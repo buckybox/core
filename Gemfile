@@ -18,6 +18,11 @@ gem 'jquery-rails'
 
 group :development, :test do
   gem 'rspec-rails'
+  gem 'guard'
+
+  gem 'rb-inotify', :require => false
+  gem 'rb-fsevent', :require => false
+  gem 'rb-fchange', :require => false
   
   gem 'ruby-debug19', :require => false
   gem 'mailcatcher', :require => false
@@ -27,6 +32,7 @@ group :test do
   gem 'fabrication'
   gem 'capybara'
   gem 'launchy'
+  gem 'guard-rspec'
 end
 
 group :staging do
