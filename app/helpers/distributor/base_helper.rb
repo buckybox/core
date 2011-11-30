@@ -1,0 +1,2 @@
+module Distributor::BaseHelper
+end

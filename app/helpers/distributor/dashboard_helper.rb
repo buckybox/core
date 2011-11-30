@@ -1,0 +1,2 @@
+module Distributor::DashboardHelper
+end

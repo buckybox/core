@@ -1,4 +1,15 @@
 BuckyBox::Application.routes.draw do
+  get "dashboard/index"
+
+  get "wizard/business"
+  get "wizard/boxes"
+  get "wizard/routes"
+  get "wizard/payment"
+  get "wizard/billing"
+  get "wizard/success"
+
+  devise_for :distributors
+
   # The priority is based upon order of creation:
   # first created -> highest priority.
 
@@ -48,7 +59,7 @@ BuckyBox::Application.routes.draw do
 
   # You can have the root of your site routed with "root"
   # just remember to delete public/index.html.
-  # root :to => 'welcome#index'
+  root :to => 'distributor/dashboard#index'
 
   # See how all your routes lay out with "rake routes"
 

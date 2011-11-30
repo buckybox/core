@@ -1,0 +1,2 @@
+Fabricator(:distributor) do
+end
