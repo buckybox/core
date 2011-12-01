@@ -20,6 +20,12 @@ gem 'haml-rails'
 gem 'devise'
 gem 'simple_form'
 gem 'inherited_resources'
+gem 'mini_magick'
+gem 'carrierwave'
+
+group :development do
+  gem 'nifty-generators'
+end
 
 group :development, :test do
   gem 'rspec-rails'

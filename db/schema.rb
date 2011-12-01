@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20111129095356) do
+ActiveRecord::Schema.define(:version => 20111201005231) do
 
   create_table "distributors", :force => true do |t|
     t.string   "email",                                 :default => "", :null => false
@@ -34,6 +34,9 @@ ActiveRecord::Schema.define(:version => 20111129095356) do
     t.string   "authentication_token"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "name"
+    t.string   "url"
+    t.string   "company_logo"
   end
 
   add_index "distributors", ["authentication_token"], :name => "index_distributors_on_authentication_token", :unique => true

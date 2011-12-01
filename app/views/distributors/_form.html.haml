@@ -1,6 +1,4 @@
-- title "Your Info"
-
-= simple_form_for(current_distributor) do |f|
+= simple_form_for(@distributor) do |f|
   = f.error_notification
 
   .inputs
@@ -13,5 +11,4 @@
     = image_tag(current_distributor.company_logo.url) if current_distributor.company_logo?
 
   .actions
-    = f.button :submit, 'Next'
-
+    = f.button :submit

@@ -1,0 +1,2 @@
+module BuckyBoxHelper
+end

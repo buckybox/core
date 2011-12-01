@@ -1,0 +1,21 @@
+%h1 Listing distributors
+
+%table
+  %tr
+    %th Name
+    %th Url
+    %th
+    %th
+    %th
+
+  - @distributors.each do |distributor|
+    %tr
+      %td= distributor.name
+      %td= distributor.url
+      %td= link_to 'Show', distributor
+      %td= link_to 'Edit', edit_distributor_path(distributor)
+      %td= link_to 'Destroy', distributor, :confirm => 'Are you sure?', :method => :delete
+
+%br
+
+= link_to 'New Distributor', new_distributor_path
