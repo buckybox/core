@@ -1,4 +1,6 @@
 BuckyBox::Application.routes.draw do
+  namespace :distributor do  end
+
   devise_for :distributors
 
   get 'home' => 'bucky_box#index', :as => 'home'
@@ -6,7 +8,8 @@ BuckyBox::Application.routes.draw do
   root :to => 'bucky_box#index'
   
   resources :distributors do
-    resources :boxes, :controller => "distributor/boxes"
+    resources :boxes, :controller => 'distributor/boxes'
+    resources :routes, :controller => 'distributor/routes'
   end
   
   namespace(:distributor) do

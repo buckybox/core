@@ -1,0 +1,16 @@
+= simple_form_for(@distributor_route) do |f|
+  = f.error_notification
+
+  .inputs
+    = f.association :distributor
+    = f.input :name
+    = f.input :monday
+    = f.input :tuesday
+    = f.input :wednesday
+    = f.input :thursday
+    = f.input :friday
+    = f.input :saturday
+    = f.input :sunday
+
+  .actions
+    = f.button :submit

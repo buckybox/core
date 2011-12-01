@@ -1,2 +1,25 @@
-%h1 Distributor::Wizard#routes
-%p Find me in app/views/distributor/wizard/routes.html.haml
+- title "Your Routes"
+
+.row
+  .four.columns
+    = simple_form_for([current_distributor, @route]) do |f|
+      = f.error_notification
+
+      .inputs
+        = f.input :name
+        = f.input :monday
+        = f.input :tuesday
+        = f.input :wednesday
+        = f.input :thursday
+        = f.input :friday
+        = f.input :saturday
+        = f.input :sunday
+
+      .actions
+        = f.button :submit
+
+    = button_to 'Next', distributor_wizard_payment_path, :method => :get, :class => 'button nice'
+
+  .eight.columns
+    = render :partial => 'distributor/routes/index'
+

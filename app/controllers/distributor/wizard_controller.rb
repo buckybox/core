@@ -8,6 +8,8 @@ class Distributor::WizardController < Distributor::BaseController
   end
 
   def routes
+    @route = Route.new
+    @routes = current_distributor.routes
   end
 
   def payment

@@ -1,0 +1,33 @@
+%p#notice= notice
+
+%p
+  %b Distributor:
+  = @distributor_route.distributor
+%p
+  %b Name:
+  = @distributor_route.name
+%p
+  %b Monday:
+  = @distributor_route.monday
+%p
+  %b Tuesday:
+  = @distributor_route.tuesday
+%p
+  %b Wednesday:
+  = @distributor_route.wednesday
+%p
+  %b Thursday:
+  = @distributor_route.thursday
+%p
+  %b Friday:
+  = @distributor_route.friday
+%p
+  %b Saturday:
+  = @distributor_route.saturday
+%p
+  %b Sunday:
+  = @distributor_route.sunday
+
+= link_to 'Edit', edit_distributor_route_path(@distributor_route)
+\|
+= link_to 'Back', distributor_routes_path

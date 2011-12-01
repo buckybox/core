@@ -14,5 +14,6 @@ class CreateBoxes < ActiveRecord::Migration
 
       t.timestamps
     end
+    add_index :boxes, :distributor_id
   end
 end

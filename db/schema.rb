@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20111201080900) do
+ActiveRecord::Schema.define(:version => 20111201095437) do
 
   create_table "boxes", :force => true do |t|
     t.integer  "distributor_id"
@@ -61,5 +61,21 @@ ActiveRecord::Schema.define(:version => 20111201080900) do
   add_index "distributors", ["email"], :name => "index_distributors_on_email", :unique => true
   add_index "distributors", ["reset_password_token"], :name => "index_distributors_on_reset_password_token", :unique => true
   add_index "distributors", ["unlock_token"], :name => "index_distributors_on_unlock_token", :unique => true
+
+  create_table "routes", :force => true do |t|
+    t.integer  "distributor_id"
+    t.string   "name"
+    t.boolean  "monday",         :default => false, :null => false
+    t.boolean  "tuesday",        :default => false, :null => false
+    t.boolean  "wednesday",      :default => false, :null => false
+    t.boolean  "thursday",       :default => false, :null => false
+    t.boolean  "friday",         :default => false, :null => false
+    t.boolean  "saturday",       :default => false, :null => false
+    t.boolean  "sunday",         :default => false, :null => false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "routes", ["distributor_id"], :name => "index_routes_on_distributor_id"
 
 end
