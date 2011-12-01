@@ -3,6 +3,8 @@ class Distributor::WizardController < Distributor::BaseController
   end
 
   def boxes
+    @box = Box.new
+    @boxes = current_distributor.boxes
   end
 
   def routes

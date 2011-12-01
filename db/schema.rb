@@ -11,7 +11,24 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20111201005231) do
+ActiveRecord::Schema.define(:version => 20111201080900) do
+
+  create_table "boxes", :force => true do |t|
+    t.integer  "distributor_id"
+    t.string   "name"
+    t.text     "description"
+    t.boolean  "likes",                  :default => false, :null => false
+    t.boolean  "dislikes",               :default => false, :null => false
+    t.integer  "price_cents",            :default => 0,     :null => false
+    t.string   "currency"
+    t.string   "string"
+    t.boolean  "available_single",       :default => false, :null => false
+    t.boolean  "available_weekly",       :default => false, :null => false
+    t.boolean  "available_fourtnightly", :default => false, :null => false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.string   "box_image"
+  end
 
   create_table "distributors", :force => true do |t|
     t.string   "email",                                 :default => "", :null => false

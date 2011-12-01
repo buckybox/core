@@ -1,0 +1,2 @@
+module Distributor::BoxesHelper
+end

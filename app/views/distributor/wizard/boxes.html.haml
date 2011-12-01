@@ -1,2 +1,29 @@
-%h1 Distributor::Wizard#boxes
-%p Find me in app/views/distributor/wizard/boxes.html.haml
+- title "Your Boxes"
+
+.row
+  .four.columns
+    = simple_form_for([current_distributor, @box]) do |f|
+      = f.error_notification
+
+      .inputs
+        = f.input :name
+        = f.input :description
+        = f.input :likes
+        = f.input :dislikes
+        = f.input :price, :as => :string
+        = f.input :available_single
+        = f.input :available_weekly
+        = f.input :available_fourtnightly
+        = f.input :box_image
+        = f.input :box_image_cache, :as => :hidden
+
+      .uploaded_image
+        = image_tag(@box.box_image.url) if @box.box_image?
+
+      .actions
+        = f.button :submit
+
+    = button_to 'Next', distributor_wizard_routes_path, :method => :get, :class => 'button nice'
+
+  .eight.columns
+    = render :partial => 'distributor/boxes/index'

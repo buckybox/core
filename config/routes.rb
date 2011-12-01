@@ -5,7 +5,9 @@ BuckyBox::Application.routes.draw do
 
   root :to => 'bucky_box#index'
   
-  resources :distributors
+  resources :distributors do
+    resources :boxes, :controller => "distributor/boxes"
+  end
   
   namespace(:distributor) do
     root :to => 'dashboard#index'

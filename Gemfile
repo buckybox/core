@@ -22,6 +22,7 @@ gem 'simple_form'
 gem 'inherited_resources'
 gem 'mini_magick'
 gem 'carrierwave'
+gem 'money'
 
 group :development do
   gem 'nifty-generators'

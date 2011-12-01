@@ -1,0 +1,33 @@
+%p#notice= notice
+
+%p
+  %b Name:
+  = @distributor_box.name
+%p
+  %b Description:
+  = @distributor_box.description
+%p
+  %b Likes:
+  = @distributor_box.likes
+%p
+  %b Dislikes:
+  = @distributor_box.dislikes
+%p
+  %b Price cents:
+  = @distributor_box.price_cents
+%p
+  %b Currency:
+  = @distributor_box.currency
+%p
+  %b Available single:
+  = @distributor_box.available_single
+%p
+  %b Available weekly:
+  = @distributor_box.available_weekly
+%p
+  %b Available fourtnightly:
+  = @distributor_box.available_fourtnightly
+
+= link_to 'Edit', edit_distributor_box_path(@distributor_box)
+\|
+= link_to 'Back', distributor_boxes_path

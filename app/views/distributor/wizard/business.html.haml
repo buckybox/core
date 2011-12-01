@@ -9,7 +9,7 @@
     = f.input :company_logo
     = f.input :company_logo_cache, :as => :hidden
 
-  .company_logo
+  .uploaded_image
     = image_tag(current_distributor.company_logo.url) if current_distributor.company_logo?
 
   .actions

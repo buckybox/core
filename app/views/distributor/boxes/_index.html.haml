@@ -1,0 +1,30 @@
+%table
+  %tr
+    %th Image
+    %th Name
+    %th Price
+    %th Likes
+    %th Dislikes
+    %th Available single
+    %th Available weekly
+    %th Available fourtnightly
+    %th
+
+  - @boxes.each do |box|
+    %tr
+      %td= image_tag(box.box_image.url) if box.box_image?
+      %td= box.name
+      %td= box.price
+      %td= box.likes
+      %td= box.dislikes
+      %td= box.available_single
+      %td= box.available_weekly
+      %td= box.available_fourtnightly
+    %tr
+      %td
+      %td{:colspan => 6}= box.description
+      %td
+        = link_to 'Show', [current_distributor, box]
+        = link_to 'Edit', edit_distributor_box_path(current_distributor.id, box.id)
+        = link_to 'Destroy', [current_distributor, box], :confirm => 'Are you sure?', :method => :delete
+
