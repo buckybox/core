@@ -7,16 +7,21 @@
         - flash.each do |kind, message|
           = flash_bar(kind, message)
 
-        #session_nav
+    .row
+      .twelve.columns
+        %p
           - if distributor_signed_in?
-            == Signed in as #{current_distributor.name} 
+            Signed in as 
+            %strong=  current_distributor.name 
             = link_to 'Logout', destroy_distributor_session_path, :method => :delete
           - else   
             = link_to 'Sign up', new_distributor_registration_path
             or  
             = link_to 'Login', new_distributor_session_path
 
+    .row
+      .twelve.columns
         - if show_title?
           %h1{:style => 'text-align:center;'}= yield(:title)
- 
+
         = yield
