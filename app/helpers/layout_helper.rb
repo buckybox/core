@@ -24,6 +24,7 @@ module LayoutHelper
 
   def flash_bar(kind, message)
     classes = "alert-box #{FLASH_CLASSES[kind]}"
-    content_tag(:div, message, :class => classes).html_safe
+    message = message + link_to('&times;'.html_safe, '', :class => 'close')
+    content_tag(:div, message.html_safe, :class => classes)
   end
 end
