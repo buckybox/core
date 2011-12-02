@@ -1,0 +1,2 @@
+module Distributor::BankInformationHelper
+end

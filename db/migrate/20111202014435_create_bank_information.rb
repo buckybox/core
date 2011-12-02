@@ -1,6 +1,6 @@
-class CreateBanks < ActiveRecord::Migration
+class CreateBankInformation < ActiveRecord::Migration
   def change
-    create_table :banks do |t|
+    create_table :bank_information do |t|
       t.references :distributor
       t.string :name
       t.string :account_name
@@ -9,6 +9,6 @@ class CreateBanks < ActiveRecord::Migration
 
       t.timestamps
     end
-    add_index :banks, :distributor_id
+    add_index :bank_information, :distributor_id
   end
 end

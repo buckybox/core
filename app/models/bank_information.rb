@@ -1,4 +1,4 @@
-class Bank < ActiveRecord::Base
+class BankInformation < ActiveRecord::Base
   belongs_to :distributor
 
   attr_accessible :distributor, :name, :account_name, :account_number, :customer_message

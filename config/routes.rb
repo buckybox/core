@@ -8,7 +8,7 @@ BuckyBox::Application.routes.draw do
   resources :distributors do
     resources :boxes, :controller => 'distributor/boxes'
     resources :routes, :controller => 'distributor/routes'
-    resource :bank, :controller => 'distributor/banks'
+    resource :bank_information, :controller => 'distributor/bank_information'
     resource :invoice_information, :controller => 'distributor/invoice_information'
   end
   

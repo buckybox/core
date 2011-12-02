@@ -1,2 +1,0 @@
-module Distributor::BanksHelper
-end

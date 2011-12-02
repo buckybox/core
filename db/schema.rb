@@ -13,7 +13,7 @@
 
 ActiveRecord::Schema.define(:version => 20111202030831) do
 
-  create_table "banks", :force => true do |t|
+  create_table "bank_information", :force => true do |t|
     t.integer  "distributor_id"
     t.string   "name"
     t.string   "account_name"
@@ -23,7 +23,7 @@ ActiveRecord::Schema.define(:version => 20111202030831) do
     t.datetime "updated_at"
   end
 
-  add_index "banks", ["distributor_id"], :name => "index_banks_on_distributor_id"
+  add_index "bank_information", ["distributor_id"], :name => "index_bank_information_on_distributor_id"
 
   create_table "boxes", :force => true do |t|
     t.integer  "distributor_id"
