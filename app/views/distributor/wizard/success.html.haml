@@ -1,4 +1,4 @@
-- title "Success!"
+- title "Success! Welcome to Bucky Box!"
 
 .row
   .six.columns.centered
@@ -9,5 +9,7 @@
     %p
       If you would prefer to finish here and come back later, after you sign in you will be automatically taken to your dashboard.
 
-    = button_to 'Take Me To My Bucky Box!', distributor_dashboard_path, :method => :get, :class => 'button nice'
+    = form_tag distributor_dashboard_path, :method => :get do
+      = hidden_field_tag :completed_wizard, true
+      = submit_tag 'Take Me To My Dashboard!', :class => 'button nice'
 

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20111202030831) do
+ActiveRecord::Schema.define(:version => 20111202203846) do
 
   create_table "bank_information", :force => true do |t|
     t.integer  "distributor_id"
@@ -45,8 +45,8 @@ ActiveRecord::Schema.define(:version => 20111202030831) do
   add_index "boxes", ["distributor_id"], :name => "index_boxes_on_distributor_id"
 
   create_table "distributors", :force => true do |t|
-    t.string   "email",                                 :default => "", :null => false
-    t.string   "encrypted_password",     :limit => 128, :default => "", :null => false
+    t.string   "email",                                 :default => "",    :null => false
+    t.string   "encrypted_password",     :limit => 128, :default => "",    :null => false
     t.string   "reset_password_token"
     t.datetime "reset_password_sent_at"
     t.datetime "remember_created_at"
@@ -68,6 +68,7 @@ ActiveRecord::Schema.define(:version => 20111202030831) do
     t.string   "name"
     t.string   "url"
     t.string   "company_logo"
+    t.boolean  "completed_wizard",                      :default => false, :null => false
   end
 
   add_index "distributors", ["authentication_token"], :name => "index_distributors_on_authentication_token", :unique => true

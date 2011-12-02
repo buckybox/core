@@ -12,7 +12,7 @@ class Distributor < ActiveRecord::Base
   mount_uploader :company_logo, CompanyLogoUploader
 
   # Setup accessible (or protected) attributes for your model
-  attr_accessible :email, :password, :password_confirmation, :remember_me, :name, :url, :company_logo
+  attr_accessible :email, :password, :password_confirmation, :remember_me, :name, :url, :company_logo, :completed_wizard
 
   validates_uniqueness_of :email
 
