@@ -4,8 +4,8 @@
   .container
     .row
       .twelve.columns
-        - flash.each do |name, msg|
-          = content_tag :div, msg, :class => "alert-box #{name}"
+        - flash.each do |kind, message|
+          = flash_bar(kind, message)
 
         #session_nav
           - if distributor_signed_in?

@@ -19,4 +19,11 @@ module LayoutHelper
   def javascript(*args)
     content_for(:head) { javascript_include_tag(*args) }
   end
+
+  FLASH_CLASSES = {notice: 'success', warning: 'warning', error: 'error'}
+
+  def flash_bar(kind, message)
+    classes = "alert-box #{FLASH_CLASSES[kind]}"
+    content_tag(:div, message, :class => classes).html_safe
+  end
 end

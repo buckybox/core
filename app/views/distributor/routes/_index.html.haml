@@ -1,27 +1,29 @@
 %table
-  %tr
-    %th Name
-    %th Monday
-    %th Tuesday
-    %th Wednesday
-    %th Thursday
-    %th Friday
-    %th Saturday
-    %th Sunday
-    %th
-
-  - @routes.each do |route|
+  %thead
     %tr
-      %td= route.name
-      %td= route.monday
-      %td= route.tuesday
-      %td= route.wednesday
-      %td= route.thursday
-      %td= route.friday
-      %td= route.saturday
-      %td= route.sunday
-      %td
-        = link_to 'Show', [current_distributor, route]
-        = link_to 'Edit', edit_distributor_route_path(current_distributor, route)
-        = link_to 'Destroy', [current_distributor, route], :confirm => 'Are you sure?', :method => :delete
+      %th Name
+      %th Monday
+      %th Tuesday
+      %th Wednesday
+      %th Thursday
+      %th Friday
+      %th Saturday
+      %th Sunday
+      %th
+
+  %tbody
+    - @routes.each do |route|
+      %tr
+        %td= route.name
+        %td= route.monday
+        %td= route.tuesday
+        %td= route.wednesday
+        %td= route.thursday
+        %td= route.friday
+        %td= route.saturday
+        %td= route.sunday
+        %td
+          = link_to 'Show', [current_distributor, route]
+          = link_to 'Edit', edit_distributor_route_path(current_distributor, route)
+          = link_to 'Destroy', [current_distributor, route], :confirm => 'Are you sure?', :method => :delete
 
