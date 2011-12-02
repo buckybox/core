@@ -17,6 +17,7 @@ class Distributor::WizardController < Distributor::BaseController
   end
 
   def billing
+    @invoice_information = InvoiceInformation.new
   end
 
   def success

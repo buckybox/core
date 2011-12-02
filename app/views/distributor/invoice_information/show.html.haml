@@ -1,0 +1,27 @@
+%p#notice= notice
+
+%p
+  %b Distributor:
+  = @distributor_invoice_information.distributor
+%p
+  %b Gst number:
+  = @distributor_invoice_information.gst_number
+%p
+  %b Billing address 1:
+  = @distributor_invoice_information.billing_address_1
+%p
+  %b Billing address 2:
+  = @distributor_invoice_information.billing_address_2
+%p
+  %b Billing suburb:
+  = @distributor_invoice_information.billing_suburb
+%p
+  %b Billing city:
+  = @distributor_invoice_information.billing_city
+%p
+  %b Billing postcode:
+  = @distributor_invoice_information.billing_postcode
+
+= link_to 'Edit', edit_distributor_invoice_information_path(@distributor_invoice_information)
+\|
+= link_to 'Back', distributor_invoice_information_index_path

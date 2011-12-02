@@ -1,0 +1,31 @@
+%h1 Listing distributor_invoice_information
+
+%table
+  %tr
+    %th Distributor
+    %th Gst number
+    %th Billing address 1
+    %th Billing address 2
+    %th Billing suburb
+    %th Billing city
+    %th Billing postcode
+    %th
+    %th
+    %th
+
+  - @distributor_invoice_information.each do |distributor_invoice_information|
+    %tr
+      %td= distributor_invoice_information.distributor
+      %td= distributor_invoice_information.gst_number
+      %td= distributor_invoice_information.billing_address_1
+      %td= distributor_invoice_information.billing_address_2
+      %td= distributor_invoice_information.billing_suburb
+      %td= distributor_invoice_information.billing_city
+      %td= distributor_invoice_information.billing_postcode
+      %td= link_to 'Show', distributor_invoice_information
+      %td= link_to 'Edit', edit_distributor_invoice_information_path(distributor_invoice_information)
+      %td= link_to 'Destroy', distributor_invoice_information, :confirm => 'Are you sure?', :method => :delete
+
+%br
+
+= link_to 'New Invoice information', new_distributor_invoice_information_path

@@ -1,0 +1,2 @@
+module Distributor::InvoiceInformationHelper
+end

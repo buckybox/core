@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20111202014435) do
+ActiveRecord::Schema.define(:version => 20111202030831) do
 
   create_table "banks", :force => true do |t|
     t.integer  "distributor_id"
@@ -75,6 +75,20 @@ ActiveRecord::Schema.define(:version => 20111202014435) do
   add_index "distributors", ["email"], :name => "index_distributors_on_email", :unique => true
   add_index "distributors", ["reset_password_token"], :name => "index_distributors_on_reset_password_token", :unique => true
   add_index "distributors", ["unlock_token"], :name => "index_distributors_on_unlock_token", :unique => true
+
+  create_table "invoice_information", :force => true do |t|
+    t.integer  "distributor_id"
+    t.string   "gst_number"
+    t.string   "billing_address_1"
+    t.string   "billing_address_2"
+    t.string   "billing_suburb"
+    t.string   "billing_city"
+    t.string   "billing_postcode"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "invoice_information", ["distributor_id"], :name => "index_invoice_information_on_distributor_id"
 
   create_table "routes", :force => true do |t|
     t.integer  "distributor_id"
