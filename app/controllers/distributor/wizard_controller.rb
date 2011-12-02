@@ -13,6 +13,7 @@ class Distributor::WizardController < Distributor::BaseController
   end
 
   def payment
+    @bank = Bank.new
   end
 
   def billing

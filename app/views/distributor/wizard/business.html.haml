@@ -1,17 +1,19 @@
 - title "Your Info"
 
-= simple_form_for(current_distributor) do |f|
-  = f.error_notification
+.row
+  .four.columns.centered
+    = simple_form_for(current_distributor) do |f|
+      = f.error_notification
 
-  .inputs
-    = f.input :name
-    = f.input :url
-    = f.input :company_logo
-    = f.input :company_logo_cache, :as => :hidden
+      .inputs
+        = f.input :name
+        = f.input :url
+        = f.input :company_logo
+        = f.input :company_logo_cache, :as => :hidden
 
-  .uploaded_image
-    = image_tag(current_distributor.company_logo.url) if current_distributor.company_logo?
+      .uploaded_image
+        = image_tag(current_distributor.company_logo.url) if current_distributor.company_logo?
 
-  .actions
-    = f.button :submit, 'Next'
+      .actions
+        = f.button :submit, 'Next'
 

@@ -1,7 +1,7 @@
 class Route < ActiveRecord::Base
   belongs_to :distributor
 
-  attr_accessible :name, :monday, :tuesday, :wednesday, :thursday, :friday, :saturday, :sunday, :distributor
+  attr_accessible :distributor, :name, :monday, :tuesday, :wednesday, :thursday, :friday, :saturday, :sunday
 
-  validates_presence_of :name
+  validates_presence_of :distributor, :name
 end

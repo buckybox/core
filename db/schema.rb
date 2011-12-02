@@ -11,7 +11,19 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20111201095437) do
+ActiveRecord::Schema.define(:version => 20111202014435) do
+
+  create_table "banks", :force => true do |t|
+    t.integer  "distributor_id"
+    t.string   "name"
+    t.string   "account_name"
+    t.string   "account_number"
+    t.text     "customer_message"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "banks", ["distributor_id"], :name => "index_banks_on_distributor_id"
 
   create_table "boxes", :force => true do |t|
     t.integer  "distributor_id"
@@ -29,6 +41,8 @@ ActiveRecord::Schema.define(:version => 20111201095437) do
     t.datetime "updated_at"
     t.string   "box_image"
   end
+
+  add_index "boxes", ["distributor_id"], :name => "index_boxes_on_distributor_id"
 
   create_table "distributors", :force => true do |t|
     t.string   "email",                                 :default => "", :null => false

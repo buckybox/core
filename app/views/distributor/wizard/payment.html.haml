@@ -1,2 +1,15 @@
-%h1 Distributor::Wizard#payment
-%p Find me in app/views/distributor/wizard/payment.html.haml
+- title "Your Bank Information"
+
+.row
+  .four.columns.centered
+    = simple_form_for(@bank, :url => distributor_bank_path(current_distributor, @post)) do |f|
+      = f.error_notification
+
+      .inputs
+        = f.input :name
+        = f.input :account_name
+        = f.input :account_number
+        = f.input :customer_message
+
+      .actions
+        = f.button :submit, 'Next'

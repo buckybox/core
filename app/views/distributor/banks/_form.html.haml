@@ -1,0 +1,12 @@
+= simple_form_for([@distributor, @bank]) do |f|
+  = f.error_notification
+
+  .inputs
+    = f.association :distributor
+    = f.input :name
+    = f.input :account_name
+    = f.input :account_number
+    = f.input :customer_message
+
+  .actions
+    = f.button :submit

@@ -1,0 +1,21 @@
+%p#notice= notice
+
+%p
+  %b Distributor:
+  = @distributor_bank.distributor
+%p
+  %b Name:
+  = @distributor_bank.name
+%p
+  %b Account name:
+  = @distributor_bank.account_name
+%p
+  %b Account number:
+  = @distributor_bank.account_number
+%p
+  %b Customer message:
+  = @distributor_bank.customer_message
+
+= link_to 'Edit', edit_distributor_bank_path(@distributor_bank)
+\|
+= link_to 'Back', distributor_banks_path

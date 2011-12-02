@@ -10,8 +10,8 @@ class Box < ActiveRecord::Base
   mount_uploader :box_image, BoxImageUploader
 
   # Setup accessible (or protected) attributes for your model
-  attr_accessible :name, :description, :likes, :dislikes, :price, :available_single, :available_weekly, 
-    :available_fourtnightly, :box_image, :distributor
+  attr_accessible :distributor, :name, :description, :likes, :dislikes, :price, :available_single, :available_weekly, 
+    :available_fourtnightly, :box_image
 
-  validates_presence_of :name, :description, :price
+  validates_presence_of :distributor, :name, :description, :price
 end
