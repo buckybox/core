@@ -1,2 +1,13 @@
-%h1 Distributor::Wizard#success
-%p Find me in app/views/distributor/wizard/success.html.haml
+- title "Success!"
+
+.row
+  .six.columns.centered
+    %p
+      Thank you for taking the time to fill out your information. You can now view your customized dashboard where you can
+      access all your information, make changes, and view your own webstore!
+
+    %p
+      If you would prefer to finish here and come back later, after you sign in you will be automatically taken to your dashboard.
+
+    = button_to 'Take Me To My Bucky Box!', distributor_dashboard_path, :method => :get, :class => 'button nice'
+

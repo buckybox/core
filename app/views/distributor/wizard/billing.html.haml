@@ -1,16 +1,18 @@
 - title "Your Invoicing Information"
 
-= simple_form_for(@invoice_information, :url => distributor_invoice_information_path(current_distributor, @invoice_information)) do |f|
-  = f.error_notification
+.row
+  .four.columns.centered
+    = simple_form_for(@invoice_information, :url => distributor_invoice_information_path(current_distributor, @invoice_information)) do |f|
+      = f.error_notification
 
-  .inputs
-    = f.input :gst_number
-    = f.input :billing_address_1
-    = f.input :billing_address_2
-    = f.input :billing_suburb
-    = f.input :billing_city
-    = f.input :billing_postcode
+      .inputs
+        = f.input :gst_number
+        = f.input :billing_address_1
+        = f.input :billing_address_2
+        = f.input :billing_suburb
+        = f.input :billing_city
+        = f.input :billing_postcode
 
-  .actions
-    = f.button :submit, 'Next'
+      .actions
+        = f.button :submit, 'Next'
 
