@@ -1,0 +1,25 @@
+- title 'Payment'
+
+%table
+  %thead
+    %tr
+      %th{:colspan => 2} Bank Transfer Information
+
+  %tbody
+    %tr
+      %td{:colspan => 2} Use the below information to make payment via bank transfer.
+
+    %tr
+      %td Bank: 
+      %td= @distributor.bank_information.name
+    %tr
+      %td Account Name: 
+      %td= @distributor.bank_information.account_name
+    %tr
+      %td Account Number: 
+      %td= @distributor.bank_information.account_number
+    %tr
+      %td Make sure you use reference: 
+      %td= @distributor.bank_information.customer_message
+
+= button_to 'Next', market_success_path(@distributor.parameter_name, @order), :method => :get, :class => 'button nice'

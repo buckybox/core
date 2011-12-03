@@ -1,0 +1,24 @@
+%p#notice= notice
+
+%p
+  %b Distributor:
+  = @distributor_order.distributor
+%p
+  %b Box:
+  = @distributor_order.box
+%p
+  %b Customer:
+  = @distributor_order.customer
+%p
+  %b Quantity:
+  = @distributor_order.quantity
+%p
+  %b Likes:
+  = @distributor_order.likes
+%p
+  %b Dislikes:
+  = @distributor_order.dislikes
+
+= link_to 'Edit', edit_distributor_order_path(@distributor_order)
+\|
+= link_to 'Back', distributor_orders_path

@@ -11,7 +11,21 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20111202203846) do
+ActiveRecord::Schema.define(:version => 20111203124951) do
+
+  create_table "addresses", :force => true do |t|
+    t.integer  "customer_id"
+    t.string   "address_1"
+    t.string   "address_2"
+    t.string   "suburb"
+    t.string   "city"
+    t.string   "postcode"
+    t.text     "delivery_note"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "addresses", ["customer_id"], :name => "index_addresses_on_customer_id"
 
   create_table "bank_information", :force => true do |t|
     t.integer  "distributor_id"
@@ -44,6 +58,14 @@ ActiveRecord::Schema.define(:version => 20111202203846) do
 
   add_index "boxes", ["distributor_id"], :name => "index_boxes_on_distributor_id"
 
+  create_table "customers", :force => true do |t|
+    t.string   "name"
+    t.string   "email"
+    t.string   "phone"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "distributors", :force => true do |t|
     t.string   "email",                                 :default => "",    :null => false
     t.string   "encrypted_password",     :limit => 128, :default => "",    :null => false
@@ -69,6 +91,7 @@ ActiveRecord::Schema.define(:version => 20111202203846) do
     t.string   "url"
     t.string   "company_logo"
     t.boolean  "completed_wizard",                      :default => false, :null => false
+    t.string   "parameter_name"
   end
 
   add_index "distributors", ["authentication_token"], :name => "index_distributors_on_authentication_token", :unique => true
@@ -87,9 +110,27 @@ ActiveRecord::Schema.define(:version => 20111202203846) do
     t.string   "billing_postcode"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "phone"
   end
 
   add_index "invoice_information", ["distributor_id"], :name => "index_invoice_information_on_distributor_id"
+
+  create_table "orders", :force => true do |t|
+    t.integer  "distributor_id"
+    t.integer  "box_id"
+    t.integer  "customer_id"
+    t.integer  "quantity",       :default => 1,        :null => false
+    t.text     "likes"
+    t.text     "dislikes"
+    t.string   "frequency",      :default => "single", :null => false
+    t.boolean  "completed",      :default => false,    :null => false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "orders", ["box_id"], :name => "index_orders_on_box_id"
+  add_index "orders", ["customer_id"], :name => "index_orders_on_customer_id"
+  add_index "orders", ["distributor_id"], :name => "index_orders_on_distributor_id"
 
   create_table "routes", :force => true do |t|
     t.integer  "distributor_id"

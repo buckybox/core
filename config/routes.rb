@@ -5,23 +5,38 @@ BuckyBox::Application.routes.draw do
 
   root :to => 'bucky_box#index'
   
-  resources :distributors do
-    resources :boxes, :controller => 'distributor/boxes'
-    resources :routes, :controller => 'distributor/routes'
-    resource :bank_information, :controller => 'distributor/bank_information'
-    resource :invoice_information, :controller => 'distributor/invoice_information'
+  namespace :market do
+    get ':distributor_parameter_name',                            :action => 'store',            :as => 'store'
+    get ':distributor_parameter_name/buy/:box_id',                :action => 'buy',              :as => 'buy'
+    get ':distributor_parameter_name/customer_details/:order_id', :action => 'customer_details', :as => 'customer_details'
+    get ':distributor_parameter_name/payment/:order_id',          :action => 'payment',          :as => 'payment'
+    get ':distributor_parameter_name/success/:order_id',          :action => 'success',          :as => 'success'
+  end
+
+  resources :customers do
+    resource :addresses, :controller => 'customer/addresses'
   end
   
-  namespace(:distributor) do
+  resources :distributors do
+    resource :bank_information,    :controller => 'distributor/bank_information'
+    resource :invoice_information, :controller => 'distributor/invoice_information'
+    resources :boxes,              :controller => 'distributor/boxes'
+    resources :routes,             :controller => 'distributor/routes'
+    resources :orders,             :controller => 'distributor/orders'
+  end
+  
+  namespace :distributor do
     root :to => 'dashboard#index'
 
     get 'dashboard' => 'dashboard#index'
-  
-    get 'wizard/business'
-    get 'wizard/boxes'
-    get 'wizard/routes'
-    get 'wizard/payment'
-    get 'wizard/billing'
-    get 'wizard/success'
+
+    namespace :wizard do
+      get 'business'
+      get 'boxes'
+      get 'routes'
+      get 'payment'
+      get 'billing'
+      get 'success'
+    end
   end
 end

@@ -1,6 +1,8 @@
 class Box < ActiveRecord::Base
   belongs_to :distributor
 
+  has_many :orders
+
   composed_of :price,
     :class_name => "Money",
     :mapping => [%w(price_cents cents), %w(currency currency_as_string)],

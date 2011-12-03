@@ -25,7 +25,7 @@ gem 'carrierwave'
 gem 'money'
 
 group :development do
-  gem 'nifty-generators'
+  gem 'nifty-generators', :require => false
 end
 
 group :development, :test do

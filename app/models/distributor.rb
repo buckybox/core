@@ -1,6 +1,9 @@
 class Distributor < ActiveRecord::Base
   has_many :boxes, :dependent => :destroy
   has_many :routes, :dependent => :destroy
+  has_many :orders, :dependent => :destroy
+  has_many :customers, :through => :orders
+  
   has_one :bank_information, :dependent => :destroy
   has_one :invoice_information, :dependent => :destroy
 
@@ -18,4 +21,10 @@ class Distributor < ActiveRecord::Base
 
   validates_presence_of :name, :on => :update
   validates_uniqueness_of :name, :on => :update
+
+  before_save :parameterize_name
+
+  def parameterize_name
+    parameter_name = name.parameterize if name
+  end
 end

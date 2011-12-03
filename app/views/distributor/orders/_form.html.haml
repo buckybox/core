@@ -1,0 +1,13 @@
+= simple_form_for([@distributor, @order]) do |f|
+  = f.error_notification
+
+  .inputs
+    = f.association :distributor
+    = f.association :box
+    = f.association :customer
+    = f.input :quantity
+    = f.input :likes
+    = f.input :dislikes
+
+  .actions
+    = f.button :submit

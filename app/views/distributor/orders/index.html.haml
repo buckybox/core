@@ -1,0 +1,29 @@
+%h1 Listing distributor_orders
+
+%table
+  %tr
+    %th Distributor
+    %th Box
+    %th Customer
+    %th Quantity
+    %th Likes
+    %th Dislikes
+    %th
+    %th
+    %th
+
+  - @distributor_orders.each do |distributor_order|
+    %tr
+      %td= distributor_order.distributor
+      %td= distributor_order.box
+      %td= distributor_order.customer
+      %td= distributor_order.quantity
+      %td= distributor_order.likes
+      %td= distributor_order.dislikes
+      %td= link_to 'Show', distributor_order
+      %td= link_to 'Edit', edit_distributor_order_path(distributor_order)
+      %td= link_to 'Destroy', distributor_order, :confirm => 'Are you sure?', :method => :delete
+
+%br
+
+= link_to 'New Order', new_distributor_order_path
