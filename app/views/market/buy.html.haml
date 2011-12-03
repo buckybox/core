@@ -4,6 +4,10 @@
   = f.error_notification
 
   .inputs
+    = label_tag :email, :class => "email required" do
+      %abbr{:title => 'required'} *
+      Your Email
+    = text_field_tag :email, nil, :class => "email required input-text", :required => 'required'
     = f.association :box, :as => :hidden
     = f.input :quantity
     = f.input :frequency, :collection => Order::FREQUENCIES.map{ |fr| [fr.titleize, fr] }, :include_blank => false 

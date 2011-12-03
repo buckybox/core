@@ -14,8 +14,14 @@ class MarketController < ApplicationController
   def customer_details
     @order = Order.find(params[:order_id])
     @box = @order.box
-    @customer = Customer.new
-    @address = @customer.build_address
+
+    @customer = Customer.find_by_email(params[:email])
+    if @customer
+      @address = @customer.address
+    else
+      @customer = Customer.new(:email => params[:email])
+      @address = @customer.build_address
+    end
   end
 
   def payment
@@ -27,10 +33,7 @@ class MarketController < ApplicationController
   def success
     @order = Order.find(params[:order_id])
     @order.completed = true
-    puts "-"*20
-    puts @order.inspect
     @order.save
-    puts @order.errors.messages
 
     @box = @order.box
     @customer = @order.customer
