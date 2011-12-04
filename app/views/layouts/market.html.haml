@@ -21,10 +21,11 @@
     .row
       .twelve.columns
         - if @hide_sidebars
-          = yield
+          #content
+            = yield
         - else
-          .row
-            .four.columns
+          #content.row
+            #details.four.columns
               = render :partial => 'market/order_details'
 
             .eight.columns
