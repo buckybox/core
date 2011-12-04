@@ -1,29 +1,43 @@
-%h1 Listing distributor_orders
+- title 'Orders', false
 
-%table
-  %tr
-    %th Distributor
-    %th Box
-    %th Customer
-    %th Quantity
-    %th Likes
-    %th Dislikes
-    %th
-    %th
-    %th
+%dl.nice.tabs
+  %dd= link_to image_tag('buckylogo.png'), distributor_root_path
+  %dd= link_to 'Store', market_store_path(current_distributor.parameter_name)
+  %dd= link_to 'Orders', distributor_orders_path(current_distributor), :class => 'active'
+  %dd= link_to 'Billing', '#nice4'
+  %dd= link_to 'Customers', '#nice5'
+  %dd= link_to 'Settings', '#nice6'
 
-  - @distributor_orders.each do |distributor_order|
-    %tr
-      %td= distributor_order.distributor
-      %td= distributor_order.box
-      %td= distributor_order.customer
-      %td= distributor_order.quantity
-      %td= distributor_order.likes
-      %td= distributor_order.dislikes
-      %td= link_to 'Show', distributor_order
-      %td= link_to 'Edit', edit_distributor_order_path(distributor_order)
-      %td= link_to 'Destroy', distributor_order, :confirm => 'Are you sure?', :method => :delete
+%ul.nice.tabs-content
+  %li#nice1Tab content
+  %li#nice2Tab content
+  %li#nice3Tab.active
+    %table
+      %thead
+        %tr
+          %th Box
+          %th Customer
+          %th Quantity
+          %th Likes
+          %th Dislikes
+          %th Completed
+          %th
 
-%br
+      - @orders.each do |order|
+        %tbody
+          %tr
+            %td= link_to order.box.name, [current_distributor, order.box]
+            %td 
+              - if order.customer
+                = link_to order.customer.name, order.customer
+              - else
+                No customer
+            %td= order.quantity
+            %td= order.likes
+            %td= order.dislikes
+            %td= order.completed
+            %td
+              = link_to 'Show', [current_distributor, order]
+              = link_to 'Edit', edit_distributor_order_path(current_distributor, order)
+              = link_to 'Destroy', [current_distributor, order], :confirm => 'Are you sure?', :method => :delete
 
-= link_to 'New Order', new_distributor_order_path

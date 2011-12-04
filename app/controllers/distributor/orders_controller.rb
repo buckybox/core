@@ -1,4 +1,4 @@
-class Distributor::OrdersController < InheritedResources::Base
+class Distributor::OrdersController < Distributor::BaseController
   belongs_to :distributor
 
   respond_to :html, :xml, :json

@@ -1,4 +1,4 @@
-class Distributor::BankInformationController < InheritedResources::Base
+class Distributor::BankInformationController < Distributor::BaseController
   belongs_to :distributor, :singleton => true
 
   respond_to :html, :xml, :json

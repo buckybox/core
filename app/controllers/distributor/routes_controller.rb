@@ -1,4 +1,4 @@
-class Distributor::RoutesController < InheritedResources::Base
+class Distributor::RoutesController < Distributor::BaseController
   belongs_to :distributor
 
   respond_to :html, :xml, :json

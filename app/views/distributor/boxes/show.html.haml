@@ -2,32 +2,32 @@
 
 %p
   %b Name:
-  = @distributor_box.name
+  = @box.name
 %p
   %b Description:
-  = @distributor_box.description
+  = @box.description
 %p
   %b Likes:
-  = @distributor_box.likes
+  = @box.likes
 %p
   %b Dislikes:
-  = @distributor_box.dislikes
+  = @box.dislikes
 %p
   %b Price cents:
-  = @distributor_box.price_cents
+  = @box.price_cents
 %p
   %b Currency:
-  = @distributor_box.currency
+  = @box.currency
 %p
   %b Available single:
-  = @distributor_box.available_single
+  = @box.available_single
 %p
   %b Available weekly:
-  = @distributor_box.available_weekly
+  = @box.available_weekly
 %p
   %b Available fourtnightly:
-  = @distributor_box.available_fourtnightly
+  = @box.available_fourtnightly
 
-= link_to 'Edit', edit_distributor_box_path(@distributor_box)
+= link_to 'Edit', edit_distributor_box_path(current_distributor, @box)
 \|
-= link_to 'Back', distributor_boxes_path
+= link_to 'Back', distributor_orders_path(current_distributor)

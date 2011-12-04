@@ -1,9 +1,9 @@
 - title 'Dashboard', false
 
 %dl.nice.tabs
-  %dd= link_to image_tag('buckylogo.png'), '#nice1', :class => 'active'
-  %dd= link_to 'Store', '#nice2'
-  %dd= link_to 'Orders', '#nice3'
+  %dd= link_to image_tag('buckylogo.png'), distributor_root_path, :class => 'active'
+  %dd= link_to 'Store', market_store_path(current_distributor.parameter_name)
+  %dd= link_to 'Orders', distributor_orders_path(current_distributor)
   %dd= link_to 'Billing', '#nice4'
   %dd= link_to 'Customers', '#nice5'
   %dd= link_to 'Settings', '#nice6'
@@ -11,18 +11,4 @@
 %ul.nice.tabs-content
   %li#nice1Tab.active
     Add Order:
-  
-  %li#nice2Tab 
-    Go to the store
-  
-  %li#nice3Tab 
-    List orders here
-  
-  %li#nice4Tab 
-    List billing information here
 
-  %li#nice5Tab
-    List customers here
-
-  %li#nice6Tab
-    Show Settings (Maybe with vertical sub nav?)
