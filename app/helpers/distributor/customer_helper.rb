@@ -1,0 +1,2 @@
+module Distributor::CustomerHelper
+end

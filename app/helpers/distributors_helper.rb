@@ -4,7 +4,7 @@ module DistributorsHelper
     join_with = (options[:single_line] ? ', ' : '<br/>')
 
     address = [i.billing_address_1]
-    address << i.billing_address_2 if i.billing_address_2
+    address << i.billing_address_2 if i.billing_address_2.blank?
     address += [i.billing_suburb, "#{i.billing_city}, #{i.billing_postcode}"]
     address << i.phone if options[:with_phone]
 

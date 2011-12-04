@@ -4,14 +4,12 @@
   %dd= link_to image_tag('buckylogo.png'), distributor_root_path
   %dd= link_to 'Store', market_store_path(current_distributor.parameter_name)
   %dd= link_to 'Orders', distributor_orders_path(current_distributor), :class => 'active'
-  %dd= link_to 'Billing', '#nice4'
-  %dd= link_to 'Customers', '#nice5'
-  %dd= link_to 'Settings', '#nice6'
+  %dd= link_to 'Billing', '#billing'
+  %dd= link_to 'Customers', :controller => 'distributor/customers', :action => 'index', :distributor_id => current_distributor
+  %dd= link_to 'Settings', '#settings'
 
 %ul.nice.tabs-content
-  %li#nice1Tab content
-  %li#nice2Tab content
-  %li#nice3Tab.active
+  %li.active
     %table
       %thead
         %tr

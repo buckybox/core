@@ -13,16 +13,13 @@ BuckyBox::Application.routes.draw do
     get ':distributor_parameter_name/success/:order_id',          :action => 'success',          :as => 'success'
   end
 
-  resources :customers do
-    resource :addresses, :controller => 'customer/addresses'
-  end
-  
   resources :distributors do
     resource :bank_information,    :controller => 'distributor/bank_information'
     resource :invoice_information, :controller => 'distributor/invoice_information'
     resources :boxes,              :controller => 'distributor/boxes'
     resources :routes,             :controller => 'distributor/routes'
     resources :orders,             :controller => 'distributor/orders'
+    resources :customers,          :controller => 'distributor/customers'
   end
   
   namespace :distributor do
@@ -38,5 +35,9 @@ BuckyBox::Application.routes.draw do
       get 'billing'
       get 'success'
     end
+  end
+  
+  resources :customers do
+    resource :addresses, :controller => 'customer/addresses'
   end
 end

@@ -1,5 +1,6 @@
 class CustomersController < InheritedResources::Base
   respond_to :html, :xml, :json
+  layout 'distributor'
 
   def create
     create! do |success, failure|
