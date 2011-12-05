@@ -18,3 +18,5 @@
 /tmp
 
 /public/uploads/
+
+database.yml
