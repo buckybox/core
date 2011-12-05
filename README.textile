@@ -1,0 +1,17 @@
+h1. Bucky Box
+
+"It’s your operations team for your organic deliveries...":http://www.buckybox.com/
+
+h2. Git Strategy
+
+Currently following "this git branching and merging strategy.":http://scottchacon.com/2011/08/31/github-flow.html
+
+h2. Best Practices
+
+* Don't commit commented out code (actual comments are fine). That is what version control is for.
+* Don't throw random javascript in pages, we are moving towards a Javascript MVC framework.
+* Don't use @&nbsp;@ for spacing. Use CSS padding or margin instead.
+* Where possible use an options API for methods calls to improve code readability
+** Use this API @def find_by_id_and_process(id, options = {})@ for this call @find_by_id_and_process(3, :with_totals => true, :skip_empty => false)@
+** Don't use this API @def find_by_id_and_process(id, with_totals = true, skip_empty = false)@ for this call @find_by_id_and_process(3, true, false)@
+
