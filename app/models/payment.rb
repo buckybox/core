@@ -1,7 +1,6 @@
 class Payment < ActiveRecord::Base
   belongs_to :distributor
   belongs_to :customer
-  has_one :transaction, :as => :transactionable
 
   composed_of :amount,
     :class_name => "Money",
@@ -11,5 +10,8 @@ class Payment < ActiveRecord::Base
 
   attr_accessible :distributor, :customer, :amount, :kind, :description
   
+  KINDS = %w(bank_transfer credit_card)
+
   validates_presence_of :distributor, :customer, :amount, :kind, :description
+  validates :kind, :inclusion => { :in => KINDS, :message => "%{value} is not a valid kind" }
 end

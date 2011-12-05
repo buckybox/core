@@ -2,6 +2,10 @@ class Account < ActiveRecord::Base
   belongs_to :distributor
   belongs_to :customer
 
+  has_many :orders
+  has_many :payments
+  has_many :transactions
+
   composed_of :balance,
     :class_name => "Money",
     :mapping => [%w(balance_cents cents), %w(currency currency_as_string)],

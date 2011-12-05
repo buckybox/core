@@ -16,6 +16,7 @@ class MarketController < ApplicationController
     @box = @order.box
 
     @customer = Customer.find_by_email(params[:email])
+    
     if @customer
       @address = @customer.address
     else
