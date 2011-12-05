@@ -1,0 +1,2 @@
+module Distributor::TransactionsHelper
+end

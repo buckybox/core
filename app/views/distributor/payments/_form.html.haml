@@ -1,0 +1,13 @@
+= simple_form_for(@distributor_payment) do |f|
+  = f.error_notification
+
+  .inputs
+    = f.association :distributor
+    = f.association :customer
+    = f.input :amount_cents
+    = f.input :currency
+    = f.input :kind
+    = f.input :description
+
+  .actions
+    = f.button :submit

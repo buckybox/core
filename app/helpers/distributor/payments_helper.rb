@@ -1,0 +1,2 @@
+module Distributor::PaymentsHelper
+end

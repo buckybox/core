@@ -1,0 +1,2 @@
+module Distributor::AccountsHelper
+end

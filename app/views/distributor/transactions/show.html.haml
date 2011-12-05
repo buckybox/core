@@ -1,0 +1,24 @@
+%p#notice= notice
+
+%p
+  %b Distributor:
+  = @distributor_transaction.distributor
+%p
+  %b Customer:
+  = @distributor_transaction.customer
+%p
+  %b Transactionable:
+  = @distributor_transaction.transactionable
+%p
+  %b Amount cents:
+  = @distributor_transaction.amount_cents
+%p
+  %b Currency:
+  = @distributor_transaction.currency
+%p
+  %b Description:
+  = @distributor_transaction.description
+
+= link_to 'Edit', edit_distributor_transaction_path(@distributor_transaction)
+\|
+= link_to 'Back', distributor_transactions_path

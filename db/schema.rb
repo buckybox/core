@@ -11,7 +11,19 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20111203124951) do
+ActiveRecord::Schema.define(:version => 20111205005039) do
+
+  create_table "accounts", :force => true do |t|
+    t.integer  "distributor_id"
+    t.integer  "customer_id"
+    t.integer  "balance_cents",  :default => 0, :null => false
+    t.string   "currenty"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "accounts", ["customer_id"], :name => "index_accounts_on_customer_id"
+  add_index "accounts", ["distributor_id"], :name => "index_accounts_on_distributor_id"
 
   create_table "addresses", :force => true do |t|
     t.integer  "customer_id"
@@ -132,6 +144,20 @@ ActiveRecord::Schema.define(:version => 20111203124951) do
   add_index "orders", ["customer_id"], :name => "index_orders_on_customer_id"
   add_index "orders", ["distributor_id"], :name => "index_orders_on_distributor_id"
 
+  create_table "payments", :force => true do |t|
+    t.integer  "distributor_id"
+    t.integer  "customer_id"
+    t.integer  "amount_cents",   :default => 0, :null => false
+    t.string   "currency"
+    t.string   "kind"
+    t.text     "description"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "payments", ["customer_id"], :name => "index_payments_on_customer_id"
+  add_index "payments", ["distributor_id"], :name => "index_payments_on_distributor_id"
+
   create_table "routes", :force => true do |t|
     t.integer  "distributor_id"
     t.string   "name"
@@ -147,5 +173,21 @@ ActiveRecord::Schema.define(:version => 20111203124951) do
   end
 
   add_index "routes", ["distributor_id"], :name => "index_routes_on_distributor_id"
+
+  create_table "transactions", :force => true do |t|
+    t.integer  "distributor_id"
+    t.integer  "customer_id"
+    t.integer  "transactionable_id"
+    t.string   "transactionable_type"
+    t.integer  "amount_cents",         :default => 0, :null => false
+    t.string   "currency"
+    t.text     "description"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "transactions", ["customer_id"], :name => "index_transactions_on_customer_id"
+  add_index "transactions", ["distributor_id"], :name => "index_transactions_on_distributor_id"
+  add_index "transactions", ["transactionable_id"], :name => "index_transactions_on_transactionable_id"
 
 end

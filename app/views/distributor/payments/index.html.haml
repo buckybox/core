@@ -1,0 +1,29 @@
+%h1 Listing distributor_payments
+
+%table
+  %tr
+    %th Distributor
+    %th Customer
+    %th Amount cents
+    %th Currency
+    %th Kind
+    %th Description
+    %th
+    %th
+    %th
+
+  - @distributor_payments.each do |distributor_payment|
+    %tr
+      %td= distributor_payment.distributor
+      %td= distributor_payment.customer
+      %td= distributor_payment.amount_cents
+      %td= distributor_payment.currency
+      %td= distributor_payment.kind
+      %td= distributor_payment.description
+      %td= link_to 'Show', distributor_payment
+      %td= link_to 'Edit', edit_distributor_payment_path(distributor_payment)
+      %td= link_to 'Destroy', distributor_payment, :confirm => 'Are you sure?', :method => :delete
+
+%br
+
+= link_to 'New Payment', new_distributor_payment_path

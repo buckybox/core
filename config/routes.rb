@@ -19,7 +19,9 @@ BuckyBox::Application.routes.draw do
     resources :boxes,              :controller => 'distributor/boxes'
     resources :routes,             :controller => 'distributor/routes'
     resources :orders,             :controller => 'distributor/orders'
-    resources :customers,          :controller => 'distributor/customers'
+    resources :payments,           :controller => 'distributor/payments'
+    resources :transactions,       :controller => 'distributor/transactions'
+    resources :accounts,           :controller => 'distributor/accounts'
   end
   
   namespace :distributor do

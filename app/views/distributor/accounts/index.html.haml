@@ -1,0 +1,25 @@
+%h1 Listing distributor_accounts
+
+%table
+  %tr
+    %th Distributor
+    %th Customer
+    %th Balance cents
+    %th Currenty
+    %th
+    %th
+    %th
+
+  - @distributor_accounts.each do |distributor_account|
+    %tr
+      %td= distributor_account.distributor
+      %td= distributor_account.customer
+      %td= distributor_account.balance_cents
+      %td= distributor_account.currenty
+      %td= link_to 'Show', distributor_account
+      %td= link_to 'Edit', edit_distributor_account_path(distributor_account)
+      %td= link_to 'Destroy', distributor_account, :confirm => 'Are you sure?', :method => :delete
+
+%br
+
+= link_to 'New Account', new_distributor_account_path

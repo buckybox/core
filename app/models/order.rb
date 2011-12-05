@@ -2,6 +2,7 @@ class Order < ActiveRecord::Base
   belongs_to :distributor
   belongs_to :box
   belongs_to :customer
+  has_one :transaction, :as => :transactionable
 
   attr_accessible :distributor, :box, :box_id, :customer, :quantity, :likes, :dislikes, :completed, :frequency
 
