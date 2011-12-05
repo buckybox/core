@@ -9,7 +9,7 @@
 
     .row
       .twelve.columns
-        %p
+        %p#session_links
           - if distributor_signed_in?
             Signed in as 
             %strong=  current_distributor.name 

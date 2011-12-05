@@ -18,5 +18,5 @@
 /tmp
 
 /public/uploads/
-
-database.yml
+/.sass-cache/
+/config/database.yml
