@@ -1,0 +1,7 @@
+%dl.nice.tabs
+  = topic_tab 'buckylogo.png', distributor_root_path, :image_link => true
+  = topic_tab 'Store', market_store_path(current_distributor.parameter_name)
+  = topic_tab 'Orders', distributor_orders_path(current_distributor)
+  = topic_tab 'Billing', '#billing'
+  = topic_tab 'Customers', distributor_customers_path(current_distributor), :class => 'active'
+  = topic_tab 'Settings', '#settings'

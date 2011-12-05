@@ -1,12 +1,6 @@
 - title 'Orders', false
 
-%dl.nice.tabs
-  %dd= link_to image_tag('buckylogo.png'), distributor_root_path
-  %dd= link_to 'Store', market_store_path(current_distributor.parameter_name)
-  %dd= link_to 'Orders', distributor_orders_path(current_distributor), :class => 'active'
-  %dd= link_to 'Billing', '#billing'
-  %dd= link_to 'Customers', :controller => 'distributor/customers', :action => 'index', :distributor_id => current_distributor
-  %dd= link_to 'Settings', '#settings'
+= render :partial => 'distributor/shared/topic_tabs'
 
 %ul.nice.tabs-content
   %li.active

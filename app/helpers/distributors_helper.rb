@@ -10,4 +10,16 @@ module DistributorsHelper
 
     return address.join(join_with).html_safe
   end
+
+  def topic_tab(text, path, options = {})
+    css_class = (current_page?(path) ? 'active' : '')
+
+    content_tag :dd do
+      if options[:image_link]
+        link_to image_tag(text), path, :class => css_class
+      else
+        link_to text, path, :class => css_class
+      end
+    end
+  end
 end
