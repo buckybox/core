@@ -6,7 +6,8 @@
   .inputs
     = hidden_field_tag :order_id,  @order.id
     = f.input :email, :as => :hidden
-    = f.input :name
+    = f.input :first_name
+    = f.input :last_name
     = f.input :phone
 
   = f.simple_fields_for :address do |g|
