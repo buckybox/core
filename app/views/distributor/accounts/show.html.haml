@@ -1,18 +1,11 @@
-%p#notice= notice
+- title @account.customer.name
 
-%p
-  %b Distributor:
-  = @distributor_account.distributor
-%p
-  %b Customer:
-  = @distributor_account.customer
-%p
-  %b Balance cents:
-  = @distributor_account.balance_cents
-%p
-  %b Currenty:
-  = @distributor_account.currenty
+%dl
+  %dt Balance:
+  %dd= @account.balance
 
-= link_to 'Edit', edit_distributor_account_path(@distributor_account)
+= render :partial => 'distributor/transactions/index'
+
+= link_to 'Edit', edit_distributor_account_path(current_distributor, @account)
 \|
 = link_to 'Back', distributor_accounts_path

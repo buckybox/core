@@ -16,7 +16,7 @@ class MarketController < ApplicationController
     @box = @order.box
 
     @customer = Customer.find_by_email(params[:email])
-    
+
     if @customer
       @address = @customer.address
     else
@@ -33,11 +33,16 @@ class MarketController < ApplicationController
 
   def success
     @order = Order.find(params[:order_id])
+    
+    @customer = @order.customer
+    account = @customer.accounts.where(:distributor_id => @distributor.id).first
+    account = @customer.accounts.create(:distributor => @distributor, :balance => 0) unless account
+    
+    @order.account = account
     @order.completed = true
     @order.save
 
     @box = @order.box
-    @customer = @order.customer
   end
 
   private

@@ -1,6 +1,7 @@
 class Payment < ActiveRecord::Base
   belongs_to :distributor
   belongs_to :customer
+  belongs_to :account
 
   composed_of :amount,
     :class_name => "Money",
@@ -13,5 +14,15 @@ class Payment < ActiveRecord::Base
   KINDS = %w(bank_transfer credit_card)
 
   validates_presence_of :distributor, :customer, :amount, :kind, :description
-  validates :kind, :inclusion => { :in => KINDS, :message => "%{value} is not a valid kind" }
+  validates_inclusion_of :kind, :in => KINDS, :message => "%{value} is not a valid kind"
+
+  before_create :update_account
+
+  def update_account
+    account.balance += amount
+    account.save
+
+    description = 'Payment was made.'
+    Transaction.create(:account => account, :kind => 'payment', :amount => amount, :description => description)
+  end
 end

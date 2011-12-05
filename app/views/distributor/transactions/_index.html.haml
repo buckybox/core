@@ -1,24 +1,18 @@
-- title 'Billing', false
-
-= render :partial => 'distributor/shared/topic_tabs'
-
 %ul.nice.tabs-content
   %li.active
     %table
       %thead
         %tr
-          %th Account ID
-          %th Type
           %th Amount
+          %th Kind
           %th Description
           %th
 
       - @transactions.each do |transaction|
         %tbody
           %tr
-            %td= link_to transaction.account.id, [current_distributor, transaction.account]
-            %td= transaction.kind.titleize
             %td= transaction.amount
+            %td= transaction.kind.titleize
             %td= transaction.description
             %td
               = link_to 'Show', [current_distributor, transaction]

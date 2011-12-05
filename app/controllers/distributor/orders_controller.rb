@@ -9,4 +9,10 @@ class Distributor::OrdersController < Distributor::BaseController
       failure.html { redirect_to :back }
     end
   end
+
+  protected
+
+  def collection
+    @orders ||= end_of_association_chain.completed
+  end
 end

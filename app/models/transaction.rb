@@ -9,7 +9,7 @@ class Transaction < ActiveRecord::Base
 
   attr_accessible :account, :kind, :amount, :description
 
-  KINDS = %w(order payment emend)
+  KINDS = %w(order payment amend)
 
   validates_presence_of :account, :kind, :amount, :description
   validates :kind, :inclusion => { :in => KINDS, :message => "%{value} is not a valid kind" }

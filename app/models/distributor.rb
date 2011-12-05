@@ -4,9 +4,10 @@ class Distributor < ActiveRecord::Base
 
   has_many :boxes, :dependent => :destroy
   has_many :routes, :dependent => :destroy
-  has_many :accounts, :dependent => :destroy
   has_many :orders, :dependent => :destroy
   has_many :payments, :dependent => :destroy
+  has_many :accounts, :dependent => :destroy
+  has_many :transactions, :through => :accounts
   
   # Include default devise modules. Others available are:
   # :token_authenticatable, :encryptable, :confirmable, :lockable, :timeoutable and :omniauthable
