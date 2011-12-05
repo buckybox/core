@@ -1,25 +1,29 @@
-%h1 Listing distributor_accounts
+- title 'Accounts', false
 
-%table
-  %tr
-    %th Distributor
-    %th Customer
-    %th Balance cents
-    %th Currenty
-    %th
-    %th
-    %th
+= render :partial => 'distributor/shared/topic_tabs'
 
-  - @distributor_accounts.each do |distributor_account|
-    %tr
-      %td= distributor_account.distributor
-      %td= distributor_account.customer
-      %td= distributor_account.balance_cents
-      %td= distributor_account.currenty
-      %td= link_to 'Show', distributor_account
-      %td= link_to 'Edit', edit_distributor_account_path(distributor_account)
-      %td= link_to 'Destroy', distributor_account, :confirm => 'Are you sure?', :method => :delete
+%ul.nice.tabs-content
+  %li.active
+    %table
+      %thead
+        %tr
+          %th Customer
+          %th Email
+          %th Phone
+          %th Address
+          %th Balance
+          %th
 
-%br
+      - @accounts.each do |account|
+        %tbody
+          %tr
+            %td= account.customer.name
+            %td= account.customer.email
+            %td= account.customer.phone
+            %td= customer_address(account.customer)
+            %td= account.balance
+            %td
+              = link_to 'Show', [current_distributor, account]
+              = link_to 'Edit', edit_distributor_account_path(current_distributor, account)
+              = link_to 'Destroy', [current_distributor, account], :confirm => 'Are you sure?', :method => :delete
 
-= link_to 'New Account', new_distributor_account_path

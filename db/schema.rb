@@ -17,7 +17,7 @@ ActiveRecord::Schema.define(:version => 20111205005039) do
     t.integer  "distributor_id"
     t.integer  "customer_id"
     t.integer  "balance_cents",  :default => 0, :null => false
-    t.string   "currenty"
+    t.string   "currency"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

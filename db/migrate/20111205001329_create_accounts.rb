@@ -4,7 +4,7 @@ class CreateAccounts < ActiveRecord::Migration
       t.references :distributor
       t.references :customer
       t.integer :balance_cents, :default => 0, :null => false
-      t.string :currenty
+      t.string :currency
 
       t.timestamps
     end

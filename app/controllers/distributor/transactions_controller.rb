@@ -1,2 +1,5 @@
-class Distributor::TransactionsController < InheritedResources::Base
+class Distributor::TransactionsController < Distributor::BaseController
+  belongs_to :distributor
+
+  respond_to :html, :xml, :json
 end

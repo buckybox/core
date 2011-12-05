@@ -1,29 +1,27 @@
-%h1 Listing distributor_transactions
+- title 'Billing', false
 
-%table
-  %tr
-    %th Distributor
-    %th Customer
-    %th Transactionable
-    %th Amount cents
-    %th Currency
-    %th Description
-    %th
-    %th
-    %th
+= render :partial => 'distributor/shared/topic_tabs'
 
-  - @distributor_transactions.each do |distributor_transaction|
-    %tr
-      %td= distributor_transaction.distributor
-      %td= distributor_transaction.customer
-      %td= distributor_transaction.transactionable
-      %td= distributor_transaction.amount_cents
-      %td= distributor_transaction.currency
-      %td= distributor_transaction.description
-      %td= link_to 'Show', distributor_transaction
-      %td= link_to 'Edit', edit_distributor_transaction_path(distributor_transaction)
-      %td= link_to 'Destroy', distributor_transaction, :confirm => 'Are you sure?', :method => :delete
+%ul.nice.tabs-content
+  %li.active
+    %table
+      %thead
+        %tr
+          %th Customer
+          %th Type
+          %th Amount
+          %th Description
+          %th
 
-%br
+      - @transactions.each do |transaction|
+        %tbody
+          %tr
+            %td= transaction.customer.name
+            %td= transaction.transactionable_type
+            %td= transaction.amount
+            %td= transaction.description
+            %td
+              = link_to 'Show', [current_distributor, transaction]
+              = link_to 'Edit', edit_distributor_transaction_path(current_distributor, transaction)
+              = link_to 'Destroy', [current_distributor, transaction], :confirm => 'Are you sure?', :method => :delete
 
-= link_to 'New Transaction', new_distributor_transaction_path
