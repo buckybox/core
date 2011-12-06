@@ -42,6 +42,7 @@ end
 
 group :test do
   gem 'fabrication'
+  gem 'database_cleaner'
   gem 'capybara'
   gem 'launchy'
   gem 'guard-rspec'

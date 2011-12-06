@@ -1,6 +1,5 @@
 Fabricator(:account) do
-  distributor nil
-  customer nil
-  balance_cents 1
-  currenty "MyString"
+  distributor!
+  customer!
+  balance 0
 end

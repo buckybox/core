@@ -1,11 +1,6 @@
 Fabricator(:box) do
-  name "MyString"
-  description "MyText"
-  likes false
-  dislikes false
-  price_cents 1
-  currency "MyString"
-  available_single false
-  available_weekly false
-  available_fourtnightly false
+  distributor!
+  name { sequence(:name) { |i| "Box #{i}" } }
+  description { sequence(:description) { |i| "Description #{i}" } }
+  price_cents 1000
 end

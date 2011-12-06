@@ -1,8 +1,6 @@
 Fabricator(:transaction) do
-  distributor nil
-  customer nil
-  transactionable nil
-  amount_cents 1
-  currency "MyString"
-  description "MyText"
+  account!
+  kind 'order'
+  amount 1000
+  description { sequence(:description) { |i| "Description #{i}" } }
 end

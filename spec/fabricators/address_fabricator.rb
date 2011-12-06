@@ -1,9 +1,7 @@
 Fabricator(:address) do
-  customer nil
-  address_1 "MyString"
-  address_2 "MyString"
-  suburb "MyString"
-  city "MyString"
-  postcode "MyString"
-  delivery_note "MyText"
+  customer!
+  address_1 { sequence(:address_1) { |i| "#{1} Address St" } }
+  suburb { sequence(:suburb) { |i| "Suburb #{i}" } }
+  city { sequence(:city) { |i| "City #{i}" } }
+  postcode { sequence(:psotcode, 1000) }
 end

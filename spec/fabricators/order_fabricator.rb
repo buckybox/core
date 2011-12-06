@@ -1,8 +1,7 @@
 Fabricator(:order) do
-  distributor nil
-  box nil
-  customer nil
+  distributor!
+  box!
+  customer!
   quantity 1
-  likes "MyText"
-  dislikes "MyText"
+  frequency 'single'
 end
