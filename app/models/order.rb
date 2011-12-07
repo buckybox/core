@@ -15,14 +15,22 @@ class Order < ActiveRecord::Base
   validates_numericality_of :quantity, :greater_than => 0
   validates_inclusion_of :frequency, :in => FREQUENCIES, :message => "%{value} is not a valid frequency"
 
-  before_save :update_account, :if => 'completed_changed? || (completed? && quantity_changed?)'
+  after_save :update_account, :if => 'completed_changed? || (completed? && quantity_changed?)'
 
   def update_account
-    amount = (box.price * quantity)
-    account.balance -= amount
-    account.save
+    if completed_changed?
+      amount = box.price * quantity
+      account.subtract_from_balance(amount, :kind => 'order', :description => "[ID##{id}] Placed an order for #{string_pluralize} at #{box.price} each.")
+      account.save
+    elsif completed? && quantity_changed?
+      old_quantity, new_quantity = quantity_change
+      amount = (old_quantity - new_quantity) * box.price
+      account.subtract_from_balance(amount, :kind => 'order', :description => "[ID##{id}] Changed quantity of an order form #{old_quantity} to #{new_quantity}.")
+      account.save
+    end
+  end
 
-    description = 'Order was created.'
-    Transaction.create(:account => account, :kind => 'order', :amount => amount, :description => description)
+  def string_pluralize
+    "#{quantity || 0} " + ((quantity == 1 || quantity =~ /^1(\.0+)?$/) ? box.name : box.name.pluralize)
   end
 end

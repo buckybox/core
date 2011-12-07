@@ -36,8 +36,8 @@ class MarketController < ApplicationController
     
     @customer = @order.customer
     account = @customer.accounts.where(:distributor_id => @distributor.id).first
-    account = @customer.accounts.create(:distributor => @distributor, :balance => 0) unless account
-    
+    account = @customer.accounts.create(:distributor => @distributor) unless account
+
     @order.account = account
     @order.completed = true
     @order.save
