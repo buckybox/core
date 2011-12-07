@@ -14,7 +14,14 @@ class Account < ActiveRecord::Base
 
   attr_accessible :distributor, :customer
 
+  before_validation :default_balance_and_currency
+
   validates_presence_of :distributor, :customer, :balance
+
+  def default_balance_and_currency
+    write_attribute(:balance_cents, 0) if balance_cents.blank?
+    write_attribute(:currency, Money.default_currency.to_s) if currency.blank?
+  end
 
   def balance_cents=(value)
     raise(ArgumentError, "The balance can not be updated this way. Please use one of the model balance methods that create transactions.")
@@ -37,8 +44,6 @@ class Account < ActiveRecord::Base
   end
 
   def add_to_balance(amount, options = {})
-    puts balance.inspect
-    puts amount.to_money.inspect
     new_balance = balance + amount.to_money
     change_balance_to(new_balance, options)
   end
