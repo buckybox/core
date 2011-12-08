@@ -3,9 +3,9 @@
 = simple_form_for(resource, :as => resource_name, :url => registration_path(resource_name)) do |f|
   = f.error_notification
   .inputs
-    = f.input :email, :required => true, :autofocus => true
-    = f.input :password, :required => true
-    = f.input :password_confirmation, :required => true
+    = f.input :email, :required => true, :label => false, :placeholder => "Email", :autofocus => true
+    = f.input :password, :required => true, :label => false, :placeholder => "Password"
+    = f.input :password_confirmation, :required => true, :label => false, :placeholder => "Password confirmation"
   .actions
     = f.button :submit, "Sign up"
 
