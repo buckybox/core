@@ -47,8 +47,8 @@ class Account < ActiveRecord::Base
   end
 
   def add_to_balance(amount, options = {})
-    new_balance = balance + amount.to_money
-    change_balance_to(new_balance, options)
+    amount = balance + amount.to_money
+    change_balance_to(amount, options)
   end
 
   def subtract_from_balance(amount, options = {})

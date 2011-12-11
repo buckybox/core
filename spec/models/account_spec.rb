@@ -16,23 +16,41 @@ describe Account do
     describe '#change_balance_to(amount)' do
       [-5, 0, 5].each do |v|
         context "with #{v} of type #{v.class}" do
-          before(:each) do
-            @account.change_balance_to(v)
-            @account.save
-          end
-
-          specify { @account.balance.should == Money.new(v * 100) }
-          specify { @account.transactions.last.amount.should == Money.new(v * 100) }
+          before { @account.change_balance_to(v) }
+          specify { @account.balance.should == v.to_money }
+          specify { @account.transactions.last.amount.should == v.to_money }
         end
       end
     end
 
     describe '#add_to_balance' do
+      [-5, 0, 5].each do |v|
+        context "with #{v} of type #{v.class}" do
+          before(:each) do
+            @account.change_balance_to(250)
+            @account.save
+            @account.add_to_balance(v)
+          end
 
+          specify { @account.balance.should == (250 + v).to_money }
+          specify { @account.transactions.last.amount.should == v.to_money }
+        end
+      end
     end
 
     describe '#subtract_from_balance' do
+      [-5, 0, 5].each do |v|
+        context "with #{v} of type #{v.class}" do
+          before(:each) do
+            @account.change_balance_to(250)
+            @account.save
+            @account.subtract_from_balance(v)
+          end
 
+          specify { @account.balance.should == (250 - v).to_money }
+          specify { @account.transactions.last.amount.should == (-1 * v).to_money }
+        end
+      end
     end
   end
 end
