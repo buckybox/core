@@ -1,7 +1,7 @@
-%h1 Editing distributor_account
+- title("Edit #{@account.customer.name}'s Account")
 
 = render 'form'
 
-= link_to 'Show', @distributor_account
+= link_to 'Show', [current_distributor, @account]
 \|
-= link_to 'Back', distributor_accounts_path
+= link_to 'Back', distributor_accounts_path(current_distributor)
