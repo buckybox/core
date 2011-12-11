@@ -6,8 +6,8 @@
       = f.error_notification
 
       .inputs
-        = f.input :name
-        = f.input :url
+        = f.input :name, :label => false, :placeholder => "Business name"
+        = f.input :url, :label => false, :placeholder => "Website"
         = f.input :company_logo
         = f.input :company_logo_cache, :as => :hidden
 
