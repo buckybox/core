@@ -17,6 +17,7 @@ class Account < ActiveRecord::Base
   before_validation :default_balance_and_currency
 
   validates_presence_of :distributor, :customer, :balance
+  validates_uniqueness_of :customer_id, :scope => :distributor_id, :message => 'this customer already has an account with this distributor'
 
   def default_balance_and_currency
     write_attribute(:balance_cents, 0) if balance_cents.blank?
@@ -33,19 +34,21 @@ class Account < ActiveRecord::Base
 
   def change_balance_to(amount, options = {})
     amount = amount.to_money
-    
-    options.merge!(:kind => 'amend') unless options[:kind]
-    options.merge!(:description => "Balance changed from #{balance} to #{amount}.") unless options[:description]
+    amount_difference = amount - balance
+
+    options.merge!(kind: 'amend') unless options[:kind]
+    options.merge!(description: "Balance changed from #{balance} to #{amount}.") unless options[:description]
 
     write_attribute(:balance_cents, amount.cents)
-    write_attribute(:crrency, amount.currency.to_s || Money.default_currency.to_s)
+    write_attribute(:currency, amount.currency.to_s || Money.default_currency.to_s)
+    clear_aggregation_cache # without this the composed_of balance attribute does not update
 
-    transactions.build(:kind => options[:kind], :amount => amount, :description => options[:description])
+    transactions.build(kind: options[:kind], amount: amount_difference, description: options[:description])
   end
 
   def add_to_balance(amount, options = {})
-    new_balance = balance + amount.to_money
-    change_balance_to(new_balance, options)
+    amount = balance + amount.to_money
+    change_balance_to(amount, options)
   end
 
   def subtract_from_balance(amount, options = {})

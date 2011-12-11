@@ -1,11 +1,8 @@
-= simple_form_for(@distributor_account) do |f|
+= simple_form_for([current_distributor, @account]) do |f|
   = f.error_notification
 
   .inputs
-    = f.association :distributor
-    = f.association :customer
-    = f.input :balance_cents
-    = f.input :currenty
+    = f.input :balance
 
   .actions
     = f.button :submit

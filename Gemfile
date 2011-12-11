@@ -46,6 +46,7 @@ group :test do
   gem 'capybara'
   gem 'launchy'
   gem 'guard-rspec'
+  gem 'fuubar'
 end
 
 group :staging do

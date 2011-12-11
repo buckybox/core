@@ -16,7 +16,7 @@ class Payment < ActiveRecord::Base
   validates_presence_of :distributor, :customer, :account, :amount, :kind, :description
   validates_inclusion_of :kind, :in => KINDS, :message => "%{value} is not a valid kind of payment"
 
-  after_save :update_account
+  after_create :update_account
 
   def update_account
     account.add_to_balance(amount, :kind => 'payment', :description => "[ID##{id}] Recieved a payment by #{kind.humanize.downcase}.")

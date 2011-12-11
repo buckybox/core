@@ -1,8 +1,6 @@
 - title @account.customer.name
 
-%dl
-  %dt Balance:
-  %dd= @account.balance
+%h2== Balance: #{@account.balance}
 
 = render :partial => 'distributor/transactions/index'
 

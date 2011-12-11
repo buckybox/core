@@ -24,8 +24,8 @@ class Order < ActiveRecord::Base
       account.save
     elsif completed? && quantity_changed?
       old_quantity, new_quantity = quantity_change
-      amount = (old_quantity - new_quantity) * box.price
-      account.subtract_from_balance(amount, :kind => 'order', :description => "[ID##{id}] Changed quantity of an order form #{old_quantity} to #{new_quantity}.")
+      amount = box.price * (old_quantity - new_quantity)
+      account.add_to_balance(amount, :kind => 'order', :description => "[ID##{id}] Changed quantity of an order form #{old_quantity} to #{new_quantity}.")
       account.save
     end
   end
