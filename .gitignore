@@ -17,6 +17,8 @@
 /log/*.log
 /tmp
 
-/public/uploads/
-/.sass-cache/
-/config/database.yml
+public/uploads/
+.sass-cache/
+config/database.yml
+Session.vim
+.rvmrc
