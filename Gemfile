@@ -23,9 +23,13 @@ gem 'inherited_resources'
 gem 'mini_magick'
 gem 'carrierwave'
 gem 'money'
+gem 'airbrake'
 
 group :development do
   gem 'nifty-generators', :require => false
+
+  gem 'capistrano'
+  gem 'capistrano_colors'
 end
 
 group :development, :test do
@@ -38,11 +42,6 @@ group :development, :test do
   
   gem 'ruby-debug19', :require => false
   gem 'mailcatcher', :require => false
-
-  gem 'airbrake'
-
-  gem 'capistrano'
-  gem 'capistrano_colors'
 end
 
 group :test do

@@ -46,5 +46,3 @@ require 'capistrano_colors'
 require 'bundler/capistrano'
 require 'airbrake/capistrano'
 
-load 'deploy/assets'
-
