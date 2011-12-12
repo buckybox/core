@@ -1,22 +1,23 @@
 set :application, "bucky_box"
 set :user, application
 set :repository,  "git@github.com:enspiral/#{application}.git"
-set :scm, :git
 
-set :deploy_via, :remote_cache
-set :rake, "bundle exec rake"
+set :scm, :git
 set :use_sudo, false
+set :rake, 'bundle exec rake'
+set :deploy_via, :remote_cache
 
 task :staging do
   set :rails_env, :staging
+  set :deploy_to, "/home/#{application}/staging"
 end
 
 task :production do
   set :rails_env, :production
+  set :deploy_to, "/home/#{application}/production"
 end
 
 set :domain, '173.255.206.188'
-set :deploy_to, "/home/#{application}/#{rails_env}"
 set :branch, rails_env
 
 role :web, domain
@@ -37,7 +38,7 @@ namespace :deploy do
   end
 end
 
-after "deploy:update_code" do
+after 'deploy:update_code' do
   deploy.symlink_configs
 end
 
