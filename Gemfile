@@ -38,13 +38,20 @@ group :development, :test do
   
   gem 'ruby-debug19', :require => false
   gem 'mailcatcher', :require => false
+
+  gem 'airbrake'
+
+  gem 'capistrano'
+  gem 'capistrano_colors'
 end
 
 group :test do
   gem 'fabrication'
   gem 'database_cleaner'
+
   gem 'capybara'
   gem 'launchy'
+  
   gem 'guard-rspec'
   gem 'fuubar'
 end
