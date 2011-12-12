@@ -5,7 +5,7 @@ test:
   domain: test.host
 
 staging:
-  domain: dev.bucky_box.com
+  domain: dev.buckybox.com
 
 production:
-  domain: my.bukcy_box.com
+  domain: my.bukcybox.com
