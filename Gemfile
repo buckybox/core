@@ -9,14 +9,14 @@ gem 'pg'
 # Gems used only for assets and not required
 # in production environments by default.
 group :assets do
-  gem 'sass-rails'
   gem 'coffee-rails'
   gem 'uglifier'
   gem 'zurb-foundation'
 end
 
-gem 'jquery-rails'
 gem 'haml-rails'
+gem 'sass-rails'
+gem 'jquery-rails'
 gem 'devise'
 gem 'simple_form'
 gem 'inherited_resources'
