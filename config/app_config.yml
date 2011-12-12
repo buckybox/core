@@ -4,5 +4,8 @@ development:
 test:
   domain: test.host
 
+staging:
+  domain: dev.bucky_box.com
+
 production:
-  domain: example.com
+  domain: my.bukcy_box.com

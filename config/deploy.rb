@@ -5,7 +5,6 @@ set :repository,  "git@github.com:enspiral/#{application}.git"
 set :scm, :git
 set :use_sudo, false
 set :rake, 'bundle exec rake'
-set :deploy_via, :remote_cache
 
 task :staging do
   set :rails_env, :staging
@@ -38,7 +37,7 @@ namespace :deploy do
   end
 end
 
-after 'deploy:update_code' do
+after 'deploy:assets:symlink' do
   deploy.symlink_configs
 end
 
