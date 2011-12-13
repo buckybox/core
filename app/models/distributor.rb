@@ -28,6 +28,6 @@ class Distributor < ActiveRecord::Base
   before_save :parameterize_name
 
   def parameterize_name
-    parameter_name = name.parameterize if name
+    self.parameter_name = name.parameterize if name
   end
 end

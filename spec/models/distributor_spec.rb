@@ -6,5 +6,6 @@ describe Distributor do
   end
 
   specify { @distributor.should be_valid }
+  specify { @distributor.parameter_name.should == @distributor.name.parameterize }
 end
 
