@@ -26,7 +26,7 @@ class Distributor::AccountsController < Distributor::BaseController
   def collection
     @accounts = end_of_association_chain.includes(:customer => :address)
 
-    if params[:query]
+    unless params[:query].blank?
       customers = @distributor.customers.search(params[:query])
       @accounts = @accounts.where(:customer_id => customers.map(&:id))
     end

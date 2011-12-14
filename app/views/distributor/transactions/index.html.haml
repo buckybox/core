@@ -2,24 +2,25 @@
 
 = render :partial => 'distributor/shared/topic_tabs'
 
-%table
-  %thead
-    %tr
-      %th Account ID
-      %th Type
-      %th Amount
-      %th Description
-      %th
-
-  - @transactions.each do |transaction|
-    %tbody
+.row
+  %table.twelve.columns
+    %thead
       %tr
-        %td= link_to transaction.account.id, [current_distributor, transaction.account]
-        %td= transaction.kind.titleize
-        %td= transaction.amount
-        %td= transaction.description
-        %td
-          = link_to 'Show', [current_distributor, transaction]
-          = link_to 'Edit', edit_distributor_transaction_path(current_distributor, transaction)
-          = link_to 'Destroy', [current_distributor, transaction], :confirm => 'Are you sure?', :method => :delete
+        %th Account ID
+        %th Type
+        %th Amount
+        %th Description
+        %th
+
+    - @transactions.each do |transaction|
+      %tbody
+        %tr
+          %td= link_to transaction.account.id, [current_distributor, transaction.account]
+          %td= transaction.kind.titleize
+          %td= transaction.amount
+          %td= transaction.description
+          %td
+            = link_to 'Show', [current_distributor, transaction]
+            = link_to 'Edit', edit_distributor_transaction_path(current_distributor, transaction)
+            = link_to 'Destroy', [current_distributor, transaction], :confirm => 'Are you sure?', :method => :delete
 
