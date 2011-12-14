@@ -3,6 +3,8 @@ class Order < ActiveRecord::Base
   belongs_to :box
   belongs_to :customer
   belongs_to :account
+  
+  acts_as_taggable
 
   attr_accessible :distributor, :box, :box_id, :customer, :quantity, :likes, :dislikes, :completed, :frequency
 

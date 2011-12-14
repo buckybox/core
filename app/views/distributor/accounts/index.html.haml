@@ -2,28 +2,36 @@
 
 = render :partial => 'distributor/shared/topic_tabs'
 
-%ul.nice.tabs-content
-  %li.active
-    %table
-      %thead
-        %tr
-          %th Customer
-          %th Email
-          %th Phone
-          %th Address
-          %th Balance
-          %th
+.row.page-controls
+  .eight.columns
+  .four.columns
+    = form_tag search_distributor_accounts_path, :method => :get, :class => 'nice' do
+      = text_field_tag :query, '', :placeholder => 'Search For...', :class => 'input-text'
+      = submit_tag 'Search', :class => 'small button nice'
 
-      - @accounts.each do |account|
-        %tbody
-          %tr
-            %td= link_to account.customer.name, account.customer
-            %td= account.customer.email
-            %td= account.customer.phone
-            %td= customer_address(account.customer)
-            %td= account.balance
-            %td
-              = link_to 'Show', [current_distributor, account]
-              = link_to 'Edit', edit_distributor_account_path(current_distributor, account)
-              = link_to 'Destroy', [current_distributor, account], :confirm => 'Are you sure?', :method => :delete
+.row
+  %table.twelve.columns
+    %thead
+      %tr
+        %th Customer
+        %th Email
+        %th Phone
+        %th Address
+        %th Balance
+        %th Tags
+        %th Controls
+
+    - @accounts.each do |account|
+      %tbody
+        %tr
+          %td= link_to account.customer.name, [current_distributor, account]
+          %td= account.customer.email
+          %td= account.customer.phone
+          %td= customer_address(account.customer)
+          %td= account.balance
+          %td= account.tag_list
+          %td
+            = link_to 'Edit', edit_distributor_account_path(current_distributor, account)
+            %br
+            = link_to 'Delete', [current_distributor, account], :confirm => 'Are you sure?', :method => :delete
 
