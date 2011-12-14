@@ -4,5 +4,10 @@
   = topic_tab 'Store', market_store_path(current_distributor.parameter_name)
   = topic_tab 'Orders', distributor_orders_path(current_distributor)
   = topic_tab 'Billing', distributor_transactions_path(current_distributor)
-  = topic_tab 'Accounts', distributor_accounts_path(current_distributor)
+  = topic_tab 'Customers', distributor_accounts_path(current_distributor)
   = topic_tab 'Settings', distributor_wizard_business_path
+
+
+- if content_for?(:page_controls)
+  .page-controls
+    = yeild(:page_controls)

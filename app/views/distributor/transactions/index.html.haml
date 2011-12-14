@@ -2,26 +2,24 @@
 
 = render :partial => 'distributor/shared/topic_tabs'
 
-%ul.nice.tabs-content
-  %li.active
-    %table
-      %thead
-        %tr
-          %th Account ID
-          %th Type
-          %th Amount
-          %th Description
-          %th
+%table
+  %thead
+    %tr
+      %th Account ID
+      %th Type
+      %th Amount
+      %th Description
+      %th
 
-      - @transactions.each do |transaction|
-        %tbody
-          %tr
-            %td= link_to transaction.account.id, [current_distributor, transaction.account]
-            %td= transaction.kind.titleize
-            %td= transaction.amount
-            %td= transaction.description
-            %td
-              = link_to 'Show', [current_distributor, transaction]
-              = link_to 'Edit', edit_distributor_transaction_path(current_distributor, transaction)
-              = link_to 'Destroy', [current_distributor, transaction], :confirm => 'Are you sure?', :method => :delete
+  - @transactions.each do |transaction|
+    %tbody
+      %tr
+        %td= link_to transaction.account.id, [current_distributor, transaction.account]
+        %td= transaction.kind.titleize
+        %td= transaction.amount
+        %td= transaction.description
+        %td
+          = link_to 'Show', [current_distributor, transaction]
+          = link_to 'Edit', edit_distributor_transaction_path(current_distributor, transaction)
+          = link_to 'Destroy', [current_distributor, transaction], :confirm => 'Are you sure?', :method => :delete
 

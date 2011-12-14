@@ -2,7 +2,10 @@
 
 = render :partial => 'distributor/shared/topic_tabs'
 
-%ul.nice.tabs-content
-  %li.active
-    Add Order:
+= form_tag root_url, :class => 'nice' do
+  %fieldset
+    %legend Add Order
+    = text_field_tag :customer_first_name, '', :placeholder => 'Customers First Name', :class => 'input-text'
+    = text_field_tag :customer_last_name, '', :placeholder => 'Customers Last Name', :class => 'input-text'
+    = submit_tag 'Create Order', :class => 'button nice'
 
