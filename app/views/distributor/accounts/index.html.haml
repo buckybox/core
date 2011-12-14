@@ -3,7 +3,8 @@
 = render :partial => 'distributor/shared/topic_tabs'
 
 .row.page-controls
-  .twelve.columns
+  .eight.columns
+  .four.columns
     = form_tag search_distributor_accounts_path, :method => :get, :class => 'nice' do
       = text_field_tag :query, '', :placeholder => 'Search For...', :class => 'input-text'
       = submit_tag 'Search', :class => 'small button nice'

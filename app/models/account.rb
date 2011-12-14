@@ -13,7 +13,7 @@ class Account < ActiveRecord::Base
     :converter => Proc.new { |value| value.respond_to?(:to_money) ? value.to_money : raise(ArgumentError, "Can't convert #{value.class} to Money") }
 
   acts_as_taggable
-  
+
   attr_accessible :distributor, :customer
 
   before_validation :default_balance_and_currency
