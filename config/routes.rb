@@ -23,8 +23,8 @@ BuckyBox::Application.routes.draw do
     resources :transactions,       :controller => 'distributor/transactions'
     resources :accounts,           :controller => 'distributor/accounts' do
       collection do
-        get 'search',     :action => :index, :as => 'search'
-        get 'page/:page', :action => :index, :as => 'page'
+        get 'search',   :action => :index, :as => 'search'
+        get 'tag/:tag', :action => :index, :as => 'tag'
       end
     end
   end

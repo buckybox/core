@@ -14,24 +14,13 @@
     %thead
       %tr
         %th Customer
-        %th Email
-        %th Phone
-        %th Address
-        %th Balance
         %th Tags
-        %th Controls
+        %th Balance
 
     - @accounts.each do |account|
       %tbody
         %tr
           %td= link_to account.customer.name, [current_distributor, account]
-          %td= account.customer.email
-          %td= account.customer.phone
-          %td= customer_address(account.customer)
+          %td= tag_links(account.tags)
           %td= account.balance
-          %td= account.tag_list
-          %td
-            = link_to 'Edit', edit_distributor_account_path(current_distributor, account)
-            %br
-            = link_to 'Delete', [current_distributor, account], :confirm => 'Are you sure?', :method => :delete
 
