@@ -1,5 +1,5 @@
 BuckyBox::Application.routes.draw do
-  devise_for :distributors
+  devise_for :distributors, :controllers => {:sessions => "distributor/sessions"}
 
   get 'home' => 'bucky_box#index', :as => 'home'
 
