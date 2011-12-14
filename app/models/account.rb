@@ -14,7 +14,7 @@ class Account < ActiveRecord::Base
 
   acts_as_taggable
 
-  attr_accessible :distributor, :customer
+  attr_accessible :distributor, :customer, :tag_list
 
   before_validation :default_balance_and_currency
 
