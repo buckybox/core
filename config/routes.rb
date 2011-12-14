@@ -12,7 +12,7 @@ BuckyBox::Application.routes.draw do
     get ':distributor_parameter_name/payment/:order_id',          :action => 'payment',          :as => 'payment'
     get ':distributor_parameter_name/success/:order_id',          :action => 'success',          :as => 'success'
   end
-
+  
   resources :distributors do
     resource :bank_information,    :controller => 'distributor/bank_information'
     resource :invoice_information, :controller => 'distributor/invoice_information'
@@ -21,7 +21,12 @@ BuckyBox::Application.routes.draw do
     resources :orders,             :controller => 'distributor/orders'
     resources :payments,           :controller => 'distributor/payments'
     resources :transactions,       :controller => 'distributor/transactions'
-    resources :accounts,           :controller => 'distributor/accounts'
+    resources :accounts,           :controller => 'distributor/accounts' do
+      collection do
+        get 'search',     :action => :index, :as => 'search'
+        get 'page/:page', :action => :index, :as => 'page'
+      end
+    end
   end
   
   namespace :distributor do

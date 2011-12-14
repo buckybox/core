@@ -1,5 +1,6 @@
-%dl.nice.tabs
-  = topic_tab 'buckylogo.png', distributor_root_path, :image_link => true
+.nav-bar
+  = topic_tab 'buckylogo.png', distributor_root_path, :image_link => true, :style => 'padding-top:7px; height:39px;'
+  = topic_tab 'Dashboard', distributor_root_path
   = topic_tab 'Store', market_store_path(current_distributor.parameter_name)
   = topic_tab 'Orders', distributor_orders_path(current_distributor)
   = topic_tab 'Billing', distributor_transactions_path(current_distributor)

@@ -13,12 +13,13 @@ module DistributorsHelper
 
   def topic_tab(text, path, options = {})
     css_class = (current_page?(path) ? 'active' : '')
+    is_image = options.delete(:image_link)
 
-    content_tag :dd do
-      if options[:image_link]
-        link_to image_tag(text), path, :class => css_class
+    content_tag :li do
+      if is_image
+        link_to image_tag(text), path, options.merge(:class => css_class)
       else
-        link_to text, path, :class => css_class
+        link_to text, path, options.merge(:class => css_class)
       end
     end
   end

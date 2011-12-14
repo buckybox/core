@@ -17,12 +17,16 @@ end
 gem 'haml-rails'
 gem 'sass-rails'
 gem 'jquery-rails'
+
 gem 'devise'
 gem 'simple_form'
 gem 'inherited_resources'
 gem 'mini_magick'
 gem 'carrierwave'
 gem 'money'
+gem 'acts-as-taggable-on'
+gem 'pg_search'
+gem 'kaminari'
 gem 'airbrake'
 
 group :development do
