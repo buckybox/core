@@ -6,6 +6,24 @@ h2. Git Strategy
 
 Currently following "this git branching and merging strategy.":http://scottchacon.com/2011/08/31/github-flow.html
 
+Basically we are using pull request in Github so others can review commits. Before you submit a pull request make sure to rebase off of origin master.
+
+@git checkout master@ Change to your local master branch
+@git fetch origin@ Make sure your origin reference is upto date
+@git pull origin master@ Commit any of the changes origin had
+@git checkout feature_branch_name@ Switch to your feature branch
+@git rebase master@ Rebase off of your master which is now upto date with origin master
+You may need to resolve conflicts. It will give instructions on what to do.
+@git push --force origin feature_branch_name@ Because you have rewritten history and need to force Github to accept it
+
+Go to Github, navigate to your branch and click on the 'Pull Request' button in the top right. Add a comment to your pull request and get someone else to review and merge it in (unless you need to fix something then just keep commiting to the branch until it is fixed).
+
+Occasionally, staging gets a little messy. If the team is ok with it (nothing else is being tested) you can reset staging 
+so it is the same as master again before you merge in your feature branch for testing using:
+
+@git checkout staging@
+@git reset --hard origin/master@
+
 h2. Best Practices
 
 * Don't commit commented out code (actual comments are fine). That is what version control is for.
