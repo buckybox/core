@@ -6,11 +6,11 @@ BuckyBox::Application.routes.draw do
   root :to => 'bucky_box#index'
   
   namespace :market do
-    get ':distributor_parameter_name',                            :action => 'store',            :as => 'store'
-    get ':distributor_parameter_name/buy/:box_id',                :action => 'buy',              :as => 'buy'
-    get ':distributor_parameter_name/customer_details/:order_id', :action => 'customer_details', :as => 'customer_details'
-    get ':distributor_parameter_name/payment/:order_id',          :action => 'payment',          :as => 'payment'
-    get ':distributor_parameter_name/success/:order_id',          :action => 'success',          :as => 'success'
+    get ':distributor_parameter_name',                  :action => 'store',            :as => 'store'
+    get ':distributor_parameter_name/buy/:box_id',      :action => 'buy',              :as => 'buy'
+    get ':distributor_parameter_name/customer_details', :action => 'customer_details', :as => 'customer_details'
+    get ':distributor_parameter_name/payment',          :action => 'payment',          :as => 'payment'
+    get ':distributor_parameter_name/success',          :action => 'success',          :as => 'success'
   end
   
   resources :distributors do
@@ -47,4 +47,7 @@ BuckyBox::Application.routes.draw do
   resources :customers do
     resource :addresses, :controller => 'customer/addresses'
   end
+
+  resources :orders
+
 end
