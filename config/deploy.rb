@@ -9,15 +9,16 @@ set :rake, 'bundle exec rake'
 task :staging do
   set :rails_env, :staging
   set :deploy_to, "/home/#{application}/staging"
+  set :branch, 'staging'
 end
 
 task :production do
   set :rails_env, :production
   set :deploy_to, "/home/#{application}/production"
+  set :branch, 'production'
 end
 
 set :domain, '173.255.206.188'
-set :branch, rails_env
 
 role :web, domain
 role :app, domain
