@@ -12,7 +12,6 @@ class MarketController < ApplicationController
     @box = Box.find(params[:box_id])
     @order = @distributor.orders.new(:box => @box)
     analytical.event('begin_order', :with => {:distributor_id => @distributor.id, :box => @box.id})
-    #TODO: save order_id in session and use that for the rest of the process
   end
 
   def customer_details
