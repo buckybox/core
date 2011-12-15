@@ -4,11 +4,13 @@ class MarketController < ApplicationController
   def store
     @hide_sidebars = true
     @boxes = @distributor.boxes
+    analytical.event('view_store', :with => {:distributor_id => @distributor.id})
   end
 
   def buy
     @box = Box.find(params[:box_id])
     @order = @distributor.orders.new(:box => @box)
+    analytical.event('begin_order', :with => {:distributor_id => @distributor.id, :box => @box.id})
     #TODO: save order_id in session and use that for the rest of the process
   end
 
@@ -44,6 +46,7 @@ class MarketController < ApplicationController
     @order.completed = true
     @order.save
 
+    analytical.event('complete_order', :with => {:distributor_id => @distributor.id})
     #TODO: clear order from session
     @box = @order.box
   end

@@ -27,6 +27,7 @@ RSpec.configure do |config|
   # instead of true.
   config.use_transactional_fixtures = true
 
+  config.include DeviseRequest, :type => :request
   config.extend DeviseRequestMacros, :type => :request
   
   config.before(:suite) do
