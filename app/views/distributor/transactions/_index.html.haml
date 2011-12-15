@@ -1,21 +1,20 @@
-%ul.nice.tabs-content
-  %li.active
-    %table
-      %thead
-        %tr
-          %th Amount
-          %th Kind
-          %th Description
-          %th
+.row
+  %table.twelve.columns
+    %thead
+      %tr
+        %th Amount
+        %th Kind
+        %th Description
+        %th
 
-      - @transactions.each do |transaction|
-        %tbody
-          %tr
-            %td= transaction.amount
-            %td= transaction.kind.titleize
-            %td= transaction.description
-            %td
-              = link_to 'Show', [current_distributor, transaction]
-              = link_to 'Edit', edit_distributor_transaction_path(current_distributor, transaction)
-              = link_to 'Destroy', [current_distributor, transaction], :confirm => 'Are you sure?', :method => :delete
+    - @transactions.each do |transaction|
+      %tbody
+        %tr
+          %td= transaction.amount
+          %td= transaction.kind.titleize
+          %td= transaction.description
+          %td
+            = link_to 'Show', [current_distributor, transaction]
+            = link_to 'Edit', edit_distributor_transaction_path(current_distributor, transaction)
+            = link_to 'Destroy', [current_distributor, transaction], :confirm => 'Are you sure?', :method => :delete
 

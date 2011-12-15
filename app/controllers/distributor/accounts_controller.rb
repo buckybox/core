@@ -6,6 +6,8 @@ class Distributor::AccountsController < Distributor::BaseController
   def show
     show! do
       @transactions = @account.transactions
+      @customer = @account.customer
+      @address = @customer.address
     end
   end
 

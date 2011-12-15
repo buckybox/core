@@ -19,7 +19,7 @@
 
 - if @accounts.blank?
   .row.data-headings
-    %h4.tweleve.columns No Customers To Display
+    %h4.twelve.columns No Customers To Display
 - else
   .row.data-headings
     %h4.three.columns Customer
@@ -29,6 +29,6 @@
   - @accounts.each do |account|
     .row.data-listings
       .three.columns= link_to account.customer.name, [current_distributor, account]
-      .seven.columns.tag-links= tag_links(account.tags)
+      .seven.columns= tag_links(account.tags)
       .two.columns= account.balance
 

@@ -1,13 +1,27 @@
-- title @account.customer.name
+- title(@account.customer.name, false)
 
-%h2== Balance: #{@account.balance}
-
-- unless @account.tags.empty?
-  %h3 Tags
-  %p= @account.tag_list
-
-= render :partial => 'distributor/transactions/index'
+%ul.vcard
+  %li.fn= @customer.name
+  %li.adr= @address.address_1
+  - if @address.address_2
+    %li.adr= @address.address_2
+  %li.adr= @address.suburb
+  %li.adr= @address.city
+  %li.adr= @address.postcode
+  %li.tel= @customer.phone
+  %li.email= @customer.email
 
 = link_to 'Edit', edit_distributor_account_path(current_distributor, @account)
 \|
 = link_to 'Back', distributor_accounts_path
+
+%h4== Balance: #{@account.balance}
+
+- unless @account.tags.empty?
+  .row.data-listings
+    .twelve.columns
+      %h4 Tags
+      = tag_links(@account.tags)
+
+= render :partial => 'distributor/transactions/index'
+
