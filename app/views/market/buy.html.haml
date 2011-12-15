@@ -1,6 +1,6 @@
 - title 'Place Order'
 
-= simple_form_for([@distributor, @order]) do |f|
+= simple_form_for(@order) do |f|
   = f.error_notification
 
   .inputs
@@ -8,6 +8,7 @@
       %abbr{:title => 'required'} *
       Your Email
     = text_field_tag :email, nil, :class => "email required input-text", :required => 'required'
+    = f.association :distributor, :as => :hidden
     = f.association :box, :as => :hidden
     = f.input :quantity
     = f.input :frequency, :collection => Order::FREQUENCIES.map{ |fr| [fr.titleize, fr] }, :include_blank => false 

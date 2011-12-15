@@ -1,5 +1,5 @@
 class CustomersController < InheritedResources::Base
-  respond_to :html, :xml, :json
+  respond_to :html, :xml, :json, :only => [:create]
   layout 'distributor'
 
   def create
@@ -12,20 +12,6 @@ class CustomersController < InheritedResources::Base
         redirect_to market_payment_url(@distributor.parameter_name, @order)
       end
 
-      failure.html { redirect_to :back }
-    end
-  end
-
-  #TODO: needs authentication : jbv
-  def update
-    update! do |success, failure|
-      success.html do
-        @order = Order.find(params[:order_id])
-        @order.update_attribute(:customer, @customer)
-        @distributor = @order.distributor
-
-        redirect_to market_payment_url(@distributor.parameter_name, @order)
-      end
       failure.html { redirect_to :back }
     end
   end

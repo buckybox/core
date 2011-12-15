@@ -6,7 +6,7 @@ class Order < ActiveRecord::Base
   
   acts_as_taggable
 
-  attr_accessible :distributor, :box, :box_id, :customer, :quantity, :likes, :dislikes, :completed, :frequency
+  attr_accessible :distributor, :distributor_id, :box, :box_id, :customer, :customer_id, :quantity, :likes, :dislikes, :completed, :frequency
 
   scope :completed, where(:completed => true)
 
