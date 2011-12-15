@@ -53,5 +53,15 @@ describe Account do
       end
     end
   end
+
+  context 'when using tags' do
+    before :each do
+      @account.tag_list = 'dog, cat, rain'
+      @account.save
+    end
+
+    specify { @account.tags.size.should == 3 }
+    specify { @account.tag_list.should == %w(dog cat rain) }
+  end
 end
 

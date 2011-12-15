@@ -18,4 +18,21 @@ describe Customer do
       specify { @customer.last_name.should == 'Smith' }
     end
   end
+
+  context 'when searching' do
+    before :each do
+      address = Fabricate(:address, :city => 'Edinburgh')
+      customer2 = address.customer
+      customer2.first_name = 'Smith'
+      customer2.save
+
+      Fabricate(:address, :city => 'Edinburgh')
+      Fabricate(:customer, :last_name => 'Smith')
+      Fabricate(:customer, :first_name => 'John', :last_name =>'Smith')
+    end
+
+    specify { Customer.search('Edinburgh').size.should == 2 }
+    specify { Customer.search('Smith').size.should == 3 }
+    specify { Customer.search('John').size.should == 1 }
+  end
 end
