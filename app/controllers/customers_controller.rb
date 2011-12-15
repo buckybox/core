@@ -16,6 +16,7 @@ class CustomersController < InheritedResources::Base
     end
   end
 
+  #TODO: needs authentication : jbv
   def update
     update! do |success, failure|
       success.html do

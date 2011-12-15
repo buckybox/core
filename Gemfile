@@ -28,6 +28,7 @@ gem 'acts-as-taggable-on'
 gem 'pg_search'
 gem 'kaminari'
 gem 'airbrake'
+gem 'analytical'
 
 group :development do
   gem 'nifty-generators', :require => false

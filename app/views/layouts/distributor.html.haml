@@ -1,27 +1,29 @@
-= render 'layouts/head'
+- content_for :body do
+  %body
+    .container
+      .row
+        .twelve.columns
+          - flash.each do |kind, message|
+            = flash_bar(kind, message)
 
-%body
-  .container
-    .row
-      .twelve.columns
-        - flash.each do |kind, message|
-          = flash_bar(kind, message)
+      .row
+        .twelve.columns
+          #session-links
+            - if distributor_signed_in?
+              Signed in as 
+              %strong=  current_distributor.name 
+              = link_to 'Logout', destroy_distributor_session_path, :method => :delete
+            - else   
+              = link_to 'Sign up', new_distributor_registration_path
+              or  
+              = link_to 'Login', new_distributor_session_path
 
-    .row
-      .twelve.columns
-        #session-links
-          - if distributor_signed_in?
-            Signed in as 
-            %strong=  current_distributor.name 
-            = link_to 'Logout', destroy_distributor_session_path, :method => :delete
-          - else   
-            = link_to 'Sign up', new_distributor_registration_path
-            or  
-            = link_to 'Login', new_distributor_session_path
+      #dashboard-content.row
+        .twelve.columns
+          - if show_title?
+            %h1{:style => 'text-align:center;'}= yield(:title)
 
-    #dashboard-content.row
-      .twelve.columns
-        - if show_title?
-          %h1{:style => 'text-align:center;'}= yield(:title)
+          = yield
 
-        = yield
+= render 'layouts/base'
+

@@ -16,6 +16,7 @@
 # Ignore all logfiles and tempfiles.
 /log/*.log
 /tmp
+*.swp
 
 .DS_Store
 public/uploads/
@@ -23,3 +24,4 @@ public/uploads/
 config/database.yml
 Session.vim
 .rvmrc
+

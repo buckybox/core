@@ -1,0 +1,5 @@
+production:
+  google:
+    key: UA-21417656-5
+  kiss_metrics:
+    js_url_key: //doug1izaerwt3.cloudfront.net/af961c648a334717251e9a156d34b15f9e01f8b1.1.js
