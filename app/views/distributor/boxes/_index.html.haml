@@ -1,30 +1,37 @@
-%table
-  %thead
-    %tr
-      %th Image
-      %th Name
-      %th Price
-      %th Likes
-      %th Dislikes
-      %th Available Single
-      %th Available Weekly
-      %th Available Fourtnightly
-
-  %tbody
-    - @boxes.each do |box|
-      %tr
-        %td{:rowspan => 2}= image_tag(box.box_image.url) if box.box_image?
-        %td= box.name
-        %td= box.price
-        %td= box.likes
-        %td= box.dislikes
-        %td= box.available_single
-        %td= box.available_weekly
-        %td= box.available_fourtnightly
-      %tr
-        %td{:colspan => 5}= box.description
-        %td{:colspan => 2}
-          = link_to 'Show', [current_distributor, box]
-          = link_to 'Edit', edit_distributor_box_path(current_distributor.id, box.id)
-          = link_to 'Destroy', [current_distributor, box], :confirm => 'Are you sure?', :method => :delete
-
+- @boxes.each do |box|
+  .box-entry
+    .three.columns
+      = image_tag(box.box_image.url) if box.box_image?
+      .action-bar
+        = link_to 'Edit', edit_distributor_box_path(current_distributor.id, box.id)
+        |
+        = link_to 'Delete', [current_distributor, box], :confirm => 'Are you sure you want to delete this box?', :method => :delete
+    .five.columns
+      %a{:href => "#{url_for [current_distributor, box] }"}
+        %h2= box.name
+      %p= box.description
+    .four.columns
+      %ul.options
+        %li Custom boxes
+        %li
+          %ul
+            %li
+              = option_status_for box.likes
+              Likes
+            %li
+              = option_status_for box.dislikes
+              Dislikes
+        %li Delivery options
+        %li
+          %ul
+            %li
+              = option_status_for box.available_single
+              Once
+            %li
+              = option_status_for box.available_weekly
+              Weekly
+            %li
+              = option_status_for box.available_fourtnightly
+              Fortnightly
+      %p.price= price_for box
+    .clear
