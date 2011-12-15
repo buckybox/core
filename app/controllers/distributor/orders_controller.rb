@@ -1,6 +1,8 @@
 class Distributor::OrdersController < Distributor::BaseController
   belongs_to :distributor
 
+  skip_before_filter :authenticate_distributor!, :only => [:create]
+
   respond_to :html, :xml, :json
 
   def create
