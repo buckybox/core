@@ -48,6 +48,10 @@ BuckyBox::Application.configure do
   # Disable delivery errors, bad email addresses will be ignored
   # config.action_mailer.raise_delivery_errors = false
   config.action_mailer.default_url_options = { :host => 'my.buckybox.com' }
+    
+  # postmark settings
+  config.action_mailer.delivery_method   = :postmark
+  config.action_mailer.postmark_settings = { :api_key => "63583ad4-c990-4ccb-a7db-afcc85d9070a" }
 
   # Enable threaded mode
   # config.threadsafe!

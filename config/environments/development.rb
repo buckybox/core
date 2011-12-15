@@ -15,7 +15,12 @@ BuckyBox::Application.configure do
 
   # Don't care if the mailer can't send
   config.action_mailer.raise_delivery_errors = false
-  config.action_mailer.default_url_options = { :host => 'buckybox.local:3000' }
+  config.action_mailer.default_url_options = { :host => 'localhost:3000' }
+
+  # postmark settings
+  # uncomment to test postmark locally
+  #config.action_mailer.delivery_method   = :postmark
+  #config.action_mailer.postmark_settings = { :api_key => "63583ad4-c990-4ccb-a7db-afcc85d9070a" }
 
   # Print deprecation notices to the Rails logger
   config.active_support.deprecation = :log
