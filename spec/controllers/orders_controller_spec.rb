@@ -41,14 +41,13 @@ describe OrdersController do
       context "with existing customer's email" do
         before(:each) do
           @customer = Fabricate(:customer)
-          Customer.stub(:find_by_email).and_return(@customer)
         end
         it "associates customer with order" do
-          post :create
+          post :create, :email => @customer.email
           @order.customer.should == @customer
         end
         it "redirects to payment page" do
-          post :create
+          post :create, :email => @customer.email
           response.should redirect_to(market_payment_path(:distributor_parameter_name => @distributor.parameter_name))
         end
       end
