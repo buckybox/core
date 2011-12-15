@@ -4,23 +4,31 @@
 
 .row.page-controls
   .eight.columns
+    - if params[:query]
+      %h3== Searching "#{params[:query]}"
+    - elsif params[:tag]
+      %h3== Tag "#{params[:tag]}"
+
+    - if params[:query] || params[:tag]
+      = link_to 'Clear', distributor_accounts_path(current_distributor)
+
   .four.columns
     = form_tag search_distributor_accounts_path, :method => :get, :class => 'nice' do
       = text_field_tag :query, '', :placeholder => 'Search For...', :class => 'input-text'
       = submit_tag 'Search', :class => 'small button nice'
 
-.row
-  %table.twelve.columns
-    %thead
-      %tr
-        %th Customer
-        %th Tags
-        %th Balance
+- if @accounts.blank?
+  .row.data-headings
+    %h4.tweleve.columns No Customers To Display
+- else
+  .row.data-headings
+    %h4.three.columns Customer
+    %h4.seven.columns Tags
+    %h4.two.columns Balance
 
-    - @accounts.each do |account|
-      %tbody
-        %tr
-          %td= link_to account.customer.name, [current_distributor, account]
-          %td= tag_links(account.tags)
-          %td= account.balance
+  - @accounts.each do |account|
+    .row.data-listings
+      .three.columns= link_to account.customer.name, [current_distributor, account]
+      .seven.columns.tag-links= tag_links(account.tags)
+      .two.columns= account.balance
 
