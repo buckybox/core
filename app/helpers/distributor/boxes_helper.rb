@@ -5,6 +5,6 @@ module Distributor::BoxesHelper
 
   def option_status_for(option_value)
     status = option_value ? '&#x2714' : '&#10007'
-    "<span class=\"status status-#{option_value}\">#{status}</span>".html_safe
+    content_tag :span, status, :class => "status status-#{option-value}"
   end
 end
