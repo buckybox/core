@@ -1,5 +1,9 @@
 - title "Your Boxes"
 
+%nav
+  = link_to 'Next »', distributor_wizard_routes_path, :method => :get, :class => 'button nice'
+  .clear
+
 .row
   = simple_form_for([current_distributor, @box]) do |f|
     %fieldset
@@ -32,7 +36,6 @@
         .actions
           = f.button :submit
 
-    = button_to 'Next', distributor_wizard_routes_path, :method => :get, :class => 'button nice'
     .clear
 
   = render :partial => 'distributor/boxes/index'
