@@ -13,8 +13,7 @@ class OrdersController < InheritedResources::Base
           redirect_to market_customer_details_path(@order.distributor.parameter_name, :email => params[:email])
         end
       }
-      failure.html { 
-        redirect_to :back }
+      failure.html { redirect_to :back }
     end
   end
 end

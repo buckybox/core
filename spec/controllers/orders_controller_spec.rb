@@ -25,6 +25,11 @@ describe OrdersController do
         @order.should_receive(:save).and_return(true)
         post :create
       end
+      
+      it "sets order_id in session" do
+        post :create
+        session[:order_id].should == @order.id
+      end
 
       context "with new customer's email" do 
         it "redirects to customer details page" do

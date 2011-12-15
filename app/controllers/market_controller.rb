@@ -15,7 +15,8 @@ class MarketController < ApplicationController
   end
 
   def customer_details
-    @customer.email = @params[:email]
+    @customer = Customer.new if @customer.nil?
+    @customer.email = params[:email]
     @address = @customer.build_address
   end
 
@@ -31,7 +32,7 @@ class MarketController < ApplicationController
     @order.save
 
     analytical.event('complete_order', :with => {:distributor_id => @distributor.id})
-    #TODO: clear order from session
+    session[:order_id] = nil
     @box = @order.box
   end
 
