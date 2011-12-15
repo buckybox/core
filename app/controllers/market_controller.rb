@@ -1,5 +1,6 @@
 class MarketController < ApplicationController
   before_filter :get_distributor
+  before_filter :get_order_from_session, :except => [:store, :buy]
 
   def store
     @hide_sidebars = true
@@ -15,30 +16,14 @@ class MarketController < ApplicationController
   end
 
   def customer_details
-    #TODO: restrict to orders that aren't completed - load from session, not query string
-    @order = Order.find(params[:order_id])
-    @box = @order.box
-
-    @customer = Customer.find_by_email(params[:email])
-
-    if @customer
-      @address = @customer.address
-    else
-      @customer = Customer.new(:email => params[:email])
-      @address = @customer.build_address
-    end
+    @customer.email = @params[:email]
+    @address = @customer.build_address
   end
 
   def payment
-    @order = Order.find(params[:order_id])
-    @box = @order.box
-    @customer = @order.customer
   end
 
   def success
-    @order = Order.find(params[:order_id])
-    
-    @customer = @order.customer
     account = @customer.accounts.where(:distributor_id => @distributor.id).first
     account = @customer.accounts.create(:distributor => @distributor) unless account
 
@@ -52,6 +37,15 @@ class MarketController < ApplicationController
   end
 
   private
+
+  def get_order_from_session
+    @order = Order.find(session[:order_id])
+    @box = @order.box
+    @customer = @order.customer
+    unless @order
+      redirect_to market_store_path(@distributor.parameter_name)
+    end
+  end
 
   def get_distributor
     @distributor = Distributor.find_by_parameter_name(params[:distributor_parameter_name])
