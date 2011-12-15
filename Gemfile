@@ -29,6 +29,7 @@ gem 'pg_search'
 gem 'kaminari'
 gem 'airbrake'
 gem 'analytical'
+gem 'postmark-rails'
 
 group :development do
   gem 'nifty-generators', :require => false

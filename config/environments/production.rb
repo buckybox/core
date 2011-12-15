@@ -19,6 +19,10 @@ BuckyBox::Application.configure do
 
   # Generate digests for assets URLs
   config.assets.digest = true
+    
+  # postmark settings
+  config.action_mailer.delivery_method   = :postmark
+  config.action_mailer.postmark_settings = { :api_key => "63583ad4-c990-4ccb-a7db-afcc85d9070a" }
 
   # Defaults to Rails.root.join("public/assets")
   # config.assets.manifest = YOUR_PATH
