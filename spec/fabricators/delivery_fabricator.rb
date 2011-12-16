@@ -1,0 +1,2 @@
+Fabricator(:delivery) do
+end
