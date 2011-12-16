@@ -1,26 +1,26 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>We're sorry, but something went wrong (500)</title>
+  <title>Bucky Box - 500</title>
+
   <style type="text/css">
-    body { background-color: #fff; color: #666; text-align: center; font-family: arial, sans-serif; }
-    div.dialog {
-      width: 25em;
-      padding: 0 4em;
-      margin: 4em auto 0 auto;
-      border: 1px solid #ccc;
-      border-right-color: #999;
-      border-bottom-color: #999;
-    }
-    h1 { font-size: 100%; color: #f00; line-height: 1.5em; }
+    #error_page { text-align: center; }
+    #error_page img { margin: 10px auto; }
+    #error_page h1 { margin-bottom: 20px; }
   </style>
 </head>
 
 <body>
-  <!-- This file lives in public/500.html -->
-  <div class="dialog">
-    <h1>We're sorry, but something went wrong.</h1>
-    <p>We've been notified about this issue and we'll take a look at it shortly.</p>
+  <div class='container'>
+    <div class='row'>
+      <div class='ten columns centered' id='error_page'>
+        <img alt="Buckyerrorlogo" src="/buckyerrorlogo.png" />
+        <h1>Error 500</h1>
+        <h4>Sorry, something seems to have gone wrong.</h4>
+        <h4>Please feel free to email <a href="mailto:info@buckybox.com?subject=I%20got%20a%20500%20Error!">info@buckybox.com</a> for help.</h4>
+      </div>
+    </div>
   </div>
 </body>
 </html>
+
