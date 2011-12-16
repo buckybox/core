@@ -19,6 +19,7 @@ BuckyBox::Application.routes.draw do
     resources :boxes,              :controller => 'distributor/boxes'
     resources :routes,             :controller => 'distributor/routes'
     resources :orders,             :controller => 'distributor/orders'
+    resources :deliveries,         :controller => 'distributor/deliveries'
     resources :payments,           :controller => 'distributor/payments'
     resources :transactions,       :controller => 'distributor/transactions'
     resources :accounts,           :controller => 'distributor/accounts' do
@@ -49,5 +50,4 @@ BuckyBox::Application.routes.draw do
   end
 
   resources :orders
-
 end

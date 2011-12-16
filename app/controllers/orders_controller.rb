@@ -3,8 +3,9 @@ class OrdersController < InheritedResources::Base
 
   def create
     create! do |success, failure|
-      success.html { 
+      success.html do
         session[:order_id] = @order.id
+
         if customer = Customer.find_by_email(params[:email])
           @order.customer = customer
           @order.save
@@ -12,7 +13,8 @@ class OrdersController < InheritedResources::Base
         else
           redirect_to market_customer_details_path(@order.distributor.parameter_name, :email => params[:email])
         end
-      }
+      end
+
       failure.html { redirect_to :back }
     end
   end

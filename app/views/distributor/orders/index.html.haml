@@ -2,33 +2,20 @@
 
 = render :partial => 'distributor/shared/topic_tabs'
 
-.row
-  %table.twelve.columns
-    %thead
-      %tr
-        %th Box
-        %th Customer
-        %th Quantity
-        %th Likes
-        %th Dislikes
-        %th Completed
-        %th
+.row.data-headings
+  %h4.two.columns ID
+  %h4.three.columns Customer
+  %h4.three.columns Box
+  %h4.two.columns Quantity
+  %h4.two.columns
 
-    - @orders.each do |order|
-      %tbody
-        %tr
-          %td= link_to order.box.name, [current_distributor, order.box]
-          %td 
-            - if order.customer
-              = link_to order.customer.name, order.customer
-            - else
-              No customer
-          %td= order.quantity
-          %td= order.likes
-          %td= order.dislikes
-          %td= order.completed
-          %td
-            = link_to 'Show', [current_distributor, order]
-            = link_to 'Edit', edit_distributor_order_path(current_distributor, order)
-            = link_to 'Destroy', [current_distributor, order], :confirm => 'Are you sure?', :method => :delete
+- @orders.each do |order|
+  .row.data-listings
+    .two.columns= link_to order.id, [current_distributor, order]
+    .three.columns= link_to order.box.name, [current_distributor, order.box]
+    .three.columns= link_to order.customer.name, order.customer
+    .two.columns= order.quantity
+    .two.columns
+      = link_to 'Edit', edit_distributor_order_path(current_distributor, order)
+      = link_to 'Destroy', [current_distributor, order], :confirm => 'Are you sure?', :method => :delete
 
