@@ -7,6 +7,19 @@ describe Customer do
 
   specify { @customer.should be_valid }
 
+  context "initializing" do
+    it "creates a customer number" do
+      @customer.number.should_not be_nil
+    end
+    it "throws error if unable to find a free customer number" do
+      distributor = Fabricate(:distributor)
+      distributor.stub_chain(:customers,:find_by_number).and_return(true)
+      lambda{
+        Fabricate(:customer, :distributor => distributor)
+      }.should raise_error 
+    end
+  end
+
   context 'full name' do
     describe '#name' do
       specify { @customer.name.should == "#{@customer.first_name} #{@customer.last_name}" }

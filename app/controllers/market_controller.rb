@@ -17,6 +17,7 @@ class MarketController < ApplicationController
   def customer_details
     @customer = Customer.new if @customer.nil?
     @customer.email = params[:email]
+    @customer.distributor = @distributor
     @address = @customer.build_address
   end
 
