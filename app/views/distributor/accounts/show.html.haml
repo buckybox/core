@@ -1,27 +1,32 @@
 - title(@account.customer.name, false)
 
-%ul.vcard
-  %li.fn= @customer.name
-  %li.adr= @address.address_1
-  - if @address.address_2
-    %li.adr= @address.address_2
-  %li.adr= @address.suburb
-  %li.adr= @address.city
-  %li.adr= @address.postcode
-  %li.tel= @customer.phone
-  %li.email= @customer.email
+.row
+  .three.columns
+    %ul.vcard
+      %li.fn= @customer.name
+      %li.adr= @address.address_1
+      - if @address.address_2
+        %li.adr= @address.address_2
+      %li.adr= @address.suburb
+      %li.adr= @address.city
+      %li.adr= @address.postcode
+      %li.tel= @customer.phone
+      %li.email= @customer.email
 
-= link_to 'Edit', edit_distributor_account_path(current_distributor, @account)
-\|
-= link_to 'Back', distributor_accounts_path
+  .four.columns
+    %h4== Balance: #{@account.balance}
+    %br
 
-%h4== Balance: #{@account.balance}
-
-- unless @account.tags.empty?
-  .row.data-listings
-    .twelve.columns
+    - unless @account.tags.empty?
       %h4 Tags
       = tag_links(@account.tags)
+
+  .five.columns
+    = link_to 'Edit Accounts Detials', edit_distributor_account_path(current_distributor, @account)
+    %br
+    = link_to 'Edit Customer Details', edit_customer_path(@account.customer)
+    %br
+    = link_to 'Back to Accounts List', distributor_accounts_path
 
 = render :partial => 'distributor/transactions/index'
 
