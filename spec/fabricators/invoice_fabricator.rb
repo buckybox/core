@@ -1,0 +1,2 @@
+Fabricator(:invoice) do
+end

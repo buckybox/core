@@ -16,6 +16,9 @@ class Delivery < ActiveRecord::Base
   scope :delivered, where(:scope => 'delivered')
   scope :canceled,  where(:scope => 'canceled')
 
+  def self.within_date_range from, to
+  end
+
   def box
     order.box
   end
