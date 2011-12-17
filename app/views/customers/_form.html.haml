@@ -1,10 +1,24 @@
 = simple_form_for(@customer) do |f|
   = f.error_notification
 
-  .inputs
-    = f.input :name
-    = f.input :email
-    = f.input :phone
+  .row
+    .six.columns
+      .inputs
+        = f.input :email
+        = f.input :first_name
+        = f.input :last_name
+        = f.input :phone
 
-  .actions
-    = f.button :submit
+    .six.columns
+      = f.simple_fields_for :address do |g|
+        .inputs
+          = g.input :address_1
+          = g.input :address_2
+          = g.input :suburb
+          = g.input :city
+          = g.input :postcode
+          = g.input :delivery_note
+
+      .actions
+        = f.button :submit
+        = link_to 'Cancel', :back, :class => 'blue button nice'
