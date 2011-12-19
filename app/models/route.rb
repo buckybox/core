@@ -17,7 +17,7 @@ class Route < ActiveRecord::Base
   end
 
   def schedule
-    Schedule.from_yaml(self[:schedule])
+    Schedule.from_hash(self[:schedule])
   end
 
   def next_run
@@ -40,6 +40,6 @@ class Route < ActiveRecord::Base
     recurrence_rule = Rule.weekly.day(*delivery_days)
     new_schedule = Schedule.new
     new_schedule.add_recurrence_rule(recurrence_rule)
-    self.schedule = new_schedule.to_yaml
+    self.schedule = new_schedule.to_hash
   end
 end
