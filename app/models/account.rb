@@ -2,7 +2,7 @@ class Account < ActiveRecord::Base
   belongs_to :distributor
   belongs_to :customer
 
-  has_many :orders
+  has_many :orders #shouldn't this be through customer? jbv
   has_many :payments
   has_many :transactions
 

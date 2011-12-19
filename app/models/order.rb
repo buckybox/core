@@ -2,10 +2,10 @@ class Order < ActiveRecord::Base
   belongs_to :distributor
   belongs_to :box
   belongs_to :customer
-  belongs_to :account
 
+  belongs_to :account #through customer?
   has_many :deliveries
-
+  
   acts_as_taggable
 
   attr_accessible :distributor, :distributor_id, :box, :box_id, :customer, :customer_id, :quantity, :likes, :dislikes, :completed, :frequency
