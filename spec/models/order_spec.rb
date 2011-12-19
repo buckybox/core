@@ -33,6 +33,8 @@ describe Order do
   end
 
   describe '#update_account' do
+    before { pending 'All this will change soon with the new delivery code.' }
+
     context "when the order is new and has been marked as completed" do
       before do
         @original_account_balance = @order.account.balance

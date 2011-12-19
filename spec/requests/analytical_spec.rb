@@ -2,8 +2,8 @@ require 'spec_helper'
 
 describe 'analytical' do
   before(:each) do
-    @box = Fabricate(:box)
-    @distributor = @box.distributor
+    @distributor = Fabricate(:distributor_with_information)
+    @box = Fabricate(:box, :distributor => @distributor)
   end
 
   context "when logged out" do

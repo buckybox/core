@@ -1,10 +1,29 @@
 require 'spec_helper'
 
 describe Route do
-  before :all do
-    @route = Fabricate(:route)
-  end
+  before { @route = Fabricate(:route) }
 
   specify { @route.should be_valid }
+
+  context :route_days do
+    specify { Fabricate.build(:route, :monday => false).should_not be_valid }
+  end
+
+  context :schedule do
+    specify { @route.schedule.should_not be_nil }
+  end
+
+  describe '#best_route' do
+    it 'should just return the first one for now' do
+      Route.best_route(@route.distributor).should == @route
+    end
+  end
+
+  describe '#delivery_days' do
+    before { @route.friday = true }
+    it 'should return any array of all the selected days' do
+      @route.delivery_days.should == [:monday, :friday]
+    end
+  end
 end
 

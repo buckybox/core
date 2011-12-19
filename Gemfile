@@ -30,6 +30,8 @@ gem 'kaminari'
 gem 'airbrake'
 gem 'analytical'
 gem 'postmark-rails'
+gem 'ice_cube'
+gem 'whenever'
 
 group :development do
   gem 'nifty-generators', :require => false

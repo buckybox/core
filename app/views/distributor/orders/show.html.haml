@@ -1,24 +1,21 @@
 %p#notice= notice
 
 %p
-  %b Distributor:
-  = @distributor_order.distributor
-%p
   %b Box:
-  = @distributor_order.box
+  = @order.box.name
 %p
   %b Customer:
-  = @distributor_order.customer
+  = @order.customer.name
 %p
   %b Quantity:
-  = @distributor_order.quantity
+  = @order.quantity
 %p
   %b Likes:
-  = @distributor_order.likes
+  = @order.likes
 %p
   %b Dislikes:
-  = @distributor_order.dislikes
+  = @order.dislikes
 
-= link_to 'Edit', edit_distributor_order_path(@distributor_order)
+= link_to 'Edit', edit_distributor_order_path(current_distributor, @order)
 \|
-= link_to 'Back', distributor_orders_path
+= link_to 'Back', distributor_orders_path(current_distributor)
