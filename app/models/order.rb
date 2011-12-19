@@ -3,12 +3,12 @@ class Order < ActiveRecord::Base
   belongs_to :box
   belongs_to :customer
   belongs_to :account
-  
+
+  has_many :deliveries
+
   acts_as_taggable
 
   attr_accessible :distributor, :distributor_id, :box, :box_id, :customer, :customer_id, :quantity, :likes, :dislikes, :completed, :frequency
-
-  scope :completed, where(:completed => true)
 
   FREQUENCIES = %w(single weekly fortnightly)
 
@@ -17,9 +17,19 @@ class Order < ActiveRecord::Base
   validates_numericality_of :quantity, :greater_than => 0
   validates_inclusion_of :frequency, :in => FREQUENCIES, :message => "%{value} is not a valid frequency"
 
-  after_save :update_account, :if => 'completed_changed? || (completed? && quantity_changed?)'
+  before_save :setup_deliveries, :if => :just_completed?
 
-  def update_account
+  scope :completed, where(:completed => true)
+
+  def just_completed?
+    completed_changed? && completed?
+  end
+
+  def is_preorder?
+    false #false because we don't do preoders yet
+  end
+
+  def change_account_balance
     if completed_changed?
       amount = box.price * quantity
       account.subtract_from_balance(amount, :kind => 'order', :description => "[ID##{id}] Placed an order for #{string_pluralize} at #{box.price} each.")
@@ -34,5 +44,18 @@ class Order < ActiveRecord::Base
 
   def string_pluralize
     "#{quantity || 0} " + ((quantity == 1 || quantity =~ /^1(\.0+)?$/) ? box.name : box.name.pluralize)
+  end
+
+  protected
+
+  def setup_deliveries
+    route = Route.best_route(distributor)
+   
+    if route
+      # create first delivery
+      first_delivery =  self.deliveries.build(:route => route, :date => route.next_run)
+      
+      # TODO: if more than one schedule the next four
+    end
   end
 end

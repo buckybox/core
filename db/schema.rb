@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20111216002214) do
+ActiveRecord::Schema.define(:version => 20111218221013) do
 
   create_table "accounts", :force => true do |t|
     t.integer  "distributor_id"
@@ -84,7 +84,11 @@ ActiveRecord::Schema.define(:version => 20111216002214) do
     t.date     "date"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "status"
+    t.integer  "route_id"
   end
+
+  add_index "deliveries", ["route_id"], :name => "index_deliveries_on_route_id"
 
   create_table "distributors", :force => true do |t|
     t.string   "email",                                 :default => "",    :null => false
@@ -182,6 +186,7 @@ ActiveRecord::Schema.define(:version => 20111216002214) do
     t.boolean  "sunday",         :default => false, :null => false
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.text     "schedule"
   end
 
   add_index "routes", ["distributor_id"], :name => "index_routes_on_distributor_id"
