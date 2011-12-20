@@ -64,7 +64,7 @@ describe Account do
     specify { @account.tag_list.should == %w(dog cat rain) }
   end
 
-  context "next invoice date" do
+  describe "next_invoice_date" do
     before(:each) do
       @order = Fabricate(:order) # $10
       @account = @order.account
@@ -104,6 +104,28 @@ describe Account do
       @account.stub(:balance).and_return(Money.new(3501))
       @account.next_invoice_date.should_not be_nil
     end
+  end
+
+  describe "create_invoice" do
+    it "does nothing if an outstanding invoice exists" do
+      Fabricate(:invoice, :account => @account)
+      @account.stub(:next_invoice_date).and_return(Date.today)
+      Invoice.should_not_receive(:create)
+      @account.create_invoice
+    end
+
+    it "does nothing if next invoice date is after today" do
+      @account.stub(:next_invoice_date).and_return(1.day.from_now)
+      Invoice.should_not_receive(:create)
+      @account.create_invoice
+    end
+
+    it "creates invoice if next invoice date is <= today" do
+      @account.stub(:next_invoice_date).and_return(Date.today)
+      Invoice.should_receive(:create).and_return(true)
+      @account.create_invoice
+    end
+      
   end
 end
 

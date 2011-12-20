@@ -7,6 +7,7 @@ class Account < ActiveRecord::Base
 
   has_many :transactions
   has_many :deliveries, :through => :orders
+  has_many :invoices
 
   composed_of :balance,
     :class_name => "Money",
@@ -80,6 +81,12 @@ class Account < ActiveRecord::Base
 
     return invoice_date
 
+  end
+
+  def create_invoice
+    if next_invoice_date <= Date.today && invoices.outstanding.count == 0
+      Invoice.create(:account => self) 
+    end
   end
 
   protected
