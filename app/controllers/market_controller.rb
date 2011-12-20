@@ -25,10 +25,6 @@ class MarketController < ApplicationController
   end
 
   def success
-    account = @customer.accounts.where(:distributor_id => @distributor.id).first
-    account = @customer.accounts.create(:distributor => @distributor) unless account
-
-    @order.account = account
     @order.completed = true
     @order.save
 

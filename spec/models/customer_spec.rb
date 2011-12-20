@@ -18,6 +18,9 @@ describe Customer do
         Fabricate(:customer, :distributor => distributor)
       }.should raise_error 
     end
+    it "creates an account" do
+      @customer.account.should_not be_nil
+    end
   end
 
   context 'full name' do

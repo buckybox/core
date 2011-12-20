@@ -8,7 +8,8 @@ class CustomersController < InheritedResources::Base
     create! do |success, failure|
       success.html do
         @order = Order.find(session[:order_id])
-        @order.update_attribute(:customer, @customer)
+        @order.customer = @customer
+        @order.save
         redirect_to market_payment_url(@customer.distributor.parameter_name, @order)
       end
 

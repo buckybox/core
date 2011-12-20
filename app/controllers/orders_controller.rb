@@ -6,7 +6,7 @@ class OrdersController < InheritedResources::Base
       success.html do
         session[:order_id] = @order.id
 
-        if customer = Customer.find_by_email(params[:email])
+        if customer = @order.distributor.customers.find_by_email(params[:email])
           @order.customer = customer
           @order.save
           redirect_to market_payment_path(@order.distributor.parameter_name)

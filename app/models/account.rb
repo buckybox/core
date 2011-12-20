@@ -2,8 +2,8 @@ class Account < ActiveRecord::Base
   belongs_to :distributor
   belongs_to :customer
 
-  has_many :orders #shouldn't this be through customer? jbv
-  has_many :payments
+  has_many :orders, :dependent => :destroy
+  has_many :payments, :dependent => :destroy
   has_many :transactions
 
   composed_of :balance,

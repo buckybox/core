@@ -2,10 +2,10 @@ require 'spec_helper'
 
 describe OrdersController do
   before(:each) do
-    @box = Fabricate(:order)
+    @box = Fabricate(:box)
     @distributor = @box.distributor
     
-    @order = Fabricate(:order, :distributor => @distributor)
+    @order = Fabricate(:order, :box => @box)
     Order.stub(:new).and_return(@order) 
   end
 
@@ -40,10 +40,11 @@ describe OrdersController do
 
       context "with existing customer's email" do
         before(:each) do
-          @customer = Fabricate(:customer)
+          @customer = Fabricate(:customer, :distributor => @distributor)
         end
         it "associates customer with order" do
           post :create, :email => @customer.email
+          @order.reload
           @order.customer.should == @customer
         end
         it "redirects to payment page" do

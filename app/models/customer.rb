@@ -3,10 +3,10 @@ class Customer < ActiveRecord::Base
 
   has_one :address, :dependent => :destroy, :inverse_of => :customer
 
-  has_many :accounts, :dependent => :destroy
-  has_many :orders, :dependent => :destroy
+  has_one :account, :dependent => :destroy
+  has_many :orders, :through => :account
+  has_many :payments, :through => :account
   has_many :deliveries, :through => :orders
-  has_many :payments, :dependent => :destroy
 
   belongs_to :distributor
 
@@ -20,6 +20,7 @@ class Customer < ActiveRecord::Base
     }
   
   before_create :initialize_number
+  after_create :create_account
 
   accepts_nested_attributes_for :address
 
@@ -52,5 +53,9 @@ class Customer < ActiveRecord::Base
       end
       self.number = number.to_s
     end
+  end
+
+  def create_account
+    Account.create(:customer_id => id, :distributor_id => distributor_id)
   end
 end
