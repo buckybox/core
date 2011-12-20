@@ -1,10 +1,21 @@
 class Distributor::DashboardController < Distributor::BaseController
+  before_filter :check_wizard_completed
+  before_filter :generate_notifications, :only => :index
+
   def index
-    current_distributor.update_attribute(:completed_wizard, params[:completed_wizard]) if params[:completed_wizard]
-    redirect_to current_wizard_step and return unless current_distributor.completed_wizard?
+    @notifications = current_distributor.events
   end
 
   private
+  def generate_notifications
+    @events = current_distributor.events
+    @notifications = current_distributor.events
+  end
+
+  def check_wizard_completed
+    current_distributor.update_attribute(:completed_wizard, params[:completed_wizard]) if params[:completed_wizard]
+    redirect_to current_wizard_step and return unless current_distributor.completed_wizard?
+  end
 
   def current_wizard_step
     if !current_distributor.name?
