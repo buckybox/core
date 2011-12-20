@@ -1,9 +1,11 @@
 class Route < ActiveRecord::Base
   include IceCube
-
+  
   belongs_to :distributor
 
   has_many :deliveries
+
+  serialize :schedule, Hash
 
   attr_accessible :distributor, :name, :monday, :tuesday, :wednesday, :thursday, :friday, :saturday, :sunday
 

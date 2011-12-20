@@ -1,4 +1,6 @@
 class Order < ActiveRecord::Base
+  include IceCube
+
   belongs_to :account
   has_one :customer, :through => :account
 
@@ -8,10 +10,13 @@ class Order < ActiveRecord::Base
   has_many :deliveries
   
   acts_as_taggable
+  serialize :schedule, Hash
 
   attr_accessible :box, :box_id, :account, :account_id, :quantity, :likes, :dislikes, :completed, :frequency
 
   FREQUENCIES = %w(single weekly fortnightly)
+  FREQUENCY_IN_WEEKS = [nil, 1, 2] # to be transposed to the FREQUENCIES array
+  FREQUENCY_HASH = Hash[[FREQUENCIES, FREQUENCY_IN_WEEKS].transpose] 
 
   validates_presence_of :box, :quantity, :frequency
   validates_presence_of :account, :on => :update
@@ -19,7 +24,7 @@ class Order < ActiveRecord::Base
   validates_inclusion_of :frequency, :in => FREQUENCIES, :message => "%{value} is not a valid frequency"
   validate :box_distributor_equals_customer_distributor
 
-  before_save :setup_deliveries, :if => :just_completed?
+  before_save :create_schedule
 
   scope :completed, where(:completed => true)
 
@@ -37,6 +42,10 @@ class Order < ActiveRecord::Base
 
   def is_preorder?
     false #false because we don't do preoders yet
+  end
+
+  def schedule
+    Schedule.from_hash(self[:schedule])
   end
 
   def change_account_balance
@@ -58,14 +67,16 @@ class Order < ActiveRecord::Base
 
   protected
 
-  def setup_deliveries
-    route = Route.best_route(distributor)
-   
-    if route
-      # create first delivery
-      first_delivery =  self.deliveries.build(:route => route, :date => route.next_run)
-      
-      # TODO: if more than one schedule the next four
+  def create_schedule
+    weeks_between_deliveries = FREQUENCY_HASH[frequency]
+
+    if weeks_between_deliveries
+      route = Route.best_route(distributor)
+
+      new_schedule = Schedule.new(route.next_run)
+      recurrence_rule = Rule.weekly(weeks_between_deliveries)
+      new_schedule.add_recurrence_rule(recurrence_rule)
+      self.schedule = new_schedule.to_hash
     end
   end
 
