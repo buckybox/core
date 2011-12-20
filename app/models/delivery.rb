@@ -11,10 +11,12 @@ class Delivery < ActiveRecord::Base
 
   before_validation :default_status, :if => 'status.nil?'
 
-  scope :pending,   where(:scope => 'pending')
-  scope :missed,    where(:scope => 'missed')
-  scope :delivered, where(:scope => 'delivered')
-  scope :canceled,  where(:scope => 'cancelled')
+  scope :pending,   where(:status => 'pending')
+  scope :missed,    where(:status => 'missed')
+  scope :delivered, where(:status => 'delivered')
+  scope :canceled,  where(:status => 'cancelled')
+
+  default_scope order(:date)
 
   belongs_to :order
 

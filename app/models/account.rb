@@ -4,7 +4,9 @@ class Account < ActiveRecord::Base
 
   has_many :orders, :dependent => :destroy
   has_many :payments, :dependent => :destroy
+
   has_many :transactions
+  has_many :deliveries, :through => :orders
 
   composed_of :balance,
     :class_name => "Money",
@@ -50,6 +52,34 @@ class Account < ActiveRecord::Base
 
   def subtract_from_balance(amount, options = {})
     add_to_balance((amount * -1), options)
+  end
+
+  def next_invoice_date
+    total = balance
+    invoice_date = nil
+
+    if total < distributor.invoice_threshold
+      invoice_date =  Date.today
+    else
+      deliveries.pending.each do |delivery|
+        total -= delivery.order.price * (1 + distributor.fee)
+        if total < distributor.invoice_threshold
+          invoice_date = delivery.date - 12.days
+          break
+        end
+      end
+    end
+
+    if invoice_date
+      invoice_date = Date.today if invoice_date < Date.today
+
+      if deliveries.first.date >= invoice_date - 2.days
+        invoice_date = deliveries.first.date + 2.days
+      end
+    end
+
+    return invoice_date
+
   end
 
   protected

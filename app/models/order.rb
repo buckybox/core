@@ -23,6 +23,10 @@ class Order < ActiveRecord::Base
 
   scope :completed, where(:completed => true)
 
+  def price
+    box.price #will likely need to copy this to the order model at some stage
+  end
+
   def customer= cust
     self.account = cust.account
   end
@@ -67,7 +71,7 @@ class Order < ActiveRecord::Base
 
   def box_distributor_equals_customer_distributor
     if customer && customer.distributor_id != box.distributor_id
-      errors[:box_id] = "Box distributor does not match customer distributor"
+      errors[:box_id] = "distributor does not match customer distributor"
       return false
     end
   end
