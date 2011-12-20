@@ -1,3 +1,25 @@
 // Place all the styles related to the Distributor::Dashboard controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+
+#dashboard-content
+  h2
+    margin-top: 40px
+  ul 
+    margin-top: 20px
+    li 
+      margin-right: 10px
+      line-height: 2em
+      font-size: 1.2em
+      display: inline-block
+      &.notification_tag
+        padding: 3px 10px
+        font-size: 0.9em
+        color: white
+        opacity: .6
+        &.customer
+          background: green
+        &.billing
+          background: red
+        &.delivery
+          background: blue
