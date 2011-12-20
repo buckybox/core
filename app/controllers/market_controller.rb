@@ -10,7 +10,7 @@ class MarketController < ApplicationController
 
   def buy
     @box = Box.find(params[:box_id])
-    @order = @distributor.orders.new(:box => @box)
+    @order = Order.new(:box => @box)
     analytical.event('begin_order', :with => {:distributor_id => @distributor.id, :box => @box.id})
   end
 
