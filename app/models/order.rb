@@ -16,7 +16,7 @@ class Order < ActiveRecord::Base
 
   FREQUENCIES = %w(single weekly fortnightly)
   FREQUENCY_IN_WEEKS = [nil, 1, 2] # to be transposed to the FREQUENCIES array
-  FREQUENCY_HASH = Hash[[FREQUENCIES, FREQUENCY_IN_WEEKS].transpose] 
+  FREQUENCY_HASH = Hash[[FREQUENCIES, FREQUENCY_IN_WEEKS].transpose]
 
   validates_presence_of :box, :quantity, :frequency
   validates_presence_of :account, :on => :update
@@ -25,6 +25,7 @@ class Order < ActiveRecord::Base
   validate :box_distributor_equals_customer_distributor
 
   before_save :create_schedule
+  before_save :create_first_delivery, :if => :just_completed?
 
   scope :completed, where(:completed => true)
 
@@ -34,6 +35,19 @@ class Order < ActiveRecord::Base
 
   def customer= cust
     self.account = cust.account
+  end
+
+  def self.update_future_deliveries
+    all.each { |d| d.create_next_delivery }
+  end
+
+  def create_next_delivery
+    if completed? && !(frequency == 'single' && deliveries.size > 0)
+      route = Route.best_route(distributor)
+      date = (schedule ? schedule.next_occurrence : route.next_run)
+
+      deliveries.find_or_create_by_date_and_route_id(date, route.id)
+    end
   end
 
   def just_completed?
@@ -65,11 +79,16 @@ class Order < ActiveRecord::Base
     "#{quantity || 0} " + ((quantity == 1 || quantity =~ /^1(\.0+)?$/) ? box.name : box.name.pluralize)
   end
 
+  def next_deliveries(n = 1)
+    schedule.first(n)
+  end
+
   protected
 
   def create_schedule
     weeks_between_deliveries = FREQUENCY_HASH[frequency]
 
+    # Unless it is a one off delivery then set up a requiring schedule
     if weeks_between_deliveries
       route = Route.best_route(distributor)
 
@@ -78,6 +97,12 @@ class Order < ActiveRecord::Base
       new_schedule.add_recurrence_rule(recurrence_rule)
       self.schedule = new_schedule.to_hash
     end
+  end
+
+  def create_first_delivery
+    route = Route.best_route(distributor)
+    # Manually create the first delivery all following deliveries should be scheduled for creation by the cron
+    create_next_delivery
   end
 
   def box_distributor_equals_customer_distributor

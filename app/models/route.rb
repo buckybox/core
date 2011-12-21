@@ -1,6 +1,6 @@
 class Route < ActiveRecord::Base
   include IceCube
-  
+
   belongs_to :distributor
 
   has_many :deliveries
@@ -40,7 +40,7 @@ class Route < ActiveRecord::Base
 
   def create_schedule
     recurrence_rule = Rule.weekly.day(*delivery_days)
-    new_schedule = Schedule.new
+    new_schedule = Schedule.new(Date.today.to_time)
     new_schedule.add_recurrence_rule(recurrence_rule)
     self.schedule = new_schedule.to_hash
   end
