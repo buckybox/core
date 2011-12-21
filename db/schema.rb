@@ -128,9 +128,11 @@ ActiveRecord::Schema.define(:version => 20111218221013) do
     t.integer  "distributor_id",                       :null => false
     t.string   "event_category",                       :null => false
     t.string   "event_type",                           :null => false
+    t.integer  "customer_id"
     t.integer  "invoice_id"
     t.integer  "reconciliation_id"
     t.integer  "transaction_id"
+    t.integer  "delivery_id"
     t.boolean  "dismissed",         :default => false, :null => false
     t.datetime "created_at"
     t.datetime "updated_at"
