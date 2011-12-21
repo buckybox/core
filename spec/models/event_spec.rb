@@ -5,5 +5,17 @@ describe Event do
     @event = Fabricate(:billing_event)
   end
 
-  specify { @event.should be_valid }
+  context :validation do
+    before do
+      @invalid_event1 = Fabricate.build(:billing_event, :event_category => "not_a_category")
+      @invalid_event2 = Fabricate.build(:billing_event, :event_type => "not_a_type" )
+    end
+
+    specify { @event.should be_valid }
+    specify { @invalid_event1.should_not be_valid }
+    specify { @invalid_event2.should_not be_valid }
+  end
+
+  context :scopes do
+  end
 end
