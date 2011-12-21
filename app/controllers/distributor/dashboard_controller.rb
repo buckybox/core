@@ -3,13 +3,11 @@ class Distributor::DashboardController < Distributor::BaseController
   before_filter :generate_notifications, :only => :index
 
   def index
-    @notifications = current_distributor.events
+    @notifications = current_distributor.events.active.sorted
   end
 
   private
   def generate_notifications
-    @events = current_distributor.events
-    @notifications = current_distributor.events
   end
 
   def check_wizard_completed

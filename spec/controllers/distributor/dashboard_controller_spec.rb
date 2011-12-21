@@ -18,14 +18,12 @@ describe Distributor::DashboardController do
     it "should render" do
       response.should render_template("index")
     end
-    
-    it "should find events" do 
-      assigns[:notifications].should have(2).events
-    end
 
-    it "should not find dismissed events" do 
-      pending
-      assigns[:notifications].should have(2).events
+    subject { assigns[:notifications] }
+    context "listing events" do
+      it "should find active events" do 
+        should have(2).events
+      end
     end
   end
 end
