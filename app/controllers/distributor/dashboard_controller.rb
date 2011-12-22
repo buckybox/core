@@ -6,6 +6,11 @@ class Distributor::DashboardController < Distributor::BaseController
     @notifications = current_distributor.events.active.sorted
   end
 
+  def dismiss_notification
+    Event.find(params[:id]).dismiss!
+    render nil
+  end
+
   private
   def generate_notifications
   end

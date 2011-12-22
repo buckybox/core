@@ -16,6 +16,9 @@ describe Event do
     specify { @invalid_event2.should_not be_valid }
   end
 
-  context :scopes do
+  context "#dismiss!" do
+    before {@event.dismiss!}
+
+    specify {@event.dismissed.should be_true}
   end
 end

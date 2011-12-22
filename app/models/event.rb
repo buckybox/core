@@ -3,7 +3,7 @@ class Event < ActiveRecord::Base
   belongs_to :distributor
 
   # Setup accessible (or protected) attributes for your model
-  attr_accessible :distributor_id, :event_category, :event_type, :customer_id, :invoice_id, :reconciliation_id, :transaction_id, :dismissed
+  attr_accessible :distributor_id, :event_category, :event_type, :customer_id, :invoice_id, :reconciliation_id, :transaction_id, :delivery_id, :dismissed
 
   # Global variables
   EVENT_CATEGORIES = %w[customer billing delivery]
@@ -25,7 +25,7 @@ class Event < ActiveRecord::Base
       EVENT_TYPES[:customer_new],
       EVENT_TYPES[:customer_call_reminder],
       EVENT_TYPES[:credit_limit_reached],
-      EVENT_TYPES[:payment_overdue],
+      EVENT_TYPES[:payment_overdue]
   ].include? event_type}
   validates_presence_of :delivery_id, :if => lambda{[
     EVENT_TYPES[:delivery_scheduler_issue],
@@ -45,4 +45,8 @@ class Event < ActiveRecord::Base
   scope :sorted, order("events.created_at DESC")
   scope :dismissed, where("events.dismissed = ?", true)
   scope :active, where("events.dismissed = ?", false)
+
+  def dismiss!
+    update_attribute("dismissed", true)
+  end
 end

@@ -6,13 +6,15 @@
   h2
     margin-top: 40px
   ul 
-    margin-top: 20px
+    border: 1px solid rgba(0,0,0,0.1)
+    margin: 10px 0
+    padding: 5px
     li 
-      margin-right: 10px
-      line-height: 2em
+      margin: 0 10px 0 0
       font-size: 1.2em
       display: inline-block
       &.notification_tag
+        width: 50px
         padding: 3px 10px
         font-size: 0.9em
         color: white
@@ -23,3 +25,7 @@
           background: red
         &.delivery
           background: blue
+      &.notification_message
+        width: 650px
+      a.button
+        font-size: 0.7em

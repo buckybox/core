@@ -28,6 +28,11 @@ BuckyBox::Application.routes.draw do
         get 'tag/:tag', :action => :index, :as => 'tag'
       end
     end
+    resources :events,             :controller => 'distributor/dashboard' do
+      member do
+        post 'dismiss_notification'=> 'distributor/dashboard', :action => 'dismiss_notification'
+      end
+    end
   end
   
   namespace :distributor do

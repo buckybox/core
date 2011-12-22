@@ -12,11 +12,10 @@ module Distributor::DashboardHelper
         "First delivery follow up call #{customer.name}(##{customer.id})"
       when Event::EVENT_TYPES[:delivery_scheduler_issue]
         # TODO link to the delivery when deliveries created
-        "Delivery Scheduler could not schedule a delivery [#{delivery_id}]}"
+        "Delivery Scheduler could not schedule a delivery [#{notification.delivery_id}]}"
 
       when Event::EVENT_TYPES[:delivery_pending]
         # TODO adapt to whatever the Delivery is gonna look like
-        delivery = Delivery.find notification.delivery_id
         "A delivery [#{notification.delivery_id}] is still marked as pending"
 
       when Event::EVENT_TYPES[:credit_limit_reached]
@@ -25,11 +24,11 @@ module Distributor::DashboardHelper
         "Credit Limit reached for #{customer.name}(##{customer.id}), deliveries will be halted"
 
       when Event::EVENT_TYPES[:payment_overdue]
-        cutsomer = Customer.find notification.customer_id
-        "Payment overdue for #{cutomer.name}(##{customer.id})"
+        customer = Customer.find notification.customer_id
+        "Payment overdue for #{customer.name}(##{customer.id})"
 
       when Event::EVENT_TYPES[:invoice_reminder]
-        "Invoice ##{notification.invoice_id} will be sent tomorrow, please [reconcile bank deposits #{notification.reconciliation_id}] as some payments are overdue"
+        "Invoice ##{notification.invoice_id} will be sent tomorrow, please [reconcile bank deposits #{notification.reconciliation_id}] (payments overdue)"
 
       when Event::EVENT_TYPES[:invoice_mail_sent]
         "Invoice ##{notification.invoice_id} has been sent by email"
