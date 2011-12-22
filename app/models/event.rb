@@ -43,7 +43,6 @@ class Event < ActiveRecord::Base
   validates_inclusion_of :event_type, :in => EVENT_TYPES.map{|k,v| v}
 
   scope :sorted, order("events.created_at DESC")
-  scope :dismissed, where("events.dismissed = ?", true)
   scope :active, where("events.dismissed = ?", false)
 
   def dismiss!

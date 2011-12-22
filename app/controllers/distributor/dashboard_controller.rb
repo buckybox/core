@@ -8,7 +8,7 @@ class Distributor::DashboardController < Distributor::BaseController
 
   def dismiss_notification
     Event.find(params[:id]).dismiss!
-    render nil
+    render :status => 200
   end
 
   private

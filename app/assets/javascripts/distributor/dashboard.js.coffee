@@ -5,7 +5,7 @@
 $(document).ready ->
   $(".dismiss").click ->
     
-    $(this).parent().css("opacity", 0.5)
+    $(this).parent().parent().css("opacity", 0.5)
     $.ajax({url: $(this).attr("href"), type: "POST"})
     $(this).replaceWith("dismissed")
     return false
