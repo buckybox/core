@@ -9,6 +9,8 @@ class Transaction < ActiveRecord::Base
 
   attr_accessible :account, :kind, :amount, :description
 
+  default_scope order(:created_at)
+
   KINDS = %w(order payment amend)
 
   validates_presence_of :account, :kind, :amount, :description

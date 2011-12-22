@@ -10,13 +10,14 @@ class MarketController < ApplicationController
 
   def buy
     @box = Box.find(params[:box_id])
-    @order = @distributor.orders.new(:box => @box)
+    @order = Order.new(:box => @box)
     analytical.event('begin_order', :with => {:distributor_id => @distributor.id, :box => @box.id})
   end
 
   def customer_details
     @customer = Customer.new if @customer.nil?
     @customer.email = params[:email]
+    @customer.distributor = @distributor
     @address = @customer.build_address
   end
 
@@ -24,10 +25,6 @@ class MarketController < ApplicationController
   end
 
   def success
-    account = @customer.accounts.where(:distributor_id => @distributor.id).first
-    account = @customer.accounts.create(:distributor => @distributor) unless account
-
-    @order.account = account
     @order.completed = true
     @order.save
 

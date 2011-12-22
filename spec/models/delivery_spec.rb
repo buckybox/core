@@ -9,4 +9,6 @@ describe Delivery do
     specify { @delivery.status.should == 'pending' }
     specify { Fabricate.build(:delivery, :status => 'lame').should_not be_valid }
   end
+
+  it "returns dates within a valid date range"
 end

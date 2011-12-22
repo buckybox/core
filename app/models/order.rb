@@ -1,25 +1,35 @@
 class Order < ActiveRecord::Base
-  belongs_to :distributor
-  belongs_to :box
-  belongs_to :customer
   belongs_to :account
+  has_one :customer, :through => :account
+
+  belongs_to :box
+  has_one :distributor, :through => :box
 
   has_many :deliveries
-
+  
   acts_as_taggable
 
-  attr_accessible :distributor, :distributor_id, :box, :box_id, :customer, :customer_id, :quantity, :likes, :dislikes, :completed, :frequency
+  attr_accessible :box, :box_id, :account, :account_id, :quantity, :likes, :dislikes, :completed, :frequency
 
   FREQUENCIES = %w(single weekly fortnightly)
 
-  validates_presence_of :distributor, :box, :quantity, :frequency
-  validates_presence_of :customer, :on => :update
+  validates_presence_of :box, :quantity, :frequency
+  validates_presence_of :account, :on => :update
   validates_numericality_of :quantity, :greater_than => 0
   validates_inclusion_of :frequency, :in => FREQUENCIES, :message => "%{value} is not a valid frequency"
+  validate :box_distributor_equals_customer_distributor
 
   before_save :setup_deliveries, :if => :just_completed?
 
   scope :completed, where(:completed => true)
+
+  def price
+    box.price #will likely need to copy this to the order model at some stage
+  end
+
+  def customer= cust
+    self.account = cust.account
+  end
 
   def just_completed?
     completed_changed? && completed?
@@ -56,6 +66,13 @@ class Order < ActiveRecord::Base
       first_delivery =  self.deliveries.build(:route => route, :date => route.next_run)
       
       # TODO: if more than one schedule the next four
+    end
+  end
+
+  def box_distributor_equals_customer_distributor
+    if customer && customer.distributor_id != box.distributor_id
+      errors[:box_id] = "distributor does not match customer distributor"
+      return false
     end
   end
 end

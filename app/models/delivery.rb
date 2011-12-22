@@ -4,17 +4,24 @@ class Delivery < ActiveRecord::Base
 
   attr_accessible :order, :route, :date, :status
 
-  STATUS = %w(pending missed delivered canceled)
+  STATUS = %w(pending missed delivered cancelled )
 
   validates_presence_of :order, :date, :route, :status
   validates_inclusion_of :status, :in => STATUS, :message => "%{value} is not a valid status"
 
   before_validation :default_status, :if => 'status.nil?'
 
-  scope :pending,   where(:scope => 'pending')
-  scope :missed,    where(:scope => 'missed')
-  scope :delivered, where(:scope => 'delivered')
-  scope :canceled,  where(:scope => 'canceled')
+  scope :pending,   where(:status => 'pending')
+  scope :missed,    where(:status => 'missed')
+  scope :delivered, where(:status => 'delivered')
+  scope :canceled,  where(:status => 'cancelled')
+
+  default_scope order(:date)
+
+  belongs_to :order
+
+  def self.within_date_range from, to
+  end
 
   def box
     order.box

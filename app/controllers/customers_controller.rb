@@ -7,11 +7,10 @@ class CustomersController < InheritedResources::Base
   def create
     create! do |success, failure|
       success.html do
-        @order = Order.find(params[:order_id])
-        @order.update_attribute(:customer, @customer)
-        @distributor = @order.distributor
-
-        redirect_to market_payment_url(@distributor.parameter_name, @order)
+        @order = Order.find(session[:order_id])
+        @order.customer = @customer
+        @order.save
+        redirect_to market_payment_url(@customer.distributor.parameter_name, @order)
       end
 
       failure.html { redirect_to :back }
