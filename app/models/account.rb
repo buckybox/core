@@ -63,9 +63,10 @@ class Account < ActiveRecord::Base
       invoice_date =  Date.today
     else
       deliveries.pending.each do |delivery|
-        total -= delivery.order.price * (1 + distributor.fee)
+        bucky_fee_multiple = distributor.separate_bucky_fee ? (1 + distributor.fee) : 1
+        total -= delivery.order.price * bucky_fee_multiple
         if total < distributor.invoice_threshold
-          invoice_date = delivery.date - 12.days
+          invoice_date = delivery.date.to_date - 12.days
           break
         end
       end
@@ -78,6 +79,7 @@ class Account < ActiveRecord::Base
         invoice_date = deliveries.first.date + 2.days
       end
     end
+
 
     return invoice_date
 

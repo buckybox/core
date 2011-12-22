@@ -76,23 +76,23 @@ describe Account do
 
     it "is today if balance is currently below threshold" do
       @account.stub(:balance).and_return(Money.new(-1000))  
-      @account.next_invoice_date.should == 2.days.from_now.to_date
+      @account.next_invoice_date.should == 2.days.from_now(Time.now).to_date
     end
     it "is at least 2 days after the first delivery" do
       @account.stub(:balance).and_return(Money.new(0))  
-      @account.next_invoice_date.should == 2.days.from_now.to_date
+      @account.next_invoice_date.should == 2.days.from_now(Time.now).to_date
 
       @account.stub(:balance).and_return(Money.new(1000))
-      @account.next_invoice_date.should == 2.days.from_now.to_date
+      @account.next_invoice_date.should == 2.days.from_now(Time.now).to_date
     end
     it "is 12 days before the account goes below the invoice threshold" do
       @account.stub(:balance).and_return(Money.new(3000))
-      @account.next_invoice_date.should == 9.days.from_now.to_date #21 days - 12
+      @account.next_invoice_date.should == 12.days.ago(@d4.date).to_date 
     end
     it "is only influenced by pending deliveries" do
       @account.stub(:balance).and_return(Money.new(2000))
       @d3.update_attribute(:status, 'cancelled')
-      @account.next_invoice_date.should == 9.days.from_now.to_date  #skip cancelled order in calculation
+      @account.next_invoice_date.should == 12.days.ago(@d4.date).to_date  #skip cancelled order in calculation
     end
 
     it "does not need an invoice if balance won't go below threshold" do
@@ -100,9 +100,15 @@ describe Account do
       @account.next_invoice_date.should be_nil
     end
 
-    it "includes bucky fee in the calculations" do
+    it "includes bucky fee in the calculations if distributor.separate_bucky_fee is true" do
       @account.stub(:balance).and_return(Money.new(3501))
       @account.next_invoice_date.should_not be_nil
+    end
+
+    it "doesn't include bucky fee in the calculations if distributor.separate_bucky_fee is false" do
+      @account.distributor.update_attribute(:separate_bucky_fee, false)
+      @account.stub(:balance).and_return(Money.new(3501))
+      @account.next_invoice_date.should be_nil
     end
   end
 
@@ -115,7 +121,7 @@ describe Account do
     end
 
     it "does nothing if next invoice date is after today" do
-      @account.stub(:next_invoice_date).and_return(1.day.from_now)
+      @account.stub(:next_invoice_date).and_return(1.day.from_now(Time.now))
       Invoice.should_not_receive(:create)
       @account.create_invoice
     end
