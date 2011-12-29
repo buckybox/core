@@ -1,23 +1,5 @@
 - title 'Deliveries', false
 
-= render :partial => 'distributor/shared/topic_tabs'
-
-.row.data-headings
-  %h4.two.columns ID
-  %h4.two.columns Deliver
-  %h4.two.columns Quantity
-  %h4.two.columns Box
-  %h4.two.columns Customer
-  %h4.two.columns
-
-- @deliveries.each do |delivery|
-  .row.data-listings
-    .two.columns= link_to delivery.id, [current_distributor, delivery]
-    .two.columns= delivery.date
-    .two.columns= link_to delivery.order.quantity, [current_distributor, delivery.order]
-    .two.columns= link_to delivery.customer.name, delivery.customer
-    .two.columns= link_to delivery.box.name, [current_distributor, delivery.box]
-    .two.columns
-      = link_to 'Edit', edit_distributor_order_path(current_distributor, delivery)
-      = link_to 'Destroy', [current_distributor, delivery], :confirm => 'Are you sure?', :method => :delete
+= render 'distributor/shared/topic_tabs'
+= render 'date_navigation'
 

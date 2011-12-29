@@ -2,13 +2,13 @@ class Order < ActiveRecord::Base
   include IceCube
 
   belongs_to :account
-  has_one :customer, :through => :account
-
   belongs_to :box
+
+  has_one :customer, :through => :account
   has_one :distributor, :through => :box
 
   has_many :deliveries
-  
+
   acts_as_taggable
   serialize :schedule, Hash
 
@@ -28,6 +28,7 @@ class Order < ActiveRecord::Base
   before_save :create_first_delivery, :if => :just_completed?
 
   scope :completed, where(:completed => true)
+  scope :active,    where(:active => true)
 
   def price
     box.price #will likely need to copy this to the order model at some stage

@@ -19,9 +19,13 @@ BuckyBox::Application.routes.draw do
     resources :boxes,              :controller => 'distributor/boxes'
     resources :routes,             :controller => 'distributor/routes'
     resources :orders,             :controller => 'distributor/orders'
-    resources :deliveries,         :controller => 'distributor/deliveries'
     resources :payments,           :controller => 'distributor/payments'
     resources :transactions,       :controller => 'distributor/transactions'
+    resources :deliveries,         :controller => 'distributor/deliveries' do
+      collection do
+        get 'date/:date', :action => :index, :as => 'date'
+      end
+    end
     resources :accounts,           :controller => 'distributor/accounts' do
       collection do
         get 'search',   :action => :index, :as => 'search'

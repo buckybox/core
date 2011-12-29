@@ -1,0 +1,42 @@
+$cal-nav-base: rgb(240, 240, 240)
+$cal-nav-head: darken($cal-nav-base, 25%)
+$cal-nav-hover: darken($cal-nav-base, 30%)
+$cal-nav-divider: darken($cal-nav-base, 35%)
+
+#calendar-navigation
+  width: 980px
+  overflow-y: hidden
+  overflow-x: scroll
+  text-align: center
+
+  ul
+    margin-top: 5px
+
+    li
+      display: inline-block
+      width: 55px
+      margin-bottom: 0px
+      font-weight: bold
+
+      .month
+        padding: 3px
+        background-color: $cal-nav-divider
+        color: #fff
+      .hack-spacer
+        padding: 3px
+        background-color: #fff
+
+      a
+        .date
+          padding: 3px
+          background-color: $cal-nav-head
+          color: #fff
+        .count
+          padding: 3px
+          background-color: $cal-nav-base
+          color: $cal-nav-head
+        &:hover
+          .date
+            background-color: $cal-nav-hover
+          .count
+            color: $cal-nav-hover

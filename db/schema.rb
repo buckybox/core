@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20111220115128) do
+ActiveRecord::Schema.define(:version => 20111228012130) do
 
   create_table "accounts", :force => true do |t|
     t.integer  "distributor_id"
@@ -188,6 +188,7 @@ ActiveRecord::Schema.define(:version => 20111220115128) do
     t.datetime "updated_at"
     t.integer  "account_id"
     t.text     "schedule"
+    t.boolean  "active",     :default => true,     :null => false
   end
 
   add_index "orders", ["account_id"], :name => "index_orders_on_account_id"

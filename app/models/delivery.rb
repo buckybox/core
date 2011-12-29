@@ -2,6 +2,10 @@ class Delivery < ActiveRecord::Base
   belongs_to :order
   belongs_to :route
 
+  has_one :box, :through => :order
+  has_one :account, :through => :order
+  has_one :customer, :through => :order
+
   attr_accessible :order, :route, :date, :status
 
   STATUS = %w(pending missed delivered cancelled )
@@ -22,18 +26,6 @@ class Delivery < ActiveRecord::Base
   belongs_to :order
 
   def self.within_date_range from, to
-  end
-
-  def box
-    order.box
-  end
-
-  def account
-    order.account
-  end
-
-  def customer
-    account.customer
   end
 
   protected
