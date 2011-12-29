@@ -1,0 +1,27 @@
+- unless @orders.blank?
+  #delivery-listings.row
+    .three.columns
+      .row.data-headings
+        %h5.twelve.columns= @selected_date.strftime("%A %m %B") if @selected_date
+      .row
+        .twelve.columns
+          %h6.route-name== #{@orders.size} - #{@route.name}
+      .row
+        .twelve.columns
+          %h6.route-name Summary
+          %ul
+            - @orders.group_by(&:box_id).each do |box_id, array|
+              %li== #{array.size} - #{Box.find(box_id).name}
+
+
+    .nine.columns
+      .row.data-headings
+        %h5.four.columns Address
+        %h5.four.columns Box
+        %h5.four.columns Customer Name
+
+      - @orders.each do |order|
+        .row.data-listings
+          .four.columns= customer_address(order.customer, :single_line => true)
+          .four.columns== #{order.quantity} - #{order.box.name}
+          .four.columns= order.customer.name

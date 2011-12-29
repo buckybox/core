@@ -1,7 +1,7 @@
 .row
   .twelve.columns
     #calendar-navigation
-      %ul{:style => "width:#{@nav_length * 58}px;"}
+      %ul{:style => "width:#{@nav_length * 59}px;"}
         - last_month = @calendar_hash.first.first.strftime("%m")
 
         - @calendar_hash.each do |date, delivery_count|
