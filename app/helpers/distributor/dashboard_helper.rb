@@ -11,11 +11,9 @@ module Distributor::DashboardHelper
         "Follow up call #{link_to_customer customer}".html_safe
 
       when Event::EVENT_TYPES[:delivery_scheduler_issue]
-        # TODO link to the delivery when deliveries created
         "Delivery Scheduler could not schedule a #{link_to_delivery notification.delivery_id}".html_safe
 
       when Event::EVENT_TYPES[:delivery_pending]
-        # TODO adapt to whatever the Delivery is gonna look like
         "A #{link_to_delivery notification.delivery_id} is still marked as pending".html_safe
 
       when Event::EVENT_TYPES[:credit_limit_reached]

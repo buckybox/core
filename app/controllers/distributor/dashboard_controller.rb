@@ -1,6 +1,5 @@
 class Distributor::DashboardController < Distributor::BaseController
   before_filter :check_wizard_completed
-  before_filter :generate_notifications, :only => :index
 
   def index
     @notifications = current_distributor.events.active.sorted
@@ -12,9 +11,6 @@ class Distributor::DashboardController < Distributor::BaseController
   end
 
   private
-  def generate_notifications
-  end
-
   def check_wizard_completed
     current_distributor.update_attribute(:completed_wizard, params[:completed_wizard]) if params[:completed_wizard]
     redirect_to current_wizard_step and return unless current_distributor.completed_wizard?

@@ -48,4 +48,10 @@ class Event < ActiveRecord::Base
   def dismiss!
     update_attribute("dismissed", true)
   end
+
+  private
+  def self.trigger(distributor_id, event_type, params = {})
+    # TODO resolve event_category based on event_type (instead of passing it as a param everytime the method is called)
+    self.create({distributor_id: distributor_id, event_type: event_type}.merge!(params))
+  end
 end

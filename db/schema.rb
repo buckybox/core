@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20111218221013) do
+ActiveRecord::Schema.define(:version => 20111220042841) do
 
   create_table "accounts", :force => true do |t|
     t.integer  "distributor_id"
@@ -77,6 +77,8 @@ ActiveRecord::Schema.define(:version => 20111218221013) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "last_name"
+    t.integer  "distributor_id"
+    t.string   "number"
   end
 
   create_table "deliveries", :force => true do |t|
@@ -91,12 +93,12 @@ ActiveRecord::Schema.define(:version => 20111218221013) do
   add_index "deliveries", ["route_id"], :name => "index_deliveries_on_route_id"
 
   create_table "distributors", :force => true do |t|
-    t.string   "email",                                 :default => "",    :null => false
-    t.string   "encrypted_password",     :limit => 128, :default => "",    :null => false
+    t.string   "email",                                  :default => "",     :null => false
+    t.string   "encrypted_password",      :limit => 128, :default => "",     :null => false
     t.string   "reset_password_token"
     t.datetime "reset_password_sent_at"
     t.datetime "remember_created_at"
-    t.integer  "sign_in_count",                         :default => 0
+    t.integer  "sign_in_count",                          :default => 0
     t.datetime "current_sign_in_at"
     t.datetime "last_sign_in_at"
     t.string   "current_sign_in_ip"
@@ -105,7 +107,7 @@ ActiveRecord::Schema.define(:version => 20111218221013) do
     t.string   "confirmation_token"
     t.datetime "confirmed_at"
     t.datetime "confirmation_sent_at"
-    t.integer  "failed_attempts",                       :default => 0
+    t.integer  "failed_attempts",                        :default => 0
     t.string   "unlock_token"
     t.datetime "locked_at"
     t.string   "authentication_token"
@@ -114,8 +116,12 @@ ActiveRecord::Schema.define(:version => 20111218221013) do
     t.string   "name"
     t.string   "url"
     t.string   "company_logo"
-    t.boolean  "completed_wizard",                      :default => false, :null => false
+    t.boolean  "completed_wizard",                       :default => false,  :null => false
     t.string   "parameter_name"
+    t.integer  "invoice_threshold_cents",                :default => -500
+    t.string   "currency"
+    t.float    "fee",                                    :default => 0.0175
+    t.boolean  "separate_bucky_fee",                     :default => true
   end
 
   add_index "distributors", ["authentication_token"], :name => "index_distributors_on_authentication_token", :unique => true
@@ -155,15 +161,29 @@ ActiveRecord::Schema.define(:version => 20111218221013) do
 
   add_index "invoice_information", ["distributor_id"], :name => "index_invoice_information_on_distributor_id"
 
+  create_table "invoices", :force => true do |t|
+    t.integer  "account_id"
+    t.integer  "number"
+    t.integer  "amount_cents"
+    t.integer  "balance_cents"
+    t.string   "currency"
+    t.date     "date"
+    t.date     "start_date"
+    t.date     "end_date"
+    t.text     "transactions"
+    t.text     "deliveries"
+    t.boolean  "paid",          :default => false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "orders", :force => true do |t|
-    t.integer  "distributor_id"
     t.integer  "box_id"
-    t.integer  "customer_id"
-    t.integer  "quantity",       :default => 1,        :null => false
+    t.integer  "quantity",   :default => 1,        :null => false
     t.text     "likes"
     t.text     "dislikes"
-    t.string   "frequency",      :default => "single", :null => false
-    t.boolean  "completed",      :default => false,    :null => false
+    t.string   "frequency",  :default => "single", :null => false
+    t.boolean  "completed",  :default => false,    :null => false
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "account_id"
@@ -171,8 +191,6 @@ ActiveRecord::Schema.define(:version => 20111218221013) do
 
   add_index "orders", ["account_id"], :name => "index_orders_on_account_id"
   add_index "orders", ["box_id"], :name => "index_orders_on_box_id"
-  add_index "orders", ["customer_id"], :name => "index_orders_on_customer_id"
-  add_index "orders", ["distributor_id"], :name => "index_orders_on_distributor_id"
 
   create_table "payments", :force => true do |t|
     t.integer  "distributor_id"
