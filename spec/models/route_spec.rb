@@ -10,7 +10,18 @@ describe Route do
   end
 
   context :schedule do
+    before do
+      @route.monday    = true
+      @route.tuesday   = false
+      @route.wednesday = true
+      @route.thursday  = false
+      @route.friday    = true
+      @route.saturday  = false
+      @route.sunday    = false
+      @route.save
+    end
     specify { @route.schedule.should_not be_nil }
+    specify { @route.schedule.to_s.should == "Weekly on Mondays, Wednesdays, and Fridays" }
   end
 
   describe '#best_route' do

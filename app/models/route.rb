@@ -9,13 +9,14 @@ class Route < ActiveRecord::Base
 
   attr_accessible :distributor, :name, :monday, :tuesday, :wednesday, :thursday, :friday, :saturday, :sunday
 
-  validates_presence_of :distributor, :name
+  validates_presence_of :distributor, :name, :schedule
   validate :at_least_one_day_is_selected
 
   before_save :create_schedule
 
   def self.best_route(distributor)
-    distributor.routes.first # For now the first one is the default
+    route = distributor.routes.first # For now the first one is the default
+    return route
   end
 
   def schedule

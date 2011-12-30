@@ -55,12 +55,8 @@ class Order < ActiveRecord::Base
     completed_changed? && completed?
   end
 
-  def is_preorder?
-    false #false because we don't do preoders yet
-  end
-
   def schedule
-    Schedule.from_hash(self[:schedule])
+    Schedule.from_hash(self[:schedule]) if self[:schedule]
   end
 
   def change_account_balance
@@ -80,32 +76,33 @@ class Order < ActiveRecord::Base
     "#{quantity || 0} " + ((quantity == 1 || quantity =~ /^1(\.0+)?$/) ? box.name : box.name.pluralize)
   end
 
-  def next_deliveries(n = 1)
-    schedule.first(n)
-  end
-
   protected
 
   def create_schedule
     weeks_between_deliveries = FREQUENCY_HASH[frequency]
+    route = Route.best_route(distributor)
 
-    # Unless it is a one off delivery then set up a requiring schedule
-    if weeks_between_deliveries
-      route = Route.best_route(distributor)
+    if route
+      next_run = route.next_run
+      new_schedule = Schedule.new(next_run)
 
-      new_schedule = Schedule.new(route.next_run)
-      recurrence_rule = Rule.weekly(weeks_between_deliveries)
-      new_schedule.add_recurrence_rule(recurrence_rule)
+      if weeks_between_deliveries
+        recurrence_rule = Rule.weekly(weeks_between_deliveries)
+        new_schedule.add_recurrence_rule(recurrence_rule)
+      else
+        new_schedule.add_recurrence_date(next_run)
+      end
+
       self.schedule = new_schedule.to_hash
     end
   end
 
+  # Manually create the first delivery all following deliveries should be scheduled for creation by the cron job
   def create_first_delivery
-    route = Route.best_route(distributor)
-    # Manually create the first delivery all following deliveries should be scheduled for creation by the cron
     create_next_delivery
   end
 
+  #TODO: Fix hacks as a result of customer accounts model rejig
   def box_distributor_equals_customer_distributor
     if customer && customer.distributor_id != box.distributor_id
       errors[:box_id] = "distributor does not match customer distributor"

@@ -6,7 +6,7 @@ class Distributor::DeliveriesController < Distributor::BaseController
   def index
     index! do
       start_date = Time.now - 1.week
-      end_date = start_date + 25.weeks
+      end_date = start_date + 15.weeks
       @selected_date = Date.parse(params['date']) if params['date']
 
       @calendar_hash = {}
@@ -23,6 +23,7 @@ class Distributor::DeliveriesController < Distributor::BaseController
         end
       end
 
+      @calendar_hash = @calendar_hash.to_a.sort!
       number_of_month_dividers = @calendar_hash.map{|ch| ch.first.strftime("%m %Y")}.uniq.length - 1
 
       @nav_length = @calendar_hash.length + number_of_month_dividers
