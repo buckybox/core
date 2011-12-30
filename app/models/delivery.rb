@@ -25,9 +25,6 @@ class Delivery < ActiveRecord::Base
 
   belongs_to :order
 
-  def self.within_date_range from, to
-  end
-
   protected
 
   def default_status
