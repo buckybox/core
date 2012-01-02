@@ -13,14 +13,15 @@ class Customer < ActiveRecord::Base
   pg_search_scope :search, 
     :against => [:first_name, :last_name, :email, :number], 
     :associated_against => {
-      :address => [:address_1, :address_2, :suburb, :city, :postcode, :delivery_note]
-    },
+    :address => [:address_1, :address_2, :suburb, :city, :postcode, :delivery_note]
+  },
     :using => {
-      :tsearch => {:prefix => true}
-    }
-  
+    :tsearch => {:prefix => true}
+  }
+
   before_create :initialize_number
   after_create :create_account
+  after_create :trigger_new_customer
 
   accepts_nested_attributes_for :address
 
@@ -57,5 +58,9 @@ class Customer < ActiveRecord::Base
 
   def create_account
     Account.create(:customer_id => id, :distributor_id => distributor_id)
+  end
+
+  def trigger_new_customer
+    Event.trigger(distributor_id, Event::EVENT_TYPES[:customer_new], {:event_category => "customer", :customer_id => id})
   end
 end

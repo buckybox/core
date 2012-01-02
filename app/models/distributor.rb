@@ -10,6 +10,7 @@ class Distributor < ActiveRecord::Base
   has_many :accounts,     :dependent => :destroy
   has_many :transactions, :dependent => :destroy, :through => :accounts
   has_many :customers
+  has_many :events
 
   # Include default devise modules. Others available are:
   # :token_authenticatable, :encryptable, :confirmable, :lockable, :timeoutable and :omniauthable
@@ -25,7 +26,7 @@ class Distributor < ActiveRecord::Base
     :converter => Proc.new { |value| value.respond_to?(:to_money) ? value.to_money : raise(ArgumentError, "Can't convert #{value.class} to Money") }
 
   # Setup accessible (or protected) attributes for your model
-  attr_accessible :email, :password, :password_confirmation, :remember_me, :name, :url, :company_logo, :completed_wizard, :invoice_threshold_cents
+  attr_accessible :email, :password, :password_confirmation, :remember_me, :name, :url, :company_logo, :completed_wizard
 
   validates_presence_of :email
   validates_uniqueness_of :email

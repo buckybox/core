@@ -2,10 +2,14 @@
 
 = render :partial => 'distributor/shared/topic_tabs'
 
-= form_tag root_url, :class => 'nice' do
-  %fieldset
-    %legend Add Order
-    = text_field_tag :customer_first_name, '', :placeholder => 'Customers First Name', :class => 'input-text'
-    = text_field_tag :customer_last_name, '', :placeholder => 'Customers Last Name', :class => 'input-text'
-    = submit_tag 'Create Order', :class => 'button nice'
-
+%h2 Alerts
+- @notifications.each do |notification|
+  %ul
+    %li= date_for notification
+    %li{:class => "notification_tag #{notification.event_category}"}
+      = notification.event_category
+    %li.notification_message
+      = notification_message_for notification
+    %li
+      %a{:href => "#{dismiss_notification_distributor_event_path(current_distributor, notification.id)}", :class => "dismiss small white button"}
+        Dismiss

@@ -130,6 +130,22 @@ ActiveRecord::Schema.define(:version => 20111220042841) do
   add_index "distributors", ["reset_password_token"], :name => "index_distributors_on_reset_password_token", :unique => true
   add_index "distributors", ["unlock_token"], :name => "index_distributors_on_unlock_token", :unique => true
 
+  create_table "events", :force => true do |t|
+    t.integer  "distributor_id",                       :null => false
+    t.string   "event_category",                       :null => false
+    t.string   "event_type",                           :null => false
+    t.integer  "customer_id"
+    t.integer  "invoice_id"
+    t.integer  "reconciliation_id"
+    t.integer  "transaction_id"
+    t.integer  "delivery_id"
+    t.boolean  "dismissed",         :default => false, :null => false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "events", ["distributor_id"], :name => "index_events_on_distributor_id"
+
   create_table "invoice_information", :force => true do |t|
     t.integer  "distributor_id"
     t.string   "gst_number"
