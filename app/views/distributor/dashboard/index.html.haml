@@ -1,15 +1,16 @@
 - title 'Dashboard', false
 
-= render :partial => 'distributor/shared/topic_tabs'
+= render 'distributor/shared/topic_tabs'
 
-%h2 Alerts
-- @notifications.each do |notification|
-  %ul
-    %li= date_for notification
-    %li{:class => "notification_tag #{notification.event_category}"}
-      = notification.event_category
-    %li.notification_message
-      = notification_message_for notification
-    %li
-      %a{:href => "#{dismiss_notification_distributor_event_path(current_distributor, notification.id)}", :class => "dismiss small white button"}
-        Dismiss
+#noticeboard
+  %h2 Alerts
+  - @notifications.each do |notification|
+    %ul
+      %li= date_for notification
+      %li{:class => "notification_tag #{notification.event_category}"}
+        = notification.event_category
+      %li.notification_message
+        = notification_message_for notification
+      %li
+        %a{:href => "#{dismiss_notification_distributor_event_path(current_distributor, notification.id)}", :class => "dismiss small white button"}
+          Dismiss
