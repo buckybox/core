@@ -5,15 +5,18 @@ class Route < ActiveRecord::Base
 
   has_many :deliveries
 
+  serialize :schedule, Hash
+
   attr_accessible :distributor, :name, :monday, :tuesday, :wednesday, :thursday, :friday, :saturday, :sunday
 
-  validates_presence_of :distributor, :name
+  validates_presence_of :distributor, :name, :schedule
   validate :at_least_one_day_is_selected
 
   before_save :create_schedule
 
   def self.best_route(distributor)
-    distributor.routes.first # For now the first one is the default
+    route = distributor.routes.first # For now the first one is the default
+    return route
   end
 
   def schedule
@@ -38,7 +41,7 @@ class Route < ActiveRecord::Base
 
   def create_schedule
     recurrence_rule = Rule.weekly.day(*delivery_days)
-    new_schedule = Schedule.new
+    new_schedule = Schedule.new(Date.today.to_time)
     new_schedule.add_recurrence_rule(recurrence_rule)
     self.schedule = new_schedule.to_hash
   end

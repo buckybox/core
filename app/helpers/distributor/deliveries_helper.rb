@@ -1,0 +1,2 @@
+module Distributor::DeliveriesHelper
+end

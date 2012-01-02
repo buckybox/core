@@ -2,9 +2,7 @@
   = f.error_notification
 
   .inputs
-    = f.association :distributor
-    = f.association :box
-    = f.association :customer
+    = f.association :box, :collection => current_distributor.boxes, :include_blank => false
     = f.input :quantity
     = f.input :likes
     = f.input :dislikes

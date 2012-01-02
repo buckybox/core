@@ -18,6 +18,46 @@ describe Order do
     specify { Fabricate.build(:order, :frequency => 'yearly').should_not be_valid }
   end
 
+  context :schedule do
+    before do
+      @route = Fabricate(:route, :distributor => @order.distributor)
+      @order.completed = true
+    end
+
+    context :single do
+      before do
+        @order.frequency = 'single'
+        @order.save
+      end
+
+      specify { @order.schedule.to_s.should == @route.next_run.strftime("%B %e, %Y") }
+      specify { @order.schedule.next_occurrence == @route.next_run }
+      specify { @order.should have(1).delivery }
+    end
+
+    context :weekly do
+      before do
+        @order.frequency = 'weekly'
+        @order.save
+      end
+
+      specify { @order.schedule.to_s.should == 'Weekly' }
+      specify { @order.schedule.next_occurrence == @route.next_run }
+      specify { @order.should have(1).delivery }
+    end
+
+    context :fortnightly do
+      before do
+        @order.frequency = 'fortnightly'
+        @order.save
+      end
+
+      specify { @order.schedule.to_s.should == 'Every 2 weeks' }
+      specify { @order.schedule.next_occurrence == @route.next_run }
+      specify { @order.should have(1).delivery }
+    end
+  end
+
   describe '#string_pluralize' do
     context "when the quantity is 1" do
       before { @order.quantity = 1 }
@@ -32,45 +72,43 @@ describe Order do
     end
   end
 
-  describe '#update_account' do
-    before { pending 'All this will change soon with the new delivery code.' }
-
-    context "when the order is new and has been marked as completed" do
-      before do
-        @original_account_balance = @order.account.balance
-        @order.quantity = 5
-        @order.completed = true
-        @order.save
-      end
-
-      specify { @order.account.balance.should == @original_account_balance - (@order.box.price * @order.quantity) }
-      specify { @order.account.transactions.last.kind.should == 'order' }
-      specify { @order.account.transactions.last.amount.should == (@order.box.price * -1 * @order.quantity) }
+  describe '#create_next_delivery' do
+    before do
+      Fabricate(:route, :distributor => @order.distributor)
+      @order.save
     end
 
-    context "when a previously completed order has its quantity changed" do
-      before do
-        @original_quantity = 10
-        @order.completed = true
+    context "when order has not been completed" do
+      specify { expect { @order.create_next_delivery }.should_not change(Delivery, :count) }
+    end
 
-        @order.quantity = @original_quantity
-        @order.save
-      end
+    context "when order is inactive" do
+      before { @order.active = true }
+      specify { expect { @order.create_next_delivery }.should_not change(Delivery, :count) }
+    end
 
-      [5, 15].each do |q|
-        context "from 10 to #{q}" do
-          before do
-            @original_account_balance = @order.account.balance
-            @change_in_quantity = q - @original_quantity
+    context "when order has been completed" do
+      before { @order.completed = true }
+      specify { expect { @order.create_next_delivery }.should change(Delivery, :count).by(1) }
+    end
 
-            @order.quantity = q
-            @order.save
-          end
+    context "when delivery already exists" do
+      before { @order.create_next_delivery }
+      specify { expect { @order.create_next_delivery }.should_not change(Delivery, :count) }
+    end
+  end
 
-          specify { @order.account.balance.should == @original_account_balance + (@order.box.price * -1 * @change_in_quantity) }
-          specify { @order.account.transactions.last.kind.should == 'order' }
-          specify { @order.account.transactions.last.amount.should == (@order.box.price * -1 * @change_in_quantity) }
-        end
+  describe '#update_future_deliveries' do
+    before do
+      box = Fabricate(:box, :distributor => Fabricate(:route).distributor)
+      3.times { Fabricate(:order, :box => box, :completed => true, :frequency => 'weekly') }
+      Fabricate(:order, :box => box, :frequency => 'weekly')
+      Fabricate(:order, :box => box, :frequency => 'weekly', :active => false)
+    end
+
+    it "should create the next delivery for each active order if it doesn't exist already" do
+      Delorean.time_travel_to('1 month from now') do
+        expect { Order.update_future_deliveries }.should change(Delivery, :count).by(3)
       end
     end
   end

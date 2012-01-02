@@ -1,33 +1,40 @@
-set :application, "bucky_box"
+set :application, 'bucky_box'
 set :user, application
 set :repository,  "git@github.com:enspiral/#{application}.git"
 
 set :scm, :git
 set :use_sudo, false
+
 set :rake, 'bundle exec rake'
+set :whenever_command, 'bundle exec whenever'
 
 task :staging do
+  set :domain, '173.255.206.188'
   set :rails_env, :staging
+  set :stage, :staging
   set :deploy_to, "/home/#{application}/staging"
   set :branch, 'staging'
 end
 
 task :production do
+  set :domain, '173.255.206.188'
   set :rails_env, :production
+  set :stage, :production
   set :deploy_to, "/home/#{application}/production"
   set :branch, 'production'
 end
-
-set :domain, '173.255.206.188'
 
 role :web, domain
 role :app, domain
 role :db,  domain, :primary => true
 
+set :whenever_environment, defer { stage }
+set :whenever_identifier, defer { "#{application}_#{stage}" }
+
 namespace :deploy do
   [:stop, :start, :restart].each do |task_name|
     task task_name, :roles => [:app] do
-      run "cd #{current_path} && touch tmp/restart.txt"
+      run 'cd #{current_path} && touch tmp/restart.txt'
     end
   end
 
@@ -45,5 +52,6 @@ end
 require './config/boot'
 require 'capistrano_colors'
 require 'bundler/capistrano'
+require 'whenever/capistrano'
 require 'airbrake/capistrano'
 
