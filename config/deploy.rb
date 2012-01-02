@@ -11,22 +11,26 @@ set :whenever_command, 'bundle exec whenever'
 task :staging do
   set :domain, '173.255.206.188'
   set :rails_env, :staging
-  set :stage, :staging
-  set :deploy_to, "/home/#{application}/staging"
-  set :branch, 'staging'
+  set :stage, rails_env
+  set :deploy_to, "/home/#{application}/#{rails_env}"
+  set :branch, rails_env
+  
+  role :web, domain
+  role :app, domain
+  role :db,  domain, :primary => true
 end
 
 task :production do
   set :domain, '173.255.206.188'
   set :rails_env, :production
-  set :stage, :production
-  set :deploy_to, "/home/#{application}/production"
-  set :branch, 'production'
+  set :stage, rails_env
+  set :deploy_to, "/home/#{application}/#{rails_env}"
+  set :branch, rails_env
+  
+  role :web, domain
+  role :app, domain
+  role :db,  domain, :primary => true
 end
-
-role :web, domain
-role :app, domain
-role :db,  domain, :primary => true
 
 set :whenever_environment, defer { stage }
 set :whenever_identifier, defer { "#{application}_#{stage}" }
