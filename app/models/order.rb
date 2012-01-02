@@ -43,11 +43,10 @@ class Order < ActiveRecord::Base
   end
 
   def create_next_delivery
-    if completed? && !(frequency == 'single' && deliveries.size > 0)
+    if completed? && active?
       route = Route.best_route(distributor)
-      date = (schedule ? schedule.next_occurrence : route.next_run)
-
-      deliveries.find_or_create_by_date_and_route_id(date, route.id)
+      date = schedule.next_occurrence
+      deliveries.find_or_create_by_date_and_route_id(date, route.id) if date && route
     end
   end
 

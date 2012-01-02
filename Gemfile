@@ -47,7 +47,7 @@ group :development, :test do
   gem 'rb-inotify', :require => false
   gem 'rb-fsevent', :require => false
   gem 'rb-fchange', :require => false
-  
+
   gem 'ruby-debug19', :require => false
   gem 'mailcatcher', :require => false
 end
@@ -56,9 +56,11 @@ group :test do
   gem 'fabrication'
   gem 'database_cleaner'
 
+  gem 'delorean'
+
   gem 'capybara'
   gem 'launchy'
-  
+
   gem 'guard-rspec'
   gem 'fuubar'
 end
