@@ -13,15 +13,27 @@
             - @orders.group_by(&:box_id).each do |box_id, array|
               %li== #{array.size} - #{Box.find(box_id).name}
 
-
     .nine.columns
       .row.data-headings
-        %h5.four.columns Address
-        %h5.four.columns Box
-        %h5.four.columns Customer Name
+        .one.columns= check_box_tag 'all'
+        .nine.columns
+          = link_to 'Delivered', '#', :class => 'nice small button'
+          = link_to 'Pending', '#', :class => 'nice small button'
+          = link_to 'Missed', '#', :class => 'nice small button', :id => 'missed'
+          .has-flyout
+            %ul.flyout
+              %li
+                = radio_button_tag 'missed', 'canceled'
+                = label_tag 'missed_canceled', 'Order Canceled'
+              %li
+                = radio_button_tag 'missed', 'reschedule'
+                = label_tag 'missed_reschedule', 'Reschedule Delivery'
+                = select_tag "people", options_from_collection_for_select(Route.best_route(current_distributor).schedule.next_occurrences(5), 'to_date', 'to_date')
+        .two.columns
 
       - @orders.each do |order|
         .row.data-listings
-          .four.columns= customer_address(order.customer, :single_line => true)
-          .four.columns== #{order.quantity} - #{order.box.name}
-          .four.columns= order.customer.name
+          .one.columns= check_box_tag order.id
+          .five.columns= delivery_item_address(order)
+          .three.columns== #{order.quantity} - #{order.box.name}
+          .three.columns= order.customer.name

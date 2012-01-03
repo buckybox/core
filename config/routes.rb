@@ -21,17 +21,20 @@ BuckyBox::Application.routes.draw do
     resources :orders,             :controller => 'distributor/orders'
     resources :payments,           :controller => 'distributor/payments', :only => :create
     resources :transactions,       :controller => 'distributor/transactions', :only => :create
+
     resources :deliveries,         :controller => 'distributor/deliveries' do
       collection do
         get 'date/:date', :action => :index, :as => 'date'
       end
     end
+
     resources :accounts,           :controller => 'distributor/accounts' do
       collection do
         get 'search',   :action => :index, :as => 'search'
         get 'tag/:tag', :action => :index, :as => 'tag'
       end
     end
+
     resources :events,             :controller => 'distributor/dashboard' do
       member do
         post 'dismiss_notification'=> 'distributor/dashboard', :action => 'dismiss_notification'
