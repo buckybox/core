@@ -1,13 +1,12 @@
 class Distributor::TransactionsController < Distributor::BaseController
   belongs_to :distributor
-  actions :create
+  respond_to :html, :xml, :json
 
   def update
-    update! { distributor_account_path(@transaction.account) }
+    update! { distributor_account_path(current_distributor, @transaction.account)}
   end
 
-  def create
-    create! { distributor_account_path(@transaction.account) }
+  def destroy
+    destroy! { distributor_account_path(current_distributor, @transaction.account) }
   end
-  respond_to :html, :xml, :json
 end

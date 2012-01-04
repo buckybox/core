@@ -67,6 +67,7 @@ describe Account do
     it "should recalculate balance correctly" do
       @account.balance.should == 500
       @account.recalculate_balance!
+      @account.reload
       @account.balance.should == 400
     end
   end

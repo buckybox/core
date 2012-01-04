@@ -47,6 +47,7 @@ class Account < ActiveRecord::Base
   def recalculate_balance!
     total = transactions.sum(:amount_cents)
     write_attribute(:balance_cents, total)
+    save
     clear_aggregation_cache # without this the composed_of balance attribute does not update
   end
 
