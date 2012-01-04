@@ -31,4 +31,37 @@ class Distributor::AccountsController < Distributor::BaseController
       end
     end
   end
+
+  def receive_payment
+    @account = current_distributor.accounts.find params[:id]
+    @transaction = Transaction.new
+  end
+
+  def save_payment
+    @account = current_distributor.accounts.find params[:id]
+    @transaction = Transaction.new(params[:transaction])
+    @transaction.account = @account
+    @transaction.kind = 'payment'
+    
+    if @transaction.save
+      flash[:notice] = "Successfully created payment"
+      redirect_to distributor_account_path(current_distributor, @account)
+    else
+      flash[:error] = "Could not save payment"
+      render :receive_payment
+    end
+  end
+
+  protected
+
+  def collection
+    @accounts = end_of_association_chain.includes(:customer => :address)
+
+    @accounts = @accounts.tagged_with(params[:tag]) unless params[:tag].blank?
+
+    unless params[:query].blank?
+      customers = @distributor.customers.search(params[:query])
+      @accounts = @accounts.where(:customer_id => customers.map(&:id))
+    end
+  end
 end

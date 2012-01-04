@@ -1,0 +1,13 @@
+- title('Receive payment')
+
+= simple_form_for(@transaction, :url => save_payment_distributor_account_path(:distributor_id => current_distributor.id, :id => @account.id) ) do |f|
+  = f.error_notification
+
+  .inputs
+    = f.input :amount
+    = f.input :description
+
+  .actions
+    = f.button :submit
+
+= link_to 'Back', distributor_accounts_path(current_distributor)

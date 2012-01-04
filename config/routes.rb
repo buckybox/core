@@ -52,6 +52,10 @@ BuckyBox::Application.routes.draw do
       member do
         put 'change_balance', :action => :change_balance, :as => 'change_balance'
       end
+      member do
+        get 'receive_payment', :action => :receive_payment, :as => 'receive_payment'
+        post 'save_payment', :action => :save_payment, :as => 'save_payment'
+      end
     end
 
     resources :events, :controller => 'distributor/dashboard' do

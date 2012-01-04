@@ -24,6 +24,8 @@
       = tag_links(@account.tags)
 
   .five.columns
+    = link_to 'Receive Payment', receive_payment_distributor_account_path(current_distributor, @account)
+    %br
     = link_to 'Edit Accounts Details', edit_distributor_account_path(current_distributor, @account)
     %br
     = link_to 'Edit Customer Details', edit_customer_path(@account.customer)
