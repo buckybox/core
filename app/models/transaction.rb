@@ -11,8 +11,16 @@ class Transaction < ActiveRecord::Base
 
   default_scope order('created_at DESC')
 
-  KINDS = %w(delivery payment amend)
+  KINDS = %w(delivery order payment amend)
+
+  after_save :update_account_balance
+  after_destroy :update_account_balance
 
   validates_presence_of :account, :kind, :amount, :description
   validates :kind, :inclusion => { :in => KINDS, :message => "%{value} is not a valid kind of transaction" }
+
+  private
+  def update_account_balance
+    account.recalculate_balance!
+  end
 end
