@@ -3,11 +3,16 @@ class Distributor::DashboardController < Distributor::BaseController
 
   def index
     @notifications = current_distributor.events.active.sorted
+
+    @payments = current_distributor.payments.manual.order('created_at DESC').limit(10)
+    @payment = current_distributor.payments.new(:kind => 'manual')
+
+    @accounts = current_distributor.accounts.includes(:customer).sort { |a,b| a.customer.name <=> b.customer.name }
   end
 
   def dismiss_notification
     Event.find(params[:id]).dismiss!
-    render :status => 200
+    head :ok
   end
 
   private
