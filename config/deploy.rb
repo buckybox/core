@@ -38,7 +38,7 @@ set :whenever_identifier, defer { "#{application}_#{stage}" }
 namespace :deploy do
   [:stop, :start, :restart].each do |task_name|
     task task_name, :roles => [:app] do
-      run 'cd #{current_path} && touch tmp/restart.txt'
+      run "cd #{current_path} && touch tmp/restart.txt"
     end
   end
 
