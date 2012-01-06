@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20111228012130) do
+ActiveRecord::Schema.define(:version => 20120104235552) do
 
   create_table "accounts", :force => true do |t|
     t.integer  "distributor_id"
@@ -196,7 +196,6 @@ ActiveRecord::Schema.define(:version => 20111228012130) do
 
   create_table "payments", :force => true do |t|
     t.integer  "distributor_id"
-    t.integer  "customer_id"
     t.integer  "account_id"
     t.integer  "amount_cents",   :default => 0, :null => false
     t.string   "currency"
@@ -207,7 +206,6 @@ ActiveRecord::Schema.define(:version => 20111228012130) do
   end
 
   add_index "payments", ["account_id"], :name => "index_payments_on_account_id"
-  add_index "payments", ["customer_id"], :name => "index_payments_on_customer_id"
   add_index "payments", ["distributor_id"], :name => "index_payments_on_distributor_id"
 
   create_table "routes", :force => true do |t|

@@ -1,12 +1,15 @@
-= simple_form_for(@distributor_payment) do |f|
+%h2 Manual Customer Payment
+
+= simple_form_for([current_distributor, @payment]) do |f|
   = f.error_notification
 
   .inputs
-    = f.association :distributor
-    = f.association :customer
-    = f.input :amount_cents
-    = f.input :currency
-    = f.input :kind
+    = f.input :kind, :as => :hidden
+    = f.association :account, :collection => @accounts,
+      :label_method => lambda { |a| a.customer.name },
+      :value_method => lambda { |a| a.id },
+      :label => 'Customer'
+    = f.input :amount
     = f.input :description
 
   .actions

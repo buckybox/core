@@ -3,6 +3,12 @@ class Distributor::AccountsController < Distributor::BaseController
 
   respond_to :html, :xml, :json
 
+  def index
+    index! do
+      @accounts.sort! { |a,b| a.customer.name <=> b.customer.name }
+    end
+  end
+
   def show
     show! do
       @transactions = @account.transactions
@@ -28,9 +34,7 @@ class Distributor::AccountsController < Distributor::BaseController
   def collection
     @accounts = end_of_association_chain.includes(:customer => :address)
 
-    unless params[:tag].blank?
-      @accounts = @accounts.tagged_with(params[:tag])
-    end
+    @accounts = @accounts.tagged_with(params[:tag]) unless params[:tag].blank?
 
     unless params[:query].blank?
       customers = @distributor.customers.search(params[:query])

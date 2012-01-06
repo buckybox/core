@@ -9,7 +9,7 @@ class Transaction < ActiveRecord::Base
 
   attr_accessible :account, :kind, :amount, :description
 
-  default_scope order(:created_at)
+  default_scope order('created_at DESC')
 
   KINDS = %w(order payment amend)
 

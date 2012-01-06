@@ -1,0 +1,18 @@
+%h2 Recent Manual Payments
+
+- if @payments.blank?
+  No manual payments have been entered yet
+- else
+  %table
+    %thead
+      %tr
+        %th Customer
+        %th Amount
+        %th Description
+
+    %tbody
+      - @payments.each do |payment|
+        %tr
+          %td= payment.customer.name
+          %td= payment.amount.format
+          %td= payment.description
