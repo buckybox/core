@@ -16,24 +16,45 @@
     .nine.columns
       .row.data-headings
         .one.columns= check_box_tag 'all'
-        .nine.columns
-          = link_to 'Delivered', '#', :class => 'nice small button'
-          = link_to 'Pending', '#', :class => 'nice small button'
-          = link_to 'Missed', '#', :class => 'nice small button', :id => 'missed'
+        .nine.columns.delivery_actions
+          = button_tag 'Delivered', :class => 'nice small button', :id => 'delivered', :disabled => @selected_date.future?
+          = button_tag 'Pending', :class => 'nice small button', :id => 'pending', :disabled => @selected_date.future?
+          = button_tag 'Missed', :class => 'nice small button', :id => 'missed', :disabled => @selected_date.future?
           .has-flyout
-            %ul.flyout
-              %li
-                = radio_button_tag 'missed', 'canceled'
-                = label_tag 'missed_canceled', 'Order Canceled'
-              %li
-                = radio_button_tag 'missed', 'reschedule'
-                = label_tag 'missed_reschedule', 'Reschedule Delivery'
-                = select_tag "people", options_from_collection_for_select(Route.best_route(current_distributor).schedule.next_occurrences(5), 'to_date', 'to_date')
+            %table.flyout.large
+              %tr
+                %td= radio_button_tag 'missed', 'cancel'
+                %td= label_tag 'missed_cancelled', 'Cancel delivery'
+                %td
+              %tr
+                %td= radio_button_tag 'missed', 'reschedule'
+                %td= label_tag 'missed_reschedule', 'Reschedule delivery'
+                %td= select_tag "people", options_from_collection_for_select(Route.best_route(current_distributor).schedule.next_occurrences(5), 'to_date', 'to_date')
+              %tr
+                %td= radio_button_tag 'missed', 'pack'
+                %td= label_tag 'missed_pack', 'Repack delivery'
+                %td= select_tag "people", options_from_collection_for_select(Route.best_route(current_distributor).schedule.next_occurrences(5), 'to_date', 'to_date')
+              %tr
+                %td{:colspan => 2}
+                %td= button_tag 'Commit', :class => 'nice small button'
         .two.columns
 
       - @orders.each do |order|
-        .row.data-listings
-          .one.columns= check_box_tag order.id
+        .row.data-listings{:class => order.check_status_by_date(@selected_date)}
+          .one.columns= check_box_tag order.id, "1", false, :data => {:delivery => order.delivery_for_date(@selected_date).id}
           .five.columns= delivery_item_address(order)
           .three.columns== #{order.quantity} - #{order.box.name}
           .three.columns= order.customer.name
+
+  :javascript
+    $(function() {
+      $('#delivery-listings #delivered').click(function() {
+        id = $(this).attr('id');
+        distributor_id = "#{current_distributor.id}";
+        checked_deliveries = $('#delivery-listings .data-listings input[type=checkbox]:checked');
+
+        updateDeliveryStatus(id, distributor_id, checked_deliveries);
+
+        return false;
+      });
+    });

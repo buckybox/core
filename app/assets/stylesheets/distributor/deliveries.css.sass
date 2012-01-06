@@ -49,8 +49,17 @@ $cal-nav-divider: darken($cal-nav-base, 40%)
 
   .flyout
     display: none
-    top: 31px
-    left: 185px
+    top: 33px
+    left: 195px
     width: auto
     select
       display: inline
+
+  .data-listings
+    background-color: #fafafa
+    &.cancelled
+      background-color: #e8e8e8
+    &.missed
+      background-color: #f1f1f1
+    &.delivered
+      background-color: #fef8e2

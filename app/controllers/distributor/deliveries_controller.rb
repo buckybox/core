@@ -1,7 +1,9 @@
 class Distributor::DeliveriesController < Distributor::BaseController
+  custom_actions :collection => :update_status
   belongs_to :distributor
 
-  respond_to :html, :xml, :json
+  respond_to :html, :xml, :except => :update_status
+  respond_to :json
 
   def index
     index! do
@@ -29,6 +31,17 @@ class Distributor::DeliveriesController < Distributor::BaseController
       @nav_length = @calendar_hash.length + number_of_month_dividers
 
       @route = Route.best_route(current_distributor)
+    end
+  end
+
+  def update_status
+    deliveries = current_distributor.deliveries.where(:id => params[:deliveries])
+    status = params[:status] if Delivery::STATUS.include?(params[:status])
+
+    if status && deliveries.map{ |d| d.update_attribute('status', status) }.all?
+      head :ok
+    else
+      head :bad_request
     end
   end
 end

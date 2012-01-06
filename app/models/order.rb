@@ -24,7 +24,8 @@ class Order < ActiveRecord::Base
   validates_inclusion_of :frequency, :in => FREQUENCIES, :message => "%{value} is not a valid frequency"
   validate :box_distributor_equals_customer_distributor
 
-  before_save :create_schedule
+  before_save :not_completed_not_active, :unless => 'completed?'
+  before_save :create_schedule, :if => :just_completed?
   before_save :create_first_delivery, :if => :just_completed?
 
   scope :completed, where(:completed => true)
@@ -47,6 +48,20 @@ class Order < ActiveRecord::Base
       route = Route.best_route(distributor)
       date = schedule.next_occurrence
       deliveries.find_or_create_by_date_and_route_id(date, route.id) if date && route
+    end
+  end
+
+  # Maintenance method. Should only need if cron isn't running or missed some dates
+  def self.create_old_deliveries
+    all.each { |o| o.create_old_deliveries }
+  end
+
+  # Maintenance method. Should only need if cron isn't running or missed some dates
+  def create_old_deliveries
+    schedule.occurrences(Time.now).each do |occurrence|
+      route = Route.best_route(distributor)
+      date = occurrence.to_date
+      result = deliveries.find_or_create_by_date_and_route_id(date, route.id) if date && route
     end
   end
 
@@ -75,7 +90,22 @@ class Order < ActiveRecord::Base
     "#{quantity || 0} " + ((quantity == 1 || quantity =~ /^1(\.0+)?$/) ? box.name : box.name.pluralize)
   end
 
+  def delivery_for_date(date)
+    deliveries.where(:date => date)
+    (deliveries.empty? ? nil : deliveries.first)
+  end
+
+  def check_status_by_date(date)
+    if schedule.occurs_on?(date) # is it even suposed to happen on this date?
+      (date.future? ? 'pending' : delivery_for_date(date).status)
+    end
+  end
+
   protected
+
+  def not_completed_not_active
+    self.active = false
+  end
 
   def create_schedule
     weeks_between_deliveries = FREQUENCY_HASH[frequency]
@@ -104,8 +134,7 @@ class Order < ActiveRecord::Base
   #TODO: Fix hacks as a result of customer accounts model rejig
   def box_distributor_equals_customer_distributor
     if customer && customer.distributor_id != box.distributor_id
-      errors[:box_id] = "distributor does not match customer distributor"
-      return false
+      errors.add(:box_id, 'distributor does not match customer distributor')
     end
   end
 end
