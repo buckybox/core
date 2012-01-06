@@ -8,7 +8,7 @@ class Delivery < ActiveRecord::Base
 
   attr_accessible :order, :route, :date, :status
 
-  STATUS = %w(pending delivered cancelled)
+  STATUS = %w(pending delivered cancelled missed)
 
   validates_presence_of :order, :date, :route, :status
   validates_inclusion_of :status, :in => STATUS, :message => "%{value} is not a valid status"
@@ -20,6 +20,7 @@ class Delivery < ActiveRecord::Base
   scope :pending,   where(:status => 'pending')
   scope :delivered, where(:status => 'delivered')
   scope :cancelled, where(:status => 'cancelled')
+  scope :missed,    where(:status => 'missed')
 
   default_scope order(:date)
 

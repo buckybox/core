@@ -1,5 +1,5 @@
 - unless @orders.blank?
-  #delivery-listings.row
+  #delivery-listings.row{:data => {:distributor => current_distributor.id}}
     .three.columns
       .row.data-headings
         %h5.twelve.columns= @selected_date.strftime("%A %m %B") if @selected_date
@@ -45,16 +45,3 @@
           .five.columns= delivery_item_address(order)
           .three.columns== #{order.quantity} - #{order.box.name}
           .three.columns= order.customer.name
-
-  :javascript
-    $(function() {
-      $('#delivery-listings #delivered').click(function() {
-        id = $(this).attr('id');
-        distributor_id = "#{current_distributor.id}";
-        checked_deliveries = $('#delivery-listings .data-listings input[type=checkbox]:checked');
-
-        updateDeliveryStatus(id, distributor_id, checked_deliveries);
-
-        return false;
-      });
-    });
