@@ -4,14 +4,18 @@
       .row.data-headings
         %h5.twelve.columns= @selected_date.strftime("%A %m %B") if @selected_date
       .row
-        .twelve.columns
-          %h6.route-name== #{@orders.size} - #{@route.name}
+        .twelve.columns.route-name
+          %h6
+            %span= @orders.size
+            = @route.name
       .row
-        .twelve.columns
-          %h6.route-name Summary
+        .twelve.columns.summary
+          %strong Summary
           %ul
             - @orders.group_by(&:box_id).each do |box_id, array|
-              %li== #{array.size} - #{Box.find(box_id).name}
+              %li
+                %span= array.size
+                = Box.find(box_id).name
 
     .nine.columns
       .row.data-headings
