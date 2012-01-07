@@ -26,6 +26,10 @@ class Account < ActiveRecord::Base
     raise(ArgumentError, "The balance can not be updated this way. Please use one of the model balance methods that create transactions.")
   end
 
+  def name
+    customer.name
+  end
+  
   def balance=(value)
     raise(ArgumentError, "The balance can not be updated this way. Please use one of the model balance methods that create transactions.")
   end

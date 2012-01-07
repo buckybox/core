@@ -1,0 +1,22 @@
+- title 'Billing', false
+= render :partial => 'distributor/shared/billing_sub_nav'
+
+.row
+  %table.twelve.columns
+    %thead
+      %tr
+        %th Customer
+        %th Type
+        %th Amount
+        %th Description
+        %th Date
+
+    - @transactions.each do |transaction|
+      %tbody
+        %tr
+          %td= link_to transaction.account.customer.name, [current_distributor, transaction.account]
+          %td= transaction.kind.titleize
+          %td= transaction.amount
+          %td= transaction.description
+          %td= transaction.created_at.strftime('%Y-%m-%d')
+

@@ -15,7 +15,7 @@ describe "distributor/dashboard/index.html.haml" do
       end
       it "displays confirmation" do
         render
-        rendered.should have_content("0 invoices ready to send")
+        rendered.should_not have_content("invoices ready to send")
       end
     end
 

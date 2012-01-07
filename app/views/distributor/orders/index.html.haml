@@ -1,0 +1,21 @@
+- title 'Orders', false
+
+=link_to 'Add Order', new_distributor_order_path(current_distributor)
+
+.row.data-headings
+  %h4.two.columns ID
+  %h4.three.columns Customer
+  %h4.three.columns Box
+  %h4.two.columns Quantity
+  %h4.two.columns
+
+- @orders.each do |order|
+  .row.data-listings
+    .two.columns= link_to order.id, [current_distributor, order]
+    .three.columns= link_to order.customer.name, order.customer if order.customer
+    .three.columns= link_to order.box.name, [current_distributor, order.box]
+    .two.columns= order.quantity
+    .two.columns
+      = link_to 'Edit', edit_distributor_order_path(current_distributor, order)
+      = link_to 'Destroy', [current_distributor, order], :confirm => 'Are you sure?', :method => :delete
+

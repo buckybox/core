@@ -12,6 +12,9 @@
         - unless @order.persisted?
           = f.input :frequency, :collection => order_frequencies, :include_blank => false
 
+    - unless @order.id
+      = f.association :account, :collection => current_distributor.accounts
+
     .four.columns
       .inputs
         = f.input :likes, :wrapper_html => { :id => 'likes_input' }
