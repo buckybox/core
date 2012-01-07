@@ -134,12 +134,32 @@ describe Account do
     end
   end
 
+  describe "#amount_with_bucky_fee" do
+    it "returns amount if bucky fee is not separate" do
+      @account.distributor.stub(:separate_bucky_fee).and_return(true)
+      @account.distributor.stub(:fee).and_return(0.02) #%
+      @account.amount_with_bucky_fee(100).should == 102
+    end
+    it "includes bucky fee if bucky fee is separate" do
+      @account.distributor.stub(:separate_bucky_fee).and_return(false)
+      @account.distributor.stub(:fee).and_return(0.02) #%
+      @account.amount_with_bucky_fee(100).should == 100
+    end
+  end
+
   describe "create_invoice" do
     before { pending('Invoices not done so not bothering to fix tests for them.') }
 
     it "does nothing if an outstanding invoice exists" do
       Fabricate(:invoice, :account => @account)
       @account.stub(:next_invoice_date).and_return(Date.current)
+      Invoice.should_not_receive(:create)
+      @account.create_invoice
+    end
+
+    it "does nothing if invoice_date is nil" do
+      Fabricate(:invoice, :account => @account)
+      @account.stub(:next_invoice_date).and_return(nil)
       Invoice.should_not_receive(:create)
       @account.create_invoice
     end
@@ -151,9 +171,11 @@ describe Account do
     end
 
     it "creates invoice if next invoice date is <= today" do
+      @account = order_with_deliveries.account
       @account.stub(:next_invoice_date).and_return(Date.current)
-      Invoice.should_receive(:create).and_return(true)
-      @account.create_invoice
+      lambda {
+        @account.create_invoice
+      }.should change {Invoice.count}
     end
   end
 end

@@ -26,6 +26,8 @@ RSpec.configure do |config|
   config.include DeviseRequest, :type => :request
   config.extend DeviseRequestMacros, :type => :request
 
+  config.include FabricationHelper
+
   config.before(:suite) do
     DatabaseCleaner.strategy = :truncation
     DatabaseCleaner.clean_with(:truncation)

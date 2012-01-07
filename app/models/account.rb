@@ -60,6 +60,7 @@ class Account < ActiveRecord::Base
     add_to_balance((amount * -1), options)
   end
 
+  #this holds the core logic for when an invoice should be raised
   def next_invoice_date
     total = balance
     invoice_date = nil
@@ -68,8 +69,8 @@ class Account < ActiveRecord::Base
       invoice_date =  Date.current
     else
       deliveries.pending.each do |delivery|
-        bucky_fee_multiple = distributor.separate_bucky_fee ? (1 + distributor.fee) : 1
-        total -= delivery.order.price * bucky_fee_multiple
+        total -= amount_with_bucky_fee(delivery.order.price)
+
         if total < distributor.invoice_threshold
           invoice_date = delivery.date.to_date - 12.days
           break
@@ -80,19 +81,25 @@ class Account < ActiveRecord::Base
     if invoice_date
       invoice_date = Date.current if invoice_date < Date.current
 
-      if deliveries.first.date >= invoice_date - 2.days
+      if deliveries.size > 0 && deliveries.first.date >= invoice_date - 2.days
         invoice_date = deliveries.first.date + 2.days
       end
     end
-
 
     return invoice_date
 
   end
 
+  #used internally for calculating invoice totals
+  #if distributor charges bucky fee in addition to box price return price + bucky fee
+  def amount_with_bucky_fee(amount)
+    bucky_fee_multiple = distributor.separate_bucky_fee ? (1 + distributor.fee) : 1
+    amount * bucky_fee_multiple
+  end
+
   def create_invoice
-    if next_invoice_date <= Date.current && invoices.outstanding.count == 0
-      Invoice.create(:account => self) 
+    if next_invoice_date.present? && next_invoice_date <= Date.current && invoices.outstanding.count == 0
+      invoice = Invoice.create_for_account(self)
     end
   end
 
