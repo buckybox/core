@@ -178,5 +178,22 @@ describe Account do
       }.should change {Invoice.count}
     end
   end
+
+  describe "#need_invoicing" do
+    before(:each) do
+      @a1 = Fabricate(:account)
+      @a1.stub(:needs_invoicing?).and_return(true)
+      @a2 = Fabricate(:account)
+      @a2.stub(:needs_invoicing?).and_return(false)
+      Account.stub(:all).and_return [@a1, @a2]
+      @accounts = Account.need_invoicing
+    end
+    it "includes accounts that need invoicing" do
+      @accounts.should include(@a1)
+    end
+    it "does not include accounts that need invoicing" do
+      @accounts.should_not include(@a2)
+    end
+  end
 end
 

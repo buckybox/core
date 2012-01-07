@@ -60,6 +60,15 @@ class Account < ActiveRecord::Base
     add_to_balance((amount * -1), options)
   end
 
+  #all accounts that need invoicing
+  def self.need_invoicing
+    accounts = []
+    Account.all.each do |a|
+      accounts << a if a.needs_invoicing?
+    end
+    accounts
+  end
+
   #this holds the core logic for when an invoice should be raised
   def next_invoice_date
     total = balance
@@ -97,8 +106,12 @@ class Account < ActiveRecord::Base
     amount * bucky_fee_multiple
   end
 
+  def needs_invoicing?
+    next_invoice_date.present? && next_invoice_date <= Date.current && invoices.outstanding.count == 0
+  end
+
   def create_invoice
-    if next_invoice_date.present? && next_invoice_date <= Date.current && invoices.outstanding.count == 0
+    if needs_invoicing?
       invoice = Invoice.create_for_account(self)
     end
   end

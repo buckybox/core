@@ -1,0 +1,24 @@
+.row
+  %table.twelve.columns
+    %thead
+      %tr
+        %th Number
+        %th Customer
+        %th Amount
+        %th Date
+        %th Paid
+        %th 
+
+    - invoices.each do |invoice|
+      %tbody
+        %tr
+          %td= invoice.number
+          %td= link_to invoice.account.customer.name, [current_distributor, invoice.account]
+          %td= invoice.amount
+          %td= invoice.date
+          %td= invoice.paid ? "Y" : "N"
+          %td
+            /= link_to 'Show', [current_distributor, invoice]
+            /= link_to 'Edit', edit_distributor_transaction_path(current_distributor, transaction)
+            /= link_to 'Destroy', [current_distributor, transaction], :confirm => 'Are you sure?', :method => :delete
+
