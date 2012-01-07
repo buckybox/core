@@ -1,10 +1,14 @@
 require "spec_helper"
 
 describe "distributor/dashboard/index.html.haml" do
+  before(:each) do
+    @notifications = []
+    @payments = []
+    @accounts = []
+    view.stub(:current_distributor).and_return(Fabricate(:distributor))
+    @payment = Fabricate(:payment)
+  end
   describe "accounts to invoice" do
-    before(:each) do
-      @notifications = []
-    end
     context "with no accounts to invoice" do
       before(:each) do
         @accounts_to_invoice = []

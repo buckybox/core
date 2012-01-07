@@ -41,7 +41,7 @@ class Account < ActiveRecord::Base
     write_attribute(:currency, amount.currency.to_s || Money.default_currency.to_s)
     clear_aggregation_cache # without this the composed_of balance attribute does not update
 
-    transactions.create(kind: options[:kind], amount: amount_difference, description: options[:description])
+    transactions.create!(kind: options[:kind], amount: amount_difference, description: options[:description])
   end
   
   def recalculate_balance!

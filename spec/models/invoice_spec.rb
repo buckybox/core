@@ -56,7 +56,6 @@ describe Invoice do
       end
       it "should calculate correct amount" do
         @invoice.amount.should == @account.amount_with_bucky_fee(@order.box.price)
-        puts @invoice.deliveries.inspect
         @invoice.deliveries.collect{|d| d[:id]}.should include(@order.deliveries.first.id)
       end
     end

@@ -1,6 +1,6 @@
 %h3 Make A Payment
 
-= simple_form_for([current_distributor, @payment]) do |f|
+= simple_form_for(@payment, :url => distributor_payments_path(current_distributor)) do |f|
   = f.error_notification
 
   .inputs

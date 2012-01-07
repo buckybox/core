@@ -18,7 +18,7 @@ describe Account do
         context "with #{v} of type #{v.class}" do
           before { @account.change_balance_to(v) }
           specify { @account.balance.should == v.to_money }
-          specify { @account.transactions.last.amount.should == v.to_money }
+          specify { @account.transactions.order(:created_at).last.amount.should == v.to_money }
         end
       end
     end
@@ -33,7 +33,7 @@ describe Account do
           end
 
           specify { @account.balance.should == (250 + v).to_money }
-          specify { @account.transactions.last.amount.should == v.to_money }
+          specify { @account.transactions.order.last.amount.should == v.to_money }
         end
       end
     end

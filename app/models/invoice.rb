@@ -19,7 +19,7 @@ class Invoice < ActiveRecord::Base
   scope :outstanding, where(:paid => false)
 
   after_initialize :set_defaults
-  after_create :generate_number
+  before_create :generate_number
 
   validates_presence_of :account_id
   validates_uniqueness_of :number, :allow_nil => false
@@ -29,7 +29,7 @@ class Invoice < ActiveRecord::Base
     self.start_date ||= 4.weeks.ago.to_date
     self.end_date ||= 4.weeks.from_now.to_date
     self.date = Date.today
-    generate_number
+    #generate_number
   end
 
   #creates invoices for all accounts which need it
@@ -70,7 +70,7 @@ class Invoice < ActiveRecord::Base
   def generate_number
     return if number.present? || !account.present?
     last_invoice = account.invoices.order('number DESC').limit(1).first
-    self.number = last_invoice.nil? ? 1 : last_invoice.number + 1
+    self.number = last_invoice.nil? || last_invoice.number.nil? ? 1 : last_invoice.number + 1
   end
 
 end
