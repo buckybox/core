@@ -20,28 +20,28 @@
           = button_tag 'Delivered', :class => 'nice small button', :id => 'delivered', :disabled => @selected_date.future?
           = button_tag 'Pending', :class => 'nice small button', :id => 'pending', :disabled => @selected_date.future?
           = button_tag 'Missed', :class => 'nice small button', :id => 'missed', :disabled => @selected_date.future?
-          .has-flyout
+          #missed-options.has-flyout
             %table.flyout.large
               %tr
-                %td= radio_button_tag 'missed', 'cancel'
+                %td= radio_button_tag 'missed', 'cancelled'
                 %td= label_tag 'missed_cancelled', 'Cancel delivery'
                 %td
               %tr
                 %td= radio_button_tag 'missed', 'reschedule'
                 %td= label_tag 'missed_reschedule', 'Reschedule delivery'
-                %td= select_tag "people", options_from_collection_for_select(Route.best_route(current_distributor).schedule.next_occurrences(5), 'to_date', 'to_date')
+                %td= select_tag 'date_reschedule', options_from_collection_for_select(Route.best_route(current_distributor).schedule.next_occurrences(5), 'to_date', 'to_date')
               %tr
                 %td= radio_button_tag 'missed', 'pack'
                 %td= label_tag 'missed_pack', 'Repack delivery'
-                %td= select_tag "people", options_from_collection_for_select(Route.best_route(current_distributor).schedule.next_occurrences(5), 'to_date', 'to_date')
+                %td= select_tag 'date_pack', options_from_collection_for_select(Route.best_route(current_distributor).schedule.next_occurrences(5), 'to_date', 'to_date')
               %tr
                 %td{:colspan => 2}
-                %td= button_tag 'Commit', :class => 'nice small button'
+                %td= button_tag 'Commit', :class => 'nice small button', :id => 'commit-missed'
         .two.columns
 
       - @orders.each do |order|
         .row.data-listings{:class => order.check_status_by_date(@selected_date)}
-          .one.columns= check_box_tag order.id, "1", false, :data => {:delivery => order.delivery_for_date(@selected_date).id}
+          .one.columns= check_box_tag order.id, '1', false, :data => {:delivery => order.delivery_for_date(@selected_date).id}
           .five.columns= delivery_item_address(order)
           .three.columns== #{order.quantity} - #{order.box.name}
           .three.columns= order.customer.name

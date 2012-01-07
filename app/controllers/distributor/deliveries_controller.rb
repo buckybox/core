@@ -36,9 +36,17 @@ class Distributor::DeliveriesController < Distributor::BaseController
 
   def update_status
     deliveries = current_distributor.deliveries.where(:id => params[:deliveries])
-    status = params[:status] if Delivery::STATUS.include?(params[:status])
+    status = params[:status]
 
-    if status && deliveries.map{ |d| d.update_attribute('status', status) }.all?
+    if status == 'reschedule' || status == 'pack'
+      missed_type = status
+      date = Date.parse(params[:date])
+      status = 'cancelled'
+    end
+
+    valid_status = Delivery::STATUS.include?(status)
+
+    if valid_status && deliveries.map{ |d| d.update_attribute('status', status) }.all?
       head :ok
     else
       head :bad_request
