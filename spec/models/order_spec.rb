@@ -98,7 +98,7 @@ describe Order do
     end
   end
 
-  describe '#update_future_deliveries' do
+  describe '#create_next_delivery' do
     before do
       box = Fabricate(:box, :distributor => Fabricate(:route).distributor)
       3.times { Fabricate(:order, :box => box, :completed => true, :frequency => 'weekly') }
@@ -108,7 +108,7 @@ describe Order do
 
     it "should create the next delivery for each active order if it doesn't exist already" do
       Delorean.time_travel_to('1 month from now') do
-        expect { Order.update_future_deliveries }.should change(Delivery, :count).by(3)
+        expect { Order.create_next_delivery }.should change(Delivery, :count).by(3)
       end
     end
   end

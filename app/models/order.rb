@@ -39,7 +39,7 @@ class Order < ActiveRecord::Base
     self.account = cust.account
   end
 
-  def self.update_future_deliveries
+  def self.create_next_delivery
     active.each { |d| d.create_next_delivery }
   end
 
