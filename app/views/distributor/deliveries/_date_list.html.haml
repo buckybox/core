@@ -32,13 +32,13 @@
                 %td= label_tag 'missed_cancelled', 'Cancel delivery'
                 %td
               %tr
-                %td= radio_button_tag 'missed', 'reschedule'
-                %td= label_tag 'missed_reschedule', 'Reschedule delivery'
-                %td= select_tag 'date_reschedule', options_from_collection_for_select(Route.best_route(current_distributor).schedule.next_occurrences(5), 'to_date', 'to_date')
+                %td= radio_button_tag 'missed', 'rescheduled'
+                %td= label_tag 'missed_rescheduled', 'Reschedule delivery'
+                %td= select_tag 'date_rescheduled', options_from_collection_for_select(Route.best_route(current_distributor).schedule.next_occurrences(5), 'to_date', 'to_date')
               %tr
-                %td= radio_button_tag 'missed', 'pack'
-                %td= label_tag 'missed_pack', 'Repack delivery'
-                %td= select_tag 'date_pack', options_from_collection_for_select(Route.best_route(current_distributor).schedule.next_occurrences(5), 'to_date', 'to_date')
+                %td= radio_button_tag 'missed', 'repacked'
+                %td= label_tag 'missed_repacked', 'Repack delivery'
+                %td= select_tag 'date_repacked', options_from_collection_for_select(Route.best_route(current_distributor).schedule.next_occurrences(5), 'to_date', 'to_date')
               %tr
                 %td{:colspan => 2}
                 %td= button_tag 'Commit', :class => 'nice small button', :id => 'commit-missed'

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120104235552) do
+ActiveRecord::Schema.define(:version => 20120108085002) do
 
   create_table "accounts", :force => true do |t|
     t.integer  "distributor_id"
@@ -88,6 +88,8 @@ ActiveRecord::Schema.define(:version => 20120104235552) do
     t.datetime "updated_at"
     t.string   "status"
     t.integer  "route_id"
+    t.integer  "position"
+    t.integer  "old_delivery_id"
   end
 
   add_index "deliveries", ["route_id"], :name => "index_deliveries_on_route_id"

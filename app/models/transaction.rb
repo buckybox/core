@@ -11,7 +11,7 @@ class Transaction < ActiveRecord::Base
 
   default_scope order('created_at DESC')
 
-  KINDS = %w(order payment amend)
+  KINDS = %w(delivery payment amend)
 
   validates_presence_of :account, :kind, :amount, :description
   validates :kind, :inclusion => { :in => KINDS, :message => "%{value} is not a valid kind of transaction" }

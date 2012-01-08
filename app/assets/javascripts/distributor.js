@@ -32,7 +32,7 @@ $(function() {
     var missed_option = $('#missed-options input:radio[name=missed]:checked').val();
     var date = undefined;
 
-    if(missed_option === 'reschedule' || missed_option === 'pack') {
+    if(missed_option === 'rescheduled' || missed_option === 'repacked') {
       date = $('#date_' + missed_option).val();
     }
 
@@ -58,7 +58,7 @@ function updateDeliveryStatus(status, distributor_id, checked_deliveries, date) 
     data: $.param(data_hash)
   });
 
-  $.each(checked_deliveries, function(index, ckbx) { 
+  $.each(checked_deliveries, function(index, ckbx) {
     holder = $(ckbx).parent().parent();
 
     if(status === 'pending') {
@@ -68,7 +68,7 @@ function updateDeliveryStatus(status, distributor_id, checked_deliveries, date) 
       holder.addClass('delivered');
       holder.removeClass('cancelled');
     }
-    else if(status === 'cancelled' || status === 'reschedule' || status === 'pack') {
+    else if(status === 'cancelled' || status === 'rescheduled' || status === 'repacked') {
       holder.addClass('cancelled');
       holder.removeClass('delivered');
     }

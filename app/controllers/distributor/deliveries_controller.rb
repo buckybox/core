@@ -24,12 +24,7 @@ class Distributor::DeliveriesController < Distributor::BaseController
     deliveries = current_distributor.deliveries.where(id: params[:deliveries])
     status = params[:status]
 
-    if status == 'reschedule' || status == 'pack'
-      options = { missed_type: status, date: Date.parse(params[:date]) }
-      status = 'cancelled'
-    end
-
-    if update_actions(deliveries, status, options)
+    if Delivery.change_statuses(deliveries, status)
       head :ok
     else
       head :bad_request
@@ -52,15 +47,5 @@ class Distributor::DeliveriesController < Distributor::BaseController
     end
 
     return calendar_hash
-  end
-
-  def update_actions(deliveries, status, options = {})
-    return false if Delivery::STATUS.include?(status)
-
-    if status == 'delivered'
-
-    end
-
-    valid_status && deliveries.map{ |d| d.update_attribute('status', status) }.all?
   end
 end

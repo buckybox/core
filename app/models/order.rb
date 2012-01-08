@@ -73,19 +73,6 @@ class Order < ActiveRecord::Base
     Schedule.from_hash(self[:schedule]) if self[:schedule]
   end
 
-  def change_account_balance
-    if completed_changed?
-      amount = box.price * quantity
-      account.subtract_from_balance(amount, :kind => 'order', :description => "[ID##{id}] Placed an order for #{string_pluralize} at #{box.price} each.")
-      account.save
-    elsif completed? && quantity_changed?
-      old_quantity, new_quantity = quantity_change
-      amount = box.price * (old_quantity - new_quantity)
-      account.add_to_balance(amount, :kind => 'order', :description => "[ID##{id}] Changed quantity of an order form #{old_quantity} to #{new_quantity}.")
-      account.save
-    end
-  end
-
   def string_pluralize
     "#{quantity || 0} " + ((quantity == 1 || quantity =~ /^1(\.0+)?$/) ? box.name : box.name.pluralize)
   end
@@ -96,7 +83,7 @@ class Order < ActiveRecord::Base
   end
 
   def check_status_by_date(date)
-    if schedule.occurs_on?(date) # is it even suposed to happen on this date?
+    if schedule.occurs_on?(date.to_time) # is it even suposed to happen on this date?
       (date.future? ? 'pending' : delivery_for_date(date).status)
     end
   end
