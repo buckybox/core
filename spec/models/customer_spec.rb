@@ -8,11 +8,21 @@ describe Customer do
   specify { @customer.should be_valid }
   specify { @customer.email.should == 'buckybox@example.com' }
 
-  context 'initializing' do
+  context "initializing" do
+    before(:each) do
+      @customer = Customer.create!(:first_name => 'test', 
+                               :last_name => 'test',
+                               :email => 'test@buckybox.com',
+                               :distributor => Fabricate(:distributor))
+    end
+
     specify { @customer.number.should_not be_nil }
     specify { @customer.account.should_not be_nil }
 
-    it 'throws error if unable to find a free customer number' do
+    it "creates a customer number" do
+      @customer.number.should_not be_nil
+    end
+    it "throws error if unable to find a free customer number" do
       distributor = Fabricate(:distributor)
       distributor.stub_chain(:customers,:find_by_number).and_return(true)
 

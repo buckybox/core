@@ -21,6 +21,8 @@ class Account < ActiveRecord::Base
   validates_presence_of :customer, :balance
 
   before_validation :default_balance_and_currency
+  validates_presence_of :distributor_id, :customer_id, :balance
+  validates_uniqueness_of :customer_id, :scope => :distributor_id, :message => 'this customer already has an account with this distributor'
 
   def balance_cents=(value)
     raise(ArgumentError, "The balance can not be updated this way. Please use one of the model balance methods that create transactions.")
