@@ -5,9 +5,10 @@
         %h5.twelve.columns= @selected_date.strftime("%A %m %B") if @selected_date
       .row
         .twelve.columns.route-name
-          %h6
-            %span= @orders.size
-            = @route.name
+          - @routes.each do |route|
+            %h6
+              %span= route.deliveries.where(date:@selected_date).size
+              = route.name
       .row
         .twelve.columns.summary
           %strong Summary
