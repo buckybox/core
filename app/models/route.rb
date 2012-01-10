@@ -13,7 +13,7 @@ class Route < ActiveRecord::Base
   validates_presence_of :distributor, :name, :schedule
   validate :at_least_one_day_is_selected
 
-  before_save :create_schedule
+  before_validation :create_schedule
   before_save :record_schedule_change, :if => 'schedule_changed?'
 
   def self.best_route(distributor)
@@ -23,10 +23,6 @@ class Route < ActiveRecord::Base
 
   def schedule
     Schedule.from_hash(self[:schedule]) if self[:schedule]
-  end
-
-  def schedule=(schedule)
-    self[:schedule] = schedule.to_hash
   end
 
   def next_run

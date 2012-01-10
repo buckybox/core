@@ -1,4 +1,5 @@
 require 'spec_helper'
+include IceCube
 
 describe Route do
   before { @route = Fabricate(:route) }
@@ -12,16 +13,18 @@ describe Route do
   context :schedule do
     before do
       @route.monday    = true
-      @route.tuesday   = false
       @route.wednesday = true
-      @route.thursday  = false
       @route.friday    = true
-      @route.saturday  = false
-      @route.sunday    = false
       @route.save
     end
+
     specify { @route.schedule.should_not be_nil }
     specify { @route.schedule.to_s.should == "Weekly on Mondays, Wednesdays, and Fridays" }
+  end
+
+  context :schedule_transaction do
+    before { @route.sunday = true }
+    specify { expect { @route.save }.should change(RouteScheduleTransaction, :count).by(1) }
   end
 
   describe '#best_route' do

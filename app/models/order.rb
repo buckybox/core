@@ -25,9 +25,9 @@ class Order < ActiveRecord::Base
   validates_inclusion_of :frequency, :in => FREQUENCIES, :message => "%{value} is not a valid frequency"
   validate :box_distributor_equals_customer_distributor
 
-  before_save :create_schedule, :if => :just_completed?
+  before_save :create_schedule, :if => 'schedule.first.nil?'
   before_save :create_first_delivery, :if => :just_completed?
-  before_save :record_schedule_change, :if => 'schedule_changed?'
+  before_save :record_schedule_change
 
   scope :completed, where(:completed => true)
   scope :active,    where(:active => true)
@@ -79,17 +79,13 @@ class Order < ActiveRecord::Base
   end
 
   def add_scheduled_delivery(delivery)
-    #TODO: Find out if I can change this behaviour in the gem
-    # for some reason schedule seems to become imutable after persistance, hence clone and replace
-    s = self.schedule.clone
+    s = self.schedule
     s.add_recurrence_time(delivery.date.to_time)
     self.schedule = s
   end
 
   def remove_scheduled_delivery(delivery)
-    #TODO: Find out if I can change this behaviour in the gem
-    # for some reason schedule seems to become imutable after persistance, hence clone and replace
-    s = schedule.clone
+    s = schedule
     s.remove_recurrence_time(delivery.date.to_time)
     self.schedule = s
   end
@@ -142,7 +138,7 @@ class Order < ActiveRecord::Base
   #TODO: Fix hacks as a result of customer accounts model rejig
   def box_distributor_equals_customer_distributor
     if customer && customer.distributor_id != box.distributor_id
-      errors.add(:base, 'distributor does not match customer distributor')
+      errors.add(:box, 'distributor does not match customer distributor')
     end
   end
 end
