@@ -1,4 +1,4 @@
 Fabricator(:route_schedule_transaction) do
-  route nil
-  schedule "MyText"
+  route!
+  schedule IceCube::Schedule.new
 end

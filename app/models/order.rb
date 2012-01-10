@@ -25,7 +25,6 @@ class Order < ActiveRecord::Base
   validates_inclusion_of :frequency, :in => FREQUENCIES, :message => "%{value} is not a valid frequency"
   validate :box_distributor_equals_customer_distributor
 
-  before_save :not_completed_not_active, :unless => 'completed?'
   before_save :create_schedule, :if => :just_completed?
   before_save :create_first_delivery, :if => :just_completed?
   before_save :record_schedule_change, :if => 'schedule_changed?'
@@ -112,10 +111,6 @@ class Order < ActiveRecord::Base
 
   protected
 
-  def not_completed_not_active
-    self.active = false
-  end
-
   def create_schedule
     weeks_between_deliveries = FREQUENCY_HASH[frequency]
     route = Route.best_route(distributor)
@@ -147,7 +142,7 @@ class Order < ActiveRecord::Base
   #TODO: Fix hacks as a result of customer accounts model rejig
   def box_distributor_equals_customer_distributor
     if customer && customer.distributor_id != box.distributor_id
-      errors.add(:box_id, 'distributor does not match customer distributor')
+      errors.add(:base, 'distributor does not match customer distributor')
     end
   end
 end

@@ -1,10 +1,16 @@
 require 'spec_helper'
 
 describe Transaction do
-  before :all do
-    @transaction = Fabricate(:transaction)
-  end
+  before { @transaction = Fabricate(:transaction) }
 
   specify { @transaction.should be_valid }
+
+  context :kind do
+    %w(delivery payment amend).each do |k|
+      specify { Fabricate.build(:transaction, :kind => k).should be_valid }
+    end
+
+    specify { Fabricate.build(:transaction, :kind => 'order').should_not be_valid }
+  end
 end
 
