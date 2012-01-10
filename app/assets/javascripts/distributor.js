@@ -62,15 +62,23 @@ function updateDeliveryStatus(status, distributor_id, checked_deliveries, date) 
     holder = $(ckbx).parent().parent();
 
     if(status === 'pending') {
-      holder.removeClass('delivered cancelled');
+      holder.removeClass('delivered cancelled rescheduled repacked');
     }
     else if(status === 'delivered') {
       holder.addClass('delivered');
-      holder.removeClass('cancelled');
+      holder.removeClass('cancelled rescheduled repacked');
     }
-    else if(status === 'cancelled' || status === 'rescheduled' || status === 'repacked') {
+    else if(status === 'cancelled') {
       holder.addClass('cancelled');
-      holder.removeClass('delivered');
+      holder.removeClass('delivered rescheduled repacked');
+    }
+    else if(status === 'rescheduled') {
+      holder.addClass('rescheduled');
+      holder.removeClass('delivered cancelled repacked');
+    }
+    else if(status === 'repacked') {
+      holder.addClass('repacked');
+      holder.removeClass('delivered cancelled rescheduled');
     }
   });
 }

@@ -2,7 +2,7 @@
   #delivery-listings.row{:data => {:distributor => current_distributor.id}}
     .three.columns
       .row.data-headings
-        %h5.twelve.columns= @selected_date.strftime("%A %m %B") if @selected_date
+        %h5.twelve.columns= @selected_date.strftime("%A %d %B") if @selected_date
       .row
         .twelve.columns.route-name
           - @routes.each do |route|
@@ -34,11 +34,11 @@
               %tr
                 %td= radio_button_tag 'missed', 'rescheduled'
                 %td= label_tag 'missed_rescheduled', 'Reschedule delivery'
-                %td= select_tag 'date_rescheduled', options_from_collection_for_select(Route.best_route(current_distributor).schedule.next_occurrences(5), 'to_date', 'to_date')
+                %td= select_tag 'date_rescheduled', reschedule_dates(current_distributor)
               %tr
                 %td= radio_button_tag 'missed', 'repacked'
                 %td= label_tag 'missed_repacked', 'Repack delivery'
-                %td= select_tag 'date_repacked', options_from_collection_for_select(Route.best_route(current_distributor).schedule.next_occurrences(5), 'to_date', 'to_date')
+                %td= select_tag 'date_repacked', reschedule_dates(current_distributor)
               %tr
                 %td{:colspan => 2}
                 %td= button_tag 'Commit', :class => 'nice small button', :id => 'commit-missed'

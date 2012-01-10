@@ -8,6 +8,7 @@ class Order < ActiveRecord::Base
   has_one :distributor, :through => :box
 
   has_many :deliveries
+  has_many :order_schedule_transactions
 
   acts_as_taggable
   serialize :schedule, Hash
@@ -27,6 +28,7 @@ class Order < ActiveRecord::Base
   before_save :not_completed_not_active, :unless => 'completed?'
   before_save :create_schedule, :if => :just_completed?
   before_save :create_first_delivery, :if => :just_completed?
+  before_save :record_schedule_change, :if => 'schedule_changed?'
 
   scope :completed, where(:completed => true)
   scope :active,    where(:active => true)
@@ -73,6 +75,26 @@ class Order < ActiveRecord::Base
     Schedule.from_hash(self[:schedule]) if self[:schedule]
   end
 
+  def schedule=(schedule)
+    self[:schedule] = schedule.to_hash
+  end
+
+  def add_scheduled_delivery(delivery)
+    #TODO: Find out if I can change this behaviour in the gem
+    # for some reason schedule seems to become imutable after persistance, hence clone and replace
+    s = self.schedule.clone
+    s.add_recurrence_time(delivery.date.to_time)
+    self.schedule = s
+  end
+
+  def remove_scheduled_delivery(delivery)
+    #TODO: Find out if I can change this behaviour in the gem
+    # for some reason schedule seems to become imutable after persistance, hence clone and replace
+    s = schedule.clone
+    s.remove_recurrence_time(delivery.date.to_time)
+    self.schedule = s
+  end
+
   def string_pluralize
     "#{quantity || 0} " + ((quantity == 1 || quantity =~ /^1(\.0+)?$/) ? box.name : box.name.pluralize)
   end
@@ -109,13 +131,17 @@ class Order < ActiveRecord::Base
         new_schedule.add_recurrence_date(next_run)
       end
 
-      self.schedule = new_schedule.to_hash
+      self.schedule = new_schedule
     end
   end
 
   # Manually create the first delivery all following deliveries should be scheduled for creation by the cron job
   def create_first_delivery
     create_next_delivery
+  end
+
+  def record_schedule_change
+    order_schedule_transactions.build(order: self, schedule: self.schedule)
   end
 
   #TODO: Fix hacks as a result of customer accounts model rejig
