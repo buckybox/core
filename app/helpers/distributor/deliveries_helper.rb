@@ -10,4 +10,9 @@ module Distributor::DeliveriesHelper
     dates = Route.best_route(distributor).schedule.next_occurrences(5, Time.now)
     options_from_collection_for_select(dates, 'to_date', 'to_date')
   end
+
+  def order_delivery_id(order, date)
+    delivery = order.delivery_for_date(date)
+    delivery.id if delivery
+  end
 end

@@ -26,7 +26,7 @@
 
   - @orders.each do |order|
     .row.data-listings{:class => order.check_status_by_date(@selected_date)}
-      .one.columns= check_box_tag order.id, '1', false, :data => {:delivery => order.delivery_for_date(@selected_date).id}
+      .one.columns= check_box_tag order.id, '1', false, :data => {:delivery => order_delivery_id(order, @selected_date)}
       .five.columns= delivery_item_address(order)
       .three.columns== #{order.quantity} - #{order.box.name}
       .three.columns= order.customer.name
