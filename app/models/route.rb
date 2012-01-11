@@ -4,6 +4,7 @@ class Route < ActiveRecord::Base
   belongs_to :distributor
 
   has_many :deliveries
+  has_many :route_schedule_transactions
 
   serialize :schedule, Hash
 
@@ -12,7 +13,8 @@ class Route < ActiveRecord::Base
   validates_presence_of :distributor, :name, :schedule
   validate :at_least_one_day_is_selected
 
-  before_save :create_schedule
+  before_validation :create_schedule
+  before_save :record_schedule_change, :if => 'schedule_changed?'
 
   def self.best_route(distributor)
     route = distributor.routes.first # For now the first one is the default
@@ -20,7 +22,7 @@ class Route < ActiveRecord::Base
   end
 
   def schedule
-    Schedule.from_hash(self[:schedule])
+    Schedule.from_hash(self[:schedule]) if self[:schedule]
   end
 
   def next_run
@@ -44,5 +46,9 @@ class Route < ActiveRecord::Base
     new_schedule = Schedule.new(Date.today.to_time)
     new_schedule.add_recurrence_rule(recurrence_rule)
     self.schedule = new_schedule.to_hash
+  end
+
+  def record_schedule_change
+    route_schedule_transactions.build(route: self, schedule: self.schedule)
   end
 end

@@ -2,10 +2,10 @@
   .row
     .twelve.columns
       #calendar-navigation
-        %ul{:style => "width:#{@nav_length * 59}px;"}
+        %ul{:style => "width:#{calendar_nav_length(@calendar_hash)};"}
           - last_month = @calendar_hash.first.first.strftime("%m")
 
-          - @calendar_hash.each do |date, delivery_count|
+          - @calendar_hash.each do |date, delivery_info|
             - if last_month != date.strftime("%m")
               %li
                 .month= date.strftime("%b")
@@ -14,6 +14,6 @@
             %li
               = link_to date_distributor_deliveries_path(current_distributor, date) do
                 .date= date.strftime("%d %a")
-                .count= delivery_count
+                .count= delivery_info[:count]
 
             - last_month = date.strftime("%m")

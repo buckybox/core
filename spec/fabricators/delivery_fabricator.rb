@@ -1,5 +1,5 @@
 Fabricator(:delivery) do
-  order!
+  order!(:fabricator => :active_order)
   route!
-  date Time.now
+  date Date.today - 1.day
 end

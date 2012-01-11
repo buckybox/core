@@ -43,6 +43,44 @@ $cal-nav-divider: darken($cal-nav-base, 40%)
 
 #delivery-listings
   .route-name
-    background: $cal-nav-base
-    margin-top: 5px
-    padding: 3px 5px
+    h6
+      background-color: #fafafa
+      margin-top: 5px
+      padding: 6px 4px
+      span
+        display: inline-block
+        width: 20px
+        text-align: center
+        background-color: #ffe8b6
+        padding: 3px
+        margin-right: 6px
+
+  .summary
+    strong
+      display: block
+      background-color: #f1f1f1
+      margin: 25px 0 10px
+      padding: 4px
+    span
+      display: inline-block
+      width: 20px
+      text-align: center
+      background-color: #f1f1f1
+      padding: 1px
+      margin-right: 4px
+
+  .flyout
+    display: none
+    top: 33px
+    left: 195px
+    width: auto
+    select
+      display: inline
+
+  .data-listings
+    background-color: #fafafa
+    &.cancelled, &.rescheduled, &.repacked
+      background-color: #f1f1f1
+      text-decoration: line-through
+    &.delivered
+      background-color: #fef8e2

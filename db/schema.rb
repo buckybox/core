@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120104235552) do
+ActiveRecord::Schema.define(:version => 20120110113524) do
 
   create_table "accounts", :force => true do |t|
     t.integer  "distributor_id"
@@ -88,6 +88,7 @@ ActiveRecord::Schema.define(:version => 20120104235552) do
     t.datetime "updated_at"
     t.string   "status"
     t.integer  "route_id"
+    t.integer  "old_delivery_id"
   end
 
   add_index "deliveries", ["route_id"], :name => "index_deliveries_on_route_id"
@@ -177,6 +178,17 @@ ActiveRecord::Schema.define(:version => 20120104235552) do
     t.datetime "updated_at"
   end
 
+  create_table "order_schedule_transactions", :force => true do |t|
+    t.integer  "order_id"
+    t.text     "schedule"
+    t.integer  "delivery_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "order_schedule_transactions", ["delivery_id"], :name => "index_order_schedule_transactions_on_delivery_id"
+  add_index "order_schedule_transactions", ["order_id"], :name => "index_order_schedule_transactions_on_order_id"
+
   create_table "orders", :force => true do |t|
     t.integer  "box_id"
     t.integer  "quantity",   :default => 1,        :null => false
@@ -188,7 +200,7 @@ ActiveRecord::Schema.define(:version => 20120104235552) do
     t.datetime "updated_at"
     t.integer  "account_id"
     t.text     "schedule"
-    t.boolean  "active",     :default => true,     :null => false
+    t.boolean  "active",     :default => false,    :null => false
   end
 
   add_index "orders", ["account_id"], :name => "index_orders_on_account_id"
@@ -207,6 +219,15 @@ ActiveRecord::Schema.define(:version => 20120104235552) do
 
   add_index "payments", ["account_id"], :name => "index_payments_on_account_id"
   add_index "payments", ["distributor_id"], :name => "index_payments_on_distributor_id"
+
+  create_table "route_schedule_transactions", :force => true do |t|
+    t.integer  "route_id"
+    t.text     "schedule"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "route_schedule_transactions", ["route_id"], :name => "index_route_schedule_transactions_on_route_id"
 
   create_table "routes", :force => true do |t|
     t.integer  "distributor_id"

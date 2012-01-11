@@ -4,5 +4,5 @@
 # Learn more: http://github.com/javan/whenever
 
 every 1.day, :at => '4am' do
-  runner 'Order.update_future_deliveries'
+  runner 'Order.create_next_delivery'
 end

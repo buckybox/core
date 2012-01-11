@@ -8,6 +8,7 @@ class Order < ActiveRecord::Base
   has_one :distributor, :through => :box
 
   has_many :deliveries
+  has_many :order_schedule_transactions
 
   acts_as_taggable
   serialize :schedule, Hash
@@ -24,8 +25,9 @@ class Order < ActiveRecord::Base
   validates_inclusion_of :frequency, :in => FREQUENCIES, :message => "%{value} is not a valid frequency"
   validate :box_distributor_equals_customer_distributor
 
-  before_save :create_schedule
-  before_save :create_first_delivery, :if => :just_completed?
+  before_save :create_schedule, :if => 'schedule.first.nil?'
+  before_save :make_active_and_create_first_delivery, :if => :just_completed?
+  before_save :record_schedule_change
 
   scope :completed, where(:completed => true)
   scope :active,    where(:active => true)
@@ -38,7 +40,7 @@ class Order < ActiveRecord::Base
     self.account = cust.account
   end
 
-  def self.update_future_deliveries
+  def self.create_next_delivery
     active.each { |d| d.create_next_delivery }
   end
 
@@ -46,7 +48,21 @@ class Order < ActiveRecord::Base
     if completed? && active?
       route = Route.best_route(distributor)
       date = schedule.next_occurrence
-      deliveries.find_or_create_by_date_and_route_id(date, route.id) if date && route
+      delivery = deliveries.find_or_create_by_date_and_route_id(date, route.id) if date && route
+    end
+  end
+
+  # Maintenance method. Should only need if cron isn't running or missed some dates
+  def self.create_old_deliveries
+    all.each { |o| o.create_old_deliveries }
+  end
+
+  # Maintenance method. Should only need if cron isn't running or missed some dates
+  def create_old_deliveries
+    schedule.occurrences(Time.now).each do |occurrence|
+      route = Route.best_route(distributor)
+      date = occurrence.to_date
+      result = deliveries.find_or_create_by_date_and_route_id(date, route.id) if date && route
     end
   end
 
@@ -58,21 +74,36 @@ class Order < ActiveRecord::Base
     Schedule.from_hash(self[:schedule]) if self[:schedule]
   end
 
-  def change_account_balance
-    if completed_changed?
-      amount = box.price * quantity
-      account.subtract_from_balance(amount, :kind => 'order', :description => "[ID##{id}] Placed an order for #{string_pluralize} at #{box.price} each.")
-      account.save
-    elsif completed? && quantity_changed?
-      old_quantity, new_quantity = quantity_change
-      amount = box.price * (old_quantity - new_quantity)
-      account.add_to_balance(amount, :kind => 'order', :description => "[ID##{id}] Changed quantity of an order form #{old_quantity} to #{new_quantity}.")
-      account.save
-    end
+  def schedule=(schedule)
+    self[:schedule] = schedule.to_hash
+  end
+
+  def add_scheduled_delivery(delivery)
+    s = self.schedule
+    s.add_recurrence_time(delivery.date.to_time)
+    self.schedule = s
+  end
+
+  def remove_scheduled_delivery(delivery)
+    s = schedule
+    time = schedule.recurrence_times.select{|t|t.to_date <=> delivery.date}.first
+    s.remove_recurrence_time(time)
+    self.schedule = s
   end
 
   def string_pluralize
     "#{quantity || 0} " + ((quantity == 1 || quantity =~ /^1(\.0+)?$/) ? box.name : box.name.pluralize)
+  end
+
+  def delivery_for_date(date)
+    deliveries.where(:date => date)
+    (deliveries.empty? ? nil : deliveries.first)
+  end
+
+  def check_status_by_date(date)
+    if schedule.occurs_on?(date.to_time) # is it even suposed to happen on this date?
+      (date.future? ? 'pending' : delivery_for_date(date).status)
+    end
   end
 
   protected
@@ -92,20 +123,24 @@ class Order < ActiveRecord::Base
         new_schedule.add_recurrence_date(next_run)
       end
 
-      self.schedule = new_schedule.to_hash
+      self.schedule = new_schedule
     end
   end
 
   # Manually create the first delivery all following deliveries should be scheduled for creation by the cron job
-  def create_first_delivery
+  def make_active_and_create_first_delivery
+    self.active = true
     create_next_delivery
+  end
+
+  def record_schedule_change
+    order_schedule_transactions.build(order: self, schedule: self.schedule)
   end
 
   #TODO: Fix hacks as a result of customer accounts model rejig
   def box_distributor_equals_customer_distributor
     if customer && customer.distributor_id != box.distributor_id
-      errors[:box_id] = "distributor does not match customer distributor"
-      return false
+      errors.add(:box, 'distributor does not match customer distributor')
     end
   end
 end
