@@ -11,8 +11,14 @@ module Distributor::DeliveriesHelper
     options_from_collection_for_select(dates, 'to_date', 'to_date')
   end
 
+  #FIXME: Thes two are to compisate for a larger problem I have to revisit shortly.
   def order_delivery_id(order, date)
     delivery = order.delivery_for_date(date)
     delivery.id if delivery
+  end
+
+  def order_delivery_route_name(order, date)
+    delivery = order.delivery_for_date(date)
+    delivery.route.name if delivery
   end
 end
