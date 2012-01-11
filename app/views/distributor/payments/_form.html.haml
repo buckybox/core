@@ -5,12 +5,10 @@
 
   .inputs
     = f.input :kind, :as => :hidden
-    = f.association :account, :collection => @accounts,
-      :label_method => lambda { |a| a.customer.name },
-      :value_method => lambda { |a| a.id },
+    = f.association :account, :collection => @accounts.collect {|a| [a.customer.name, a.id]},
       :label => 'Customer'
     = f.input :amount
-    = f.input :description
+    = f.input :description, :input_html => {:rows => 4}
 
   .actions
     = f.button :submit

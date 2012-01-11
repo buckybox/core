@@ -13,6 +13,9 @@ class Order < ActiveRecord::Base
   has_many :deliveries
   has_many :order_schedule_transactions
 
+  scope :completed, where(:completed => true)
+  scope :active, where(:active => true)
+
   acts_as_taggable
   serialize :schedule, Hash
 

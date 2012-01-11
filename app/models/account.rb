@@ -95,10 +95,11 @@ class Account < ActiveRecord::Base
 
     if invoice_date
       invoice_date = Date.current if invoice_date < Date.current
-
-      if deliveries.size > 0 && deliveries.first.date >= invoice_date - 2.days
+      if deliveries.size > 0 && deliveries.first.date <= invoice_date - 2.days
         invoice_date = deliveries.first.date + 2.days
       end
+
+      invoice_date = Date.curent if invoice_date < Date.current
     end
 
     return invoice_date

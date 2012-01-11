@@ -31,9 +31,9 @@ class Distributor::OrdersController < Distributor::BaseController
   end
 
   def update
-    @distributor = Distributor.find(params[:distributor_id])
-    @account = Account.find(params[:account_id])
-    @order = Order.find(params[:id])
+    @distributor = current_distributor
+    @account = @distributor.accounts.find(params[:account_id])
+    @order = @distributor.orders.find(params[:id])
 
     # Not allowing changes to the schedule at the moment
     # Will revisit when we have time to build a proper UI for it
