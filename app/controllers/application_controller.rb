@@ -4,7 +4,6 @@ class ApplicationController < ActionController::Base
   if Rails.env.production?
     analytical :modules=>[:google, :kiss_metrics], :use_session_store=>true
   else
-    analytical :modules=>[:console], :use_session_store=>true
+    analytical :modules=>[], :use_session_store=>true
   end
-
 end
