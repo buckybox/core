@@ -22,21 +22,21 @@ BuckyBox::Application.routes.draw do
     resources :transactions,       :controller => 'distributor/transactions', :only => :create
     resources :orders,             :controller => 'distributor/orders'
 
-    resources :deliveries,         :controller => 'distributor/deliveries' do
+    resources :deliveries,    :controller => 'distributor/deliveries' do
       collection do
-        get 'date/:date',     :action => :index, :as => 'date'
+        get 'date/:date(/:view)',     :action => :index, :as => 'date'
         post 'update_status', :action => :update_status, :as => 'update_status'
       end
     end
 
-    resources :accounts,           :controller => 'distributor/accounts' do
+    resources :accounts, :controller => 'distributor/accounts' do
       collection do
-        get 'search',   :action => :index, :as => 'search'
-        get 'tag/:tag', :action => :index, :as => 'tag'
+        get 'search',    :action => :index, :as => 'search'
+        get 'tag/:tag',  :action => :index, :as => 'tag'
       end
     end
 
-    resources :events,             :controller => 'distributor/dashboard' do
+    resources :events, :controller => 'distributor/dashboard' do
       member do
         post 'dismiss_notification'=> 'distributor/dashboard', :action => 'dismiss_notification'
       end

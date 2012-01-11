@@ -1,0 +1,39 @@
+#delivery-listings.row{:data => {:distributor => current_distributor.id}}
+  .three.columns
+    .row.data-headings
+      %h5.twelve.columns= @selected_date.strftime("%A %d %B") if @selected_date
+    .row
+      .twelve.columns.route-name
+        = link_to date_distributor_deliveries_path(current_distributor, @selected_date, 'packing') do
+          %h6
+            %span= current_distributor.deliveries.where(date:@selected_date).size
+            Packing (All)
+        - @routes.each do |route|
+          = link_to date_distributor_deliveries_path(current_distributor, @selected_date, route.id) do
+            %h6
+              %span= route.deliveries.where(date:@selected_date).size
+              = route.name
+
+    - unless @orders.blank?
+      .row
+        .twelve.columns.summary
+          %strong Summary
+          %ul
+            - @orders.group_by(&:box_id).each do |box_id, array|
+              %li
+                %span= array.size
+                = Box.find(box_id).name
+
+  - if @orders.blank?
+    .nine.columns
+      %h3 No Deliveries
+      %p
+        There are no deliveries for 
+        %strong= @route.name
+        on 
+        %strong= @selected_date.strftime("%A %d %B")
+  - else
+    - if params[:view] == 'packing'
+      = render 'packing_list'
+    - else
+      = render 'route_list'

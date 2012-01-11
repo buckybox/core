@@ -10,14 +10,20 @@ class Distributor::DeliveriesController < Distributor::BaseController
   def index
     index! do
       start_date = Time.now - 1.week
-      end_date = start_date + 15.weeks
-      @selected_date = Date.parse(params['date']) if params['date']
-
+      end_date = start_date + 6.weeks
+      @selected_date = Date.parse(params[:date]) if params[:date]
       @calendar_hash = calendar_nav_data(start_date, end_date)
 
-      if @calendar_hash[@selected_date]
-        @orders = ( @selected_date ? Order.find(@calendar_hash[@selected_date][:order_ids]) : [] )
-        @orders.sort!
+      if params[:view] == 'packing'
+        @orders = current_distributor.orders
+      else
+        @route = (params[:view] ? current_distributor.routes.find(params[:view]) : Route.best_route(current_distributor))
+
+        if @calendar_hash[@selected_date]
+          @orders = current_distributor.orders.find(@calendar_hash[@selected_date][:order_ids])
+          @orders.select! { |o| o.deliveries.map(&:route_id).include?(@route.id) }
+          @orders.sort!
+        end
       end
 
       @calendar_hash = @calendar_hash.to_a.sort

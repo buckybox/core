@@ -8,6 +8,7 @@ class Order < ActiveRecord::Base
   has_one :distributor, :through => :box
 
   has_many :deliveries
+  has_many :routes, :through => :deliveries
   has_many :order_schedule_transactions
 
   acts_as_taggable

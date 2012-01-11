@@ -1,0 +1,17 @@
+.nine.columns
+  .row.data-headings
+    .one.columns= check_box_tag 'all'
+    .six.columns.delivery_actions
+      = button_tag 'Print', :class => 'nice small button', :id => 'print', :disabled => @selected_date.future?
+    .five.columns
+
+  - @orders.group_by(&:box_id).each do |box_id, order_array|
+    .row.data-headings
+      %h5.twelve.columns= Box.find(box_id).name
+
+    - order_array.each do |order|
+      .row.data-listings{:class => order.check_status_by_date(@selected_date)}
+        .one.columns= check_box_tag order.id, '1', false, :data => {:delivery => order.delivery_for_date(@selected_date).id}
+        .five.columns= order.delivery_for_date(@selected_date).route.name
+        .three.columns== #{order.quantity} - #{order.box.name}
+        .three.columns= order.customer.name
