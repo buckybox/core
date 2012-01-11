@@ -86,6 +86,14 @@ class Order < ActiveRecord::Base
     self.schedule = s
   end
 
+  def future_deliveries(end_date)
+    results = []
+    schedule.occurrences_between(Date.today.to_time, end_date).each do |occurence|
+      results << {:date => occurence.to_date, :price => box.price, :description => "Delivery for order ##{id}"}
+    end
+    results
+  end
+
   def string_pluralize
     box_name = box.name
     "#{quantity || 0} " + ((quantity == 1 || quantity =~ /^1(\.0+)?$/) ? box_name : box_name.pluralize)

@@ -83,6 +83,8 @@ class Account < ActiveRecord::Base
     if total < distributor.invoice_threshold
       invoice_date =  Date.current
     else
+      order.schedule.occurrences_between(Date.today, end_date).each do |occurrence|
+      end
       deliveries.pending.each do |delivery|
         total -= amount_with_bucky_fee(delivery.order.price)
 
@@ -103,7 +105,6 @@ class Account < ActiveRecord::Base
     end
 
     return invoice_date
-
   end
 
   #used internally for calculating invoice totals
