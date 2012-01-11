@@ -5,6 +5,7 @@ describe Order do
   before { @order = Fabricate(:order) }
 
   specify { @order.should be_valid }
+  specify { Fabricate(:active_order).should be_valid }
 
   context :quantity do
     specify { Fabricate.build(:order, :quantity => 0).should_not be_valid }
@@ -15,7 +16,6 @@ describe Order do
     %w(single weekly fortnightly).each do |f|
       specify { Fabricate.build(:order, :frequency => f).should be_valid }
     end
-
     specify { Fabricate.build(:order, :frequency => 'yearly').should_not be_valid }
   end
 
@@ -23,6 +23,7 @@ describe Order do
     before do
       @route = Fabricate(:route, :distributor => @order.distributor)
       @order.completed = true
+      @order.active = true
     end
 
     describe 'new schedule' do
@@ -160,31 +161,34 @@ describe Order do
     end
 
     context "when order has not been completed" do
-      specify { expect { @order.create_next_delivery }.should_not change(Delivery, :count) }
-    end
-
-    context "when order is inactive" do
-      before { @order.active = true }
-      specify { expect { @order.create_next_delivery }.should_not change(Delivery, :count) }
+      specify { expect { @order.create_next_delivery }.should_not change(@order.deliveries, :count) }
     end
 
     context "when order has been completed" do
       before { @order.completed = true }
-      specify { expect { @order.create_next_delivery }.should change(Delivery, :count).by(1) }
+      specify { expect { @order.create_next_delivery }.should_not change(@order.deliveries, :count) }
+    end
+
+    context "when order is active" do
+      before do
+        @order.completed = true
+        @order.active = true
+      end
+
+      specify { expect { @order.create_next_delivery }.should change(@order.deliveries, :count).by(1) }
     end
 
     context "when delivery already exists" do
       before { @order.create_next_delivery }
-      specify { expect { @order.create_next_delivery }.should_not change(Delivery, :count) }
+      specify { expect { @order.create_next_delivery }.should_not change(@order.deliveries, :count) }
     end
   end
 
   describe '#create_next_delivery' do
     before do
       box = Fabricate(:box, :distributor => Fabricate(:route).distributor)
-      3.times { Fabricate(:order, :box => box, :completed => true, :frequency => 'weekly') }
+      3.times { Fabricate(:active_order, :box => box, :completed => true, :frequency => 'weekly') }
       Fabricate(:order, :box => box, :frequency => 'weekly')
-      Fabricate(:order, :box => box, :frequency => 'weekly', :active => false)
     end
 
     it "should create the next delivery for each active order if it doesn't exist already" do

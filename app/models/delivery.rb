@@ -30,6 +30,7 @@ class Delivery < ActiveRecord::Base
 
   def self.change_statuses(deliveries, new_status, options = {})
     return false unless STATUS.include?(new_status)
+    return false if (new_status == 'rescheduled' || new_status == 'repacked') && options[:date].nil?
 
     new_date = Date.parse(options[:date]) if options[:date]
     result = true

@@ -5,3 +5,8 @@ Fabricator(:order) do
   frequency 'single'
 end
 
+Fabricator(:active_order, :from => :order) do
+  completed true
+  active true
+end
+

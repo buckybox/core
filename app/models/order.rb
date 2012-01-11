@@ -26,7 +26,7 @@ class Order < ActiveRecord::Base
   validate :box_distributor_equals_customer_distributor
 
   before_save :create_schedule, :if => 'schedule.first.nil?'
-  before_save :create_first_delivery, :if => :just_completed?
+  before_save :make_active_and_create_first_delivery, :if => :just_completed?
   before_save :record_schedule_change
 
   scope :completed, where(:completed => true)
@@ -48,7 +48,7 @@ class Order < ActiveRecord::Base
     if completed? && active?
       route = Route.best_route(distributor)
       date = schedule.next_occurrence
-      deliveries.find_or_create_by_date_and_route_id(date, route.id) if date && route
+      delivery = deliveries.find_or_create_by_date_and_route_id(date, route.id) if date && route
     end
   end
 
@@ -86,7 +86,8 @@ class Order < ActiveRecord::Base
 
   def remove_scheduled_delivery(delivery)
     s = schedule
-    s.remove_recurrence_time(delivery.date.to_time)
+    time = schedule.recurrence_times.select{|t|t.to_date <=> delivery.date}.first
+    s.remove_recurrence_time(time)
     self.schedule = s
   end
 
@@ -127,7 +128,8 @@ class Order < ActiveRecord::Base
   end
 
   # Manually create the first delivery all following deliveries should be scheduled for creation by the cron job
-  def create_first_delivery
+  def make_active_and_create_first_delivery
+    self.active = true
     create_next_delivery
   end
 
