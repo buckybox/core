@@ -26,6 +26,11 @@ class Distributor::DeliveriesController < Distributor::BaseController
         end
       end
 
+      unless @selected_date
+        @selected_date = @calendar_hash.keys.find { |ch_key| ch_key <= Date.today }
+        redirect_to date_distributor_deliveries_url(current_distributor, @selected_date) and return
+      end
+
       @calendar_hash = @calendar_hash.to_a.sort
       @routes = current_distributor.routes
     end
