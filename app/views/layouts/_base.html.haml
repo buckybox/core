@@ -33,6 +33,8 @@
   = raw analytical.head_append_javascript
 
 %body
+  = gauges_tracking_code if Rails.env.production? || Rails.env.staging?
+
   = raw analytical.body_prepend_javascript
   = yield(:body)
   = raw analytical.body_append_javascript

@@ -32,6 +32,8 @@ gem 'analytical'
 gem 'postmark-rails'
 gem 'ice_cube'
 gem 'whenever'
+gem 'newrelic_rpm'
+gem 'gauges-rails'
 
 group :development do
   gem 'nifty-generators', :require => false
