@@ -1,17 +1,18 @@
 .nine.columns
-  .row.data-headings
-    .one.columns= check_box_tag 'all'
-    .six.columns.delivery_actions
-      = button_tag 'Print', :class => 'nice small button', :id => 'print', :disabled => @selected_date.future?
-    .five.columns
-
-  - @orders.group_by(&:box_id).each do |box_id, order_array|
+  = form_tag master_packing_sheet_distributor_deliveries_path(current_distributor, @selected_date), :target => '_blank' do
     .row.data-headings
-      %h5.twelve.columns= Box.find(box_id).name
+      .one.columns= check_box_tag 'all'
+      .three.columns.delivery_actions
+        = submit_tag 'Print - Master List', :class => 'nice small button'
+      .eight.columns
 
-    - order_array.each do |order|
-      .row.data-listings{:class => order.check_status_by_date(@selected_date)}
-        .one.columns= check_box_tag order.id, '1', false, :data => {:delivery => order_delivery_id(order, @selected_date)}
-        .five.columns= order_delivery_route_name(order, @selected_date)
-        .three.columns== #{order.quantity} - #{order.box.name}
-        .three.columns= order.customer.name
+    - @orders.group_by(&:box_id).each do |box_id, order_array|
+      .row.data-headings
+        %h5.twelve.columns= Box.find(box_id).name
+
+      - order_array.each do |order|
+        .row.data-listings{:class => order.check_status_by_date(@selected_date)}
+          .one.columns= check_box :order, "#{order.id}"
+          .five.columns= order_delivery_route_name(order, @selected_date)
+          .three.columns== #{order.quantity} - #{order.box.name}
+          .three.columns= order.customer.name
