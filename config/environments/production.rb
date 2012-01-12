@@ -62,4 +62,6 @@ BuckyBox::Application.configure do
 
   # Send deprecation notices to registered listeners
   config.active_support.deprecation = :notify
+
+  config.gauges.site_id = '4f0f31b3f5a1f575b3000005'
 end
