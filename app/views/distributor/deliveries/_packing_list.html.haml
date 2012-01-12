@@ -2,7 +2,9 @@
   .row.data-headings
     .one.columns= check_box_tag 'all'
     .six.columns.delivery_actions
-      = button_tag 'Print', :class => 'nice small button', :id => 'print', :disabled => @selected_date.future?
+      = link_to 'Print - Master List', 
+        master_packing_sheet_distributor_deliveries_path(current_distributor, @selected_date), 
+        :class => 'nice small button', :id => 'print', :target => "_blank"
     .five.columns
 
   - @orders.group_by(&:box_id).each do |box_id, order_array|

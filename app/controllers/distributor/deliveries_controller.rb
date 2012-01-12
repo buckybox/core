@@ -3,7 +3,7 @@ class Distributor::DeliveriesController < Distributor::BaseController
   belongs_to :distributor
 
   respond_to :html, :xml, :except => :update_status
-  respond_to :json
+  respond_to :json, :except => :master_packing_sheet
 
   #TODO: Pull out as much code as possible from here into a models and lib
 
@@ -30,7 +30,7 @@ class Distributor::DeliveriesController < Distributor::BaseController
       @routes = current_distributor.routes
 
       unless @selected_date
-        @selected_date = @calendar_hash.find { |sd| puts "--- #{sd.first}"; sd.first <= Date.today }
+        @selected_date = @calendar_hash.find { |sd| sd.first <= Date.today }
 
         if @selected_date
           @selected_date = @selected_date.first
@@ -55,6 +55,13 @@ class Distributor::DeliveriesController < Distributor::BaseController
     else
       head :bad_request
     end
+  end
+
+  def master_packing_sheet
+    @selected_date = Date.parse(params[:date]) if params[:date]
+    @orders = current_distributor.orders.active
+
+    render :layout => 'print'
   end
 
   private

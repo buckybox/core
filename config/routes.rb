@@ -22,10 +22,11 @@ BuckyBox::Application.routes.draw do
     resources :transactions,       :controller => 'distributor/transactions', :only => :create
     resources :orders,             :controller => 'distributor/orders'
 
-    resources :deliveries,        :controller => 'distributor/deliveries' do
+    resources :deliveries,                :controller => 'distributor/deliveries' do
       collection do
-        get 'date/:date(/:view)', :action => :index, :as => 'date'
-        post 'update_status',     :action => :update_status, :as => 'update_status'
+        get 'master_packing_sheet/:date', :action => :master_packing_sheet, :as => 'master_packing_sheet'
+        get 'date/:date(/:view)',         :action => :index, :as => 'date'
+        post 'update_status',             :action => :update_status, :as => 'update_status'
       end
     end
 
