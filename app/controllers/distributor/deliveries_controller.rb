@@ -59,7 +59,8 @@ class Distributor::DeliveriesController < Distributor::BaseController
 
   def master_packing_sheet
     @selected_date = Date.parse(params[:date]) if params[:date]
-    @orders = current_distributor.orders.active
+    order_ids = params[:order].select{ |id, checked| checked.to_i == 1 }.keys
+    @orders = current_distributor.orders.find(order_ids)
 
     render :layout => 'print'
   end

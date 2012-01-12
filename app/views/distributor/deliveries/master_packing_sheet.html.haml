@@ -1,5 +1,8 @@
 - title("Master Packing Sheet - #{Date.today.strftime("%A %d %B")}")
 
+:javascript
+  $(function() { print(); });
+
 .row
   .twelve.columns
     - @orders.group_by(&:box_id).each do |box_id, order_array|
