@@ -11,6 +11,6 @@
       - @transactions.each do |transaction|
         %tr
           %td= transaction.created_at.to_s(:db)
-          %td= transaction.amount
+          %td= transaction.amount.format
           %td= transaction.kind.titleize
           %td= transaction.description
