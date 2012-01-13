@@ -13,17 +13,16 @@
       %li.tel= @customer.phone
       %li.email= @customer.email
 
-  .four.columns
-    %h4== Balance: #{@account.balance}
-    %br
+  .three.columns
+    %h4== Balance: #{@account.balance.format}
+    = link_to 'Adjust balance', edit_distributor_account_path(current_distributor, @account)
 
+  .two.columns
     - unless @account.tags.empty?
       %h4 Tags
       = tag_links(@account.tags)
 
-  .five.columns
-    = link_to 'Edit Accounts Detials', edit_distributor_account_path(current_distributor, @account)
-    %br
+  .four.columns
     = link_to 'Edit Customer Details', edit_customer_path(@account.customer)
     %br
     = link_to 'Back to Accounts List', distributor_accounts_path

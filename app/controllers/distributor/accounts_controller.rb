@@ -18,12 +18,15 @@ class Distributor::AccountsController < Distributor::BaseController
   end
 
   def update
-    @distributor = Distributor.find(params[:distributor_id])
-    @account = Account.find(params[:id])
-    @account.change_balance_to(params[:account][:balance])
-    params[:account].delete(:balance)
-
     update! do |success, failure|
+      delta_cents = params[:account][:delta].to_i * 100
+
+      if delta_cents != 0
+        new_balance = @account.balance + Money.new(delta_cents)
+        @account.change_balance_to(new_balance)
+        @account.save
+      end
+
       success.html { redirect_to [current_distributor, @account] }
       failure.html { render action: 'edit' }
     end

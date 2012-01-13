@@ -2,8 +2,14 @@
   = f.error_notification
 
   .inputs
-    = f.input :balance
-    = f.input :tag_list
+    .input.string.required.input-text
+      = label_tag 'account_delta', :class => 'string required' do
+        %abbr{:title => 'required'}*
+        Adjust balance by
+      = text_field_tag 'account[delta]', '0.00', :class => 'string required input-text', :required => 'required', :size => '50'
+      %span.hint Put in the amount you want to add or remove.
+
+    = f.input :tag_list, :label => 'User tags', :hint => 'Comma separated'
 
   .actions
     = f.button :submit
