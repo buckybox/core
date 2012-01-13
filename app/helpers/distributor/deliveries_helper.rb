@@ -22,6 +22,8 @@ module Distributor::DeliveriesHelper
   end
 
   def order_delivery_count(calendar_array, date, route = nil)
+    data = calendar_array.select{|cdate, cdata| cdate == date}[0][1]
+
     if route
       orders = Order.find(data[:order_ids]).select{|o| o.route(date) == route}.size
     else
