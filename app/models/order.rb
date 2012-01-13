@@ -37,6 +37,21 @@ class Order < ActiveRecord::Base
     box.price #will likely need to copy this to the order model at some stage
   end
 
+  def route(date = nil)
+    if deliveries.empty?
+      route = Route.best_route(distributor)
+    else
+      if date
+        deliveries_by_date = deliveries.where(date:date).first
+        route = deliveries_by_date.route if deliveries_by_date
+      end
+
+      route = deliveries.order(:date).last.route unless route
+    end
+
+    return route
+  end
+
   def customer= cust
     self.account = cust.account
   end
