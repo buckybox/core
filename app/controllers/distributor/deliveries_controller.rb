@@ -14,16 +14,18 @@ class Distributor::DeliveriesController < Distributor::BaseController
       @selected_date = Date.parse(params[:date]) if params[:date]
       @calendar_hash = calendar_nav_data(start_date, end_date)
 
-      if params[:view] == 'packing'
-        @orders = current_distributor.orders.active
-      else
+      unless params[:view] == 'packing'
         @route = (params[:view] ? current_distributor.routes.find(params[:view]) : Route.best_route(current_distributor))
+      end
 
-        if @calendar_hash[@selected_date]
-          @orders = current_distributor.orders.find(@calendar_hash[@selected_date][:order_ids])
+      if @calendar_hash[@selected_date]
+        @orders = current_distributor.orders.find(@calendar_hash[@selected_date][:order_ids])
+
+        if @route
           @orders.select! { |o| o.deliveries.map(&:route_id).include?(@route.id) }
-          @orders.sort!
         end
+
+        @orders.sort!
       end
 
       @calendar_hash = @calendar_hash.to_a.sort
