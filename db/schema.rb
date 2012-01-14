@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120114105104) do
+ActiveRecord::Schema.define(:version => 20120114115648) do
 
   create_table "accounts", :force => true do |t|
     t.integer  "distributor_id"
@@ -80,7 +80,10 @@ ActiveRecord::Schema.define(:version => 20120114105104) do
     t.string   "last_name"
     t.integer  "distributor_id"
     t.string   "number"
+    t.integer  "route_id"
   end
+
+  add_index "customers", ["route_id"], :name => "index_customers_on_route_id"
 
   create_table "deliveries", :force => true do |t|
     t.integer  "order_id"

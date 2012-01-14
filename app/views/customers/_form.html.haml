@@ -8,6 +8,7 @@
         = f.input :first_name
         = f.input :last_name
         = f.input :phone
+        = f.association :route, :include_blank => false
 
     .six.columns
       = f.simple_fields_for :address do |g|

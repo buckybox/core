@@ -5,6 +5,7 @@ class Route < ActiveRecord::Base
 
   has_many :deliveries, :dependent => :destroy
   has_many :orders, :through => :deliveries
+  has_many :customers
   has_many :route_schedule_transactions
 
   serialize :schedule, Hash
