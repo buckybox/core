@@ -31,7 +31,7 @@ class Distributor::DeliveriesController < Distributor::BaseController
       @calendar_hash = @calendar_hash.to_a.sort
       @routes = current_distributor.routes
 
-      unless @selected_date
+      if !@calendar_hash.blank? && @selected_date.nil?
         @selected_date = @calendar_hash.find { |sd| sd.first <= Date.today }
 
         if @selected_date
