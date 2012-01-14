@@ -9,11 +9,14 @@
             %h6
               %span= order_delivery_count(@calendar_hash, @selected_date)
               Packing (All)
+              = image_tag 'icon-packing.png'
+          %hr
           - @routes.each do |route|
             = link_to date_distributor_deliveries_path(current_distributor, @selected_date, route.id) do
               %h6
                 %span= order_delivery_count(@calendar_hash, @selected_date, route)
                 = route.name
+                = image_tag 'icon-route.png'
 
       - unless @orders.blank?
         .row
