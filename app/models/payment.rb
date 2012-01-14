@@ -28,4 +28,8 @@ class Payment < ActiveRecord::Base
     account.add_to_balance(amount, :kind => 'payment', :description => "[ID##{id}] Recieved a payment by #{kind.humanize.downcase}.")
     account.save
   end
+
+  def load_csv file
+
+  end
 end

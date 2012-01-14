@@ -20,4 +20,11 @@ class Distributor::PaymentsController < Distributor::BaseController
       end
     end
   end
+
+  def process_upload
+    csv = TransactionsUploader.new
+    csv.store!(params['transactions'])
+    csv.retrieve_from_store!(params['transactions'].original_filename)
+    Payment.load_csv!(csv)
+  end
 end

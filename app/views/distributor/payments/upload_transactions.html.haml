@@ -1,0 +1,12 @@
+%h2 CSV import
+
+= form_tag process_upload_distributor_payments_path, :multipart => true, :method => :post do
+  %p Please select a file to import and click "Upload".
+  .inputs
+    = file_field_tag :transactions, :class => "file_input"
+    .file-input
+      %span.nice.small.button "Browse..."
+      %span.description
+          
+  .actions
+    = submit_tag "Upload"
