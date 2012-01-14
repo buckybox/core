@@ -20,13 +20,15 @@
     %h4.twelve.columns No Customers To Display
 - else
   .row.data-headings
+    %h4.three.columns Route
     %h4.three.columns Customer
-    %h4.seven.columns Tags
+    %h4.four.columns Tags
     %h4.two.columns Balance
 
   - @accounts.each do |account|
     .row.data-listings
+      .three.columns= account.customer.route.name
       .three.columns= link_to account.customer.name, [current_distributor, account]
-      .seven.columns= tag_links(account.tags)
+      .four.columns= tag_links(account.tags)
       .two.columns= account.balance
 

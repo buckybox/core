@@ -4,12 +4,13 @@
   .three.columns
     %ul.vcard
       %li.fn= @customer.name
-      %li.adr= @address.address_1
-      - if @address.address_2
-        %li.adr= @address.address_2
-      %li.adr= @address.suburb
-      %li.adr= @address.city
-      %li.adr= @address.postcode
+      - if @address
+        %li.adr= @address.address_1
+        - if @address.address_2
+          %li.adr= @address.address_2
+        %li.adr= @address.suburb
+        %li.adr= @address.city
+        %li.adr= @address.postcode
       %li.tel= @customer.phone
       %li.email= @customer.email
 
