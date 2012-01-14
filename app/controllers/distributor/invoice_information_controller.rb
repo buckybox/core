@@ -1,5 +1,6 @@
 class Distributor::InvoiceInformationController < Distributor::BaseController
   belongs_to :distributor, :singleton => true
+  actions :create
 
   respond_to :html, :xml, :json
 

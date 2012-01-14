@@ -1,18 +1,21 @@
-%h2 Recent Manual Payments
+%h3 Recent Payments
 
 - if @payments.blank?
   No manual payments have been entered yet
 - else
-  %table
-    %thead
-      %tr
-        %th Customer
-        %th Amount
-        %th Description
-
-    %tbody
-      - @payments.each do |payment|
+  .row
+    %table.twelve.columns
+      %thead
         %tr
-          %td= payment.customer.name
-          %td= payment.amount.format
-          %td= payment.description
+          %th Timestamp
+          %th Customer
+          %th Amount
+          %th Description
+
+      %tbody
+        - @payments.each do |payment|
+          %tr
+            %td= payment.created_at.to_s(:db)
+            %td= payment.customer.name
+            %td= payment.amount.format
+            %td= payment.description

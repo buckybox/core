@@ -11,7 +11,6 @@ module Distributor::DeliveriesHelper
     options_from_collection_for_select(dates, 'to_date', 'to_date')
   end
 
-  #FIXME: Thes two are to compisate for a larger problem I have to revisit shortly.
   def order_delivery_id(order, date)
     delivery = order.delivery_for_date(date)
     delivery.id if delivery
@@ -20,5 +19,15 @@ module Distributor::DeliveriesHelper
   def order_delivery_route_name(order, date)
     delivery = order.delivery_for_date(date)
     delivery.route.name if delivery
+  end
+
+  def order_delivery_count(calendar_array, date, route = nil)
+    data = calendar_array.select{|cdate, cdata| cdate == date}[0][1]
+
+    if route
+      orders = Order.find(data[:order_ids]).select{|o| o.route(date) == route}.size
+    else
+      data[:order_ids].size
+    end
   end
 end

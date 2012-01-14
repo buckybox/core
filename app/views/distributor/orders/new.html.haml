@@ -1,5 +1,5 @@
-%h1 New distributor_order
+- title "New Order for #{@account.customer.name}"
 
 = render 'form'
 
-= link_to 'Back', distributor_orders_path
+= link_to 'Back', distributor_account_path(current_distributor, @account)

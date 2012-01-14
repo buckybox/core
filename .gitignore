@@ -19,7 +19,7 @@
 *.swp
 
 .DS_Store
-public/uploads/
+public/system/
 .sass-cache/
 config/database.yml
 Session.vim

@@ -1,14 +1,18 @@
+%h3 Transactions
+
 .row
   %table.twelve.columns
     %thead
       %tr
+        %th Timestamp
         %th Amount
         %th Kind
         %th Description
 
-    - @transactions.each do |transaction|
-      %tbody
+    %tbody
+      - @transactions.each do |transaction|
         %tr
-          %td= transaction.amount
+          %td= transaction.created_at.to_s(:db)
+          %td= transaction.amount.format
           %td= transaction.kind.titleize
           %td= transaction.description

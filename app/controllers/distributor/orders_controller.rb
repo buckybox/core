@@ -1,11 +1,18 @@
 class Distributor::OrdersController < Distributor::BaseController
-  belongs_to :distributor
+  nested_belongs_to :distributor, :account
+  actions :all, :except => :index
 
   respond_to :html, :xml, :json
 
-  protected
+  def create
+    create! { [current_distributor, @account] }
+  end
 
-  def collection
-    @orders ||= end_of_association_chain.completed
+  def update
+    update! { [current_distributor, @account] }
+  end
+
+  def destroy
+    destroy! { [current_distributor, @account] }
   end
 end

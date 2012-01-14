@@ -1,5 +1,6 @@
 class Distributor::RoutesController < Distributor::BaseController
   belongs_to :distributor
+  actions :all, :except => :index
 
   respond_to :html, :xml, :json
 

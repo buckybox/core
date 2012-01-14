@@ -7,7 +7,7 @@ class Order < ActiveRecord::Base
   has_one :customer, :through => :account
   has_one :distributor, :through => :box
 
-  has_many :deliveries
+  has_many :deliveries, :dependent => :destroy
   has_many :routes, :through => :deliveries
   has_many :order_schedule_transactions
 
@@ -35,6 +35,21 @@ class Order < ActiveRecord::Base
 
   def price
     box.price #will likely need to copy this to the order model at some stage
+  end
+
+  def route(date = nil)
+    if deliveries.empty?
+      route = Route.best_route(distributor)
+    else
+      if date
+        deliveries_by_date = deliveries.where(date:date).first
+        route = deliveries_by_date.route if deliveries_by_date
+      end
+
+      route = deliveries.order(:date).last.route unless route
+    end
+
+    return route
   end
 
   def customer= cust

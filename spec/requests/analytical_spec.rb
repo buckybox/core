@@ -43,7 +43,6 @@ describe 'analytical' do
       fill_in 'Address 1', :with => 'test'
       fill_in 'Suburb', :with => 'test'
       fill_in 'City', :with => 'test'
-      fill_in 'Postcode', :with => 'test'
       click_button 'Next'
       click_button 'Next'
       page.should have_content('complete_order')

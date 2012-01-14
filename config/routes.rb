@@ -3,7 +3,7 @@ BuckyBox::Application.routes.draw do
 
   get 'home' => 'bucky_box#index', :as => 'home'
 
-  root :to => 'bucky_box#index'
+  root :to => 'distributor/dashboard#index'
 
   namespace :market do
     get ':distributor_parameter_name',                  :action => 'store',            :as => 'store'
@@ -14,23 +14,24 @@ BuckyBox::Application.routes.draw do
   end
 
   resources :distributors do
-    resource :bank_information,    :controller => 'distributor/bank_information'
-    resource :invoice_information, :controller => 'distributor/invoice_information'
-    resources :boxes,              :controller => 'distributor/boxes'
-    resources :routes,             :controller => 'distributor/routes'
-    resources :payments,           :controller => 'distributor/payments', :only => :create
-    resources :transactions,       :controller => 'distributor/transactions', :only => :create
-    resources :orders,             :controller => 'distributor/orders'
+    resources :boxes,              :controller => 'distributor/boxes',               :except => :index
+    resources :routes,             :controller => 'distributor/routes',              :except => :index
+    resource :bank_information,    :controller => 'distributor/bank_information',    :only => :create
+    resource :invoice_information, :controller => 'distributor/invoice_information', :only => :create
+    resources :payments,           :controller => 'distributor/payments',            :only => :create
+    resources :transactions,       :controller => 'distributor/transactions',        :only => :create
 
-    resources :deliveries,                :controller => 'distributor/deliveries' do
+    resources :deliveries,                 :controller => 'distributor/deliveries' do
       collection do
-        get 'date/:date(/:view)',         :action => :index, :as => 'date'
-        post 'update_status',             :action => :update_status, :as => 'update_status'
+        get 'date/:date(/:view)',          :action => :index, :as => 'date'
+        post 'update_status',              :action => :update_status, :as => 'update_status'
         post 'master_packing_sheet/:date', :action => :master_packing_sheet, :as => 'master_packing_sheet'
       end
     end
 
     resources :accounts, :controller => 'distributor/accounts' do
+      resources :orders, :controller => 'distributor/orders', :except => :index
+
       collection do
         get 'search',    :action => :index, :as => 'search'
         get 'tag/:tag',  :action => :index, :as => 'tag'
