@@ -16,6 +16,6 @@
   %b Dislikes:
   = @order.dislikes
 
-= link_to 'Edit', edit_distributor_order_path(current_distributor, @order)
+= link_to 'Edit', edit_distributor_account_order_path(current_distributor, @account, @order)
 \|
-= link_to 'Back', distributor_orders_path(current_distributor)
+= link_to 'Back', distributor_account_path(current_distributor, @account)

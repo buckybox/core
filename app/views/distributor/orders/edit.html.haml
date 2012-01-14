@@ -2,6 +2,6 @@
 
 = render 'form'
 
-= link_to 'Show', [current_distributor, @order]
+= link_to 'Show', [current_distributor, @account, @order]
 \|
-= link_to 'Back', distributor_orders_path(current_distributor)
+= link_to 'Back', distributor_account_path(current_distributor, @account)

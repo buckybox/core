@@ -3,7 +3,7 @@ class Route < ActiveRecord::Base
 
   belongs_to :distributor
 
-  has_many :deliveries
+  has_many :deliveries, :dependent => :destroy
   has_many :orders, :through => :deliveries
   has_many :route_schedule_transactions
 

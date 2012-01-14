@@ -13,11 +13,8 @@
   %b Dislikes:
   = @box.dislikes
 %p
-  %b Price cents:
-  = @box.price_cents
-%p
-  %b Currency:
-  = @box.currency
+  %b Price:
+  = @box.price.format
 %p
   %b Available single:
   = @box.available_single
@@ -28,6 +25,4 @@
   %b Available fourtnightly:
   = @box.available_fourtnightly
 
-= link_to 'Edit', edit_distributor_box_path(current_distributor, @box)
-\|
 = link_to 'Back', distributor_orders_path(current_distributor)

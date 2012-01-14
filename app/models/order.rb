@@ -7,7 +7,7 @@ class Order < ActiveRecord::Base
   has_one :customer, :through => :account
   has_one :distributor, :through => :box
 
-  has_many :deliveries
+  has_many :deliveries, :dependent => :destroy
   has_many :routes, :through => :deliveries
   has_many :order_schedule_transactions
 

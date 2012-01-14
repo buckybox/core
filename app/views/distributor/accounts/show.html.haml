@@ -1,4 +1,4 @@
-- title(@account.customer.name, false)
+- title @account.customer.name
 
 .row
   .three.columns
@@ -25,7 +25,8 @@
   .four.columns
     = link_to 'Edit Customer Details', edit_customer_path(@account.customer)
     %br
-    = link_to 'Back to Accounts List', distributor_accounts_path
+    = link_to 'Back to Customer List', distributor_accounts_path
 
+= render :partial => 'distributor/orders/index'
 = render :partial => 'distributor/transactions/index'
 

@@ -16,4 +16,6 @@ class Box < ActiveRecord::Base
     :available_fourtnightly, :box_image
 
   validates_presence_of :distributor, :name, :description, :price
+
+  default_scope order(:name)
 end

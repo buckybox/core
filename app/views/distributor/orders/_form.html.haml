@@ -1,8 +1,8 @@
-= simple_form_for([@distributor, @order]) do |f|
+= simple_form_for([@distributor, @account, @order]) do |f|
   = f.error_notification
 
   .inputs
-    = f.association :box, :collection => current_distributor.boxes, :include_blank => false
+    = f.association :box, :collection => box_collection(current_distributor, with_price:true), :include_blank => false
     = f.input :quantity
     = f.input :likes
     = f.input :dislikes
