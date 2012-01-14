@@ -15,7 +15,7 @@
 
   .three.columns
     %h4== Balance: #{@account.balance.format}
-    = link_to 'Adjust balance', edit_distributor_account_path(current_distributor, @account)
+    = link_to 'Adjust balance or modify tags.', edit_distributor_account_path(current_distributor, @account)
 
   .two.columns
     - unless @account.tags.empty?

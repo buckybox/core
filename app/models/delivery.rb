@@ -94,7 +94,7 @@ class Delivery < ActiveRecord::Base
     account.add_to_balance(
       box.price * order.quantity,
       :kind => 'delivery',
-      :description => "[ID##{id}] Reverted a delivery back to pending. #{order.string_pluralize} at #{box.price} each."
+      :description => "[ID##{id}] Delivery reversal. #{order.string_pluralize} at #{box.price} each."
     )
     errors.add(:base, 'Problem adding balance from account on delivery status change.') unless account.save
   end

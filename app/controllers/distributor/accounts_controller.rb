@@ -11,7 +11,7 @@ class Distributor::AccountsController < Distributor::BaseController
 
   def show
     show! do
-      @orders = @account.orders
+      @orders = @account.orders.completed
       @transactions = @account.transactions
       @customer = @account.customer
       @address = @customer.address
