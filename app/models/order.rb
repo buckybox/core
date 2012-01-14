@@ -16,8 +16,8 @@ class Order < ActiveRecord::Base
 
   attr_accessible :box, :box_id, :account, :account_id, :quantity, :likes, :dislikes, :completed, :frequency
 
-  FREQUENCIES = %w(single weekly fortnightly)
-  FREQUENCY_IN_WEEKS = [nil, 1, 2] # to be transposed to the FREQUENCIES array
+  FREQUENCIES = %w(single daily weekly fortnightly)
+  FREQUENCY_IN_WEEKS = [nil, 1, 1, 2] # to be transposed to the FREQUENCIES array
   FREQUENCY_HASH = Hash[[FREQUENCIES, FREQUENCY_IN_WEEKS].transpose]
 
   validates_presence_of :box, :quantity, :frequency
