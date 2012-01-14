@@ -56,6 +56,14 @@ class Order < ActiveRecord::Base
     self.account = cust.account
   end
 
+  def self.deactivate_finished
+    active.each do |order|
+      if order.schedule.next_occurrence.nil?
+        order.update_attribute(:active, false)
+      end
+    end
+  end
+
   def self.create_next_delivery
     active.each { |d| d.create_next_delivery }
   end
