@@ -14,12 +14,12 @@ BuckyBox::Application.routes.draw do
   end
 
   resources :distributors do
-    resource :bank_information,    :controller => 'distributor/bank_information'
-    resource :invoice_information, :controller => 'distributor/invoice_information'
-    resources :boxes,              :controller => 'distributor/boxes'
-    resources :routes,             :controller => 'distributor/routes'
-    resources :payments,           :controller => 'distributor/payments', :only => :create
-    resources :transactions,       :controller => 'distributor/transactions', :only => :create
+    resources :boxes,              :controller => 'distributor/boxes',               :except => :index
+    resources :routes,             :controller => 'distributor/routes',              :except => :index
+    resource :bank_information,    :controller => 'distributor/bank_information',    :only => :create
+    resource :invoice_information, :controller => 'distributor/invoice_information', :only => :create
+    resources :payments,           :controller => 'distributor/payments',            :only => :create
+    resources :transactions,       :controller => 'distributor/transactions',        :only => :create
 
     resources :deliveries,                 :controller => 'distributor/deliveries' do
       collection do
