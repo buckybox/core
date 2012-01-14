@@ -1,11 +1,13 @@
+= hidden_field_tag 'distributor_id', @distributor.id
+
 = simple_form_for([@distributor, @account, @order]) do |f|
   = f.error_notification
 
   .inputs
-    = f.association :box, :collection => box_collection(current_distributor, with_price:true), :include_blank => false
+    = f.association :box, :collection => box_collection(current_distributor, with_price:true)
     = f.input :quantity
-    = f.input :likes
-    = f.input :dislikes
+    = f.input :likes, :wrapper_html => { :id => 'likes_input' }
+    = f.input :dislikes, :wrapper_html => { :id => 'dislikes_input' }
 
   .actions
     = f.button :submit

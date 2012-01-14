@@ -13,7 +13,7 @@ describe Order do
   end
 
   context :frequency do
-    %w(single weekly fortnightly).each do |f|
+    Order::FREQUENCIES.each do |f|
       specify { Fabricate.build(:order, :frequency => f).should be_valid }
     end
     specify { Fabricate.build(:order, :frequency => 'yearly').should_not be_valid }
