@@ -75,17 +75,27 @@ class Account < ActiveRecord::Base
     accounts
   end
 
+  #future occurrences for all orders on account
+  def all_occurrences end_date
+    occurrences = []
+    orders.each do |o|
+      o.future_deliveries(end_date).each do |occurrence|
+        occurrences << occurence
+      end
+    end
+    raise occurences.inspect
+    occurrences.sort_by {|a,b| a[:date] <=> b[:date] }
+  end
+
   #this holds the core logic for when an invoice should be raised
   def next_invoice_date
     total = balance
     invoice_date = nil
-
+    
     if total < distributor.invoice_threshold
       invoice_date =  Date.current
     else
-      order.schedule.occurrences_between(Date.today, end_date).each do |occurrence|
-      end
-      deliveries.pending.each do |delivery|
+      all_occurrences(4.weeks.from_now).each do |occurence|
         total -= amount_with_bucky_fee(delivery.order.price)
 
         if total < distributor.invoice_threshold
