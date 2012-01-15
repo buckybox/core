@@ -5,8 +5,26 @@
   .inputs
     = file_field_tag :transactions, :class => "file_input"
     .file-input
-      %span.nice.small.button "Browse..."
+      %span.nice.small.button Browse...
       %span.description
           
   .actions
     = submit_tag "Upload"
+
+- if @file
+  %table
+    %tr
+      %th Date
+      %th Amount
+      %th Payee
+      %th Particulars
+      %th Code
+      %th Reference
+      %th Tran Type
+
+    - @file.each_line("\n") do |line|
+      - row = line.split(",")
+      - if row[1].to_i && row[1].to_i > 0
+        %tr 
+          - row.each do |attr|
+            %td=attr

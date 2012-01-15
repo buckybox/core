@@ -25,6 +25,12 @@ class Distributor::PaymentsController < Distributor::BaseController
     csv = TransactionsUploader.new
     csv.store!(params['transactions'])
     csv.retrieve_from_store!(params['transactions'].original_filename)
+    @file = File.open(csv.path,'r')
+
+    render :upload_transactions
+  end
+
+  def create_from_csv
     Payment.load_csv!(csv)
   end
 end

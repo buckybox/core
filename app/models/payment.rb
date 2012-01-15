@@ -29,7 +29,18 @@ class Payment < ActiveRecord::Base
     account.save
   end
 
-  def load_csv file
+  def self.load_csv!(distributor, csv)
+    file = File.open(csv.path,'r')
+    file.each_line("\n") do |line|
+      row = line.split(",")
+      self.create_payment!(distributor, row)
+    end
+  end
 
+  # line format
+  # "Date", "Amount", "Payee", "Particulars", "Code", "Reference", "Tran Type"
+  def self.create_payment! distributor, row
+    if date = row[0].to_date && amount = row[1].to_i && payee = row[2] && particulars = row[3] && code = row[4] && reference = row[5] && trans_type = row[6]
+    end
   end
 end
