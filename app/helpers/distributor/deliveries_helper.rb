@@ -17,9 +17,6 @@ module Distributor::DeliveriesHelper
   end
 
   def order_delivery_route_name(order, date)
-    puts "-"*80
-    puts order.inspect
-    puts date.inspect
     delivery = order.delivery_for_date(date)
     delivery.route.name if delivery
   end

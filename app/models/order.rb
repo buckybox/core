@@ -15,19 +15,17 @@ class Order < ActiveRecord::Base
   acts_as_taggable
   serialize :schedule, Hash
 
-  attr_accessible :box, :box_id, :account, :account_id, :quantity, :likes, :dislikes, :completed, :frequency
+  attr_accessible :box, :box_id, :account, :account_id, :quantity, :likes, :dislikes, :completed, :frequency, :schedule
 
   FREQUENCIES = %w(single weekly fortnightly)
   FREQUENCY_IN_WEEKS = [nil, 1, 2] # to be transposed to the FREQUENCIES array
   FREQUENCY_HASH = Hash[[FREQUENCIES, FREQUENCY_IN_WEEKS].transpose]
 
-  validates_presence_of :box, :quantity, :frequency
-  validates_presence_of :account, :on => :update
+  validates_presence_of :box, :quantity, :frequency, :account, :schedule
   validates_numericality_of :quantity, :greater_than => 0
   validates_inclusion_of :frequency, :in => FREQUENCIES, :message => "%{value} is not a valid frequency"
   validate :box_distributor_equals_customer_distributor
 
-  before_save :create_schedule, :if => 'schedule.first.nil?'
   before_save :make_active_and_create_first_delivery, :if => :just_completed?
   before_save :record_schedule_change
 
@@ -96,7 +94,7 @@ class Order < ActiveRecord::Base
 
   def remove_scheduled_delivery(delivery)
     s = schedule
-    time = schedule.recurrence_times.select{|t|t.to_date <=> delivery.date}.first
+    time = schedule.recurrence_times.find{ |t| t.to_date == delivery.date }
     s.remove_recurrence_time(time)
     self.schedule = s
   end
@@ -117,25 +115,6 @@ class Order < ActiveRecord::Base
   end
 
   protected
-
-  def create_schedule
-    weeks_between_deliveries = FREQUENCY_HASH[frequency]
-    current_route = customer.route
-
-    if current_route
-      next_run = current_route.next_run
-      new_schedule = Schedule.new(next_run)
-
-      if weeks_between_deliveries
-        recurrence_rule = Rule.weekly(weeks_between_deliveries)
-        new_schedule.add_recurrence_rule(recurrence_rule)
-      else
-        new_schedule.add_recurrence_date(next_run)
-      end
-
-      self.schedule = new_schedule
-    end
-  end
 
   # Manually create the first delivery all following deliveries should be scheduled for creation by the cron job
   def make_active_and_create_first_delivery

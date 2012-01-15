@@ -29,7 +29,7 @@ describe Route do
 
   describe '#best_route' do
     it 'should just return the first one for now' do
-      Route.best_route(@route.distributor).should == @route
+      Route.default_route(@route.distributor).should == @route
     end
   end
 

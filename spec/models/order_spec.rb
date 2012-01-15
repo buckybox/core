@@ -52,33 +52,54 @@ describe Order do
     context :single do
       before do
         @order.frequency = 'single'
+        @order.completed = true
+
+        @schedule = new_single_schedule
+        @order.schedule = @schedule
+
         @order.save
       end
 
-      specify { @order.schedule.to_s.should == @route.next_run.strftime("%B %e, %Y") }
-      specify { @order.schedule.next_occurrence == @route.next_run }
+      specify { @order.schedule.should_not be_nil }
+      specify { @order.schedule.next_occurrence.should_not be_nil }
+      specify { @order.schedule.to_s.should == @schedule.to_s }
+      specify { @order.schedule.next_occurrence == @schedule.next_occurrence }
       specify { @order.should have(1).delivery }
     end
 
     context :weekly do
       before do
         @order.frequency = 'weekly'
+        @order.completed = true
+
+        @schedule = new_recurring_schedule
+        @order.schedule = @schedule
+
         @order.save
       end
 
-      specify { @order.schedule.to_s.should == 'Weekly' }
-      specify { @order.schedule.next_occurrence == @route.next_run }
+      specify { @order.schedule.should_not be_nil }
+      specify { @order.schedule.next_occurrence.should_not be_nil }
+      specify { @order.schedule.to_s.should == @schedule.to_s }
+      specify { @order.schedule.next_occurrence == @schedule.next_occurrence }
       specify { @order.should have(1).delivery }
     end
 
     context :fortnightly do
       before do
         @order.frequency = 'fortnightly'
+        @order.completed = true
+
+        @schedule = new_recurring_schedule
+        @order.schedule = @schedule
+
         @order.save
       end
 
-      specify { @order.schedule.to_s.should == 'Every 2 weeks' }
-      specify { @order.schedule.next_occurrence == @route.next_run }
+      specify { @order.schedule.should_not be_nil }
+      specify { @order.schedule.next_occurrence.should_not be_nil }
+      specify { @order.schedule.to_s.should == @schedule.to_s }
+      specify { @order.schedule.next_occurrence == @schedule.next_occurrence }
       specify { @order.should have(1).delivery }
     end
   end
@@ -155,7 +176,7 @@ describe Order do
   end
 
   describe '#deactivate_finished' do
-    before(:all) do
+    before do
       rule_schedule = Schedule.new(Time.now - 2.months)
       rule_schedule.add_recurrence_rule(Rule.daily(3))
 
@@ -180,11 +201,16 @@ describe Order do
     end
 
     specify { expect { Order.deactivate_finished }.should change(Order.active, :count).by(-2) }
-    specify { Order.find(@order1.id).active.should be_true }
-    specify { Order.find(@order2.id).active.should be_true }
-    specify { Order.find(@order3.id).active.should be_false }
-    specify { Order.find(@order4.id).active.should be_true }
-    specify { Order.find(@order5.id).active.should be_false }
+
+    describe 'individually' do
+      before { Order.deactivate_finished }
+
+      specify { @order1.reload.active.should be_true }
+      specify { @order2.reload.active.should be_true }
+      specify { @order3.reload.active.should be_false }
+      specify { @order4.reload.active.should be_true }
+      specify { @order5.reload.active.should be_false }
+    end
   end
 
   describe '#create_next_delivery' do
@@ -219,9 +245,9 @@ describe Order do
 
   describe '#create_next_delivery' do
     before do
-      box = Fabricate(:box, :distributor => Fabricate(:route).distributor)
-      3.times { Fabricate(:active_order, :box => box, :completed => true, :frequency => 'weekly') }
-      Fabricate(:order, :box => box, :frequency => 'weekly')
+      3.times { Fabricate(:recurring_order, :completed => true) }
+      Fabricate(:order, :schedule => new_single_schedule(Time.now + 1.month + 1.day), :completed => true)
+      Fabricate(:recurring_order)
     end
 
     it "should create the next delivery for each active order if it doesn't exist already" do

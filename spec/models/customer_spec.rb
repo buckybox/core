@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe Customer do
   before :all do
-    @customer = Fabricate(:customer)
+    @customer = Fabricate(:customer_with_account)
   end
 
   specify { @customer.should be_valid }
@@ -25,7 +25,14 @@ describe Customer do
 
   context 'full name' do
     describe '#name' do
-      specify { @customer.name.should == "#{@customer.first_name} #{@customer.last_name}" }
+      describe 'with only first name' do
+        specify { @customer.name.should == @customer.first_name }
+      end
+
+      describe 'with both first and last name' do
+        before { @customer.last_name = 'Lastname' }
+        specify { @customer.name.should == "#{@customer.first_name} #{@customer.last_name}" }
+      end
     end
 
     describe '#name=' do
