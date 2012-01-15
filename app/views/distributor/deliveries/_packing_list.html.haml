@@ -3,7 +3,7 @@
     .row.data-headings
       .one.columns= check_box_tag 'all'
       .three.columns.delivery_actions
-        = submit_tag 'Print - Master List', :class => 'nice small button'
+        = submit_tag 'Print - Master List', :class => 'small radius button'
       .eight.columns
 
     - @orders.group_by(&:box_id).each do |box_id, order_array|

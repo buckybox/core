@@ -11,9 +11,30 @@ module Distributor::DeliveriesHelper
     options_from_collection_for_select(dates, 'to_date', 'to_date')
   end
 
-  def order_delivery_id(order, date)
-    delivery = order.delivery_for_date(date)
-    delivery.id if delivery
+  def delivery_icons(status, delivery = nil)
+    case status
+    when 'pending'
+      status_icon = 'icon-status-pending.png'
+      options = { title:'PENDING delivery' }
+    when 'delivered'
+      status_icon = 'icon-status-done.png'
+      options = { title:'Delivery has been COMPLETED' }
+    when 'cancelled'
+      status_icon = 'icon-status-oops.png'
+      options = { title:'MISSED DELIVERY, customer has not been charged' }
+    when 'rescheduled'
+      status_icon = 'icon-status-refresh.png'
+      options = {
+        title:"Missed delivery, REDELIVER on #{delivery.new_delivery.date.strftime("%A %d %B")} (#{delivery.route.name})"
+      }
+    when 'repacked'
+      status_icon = 'icon-status-repack.png'
+      options = {
+        title:"Missed delivery, NEW BOX scheduled for #{delivery.new_delivery.date.strftime("%A %d %B")}"
+      }
+    end
+
+    image_tag status_icon, { :alt => status }.merge(options)
   end
 
   def order_delivery_route_name(order, date)
