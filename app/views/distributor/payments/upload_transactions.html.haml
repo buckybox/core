@@ -23,13 +23,17 @@
         %th Code
         %th Reference
         %th Tran Type
+        %th Customer
 
+      - index = 0
+      = hidden_field_tag(:transactions_filename, File.basename(@file))
       - @file.each_line("\n") do |line|
         - row = line.split(",")
         - if row[1].to_i && row[1].to_i > 0
           %tr 
             - row.each do |attr|
               %td=attr
-            %td= collection_select(:customer, :id, current_distributor.customers, :id, :name)
+            %td= collection_select(:customer, :id, current_distributor.customers, :id, :name, {:include_blank => true}, {:name => "customers[#{index}]"})
+        - index += 1
       %tr
         %td{:colspan => 8}= submit_tag "Assign customers"

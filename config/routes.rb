@@ -27,7 +27,7 @@ BuckyBox::Application.routes.draw do
       end
     end
 
-    resources :payments,           :controller => 'distributor/payments', :only => :create do 
+    resources :payments,           :controller => 'distributor/payments', :only => [:create, :index] do
       collection do
         get 'upload_transactions'
         post 'process_upload'

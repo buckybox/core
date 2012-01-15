@@ -4,6 +4,10 @@ class Distributor::PaymentsController < Distributor::BaseController
 
   respond_to :html, :xml, :json
 
+  def index 
+    @payments = current_distributor.payments.order('created_at DESC')
+  end
+
   def create
     create! do |success, failure|
       success.html { redirect_to distributor_dashboard_url }
@@ -31,6 +35,10 @@ class Distributor::PaymentsController < Distributor::BaseController
   end
 
   def create_from_csv
-    Payment.load_csv!(csv)
+    csv = TransactionsUploader.new
+    csv.retrieve_from_store!(params['transactions_filename'])
+    Payment.create_from_csv!(current_distributor, csv, params['customers'])
+
+    redirect_to distributor_payments_path
   end
 end
