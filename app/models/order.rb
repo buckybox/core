@@ -4,8 +4,9 @@ class Order < ActiveRecord::Base
   belongs_to :account
   belongs_to :box
 
-  has_one :customer, :through => :account
   has_one :distributor, :through => :box
+  has_one :customer, :through => :account
+  has_one :route, :through => :customer
 
   has_many :deliveries, :dependent => :destroy
   has_many :routes, :through => :deliveries
@@ -14,19 +15,17 @@ class Order < ActiveRecord::Base
   acts_as_taggable
   serialize :schedule, Hash
 
-  attr_accessible :box, :box_id, :account, :account_id, :quantity, :likes, :dislikes, :completed, :frequency
+  attr_accessible :box, :box_id, :account, :account_id, :quantity, :likes, :dislikes, :completed, :frequency, :schedule
 
   FREQUENCIES = %w(single weekly fortnightly)
   FREQUENCY_IN_WEEKS = [nil, 1, 2] # to be transposed to the FREQUENCIES array
   FREQUENCY_HASH = Hash[[FREQUENCIES, FREQUENCY_IN_WEEKS].transpose]
 
-  validates_presence_of :box, :quantity, :frequency
-  validates_presence_of :account, :on => :update
+  validates_presence_of :box, :quantity, :frequency, :account, :schedule
   validates_numericality_of :quantity, :greater_than => 0
   validates_inclusion_of :frequency, :in => FREQUENCIES, :message => "%{value} is not a valid frequency"
   validate :box_distributor_equals_customer_distributor
 
-  before_save :create_schedule, :if => 'schedule.first.nil?'
   before_save :make_active_and_create_first_delivery, :if => :just_completed?
   before_save :record_schedule_change
 
@@ -37,23 +36,16 @@ class Order < ActiveRecord::Base
     box.price #will likely need to copy this to the order model at some stage
   end
 
-  def route(date = nil)
-    if deliveries.empty?
-      route = Route.best_route(distributor)
-    else
-      if date
-        deliveries_by_date = deliveries.where(date:date).first
-        route = deliveries_by_date.route if deliveries_by_date
-      end
-
-      route = deliveries.order(:date).last.route unless route
-    end
-
-    return route
-  end
-
   def customer= cust
     self.account = cust.account
+  end
+
+  def self.deactivate_finished
+    active.each do |order|
+      if order.schedule.next_occurrence.nil?
+        order.update_attribute(:active, false)
+      end
+    end
   end
 
   def self.create_next_delivery
@@ -62,9 +54,9 @@ class Order < ActiveRecord::Base
 
   def create_next_delivery
     if completed? && active?
-      route = Route.best_route(distributor)
+      current_route = customer.route
       date = schedule.next_occurrence
-      delivery = deliveries.find_or_create_by_date_and_route_id(date, route.id) if date && route
+      delivery = deliveries.find_or_create_by_date_and_route_id(date, current_route.id) if date && current_route
     end
   end
 
@@ -76,9 +68,9 @@ class Order < ActiveRecord::Base
   # Maintenance method. Should only need if cron isn't running or missed some dates
   def create_old_deliveries
     schedule.occurrences(Time.now).each do |occurrence|
-      route = Route.best_route(distributor)
+      current_route = customer.route
       date = occurrence.to_date
-      result = deliveries.find_or_create_by_date_and_route_id(date, route.id) if date && route
+      result = deliveries.find_or_create_by_date_and_route_id(date, current_route.id) if date && current_route
     end
   end
 
@@ -102,7 +94,7 @@ class Order < ActiveRecord::Base
 
   def remove_scheduled_delivery(delivery)
     s = schedule
-    time = schedule.recurrence_times.select{|t|t.to_date <=> delivery.date}.first
+    time = schedule.recurrence_times.find{ |t| t.to_date == delivery.date }
     s.remove_recurrence_time(time)
     self.schedule = s
   end
@@ -123,25 +115,6 @@ class Order < ActiveRecord::Base
   end
 
   protected
-
-  def create_schedule
-    weeks_between_deliveries = FREQUENCY_HASH[frequency]
-    route = Route.best_route(distributor)
-
-    if route
-      next_run = route.next_run
-      new_schedule = Schedule.new(next_run)
-
-      if weeks_between_deliveries
-        recurrence_rule = Rule.weekly(weeks_between_deliveries)
-        new_schedule.add_recurrence_rule(recurrence_rule)
-      else
-        new_schedule.add_recurrence_date(next_run)
-      end
-
-      self.schedule = new_schedule
-    end
-  end
 
   # Manually create the first delivery all following deliveries should be scheduled for creation by the cron job
   def make_active_and_create_first_delivery

@@ -2,16 +2,17 @@ class Customer < ActiveRecord::Base
   include PgSearch
 
   has_one :address, :dependent => :destroy, :inverse_of => :customer
-
   has_one :account, :dependent => :destroy
+
   has_many :orders, :through => :account
   has_many :payments, :through => :account
   has_many :deliveries, :through => :orders
 
   belongs_to :distributor
+  belongs_to :route
 
-  pg_search_scope :search, 
-    :against => [:first_name, :last_name, :email, :number], 
+  pg_search_scope :search,
+    :against => [:first_name, :last_name, :email, :number],
     :associated_against => {
     :address => [:address_1, :address_2, :suburb, :city, :postcode, :delivery_note]
   },
@@ -25,9 +26,9 @@ class Customer < ActiveRecord::Base
 
   accepts_nested_attributes_for :address
 
-  attr_accessible :address_attributes, :first_name, :last_name, :email, :phone, :name, :distributor_id, :distributor
+  attr_accessible :address_attributes, :first_name, :last_name, :email, :phone, :name, :distributor_id, :distributor, :route
 
-  validates_presence_of :first_name, :last_name, :email, :distributor_id
+  validates_presence_of :first_name, :email, :distributor, :route
   validates_uniqueness_of :email, :scope => :distributor_id
   validates_uniqueness_of :number, :scope => :distributor_id
 
