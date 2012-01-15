@@ -14,11 +14,11 @@
           %tr
             %td= radio_button_tag 'missed', 'rescheduled'
             %td= label_tag 'missed_rescheduled', 'Reschedule delivery'
-            %td= select_tag 'date_rescheduled', reschedule_dates(current_distributor)
+            %td= select_tag 'date_rescheduled', reschedule_dates(@route)
           %tr
             %td= radio_button_tag 'missed', 'repacked'
             %td= label_tag 'missed_repacked', 'Repack delivery'
-            %td= select_tag 'date_repacked', reschedule_dates(current_distributor)
+            %td= select_tag 'date_repacked', reschedule_dates(@route)
           %tr
             %td{:colspan => 2}
             %td= button_tag 'Commit', :class => 'nice small button', :id => 'commit-missed'

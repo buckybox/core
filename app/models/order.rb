@@ -56,9 +56,9 @@ class Order < ActiveRecord::Base
 
   def create_next_delivery
     if completed? && active?
-      route = Route.best_route(distributor)
+      current_route = customer.route
       date = schedule.next_occurrence
-      delivery = deliveries.find_or_create_by_date_and_route_id(date, route.id) if date && route
+      delivery = deliveries.find_or_create_by_date_and_route_id(date, current_route.id) if date && current_route
     end
   end
 
@@ -70,9 +70,9 @@ class Order < ActiveRecord::Base
   # Maintenance method. Should only need if cron isn't running or missed some dates
   def create_old_deliveries
     schedule.occurrences(Time.now).each do |occurrence|
-      route = Route.best_route(distributor)
+      current_route = customer.route
       date = occurrence.to_date
-      result = deliveries.find_or_create_by_date_and_route_id(date, route.id) if date && route
+      result = deliveries.find_or_create_by_date_and_route_id(date, current_route.id) if date && current_route
     end
   end
 
@@ -120,10 +120,10 @@ class Order < ActiveRecord::Base
 
   def create_schedule
     weeks_between_deliveries = FREQUENCY_HASH[frequency]
-    route = Route.best_route(distributor)
+    current_route = customer.route
 
-    if route
-      next_run = route.next_run
+    if current_route
+      next_run = current_route.next_run
       new_schedule = Schedule.new(next_run)
 
       if weeks_between_deliveries

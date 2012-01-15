@@ -15,7 +15,7 @@ class Distributor::DeliveriesController < Distributor::BaseController
       @calendar_hash = calendar_nav_data(start_date, end_date)
 
       unless params[:view] == 'packing'
-        @route = (params[:view] ? current_distributor.routes.find(params[:view]) : Route.best_route(current_distributor))
+        @route = (params[:view] ? current_distributor.routes.find(params[:view]) : Route.default_route(current_distributor))
       end
 
       if @calendar_hash[@selected_date]
