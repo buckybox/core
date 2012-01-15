@@ -31,6 +31,7 @@ BuckyBox::Application.routes.draw do
       collection do
         get 'upload_transactions'
         post 'process_upload'
+        post 'create_from_csv'
       end
     end
 
