@@ -36,5 +36,8 @@
   = gauges_tracking_code if Rails.env.production? || Rails.env.staging?
 
   = raw analytical.body_prepend_javascript
+
+  = render 'layouts/server_warnings'
   = yield(:body)
+
   = raw analytical.body_append_javascript
