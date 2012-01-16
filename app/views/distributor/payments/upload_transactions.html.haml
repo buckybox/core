@@ -1,7 +1,7 @@
 %h2 Bank spreadsheet import
 
 = form_tag process_upload_distributor_payments_path, :multipart => true, :method => :post do
-  %p Please select a file to import and click "Upload".
+  %p Please select a .csv file to import.
   .inputs
     = file_field_tag :transactions, :class => "file_input"
     .file-input
