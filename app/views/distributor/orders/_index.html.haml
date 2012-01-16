@@ -8,28 +8,26 @@
   %table.twelve.columns
     %thead
       %tr
+        %th Order #
         %th Box
         %th Quantity
         %th Total Cost
-        %th Active?
         %th Start Date
-        %th Schedule
+        %th{:style => 'width:25%;'} Schedule
         %th Next Delivery Date
         %th Actions
 
     %tbody
       - @orders.each do |order|
         %tr
-          %td= link_to order.box.name, [current_distributor, order.box]
+          %td= order.id
+          %td= order.box.name
           %td= order.quantity
           %td= (order.price * order.quantity).format
-          %td= (order.active? ? 'yes' : 'no')
           %td= order.schedule.start_date.strftime("%B %d, %Y")
           %td= order.schedule
           %td= order.schedule.next_occurrence.strftime("%B %d, %Y") if order.schedule.next_occurrence
           %td
-            = link_to 'Details', [current_distributor, @account, order]
-            \|
             = link_to 'Edit', edit_distributor_account_order_path(current_distributor, @account, order)
             \|
             = link_to 'Delete', [current_distributor, @account, order], :confirm => 'Are you sure?', :method => :delete

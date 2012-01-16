@@ -30,7 +30,7 @@ BuckyBox::Application.routes.draw do
     end
 
     resources :accounts, :controller => 'distributor/accounts' do
-      resources :orders, :controller => 'distributor/orders', :except => :index
+      resources :orders, :controller => 'distributor/orders', :except => [:index, :show]
 
       collection do
         get 'search',    :action => :index, :as => 'search'
@@ -40,7 +40,7 @@ BuckyBox::Application.routes.draw do
 
     resources :events, :controller => 'distributor/dashboard' do
       member do
-        post 'dismiss_notification'=> 'distributor/dashboard', :action => 'dismiss_notification'
+        post 'dismiss_notification' => 'distributor/dashboard', :action => 'dismiss_notification'
       end
     end
   end

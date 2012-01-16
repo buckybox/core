@@ -1,5 +1,5 @@
 class Distributor::DeliveriesController < Distributor::BaseController
-  custom_actions :collection => :update_status
+  custom_actions :collection => [:update_status, :master_packing_sheet]
   belongs_to :distributor
 
   respond_to :html, :xml, :except => :update_status

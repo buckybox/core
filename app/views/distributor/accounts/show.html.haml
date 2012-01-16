@@ -28,6 +28,7 @@
     %br
     = link_to 'Back to Customer List', distributor_accounts_path
 
-= render :partial => 'distributor/orders/index'
-= render :partial => 'distributor/transactions/index'
+= render 'distributor/orders/index'
+= render 'distributor/deliveries/index'
+= render 'distributor/transactions/index'
 

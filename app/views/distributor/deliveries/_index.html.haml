@@ -1,0 +1,24 @@
+.row
+  .twelve.columns
+    %h3 Deliveries
+
+.row
+  %table.twelve.columns
+    %thead
+      %tr
+        %th Order #
+        %th Delivery #
+        %th Status
+        %th Date
+        %th Route
+        %th Old Delivery #
+
+    %tbody
+      - @deliveries.each do |delivery|
+        %tr
+          %td= delivery.order.id
+          %td= delivery.id
+          %td= delivery.status
+          %td= delivery.date
+          %td= delivery.route.name
+          %td= delivery.old_delivery.id if delivery.old_delivery
