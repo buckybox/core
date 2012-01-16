@@ -1,4 +1,4 @@
-%h2 CSV import
+%h2 Bank spreadsheet import
 
 = form_tag process_upload_distributor_payments_path, :multipart => true, :method => :post do
   %p Please select a file to import and click "Upload".
@@ -15,25 +15,27 @@
   =form_tag create_from_csv_distributor_payments_path, :method => :post do
 
     %table
-      %tr
-        %th Date
-        %th Amount
-        %th Payee
-        %th Particulars
-        %th Code
-        %th Reference
-        %th Tran Type
-        %th Customer
+      %thead
+        %tr
+          %th Date
+          %th Amount
+          %th Payee
+          %th Particulars
+          %th Code
+          %th Reference
+          %th Tran Type
+          %th Customer
 
-      - index = 0
-      = hidden_field_tag(:transactions_filename, File.basename(@file))
-      - @file.each_line("\n") do |line|
-        - row = line.split(",")
-        - if row[1].to_i && row[1].to_i > 0
-          %tr 
-            - row.each do |attr|
-              %td=attr
-            %td= collection_select(:customer, :id, current_distributor.customers, :id, :name, {:include_blank => true}, {:name => "customers[#{index}]"})
-        - index += 1
-      %tr
-        %td{:colspan => 8}= submit_tag "Assign customers"
+      %tbody
+        - index = 0
+        = hidden_field_tag(:transactions_filename, File.basename(@file))
+        - @file.each_line("\n") do |line|
+          - row = line.split(",")
+          - if row[1].to_i && row[1].to_i > 0
+            %tr 
+              - row.each do |attr|
+                %td=attr
+              %td= collection_select(:customer, :id, current_distributor.customers, :id, :name, {:include_blank => true}, {:name => "customers[#{index}]"})
+          - index += 1
+        %tr
+          %td{:colspan => 8}= submit_tag "Assign customers"
