@@ -35,6 +35,9 @@ $cal-nav-divider: darken($cal-nav-base, 40%)
           padding: 3px
           background-color: $cal-nav-base
           color: $cal-nav-head
+          &.selected
+            border: 2px solid #000
+            padding: 1px
         &:hover
           .date
             background-color: $cal-nav-hover
@@ -47,6 +50,8 @@ $cal-nav-divider: darken($cal-nav-base, 40%)
       background-color: #F0F0F0
       margin-top: 5px
       padding: 6px 4px
+      &.selected
+        background-color: #868686
       span
         display: inline-block
         width: 20px

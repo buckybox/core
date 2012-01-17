@@ -6,14 +6,14 @@
       .row
         .twelve.columns.route-name
           = link_to date_distributor_deliveries_path(current_distributor, @selected_date, 'packing') do
-            %h6
+            %h6{:class => "#{'selected' if params[:view] == 'packing'}"}
               %span= order_delivery_count(@calendar_hash, @selected_date)
               Packing (All)
               = image_tag 'icon-packing.png'
           %hr
           - @routes.each do |route|
             = link_to date_distributor_deliveries_path(current_distributor, @selected_date, route.id) do
-              %h6
+              %h6{:class => "#{'selected' if params[:view].to_i == route.id}"}
                 %span= order_delivery_count(@calendar_hash, @selected_date, route)
                 = route.name
                 = image_tag 'icon-route.png'
