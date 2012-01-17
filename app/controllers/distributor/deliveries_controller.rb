@@ -1,5 +1,5 @@
 class Distributor::DeliveriesController < Distributor::BaseController
-  custom_actions :collection => :update_status
+  custom_actions :collection => [:update_status, :master_packing_sheet]
   belongs_to :distributor
 
   respond_to :html, :xml, :except => :update_status
@@ -13,18 +13,13 @@ class Distributor::DeliveriesController < Distributor::BaseController
       end_date = start_date + 6.weeks
       @selected_date = Date.parse(params[:date]) if params[:date]
       @calendar_hash = calendar_nav_data(start_date, end_date)
+      params[:view] = 'packing' if params[:view].nil?
 
-      unless params[:view] == 'packing'
-        @route = (params[:view] ? current_distributor.routes.find(params[:view]) : Route.default_route(current_distributor))
-      end
+      @route = current_distributor.routes.find(params[:view]) unless params[:view] == 'packing'
 
       if @calendar_hash[@selected_date]
         @orders = current_distributor.orders.find(@calendar_hash[@selected_date][:order_ids])
-
-        if @route
-          @orders.select! { |o| o.deliveries.map(&:route_id).include?(@route.id) }
-        end
-
+        @orders.select! { |o| o.deliveries.map(&:route_id).include?(@route.id) } if @route
         @orders.sort!
       end
 

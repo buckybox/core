@@ -3,7 +3,7 @@
     .row.data-headings
       .one.columns= check_box_tag 'all'
       .three.columns.delivery_actions
-        = submit_tag 'Print - Master List', :class => 'nice small button'
+        = submit_tag 'Print - Master List', :class => 'small radius button'
       .eight.columns
 
     - @orders.group_by(&:box_id).each do |box_id, order_array|
@@ -14,5 +14,5 @@
         .row.data-listings{:class => order.check_status_by_date(@selected_date)}
           .one.columns= check_box :order, "#{order.id}"
           .five.columns= order_delivery_route_name(order, @selected_date)
-          .three.columns== #{order.quantity} - #{order.box.name}
+          .three.columns== #{order.quantity}x #{order.box.name}
           .three.columns= order.customer.name

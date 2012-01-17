@@ -27,4 +27,8 @@ module LayoutHelper
     message = message + link_to('&times;'.html_safe, '', :class => 'close')
     content_tag(:div, message.html_safe, :class => classes)
   end
+
+  def checkmark_boolean(value)
+    (value ? '&#x2714' : '&#10007').html_safe
+  end
 end

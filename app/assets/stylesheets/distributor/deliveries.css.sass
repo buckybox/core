@@ -35,6 +35,9 @@ $cal-nav-divider: darken($cal-nav-base, 40%)
           padding: 3px
           background-color: $cal-nav-base
           color: $cal-nav-head
+          &.selected
+            border: 2px solid #000
+            padding: 1px
         &:hover
           .date
             background-color: $cal-nav-hover
@@ -44,14 +47,16 @@ $cal-nav-divider: darken($cal-nav-base, 40%)
 #delivery-listings
   .route-name
     h6
-      background-color: #fafafa
+      background-color: #F0F0F0
       margin-top: 5px
       padding: 6px 4px
+      &.selected
+        background-color: #868686
       span
         display: inline-block
         width: 20px
         text-align: center
-        background-color: #ffe8b6
+        background-color: #FFF0D8
         padding: 3px
         margin-right: 6px
       img
@@ -73,16 +78,17 @@ $cal-nav-divider: darken($cal-nav-base, 40%)
 
   .flyout
     display: none
-    top: 33px
-    left: 195px
+    top: 30px
+    left: 191px
     width: auto
     select
       display: inline
 
   .data-listings
-    background-color: #FEE098
-    &.cancelled, &.rescheduled, &.repacked
-      background-color: #D8D8D8
-      text-decoration: line-through
+    &.pending
+      background-color: #FFF0D8
     &.delivered
-      background-color: #D8D8D8
+      background-color: #F0F0F0
+    &.cancelled, &.rescheduled, &.repacked
+      background-color: #F0F0F0
+      text-decoration: line-through
