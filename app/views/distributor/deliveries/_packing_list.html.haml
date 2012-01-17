@@ -14,5 +14,5 @@
         .row.data-listings{:class => order.check_status_by_date(@selected_date)}
           .one.columns= check_box :order, "#{order.id}"
           .five.columns= order_delivery_route_name(order, @selected_date)
-          .three.columns== #{order.quantity} - #{order.box.name}
+          .three.columns== #{order.quantity}x #{order.box.name}
           .three.columns= order.customer.name
