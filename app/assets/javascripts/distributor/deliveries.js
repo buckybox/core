@@ -63,27 +63,19 @@ function updateDeliveryStatus(status, distributor_id, checked_deliveries, date) 
     data: $.param(data_hash)
   });
 
-  $.each(checked_deliveries, function(index, ckbx) {
-    holder = $(ckbx).parent().parent();
+  $.each(checked_deliveries, function(i, ckbx) {
+    var holder = $(ckbx).parent().parent();
 
-    if(status === 'pending') {
-      holder.removeClass('delivered cancelled rescheduled repacked');
-    }
-    else if(status === 'delivered') {
-      holder.addClass('delivered');
-      holder.removeClass('cancelled rescheduled repacked');
-    }
-    else if(status === 'cancelled') {
-      holder.addClass('cancelled');
-      holder.removeClass('delivered rescheduled repacked');
-    }
-    else if(status === 'rescheduled') {
-      holder.addClass('rescheduled');
-      holder.removeClass('delivered cancelled repacked');
-    }
-    else if(status === 'repacked') {
-      holder.addClass('repacked');
-      holder.removeClass('delivered cancelled rescheduled');
-    }
+    var statuses = ['pending', 'delivered', 'cancelled', 'rescheduled', 'repacked'];
+    statuses.splice(statuses.indexOf(status), 1);
+
+    holder.addClass(status);
+    holder.removeClass(statuses.join(' '));
+
+    holder.find('.icon-' + status).show();
+    $.each(statuses, function(j, hide_status) {
+      holder.find('.icon-' + hide_status).hide();
+    });
   });
 }
+

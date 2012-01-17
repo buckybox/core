@@ -32,7 +32,13 @@
 
     .row.data-listings{:class => status}
       .one.columns= check_box_tag order.id, '1', false, :data => { :delivery => delivery_id }
-      .one.columns= delivery_icons(status, delivery)
+      .one.columns
+        -# Getting gross and hacky. But currently easiest way to do it given asset pipeline images and needing title attributes.
+        = image_tag 'icon-status-pending.png', :alt => status, :title => 'PENDING delivery', :class => 'icon-pending', :style => "#{'display:none;' unless status == 'pending'}"
+        = image_tag 'icon-status-done.png', :alt => status, :title => 'Delivery has been COMPLETED', :class => 'icon-delivered', :style => "#{'display:none;' unless status == 'delivered'}"
+        = image_tag 'icon-status-oops.png', :alt => status, :title => 'MISSED DELIVERY, customer has not been charged', :class => 'icon-cancelled', :style => "#{'display:none;' unless status == 'charged'}"
+        = image_tag 'icon-status-refresh.png', :alt => status, :title => 'Missed delivery, REDELIVERED', :class => 'icon-rescheduled', :style => "#{'display:none;' unless status == 'rescheduled'}"
+        = image_tag 'icon-status-repack.png', :alt => status, :title => 'Missed delivery, NEW BOX scheduled', :class => 'icon-repacked', :style => "#{'display:none;' unless status == 'repacked'}"
       .four.columns= delivery_item_address(order)
-      .three.columns== #{order.quantity} - #{order.box.name}
+      .three.columns== #{order.quantity}x #{order.box.name}
       .three.columns= order.customer.name
