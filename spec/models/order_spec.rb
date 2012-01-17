@@ -237,8 +237,8 @@ describe Order do
       @end_date = 4.weeks.from_now(1.day.ago)
       @results = @order.future_deliveries(@end_date)
     end
-    it "returns 3 deliveries" do
-      @results.size.should == 3
+    it "returns deliveries" do
+      @results.size.should > 2
     end
     it "returns a hash with date, price and description" do    
       hash = @results.first

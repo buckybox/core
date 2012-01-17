@@ -84,7 +84,7 @@ describe Account do
 
   describe "all_occurrences" do
     before(:each) do
-      @order = Fabricate(:order) # $10
+      @order = order_with_deliveries
       @account = @order.account
     end
     it "returns 4 occurrences" do
@@ -96,7 +96,7 @@ describe Account do
   describe "next_invoice_date" do
     context "4 deliveries loaded in the future" do
       before(:each) do
-        @order = Fabricate(:order) # $10
+        @order = order_with_deliveries
         @account = @order.account
       end
 
@@ -113,7 +113,9 @@ describe Account do
       end
       it "is 12 days before the account goes below the invoice threshold" do
         @account.stub(:balance).and_return(Money.new(3000))
-        @account.next_invoice_date.should == 12.days.ago(@d4.date).to_date 
+        last_occurrence = @account.all_occurrences(4.weeks.from_now).last
+        last_date = last_occurrence[:date]
+        @account.next_invoice_date.should == 12.days.from_now(last_date).to_date 
       end
 
       it "does not need an invoice if balance won't go below threshold" do

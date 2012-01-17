@@ -80,11 +80,10 @@ class Account < ActiveRecord::Base
     occurrences = []
     orders.each do |o|
       o.future_deliveries(end_date).each do |occurrence|
-        occurrences << occurence
+        occurrences << occurrence
       end
     end
-    raise occurences.inspect
-    occurrences.sort_by {|a,b| a[:date] <=> b[:date] }
+    occurrences.sort {|a,b| a[:date] <=> b[:date] }
   end
 
   #this holds the core logic for when an invoice should be raised
@@ -95,11 +94,11 @@ class Account < ActiveRecord::Base
     if total < distributor.invoice_threshold
       invoice_date =  Date.current
     else
-      all_occurrences(4.weeks.from_now).each do |occurence|
-        total -= amount_with_bucky_fee(delivery.order.price)
+      all_occurrences(4.weeks.from_now).each do |occurrence|
+        total -= amount_with_bucky_fee(occurrence[:price])
 
         if total < distributor.invoice_threshold
-          invoice_date = delivery.date.to_date - 12.days
+          invoice_date = occurrence[:date] - 12.days
           break
         end
       end
