@@ -5,37 +5,38 @@
   .inputs
     = file_field_tag :transactions, :class => "file_input"
     .file-input
-      %span.nice.small.button Browse...
+      %span.radius.button Browse...
       %span.description
-          
+
   .actions
-    = submit_tag "Upload"
+    = submit_tag "Upload", :class => 'button radius'
 
 - if @file
-  =form_tag create_from_csv_distributor_payments_path, :method => :post do
+  = form_tag create_from_csv_distributor_payments_path, :method => :post do
 
-    %table
-      %thead
-        %tr
-          %th Date
-          %th Amount
-          %th Payee
-          %th Particulars
-          %th Code
-          %th Reference
-          %th Tran Type
-          %th Customer
+    .row
+      %table.twelve.columns
+        %thead
+          %tr
+            %th Date
+            %th Amount
+            %th Payee
+            %th Particulars
+            %th Code
+            %th Reference
+            %th Tran Type
+            %th Customer
 
-      %tbody
-        - index = 0
-        = hidden_field_tag(:transactions_filename, File.basename(@file))
-        - @file.each_line("\n") do |line|
-          - row = line.split(",")
-          - if row[1].to_i && row[1].to_i > 0
-            %tr 
-              - row.each do |attr|
-                %td=attr
-              %td= collection_select(:customer, :id, current_distributor.customers, :id, :name, {:include_blank => true}, {:name => "customers[#{index}]"})
-          - index += 1
-        %tr
-          %td{:colspan => 8}= submit_tag "Assign customers"
+        %tbody
+          - index = 0
+          = hidden_field_tag(:transactions_filename, File.basename(@file))
+          - @file.each_line("\n") do |line|
+            - row = line.split(",")
+            - if row[1].to_i && row[1].to_i > 0
+              %tr 
+                - row.each do |attr|
+                  %td=attr
+                %td= collection_select(:customer, :id, current_distributor.customers, :id, :name, {:include_blank => true}, {:name => "customers[#{index}]"})
+            - index += 1
+          %tr
+            %td{:colspan => 8}= submit_tag "Assign customers"
