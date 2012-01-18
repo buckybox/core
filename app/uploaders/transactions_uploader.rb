@@ -13,7 +13,7 @@ class TransactionsUploader < CarrierWave::Uploader::Base
   # Override the directory where uploaded files will be stored.
   # This is a sensible default for uploaders that are meant to be mounted:
   def store_dir
-    "uploads/payments/csv"
+    "system/uploads/payments/csv"
   end
 
   # Provide a default URL as a default if there hasn't been a file uploaded:
@@ -44,8 +44,7 @@ class TransactionsUploader < CarrierWave::Uploader::Base
 
   # Override the filename of the uploaded files:
   # Avoid using model.id or version_name here, see uploader/store.rb for details.
-  # def filename
-  #   "something.jpg" if original_filename
-  # end
-
+  def filename
+    "bank_statement_#{Time.new.strftime("%Y%m%d%H%M%S")}_#{File.extname(super)}" if original_filename
+  end
 end
