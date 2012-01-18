@@ -5,12 +5,13 @@
         %h5.twelve.columns= @selected_date.strftime("%A %d %B") if @selected_date
       .row
         .twelve.columns.route-name
-          = link_to date_distributor_deliveries_path(current_distributor, @selected_date, 'packing') do
-            %h6{:class => "#{'selected' if params[:view] == 'packing'}"}
-              %span= order_delivery_count(@calendar_hash, @selected_date)
-              Packing (All)
-              = image_tag 'icon-packing.png'
-          %hr
+          - unless @selected_date.future?
+            = link_to date_distributor_deliveries_path(current_distributor, @selected_date, 'packing') do
+              %h6{:class => "#{'selected' if params[:view] == 'packing'}"}
+                %span= order_delivery_count(@calendar_hash, @selected_date)
+                Packing (All)
+                = image_tag 'icon-packing.png'
+            %hr
           - @routes.each do |route|
             = link_to date_distributor_deliveries_path(current_distributor, @selected_date, route.id) do
               %h6{:class => "#{'selected' if params[:view].to_i == route.id}"}

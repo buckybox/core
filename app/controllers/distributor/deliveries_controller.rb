@@ -13,9 +13,13 @@ class Distributor::DeliveriesController < Distributor::BaseController
       end_date = start_date + 6.weeks
       @selected_date = Date.parse(params[:date]) if params[:date]
       @calendar_hash = calendar_nav_data(start_date, end_date)
-      params[:view] = 'packing' if params[:view].nil?
+      @routes = current_distributor.routes
 
-      @route = current_distributor.routes.find(params[:view]) unless params[:view] == 'packing'
+      if params[:view].nil?
+        @route = @routes.first
+      elsif params[:view].to_i != 0
+        @route = @routes.find(params[:view])
+      end
 
       if @calendar_hash[@selected_date]
         @orders = current_distributor.orders.find(@calendar_hash[@selected_date][:order_ids])
@@ -24,7 +28,6 @@ class Distributor::DeliveriesController < Distributor::BaseController
       end
 
       @calendar_hash = @calendar_hash.to_a.sort
-      @routes = current_distributor.routes
 
       if !@calendar_hash.blank? && @selected_date.nil?
         @selected_date = @calendar_hash.find { |sd| sd.first <= Date.today }

@@ -18,6 +18,8 @@ class Route < ActiveRecord::Base
   before_validation :create_schedule
   before_save :record_schedule_change, :if => 'schedule_changed?'
 
+  default_scope order(:name)
+
   def self.default_route(distributor)
     distributor.routes.first # For now the first one is the default
   end

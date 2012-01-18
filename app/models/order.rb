@@ -6,6 +6,7 @@ class Order < ActiveRecord::Base
 
   has_one :distributor, :through => :box
   has_one :customer, :through => :account
+  has_one :address, :through => :customer
   has_one :route, :through => :customer
 
   has_many :deliveries, :dependent => :destroy
@@ -101,17 +102,6 @@ class Order < ActiveRecord::Base
 
   def string_pluralize
     "#{quantity || 0} " + ((quantity == 1 || quantity =~ /^1(\.0+)?$/) ? box.name : box.name.pluralize)
-  end
-
-  def delivery_for_date(date)
-    deliveries.where(:date => date)
-    (deliveries.empty? ? nil : deliveries.first)
-  end
-
-  def check_status_by_date(date)
-    if schedule.occurs_on?(date.to_time) # is it even suposed to happen on this date?
-      (date.future? ? 'pending' : delivery_for_date(date).status)
-    end
   end
 
   protected

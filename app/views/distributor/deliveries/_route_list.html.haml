@@ -25,20 +25,23 @@
     .two.columns
 
   - @orders.each do |order|
-    -# Bad Sam! But convenient for now. Must rejig once development pace settles down a bit.
-    - status = order.check_status_by_date(@selected_date)
-    - delivery = order.delivery_for_date(@selected_date)
-    - delivery_id = delivery.id if delivery
+    - deliveries = order.deliveries.where(date:@selected_date)
 
-    .row.data-listings{:class => status}
-      .one.columns= check_box_tag order.id, '1', false, :data => { :delivery => delivery_id }
-      .one.columns
-        -# Getting gross and hacky. But currently easiest way to do it given asset pipeline images and needing title attributes.
-        = image_tag 'icon-status-pending.png', :alt => status, :title => 'PENDING delivery', :class => 'icon-pending', :style => "#{'display:none;' unless status == 'pending'}"
-        = image_tag 'icon-status-done.png', :alt => status, :title => 'Delivery has been COMPLETED', :class => 'icon-delivered', :style => "#{'display:none;' unless status == 'delivered'}"
-        = image_tag 'icon-status-oops.png', :alt => status, :title => 'MISSED DELIVERY, customer has not been charged', :class => 'icon-cancelled', :style => "#{'display:none;' unless status == 'cancelled'}"
-        = image_tag 'icon-status-refresh.png', :alt => status, :title => 'Missed delivery, REDELIVERED', :class => 'icon-rescheduled', :style => "#{'display:none;' unless status == 'rescheduled'}"
-        = image_tag 'icon-status-repack.png', :alt => status, :title => 'Missed delivery, NEW BOX scheduled', :class => 'icon-repacked', :style => "#{'display:none;' unless status == 'repacked'}"
-      .four.columns= delivery_item_address(order)
-      .three.columns== #{order.quantity}x #{order.box.name}
-      .three.columns= order.customer.name
+    - if @selected_date.future?
+      .row.data-listings.pending
+        .one.columns= check_box_tag order.id, '1', false
+        .one.columns= image_tag 'icon-status-pending.png', :title => 'PENDING delivery', :class => 'icon-pending'
+        .two.columns N/A
+        .three.columns= order_address(order)
+        .two.columns== #{order.quantity}x #{order.box.name}
+        .two.columns= order.customer.name
+
+    - unless deliveries.blank?
+      - deliveries.each do |delivery|
+        .row.data-listings{:class => delivery.status}
+          .one.columns= check_box_tag order.id, '1', false, :data => { :delivery => delivery.id }
+          .one.columns= render :partial => 'status_icons', :locals => { :status => delivery.status }
+          .two.columns= delivery.id
+          .three.columns= order_address(order)
+          .two.columns== #{order.quantity}x #{order.box.name}
+          .two.columns= order.customer.name
