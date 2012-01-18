@@ -18,7 +18,7 @@ class Delivery < ActiveRecord::Base
   validate :status_for_date, :unless => :future_status?
 
   before_validation :default_status, :if => 'status.nil?'
-  before_validation :changed_status, :if => '!status_was.nil? && status_changed?'
+  before_validation :changed_status, :if => 'status_changed?'
 
   scope :pending,     where(:status => 'pending')
   scope :delivered,   where(:status => 'delivered')
@@ -65,7 +65,7 @@ class Delivery < ActiveRecord::Base
   end
 
   def default_status
-    self.status = STATUS.first
+    self.status = 'delivered'
   end
 
   def changed_status
