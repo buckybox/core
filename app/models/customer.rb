@@ -84,7 +84,7 @@ class Customer < ActiveRecord::Base
   end
 
   def create_account
-    Account.create(:customer_id => id, :distributor_id => distributor_id)
+    Account.create!(:customer => self, :balance => 0)
   end
 
   def trigger_new_customer

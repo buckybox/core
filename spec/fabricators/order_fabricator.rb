@@ -1,6 +1,6 @@
 Fabricator(:order) do
   box!
-  account! { |order| Fabricate(:customer_with_account, :distributor => order.box.distributor).account }
+  account! { |order| Fabricate(:customer, :distributor => order.box.distributor).account }
   quantity 1
   frequency 'single'
   schedule { new_single_schedule }

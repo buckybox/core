@@ -1,6 +1,7 @@
 class Account < ActiveRecord::Base
-  belongs_to :distributor
   belongs_to :customer
+
+  has_one :distributor, :through => :customer
 
   has_many :orders, :dependent => :destroy
   has_many :payments, :dependent => :destroy
@@ -17,12 +18,11 @@ class Account < ActiveRecord::Base
 
   acts_as_taggable
 
-  attr_accessible :distributor, :customer, :tag_list
+  attr_accessible :customer, :tag_list
 
   before_validation :default_balance_and_currency
 
-  validates_presence_of :distributor, :customer, :balance
-  validates_uniqueness_of :customer_id, :scope => :distributor_id, :message => 'this customer already has an account with this distributor'
+  validates_presence_of :customer, :balance
 
   def balance_cents=(value)
     raise(ArgumentError, "The balance can not be updated this way. Please use one of the model balance methods that create transactions.")
