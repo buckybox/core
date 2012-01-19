@@ -33,6 +33,7 @@ gem 'postmark-rails'
 gem 'ice_cube'
 gem 'whenever'
 gem 'newrelic_rpm'
+gem 'acts_as_list'
 
 group :development do
   gem 'nifty-generators', :require => false
