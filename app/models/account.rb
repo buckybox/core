@@ -21,8 +21,8 @@ class Account < ActiveRecord::Base
   validates_presence_of :customer, :balance
 
   before_validation :default_balance_and_currency
-  validates_presence_of :distributor_id, :customer_id, :balance
   validates_uniqueness_of :customer_id, :scope => :distributor_id, :message => 'this customer already has an account with this distributor'
+  validates_presence_of :customer, :balance
 
   def balance_cents=(value)
     raise(ArgumentError, "The balance can not be updated this way. Please use one of the model balance methods that create transactions.")
@@ -31,7 +31,7 @@ class Account < ActiveRecord::Base
   def name
     customer.name
   end
-  
+
   def balance=(value)
     raise(ArgumentError, "The balance can not be updated this way. Please use one of the model balance methods that create transactions.")
   end
@@ -49,7 +49,7 @@ class Account < ActiveRecord::Base
 
     transactions.create!(kind: options[:kind], amount: amount_difference, description: options[:description])
   end
-  
+
   def recalculate_balance!
     total = transactions.sum(:amount_cents)
     write_attribute(:balance_cents, total)
@@ -90,7 +90,7 @@ class Account < ActiveRecord::Base
   def next_invoice_date
     total = balance
     invoice_date = nil
-    
+
     if total < distributor.invoice_threshold
       invoice_date =  Date.current
     else

@@ -9,10 +9,10 @@ class Distributor < ActiveRecord::Base
   has_many :orders,       :dependent => :destroy, :through => :boxes
   has_many :deliveries,   :dependent => :destroy, :through => :orders
   has_many :payments,     :dependent => :destroy
+  has_many :customers
   has_many :accounts,     :dependent => :destroy, :through => :customers
   has_many :invoices,     :dependent => :destroy, :through => :accounts
   has_many :transactions, :dependent => :destroy, :through => :accounts
-  has_many :customers
   has_many :events
   has_many :delivery_lists, :dependent => :destroy
   has_many :packing_lists,  :dependent => :destroy
