@@ -7,18 +7,30 @@ class Delivery < ActiveRecord::Base
   has_one :box, :through => :order
   has_one :account, :through => :order
   has_one :customer, :through => :order
+  has_one :address, :through => :order
   has_one :distributor, :through => :order
+
+  composed_of :price,
+    :class_name => "Money",
+    :mapping => [%w(archived_price_cents cents), %w(archived_currency currency_as_string)],
+    :constructor => Proc.new { |cents, currency| Money.new(cents || 0, currency || Money.default_currency) },
+    :converter => Proc.new { |value| value.respond_to?(:to_money) ? value.to_money : raise(ArgumentError, "Can't convert #{value.class} to Money") }
 
   attr_accessible :order, :route, :date, :status, :old_delivery
 
   STATUS = %w(pending delivered cancelled rescheduled repacked)
+  PACKING_STATUS = %w(packed unpacked)
+  DELIVERY_METHOD = %w(manual auto)
 
   validates_presence_of :order, :date, :route, :status
   validates_inclusion_of :status, :in => STATUS, :message => "%{value} is not a valid status"
+  validates_inclusion_of :packing_status, :in => PACKING_STATUS, :message => "%{value} is not a valid packing status"
   validate :status_for_date, :unless => :future_status?
 
   before_validation :default_status, :if => 'status.nil?'
+  before_validation :default_packing_status, :if => 'packing_status.nil?'
   before_validation :changed_status, :if => 'status_changed?'
+  before_save :archive_data
 
   scope :pending,     where(:status => 'pending')
   scope :delivered,   where(:status => 'delivered')
@@ -66,6 +78,10 @@ class Delivery < ActiveRecord::Base
 
   def default_status
     self.status = 'delivered'
+  end
+
+  def default_packing_status
+    self.packing_status = 'unpacked'
   end
 
   def changed_status

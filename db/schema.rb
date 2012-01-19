@@ -11,19 +11,17 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120126102057) do
+ActiveRecord::Schema.define(:version => 20120129041416) do
 
   create_table "accounts", :force => true do |t|
-    t.integer  "distributor_id"
     t.integer  "customer_id"
-    t.integer  "balance_cents",  :default => 0, :null => false
+    t.integer  "balance_cents", :default => 0, :null => false
     t.string   "currency"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
   add_index "accounts", ["customer_id"], :name => "index_accounts_on_customer_id"
-  add_index "accounts", ["distributor_id"], :name => "index_accounts_on_distributor_id"
 
   create_table "addresses", :force => true do |t|
     t.integer  "customer_id"
@@ -59,7 +57,6 @@ ActiveRecord::Schema.define(:version => 20120126102057) do
     t.boolean  "dislikes",               :default => false, :null => false
     t.integer  "price_cents",            :default => 0,     :null => false
     t.string   "currency"
-    t.string   "string"
     t.boolean  "available_single",       :default => false, :null => false
     t.boolean  "available_weekly",       :default => false, :null => false
     t.boolean  "available_fourtnightly", :default => false, :null => false
@@ -108,15 +105,29 @@ ActiveRecord::Schema.define(:version => 20120126102057) do
 
   create_table "deliveries", :force => true do |t|
     t.integer  "order_id"
-    t.date     "date"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "status"
     t.integer  "route_id"
-    t.integer  "old_delivery_id"
+    t.string   "delivery_method"
+    t.integer  "delivery_list_id"
+    t.integer  "position"
+    t.integer  "package_id"
+    t.integer  "delivery_number"
   end
 
+  add_index "deliveries", ["delivery_list_id"], :name => "index_deliveries_on_delivery_list_id"
+  add_index "deliveries", ["package_id"], :name => "index_deliveries_on_package_id"
   add_index "deliveries", ["route_id"], :name => "index_deliveries_on_route_id"
+
+  create_table "delivery_lists", :force => true do |t|
+    t.integer  "distributor_id"
+    t.date     "date"
+    t.datetime "created_at",     :null => false
+    t.datetime "updated_at",     :null => false
+  end
+
+  add_index "delivery_lists", ["distributor_id"], :name => "index_delivery_lists_on_distributor_id"
 
   create_table "distributors", :force => true do |t|
     t.string   "email",                                  :default => "",     :null => false
@@ -148,6 +159,8 @@ ActiveRecord::Schema.define(:version => 20120126102057) do
     t.string   "currency"
     t.float    "fee",                                    :default => 0.0175
     t.boolean  "separate_bucky_fee",                     :default => true
+    t.text     "daily_lists_schedule"
+    t.text     "auto_delivery_schedule"
   end
 
   add_index "distributors", ["authentication_token"], :name => "index_distributors_on_authentication_token", :unique => true
@@ -230,6 +243,30 @@ ActiveRecord::Schema.define(:version => 20120126102057) do
 
   add_index "orders", ["account_id"], :name => "index_orders_on_account_id"
   add_index "orders", ["box_id"], :name => "index_orders_on_box_id"
+
+  create_table "packages", :force => true do |t|
+    t.integer  "packing_list_id"
+    t.integer  "position"
+    t.string   "status"
+    t.datetime "created_at",          :null => false
+    t.datetime "updated_at",          :null => false
+    t.integer  "order_id"
+    t.integer  "original_package_id"
+    t.string   "packing_method"
+  end
+
+  add_index "packages", ["order_id"], :name => "index_packages_on_order_id"
+  add_index "packages", ["original_package_id"], :name => "index_packages_on_original_package_id"
+  add_index "packages", ["packing_list_id"], :name => "index_packages_on_packing_list_id"
+
+  create_table "packing_lists", :force => true do |t|
+    t.integer  "distributor_id"
+    t.date     "date"
+    t.datetime "created_at",     :null => false
+    t.datetime "updated_at",     :null => false
+  end
+
+  add_index "packing_lists", ["distributor_id"], :name => "index_packing_lists_on_distributor_id"
 
   create_table "payments", :force => true do |t|
     t.integer  "distributor_id"

@@ -34,7 +34,7 @@ class Order < ActiveRecord::Base
   scope :active,    where(:active => true)
 
   def price
-    box.price #will likely need to copy this to the order model at some stage
+    box.price # Must try remove this in code. It is now being achrived in deliveries
   end
 
   def customer= cust

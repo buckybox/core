@@ -17,7 +17,7 @@
             %td= customer.name
             %td= customer.email
             %td= customer.phone
-            %td= customer_address(customer)
+            %td= customer.address.join('<br/>').html_safe
             %td
               = link_to 'Show', customer
               = link_to 'Edit', edit_customer_path(customer)

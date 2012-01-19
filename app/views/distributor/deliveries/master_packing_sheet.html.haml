@@ -22,6 +22,6 @@
                 %tr
                   %td{:style => 'width:5%; border:1px solid black;'}
                   %td{:style => 'width:5%; border:1px solid black;'}= delivery.id
-                  %td{:style => 'width:30%; border:1px solid black;'}= order.customer.name
-                  %td{:style => 'width:30%; border:1px solid black;'}= order_address(order)
-                  %td{:style => 'width:30%; border:1px solid black;'}== #{order.quantity}x #{order.box.name}
+                  %td{:style => 'width:25%; border:1px solid black;'}= order.customer.name
+                  %td{:style => 'width:40%; border:1px solid black;'}= order.address.join(', ')
+                  %td{:style => 'width:25%; border:1px solid black;'}== #{order.quantity}x #{order.box.name}
