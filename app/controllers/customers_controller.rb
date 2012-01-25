@@ -4,6 +4,8 @@ class CustomersController < InheritedResources::Base
   respond_to :html, :xml, :json, :except => [:index, :destroy]
   layout 'distributor'
 
+  #TODO : does this need a check to ensure the customer belongs to the current distributor - before chain or something similar?
+
   def create
     create! do |success, failure|
       success.html do
@@ -25,5 +27,14 @@ class CustomersController < InheritedResources::Base
       end
       failure.html { render 'edit' }
     end
+  end
+
+  def send_login_details
+    resource.randomize_password
+    resource.save
+    if CustomerMailer.login_details(resource).deliver
+      flash[:notice] = "Login details successfully sent"
+    end
+    redirect_to distributor_account_path(resource.account)
   end
 end

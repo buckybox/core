@@ -1,0 +1,3 @@
+CustomerMailer#login_details
+
+Hi, find me in app/views/customer_mailer/login_details
