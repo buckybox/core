@@ -17,6 +17,7 @@
 /log/*.log
 /tmp
 *.swp
+*.swo
 
 .DS_Store
 public/system/
