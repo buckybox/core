@@ -32,7 +32,7 @@ class Customer < ActiveRecord::Base
 
   accepts_nested_attributes_for :address
 
-  attr_accessible :address_attributes, :first_name, :last_name, :email, :phone, :name, :distributor_id, :distributor, :route
+  attr_accessible :address_attributes, :first_name, :last_name, :email, :phone, :name, :distributor_id, :distributor, :route, :password
 
   validates_presence_of :first_name, :email, :distributor, :route
   validates_uniqueness_of :email, :scope => :distributor_id
