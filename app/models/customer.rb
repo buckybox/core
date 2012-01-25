@@ -11,6 +11,11 @@ class Customer < ActiveRecord::Base
   belongs_to :distributor
   belongs_to :route
 
+  # Include default devise modules. Others available are:
+  # :token_authenticatable, :encryptable, :confirmable, :lockable, :timeoutable and :omniauthable
+  devise :database_authenticatable, :registerable,
+         :recoverable, :rememberable, :trackable, :validatable
+
   pg_search_scope :search,
     :against => [:first_name, :last_name, :email, :number],
     :associated_against => {
@@ -19,6 +24,8 @@ class Customer < ActiveRecord::Base
     :using => {
     :tsearch => {:prefix => true}
   }
+
+  before_validation :randomize_password_if_not_present
 
   before_create :initialize_number
   after_create :create_account
@@ -40,6 +47,20 @@ class Customer < ActiveRecord::Base
     self.first_name, self.last_name = name.split(" ")
   end
 
+  def randomize_password
+    self.password = Customer.random_string(12)
+    self.password_confirmation = password
+  end
+
+  def self.random_string(len = 10)                                                                                      
+    #generate a random password consisting of strings and digits
+    chars = ("a".."z").to_a + ("A".."Z").to_a + ("0".."9").to_a
+    newpass = ""
+    1.upto(len) { |i| newpass << chars[rand(chars.size - 1)] }
+    return newpass
+  end 
+  
+
   private
   def initialize_number
     if self.number.nil?
@@ -55,6 +76,10 @@ class Customer < ActiveRecord::Base
       end
       self.number = number.to_s
     end
+  end
+
+  def randomize_password_if_not_present
+    randomize_password unless password.present?
   end
 
   def create_account
