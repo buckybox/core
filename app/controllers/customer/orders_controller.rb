@@ -1,22 +1,23 @@
-class Distributor::OrdersController < Distributor::BaseController
+class Customer::OrdersController < Customer::BaseController
   nested_belongs_to :customer
-  actions :all, :except => :index
+  actions :all
 
   respond_to :html, :xml, :json
 
-  def first
-    raise 'jbv'
+  def home
+    redirect_to customer_orders_path(current_customer)
+  end
+
+  def new
+    #needs work
+    @order = current_customer.account.orders.new
   end
 
   def update
-    @distributor = Distributor.find(params[:distributor_id])
-    @account = Account.find(params[:account_id])
-    @order = Order.find(params[:id])
-
     # Not allowing changes to the schedule at the moment
     # Will revisit when we have time to build a proper UI for it
     params[:order].delete(:frequency)
 
-    update! { [current_distributor, @account] }
+    update! { customer_orders_path(current_customer) }
   end
 end

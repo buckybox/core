@@ -78,7 +78,7 @@ class Customer < ActiveRecord::Base
   end
 
   def randomize_password_if_not_present
-    randomize_password unless password.present?
+    randomize_password unless encrypted_password.present?
   end
 
   def create_account

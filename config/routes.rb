@@ -61,9 +61,10 @@ BuckyBox::Application.routes.draw do
     end
   end
 
-  resources :customers do
-    root :to => "orders#first"
+  get 'customer', :controller => 'customer/orders', :action => 'home',  :as => 'customer_root'
 
+  resources :customers do
+    resources :orders, :controller => 'customer/orders'
     member  do
       get :send_login_details
     end
