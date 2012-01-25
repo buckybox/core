@@ -1,17 +1,16 @@
 require "spec_helper"
 
 describe CustomerMailer do
+  before(:each) do
+    @customer = Fabricate(:customer)
+  end
   describe "login_details" do
-    let(:mail) { CustomerMailer.login_details }
+    let(:mail) { CustomerMailer.login_details(@customer)}
 
     it "renders the headers" do
-      mail.subject.should eq("Login details")
-      mail.to.should eq(["to@example.org"])
-      mail.from.should eq(["from@example.com"])
-    end
-
-    it "renders the body" do
-      mail.body.encoded.should match("Hi")
+      mail.subject.should =~ /Login details/
+      mail.to.should eq([@customer.email])
+      mail.from.should eq(["no-reply@buckybox.com"])
     end
   end
 
