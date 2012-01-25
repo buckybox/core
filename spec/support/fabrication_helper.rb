@@ -2,7 +2,7 @@ module FabricationHelper
   def order_with_deliveries
     @distributor = Fabricate(:distributor)
     @route = Fabricate(:route, :distributor => @distributor)
-    @order = Fabricate(:order, :distributor => @distributor, :frequency => 'weekly', :completed => true)
+    @order = Fabricate(:recurring_order, :distributor => @distributor, :completed => true)
     @order
   end
 
