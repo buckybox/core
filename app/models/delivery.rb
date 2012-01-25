@@ -1,44 +1,36 @@
 class Delivery < ActiveRecord::Base
   belongs_to :order
+  belongs_to :delivery_list
   belongs_to :route
-  belongs_to :old_delivery, :class_name => 'Delivery', :foreign_key => 'old_delivery_id'
+  belongs_to :package
 
-  has_one :new_delivery, :class_name => 'Delivery', :foreign_key => 'old_delivery_id'
+  has_one :distributor, :through => :delivery_list
   has_one :box, :through => :order
   has_one :account, :through => :order
   has_one :customer, :through => :order
   has_one :address, :through => :order
-  has_one :distributor, :through => :order
 
-  composed_of :price,
-    :class_name => "Money",
-    :mapping => [%w(archived_price_cents cents), %w(archived_currency currency_as_string)],
-    :constructor => Proc.new { |cents, currency| Money.new(cents || 0, currency || Money.default_currency) },
-    :converter => Proc.new { |value| value.respond_to?(:to_money) ? value.to_money : raise(ArgumentError, "Can't convert #{value.class} to Money") }
+  acts_as_list :scope => :delivery_list
 
-  attr_accessible :order, :route, :date, :status, :old_delivery
+  attr_accessible :order, :order_id, :route, :status, :delivery_method, :delivery_list, :package, :package_id
 
   STATUS = %w(pending delivered cancelled rescheduled repacked)
-  PACKING_STATUS = %w(packed unpacked)
   DELIVERY_METHOD = %w(manual auto)
 
-  validates_presence_of :order, :date, :route, :status
+  validates_presence_of :order, :route, :status, :delivery_list, :package
   validates_inclusion_of :status, :in => STATUS, :message => "%{value} is not a valid status"
-  validates_inclusion_of :packing_status, :in => PACKING_STATUS, :message => "%{value} is not a valid packing status"
-  validate :status_for_date, :unless => :future_status?
+  validates_inclusion_of :delivery_method, :in => DELIVERY_METHOD, :message => "%{value} is not a valid delivery method", :if => 'status == "delivered"'
 
+  before_validation :default_route, :if => 'route.nil?'
   before_validation :default_status, :if => 'status.nil?'
-  before_validation :default_packing_status, :if => 'packing_status.nil?'
+  before_validation :default_delivery_method, :if => 'status == "delivered"'
   before_validation :changed_status, :if => 'status_changed?'
-  before_save :archive_data
 
-  scope :pending,     where(:status => 'pending')
-  scope :delivered,   where(:status => 'delivered')
-  scope :cancelled,   where(:status => 'cancelled')
-  scope :rescheduled, where(:status => 'rescheduled')
-  scope :repacked,    where(:status => 'repacked')
-
-  default_scope order(:date)
+  scope :pending,     where(status:'pending')
+  scope :delivered,   where(status:'delivered')
+  scope :cancelled,   where(status:'cancelled')
+  scope :rescheduled, where(status:'rescheduled')
+  scope :repacked,    where(status:'repacked')
 
   def self.change_statuses(deliveries, new_status, options = {})
     return false unless STATUS.include?(new_status)
@@ -72,16 +64,16 @@ class Delivery < ActiveRecord::Base
 
   protected
 
-  def status_for_date
-    errors.add(:status, "of #{status} can not be set for a future date") if date > Date.today
+  def default_route
+    self.route = order.route
   end
 
   def default_status
-    self.status = 'delivered'
+    self.status = 'pending'
   end
 
-  def default_packing_status
-    self.packing_status = 'unpacked'
+  def default_delivery_method
+    self.delivery_method = 'manual'
   end
 
   def changed_status
@@ -92,25 +84,22 @@ class Delivery < ActiveRecord::Base
 
     remove_from_schedule  if old_status == 'rescheduled' || old_status == 'repacked'
     add_to_schedule       if new_status == 'rescheduled' || new_status == 'repacked'
-
-    #TODO: Need to add this when the packing screen is sorted
-    #update_packing(old_status, new_status)
   end
 
   def subtract_from_account
     account.subtract_from_balance(
-      box.price * order.quantity,
+      order.price * order.quantity,
       :kind => 'delivery',
-      :description => "[ID##{id}] Delivery was made of #{order.string_pluralize} at #{box.price} each."
+      :description => "[ID##{id}] Delivery was made of #{order.string_pluralize} at #{order.price} each."
     )
     errors.add(:base, 'Problem subtracting balance from account on delivery status change.') unless account.save
   end
 
   def add_to_account
     account.add_to_balance(
-      box.price * order.quantity,
+      order.price * order.quantity,
       :kind => 'delivery',
-      :description => "[ID##{id}] Delivery reversal. #{order.string_pluralize} at #{box.price} each."
+      :description => "[ID##{id}] Delivery reversal. #{order.string_pluralize} at #{order.price} each."
     )
     errors.add(:base, 'Problem adding balance from account on delivery status change.') unless account.save
   end

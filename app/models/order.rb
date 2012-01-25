@@ -5,12 +5,12 @@ class Order < ActiveRecord::Base
   belongs_to :box
 
   has_one :distributor, :through => :box
-  has_one :customer, :through => :account
-  has_one :address, :through => :customer
-  has_one :route, :through => :customer
+  has_one :customer,    :through => :account
+  has_one :address,     :through => :customer
+  has_one :route,       :through => :customer
 
+  has_many :packages,   :dependent => :destroy
   has_many :deliveries, :dependent => :destroy
-  has_many :routes, :through => :deliveries
   has_many :order_schedule_transactions
 
   acts_as_taggable
@@ -30,8 +30,8 @@ class Order < ActiveRecord::Base
   before_save :make_active_and_create_first_delivery, :if => :just_completed?
   before_save :record_schedule_change
 
-  scope :completed, where(:completed => true)
-  scope :active,    where(:active => true)
+  scope :completed, where(completed:true)
+  scope :active,    where(active:true)
 
   def price
     box.price # Must try remove this in code. It is now being achrived in deliveries
