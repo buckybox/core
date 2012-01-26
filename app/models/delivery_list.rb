@@ -17,7 +17,7 @@ class DeliveryList < ActiveRecord::Base
 
     if options[:future]
       future_start_date = start_date
-      future_start_date = result.last.date if result.last
+      future_start_date = (result.last.date + 1.day) if result.last
 
       orders = distributor.orders
 

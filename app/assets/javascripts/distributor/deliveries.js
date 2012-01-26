@@ -2,7 +2,9 @@
 // All this logic will automatically be available in application.js.
 
 $(function() {
-  $("#calendar-navigation").jScrollPane();
+  var element = $('#calendar-navigation').jScrollPane();
+  var api = element.data('jsp');
+  api.scrollToElement($('#selected'), true);
 
   $('#delivery-listings #all').change(function() {
     var checked_deliveries = $('#delivery-listings .data-listings input[type=checkbox]');
