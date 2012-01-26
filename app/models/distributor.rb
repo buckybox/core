@@ -35,8 +35,14 @@ class Distributor < ActiveRecord::Base
   validates_uniqueness_of :name, :on => :update
 
   before_save :parameterize_name
+  before_save :downcase_email
 
   def parameterize_name
     self.parameter_name = name.parameterize if name
+  end
+
+  private
+  def downcase_email
+    self.email.downcase! if self.email
   end
 end

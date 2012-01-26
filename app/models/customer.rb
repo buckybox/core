@@ -30,6 +30,8 @@ class Customer < ActiveRecord::Base
   after_create :create_account
   after_create :trigger_new_customer
 
+  before_save :downcase_email
+
   accepts_nested_attributes_for :address
 
   attr_accessible :address_attributes, :first_name, :last_name, :email, :phone, :name, :distributor_id, :distributor, :route, :password, :remember_me
@@ -58,7 +60,6 @@ class Customer < ActiveRecord::Base
     1.upto(len) { |i| newpass << chars[rand(chars.size - 1)] }
     return newpass
   end 
-  
 
   private
   def initialize_number
@@ -87,5 +88,9 @@ class Customer < ActiveRecord::Base
 
   def trigger_new_customer
     Event.trigger(distributor_id, Event::EVENT_TYPES[:customer_new], {:event_category => "customer", :customer_id => id})
+  end
+
+  def downcase_email
+    self.email.downcase! if self.email
   end
 end
