@@ -22,9 +22,11 @@ class CustomersController < InheritedResources::Base
   def update
     update! do |success, failure|
       success.html do
-        account = @customer.accounts.where(:distributor_id => current_distributor.id).first
+        account = @customer.account
+
         redirect_to [current_distributor, account]
       end
+
       failure.html { render 'edit' }
     end
   end
