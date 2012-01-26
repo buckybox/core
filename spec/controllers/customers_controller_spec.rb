@@ -18,6 +18,9 @@ describe CustomersController do
     it "should reset password" do
       assigns(:customer).password.should_not == @customer.password 
     end
+    it "should redirect correctly" do
+      response.should redirect_to(distributor_account_path(@distributor, @customer.account))
+    end
   end
 
 end
