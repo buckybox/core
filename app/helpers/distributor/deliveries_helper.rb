@@ -1,9 +1,24 @@
 module Distributor::DeliveriesHelper
-  def calendar_nav_length(calendar_hash)
-    number_of_month_dividers = calendar_hash.map{ |ch| ch.first.strftime("%m %Y") }.uniq.length - 1
-    nav_length = calendar_hash.length + number_of_month_dividers
+  def calendar_nav_length(delivery_lists)
+    number_of_month_dividers = delivery_lists.group_by{|l| l.date.month}.size
+    nav_length = delivery_lists.size + number_of_month_dividers
 
     return "#{nav_length * 59}px"
+  end
+
+  def date_status(date_list)
+    class_names = []
+    class_names << 'today' if date_list.date.today?
+
+    return class_names.join(' ')
+  end
+
+  def count_status(date_list, date)
+    class_names = []
+    class_names << 'selected' if date_list.date.to_s == date
+    class_names << 'has_pending' unless date_list.all_finished
+
+    return class_names.join(' ')
   end
 
   def reschedule_dates(route)

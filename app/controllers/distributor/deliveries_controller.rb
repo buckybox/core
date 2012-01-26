@@ -9,10 +9,18 @@ class Distributor::DeliveriesController < Distributor::BaseController
 
   def index
     index! do
-      start_date = Time.now - 1.week
+      start_date = Date.today - 2.week
       end_date = start_date + 6.weeks
+
+      # Must populate future times
+      @delivery_lists = DeliveryList.collect_delivery_lists(
+        current_distributor,
+        start_date,
+        end_date,
+        future:true
+      )
+
       @selected_date = Date.parse(params[:date]) if params[:date]
-      @calendar_hash = calendar_nav_data(start_date, end_date)
       @routes = current_distributor.routes
 
       if params[:view].nil?
@@ -21,25 +29,25 @@ class Distributor::DeliveriesController < Distributor::BaseController
         @route = @routes.find(params[:view])
       end
 
-      if @calendar_hash[@selected_date]
-        @orders = current_distributor.orders.find(@calendar_hash[@selected_date][:order_ids])
-        @orders.select! { |o| o.deliveries.map(&:route_id).include?(@route.id) } if @route
-        @orders.sort!
-      end
+      #if @calendar_hash[@selected_date]
+        #@orders = current_distributor.orders.find(@calendar_hash[@selected_date][:order_ids])
+        #@orders.select! { |o| o.deliveries.map(&:route_id).include?(@route.id) } if @route
+        #@orders.sort!
+      #end
 
-      @calendar_hash = @calendar_hash.to_a.sort
+      #@calendar_hash = @calendar_hash.to_a.sort
 
-      if !@calendar_hash.blank? && @selected_date.nil?
-        @selected_date = @calendar_hash.find { |sd| sd.first <= Date.today }
+      #if !@calendar_hash.blank? && @selected_date.nil?
+        #@selected_date = @calendar_hash.find { |sd| sd.first <= Date.today }
 
-        if @selected_date
-          @selected_date = @selected_date.first
-        else
-          @selected_date = @calendar_hash.first.first
-        end
+        #if @selected_date
+          #@selected_date = @selected_date.first
+        #else
+          #@selected_date = @calendar_hash.first.first
+        #end
 
-        redirect_to date_distributor_deliveries_url(current_distributor, @selected_date.to_s) and return
-      end
+        #redirect_to date_distributor_deliveries_url(current_distributor, @selected_date.to_s) and return
+      #end
     end
   end
 
@@ -63,23 +71,5 @@ class Distributor::DeliveriesController < Distributor::BaseController
     @orders = current_distributor.orders.find(order_ids)
 
     render :layout => 'print'
-  end
-
-  private
-
-  def calendar_nav_data(start_date, end_date)
-    calendar_hash = {}
-
-    current_distributor.orders.active.each do |order|
-      order.schedule.occurrences_between(start_date, end_date).each do |occurrence|
-        occurrence = occurrence.to_date
-
-        calendar_hash[occurrence] = { count: 0, order_ids: [] } if calendar_hash[occurrence].nil?
-        calendar_hash[occurrence][:count] += 1
-        calendar_hash[occurrence][:order_ids] << order.id
-      end
-    end
-
-    return calendar_hash
   end
 end
