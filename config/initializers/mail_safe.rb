@@ -4,5 +4,5 @@ if defined?(MailSafe::Config)
     address =~ /.*@enspiral\.com/i
   }
 
-  MailSafe::Config.replacement_address = 'samson@buckybox.com'
+  MailSafe::Config.replacement_address = 'beta@buckybox.com'
 end
