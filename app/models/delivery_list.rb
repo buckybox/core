@@ -16,9 +16,12 @@ class DeliveryList < ActiveRecord::Base
     result = distributor.delivery_lists.where(date:start_date..end_date).to_a
 
     if options[:future]
+      future_start_date = start_date
+      future_start_date = result.last.date if result.last
+
       orders = distributor.orders
 
-      (result.last.date..end_date).each do |date|
+      (future_start_date..end_date).each do |date|
         date_orders = []
 
         orders.each do |order|
