@@ -26,7 +26,7 @@
   .four.columns
     = link_to 'Edit Customer Details', edit_customer_path(@account.customer)
     %br
-    = link_to 'Send login details', send_login_details_customer_path(@account.customer) 
+    = link_to 'Send login details', send_login_details_customer_path(@account.customer), :confirm => "Are you sure? This will reset the users password."
     (User's password will be reset)
     %br
     = link_to 'Back to Customer List', distributor_accounts_path

@@ -1,6 +1,6 @@
 class CustomersController < InheritedResources::Base
   before_filter :authenticate_distributor!, :except => :create
-  
+
   respond_to :html, :xml, :json, :except => [:index, :destroy]
   layout 'distributor'
 
@@ -32,9 +32,11 @@ class CustomersController < InheritedResources::Base
   def send_login_details
     resource.randomize_password
     resource.save
+
     if CustomerMailer.login_details(resource).deliver
       flash[:notice] = "Login details successfully sent"
     end
-    redirect_to distributor_account_path(resource.account)
+
+    redirect_to distributor_account_path(resource.distributor, resource.account)
   end
 end
