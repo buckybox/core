@@ -6,6 +6,9 @@ $(function() {
   var api = element.data('jsp');
   api.scrollToElement($('#selected'), true);
 
+  $('.sortable').sortable({ delay:500, placeholder:'ui-state-highlight' });
+	$('.sortable').disableSelection();
+
   $('#delivery-listings #all').change(function() {
     var checked_deliveries = $('#delivery-listings .data-listings input[type=checkbox]');
 
