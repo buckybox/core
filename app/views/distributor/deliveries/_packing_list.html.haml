@@ -15,7 +15,7 @@
           - array.each do |order|
             %li.row.data-listings.pending
               .one.columns= check_box_tag order.id, '1', false
-              .one.columns= image_tag 'icon-status-pending.png', :title => 'PENDING delivery', :class => 'icon-pending'
+              .one.columns= image_tag 'icon-status-pending.png', :title => 'UNPACKED package', :class => 'icon-pending'
               .one.columns N/A
               .four.columns= order.address.join(', ')
               .two.columns== #{order.quantity}x #{order.box.name}
