@@ -1,6 +1,6 @@
 -# Getting gross and hacky. But currently easiest way to do it given asset pipeline images and needing title attributes.
-= image_tag 'icon-status-pending.png', :title => 'PENDING delivery', :class => 'icon-pending', :style => "#{'display:none;' unless status == 'pending'}"
-= image_tag 'icon-status-done.png', :title => 'Delivery has been COMPLETED', :class => 'icon-delivered', :style => "#{'display:none;' unless status == 'delivered'}"
-= image_tag 'icon-status-oops.png', :title => 'MISSED DELIVERY, customer has not been charged', :class => 'icon-cancelled', :style => "#{'display:none;' unless status == 'cancelled'}"
-= image_tag 'icon-status-refresh.png', :title => 'Missed delivery, REDELIVERED', :class => 'icon-rescheduled', :style => "#{'display:none;' unless status == 'rescheduled'}"
-= image_tag 'icon-status-repack.png', :title => 'Missed delivery, NEW BOX scheduled', :class => 'icon-repacked', :style => "#{'display:none;' unless status == 'repacked'}"
+= image_tag 'icon-status-pending.png', :title => 'PENDING delivery', :class => 'icon-pending', :style => icon_display(status, 'pending')
+= image_tag 'icon-status-done.png', :title => 'Delivery has been COMPLETED', :class => 'icon-delivered', :style => icon_display(status, 'delivered')
+= image_tag 'icon-status-oops.png', :title => 'MISSED DELIVERY, customer has not been charged', :class => 'icon-cancelled', :style => icon_display(status, 'cancelled')
+= image_tag 'icon-status-refresh.png', :title => 'Missed delivery, REDELIVERED', :class => 'icon-rescheduled', :style => icon_display(status, 'rescheduled')
+= image_tag 'icon-status-repack.png', :title => 'Missed delivery, NEW BOX scheduled', :class => 'icon-repacked', :style => icon_display(status, 'repacked')

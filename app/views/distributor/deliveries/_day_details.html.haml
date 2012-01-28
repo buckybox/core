@@ -5,31 +5,30 @@
         %h5.twelve.columns= @selected_date.strftime("%A %d %B") if @selected_date
       .row
         .twelve.columns.route-name
-          - unless @selected_date.future?
-            = link_to date_distributor_deliveries_path(current_distributor, @selected_date, 'packing') do
-              %h6{:class => "#{'selected' if params[:view] == 'packing'}"}
-                %span= order_delivery_count(@calendar_hash, @selected_date)
-                Packing (All)
-                = image_tag 'icon-packing.png'
-            %hr
+          = link_to date_distributor_deliveries_path(current_distributor, @selected_date, 'packing') do
+            %h6{:class => "#{'selected' if @route_id == 0}"}
+              %span= @all_packages.size
+              Packing (All)
+              = image_tag 'icon-packing.png'
+          %hr
           - @routes.each do |route|
             = link_to date_distributor_deliveries_path(current_distributor, @selected_date, route.id) do
-              %h6{:class => "#{'selected' if params[:view].to_i == route.id}"}
-                %span= order_delivery_count(@calendar_hash, @selected_date, route)
+              %h6{:class => "#{'selected' if @route_id == route.id}"}
+                %span= @all_deliveries.select{ |delivery| delivery.route.id == route.id }.size
                 = route.name
                 = image_tag 'icon-route.png'
 
-      - unless @orders.blank?
+      - unless @items.blank?
         .row
           .twelve.columns.summary
             %strong Summary
             %ul
-              - @orders.group_by(&:box_id).each do |box_id, array|
+              - @items.group_by(&:box).each do |box, array|
                 %li
                   %span= array.size
-                  = Box.find(box_id).name
+                  = box.name
 
-    - if @orders.blank?
+    - if @items.blank?
       .nine.columns
         %h3 No Deliveries
         %p
@@ -38,7 +37,7 @@
           on 
           %strong= @selected_date.strftime("%A %d %B")
     - else
-      - if params[:view] == 'packing'
-        = render 'packing_list'
-      - else
+      - if @route_id != 0
         = render 'route_list'
+      - else
+        = render 'packing_list'

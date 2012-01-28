@@ -4,26 +4,33 @@
     .nine.columns.delivery_actions
       = button_tag 'Delivered', :class => 'small radius button', :id => 'delivered', :disabled => @selected_date.future?
       = button_tag 'Pending', :class => 'small radius button', :id => 'pending', :disabled => @selected_date.future?
+      = button_tag 'Missed', :class => 'small radius button', :id => 'missed', :disabled => @selected_date.future?
+      #missed-options.has-flyout
+        %table.flyout.large
+          %tr
+            %td= radio_button_tag 'missed', 'cancelled'
+            %td= label_tag 'missed_cancelled', 'Cancel delivery'
+            %td
     .two.columns
 
-  - @orders.each do |order|
-    - deliveries = order.deliveries.where(date:@selected_date)
-
-    - if @selected_date.future?
-      .row.data-listings.pending
-        .one.columns= check_box_tag order.id, '1', false
-        .one.columns= image_tag 'icon-status-pending.png', :title => 'PENDING delivery', :class => 'icon-pending'
-        .one.columns N/A
-        .four.columns= order.address.join(', ')
-        .two.columns== #{order.quantity}x #{order.box.name}
-        .two.columns= order.customer.name
-
-    - unless deliveries.blank?
-      - deliveries.each do |delivery|
-        .row.data-listings{:class => delivery.status}
-          .one.columns= check_box_tag order.id, '1', false, :data => { :delivery => delivery.id }
-          .one.columns= render :partial => 'status_icons', :locals => { :status => delivery.status }
-          .one.columns= delivery.id
+  - if @selected_date.future?
+    %ul
+      - @items.each do |order|
+        %li.row.data-listings.pending
+          .one.columns= check_box_tag order.id, '1', false
+          .one.columns= image_tag 'icon-status-pending.png', :title => 'PENDING delivery', :class => 'icon-pending'
+          .one.columns N/A
           .four.columns= order.address.join(', ')
           .two.columns== #{order.quantity}x #{order.box.name}
           .two.columns= order.customer.name
+  - else
+    %ul.sortable
+      - @items.each do |delivery|
+        %li.row.data-listings{:class => delivery.status}
+          .one.columns= check_box_tag delivery.order_id, '1', false, :data => { :delivery => delivery.id }
+          .one.columns= render :partial => 'status_icons', :locals => { :status => delivery.status }
+          .one.columns= delivery.id
+          .four.columns= delivery.address.join(', ')
+          .two.columns== #{delivery.order.quantity}x #{delivery.box.name}
+          .two.columns= delivery.customer.name
+

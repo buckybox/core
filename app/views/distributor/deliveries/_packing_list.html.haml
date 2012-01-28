@@ -3,22 +3,30 @@
     .row.data-headings
       .one.columns= check_box_tag 'all'
       .three.columns.delivery_actions
-        = submit_tag 'Print - Master List', :class => 'small radius button'
+        = submit_tag 'Print - Master List', :class => 'small radius button', :disabled => @selected_date.future?
       .eight.columns
 
-    - @orders.group_by(&:box_id).each do |box_id, order_array|
+    - @items.group_by(&:box).each do |box, array|
       .row.data-headings
-        %h5.twelve.columns= Box.find(box_id).name
+        %h5.twelve.columns= box.name
 
-      - order_array.each do |order|
-        - deliveries = order.deliveries.where(date:@selected_date)
-
-        - unless deliveries.blank?
-          - deliveries.each do |delivery|
-            .row.data-listings{:class => delivery.status}
-              .one.columns= check_box :order, "#{order.id}"
-              .one.columns= render :partial => 'status_icons', :locals => { :status => delivery.status }
-              .one.columns= delivery.id
+      - if @selected_date.future?
+        %ul
+          - array.each do |order|
+            %li.row.data-listings.pending
+              .one.columns= check_box_tag order.id, '1', false
+              .one.columns= image_tag 'icon-status-pending.png', :title => 'PENDING delivery', :class => 'icon-pending'
+              .one.columns N/A
               .four.columns= order.address.join(', ')
               .two.columns== #{order.quantity}x #{order.box.name}
               .two.columns= order.customer.name
+      - else
+        %ul.sortable
+          - array.each do |delivery|
+            %li.row.data-listings{:class => delivery.status}
+              .one.columns= check_box :order, "#{delivery.order_id}"
+              .one.columns= render :partial => 'status_icons', :locals => { :status => delivery.status }
+              .one.columns= delivery.id
+              .four.columns= delivery.address.join(', ')
+              .two.columns== #{delivery.order.quantity}x #{delivery.order.box.name}
+              .two.columns= delivery.customer.name

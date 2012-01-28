@@ -3,7 +3,7 @@ FutureDeliveryList = Struct.new(:date, :deliveries, :all_finished)
 class DeliveryList < ActiveRecord::Base
   belongs_to :distributor
 
-  has_many :deliveries, :order => :position
+  has_many :deliveries, :order => :position, :include => [:box, :customer, :address, :route]
 
   attr_accessible :distributor, :date
 
@@ -12,10 +12,10 @@ class DeliveryList < ActiveRecord::Base
 
   default_scope order(:date)
 
-  def self.collect_delivery_lists(distributor, start_date, end_date, options = {})
+  def self.collect_lists(distributor, start_date, end_date)
     result = distributor.delivery_lists.where(date:start_date..end_date).to_a
 
-    if options[:future]
+    if end_date.future?
       future_start_date = start_date
       future_start_date = (result.last.date + 1.day) if result.last
 

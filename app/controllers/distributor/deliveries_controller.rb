@@ -5,49 +5,35 @@ class Distributor::DeliveriesController < Distributor::BaseController
   respond_to :html, :xml, :except => :update_status
   respond_to :json, :except => :master_packing_sheet
 
-  #TODO: Pull out as much code as possible from here into a models and lib
-
   def index
+    unless params[:date] && params[:view]
+      redirect_to date_distributor_deliveries_path(current_distributor, Date.today, 'packing') and return
+    end
+
     index! do
-      start_date = Date.today - 2.week
-      end_date = start_date + 6.weeks
+      @selected_date = Date.parse(params[:date])
+      @route_id = params[:view].to_i
 
-      # Must populate future times
-      @delivery_lists = DeliveryList.collect_delivery_lists(
-        current_distributor,
-        start_date,
-        end_date,
-        future:true
-      )
+      start_date = Date.today - 1.week
+      end_date   = Date.today + 4.weeks
 
-      @selected_date = Date.parse(params[:date]) if params[:date]
       @routes = current_distributor.routes
 
-      if params[:view].nil?
+      @delivery_lists = DeliveryList.collect_lists(current_distributor, start_date, end_date)
+      @delivery_list  = @delivery_lists.find { |delivery_list| delivery_list.date == @selected_date }
+      @all_deliveries = @delivery_list.deliveries
+
+      @packing_lists = PackingList.collect_lists(current_distributor, start_date, end_date)
+      @packing_list  = @packing_lists.find  { |packing_list| packing_list.date == @selected_date }
+      @all_packages  = @packing_list.packages
+
+      if @route_id != 0
+        @items = @all_deliveries.select{ |delivery| delivery.route.id == @route_id }
+        @route = @routes.find(@route_id)
+      else
+        @items = @all_packages
         @route = @routes.first
-      elsif params[:view].to_i != 0
-        @route = @routes.find(params[:view])
       end
-
-      #if @calendar_hash[@selected_date]
-        #@orders = current_distributor.orders.find(@calendar_hash[@selected_date][:order_ids])
-        #@orders.select! { |o| o.deliveries.map(&:route_id).include?(@route.id) } if @route
-        #@orders.sort!
-      #end
-
-      #@calendar_hash = @calendar_hash.to_a.sort
-
-      #if !@calendar_hash.blank? && @selected_date.nil?
-        #@selected_date = @calendar_hash.find { |sd| sd.first <= Date.today }
-
-        #if @selected_date
-          #@selected_date = @selected_date.first
-        #else
-          #@selected_date = @calendar_hash.first.first
-        #end
-
-        #redirect_to date_distributor_deliveries_url(current_distributor, @selected_date.to_s) and return
-      #end
     end
   end
 

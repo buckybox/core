@@ -39,4 +39,8 @@ module Distributor::DeliveriesHelper
       data[:order_ids].size
     end
   end
+
+  def icon_display(status, icon_status)
+    'display:none;' unless status == icon_status
+  end
 end
