@@ -3,11 +3,14 @@
 
 $(function() {
   var element = $('#calendar-navigation').jScrollPane();
-  var api = element.data('jsp');
-  api.scrollToElement($('#selected'), true);
+
+  if(element) {
+    var api = element.data('jsp');
+    api.scrollToElement($('#selected'), true);
+  }
 
   $('.sortable').sortable({
-    delay:500,
+    delay:250,
     placeholder:'ui-state-highlight',
     curser: 'move',
     opacity: 0.8,
@@ -33,6 +36,25 @@ $(function() {
     else { checked_deliveries.prop('checked', false); }
 
     return false;
+  });
+
+  $('#delivery-listings #master-print').click(function () {
+    var checked_deliveries = $('#delivery-listings .data-listings input[type=checkbox]:checked');
+
+    $.each(checked_deliveries, function(i, ckbx) {
+      var holder = $(ckbx).parent().parent();
+
+      holder.addClass('packed');
+      holder.removeClass('unpacked');
+
+      holder.find('.icon-packed').show();
+      holder.find('.icon-unpacked').hide();
+    });
+
+    $('#packing').submit();
+
+    checked_deliveries.prop('checked', false);
+    $('#delivery-listings #all').prop('checked', false);
   });
 
   $('#delivery-listings #delivered, #delivery-listings #pending').click(function() {

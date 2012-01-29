@@ -15,6 +15,7 @@ class Distributor < ActiveRecord::Base
   has_many :events,         :dependent => :destroy
   has_many :delivery_lists, :dependent => :destroy
   has_many :packing_lists,  :dependent => :destroy
+  has_many :packages,       :dependent => :destroy, :through => :packing_lists
 
   serialize :daily_lists_schedule,   Hash
   serialize :auto_delivery_schedule, Hash

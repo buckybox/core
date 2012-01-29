@@ -1,9 +1,9 @@
 .nine.columns
-  = form_tag master_packing_sheet_distributor_deliveries_path(current_distributor, @selected_date), :target => '_blank' do
+  = form_tag master_packing_sheet_distributor_deliveries_path(current_distributor, @selected_date), :id => 'packing', :target => '_blank' do
     .row.data-headings
       .one.columns= check_box_tag 'all'
-      .three.columns.delivery_actions
-        = submit_tag 'Print - Master List', :class => 'small radius button', :disabled => @selected_date.future?
+      .three.columns.packing_actions
+        = submit_tag 'Print - Master List', :id => 'master-print', :class => 'small radius button', :disabled => @selected_date.future?
       .eight.columns
 
     - @items.group_by(&:box).each do |box, array|
@@ -22,11 +22,11 @@
               .two.columns= order.customer.name
       - else
         %ul
-          - array.each do |delivery|
-            %li.row.data-listings{:class => delivery.status}
-              .one.columns= check_box :order, "#{delivery.order_id}"
-              .one.columns= render :partial => 'status_icons', :locals => { :status => delivery.status }
-              .one.columns= delivery.id
-              .four.columns= delivery.address.join(', ')
-              .two.columns== #{delivery.order.quantity}x #{delivery.order.box.name}
-              .two.columns= delivery.customer.name
+          - array.each do |package|
+            %li.row.data-listings{:class => package.status}
+              .one.columns= check_box :package, "#{package.id}"
+              .one.columns= render :partial => 'status_icons', :locals => { :status => package.status }
+              .one.columns= package.id
+              .four.columns= package.address.join(', ')
+              .two.columns== #{package.order.quantity}x #{package.order.box.name}
+              .two.columns= package.customer.name

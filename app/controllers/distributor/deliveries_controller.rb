@@ -53,8 +53,14 @@ class Distributor::DeliveriesController < Distributor::BaseController
 
   def master_packing_sheet
     @selected_date = Date.parse(params[:date]) if params[:date]
-    order_ids = params[:order].select{ |id, checked| checked.to_i == 1 }.keys
-    @orders = current_distributor.orders.find(order_ids)
+    package_ids = params[:package].select{ |id, checked| checked.to_i == 1 }.keys
+    @packages = current_distributor.packages.find(package_ids)
+
+    @packages.each do |package|
+      package.status = 'packed'
+      package.packing_method = 'manual'
+      package.save
+    end
 
     render :layout => 'print'
   end
@@ -64,11 +70,6 @@ class Distributor::DeliveriesController < Distributor::BaseController
     delivery_order = params[:delivery]
 
     @delivery_list = current_distributor.delivery_lists.find_by_date(Date.parse(params[:date]))
-
-    puts '-'*80
-    puts date
-    puts delivery_order.inspect
-    puts @delivery_list.deliveries.map(&:id).inspect
 
     all_saved = true
 

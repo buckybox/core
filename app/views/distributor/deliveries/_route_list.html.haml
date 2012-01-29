@@ -11,6 +11,9 @@
             %td= radio_button_tag 'missed', 'cancelled'
             %td= label_tag 'missed_cancelled', 'Cancel delivery'
             %td
+          %tr
+            %td{:colspan => 2}
+            %td= button_tag 'Commit', :class => 'small radius button', :id => 'commit-missed'
     .two.columns
 
   - if @selected_date.future?

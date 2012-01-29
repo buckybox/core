@@ -6,22 +6,18 @@
 
 .row
   .twelve.columns
-    - @orders.group_by(&:box_id).each do |box_id, order_array|
+    - @packages.group_by(&:box).each do |box, array|
       %table{:style => 'width:100%; border-collapse:collapse; margin-bottom:20px;'}
         %thead
           %tr
             %th{:colspan => 5, :style => 'border:1px solid black;'}
-              = Box.find(box_id).name
+              = box.name
 
         %tbody
-          - order_array.each do |order|
-            - deliveries = order.deliveries.where(date:@selected_date)
-
-            - unless deliveries.blank?
-              - deliveries.each do |delivery|
-                %tr
-                  %td{:style => 'width:5%; border:1px solid black;'}
-                  %td{:style => 'width:5%; border:1px solid black;'}= delivery.id
-                  %td{:style => 'width:25%; border:1px solid black;'}= order.customer.name
-                  %td{:style => 'width:40%; border:1px solid black;'}= order.address.join(', ')
-                  %td{:style => 'width:25%; border:1px solid black;'}== #{order.quantity}x #{order.box.name}
+          - array.reverse.each do |package|
+            %tr
+              %td{:style => 'width:5%; border:1px solid black;'}
+              %td{:style => 'width:5%; border:1px solid black;'}= package.id
+              %td{:style => 'width:25%; border:1px solid black;'}= package.customer.name
+              %td{:style => 'width:40%; border:1px solid black;'}= package.address.join(', ')
+              %td{:style => 'width:25%; border:1px solid black;'}== #{package.order.quantity}x #{box.name}
