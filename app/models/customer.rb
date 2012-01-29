@@ -53,8 +53,8 @@ class Customer < ActiveRecord::Base
     self.password_confirmation = password
   end
 
-  def self.random_string(len = 10)                                                                                      
-    #generate a random password consisting of strings and digits
+  def self.random_string(len = 10)
+    # generate a random password consisting of strings and digits
     chars = ("a".."z").to_a + ("A".."Z").to_a + ("0".."9").to_a
     newpass = ""
     1.upto(len) { |i| newpass << chars[rand(chars.size - 1)] }
@@ -62,6 +62,7 @@ class Customer < ActiveRecord::Base
   end 
 
   private
+
   def initialize_number
     if self.number.nil?
       number = rand(1000000)
