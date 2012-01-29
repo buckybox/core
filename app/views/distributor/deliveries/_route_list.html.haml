@@ -29,7 +29,7 @@
         %li.row.data-listings{:id => "delivery_#{delivery.id}", :class => delivery.status}
           .one.columns= check_box_tag delivery.order_id, '1', false, :data => { :delivery => delivery.id }
           .one.columns= render :partial => 'status_icons', :locals => { :status => delivery.status }
-          .one.columns= delivery.position
+          .one.columns= delivery.delivery_number
           .four.columns= delivery.address.join(', ')
           .two.columns== #{delivery.order.quantity}x #{delivery.box.name}
           .two.columns= delivery.customer.name

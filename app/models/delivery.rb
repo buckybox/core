@@ -26,6 +26,8 @@ class Delivery < ActiveRecord::Base
   before_validation :default_delivery_method, :if => 'status == "delivered"'
   before_validation :changed_status, :if => 'status_changed?'
 
+  before_create :add_delivery_number
+
   scope :pending,     where(status:'pending')
   scope :delivered,   where(status:'delivered')
   scope :cancelled,   where(status:'cancelled')
@@ -78,6 +80,10 @@ class Delivery < ActiveRecord::Base
 
   def default_delivery_method
     self.delivery_method = 'manual'
+  end
+
+  def add_delivery_number
+    self.delivery_number = self.position
   end
 
   def changed_status

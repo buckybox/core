@@ -39,8 +39,27 @@ class DeliveryList < ActiveRecord::Base
     delivery_list = DeliveryList.find_or_create_by_distributor_id_and_date(distributor.id, date)
     packing_list = PackingList.find_or_create_by_distributor_id_and_date(distributor.id, date)
 
+    packages = {}
+
+    # Determine the order of this delivery list based on previous deliveries
     packing_list.packages.each do |package|
-      delivery = delivery_list.deliveries.find_or_create_by_package_id(package.id, :order => package.order)
+      last_delivery = package.order.deliveries.last
+
+      if last_delivery
+        position = last_delivery.position
+        packages[position] = [] unless packages[position]
+        packages[position] << package
+      else
+        #sufficiantly large number to insure it is at the end
+        packages[9999] = [] unless packages[9999]
+        packages[9999] << package
+      end
+    end
+
+    packages = packages.sort.map{ |key, value| value }.flatten
+
+    packages.each do |package|
+      delivery_list.deliveries.find_or_create_by_package_id(package.id, :order => package.order)
     end
   end
 
