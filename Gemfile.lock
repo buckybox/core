@@ -1,31 +1,31 @@
 GEM
   remote: http://rubygems.org/
   specs:
-    actionmailer (3.2.0)
-      actionpack (= 3.2.0)
+    actionmailer (3.2.1)
+      actionpack (= 3.2.1)
       mail (~> 2.4.0)
-    actionpack (3.2.0)
-      activemodel (= 3.2.0)
-      activesupport (= 3.2.0)
+    actionpack (3.2.1)
+      activemodel (= 3.2.1)
+      activesupport (= 3.2.1)
       builder (~> 3.0.0)
       erubis (~> 2.7.0)
-      journey (~> 1.0.0)
+      journey (~> 1.0.1)
       rack (~> 1.4.0)
       rack-cache (~> 1.1)
       rack-test (~> 0.6.1)
       sprockets (~> 2.1.2)
-    activemodel (3.2.0)
-      activesupport (= 3.2.0)
+    activemodel (3.2.1)
+      activesupport (= 3.2.1)
       builder (~> 3.0.0)
-    activerecord (3.2.0)
-      activemodel (= 3.2.0)
-      activesupport (= 3.2.0)
+    activerecord (3.2.1)
+      activemodel (= 3.2.1)
+      activesupport (= 3.2.1)
       arel (~> 3.0.0)
       tzinfo (~> 0.3.29)
-    activeresource (3.2.0)
-      activemodel (= 3.2.0)
-      activesupport (= 3.2.0)
-    activesupport (3.2.0)
+    activeresource (3.2.1)
+      activemodel (= 3.2.1)
+      activesupport (= 3.2.1)
+    activesupport (3.2.1)
       i18n (~> 0.6)
       multi_json (~> 1.0)
     acts-as-taggable-on (2.2.2)
@@ -59,9 +59,9 @@ GEM
     childprocess (0.3.0)
       ffi (~> 1.0.6)
     chronic (0.6.6)
-    coffee-rails (3.2.1)
+    coffee-rails (3.2.2)
       coffee-script (>= 2.2.0)
-      railties (~> 3.2.0.beta)
+      railties (~> 3.2.0)
     coffee-script (2.2.0)
       coffee-script-source
       execjs
@@ -105,9 +105,9 @@ GEM
     inherited_resources (1.3.0)
       has_scope (~> 0.5.0)
       responders (~> 0.6.0)
-    journey (1.0.0)
-    jquery-rails (1.0.19)
-      railties (~> 3.0)
+    journey (1.0.1)
+    jquery-rails (2.0.0)
+      railties (>= 3.2.0.beta, < 5.0)
       thor (~> 0.14)
     json (1.6.5)
     kaminari (0.13.0)
@@ -170,17 +170,17 @@ GEM
       rack
     rack-test (0.6.1)
       rack (>= 1.0)
-    rails (3.2.0)
-      actionmailer (= 3.2.0)
-      actionpack (= 3.2.0)
-      activerecord (= 3.2.0)
-      activeresource (= 3.2.0)
-      activesupport (= 3.2.0)
+    rails (3.2.1)
+      actionmailer (= 3.2.1)
+      actionpack (= 3.2.1)
+      activerecord (= 3.2.1)
+      activeresource (= 3.2.1)
+      activesupport (= 3.2.1)
       bundler (~> 1.0)
-      railties (= 3.2.0)
-    railties (3.2.0)
-      actionpack (= 3.2.0)
-      activesupport (= 3.2.0)
+      railties (= 3.2.1)
+    railties (3.2.1)
+      actionpack (= 3.2.1)
+      activesupport (= 3.2.1)
       rack-ssl (~> 1.3.2)
       rake (>= 0.8.7)
       rdoc (~> 3.4)
@@ -188,12 +188,12 @@ GEM
     rake (0.9.2.2)
     rb-fchange (0.0.5)
       ffi
-    rb-fsevent (0.4.3.1)
+    rb-fsevent (0.9.0)
     rb-inotify (0.8.8)
       ffi (>= 0.5.0)
     rdoc (3.12)
       json (~> 1.4)
-    responders (0.6.4)
+    responders (0.6.5)
     rspec (2.8.0)
       rspec-core (~> 2.8.0)
       rspec-expectations (~> 2.8.0)
@@ -221,11 +221,11 @@ GEM
       archive-tar-minitar (>= 0.5.2)
     rubyzip (0.9.5)
     sass (3.1.12)
-    sass-rails (3.2.3)
-      railties (~> 3.2.0.beta)
+    sass-rails (3.2.4)
+      railties (~> 3.2.0)
       sass (>= 3.1.10)
       tilt (~> 1.3)
-    selenium-webdriver (2.17.0)
+    selenium-webdriver (2.18.0)
       childprocess (>= 0.2.5)
       ffi (~> 1.0.9)
       multi_json (~> 1.0.4)
@@ -256,7 +256,7 @@ GEM
       polyglot
       polyglot (>= 0.3.1)
     tzinfo (0.3.31)
-    uglifier (1.2.2)
+    uglifier (1.2.3)
       execjs (>= 0.3.0)
       multi_json (>= 1.0.2)
     warden (1.1.0)
@@ -266,8 +266,8 @@ GEM
       chronic (~> 0.6.3)
     xpath (0.1.4)
       nokogiri (~> 1.3)
-    zurb-foundation (2.1.4.3)
-      jquery-rails (~> 1.0)
+    zurb-foundation (2.1.5.1)
+      jquery-rails (>= 1.0)
       rails (~> 3.1)
 
 PLATFORMS
@@ -285,7 +285,7 @@ DEPENDENCIES
   coffee-rails
   database_cleaner
   delorean
-  devise
+  devise (~> 1.5.3)
   fabrication
   fuubar
   guard
@@ -305,7 +305,7 @@ DEPENDENCIES
   pg
   pg_search
   postmark-rails
-  rails (= 3.2.0)
+  rails (~> 3.2.1)
   rb-fchange
   rb-fsevent
   rb-inotify

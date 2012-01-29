@@ -1,7 +1,7 @@
 source 'http://rubygems.org'
 
 # Core
-gem 'rails', '3.2.0'
+gem 'rails', '~> 3.2.1'
 
 # Database
 gem 'pg'
@@ -16,7 +16,7 @@ gem 'haml-rails'
 gem 'sass-rails'
 gem 'jquery-rails'
 
-gem 'devise'
+gem 'devise', '~> 1.5.3'
 gem 'simple_form'
 gem 'inherited_resources'
 gem 'mini_magick'
