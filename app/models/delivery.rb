@@ -10,7 +10,7 @@ class Delivery < ActiveRecord::Base
   has_one :customer, :through => :order
   has_one :address, :through => :order
 
-  acts_as_list :scope => :delivery_list
+  acts_as_list :scope => [:delivery_list_id, :route_id]
 
   attr_accessible :order, :order_id, :route, :status, :delivery_method, :delivery_list, :package, :package_id
 
@@ -56,6 +56,10 @@ class Delivery < ActiveRecord::Base
     end
 
     return result
+  end
+
+  def date
+    delivery_list.date
   end
 
   def future_status?

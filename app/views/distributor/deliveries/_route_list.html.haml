@@ -24,12 +24,12 @@
           .two.columns== #{order.quantity}x #{order.box.name}
           .two.columns= order.customer.name
   - else
-    %ul.sortable
+    %ul#delivery_list.sortable
       - @items.each do |delivery|
-        %li.row.data-listings{:class => delivery.status}
+        %li.row.data-listings{:id => "delivery_#{delivery.id}", :class => delivery.status}
           .one.columns= check_box_tag delivery.order_id, '1', false, :data => { :delivery => delivery.id }
           .one.columns= render :partial => 'status_icons', :locals => { :status => delivery.status }
-          .one.columns= delivery.id
+          .one.columns= delivery.position
           .four.columns= delivery.address.join(', ')
           .two.columns== #{delivery.order.quantity}x #{delivery.box.name}
           .two.columns= delivery.customer.name

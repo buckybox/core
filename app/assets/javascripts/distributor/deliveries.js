@@ -6,8 +6,25 @@ $(function() {
   var api = element.data('jsp');
   api.scrollToElement($('#selected'), true);
 
-  $('.sortable').sortable({ delay:500, placeholder:'ui-state-highlight' });
-	$('.sortable').disableSelection();
+  $('.sortable').sortable({
+    delay:500,
+    placeholder:'ui-state-highlight',
+    curser: 'move',
+    opacity: 0.8,
+    update: function() {
+      $.ajax({
+        type: 'post',
+        data: $('#delivery_list').sortable('serialize'),
+        dataType: 'json',
+        url: '/distributors/' +
+          $('#delivery-listings').data('distributor') +
+          '/deliveries/date/' +
+          $('#delivery-listings').data('date') +
+          '/reposition'
+      })
+    }
+  });
+  $('.sortable').disableSelection();
 
   $('#delivery-listings #all').change(function() {
     var checked_deliveries = $('#delivery-listings .data-listings input[type=checkbox]');
@@ -19,8 +36,8 @@ $(function() {
   });
 
   $('#delivery-listings #delivered, #delivery-listings #pending').click(function() {
-    var id = $(this).attr('id');
     var distributor_id = $('#delivery-listings').data('distributor');
+    var id = $(this).attr('id');
     var checked_deliveries = $('#delivery-listings .data-listings input[type=checkbox]:checked');
 
     updateDeliveryStatus(id, distributor_id, checked_deliveries);

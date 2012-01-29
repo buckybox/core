@@ -25,6 +25,7 @@ BuckyBox::Application.routes.draw do
     resources :deliveries,                 :controller => 'distributor/deliveries' do
       collection do
         get 'date/:date/view/:view',       :action => :index, :as => 'date'
+        post 'date/:date/reposition',      :action => :reposition, :as => 'reposition'
         post 'update_status',              :action => :update_status, :as => 'update_status'
         post 'master_packing_sheet/:date', :action => :master_packing_sheet, :as => 'master_packing_sheet'
       end

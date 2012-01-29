@@ -95,6 +95,7 @@ class Distributor < ActiveRecord::Base
 
   def automate_delivered_status(date = Date.today)
     delivery_lists.find_by_date(date).mark_all_as_auto_delivered
+    packing_lists.find_by_date(date).mark_all_as_auto_packed
   end
 
   private

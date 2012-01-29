@@ -58,4 +58,30 @@ class Distributor::DeliveriesController < Distributor::BaseController
 
     render :layout => 'print'
   end
+
+  def reposition
+    date = Date.parse(params[:date])
+    delivery_order = params[:delivery]
+
+    @delivery_list = current_distributor.delivery_lists.find_by_date(Date.parse(params[:date]))
+
+    puts '-'*80
+    puts date
+    puts delivery_order.inspect
+    puts @delivery_list.deliveries.map(&:id).inspect
+
+    all_saved = true
+
+    delivery_order.each_with_index do |delivery_id, index|
+      delivery = current_distributor.deliveries.find(delivery_id)
+      delivery.position = index + 1
+      all_saved &= delivery.save
+    end
+
+    if all_saved
+      head :ok
+    else
+      head :bad_request
+    end
+  end
 end

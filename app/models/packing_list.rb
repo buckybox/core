@@ -44,4 +44,12 @@ class PackingList < ActiveRecord::Base
       end
     end
   end
+
+  def mark_all_as_auto_packed
+    packages.each do |package|
+      package.status = 'packed'
+      package.packing_method = 'auto'
+      package.save
+    end
+  end
 end

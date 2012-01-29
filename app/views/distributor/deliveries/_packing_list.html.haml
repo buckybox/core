@@ -21,7 +21,7 @@
               .two.columns== #{order.quantity}x #{order.box.name}
               .two.columns= order.customer.name
       - else
-        %ul.sortable
+        %ul
           - array.each do |delivery|
             %li.row.data-listings{:class => delivery.status}
               .one.columns= check_box :order, "#{delivery.order_id}"
