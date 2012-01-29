@@ -5,6 +5,11 @@
 
 set :output, { :error => 'cron_error.log', :standard => 'cron.log' }
 
-every 1.hour { runner 'Distributor.create_daily_lists' }
-every 1.hour { runner 'Distributor.automate_delivered_status' }
+every 1.hour do 
+  runner 'Distributor.create_daily_lists'
+end
+
+every 1.hour do 
+  runner 'Distributor.automate_delivered_status'
+end
 
