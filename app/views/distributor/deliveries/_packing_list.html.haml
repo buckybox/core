@@ -27,6 +27,6 @@
               .one.columns= check_box :package, "#{package.id}"
               .one.columns= render :partial => 'status_icons', :locals => { :status => package.status }
               .one.columns= package.id
-              .four.columns= package.address.join(', ')
-              .two.columns== #{package.order.quantity}x #{package.order.box.name}
-              .two.columns= package.customer.name
+              .four.columns= package.archived_address
+              .two.columns== #{package.archived_order_quantity}x #{package.archived_box_name}
+              .two.columns= package.archived_customer_name

@@ -33,7 +33,7 @@
           .one.columns= check_box_tag delivery.order_id, '1', false, :data => { :delivery => delivery.id }
           .one.columns= render :partial => 'status_icons', :locals => { :status => delivery.status }
           .one.columns= delivery.delivery_number
-          .four.columns= delivery.address.join(', ')
-          .two.columns== #{delivery.order.quantity}x #{delivery.box.name}
-          .two.columns= delivery.customer.name
+          .four.columns= delivery.package.archived_address
+          .two.columns== #{delivery.package.archived_order_quantity}x #{delivery.package.archived_box_name}
+          .two.columns= delivery.package.archived_customer_name
 

@@ -12,6 +12,12 @@ class Package < ActiveRecord::Base
 
   has_many :deliveries, :order => :date
 
+  composed_of :archived_box_price,
+    :class_name => "Money",
+    :mapping => [%w(archived_price_cents cents), %w(archived_currency currency_as_string)],
+    :constructor => Proc.new { |cents, currency| Money.new(cents || 0, currency || Money.default_currency) },
+    :converter => Proc.new { |value| value.respond_to?(:to_money) ? value.to_money : raise(ArgumentError, "Can't convert #{value.class} to Money") }
+
   acts_as_list :scope => :packing_list_id
 
   attr_accessible :order, :order_id, :packing_list, :status, :position
@@ -26,6 +32,8 @@ class Package < ActiveRecord::Base
   before_validation :default_status, :if => 'status.nil?'
   before_validation :default_packing_method, :if => 'status == "delivered"'
 
+  before_save :archive_data
+
   scope :originals, where(original_package_id:nil)
 
   private
@@ -36,5 +44,13 @@ class Package < ActiveRecord::Base
 
   def default_packing_method
     self.delivery_method = 'manual'
+  end
+
+  def archive_data
+    self.archived_address = address.join(', ')
+    self.archived_order_quantity = order.quantity
+    self.archived_box_name = box.name
+    self.archived_box_price = box.price
+    self.archived_customer_name = customer.name
   end
 end

@@ -87,7 +87,7 @@ class Delivery < ActiveRecord::Base
 
   def subtract_from_account
     account.subtract_from_balance(
-      order.price * order.quantity,
+      package.archived_box_price * package.archived_order_quantity,
       :kind => 'delivery',
       :description => "[ID##{id}] Delivery was made of #{order.string_pluralize} at #{order.price} each."
     )
@@ -96,7 +96,7 @@ class Delivery < ActiveRecord::Base
 
   def add_to_account
     account.add_to_balance(
-      order.price * order.quantity,
+      package.archived_box_price * package.archived_order_quantity,
       :kind => 'delivery',
       :description => "[ID##{id}] Delivery reversal. #{order.string_pluralize} at #{order.price} each."
     )
