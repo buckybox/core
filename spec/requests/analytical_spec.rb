@@ -17,6 +17,16 @@ describe 'analytical' do
       page.should have_content('distributor_signed_in')
     end
 
+    it "tracks view customer sign in form" do
+      visit new_customer_session_path
+      page.should have_content('view_customer_sign_in')
+    end
+
+    it "tracks customer sign in" do
+      simulate_customer_login
+      page.should have_content('customer_signed_in')
+    end
+
     it "tracks view marketplace" do
       visit market_store_path(@distributor.parameter_name)
       page.should have_content('view_store')

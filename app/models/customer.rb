@@ -11,6 +11,10 @@ class Customer < ActiveRecord::Base
   belongs_to :distributor
   belongs_to :route
 
+  # Include default devise modules. Others available are:
+  # :token_authenticatable, :encryptable, :confirmable, :lockable, :timeoutable and :omniauthable
+  devise :database_authenticatable, :recoverable, :rememberable, :trackable
+
   pg_search_scope :search,
     :against => [:first_name, :last_name, :email, :number],
     :associated_against => {
@@ -20,13 +24,17 @@ class Customer < ActiveRecord::Base
     :tsearch => {:prefix => true}
   }
 
+  before_validation :randomize_password_if_not_present
+
   before_create :initialize_number
   after_create :create_account
   after_create :trigger_new_customer
 
+  before_save :downcase_email
+
   accepts_nested_attributes_for :address
 
-  attr_accessible :address_attributes, :first_name, :last_name, :email, :phone, :name, :distributor_id, :distributor, :route
+  attr_accessible :address_attributes, :first_name, :last_name, :email, :phone, :name, :distributor_id, :distributor, :route, :password, :remember_me
 
   validates_presence_of :first_name, :email, :distributor, :route
   validates_uniqueness_of :email, :scope => :distributor_id
@@ -40,7 +48,21 @@ class Customer < ActiveRecord::Base
     self.first_name, self.last_name = name.split(" ")
   end
 
+  def randomize_password
+    self.password = Customer.random_string(12)
+    self.password_confirmation = password
+  end
+
+  def self.random_string(len = 10)
+    # generate a random password consisting of strings and digits
+    chars = ("a".."z").to_a + ("A".."Z").to_a + ("0".."9").to_a
+    newpass = ""
+    1.upto(len) { |i| newpass << chars[rand(chars.size - 1)] }
+    return newpass
+  end 
+
   private
+
   def initialize_number
     if self.number.nil?
       number = rand(1000000)
@@ -57,11 +79,19 @@ class Customer < ActiveRecord::Base
     end
   end
 
+  def randomize_password_if_not_present
+    randomize_password unless encrypted_password.present?
+  end
+
   def create_account
     Account.create(:customer_id => id, :distributor_id => distributor_id)
   end
 
   def trigger_new_customer
     Event.trigger(distributor_id, Event::EVENT_TYPES[:customer_new], {:event_category => "customer", :customer_id => id})
+  end
+
+  def downcase_email
+    self.email.downcase! if self.email
   end
 end

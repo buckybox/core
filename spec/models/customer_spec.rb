@@ -2,25 +2,33 @@ require 'spec_helper'
 
 describe Customer do
   before :all do
-    @customer = Fabricate(:customer_with_account)
+    @customer = Fabricate(:customer_with_account, :email => 'BuckyBox@example.com')
   end
 
   specify { @customer.should be_valid }
+  specify { @customer.email.should == 'buckybox@example.com' }
 
-  context "initializing" do
-    it "creates a customer number" do
-      @customer.number.should_not be_nil
-    end
-    it "throws error if unable to find a free customer number" do
+  context 'initializing' do
+    specify { @customer.number.should_not be_nil }
+    specify { @customer.account.should_not be_nil }
+
+    it 'throws error if unable to find a free customer number' do
       distributor = Fabricate(:distributor)
       distributor.stub_chain(:customers,:find_by_number).and_return(true)
-      lambda{
-        Fabricate(:customer, :distributor => distributor)
-      }.should raise_error 
+
+      expect {  Fabricate(:customer, :distributor => distributor) }.should raise_error 
     end
-    it "creates an account" do
-      @customer.account.should_not be_nil
+  end
+
+  context 'random password' do
+    before do
+      @customer.password = @customer.password_confirmation = ''
+      @customer.save
     end
+
+    specify { @customer.password.should_not be_nil }
+    specify { @customer.randomize_password.length == 12 }
+    specify { Customer.random_string.should_not == Customer.random_string }
   end
 
   context 'full name' do

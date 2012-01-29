@@ -1,0 +1,34 @@
+.row
+  .ten.columns
+    %h3 Orders
+  .two.columns
+    /= link_to 'Create a new order', new_customer_order_path(current_customer)
+
+.row
+  %table.twelve.columns
+    %thead
+      %tr
+        %th Order #
+        %th Box
+        %th Quantity
+        %th Total Cost
+        %th Start Date
+        %th{:style => 'width:25%;'} Schedule
+        %th Next Delivery Date
+        %th Actions
+
+    %tbody
+      - @orders.each do |order|
+        %tr
+          %td= order.id
+          %td= order.box.name
+          %td= order.quantity
+          %td= (order.price * order.quantity).format
+          %td= order.schedule.start_date.strftime("%B %d, %Y")
+          %td= order.schedule
+          %td= order.schedule.next_occurrence.strftime("%B %d, %Y") if order.schedule.next_occurrence
+          %td
+            = link_to 'Edit', edit_customer_order_path(current_customer.id, order)
+            /\|
+            /= link_to 'Delete', [current_customer, order], :confirm => 'Are you sure?', :method => :delete
+

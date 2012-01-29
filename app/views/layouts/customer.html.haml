@@ -1,0 +1,30 @@
+- content_for :body do
+  %body
+    .container
+      .row
+        .twelve.columns
+          - flash.each do |kind, message|
+            = flash_bar(kind, message)
+
+      .row
+        .twelve.columns
+          #session-links
+            - if customer_signed_in?
+              Signed in as 
+              %strong=  current_customer.name 
+              = link_to 'Logout', destroy_customer_session_path, :method => :delete
+            - else   
+              = link_to 'Sign up', new_customer_registration_path
+              or  
+              = link_to 'Login', new_customer_session_path
+
+      #dashboard-content.row
+        .twelve.columns
+
+          - if show_title?
+            %h1{:style => 'text-align:center;'}= yield(:title)
+
+          = yield
+
+= render 'layouts/base'
+

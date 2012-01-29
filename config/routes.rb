@@ -1,5 +1,6 @@
 BuckyBox::Application.routes.draw do
   devise_for :distributors, :controllers => {:sessions => "distributor/sessions"}
+  devise_for :customers, :controllers => {:sessions => "customer/sessions"}
 
   get 'home' => 'bucky_box#index', :as => 'home'
 
@@ -60,7 +61,13 @@ BuckyBox::Application.routes.draw do
     end
   end
 
+  get 'customer', :controller => 'customer/orders', :action => 'home',  :as => 'customer_root'
+
   resources :customers do
+    resources :orders, :controller => 'customer/orders'
+    member  do
+      get :send_login_details
+    end
     resource :addresses, :controller => 'customer/addresses'
   end
 
