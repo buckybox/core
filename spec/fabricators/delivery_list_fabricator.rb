@@ -1,4 +1,4 @@
 Fabricator(:delivery_list) do
-  distributor nil
-  date "2012-01-20"
+  distributor!
+  date Date.today - 1.day
 end

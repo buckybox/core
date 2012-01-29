@@ -68,16 +68,17 @@ describe Account do
     before(:each) do
       @order = Fabricate(:order) # $10
       @account = @order.account
-      @d2 = Fabricate(:delivery, :date => 1.week.from_now, :order => @order)
-      @d3 = Fabricate(:delivery, :date => 2.weeks.from_now, :order => @order)
-      @d4 = Fabricate(:delivery, :date => 3.weeks.from_now, :order => @order)
-      @d1 = Fabricate(:delivery, :date => Date.today, :order => @order)
+      @d2 = Fabricate(:delivery, :delivery_list => Fabricate(:delivery_list, :date => 1.week.from_now), :order => @order)
+      @d3 = Fabricate(:delivery, :delivery_list => Fabricate(:delivery_list, :date => 2.weeks.from_now), :order => @order)
+      @d4 = Fabricate(:delivery, :delivery_list => Fabricate(:delivery_list, :date => 3.weeks.from_now), :order => @order)
+      @d1 = Fabricate(:delivery, :delivery_list => Fabricate(:delivery_list, :date => Date.today), :order => @order)
     end
 
     it "is today if balance is currently below threshold" do
-      @account.stub(:balance).and_return(Money.new(-1000))  
+      @account.stub(:balance).and_return(Money.new(-1000))
       @account.next_invoice_date.should == 2.days.from_now(Time.now).to_date
     end
+
     it "is at least 2 days after the first delivery" do
       @account.stub(:balance).and_return(Money.new(0))  
       @account.next_invoice_date.should == 2.days.from_now(Time.now).to_date
@@ -85,10 +86,12 @@ describe Account do
       @account.stub(:balance).and_return(Money.new(1000))
       @account.next_invoice_date.should == 2.days.from_now(Time.now).to_date
     end
+
     it "is 12 days before the account goes below the invoice threshold" do
       @account.stub(:balance).and_return(Money.new(3000))
       @account.next_invoice_date.should == 12.days.ago(@d4.date).to_date 
     end
+
     it "is only influenced by pending deliveries" do
       @account.stub(:balance).and_return(Money.new(2000))
       @d3.update_attribute(:status, 'cancelled')
@@ -131,7 +134,6 @@ describe Account do
       Invoice.should_receive(:create).and_return(true)
       @account.create_invoice
     end
-      
   end
 end
 

@@ -3,7 +3,7 @@ FutureDeliveryList = Struct.new(:date, :deliveries, :all_finished)
 class DeliveryList < ActiveRecord::Base
   belongs_to :distributor
 
-  has_many :deliveries, :order => :position, :include => [:box, :customer, :address, :route]
+  has_many :deliveries, :dependent => :destroy, :order => :position, :include => [:box, :customer, :address, :route]
 
   attr_accessible :distributor, :date
 
@@ -35,7 +35,7 @@ class DeliveryList < ActiveRecord::Base
     return result
   end
 
-  def self.generate_list(distributor, date = Date.today)
+  def self.generate_list(distributor, date = Date.current)
     delivery_list = DeliveryList.find_or_create_by_distributor_id_and_date(distributor.id, date)
     packing_list = PackingList.find_or_create_by_distributor_id_and_date(distributor.id, date)
 

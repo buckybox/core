@@ -38,23 +38,11 @@ class Delivery < ActiveRecord::Base
     return false unless STATUS.include?(new_status)
     return false if (new_status == 'rescheduled' || new_status == 'repacked') && options[:date].nil?
 
-    new_date = Date.parse(options[:date]) if options[:date]
     result = true
 
-    if new_status == 'rescheduled' || new_status == 'repacked'
-      ActiveRecord::Base.transaction do
-        deliveries.each do |d|
-          new_delivery = Delivery.new(order: d.order, route: d.route, status: 'pending', date: new_date, old_delivery: d)
-          result &= new_delivery.save!
-        end
-      end
-    end
-
-    if result
-      deliveries.each do |delivery|
-        delivery.status = new_status
-        result &= delivery.save!
-      end
+    deliveries.each do |delivery|
+      delivery.status = new_status
+      result &= delivery.save!
     end
 
     return result
@@ -92,8 +80,9 @@ class Delivery < ActiveRecord::Base
     subtract_from_account if new_status == 'delivered'
     add_to_account        if old_status == 'delivered'
 
-    remove_from_schedule  if old_status == 'rescheduled' || old_status == 'repacked'
-    add_to_schedule       if new_status == 'rescheduled' || new_status == 'repacked'
+    # Commenting out for now as not doing reschedule repack just yet
+    #remove_from_schedule  if old_status == 'rescheduled' || old_status == 'repacked'
+    #add_to_schedule       if new_status == 'rescheduled' || new_status == 'repacked'
   end
 
   def subtract_from_account
@@ -115,7 +104,7 @@ class Delivery < ActiveRecord::Base
   end
 
   def remove_from_schedule
-    order.remove_scheduled_delivery(new_delivery) if new_delivery
+    #order.remove_scheduled_delivery(new_delivery) if new_delivery
 
     unless new_delivery
       errors.add(:base, 'There is no "new delivery" to remove from the schedule so this status change can not be completed.')
@@ -131,7 +120,7 @@ class Delivery < ActiveRecord::Base
   end
 
   def add_to_schedule
-    order.add_scheduled_delivery(new_delivery) if new_delivery
+    #order.add_scheduled_delivery(new_delivery) if new_delivery
 
     unless new_delivery
       errors.add(:base, 'There is no "new delivery" to add to the schedule so this status change can not be completed.')

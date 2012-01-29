@@ -7,15 +7,15 @@ class Distributor::DeliveriesController < Distributor::BaseController
 
   def index
     unless params[:date] && params[:view]
-      redirect_to date_distributor_deliveries_path(current_distributor, Date.today, 'packing') and return
+      redirect_to date_distributor_deliveries_path(current_distributor, Date.current, 'packing') and return
     end
 
     index! do
       @selected_date = Date.parse(params[:date])
       @route_id = params[:view].to_i
 
-      start_date = Date.today - 1.week
-      end_date   = Date.today + 4.weeks
+      start_date = Date.current - 1.week
+      end_date   = Date.current + 4.weeks
 
       @routes = current_distributor.routes
 

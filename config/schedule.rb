@@ -13,3 +13,7 @@ every 1.hour do
   runner 'Distributor.automate_delivered_status'
 end
 
+every 1.day do
+  runner 'Order.deactivate_finished'
+end
+

@@ -24,14 +24,6 @@ class Customer < ActiveRecord::Base
     :tsearch => {:prefix => true}
   }
 
-  before_validation :randomize_password_if_not_present
-
-  before_create :initialize_number
-  after_create :create_account
-  after_create :trigger_new_customer
-
-  before_save :downcase_email
-
   accepts_nested_attributes_for :address
 
   attr_accessible :address_attributes, :first_name, :last_name, :email, :phone, :name, :distributor_id, :distributor, :route, :password, :remember_me
@@ -39,6 +31,14 @@ class Customer < ActiveRecord::Base
   validates_presence_of :first_name, :email, :distributor, :route
   validates_uniqueness_of :email, :scope => :distributor_id
   validates_uniqueness_of :number, :scope => :distributor_id
+
+  before_validation :randomize_password_if_not_present
+
+  before_create :initialize_number
+  after_create  :create_account
+  after_create  :trigger_new_customer
+
+  before_save :downcase_email
 
   def name
     "#{first_name} #{last_name}".strip
@@ -84,7 +84,7 @@ class Customer < ActiveRecord::Base
   end
 
   def create_account
-    Account.create!(:customer => self, :balance => 0)
+    Account.create!(:customer => self)
   end
 
   def trigger_new_customer

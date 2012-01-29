@@ -33,8 +33,8 @@ class Invoice < ActiveRecord::Base
   def calculate_amount
     return unless account
     self.balance = account.balance
-    self.transactions = account.transactions.order(:created_at).where(["created_at >= ? AND created_at <= ?", start_date, Date.today]).collect {|t| {:date => t.created_at.to_date, :amount => t.amount, :description => t.description}}
-    self.deliveries = account.deliveries.pending.where("date >= ? AND date <= ?", Date.today, end_date).collect {|d| {:date => d.date, :description => d.order.box.name, :amount => d.order.price}}
+    self.transactions = account.transactions.order(:created_at).where(["created_at >= ? AND created_at <= ?", start_date, Date.current]).collect {|t| {:date => t.created_at.to_date, :amount => t.amount, :description => t.description}}
+    self.deliveries = account.deliveries.pending.where("date >= ? AND date <= ?", Date.current, end_date).collect {|d| {:date => d.date, :description => d.order.box.name, :amount => d.order.price}}
     self.amount = balance - deliveries.inject(Money.new(0)) {|sum, delivery| sum += delivery[:amount]}
     return amount
   end

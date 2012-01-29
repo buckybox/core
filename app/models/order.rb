@@ -9,8 +9,8 @@ class Order < ActiveRecord::Base
   has_one :address,     :through => :customer
   has_one :route,       :through => :customer
 
-  has_many :packages,   :dependent => :destroy
-  has_many :deliveries, :dependent => :destroy
+  has_many :packages
+  has_many :deliveries
   has_many :order_schedule_transactions
 
   acts_as_taggable
@@ -27,7 +27,7 @@ class Order < ActiveRecord::Base
   validates_inclusion_of :frequency, :in => FREQUENCIES, :message => "%{value} is not a valid frequency"
   validate :box_distributor_equals_customer_distributor
 
-  before_save :make_active_and_create_first_delivery, :if => :just_completed?
+  before_save :make_active, :if => :just_completed?
   before_save :record_schedule_change
 
   scope :completed, where(completed:true)
@@ -46,32 +46,6 @@ class Order < ActiveRecord::Base
       if order.schedule.next_occurrence.nil?
         order.update_attribute(:active, false)
       end
-    end
-  end
-
-  def self.create_next_delivery
-    active.each { |d| d.create_next_delivery }
-  end
-
-  def create_next_delivery
-    if completed? && active?
-      current_route = customer.route
-      date = schedule.next_occurrence
-      delivery = deliveries.find_or_create_by_date_and_route_id(date, current_route.id) if date && current_route
-    end
-  end
-
-  # Maintenance method. Should only need if cron isn't running or missed some dates
-  def self.create_old_deliveries
-    all.each { |o| o.create_old_deliveries }
-  end
-
-  # Maintenance method. Should only need if cron isn't running or missed some dates
-  def create_old_deliveries
-    schedule.occurrences(Time.now).each do |occurrence|
-      current_route = customer.route
-      date = occurrence.to_date
-      result = deliveries.find_or_create_by_date_and_route_id(date, current_route.id) if date && current_route
     end
   end
 
@@ -107,9 +81,8 @@ class Order < ActiveRecord::Base
   protected
 
   # Manually create the first delivery all following deliveries should be scheduled for creation by the cron job
-  def make_active_and_create_first_delivery
+  def make_active
     self.active = true
-    create_next_delivery
   end
 
   def record_schedule_change

@@ -31,19 +31,12 @@ describe Delivery do
           @cost = @delivery.order.price * @delivery.order.quantity
         end
 
-        Delivery::STATUS.each do |ns|
+        (Delivery::STATUS - %w(rescheduled repacked)).each do |ns|
           next if os == ns
 
           describe "from #{os} to #{ns}" do
             before(:each) do
               @delivery.status = ns
-
-              if os == 'rescheduled' || os == 'repacked' || ns == 'rescheduled' || ns == 'repacked'
-                new_delivery = Fabricate(:delivery, :order => @delivery.order, :old_delivery => @delivery, :date => 3.weeks.from_now)
-                order = @delivery.order
-                order.add_scheduled_delivery(new_delivery)
-                order.save
-              end
 
               @schedule_hash = Order.find(@delivery.order.id).schedule.to_hash
             end
@@ -56,24 +49,11 @@ describe Delivery do
               specify { expect { @delivery.save }.should_not change(@account, :balance) }
             end
 
-            if ns == 'rescheduled' || ns == 'repacked'
-              it 'should update the order schedule' do
-                @delivery.save
-                Order.find(@delivery.order.id).schedule.to_hash.to_s.should_not == @schedule_hash.to_s
-              end
-            elsif os == 'rescheduled' || os == 'repacked'
-              it 'should update the order schedule' do
-                @delivery.save
-                Order.find(@delivery.order.id).schedule.to_hash.to_s.should_not == @schedule_hash.to_s
-              end
-              specify { expect { @delivery.save }.should change(@delivery.order.deliveries, :count).by(-1) }
-            else
-              it 'should not affect the order schedule' do
-                @delivery.save
-                Order.find(@delivery.order.id).schedule.to_hash.to_s.should == @schedule_hash.to_s
-              end
-              specify { expect { @delivery.save }.should_not change(@delivery.order.deliveries, :count) }
+            it 'should not affect the order schedule' do
+              @delivery.save
+              Order.find(@delivery.order.id).schedule.to_hash.to_s.should == @schedule_hash.to_s
             end
+            specify { expect { @delivery.save }.should_not change(@delivery.order.deliveries, :count) }
           end
         end
       end

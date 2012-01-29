@@ -5,7 +5,7 @@ describe CustomersController do
   before(:each) do
     @distributor = Fabricate(:distributor, :completed_wizard => true)
     sign_in @distributor
-    @customer = Fabricate(:customer_with_account, :distributor => @distributor)
+    @customer = Fabricate(:customer, :distributor => @distributor)
   end
 
   context "send_login_details" do

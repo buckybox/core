@@ -55,7 +55,7 @@ class Distributor < ActiveRecord::Base
     raise(ArgumentError, 'The daily list schedule can not be updated this way. Please use the schedule generation method.')
   end
 
-  def generate_daily_lists_schedule(time = Date.today.to_time)
+  def generate_daily_lists_schedule(time = Time.new.beginning_of_day)
     time = Time.at((time.to_f / 1.hour).floor * 1.hour) # make sure time starts on the hour
     schedule = Schedule.new(time, :duration => 3600) # make sure it lasts for an hour
     schedule.add_recurrence_rule Rule.daily # and have it reoccur daily
@@ -70,7 +70,7 @@ class Distributor < ActiveRecord::Base
     raise(ArgumentError, 'The auto delivery schedule can not be updated this way. Please use the schedule generation method.')
   end
 
-  def generate_auto_delivery_schedule(time = Date.tomorrow.to_time)
+  def generate_auto_delivery_schedule(time = Time.new.end_of_day)
     time = Time.at((time.to_f / 1.hour).floor * 1.hour) # make sure time starts on the hour
     schedule = Schedule.new(time, :duration => 3600) # make sure it lasts for an hour
     schedule.add_recurrence_rule Rule.daily # and have it reoccur daily
@@ -83,7 +83,7 @@ class Distributor < ActiveRecord::Base
     end
   end
 
-  def create_daily_lists(date = Date.today)
+  def create_daily_lists(date = Date.current)
     PackingList.generate_list(self, date)
     DeliveryList.generate_list(self, date)
   end
@@ -94,7 +94,7 @@ class Distributor < ActiveRecord::Base
     end
   end
 
-  def automate_delivered_status(date = Date.today)
+  def automate_delivered_status(date = Date.current)
     delivery_lists.find_by_date(date).mark_all_as_auto_delivered
     packing_lists.find_by_date(date).mark_all_as_auto_packed
   end
