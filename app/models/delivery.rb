@@ -89,7 +89,7 @@ class Delivery < ActiveRecord::Base
     account.subtract_from_balance(
       package.archived_box_price * package.archived_order_quantity,
       :kind => 'delivery',
-      :description => "[ID##{id}] Delivery was made of #{order.string_pluralize} at #{order.price} each."
+      :description => "[ID##{id}] Delivery was made of #{package.string_pluralize} at #{package.archived_box_price} each."
     )
     errors.add(:base, 'Problem subtracting balance from account on delivery status change.') unless account.save
   end
@@ -98,7 +98,7 @@ class Delivery < ActiveRecord::Base
     account.add_to_balance(
       package.archived_box_price * package.archived_order_quantity,
       :kind => 'delivery',
-      :description => "[ID##{id}] Delivery reversal. #{order.string_pluralize} at #{order.price} each."
+      :description => "[ID##{id}] Delivery reversal. #{package.string_pluralize} at #{package.archived_box_price} each."
     )
     errors.add(:base, 'Problem adding balance from account on delivery status change.') unless account.save
   end

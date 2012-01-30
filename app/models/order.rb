@@ -75,7 +75,8 @@ class Order < ActiveRecord::Base
   end
 
   def string_pluralize
-    "#{quantity || 0} " + ((quantity == 1 || quantity =~ /^1(\.0+)?$/) ? box.name : box.name.pluralize)
+    box_name = box.name
+    "#{quantity || 0} " + ((quantity == 1 || quantity =~ /^1(\.0+)?$/) ? box_name : box_name.pluralize)
   end
 
   protected

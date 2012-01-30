@@ -22,7 +22,7 @@ describe Delivery do
   end
 
   context :changing_status do
-    Delivery::STATUS.each do |os|
+    (Delivery::STATUS - %w(rescheduled repacked)).each do |os|
       context '#status_changed' do
         before(:each) do
           @delivery = Fabricate(:delivery, :status => os)

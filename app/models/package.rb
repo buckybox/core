@@ -25,7 +25,7 @@ class Package < ActiveRecord::Base
   STATUS = %w(unpacked packed)
   PACKING_METHOD = %w(manual auto)
 
-  validates_presence_of :packing_list, :status
+  validates_presence_of :packing_list, :status, :order
   validates_inclusion_of :status, :in => STATUS, :message => "%{value} is not a valid status"
   validates_inclusion_of :packing_method, :in => PACKING_METHOD, :message => "%{value} is not a valid packing method", :if => 'status == "packed"'
 
@@ -35,6 +35,12 @@ class Package < ActiveRecord::Base
   before_save :archive_data
 
   scope :originals, where(original_package_id:nil)
+
+  def string_pluralize
+    quantity = archived_order_quantity
+    box_name = archived_box_name
+    "#{quantity || 0} " + ((quantity == 1 || quantity =~ /^1(\.0+)?$/) ? box_name : box_name.pluralize)
+  end
 
   private
 

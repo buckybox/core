@@ -64,7 +64,6 @@ describe Order do
       specify { @order.schedule.next_occurrence.should_not be_nil }
       specify { @order.schedule.to_s.should == @schedule.to_s }
       specify { @order.schedule.next_occurrence == @schedule.next_occurrence }
-      specify { @order.should have(1).delivery }
     end
 
     context :weekly do
@@ -82,7 +81,6 @@ describe Order do
       specify { @order.schedule.next_occurrence.should_not be_nil }
       specify { @order.schedule.to_s.should == @schedule.to_s }
       specify { @order.schedule.next_occurrence == @schedule.next_occurrence }
-      specify { @order.should have(1).delivery }
     end
 
     context :fortnightly do
@@ -100,7 +98,6 @@ describe Order do
       specify { @order.schedule.next_occurrence.should_not be_nil }
       specify { @order.schedule.to_s.should == @schedule.to_s }
       specify { @order.schedule.next_occurrence == @schedule.next_occurrence }
-      specify { @order.should have(1).delivery }
     end
   end
 
@@ -117,7 +114,8 @@ describe Order do
   context 'scheduled_delivery' do
     before do
       @schedule = @order.schedule
-      @delivery = Fabricate(:delivery, :date => Date.today + 5.days)
+      delivery_list = Fabricate(:delivery_list, :date => Date.current + 5.days)
+      @delivery = Fabricate(:delivery, :delivery_list => delivery_list)
       @order.add_scheduled_delivery(@delivery)
       @order.save
     end
@@ -149,30 +147,6 @@ describe Order do
         specify { @order.string_pluralize.should == "#{q} #{@order.box.name}s" }
       end
     end
-  end
-
-  describe '#delivery_for_date' do
-    before { @delivery = Fabricate(:delivery, :order => @order) }
-    specify { @order.delivery_for_date(@delivery.date).should == @delivery }
-  end
-
-  describe '#check_status_by_date' do
-    before do
-      @past_date = Date.today - 2.days
-      @future_date = Date.today + 3.days
-      @delivery = Fabricate(:delivery, :order => @order, :date => @past_date, :status => 'delivered')
-
-      @schedule = @order.schedule
-      @schedule.start_date = Time.now - 4.weeks #make sure the start date is well befor ether test date
-      @schedule.add_recurrence_date(@past_date.to_time)
-      @schedule.add_recurrence_date(@future_date.to_time)
-
-      @order.schedule = @schedule
-      @order.save
-    end
-
-    specify { @order.check_status_by_date(@past_date).should == 'delivered' }
-    specify { @order.check_status_by_date(@future_date).should == 'pending' }
   end
 
   describe '#deactivate_finished' do
