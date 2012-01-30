@@ -25,4 +25,4 @@ public/system/
 config/database.yml
 Session.vim
 .rvmrc
-
+coverage/

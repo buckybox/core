@@ -44,12 +44,14 @@ group :development, :test do
   gem 'rspec-rails'
   gem 'guard'
 
-  gem 'rb-inotify', :require => false
-  gem 'rb-fsevent', :require => false
-  gem 'rb-fchange', :require => false
+  gem 'rb-inotify',   :require => false
+  gem 'rb-fsevent',   :require => false
+  gem 'rb-fchange',   :require => false
 
   gem 'ruby-debug19', :require => false
-  gem 'mailcatcher', :require => false
+  gem 'mailcatcher',  :require => false
+
+  gem 'simplecov',    :require => false
 end
 
 group :test do
