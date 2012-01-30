@@ -30,7 +30,7 @@ class Package < ActiveRecord::Base
   validates_inclusion_of :packing_method, :in => PACKING_METHOD, :message => "%{value} is not a valid packing method", :if => 'status == "packed"'
 
   before_validation :default_status, :if => 'status.nil?'
-  before_validation :default_packing_method, :if => 'status == "delivered"'
+  before_validation :default_packing_method, :if => 'status == "packed" && packing_method.nil?'
 
   before_save :archive_data
 

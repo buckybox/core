@@ -23,7 +23,7 @@ class Delivery < ActiveRecord::Base
 
   before_validation :default_route, :if => 'route.nil?'
   before_validation :default_status, :if => 'status.nil?'
-  before_validation :default_delivery_method, :if => 'status == "delivered"'
+  before_validation :default_delivery_method, :if => 'status == "delivered" && delivery_method.nil?'
   before_validation :changed_status, :if => 'status_changed?'
 
   before_create :add_delivery_number
