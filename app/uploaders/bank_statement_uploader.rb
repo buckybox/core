@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-class TransactionsUploader < CarrierWave::Uploader::Base
+class BankStatementUploader < CarrierWave::Uploader::Base
 
   # Include RMagick or MiniMagick support:
   # include CarrierWave::RMagick
