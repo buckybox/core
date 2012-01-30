@@ -8,6 +8,8 @@ describe BankStatement do
   specify {@statement.should be_valid}
 
   context '#process_statement!' do
+    before {@statement.process_statement!}
+    specify{true}
   end
 
   context '#create_payment!' do

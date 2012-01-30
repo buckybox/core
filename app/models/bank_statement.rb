@@ -1,19 +1,25 @@
+require 'csv'
+
 class BankStatement < ActiveRecord::Base
 
   belongs_to :distributor
 
   mount_uploader :statement_file, BankStatementUploader
 
-  def process_statement!(distributor, csv, customers)
-    file = File.open(csv.path,'r')
-    it = 0
-    file.each_line("\n") do |line|
-      row = line.split(",")
-      if row[1].to_i && row[1].to_i > 0
-        create_payment!(distributor, row, customers[it.to_s]) unless customers[it.to_s].blank?
-      end
-      it += 1
+  def process_statement!
+    CSV.foreach(statement_file.path) do |row|
+      puts row.inspect
     end
+
+  #  file = File.open(csv.path,'r')
+  #  it = 0
+  #  file.each_line("\n") do |line|
+  #    row = line.split(",")
+  #    if row[1].to_i && row[1].to_i > 0
+  #      create_payment!(distributor, row, customers[it.to_s]) unless customers[it.to_s].blank?
+  #    end
+  #    it += 1
+  #  end
   end
 
   # CSV line format
