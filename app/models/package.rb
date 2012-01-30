@@ -49,7 +49,7 @@ class Package < ActiveRecord::Base
   end
 
   def default_packing_method
-    self.delivery_method = 'manual'
+    self.packing_method = 'manual'
   end
 
   def archive_data
