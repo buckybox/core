@@ -6,12 +6,12 @@ describe Payment do
   end
 
   specify { @payment.should be_valid }
-  
+
   context :kinds do
     %w(bank_transfer credit_card manual).each do |k|
       specify { Fabricate.build(:payment, :kind => k).should be_valid }
     end
-    
+
     specify { Fabricate.build(:payment, :kind => 'trees').should_not be_valid }
   end
 

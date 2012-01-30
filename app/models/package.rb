@@ -47,10 +47,10 @@ class Package < ActiveRecord::Base
   end
 
   def archive_data
-    self.archived_address = address.join(', ')
-    self.archived_order_quantity = order.quantity
-    self.archived_box_name = box.name
-    self.archived_box_price = box.price
-    self.archived_customer_name = customer.name
+    self.archived_address = address.join(', ') if address
+    self.archived_order_quantity = order.quantity if order
+    self.archived_box_name = box.name if box
+    self.archived_box_price = box.price if box
+    self.archived_customer_name = customer.name if customer
   end
 end

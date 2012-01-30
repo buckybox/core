@@ -35,10 +35,11 @@ class Customer < ActiveRecord::Base
   before_validation :randomize_password_if_not_present
 
   before_create :initialize_number
-  after_create  :create_account
-  after_create  :trigger_new_customer
+  before_create :setup_account
 
   before_save :downcase_email
+
+  after_create :trigger_new_customer
 
   def name
     "#{first_name} #{last_name}".strip
@@ -83,8 +84,8 @@ class Customer < ActiveRecord::Base
     randomize_password unless encrypted_password.present?
   end
 
-  def create_account
-    Account.create!(:customer => self)
+  def setup_account
+    self.build_account
   end
 
   def trigger_new_customer
