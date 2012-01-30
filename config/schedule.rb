@@ -3,13 +3,13 @@
 # http://en.wikipedia.org/wiki/Cron
 # Learn more: http://github.com/javan/whenever
 
-set :output, { :error => 'cron_error.log', :standard => 'cron.log' }
+set :output, { :error => 'log/cron_error.log', :standard => 'log/cron.log' }
 
-every 1.hour do 
+every 1.hour do
   runner 'Distributor.create_daily_lists'
 end
 
-every 1.hour do 
+every 1.hour do
   runner 'Distributor.automate_delivered_status'
 end
 
