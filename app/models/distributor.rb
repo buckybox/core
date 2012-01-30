@@ -88,13 +88,13 @@ class Distributor < ActiveRecord::Base
     DeliveryList.generate_list(self, date)
   end
 
-  def self.automate_delivered_status(time = Time.now)
+  def self.automate_completed_status(time = Time.now)
     all.each do |distributor|
-      distributor.automate_delivered_status(time.to_date) if distributor.auto_delivery_schedule.occurring_at?(time)
+      distributor.automate_completed_status(time.to_date) if distributor.auto_delivery_schedule.occurring_at?(time)
     end
   end
 
-  def automate_delivered_status(date = Date.current)
+  def automate_completed_status(date = Date.current)
     delivery_lists.find_by_date(date).mark_all_as_auto_delivered
     packing_lists.find_by_date(date).mark_all_as_auto_packed
   end

@@ -3,7 +3,7 @@ FutureDeliveryList = Struct.new(:date, :deliveries, :all_finished)
 class DeliveryList < ActiveRecord::Base
   belongs_to :distributor
 
-  has_many :deliveries, :dependent => :destroy, :order => :position, :include => [:box, :customer, :address, :route]
+  has_many :deliveries, :dependent => :destroy, :order => :position
 
   attr_accessible :distributor, :date
 

@@ -20,7 +20,7 @@ describe Invoice do
       @account = @order.account
       @account.stub(:balance).and_return(Money.new(10000))
       @t1 = Fabricate(:transaction, :account => @account, :created_at => 3.days.ago)
-      @t2 = Fabricate(:transaction, :account => @account, :created_at => Date.today)
+      @t2 = Fabricate(:transaction, :account => @account, :created_at => Date.current)
       @d2 = Fabricate(:delivery, :order => @order, :date => 2.weeks.from_now)
       @d1 = Fabricate(:delivery, :order => @order, :date => 1.weeks.from_now)
       @d3 = Fabricate(:delivery, :order => @order, :date => 4.weeks.from_now)

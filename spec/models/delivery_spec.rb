@@ -68,7 +68,7 @@ describe Delivery do
       specify { Delivery.change_statuses(@deliveries, 'bad_status').should be_false }
       specify { Delivery.change_statuses(@deliveries, 'rescheduled').should be_false }
       specify { Delivery.change_statuses(@deliveries, 'delivered').should be_true }
-      specify { Delivery.change_statuses(@deliveries, 'rescheduled', :date => (Date.today + 2.days).to_s).should be_true }
+      specify { Delivery.change_statuses(@deliveries, 'rescheduled', :date => (Date.current + 2.days).to_s).should be_true }
     end
   end
 end

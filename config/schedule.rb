@@ -10,7 +10,7 @@ every 1.hour do
 end
 
 every 1.hour do
-  runner 'Distributor.automate_delivered_status'
+  runner 'Distributor.automate_completed_status'
 end
 
 every 1.day do

@@ -72,7 +72,7 @@ describe Account do
       @d2 = Fabricate(:delivery, :delivery_list => Fabricate(:delivery_list, :date => 1.week.from_now), :order => @order)
       @d3 = Fabricate(:delivery, :delivery_list => Fabricate(:delivery_list, :date => 2.weeks.from_now), :order => @order)
       @d4 = Fabricate(:delivery, :delivery_list => Fabricate(:delivery_list, :date => 3.weeks.from_now), :order => @order)
-      @d1 = Fabricate(:delivery, :delivery_list => Fabricate(:delivery_list, :date => Date.today), :order => @order)
+      @d1 = Fabricate(:delivery, :delivery_list => Fabricate(:delivery_list, :date => Date.current), :order => @order)
     end
 
     it "is today if balance is currently below threshold" do
@@ -121,7 +121,7 @@ describe Account do
 
     it "does nothing if an outstanding invoice exists" do
       Fabricate(:invoice, :account => @account)
-      @account.stub(:next_invoice_date).and_return(Date.today)
+      @account.stub(:next_invoice_date).and_return(Date.current)
       Invoice.should_not_receive(:create)
       @account.create_invoice
     end
@@ -133,7 +133,7 @@ describe Account do
     end
 
     it "creates invoice if next invoice date is <= today" do
-      @account.stub(:next_invoice_date).and_return(Date.today)
+      @account.stub(:next_invoice_date).and_return(Date.current)
       Invoice.should_receive(:create).and_return(true)
       @account.create_invoice
     end

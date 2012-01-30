@@ -40,7 +40,7 @@ class PackingList < ActiveRecord::Base
 
     distributor.orders.active.each do |order|
       if order.schedule.occurs_on?(date)
-        package = packing_list.packages.originals.find_or_create_by_order_id(order.id)
+        packing_list.packages.originals.find_or_create_by_order_id(order.id)
       end
     end
   end

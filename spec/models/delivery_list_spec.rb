@@ -1,5 +1,7 @@
 require 'spec_helper'
 
 describe DeliveryList do
-  pending "add some examples to (or delete) #{__FILE__}"
+  before { @delivery_list = Fabricate(:delivery_list) }
+
+  specify { @delivery_list.should be_valid }
 end
