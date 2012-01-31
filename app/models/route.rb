@@ -18,6 +18,8 @@ class Route < ActiveRecord::Base
   before_validation :create_schedule
   before_save :record_schedule_change, :if => 'schedule_changed?'
 
+  default_scope order(:name)
+
   def self.default_route(distributor)
     distributor.routes.first # For now the first one is the default
   end
@@ -44,7 +46,7 @@ class Route < ActiveRecord::Base
 
   def create_schedule
     recurrence_rule = Rule.weekly.day(*delivery_days)
-    new_schedule = Schedule.new(Date.today.to_time)
+    new_schedule = Schedule.new(Time.new.beginning_of_day)
     new_schedule.add_recurrence_rule(recurrence_rule)
     self.schedule = new_schedule.to_hash
   end

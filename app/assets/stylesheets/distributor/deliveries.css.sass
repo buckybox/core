@@ -1,7 +1,7 @@
 $cal-nav-base: rgb(240, 240, 240)
 $cal-nav-head: darken($cal-nav-base, 30%)
 $cal-nav-hover: darken($cal-nav-base, 35%)
-$cal-nav-divider: darken($cal-nav-base, 40%)
+$cal-nav-divider: darken($cal-nav-base, 50%)
 
 #calendar-navigation
   width: 980px
@@ -31,11 +31,15 @@ $cal-nav-divider: darken($cal-nav-base, 40%)
           padding: 3px
           background-color: $cal-nav-head
           color: #fff
+          &.today
+            background-color: $cal-nav-divider
         .count
           padding: 3px
           background-color: $cal-nav-base
           color: $cal-nav-head
-          &.selected
+          &.has_pending
+            background-color: #fde49b
+          &#selected
             border: 2px solid #000
             padding: 1px
         &:hover
@@ -85,10 +89,16 @@ $cal-nav-divider: darken($cal-nav-base, 40%)
       display: inline
 
   .data-listings
-    &.pending
+    &.pending, &.unpacked
       background-color: #FFF0D8
-    &.delivered
+    &.delivered, &.packed
       background-color: #F0F0F0
     &.cancelled, &.rescheduled, &.repacked
       background-color: #F0F0F0
       text-decoration: line-through
+
+  .ui-state-highlight
+    height: 38px
+    margin: 0
+    border: 1px solid darken(#FFF0D8, 50%)
+    background-color: darken(#FFF0D8, 25%)

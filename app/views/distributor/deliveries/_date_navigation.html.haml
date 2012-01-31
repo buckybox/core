@@ -1,19 +1,17 @@
-- if @calendar_hash && @calendar_hash.first
+- unless @delivery_lists.empty?
   .row
     .twelve.columns
       #calendar-navigation
-        %ul{:style => "width:#{calendar_nav_length(@calendar_hash)};"}
-          - last_month = @calendar_hash.first.first.strftime("%m")
-
-          - @calendar_hash.each do |date, delivery_info|
-            - if last_month != date.strftime("%m")
-              %li
-                .month= date.strftime("%b")
-                .hack-spacer &nbsp;
-
+        %ul{:style => calendar_nav_length(@delivery_lists)}
+          - @delivery_lists.group_by{ |date_list| date_list.date.month }.each do |month, date_list_group|
             %li
-              = link_to date_distributor_deliveries_path(current_distributor, date) do
-                .date= date.strftime("%d %a")
-                .count{:class => "#{'selected' if date.to_s == params[:date]}"}= delivery_info[:count]
+              .month= Date::ABBR_MONTHNAMES[month]
+              .hack-spacer &nbsp;
 
-            - last_month = date.strftime("%m")
+            - date_list_group.each do |date_list|
+              %li
+                = link_to date_distributor_deliveries_path(current_distributor, date_list.date) do
+                  .date{:class => date_class(date_list)}= date_list.date.strftime("%d %a")
+                  .count{:id => count_selected(date_list, params[:date]), :class => count_class(date_list, params[:date])}
+                    = date_list.deliveries.size
+

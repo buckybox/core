@@ -1,6 +1,7 @@
 class Account < ActiveRecord::Base
-  belongs_to :distributor
   belongs_to :customer
+
+  has_one :distributor, :through => :customer
 
   has_many :orders, :dependent => :destroy
   has_many :payments, :dependent => :destroy
@@ -17,12 +18,11 @@ class Account < ActiveRecord::Base
 
   acts_as_taggable
 
-  attr_accessible :distributor, :customer, :tag_list
+  attr_accessible :customer, :tag_list
+
+  validates_presence_of :customer, :balance
 
   before_validation :default_balance_and_currency
-
-  validates_presence_of :distributor, :customer, :balance
-  validates_uniqueness_of :customer_id, :scope => :distributor_id, :message => 'this customer already has an account with this distributor'
 
   def balance_cents=(value)
     raise(ArgumentError, "The balance can not be updated this way. Please use one of the model balance methods that create transactions.")
@@ -60,7 +60,7 @@ class Account < ActiveRecord::Base
     invoice_date = nil
 
     if total < distributor.invoice_threshold
-      invoice_date =  Date.today
+      invoice_date =  Date.current
     else
       deliveries.pending.each do |delivery|
         bucky_fee_multiple = distributor.separate_bucky_fee ? (1 + distributor.fee) : 1
@@ -73,7 +73,7 @@ class Account < ActiveRecord::Base
     end
 
     if invoice_date
-      invoice_date = Date.today if invoice_date < Date.today
+      invoice_date = Date.current if invoice_date < Date.current
 
       if deliveries.first.date >= invoice_date - 2.days
         invoice_date = deliveries.first.date + 2.days
@@ -86,7 +86,7 @@ class Account < ActiveRecord::Base
   end
 
   def create_invoice
-    if next_invoice_date <= Date.today && invoices.outstanding.count == 0
+    if next_invoice_date <= Date.current && invoices.outstanding.count == 0
       Invoice.create(:account => self) 
     end
   end

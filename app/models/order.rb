@@ -5,11 +5,12 @@ class Order < ActiveRecord::Base
   belongs_to :box
 
   has_one :distributor, :through => :box
-  has_one :customer, :through => :account
-  has_one :route, :through => :customer
+  has_one :customer,    :through => :account
+  has_one :address,     :through => :customer
+  has_one :route,       :through => :customer
 
-  has_many :deliveries, :dependent => :destroy
-  has_many :routes, :through => :deliveries
+  has_many :packages
+  has_many :deliveries
   has_many :order_schedule_transactions
 
   acts_as_taggable
@@ -26,14 +27,14 @@ class Order < ActiveRecord::Base
   validates_inclusion_of :frequency, :in => FREQUENCIES, :message => "%{value} is not a valid frequency"
   validate :box_distributor_equals_customer_distributor
 
-  before_save :make_active_and_create_first_delivery, :if => :just_completed?
+  before_save :make_active, :if => :just_completed?
   before_save :record_schedule_change
 
-  scope :completed, where(:completed => true)
-  scope :active,    where(:active => true)
+  scope :completed, where(completed:true)
+  scope :active,    where(active:true)
 
   def price
-    box.price #will likely need to copy this to the order model at some stage
+    box.price # Must try remove this in code. It is now being achrived in deliveries
   end
 
   def customer= cust
@@ -41,36 +42,16 @@ class Order < ActiveRecord::Base
   end
 
   def self.deactivate_finished
+    logger.info "--- Deactivating orders with no other occurrences ---"
+
     active.each do |order|
+      logger.info "Processing: #{order.id}"
+
       if order.schedule.next_occurrence.nil?
+        logger.info '> Deactivating...'
         order.update_attribute(:active, false)
+        logger.info '> Done.'
       end
-    end
-  end
-
-  def self.create_next_delivery
-    active.each { |d| d.create_next_delivery }
-  end
-
-  def create_next_delivery
-    if completed? && active?
-      current_route = customer.route
-      date = schedule.next_occurrence
-      delivery = deliveries.find_or_create_by_date_and_route_id(date, current_route.id) if date && current_route
-    end
-  end
-
-  # Maintenance method. Should only need if cron isn't running or missed some dates
-  def self.create_old_deliveries
-    all.each { |o| o.create_old_deliveries }
-  end
-
-  # Maintenance method. Should only need if cron isn't running or missed some dates
-  def create_old_deliveries
-    schedule.occurrences(Time.now).each do |occurrence|
-      current_route = customer.route
-      date = occurrence.to_date
-      result = deliveries.find_or_create_by_date_and_route_id(date, current_route.id) if date && current_route
     end
   end
 
@@ -100,26 +81,15 @@ class Order < ActiveRecord::Base
   end
 
   def string_pluralize
-    "#{quantity || 0} " + ((quantity == 1 || quantity =~ /^1(\.0+)?$/) ? box.name : box.name.pluralize)
-  end
-
-  def delivery_for_date(date)
-    deliveries.where(:date => date)
-    (deliveries.empty? ? nil : deliveries.first)
-  end
-
-  def check_status_by_date(date)
-    if schedule.occurs_on?(date.to_time) # is it even suposed to happen on this date?
-      (date.future? ? 'pending' : delivery_for_date(date).status)
-    end
+    box_name = box.name
+    "#{quantity || 0} " + ((quantity == 1 || quantity =~ /^1(\.0+)?$/) ? box_name : box_name.pluralize)
   end
 
   protected
 
   # Manually create the first delivery all following deliveries should be scheduled for creation by the cron job
-  def make_active_and_create_first_delivery
+  def make_active
     self.active = true
-    create_next_delivery
   end
 
   def record_schedule_change

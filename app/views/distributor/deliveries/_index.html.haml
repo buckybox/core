@@ -11,7 +11,6 @@
         %th Status
         %th Date
         %th Route
-        %th Old Delivery #
 
     %tbody
       - @deliveries.each do |delivery|
@@ -21,4 +20,3 @@
           %td= delivery.status
           %td= delivery.date
           %td= delivery.route.name
-          %td= delivery.old_delivery.id if delivery.old_delivery

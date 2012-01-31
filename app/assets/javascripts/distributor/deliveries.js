@@ -2,7 +2,32 @@
 // All this logic will automatically be available in application.js.
 
 $(function() {
-  $("#calendar-navigation").jScrollPane();
+  var element = $('#calendar-navigation').jScrollPane();
+
+  if(element) {
+    var api = element.data('jsp');
+    api.scrollToElement($('#selected'), true);
+  }
+
+  $('.sortable').sortable({
+    delay:250,
+    placeholder:'ui-state-highlight',
+    curser: 'move',
+    opacity: 0.8,
+    update: function() {
+      $.ajax({
+        type: 'post',
+        data: $('#delivery_list').sortable('serialize'),
+        dataType: 'json',
+        url: '/distributors/' +
+          $('#delivery-listings').data('distributor') +
+          '/deliveries/date/' +
+          $('#delivery-listings').data('date') +
+          '/reposition'
+      })
+    }
+  });
+  $('.sortable').disableSelection();
 
   $('#delivery-listings #all').change(function() {
     var checked_deliveries = $('#delivery-listings .data-listings input[type=checkbox]');
@@ -13,9 +38,28 @@ $(function() {
     return false;
   });
 
+  $('#delivery-listings #master-print').click(function () {
+    var checked_deliveries = $('#delivery-listings .data-listings input[type=checkbox]:checked');
+
+    $.each(checked_deliveries, function(i, ckbx) {
+      var holder = $(ckbx).parent().parent();
+
+      holder.addClass('packed');
+      holder.removeClass('unpacked');
+
+      holder.find('.icon-packed').show();
+      holder.find('.icon-unpacked').hide();
+    });
+
+    $('#packing').submit();
+
+    checked_deliveries.prop('checked', false);
+    $('#delivery-listings #all').prop('checked', false);
+  });
+
   $('#delivery-listings #delivered, #delivery-listings #pending').click(function() {
-    var id = $(this).attr('id');
     var distributor_id = $('#delivery-listings').data('distributor');
+    var id = $(this).attr('id');
     var checked_deliveries = $('#delivery-listings .data-listings input[type=checkbox]:checked');
 
     updateDeliveryStatus(id, distributor_id, checked_deliveries);

@@ -1,13 +1,11 @@
 source 'http://rubygems.org'
 
 # Core
-gem 'rails', '3.1.3'
+gem 'rails', '~> 3.2.1'
 
 # Database
 gem 'pg'
 
-# Gems used only for assets and not required
-# in production environments by default.
 group :assets do
   gem 'coffee-rails'
   gem 'uglifier'
@@ -18,7 +16,7 @@ gem 'haml-rails'
 gem 'sass-rails'
 gem 'jquery-rails'
 
-gem 'devise'
+gem 'devise', '~> 1.5.3'
 gem 'simple_form'
 gem 'inherited_resources'
 gem 'mini_magick'
@@ -33,7 +31,7 @@ gem 'postmark-rails'
 gem 'ice_cube'
 gem 'whenever'
 gem 'newrelic_rpm'
-gem 'gauges-rails'
+gem 'acts_as_list'
 
 group :development do
   gem 'nifty-generators', :require => false
@@ -46,12 +44,14 @@ group :development, :test do
   gem 'rspec-rails'
   gem 'guard'
 
-  gem 'rb-inotify', :require => false
-  gem 'rb-fsevent', :require => false
-  gem 'rb-fchange', :require => false
+  gem 'rb-inotify',   :require => false
+  gem 'rb-fsevent',   :require => false
+  gem 'rb-fchange',   :require => false
 
   gem 'ruby-debug19', :require => false
-  gem 'mailcatcher', :require => false
+  gem 'mailcatcher',  :require => false
+
+  gem 'simplecov',    :require => false
 end
 
 group :test do

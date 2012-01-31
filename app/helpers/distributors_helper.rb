@@ -12,7 +12,7 @@ module DistributorsHelper
   end
 
   def topic_tab(text, path, options = {})
-    css_class = (current_page?(path) ? 'active' : '')
+    css_class = (current_page?(path) ? 'active main' : 'main')
     is_image = options.delete(:image_link)
 
     content_tag :li do

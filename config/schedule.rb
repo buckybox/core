@@ -3,17 +3,17 @@
 # http://en.wikipedia.org/wiki/Cron
 # Learn more: http://github.com/javan/whenever
 
+set :output, { :error => 'log/cron_error.log', :standard => 'log/cron.log' }
+
 every 1.hour do
-  runner 'Order.deactivate_finished', :output => {
-    :error => 'log/deactivate_finished_cron_error.log',
-    :standard => 'log/deactivate_finished_cron.log'
-  }
+  runner 'Distributor.create_daily_lists'
 end
 
 every 1.hour do
-  runner 'Order.create_next_delivery', :output => {
-    :error => 'log/create_next_delivery_cron_error.log',
-    :standard => 'log/create_next_delivery_cron.log'
-  }
+  runner 'Distributor.automate_completed_status'
+end
+
+every 1.day do
+  runner 'Order.deactivate_finished'
 end
 

@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe Customer do
   before :all do
-    @customer = Fabricate(:customer_with_account, :email => 'BuckyBox@example.com')
+    @customer = Fabricate(:customer, :email => 'BuckyBox@example.com')
   end
 
   specify { @customer.should be_valid }

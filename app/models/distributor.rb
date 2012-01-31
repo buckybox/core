@@ -1,16 +1,24 @@
 class Distributor < ActiveRecord::Base
-  has_one :bank_information, :dependent => :destroy
+  include IceCube
+
+  has_one :bank_information,    :dependent => :destroy
   has_one :invoice_information, :dependent => :destroy
 
-  has_many :boxes,        :dependent => :destroy
-  has_many :routes,       :dependent => :destroy
-  has_many :orders,       :dependent => :destroy, :through => :boxes
-  has_many :deliveries,   :dependent => :destroy, :through => :orders
-  has_many :payments,     :dependent => :destroy
-  has_many :accounts,     :dependent => :destroy
-  has_many :transactions, :dependent => :destroy, :through => :accounts
-  has_many :customers
-  has_many :events
+  has_many :boxes,          :dependent => :destroy
+  has_many :routes,         :dependent => :destroy
+  has_many :orders,         :dependent => :destroy, :through => :boxes
+  has_many :deliveries,     :dependent => :destroy, :through => :orders
+  has_many :payments,       :dependent => :destroy
+  has_many :accounts,       :dependent => :destroy, :through => :customers
+  has_many :transactions,   :dependent => :destroy, :through => :accounts
+  has_many :customers,      :dependent => :destroy
+  has_many :events,         :dependent => :destroy
+  has_many :delivery_lists, :dependent => :destroy
+  has_many :packing_lists,  :dependent => :destroy
+  has_many :packages,       :dependent => :destroy, :through => :packing_lists
+
+  serialize :daily_lists_schedule,   Hash
+  serialize :auto_delivery_schedule, Hash
 
   # Include default devise modules. Others available are:
   # :token_authenticatable, :encryptable, :confirmable, :lockable, :timeoutable and :omniauthable
@@ -36,6 +44,93 @@ class Distributor < ActiveRecord::Base
 
   before_save :parameterize_name
   before_save :downcase_email
+  before_save :generate_daily_lists_schedule, :if => 'daily_lists_schedule.to_s.blank?'
+  before_save :generate_auto_delivery_schedule, :if => 'auto_delivery_schedule.to_s.blank?'
+
+  def daily_lists_schedule
+    Schedule.from_hash(self[:daily_lists_schedule]) if self[:daily_lists_schedule]
+  end
+
+  def daily_lists_schedule=(daily_lists_schedule)
+    raise(ArgumentError, 'The daily list schedule can not be updated this way. Please use the schedule generation method.')
+  end
+
+  def generate_daily_lists_schedule(time = Time.new.beginning_of_day)
+    time = Time.at((time.to_f / 1.hour).floor * 1.hour) # make sure time starts on the hour
+    schedule = Schedule.new(time, :duration => 3600) # make sure it lasts for an hour
+    schedule.add_recurrence_rule Rule.daily # and have it reoccur daily
+    self[:daily_lists_schedule] = schedule.to_hash
+  end
+
+  def auto_delivery_schedule
+    Schedule.from_hash(self[:auto_delivery_schedule]) if self[:auto_delivery_schedule]
+  end
+
+  def auto_delivery_schedule=(auto_delivery_schedule)
+    raise(ArgumentError, 'The auto delivery schedule can not be updated this way. Please use the schedule generation method.')
+  end
+
+  def generate_auto_delivery_schedule(time = Time.new.end_of_day)
+    time = Time.at((time.to_f / 1.hour).floor * 1.hour) # make sure time starts on the hour
+    schedule = Schedule.new(time, :duration => 3600) # make sure it lasts for an hour
+    schedule.add_recurrence_rule Rule.daily # and have it reoccur daily
+    self[:auto_delivery_schedule] = schedule.to_hash
+  end
+
+  def self.create_daily_lists(time = Time.now)
+    logger.info "--- Checking distributor for daily list generation (#{time}) ---"
+
+    all.each do |distributor|
+      logger.info "Processing: #{distributor.id} - #{distributor.name} - #{distributor.daily_lists_schedule.start_time}"
+
+      if distributor.daily_lists_schedule.occurring_at?(time)
+        logger.info '> Creating daily list...'
+
+        successful = distributor.create_daily_lists(time.to_date)
+
+        if successful
+          logger.info '> Found or created successfully.'
+        else
+          logger.error '> Was not able to create a the daily lists.'
+        end
+      end
+    end
+  end
+
+  def create_daily_lists(date = Date.current)
+    packing_list = PackingList.generate_list(self, date)
+    delivery_list = DeliveryList.generate_list(self, date)
+
+    return packing_list.persisted? && delivery_list.persisted?
+  end
+
+  def self.automate_completed_status(time = Time.now)
+    logger.info "--- Marking distributor daily lists as complete (#{time}) ---"
+
+    all.each do |distributor|
+      logger.info "Processing: #{distributor.id} - #{distributor.name} - #{distributor.auto_delivery_schedule.start_time}"
+
+      if distributor.auto_delivery_schedule.occurring_at?(time)
+        logger.info 'Marking lists as completed...'
+        successful = distributor.automate_completed_status(time.to_date)
+
+        if successful
+          logger.info '> All items have been marked as completed for this date.'
+        else
+          logger.error '> Was not able to mark items as complete for this date.'
+        end
+      end
+    end
+  end
+
+  def automate_completed_status(date = Date.current)
+    successful =  delivery_lists.find_by_date(date).mark_all_as_auto_delivered
+    successful &= packing_lists.find_by_date(date).mark_all_as_auto_packed
+
+    return successful
+  end
+
+  private
 
   def parameterize_name
     self.parameter_name = name.parameterize if name

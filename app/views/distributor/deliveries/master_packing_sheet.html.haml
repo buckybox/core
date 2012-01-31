@@ -1,21 +1,23 @@
-- title("Master Packing Sheet - #{Date.today.strftime("%A %d %B")}")
+- title("Master Packing Sheet - #{Date.current.strftime("%A %d %B")}")
 
 :javascript
+  // attempt to print as soon as the screen loads
   $(function() { print(); });
 
 .row
   .twelve.columns
-    - @orders.group_by(&:box_id).each do |box_id, order_array|
+    - @packages.group_by(&:box).each do |box, array|
       %table{:style => 'width:100%; border-collapse:collapse; margin-bottom:20px;'}
         %thead
           %tr
-            %th{:colspan => 4, :style => 'border:1px solid black;'}
-              = Box.find(box_id).name
+            %th{:colspan => 5, :style => 'border:1px solid black;'}
+              = box.name
 
         %tbody
-          - order_array.each do |order|
-            %tr{:class => order.check_status_by_date(@selected_date)}
-              %td{:style => 'width:10%; border:1px solid black;'}
-              %td{:style => 'width:30%; border:1px solid black;'}= order_delivery_route_name(order, @selected_date)
-              %td{:style => 'width:30%; border:1px solid black;'}== #{order.quantity} - #{order.box.name}
-              %td{:style => 'width:30%; border:1px solid black;'}= order.customer.name
+          - array.reverse.each do |package|
+            %tr
+              %td{:style => 'width:5%; border:1px solid black;'}
+              %td{:style => 'width:5%; border:1px solid black;'}= package.id
+              %td{:style => 'width:25%; border:1px solid black;'}= package.customer.name
+              %td{:style => 'width:40%; border:1px solid black;'}= package.address.join(', ')
+              %td{:style => 'width:25%; border:1px solid black;'}== #{package.order.quantity}x #{box.name}

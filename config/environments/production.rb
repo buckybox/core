@@ -33,8 +33,11 @@ BuckyBox::Application.configure do
   # See everything in the log (default is :info)
   # config.log_level = :debug
 
+  # Prepend all log lines with the following tags
+  # config.log_tags = [ :subdomain, :uuid ]
+
   # Use a different logger for distributed setups
-  # config.logger = SyslogLogger.new
+  # config.logger = ActiveSupport::TaggedLogging.new(SyslogLogger.new)
 
   # Use a different cache store in production
   # config.cache_store = :mem_cache_store
@@ -48,7 +51,7 @@ BuckyBox::Application.configure do
   # Disable delivery errors, bad email addresses will be ignored
   # config.action_mailer.raise_delivery_errors = false
   config.action_mailer.default_url_options = { :host => 'my.buckybox.com' }
-    
+
   # postmark settings
   config.action_mailer.delivery_method   = :postmark
   config.action_mailer.postmark_settings = { :api_key => "63583ad4-c990-4ccb-a7db-afcc85d9070a" }
@@ -63,5 +66,8 @@ BuckyBox::Application.configure do
   # Send deprecation notices to registered listeners
   config.active_support.deprecation = :notify
 
-  config.gauges.site_id = '4f0f31b3f5a1f575b3000005'
+  # Log the query plan for queries taking more than this (works
+  # with SQLite, MySQL, and PostgreSQL)
+  # config.active_record.auto_explain_threshold_in_seconds = 0.5
 end
+

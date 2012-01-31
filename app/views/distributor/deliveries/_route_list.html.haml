@@ -12,33 +12,28 @@
             %td= label_tag 'missed_cancelled', 'Cancel delivery'
             %td
           %tr
-            %td= radio_button_tag 'missed', 'rescheduled'
-            %td= label_tag 'missed_rescheduled', 'Redeliver'
-            %td= select_tag 'date_rescheduled', reschedule_dates(@route)
-          %tr
-            %td= radio_button_tag 'missed', 'repacked'
-            %td= label_tag 'missed_repacked', 'Repack delivery'
-            %td= select_tag 'date_repacked', reschedule_dates(@route)
-          %tr
             %td{:colspan => 2}
             %td= button_tag 'Commit', :class => 'small radius button', :id => 'commit-missed'
     .two.columns
 
-  - @orders.each do |order|
-    -# Bad Sam! But convenient for now. Must rejig once development pace settles down a bit.
-    - status = order.check_status_by_date(@selected_date)
-    - delivery = order.delivery_for_date(@selected_date)
-    - delivery_id = delivery.id if delivery
+  - if @items.all? { |i| i.is_a?(Delivery) }
+    %ul#delivery_list{:class => "#{'sortable' if @selected_date.today?}"}
+      - @items.each do |delivery|
+        %li.row.data-listings{:id => "delivery_#{delivery.id}", :class => delivery.status}
+          .one.columns= check_box_tag delivery.order_id, '1', false, :data => { :delivery => delivery.id }
+          .one.columns= render :partial => 'status_icons', :locals => { :status => delivery.status }
+          .one.columns= delivery.delivery_number
+          .four.columns= delivery.package.archived_address
+          .two.columns== #{delivery.package.archived_order_quantity}x #{delivery.package.archived_box_name}
+          .two.columns= delivery.package.archived_customer_name
+  - else
+    %ul
+      - @items.each do |order|
+        %li.row.data-listings.pending
+          .one.columns= check_box_tag order.id, '1', false
+          .one.columns= image_tag 'icon-status-pending.png', :title => 'PENDING delivery', :class => 'icon-pending'
+          .one.columns N/A
+          .four.columns= order.address.join(', ')
+          .two.columns== #{order.quantity}x #{order.box.name}
+          .two.columns= order.customer.name
 
-    .row.data-listings{:class => status}
-      .one.columns= check_box_tag order.id, '1', false, :data => { :delivery => delivery_id }
-      .one.columns
-        -# Getting gross and hacky. But currently easiest way to do it given asset pipeline images and needing title attributes.
-        = image_tag 'icon-status-pending.png', :alt => status, :title => 'PENDING delivery', :class => 'icon-pending', :style => "#{'display:none;' unless status == 'pending'}"
-        = image_tag 'icon-status-done.png', :alt => status, :title => 'Delivery has been COMPLETED', :class => 'icon-delivered', :style => "#{'display:none;' unless status == 'delivered'}"
-        = image_tag 'icon-status-oops.png', :alt => status, :title => 'MISSED DELIVERY, customer has not been charged', :class => 'icon-cancelled', :style => "#{'display:none;' unless status == 'cancelled'}"
-        = image_tag 'icon-status-refresh.png', :alt => status, :title => 'Missed delivery, REDELIVERED', :class => 'icon-rescheduled', :style => "#{'display:none;' unless status == 'rescheduled'}"
-        = image_tag 'icon-status-repack.png', :alt => status, :title => 'Missed delivery, NEW BOX scheduled', :class => 'icon-repacked', :style => "#{'display:none;' unless status == 'repacked'}"
-      .four.columns= delivery_item_address(order)
-      .three.columns== #{order.quantity}x #{order.box.name}
-      .three.columns= order.customer.name
