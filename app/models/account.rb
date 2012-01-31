@@ -21,7 +21,6 @@ class Account < ActiveRecord::Base
   validates_presence_of :customer, :balance
 
   before_validation :default_balance_and_currency
-  validates_uniqueness_of :customer_id, :scope => :distributor_id, :message => 'this customer already has an account with this distributor'
   validates_presence_of :customer, :balance
 
   def balance_cents=(value)

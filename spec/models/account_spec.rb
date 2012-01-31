@@ -33,7 +33,7 @@ describe Account do
           end
 
           specify { @account.balance.should == (250 + v).to_money }
-          specify { @account.transactions.order.last.amount.should == v.to_money }
+          specify { @account.transactions.unscoped.order(:id).last.amount.should == v.to_money }
         end
       end
     end
@@ -48,7 +48,7 @@ describe Account do
           end
 
           specify { @account.balance.should == (250 - v).to_money }
-          specify { @account.transactions.last.amount.should == (-1 * v).to_money }
+          specify { @account.transactions.unscoped.order(:id).last.amount.should == (-1 * v).to_money }
         end
       end
     end
