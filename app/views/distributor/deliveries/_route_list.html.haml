@@ -16,7 +16,17 @@
             %td= button_tag 'Commit', :class => 'small radius button', :id => 'commit-missed'
     .two.columns
 
-  - if @selected_date.future?
+  - if @items.all? { |i| i.is_a?(Delivery) }
+    %ul#delivery_list{:class => "#{'sortable' if @selected_date.today?}"}
+      - @items.each do |delivery|
+        %li.row.data-listings{:id => "delivery_#{delivery.id}", :class => delivery.status}
+          .one.columns= check_box_tag delivery.order_id, '1', false, :data => { :delivery => delivery.id }
+          .one.columns= render :partial => 'status_icons', :locals => { :status => delivery.status }
+          .one.columns= delivery.delivery_number
+          .four.columns= delivery.package.archived_address
+          .two.columns== #{delivery.package.archived_order_quantity}x #{delivery.package.archived_box_name}
+          .two.columns= delivery.package.archived_customer_name
+  - else
     %ul
       - @items.each do |order|
         %li.row.data-listings.pending
@@ -26,14 +36,4 @@
           .four.columns= order.address.join(', ')
           .two.columns== #{order.quantity}x #{order.box.name}
           .two.columns= order.customer.name
-  - else
-    %ul#delivery_list.sortable
-      - @items.each do |delivery|
-        %li.row.data-listings{:id => "delivery_#{delivery.id}", :class => delivery.status}
-          .one.columns= check_box_tag delivery.order_id, '1', false, :data => { :delivery => delivery.id }
-          .one.columns= render :partial => 'status_icons', :locals => { :status => delivery.status }
-          .one.columns= delivery.delivery_number
-          .four.columns= delivery.package.archived_address
-          .two.columns== #{delivery.package.archived_order_quantity}x #{delivery.package.archived_box_name}
-          .two.columns= delivery.package.archived_customer_name
 

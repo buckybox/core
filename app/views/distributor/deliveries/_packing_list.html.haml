@@ -6,21 +6,11 @@
         = submit_tag 'Print - Master List', :id => 'master-print', :class => 'small radius button', :disabled => @selected_date.future?
       .eight.columns
 
-    - @items.group_by(&:box).each do |box, array|
-      .row.data-headings
-        %h5.twelve.columns= box.name
+    - if @items.all? { |i| i.is_a?(Package) }
+      - @items.group_by(&:box).each do |box, array|
+        .row.data-headings
+          %h5.twelve.columns= box.name
 
-      - if @selected_date.future?
-        %ul
-          - array.each do |order|
-            %li.row.data-listings.pending
-              .one.columns= check_box_tag order.id, '1', false
-              .one.columns= image_tag 'icon-status-pending.png', :title => 'UNPACKED package', :class => 'icon-pending'
-              .one.columns N/A
-              .four.columns= order.address.join(', ')
-              .two.columns== #{order.quantity}x #{order.box.name}
-              .two.columns= order.customer.name
-      - else
         %ul
           - array.each do |package|
             %li.row.data-listings{:class => package.status}
@@ -30,3 +20,17 @@
               .four.columns= package.archived_address
               .two.columns== #{package.archived_order_quantity}x #{package.archived_box_name}
               .two.columns= package.archived_customer_name
+    - else
+      - @items.group_by(&:box).each do |box, array|
+        .row.data-headings
+          %h5.twelve.columns= box.name
+
+        %ul
+          - array.each do |order|
+            %li.row.data-listings.pending
+              .one.columns= check_box_tag order.id, '1', false
+              .one.columns= image_tag 'icon-status-pending.png', :title => 'UNPACKED package', :class => 'icon-pending'
+              .one.columns N/A
+              .four.columns= order.address.join(', ')
+              .two.columns== #{order.quantity}x #{order.box.name}
+              .two.columns= order.customer.name
