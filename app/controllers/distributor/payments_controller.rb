@@ -25,23 +25,20 @@ class Distributor::PaymentsController < Distributor::BaseController
     end
   end
 
-  def process_upload
-    if transactions = params['transactions']
-      if /.csv/.match(transactions.original_filename)
-        csv = TransactionsUploader.new
-        csv.store!(transactions)
-        csv.retrieve_from_store!(transactions.original_filename)
-        @file = File.open(csv.path,'r')
-      end
-    end
+  def upload_transactions
+    @statement = BankStatement.new
+  end
 
+  def process_upload
+    @statement = BankStatement.new(params['bank_statement'])
+    @statement.distributor = current_distributor
+    @statement.save!
     render :upload_transactions
   end
 
   def create_from_csv
-    csv = TransactionsUploader.new
-    csv.retrieve_from_store!(params['transactions_filename'])
-    Payment.create_from_csv!(current_distributor, csv, params['customers'])
+    @statement = BankStatement.find(params['statement_id'])
+    @statement.process_statement!(params['customers'])
 
     redirect_to distributor_payments_path
   end

@@ -1,42 +1,36 @@
-%h2 Bank spreadsheet import
+- require 'csv'
 
-= form_tag process_upload_distributor_payments_path, :multipart => true, :method => :post do
-  %p Please select a .csv file to import.
-  .inputs
-    = file_field_tag :transactions, :class => "file_input"
-    .file-input
-      %span.radius.button Browse...
-      %span.description
+%h2 Bank statement
 
-  .actions
-    = submit_tag "Upload", :class => 'button radius'
+= simple_form_for([current_distributor, @statement], :url => process_upload_distributor_payments_path, :html => {:multipart => true} ) do |f|
+  %fieldset
+    %legend Import
+    = f.error_notification
+    %p Please select the bank statement provided by your bank
+    = f.input :statement_file, :label => false, :hint => "Must be a .csv file"
 
-- if @file
+    .actions
+      = f.button :submit
+
+- if @statement.statement_file?
   = form_tag create_from_csv_distributor_payments_path, :method => :post do
-
+    = hidden_field_tag(:statement_id, @statement.id)
     .row
       %table.twelve.columns
         %thead
-          %tr
-            %th Date
-            %th Amount
-            %th Payee
-            %th Particulars
-            %th Code
-            %th Reference
-            %th Tran Type
-            %th Customer
+          %tr 
+            - CSV.open(@statement.statement_file.path).shift do |header|
+              - header.each do |attr|
+                %th=attr
 
         %tbody
           - index = 0
-          = hidden_field_tag(:transactions_filename, File.basename(@file))
-          - @file.each_line("\n") do |line|
-            - row = line.split(",")
-            - if row[1].to_i && row[1].to_i > 0
+          - CSV.foreach(@statement.statement_file.path, :headers => :first_row) do |row|
+            - if row['Amount'].to_i > 0
               %tr 
                 - row.each do |attr|
-                  %td=attr
+                  %td=attr.last
                 %td= collection_select(:customer, :id, current_distributor.customers, :id, :name, {:include_blank => true}, {:name => "customers[#{index}]"})
-            - index += 1
+              - index += 1
           %tr
             %td{:colspan => 8}= submit_tag "Assign customers"

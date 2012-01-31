@@ -10,7 +10,7 @@ class Payment < ActiveRecord::Base
     :constructor => Proc.new { |cents, currency| Money.new(cents || 0, currency || Money.default_currency) },
     :converter => Proc.new { |value| value.respond_to?(:to_money) ? value.to_money : raise(ArgumentError, "Can't convert #{value.class} to Money") }
 
-  attr_accessible :account, :account_id, :amount, :kind, :description, :distributor
+  attr_accessible :account, :account_id, :amount, :kind, :description, :distributor, :statement_id
 
   KINDS = %w(bank_transfer credit_card manual)
 
