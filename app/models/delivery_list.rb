@@ -61,14 +61,20 @@ class DeliveryList < ActiveRecord::Base
     packages.each do |package|
       delivery_list.deliveries.find_or_create_by_package_id(package.id, :order => package.order)
     end
+
+    return delivery_list
   end
 
   def mark_all_as_auto_delivered
+    result = true
+
     deliveries.each do |delivery|
       delivery.status = 'delivered'
       delivery.delivery_method = 'auto'
-      delivery.save
+      result &= delivery.save
     end
+
+    return result
   end
 
   def all_finished

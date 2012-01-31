@@ -42,9 +42,15 @@ class Order < ActiveRecord::Base
   end
 
   def self.deactivate_finished
+    logger.info "--- Deactivating orders with no other occurrences ---"
+
     active.each do |order|
+      logger.info "Processing: #{order.id}"
+
       if order.schedule.next_occurrence.nil?
+        logger.info '> Deactivating...'
         order.update_attribute(:active, false)
+        logger.info '> Done.'
       end
     end
   end

@@ -43,13 +43,19 @@ class PackingList < ActiveRecord::Base
         packing_list.packages.originals.find_or_create_by_order_id(order.id)
       end
     end
+
+    return packing_list
   end
 
   def mark_all_as_auto_packed
+    result = true
+
     packages.each do |package|
       package.status = 'packed'
       package.packing_method = 'auto'
-      package.save
+      result &= package.save
     end
+
+    return result
   end
 end

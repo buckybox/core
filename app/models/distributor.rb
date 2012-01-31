@@ -78,25 +78,56 @@ class Distributor < ActiveRecord::Base
   end
 
   def self.create_daily_lists(time = Time.now)
+    logger.info "--- Checking distributor for daily list generation (#{time}) ---"
+
     all.each do |distributor|
-      distributor.create_daily_lists(time.to_date) if distributor.daily_lists_schedule.occurring_at?(time)
+      logger.info "Processing: #{distributor.id} - #{distributor.name} - #{distributor.daily_lists_schedule.start_time}"
+
+      if distributor.daily_lists_schedule.occurring_at?(time)
+        logger.info '> Creating daily list...'
+
+        successful = distributor.create_daily_lists(time.to_date)
+
+        if successful
+          logger.info '> Found or created successfully.'
+        else
+          logger.error '> Was not able to create a the daily lists.'
+        end
+      end
     end
   end
 
   def create_daily_lists(date = Date.current)
-    PackingList.generate_list(self, date)
-    DeliveryList.generate_list(self, date)
+    packing_list = PackingList.generate_list(self, date)
+    delivery_list = DeliveryList.generate_list(self, date)
+
+    return packing_list.persisted? && delivery_list.persisted?
   end
 
   def self.automate_completed_status(time = Time.now)
+    logger.info "--- Marking distributor daily lists as complete (#{time}) ---"
+
     all.each do |distributor|
-      distributor.automate_completed_status(time.to_date) if distributor.auto_delivery_schedule.occurring_at?(time)
+      logger.info "Processing: #{distributor.id} - #{distributor.name} - #{distributor.auto_delivery_schedule.start_time}"
+
+      if distributor.auto_delivery_schedule.occurring_at?(time)
+        logger.info 'Marking lists as completed...'
+        successful = distributor.automate_completed_status(time.to_date)
+
+        if successful
+          logger.info '> All items have been marked as completed for this date.'
+        else
+          logger.error '> Was not able to mark items as complete for this date.'
+        end
+      end
     end
   end
 
   def automate_completed_status(date = Date.current)
-    delivery_lists.find_by_date(date).mark_all_as_auto_delivered
-    packing_lists.find_by_date(date).mark_all_as_auto_packed
+    successful =  delivery_lists.find_by_date(date).mark_all_as_auto_delivered
+    successful &= packing_lists.find_by_date(date).mark_all_as_auto_packed
+
+    return successful
   end
 
   private
