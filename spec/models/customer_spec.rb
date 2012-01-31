@@ -13,6 +13,7 @@ describe Customer do
       @customer = Customer.create!(:first_name => 'test', 
                                :last_name => 'test',
                                :email => 'test@buckybox.com',
+                               :route => Fabricate(:route),
                                :distributor => Fabricate(:distributor))
     end
 
