@@ -4,7 +4,7 @@
   #order_inputs.row
     .four.columns
       .inputs
-        = f.association :box, :collection => box_collection(current_customer.distributor, with_price:true)
+        = f.association :box, :collection => box_collection(current_customer.distributor, with_price:true), :include_blank => false
         = f.input :quantity
 
         - unless @order.persisted?
