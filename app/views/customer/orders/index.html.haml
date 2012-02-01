@@ -1,8 +1,21 @@
+- title "#{current_customer.name} (ID:#{current_customer.id})"
+
 .row
-  .ten.columns
-    %h3 Orders
-  .two.columns
-    /= link_to 'Create a new order', new_customer_order_path(current_customer)
+  .three.columns
+    %ul.vcard
+      %li.fn= current_customer.name
+      - if current_customer.address
+        %li.adr= current_customer.address.address_1
+        - if current_customer.address.address_2
+          %li.adr= current_customer.address.address_2
+        %li.adr= current_customer.address.suburb
+        %li.adr= current_customer.address.city
+        %li.adr= current_customer.address.postcode
+      %li.tel= current_customer.phone
+      %li.email= current_customer.email
+
+  .three.columns
+    %h4== Balance: #{current_customer.account.balance.format}
 
 .row
   %table.twelve.columns
