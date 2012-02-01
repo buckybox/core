@@ -19,6 +19,8 @@
   .row.data-headings
     %h4.twelve.columns No Customers To Display
 - else
+  .row
+    .twelve.columns= link_to 'New Customer', new_distributor_customer_path(current_distributor)
   .row.data-headings
     %h4.three.columns Route
     %h4.three.columns Customer

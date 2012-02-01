@@ -15,6 +15,7 @@ BuckyBox::Application.routes.draw do
   end
 
   resources :distributors do
+    resources :customers,          :controller => 'distributor/customers'
     resources :boxes,              :controller => 'distributor/boxes',               :except => :index
     resources :routes,             :controller => 'distributor/routes',              :except => :index
     resource :bank_information,    :controller => 'distributor/bank_information',    :only => :create

@@ -1,15 +1,15 @@
 class Customer < ActiveRecord::Base
   include PgSearch
 
+  belongs_to :distributor
+  belongs_to :route
+
   has_one :address, :dependent => :destroy, :inverse_of => :customer
   has_one :account, :dependent => :destroy
 
   has_many :orders, :through => :account
   has_many :payments, :through => :account
   has_many :deliveries, :through => :orders
-
-  belongs_to :distributor
-  belongs_to :route
 
   # Include default devise modules. Others available are:
   # :token_authenticatable, :encryptable, :confirmable, :lockable, :timeoutable and :omniauthable
@@ -26,7 +26,8 @@ class Customer < ActiveRecord::Base
 
   accepts_nested_attributes_for :address
 
-  attr_accessible :address_attributes, :first_name, :last_name, :email, :phone, :name, :distributor_id, :distributor, :route, :password, :remember_me
+  attr_accessible :address_attributes, :first_name, :last_name, :email, :phone, :name, :distributor_id, :distributor, 
+    :route, :route_id, :password, :remember_me
 
   validates_presence_of :first_name, :email, :distributor, :route
   validates_uniqueness_of :email, :scope => :distributor_id
