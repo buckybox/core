@@ -28,7 +28,7 @@
   - @accounts.each do |account|
     .row.data-listings
       .three.columns= account.customer.route.name
-      .three.columns= link_to account.customer.name, [current_distributor, account]
+      .three.columns= link_to "#{account.customer.name} (ID:#{account.customer.id})", [current_distributor, account]
       .four.columns= tag_links(account.tags)
       .two.columns= account.balance
 
