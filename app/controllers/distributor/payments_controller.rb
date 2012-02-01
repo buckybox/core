@@ -5,7 +5,7 @@ class Distributor::PaymentsController < Distributor::BaseController
   respond_to :html, :xml, :json
 
   def index 
-    @payments = current_distributor.payments.order('created_at DESC')
+    @payments = current_distributor.payments.bank_transfer.order('created_at DESC')
   end
 
   def create
@@ -33,6 +33,7 @@ class Distributor::PaymentsController < Distributor::BaseController
     @statement = BankStatement.new(params['bank_statement'])
     @statement.distributor = current_distributor
     @statement.save!
+    @customer_remembers = @statement.customer_remembers
     render :upload_transactions
   end
 
