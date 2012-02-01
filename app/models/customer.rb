@@ -26,17 +26,20 @@ class Customer < ActiveRecord::Base
 
   accepts_nested_attributes_for :address
 
-  attr_accessible :address_attributes, :first_name, :last_name, :email, :phone, :name, :distributor_id, :distributor, 
+  attr_accessible :address_attributes, :first_name, :last_name, :email, :phone, :name, :distributor_id, :distributor,
     :route, :route_id, :password, :remember_me
 
   validates_presence_of :first_name, :email, :distributor, :route
   validates_uniqueness_of :email, :scope => :distributor_id
   validates_uniqueness_of :number, :scope => :distributor_id
+  validates_associated :account
+  validates_associated :address
 
   before_validation :randomize_password_if_not_present
 
   before_create :initialize_number
   before_create :setup_account
+  before_create :setup_address
 
   before_save :downcase_email
 
@@ -87,6 +90,10 @@ class Customer < ActiveRecord::Base
 
   def setup_account
     self.build_account
+  end
+
+  def setup_address
+    self.build_address
   end
 
   def trigger_new_customer
