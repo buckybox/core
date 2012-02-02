@@ -43,6 +43,7 @@ describe Delivery do
 
             if ns == 'delivered'
               specify { expect { @delivery.save }.should change(@account, :balance).by(@cost * -1) }
+              specify { expect { @delivery.save }.should change(Event, :count).by(1) }
             elsif os == 'delivered'
               specify { expect { @delivery.save }.should change(@account, :balance).by(@cost) }
             else

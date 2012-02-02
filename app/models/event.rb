@@ -3,7 +3,7 @@ class Event < ActiveRecord::Base
   belongs_to :distributor
 
   # Setup accessible (or protected) attributes for your model
-  attr_accessible :distributor_id, :event_category, :event_type, :customer_id, :invoice_id, :reconciliation_id, :transaction_id, :delivery_id, :dismissed
+  attr_accessible :distributor_id, :event_category, :event_type, :customer_id, :invoice_id, :reconciliation_id, :transaction_id, :delivery_id, :dismissed, :created_at, :updated_at
 
   # Global variables
   EVENT_CATEGORIES = %w[customer billing delivery]
@@ -44,6 +44,7 @@ class Event < ActiveRecord::Base
 
   scope :sorted, order("events.created_at DESC")
   scope :active, where("events.dismissed = ?", false)
+  scope :current, where("events.created_at <= ?", Date.today)
 
   def dismiss!
     update_attribute("dismissed", true)
