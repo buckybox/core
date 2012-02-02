@@ -8,6 +8,7 @@ class BankStatement < ActiveRecord::Base
   mount_uploader :statement_file, BankStatementUploader
 
   validates_presence_of :statement_file
+  validate :csv_file_parsable
 
   attr_accessible :distributor, :statement_file
 
@@ -18,6 +19,16 @@ class BankStatement < ActiveRecord::Base
       if row['Amount'].to_i > 0
         create_payment!(row, customers_ids[it.to_s]) unless customers_ids[it.to_s].blank?
         it += 1
+      end
+    end
+  end
+
+  def csv_file_parsable
+    CSV.foreach(statement_file.path, :headers => :first_row) do |row|
+      amount_is_an_int = (row['Amount'].match(/\A[+-]?\d+?(\.\d+)?\Z/)) == nil ? false : true if row['Amount']
+      unless amount_is_an_int
+        errors.add :statement_file, "File could not be parsed"
+        return false
       end
     end
   end
