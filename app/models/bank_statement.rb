@@ -7,6 +7,8 @@ class BankStatement < ActiveRecord::Base
 
   mount_uploader :statement_file, BankStatementUploader
 
+  validates_presence_of :statement_file
+
   attr_accessible :distributor, :statement_file
 
   def process_statement!(customers_ids)
