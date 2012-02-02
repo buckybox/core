@@ -1,0 +1,18 @@
+<<<<<<< HEAD
+.row
+  .three.columns.offset-by-nine= link_to "Upload bank data", upload_transactions_distributor_payments_path, :class => 'button radius'
+
+=======
+= simple_form_for([current_distributor, @statement], :url => process_upload_distributor_payments_path, :html => {:multipart => true} ) do |f|
+  %fieldset
+    %legend Import data from your bank
+    %p Please select the bank statement provided by your bank (.csv file)
+    = f.error_notification
+    = f.input :statement_file, :label => false
+
+    .actions
+      = f.button :submit
+>>>>>>> f6ee75f... layout and style cleanup + validation error message when input file not a .csv
+.row
+  .twelve.columns
+    = render 'distributor/payments/index'
