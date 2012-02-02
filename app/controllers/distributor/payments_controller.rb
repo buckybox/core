@@ -6,6 +6,7 @@ class Distributor::PaymentsController < Distributor::BaseController
 
   def index 
     @payments = current_distributor.payments.bank_transfer.order('created_at DESC')
+    @statement = BankStatement.new
   end
 
   def create
@@ -25,13 +26,12 @@ class Distributor::PaymentsController < Distributor::BaseController
     end
   end
 
-  def upload_transactions
-    @statement = BankStatement.new
-  end
-
   def process_upload
     @statement = BankStatement.new(params['bank_statement'])
     @statement.distributor = current_distributor
+    unless @statement.valid?
+      return render :index
+    end
     @statement.save!
     @customer_remembers = @statement.customer_remembers
     render :upload_transactions
