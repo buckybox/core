@@ -20,7 +20,7 @@
     %h4.twelve.columns No Customers To Display
 - else
   .row
-    .twelve.columns= link_to 'New Customer', new_distributor_customer_path(current_distributor)
+    .twelve.columns= link_to 'New Customer', new_distributor_customer_path(current_distributor), :class => 'button radius'
   .row.data-headings
     %h4.three.columns Route
     %h4.three.columns Customer
@@ -31,6 +31,6 @@
     .row.data-listings
       .three.columns= account.customer.route.name
       .three.columns= link_to "#{account.customer.name} (ID:#{account.customer.id})", [current_distributor, account]
-      .four.columns= tag_links(account.tags)
+      .four.columns= tag_links(account.customer.tags)
       .two.columns= account.balance
 

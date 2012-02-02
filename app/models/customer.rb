@@ -15,6 +15,8 @@ class Customer < ActiveRecord::Base
   # :token_authenticatable, :encryptable, :confirmable, :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable, :recoverable, :rememberable, :trackable
 
+  acts_as_taggable
+
   pg_search_scope :search,
     :against => [:first_name, :last_name, :email, :number],
     :associated_against => {
@@ -27,7 +29,7 @@ class Customer < ActiveRecord::Base
   accepts_nested_attributes_for :address
 
   attr_accessible :address_attributes, :first_name, :last_name, :email, :phone, :name, :distributor_id, :distributor,
-    :route, :route_id, :password, :remember_me
+    :route, :route_id, :password, :remember_me, :tag_list
 
   validates_presence_of :first_name, :email, :distributor, :route
   validates_uniqueness_of :email, :scope => :distributor_id
