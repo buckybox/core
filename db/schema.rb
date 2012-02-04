@@ -49,15 +49,6 @@ ActiveRecord::Schema.define(:version => 20120207040356) do
 
   add_index "bank_information", ["distributor_id"], :name => "index_bank_information_on_distributor_id"
 
-  create_table "bank_statements", :force => true do |t|
-    t.integer  "distributor_id"
-    t.string   "statement_file"
-    t.datetime "created_at",     :null => false
-    t.datetime "updated_at",     :null => false
-  end
-
-  add_index "bank_statements", ["distributor_id"], :name => "index_bank_statements_on_distributor_id"
-
   create_table "boxes", :force => true do |t|
     t.integer  "distributor_id"
     t.string   "name"
@@ -287,14 +278,12 @@ ActiveRecord::Schema.define(:version => 20120207040356) do
   create_table "payments", :force => true do |t|
     t.integer  "distributor_id"
     t.integer  "account_id"
-    t.integer  "amount_cents",      :default => 0, :null => false
+    t.integer  "amount_cents",   :default => 0, :null => false
     t.string   "currency"
     t.string   "kind"
     t.text     "description"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "bank_statement_id"
-    t.string   "reference"
   end
 
   add_index "payments", ["account_id"], :name => "index_payments_on_account_id"

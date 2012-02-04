@@ -1,13 +1,15 @@
-= simple_form_for([current_distributor, @account]) do |f|
-  = f.error_notification
+= form_tag(change_balance_distributor_account_path(current_distributor, @account), :method => :put, :class => 'nice') do
 
   .inputs
     .input.string.required.input-text
-      = label_tag 'account_delta', :class => 'string required' do
+      = label_tag 'delta', :class => 'string required' do
         %abbr{:title => 'required'}*
         Adjust balance by
-      = text_field_tag 'account[delta]', '0.00', :class => 'string required input-text', :required => 'required', :size => '50'
-      %span.hint Put in the amount you want to add or remove.
+      = text_field_tag 'delta', '0.00', :class => 'string required input-text', :required => 'required', :size => '50'
+    .input.text
+      = label_tag 'note', 'With note', :class => 'text optional'
+      = text_area_tag 'note', '', :class => 'text required', :cols => 40, :rows => 20
+
 
   .actions
-    = f.button :submit
+    = submit_tag :submit, :class => 'button radius'

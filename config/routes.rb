@@ -35,9 +35,13 @@ BuckyBox::Application.routes.draw do
     resources :accounts, :controller => 'distributor/accounts' do
       resources :orders, :controller => 'distributor/orders', :except => [:index, :show]
 
+      member do
+        put 'change_balance', :action => :change_balance, :as => 'change_balance'
+      end
+
       collection do
-        get 'search',    :action => :index, :as => 'search'
-        get 'tag/:tag',  :action => :index, :as => 'tag'
+        get 'search',   :action => :index, :as => 'search'
+        get 'tag/:tag', :action => :index, :as => 'tag'
       end
     end
 

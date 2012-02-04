@@ -1,6 +1,7 @@
 - title("Edit #{@account.customer.name}'s Account")
 
-= render 'form'
+.row
+  .columns.four= render 'form'
 
 = link_to 'Show', [current_distributor, @account]
 \|

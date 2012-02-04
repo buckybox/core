@@ -31,7 +31,7 @@
     %br
     = link_to 'Back to Customer List', distributor_accounts_path
 
-= render 'distributor/orders/index'
-= render 'distributor/deliveries/index'
-= render 'distributor/transactions/index'
+= render 'distributor/orders/index' unless @orders.empty?
+= render 'distributor/deliveries/index' unless @deliveries.empty?
+= render 'distributor/transactions/index' unless @transactions.empty?
 

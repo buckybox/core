@@ -35,7 +35,7 @@ class Account < ActiveRecord::Base
     amount_difference = amount - balance
 
     options.merge!(kind: 'amend') unless options[:kind]
-    options.merge!(description: "Balance changed from #{balance} to #{amount}.") unless options[:description]
+    options.merge!(description: 'Manual Transaction.') unless options[:description]
 
     write_attribute(:balance_cents, amount.cents)
     write_attribute(:currency, amount.currency.to_s || Money.default_currency.to_s)
