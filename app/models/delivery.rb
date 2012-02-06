@@ -12,7 +12,7 @@ class Delivery < ActiveRecord::Base
 
   acts_as_list :scope => [:delivery_list_id, :route_id]
 
-  attr_accessible :order, :order_id, :route, :status, :delivery_method, :delivery_list, :package, :package_id
+  attr_accessible :order, :order_id, :route, :status, :delivery_method, :delivery_list, :package, :package_id, :account
 
   STATUS = %w(pending delivered cancelled rescheduled repacked)
   DELIVERY_METHOD = %w(manual auto)
@@ -77,8 +77,9 @@ class Delivery < ActiveRecord::Base
   def changed_status
     old_status, new_status = self.status_change
 
-    subtract_from_account if new_status == 'delivered'
-    add_to_account        if old_status == 'delivered'
+    subtract_from_account          if new_status == 'delivered'
+    trigger_customer_call_reminder if new_status == 'delivered'
+    add_to_account                 if old_status == 'delivered'
 
     # Commenting out for now as not doing reschedule repack just yet
     #remove_from_schedule  if old_status == 'rescheduled' || old_status == 'repacked'
@@ -120,8 +121,6 @@ class Delivery < ActiveRecord::Base
   end
 
   def add_to_schedule
-    #order.add_scheduled_delivery(new_delivery) if new_delivery
-
     unless new_delivery
       errors.add(:base, 'There is no "new delivery" to add to the schedule so this status change can not be completed.')
     end
@@ -129,5 +128,13 @@ class Delivery < ActiveRecord::Base
     unless order.save
       errors.add(:base, 'The order could not be saved.')
     end
+  end
+
+  def trigger_customer_call_reminder
+    Event.trigger(
+      distributor.id, 
+      Event::EVENT_TYPES[:customer_call_reminder], 
+      { event_category:'customer', customer_id:customer.id }
+    )
   end
 end

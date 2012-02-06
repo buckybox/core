@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120129220207) do
+ActiveRecord::Schema.define(:version => 20120201002517) do
 
   create_table "accounts", :force => true do |t|
     t.integer  "customer_id"
@@ -48,6 +48,15 @@ ActiveRecord::Schema.define(:version => 20120129220207) do
   end
 
   add_index "bank_information", ["distributor_id"], :name => "index_bank_information_on_distributor_id"
+
+  create_table "bank_statements", :force => true do |t|
+    t.integer  "distributor_id"
+    t.string   "statement_file"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "bank_statements", ["distributor_id"], :name => "index_bank_statements_on_distributor_id"
 
   create_table "boxes", :force => true do |t|
     t.integer  "distributor_id"
@@ -283,6 +292,8 @@ ActiveRecord::Schema.define(:version => 20120129220207) do
     t.text     "description"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "statement_id"
+    t.string   "reference"
   end
 
   add_index "payments", ["account_id"], :name => "index_payments_on_account_id"
