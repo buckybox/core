@@ -3,19 +3,21 @@ class Distributor::DashboardController < Distributor::BaseController
 
   def index
     @notifications = current_distributor.events.active.current.sorted
-
-    @payments = current_distributor.payments.manual.order('created_at DESC').limit(10)
-    @payment = current_distributor.payments.new(:kind => 'manual')
-
-    @accounts = current_distributor.accounts.includes(:customer).sort { |a,b| a.customer.name <=> b.customer.name }
+    @payments      = current_distributor.payments.manual.order('created_at DESC').limit(10)
+    @payment       = current_distributor.payments.new(kind: 'manual')
+    @accounts      = current_distributor.accounts.includes(:customer).sort { |a,b| a.customer.name <=> b.customer.name }
   end
 
   def dismiss_notification
-    Event.find(params[:id]).dismiss!
-    head :ok
+    if Event.find(params[:id]).dismiss!
+      head :ok
+    else
+      head :bad_request
+    end
   end
 
   private
+
   def check_wizard_completed
     current_distributor.update_attribute(:completed_wizard, params[:completed_wizard]) if params[:completed_wizard]
     redirect_to current_wizard_step and return unless current_distributor.completed_wizard?

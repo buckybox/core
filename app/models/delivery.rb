@@ -121,8 +121,6 @@ class Delivery < ActiveRecord::Base
   end
 
   def add_to_schedule
-    #order.add_scheduled_delivery(new_delivery) if new_delivery
-
     unless new_delivery
       errors.add(:base, 'There is no "new delivery" to add to the schedule so this status change can not be completed.')
     end
@@ -133,6 +131,10 @@ class Delivery < ActiveRecord::Base
   end
 
   def trigger_customer_call_reminder
-    Event.trigger(distributor.id, Event::EVENT_TYPES[:customer_call_reminder], {:event_category => "customer", :customer_id => customer.id, :created_at => Date.today + 1.day, :updated_at => Date.today + 1.day})
+    Event.trigger(
+      distributor.id, 
+      Event::EVENT_TYPES[:customer_call_reminder], 
+      { event_category:'customer', customer_id:customer.id }
+    )
   end
 end

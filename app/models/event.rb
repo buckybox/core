@@ -1,23 +1,22 @@
 class Event < ActiveRecord::Base
-
   belongs_to :distributor
 
   # Setup accessible (or protected) attributes for your model
-  attr_accessible :distributor_id, :event_category, :event_type, :customer_id, :invoice_id, :reconciliation_id, :transaction_id, :delivery_id, :dismissed, :created_at, :updated_at
+  attr_accessible :distributor_id, :event_category, :event_type, :customer_id, :invoice_id, :reconciliation_id, :transaction_id, :delivery_id, :dismissed
 
   # Global variables
-  EVENT_CATEGORIES = %w[customer billing delivery]
-  EVENT_TYPES = { 
-      :customer_new              => "customer_new",
-      :customer_call_reminder    => "customer_call_reminder",
-      :delivery_scheduler_issue  => "delivery_scheduler_issue",
-      :delivery_pending          => "delivery_pending",
-      :credit_limit_reached      => "credit_limit_reached",
-      :payment_overdue           => "payment_overdue",
-      :invoice_reminder          => "invoice_reminder",
-      :invoice_mail_sent         => "invoice_mail_sent",
-      :transaction_success       => "transaction_success",
-      :transaction_failure       => "transaction_failure"
+  EVENT_CATEGORIES = %w(customer billing delivery)
+  EVENT_TYPES = {
+      customer_new:             'customer_new',
+      customer_call_reminder:   'customer_call_reminder',
+      delivery_scheduler_issue: 'delivery_scheduler_issue',
+      delivery_pending:         'delivery_pending',
+      credit_limit_reached:     'credit_limit_reached',
+      payment_overdue:          'payment_overdue',
+      invoice_reminder:         'invoice_reminder',
+      invoice_mail_sent:        'invoice_mail_sent',
+      transaction_success:      'transaction_success',
+      transaction_failure:      'transaction_failure'
   }
 
   validates_presence_of :distributor_id
@@ -29,30 +28,35 @@ class Event < ActiveRecord::Base
   ].include? event_type}
   validates_presence_of :delivery_id, :if => lambda{[
     EVENT_TYPES[:delivery_scheduler_issue],
-    EVENT_TYPES[:delivery_pending]].include? event_type}
+    EVENT_TYPES[:delivery_pending]
+  ].include? event_type}
   validates_presence_of :invoice_id, :if => lambda{[
-    EVENT_TYPES[:invoice_reminder], 
-    EVENT_TYPES[:invoice_mail_sent]].include? event_type}
+    EVENT_TYPES[:invoice_reminder],
+    EVENT_TYPES[:invoice_mail_sent]
+  ].include? event_type}
   validates_presence_of :reconciliation_id, :if => lambda{[
-    EVENT_TYPES[:invoice_reminder]].include? event_type}
+    EVENT_TYPES[:invoice_reminder]
+  ].include? event_type}
   validates_presence_of :transaction_id, :if => lambda{[
-    EVENT_TYPES[:transaction_success], 
-    EVENT_TYPES[:transaction_failure]].include? event_type}
+    EVENT_TYPES[:transaction_success],
+    EVENT_TYPES[:transaction_failure]
+  ].include? event_type}
 
   validates_inclusion_of :event_category, :in => EVENT_CATEGORIES
-  validates_inclusion_of :event_type, :in => EVENT_TYPES.map{|k,v| v}
+  validates_inclusion_of :event_type, :in => EVENT_TYPES.values
 
-  scope :sorted, order("events.created_at DESC")
-  scope :active, where("events.dismissed = ?", false)
-  scope :current, where("events.created_at <= ?", Date.today)
+  scope :sorted,  order('created_at DESC')
+  scope :active,  where(dismissed: false)
+  scope :current, where('created_at <= ?', Date.yesterday)
 
   def dismiss!
-    update_attribute("dismissed", true)
+    update_attribute('dismissed', true)
   end
 
   private
+
   def self.trigger(distributor_id, event_type, params = {})
     # TODO resolve event_category based on event_type (instead of passing it as a param everytime the method is called)
-    self.create({distributor_id: distributor_id, event_type: event_type}.merge!(params))
+    self.create({distributor_id:distributor_id, event_type:event_type}.merge!(params))
   end
 end
