@@ -15,7 +15,6 @@ BuckyBox::Application.routes.draw do
   end
 
   resources :distributors do
-    resources :customers,          :controller => 'distributor/customers'
     resources :boxes,              :controller => 'distributor/boxes',               :except => :index
     resources :routes,             :controller => 'distributor/routes',              :except => :index
     resource :bank_information,    :controller => 'distributor/bank_information',    :only => :create
@@ -32,16 +31,22 @@ BuckyBox::Application.routes.draw do
       end
     end
 
-    resources :accounts, :controller => 'distributor/accounts' do
+    resources :customers, :controller => 'distributor/customers' do
+      collection do
+        get 'search',   :action => :index, :as => 'search'
+        get 'tag/:tag', :action => :index, :as => 'tag'
+      end
+
+      member  do
+        get :send_login_details
+      end
+    end
+
+    resources :accounts, :controller => 'distributor/accounts', :only => :edit do
       resources :orders, :controller => 'distributor/orders', :except => [:index, :show]
 
       member do
         put 'change_balance', :action => :change_balance, :as => 'change_balance'
-      end
-
-      collection do
-        get 'search',   :action => :index, :as => 'search'
-        get 'tag/:tag', :action => :index, :as => 'tag'
       end
     end
 
@@ -71,9 +76,6 @@ BuckyBox::Application.routes.draw do
 
   resources :customers do
     resources :orders, :controller => 'customer/orders'
-    member  do
-      get :send_login_details
-    end
     resource :addresses, :controller => 'customer/addresses'
   end
 

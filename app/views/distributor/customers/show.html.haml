@@ -1,15 +1,61 @@
-%p#notice= notice
+- title "#{@customer.name} (ID:#{@customer.id})"
 
-%p
-  %b Name:
-  = @customer.name
-%p
-  %b Email:
-  = @customer.email
-%p
-  %b Phone:
-  = @customer.phone
+.row
+  .three.columns
+    %ul.vcard
+      %li.fn= @customer.name
+      - if @address
+        %li.adr= @address.address_1
+        - if @address.address_2
+          %li.adr= @address.address_2
+        %li.adr= @address.suburb
+        %li.adr= @address.city
+        %li.adr= @address.postcode
+      %li.tel= @customer.phone
+      %li.email= @customer.email
 
-= link_to 'Edit', edit_customer_path(@customer)
-\|
-= link_to 'Back', customers_path
+  .three.columns
+    %h4== Balance: #{@account.balance.format}
+
+  .two.columns
+    - unless @customer.tags.empty?
+      %h4 Tags
+      - @customer.tags.each do |tag|
+        %span.radius.label= link_to tag.name, tag_distributor_customers_path(current_distributor, tag.name)
+
+  .four.columns
+    = link_to 'Edit Customer Details', edit_distributor_customer_path(current_distributor, @customer)
+    %br
+    = link_to 'Send login details', send_login_details_distributor_customer_path(current_distributor, @customer), :confirm => "Are you sure? This will reset the users password."
+    (User's password will be reset)
+    %br
+    = link_to 'Back to Customer List', distributor_customers_path(current_distributor)
+
+%hr
+
+.row
+  .nine.columns
+    %h3 Orders
+  .three.columns
+    = link_to 'New Order', new_distributor_account_order_path(current_distributor, @account), :class => 'button radius'
+
+= render 'distributor/orders/index' unless @orders.empty?
+
+%hr
+
+.row
+  .twelve.columns
+    %h3 Deliveries
+
+= render 'distributor/deliveries/index' unless @deliveries.empty?
+
+%hr
+
+.row
+  .nine.columns
+    %h3 Transactions
+  .three.columns
+    = link_to 'Adjust Balance', edit_distributor_account_path(current_distributor, @account), :class => 'button radius'
+
+= render 'distributor/transactions/index' unless @transactions.empty?
+

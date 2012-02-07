@@ -27,7 +27,7 @@ class Distributor::OrdersController < Distributor::BaseController
     @order.schedule = schedule
     @order.completed = true
 
-    create! { [current_distributor, @account] }
+    create! { [current_distributor, @account.customer] }
   end
 
   def update
@@ -39,10 +39,10 @@ class Distributor::OrdersController < Distributor::BaseController
     # Will revisit when we have time to build a proper UI for it
     params[:order].delete(:frequency)
 
-    update! { [current_distributor, @account] }
+    update! { [current_distributor, @account.customer] }
   end
 
   def destroy
-    destroy! { [current_distributor, @account] }
+    destroy! { [current_distributor, @account.customer] }
   end
 end

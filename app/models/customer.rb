@@ -47,6 +47,8 @@ class Customer < ActiveRecord::Base
 
   after_create :trigger_new_customer
 
+  default_scope order(:first_name)
+
   def name
     "#{first_name} #{last_name}".strip
   end
