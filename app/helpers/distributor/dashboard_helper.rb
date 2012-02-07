@@ -42,7 +42,7 @@ module Distributor::DashboardHelper
   end
 
   def link_to_customer customer
-      link_to_customer = link_to "#{customer.name} (##{customer.id})", customer_path(customer.id)
+      link_to "#{customer.name} (ID:#{customer.id})", distributor_customer_path(current_distributor, customer.id)
   end
 
   def link_to_delivery delivery_id
