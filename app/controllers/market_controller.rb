@@ -1,3 +1,5 @@
+#TODO: Add this to its own namespace
+
 class MarketController < ApplicationController
   before_filter :get_distributor
   before_filter :get_order_from_session, :except => [:store, :buy]

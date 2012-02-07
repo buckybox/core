@@ -2,9 +2,7 @@ BuckyBox::Application.routes.draw do
   devise_for :distributors, :controllers => {:sessions => "distributor/sessions"}
   devise_for :customers, :controllers => {:sessions => "customer/sessions"}
 
-  get 'home' => 'bucky_box#index', :as => 'home'
-
-  root :to => 'distributor/dashboard#index'
+  root :to => 'bucky_box#index'
 
   namespace :market do
     get ':distributor_parameter_name',                  :action => 'store',            :as => 'store'
