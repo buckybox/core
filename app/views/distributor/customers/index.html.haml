@@ -15,12 +15,15 @@
       = text_field_tag :query, '', :placeholder => 'Search For...', :class => 'input-text'
       = submit_tag 'Search', :class => 'small radius button'
 
+.row
+  .nine.columns
+    %h3 Customers
+  .three.columns= link_to 'New Customer', new_distributor_customer_path(current_distributor), :class => 'button radius'
+
 - if @customers.blank?
   .row.data-headings
     %h4.twelve.columns No Customers To Display
 - else
-  .row
-    .twelve.columns= link_to 'New Customer', new_distributor_customer_path(current_distributor), :class => 'button radius'
   .row.data-headings
     %h4.three.columns Route
     %h4.three.columns Customer
