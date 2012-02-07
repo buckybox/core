@@ -43,7 +43,7 @@ class Customer < ActiveRecord::Base
   before_create :setup_account
   before_create :setup_address
 
-  before_save :downcase_email
+  before_save :format_email
 
   after_create :trigger_new_customer
 
@@ -68,7 +68,7 @@ class Customer < ActiveRecord::Base
     newpass = ""
     1.upto(len) { |i| newpass << chars[rand(chars.size - 1)] }
     return newpass
-  end 
+  end
 
   private
 
@@ -104,7 +104,10 @@ class Customer < ActiveRecord::Base
     Event.trigger(distributor_id, Event::EVENT_TYPES[:customer_new], {event_category: "customer", customer_id: id})
   end
 
-  def downcase_email
-    self.email.downcase! if self.email
+  def format_email
+    if self.email
+      self.email.strip!
+      self.email.downcase!
+    end
   end
 end

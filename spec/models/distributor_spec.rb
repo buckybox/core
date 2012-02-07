@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe Distributor do
   before :all do
-    @distributor = Fabricate(:distributor, :email => 'BuckyBox@example.com')
+    @distributor = Fabricate(:distributor, :email => ' BuckyBox@example.com ')
   end
 
   specify { @distributor.should be_valid }

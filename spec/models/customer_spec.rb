@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe Customer do
   before :all do
-    @customer = Fabricate(:customer, :email => 'BuckyBox@example.com')
+    @customer = Fabricate(:customer, :email => ' BuckyBox@example.com ')
   end
 
   specify { @customer.should be_valid }
@@ -65,5 +65,15 @@ describe Customer do
     specify { Customer.search('Edinburgh').size.should == 2 }
     specify { Customer.search('Smith').size.should == 3 }
     specify { Customer.search('John').size.should == 1 }
+  end
+
+  context 'when using tags' do
+    before :each do
+      @customer.tag_list = 'dog, cat, rain'
+      @customer.save
+    end
+
+    specify { @customer.tags.size.should == 3 }
+    specify { @customer.tag_list.should == %w(dog cat rain) }
   end
 end
