@@ -20,8 +20,9 @@ describe Distributor::DashboardController do
     end
 
     subject { assigns[:notifications] }
+
     context "listing events" do
-      it "should find active events" do 
+      it "should find active events" do
         should have(2).events
       end
     end

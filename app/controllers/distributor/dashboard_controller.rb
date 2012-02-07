@@ -2,7 +2,7 @@ class Distributor::DashboardController < Distributor::BaseController
   before_filter :check_wizard_completed
 
   def index
-    @notifications = current_distributor.events.active.current.sorted
+    @notifications = current_distributor.events.active.current
     @payments      = current_distributor.payments.manual.order('created_at DESC').limit(10)
     @payment       = current_distributor.payments.new(kind: 'manual')
     @accounts      = current_distributor.accounts.includes(:customer).sort { |a,b| a.customer.name <=> b.customer.name }

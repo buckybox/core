@@ -89,7 +89,7 @@ class Customer < ActiveRecord::Base
   end
 
   def trigger_new_customer
-    Event.trigger(distributor_id, Event::EVENT_TYPES[:customer_new], {:event_category => "customer", :customer_id => id})
+    Event.trigger(distributor_id, Event::EVENT_TYPES[:customer_new], {event_category: "customer", customer_id: id})
   end
 
   def downcase_email

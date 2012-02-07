@@ -2,7 +2,8 @@ class Event < ActiveRecord::Base
   belongs_to :distributor
 
   # Setup accessible (or protected) attributes for your model
-  attr_accessible :distributor_id, :event_category, :event_type, :customer_id, :invoice_id, :reconciliation_id, :transaction_id, :delivery_id, :dismissed
+  attr_accessible :distributor_id, :event_category, :event_type, :customer_id, :invoice_id, :reconciliation_id,
+    :transaction_id, :delivery_id, :dismissed, :trigger_on
 
   # Global variables
   EVENT_CATEGORIES = %w(customer billing delivery)
@@ -45,18 +46,25 @@ class Event < ActiveRecord::Base
   validates_inclusion_of :event_category, :in => EVENT_CATEGORIES
   validates_inclusion_of :event_type, :in => EVENT_TYPES.values
 
-  scope :sorted,  order('created_at DESC')
+  before_save :check_trigger
+
   scope :active,  where(dismissed: false)
-  scope :current, where('created_at <= ?', Date.yesterday)
+  scope :current, where('trigger_on <= ?', Time.now.to_formatted_s(:db))
+
+  default_scope order('trigger_on DESC')
 
   def dismiss!
     update_attribute('dismissed', true)
   end
 
-  private
-
   def self.trigger(distributor_id, event_type, params = {})
     # TODO resolve event_category based on event_type (instead of passing it as a param everytime the method is called)
     self.create({distributor_id:distributor_id, event_type:event_type}.merge!(params))
+  end
+
+  private
+
+  def check_trigger
+    self.trigger_on = Time.now if self.trigger_on.nil?
   end
 end

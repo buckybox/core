@@ -132,9 +132,9 @@ class Delivery < ActiveRecord::Base
 
   def trigger_customer_call_reminder
     Event.trigger(
-      distributor.id, 
-      Event::EVENT_TYPES[:customer_call_reminder], 
-      { event_category:'customer', customer_id:customer.id }
+      distributor.id,
+      Event::EVENT_TYPES[:customer_call_reminder],
+      { event_category:'customer', customer_id:customer.id, trigger_on:(Time.now + 1.day) }
     )
   end
 end
