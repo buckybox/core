@@ -76,14 +76,15 @@ class Customer < ActiveRecord::Base
     if self.number.nil?
       number = rand(1000000)
       safety = 1
+
       while(self.distributor.customers.find_by_number(number.to_s).present? && safety < 100) do
         number += 1
         safety += 1
         number = rand(1000000) if safety.modulo(10) == 0
       end
-      if safety > 99
-        throw "unable to assign customer number"
-      end
+
+      throw "unable to assign customer number" if safety > 99
+
       self.number = number.to_s
     end
   end
@@ -93,11 +94,11 @@ class Customer < ActiveRecord::Base
   end
 
   def setup_account
-    self.build_account
+    self.build_account if self.account.nil?
   end
 
   def setup_address
-    self.build_address
+    self.build_address if self.address.nil?
   end
 
   def trigger_new_customer

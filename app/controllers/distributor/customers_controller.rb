@@ -10,7 +10,9 @@ class Distributor::CustomersController < Distributor::BaseController
   end
 
   def create
-    create! { distributor_customers_url(current_distributor) }
+    create! do
+      distributor_customers_url(current_distributor)
+    end
   end
 
   def update
