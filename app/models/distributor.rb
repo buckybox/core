@@ -43,7 +43,7 @@ class Distributor < ActiveRecord::Base
   validates_uniqueness_of :name, :on => :update
 
   before_save :parameterize_name
-  before_save :downcase_email
+  before_save :format_email
   before_save :generate_daily_lists_schedule, :if => 'daily_lists_schedule.to_s.blank?'
   before_save :generate_auto_delivery_schedule, :if => 'auto_delivery_schedule.to_s.blank?'
 
@@ -133,11 +133,13 @@ class Distributor < ActiveRecord::Base
   private
 
   def parameterize_name
-    self.parameter_name = name.parameterize if name
+    self.parameter_name = name.parameterize if self.name
   end
 
-  private
-  def downcase_email
-    self.email.downcase! if self.email
+  def format_email
+    if self.email
+      self.email.strip!
+      self.email.downcase!
+    end
   end
 end

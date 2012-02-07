@@ -16,8 +16,6 @@ class Account < ActiveRecord::Base
     :constructor => Proc.new { |cents, currency| Money.new(cents || 0, currency || Money.default_currency) },
     :converter => Proc.new { |value| value.respond_to?(:to_money) ? value.to_money : raise(ArgumentError, "Can't convert #{value.class} to Money") }
 
-  acts_as_taggable
-
   attr_accessible :customer, :tag_list
 
   validates_presence_of :customer, :balance
@@ -37,7 +35,7 @@ class Account < ActiveRecord::Base
     amount_difference = amount - balance
 
     options.merge!(kind: 'amend') unless options[:kind]
-    options.merge!(description: "Balance changed from #{balance} to #{amount}.") unless options[:description]
+    options.merge!(description: 'Manual Transaction.') unless options[:description]
 
     write_attribute(:balance_cents, amount.cents)
     write_attribute(:currency, amount.currency.to_s || Money.default_currency.to_s)

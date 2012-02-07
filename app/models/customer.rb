@@ -1,6 +1,9 @@
 class Customer < ActiveRecord::Base
   include PgSearch
 
+  belongs_to :distributor
+  belongs_to :route
+
   has_one :address, :dependent => :destroy, :inverse_of => :customer
   has_one :account, :dependent => :destroy
 
@@ -8,12 +11,11 @@ class Customer < ActiveRecord::Base
   has_many :payments, :through => :account
   has_many :deliveries, :through => :orders
 
-  belongs_to :distributor
-  belongs_to :route
-
   # Include default devise modules. Others available are:
   # :token_authenticatable, :encryptable, :confirmable, :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable, :recoverable, :rememberable, :trackable
+
+  acts_as_taggable
 
   pg_search_scope :search,
     :against => [:first_name, :last_name, :email, :number],
@@ -26,20 +28,26 @@ class Customer < ActiveRecord::Base
 
   accepts_nested_attributes_for :address
 
-  attr_accessible :address_attributes, :first_name, :last_name, :email, :phone, :name, :distributor_id, :distributor, :route, :password, :remember_me
+  attr_accessible :address_attributes, :first_name, :last_name, :email, :phone, :name, :distributor_id, :distributor,
+    :route, :route_id, :password, :remember_me, :tag_list
 
   validates_presence_of :first_name, :email, :distributor, :route
   validates_uniqueness_of :email, :scope => :distributor_id
   validates_uniqueness_of :number, :scope => :distributor_id
+  validates_associated :account
+  validates_associated :address
 
   before_validation :randomize_password_if_not_present
 
   before_create :initialize_number
   before_create :setup_account
+  before_create :setup_address
 
-  before_save :downcase_email
+  before_save :format_email
 
   after_create :trigger_new_customer
+
+  default_scope order(:first_name)
 
   def name
     "#{first_name} #{last_name}".strip
@@ -60,7 +68,7 @@ class Customer < ActiveRecord::Base
     newpass = ""
     1.upto(len) { |i| newpass << chars[rand(chars.size - 1)] }
     return newpass
-  end 
+  end
 
   private
 
@@ -68,14 +76,15 @@ class Customer < ActiveRecord::Base
     if self.number.nil?
       number = rand(1000000)
       safety = 1
+
       while(self.distributor.customers.find_by_number(number.to_s).present? && safety < 100) do
         number += 1
         safety += 1
         number = rand(1000000) if safety.modulo(10) == 0
       end
-      if safety > 99
-        throw "unable to assign customer number"
-      end
+
+      throw "unable to assign customer number" if safety > 99
+
       self.number = number.to_s
     end
   end
@@ -85,14 +94,21 @@ class Customer < ActiveRecord::Base
   end
 
   def setup_account
-    self.build_account
+    self.build_account if self.account.nil?
+  end
+
+  def setup_address
+    self.build_address if self.address.nil?
   end
 
   def trigger_new_customer
     Event.trigger(distributor_id, Event::EVENT_TYPES[:customer_new], {event_category: "customer", customer_id: id})
   end
 
-  def downcase_email
-    self.email.downcase! if self.email
+  def format_email
+    if self.email
+      self.email.strip!
+      self.email.downcase!
+    end
   end
 end

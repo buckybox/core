@@ -1,7 +1,8 @@
-- title("Edit #{@account.customer.name}'s Account")
+- title("Add to #{@account.customer.name}'s Balance")
 
-= render 'form'
+.row
+  .columns.four= render 'form'
 
-= link_to 'Show', [current_distributor, @account]
+= link_to 'Show', [current_distributor, @account.customer]
 \|
-= link_to 'Back', distributor_accounts_path(current_distributor)
+= link_to 'Back', distributor_customers_path(current_distributor)
