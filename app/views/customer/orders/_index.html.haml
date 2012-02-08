@@ -1,0 +1,26 @@
+.row
+  %table.twelve.columns
+    %thead
+      %tr
+        %th Order
+        %th Price
+        %th{:style => 'width:40%;'} Schedule
+        %th Next Delivery
+        %th
+
+    %tbody
+      - @orders.each do |order|
+        %tr
+          %td== #{order.quantity}x #{order.box.name}
+          %td= (order.price * order.quantity).format
+          %td
+            = order.schedule
+            - order.schedule.exception_rules.each do |exception_rule|
+              = exception_rule
+          %td= order.schedule.next_occurrence.strftime("%A %d %b") if order.schedule.next_occurrence
+          %td
+            = link_to 'change order', edit_distributor_account_order_path(current_distributor, @account, order)
+            - if order.schedule.exception_rules.empty?
+              %br
+              = link_to 'pause order', '#'
+

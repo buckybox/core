@@ -1,10 +1,12 @@
-= simple_form_for([current_customer, @order]) do |f|
+= hidden_field_tag 'distributor_id', @distributor.id
+
+= simple_form_for([@distributor, @account, @order]) do |f|
   = f.error_notification
 
   #order_inputs.row
     .four.columns
       .inputs
-        = f.association :box, :collection => box_collection(current_customer.distributor, with_price:true), :include_blank => false
+        = f.association :box, :collection => box_collection(current_distributor, with_price:true), :include_blank => false
         = f.input :quantity
 
         - unless @order.persisted?
@@ -17,32 +19,32 @@
 
     - unless @order.persisted?
       .four.columns
-        %h3= current_customer.route.name
+        %h3= @account.customer.route.name
         .inputs
           = label_tag :start_date, 'Start Date'
-          = select_tag :start_date, options_for_select(order_start_dates(current_customer.route))
+          = select_tag :start_date, options_for_select(order_start_dates(@account.customer.route))
 
           %table#days
             %tr
-              %td= check_box_tag 'days[monday]', '1', false, :disabled => !current_customer.route.monday
+              %td= check_box_tag 'days[monday]', '1', false, :disabled => !@account.customer.route.monday
               %td= label_tag :days_monday, 'Monday'
             %tr
-              %td= check_box_tag 'days[tuesday]', '2', false, :disabled => !current_customer.route.tuesday
+              %td= check_box_tag 'days[tuesday]', '2', false, :disabled => !@account.customer.route.tuesday
               %td= label_tag :days_tuesday, 'Tuesday'
             %tr
-              %td= check_box_tag 'days[wednesday]', '3', false, :disabled => !current_customer.route.wednesday
+              %td= check_box_tag 'days[wednesday]', '3', false, :disabled => !@account.customer.route.wednesday
               %td= label_tag :days_wednesday, 'Wednesday'
             %tr
-              %td= check_box_tag 'days[thursday]', '4', false, :disabled => !current_customer.route.thursday
+              %td= check_box_tag 'days[thursday]', '4', false, :disabled => !@account.customer.route.thursday
               %td= label_tag :days_thursday, 'Thursday'
             %tr
-              %td= check_box_tag 'days[friday]', '5', false, :disabled => !current_customer.route.friday
+              %td= check_box_tag 'days[friday]', '5', false, :disabled => !@account.customer.route.friday
               %td= label_tag :days_friday, 'Friday'
             %tr
-              %td= check_box_tag 'days[saturday]', '6', false, :disabled => !current_customer.route.saturday
+              %td= check_box_tag 'days[saturday]', '6', false, :disabled => !@account.customer.route.saturday
               %td= label_tag :days_saturday, 'Saturday'
             %tr
-              %td= check_box_tag 'days[sunday]', '0', false, :disabled => !current_customer.route.sunday
+              %td= check_box_tag 'days[sunday]', '0', false, :disabled => !@account.customer.route.sunday
               %td= label_tag :days_sunday, 'Sunday'
 
     .row

@@ -1,8 +1,7 @@
-= simple_form_for(@customer_address) do |f|
+= simple_form_for(@address, url: customer_address_path(current_customer)) do |f|
   = f.error_notification
 
   .inputs
-    = f.association :customer
     = f.input :address_1
     = f.input :address_2
     = f.input :suburb

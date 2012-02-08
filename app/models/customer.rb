@@ -7,9 +7,10 @@ class Customer < ActiveRecord::Base
   has_one :address, :dependent => :destroy, :inverse_of => :customer
   has_one :account, :dependent => :destroy
 
-  has_many :orders, :through => :account
-  has_many :payments, :through => :account
-  has_many :deliveries, :through => :orders
+  has_many :transactions, :through => :account
+  has_many :payments,     :through => :account
+  has_many :orders,       :through => :account
+  has_many :deliveries,   :through => :orders
 
   # Include default devise modules. Others available are:
   # :token_authenticatable, :encryptable, :confirmable, :lockable, :timeoutable and :omniauthable

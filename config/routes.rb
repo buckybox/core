@@ -78,7 +78,6 @@ BuckyBox::Application.routes.draw do
 
   namespace :distributor do
     root :to => 'dashboard#index'
-
     get 'dashboard' => 'dashboard#index'
 
     namespace :wizard do
@@ -91,10 +90,13 @@ BuckyBox::Application.routes.draw do
     end
   end
 
-  get 'customer', :controller => 'customer/orders', :action => 'home',  :as => 'customer_root'
+  resources :customers, :controller => 'customer/customers', :only => :update do
+    resource  :address, :controller => 'customer/address', :only => :update
+    resources :orders,  :controller => 'customer/orders',  :only => :update
+  end
 
-  resources :customers do
-    resources :orders, :controller => 'customer/orders'
-    resource :addresses, :controller => 'customer/addresses'
+  namespace :customer do
+    root :to => 'dashboard#index'
+    get 'dashboard' => 'dashboard#index'
   end
 end

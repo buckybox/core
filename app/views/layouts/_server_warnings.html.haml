@@ -1,6 +1,8 @@
 - if Rails.env.development?
   .row
-    #development.server_warning.twelve.columns DEVELOPMENT SERVER
+    .twelve.columns
+      #development.server_warning DEVELOPMENT SERVER
 - elsif Rails.env.staging?
   .row
-    #staging.server_warning.twelve.columns STAGING SERVER
+    .twelve.columns
+      #staging.server_warning STAGING SERVER
