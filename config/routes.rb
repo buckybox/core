@@ -107,5 +107,6 @@ BuckyBox::Application.routes.draw do
   namespace :customer do
     root :to => 'dashboard#index'
     get 'dashboard' => 'dashboard#index'
+    get 'order/:order_id/box/:id' => 'dashboard#box'
   end
 end
