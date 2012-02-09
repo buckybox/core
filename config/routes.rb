@@ -92,7 +92,12 @@ BuckyBox::Application.routes.draw do
 
   resources :customers, :controller => 'customer/customers', :only => :update do
     resource  :address, :controller => 'customer/address', :only => :update
-    resources :orders,  :controller => 'customer/orders',  :only => :update
+
+    resources :orders,  :controller => 'customer/orders',  :only => :update do
+      member do
+        put 'pause'
+      end
+    end
 
     member do
       put 'update_password'

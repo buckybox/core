@@ -22,7 +22,7 @@ class Customer::CustomersController < Customer::BaseController
         format.json { head :no_content }
       else
         format.html { redirect_to customer_root_path, error: 'There was a problem changing your password.' }
-        format.json { render json: @post.errors, status: :unprocessable_entity }
+        format.json { render json: @customer.errors, status: :unprocessable_entity }
       end
     end
   end

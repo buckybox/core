@@ -29,7 +29,7 @@
           - if current_customer.phone
             = current_customer.phone
             %br
-          = link_to 'change my delivery address', '#', :data => {:animation => 'fade', 'reveal-id' => 'address-modal'}
+          = link_to 'change my delivery address', '#', :data => {'reveal-id' => 'address-modal'}
 
       .row
         #customer-controls.twelve.columns
@@ -37,14 +37,9 @@
           %br
           = current_customer.email
           %br
-          = link_to 'change my email', '#', :data => {:animation => 'fade', 'reveal-id' => 'email-modal'}
+          = link_to 'change my email', '#', :data => {'reveal-id' => 'email-modal'}
           %br
-          = link_to 'change my password', '#', :data => {:animation => 'fade', 'reveal-id' => 'password-modal'}
-
-#order-modal.reveal-modal
-  %h2 Change Your Order
-  = link_to '&#215;'.html_safe, '#', :class => 'close-reveal-modal'
-  = render 'customer/orders/form'
+          = link_to 'change my password', '#', :data => {'reveal-id' => 'password-modal'}
 
 #address-modal.reveal-modal
   %h2 Change Your Address

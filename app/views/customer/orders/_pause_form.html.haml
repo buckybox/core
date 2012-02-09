@@ -1,4 +1,4 @@
-= simple_form_for(order, url: customer_order_path(current_customer, order), html: { method: :put }) do |f|
+= simple_form_for(order, url: pause_customer_order_path(current_customer), html: { method: :put }) do |f|
   = f.error_notification
 
   .inputs
@@ -8,4 +8,4 @@
     = f.input :dislikes, :wrapper_html => { :id => 'dislikes_input' }
 
   .actions
-    = f.button :submit
+    = f.button :submit, 'Add Pause'

@@ -8,5 +8,6 @@ class Customer::DashboardController < ApplicationController
     @orders       = @customer.orders
     @balance      = @customer.account.balance
     @transactions = @customer.transactions.limit(5)
+    @distributor  = @customer.distributor
   end
 end
