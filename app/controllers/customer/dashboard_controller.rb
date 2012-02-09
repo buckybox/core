@@ -1,9 +1,12 @@
-class Customer::DashboardController < Customer::BaseController
-  def index
-    @orders = current_customer.orders
-    @balance = current_customer.account.balance
-    @transactions = current_customer.transactions.limit(5)
+class Customer::DashboardController < ApplicationController
+  before_filter :authenticate_customer!
+  layout 'customer'
 
-    @address = current_customer.address
+  def index
+    @customer     = current_customer
+    @address      = @customer.address
+    @orders       = @customer.orders
+    @balance      = @customer.account.balance
+    @transactions = @customer.transactions.limit(5)
   end
 end

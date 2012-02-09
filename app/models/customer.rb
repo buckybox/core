@@ -14,7 +14,8 @@ class Customer < ActiveRecord::Base
 
   # Include default devise modules. Others available are:
   # :token_authenticatable, :encryptable, :confirmable, :lockable, :timeoutable and :omniauthable
-  devise :database_authenticatable, :recoverable, :rememberable, :trackable
+  devise :database_authenticatable, :registerable,
+    :recoverable, :rememberable, :trackable, :validatable
 
   acts_as_taggable
 
@@ -30,7 +31,7 @@ class Customer < ActiveRecord::Base
   accepts_nested_attributes_for :address
 
   attr_accessible :address_attributes, :first_name, :last_name, :email, :phone, :name, :distributor_id, :distributor,
-    :route, :route_id, :password, :remember_me, :tag_list
+    :route, :route_id, :password, :password_confirmation, :remember_me, :tag_list
 
   validates_presence_of :first_name, :email, :distributor, :route
   validates_uniqueness_of :email, :scope => :distributor_id

@@ -13,6 +13,6 @@ class Address < ActiveRecord::Base
     result << postcode if options[:with_postcode]
     result << phone if options[:with_phone]
 
-    return result.join(join_with)
+    return result.join(join_with).html_safe
   end
 end

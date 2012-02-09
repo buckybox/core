@@ -25,16 +25,11 @@
       %strong Deliver To:
       .row
         .twelve.columns
-          %ul.vcard
-            - if current_customer.address
-              %li.adr= current_customer.address.address_1
-              - if current_customer.address.address_2
-                %li.adr= current_customer.address.address_2
-              %li.adr= current_customer.address.suburb
-              %li.adr= current_customer.address.city
-              %li.adr= current_customer.address.postcode
-            %li.tel= current_customer.phone
-            %li= link_to 'change my delivery address', '#', :data => {:animation => 'fade', 'reveal-id' => 'address-modal'}
+          = current_customer.address.join('<br/>')
+          - if current_customer.phone
+            = current_customer.phone
+            %br
+          = link_to 'change my delivery address', '#', :data => {:animation => 'fade', 'reveal-id' => 'address-modal'}
 
       .row
         #customer-controls.twelve.columns
@@ -42,9 +37,9 @@
           %br
           = current_customer.email
           %br
-          = link_to 'change my email', '#'
+          = link_to 'change my email', '#', :data => {:animation => 'fade', 'reveal-id' => 'email-modal'}
           %br
-          = link_to 'change my password', '#'
+          = link_to 'change my password', '#', :data => {:animation => 'fade', 'reveal-id' => 'password-modal'}
 
 #address-modal.reveal-modal
   %h2 Change Your Address
@@ -54,3 +49,9 @@
 #email-modal.reveal-modal
   %h2 Change Your Email Address
   = link_to '&#215;'.html_safe, '#', :class => 'close-reveal-modal'
+  = render 'customer/customers/form'
+
+#password-modal.reveal-modal
+  %h2 Change Your Password
+  = link_to '&#215;'.html_safe, '#', :class => 'close-reveal-modal'
+  = render 'customer/customers/password_form'
