@@ -41,6 +41,11 @@
           %br
           = link_to 'change my password', '#', :data => {:animation => 'fade', 'reveal-id' => 'password-modal'}
 
+#order-modal.reveal-modal
+  %h2 Change Your Order
+  = link_to '&#215;'.html_safe, '#', :class => 'close-reveal-modal'
+  = render 'customer/orders/form'
+
 #address-modal.reveal-modal
   %h2 Change Your Address
   = link_to '&#215;'.html_safe, '#', :class => 'close-reveal-modal'
