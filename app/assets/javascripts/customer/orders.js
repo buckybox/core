@@ -4,6 +4,10 @@
 $(function() {
   if($('.customer_order').length > 0) { customer_order_init(); }
 
+  if($('.customer_pause').length > 0) {
+    $('.date_picker').dateinput({ format: 'yyyy-mm-dd', min: -1 });
+  }
+
   $('.customer_order #order_box_id').change(function() {
     var order_id = $(this).first().parent().parent().parent().children('#order_id').val();
     var box_id = $(this).val();

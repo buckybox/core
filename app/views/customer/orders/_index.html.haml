@@ -14,9 +14,15 @@
           %td== #{order.quantity}x #{order.box.name}
           %td= (order.price * order.quantity).format
           %td
-            = order.schedule
-            - order.schedule.exception_rules.each do |exception_rule|
-              = exception_rule
+            - order.schedule.recurrence_rules.each do |rr|
+              = rr.to_s
+            - order.schedule.recurrence_dates.each do |rd| 
+              = rd.to_s
+            - unless order.schedule.exception_times.empty?
+              %br
+              = link_to '#' do
+                == pausing between #{order.schedule.exception_times.first.to_date.to_s(:long)}
+                == - #{order.schedule.exception_times.last.to_date.to_s(:long)}
           %td= order.schedule.next_occurrence.strftime("%A %d %b") if order.schedule.next_occurrence
           %td
             = link_to 'change order', '#', :data => {'reveal-id' => "order-modal-#{order.id}"}
@@ -26,7 +32,7 @@
               = link_to '&#215;'.html_safe, '#', :class => 'close-reveal-modal'
               = render :partial => 'customer/orders/form', :locals => { :order => order }
 
-            - if order.schedule.exception_rules.empty?
+            - if order.schedule.exception_times.empty?
               %br
               = link_to 'pause order', '#', :data => {'reveal-id' => "pause-modal-#{order.id}"}
 

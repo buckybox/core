@@ -1,11 +1,20 @@
-= simple_form_for(order, url: pause_customer_order_path(current_customer), html: { method: :put }) do |f|
+= simple_form_for(order, url: pause_customer_order_path(current_customer, order), html: { method: :put }) do |f|
   = f.error_notification
 
-  .inputs
-    = f.association :box, :collection => box_collection(@distributor, with_price: true), :include_blank => false
-    = f.input :quantity
-    = f.input :likes, :wrapper_html => { :id => 'likes_input' }
-    = f.input :dislikes, :wrapper_html => { :id => 'dislikes_input' }
+  .customer_pause
+    = hidden_field_tag 'order_id', order.id
 
-  .actions
-    = f.button :submit, 'Add Pause'
+    .inputs
+      = label_tag 'start_date', class: 'string required' do
+        %abbr{title: 'Start date'}*
+        Start date
+      = text_field_tag 'start_date', nil, class: 'date_picker string required input-text', required: 'required', size: 50
+
+      = label_tag 'end_date', class: 'string required' do
+        %abbr{title: 'End date'}*
+        End date
+      = text_field_tag 'end_date', nil, class: 'date_picker string required input-text', required: 'required', size: 50
+
+    .actions
+      = f.button :submit, 'Add Pause'
+
