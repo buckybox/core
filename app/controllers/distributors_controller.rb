@@ -1,4 +1,6 @@
 class DistributorsController < InheritedResources::Base
+  before_filter :authenticate_distributor! # just to add some sort of authentication
+
   respond_to :html, :xml, :json
 
   #TODO: this looks like it is missing authentication to me - jbv

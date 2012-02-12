@@ -30,8 +30,9 @@ class Order < ActiveRecord::Base
   before_save :make_active, :if => :just_completed?
   before_save :record_schedule_change
 
-  scope :completed, where(completed:true)
-  scope :active,    where(active:true)
+  scope :completed, where(completed: true)
+  scope :active,    where(active: true)
+  scope :unactive,  where(active: false)
 
   def price
     box.price # Must try remove this in code. It is now being achrived in deliveries

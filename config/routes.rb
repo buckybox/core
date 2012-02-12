@@ -15,10 +15,10 @@ BuckyBox::Application.routes.draw do
   end
 
   resources :distributors do
-    resources :boxes,              :controller => 'distributor/boxes',               :except => :index
-    resources :routes,             :controller => 'distributor/routes',              :except => :index
     resource :bank_information,    :controller => 'distributor/bank_information',    :only => :create
     resource :invoice_information, :controller => 'distributor/invoice_information', :only => :create
+    resources :boxes,              :controller => 'distributor/boxes',               :except => :index
+    resources :routes,             :controller => 'distributor/routes',              :except => :index
     resources :payments,           :controller => 'distributor/payments',            :only => :create
     resources :transactions,       :controller => 'distributor/transactions',        :only => :create
 
@@ -43,7 +43,11 @@ BuckyBox::Application.routes.draw do
     end
 
     resources :accounts, :controller => 'distributor/accounts', :only => :edit do
-      resources :orders, :controller => 'distributor/orders', :except => [:index, :show]
+      resources :orders, :controller => 'distributor/orders', :except => [:index, :show, :destroy] do
+        member do
+          put 'deactivate', :action => :deactivate, :as => 'deactivate'
+        end
+      end
 
       member do
         put 'change_balance', :action => :change_balance, :as => 'change_balance'
@@ -78,6 +82,4 @@ BuckyBox::Application.routes.draw do
     resources :orders, :controller => 'customer/orders'
     resource :addresses, :controller => 'customer/addresses'
   end
-
-  resources :orders
 end
