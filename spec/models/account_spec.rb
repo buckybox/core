@@ -87,14 +87,14 @@ describe Account do
       @order = order_with_deliveries
       @account = @order.account
     end
-    it "returns 4 occurrences" do
-      @account.all_occurrences(4.weeks.from_now).size.should == 4
+    it "returns 20 occurrences" do
+      @account.all_occurrences(4.weeks.from_now).size.should == 20 
     end
 
   end
 
   describe "next_invoice_date" do
-    context "4 deliveries loaded in the future" do
+    context "20 deliveries loaded in the future" do
       before(:each) do
         @order = order_with_deliveries
         @account = @order.account

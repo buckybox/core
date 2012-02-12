@@ -1,11 +1,7 @@
 module FabricationHelper
+  #TODO : refactor this away
   def order_with_deliveries
-    @distributor = Fabricate(:distributor)
-    @route = Fabricate(:route, :distributor => @distributor)
-    @box = Fabricate(:box, :distributor => @distributor)
-
-    @order = Fabricate(:recurring_order, :box => @box, :completed => true)
-    @order
+    Fabricate(:recurring_order, :completed => true, :active => true)
   end
 
 end
