@@ -3,7 +3,6 @@ require 'ruby-debug'
 
 describe Invoice do
   before(:each) do
-    pending('Invoices not done so not bothering to fix tests for them.')
     @invoice = Fabricate(:invoice)
     @account = @invoice.account
   end
@@ -18,13 +17,13 @@ describe Invoice do
   describe "#generate_invoices" do
     before(:each) do
       @account_due_today = order_with_deliveries.account
-      @account_due_today.stub(:next_invoice_date).and_return(Date.today)
+      @account_due_today.stub(:next_invoice_date).and_return(Date.current)
       @account_due_tomorrow = order_with_deliveries.account
       @account_due_tomorrow.stub(:next_invoice_date).and_return(1.day.from_now)
       @account_due_yesterday = order_with_deliveries.account 
       @account_due_yesterday.stub(:next_invoice_date).and_return(1.day.ago)
       @account_with_invoice = order_with_deliveries.account
-      @account_with_invoice.stub(:next_invoice_date).and_return(Date.today)
+      @account_with_invoice.stub(:next_invoice_date).and_return(Date.current)
       @account_with_invoice.create_invoice
       Account.stub(:all).and_return([@account_due_today,@account_due_tomorrow, @account_due_yesterday, @account_with_invoice])
       ActionMailer::Base.deliveries = []
@@ -47,16 +46,16 @@ describe Invoice do
   end
 
   describe "calculate_amount" do
-    context "with one delivery" do
+    context "with one scheduled delivery" do
       before(:each) do
         @order = order_with_deliveries
         @account = @order.account
+        @account.stub(:all_occurrences).and_return([{:price => @order.box.price}])
         @invoice = Fabricate(:invoice, :account => @account)
         @invoice.calculate_amount
       end
       it "should calculate correct amount" do
         @invoice.amount.should == @account.amount_with_bucky_fee(@order.box.price)
-        @invoice.deliveries.collect{|d| d[:id]}.should include(@order.deliveries.first.id)
       end
     end
     context "with multiple deliveries" do
@@ -66,9 +65,6 @@ describe Invoice do
         @account.stub(:balance).and_return(Money.new(10000))
         @t1 = Fabricate(:transaction, :account => @account, :created_at => 3.days.ago)
         @t2 = Fabricate(:transaction, :account => @account, :created_at => Date.today)
-        @d2 = Fabricate(:delivery, :order => @order, :date => 2.weeks.from_now)
-        @d1 = Fabricate(:delivery, :order => @order, :date => 1.weeks.from_now)
-        @d3 = Fabricate(:delivery, :order => @order, :date => 4.weeks.from_now)
         @invoice.account = @account
         @invoice.calculate_amount
       end
@@ -82,13 +78,7 @@ describe Invoice do
         transaction_hash[:description].should == @t1.description
       end
       it "should save deliveries hash" do
-        deliveries_hash = @invoice.deliveries.first
-        deliveries_hash[:date].should == @d1.date.to_date
-        deliveries_hash[:amount].should == @d1.order.price
-        deliveries_hash[:description].should == @d1.box.name
-      end
-      it "should include deliveries on last day" do
-        @invoice.deliveries.size.should == 3
+        pending
       end
       it "should include transactions on last day" do
         @invoice.transactions.size.should == 2

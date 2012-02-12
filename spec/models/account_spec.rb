@@ -72,16 +72,6 @@ describe Account do
     end
   end
 
-  context 'when using tags' do
-    before :each do
-      @account.tag_list = 'dog, cat, rain'
-      @account.save
-    end
-
-    specify { @account.tags.size.should == 3 }
-    specify { @account.tag_list.should == %w(dog cat rain) }
-  end
-
   describe "all_occurrences" do
     before(:each) do
       @order = order_with_deliveries
@@ -98,40 +88,47 @@ describe Account do
       before(:each) do
         @order = order_with_deliveries
         @account = @order.account
+        @total_scheduled = @account.all_occurrences(4.weeks.from_now).inject(Money.new(0)) { |sum, o| sum += o[:price]}
       end
 
       it "is today if balance is currently below threshold" do
         @account.stub(:balance).and_return(Money.new(-1000))  
+        @account.stub(:all_occurrences).and_return([])
         @account.next_invoice_date.should == Date.today
       end
-      it "is at least 2 days after the first delivery" do
-        #@account.stub(:balance).and_return(Money.new(0))  
-        #@account.next_invoice_date.should == 2.days.from_now(Time.now).to_date
-
+      it "is at least 2 days after the first scheduled delivery" do
+        @account.stub(:deliveries).and_return([])
         @account.stub(:balance).and_return(Money.new(1000))
-        @account.next_invoice_date.should == 2.days.from_now(Time.now).to_date
+        @account.next_invoice_date.should == 2.days.from_now(@account.all_occurrences(4.weeks.from_now).first[:date]).to_date
       end
+
       it "is 12 days before the account goes below the invoice threshold" do
-        @account.stub(:balance).and_return(Money.new(3000))
+        @account.stub(:balance).and_return(@total_scheduled - Money.new(1000))
         last_occurrence = @account.all_occurrences(4.weeks.from_now).last
         last_date = last_occurrence[:date]
-        @account.next_invoice_date.should == 12.days.from_now(last_date).to_date 
+        @account.next_invoice_date.should == 12.days.ago(last_date).to_date 
       end
 
       it "does not need an invoice if balance won't go below threshold" do
-        @account.stub(:balance).and_return(Money.new(5000))
+        @account.stub(:balance).and_return(@total_scheduled)
         @account.next_invoice_date.should be_nil
       end
 
       it "includes bucky fee in the calculations if distributor.separate_bucky_fee is true" do
-        @account.stub(:balance).and_return(Money.new(3501))
+        @account.stub(:balance).and_return(@total_scheduled - Money.new(499))
         @account.next_invoice_date.should_not be_nil
       end
 
-      it "doesn't include bucky fee in the calculations if distributor.separate_bucky_fee is false" do
-        @account.distributor.update_attribute(:separate_bucky_fee, false)
-        @account.stub(:balance).and_return(Money.new(3501))
+      it "does not include bucky fee if distributor.separate_bucky_fee is false" do
+        @order.distributor.update_attribute(:separate_bucky_fee, false)
+        @account.stub(:balance).and_return(@total_scheduled - Money.new(499))
         @account.next_invoice_date.should be_nil
+      end
+
+      it "does include bucky fee in the calculations if distributor.separate_bucky_fee is true" do
+        @account.distributor.update_attribute(:separate_bucky_fee, true)
+        @account.stub(:balance).and_return(@total_scheduled - Money.new(499))
+        @account.next_invoice_date.should_not be_nil
       end
     end
   end
@@ -150,8 +147,6 @@ describe Account do
   end
 
   describe "create_invoice" do
-    before { pending('Invoices not done so not bothering to fix tests for them.') }
-
     it "does nothing if an outstanding invoice exists" do
       Fabricate(:invoice, :account => @account)
       @account.stub(:next_invoice_date).and_return(Date.current)
@@ -175,9 +170,8 @@ describe Account do
     it "creates invoice if next invoice date is <= today" do
       @account = order_with_deliveries.account
       @account.stub(:next_invoice_date).and_return(Date.current)
-      lambda {
-        @account.create_invoice
-      }.should change {Invoice.count}
+      Invoice.should_receive(:create_for_account)
+      @account.create_invoice
     end
   end
 

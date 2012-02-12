@@ -89,11 +89,12 @@ class Account < ActiveRecord::Base
   def next_invoice_date
     total = balance
     invoice_date = nil
+    occurrences = all_occurrences(4.weeks.from_now)
 
     if total < distributor.invoice_threshold
       invoice_date =  Date.current
     else
-      all_occurrences(4.weeks.from_now).each do |occurrence|
+      occurrences.each do |occurrence|
         total -= amount_with_bucky_fee(occurrence[:price])
 
         if total < distributor.invoice_threshold
@@ -105,11 +106,13 @@ class Account < ActiveRecord::Base
 
     if invoice_date
       invoice_date = Date.current if invoice_date < Date.current
-      if deliveries.size > 0 && deliveries.first.date <= invoice_date - 2.days
+      if deliveries.size > 0 && deliveries.first.date >= invoice_date
         invoice_date = deliveries.first.date + 2.days
+      elsif deliveries.size == 0 && occurrences.first && occurrences.first[:date] >= invoice_date
+        invoice_date = occurrences.first[:date] + 2.days
       end
 
-      invoice_date = Date.curent if invoice_date < Date.current
+      invoice_date = Date.current if invoice_date < Date.current
     end
 
     return invoice_date
