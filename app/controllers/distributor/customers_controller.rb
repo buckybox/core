@@ -24,7 +24,7 @@ class Distributor::CustomersController < Distributor::BaseController
       @address      = @customer.address
       @account      = @customer.account
       @transactions = @account.transactions
-      @orders       = @account.orders.completed.active
+      @orders       = @account.orders.active
       @deliveries   = @account.deliveries
     end
   end

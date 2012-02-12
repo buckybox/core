@@ -19,14 +19,12 @@ class PackingList < ActiveRecord::Base
       future_start_date = start_date
       future_start_date = (result.last.date + 1.day) if result.last
 
-      orders = distributor.orders
+      orders = distributor.orders.active
 
       (future_start_date..end_date).each do |date|
         date_orders = []
 
-        orders.each do |order|
-          date_orders << order if order.schedule.occurs_on?(date)
-        end
+        orders.each { |order| date_orders << order if order.schedule.occurs_on?(date) }
 
         result << FuturePackingList.new(date, date_orders, false)
       end
