@@ -1,3 +1,18 @@
+%ul
+  %li
+    %strong Order:
+    == #{order.quantity}x #{order.box.name}
+  %li
+    %strong Price:
+    = (order.price * order.quantity).format
+  %li
+    %strong Schedule:
+    - order.schedule.recurrence_rules.each do |rr|
+      = rr.to_s
+  %li
+    %strong Next delivery:
+    = order.schedule.next_occurrence.strftime("%A %d %b") if order.schedule.next_occurrence
+
 = simple_form_for(order, url: pause_customer_order_path(current_customer, order), html: { method: :put }) do |f|
   = f.error_notification
 
