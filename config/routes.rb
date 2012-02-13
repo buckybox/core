@@ -45,8 +45,8 @@ BuckyBox::Application.routes.draw do
 
     resources :customers, controller: 'distributor/customers' do
       collection do
-        get 'search',   action: :index
-        get 'tag/:tag', action: :index
+        get 'search',   action: :index, as: 'search'
+        get 'tag/:tag', action: :index, as: 'tag'
       end
 
       member  do
