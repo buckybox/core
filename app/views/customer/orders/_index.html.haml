@@ -14,28 +14,20 @@
           %td== #{order.quantity}x #{order.box.name}
           %td= (order.price * order.quantity).format
           %td
-            - order.schedule.recurrence_rules.each do |rr|
-              = rr.to_s
-            - order.schedule.recurrence_dates.each do |rd|
-              = rd.to_s
-            - unless order.schedule.exception_times.empty?
-              %br
-              = link_to '#', data: {'reveal-id' => "pause-modal-#{order.id}"} do
-                == From #{order.schedule.exception_times.first.strftime("%b %-d")}
-                == to #{order.schedule.exception_times.last.strftime("%b %-d")}
-          %td= order.schedule.next_occurrence.strftime("%A %d %b") if order.schedule.next_occurrence
-          %td
-            = link_to 'change order', '#', data: {'reveal-id' => "order-modal-#{order.id}"}
+            = order_schedule(order)
             - if order.schedule.exception_times.empty?
               %br
               = link_to 'pause order', '#', data: {'reveal-id' => "pause-modal-#{order.id}"}
-
-            .reveal-modal{id: "order-modal-#{order.id}"}
-              %h2 Change Your Order
-              = link_to '&#215;'.html_safe, '#', class: 'close-reveal-modal'
-              = render partial: 'customer/orders/form', locals: { order: order }
 
             .reveal-modal{id: "pause-modal-#{order.id}"}
               %h2 Pause Your Order
               = link_to '&#215;'.html_safe, '#', class: 'close-reveal-modal'
               = render partial: 'customer/orders/pause_form', locals: { order: order }
+          %td= order.schedule.next_occurrence.strftime("%A %d %b") if order.schedule.next_occurrence
+          %td
+            = link_to 'change order', '#', data: {'reveal-id' => "order-modal-#{order.id}"}
+
+            .reveal-modal{id: "order-modal-#{order.id}"}
+              %h2 Change Your Order
+              = link_to '&#215;'.html_safe, '#', class: 'close-reveal-modal'
+              = render partial: 'customer/orders/form', locals: { order: order }
