@@ -1,7 +1,8 @@
 - title 'Dashboard', false
 
-%h2 Invoices
-= render :partial => "distributor/invoices/ready_to_send", :locals => {:invoice_count => @accounts_to_invoice.size}
+- if @accounts_to_invoice.size > 0
+  %h2 Invoices
+  = render :partial => "distributor/invoices/ready_to_send", :locals => {:invoice_count => @accounts_to_invoice.size}
 
 - unless @notifications.blank?
   #noticeboard

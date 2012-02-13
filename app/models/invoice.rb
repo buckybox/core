@@ -22,7 +22,7 @@ class Invoice < ActiveRecord::Base
   before_create :generate_number
 
   validates_presence_of :account_id
-  validates_uniqueness_of :number, :allow_nil => false
+  validates_uniqueness_of :number, :allow_nil => false, :scope => :account_id
   validates_numericality_of :amount_cents, :greater_than => 0
 
   def set_defaults
@@ -30,6 +30,14 @@ class Invoice < ActiveRecord::Base
     self.end_date ||= 4.weeks.from_now.to_date
     self.date = Date.today
     #generate_number
+  end
+
+  def full_number
+    "#{account.customer.number}-#{number}"
+  end
+
+  def starting_balance
+    balance - transactions.inject(Money.new(0)) {|sum, t| sum += t[:amount]}
   end
 
   #creates invoices for all accounts which need it
@@ -48,9 +56,16 @@ class Invoice < ActiveRecord::Base
     return unless account
     self.balance = account.balance
     self.transactions = account.transactions.unscoped.order(:created_at).where(["created_at >= ? AND created_at <= ?", start_date, Date.current]).collect {|t| {:date => t.created_at.to_date, :amount => t.amount, :description => t.description}}
-    #TODO: check for deliveries on today that are pending
-    value = account.all_occurrences(end_date.to_time).inject(Money.new(0)) {|sum, occurrence| sum += occurrence[:price]} - balance
-    self.amount = account.amount_with_bucky_fee(value)  
+
+    #check for deliveries on today that are pending
+    real_deliveries = account.deliveries.unscoped.pending.includes(:delivery_list).order("\"deliveries\".created_at").where(["\"delivery_lists\".date >= ? AND \"delivery_lists\".date <= ?", Date.current, end_date]).collect {|d| {:date => d.date, :amount => account.amount_with_bucky_fee(d.price), :description => d.description}}
+
+    #save all_occurrences
+    occurrences = account.all_occurrences(end_date.to_time).collect {|o| {:date => o[:date], :description => o[:description], :amount => account.amount_with_bucky_fee(o[:price]) }}
+
+    self.deliveries = real_deliveries + occurrences
+    debugger
+    self.amount = deliveries.inject(Money.new(0)) {|sum, occurrence| sum += occurrence[:amount]} - balance
     amount > 0 ? amount : 0
   end
 

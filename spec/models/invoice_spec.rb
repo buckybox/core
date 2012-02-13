@@ -78,7 +78,7 @@ describe Invoice do
         transaction_hash[:description].should == @t1.description
       end
       it "should save deliveries hash" do
-        pending
+        @invoice.deliveries.size.should == @account.all_occurrences(4.weeks.from_now).size
       end
       it "should include transactions on last day" do
         @invoice.transactions.size.should == 2

@@ -1,7 +1,7 @@
 class Distributor::InvoicesController < Distributor::BaseController
   belongs_to :distributor
 
-  actions :index
+  actions :index, :show
 
   def to_send
     @invoices = Account.need_invoicing.collect {|a| Invoice.for_account(a) }

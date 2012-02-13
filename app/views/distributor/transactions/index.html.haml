@@ -14,7 +14,7 @@
     - @transactions.each do |transaction|
       %tbody
         %tr
-          %td= link_to transaction.account.customer.name, [current_distributor, transaction.account]
+          %td= link_to transaction.account.customer.name, [current_distributor, transaction.account.customer]
           %td= transaction.kind.titleize
           %td= transaction.amount
           %td= transaction.description

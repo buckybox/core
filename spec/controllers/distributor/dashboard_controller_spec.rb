@@ -1,6 +1,7 @@
 require 'spec_helper'
 
 describe Distributor::DashboardController do
+  render_views 
 
   before(:each) do 
     @distributor = Fabricate(:distributor, completed_wizard: true)
@@ -10,6 +11,8 @@ describe Distributor::DashboardController do
     @billing_evt   = Fabricate(:billing_event,  distributor: @distributor)
     @custormer_evt = Fabricate(:customer_event, distributor: @distributor)
     @dismissed_evt = Fabricate(:customer_event, distributor: @distributor, dismissed: true)
+    Account.stub(:need_invoicing).and_return([Fabricate(:account)])
+    Fabricate(:payment, :distributor => @distributor, :kind => 'manual') 
   end
 
   context 'visiting dashboard' do

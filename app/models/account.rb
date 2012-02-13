@@ -106,7 +106,7 @@ class Account < ActiveRecord::Base
 
     if invoice_date
       invoice_date = Date.current if invoice_date < Date.current
-      if deliveries.size > 0 && deliveries.first.date >= invoice_date
+      if deliveries.size > 0 && deliveries.first.date.present? && deliveries.first.date >= invoice_date
         invoice_date = deliveries.first.date + 2.days
       elsif deliveries.size == 0 && occurrences.first && occurrences.first[:date] >= invoice_date
         invoice_date = occurrences.first[:date] + 2.days
@@ -120,9 +120,13 @@ class Account < ActiveRecord::Base
 
   #used internally for calculating invoice totals
   #if distributor charges bucky fee in addition to box price return price + bucky fee
-  def amount_with_bucky_fee(amount)
+  def self.amount_with_bucky_fee(amount, distributor)
     bucky_fee_multiple = distributor.separate_bucky_fee ? (1 + distributor.fee) : 1
     amount * bucky_fee_multiple
+  end
+
+  def amount_with_bucky_fee(amount)
+    Account.amount_with_bucky_fee(amount, distributor)
   end
 
   def needs_invoicing?
