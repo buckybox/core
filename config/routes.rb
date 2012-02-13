@@ -58,6 +58,8 @@ BuckyBox::Application.routes.draw do
       resources :orders, controller: 'distributor/orders', except: [:index, :show, :destroy] do
         member do
           put 'deactivate'
+          put 'pause'
+          post 'remove_pause'
         end
       end
 

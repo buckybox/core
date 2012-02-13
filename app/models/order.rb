@@ -37,7 +37,7 @@ class Order < ActiveRecord::Base
 
   scope :completed, where(completed: true)
   scope :active,    where(active: true)
-  scope :unactive,  where(active: false)
+  scope :inactive,  where(active: false)
 
   def price
     box.price # Must try remove this in code. It is now being achrived in deliveries

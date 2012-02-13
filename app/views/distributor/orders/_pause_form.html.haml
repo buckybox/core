@@ -1,0 +1,43 @@
+%ul
+  %li
+    %strong Order:
+    == #{order.quantity}x #{order.box.name}
+  %li
+    %strong Price:
+    = (order.price * order.quantity).format
+  %li
+    %strong Schedule:
+    - order.schedule.recurrence_rules.each do |rr|
+      = rr.to_s
+  %li
+    %strong Next delivery:
+    = order.schedule.next_occurrence.strftime("%A %d %b") if order.schedule.next_occurrence
+
+= simple_form_for(order, url: pause_distributor_account_order_path(current_distributor, order.account, order), html: { method: :put }) do |f|
+  = f.error_notification
+
+  .customer_pause
+    = hidden_field_tag 'order_id', order.id
+
+    - pause_date  = order.schedule.exception_times.first
+    - resume_date = (order.schedule.exception_times.empty? ? nil : order.schedule.exception_times.last + 1.day)
+
+    .inputs
+      = label_tag 'start_date', class: 'string required' do
+        %abbr{title: 'Pause date'}*
+        Pause date
+      = text_field_tag('start_date',
+        pause_date,
+        { class: 'date_picker string required input-text', required: 'required', size: 50 })
+
+      = label_tag 'end_date', class: 'string required' do
+        %abbr{title: 'Resume date'}*
+        Resume date
+      = text_field_tag('end_date',
+        resume_date,
+        { class: 'date_picker string required input-text', required: 'required', size: 50 })
+
+    .actions
+      = f.button :submit, 'Update Pause'
+      = link_to 'Remove Pause', remove_pause_distributor_account_order_path(current_distributor, order.account, order), method: :post
+
