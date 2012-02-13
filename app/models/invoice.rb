@@ -57,6 +57,9 @@ class Invoice < ActiveRecord::Base
     self.balance = account.balance
     self.transactions = account.transactions.unscoped.order(:created_at).where(["created_at >= ? AND created_at <= ?", start_date, Date.current]).collect {|t| {:date => t.created_at.to_date, :amount => t.amount, :description => t.description}}
 
+    #TODO - check with will how he wants to handle the distributor bucky fee
+    # currently if the fee is separate I just add it onto the price through account.amount_with_bucky_fee but it might be he wants it as a separate line item on the invoice, or displayed as a total at the bottom or something.
+
     #check for deliveries on today that are pending
     real_deliveries = account.deliveries.unscoped.pending.includes(:delivery_list).order("\"deliveries\".created_at").where(["\"delivery_lists\".date >= ? AND \"delivery_lists\".date <= ?", Date.current, end_date]).collect {|d| {:date => d.date, :amount => account.amount_with_bucky_fee(d.price), :description => d.description}}
 
@@ -64,7 +67,6 @@ class Invoice < ActiveRecord::Base
     occurrences = account.all_occurrences(end_date.to_time).collect {|o| {:date => o[:date], :description => o[:description], :amount => account.amount_with_bucky_fee(o[:price]) }}
 
     self.deliveries = real_deliveries + occurrences
-    debugger
     self.amount = deliveries.inject(Money.new(0)) {|sum, occurrence| sum += occurrence[:amount]} - balance
     amount > 0 ? amount : 0
   end
