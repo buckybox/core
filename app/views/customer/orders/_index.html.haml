@@ -21,8 +21,8 @@
             - unless order.schedule.exception_times.empty?
               %br
               = link_to '#', :data => {'reveal-id' => "pause-modal-#{order.id}"} do
-                == pausing between #{order.schedule.exception_times.first.strftime("%b %-d")}
-                == - #{order.schedule.exception_times.last.strftime("%b %-d")}
+                == From #{order.schedule.exception_times.first.strftime("%b %-d")}
+                == to #{order.schedule.exception_times.last.strftime("%b %-d")}
           %td= order.schedule.next_occurrence.strftime("%A %d %b") if order.schedule.next_occurrence
           %td
             = link_to 'change order', '#', :data => {'reveal-id' => "order-modal-#{order.id}"}
