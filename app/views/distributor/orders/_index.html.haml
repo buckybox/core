@@ -19,7 +19,15 @@
           %td= order.quantity
           %td= (order.price * order.quantity).format
           %td= order.schedule.start_date.strftime("%B %d, %Y")
-          %td= order.schedule
+          %td
+            - order.schedule.recurrence_rules.each do |rr|
+              = rr.to_s
+            - order.schedule.recurrence_dates.each do |rd|
+              = rd.to_s
+            - unless order.schedule.exception_times.empty?
+              %br
+              %strong== pausing between #{order.schedule.exception_times.first.to_date.to_s(:long)}
+              %strong== - #{order.schedule.exception_times.last.to_date.to_s(:long)}
           %td= order.schedule.next_occurrence.strftime("%B %d, %Y") if order.schedule.next_occurrence
           %td
             = link_to 'Edit', edit_distributor_account_order_path(current_distributor, @account, order)

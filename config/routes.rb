@@ -96,6 +96,7 @@ BuckyBox::Application.routes.draw do
     resources :orders,  :controller => 'customer/orders',  :only => :update do
       member do
         put 'pause'
+        post 'remove_pause'
       end
     end
 

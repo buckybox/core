@@ -4,17 +4,25 @@
   .customer_pause
     = hidden_field_tag 'order_id', order.id
 
+    - pause_date  = order.schedule.exception_times.first
+    - resume_date = (order.schedule.exception_times.empty? ? nil : order.schedule.exception_times.last + 1.day)
+
     .inputs
       = label_tag 'start_date', class: 'string required' do
-        %abbr{title: 'Start date'}*
-        Start date
-      = text_field_tag 'start_date', nil, class: 'date_picker string required input-text', required: 'required', size: 50
+        %abbr{title: 'Pause date'}*
+        Pause date
+      = text_field_tag('start_date',
+        pause_date,
+        { class: 'date_picker string required input-text', required: 'required', size: 50 })
 
       = label_tag 'end_date', class: 'string required' do
-        %abbr{title: 'End date'}*
-        End date
-      = text_field_tag 'end_date', nil, class: 'date_picker string required input-text', required: 'required', size: 50
+        %abbr{title: 'Resume date'}*
+        Resume date
+      = text_field_tag('end_date',
+        resume_date,
+        { class: 'date_picker string required input-text', required: 'required', size: 50 })
 
     .actions
-      = f.button :submit, 'Add Pause'
+      = f.button :submit, 'Update Pause'
+      = link_to 'Remove Pause', remove_pause_customer_order_path(current_customer, order), method: :post
 

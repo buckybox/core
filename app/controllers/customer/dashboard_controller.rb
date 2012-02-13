@@ -5,7 +5,7 @@ class Customer::DashboardController < ApplicationController
   def index
     @customer     = current_customer
     @address      = @customer.address
-    @orders       = @customer.orders
+    @orders       = @customer.orders.active
     @balance      = @customer.account.balance
     @transactions = @customer.transactions.limit(5)
     @distributor  = @customer.distributor
