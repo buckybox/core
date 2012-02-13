@@ -30,6 +30,8 @@ class Order < ActiveRecord::Base
   before_save :make_active, :if => :just_completed?
   before_save :record_schedule_change
 
+  default_scope order('created_at DESC')
+
   scope :completed, where(completed: true)
   scope :active,    where(active: true)
   scope :unactive,  where(active: false)

@@ -20,4 +20,10 @@ class Customer::OrdersController < Customer::BaseController
 
     update! { customer_orders_path(current_customer) }
   end
+
+  protected
+
+  def collection
+    @orders ||= end_of_association_chain.active
+  end
 end
