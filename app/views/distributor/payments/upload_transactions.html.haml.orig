@@ -1,0 +1,29 @@
+- require 'csv'
+
+%h2 Bank statement
+
+- if @statement.statement_file?
+  = form_tag create_from_csv_distributor_payments_path, :method => :post do
+
+    = render 'statement_options'
+    = hidden_field_tag(:statement_id, @statement.id)
+    .row
+      %table.twelve.columns
+        %thead
+          %tr 
+            - CSV.open(@statement.statement_file.path).shift.each do |header|
+              %th= header
+            %th= "Customer"
+
+        %tbody
+          - index = 0
+          - CSV.foreach(@statement.statement_file.path, :headers => :first_row) do |row|
+            - if row['Amount'].to_i > 0
+              %tr 
+                - row.each do |attr|
+                  %td=attr.last
+                %td= select_tag :customer, options_from_collection_for_select(current_distributor.customers, :id, :name, @customer_remembers["#{index}"]), {:prompt => "None", :name => "customers[#{index}]"}
+              - index += 1
+          %tr
+            
+    = render 'statement_options'
