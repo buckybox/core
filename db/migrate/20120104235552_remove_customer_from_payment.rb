@@ -5,7 +5,7 @@ class RemoveCustomerFromPayment < ActiveRecord::Migration
   end
 
   def down
-    add_column :payments, :cusomter_id, :integer
+    add_column :payments, :customer_id, :integer
     add_index :payments, :customer_id
   end
 end
