@@ -80,11 +80,12 @@ describe Customer do
 
   context 'when using tags' do
     before :each do
+      @customer = Fabricate(:customer)
       @customer.tag_list = 'dog, cat, rain'
       @customer.save
     end
 
     specify { @customer.tags.size.should == 3 }
-    specify { @customer.tag_list.should == %w(dog cat rain) }
+    specify { @customer.tag_list.sort.should == %w(cat dog rain) }
   end
 end

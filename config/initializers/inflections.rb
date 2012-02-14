@@ -6,7 +6,6 @@ ActiveSupport::Inflector.inflections do |inflect|
 #   inflect.plural /^(ox)$/i, '\1en'
 #   inflect.singular /^(ox)en/i, '\1'
 #   inflect.irregular 'person', 'people'
-    #inflect.irregular 'information', 'information'
-    inflect.uncountable %w( information )
+    inflect.irregular 'information', 'information'
     inflect.singular 'address', 'address'
 end
