@@ -6,9 +6,6 @@ module Distributor::BoxesHelper
 
   def box_collection(distributor, options = {})
     boxes = distributor.boxes
-
-    if options[:with_price]
-      distributor.boxes.map { |b| ["#{b.name} - #{b.price.format}", b.id] }
-    end
+    distributor.boxes.map { |b| ["#{b.name} - #{b.price.format}", b.id] } if options[:with_price]
   end
 end

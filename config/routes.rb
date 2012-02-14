@@ -1,53 +1,52 @@
 BuckyBox::Application.routes.draw do
-  devise_for :distributors, :controllers => {:sessions => "distributor/sessions"}
-  devise_for :customers, :controllers => {:sessions => "customer/sessions"}
+  devise_for :distributors, controllers: { sessions: 'distributor/sessions' }
+  devise_for :customers,    controllers: { sessions: 'customer/sessions' }
 
-  get 'home' => 'bucky_box#index', :as => 'home'
-
-  root :to => 'distributor/dashboard#index'
+  root to: 'bucky_box#index'
 
   namespace :market do
-    get ':distributor_parameter_name',                  :action => 'store',            :as => 'store'
-    get ':distributor_parameter_name/buy/:box_id',      :action => 'buy',              :as => 'buy'
-    get ':distributor_parameter_name/customer_details', :action => 'customer_details', :as => 'customer_details'
-    get ':distributor_parameter_name/payment',          :action => 'payment',          :as => 'payment'
-    get ':distributor_parameter_name/success',          :action => 'success',          :as => 'success'
+    get ':distributor_parameter_name',                  action: 'store',            as: 'store'
+    get ':distributor_parameter_name/buy/:box_id',      action: 'buy',              as: 'buy'
+    get ':distributor_parameter_name/customer_details', action: 'customer_details', as: 'customer_details'
+    get ':distributor_parameter_name/payment',          action: 'payment',          as: 'payment'
+    get ':distributor_parameter_name/success',          action: 'success',          as: 'success'
   end
 
   resources :distributors do
-    resource :bank_information,    :controller => 'distributor/bank_information',    :only => :create
-    resource :invoice_information, :controller => 'distributor/invoice_information', :only => :create
-    resources :boxes,              :controller => 'distributor/boxes',               :except => :index
-    resources :routes,             :controller => 'distributor/routes',              :except => :index
-    resources :transactions,       :controller => 'distributor/transactions',        :only => :create
-    resources :invoices,           :controller => 'distributor/invoices' do
+    resource :bank_information,    controller: 'distributor/bank_information',    only: :create
+    resource :invoice_information, controller: 'distributor/invoice_information', only: :create
+    resources :boxes,              controller: 'distributor/boxes',               except: :index
+    resources :routes,             controller: 'distributor/routes',              except: :index
+    resources :transactions,       controller: 'distributor/transactions',        only: :create
+
+    resources :deliveries, controller: 'distributor/deliveries' do
       collection do
-        get 'to_send', :action => 'to_send', :as => 'to_send'
-        post 'do_send', :action => 'do_send', :as => 'do_send'
+        get 'date/:date/view/:view',       action: :index,                as: 'date'
+        post 'date/:date/reposition',      action: :reposition,           as: 'reposition'
+        post 'update_status',              action: :update_status,        as: 'update_status'
+        post 'master_packing_sheet/:date', action: :master_packing_sheet, as: 'master_packing_sheet'
       end
     end
 
-    resources :payments,           :controller => 'distributor/payments', :only => [:create, :index] do
+    resources :invoices, controller: 'distributor/invoices' do
       collection do
-        get 'upload_transactions'
-        post 'process_upload'
-        post 'create_from_csv'
+        get 'to_send', action: 'to_send', as: 'to_send'
+        post 'do_send', action: 'do_send', as: 'do_send'
       end
     end
 
-    resources :deliveries,                 :controller => 'distributor/deliveries' do
+    resources :payments, controller: 'distributor/payments', only: [:create, :index] do
       collection do
-        get 'date/:date/view/:view',       :action => :index, :as => 'date'
-        post 'date/:date/reposition',      :action => :reposition, :as => 'reposition'
-        post 'update_status',              :action => :update_status, :as => 'update_status'
-        post 'master_packing_sheet/:date', :action => :master_packing_sheet, :as => 'master_packing_sheet'
+        get 'upload_transactions', action: 'upload_transactions', as: 'upload_transactions'
+        post 'process_upload', action: 'process_upload', as: 'process_upload'
+        post 'create_from_csv', action: 'create_from_csv', as: 'create_from_csv'
       end
     end
 
-    resources :customers, :controller => 'distributor/customers' do
+    resources :customers, controller: 'distributor/customers' do
       collection do
-        get 'search',   :action => :index, :as => 'search'
-        get 'tag/:tag', :action => :index, :as => 'tag'
+        get 'search',   action: :index, as: 'search'
+        get 'tag/:tag', action: :index, as: 'tag'
       end
 
       member  do
@@ -55,15 +54,17 @@ BuckyBox::Application.routes.draw do
       end
     end
 
-    resources :accounts, :controller => 'distributor/accounts', :only => :edit do
-      resources :orders, :controller => 'distributor/orders', :except => [:index, :show, :destroy] do
+    resources :accounts, controller: 'distributor/accounts', only: :edit do
+      resources :orders, controller: 'distributor/orders', except: [:index, :show, :destroy] do
         member do
-          put 'deactivate', :action => :deactivate, :as => 'deactivate'
+          put 'deactivate'
+          put 'pause'
+          post 'remove_pause'
         end
       end
 
       member do
-        put 'change_balance', :action => :change_balance, :as => 'change_balance'
+        put 'change_balance', action: :change_balance, as: 'change_balance'
       end
       member do
         get 'receive_payment', :action => :receive_payment, :as => 'receive_payment'
@@ -71,17 +72,16 @@ BuckyBox::Application.routes.draw do
       end
     end
 
-    resources :events, :controller => 'distributor/dashboard' do
+    resources :events, controller: 'distributor/dashboard' do
       member do
-        post 'dismiss_notification' => 'distributor/dashboard', :action => 'dismiss_notification'
+        post 'dismiss_notification'
       end
     end
   end
 
   namespace :distributor do
-    root :to => 'dashboard#index'
-
-    get 'dashboard' => 'dashboard#index'
+    root to: 'dashboard#index'
+    get 'dashboard', constoller: 'dashboard', action: 'index'
 
     namespace :wizard do
       get 'business'
@@ -93,10 +93,24 @@ BuckyBox::Application.routes.draw do
     end
   end
 
-  get 'customer', :controller => 'customer/orders', :action => 'home',  :as => 'customer_root'
+  resources :customers, controller: 'customer/customers', only: :update do
+    resource  :address, controller: 'customer/address', only: :update
 
-  resources :customers do
-    resources :orders, :controller => 'customer/orders'
-    resource :addresses, :controller => 'customer/addresses'
+    resources :orders,  controller: 'customer/orders',  only: :update do
+      member do
+        put 'pause'
+        post 'remove_pause'
+      end
+    end
+
+    member do
+      put 'update_password'
+    end
+  end
+
+  namespace :customer do
+    root to: 'dashboard#index'
+    get 'dashboard',               controller: 'dashboard', action: 'index'
+    get 'order/:order_id/box/:id', controller: 'dashboard',  action: 'box'
   end
 end

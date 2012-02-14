@@ -1,0 +1,21 @@
+.row
+  %table.twelve.columns
+    %thead
+      %tr
+        %th Date
+        %th Details
+        %th Transaction
+        %th Balance
+
+    %tbody
+      - transaction_total = Money.new(0) # manual calculation until we start storing historical balance
+
+      - @transactions.each do |transaction|
+        %tr
+          %td= transaction.created_at.to_date.to_s(:rfc822)
+          %td= transaction.description
+          %td= transaction.amount.format
+          %td= (@balance - transaction_total).format
+
+        - transaction_total += transaction.amount
+

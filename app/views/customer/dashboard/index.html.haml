@@ -1,0 +1,57 @@
+- title "#{current_customer.name} (ID:#{current_customer.id})"
+
+.row
+  .twelve.columns.text-center
+    %h2== Account Balance #{current_customer.account.balance.format}
+
+.row
+  .nine.columns
+    .panel
+      .row
+        %h3.twelve.columns My Orders
+      .row
+        .twelve.columns
+          = render 'customer/orders/index' unless @orders.empty?
+
+    .panel
+      .row
+        %h3.twelve.columns Account Statement
+      .row
+        .twelve.columns
+          = render 'customer/transactions/index' unless @transactions.empty?
+
+  .three.columns
+    .panel
+      %strong Deliver To:
+      .row
+        .twelve.columns
+          = current_customer.address.join('<br/>')
+          - if current_customer.phone
+            = current_customer.phone
+            %br
+          = link_to 'change my delivery address', '#', data: {'reveal-id' => 'address-modal'}
+
+      .row
+        #customer-controls.twelve.columns
+          %strong== #{current_customer.name} (ID:#{current_customer.id})
+          %br
+          = current_customer.email
+          %br
+          = link_to 'change my email', '#', data: {'reveal-id' => 'email-modal'}
+          %br
+          = link_to 'change my password', '#', data: {'reveal-id' => 'password-modal'}
+
+#address-modal.reveal-modal
+  %h2 Change Your Address
+  = link_to '&#215;'.html_safe, '#', class: 'close-reveal-modal'
+  = render 'customer/address/form'
+
+#email-modal.reveal-modal
+  %h2 Change Your Email Address
+  = link_to '&#215;'.html_safe, '#', class: 'close-reveal-modal'
+  = render 'customer/customers/form'
+
+#password-modal.reveal-modal
+  %h2 Change Your Password
+  = link_to '&#215;'.html_safe, '#', class: 'close-reveal-modal'
+  = render 'customer/customers/password_form'

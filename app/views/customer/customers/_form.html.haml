@@ -1,0 +1,8 @@
+= simple_form_for([current_distributor, @customer], html: { method: :put }) do |f|
+  = f.error_notification
+
+  .inputs
+    = f.input :email, hint: 'Please double check this email as it is also used as your login.'
+
+  .actions
+    = f.button :submit, 'Update Email'

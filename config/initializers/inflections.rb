@@ -7,5 +7,5 @@ ActiveSupport::Inflector.inflections do |inflect|
 #   inflect.singular /^(ox)en/i, '\1'
 #   inflect.irregular 'person', 'people'
     inflect.irregular 'information', 'information'
-#   inflect.uncountable %w( sheep money )
+    inflect.singular 'address', 'address'
 end

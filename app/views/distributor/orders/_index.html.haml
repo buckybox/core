@@ -7,7 +7,7 @@
         %th Quantity
         %th Total Cost
         %th Start Date
-        %th{:style => 'width:25%;'} Schedule
+        %th{style: 'width:25%;'} Schedule
         %th Next Delivery Date
         %th Actions
 
@@ -19,13 +19,21 @@
           %td= order.quantity
           %td= (order.price * order.quantity).format
           %td= order.schedule.start_date.strftime("%B %d, %Y")
-          %td= order.schedule
-          %td= order.schedule.next_occurrence.strftime("%B %d, %Y") if order.schedule.next_occurrence
           %td
-            = link_to 'Edit', edit_distributor_account_order_path(current_distributor, @account, order)
-            \|
-            = link_to('Delete',
-              deactivate_distributor_account_order_path(current_distributor, @account, order),
-              :confirm => 'Are you sure you would like to deactivate this order? It will no longer generate deliveries.',
-              :method => :put)
+            = order_schedule(order)
+            - if order.schedule.exception_times.empty?
+              %br
+              = link_to 'pause order', '#', data: {'reveal-id' => "pause-modal-#{order.id}"}
 
+            .reveal-modal{id: "pause-modal-#{order.id}"}
+              %h2 Pause Your Order
+              = link_to '&#215;'.html_safe, '#', class: 'close-reveal-modal'
+              = render partial: 'distributor/orders/pause_form', locals: { order: order }
+          %td= order.schedule.next_occurrence.strftime("%B %d") if order.schedule.next_occurrence
+          %td
+            = link_to 'edit', edit_distributor_account_order_path(current_distributor, @account, order)
+            %br
+            = link_to('delete',
+              deactivate_distributor_account_order_path(current_distributor, @account, order),
+              confirm: 'Are you sure you would like to deactivate this order? It will no longer generate deliveries.',
+              method: :put)
