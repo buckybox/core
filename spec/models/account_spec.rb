@@ -54,21 +54,14 @@ describe Account do
     end
   end
 
-  describe "#recalculate_balance" do
+  describe "#calculate_balance" do
     before(:each) do
       @account.change_balance_to 250
       @account.change_balance_to 500
-      @transaction = @account.transactions.last
-      @transaction.amount.should == 250
-      @transaction.stub(:update_account_balance).and_return(true)
-      @transaction.amount = 150
-      @transaction.save
     end
-    it "should recalculate balance correctly" do
-      @account.balance.should == 500
-      @account.recalculate_balance!
-      @account.reload
-      @account.balance.should == 400
+
+    it "should calculate balance correctly" do
+      @account.calculate_balance == 250
     end
   end
 

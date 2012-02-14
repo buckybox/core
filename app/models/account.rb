@@ -49,13 +49,6 @@ class Account < ActiveRecord::Base
     transactions.create!(kind: options[:kind], amount: amount_difference, description: options[:description])
   end
 
-  def recalculate_balance!
-    total = transactions.sum(:amount_cents)
-    write_attribute(:balance_cents, total)
-    save
-    clear_aggregation_cache # without this the composed_of balance attribute does not update
-  end
-
   def add_to_balance(amount, options = {})
     amount = balance + amount.to_money
     change_balance_to(amount, options)
@@ -63,6 +56,13 @@ class Account < ActiveRecord::Base
 
   def subtract_from_balance(amount, options = {})
     add_to_balance((amount * -1), options)
+  end
+
+  # A way to double check that the transactions and the balance have not gone out of sync.
+  # THIS SHOULD NEVER HAPPEN! If it does fix the root cause don't make this write a new balance.
+  # Likely somewhere a transaction is being created manually.
+  def calculate_balance
+    total = transactions.sum(:amount_cents)
   end
 
   #all accounts that need invoicing
