@@ -70,8 +70,6 @@ class Customer < ActiveRecord::Base
     return newpass
   end
 
-  private
-
   def initialize_number
     if self.number.nil?
       number = rand(1000000)
@@ -88,6 +86,8 @@ class Customer < ActiveRecord::Base
       self.number = number.to_s
     end
   end
+
+  private
 
   def randomize_password_if_not_present
     randomize_password unless encrypted_password.present?

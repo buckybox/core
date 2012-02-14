@@ -1,6 +1,8 @@
 require 'spec_helper'
 
 describe Distributor::CustomersController do
+  render_views
+
   before(:each) do
     @distributor = Fabricate(:distributor, :completed_wizard => true)
     sign_in @distributor

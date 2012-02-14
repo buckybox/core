@@ -186,5 +186,21 @@ describe Order do
       specify { @order5.reload.active.should be_false }
     end
   end
+
+  describe "#future_deliveries" do
+    before(:each) do
+      @order = order_with_deliveries
+      @end_date = 4.weeks.from_now(1.day.ago)
+      @results = @order.future_deliveries(@end_date)
+    end
+    it "returns a hash with date, price and description" do    
+      hash = @results.first
+      hash[:date].should >= Date.current
+    end
+
+    it "includes deliveries within date range" do
+      @results.last[:date].should <= @end_date.to_date
+    end
+  end
 end
 

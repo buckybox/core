@@ -10,7 +10,7 @@ describe Transaction do
       specify { Fabricate.build(:transaction, :kind => k).should be_valid }
     end
 
-    specify { Fabricate.build(:transaction, :kind => 'order').should_not be_valid }
+    specify { Fabricate.build(:transaction, :kind => 'something').should_not be_valid }
   end
 end
 

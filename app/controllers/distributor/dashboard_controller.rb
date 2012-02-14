@@ -6,6 +6,7 @@ class Distributor::DashboardController < Distributor::BaseController
     @payments      = current_distributor.payments.manual.order('created_at DESC').limit(10)
     @payment       = current_distributor.payments.new(kind: 'manual')
     @accounts      = current_distributor.accounts.includes(:customer).sort { |a,b| a.customer.name <=> b.customer.name }
+    @accounts_to_invoice = Account.need_invoicing
   end
 
   def dismiss_notification

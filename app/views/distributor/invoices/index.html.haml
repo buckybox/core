@@ -1,0 +1,6 @@
+- title 'Invoices', false
+= render :partial => 'distributor/shared/billing_sub_nav'
+
+%p= render :partial => "distributor/invoices/ready_to_send", :locals => {:invoice_count => Account.need_invoicing.size}
+
+= render :partial => 'index', :locals => {:invoices => @invoices}

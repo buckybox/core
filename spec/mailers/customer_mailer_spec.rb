@@ -4,6 +4,7 @@ describe CustomerMailer do
   before(:each) do
     @customer = Fabricate(:customer)
   end
+
   describe "login_details" do
     let(:mail) { CustomerMailer.login_details(@customer)}
 
@@ -11,6 +12,22 @@ describe CustomerMailer do
       mail.subject.should =~ /Login details/
       mail.to.should eq([@customer.email])
       mail.from.should eq(["no-reply@buckybox.com"])
+    end
+  end
+
+  describe "invoice" do
+    before(:each) do
+      @invoice = Fabricate(:invoice)
+    end
+    let(:mail) { CustomerMailer.invoice(@invoice) }
+
+    it "renders the headers" do
+      mail.to.should eq([@invoice.account.customer.email])
+      mail.from.should eq(["no-reply@buckybox.com"])
+    end
+
+    it "renders the body" do
+      mail.body.encoded.should match(@invoice.account.customer.name)
     end
   end
 

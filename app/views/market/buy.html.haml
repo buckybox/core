@@ -11,8 +11,8 @@
     = f.association :box, :as => :hidden
     = f.input :quantity
     = f.input :frequency, :collection => Order::FREQUENCIES.map{ |fr| [fr.titleize, fr] }, :include_blank => false 
-    = f.input :likes if @box.likes?
-    = f.input :dislikes if @box.dislikes?
+    = f.input :likes, :input_html => {:rows => '4'} if @box.likes?
+    = f.input :dislikes, :input_html => {:rows => '4'} if @box.dislikes?
 
   .actions
     = f.button :submit, 'Next'

@@ -1,0 +1,16 @@
+Hi #{@customer.name},
+
+Here's you latest account statement. A total payment of $#{@invoice.amount} is due on #{@invoice.date}.
+
+- if @invoice.balance < @invoice.account.distributor.invoice_threshold 
+  **Please note no further deliveries can be made until your payment is received**
+
+You can pay by [list:payment types accepted].
+
+Thank you for choosing #{@distributor.name}!
+
+\- The #{@distributor.name} Team
+\---
+/[Distributor_Name] 
+/[Distributor Contact Details, including phone support number]
+

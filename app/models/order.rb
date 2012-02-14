@@ -13,6 +13,9 @@ class Order < ActiveRecord::Base
   has_many :deliveries
   has_many :order_schedule_transactions
 
+  scope :completed, where(:completed => true)
+  scope :active, where(:active => true)
+
   acts_as_taggable
   serialize :schedule, Hash
 
@@ -81,6 +84,14 @@ class Order < ActiveRecord::Base
     time = schedule.recurrence_times.find{ |t| t.to_date == delivery.date }
     s.remove_recurrence_time(time)
     self.schedule = s
+  end
+
+  def future_deliveries(end_date)
+    results = []
+    schedule.occurrences_between(Date.today.to_time, end_date).each do |occurence|
+      results << {:date => occurence.to_date, :price => box.price, :description => "Delivery for order ##{id}"}
+    end
+    results
   end
 
   def string_pluralize

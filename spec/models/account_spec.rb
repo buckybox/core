@@ -18,7 +18,7 @@ describe Account do
         context "with #{v} of type #{v.class}" do
           before { @account.change_balance_to(v) }
           specify { @account.balance.should == v.to_money }
-          specify { @account.transactions.last.amount.should == v.to_money }
+          specify { @account.transactions.order(:created_at).last.amount.should == v.to_money }
         end
       end
     end
@@ -33,7 +33,7 @@ describe Account do
           end
 
           specify { @account.balance.should == (250 + v).to_money }
-          specify { @account.transactions.last.amount.should == v.to_money }
+          specify { @account.transactions.unscoped.order(:id).last.amount.should == v.to_money }
         end
       end
     end
@@ -48,70 +48,108 @@ describe Account do
           end
 
           specify { @account.balance.should == (250 - v).to_money }
-          specify { @account.transactions.last.amount.should == (-1 * v).to_money }
+          specify { @account.transactions.unscoped.order(:id).last.amount.should == (-1 * v).to_money }
         end
       end
     end
   end
 
-  describe "next_invoice_date" do
+  describe "#calculate_balance" do
     before(:each) do
-      pending('Invoices not done so not bothering to fix tests for them.')
-      @order = Fabricate(:order) # $10
+      @account.change_balance_to 250
+      @account.change_balance_to 500
+    end
+
+    it "should calculate balance correctly" do
+      @account.calculate_balance == 250
+    end
+  end
+
+  describe "all_occurrences" do
+    before(:each) do
+      @order = order_with_deliveries
       @account = @order.account
-      @d2 = Fabricate(:delivery, :delivery_list => Fabricate(:delivery_list, :date => 1.week.from_now), :order => @order)
-      @d3 = Fabricate(:delivery, :delivery_list => Fabricate(:delivery_list, :date => 2.weeks.from_now), :order => @order)
-      @d4 = Fabricate(:delivery, :delivery_list => Fabricate(:delivery_list, :date => 3.weeks.from_now), :order => @order)
-      @d1 = Fabricate(:delivery, :delivery_list => Fabricate(:delivery_list, :date => Date.current), :order => @order)
+    end
+    it "returns 20 occurrences" do
+      @account.all_occurrences(4.weeks.from_now).size.should == 20 
     end
 
-    it "is today if balance is currently below threshold" do
-      @account.stub(:balance).and_return(Money.new(-1000))
-      @account.next_invoice_date.should == 2.days.from_now(Time.now).to_date
+  end
+
+  describe "next_invoice_date" do
+    context "20 deliveries loaded in the future" do
+      before(:each) do
+        @order = order_with_deliveries
+        @account = @order.account
+        @total_scheduled = @account.all_occurrences(4.weeks.from_now).inject(Money.new(0)) { |sum, o| sum += o[:price]}
+      end
+
+      it "is today if balance is currently below threshold" do
+        @account.stub(:balance).and_return(Money.new(-1000))  
+        @account.stub(:all_occurrences).and_return([])
+        @account.next_invoice_date.should == Date.today
+      end
+      it "is at least 2 days after the first scheduled delivery" do
+        @account.stub(:deliveries).and_return([])
+        @account.stub(:balance).and_return(Money.new(1000))
+        @account.next_invoice_date.should == 2.days.from_now(@account.all_occurrences(4.weeks.from_now).first[:date]).to_date
+      end
+
+      it "is 12 days before the account goes below the invoice threshold" do
+        @account.stub(:balance).and_return(@total_scheduled - Money.new(1000))
+        last_occurrence = @account.all_occurrences(4.weeks.from_now).last
+        last_date = last_occurrence[:date]
+        @account.next_invoice_date.should == 12.days.ago(last_date).to_date 
+      end
+
+      it "does not need an invoice if balance won't go below threshold" do
+        @account.stub(:balance).and_return(@total_scheduled)
+        @account.next_invoice_date.should be_nil
+      end
+
+      it "includes bucky fee in the calculations if distributor.separate_bucky_fee is true" do
+        @account.stub(:balance).and_return(@total_scheduled - Money.new(499))
+        @account.next_invoice_date.should_not be_nil
+      end
+
+      it "does not include bucky fee if distributor.separate_bucky_fee is false" do
+        @order.distributor.update_attribute(:separate_bucky_fee, false)
+        @account.stub(:balance).and_return(@total_scheduled - Money.new(499))
+        @account.next_invoice_date.should be_nil
+      end
+
+      it "does include bucky fee in the calculations if distributor.separate_bucky_fee is true" do
+        @account.distributor.update_attribute(:separate_bucky_fee, true)
+        @account.stub(:balance).and_return(@total_scheduled - Money.new(499))
+        @account.next_invoice_date.should_not be_nil
+      end
     end
+  end
 
-    it "is at least 2 days after the first delivery" do
-      @account.stub(:balance).and_return(Money.new(0))  
-      @account.next_invoice_date.should == 2.days.from_now(Time.now).to_date
-
-      @account.stub(:balance).and_return(Money.new(1000))
-      @account.next_invoice_date.should == 2.days.from_now(Time.now).to_date
+  describe "#amount_with_bucky_fee" do
+    it "returns amount if bucky fee is not separate" do
+      @account.distributor.stub(:separate_bucky_fee).and_return(true)
+      @account.distributor.stub(:fee).and_return(0.02) #%
+      @account.amount_with_bucky_fee(100).should == 102
     end
-
-    it "is 12 days before the account goes below the invoice threshold" do
-      @account.stub(:balance).and_return(Money.new(3000))
-      @account.next_invoice_date.should == 12.days.ago(@d4.date).to_date 
-    end
-
-    it "is only influenced by pending deliveries" do
-      @account.stub(:balance).and_return(Money.new(2000))
-      @d3.update_attribute(:status, 'cancelled')
-      @account.next_invoice_date.should == 12.days.ago(@d4.date).to_date  #skip cancelled order in calculation
-    end
-
-    it "does not need an invoice if balance won't go below threshold" do
-      @account.stub(:balance).and_return(Money.new(5000))
-      @account.next_invoice_date.should be_nil
-    end
-
-    it "includes bucky fee in the calculations if distributor.separate_bucky_fee is true" do
-      @account.stub(:balance).and_return(Money.new(3501))
-      @account.next_invoice_date.should_not be_nil
-    end
-
-    it "doesn't include bucky fee in the calculations if distributor.separate_bucky_fee is false" do
-      @account.distributor.update_attribute(:separate_bucky_fee, false)
-      @account.stub(:balance).and_return(Money.new(3501))
-      @account.next_invoice_date.should be_nil
+    it "includes bucky fee if bucky fee is separate" do
+      @account.distributor.stub(:separate_bucky_fee).and_return(false)
+      @account.distributor.stub(:fee).and_return(0.02) #%
+      @account.amount_with_bucky_fee(100).should == 100
     end
   end
 
   describe "create_invoice" do
-    before { pending('Invoices not done so not bothering to fix tests for them.') }
-
     it "does nothing if an outstanding invoice exists" do
       Fabricate(:invoice, :account => @account)
       @account.stub(:next_invoice_date).and_return(Date.current)
+      Invoice.should_not_receive(:create)
+      @account.create_invoice
+    end
+
+    it "does nothing if invoice_date is nil" do
+      Fabricate(:invoice, :account => @account)
+      @account.stub(:next_invoice_date).and_return(nil)
       Invoice.should_not_receive(:create)
       @account.create_invoice
     end
@@ -123,9 +161,27 @@ describe Account do
     end
 
     it "creates invoice if next invoice date is <= today" do
+      @account = order_with_deliveries.account
       @account.stub(:next_invoice_date).and_return(Date.current)
-      Invoice.should_receive(:create).and_return(true)
+      Invoice.should_receive(:create_for_account)
       @account.create_invoice
+    end
+  end
+
+  describe "#need_invoicing" do
+    before(:each) do
+      @a1 = Fabricate(:account)
+      @a1.stub(:needs_invoicing?).and_return(true)
+      @a2 = Fabricate(:account)
+      @a2.stub(:needs_invoicing?).and_return(false)
+      Account.stub(:all).and_return [@a1, @a2]
+      @accounts = Account.need_invoicing
+    end
+    it "includes accounts that need invoicing" do
+      @accounts.should include(@a1)
+    end
+    it "does not include accounts that need invoicing" do
+      @accounts.should_not include(@a2)
     end
   end
 end

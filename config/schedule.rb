@@ -17,3 +17,6 @@ every 1.day do
   runner 'Order.deactivate_finished'
 end
 
+every 1.day, :at => '6am' do
+  runner 'Invoice.generate_invoices'
+end

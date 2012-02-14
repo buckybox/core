@@ -49,11 +49,19 @@ class Delivery < ActiveRecord::Base
   end
 
   def date
-    delivery_list.date
+    delivery_list.present? ? delivery_list.date : nil
   end
 
   def future_status?
     status == 'pending'
+  end
+
+  def price
+    package.archived_box_price * package.archived_order_quantity
+  end
+
+  def description
+    "[ID##{id}] Delivery of #{package.string_pluralize} at #{package.archived_box_price} each."
   end
 
   protected
@@ -88,7 +96,7 @@ class Delivery < ActiveRecord::Base
 
   def subtract_from_account
     account.subtract_from_balance(
-      package.archived_box_price * package.archived_order_quantity,
+      price,
       :kind => 'delivery',
       :description => "[ID##{id}] Delivery was made of #{package.string_pluralize} at #{package.archived_box_price} each."
     )
@@ -97,7 +105,7 @@ class Delivery < ActiveRecord::Base
 
   def add_to_account
     account.add_to_balance(
-      package.archived_box_price * package.archived_order_quantity,
+      price, 
       :kind => 'delivery',
       :description => "[ID##{id}] Delivery reversal. #{package.string_pluralize} at #{package.archived_box_price} each."
     )
