@@ -87,7 +87,7 @@ describe Account do
       it "is today if balance is currently below threshold" do
         @account.stub(:balance).and_return(Money.new(-1000))  
         @account.stub(:all_occurrences).and_return([])
-        @account.next_invoice_date.should == Date.today
+        @account.next_invoice_date.should == Date.current
       end
       it "is at least 2 days after the first scheduled delivery" do
         @account.stub(:deliveries).and_return([])

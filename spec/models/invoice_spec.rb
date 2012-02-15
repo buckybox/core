@@ -64,7 +64,7 @@ describe Invoice do
         @account = @order.account
         @account.stub(:balance).and_return(Money.new(10000))
         @t1 = Fabricate(:transaction, :account => @account, :created_at => 3.days.ago)
-        @t2 = Fabricate(:transaction, :account => @account, :created_at => Date.today)
+        @t2 = Fabricate(:transaction, :account => @account, :created_at => Date.current)
         @invoice.account = @account
         @invoice.calculate_amount
       end

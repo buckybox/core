@@ -40,7 +40,11 @@ class Order < ActiveRecord::Base
   scope :inactive,  where(active: false)
 
   def price
-    box.price # Must try remove this in code. It is now being achrived in deliveries
+    (individual_price * quantity) * (1 - customer.discount)
+  end
+
+  def individual_price
+    box.price + route.fee
   end
 
   def customer= cust
@@ -88,10 +92,12 @@ class Order < ActiveRecord::Base
 
   def future_deliveries(end_date)
     results = []
-    schedule.occurrences_between(Date.today.to_time, end_date).each do |occurence|
+
+    schedule.occurrences_between(Date.current.to_time, end_date).each do |occurence|
       results << {:date => occurence.to_date, :price => box.price, :description => "Delivery for order ##{id}"}
     end
-    results
+
+    return results
   end
 
   def string_pluralize

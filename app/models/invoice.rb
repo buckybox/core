@@ -28,8 +28,7 @@ class Invoice < ActiveRecord::Base
   def set_defaults
     self.start_date ||= 4.weeks.ago.to_date
     self.end_date ||= 4.weeks.from_now.to_date
-    self.date = Date.today
-    #generate_number
+    self.date = Date.current
   end
 
   def full_number

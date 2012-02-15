@@ -68,20 +68,22 @@ class Account < ActiveRecord::Base
   #all accounts that need invoicing
   def self.need_invoicing
     accounts = []
-    Account.all.each do |a|
-      accounts << a if a.needs_invoicing?
+    Account.all.each do |account|
+      accounts << account if account.needs_invoicing?
     end
     accounts
   end
 
   #future occurrences for all orders on account
-  def all_occurrences end_date
+  def all_occurrences(end_date)
     occurrences = []
-    orders.each do |o|
-      o.future_deliveries(end_date).each do |occurrence|
+
+    orders.each do |order|
+      order.future_deliveries(end_date).each do |occurrence|
         occurrences << occurrence
       end
     end
+
     occurrences.sort {|a,b| a[:date] <=> b[:date] }
   end
 
@@ -121,7 +123,7 @@ class Account < ActiveRecord::Base
   #used internally for calculating invoice totals
   #if distributor charges bucky fee in addition to box price return price + bucky fee
   def self.amount_with_bucky_fee(amount, distributor)
-    bucky_fee_multiple = distributor.separate_bucky_fee ? (1 + distributor.fee) : 1
+    bucky_fee_multiple = distributor.separate_bucky_fee ? (1 + distributor.bucky_box_percentage) : 1
     amount * bucky_fee_multiple
   end
 
