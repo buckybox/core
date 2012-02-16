@@ -13,13 +13,13 @@
           - unless @order.persisted?
             = f.input :frequency, :collection => order_frequencies, :include_blank => false
 
-    .four.columns
-      .inputs
-        = f.input :likes, :wrapper_html => { :id => 'likes_input' }
-        = f.input :dislikes, :wrapper_html => { :id => 'dislikes_input' }
+      .four.columns
+        .inputs
+          = f.input :likes, :wrapper_html => { :id => 'likes_input' }
+          = f.input :dislikes, :wrapper_html => { :id => 'dislikes_input' }
 
-      - unless @order.persisted?
-        .four.columns
+      .four.columns
+        - unless @order.persisted?
           %h3= @account.customer.route.name
           .inputs
             = label_tag :start_date, 'Start Date'

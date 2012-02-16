@@ -16,9 +16,9 @@ class Route < ActiveRecord::Base
 
   serialize :schedule, Hash
 
-  attr_accessible :distributor, :name, :monday, :tuesday, :wednesday, :thursday, :friday, :saturday, :sunday
+  attr_accessible :distributor, :name, :monday, :tuesday, :wednesday, :thursday, :friday, :saturday, :sunday, :fee
 
-  validates_presence_of :distributor, :name, :schedule
+  validates_presence_of :distributor, :name, :schedule, :fee
   validate :at_least_one_day_is_selected
 
   before_validation :create_schedule

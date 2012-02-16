@@ -4,13 +4,13 @@ class Customer < ActiveRecord::Base
   belongs_to :distributor
   belongs_to :route
 
-  has_one :address, :dependent => :destroy, :inverse_of => :customer
-  has_one :account, :dependent => :destroy
+  has_one :address, dependent: :destroy, inverse_of: :customer
+  has_one :account, dependent: :destroy
 
-  has_many :transactions, :through => :account
-  has_many :payments,     :through => :account
-  has_many :orders,       :through => :account
-  has_many :deliveries,   :through => :orders
+  has_many :transactions, through: :account
+  has_many :payments,     through: :account
+  has_many :orders,       through: :account
+  has_many :deliveries,   through: :orders
 
   # Include default devise modules. Others available are:
   # :token_authenticatable, :encryptable, :confirmable, :lockable, :timeoutable and :omniauthable
@@ -20,26 +20,26 @@ class Customer < ActiveRecord::Base
   acts_as_taggable
 
   pg_search_scope :search,
-    :against => [:first_name, :last_name, :email, :number],
-    :associated_against => {
-    :address => [:address_1, :address_2, :suburb, :city, :postcode, :delivery_note]
-  },
-    :using => {
-    :tsearch => {:prefix => true}
-  }
+    against: [ :first_name, :last_name, :email, :number ],
+    associated_against: {
+      address: [ :address_1, :address_2, :suburb, :city, :postcode, :delivery_note ]
+    },
+    using: { tsearch: { prefix: true } }
 
   accepts_nested_attributes_for :address
 
   attr_accessible :address_attributes, :first_name, :last_name, :email, :phone, :name, :distributor_id, :distributor,
-    :route, :route_id, :password, :password_confirmation, :remember_me, :tag_list
+    :route, :route_id, :password, :password_confirmation, :remember_me, :tag_list, :discount
 
-  validates_presence_of :first_name, :email, :distributor, :route
-  validates_uniqueness_of :email, :scope => :distributor_id
-  validates_uniqueness_of :number, :scope => :distributor_id
+  validates_presence_of :first_name, :email, :distributor, :route, :discount
+  validates_uniqueness_of :email, scope: :distributor_id
+  validates_uniqueness_of :number, scope: :distributor_id
+  validates_numericality_of :discount, greater_than_or_equal_to: 0.0, less_than_or_equal_to: 1.0
   validates_associated :account
   validates_associated :address
 
   before_validation :randomize_password_if_not_present
+  before_validation :discount_percentage
 
   before_create :initialize_number
   before_create :setup_account
@@ -93,6 +93,10 @@ class Customer < ActiveRecord::Base
 
   def randomize_password_if_not_present
     randomize_password unless encrypted_password.present?
+  end
+
+  def discount_percentage
+    self.discount = self.discount / 100.0 if self.discount > 1
   end
 
   def setup_account

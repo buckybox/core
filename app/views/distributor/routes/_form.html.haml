@@ -1,9 +1,9 @@
-= simple_form_for(@distributor_route) do |f|
+= simple_form_for([current_distributor, @route]) do |f|
   = f.error_notification
 
   .inputs
-    = f.association :distributor
     = f.input :name
+    = f.input :fee
     = f.input :monday
     = f.input :tuesday
     = f.input :wednesday

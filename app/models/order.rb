@@ -4,17 +4,17 @@ class Order < ActiveRecord::Base
   belongs_to :account
   belongs_to :box
 
-  has_one :distributor, :through => :box
-  has_one :customer,    :through => :account
-  has_one :address,     :through => :customer
-  has_one :route,       :through => :customer
+  has_one :distributor, through: :box
+  has_one :customer,    through: :account
+  has_one :address,     through: :customer
+  has_one :route,       through: :customer
 
   has_many :packages
   has_many :deliveries
   has_many :order_schedule_transactions
 
-  scope :completed, where(:completed => true)
-  scope :active, where(:active => true)
+  scope :completed, where(completed: true)
+  scope :active, where(active: true)
 
   acts_as_taggable
   serialize :schedule, Hash
@@ -26,11 +26,11 @@ class Order < ActiveRecord::Base
   FREQUENCY_HASH = Hash[[FREQUENCIES, FREQUENCY_IN_WEEKS].transpose]
 
   validates_presence_of :box, :quantity, :frequency, :account, :schedule
-  validates_numericality_of :quantity, :greater_than => 0
-  validates_inclusion_of :frequency, :in => FREQUENCIES, :message => "%{value} is not a valid frequency"
+  validates_numericality_of :quantity, greater_than: 0
+  validates_inclusion_of :frequency, in: FREQUENCIES, message: "%{value} is not a valid frequency"
   validate :box_distributor_equals_customer_distributor
 
-  before_save :make_active, :if => :just_completed?
+  before_save :make_active, if: :just_completed?
   before_save :record_schedule_change
 
   default_scope order('created_at DESC')
@@ -40,11 +40,11 @@ class Order < ActiveRecord::Base
   scope :inactive,  where(active: false)
 
   def price
-    (individual_price * quantity) * (1 - customer.discount)
+    individual_price * quantity
   end
 
   def individual_price
-    box.price + route.fee
+    (box.price + route.fee) * (1 - customer.discount)
   end
 
   def customer= cust
@@ -93,8 +93,8 @@ class Order < ActiveRecord::Base
   def future_deliveries(end_date)
     results = []
 
-    schedule.occurrences_between(Date.current.to_time, end_date).each do |occurence|
-      results << {:date => occurence.to_date, :price => box.price, :description => "Delivery for order ##{id}"}
+    schedule.occurrences_between(Time.now, end_date).each do |occurence|
+      results << { date: occurence.to_date, price: self.price, description: "Delivery for order ##{id}"}
     end
 
     return results

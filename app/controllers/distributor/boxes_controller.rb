@@ -1,6 +1,6 @@
 class Distributor::BoxesController < Distributor::BaseController
   belongs_to :distributor
-  actions :all, :except => :index
+  actions :all, except: [:index, :new, :show]
 
   respond_to :html, :xml, :json
 
