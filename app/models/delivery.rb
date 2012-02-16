@@ -4,13 +4,13 @@ class Delivery < ActiveRecord::Base
   belongs_to :route
   belongs_to :package
 
-  has_one :distributor, :through => :delivery_list
-  has_one :box, :through => :order
-  has_one :account, :through => :order
-  has_one :customer, :through => :order
-  has_one :address, :through => :order
+  has_one :distributor, through: :delivery_list
+  has_one :box, through: :order
+  has_one :account, through: :order
+  has_one :customer, through: :order
+  has_one :address, through: :order
 
-  acts_as_list :scope => [:delivery_list_id, :route_id]
+  acts_as_list scope: [:delivery_list_id, :route_id]
 
   attr_accessible :order, :order_id, :route, :status, :delivery_method, :delivery_list, :package, :package_id, :account
 
@@ -18,13 +18,13 @@ class Delivery < ActiveRecord::Base
   DELIVERY_METHOD = %w(manual auto)
 
   validates_presence_of :order, :route, :status, :delivery_list, :package
-  validates_inclusion_of :status, :in => STATUS, :message => "%{value} is not a valid status"
-  validates_inclusion_of :delivery_method, :in => DELIVERY_METHOD, :message => "%{value} is not a valid delivery method", :if => 'status == "delivered"'
+  validates_inclusion_of :status, in: STATUS, message: "%{value} is not a valid status"
+  validates_inclusion_of :delivery_method, in: DELIVERY_METHOD, message: "%{value} is not a valid delivery method", if: 'status == "delivered"'
 
-  before_validation :default_route, :if => 'route.nil?'
-  before_validation :default_status, :if => 'status.nil?'
-  before_validation :default_delivery_method, :if => 'status == "delivered" && delivery_method.nil?'
-  before_validation :changed_status, :if => 'status_changed?'
+  before_validation :default_route, if: 'route.nil?'
+  before_validation :default_status, if: 'status.nil?'
+  before_validation :default_delivery_method, if: 'status == "delivered" && delivery_method.nil?'
+  before_validation :changed_status, if: 'status_changed?'
 
   before_create :add_delivery_number
 
@@ -56,15 +56,11 @@ class Delivery < ActiveRecord::Base
     status == 'pending'
   end
 
-  def price
-    package.archived_box_price * package.archived_order_quantity
-  end
-
   def description
     "[ID##{id}] Delivery of #{package.string_pluralize} at #{package.archived_box_price} each."
   end
 
-  protected
+  private
 
   def default_route
     self.route = order.route
@@ -96,18 +92,18 @@ class Delivery < ActiveRecord::Base
 
   def subtract_from_account
     account.subtract_from_balance(
-      price,
-      :kind => 'delivery',
-      :description => "[ID##{id}] Delivery was made of #{package.string_pluralize} at #{package.archived_box_price} each."
+      package.price,
+      kind: 'delivery',
+      description: "[ID##{id}] Delivery was made of #{package.string_pluralize} at #{package.price} each."
     )
     errors.add(:base, 'Problem subtracting balance from account on delivery status change.') unless account.save
   end
 
   def add_to_account
     account.add_to_balance(
-      price, 
-      :kind => 'delivery',
-      :description => "[ID##{id}] Delivery reversal. #{package.string_pluralize} at #{package.archived_box_price} each."
+      package.price,
+      kind: 'delivery',
+      description: "[ID##{id}] Delivery reversal. #{package.string_pluralize} at #{package.price} each."
     )
     errors.add(:base, 'Problem adding balance from account on delivery status change.') unless account.save
   end
