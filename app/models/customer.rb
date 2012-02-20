@@ -51,6 +51,10 @@ class Customer < ActiveRecord::Base
 
   default_scope order(:first_name)
 
+  def new?
+    deliveries.size == 1
+  end
+
   def name
     "#{first_name} #{last_name}".strip
   end

@@ -1,9 +1,12 @@
+require 'csv'
+
 class Distributor::DeliveriesController < Distributor::BaseController
-  custom_actions :collection => [:update_status, :master_packing_sheet]
+  custom_actions collection: [:update_status, :master_packing_sheet, :export]
   belongs_to :distributor
 
-  respond_to :html, :xml, :except => :update_status
-  respond_to :json, :except => :master_packing_sheet
+  respond_to :html, :xml, except: [:update_status, :export]
+  respond_to :json, except: [:master_packing_sheet, :export]
+  respond_to :csv, only: :export
 
   def index
     unless params[:date] && params[:view]
@@ -51,6 +54,73 @@ class Distributor::DeliveriesController < Distributor::BaseController
     end
   end
 
+  def export
+    deliveries = current_distributor.deliveries.where(id: params[:deliveries])
+
+    #NOTE: Perhaps change this to use comma and move into delivery model down the track and if not then pull out into a lib file
+    csv_output = CSV.generate do |csv|
+      csv << [
+        'Delivery Route', 'Delivery Sequence Number', 'Delivery Pickup Point Name', 'Delivery Package Count',
+        'Order Number', 'Delivery Number', 'Delivery Date', 'Customer Number', 'Customer First Name',
+        'Customer Last Name', 'Customer Phone', 'New Customer', 'Delivery Address Line 1', 'Delivery Address Line 2',
+        'Delivery Address Suburb', 'Delivery Address City', 'Delivery Address Postcode', 'Delivery Note',
+        'Box Contents Short Description', 'Box Type', 'Box Likes', 'Box Dislikes', 'Box Extra Line Items'
+      ]
+
+      deliveries.each do |delivery|
+        route    = delivery.route
+        order    = delivery.order
+        customer = delivery.customer
+        address  = delivery.address
+        box      = delivery.box
+
+        total_package_count = delivery.order.quantity
+
+        total_package_count.times do |index|
+          package_count = "(#{index + 1} of #{total_package_count})"
+
+          csv << [
+            route.name,
+            "%03d" % delivery.position,
+            nil,
+            package_count,
+            order.id,
+            delivery.id,
+            delivery.date.strftime("%-d %b %Y"),
+            customer.id,
+            customer.first_name,
+            customer.last_name,
+            customer.phone,
+            (delivery.customer.new? ? 'NEW' : nil),
+            address.address_1,
+            address.address_2,
+            address.suburb,
+            address.city,
+            address.postcode,
+            address.delivery_note,
+            order.string_sort_code,
+            box.name,
+            order.likes,
+            order.dislikes,
+            nil
+          ]
+        end
+      end
+    end
+
+    respond_to do |format|
+      if deliveries
+        format.csv do
+          send_data csv_output,
+            type: 'text/csv; charset=iso-8859-1; header=present',
+            filename: "bucky-box-export-#{Date.current.to_s}.csv"
+        end
+      else
+        format.csv { respond_to :back }
+      end
+    end
+  end
+
   def master_packing_sheet
     @selected_date = Date.parse(params[:date]) if params[:date]
     package_ids = params[:package].select{ |id, checked| checked.to_i == 1 }.keys
@@ -62,7 +132,7 @@ class Distributor::DeliveriesController < Distributor::BaseController
       package.save
     end
 
-    render :layout => 'print'
+    render layout: 'print'
   end
 
   def reposition

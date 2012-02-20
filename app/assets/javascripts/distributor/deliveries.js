@@ -6,7 +6,7 @@ $(function() {
 
   if(element) {
     var api = element.data('jsp');
-    api.scrollToElement($('#selected'), true);
+    api.scrollToElement($('#scroll-to'), true);
   }
 
   $('.sortable').sortable({
@@ -52,6 +52,22 @@ $(function() {
     });
 
     $('#packing').submit();
+
+    checked_deliveries.prop('checked', false);
+    $('#delivery-listings #all').prop('checked', false);
+  });
+
+
+  $('#delivery-listings #export').click(function() {
+    var distributor_id = $('#delivery-listings').data('distributor');
+    var checked_deliveries = $('#delivery-listings .data-listings input[type=checkbox]:checked');
+    var ckbx_ids = $.map(checked_deliveries, function(ckbx) { return $(ckbx).data('delivery'); });
+
+    var form = $(this).parent().parent('form');
+
+    $.each(ckbx_ids, function(index, delivery_id) {
+      $("<input type='hidden'>").attr('name', 'deliveries[]').attr('value', delivery_id).appendTo(form);
+    });
 
     checked_deliveries.prop('checked', false);
     $('#delivery-listings #all').prop('checked', false);

@@ -105,6 +105,13 @@ class Order < ActiveRecord::Base
     "#{quantity || 0} " + ((quantity == 1 || quantity =~ /^1(\.0+)?$/) ? box_name : box_name.pluralize)
   end
 
+  def string_sort_code
+    result = box.name
+    result += '+L' unless likes.blank?
+    result += '+D' unless dislikes.blank?
+    result.upcase
+  end
+
   protected
 
   # Manually create the first delivery all following deliveries should be scheduled for creation by the cron job

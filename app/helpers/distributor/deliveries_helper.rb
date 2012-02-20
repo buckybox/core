@@ -13,7 +13,13 @@ module Distributor::DeliveriesHelper
   end
 
   def count_selected(date_list, date)
-    'selected' if date_list.date.to_s == date
+    if date_list.date.to_s == date
+      element_id = 'selected'
+    elsif (date_list.date + 7.days).to_s == date
+      element_id = 'scroll-to'
+    end
+
+    return element_id
   end
 
   def count_class(date_list, date)

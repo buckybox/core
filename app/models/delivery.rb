@@ -7,8 +7,8 @@ class Delivery < ActiveRecord::Base
   has_one :distributor, through: :delivery_list
   has_one :box, through: :order
   has_one :account, through: :order
-  has_one :customer, through: :order
   has_one :address, through: :order
+  has_one :customer, through: :order
 
   acts_as_list scope: [:delivery_list_id, :route_id]
 
@@ -49,7 +49,7 @@ class Delivery < ActiveRecord::Base
   end
 
   def date
-    delivery_list.present? ? delivery_list.date : nil
+    delivery_list.date
   end
 
   def future_status?

@@ -1,10 +1,10 @@
 .nine.columns
   .row.data-headings
     .one.columns= check_box_tag 'all'
-    .nine.columns.delivery_actions
-      = button_tag 'Delivered', :class => 'small radius button', :id => 'delivered', :disabled => @selected_date.future?
-      = button_tag 'Pending', :class => 'small radius button', :id => 'pending', :disabled => @selected_date.future?
-      = button_tag 'Missed', :class => 'small radius button', :id => 'missed', :disabled => @selected_date.future?
+    .six.columns.delivery_actions
+      = button_tag 'Delivered', class: 'small radius button', id: 'delivered', disabled: @selected_date.future?
+      = button_tag 'Pending', class: 'small radius button', id: 'pending', disabled: @selected_date.future?
+      = button_tag 'Missed', class: 'small radius button', id: 'missed', disabled: @selected_date.future?
       #missed-options.has-flyout
         %table.flyout.large
           %tr
@@ -12,16 +12,17 @@
             %td= label_tag 'missed_cancelled', 'Cancel delivery'
             %td
           %tr
-            %td{:colspan => 2}
-            %td= button_tag 'Commit', :class => 'small radius button', :id => 'commit-missed'
-    .two.columns
+            %td{colspan: 2}
+            %td= button_tag 'Commit', class: 'small radius button', id: 'commit-missed'
+    .five.columns.export.text-right
+      = button_to 'Export', "/distributors/#{current_distributor.id}/deliveries/export.csv", { class: 'small radius button', id: 'export', disabled: @selected_date.future? }
 
   - if @items.all? { |i| i.is_a?(Delivery) }
-    %ul#delivery_list{:class => "#{'sortable' if @selected_date.today?}"}
+    %ul#delivery_list{ class: "#{'sortable' if @selected_date.today?}" }
       - @items.each do |delivery|
-        %li.row.data-listings{:id => "delivery_#{delivery.id}", :class => delivery.status}
-          .one.columns= check_box_tag delivery.order_id, '1', false, :data => { :delivery => delivery.id }
-          .one.columns= render :partial => 'status_icons', :locals => { :status => delivery.status }
+        %li.row.data-listings{id: "delivery_#{delivery.id}", class: delivery.status}
+          .one.columns= check_box_tag delivery.order_id, '1', false, data: { delivery: delivery.id }
+          .one.columns= render partial: 'status_icons', locals: { status: delivery.status }
           .one.columns= delivery.delivery_number
           .four.columns= delivery.package.archived_address
           .two.columns== #{delivery.package.archived_order_quantity}x #{delivery.package.archived_box_name}
@@ -31,9 +32,8 @@
       - @items.each do |order|
         %li.row.data-listings.pending
           .one.columns= check_box_tag order.id, '1', false
-          .one.columns= image_tag 'icon-status-pending.png', :title => 'PENDING delivery', :class => 'icon-pending'
+          .one.columns= image_tag 'icon-status-pending.png', title: 'PENDING delivery', class: 'icon-pending'
           .one.columns N/A
           .four.columns= order.address.join(', ')
           .two.columns== #{order.quantity}x #{order.box.name}
           .two.columns= order.customer.name
-
