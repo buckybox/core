@@ -38,6 +38,9 @@ group :development do
 
   gem 'capistrano'
   gem 'capistrano_colors'
+
+  gem 'linecache19', '0.5.13', :require => false
+  gem 'ruby-debug-base19', '0.11.26', :require => false
 end
 
 group :development, :test do
@@ -48,7 +51,6 @@ group :development, :test do
   gem 'rb-fsevent',   :require => false
   gem 'rb-fchange',   :require => false
 
-  gem 'ruby-debug19', :require => false
   gem 'mailcatcher',  :require => false
 
   gem 'simplecov',    :require => false

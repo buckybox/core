@@ -1,6 +1,4 @@
 require 'spec_helper'
-require 'ruby-debug'
-
 describe Invoice do
   before(:each) do
     @invoice = Fabricate(:invoice)
