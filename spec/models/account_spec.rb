@@ -129,12 +129,12 @@ describe Account do
   describe "#amount_with_bucky_fee" do
     it "returns amount if bucky fee is not separate" do
       @account.distributor.stub(:separate_bucky_fee).and_return(true)
-      @account.distributor.stub(:fee).and_return(0.02) #%
+      @account.distributor.stub(:bucky_box_percentage).and_return(0.02) #%
       @account.amount_with_bucky_fee(100).should == 102
     end
     it "includes bucky fee if bucky fee is separate" do
       @account.distributor.stub(:separate_bucky_fee).and_return(false)
-      @account.distributor.stub(:fee).and_return(0.02) #%
+      @account.distributor.stub(:bucky_box_percentage).and_return(0.02) #%
       @account.amount_with_bucky_fee(100).should == 100
     end
   end
