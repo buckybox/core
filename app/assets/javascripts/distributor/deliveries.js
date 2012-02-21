@@ -39,9 +39,10 @@ $(function() {
   });
 
   $('#delivery-listings #master-print').click(function () {
-    var checked_deliveries = $('#delivery-listings .data-listings input[type=checkbox]:checked');
+    var checked_packages = $('#delivery-listings .data-listings input[type=checkbox]:checked');
+    var ckbx_ids = $.map(checked_packages, function(ckbx) { return $(ckbx).data('package'); });
 
-    $.each(checked_deliveries, function(i, ckbx) {
+    $.each(checked_packages, function(i, ckbx) {
       var holder = $(ckbx).parent().parent();
 
       holder.addClass('packed');
@@ -51,15 +52,31 @@ $(function() {
       holder.find('.icon-unpacked').hide();
     });
 
-    $('#packing').submit();
+    var form = $(this).parent().parent('form');
 
-    checked_deliveries.prop('checked', false);
+    $.each(ckbx_ids, function(index, package_id) {
+      $("<input type='hidden'>").attr('name', 'packages[]').attr('value', package_id).appendTo(form);
+    });
+
+    checked_packages.prop('checked', false);
     $('#delivery-listings #all').prop('checked', false);
   });
 
+  $('#delivery-listings #packing-export').click(function() {
+    var checked_packages = $('#delivery-listings .data-listings input[type=checkbox]:checked');
+    var ckbx_ids = $.map(checked_packages, function(ckbx) { return $(ckbx).data('package'); });
 
-  $('#delivery-listings #export').click(function() {
-    var distributor_id = $('#delivery-listings').data('distributor');
+    var form = $(this).parent().parent('form');
+
+    $.each(ckbx_ids, function(index, delivery_id) {
+      $("<input type='hidden'>").attr('name', 'packages[]').attr('value', delivery_id).appendTo(form);
+    });
+
+    checked_packages.prop('checked', false);
+    $('#delivery-listings #all').prop('checked', false);
+  });
+
+  $('#delivery-listings #delivery-export').click(function() {
     var checked_deliveries = $('#delivery-listings .data-listings input[type=checkbox]:checked');
     var ckbx_ids = $.map(checked_deliveries, function(ckbx) { return $(ckbx).data('delivery'); });
 

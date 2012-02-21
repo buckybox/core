@@ -8,6 +8,9 @@ class Distributor::DeliveriesController < Distributor::BaseController
   respond_to :json, except: [:master_packing_sheet, :export]
   respond_to :csv, only: :export
 
+  NAV_START_DATE = Date.current - 2.week
+  NAV_END_DATE   = Date.current + 2.week
+
   def index
     unless params[:date] && params[:view]
       redirect_to date_distributor_deliveries_path(current_distributor, Date.current, 'packing') and return
@@ -17,16 +20,13 @@ class Distributor::DeliveriesController < Distributor::BaseController
       @selected_date = Date.parse(params[:date])
       @route_id = params[:view].to_i
 
-      start_date = Date.current - 1.week
-      end_date   = Date.current + 4.weeks
-
       @routes = current_distributor.routes
 
-      @delivery_lists = DeliveryList.collect_lists(current_distributor, start_date, end_date)
+      @delivery_lists = DeliveryList.collect_lists(current_distributor, NAV_START_DATE, NAV_END_DATE)
       @delivery_list  = @delivery_lists.find { |delivery_list| delivery_list.date == @selected_date }
       @all_deliveries = @delivery_list.deliveries
 
-      @packing_lists = PackingList.collect_lists(current_distributor, start_date, end_date)
+      @packing_lists = PackingList.collect_lists(current_distributor, NAV_START_DATE, NAV_END_DATE)
       @packing_list  = @packing_lists.find  { |packing_list| packing_list.date == @selected_date }
       @all_packages  = @packing_list.packages
 
@@ -55,7 +55,14 @@ class Distributor::DeliveriesController < Distributor::BaseController
   end
 
   def export
-    deliveries = current_distributor.deliveries.where(id: params[:deliveries])
+    redirect_to :back and return unless params[:deliveries] || params[:packages]
+
+    if params[:deliveries]
+      deliveries = current_distributor.deliveries.where(id: params[:deliveries])
+    elsif params[:packages]
+      packages = current_distributor.packages.where(id: params[:packages])
+      deliveries = packages.map{ |p| p.deliveries }.flatten
+    end
 
     #NOTE: Perhaps change this to use comma and move into delivery model down the track and if not then pull out into a lib file
     csv_output = CSV.generate do |csv|
@@ -108,23 +115,27 @@ class Distributor::DeliveriesController < Distributor::BaseController
       end
     end
 
-    respond_to do |format|
-      if deliveries
-        format.csv do
-          send_data csv_output,
-            type: 'text/csv; charset=iso-8859-1; header=present',
-            filename: "bucky-box-export-#{Date.current.to_s}.csv"
-        end
+    if deliveries
+      type = 'text/csv; charset=utf-8; header=present'
+
+      if packages
+        filename = "bucky-box-packing-list-export-#{Date.current.to_s}.csv"
       else
-        format.csv { respond_to :back }
+        filename = "bucky-box-delivery-list-export-#{Date.current.to_s}.csv"
       end
+
+      send_data(csv_output, type: type, filename: filename)
+    else
+      respond_to :back
     end
   end
 
   def master_packing_sheet
-    @selected_date = Date.parse(params[:date]) if params[:date]
-    package_ids = params[:package].select{ |id, checked| checked.to_i == 1 }.keys
-    @packages = current_distributor.packages.find(package_ids)
+    redirect_to :back and return unless params[:packages]
+
+    @packages = current_distributor.packages.find(params[:packages])
+
+    puts @packages.inspect
 
     @packages.each do |package|
       package.status = 'packed'

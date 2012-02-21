@@ -15,7 +15,9 @@
             %td{colspan: 2}
             %td= button_tag 'Commit', class: 'small radius button', id: 'commit-missed'
     .five.columns.export.text-right
-      = button_to 'Export', "/distributors/#{current_distributor.id}/deliveries/export.csv", { class: 'small radius button', id: 'export', disabled: @selected_date.future? }
+      = button_to('Export',
+        export_distributor_deliveries_path(current_distributor),
+        { id: 'delivery-export', class: 'small radius button', disabled: @selected_date.future? })
 
   - if @items.all? { |i| i.is_a?(Delivery) }
     %ul#delivery_list{ class: "#{'sortable' if @selected_date.today?}" }

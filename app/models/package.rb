@@ -11,7 +11,7 @@ class Package < ActiveRecord::Base
   has_one :customer, through: :order
   has_one :address, through: :order
 
-  has_many :deliveries, order: :date
+  has_many :deliveries
 
   composed_of :archived_box_price,
     class_name: "Money",

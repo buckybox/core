@@ -1,35 +1,40 @@
 .nine.columns
-  = form_tag master_packing_sheet_distributor_deliveries_path(current_distributor, @selected_date), id: 'packing', target: '_blank' do
-    .row.data-headings
-      .one.columns= check_box_tag 'all'
-      .eleven.columns.packing_actions
-        = submit_tag 'Print - Master List', id: 'master-print', class: 'small radius button', disabled: @selected_date.future?
+  .row.data-headings
+    .one.columns= check_box_tag 'all'
+    .six.columns.packing_actions
+      = button_to('Print - Master List',
+        master_packing_sheet_distributor_deliveries_path(current_distributor),
+        { id: 'master-print', class: 'small radius button', disabled: @selected_date.future?, form: { target: '_blank' } })
+    .five.columns.export.text-right
+      = button_to('Export',
+        export_distributor_deliveries_path(current_distributor),
+        { id: 'packing-export', class: 'small radius button', disabled: @selected_date.future? })
 
-    - if @items.all? { |i| i.is_a?(Package) }
-      - @items.group_by(&:box).each do |box, array|
-        .row.data-headings
-          %h5.twelve.columns= box.name
+  - if @items.all? { |i| i.is_a?(Package) }
+    - @items.group_by(&:box).each do |box, array|
+      .row.data-headings
+        %h5.twelve.columns= box.name
 
-        %ul
-          - array.each do |package|
-            %li.row.data-listings{ class: package.status }
-              .one.columns= check_box :package, "#{package.id}"
-              .one.columns= render partial: 'status_icons', locals: { status: package.status }
-              .one.columns= package.id
-              .four.columns= package.archived_address
-              .two.columns== #{package.archived_order_quantity}x #{package.archived_box_name}
-              .two.columns= package.archived_customer_name
-    - else
-      - @items.group_by(&:box).each do |box, array|
-        .row.data-headings
-          %h5.twelve.columns= box.name
+      %ul
+        - array.each do |package|
+          %li.row.data-listings{ class: package.status }
+            .one.columns= check_box_tag package.order_id, '1', false, data: { package: package.id }
+            .one.columns= render partial: 'status_icons', locals: { status: package.status }
+            .one.columns= package.id
+            .four.columns= package.archived_address
+            .two.columns== #{package.archived_order_quantity}x #{package.archived_box_name}
+            .two.columns= package.archived_customer_name
+  - else
+    - @items.group_by(&:box).each do |box, array|
+      .row.data-headings
+        %h5.twelve.columns= box.name
 
-        %ul
-          - array.each do |order|
-            %li.row.data-listings.pending
-              .one.columns= check_box_tag order.id, '1', false
-              .one.columns= image_tag 'icon-status-pending.png', title: 'UNPACKED package', class: 'icon-pending'
-              .one.columns N/A
-              .four.columns= order.address.join(', ')
-              .two.columns== #{order.quantity}x #{order.box.name}
-              .two.columns= order.customer.name
+      %ul
+        - array.each do |order|
+          %li.row.data-listings.pending
+            .one.columns= check_box_tag order.id, '1', false
+            .one.columns= image_tag 'icon-status-pending.png', title: 'UNPACKED package', class: 'icon-pending'
+            .one.columns N/A
+            .four.columns= order.address.join(', ')
+            .two.columns== #{order.quantity}x #{order.box.name}
+            .two.columns= order.customer.name

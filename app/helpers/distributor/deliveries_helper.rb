@@ -12,10 +12,15 @@ module Distributor::DeliveriesHelper
     'today' if date_list.date.today?
   end
 
-  def count_selected(date_list, date)
-    if date_list.date.to_s == date
+  def count_selected(start_date, date_list, date)
+    date = Date.parse(date) unless date.is_a?(Date)
+
+    scroll_date = date - 1.week
+    scroll_date = start_date if scroll_date < start_date
+
+    if date == date_list.date
       element_id = 'selected'
-    elsif (date_list.date + 7.days).to_s == date
+    elsif scroll_date == date_list.date
       element_id = 'scroll-to'
     end
 
