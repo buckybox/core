@@ -17,6 +17,7 @@ gem 'sass-rails'
 gem 'jquery-rails'
 
 gem 'devise', '~> 1.5.3'
+gem 'multi_json', '~> 1.0.4'
 gem 'simple_form'
 gem 'inherited_resources'
 gem 'mini_magick'
