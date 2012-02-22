@@ -4,3 +4,4 @@ Fabricator(:box) do
   description { sequence(:description) { |i| "Description #{i}" } }
   price 10
 end
+

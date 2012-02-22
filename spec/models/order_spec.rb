@@ -19,6 +19,34 @@ describe Order do
     specify { Fabricate.build(:order, :frequency => 'yearly').should_not be_valid }
   end
 
+  context :price do
+    # Default box price is $10
+    PRICE_PERMUTATIONS = [
+      { discount: 0.05, fee: 5, quantity: 5, individual_price: 14.25, price: 71.25 },
+      { discount: 0.05, fee: 5, quantity: 1, individual_price: 14.25, price: 14.25 },
+      { discount: 0.05, fee: 0, quantity: 5, individual_price:  9.50, price: 47.50 },
+      { discount: 0.05, fee: 0, quantity: 1, individual_price:  9.50, price:  9.50 },
+      { discount: 0.00, fee: 5, quantity: 5, individual_price: 15.00, price: 75.00 },
+      { discount: 0.00, fee: 5, quantity: 1, individual_price: 15.00, price: 15.00 },
+      { discount: 0.00, fee: 0, quantity: 5, individual_price: 10.00, price: 50.00 },
+      { discount: 0.00, fee: 0, quantity: 1, individual_price: 10.00, price: 10.00 }
+    ]
+
+
+    PRICE_PERMUTATIONS.each do |pp|
+      context "where discount is #{pp[:discount]}, fee is #{pp[:fee]}, and quantity is #{pp[:quantity]}" do
+        before do
+          route = Fabricate(:route, fee: pp[:fee])
+          customer = Fabricate(:customer, discount: pp[:discount], route: route)
+          @order = Fabricate(:order, quantity: pp[:quantity], account: customer.account)
+        end
+
+        specify { @order.individual_price.should == pp[:individual_price] }
+        specify { @order.price.should == pp[:price] }
+      end
+    end
+  end
+
   context :schedule do
     before do
       @route = Fabricate(:route, :distributor => @order.distributor)
@@ -40,7 +68,7 @@ describe Order do
     describe 'change schedule' do
       before do
         @schedule = @order.schedule
-        @schedule.add_recurrence_date(Time.now + 5.days)
+        @schedule.add_recurrence_time(Time.now + 5.days)
         @schedule.add_recurrence_rule(Rule.weekly(2).day(:monday, :tuesday))
         @order.schedule = @schedule
         @order.save

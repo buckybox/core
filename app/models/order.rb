@@ -28,7 +28,6 @@ class Order < ActiveRecord::Base
   validates_presence_of :box, :quantity, :frequency, :account, :schedule
   validates_numericality_of :quantity, greater_than: 0
   validates_inclusion_of :frequency, in: FREQUENCIES, message: "%{value} is not a valid frequency"
-  validate :box_distributor_equals_customer_distributor
 
   before_save :make_active, if: :just_completed?
   before_save :record_schedule_change
@@ -121,12 +120,5 @@ class Order < ActiveRecord::Base
 
   def record_schedule_change
     order_schedule_transactions.build(order: self, schedule: self.schedule)
-  end
-
-  #TODO: Fix hacks as a result of customer accounts model rejig
-  def box_distributor_equals_customer_distributor
-    if customer && customer.distributor_id != box.distributor_id
-      errors.add(:box, 'distributor does not match customer distributor')
-    end
   end
 end
