@@ -18,12 +18,13 @@
       %ul
         - array.each do |package|
           %li.row.data-listings{ class: package.status }
-            .one.columns= check_box_tag package.order_id, '1', false, data: { package: package.id }
-            .one.columns= render partial: 'status_icons', locals: { status: package.status }
-            .one.columns= package.id
-            .four.columns= package.archived_address
+            .two.columns
+              = check_box_tag package.order_id, '1', false, data: { package: package.id }
+              = render partial: 'status_icons', locals: { status: package.status }
+              = package.id
+            .five.columns= package.archived_address
             .two.columns== #{package.archived_order_quantity}x #{package.archived_box_name}
-            .two.columns= package.archived_customer_name
+            .three.columns= customer_badge(package.customer, customer_name: package.archived_customer_name)
   - else
     - @items.group_by(&:box).each do |box, array|
       .row.data-headings
@@ -32,9 +33,10 @@
       %ul
         - array.each do |order|
           %li.row.data-listings.pending
-            .one.columns= check_box_tag order.id, '1', false
-            .one.columns= image_tag 'icon-status-pending.png', title: 'UNPACKED package', class: 'icon-pending'
-            .one.columns N/A
-            .four.columns= order.address.join(', ')
+            .two.columns
+              = check_box_tag order.id, '1', false
+              = image_tag 'icon-status-pending.png', title: 'UNPACKED package', class: 'icon-pending'
+              N/A
+            .five.columns= order.address.join(', ')
             .two.columns== #{order.quantity}x #{order.box.name}
-            .two.columns= order.customer.name
+            .three.columns= customer_badge(order.customer)

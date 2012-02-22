@@ -1,4 +1,4 @@
-- title "#{current_customer.name} (ID:#{current_customer.id})"
+= customer_title(current_customer, link: customer_root_path)
 
 .row
   .twelve.columns.text-center
@@ -33,7 +33,7 @@
 
       .row
         #customer-controls.twelve.columns
-          %strong== #{current_customer.name} (ID:#{current_customer.id})
+          = customer_badge(current_customer, link: customer_root_path)
           %br
           = current_customer.email
           %br

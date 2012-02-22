@@ -18,6 +18,6 @@
             %tr
               %td{:style => 'width:5%; border:1px solid black;'}
               %td{:style => 'width:5%; border:1px solid black;'}= package.id
-              %td{:style => 'width:25%; border:1px solid black;'}= package.customer.name
-              %td{:style => 'width:40%; border:1px solid black;'}= package.address.join(', ')
-              %td{:style => 'width:25%; border:1px solid black;'}== #{package.order.quantity}x #{box.name}
+              %td{:style => 'width:25%; border:1px solid black;'}= customer_badge(package.customer, customer_name: package.archived_customer_name)
+              %td{:style => 'width:40%; border:1px solid black;'}= package.archived_address
+              %td{:style => 'width:25%; border:1px solid black;'}== #{package.archived_order_quantity}x #{package.archived_box_name}

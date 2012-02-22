@@ -1,4 +1,4 @@
-- title("Add to #{@account.customer.name}'s Balance")
+= customer_title(@account.customer, title: "Add to #{customer_and_number(@account.customer)}'s Balance")
 
 .row
   .columns.four= render 'form'

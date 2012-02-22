@@ -16,6 +16,6 @@
         - @payments.each do |payment|
           %tr
             %td= payment.created_at.to_s(:db)
-            %td= link_to payment.customer.name, [current_distributor, payment.customer]
+            %td= customer_badge(payment.customer)
             %td= payment.amount.format
             %td= payment.description

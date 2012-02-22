@@ -33,7 +33,7 @@
   - @customers.each do |customer|
     .row.data-listings
       .three.columns= customer.route.name
-      .three.columns= link_to "#{customer.name} (ID:#{customer.id})", [current_distributor, customer]
+      .three.columns= customer_badge(customer)
       .four.columns
         - unless customer.tags.empty?
           - customer.tags.each do |tag|
