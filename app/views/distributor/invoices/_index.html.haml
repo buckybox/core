@@ -7,7 +7,6 @@
         %th Amount
         %th Date
         %th Paid
-        %th 
 
     - invoices.each do |invoice|
       %tbody
@@ -16,9 +15,5 @@
           %td= link_to invoice.account.customer.name, [current_distributor, invoice.account.customer]
           %td= invoice.amount
           %td= invoice.date
-          %td= invoice.paid ? "Y" : "N"
-          %td
-            /= link_to 'Show', [current_distributor, invoice]
-            /= link_to 'Edit', edit_distributor_transaction_path(current_distributor, transaction)
-            /= link_to 'Destroy', [current_distributor, transaction], :confirm => 'Are you sure?', :method => :delete
+          %td= checkmark_boolean(invoice.paid)
 

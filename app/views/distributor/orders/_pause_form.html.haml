@@ -4,7 +4,7 @@
     == #{order.quantity}x #{order.box.name}
   %li
     %strong Price:
-    = (order.price * order.quantity).format
+    = order.price.format
   %li
     %strong Schedule:
     - order.schedule.recurrence_rules.each do |rr|

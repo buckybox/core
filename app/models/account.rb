@@ -1,20 +1,20 @@
 class Account < ActiveRecord::Base
   belongs_to :customer
 
-  has_one :distributor, :through => :customer
+  has_one :distributor, through: :customer
 
-  has_many :orders, :dependent => :destroy
-  has_many :payments, :dependent => :destroy
+  has_many :orders, dependent: :destroy
+  has_many :payments, dependent: :destroy
 
   has_many :transactions
-  has_many :deliveries, :through => :orders
+  has_many :deliveries, through: :orders
   has_many :invoices
 
   composed_of :balance,
-    :class_name => "Money",
-    :mapping => [%w(balance_cents cents), %w(currency currency_as_string)],
-    :constructor => Proc.new { |cents, currency| Money.new(cents || 0, currency || Money.default_currency) },
-    :converter => Proc.new { |value| value.respond_to?(:to_money) ? value.to_money : raise(ArgumentError, "Can't convert #{value.class} to Money") }
+    class_name: "Money",
+    mapping: [%w(balance_cents cents), %w(currency currency_as_string)],
+    constructor: Proc.new { |cents, currency| Money.new(cents || 0, currency || Money.default_currency) },
+    converter: Proc.new { |value| value.respond_to?(:to_money) ? value.to_money : raise(ArgumentError, "Can't convert #{value.class} to Money") }
 
   attr_accessible :customer, :tag_list
 
@@ -22,6 +22,13 @@ class Account < ActiveRecord::Base
 
   before_validation :default_balance_and_currency
   validates_presence_of :customer, :balance
+
+  # A way to double check that the transactions and the balance have not gone out of sync.
+  # THIS SHOULD NEVER HAPPEN! If it does fix the root cause don't make this write a new balance.
+  # Likely somewhere a transaction is being created manually.
+  def calculate_balance
+    total = transactions.sum(:amount_cents)
+  end
 
   def balance_cents=(value)
     raise(ArgumentError, "The balance can not be updated this way. Please use one of the model balance methods that create transactions.")
@@ -58,31 +65,24 @@ class Account < ActiveRecord::Base
     add_to_balance((amount * -1), options)
   end
 
-  # A way to double check that the transactions and the balance have not gone out of sync.
-  # THIS SHOULD NEVER HAPPEN! If it does fix the root cause don't make this write a new balance.
-  # Likely somewhere a transaction is being created manually.
-  def calculate_balance
-    total = transactions.sum(:amount_cents)
-  end
-
   #all accounts that need invoicing
   def self.need_invoicing
     accounts = []
-    Account.all.each do |a|
-      accounts << a if a.needs_invoicing?
-    end
-    accounts
+    Account.all.each { |account| accounts << account if account.needs_invoicing? }
+    return accounts
   end
 
   #future occurrences for all orders on account
-  def all_occurrences end_date
+  def all_occurrences(end_date)
     occurrences = []
-    orders.each do |o|
-      o.future_deliveries(end_date).each do |occurrence|
+
+    orders.each do |order|
+      order.future_deliveries(end_date).each do |occurrence|
         occurrences << occurrence
       end
     end
-    occurrences.sort {|a,b| a[:date] <=> b[:date] }
+
+    return occurrences.sort {|a,b| a[:date] <=> b[:date] }
   end
 
   #this holds the core logic for when an invoice should be raised
@@ -118,11 +118,11 @@ class Account < ActiveRecord::Base
     return invoice_date
   end
 
-  #used internally for calculating invoice totals
-  #if distributor charges bucky fee in addition to box price return price + bucky fee
+  # Used internally for calculating invoice totals
+  # if distributor charges bucky fee in addition to box price return price + bucky fee
   def self.amount_with_bucky_fee(amount, distributor)
-    bucky_fee_multiple = distributor.separate_bucky_fee ? (1 + distributor.fee) : 1
-    amount * bucky_fee_multiple
+    bucky_fee_multiple = distributor.separate_bucky_fee ? (1 + distributor.bucky_box_percentage) : 1
+    return amount * bucky_fee_multiple
   end
 
   def amount_with_bucky_fee(amount)
@@ -139,7 +139,7 @@ class Account < ActiveRecord::Base
     end
   end
 
-  protected
+  private
 
   def default_balance_and_currency
     write_attribute(:balance_cents, 0) if balance_cents.blank?

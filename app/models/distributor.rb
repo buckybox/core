@@ -124,7 +124,7 @@ class Distributor < ActiveRecord::Base
     return packing_list.persisted? && delivery_list.persisted?
   end
 
-  def automate_completed_status(date = Date.current)
+  def automate_completed_status(date = Date.yesterday)
     successful =  delivery_lists.find_by_date(date).mark_all_as_auto_delivered
     successful &= packing_lists.find_by_date(date).mark_all_as_auto_packed
 

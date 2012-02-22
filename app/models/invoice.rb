@@ -28,8 +28,7 @@ class Invoice < ActiveRecord::Base
   def set_defaults
     self.start_date ||= 4.weeks.ago.to_date
     self.end_date ||= 4.weeks.from_now.to_date
-    self.date = Date.today
-    #generate_number
+    self.date = Date.current
   end
 
   def full_number
@@ -37,57 +36,67 @@ class Invoice < ActiveRecord::Base
   end
 
   def starting_balance
-    balance - transactions.inject(Money.new(0)) {|sum, t| sum += t[:amount]}
+    balance - transactions.inject(Money.new(0)) { |sum, t| sum += t[:amount] }
   end
 
   #creates invoices for all accounts which need it
   def self.generate_invoices
     invoices = []
+
     Account.all.each do |a|
       if invoice = a.create_invoice
         invoices << invoice
         CustomerMailer.invoice(invoice).deliver
       end
     end
-    invoices
+
+    return invoices
   end
 
   def calculate_amount
     return unless account
     self.balance = account.balance
-    self.transactions = account.transactions.unscoped.order(:created_at).where(["created_at >= ? AND created_at <= ?", start_date, Date.current]).collect {|t| {:date => t.created_at.to_date, :amount => t.amount, :description => t.description}}
+
+    account_transactions = account.transactions.unscoped.order(:created_at).where(["created_at >= ? AND created_at <= ?", start_date, Date.current])
+    self.transactions = account_transactions.map { |t| {:date => t.created_at.to_date, :amount => t.amount, :description => t.description} }
 
     #TODO - check with will how he wants to handle the distributor bucky fee
     # currently if the fee is separate I just add it onto the price through account.amount_with_bucky_fee but it might be he wants it as a separate line item on the invoice, or displayed as a total at the bottom or something.
 
     #check for deliveries on today that are pending
-    real_deliveries = account.deliveries.unscoped.pending.includes(:delivery_list).order("\"deliveries\".created_at").where(["\"delivery_lists\".date >= ? AND \"delivery_lists\".date <= ?", Date.current, end_date]).collect {|d| {:date => d.date, :amount => account.amount_with_bucky_fee(d.price), :description => d.description}}
+    account_deliveries = account.deliveries.unscoped.pending.includes(:delivery_list).order("\"deliveries\".created_at").where(["\"delivery_lists\".date >= ? AND \"delivery_lists\".date <= ?", Date.current, end_date])
+    real_deliveries = account_deliveries.map {|d| {:date => d.date, :amount => account.amount_with_bucky_fee(d.price), :description => d.description}}
 
     #save all_occurrences
-    occurrences = account.all_occurrences(end_date.to_time).collect {|o| {:date => o[:date], :description => o[:description], :amount => account.amount_with_bucky_fee(o[:price]) }}
+    account_occurrences = account.all_occurrences(end_date.to_time)
+    occurrences = account_occurrences.map {|o| {:date => o[:date], :description => o[:description], :amount => account.amount_with_bucky_fee(o[:price]) }}
 
     self.deliveries = real_deliveries + occurrences
     self.amount = deliveries.inject(Money.new(0)) {|sum, occurrence| sum += occurrence[:amount]} - balance
-    amount > 0 ? amount : 0
+
+     return (amount > 0) ? amount : 0
   end
 
   def self.create_for_account(account)
     invoice = Invoice.for_account(account)
     invoice.save! if invoice.amount > 0
-    invoice
+
+    return invoice
   end
 
   def self.for_account(account)
     invoice = Invoice.new(:account => account)
     invoice.calculate_amount
-    invoice
+
+    return invoice
   end
 
   private
+
   def generate_number
     return if number.present? || !account.present?
+
     last_invoice = account.invoices.order('number DESC').limit(1).first
     self.number = last_invoice.nil? || last_invoice.number.nil? ? 1 : last_invoice.number + 1
   end
-
 end

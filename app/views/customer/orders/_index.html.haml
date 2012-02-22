@@ -12,7 +12,7 @@
       - @orders.each do |order|
         %tr
           %td== #{order.quantity}x #{order.box.name}
-          %td= (order.price * order.quantity).format
+          %td= order.price.format
           %td
             = order_schedule(order)
             - if order.schedule.exception_times.empty?

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120207040356) do
+ActiveRecord::Schema.define(:version => 20120216100258) do
 
   create_table "accounts", :force => true do |t|
     t.integer  "customer_id"
@@ -86,7 +86,7 @@ ActiveRecord::Schema.define(:version => 20120207040356) do
     t.integer  "distributor_id"
     t.string   "number"
     t.integer  "route_id"
-    t.string   "encrypted_password",     :limit => 128, :default => "", :null => false
+    t.string   "encrypted_password",     :limit => 128, :default => "",  :null => false
     t.string   "reset_password_token"
     t.datetime "reset_password_sent_at"
     t.datetime "remember_created_at"
@@ -103,6 +103,7 @@ ActiveRecord::Schema.define(:version => 20120207040356) do
     t.string   "unlock_token"
     t.datetime "locked_at"
     t.string   "authentication_token"
+    t.decimal  "discount",                              :default => 0.0, :null => false
   end
 
   add_index "customers", ["authentication_token"], :name => "index_customers_on_authentication_token", :unique => true
@@ -166,7 +167,7 @@ ActiveRecord::Schema.define(:version => 20120207040356) do
     t.string   "parameter_name"
     t.integer  "invoice_threshold_cents",                :default => -500
     t.string   "currency"
-    t.float    "fee",                                    :default => 0.0175
+    t.decimal  "bucky_box_percentage",                   :default => 0.0175, :null => false
     t.boolean  "separate_bucky_fee",                     :default => true
     t.text     "daily_lists_schedule"
     t.text     "auto_delivery_schedule"
@@ -258,17 +259,20 @@ ActiveRecord::Schema.define(:version => 20120207040356) do
     t.integer  "packing_list_id"
     t.integer  "position"
     t.string   "status"
-    t.datetime "created_at",                             :null => false
-    t.datetime "updated_at",                             :null => false
+    t.datetime "created_at",                                  :null => false
+    t.datetime "updated_at",                                  :null => false
     t.integer  "order_id"
     t.integer  "original_package_id"
     t.string   "packing_method"
     t.text     "archived_address"
     t.integer  "archived_order_quantity"
     t.string   "archived_box_name"
-    t.integer  "archived_price_cents",    :default => 0
-    t.string   "archived_currency"
+    t.integer  "archived_price_cents",       :default => 0
+    t.string   "archived_price_currency"
     t.string   "archived_customer_name"
+    t.integer  "archived_fee_cents",         :default => 0
+    t.string   "archived_fee_currency"
+    t.decimal  "archived_customer_discount", :default => 0.0, :null => false
   end
 
   add_index "packages", ["order_id"], :name => "index_packages_on_order_id"
@@ -322,6 +326,8 @@ ActiveRecord::Schema.define(:version => 20120207040356) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.text     "schedule"
+    t.integer  "fee_cents",      :default => 0
+    t.string   "currency"
   end
 
   add_index "routes", ["distributor_id"], :name => "index_routes_on_distributor_id"

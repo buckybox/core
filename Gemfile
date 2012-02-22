@@ -17,6 +17,7 @@ gem 'sass-rails'
 gem 'jquery-rails'
 
 gem 'devise', '~> 1.5.3'
+gem 'multi_json', '~> 1.0.4'
 gem 'simple_form'
 gem 'inherited_resources'
 gem 'mini_magick'
@@ -28,7 +29,7 @@ gem 'kaminari'
 gem 'airbrake'
 gem 'analytical'
 gem 'postmark-rails'
-gem 'ice_cube'
+gem 'ice_cube', git: 'git://github.com/ootoovak/ice_cube.git'
 gem 'whenever'
 gem 'newrelic_rpm'
 gem 'acts_as_list'
@@ -38,20 +39,22 @@ group :development do
 
   gem 'capistrano'
   gem 'capistrano_colors'
+
+  gem 'linecache19', '0.5.13', require: false
+  gem 'ruby-debug-base19', '0.11.26', require: false
 end
 
 group :development, :test do
   gem 'rspec-rails'
   gem 'guard'
 
-  gem 'rb-inotify',   :require => false
-  gem 'rb-fsevent',   :require => false
-  gem 'rb-fchange',   :require => false
+  gem 'rb-inotify',  require: false
+  gem 'rb-fsevent',  require: false
+  gem 'rb-fchange',  require: false
 
-  gem 'ruby-debug19', :require => false
-  gem 'mailcatcher',  :require => false
+  gem 'mailcatcher', require: false
 
-  gem 'simplecov',    :require => false
+  gem 'simplecov',   require: false
 end
 
 group :test do

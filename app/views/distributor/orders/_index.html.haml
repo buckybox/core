@@ -17,7 +17,7 @@
           %td= order.id
           %td= order.box.name
           %td= order.quantity
-          %td= (order.price * order.quantity).format
+          %td= order.price.format
           %td= order.schedule.start_date.strftime("%B %d, %Y")
           %td
             = order_schedule(order)

@@ -87,7 +87,7 @@ describe Account do
       it "is today if balance is currently below threshold" do
         @account.stub(:balance).and_return(Money.new(-1000))  
         @account.stub(:all_occurrences).and_return([])
-        @account.next_invoice_date.should == Date.today
+        @account.next_invoice_date.should == Date.current
       end
       it "is at least 2 days after the first scheduled delivery" do
         @account.stub(:deliveries).and_return([])
@@ -129,12 +129,12 @@ describe Account do
   describe "#amount_with_bucky_fee" do
     it "returns amount if bucky fee is not separate" do
       @account.distributor.stub(:separate_bucky_fee).and_return(true)
-      @account.distributor.stub(:fee).and_return(0.02) #%
+      @account.distributor.stub(:bucky_box_percentage).and_return(0.02) #%
       @account.amount_with_bucky_fee(100).should == 102
     end
     it "includes bucky fee if bucky fee is separate" do
       @account.distributor.stub(:separate_bucky_fee).and_return(false)
-      @account.distributor.stub(:fee).and_return(0.02) #%
+      @account.distributor.stub(:bucky_box_percentage).and_return(0.02) #%
       @account.amount_with_bucky_fee(100).should == 100
     end
   end

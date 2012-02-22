@@ -2,7 +2,7 @@
   .row
     .twelve.columns
       #calendar-navigation
-        %ul{:style => calendar_nav_length(@delivery_lists)}
+        %ul{ style: calendar_nav_length(@delivery_lists) }
           - @delivery_lists.group_by{ |date_list| date_list.date.month }.each do |month, date_list_group|
             %li
               .month= Date::ABBR_MONTHNAMES[month]
@@ -11,7 +11,7 @@
             - date_list_group.each do |date_list|
               %li
                 = link_to date_distributor_deliveries_path(current_distributor, date_list.date) do
-                  .date{:class => date_class(date_list)}= date_list.date.strftime("%d %a")
-                  .count{:id => count_selected(date_list, params[:date]), :class => count_class(date_list, params[:date])}
+                  .date{ class: date_class(date_list) }= date_list.date.strftime("%d %a")
+                  .count{ id: count_selected(@delivery_lists.first.date, date_list, params[:date]), class: count_class(date_list, params[:date]) }
                     = date_list.deliveries.size
 

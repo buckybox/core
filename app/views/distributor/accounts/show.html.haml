@@ -24,6 +24,8 @@
       = tag_links(@account.tags)
 
   .five.columns
+    = link_to 'Back to Customer List', distributor_accounts_path
+    %br
     = link_to 'Receive Payment', receive_payment_distributor_account_path(current_distributor, @account)
     %br
     = link_to 'Edit Accounts Details', edit_distributor_account_path(current_distributor, @account)
@@ -32,8 +34,6 @@
     %br
     = link_to 'Send login details', send_login_details_customer_path(@account.customer), :confirm => "Are you sure? This will reset the users password."
     (User's password will be reset)
-    %br
-    = link_to 'Back to Customer List', distributor_accounts_path
 
 = render 'distributor/orders/index'
 = render 'distributor/deliveries/index'
