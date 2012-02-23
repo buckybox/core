@@ -5,3 +5,4 @@ require File.expand_path('../application', __FILE__)
 BuckyBox::Application.initialize!
 
 Money.default_currency = Money::Currency.new("NZD")
+ActsAsTaggableOn.force_parameterize = true

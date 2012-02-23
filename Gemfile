@@ -23,7 +23,7 @@ gem 'inherited_resources'
 gem 'mini_magick'
 gem 'carrierwave'
 gem 'money'
-gem 'acts-as-taggable-on'
+gem 'acts-as-taggable-on', git: 'git://github.com/mbleigh/acts-as-taggable-on.git'
 gem 'pg_search'
 gem 'kaminari'
 gem 'airbrake'
@@ -35,7 +35,7 @@ gem 'newrelic_rpm'
 gem 'acts_as_list'
 
 group :development do
-  gem 'nifty-generators', :require => false
+  gem 'nifty-generators', require: false
 
   gem 'capistrano'
   gem 'capistrano_colors'

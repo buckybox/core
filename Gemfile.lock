@@ -1,4 +1,11 @@
 GIT
+  remote: git://github.com/mbleigh/acts-as-taggable-on.git
+  revision: 1338cb82593be43928ecafbc09a0a18f5fc08a94
+  specs:
+    acts-as-taggable-on (2.2.2)
+      rails (~> 3.0)
+
+GIT
   remote: git://github.com/ootoovak/ice_cube.git
   revision: 05f8677efe02d1e06868c1cba7f91950b885f823
   specs:
@@ -34,8 +41,6 @@ GEM
     activesupport (3.2.1)
       i18n (~> 0.6)
       multi_json (~> 1.0)
-    acts-as-taggable-on (2.2.2)
-      rails (~> 3.0)
     acts_as_list (0.1.4)
     addressable (2.2.7)
     airbrake (3.0.9)
@@ -279,7 +284,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  acts-as-taggable-on
+  acts-as-taggable-on!
   acts_as_list
   airbrake
   analytical

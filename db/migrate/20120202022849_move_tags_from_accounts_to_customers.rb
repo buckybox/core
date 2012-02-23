@@ -1,7 +1,7 @@
 class MoveTagsFromAccountsToCustomers < ActiveRecord::Migration
   class Account < ActiveRecord::Base; end
   class Customer < ActiveRecord::Base; end
-  class ActsAsTaggableOn::Tagging < ::ActiveRecord::Base; end
+  class ActsAsTaggableOn::Tagging < ActiveRecord::Base; end
 
   def up
     Account.reset_column_information
