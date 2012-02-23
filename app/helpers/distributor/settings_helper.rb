@@ -1,0 +1,3 @@
+module Distributor::SettingsHelper
+
+end
