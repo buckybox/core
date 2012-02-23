@@ -46,21 +46,20 @@ module LayoutHelper
   def customer_badge(customer, options = {})
     content = ''
 
-    if options[:link] == false
-      content += content_tag(:span, "##{customer.id}", class: 'pill')
-    elsif options.has_key?(:link)
-      content += link_to("##{customer.id}", url_for(options[:link]), class: 'pill')
-    else
-      content += link_to("##{customer.id}", [customer.distributor, customer], class: 'pill')
-    end
+    customer_id = "%03d" % customer.id
+    content += content_tag(:span, "##{customer_id}", class: 'customer-id')
 
     customer_name = options[:customer_name] || customer.name
     content += content_tag(:span, customer_name, class: 'customer-name')
 
-    return [
-      options[:before],
-      content_tag(:span, content.html_safe, class: 'customer-badge'),
-      options[:after]
-    ].join.html_safe
+    if options[:link] == false
+      badge = content_tag(:span, content.html_safe, class: 'customer-badge')
+    elsif options.has_key?(:link)
+      badge = link_to(content.html_safe, url_for(options[:link]), class: 'customer-badge')
+    else
+      badge = link_to(content.html_safe, [customer.distributor, customer], class: 'customer-badge')
+    end
+
+    return [ options[:before], badge, options[:after] ].join.html_safe
   end
 end
