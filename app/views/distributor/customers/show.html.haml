@@ -55,7 +55,7 @@
   .nine.columns
     %h3 Transactions
   .three.columns
-    = link_to 'Adjust Balance', edit_distributor_account_path(current_distributor, @account), :class => 'button radius'
+    = link_to 'Add Transaction', edit_distributor_account_path(current_distributor, @account), :class => 'button radius'
 
 = render 'distributor/transactions/index' unless @transactions.empty?
 
