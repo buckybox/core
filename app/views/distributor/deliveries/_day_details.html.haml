@@ -7,14 +7,14 @@
         .twelve.columns.route-name
           = link_to date_distributor_deliveries_path(current_distributor, @selected_date, 'packing') do
             %h6{:class => "#{'selected' if @route_id == 0}"}
-              %span= @all_packages.size
+              %span= @all_packages.map(&:quantity).inject(0, :+)
               Packing (All)
               = image_tag 'icon-packing.png'
           %hr
           - @routes.each do |route|
             = link_to date_distributor_deliveries_path(current_distributor, @selected_date, route.id) do
               %h6{:class => "#{'selected' if @route_id == route.id}"}
-                %span= @all_deliveries.select{ |delivery| delivery.route.id == route.id }.size
+                %span= @all_deliveries.select{ |delivery| delivery.route.id == route.id }.map(&:quantity).inject(0, :+)
                 = route.name
                 = image_tag 'icon-route.png'
 

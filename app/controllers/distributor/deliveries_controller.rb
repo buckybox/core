@@ -1,3 +1,5 @@
+#FIXME: Too much code in this controller!
+
 require 'csv'
 
 class Distributor::DeliveriesController < Distributor::BaseController

@@ -52,6 +52,10 @@ class Delivery < ActiveRecord::Base
     delivery_list.date
   end
 
+  def quantity
+    package.archived_order_quantity
+  end
+
   def future_status?
     status == 'pending'
   end
