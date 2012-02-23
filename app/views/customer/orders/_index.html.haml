@@ -22,7 +22,3 @@
           %td
             = link_to 'change order', '#', data: {'reveal-id' => "order-modal-#{order.id}"}
 
-            .reveal-modal{id: "order-modal-#{order.id}"}
-              %h2 Change Your Order
-              = link_to '&#215;'.html_safe, '#', class: 'close-reveal-modal'
-              = render partial: 'customer/orders/form', locals: { order: order }
