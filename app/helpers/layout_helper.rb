@@ -57,6 +57,10 @@ module LayoutHelper
     customer_name = options[:customer_name] || customer.name
     content += content_tag(:span, customer_name, class: 'customer-name')
 
-    content_tag(:span, content.html_safe, class: 'customer-badge')
+    return [
+      options[:before],
+      content_tag(:span, content.html_safe, class: 'customer-badge'),
+      options[:after]
+    ].join.html_safe
   end
 end

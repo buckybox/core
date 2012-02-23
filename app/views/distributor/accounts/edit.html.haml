@@ -1,8 +1,4 @@
-= customer_title(@account.customer, title: "Add to #{customer_and_number(@account.customer)}'s Balance")
+= customer_title(@account.customer, before: "Add Transaction > ", title: "Add Transaction > #{customer_and_number(@account.customer)}")
 
-.row
-  .columns.four= render 'form'
+= render 'form'
 
-= link_to 'Show', [current_distributor, @account.customer]
-\|
-= link_to 'Back', distributor_customers_path(current_distributor)

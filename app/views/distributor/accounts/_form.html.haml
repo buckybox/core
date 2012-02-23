@@ -1,14 +1,21 @@
-= form_tag(change_balance_distributor_account_path(current_distributor, @account), :method => :put, :class => 'nice') do
+= form_tag(change_balance_distributor_account_path(current_distributor, @account), method: :put, class: 'nice') do
 
-  .inputs
-    .input.string.required.input-text
-      = label_tag 'delta', :class => 'string required' do
-        %abbr{:title => 'required'}*
-        Adjust balance by
-      = text_field_tag 'delta', '0.00', :class => 'string required input-text', :required => 'required', :size => '50'
-    .input.text
-      = label_tag 'note', 'With note', :class => 'text optional'
-      = text_area_tag 'note', '', :class => 'text required', :cols => 40, :rows => 20
+  .row
+    .four.columns
+      .inputs
+        .input.string.required.input-text
+          = label_tag 'delta', class: 'string required' do
+            %abbr{title: 'required'}*
+            Transaction Amount
+          = text_field_tag 'delta', '0.00', class: 'string required input-text', required: 'required', size: '50'
 
-  .actions
-    = submit_tag :submit, :class => 'button radius'
+    .five.columns
+      .inputs
+        .input.text
+          = label_tag 'note', 'Description', class: 'text optional'
+          = text_area_tag 'note', '', class: 'text required', rows: 1, placeholder: 'e.g. cash payment, credit note, refund', style: 'width:100%;'
+
+    .three.columns
+      .actions{style: 'padding-top:12px'}
+        = submit_tag 'Add Transaction', class: 'button radius'
+        = link_to 'cancel', distributor_customer_path(current_distributor, @account.customer)
