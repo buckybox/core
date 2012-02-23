@@ -20,7 +20,7 @@ module ApplicationHelper
       et = schedule.exception_times
       first_et = et.first
       last_et = (et.last + 1.day) # this is shown as the resume day so a day after the last exception date
-      exception_times = "pausing on #{first_et.strftime("%B %d")}#{joiner}resuming on #{last_et.strftime("%B %d")}".html_safe
+      exception_times = "pausing on #{first_et.strftime("%A %d %b")}#{joiner}resuming on #{last_et.strftime("%A %d %b")}".html_safe
       string_schedule << "#{link_to exception_times, '#', data: {'reveal-id' => "pause-modal-#{order.id}"}}"
     end
 
