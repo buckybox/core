@@ -23,4 +23,10 @@ module Distributor::BaseHelper
       end
     end
   end
+
+  def sub_tab(text, path)
+    content_tag(:dd, class: current_page?(path) ? 'active' : '')  do
+      link_to text, path
+    end
+  end
 end
