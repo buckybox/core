@@ -1,7 +1,5 @@
-.nav-bar
-  = topic_tab 'buckylogo.png', distributor_root_path, :image_link => true, :style => 'padding-top:7px; height:39px;'
+%ul.nav-bar
+  %li#bucky-box-logo= image_tag 'buckylogo.png', alt: 'Logo'
   = topic_tab 'Dashboard', distributor_root_path
   = topic_tab 'Customers', distributor_customers_path(current_distributor)
   = topic_tab 'Deliveries', distributor_deliveries_path(current_distributor)
-
-
