@@ -6,8 +6,16 @@ class Distributor::RoutesController < Distributor::BaseController
 
   def create
     create! do |success, failure|
-      success.html { redirect_to distributor_wizard_routes_url }
+      success.html { redirect_to routes_distributor_settings_url}
       failure.html { redirect_to :back }
     end
+  end
+
+  def update
+    update! { routes_distributor_settings_url }
+  end
+
+  def destroy
+    destroy! { routes_distributor_settings_url }
   end
 end
