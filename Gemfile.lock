@@ -223,6 +223,10 @@ GEM
       columnize (>= 0.3.1)
       linecache19 (>= 0.5.11)
       ruby_core_source (>= 0.1.4)
+    ruby-debug19 (0.11.6)
+      columnize (>= 0.3.1)
+      linecache19 (>= 0.5.11)
+      ruby-debug-base19 (>= 0.11.19)
     ruby-progressbar (0.0.10)
     ruby_core_source (0.1.5)
       archive-tar-minitar (>= 0.5.2)
@@ -326,6 +330,7 @@ DEPENDENCIES
   rb-inotify
   rspec-rails
   ruby-debug-base19 (= 0.11.26)
+  ruby-debug19
   sass-rails
   simple_form (~> 1.5.2)
   simplecov
