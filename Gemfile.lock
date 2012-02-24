@@ -1,6 +1,6 @@
 GIT
-  remote: git://github.com/mbleigh/acts-as-taggable-on.git
-  revision: 1338cb82593be43928ecafbc09a0a18f5fc08a94
+  remote: git://github.com/ootoovak/acts-as-taggable-on.git
+  revision: 2077ae92b2ae205c3b1a71664e5665f3da4d4673
   specs:
     acts-as-taggable-on (2.2.2)
       rails (~> 3.0)
@@ -271,7 +271,7 @@ GEM
       multi_json (>= 1.0.2)
     warden (1.1.1)
       rack (>= 1.0)
-    whenever (0.7.2)
+    whenever (0.7.3)
       activesupport (>= 2.3.4)
       chronic (~> 0.6.3)
     xpath (0.1.4)
@@ -324,7 +324,7 @@ DEPENDENCIES
   rspec-rails
   ruby-debug-base19 (= 0.11.26)
   sass-rails
-  simple_form
+  simple_form (~> 1.5.2)
   simplecov
   uglifier
   whenever
