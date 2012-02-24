@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120223062300) do
+ActiveRecord::Schema.define(:version => 20120223234648) do
 
   create_table "accounts", :force => true do |t|
     t.integer  "customer_id"
@@ -33,6 +33,7 @@ ActiveRecord::Schema.define(:version => 20120223062300) do
     t.text     "delivery_note"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "phone"
   end
 
   add_index "addresses", ["customer_id"], :name => "index_addresses_on_customer_id"
@@ -79,7 +80,6 @@ ActiveRecord::Schema.define(:version => 20120223062300) do
   create_table "customers", :force => true do |t|
     t.string   "first_name"
     t.string   "email"
-    t.string   "phone"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "last_name"

@@ -7,7 +7,6 @@
         = f.input :email
         = f.input :first_name
         = f.input :last_name
-        = f.input :phone
         = f.association :route, :collection => current_distributor.routes, :include_blank => false
         = f.input :tag_list, :label => 'Customer tags', :hint => 'Comma separated'
         = f.input :discount, :hint => 'As percentage off'
@@ -20,6 +19,7 @@
           = g.input :suburb
           = g.input :city
           = g.input :postcode
+          = g.input :phone
           = g.input :delivery_note
 
       .actions

@@ -25,10 +25,8 @@
       %strong Deliver To:
       .row
         .twelve.columns
-          = current_customer.address.join('<br/>')
-          - if current_customer.phone
-            = current_customer.phone
-            %br
+          = current_customer.address.join('<br/>', with_phone:true)
+          %br
           = link_to 'change my delivery address', '#', data: {'reveal-id' => 'address-modal'}
 
       .row
