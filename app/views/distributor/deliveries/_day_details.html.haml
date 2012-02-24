@@ -25,7 +25,7 @@
             %ul
               - @items.group_by(&:box).each do |box, array|
                 %li
-                  %span= array.size
+                  %span= array.map(&:quantity).inject(0, :+)
                   = box.name
 
     - if @items.blank?
