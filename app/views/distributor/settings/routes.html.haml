@@ -4,5 +4,25 @@
   - render partial: 'sub_nav'
 
 .row
-  .nine.columns
-    %h3 Settings
+  .four.columns
+    = simple_form_for([current_distributor, @route]) do |f|
+      = f.error_notification
+
+      .inputs
+        = f.input :name
+        = f.input :fee
+        = f.input :monday
+        = f.input :tuesday
+        = f.input :wednesday
+        = f.input :thursday
+        = f.input :friday
+        = f.input :saturday
+        = f.input :sunday
+
+      .actions
+        = f.button :submit
+
+    = button_to 'Next', distributor_wizard_payment_path, :method => :get, :class => 'button radius'
+
+  .eight.columns
+    = render :partial => 'distributor/routes/index'
