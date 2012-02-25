@@ -1,7 +1,7 @@
 class Address < ActiveRecord::Base
   belongs_to :customer, :inverse_of => :address
 
-  attr_accessible :customer, :address_1, :address_2, :suburb, :city, :postcode, :delivery_note
+  attr_accessible :customer, :address_1, :address_2, :suburb, :city, :postcode, :delivery_note, :phone
 
   validates_presence_of :customer, :address_1, :suburb, :city
 
@@ -11,7 +11,7 @@ class Address < ActiveRecord::Base
     result << suburb
     result << city
     result << postcode if options[:with_postcode]
-    result << phone if options[:with_phone]
+    result << "Phone: #{phone}" if options[:with_phone]
 
     return result.join(join_with).html_safe
   end

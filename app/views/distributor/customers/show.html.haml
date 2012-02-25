@@ -1,4 +1,4 @@
-- title "#{@customer.name} (ID:#{@customer.id})"
+= customer_title(@customer)
 
 .row
   .three.columns
@@ -11,8 +11,8 @@
         %li.adr= @address.suburb
         %li.adr= @address.city
         %li.adr= @address.postcode
-      %li.tel= @customer.phone
-      %li.email= @customer.email
+        %li.tel= "Phone: #{@address.phone}"
+      %li.email= "Email: #{@customer.email}"
 
   .three.columns
     %h4== Balance: #{@account.balance.format}
@@ -55,7 +55,7 @@
   .nine.columns
     %h3 Transactions
   .three.columns
-    = link_to 'Adjust Balance', edit_distributor_account_path(current_distributor, @account), :class => 'button radius'
+    = link_to 'Add Transaction', edit_distributor_account_path(current_distributor, @account), :class => 'button radius'
 
 = render 'distributor/transactions/index' unless @transactions.empty?
 

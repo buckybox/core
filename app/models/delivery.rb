@@ -52,6 +52,10 @@ class Delivery < ActiveRecord::Base
     delivery_list.date
   end
 
+  def quantity
+    package.archived_order_quantity
+  end
+
   def future_status?
     status == 'pending'
   end
@@ -135,10 +139,12 @@ class Delivery < ActiveRecord::Base
   end
 
   def trigger_customer_call_reminder
-    Event.trigger(
-      distributor.id,
-      Event::EVENT_TYPES[:customer_call_reminder],
-      { event_category:'customer', customer_id:customer.id, trigger_on:(Time.now + 1.day) }
-    )
+    if customer.new?
+      Event.trigger(
+        distributor.id,
+        Event::EVENT_TYPES[:customer_call_reminder],
+        { event_category: 'customer', customer_id: customer.id, trigger_on: (Time.now + 1.day) }
+      )
+    end
   end
 end

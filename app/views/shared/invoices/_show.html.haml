@@ -1,9 +1,11 @@
-%p Invoice number : #{invoice.full_number}
-%p Sent on : #{invoice.date}
-%p Customer : #{link_to invoice.account.customer.name, [current_distributor, invoice.account.customer]}
-%p Amount : #{invoice.amount}
-%p Status : #{invoice.paid ? "Paid" : "Pending"}
+%p== Invoice number : #{invoice.full_number}
+%p== Sent on : #{invoice.date}
+%p== Customer : #{customer_badge(invoice.account.customer)}
+%p== Amount : #{invoice.amount}
+%p== Status : #{invoice.paid ? "Paid" : "Pending"}
+
 %h4 Items
+
 %table
   %thead
     %tr
@@ -14,7 +16,7 @@
 
   %tbody
     %tr
-      %th{:colspan => 4} Transactions
+      %th{colspan: 4} Transactions
     %tr
       %td= invoice.start_date
       %td Balance forward
@@ -28,7 +30,7 @@
         %td= total += t[:amount]
 
     %tr
-      %th{:colspan => 4} Deliveries
+      %th{colspan: 4} Deliveries
 
     - invoice.deliveries.each do |d| 
       %tr

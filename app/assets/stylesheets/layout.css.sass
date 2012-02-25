@@ -33,3 +33,33 @@ span.label
     background-color: #2A85E8
   a
     color: #fff
+
+$badge-id: #ccc
+$badge-name: #eee
+$badge-text: #000
+
+.customer-badge
+  display: inline-block
+  color: $badge-text
+  background-color: $badge-name
+  -webkit-border-radius: 0.2em
+  -moz-border-radius: 0.2em
+  border-radius: 0.2em
+  &:hover
+    color: lighten($badge-text, 10%)
+    background-color: lighten($badge-name, 2%)
+    .customer-id
+      color: lighten($badge-text, 10%)
+      background-color: lighten($badge-id, 3%)
+  .customer-id
+    font-weight: bold
+    display: inline-block
+    color: $badge-text
+    background-color: $badge-id
+    padding: 0 0.2em
+    -webkit-border-radius: 0.2em
+    -moz-border-radius: 0.2em
+    border-radius: 0.2em
+  .customer-name
+    font-weight: normal
+    padding: 0 0.2em

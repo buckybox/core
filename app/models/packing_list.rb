@@ -1,4 +1,4 @@
-FuturePackingList = Struct.new(:date, :packages, :all_finished)
+FuturePackingList = Struct.new(:date, :packages, :all_finished, :quantity)
 
 class PackingList < ActiveRecord::Base
   belongs_to :distributor

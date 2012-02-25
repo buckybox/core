@@ -47,6 +47,10 @@ class Package < ActiveRecord::Base
     individual_price * archived_order_quantity
   end
 
+  def quantity
+    archived_order_quantity
+  end
+
   def individual_price
     (archived_box_price + archived_route_fee) * (1 - archived_customer_discount)
   end

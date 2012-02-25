@@ -1,4 +1,4 @@
-- title "New Order for #{@account.customer.name}"
+= customer_title(@account.customer, title: "New Order for #{customer_and_number(@account.customer)}")
 
 = render 'form'
 

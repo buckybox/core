@@ -18,12 +18,12 @@ gem 'jquery-rails'
 
 gem 'devise', '~> 1.5.3'
 gem 'multi_json', '~> 1.0.4'
-gem 'simple_form'
+gem 'simple_form', '~> 1.5.2'
 gem 'inherited_resources'
 gem 'mini_magick'
 gem 'carrierwave'
 gem 'money'
-gem 'acts-as-taggable-on'
+gem 'acts-as-taggable-on', git: 'git://github.com/ootoovak/acts-as-taggable-on.git'
 gem 'pg_search'
 gem 'kaminari'
 gem 'airbrake'
@@ -35,7 +35,7 @@ gem 'newrelic_rpm'
 gem 'acts_as_list'
 
 group :development do
-  gem 'nifty-generators', :require => false
+  gem 'nifty-generators', require: false
 
   gem 'capistrano'
   gem 'capistrano_colors'
