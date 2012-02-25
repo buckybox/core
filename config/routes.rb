@@ -15,8 +15,8 @@ BuckyBox::Application.routes.draw do
   resources :distributors do
     resource :bank_information,    controller: 'distributor/bank_information',    only: :create
     resource :invoice_information, controller: 'distributor/invoice_information', only: :create
-    resources :boxes,              controller: 'distributor/boxes',               except: [:index, :new, :show]
-    resources :routes,             controller: 'distributor/routes',              except: [:index, :new, :show]
+    resources :boxes,              controller: 'distributor/boxes',               except: [ :index, :new, :show ]
+    resources :routes,             controller: 'distributor/routes',              except: [ :index, :new, :show ]
     resources :transactions,       controller: 'distributor/transactions',        only: :create
 
     resources :deliveries, controller: 'distributor/deliveries' do
@@ -56,7 +56,7 @@ BuckyBox::Application.routes.draw do
     end
 
     resources :accounts, controller: 'distributor/accounts', only: :edit do
-      resources :orders, controller: 'distributor/orders', except: [:index, :show, :destroy] do
+      resources :orders, controller: 'distributor/orders', except: [ :index, :show, :destroy ] do
         member do
           put 'deactivate'
           put 'pause'
@@ -69,8 +69,8 @@ BuckyBox::Application.routes.draw do
       end
 
       member do
-        get 'receive_payment', :action => :receive_payment, :as => 'receive_payment'
-        post 'save_payment', :action => :save_payment, :as => 'save_payment'
+        get 'receive_payment', action: :receive_payment, as: 'receive_payment'
+        post 'save_payment', action: :save_payment, as: 'save_payment'
       end
     end
 
@@ -113,6 +113,6 @@ BuckyBox::Application.routes.draw do
   namespace :customer do
     root to: 'dashboard#index'
     get 'dashboard',               controller: 'dashboard', action: 'index'
-    get 'order/:order_id/box/:id', controller: 'dashboard',  action: 'box'
+    get 'order/:order_id/box/:id', controller: 'dashboard', action: 'box'
   end
 end
