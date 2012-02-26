@@ -22,15 +22,10 @@ BuckyBox::Application.routes.draw do
     resources :settings, controller: 'distributor/settings', only: [:index] do
       collection do
         get 'routes'
-        put 'routes'
         get 'boxes'
-        get 'boxes'
-        get 'contact_info'
         get 'contact_info'
         get 'bank_info'
-        put 'bank_info'
         get 'basic_reporting'
-        put 'basic_reporting'
       end
     end
 

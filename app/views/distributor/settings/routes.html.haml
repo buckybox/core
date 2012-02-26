@@ -1,7 +1,6 @@
 - title 'Settings', false
 
-- content_for :sub_nav do
-  - render partial: 'sub_nav'
+= show_settings_sub_nav
 
 .row
   .four.columns
@@ -21,8 +20,6 @@
 
       .actions
         = f.button :submit
-
-    = button_to 'Next', distributor_wizard_payment_path, :method => :get, :class => 'button radius'
 
   .eight.columns
     = render :partial => 'distributor/routes/index'

@@ -7,7 +7,6 @@ class Distributor::RoutesController < Distributor::BaseController
   def create
     create! do |success, failure|
       success.html { redirect_to routes_distributor_settings_url}
-      failure.html { redirect_to :back }
     end
   end
 
