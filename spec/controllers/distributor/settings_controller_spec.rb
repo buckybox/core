@@ -10,18 +10,17 @@ describe Distributor::SettingsController do
     @invoice = Fabricate(:invoice, :account => @customer.account)
   end
 
-  context 'visiting Distributor Settings' do
-    it 'should redirect index to routes' do
-      get :index, :distributor_id => @distributor.id
-      response.should redirect_to(routes_distributor_settings_url(@distributor))
-    end
+  describe '#index' do
+    before(:each) { get :index, :distributor_id => @distributor.id }
+    specify { response.should redirect_to(routes_distributor_settings_url(@distributor)) }
   end
 
-  context 'routes' do
-    it 'should show routes and provide new form' do
+  describe '#routes' do
+    before(:each) do
       get :routes, :distributor_id => @distributor.id
-      assigns(:route).should be_a_new(Route)
-      assigns(:routes).should == @distributor.routes
     end
+    specify { assigns(:routes).should eq(@distributor.routes) }
+    specify { assigns(:route).should be_a_new(Route) }
   end
+
 end
