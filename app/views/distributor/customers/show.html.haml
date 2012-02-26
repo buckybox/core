@@ -36,7 +36,7 @@
 .row
   .nine.columns
     %h3 Orders
-  .three.columns
+  .three.columns.text-right
     = link_to 'New Order', new_distributor_account_order_path(current_distributor, @account), :class => 'button radius'
 
 = render 'distributor/orders/index' unless @orders.empty?
@@ -54,7 +54,7 @@
 .row
   .nine.columns
     %h3 Transactions
-  .three.columns
+  .three.columns.text-right
     = link_to 'Add Transaction', edit_distributor_account_path(current_distributor, @account), :class => 'button radius'
 
 = render 'distributor/transactions/index' unless @transactions.empty?
