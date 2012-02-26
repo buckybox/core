@@ -1,5 +1,5 @@
 class Customer::OrdersController < Customer::BaseController
-  actions :update
+  actions :new, :create, :update
 
   belongs_to :customer
 

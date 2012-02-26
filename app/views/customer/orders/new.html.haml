@@ -1,0 +1,6 @@
+= customer_title(@customer, link: customer_root_path, title: "New Order for #{customer_and_number(@customer)}")
+
+= render partial: 'customer/orders/form', locals: { order: @order }
+
+= link_to 'Cancel', customer_root_path
+
