@@ -1,5 +1,7 @@
 %h1 New distributor_route
 
+= show_settings_sub_nav(:routes)
+
 = render 'form'
 
-= link_to 'Back', distributor_routes_path
+= link_to 'Back', routes_distributor_settings_path(@distributor)
