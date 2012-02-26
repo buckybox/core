@@ -3,12 +3,12 @@ FutureDeliveryList = Struct.new(:date, :deliveries, :all_finished)
 class DeliveryList < ActiveRecord::Base
   belongs_to :distributor
 
-  has_many :deliveries, :dependent => :destroy, :order => :position
+  has_many :deliveries, dependent: :destroy, order: :position
 
   attr_accessible :distributor, :date
 
   validates_presence_of :distributor, :date
-  validates_uniqueness_of :date, :scope => :distributor_id
+  validates_uniqueness_of :date, scope: :distributor_id
 
   default_scope order(:date)
 
@@ -57,7 +57,7 @@ class DeliveryList < ActiveRecord::Base
     packages = packages.sort.map{ |key, value| value }.flatten
 
     packages.each do |package|
-      delivery_list.deliveries.find_or_create_by_package_id(package.id, :order => package.order)
+      delivery_list.deliveries.find_or_create_by_package_id(package.id, order: package.order)
     end
 
     return delivery_list
@@ -66,11 +66,7 @@ class DeliveryList < ActiveRecord::Base
   def mark_all_as_auto_delivered
     result = true
 
-    deliveries.each do |delivery|
-      delivery.status = 'delivered'
-      delivery.delivery_method = 'auto'
-      result &= delivery.save
-    end
+    deliveries.each { |delivery| result &= Delivery.auto_deliver(delivery) }
 
     return result
   end
