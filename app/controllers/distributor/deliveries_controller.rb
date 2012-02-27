@@ -96,7 +96,7 @@ class Distributor::DeliveriesController < Distributor::BaseController
             order.id,
             delivery.id,
             delivery.date.strftime("%-d %b %Y"),
-            customer.id,
+            customer.number,
             customer.first_name,
             customer.last_name,
             address.phone,

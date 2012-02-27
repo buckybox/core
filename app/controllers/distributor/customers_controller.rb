@@ -6,6 +6,7 @@ class Distributor::CustomersController < Distributor::BaseController
   def new
     new! do
       @address = @customer.build_address
+      @customer.number = Customer.next_number(current_distributor)
     end
   end
 
@@ -46,7 +47,15 @@ class Distributor::CustomersController < Distributor::BaseController
     @customers = end_of_association_chain.includes(:address, :account)
 
     @customers = @customers.tagged_with(params[:tag]) unless params[:tag].blank?
-    @customers = @distributor.customers.search(params[:query]) unless params[:query].blank?
+
+    unless params[:query].blank?
+
+      if params[:query].to_i == 0
+        @customers = @distributor.customers.search(params[:query])
+      else
+        @customers = @distributor.customers.where(number: params[:query].to_i)
+      end
+    end
 
     @customers = @customers.page(params[:page]) if params[:page]
   end

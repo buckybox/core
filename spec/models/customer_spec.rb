@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe Customer do
   before :all do
-    @customer = Fabricate(:customer, :email => ' BuckyBox@example.com ')
+    @customer = Fabricate(:customer, email: ' BuckyBox@example.com ')
   end
 
   specify { @customer.should be_valid }
@@ -10,25 +10,16 @@ describe Customer do
 
   context "initializing" do
     before(:each) do
-      @customer = Customer.create!(:first_name => 'test', 
-                               :last_name => 'test',
-                               :email => 'test@buckybox.com',
-                               :route => Fabricate(:route),
-                               :distributor => Fabricate(:distributor))
+      @customer = Customer.create!(first_name: 'test',
+                               last_name: 'test',
+                               email: 'test@buckybox.com',
+                               route: Fabricate(:route),
+                               distributor: Fabricate(:distributor))
     end
 
     specify { @customer.number.should_not be_nil }
     specify { @customer.account.should_not be_nil }
-
-    it "creates a customer number" do
-      @customer.number.should_not be_nil
-    end
-    it "throws error if unable to find a free customer number" do
-      distributor = Fabricate(:distributor)
-      distributor.stub_chain(:customers,:find_by_number).and_return(true)
-
-      expect {  Fabricate(:customer, :distributor => distributor) }.should raise_error 
-    end
+    specify { @customer.number.should_not be_nil }
   end
 
   context 'random password' do
@@ -63,14 +54,14 @@ describe Customer do
 
   context 'when searching' do
     before :each do
-      address = Fabricate(:address, :city => 'Edinburgh')
+      address = Fabricate(:address, city: 'Edinburgh')
       customer2 = address.customer
       customer2.first_name = 'Smith'
       customer2.save
 
-      Fabricate(:address, :city => 'Edinburgh')
-      Fabricate(:customer, :last_name => 'Smith')
-      Fabricate(:customer, :first_name => 'John', :last_name =>'Smith')
+      Fabricate(:address, city: 'Edinburgh')
+      Fabricate(:customer, last_name: 'Smith')
+      Fabricate(:customer, first_name: 'John', :last_name =>'Smith')
     end
 
     specify { Customer.search('Edinburgh').size.should == 2 }
