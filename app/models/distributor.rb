@@ -108,14 +108,14 @@ class Distributor < ActiveRecord::Base
   end
 
   def generate_daily_lists_schedule(time = Time.new.beginning_of_day)
-    time = Time.at((time.to_f / 1.hour).floor * 1.hour) # make sure time starts on the hour
+    time = time.change(min: 0, sec: 0, usec: 0) # make sure time starts on the hour
     schedule = Schedule.new(time, duration: 3600) # make sure it lasts for an hour
     schedule.add_recurrence_rule Rule.daily # and have it reoccur daily
     self[:daily_lists_schedule] = schedule.to_hash
   end
 
   def generate_auto_delivery_schedule(time = Time.new.end_of_day)
-    time = Time.at((time.to_f / 1.hour).floor * 1.hour) # make sure time starts on the hour
+    time = time.change(min: 0, sec: 0, usec: 0) # make sure time starts on the hour
     schedule = Schedule.new(time, duration: 3600) # make sure it lasts for an hour
     schedule.add_recurrence_rule Rule.daily # and have it reoccur daily
     self[:auto_delivery_schedule] = schedule.to_hash
