@@ -14,7 +14,7 @@ BuckyBox::Application.routes.draw do
 
   resources :distributors do
     resource :bank_information,    controller: 'distributor/bank_information',    only: :create
-    resource :invoice_information, controller: 'distributor/invoice_information', only: :create
+    resource :invoice_information, controller: 'distributor/invoice_information', only: [:create, :update]
     resources :boxes,              controller: 'distributor/boxes',               except: :index
     resources :routes,             controller: 'distributor/routes',              except: :index
     resources :transactions,       controller: 'distributor/transactions',        only: :create
