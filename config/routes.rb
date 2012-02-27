@@ -98,6 +98,8 @@ BuckyBox::Application.routes.draw do
   resources :customers, controller: 'customer/customers', only: :update do
     resource  :address, controller: 'customer/address', only: :update
 
+    resources :boxes, controller: 'distributor/boxes', only: :show
+
     resources :orders,  controller: 'customer/orders',  only: [ :new, :create, :update ] do
       member do
         put 'pause'
