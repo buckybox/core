@@ -1,6 +1,6 @@
 class Distributor::RoutesController < Distributor::BaseController
   belongs_to :distributor
-  actions :all, except: [ :index ]
+  actions :all, except: [ :index, :destroy ]
 
   respond_to :html, :xml, :json
 
@@ -12,9 +12,5 @@ class Distributor::RoutesController < Distributor::BaseController
 
   def update
     update! { routes_distributor_settings_url }
-  end
-
-  def destroy
-    destroy! { routes_distributor_settings_url }
   end
 end

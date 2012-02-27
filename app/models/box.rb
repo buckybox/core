@@ -13,7 +13,7 @@ class Box < ActiveRecord::Base
 
   # Setup accessible (or protected) attributes for your model
   attr_accessible :distributor, :name, :description, :likes, :dislikes, :price, :available_single, :available_weekly, 
-    :available_fourtnightly, :box_image
+    :available_fourtnightly, :box_image, :box_image_cache, :remove_box_image
 
   validates_presence_of :distributor, :name, :description, :price
 

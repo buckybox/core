@@ -3,5 +3,37 @@
 = show_settings_sub_nav
 
 .row
-  .nine.columns
-    %h3 Settings
+  = simple_form_for([current_distributor, @box]) do |f|
+    %fieldset
+      %legend Add Box
+      = f.error_notification
+
+      .three.columns
+        = f.input :name, :label => false, :placeholder => "Name"
+        = f.input :price, :as => :currency, :label => false, :input_html => { :class => "input-text" }, :hint => "per box"
+        %fieldset
+          %p Custom boxes
+          = f.input :likes, :label => "Enable likes"
+          = f.input :dislikes, :label => "Enable dislikes"
+        %fieldset
+          %p Delivery options
+          = f.input :available_single, :label => "One-time delivery"
+          = f.input :available_weekly, :label => "Weekly"
+          = f.input :available_fourtnightly, :label => "Fortnightly"
+
+      .four.columns
+        = f.input :description, :label => false, :placeholder => "Description", :input_html => { :rows => 15 }
+
+      .four.columns
+        %p Choose your logo
+        = f.input :box_image, :label => false, :hint => "Any jpeg, gif or png image file"
+        = f.input :box_image_cache, :as => :hidden
+        .uploaded_image
+          = image_tag(@box.box_image.url) if @box.box_image?
+        .image-thumbnail
+        .actions
+          = f.button :submit
+
+    .clear
+
+  = render :partial => 'distributor/boxes/index'

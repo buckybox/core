@@ -12,6 +12,8 @@ class Distributor::SettingsController < Distributor::BaseController
   end
 
   def boxes
+    @box = Box.new
+    @boxes = current_distributor.boxes
   end
 
   def contact_info

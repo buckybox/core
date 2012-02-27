@@ -1,13 +1,16 @@
 class Distributor::BoxesController < Distributor::BaseController
   belongs_to :distributor
-  actions :all, except: [ :index ]
+  actions :all, except: [ :index, :destroy ]
 
   respond_to :html, :xml, :json
 
   def create
     create! do |success, failure|
-      success.html { redirect_to distributor_wizard_boxes_url }
-      failure.html { redirect_to :back }
+      success.html { redirect_to boxes_distributor_settings_url }
     end
+  end
+
+  def update
+    update! { boxes_distributor_settings_url }
   end
 end

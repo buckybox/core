@@ -14,7 +14,8 @@
     = f.input :box_image_cache, :as => :hidden
 
   .uploaded_image
-    = image_tag(@box.box_image.url) if @box.box_image?
-
+    - if @box.box_image?
+      = image_tag(@box.box_image.url)
+      = f.input :remove_box_image, as: :boolean, label: "Remove image"
   .actions
     = f.button :submit
