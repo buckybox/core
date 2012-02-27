@@ -23,4 +23,36 @@ describe Distributor::SettingsController do
     specify { assigns(:route).should be_a_new(Route) }
   end
 
+  describe '#boxes' do
+    before(:each) do
+      get :boxes, :distributor_id => @distributor.id
+    end
+    specify { assigns(:boxes).should eq(@distributor.boxes) }
+    specify { assigns(:box).should be_a_new(Box) }
+  end
+  
+  describe '#contact_info' do
+    before(:each) do
+      get :contact_info, :distributor_id => @distributor.id
+    end
+    specify { response.should render_template 'distributor/settings/contact_info' }
+  end
+
+  describe '#bank_info' do
+    context 'without invoice_information' do
+      before(:each) do
+        get :bank_info, :distributor_id => @distributor.id
+      end
+      specify { response.should render_template 'distributor/settings/bank_info' }
+      specify { assigns(:invoice_information).should be_a_new(InvoiceInformation) }
+    end
+    context 'with invoice_information' do
+      before(:each) do
+        @invoice_information = Fabricate(:invoice_information, distributor: @distributor)
+        get :bank_info, :distributor_id => @distributor.id
+      end
+      specify { assigns(:invoice_information).should eq(@invoice_information) }
+    end
+  end
+
 end
