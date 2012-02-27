@@ -1,7 +1,20 @@
 - title 'Settings', false
 
-= show_settings_sub_nav
+= show_settings_sub_nav(:bank_info)
 
 .row
-  .nine.columns
-    %h3 Settings
+  .four.columns
+    = simple_form_for(@invoice_information, :url => distributor_invoice_information_path(current_distributor)) do |f|
+      = f.error_notification
+
+      .inputs
+        = f.input :gst_number
+        = f.input :billing_address_1
+        = f.input :billing_address_2
+        = f.input :billing_suburb
+        = f.input :billing_city
+        = f.input :billing_postcode
+        = f.input :phone
+
+      .actions
+        = f.button :submit, 'Save'

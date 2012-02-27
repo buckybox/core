@@ -20,6 +20,7 @@ class Distributor::SettingsController < Distributor::BaseController
   end
 
   def bank_info
+    @invoice_information = current_distributor.invoice_information || InvoiceInformation.new
   end
 
   def basic_reporting
