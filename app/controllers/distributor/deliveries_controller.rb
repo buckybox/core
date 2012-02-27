@@ -99,7 +99,7 @@ class Distributor::DeliveriesController < Distributor::BaseController
             customer.id,
             customer.first_name,
             customer.last_name,
-            customer.phone,
+            address.phone,
             (delivery.customer.new? ? 'NEW' : nil),
             address.address_1,
             address.address_2,
