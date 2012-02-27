@@ -41,10 +41,10 @@ class Customer < ActiveRecord::Base
   before_validation :randomize_password_if_not_present
   before_validation :discount_percentage
 
-  before_create :initialize_number, if: 'number.nil?'
   before_create :setup_account
   before_create :setup_address
 
+  before_save :initialize_number, if: 'number.nil?'
   before_save :format_email
 
   after_create :trigger_new_customer
@@ -79,19 +79,13 @@ class Customer < ActiveRecord::Base
   private
 
   def initialize_number
-    if self.number.nil?
-      number = rand(999999)
-      safety = 1
+    existing_customers = distributor.customers
 
-      while(self.distributor.customers.find_by_number(number.to_s).present? && safety < 100) do
-        number += 1
-        safety += 1
-        number = rand(1000000) if safety.modulo(10) == 0
-      end
-
-      throw "unable to assign customer number" if safety > 99
-
-      self.number = number.to_s
+    if existing_customers.size == 0
+      self.number = 1
+    else
+      max_number = distributor.customers.maximum(:number)
+      self.number = max_number + 1
     end
   end
 

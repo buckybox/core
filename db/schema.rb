@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120223234648) do
+ActiveRecord::Schema.define(:version => 20120227092736) do
 
   create_table "accounts", :force => true do |t|
     t.integer  "customer_id"
@@ -84,7 +84,6 @@ ActiveRecord::Schema.define(:version => 20120223234648) do
     t.datetime "updated_at"
     t.string   "last_name"
     t.integer  "distributor_id"
-    t.string   "number"
     t.integer  "route_id"
     t.string   "encrypted_password",     :limit => 128, :default => "",  :null => false
     t.string   "reset_password_token"
@@ -104,6 +103,7 @@ ActiveRecord::Schema.define(:version => 20120223234648) do
     t.datetime "locked_at"
     t.string   "authentication_token"
     t.decimal  "discount",                              :default => 0.0, :null => false
+    t.integer  "number"
   end
 
   add_index "customers", ["authentication_token"], :name => "index_customers_on_authentication_token", :unique => true
@@ -119,7 +119,7 @@ ActiveRecord::Schema.define(:version => 20120223234648) do
     t.datetime "updated_at"
     t.string   "status"
     t.integer  "route_id"
-    t.string   "delivery_method"
+    t.string   "status_change_type"
     t.integer  "delivery_list_id"
     t.integer  "position"
     t.integer  "package_id"
