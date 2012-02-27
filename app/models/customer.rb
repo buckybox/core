@@ -19,13 +19,6 @@ class Customer < ActiveRecord::Base
 
   acts_as_taggable
 
-  pg_search_scope :search,
-    against: [ :first_name, :last_name, :email, :number ],
-    associated_against: {
-      address: [ :address_1, :address_2, :suburb, :city, :postcode, :delivery_note ]
-    },
-    using: { tsearch: { prefix: true } }
-
   accepts_nested_attributes_for :address
 
   attr_accessible :address_attributes, :first_name, :last_name, :email, :name, :distributor_id, :distributor,
@@ -51,6 +44,33 @@ class Customer < ActiveRecord::Base
 
   default_scope order(:first_name)
 
+  pg_search_scope :search,
+    against: [ :first_name, :last_name, :email ],
+    associated_against: {
+      address: [ :address_1, :address_2, :suburb, :city, :postcode, :delivery_note ]
+    },
+    using: { tsearch: { prefix: true } }
+
+  def self.random_string(len = 10)
+    # generate a random password consisting of strings and digits
+    chars = ("a".."z").to_a + ("A".."Z").to_a + ("0".."9").to_a
+    newpass = ""
+    1.upto(len) { |i| newpass << chars[rand(chars.size - 1)] }
+    return newpass
+  end
+
+  def self.next_number(distributor)
+    existing_customers = distributor.customers
+    result = 1
+
+    unless existing_customers.size == 0
+      max_number = distributor.customers.maximum(:number)
+      result = max_number + 1
+    end
+
+    return result
+  end
+
   def new?
     deliveries.size == 1
   end
@@ -68,25 +88,10 @@ class Customer < ActiveRecord::Base
     self.password_confirmation = password
   end
 
-  def self.random_string(len = 10)
-    # generate a random password consisting of strings and digits
-    chars = ("a".."z").to_a + ("A".."Z").to_a + ("0".."9").to_a
-    newpass = ""
-    1.upto(len) { |i| newpass << chars[rand(chars.size - 1)] }
-    return newpass
-  end
-
   private
 
   def initialize_number
-    existing_customers = distributor.customers
-
-    if existing_customers.size == 0
-      self.number = 1
-    else
-      max_number = distributor.customers.maximum(:number)
-      self.number = max_number + 1
-    end
+    self.number = Customer.next_number(distributor)
   end
 
   def randomize_password_if_not_present
