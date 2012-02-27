@@ -29,7 +29,7 @@ class Customer < ActiveRecord::Base
   accepts_nested_attributes_for :address
 
   attr_accessible :address_attributes, :first_name, :last_name, :email, :name, :distributor_id, :distributor,
-    :route, :route_id, :password, :password_confirmation, :remember_me, :tag_list, :discount
+    :route, :route_id, :password, :password_confirmation, :remember_me, :tag_list, :discount, :number
 
   validates_presence_of :first_name, :email, :distributor, :route, :discount
   validates_uniqueness_of :email, scope: :distributor_id
@@ -41,7 +41,7 @@ class Customer < ActiveRecord::Base
   before_validation :randomize_password_if_not_present
   before_validation :discount_percentage
 
-  before_create :initialize_number
+  before_create :initialize_number, if: 'number.nil?'
   before_create :setup_account
   before_create :setup_address
 
@@ -76,9 +76,11 @@ class Customer < ActiveRecord::Base
     return newpass
   end
 
+  private
+
   def initialize_number
     if self.number.nil?
-      number = rand(1000000)
+      number = rand(999999)
       safety = 1
 
       while(self.distributor.customers.find_by_number(number.to_s).present? && safety < 100) do
@@ -92,8 +94,6 @@ class Customer < ActiveRecord::Base
       self.number = number.to_s
     end
   end
-
-  private
 
   def randomize_password_if_not_present
     randomize_password unless encrypted_password.present?
