@@ -13,7 +13,7 @@
           .float-right
             - if customer_signed_in?
               Signed in as
-              %strong=  customer_badge(current_customer, link: customer_root_path)
+              %strong= customer_badge(current_customer, link: customer_root_path)
               \|
               = link_to 'logout', destroy_customer_session_path, method: :delete
             - else

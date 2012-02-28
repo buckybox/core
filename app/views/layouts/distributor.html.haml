@@ -11,12 +11,13 @@
           #session-links
             - if distributor_signed_in?
               Signed in as 
-              %strong=  link_to current_distributor.name, distributor_settings_path(current_distributor)
-              = link_to 'Logout', destroy_distributor_session_path, :method => :delete
-            - else   
-              = link_to 'Sign up', new_distributor_registration_path
-              or  
-              = link_to 'Login', new_distributor_session_path
+              %strong= current_distributor.name
+              \|
+              = link_to 'settings', distributor_settings_path(current_distributor)
+              \|
+              = link_to 'logout', destroy_distributor_session_path, :method => :delete
+            - else
+              = link_to 'login', new_distributor_session_path
 
       #dashboard-content.row
         .twelve.columns
