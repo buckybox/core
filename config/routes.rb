@@ -25,7 +25,7 @@ BuckyBox::Application.routes.draw do
         get 'boxes'
         get 'contact_info'
         get 'bank_info'
-        get 'basic_reporting'
+        get 'reporting'
       end
     end
 
