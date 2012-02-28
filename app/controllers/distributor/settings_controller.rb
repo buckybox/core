@@ -15,7 +15,7 @@ class Distributor::SettingsController < Distributor::BaseController
     @boxes = current_distributor.boxes
   end
 
-  def contact_info
+  def business_info
   end
 
   def bank_info

@@ -6,8 +6,8 @@ class DistributorsController < Distributor::BaseController
   #TODO: this looks like it is missing authentication to me - jbv
   def update
     update! do |success, failure|
-      success.html { redirect_to contact_info_distributor_settings_url(@distributor) }
-      failure.html { render template: 'distributor/settings/contact_info' }
+      success.html { redirect_to business_info_distributor_settings_url(@distributor) }
+      failure.html { render template: 'distributor/settings/business_info' }
     end
   end
 end
