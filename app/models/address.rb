@@ -16,8 +16,9 @@ class Address < ActiveRecord::Base
     end
 
     if options[:with_phone]
-      result << "Phone:  #{phone}" unless phone.blank?
-      result << "Mobile: #{mobile}" unless mobile.blank?
+      result << "Phone 1: #{phone}"   unless phone.blank?
+      result << "Phone 2: #{phone_2}" unless phone_2.blank?
+      result << "Phone 3: #{phone_3}" unless phone_3.blank?
     end
 
     return result.join(join_with).html_safe
