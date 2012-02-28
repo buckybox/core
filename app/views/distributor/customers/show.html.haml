@@ -11,9 +11,9 @@
         %li.adr= @address.suburb
         %li.adr= @address.city
         %li.adr= @address.postcode
-        %li.tel= "Phone 1: #{@address.phone_1}"
-        %li.tel= "Phone 2: #{@address.phone_2}"
-        %li.tel= "Phone 3: #{@address.phone_3}"
+        %li.tel= "Phone 1: #{@address.phone_1}" unless @address.phone_1.blank?
+        %li.tel= "Phone 2: #{@address.phone_2}" unless @address.phone_2.blank?
+        %li.tel= "Phone 3: #{@address.phone_3}" unless @address.phone_3.blank?
       %li.email= "Email: #{@customer.email}"
 
   .three.columns
