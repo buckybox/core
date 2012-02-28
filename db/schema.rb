@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120228033613) do
+ActiveRecord::Schema.define(:version => 20120228210358) do
 
   create_table "accounts", :force => true do |t|
     t.integer  "customer_id"
@@ -75,6 +75,7 @@ ActiveRecord::Schema.define(:version => 20120228033613) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "box_image"
+    t.boolean  "available_monthly",      :default => false, :null => false
   end
 
   add_index "boxes", ["distributor_id"], :name => "index_boxes_on_distributor_id"
