@@ -10,4 +10,4 @@
 
 = show_settings_metric('Distributor Since', current_distributor.created_at.to_s(:month_and_year))
 = show_settings_metric('Total Customers', current_distributor.customers.count)
-= show_settings_metric('Deliveries to Date', current_distributor.deliveries.count)
+= show_settings_metric('Deliveries to Date', current_distributor.deliveries.delivered.count)
