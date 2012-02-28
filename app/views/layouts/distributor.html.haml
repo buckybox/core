@@ -7,17 +7,16 @@
             = flash_bar(kind, message)
 
       .row
-        .twelve.columns
-          #session-links
-            - if distributor_signed_in?
-              Signed in as 
-              %strong= current_distributor.name
-              \|
-              = link_to 'settings', distributor_settings_path(current_distributor)
-              \|
-              = link_to 'logout', destroy_distributor_session_path, :method => :delete
-            - else
-              = link_to 'login', new_distributor_session_path
+        .twelve.columns.text-right
+          - if distributor_signed_in?
+            Signed in as 
+            %strong= current_distributor.name
+            \|
+            = link_to 'settings', distributor_settings_path(current_distributor)
+            \|
+            = link_to 'logout', destroy_distributor_session_path, :method => :delete
+          - else
+            = link_to 'login', new_distributor_session_path
 
       #dashboard-content.row
         .twelve.columns
