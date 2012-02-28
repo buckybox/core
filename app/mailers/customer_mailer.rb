@@ -15,6 +15,9 @@ class CustomerMailer < ActionMailer::Base
     @account = invoice.account
     @customer = @account.customer
     @distributor = @account.distributor
-    mail to: @customer.email, subject: "Your #{@distributor.name} Bill/Account Statement ##{@invoice.number}"
+
+    mail to: @customer.email,
+      from: @distributor.support_email,
+      subject: "Your #{@distributor.name} Bill/Account Statement ##{@invoice.number}"
   end
 end
