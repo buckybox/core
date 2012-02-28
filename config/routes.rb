@@ -23,7 +23,7 @@ BuckyBox::Application.routes.draw do
       collection do
         get 'routes'
         get 'boxes'
-        get 'contact_info'
+        get 'business_info'
         get 'bank_info'
         get 'reporting'
       end

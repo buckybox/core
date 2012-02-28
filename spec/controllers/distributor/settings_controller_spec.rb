@@ -31,11 +31,11 @@ describe Distributor::SettingsController do
     specify { assigns(:box).should be_a_new(Box) }
   end
   
-  describe '#contact_info' do
+  describe '#business_info' do
     before(:each) do
-      get :contact_info, distributor_id: @distributor.id
+      get :business_info, distributor_id: @distributor.id
     end
-    specify { response.should render_template 'distributor/settings/contact_info' }
+    specify { response.should render_template 'distributor/settings/business_info' }
   end
 
   describe '#bank_info' do
