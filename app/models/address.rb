@@ -1,7 +1,7 @@
 class Address < ActiveRecord::Base
   belongs_to :customer, :inverse_of => :address
 
-  attr_accessible :customer, :address_1, :address_2, :suburb, :city, :postcode, :delivery_note, :phone
+  attr_accessible :customer, :address_1, :address_2, :suburb, :city, :postcode, :delivery_note, :phone_1, :phone_2, :phone_3
 
   validates_presence_of :customer, :address_1, :suburb, :city
 
@@ -16,7 +16,7 @@ class Address < ActiveRecord::Base
     end
 
     if options[:with_phone]
-      result << "Phone 1: #{phone}"   unless phone.blank?
+      result << "Phone 1: #{phone_1}" unless phone_1.blank?
       result << "Phone 2: #{phone_2}" unless phone_2.blank?
       result << "Phone 3: #{phone_3}" unless phone_3.blank?
     end

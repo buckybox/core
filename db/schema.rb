@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120228003940) do
+ActiveRecord::Schema.define(:version => 20120228033613) do
 
   create_table "accounts", :force => true do |t|
     t.integer  "customer_id"
@@ -33,7 +33,7 @@ ActiveRecord::Schema.define(:version => 20120228003940) do
     t.text     "delivery_note"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "phone"
+    t.string   "phone_1"
     t.string   "phone_2"
     t.string   "phone_3"
   end
@@ -106,6 +106,7 @@ ActiveRecord::Schema.define(:version => 20120228003940) do
     t.string   "authentication_token"
     t.decimal  "discount",                              :default => 0.0, :null => false
     t.integer  "number"
+    t.text     "notes"
   end
 
   add_index "customers", ["authentication_token"], :name => "index_customers_on_authentication_token", :unique => true

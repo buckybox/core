@@ -11,6 +11,7 @@
         = f.association :route, :collection => current_distributor.routes, :include_blank => false
         = f.input :tag_list, :label => 'Customer tags', :hint => 'Comma separated'
         = f.input :discount
+        = f.input :notes
 
     .six.columns
       = f.simple_fields_for :address do |g|
@@ -20,7 +21,7 @@
           = g.input :suburb
           = g.input :city
           = g.input :postcode
-          = g.input :phone
+          = g.input :phone_1
           = g.input :phone_2
           = g.input :phone_3
           = g.input :delivery_note

@@ -11,7 +11,9 @@
         %li.adr= @address.suburb
         %li.adr= @address.city
         %li.adr= @address.postcode
-        %li.tel= "Phone: #{@address.phone}"
+        %li.tel= "Phone 1: #{@address.phone_1}"
+        %li.tel= "Phone 2: #{@address.phone_2}"
+        %li.tel= "Phone 3: #{@address.phone_3}"
       %li.email= "Email: #{@customer.email}"
 
   .three.columns
