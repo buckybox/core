@@ -1,9 +1,5 @@
-%h1 Editing '#{@box.name}'
+- title "Editing #{@box.name}"
 
 = show_settings_sub_nav(:boxes)
 
 = render 'form'
-
-= link_to 'Show', @distributor_box
-\|
-= link_to 'Back', distributor_boxes_path
