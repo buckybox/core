@@ -1,30 +1,21 @@
 class Distributor::OrdersController < Distributor::BaseController
   nested_belongs_to :distributor, :account
-  actions :all, :except => [:index, :show, :destroy]
+  actions :all, except: [:index, :show, :destroy]
 
   respond_to :html, :xml, :json
 
   def create
-    @distributor = Distributor.find(params[:distributor_id])
-    @account = Account.find(params[:account_id])
-    @order = Order.new(params[:order])
+    @distributor     = Distributor.find(params[:distributor_id])
+    @account         = Account.find(params[:account_id])
+    @order           = Order.new(params[:order])
 
-    frequency = params[:order][:frequency]
-    start_time = Date.parse(params[:start_date]).to_time
-    schedule = IceCube::Schedule.new(start_time)
+    frequency        = params[:order][:frequency]
+    start_time       = Date.parse(params[:start_date]).to_time
+    days_by_number   = params[:days].values.map(&:to_i).sort unless frequency == 'single'
 
-    if frequency == 'single'
-      schedule.add_recurrence_time(start_time)
-    else
-      days_by_number = params[:days].values.map(&:to_i).sort
-      weeks_between_deliveries = Order::FREQUENCY_HASH[frequency]
+    @order.schedule  = Order.create_schedule(start_time, frequency, days_by_number)
 
-      recurrence_rule = IceCube::Rule.weekly(weeks_between_deliveries).day(*days_by_number)
-      schedule.add_recurrence_rule(recurrence_rule)
-    end
-
-    @order.account = @account
-    @order.schedule = schedule
+    @order.account   = @account
     @order.completed = true
 
     create! { [current_distributor, @account.customer] }
@@ -32,8 +23,8 @@ class Distributor::OrdersController < Distributor::BaseController
 
   def update
     @distributor = current_distributor
-    @account = @distributor.accounts.find(params[:account_id])
-    @order = @distributor.orders.find(params[:id])
+    @account     = @distributor.accounts.find(params[:account_id])
+    @order       = @distributor.orders.find(params[:id])
 
     # Not allowing changes to the schedule at the moment
     # Will revisit when we have time to build a proper UI for it
