@@ -34,7 +34,8 @@ ActiveRecord::Schema.define(:version => 20120228003940) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "phone"
-    t.string   "mobile"
+    t.string   "phone_2"
+    t.string   "phone_3"
   end
 
   add_index "addresses", ["customer_id"], :name => "index_addresses_on_customer_id"
