@@ -1,5 +1,4 @@
 class Distributor::SettingsController < Distributor::BaseController
-
   respond_to :html, :json
 
   def index
@@ -25,5 +24,4 @@ class Distributor::SettingsController < Distributor::BaseController
 
   def reporting
   end
-
 end

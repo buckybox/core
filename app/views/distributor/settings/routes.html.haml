@@ -1,25 +1,11 @@
-- title 'Settings', false
+- title 'Route Settings'
 
 = show_settings_sub_nav
 
 .row
   .four.columns
-    = simple_form_for([current_distributor, @route]) do |f|
-      = f.error_notification
-
-      .inputs
-        = f.input :name
-        = f.input :fee
-        = f.input :monday
-        = f.input :tuesday
-        = f.input :wednesday
-        = f.input :thursday
-        = f.input :friday
-        = f.input :saturday
-        = f.input :sunday
-
-      .actions
-        = f.button :submit
+    %h3 Add Route
+    = render partial: 'distributor/routes/form'
 
   .eight.columns
-    = render :partial => 'distributor/routes/index'
+    = render partial: 'distributor/routes/index'
