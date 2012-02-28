@@ -67,6 +67,6 @@ module Distributor::DashboardHelper
 
 
   def date_for notification
-    notification.created_at.strftime("%d %B")
+    notification.created_at.to_s(:date_month)
   end
 end

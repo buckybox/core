@@ -7,6 +7,7 @@ set :use_sudo, false
 
 set :rake, 'bundle exec rake'
 set :whenever_command, 'bundle exec whenever'
+set :ssh_options, { :forward_agent => true }
 
 task :staging do
   set :domain, '173.255.206.188'
