@@ -10,8 +10,15 @@ class Address < ActiveRecord::Base
     result << address_2 unless address_2.blank?
     result << suburb
     result << city
-    result << postcode if options[:with_postcode]
-    result << "Phone: #{phone}" if options[:with_phone]
+
+    if options[:with_postcode]
+      result << postcode unless postcode.blank?
+    end
+
+    if options[:with_phone]
+      result << "Phone:  #{phone}" unless phone.blank?
+      result << "Mobile: #{mobile}" unless mobile.blank?
+    end
 
     return result.join(join_with).html_safe
   end
