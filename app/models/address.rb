@@ -5,7 +5,7 @@ class Address < ActiveRecord::Base
 
   validates_presence_of :customer, :address_1, :suburb, :city
 
-  def join(join_with, options = {})
+  def join(join_with = ', ', options = {})
     result = [address_1]
     result << address_2 unless address_2.blank?
     result << suburb
