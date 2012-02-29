@@ -8,7 +8,7 @@ class SplitExistingPhoneNumbers < ActiveRecord::Migration
       value = address.read_attribute(:phone_1)
 
       if value
-        numbers = value.spllit('/').map(&:strip).reverse
+        numbers = value.split('/').map(&:strip).reverse
         address.update_attribute(:phone_1, numbers.pop) if numbers > 0
         address.update_attribute(:phone_2, numbers.pop) if numbers > 0
         address.update_attribute(:phone_3, numbers.pop) if numbers > 0
