@@ -39,18 +39,36 @@ describe Distributor::SettingsController do
   end
 
   describe '#bank_info' do
-    context 'without invoice_information' do
+    context 'without bank_information' do
       before(:each) do
         get :bank_info, distributor_id: @distributor.id
       end
       specify { response.should render_template 'distributor/settings/bank_info' }
+      specify { assigns(:bank_information).should be_a_new(BankInformation) }
+    end
+    context 'with bank_information' do
+      before(:each) do
+        @bank_information = Fabricate(:bank_information, distributor: @distributor)
+        get :bank_info, distributor_id: @distributor.id
+      end
+      specify { assigns(:bank_information).should eq(@bank_information) }
+    end
+  end
+  
+  describe '#invoicing_info' do
+    context 'without invoice_information' do
+      before(:each) do
+        get :invoicing_info, distributor_id: @distributor.id
+      end
+      specify { response.should render_template 'distributor/settings/invoicing_info' }
       specify { assigns(:invoice_information).should be_a_new(InvoiceInformation) }
     end
     context 'with invoice_information' do
       before(:each) do
         @invoice_information = Fabricate(:invoice_information, distributor: @distributor)
-        get :bank_info, distributor_id: @distributor.id
+        get :invoicing_info, distributor_id: @distributor.id
       end
+      specify { response.should render_template 'distributor/settings/invoicing_info' }
       specify { assigns(:invoice_information).should eq(@invoice_information) }
     end
   end
