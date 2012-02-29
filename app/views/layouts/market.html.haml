@@ -9,13 +9,13 @@
       .row
         .three.columns
           = image_tag(@distributor.company_logo.url) if @distributor.company_logo?
-          
+
         .nine.columns
           %strong= @distributor.name
           %p 
             = distributor_address(@distributor, :single_line => true)
             %br
-            = @distributor.invoice_information.phone
+            = @distributor.invoice_information.phone_1
 
       .row
         .twelve.columns

@@ -9,7 +9,6 @@
     = f.input :email, :as => :hidden
     = f.input :first_name
     = f.input :last_name
-    = f.input :phone
 
   = f.simple_fields_for :address do |g|
     .inputs
@@ -19,6 +18,9 @@
       = g.input :city
       = g.input :postcode
       = g.input :delivery_note
+      = g.input :phone_1
+      = g.input :phone_2
+      = g.input :phone_3
 
   .actions
     = f.button :submit, 'Next'

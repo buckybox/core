@@ -11,15 +11,20 @@
         %li.adr= @address.suburb
         %li.adr= @address.city
         %li.adr= @address.postcode
-        %li.tel= "Phone: #{@address.phone}"
+        %li.tel= "Phone 1: #{@address.phone_1}" unless @address.phone_1.blank?
+        %li.tel= "Phone 2: #{@address.phone_2}" unless @address.phone_2.blank?
+        %li.tel= "Phone 3: #{@address.phone_3}" unless @address.phone_3.blank?
       %li.email= "Email: #{@customer.email}"
 
   .three.columns
     %h4== Balance: #{@account.balance.format}
+    %br
+    %h4 Notes:
+    = @customer.notes
 
   .two.columns
     - unless @customer.tags.empty?
-      %h4 Tags
+      %h4 Tags:
       - @customer.tags.each do |tag|
         %span.radius.label= link_to tag.name, tag_distributor_customers_path(current_distributor, tag.name)
 
