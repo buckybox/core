@@ -24,7 +24,7 @@
               = package.id
             .five.columns= package.archived_address
             .two.columns== #{package.archived_order_quantity}x #{package.archived_box_name}
-            .three.columns= customer_badge(package.customer, customer_name: package.archived_customer_name)
+            .three.columns= customer_badge(package.customer, customer_name: package.archived_customer_name, short: true)
   - else
     - @items.group_by(&:box).each do |box, array|
       .row.data-headings

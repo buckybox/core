@@ -16,5 +16,6 @@ class DowncaseEmail < ActiveRecord::Migration
   end
 
   def down
+    # Can not rollback this data migration
   end
 end

@@ -123,7 +123,7 @@ ActiveRecord::Schema.define(:version => 20120229005336) do
     t.datetime "updated_at"
     t.string   "status"
     t.integer  "route_id"
-    t.string   "delivery_method"
+    t.string   "status_change_type"
     t.integer  "delivery_list_id"
     t.integer  "position"
     t.integer  "package_id"
