@@ -24,5 +24,4 @@ public/system/
 .sass-cache/
 config/database.yml
 Session.vim
-.rvmrc
 coverage/
