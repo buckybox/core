@@ -32,14 +32,13 @@ class Customer < ActiveRecord::Base
   validates_associated :account
   validates_associated :address
 
+  before_validation :initialize_number, if: 'number.nil?'
   before_validation :randomize_password_if_not_present
   before_validation :discount_percentage
+  before_validation :format_email
 
   before_create :setup_account
   before_create :setup_address
-
-  before_save :initialize_number, if: 'number.nil?'
-  before_save :format_email
 
   after_create :trigger_new_customer
 
