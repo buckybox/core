@@ -302,6 +302,7 @@ DEPENDENCIES
   guard
   guard-rspec
   haml-rails
+  hirb
   ice_cube
   inherited_resources
   jquery-rails
