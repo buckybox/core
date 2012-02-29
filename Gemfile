@@ -40,8 +40,12 @@ group :development do
   gem 'capistrano'
   gem 'capistrano_colors'
 
+  #ruby-debug needs extra stuff to work on 1.9.3, see here -> https://gist.github.com/1333785
   gem 'linecache19', '0.5.13', require: false
   gem 'ruby-debug-base19', '0.11.26', require: false
+  gem 'ruby-debug19'
+  gem 'hirb'
+  gem 'wirble'
 end
 
 group :development, :test do

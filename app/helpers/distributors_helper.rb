@@ -1,4 +1,4 @@
-module Distributor::BaseHelper
+module DistributorsHelper
   def distributor_address(distributor, options = {})
     i = distributor.invoice_information
     join_with = (options[:single_line] ? ', ' : '<br/>')
@@ -6,7 +6,7 @@ module Distributor::BaseHelper
     address = [i.billing_address_1]
     address << i.billing_address_2 if i.billing_address_2.blank?
     address += [i.billing_suburb, "#{i.billing_city}, #{i.billing_postcode}"]
-    address << i.phone_1 if options[:with_phone]
+    address << i.phone if options[:with_phone]
 
     return address.join(join_with).html_safe
   end
@@ -33,7 +33,7 @@ module Distributor::BaseHelper
   end
 
   def sub_tab(text, path, opts = {})
-    highlighted = current_page?(path) || opts[:force_highlighted].to_s == text.downcase
+    highlighted = current_page?(path) || opts[:force_highlighted].to_s.gsub(/_/, ' ') == text.downcase
 
     content_tag(:dd, class: highlighted ? 'active' : '') do
       link_to text, path

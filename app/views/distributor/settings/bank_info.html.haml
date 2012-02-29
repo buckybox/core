@@ -1,0 +1,17 @@
+- title "Your Bank Information"
+
+= show_settings_sub_nav(:bank_info)
+
+.row
+  .four.columns
+    = simple_form_for(@bank_information, :url => distributor_bank_information_path(current_distributor)) do |f|
+      = f.error_notification
+
+      .inputs
+        = f.input :name
+        = f.input :account_name
+        = f.input :account_number
+        = f.input :customer_message
+
+      .actions
+        = f.button :submit, 'Save'
