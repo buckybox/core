@@ -63,7 +63,7 @@ class Customer < ActiveRecord::Base
     existing_customers = distributor.customers
     result = 1
 
-    unless existing_customers.size == 0
+    unless existing_customers.count == 0
       max_number = distributor.customers.maximum(:number)
       result = max_number + 1
     end
