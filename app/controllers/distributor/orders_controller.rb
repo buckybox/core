@@ -4,6 +4,13 @@ class Distributor::OrdersController < Distributor::BaseController
 
   respond_to :html, :xml, :json
 
+  def new
+    new! do
+      @customer    = @account.customer
+      @route       = @customer.route
+    end
+  end
+
   def create
     @distributor     = Distributor.find(params[:distributor_id])
     @account         = Account.find(params[:account_id])
@@ -20,6 +27,14 @@ class Distributor::OrdersController < Distributor::BaseController
 
     create! { [current_distributor, @account.customer] }
   end
+
+  def edit
+    edit! do
+      @customer    = @account.customer
+      @route       = @customer.route
+    end
+  end
+
 
   def update
     @distributor = current_distributor

@@ -1,14 +1,12 @@
 require 'spec_helper'
 
 describe Customer do
-  before :all do
-    @customer = Fabricate(:customer, email: ' BuckyBox@example.com ')
-  end
+  before { @customer = Fabricate(:customer, email: ' BuckyBox@example.com ') }
 
   specify { @customer.should be_valid }
   specify { @customer.email.should == 'buckybox@example.com' }
 
-  context "initializing" do
+  context 'initializing' do
     before(:each) do
       @customer = Customer.create!(first_name: 'test',
                                last_name: 'test',
@@ -17,9 +15,14 @@ describe Customer do
                                distributor: Fabricate(:distributor))
     end
 
-    specify { @customer.number.should_not be_nil }
+    specify { @customer.address.should_not be_nil }
     specify { @customer.account.should_not be_nil }
     specify { @customer.number.should_not be_nil }
+  end
+
+  context 'number' do
+    before { @customer.number = -1 }
+    specify { @customer.should_not be_valid }
   end
 
   context 'random password' do
