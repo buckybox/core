@@ -26,7 +26,7 @@ class Route < ActiveRecord::Base
 
   default_scope order(:name)
 
-  DAYS = [:monday, :tuesday, :wednesday, :thursday, :friday, :saturday, :sunday]
+  DAYS = [:sunday, :monday, :tuesday, :wednesday, :thursday, :friday, :saturday]
 
   def self.default_route(distributor)
     distributor.routes.first # For now the first one is the default
@@ -42,6 +42,10 @@ class Route < ActiveRecord::Base
 
   def delivery_days
     DAYS.select { |day| self[day] }
+  end
+
+  def delivery_day_numbers(days=delivery_days)
+    days.collect { |day| DAYS.index(day)}
   end
 
   protected
@@ -61,15 +65,33 @@ class Route < ActiveRecord::Base
 
   def update_schedule
     track_schedule_change
-    deleted_days.each do |day|
+    delivery_day_numbers(deleted_days).each do |day|
       orders.active.each do |order|
-        
+        recurrence_rule = order.schedule.recurrence_rules.first
+
+        rule = if recurrence_rule.present?
+          days = recurrence_rule.to_hash[:validations][:day] - [day]
+          interval = recurrence_rule.to_hash[:interval]
+
+          case recurrence_rule
+          when IceCube::WeeklyRule
+            Rule.weekly(interval).day(*days)
+          when IceCube::MonthlyRule
+            Rule.monthly(interval).day(*days)
+          end
+        else
+          nil
+        end
+
+        new_schedule = Schedule.new(Time.new.beginning_of_day)
+        new_schedule.add_recurrence_rule(rule)
+        order.schedule = new_schedule.to_hash
       end
     end
   end
 
   def deleted_days
-    DAYS.select?{|day| self.send("#{day.to_s}_was") && !self.send(day)}
+    DAYS.select{|day| self.send("#{day.to_s}_was") && !self.send(day)}
   end
 
   def track_schedule_change

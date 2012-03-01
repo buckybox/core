@@ -39,5 +39,18 @@ describe Route do
       @route.delivery_days.should == [:monday, :friday]
     end
   end
+  
+  describe '.update_schedule' do
+    before do
+      @route.update_attributes(monday: true, tuesday: true, wednesday: true, thursday: true, friday: true, saturday: true, sunday: true)
+      @order = Fabricate(:order, route: @route, monday: true, tuesday: true, wednesday: true, thursday: true, friday: true, saturday: true, sunday: true) do
+        account! {|order| Fabricate(:customer, distributor: order.box.distributor}
+      end
+      @route.monday = false
+      @route.save
+      @order.reload
+    end
+    specify { @order.should not_match /monday/ }
+  end
 end
 
