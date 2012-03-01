@@ -22,9 +22,11 @@ class Route < ActiveRecord::Base
   validate :at_least_one_day_is_selected
 
   before_validation :create_schedule
-  before_save :record_schedule_change, :if => 'schedule_changed?'
+  before_save :update_schedule, :if => 'schedule_changed?'
 
   default_scope order(:name)
+
+  DAYS = [:monday, :tuesday, :wednesday, :thursday, :friday, :saturday, :sunday]
 
   def self.default_route(distributor)
     distributor.routes.first # For now the first one is the default
@@ -39,7 +41,7 @@ class Route < ActiveRecord::Base
   end
 
   def delivery_days
-    [:monday, :tuesday, :wednesday, :thursday, :friday, :saturday, :sunday].select { |day| self[day] }
+    DAYS.select { |day| self[day] }
   end
 
   protected
@@ -57,7 +59,20 @@ class Route < ActiveRecord::Base
     self.schedule = new_schedule.to_hash
   end
 
-  def record_schedule_change
+  def update_schedule
+    track_schedule_change
+    deleted_days.each do |day|
+      orders.active.each do |order|
+        
+      end
+    end
+  end
+
+  def deleted_days
+    DAYS.select?{|day| self.send("#{day.to_s}_was") && !self.send(day)}
+  end
+
+  def track_schedule_change
     route_schedule_transactions.build(route: self, schedule: self.schedule)
   end
 end
