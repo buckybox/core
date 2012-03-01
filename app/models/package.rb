@@ -43,6 +43,14 @@ class Package < ActiveRecord::Base
 
   scope :originals, where(original_package_id:nil)
 
+  def self.calculated_price(box_price, route_fee, customer_discount)
+    box_price         = box_price.price            if box_price.is_a?(Box)
+    route_fee         = route_fee.fee              if route_fee.is_a?(Route)
+    customer_discount = customer_discount.discount if customer_discount.is_a?(Customer)
+
+    (box_price + route_fee) * (1 - customer_discount)
+  end
+
   def price
     individual_price * archived_order_quantity
   end
@@ -52,7 +60,7 @@ class Package < ActiveRecord::Base
   end
 
   def individual_price
-    (archived_box_price + archived_route_fee) * (1 - archived_customer_discount)
+    Package.calculated_price(archived_box_price, archived_route_fee, archived_customer_discount)
   end
 
   def string_pluralize

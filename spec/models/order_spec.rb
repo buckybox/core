@@ -55,7 +55,7 @@ describe Order do
         end
       end
 
-      specify { Order.create_schedule(Time.now, 'single').to_s.should == 'February 29, 2012' }
+      specify { Order.create_schedule(Time.now, 'single').to_s.should == Time.now.strftime("%B %e, %Y") }
       specify { Order.create_schedule(Time.now, 'weekly', [1, 3]).to_s.should == 'Weekly on Mondays and Wednesdays' }
       specify { Order.create_schedule(Time.now, 'fortnightly', [1, 3]).to_s.should == 'Every 2 weeks on Mondays and Wednesdays' }
       specify { Order.create_schedule(Time.now, 'monthly', [1, 3]).to_s.should == 'Monthly on the 1st Monday when it is the 1st Wednesday' }

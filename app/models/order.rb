@@ -83,7 +83,7 @@ class Order < ActiveRecord::Base
   end
 
   def individual_price
-    (box.price + route.fee) * (1 - customer.discount)
+    Package.calculated_price(box, route, customer)
   end
 
   def customer= cust
