@@ -175,7 +175,6 @@ ActiveRecord::Schema.define(:version => 20120229043436) do
     t.boolean  "separate_bucky_fee",                     :default => true
     t.text     "daily_lists_schedule"
     t.text     "auto_delivery_schedule"
-    t.string   "time_zone"
     t.string   "support_email"
   end
 
