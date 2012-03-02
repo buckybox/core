@@ -87,10 +87,6 @@ class Distributor < ActiveRecord::Base
     end
   end
 
-  def support_email
-    email
-  end
-
   def daily_lists_schedule
     Schedule.from_hash(self[:daily_lists_schedule]) if self[:daily_lists_schedule]
   end
