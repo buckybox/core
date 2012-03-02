@@ -14,6 +14,7 @@ describe Invoice do
 
   describe "#generate_invoices" do
     before(:each) do
+      pending('Invoicing email generation is turned off for now')
       @account_due_today = order_with_deliveries.account
       @account_due_today.stub(:next_invoice_date).and_return(Date.current)
       @account_due_tomorrow = order_with_deliveries.account
