@@ -6,7 +6,7 @@ class CustomerMailer < ActionMailer::Base
     @customer = customer
 
     mail to: @customer.email,
-         from: @distributor.support_email,
+         reply_to: @distributor.support_email,
          subject: "Your Login details for #{@distributor.name}"
   end
 
@@ -17,7 +17,7 @@ class CustomerMailer < ActionMailer::Base
     @distributor = @account.distributor
 
     mail to: @customer.email,
-      from: @distributor.support_email,
+      reply_to: @distributor.support_email,
       subject: "Your #{@distributor.name} Bill/Account Statement ##{@invoice.number}"
   end
 end
