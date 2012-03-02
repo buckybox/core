@@ -6,29 +6,9 @@ h2. Git Strategy
 
 Currently following "this git branching and merging strategy.":http://scottchacon.com/2011/08/31/github-flow.html
 
-h3. Submitting a Pull Request
+For a video version here is a "recorded presentation":http://youtu.be/MQZoy3VU3io?hd=1
 
-Basically we are using pull request in Github so others can review commits. Before you submit a pull request make sure to rebase off of origin master.
-
-@git checkout master@ Change to your local master branch
-@git fetch origin@ Make sure your origin reference is upto date
-@git pull origin master@ Commit any of the changes origin had
-@git checkout feature_branch_name@ Switch to your feature branch
-@git rebase master@ Rebase off of your master which is now upto date with origin master
-You may need to resolve conflicts. It will give instructions on what to do.
-@git push --force origin feature_branch_name@ Because you have rewritten history and need to force Github to accept it
-
-Go to Github, navigate to your branch and click on the 'Pull Request' button in the top right. Add a comment to your pull request and get someone else to review and merge it in (unless you need to fix something then just keep commiting to the branch until it is fixed).
-
-h3. Accepting a Pull Request
-
-Pull changes locally.
-Make sure code has been rebased with newest master.
-If lots of conflicts abort rebase and put a note on Pull Request getting original commiter to do the rebase.
-Force push the branch back to Github if you did have to rebase.
-Run full RSpec to make sure no regression bugs have popped up.
-Review changes in Github and comment on any potential issues, inline or on the whole commit.
-If everything looks good, use Githubs merge to merge changes into master. This addes a nice branch history.
+If you have any questions ask Samson.
 
 h3. Staging
 

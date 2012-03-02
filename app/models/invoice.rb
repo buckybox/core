@@ -42,17 +42,18 @@ class Invoice < ActiveRecord::Base
   end
 
   #creates invoices for all accounts which need it
+  #TODO we are not doing invoicing at the moment
   def self.generate_invoices
-    invoices = []
+    #invoices = []
 
-    Account.all.each do |a|
-      if invoice = a.create_invoice
-        invoices << invoice
-        CustomerMailer.invoice(invoice).deliver
-      end
-    end
+    #Account.all.each do |a|
+      #if invoice = a.create_invoice
+        #invoices << invoice
+        #CustomerMailer.invoice(invoice).deliver
+      #end
+    #end
 
-    return invoices
+    #return invoices
   end
 
   def calculate_amount
