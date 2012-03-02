@@ -35,7 +35,8 @@ class Distributor < ActiveRecord::Base
     converter: Proc.new { |value| value.respond_to?(:to_money) ? value.to_money : raise(ArgumentError, "Can't convert #{value.class} to Money") }
 
   # Setup accessible (or protected) attributes for your model
-  attr_accessible :email, :password, :password_confirmation, :remember_me, :name, :url, :company_logo, :company_logo_cache, :completed_wizard, :remove_company_logo, :support_email
+  attr_accessible :email, :password, :password_confirmation, :remember_me, :name, :url, :company_logo, :company_logo_cache, :completed_wizard,
+    :remove_company_logo, :support_email
 
   validates_presence_of :email
   validates_uniqueness_of :email
@@ -43,10 +44,10 @@ class Distributor < ActiveRecord::Base
   validates_presence_of :name, on: :update
   validates_uniqueness_of :name, on: :update
 
-  before_save :parameterize_name
-  before_save :format_email
-  before_save :generate_daily_lists_schedule, if: 'daily_lists_schedule.to_s.blank?'
-  before_save :generate_auto_delivery_schedule, if: 'auto_delivery_schedule.to_s.blank?'
+  before_validation :parameterize_name
+  before_validation :check_emails
+  before_validation :generate_daily_lists_schedule, if: 'daily_lists_schedule.to_s.blank?'
+  before_validation :generate_auto_delivery_schedule, if: 'auto_delivery_schedule.to_s.blank?'
 
   def self.create_daily_lists(time = Time.now)
     logger.info "--- Checking distributor for daily list generation (#{time}) ---"
@@ -143,10 +144,12 @@ class Distributor < ActiveRecord::Base
     self.parameter_name = name.parameterize if self.name
   end
 
-  def format_email
+  def check_emails
     if self.email
       self.email.strip!
       self.email.downcase!
     end
+
+    self.support_email = self.email if self.support_email.blank?
   end
 end
