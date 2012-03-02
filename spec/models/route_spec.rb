@@ -39,18 +39,63 @@ describe Route do
       @route.delivery_days.should == [:monday, :friday]
     end
   end
+
+  describe '.deleted_days' do
+    before do
+      @route.update_attributes(monday: true, tuesday: true, wednesday: true, thursday: true, friday: true, saturday: true, sunday: true)
+      @route.attributes = {monday: false, tuesday: false, wednesday: false, thursday: false, friday: false, saturday: false, sunday: false}
+    end
+    specify { @route.send(:deleted_days).should eq(Route::DAYS) }
+  end
+
+  describe '.deleted_day_numbers' do
+    before do
+      @route.update_attributes(monday: true, tuesday: true, wednesday: true, thursday: true, friday: true, saturday: true, sunday: true)
+      @route.attributes = {monday: false, tuesday: false, wednesday: false, thursday: false, friday: false, saturday: false, sunday: false}
+    end
+    specify { @route.send(:deleted_day_numbers).should eq([0,1,2,3,4,5,6]) }
+  end
   
   describe '.update_schedule' do
     before do
       @route.update_attributes(monday: true, tuesday: true, wednesday: true, thursday: true, friday: true, saturday: true, sunday: true)
-      @order = Fabricate(:order, route: @route, monday: true, tuesday: true, wednesday: true, thursday: true, friday: true, saturday: true, sunday: true) do
-        account! {|order| Fabricate(:customer, distributor: order.box.distributor}
-      end
-      @route.monday = false
-      @route.save
-      @order.reload
+      @customer = Fabricate(:customer, route: @route, distributor: @route.distributor)
+      @account = @customer.account
+      @box = Fabricate(:box, distributor: @route.distributor)
+      @order = Fabricate(:recurring_order, schedule: new_everyday_schedule, account: @account, box: @box)
+      @route.schedule.to_s.should match /Weekly on Sundays, Mondays, Tuesdays, Wednesdays, Thursdays, Fridays, and Saturdays/ 
+      @order.schedule.to_s.should match /Weekly on Sundays, Mondays, Tuesdays, Wednesdays, Thursdays, Fridays, and Saturdays/ 
+      @route.future_orders.should include(@order)
     end
-    specify { @order.should not_match /monday/ }
+    
+    Route::DAYS.each do |day|
+      context "remove_#{day.to_s}" do
+        before do
+          @route.send("#{day.to_s}=", false)
+          @route.save
+          @order.reload
+        end
+        it "should remove only #{day} from the order schedule" do
+          @order.schedule.to_s.should_not match /#{day.to_s}/i 
+          (Route::DAYS - [day]).each do |remaining_day|
+            @order.schedule.to_s.should match /#{remaining_day.to_s}/i
+          end
+        end
+      end
+    end
+    context "remove monday and friday" do
+      before do
+        @route.update_attributes(monday: false, friday:false)
+        @order.reload
+      end
+      specify { @order.schedule.to_s.should match /Weekly on Sundays, Tuesdays, Wednesdays, Thursdays, and Saturdays/ }
+    end
+    context "remove all days" do
+      before do
+        @route.update_attributes(monday: false, tuesday: false, wednesday: false, thursday: false, friday: false, saturday: false, sunday: false)
+        @order.reload
+      end
+    end
   end
 end
 

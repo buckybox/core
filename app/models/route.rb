@@ -48,6 +48,12 @@ class Route < ActiveRecord::Base
     days.collect { |day| DAYS.index(day)}
   end
 
+  def future_orders
+    # Using a join makes the returned models read-only, this is a work around
+    order_ids = Order.where(customers: {route_id: id}).joins(:customer).collect(&:id)
+    Order.where(["id in (?)", order_ids])
+  end
+
   protected
 
   def at_least_one_day_is_selected
@@ -65,19 +71,18 @@ class Route < ActiveRecord::Base
 
   def update_schedule
     track_schedule_change
-    delivery_day_numbers(deleted_days).each do |day|
-      orders.active.each do |order|
+    deleted_day_numbers.each do |day|
+      future_orders.active.each do |order|
         recurrence_rule = order.schedule.recurrence_rules.first
-
         rule = if recurrence_rule.present?
-          days = recurrence_rule.to_hash[:validations][:day] - [day]
+          days = recurrence_rule.to_hash[:validations][:day]
           interval = recurrence_rule.to_hash[:interval]
 
           case recurrence_rule
           when IceCube::WeeklyRule
-            Rule.weekly(interval).day(*days)
+            Rule.weekly(interval).day(*(days - [day]))
           when IceCube::MonthlyRule
-            Rule.monthly(interval).day(*days)
+            Rule.monthly(interval).day(*(days - [day]))
           end
         else
           nil
@@ -86,12 +91,17 @@ class Route < ActiveRecord::Base
         new_schedule = Schedule.new(Time.new.beginning_of_day)
         new_schedule.add_recurrence_rule(rule)
         order.schedule = new_schedule.to_hash
+        order.save
       end
     end
   end
 
   def deleted_days
     DAYS.select{|day| self.send("#{day.to_s}_was") && !self.send(day)}
+  end
+
+  def deleted_day_numbers(days=deleted_days)
+    delivery_day_numbers(days)
   end
 
   def track_schedule_change
