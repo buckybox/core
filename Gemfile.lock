@@ -265,7 +265,7 @@ GEM
     treetop (1.4.10)
       polyglot
       polyglot (>= 0.3.1)
-    tzinfo (0.3.31)
+    tzinfo (0.3.32)
     uglifier (1.2.3)
       execjs (>= 0.3.0)
       multi_json (>= 1.0.2)
@@ -319,7 +319,7 @@ DEPENDENCIES
   pg
   pg_search
   postmark-rails
-  rails (~> 3.2.1)
+  rails (= 3.2.1)
   rb-fchange
   rb-fsevent
   rb-inotify

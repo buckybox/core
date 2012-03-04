@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120229005336) do
+ActiveRecord::Schema.define(:version => 20120302024839) do
 
   create_table "accounts", :force => true do |t|
     t.integer  "customer_id"
@@ -175,6 +175,7 @@ ActiveRecord::Schema.define(:version => 20120229005336) do
     t.boolean  "separate_bucky_fee",                     :default => true
     t.text     "daily_lists_schedule"
     t.text     "auto_delivery_schedule"
+    t.string   "support_email"
   end
 
   add_index "distributors", ["authentication_token"], :name => "index_distributors_on_authentication_token", :unique => true

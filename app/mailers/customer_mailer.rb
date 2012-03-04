@@ -19,7 +19,8 @@ class CustomerMailer < ActionMailer::Base
     #@distributor = @account.distributor
 
     #mail to: @customer.email,
-      #reply_to: @distributor.support_email,
-      #subject: "Your #{@distributor.name} Bill/Account Statement ##{@invoice.number}"
+         #from: "#{@distributor.name} <no-reply@buckybox.com>",
+         #reply_to: @distributor.support_email,
+         #subject: "Your #{@distributor.name} Bill/Account Statement ##{@invoice.number}"
   end
 end
