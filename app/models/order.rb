@@ -27,8 +27,8 @@ class Order < ActiveRecord::Base
   validates_numericality_of :quantity, greater_than: 0
   validates_inclusion_of :frequency, in: FREQUENCIES, message: "%{value} is not a valid frequency"
 
-  before_save :make_active, if: :just_completed?
-  before_save :record_schedule_change
+  before_save :activate, if: :just_completed?
+  before_save :record_schedule_change, if: :schedule_changed?
 
   default_scope order('created_at DESC')
 
@@ -72,7 +72,8 @@ class Order < ActiveRecord::Base
 
       if order.schedule.next_occurrence.nil?
         logger.info '> Deactivating...'
-        order.update_attribute(:active, false)
+        order.deactivate
+        order.save
         logger.info '> Done.'
       end
     end
@@ -171,10 +172,18 @@ class Order < ActiveRecord::Base
     result.upcase
   end
 
+  def schedule_empty?
+    schedule.next_occurrence.nil?
+  end
+  
+  def deactivate
+    self.active = false
+  end
+
   protected
 
   # Manually create the first delivery all following deliveries should be scheduled for creation by the cron job
-  def make_active
+  def activate
     self.active = true
   end
 

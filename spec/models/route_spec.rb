@@ -113,12 +113,15 @@ describe Route do
       end
 
       specify { @order.schedule.to_s.should match /Weekly on Sundays, Tuesdays, Wednesdays, Thursdays, and Saturdays/ }
+      specify { @order.should be_active }
 
       (Route::DAYS - [:monday, :friday]).each do |day|
         specify { @order_times[day].schedule.recurrence_times.should_not be_empty }
+        specify { @order_times[day].should be_active }
       end
       [:monday, :friday].each do |day|
         specify { @order_times[day].schedule.recurrence_times.should be_empty }
+        specify { @order_times[day].should_not be_active }
       end
 
       specify { @order.schedule.start_time.should eq(@schedule_start_time) }
@@ -135,11 +138,15 @@ describe Route do
       end
 
       specify { @order.schedule.to_s.should eq('Weekly on Sundays') }
+      specify { @order.should be_active }
+
       (Route::DAYS - [:sunday]).each do |day|
         specify { @order_times[day].schedule.recurrence_times.should be_empty }
+        specify { @order_times[day].should_not be_active }
       end
       [:sunday].each do |day|
         specify { @order_times[day].schedule.recurrence_times.should_not be_empty }
+        specify { @order_times[day].should be_active }
       end
 
       specify { @order.schedule.start_time.should eq(@schedule_start_time) }

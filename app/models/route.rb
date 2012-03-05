@@ -22,7 +22,7 @@ class Route < ActiveRecord::Base
   validate :at_least_one_day_is_selected
 
   before_validation :create_schedule
-  before_save :update_schedule, :if => 'schedule_changed?'
+  before_validation :update_schedule, :if => 'schedule_changed?'
 
   default_scope order(:name)
 
@@ -75,6 +75,7 @@ class Route < ActiveRecord::Base
       future_orders.active.each do |order|
         order.remove_recurrence_day(day)
         order.remove_recurrence_times_on_day(day)
+        order.deactivate if order.schedule_empty?
         order.save
       end
     end
