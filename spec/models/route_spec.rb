@@ -58,11 +58,12 @@ describe Route do
   
   describe '.update_schedule' do
     before do
+      @schedule_start_time = Time.now
       @route.update_attributes(monday: true, tuesday: true, wednesday: true, thursday: true, friday: true, saturday: true, sunday: true)
       @customer = Fabricate(:customer, route: @route, distributor: @route.distributor)
       @account = @customer.account
       @box = Fabricate(:box, distributor: @route.distributor)
-      @order = Fabricate(:recurring_order, schedule: new_everyday_schedule, account: @account, box: @box)
+      @order = Fabricate(:recurring_order, schedule: new_everyday_schedule(@schedule_start_time), account: @account, box: @box)
       @route.schedule.to_s.should match /Weekly on Sundays, Mondays, Tuesdays, Wednesdays, Thursdays, Fridays, and Saturdays/ 
       @order.schedule.to_s.should match /Weekly on Sundays, Mondays, Tuesdays, Wednesdays, Thursdays, Fridays, and Saturdays/ 
       @route.future_orders.should include(@order)
@@ -96,6 +97,11 @@ describe Route do
             @order_times[remaining_day].schedule.recurrence_times.first.should eq(@next_times[remaining_day])
           end
         end
+
+        specify { @order.schedule.start_time.should eq(@schedule_start_time) }
+        Route::DAYS.each do |day|
+          specify { @order_times[day].schedule.start_time.should eq(@next_times[day]) }
+        end
       end
     end
 
@@ -105,14 +111,22 @@ describe Route do
         @order.reload
         @order_times.map{|d, order| order.reload}
       end
+
       specify { @order.schedule.to_s.should match /Weekly on Sundays, Tuesdays, Wednesdays, Thursdays, and Saturdays/ }
+
       (Route::DAYS - [:monday, :friday]).each do |day|
         specify { @order_times[day].schedule.recurrence_times.should_not be_empty }
       end
       [:monday, :friday].each do |day|
         specify { @order_times[day].schedule.recurrence_times.should be_empty }
       end
+
+      specify { @order.schedule.start_time.should eq(@schedule_start_time) }
+      Route::DAYS.each do |day|
+        specify { @order_times[day].schedule.start_time.should eq(@next_times[day]) }
+      end
     end
+
     context "remove most days" do
       before do
         @route.update_attributes(monday: false, tuesday: false, wednesday: false, thursday: false, friday: false, saturday: false)
@@ -126,6 +140,11 @@ describe Route do
       end
       [:sunday].each do |day|
         specify { @order_times[day].schedule.recurrence_times.should_not be_empty }
+      end
+
+      specify { @order.schedule.start_time.should eq(@schedule_start_time) }
+      Route::DAYS.each do |day|
+        specify { @order_times[day].schedule.start_time.should eq(@next_times[day]) }
       end
     end
   end

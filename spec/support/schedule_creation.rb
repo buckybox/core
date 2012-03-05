@@ -16,8 +16,8 @@ def new_recurring_schedule(time = (Time.now + 1.day), days = [:monday, :tuesday,
   return schedule
 end
 
-def new_everyday_schedule
-  new_recurring_schedule(Time.now + 1.day, [:sunday, :monday, :tuesday, :wednesday, :thursday, :friday, :saturday])
+def new_everyday_schedule(time = (Time.now + 1.day))
+  new_recurring_schedule(time , [:sunday, :monday, :tuesday, :wednesday, :thursday, :friday, :saturday])
 end
 
 # From

@@ -129,8 +129,7 @@ class Order < ActiveRecord::Base
       end
 
       if rule.present?
-        #TODO make it use original start time
-        new_schedule = Schedule.new(Time.new.beginning_of_day)
+        new_schedule = Schedule.new(schedule.start_time)
         new_schedule.add_recurrence_rule(rule)
         self.schedule = new_schedule.to_hash
       end
