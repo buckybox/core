@@ -2,7 +2,7 @@
 
 require 'csv'
 
-class Distributor::DeliveriesController < Distributor::BaseController
+class Distributor::DeliveriesController < Distributor::ResourceController
   custom_actions collection: [:update_status, :master_packing_sheet, :export]
   belongs_to :distributor
 

@@ -1,4 +1,4 @@
-class Distributor::PaymentsController < Distributor::BaseController
+class Distributor::PaymentsController < Distributor::ResourceController
   belongs_to :distributor
   actions :create
 

@@ -1,4 +1,4 @@
-class Distributor::InvoiceInformationController < Distributor::BaseController
+class Distributor::InvoiceInformationController < Distributor::ResourceController
   belongs_to :distributor, :singleton => true
   actions :create, :update
 

@@ -18,17 +18,6 @@ BuckyBox::Application.routes.draw do
     resources :boxes,              controller: 'distributor/boxes',               except: :index
     resources :routes,             controller: 'distributor/routes',              except: :index
     resources :transactions,       controller: 'distributor/transactions',        only: :create
-    
-    resources :settings, controller: 'distributor/settings', only: [:index] do
-      collection do
-        get 'routes'
-        get 'boxes'
-        get 'business_info'
-        get 'invoicing_info'
-        get 'bank_info'
-        get 'reporting'
-      end
-    end
 
     resources :deliveries, controller: 'distributor/deliveries' do
       collection do
@@ -103,6 +92,15 @@ BuckyBox::Application.routes.draw do
       get 'payment'
       get 'billing'
       get 'success'
+    end
+
+    namespace :settings do
+      get 'business_info'
+      get 'boxes'
+      get 'routes'
+      get 'bank_info'
+      get 'invoicing_info'
+      get 'reporting'
     end
   end
 

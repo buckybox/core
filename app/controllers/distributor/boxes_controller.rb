@@ -1,4 +1,4 @@
-class Distributor::BoxesController < Distributor::BaseController
+class Distributor::BoxesController < Distributor::ResourceController
   belongs_to :distributor
   actions :all, except: [ :index, :destroy ]
 

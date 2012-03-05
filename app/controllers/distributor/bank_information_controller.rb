@@ -1,4 +1,4 @@
-class Distributor::BankInformationController < Distributor::BaseController
+class Distributor::BankInformationController < Distributor::ResourceController
   belongs_to :distributor, :singleton => true
   actions :create, :update
 

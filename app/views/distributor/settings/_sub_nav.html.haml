@@ -1,7 +1,7 @@
 %dl.sub-nav.settings
-  = sub_tab 'Routes', routes_distributor_settings_path(@distributor), {force_highlighted: force_highlighted}
-  = sub_tab 'Boxes', boxes_distributor_settings_path(@distributor), {force_highlighted: force_highlighted}
-  = sub_tab 'Business Info', business_info_distributor_settings_path(@distributor), {force_highlighted: force_highlighted}
-  = sub_tab 'Bank Info', bank_info_distributor_settings_path(@distributor), {force_highlighted: force_highlighted}
-  = sub_tab 'Invoicing Info', invoicing_info_distributor_settings_path(@distributor), {force_highlighted: force_highlighted}
-  = sub_tab 'Reporting', reporting_distributor_settings_path(@distributor), {force_highlighted: force_highlighted}
+  = sub_tab 'Business Info',  distributor_settings_business_info_path,  { force_highlighted: force_highlighted }
+  = sub_tab 'Boxes',          distributor_settings_boxes_path,          { force_highlighted: force_highlighted }
+  = sub_tab 'Routes',         distributor_settings_routes_path,         { force_highlighted: force_highlighted }
+  = sub_tab 'Bank Info',      distributor_settings_bank_info_path,      { force_highlighted: force_highlighted }
+  = sub_tab 'Invoicing Info', distributor_settings_invoicing_info_path, { force_highlighted: force_highlighted }
+  = sub_tab 'Reporting',      distributor_settings_reporting_path,      { force_highlighted: force_highlighted }

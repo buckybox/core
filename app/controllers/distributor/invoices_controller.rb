@@ -1,4 +1,4 @@
-class Distributor::InvoicesController < Distributor::BaseController
+class Distributor::InvoicesController < Distributor::ResourceController
   belongs_to :distributor
 
   actions :index, :show

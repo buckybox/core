@@ -1,4 +1,4 @@
-class Distributor::OrdersController < Distributor::BaseController
+class Distributor::OrdersController < Distributor::ResourceController
   nested_belongs_to :distributor, :account
   actions :all, except: [:index, :show, :destroy]
 

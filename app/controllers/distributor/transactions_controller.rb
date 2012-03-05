@@ -1,4 +1,4 @@
-class Distributor::TransactionsController < Distributor::BaseController
+class Distributor::TransactionsController < Distributor::ResourceController
   actions :create, :index
 
   belongs_to :distributor

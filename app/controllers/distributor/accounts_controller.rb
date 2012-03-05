@@ -1,4 +1,4 @@
-class Distributor::AccountsController < Distributor::BaseController
+class Distributor::AccountsController < Distributor::ResourceController
   belongs_to :distributor
 
   respond_to :html, :xml, :json
