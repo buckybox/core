@@ -73,24 +73,8 @@ class Route < ActiveRecord::Base
     track_schedule_change
     deleted_day_numbers.each do |day|
       future_orders.active.each do |order|
-        recurrence_rule = order.schedule.recurrence_rules.first
-        rule = if recurrence_rule.present?
-          days = recurrence_rule.to_hash[:validations][:day]
-          interval = recurrence_rule.to_hash[:interval]
-
-          case recurrence_rule
-          when IceCube::WeeklyRule
-            Rule.weekly(interval).day(*(days - [day]))
-          when IceCube::MonthlyRule
-            Rule.monthly(interval).day(*(days - [day]))
-          end
-        else
-          nil
-        end
-
-        new_schedule = Schedule.new(Time.new.beginning_of_day)
-        new_schedule.add_recurrence_rule(rule)
-        order.schedule = new_schedule.to_hash
+        order.remove_recurrence_day(day)
+        order.remove_recurrence_times_on_day(day)
         order.save
       end
     end

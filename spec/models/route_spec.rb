@@ -66,6 +66,13 @@ describe Route do
       @route.schedule.to_s.should match /Weekly on Sundays, Mondays, Tuesdays, Wednesdays, Thursdays, Fridays, and Saturdays/ 
       @order.schedule.to_s.should match /Weekly on Sundays, Mondays, Tuesdays, Wednesdays, Thursdays, Fridays, and Saturdays/ 
       @route.future_orders.should include(@order)
+      
+      @order_times = {}
+      @next_times = {}
+      Route::DAYS.each do |d|
+        @next_times[d] = Time.next(d)
+        @order_times[d] = Fabricate(:order, schedule: new_single_schedule(@next_times[d]), account: @account, box: @box)
+      end
     end
     
     Route::DAYS.each do |day|
@@ -74,6 +81,7 @@ describe Route do
           @route.send("#{day.to_s}=", false)
           @route.save
           @order.reload
+          @order_times.map{|d, order| order.reload}
         end
         it "should remove only #{day} from the order schedule" do
           @order.schedule.to_s.should_not match /#{day.to_s}/i 
@@ -81,19 +89,43 @@ describe Route do
             @order.schedule.to_s.should match /#{remaining_day.to_s}/i
           end
         end
+
+        it "should remove #{day} from the scheduled times" do
+          @order_times[day].schedule.recurrence_times.size.should eq(0)
+          (Route::DAYS - [day]).each do |remaining_day|
+            @order_times[remaining_day].schedule.recurrence_times.first.should eq(@next_times[remaining_day])
+          end
+        end
       end
     end
+
     context "remove monday and friday" do
       before do
         @route.update_attributes(monday: false, friday:false)
         @order.reload
+        @order_times.map{|d, order| order.reload}
       end
       specify { @order.schedule.to_s.should match /Weekly on Sundays, Tuesdays, Wednesdays, Thursdays, and Saturdays/ }
+      (Route::DAYS - [:monday, :friday]).each do |day|
+        specify { @order_times[day].schedule.recurrence_times.should_not be_empty }
+      end
+      [:monday, :friday].each do |day|
+        specify { @order_times[day].schedule.recurrence_times.should be_empty }
+      end
     end
-    context "remove all days" do
+    context "remove most days" do
       before do
-        @route.update_attributes(monday: false, tuesday: false, wednesday: false, thursday: false, friday: false, saturday: false, sunday: false)
+        @route.update_attributes(monday: false, tuesday: false, wednesday: false, thursday: false, friday: false, saturday: false)
         @order.reload
+        @order_times.map{|d, order| order.reload}
+      end
+
+      specify { @order.schedule.to_s.should eq('Weekly on Sundays') }
+      (Route::DAYS - [:sunday]).each do |day|
+        specify { @order_times[day].schedule.recurrence_times.should be_empty }
+      end
+      [:sunday].each do |day|
+        specify { @order_times[day].schedule.recurrence_times.should_not be_empty }
       end
     end
   end

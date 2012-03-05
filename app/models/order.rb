@@ -115,6 +115,41 @@ class Order < ActiveRecord::Base
     self.schedule = s
   end
 
+  def remove_recurrence_day(day)
+    recurrence_rule = schedule.recurrence_rules.first
+    if recurrence_rule.present?
+      days = recurrence_rule.to_hash[:validations][:day]
+      interval = recurrence_rule.to_hash[:interval]
+
+      rule = case recurrence_rule
+      when IceCube::WeeklyRule
+       Rule.weekly(interval).day(*(days - [day]))
+      when IceCube::MonthlyRule
+       Rule.monthly(interval).day(*(days - [day]))
+      end
+
+      if rule.present?
+        #TODO make it use original start time
+        new_schedule = Schedule.new(Time.new.beginning_of_day)
+        new_schedule.add_recurrence_rule(rule)
+        self.schedule = new_schedule.to_hash
+      end
+    else
+      nil
+    end
+  end
+
+  def remove_recurrence_times_on_day(day)
+    day = Route::DAYS[day] if day.is_a?(Integer) && day.between?(0, 6)
+    new_schedule = schedule
+    schedule.recurrence_times.each do |recurrence_time|
+      if recurrence_time.send("#{day}?") # recurrence_time.monday? for example
+        new_schedule.remove_recurrence_time(recurrence_time)
+      end
+    end
+    self.schedule = new_schedule.to_hash
+  end
+
   def future_deliveries(end_date)
     results = []
 
