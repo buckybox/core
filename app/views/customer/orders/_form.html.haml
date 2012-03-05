@@ -5,7 +5,7 @@
     = hidden_field_tag 'order_id', order.id
 
     .inputs
-      = f.association :box, collection: box_collection(@distributor, with_price: true), include_blank: false
+      = f.association :box, collection: box_collection(current_customer, with_price: true), include_blank: false
       = f.input :quantity
       = f.input :likes, wrapper_html: { id: 'likes_input' }
       = f.input :dislikes, wrapper_html: { id: 'dislikes_input' }

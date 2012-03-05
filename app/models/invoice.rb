@@ -67,7 +67,7 @@ class Invoice < ActiveRecord::Base
 
     #check for deliveries on today that are pending
     account_deliveries = account.deliveries.unscoped.pending.includes(:delivery_list).order("\"deliveries\".created_at").where(["\"delivery_lists\".date >= ? AND \"delivery_lists\".date <= ?", Date.current, end_date])
-    real_deliveries = account_deliveries.map { |d| { date: d.date, amount: account.amount_with_bucky_fee(d.price), description: d.description } }
+    real_deliveries = account_deliveries.map { |d| { date: d.date, amount: account.amount_with_bucky_fee(d.package.price), description: d.description } }
 
     #save all_occurrences
     account_occurrences = account.all_occurrences(end_date.to_time)

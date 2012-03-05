@@ -133,7 +133,7 @@ class Distributor < ActiveRecord::Base
     dates_packing_lists  = packing_lists.find_by_date(date)
 
     # If the list were not created on this date for some reason create them first
-    create_daily_lists(date) unless !!dates_delivery_lists && !!dates_packing_lists
+    create_daily_lists(date) unless !!dates_delivery_lists || !!dates_packing_lists
 
     successful  = dates_delivery_lists.mark_all_as_auto_delivered
     successful &= dates_packing_lists.mark_all_as_auto_packed
