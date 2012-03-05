@@ -118,7 +118,10 @@ class Order < ActiveRecord::Base
 
   def remove_recurrence_day(day)
     recurrence_rule = schedule.recurrence_rules.first
+    new_schedule = schedule
+
     if recurrence_rule.present?
+      new_schedule.remove_recurrence_rule(recurrence_rule)
       days = recurrence_rule.to_hash[:validations][:day]
       interval = recurrence_rule.to_hash[:interval]
 
@@ -130,7 +133,6 @@ class Order < ActiveRecord::Base
       end
 
       if rule.present?
-        new_schedule = Schedule.new(schedule.start_time)
         new_schedule.add_recurrence_rule(rule)
         self.schedule = new_schedule.to_hash
       end
@@ -178,6 +180,25 @@ class Order < ActiveRecord::Base
   
   def deactivate
     self.active = false
+  end
+
+  def pause(start_date, end_date)
+
+    # Could not get controller response to render error, so commented out
+    # for now.
+    if start_date.past? || end_date.past?
+      #errors.add(:base, "Dates can not be in the past")
+      return false
+    elsif end_date <= start_date
+      #errors.add(:base, "Start date can not be past end date")
+      return false
+    end
+
+    updated_schedule = schedule
+    updated_schedule.exception_times.each { |time| updated_schedule.remove_exception_time(time) }
+    (start_date..end_date).each   { |date| updated_schedule.add_exception_time(date.to_time) }
+    self.schedule = updated_schedule
+    save
   end
 
   protected

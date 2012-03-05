@@ -70,9 +70,16 @@ describe Route do
       
       @order_times = {}
       @next_times = {}
+      @start_pause = 2.weeks.from_now.to_date
+      @end_pause = 3.weeks.from_now.to_date
+      @pause_range = (@start_pause..@end_pause).to_a.collect(&:beginning_of_day)
+
+      @order.pause(@start_pause, @end_pause)
+
       Route::DAYS.each do |d|
         @next_times[d] = Time.next(d)
         @order_times[d] = Fabricate(:order, schedule: new_single_schedule(@next_times[d]), account: @account, box: @box)
+        @order_times[d].pause(@start_pause, @end_pause)
       end
     end
     
@@ -97,10 +104,13 @@ describe Route do
             @order_times[remaining_day].schedule.recurrence_times.first.should eq(@next_times[remaining_day])
           end
         end
+        
+        specify { @order.schedule.exception_times.should eq(@pause_range) }
 
         specify { @order.schedule.start_time.should eq(@schedule_start_time) }
         Route::DAYS.each do |day|
           specify { @order_times[day].schedule.start_time.should eq(@next_times[day]) }
+          specify { @order_times[day].schedule.exception_times.should eq(@pause_range)}
         end
       end
     end
@@ -124,9 +134,11 @@ describe Route do
         specify { @order_times[day].should_not be_active }
       end
 
+      specify { @order.schedule.exception_times.should eq(@pause_range) }
       specify { @order.schedule.start_time.should eq(@schedule_start_time) }
       Route::DAYS.each do |day|
         specify { @order_times[day].schedule.start_time.should eq(@next_times[day]) }
+        specify { @order_times[day].schedule.exception_times.should eq(@pause_range)}
       end
     end
 
@@ -137,7 +149,7 @@ describe Route do
         @order_times.map{|d, order| order.reload}
       end
 
-      specify { @order.schedule.to_s.should eq('Weekly on Sundays') }
+      specify { @order.schedule.to_s.should match /Weekly on Sundays/ }
       specify { @order.should be_active }
 
       (Route::DAYS - [:sunday]).each do |day|
@@ -150,8 +162,10 @@ describe Route do
       end
 
       specify { @order.schedule.start_time.should eq(@schedule_start_time) }
+      specify { @order.schedule.exception_times.should eq(@pause_range) }
       Route::DAYS.each do |day|
         specify { @order_times[day].schedule.start_time.should eq(@next_times[day]) }
+        specify { @order_times[day].schedule.exception_times.should eq(@pause_range)}
       end
     end
   end
