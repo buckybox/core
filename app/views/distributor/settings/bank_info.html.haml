@@ -3,7 +3,7 @@
 = show_settings_sub_nav(:bank_info)
 
 .row
-  .four.columns
+  .four.columns.centered
     = simple_form_for(@bank_information, :url => distributor_bank_information_path(current_distributor)) do |f|
       = f.error_notification
 

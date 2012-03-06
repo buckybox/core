@@ -3,7 +3,7 @@
 = show_settings_sub_nav(:contact_info)
 
 .row
-  .four.columns
+  .four.columns.centered
     = simple_form_for(current_distributor) do |f|
       = f.error_notification
 
@@ -14,10 +14,19 @@
         = f.input :company_logo
         = f.input :company_logo_cache, as: :hidden
 
-      .uploaded_image
-        - if current_distributor.company_logo?
-          = image_tag(current_distributor.company_logo.url)
-          = f.input :remove_company_logo, as: :boolean, label: 'Remove image'
+        .uploaded_image
+          - if current_distributor.company_logo?
+            = image_tag(current_distributor.company_logo.url)
+            = f.input :remove_company_logo, as: :boolean, label: 'Remove image'
+
+        Customers must place orders by
+        = select_hour Time.now, ampm: true
+        = select_tag 'order_days', options_for_select(days_in_advance)
+        in advance.
+
+        Will be auto marked as delivered by
+        = select_hour Time.now, ampm: true
+        on that day.
 
       .actions
         = f.button :submit, 'Update'
