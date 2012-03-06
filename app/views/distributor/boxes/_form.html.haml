@@ -1,21 +1,35 @@
-= simple_form_for([@distributor, @box]) do |f|
-  = f.error_notification
+.row
+  .twelve.columns
+    = simple_form_for([current_distributor, @box]) do |f|
+      = f.error_notification
 
-  .inputs
-    = f.input :name
-    = f.input :description
-    = f.input :likes
-    = f.input :dislikes
-    = f.input :price, :as => :string
-    = f.input :available_single
-    = f.input :available_weekly
-    = f.input :available_fourtnightly
-    = f.input :box_image
-    = f.input :box_image_cache, :as => :hidden
+      .row
+        .four.columns
+          .inputs
+            = f.input :name, label: false, placeholder: 'Name', size: 20
+            = f.input :price, as: :currency, label: false, input_html: { class: 'input-text' }, hint: 'per box'
 
-  .uploaded_image
-    - if @box.box_image?
-      = image_tag(@box.box_image.url)
-      = f.input :remove_box_image, as: :boolean, label: "Remove image"
-  .actions
-    = f.button :submit
+            %h4 Custom boxes
+            = f.input :likes, label: 'Enable likes'
+            = f.input :dislikes, label: 'Enable dislikes'
+
+        .four.columns
+          = f.input :description
+
+        .four.columns
+          .inputs
+            %h4 Delivery options
+            = f.input :available_single, label: 'One-time delivery'
+            = f.input :available_weekly, label: 'Weekly'
+            = f.input :available_fourtnightly, label: 'Fortnightly'
+
+            %h4 Choose your logo
+            = f.input :box_image, label: false, hint: 'Any jpeg, gif or png image file'
+            = f.input :box_image_cache, as: :hidden
+
+            .uploaded_image= image_tag(@box.box_image.url) if @box.box_image?
+            .image-thumbnail
+
+      .row
+        .twelve.columns.text-right
+          .actions= f.button :submit

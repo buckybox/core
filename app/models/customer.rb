@@ -22,23 +22,23 @@ class Customer < ActiveRecord::Base
   accepts_nested_attributes_for :address
 
   attr_accessible :address_attributes, :first_name, :last_name, :email, :name, :distributor_id, :distributor,
-    :route, :route_id, :password, :password_confirmation, :remember_me, :tag_list, :discount, :number
+    :route, :route_id, :password, :password_confirmation, :remember_me, :tag_list, :discount, :number, :notes
 
   validates_presence_of :first_name, :email, :distributor, :route, :discount
   validates_uniqueness_of :email, scope: :distributor_id
   validates_uniqueness_of :number, scope: :distributor_id
+  validates_numericality_of :number, greater_than: 0
   validates_numericality_of :discount, greater_than_or_equal_to: 0.0, less_than_or_equal_to: 1.0
   validates_associated :account
   validates_associated :address
 
+  before_validation :initialize_number, if: 'number.nil?'
   before_validation :randomize_password_if_not_present
   before_validation :discount_percentage
+  before_validation :format_email
 
   before_create :setup_account
   before_create :setup_address
-
-  before_save :initialize_number, if: 'number.nil?'
-  before_save :format_email
 
   after_create :trigger_new_customer
 
@@ -63,7 +63,7 @@ class Customer < ActiveRecord::Base
     existing_customers = distributor.customers
     result = 1
 
-    unless existing_customers.size == 0
+    unless existing_customers.count == 0
       max_number = distributor.customers.maximum(:number)
       result = max_number + 1
     end

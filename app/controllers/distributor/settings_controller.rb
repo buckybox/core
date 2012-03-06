@@ -1,5 +1,4 @@
 class Distributor::SettingsController < Distributor::BaseController
-
   respond_to :html, :json
 
   def index
@@ -16,14 +15,17 @@ class Distributor::SettingsController < Distributor::BaseController
     @boxes = current_distributor.boxes
   end
 
-  def contact_info
+  def business_info
   end
 
   def bank_info
+    @bank_information = current_distributor.bank_information || BankInformation.new
+  end
+
+  def invoicing_info
     @invoice_information = current_distributor.invoice_information || InvoiceInformation.new
   end
 
   def reporting
   end
-
 end

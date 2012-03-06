@@ -1,15 +1,20 @@
-- title "Your Bank Information"
+- title 'Settings', false
+
+= show_settings_sub_nav(:bank_info)
 
 .row
-  .four.columns.centered
-    = simple_form_for(@bank_information, :url => distributor_bank_information_path(current_distributor, @bank_information)) do |f|
+  .four.columns
+    = simple_form_for(@invoice_information, :url => distributor_invoice_information_path(current_distributor)) do |f|
       = f.error_notification
 
       .inputs
-        = f.input :name
-        = f.input :account_name
-        = f.input :account_number
-        = f.input :customer_message
+        = f.input :gst_number
+        = f.input :billing_address_1
+        = f.input :billing_address_2
+        = f.input :billing_suburb
+        = f.input :billing_city
+        = f.input :billing_postcode
+        = f.input :phone
 
       .actions
-        = f.button :submit, 'Next'
+        = f.button :submit, 'Save'

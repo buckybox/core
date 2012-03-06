@@ -1,4 +1,13 @@
-#{@distributor.name} has reset your login details to their account management area
+:plain
+  Here's your new login details for your account with us at #{@distributor.name}
 
-You can login at #{new_customer_session_url} with the password #{@customer.password}
+  #{new_customer_session_url}
 
+  Email: #{@customer.email}
+  Password: #{@customer.password}
+
+  Use this account to:
+
+  * change your orders
+  * pause your orders if you're away
+  * change your delivery address or contact details if you've moved

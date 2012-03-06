@@ -16,7 +16,7 @@ describe DistributorsController do
       end
       specify { flash[:notice].should eq("Distributor was successfully updated.") }
       specify { assigns(:distributor).name.should eq('Yoda') }
-      specify { response.should redirect_to(contact_info_distributor_settings_path(@distributor)) }
+      specify { response.should redirect_to(business_info_distributor_settings_path(@distributor)) }
     end
     context 'with invalid params' do
       before(:each) do
@@ -24,7 +24,7 @@ describe DistributorsController do
       end
       specify { assigns(:distributor).errors.size.should eq(1) }
       specify { assigns(:distributor).name.should eq('') }
-      specify { response.should render_template('distributor/settings/contact_info') }
+      specify { response.should render_template('distributor/settings/business_info') }
     end
   end
 end

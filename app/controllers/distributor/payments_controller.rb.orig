@@ -4,14 +4,11 @@ class Distributor::PaymentsController < Distributor::BaseController
 
   respond_to :html, :xml, :json
 
-<<<<<<< HEAD
-=======
   def index 
     @payments = current_distributor.payments.bank_transfer.order('created_at DESC')
     @statement = BankStatement.new
   end
 
->>>>>>> f6ee75f... layout and style cleanup + validation error message when input file not a .csv
   def create
     create! do |success, failure|
       success.html { redirect_to distributor_dashboard_url }
@@ -28,8 +25,6 @@ class Distributor::PaymentsController < Distributor::BaseController
       end
     end
   end
-<<<<<<< HEAD
-=======
 
   def process_upload
     @statement = BankStatement.new(params['bank_statement'])
@@ -48,5 +43,4 @@ class Distributor::PaymentsController < Distributor::BaseController
 
     redirect_to distributor_payments_path
   end
->>>>>>> f6ee75f... layout and style cleanup + validation error message when input file not a .csv
 end

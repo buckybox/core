@@ -50,6 +50,7 @@ module LayoutHelper
     content += content_tag(:span, "#{customer_id}", class: 'customer-id')
 
     customer_name = options[:customer_name] || customer.name
+    customer_name = truncate(customer_name, length: 18) if options[:short]
     content += content_tag(:span, customer_name, class: 'customer-name')
 
     if options[:link] == false

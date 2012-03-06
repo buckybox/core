@@ -21,7 +21,7 @@ describe Order do
 
   context :price do
     # Default box price is $10
-    PRICE_PERMUTATIONS = [
+    ORDER_PRICE_PERMUTATIONS = [
       { discount: 0.05, fee: 5, quantity: 5, individual_price: 14.25, price: 71.25 },
       { discount: 0.05, fee: 5, quantity: 1, individual_price: 14.25, price: 14.25 },
       { discount: 0.05, fee: 0, quantity: 5, individual_price:  9.50, price: 47.50 },
@@ -33,7 +33,7 @@ describe Order do
     ]
 
 
-    PRICE_PERMUTATIONS.each do |pp|
+    ORDER_PRICE_PERMUTATIONS.each do |pp|
       context "where discount is #{pp[:discount]}, fee is #{pp[:fee]}, and quantity is #{pp[:quantity]}" do
         before do
           route = Fabricate(:route, fee: pp[:fee])
@@ -44,6 +44,21 @@ describe Order do
         specify { @order.individual_price.should == pp[:individual_price] }
         specify { @order.price.should == pp[:price] }
       end
+    end
+  end
+
+  context '#self.create_schedule' do
+    Delorean.time_travel_to(Date.parse('2013-02-02')) do
+      context 'exceptions' do
+        %w(weekly fortnightly monthly).each do |frequency|
+          specify { expect { Order.create_schedule(Time.now, frequency) }.should raise_error }
+        end
+      end
+
+      specify { Order.create_schedule(Time.now, 'single').to_s.should == Time.now.strftime("%B %e, %Y") }
+      specify { Order.create_schedule(Time.now, 'weekly', [1, 3]).to_s.should == 'Weekly on Mondays and Wednesdays' }
+      specify { Order.create_schedule(Time.now, 'fortnightly', [1, 3]).to_s.should == 'Every 2 weeks on Mondays and Wednesdays' }
+      specify { Order.create_schedule(Time.now, 'monthly', [1, 3]).to_s.should == 'Monthly on the 1st Monday when it is the 1st Wednesday' }
     end
   end
 

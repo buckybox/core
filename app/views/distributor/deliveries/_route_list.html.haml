@@ -29,7 +29,7 @@
             = delivery.delivery_number
           .five.columns= delivery.package.archived_address
           .two.columns== #{delivery.package.archived_order_quantity}x #{delivery.package.archived_box_name}
-          .three.columns= customer_badge(delivery.customer, customer_name: delivery.package.archived_customer_name)
+          .three.columns= customer_badge(delivery.customer, customer_name: delivery.package.archived_customer_name, short: true)
   - else
     %ul
       - @items.each do |order|

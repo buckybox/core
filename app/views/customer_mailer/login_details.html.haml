@@ -1,0 +1,16 @@
+%p== Here's your new login details for your account with us at #{@distributor.name}
+
+%p== #{new_customer_session_url}
+
+%p
+  == Email: #{@customer.email}
+  %br
+  == Password: #{@customer.password}
+
+%p
+  Use this account to:
+
+  %ul
+    %li change your orders
+    %li pause your orders if you're away
+    %li change your delivery address or contact details if you've moved

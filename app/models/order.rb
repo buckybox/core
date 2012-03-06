@@ -21,9 +21,7 @@ class Order < ActiveRecord::Base
 
   attr_accessible :box, :box_id, :account, :account_id, :quantity, :likes, :dislikes, :completed, :frequency, :schedule
 
-  FREQUENCIES = %w(single weekly fortnightly)
-  FREQUENCY_IN_WEEKS = [nil, 1, 2] # to be transposed to the FREQUENCIES array
-  FREQUENCY_HASH = Hash[[FREQUENCIES, FREQUENCY_IN_WEEKS].transpose]
+  FREQUENCIES = %w( single weekly fortnightly monthly )
 
   validates_presence_of :box, :quantity, :frequency, :account, :schedule
   validates_numericality_of :quantity, greater_than: 0
@@ -38,16 +36,32 @@ class Order < ActiveRecord::Base
   scope :active,    where(active: true)
   scope :inactive,  where(active: false)
 
-  def price
-    individual_price * quantity
-  end
+  def self.create_schedule(start_time, frequency, days_by_number = nil)
+    if frequency != 'single' && days_by_number.nil?
+      raise(ArgumentError, "Unless it is a single order the schedule needs to specify days.")
+    end
 
-  def individual_price
-    (box.price + route.fee) * (1 - customer.discount)
-  end
+    schedule = Schedule.new(start_time)
 
-  def customer= cust
-    self.account = cust.account
+    if frequency == 'single'
+      schedule.add_recurrence_time(start_time)
+    elsif frequency == 'monthly'
+      montly_days_hash = days_by_number.inject({}) { |hash, day| hash[day] = [1]; hash }
+
+      recurrence_rule = Rule.monthly.day_of_week(montly_days_hash)
+      schedule.add_recurrence_rule(recurrence_rule)
+    else
+      if frequency == 'weekly'
+        weeks_between_deliveries = 1
+      elsif frequency == 'fortnightly'
+        weeks_between_deliveries = 2
+      end
+
+      recurrence_rule = Rule.weekly(weeks_between_deliveries).day(*days_by_number)
+      schedule.add_recurrence_rule(recurrence_rule)
+    end
+
+    return schedule
   end
 
   def self.deactivate_finished
@@ -62,6 +76,18 @@ class Order < ActiveRecord::Base
         logger.info '> Done.'
       end
     end
+  end
+
+  def price
+    individual_price * quantity
+  end
+
+  def individual_price
+    Package.calculated_price(box, route, customer)
+  end
+
+  def customer= cust
+    self.account = cust.account
   end
 
   def just_completed?

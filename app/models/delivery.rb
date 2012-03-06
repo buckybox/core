@@ -10,29 +10,29 @@ class Delivery < ActiveRecord::Base
   has_one :address, through: :order
   has_one :customer, through: :order
 
-  acts_as_list scope: [:delivery_list_id, :route_id]
+  acts_as_list scope: [ :delivery_list_id, :route_id ]
 
-  attr_accessible :order, :order_id, :route, :status, :delivery_method, :delivery_list, :package, :package_id, :account
+  attr_accessible :order, :order_id, :route, :status, :status_change_type, :delivery_list, :package, :package_id, :account
 
-  STATUS = %w(pending delivered cancelled rescheduled repacked)
-  DELIVERY_METHOD = %w(manual auto)
+  STATUS = %w( pending delivered cancelled rescheduled repacked )
+  STATUS_CHANGE_TYPE = %w( manual auto )
 
   validates_presence_of :order, :route, :status, :delivery_list, :package
   validates_inclusion_of :status, in: STATUS, message: "%{value} is not a valid status"
-  validates_inclusion_of :delivery_method, in: DELIVERY_METHOD, message: "%{value} is not a valid delivery method", if: 'status == "delivered"'
+  validates_inclusion_of :status_change_type, in: STATUS_CHANGE_TYPE, message: "%{value} is not a valid status change type"
 
   before_validation :default_route, if: 'route.nil?'
   before_validation :default_status, if: 'status.nil?'
-  before_validation :default_delivery_method, if: 'status == "delivered" && delivery_method.nil?'
+  before_validation :default_status_change_type, if: 'status_change_type.nil?'
   before_validation :changed_status, if: 'status_changed?'
 
   before_create :add_delivery_number
 
-  scope :pending,     where(status:'pending')
-  scope :delivered,   where(status:'delivered')
-  scope :cancelled,   where(status:'cancelled')
-  scope :rescheduled, where(status:'rescheduled')
-  scope :repacked,    where(status:'repacked')
+  scope :pending,     where(status: 'pending')
+  scope :delivered,   where(status: 'delivered')
+  scope :cancelled,   where(status: 'cancelled')
+  scope :rescheduled, where(status: 'rescheduled')
+  scope :repacked,    where(status: 'repacked')
 
   def self.change_statuses(deliveries, new_status, options = {})
     return false unless STATUS.include?(new_status)
@@ -46,6 +46,19 @@ class Delivery < ActiveRecord::Base
     end
 
     return result
+  end
+
+  def self.auto_deliver(delivery)
+    auto_delivered = false
+
+    unless delivery.status_change_type == 'manual'
+      delivery.status = 'delivered'
+      delivery.status_change_type = 'auto'
+
+      auto_delivered = delivery.save
+    end
+
+    return auto_delivered
   end
 
   def date
@@ -74,8 +87,8 @@ class Delivery < ActiveRecord::Base
     self.status = 'pending'
   end
 
-  def default_delivery_method
-    self.delivery_method = 'manual'
+  def default_status_change_type
+    self.status_change_type = 'auto'
   end
 
   def add_delivery_number

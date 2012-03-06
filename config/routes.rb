@@ -1,4 +1,5 @@
 BuckyBox::Application.routes.draw do
+  devise_for :admins, controllers: { sessions: 'admin/sessions' }
   devise_for :distributors, controllers: { sessions: 'distributor/sessions' }
   devise_for :customers,    controllers: { sessions: 'customer/sessions' }
 
@@ -13,7 +14,7 @@ BuckyBox::Application.routes.draw do
   end
 
   resources :distributors do
-    resource :bank_information,    controller: 'distributor/bank_information',    only: :create
+    resource :bank_information,    controller: 'distributor/bank_information',    only: [:create, :update]
     resource :invoice_information, controller: 'distributor/invoice_information', only: [:create, :update]
     resources :boxes,              controller: 'distributor/boxes',               except: :index
     resources :routes,             controller: 'distributor/routes',              except: :index
@@ -24,6 +25,17 @@ BuckyBox::Application.routes.draw do
         get 'routes'
         get 'boxes'
         get 'contact_info'
+        get 'bank_info'
+        get 'reporting'
+      end
+    end
+
+    resources :settings, controller: 'distributor/settings', only: [:index] do
+      collection do
+        get 'routes'
+        get 'boxes'
+        get 'business_info'
+        get 'invoicing_info'
         get 'bank_info'
         get 'reporting'
       end
@@ -124,5 +136,19 @@ BuckyBox::Application.routes.draw do
     root to: 'dashboard#index'
     get 'dashboard',               controller: 'dashboard', action: 'index'
     get 'order/:order_id/box/:id', controller: 'dashboard', action: 'box'
+  end
+
+  namespace :admin do
+    root to: 'distributors#index'
+
+    resources :distributors do
+      member do
+        get 'impersonate'
+      end
+
+      collection do
+        get 'unimpersonate'
+      end
+    end
   end
 end

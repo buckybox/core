@@ -1,16 +1,18 @@
-= simple_form_for([current_distributor, @route]) do |f|
-  = f.error_notification
+.row
+  .twelve.columns
+    = simple_form_for([current_distributor, @route]) do |f|
+      = f.error_notification
 
-  .inputs
-    = f.input :name
-    = f.input :fee
-    = f.input :monday
-    = f.input :tuesday
-    = f.input :wednesday
-    = f.input :thursday
-    = f.input :friday
-    = f.input :saturday
-    = f.input :sunday
+      .inputs
+        = f.input :name
+        = f.input :fee
+        = f.input :monday
+        = f.input :tuesday
+        = f.input :wednesday
+        = f.input :thursday
+        = f.input :friday
+        = f.input :saturday
+        = f.input :sunday
 
-  .actions
-    = f.button :submit
+      .actions
+        = f.button :submit
