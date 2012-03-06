@@ -22,11 +22,11 @@
         Customers must place orders by
         = select_hour Time.now, ampm: true
         = select_tag 'order_days', options_for_select(days_in_advance)
-        in advance.
+        before delivery.
 
-        Will be auto marked as delivered by
+        Automatically assume all deliveries are successfully delivered by
         = select_hour Time.now, ampm: true
-        on that day.
+        on the day of delivery.
 
       .actions
         = f.button :submit, 'Update'
