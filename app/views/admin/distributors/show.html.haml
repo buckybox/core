@@ -1,0 +1,13 @@
+%p#notice= notice
+
+.field Name: #{@distributor.name}
+.field Email: #{@distributor.email}
+.field Url: #{@distributor.url}
+.field Parameter: #{@distributor.parameter_name}
+
+.field Invoice Threshold (cents) : #{@distributor.invoice_threshold_cents}
+.field Separate Bucky Fee: #{@distributor.separate_bucky_fee}
+
+= link_to 'Edit', edit_admin_distributor_path(@distributor)
+\|
+= link_to 'Back', admin_distributors_path

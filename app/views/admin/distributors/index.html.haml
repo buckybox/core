@@ -1,0 +1,20 @@
+%h1 Distributors
+
+%p Talk to a dev if you want to delete an account
+
+%table
+  %tr
+    %th Name
+    %th
+    %th
+
+  - @distributors.each do |distributor|
+    %tr
+      %td= distributor.name
+      %td= link_to 'Show', admin_distributor_path(distributor)
+      %td= link_to 'Edit', edit_admin_distributor_path(distributor)
+      %td= link_to 'Impersonate', impersonate_admin_distributor_path(distributor)
+
+%br
+
+= link_to 'New Distributor', new_admin_distributor_path
