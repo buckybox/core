@@ -1,7 +1,7 @@
-%h1 Editing Distributor
+- title("Admin - Editing #{@distributor.name}")
 
 = render 'form'
 
-= link_to 'Show', @distributor
+= link_to 'Show', admin_distributor_path(@distributor)
 \|
 = link_to 'Back', admin_distributors_path

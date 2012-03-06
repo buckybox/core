@@ -19,7 +19,7 @@ BuckyBox::Application.routes.draw do
     resources :boxes,              controller: 'distributor/boxes',               except: :index
     resources :routes,             controller: 'distributor/routes',              except: :index
     resources :transactions,       controller: 'distributor/transactions',        only: :create
-    
+
     resources :settings, controller: 'distributor/settings', only: [:index] do
       collection do
         get 'routes'
@@ -130,10 +130,12 @@ BuckyBox::Application.routes.draw do
 
   namespace :admin do
     root to: 'distributors#index'
+
     resources :distributors do
       member do
         get 'impersonate'
       end
+
       collection do
         get 'unimpersonate'
       end

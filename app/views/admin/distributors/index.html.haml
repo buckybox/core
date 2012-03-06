@@ -1,20 +1,33 @@
-%h1 Distributors
+- title('Admin - Distributors')
 
-%p Talk to a dev if you want to delete an account
+.row
+  .six.columns
+    %p Talk to a dev if you want to delete an account
 
-%table
-  %tr
-    %th Name
-    %th
-    %th
+  .six.columns.text-right
+    = link_to 'New Distributor', new_admin_distributor_path, class: 'button radius'
+    %br
+    %br
 
-  - @distributors.each do |distributor|
-    %tr
-      %td= distributor.name
-      %td= link_to 'Show', admin_distributor_path(distributor)
-      %td= link_to 'Edit', edit_admin_distributor_path(distributor)
-      %td= link_to 'Impersonate', impersonate_admin_distributor_path(distributor)
+.row
+  %table.twelve.columns
+    %thead
+      %tr
+        %th Name
+        %th Email
+        %th Created On
+        %th Actions
 
-%br
+    %tbody
+      - @distributors.each do |distributor|
+        %tr
+          %td= distributor.name
+          %td= distributor.email
+          %td= distributor.created_at.to_s(:pretty)
+          %td
+            = link_to 'Show', admin_distributor_path(distributor)
+            \|
+            = link_to 'Edit', edit_admin_distributor_path(distributor)
+            \|
+            = link_to 'Impersonate', impersonate_admin_distributor_path(distributor)
 
-= link_to 'New Distributor', new_admin_distributor_path

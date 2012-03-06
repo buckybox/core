@@ -56,7 +56,6 @@ class Distributor < ActiveRecord::Base
   def password_required?
     password.present? && password.size > 0 || new_record?
   end
-                                                        
 
   def self.create_daily_lists(time = Time.now)
     logger.info "--- Checking distributor for daily list generation (#{time}) ---"

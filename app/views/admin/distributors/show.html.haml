@@ -1,12 +1,33 @@
-%p#notice= notice
+- title("Admin - #{@distributor.name}")
 
-.field Name: #{@distributor.name}
-.field Email: #{@distributor.email}
-.field Url: #{@distributor.url}
-.field Parameter: #{@distributor.parameter_name}
+%table
+  %tr
+    %td Name:
+    %td= @distributor.name
+  %tr
+    %td Email:
+    %td= @distributor.email
+  %tr
+    %td Url:
+    %td= @distributor.url
+  %tr
+    %td Parameter Name:
+    %td= @distributor.parameter_name
+  %tr
+    %td Invoice Threshold:
+    %td= @distributor.invoice_threshold.format
+  %tr
+    %td Separate Bucky Fee:
+    %td= checkmark_boolean(@distributor.separate_bucky_fee)
 
-.field Invoice Threshold (cents) : #{@distributor.invoice_threshold_cents}
-.field Separate Bucky Fee: #{@distributor.separate_bucky_fee}
+%table
+  %tr
+    %td Total Customers:
+    %td= @distributor.customers.count
+  %tr
+    %td Deliveries to Date:
+    %td= @distributor.deliveries.delivered.count
+
 
 = link_to 'Edit', edit_admin_distributor_path(@distributor)
 \|
