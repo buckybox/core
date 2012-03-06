@@ -49,7 +49,7 @@ class Distributor < ActiveRecord::Base
   before_validation :generate_daily_lists_schedule, if: 'daily_lists_schedule.to_s.blank?'
   before_validation :generate_auto_delivery_schedule, if: 'auto_delivery_schedule.to_s.blank?'
 
-  #avoid validations on update
+  # Devise Override: Avoid validations on update or if now password provided
   def password_required?
     password.present? && password.size > 0 || new_record?
   end
