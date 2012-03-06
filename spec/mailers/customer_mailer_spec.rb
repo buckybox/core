@@ -16,6 +16,7 @@ describe CustomerMailer do
 
   describe "invoice" do
     before(:each) do
+      pending ('Invoicing email generation is turned off for now')
       @invoice = Fabricate(:invoice)
     end
     let(:mail) { CustomerMailer.invoice(@invoice) }

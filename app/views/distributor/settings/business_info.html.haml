@@ -8,11 +8,11 @@
       = f.error_notification
 
       .inputs
-        = f.input :name, :label => false, :placeholder => "Business name"
-        = f.input :support_email, :label => false, :placeholder => "Support Email"
-        = f.input :url, :label => false, :placeholder => "Website"
+        = f.input :name, label: "Business name"
+        = f.input :support_email, label: "Support Email"
+        = f.input :url, label: "Website"
         = f.input :company_logo
-        = f.input :company_logo_cache, :as => :hidden
+        = f.input :company_logo_cache, as: :hidden
 
       .uploaded_image
         - if current_distributor.company_logo?
