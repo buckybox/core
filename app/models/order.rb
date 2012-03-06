@@ -123,6 +123,7 @@ class Order < ActiveRecord::Base
     if recurrence_rule.present?
       new_schedule.remove_recurrence_rule(recurrence_rule)
       interval = recurrence_rule.to_hash[:interval]
+      days = nil
 
       rule = case recurrence_rule
       when IceCube::WeeklyRule
@@ -136,9 +137,11 @@ class Order < ActiveRecord::Base
         Rule.monthly(interval).day_of_week(monthly_days_hash)
       end
 
-      if rule.present?
+      if rule.present? && (days - [day]).present?
         new_schedule.add_recurrence_rule(rule)
         self.schedule = new_schedule.to_hash
+      else
+        self.schedule = {}
       end
     else
       nil
@@ -179,8 +182,7 @@ class Order < ActiveRecord::Base
   end
 
   def schedule_empty?
-    schedule.next_occurrence.nil? && 
-      (schedule.recurrence_rules.empty? || schedule.recurrence_rules.first.to_hash[:validations].blank?)
+    schedule.next_occurrence.blank?
   end
   
   def deactivate

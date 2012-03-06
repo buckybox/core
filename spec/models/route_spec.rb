@@ -88,7 +88,7 @@ describe Route do
         @order_times[d].pause(@start_pause, @end_pause)
       end
     end
-    
+
     Route::DAYS.each do |day|
       context "remove_#{day.to_s}" do
         before do
@@ -159,6 +159,21 @@ describe Route do
       Route::DAYS.each do |day|
         specify { @order_times[day].schedule.start_time.should eq(@next_times[day]) }
         specify { @order_times[day].schedule.exception_times.should eq(@pause_range)}
+      end
+
+      context "and then remove sunday, tuesday, wednesday, thursday, saturday and add monday" do
+        before do
+          @route.update_attributes(sunday: false, monday: true, tuesday: false, wednesday: false, thursday: false, friday: false, saturday: false)
+          @order.reload
+          @monthly_order.reload
+          @order_times.map{|d, order| order.reload}
+        end
+
+        specify { @order.should_not be_active }
+        specify { @monthly_order.should_not be_active }
+        Route::DAYS.each do |day|
+          specify { @order_times[day].should_not be_active }
+        end
       end
     end
 
