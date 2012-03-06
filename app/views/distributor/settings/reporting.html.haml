@@ -3,10 +3,8 @@
 = show_settings_sub_nav(:reporting)
 
 .row.data-headings
-  %h4.three.columns
-    Metric
-  %h4.nine.columns
-    Value
+  %h4.three.columns Metric
+  %h4.nine.columns Value
 
 = show_settings_metric('Distributor Since', current_distributor.created_at.to_s(:month_and_year))
 = show_settings_metric('Total Customers', current_distributor.customers.count)

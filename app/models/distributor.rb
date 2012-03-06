@@ -36,7 +36,7 @@ class Distributor < ActiveRecord::Base
 
   # Setup accessible (or protected) attributes for your model
   attr_accessible :email, :password, :password_confirmation, :remember_me, :name, :url, :company_logo, :company_logo_cache, :completed_wizard,
-    :remove_company_logo, :support_email
+    :remove_company_logo, :support_email, :invoice_threshold_cents, :separate_bucky_fee
 
   validates_presence_of :email
   validates_uniqueness_of :email
@@ -48,6 +48,11 @@ class Distributor < ActiveRecord::Base
   before_validation :check_emails
   before_validation :generate_daily_lists_schedule, if: 'daily_lists_schedule.to_s.blank?'
   before_validation :generate_auto_delivery_schedule, if: 'auto_delivery_schedule.to_s.blank?'
+
+  # Devise Override: Avoid validations on update or if now password provided
+  def password_required?
+    password.present? && password.size > 0 || new_record?
+  end
 
   def self.create_daily_lists(time = Time.now)
     logger.info "--- Checking distributor for daily list generation (#{time}) ---"
