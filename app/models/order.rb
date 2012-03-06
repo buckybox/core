@@ -46,9 +46,9 @@ class Order < ActiveRecord::Base
     if frequency == 'single'
       schedule.add_recurrence_time(start_time)
     elsif frequency == 'monthly'
-      montly_days_hash = days_by_number.inject({}) { |hash, day| hash[day] = [1]; hash }
+      monthly_days_hash = days_by_number.inject({}) { |hash, day| hash[day] = [1]; hash }
 
-      recurrence_rule = Rule.monthly.day_of_week(montly_days_hash)
+      recurrence_rule = Rule.monthly.day_of_week(monthly_days_hash)
       schedule.add_recurrence_rule(recurrence_rule)
     else
       if frequency == 'weekly'
@@ -122,14 +122,18 @@ class Order < ActiveRecord::Base
 
     if recurrence_rule.present?
       new_schedule.remove_recurrence_rule(recurrence_rule)
-      days = recurrence_rule.to_hash[:validations][:day]
       interval = recurrence_rule.to_hash[:interval]
 
       rule = case recurrence_rule
       when IceCube::WeeklyRule
-       Rule.weekly(interval).day(*(days - [day]))
+        days = recurrence_rule.to_hash[:validations][:day]
+
+        Rule.weekly(interval).day(*(days - [day]))
       when IceCube::MonthlyRule
-       Rule.monthly(interval).day(*(days - [day]))
+        days = recurrence_rule.to_hash[:validations][:day_of_week].keys
+
+        monthly_days_hash = (days - [day]).inject({}) { |hash, day| hash[day] = [1]; hash }
+        Rule.monthly(interval).day_of_week(monthly_days_hash)
       end
 
       if rule.present?
@@ -175,7 +179,8 @@ class Order < ActiveRecord::Base
   end
 
   def schedule_empty?
-    schedule.next_occurrence.nil?
+    schedule.next_occurrence.nil? && 
+      (schedule.recurrence_rules.empty? || schedule.recurrence_rules.first.to_hash[:validations].blank?)
   end
   
   def deactivate
@@ -196,7 +201,7 @@ class Order < ActiveRecord::Base
 
     updated_schedule = schedule
     updated_schedule.exception_times.each { |time| updated_schedule.remove_exception_time(time) }
-    (start_date..end_date).each   { |date| updated_schedule.add_exception_time(date.to_time) }
+    (start_date..end_date).each   { |date| updated_schedule.add_exception_time(date.beginning_of_day) }
     self.schedule = updated_schedule
     save
   end

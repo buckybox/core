@@ -1,6 +1,8 @@
 require 'spec_helper'
 include IceCube
 
+#TODO optomized the tests, I confess I didn't do any of that when writing them
+
 describe Route do
   before { @route = Fabricate(:route) }
 
@@ -68,6 +70,9 @@ describe Route do
       @order.schedule.to_s.should match /Weekly on Sundays, Mondays, Tuesdays, Wednesdays, Thursdays, Fridays, and Saturdays/ 
       @route.future_orders.should include(@order)
       
+      # [0, 1, ...] === [:sunday, :monday, ..], kinda
+      @monthly_order = Fabricate(:recurring_order, schedule: new_monthly_schedule(@schedule_start_time, [0,1,2,3,4,5,6]), account: @account, box: @box)
+      
       @order_times = {}
       @next_times = {}
       @start_pause = 2.weeks.from_now.to_date
@@ -75,6 +80,7 @@ describe Route do
       @pause_range = (@start_pause..@end_pause).to_a.collect(&:beginning_of_day)
 
       @order.pause(@start_pause, @end_pause)
+      @monthly_order.pause(@start_pause, @end_pause)
 
       Route::DAYS.each do |d|
         @next_times[d] = Time.next(d)
@@ -89,12 +95,17 @@ describe Route do
           @route.send("#{day.to_s}=", false)
           @route.save
           @order.reload
+          @monthly_order.reload
           @order_times.map{|d, order| order.reload}
         end
         it "should remove only #{day} from the order schedule" do
           @order.schedule.to_s.should_not match /#{day.to_s}/i 
+          @monthly_order.schedule.to_s.should_not match /#{day.to_s}/i 
+
           (Route::DAYS - [day]).each do |remaining_day|
             @order.schedule.to_s.should match /#{remaining_day.to_s}/i
+            @monthly_order.schedule.to_s.should match /#{remaining_day.to_s}/i
+            @monthly_order.schedule.to_s.should match /Monthly/i
           end
         end
 
@@ -106,8 +117,11 @@ describe Route do
         end
         
         specify { @order.schedule.exception_times.should eq(@pause_range) }
+        specify { @monthly_order.schedule.exception_times.should eq(@pause_range) }
 
         specify { @order.schedule.start_time.should eq(@schedule_start_time) }
+        specify { @monthly_order.schedule.start_time.should eq(@schedule_start_time) }
+
         Route::DAYS.each do |day|
           specify { @order_times[day].schedule.start_time.should eq(@next_times[day]) }
           specify { @order_times[day].schedule.exception_times.should eq(@pause_range)}
@@ -119,11 +133,14 @@ describe Route do
       before do
         @route.update_attributes(monday: false, friday:false)
         @order.reload
+        @monthly_order.reload
         @order_times.map{|d, order| order.reload}
       end
 
       specify { @order.schedule.to_s.should match /Weekly on Sundays, Tuesdays, Wednesdays, Thursdays, and Saturdays/ }
       specify { @order.should be_active }
+      specify { @monthly_order.schedule.to_s.should match /Monthly.*Sunday.*Tuesday.*Wednesday.*Thursday.*Saturday/ }
+      specify { @monthly_order.should be_active }
 
       (Route::DAYS - [:monday, :friday]).each do |day|
         specify { @order_times[day].schedule.recurrence_times.should_not be_empty }
@@ -136,6 +153,9 @@ describe Route do
 
       specify { @order.schedule.exception_times.should eq(@pause_range) }
       specify { @order.schedule.start_time.should eq(@schedule_start_time) }
+      specify { @monthly_order.schedule.exception_times.should eq(@pause_range) }
+      specify { @monthly_order.schedule.start_time.should eq(@schedule_start_time) }
+
       Route::DAYS.each do |day|
         specify { @order_times[day].schedule.start_time.should eq(@next_times[day]) }
         specify { @order_times[day].schedule.exception_times.should eq(@pause_range)}
@@ -146,11 +166,14 @@ describe Route do
       before do
         @route.update_attributes(monday: false, tuesday: false, wednesday: false, thursday: false, friday: false, saturday: false)
         @order.reload
+        @monthly_order.reload
         @order_times.map{|d, order| order.reload}
       end
 
       specify { @order.schedule.to_s.should match /Weekly on Sundays/ }
       specify { @order.should be_active }
+      specify { @monthly_order.schedule.to_s.should match /Monthly on the 1st Sunday/ }
+      specify { @monthly_order.should be_active }
 
       (Route::DAYS - [:sunday]).each do |day|
         specify { @order_times[day].schedule.recurrence_times.should be_empty }
@@ -163,6 +186,9 @@ describe Route do
 
       specify { @order.schedule.start_time.should eq(@schedule_start_time) }
       specify { @order.schedule.exception_times.should eq(@pause_range) }
+      specify { @monthly_order.schedule.start_time.should eq(@schedule_start_time) }
+      specify { @monthly_order.schedule.exception_times.should eq(@pause_range) }
+
       Route::DAYS.each do |day|
         specify { @order_times[day].schedule.start_time.should eq(@next_times[day]) }
         specify { @order_times[day].schedule.exception_times.should eq(@pause_range)}
