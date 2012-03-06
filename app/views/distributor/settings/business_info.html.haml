@@ -19,14 +19,20 @@
             = image_tag(current_distributor.company_logo.url)
             = f.input :remove_company_logo, as: :boolean, label: 'Remove image'
 
-        Customers must place orders by
-        = select_hour Time.now, ampm: true
-        = select_tag 'order_days', options_for_select(days_in_advance)
-        before delivery.
+        %fieldset.inline-inputs
+          %legend Delivery Window
+          %p
+            Customers must place orders by
+            = select_hour @default_delivery_time, ampm: true
+            = select_tag 'order_days', options_for_select(days_in_advance, selected: @default_delivery_days)
+            before delivery.
 
-        Automatically assume all deliveries are successfully delivered by
-        = select_hour Time.now, ampm: true
-        on the day of delivery.
+        %fieldset.inline-inputs
+          %legend Automatic Delivery
+          %p
+            Automatically assume all deliveries are successfully delivered by
+            = select_hour @default_automatic_time, ampm: true
+            on the day of delivery.
 
       .actions
         = f.button :submit, 'Update'

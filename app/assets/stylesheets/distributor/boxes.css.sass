@@ -1,3 +1,27 @@
 // Place all the styles related to the Distributor::Boxes controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+
+.box-form
+  form
+    .hint 
+      font-size: .9em
+
+    div.currency > *, div.boolean > *
+      display: inline
+
+    div.currency
+      input
+        width: 5em
+      span.hint, input
+        margin-left: .5em
+
+    div.file-input
+      display: none
+      border: 1px solid #ddd
+      border-radius: 3px
+      padding: 3px
+
+      .description
+        font-style: italic
+        margin-left: .5em

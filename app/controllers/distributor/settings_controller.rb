@@ -1,9 +1,11 @@
 class Distributor::SettingsController < Distributor::BaseController
   respond_to :html, :json
 
-  def routes
-    @route = Route.new
-    @routes = current_distributor.routes
+  def business_info
+    time = Time.new
+    @default_delivery_time  = Time.new(time.year, time.month, time.day, 18)
+    @default_delivery_days  = 3
+    @default_automatic_time = Time.new(time.year, time.month, time.day, 18)
   end
 
   def boxes
@@ -11,7 +13,9 @@ class Distributor::SettingsController < Distributor::BaseController
     @boxes = current_distributor.boxes
   end
 
-  def business_info
+  def routes
+    @route = Route.new
+    @routes = current_distributor.routes
   end
 
   def bank_info
