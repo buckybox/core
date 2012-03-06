@@ -127,11 +127,11 @@ class Order < ActiveRecord::Base
 
       rule = case recurrence_rule
       when IceCube::WeeklyRule
-        days = recurrence_rule.to_hash[:validations][:day]
+        days = recurrence_rule.to_hash[:validations][:day] || []
 
         Rule.weekly(interval).day(*(days - [day]))
       when IceCube::MonthlyRule
-        days = recurrence_rule.to_hash[:validations][:day_of_week].keys
+        days = recurrence_rule.to_hash[:validations][:day_of_week].keys || []
 
         monthly_days_hash = (days - [day]).inject({}) { |hash, day| hash[day] = [1]; hash }
         Rule.monthly(interval).day_of_week(monthly_days_hash)
