@@ -36,10 +36,7 @@ class Distributor < ActiveRecord::Base
 
   # Setup accessible (or protected) attributes for your model
   attr_accessible :email, :password, :password_confirmation, :remember_me, :name, :url, :company_logo, :company_logo_cache, :completed_wizard,
-    :remove_company_logo, :support_email
-
-  #jordan and samson to review and make sure they are happy with change
-  attr_accessible :parameter_name, :invoice_threshold_cents, :separate_bucky_fee
+    :remove_company_logo, :support_email, :invoice_threshold_cents, :separate_bucky_fee
 
   validates_presence_of :email
   validates_uniqueness_of :email
