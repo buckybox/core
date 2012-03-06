@@ -14,7 +14,10 @@
             \|
             = link_to 'settings', distributor_settings_business_info_path
             \|
-            = link_to 'logout', destroy_distributor_session_path, :method => :delete
+            - if admin_signed_in? 
+              = link_to 'logout', unimpersonate_admin_distributors_path
+            - else
+              = link_to 'logout', destroy_distributor_session_path, :method => :delete
           - else
             = link_to 'login', new_distributor_session_path
 

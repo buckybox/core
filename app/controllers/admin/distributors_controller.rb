@@ -1,0 +1,14 @@
+class Admin::DistributorsController <  Admin::BaseController
+  def impersonate
+    distributor = Distributor.find(params[:id])
+    sign_in(distributor)
+
+    redirect_to distributor_root_path
+  end
+
+  def unimpersonate
+    sign_out(:distributor)
+
+    redirect_to admin_root_path
+  end
+end
