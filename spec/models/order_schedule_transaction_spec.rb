@@ -8,7 +8,7 @@ describe OrderScheduleTransaction do
 
   context :schedule do
     before do
-      @time = Time.now
+      @time = Time.current
       @schedule = Schedule.new(@time)
       @order_schedule_transaction.schedule = @schedule
       @order_schedule_transaction.save

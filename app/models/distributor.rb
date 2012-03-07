@@ -54,7 +54,10 @@ class Distributor < ActiveRecord::Base
     password.present? && password.size > 0 || new_record?
   end
 
-  def self.create_daily_lists(time = Time.now)
+  def self.create_daily_lists(time = nil)
+    self.change_to_local_timezone
+    time ||= Time.current
+
     logger.info "--- Checking distributor for daily list generation (#{time}) ---"
 
     all.each do |distributor|
@@ -74,7 +77,10 @@ class Distributor < ActiveRecord::Base
     end
   end
 
-  def self.automate_completed_status(time = Time.now)
+  def self.automate_completed_status(time = nil)
+    self.change_to_local_timezone
+    time ||= Time.current
+
     logger.info "--- Marking distributor daily lists as complete (#{time}) ---"
 
     all.each do |distributor|
@@ -141,6 +147,16 @@ class Distributor < ActiveRecord::Base
     successful &= dates_packing_lists.mark_all_as_auto_packed
 
     return successful
+  end
+
+  def change_to_local_time_zone
+    Time.zone = time_zone || BuckyBox::Application.config.time_zone
+  end
+
+  def use_local_time_zone
+    Time.use_zone(time_zone || BuckyBox::Application.config.time_zone) do
+      yield
+    end
   end
 
   private

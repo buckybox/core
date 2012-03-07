@@ -32,7 +32,7 @@ module Distributor::DeliveriesHelper
   end
 
   def reschedule_dates(route)
-    dates = route.schedule.next_occurrences(5, Time.now)
+    dates = route.schedule.next_occurrences(5, Time.current)
     options_from_collection_for_select(dates, 'to_date', 'to_date')
   end
 

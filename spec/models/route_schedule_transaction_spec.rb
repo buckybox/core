@@ -8,7 +8,7 @@ describe RouteScheduleTransaction do
 
   context :schedule do
     before do
-      @time = Time.now
+      @time = Time.current
       @schedule = Schedule.new(@time)
       @route_schedule_transaction.schedule = @schedule
       @route_schedule_transaction.save

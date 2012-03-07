@@ -51,14 +51,14 @@ describe Order do
     Delorean.time_travel_to(Date.parse('2013-02-02')) do
       context 'exceptions' do
         %w(weekly fortnightly monthly).each do |frequency|
-          specify { expect { Order.create_schedule(Time.now, frequency) }.should raise_error }
+          specify { expect { Order.create_schedule(Time.current, frequency) }.should raise_error }
         end
       end
 
-      specify { Order.create_schedule(Time.now, 'single').to_s.should == Time.now.strftime("%B %e, %Y") }
-      specify { Order.create_schedule(Time.now, 'weekly', [1, 3]).to_s.should == 'Weekly on Mondays and Wednesdays' }
-      specify { Order.create_schedule(Time.now, 'fortnightly', [1, 3]).to_s.should == 'Every 2 weeks on Mondays and Wednesdays' }
-      specify { Order.create_schedule(Time.now, 'monthly', [1, 3]).to_s.should == 'Monthly on the 1st Monday when it is the 1st Wednesday' }
+      specify { Order.create_schedule(Time.current, 'single').to_s.should == Time.current.strftime("%B %e, %Y") }
+      specify { Order.create_schedule(Time.current, 'weekly', [1, 3]).to_s.should == 'Weekly on Mondays and Wednesdays' }
+      specify { Order.create_schedule(Time.current, 'fortnightly', [1, 3]).to_s.should == 'Every 2 weeks on Mondays and Wednesdays' }
+      specify { Order.create_schedule(Time.current, 'monthly', [1, 3]).to_s.should == 'Monthly on the 1st Monday when it is the 1st Wednesday' }
     end
   end
 
@@ -83,7 +83,7 @@ describe Order do
     describe 'change schedule' do
       before do
         @schedule = @order.schedule
-        @schedule.add_recurrence_time(Time.now + 5.days)
+        @schedule.add_recurrence_time(Time.current + 5.days)
         @schedule.add_recurrence_rule(Rule.weekly(2).day(:monday, :tuesday))
         @order.schedule = @schedule
         @order.save
@@ -194,26 +194,26 @@ describe Order do
 
   describe '#deactivate_finished' do
     before do
-      rule_schedule = Schedule.new(Time.now - 2.months)
+      rule_schedule = Schedule.new(Time.current - 2.months)
       rule_schedule.add_recurrence_rule(Rule.daily(3))
 
       rule_schedule_no_end_date = rule_schedule.clone
       @order1 = Fabricate(:active_order, :schedule => rule_schedule_no_end_date)
 
       rule_schedule_end_date_future = rule_schedule.clone
-      rule_schedule_end_date_future.end_time = (Time.now + 1.month)
+      rule_schedule_end_date_future.end_time = (Time.current + 1.month)
       @order2 = Fabricate(:active_order, :schedule => rule_schedule_end_date_future)
 
       rule_schedule_end_date_past = rule_schedule.clone
-      rule_schedule_end_date_past.end_time = (Time.now - 1.month)
+      rule_schedule_end_date_past.end_time = (Time.current - 1.month)
       @order3 = Fabricate(:active_order, :schedule => rule_schedule_end_date_past)
 
-      time_schedule_future = Schedule.new(Time.now - 2.months)
-      time_schedule_future.add_recurrence_time(Time.now + 5.days)
+      time_schedule_future = Schedule.new(Time.current - 2.months)
+      time_schedule_future.add_recurrence_time(Time.current + 5.days)
       @order4 = Fabricate(:active_order, :schedule => time_schedule_future)
 
-      time_schedule_past = Schedule.new(Time.now - 2.months)
-      time_schedule_past.add_recurrence_time(Time.now - 5.days)
+      time_schedule_past = Schedule.new(Time.current - 2.months)
+      time_schedule_past.add_recurrence_time(Time.current - 5.days)
       @order5 = Fabricate(:active_order, :schedule => time_schedule_past)
     end
 

@@ -155,7 +155,7 @@ describe Account do
     end
 
     it "does nothing if next invoice date is after today" do
-      @account.stub(:next_invoice_date).and_return(1.day.from_now(Time.now))
+      @account.stub(:next_invoice_date).and_return(1.day.from_now(Time.current))
       Invoice.should_not_receive(:create)
       @account.create_invoice
     end

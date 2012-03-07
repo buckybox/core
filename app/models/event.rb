@@ -49,7 +49,7 @@ class Event < ActiveRecord::Base
   before_save :check_trigger
 
   scope :active,  where(dismissed: false)
-  scope :current, where('trigger_on <= ?', Time.now.to_formatted_s(:db))
+  scope :current, lambda { where('trigger_on <= ?', Time.current) }
 
   default_scope order('trigger_on DESC')
 
@@ -65,6 +65,6 @@ class Event < ActiveRecord::Base
   private
 
   def check_trigger
-    self.trigger_on = Time.now if self.trigger_on.nil?
+    self.trigger_on = Time.current if self.trigger_on.nil?
   end
 end
