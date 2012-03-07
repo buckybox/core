@@ -5,7 +5,7 @@
   .clear
 
 .row
-  = simple_form_for([current_distributor, @box]) do |f|
+  = simple_form_for([:distributor, @box]) do |f|
     %fieldset
       %legend Add Box
       = f.error_notification

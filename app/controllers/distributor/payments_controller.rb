@@ -1,5 +1,4 @@
 class Distributor::PaymentsController < Distributor::ResourceController
-  belongs_to :distributor
   actions :create
 
   respond_to :html, :xml, :json
@@ -41,6 +40,6 @@ class Distributor::PaymentsController < Distributor::ResourceController
     @statement = BankStatement.find(params['statement_id'])
     @statement.process_statement!(params['customers'])
 
-    redirect_to distributor_payments_path
+    redirect_to distributor_payments_url
   end
 end

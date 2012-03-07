@@ -42,26 +42,26 @@ module Distributor::DashboardHelper
   end
 
   def link_to_customer customer
-      link_to "#{customer.name} (ID:#{customer.id})", distributor_customer_path(current_distributor, customer.id)
+      link_to "#{customer.name} (ID:#{customer.id})", distributor_customer_path(customer.id)
   end
 
   def link_to_delivery delivery_id
-    link_to  "delivery", distributor_delivery_path(current_distributor, delivery_id)
+    link_to  "delivery", distributor_delivery_path(delivery_id)
   end
 
   def link_to_invoice invoice_id
     #TODO change the path to match the correct route when invoice page created
-    #link_to  "Invoice ##{invoice_id}", distributor_invoice_path(current_distributor, invoice_id)
+    #link_to  "Invoice ##{invoice_id}", distributor_invoice_path(invoice_id)
     "An invoice"
   end
 
   def link_to_transaction transaction_id
-    link_to "Transaction ##{transaction_id}", distributor_transaction_path(current_distributor, transaction_id)
+    link_to "Transaction ##{transaction_id}", distributor_transaction_path(transaction_id)
   end
 
   def link_to_reconciliation reconciliation_id
     #TODO change the path to match the correct route when invoice page created
-    #link_to  "reconcile bank deposits", distributor_reconciliation_path(current_distributor, reconciliation_id)
+    #link_to  "reconcile bank deposits", distributor_reconciliation_path(reconciliation_id)
     "reconcile bank deposits"
   end
 

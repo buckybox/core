@@ -1,28 +1,22 @@
-class Customer::CustomersController < Customer::BaseController
+class Customer::CustomersController < Customer::ResourceController
   actions :update
 
   respond_to :html, :xml, :json
 
   def update
-    @customer = Customer.find(params[:id])
-    redirect_to customer_root_url and return unless @customer == current_customer
-
     update! { customer_root_url }
   end
 
   def update_password
-    @customer = Customer.find(params[:id])
-    redirect_to customer_root_url and return unless @customer == current_customer
-
     respond_to do |format|
-      if @customer.update_attributes(params[:customer])
-        sign_in @customer, bypass: true
+      if current_customer.update_attributes(params[:customer])
+        sign_in current_customer, bypass: true
 
-        format.html { redirect_to customer_root_path, notice: 'Password successfully updated.' }
+        format.html { redirect_to customer_root_url, notice: 'Password successfully updated.' }
         format.json { head :no_content }
       else
-        format.html { redirect_to customer_root_path, error: 'There was a problem changing your password.' }
-        format.json { render json: @customer.errors, status: :unprocessable_entity }
+        format.html { redirect_to customer_root_url, error: 'There was a problem changing your password.' }
+        format.json { render json: current_customer.errors, status: :unprocessable_entity }
       end
     end
   end

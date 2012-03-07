@@ -42,7 +42,7 @@ class MarketController < ApplicationController
     @box = @order.box
     @customer = @order.customer
     unless @order
-      redirect_to market_store_path(@distributor.parameter_name)
+      redirect_to market_store_url(@distributor.parameter_name)
     end
   end
 

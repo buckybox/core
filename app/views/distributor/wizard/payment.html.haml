@@ -4,7 +4,7 @@
 
 .row
   .four.columns
-    = simple_form_for(@invoice_information, :url => distributor_invoice_information_path(current_distributor)) do |f|
+    = simple_form_for(@invoice_information, :url => distributor_invoice_information_path) do |f|
       = f.error_notification
 
       .inputs

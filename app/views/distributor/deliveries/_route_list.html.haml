@@ -16,7 +16,7 @@
             %td= button_tag 'Commit', class: 'small radius button', id: 'commit-missed'
     .five.columns.export.text-right
       = button_to('Export',
-        export_distributor_deliveries_path(current_distributor),
+        export_distributor_deliveries_path,
         { id: 'delivery-export', class: 'small radius button', disabled: @selected_date.future? })
 
   - if @items.all? { |i| i.is_a?(Delivery) }

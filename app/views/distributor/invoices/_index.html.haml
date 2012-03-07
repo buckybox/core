@@ -11,7 +11,7 @@
     - invoices.each do |invoice|
       %tbody
         %tr
-          %td= invoice.id.present? ? link_to("#{invoice.full_number}", [current_distributor, invoice]) : '-'
+          %td= invoice.id.present? ? link_to("#{invoice.full_number}", [:distributor, invoice]) : '-'
           %td= customer_badge(invoice.customer)
           %td= invoice.amount
           %td= invoice.date

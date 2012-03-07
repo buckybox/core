@@ -11,7 +11,6 @@
         %th Sat
         %th Sun
         %th Fee
-        -#%th Actions
 
     %tbody
       - @routes.each do |route|
@@ -25,5 +24,3 @@
           %td= checkmark_boolean(route.saturday)
           %td= checkmark_boolean(route.sunday)
           %td= route.fee.format
-          -#%td
-            -# link_to 'Edit', edit_distributor_route_path(current_distributor, route)

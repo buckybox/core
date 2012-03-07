@@ -1,5 +1,4 @@
 class Distributor::BoxesController < Distributor::ResourceController
-  belongs_to :distributor
   actions :all, except: [ :index, :destroy ]
 
   respond_to :html, :xml, :json

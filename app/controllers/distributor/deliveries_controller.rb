@@ -4,7 +4,6 @@ require 'csv'
 
 class Distributor::DeliveriesController < Distributor::ResourceController
   custom_actions collection: [:update_status, :master_packing_sheet, :export]
-  belongs_to :distributor
 
   respond_to :html, :xml, except: [:update_status, :export]
   respond_to :json, except: [:master_packing_sheet, :export]
@@ -15,7 +14,7 @@ class Distributor::DeliveriesController < Distributor::ResourceController
 
   def index
     unless params[:date] && params[:view]
-      redirect_to date_distributor_deliveries_path(current_distributor, Date.current, 'packing') and return
+      redirect_to date_distributor_deliveries_url(Date.current, 'packing') and return
     end
 
     index! do

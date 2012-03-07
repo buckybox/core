@@ -1,5 +1,5 @@
 class Distributor::OrdersController < Distributor::ResourceController
-  nested_belongs_to :distributor, :account
+  belongs_to :account
   actions :all, except: [:index, :show, :destroy]
 
   respond_to :html, :xml, :json
@@ -12,7 +12,6 @@ class Distributor::OrdersController < Distributor::ResourceController
   end
 
   def create
-    @distributor     = Distributor.find(params[:distributor_id])
     @account         = Account.find(params[:account_id])
     @order           = Order.new(params[:order])
 
@@ -25,7 +24,7 @@ class Distributor::OrdersController < Distributor::ResourceController
     @order.account   = @account
     @order.completed = true
 
-    create! { [current_distributor, @account.customer] }
+    create! { [:distributor, @account.customer] }
   end
 
   def edit
@@ -35,37 +34,33 @@ class Distributor::OrdersController < Distributor::ResourceController
     end
   end
 
-
   def update
-    @distributor = current_distributor
-    @account     = @distributor.accounts.find(params[:account_id])
-    @order       = @distributor.orders.find(params[:id])
+    @account     = current_distributor.accounts.find(params[:account_id])
+    @order       = current_distributor.orders.find(params[:id])
 
     # Not allowing changes to the schedule at the moment
     # Will revisit when we have time to build a proper UI for it
     params[:order].delete(:frequency)
 
-    update! { [current_distributor, @account.customer] }
+    update! { [:distributor, @account.customer] }
   end
 
   def deactivate
-    @distributor = Distributor.find(params[:distributor_id])
     @account = Account.find(params[:account_id])
     @order = Order.find(params[:id])
 
     respond_to do |format|
       if @order.update_attribute(:active, false)
-        format.html { redirect_to [current_distributor, @account.customer], notice: 'Order was successfully deactivated.' }
+        format.html { redirect_to [:distributor, @account.customer], notice: 'Order was successfully deactivated.' }
         format.json { head :no_content }
       else
-        format.html { redirect_to [current_distributor, @account.customer], warning: 'Error while trying to deactivate order.' }
+        format.html { redirect_to [:distributor, @account.customer], warning: 'Error while trying to deactivate order.' }
         format.json { render json: @order.errors, status: :unprocessable_entity }
       end
     end
   end
 
   def pause
-    @distributor = Distributor.find(params[:distributor_id])
     @account     = Account.find(params[:account_id])
     @order       = Order.find(params[:id])
 
@@ -74,8 +69,8 @@ class Distributor::OrdersController < Distributor::ResourceController
 
     schedule   = @order.schedule
 
-    redirect_to [@distributor, @account.customer], warning: 'Dates can not be in the past' and return if start_date.past? || end_date.past?
-    redirect_to [@distributor, @account.customer], warning: 'Start date can not be past end date' and return if end_date <= start_date
+    redirect_to [:distributor, @account.customer], warning: 'Dates can not be in the past' and return if start_date.past? || end_date.past?
+    redirect_to [:distributor, @account.customer], warning: 'Start date can not be past end date' and return if end_date <= start_date
 
     schedule.exception_times.each { |time| schedule.remove_exception_time(time) }
     (start_date..end_date).each   { |date| schedule.add_exception_time(date.to_time) }
@@ -84,17 +79,16 @@ class Distributor::OrdersController < Distributor::ResourceController
 
     respond_to do |format|
       if @order.save
-        format.html { redirect_to [@distributor, @account.customer], notice: 'Pause successfully applied.' }
+        format.html { redirect_to [:distributor, @account.customer], notice: 'Pause successfully applied.' }
         format.json { head :no_content }
       else
-        format.html { redirect_to [@distributor, @account.customer], error: 'There was a problem pausing your order.' }
+        format.html { redirect_to [:distributor, @account.customer], error: 'There was a problem pausing your order.' }
         format.json { render json: @order.errors, status: :unprocessable_entity }
       end
     end
   end
 
   def remove_pause
-    @distributor = Distributor.find(params[:distributor_id])
     @account     = Account.find(params[:account_id])
     @order       = Order.find(params[:id])
 
@@ -106,10 +100,10 @@ class Distributor::OrdersController < Distributor::ResourceController
 
     respond_to do |format|
       if @order.save
-        format.html { redirect_to [@distributor, @account.customer], notice: 'Pause successfully removed.' }
+        format.html { redirect_to [:distributor, @account.customer], notice: 'Pause successfully removed.' }
         format.json { head :no_content }
       else
-        format.html { redirect_to [@distributor, @account.customer], error: 'There was a problem removing the pause from your order.' }
+        format.html { redirect_to [:distributor, @account.customer], error: 'There was a problem removing the pause from your order.' }
         format.json { render json: @order.errors, status: :unprocessable_entity }
       end
     end

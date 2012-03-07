@@ -4,7 +4,7 @@
 
 .row
   .four.columns.centered
-    = simple_form_for(@bank_information, :url => distributor_bank_information_path(current_distributor)) do |f|
+    = simple_form_for(@bank_information, :url => distributor_bank_information_path) do |f|
       = f.error_notification
 
       .inputs

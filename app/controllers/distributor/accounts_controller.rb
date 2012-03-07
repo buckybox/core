@@ -1,6 +1,4 @@
 class Distributor::AccountsController < Distributor::ResourceController
-  belongs_to :distributor
-
   respond_to :html, :xml, :json
 
   def change_balance
@@ -23,7 +21,7 @@ class Distributor::AccountsController < Distributor::ResourceController
 
     respond_to do |format|
       if @account.save && delta_cents != 0
-        format.html { redirect_to [current_distributor, @account.customer], notice: 'Account balance was successfully updated.' }
+        format.html { redirect_to [:distributor, @account.customer], notice: 'Account balance was successfully updated.' }
         format.json { head :no_content }
       else
         format.html { render action: 'edit' }

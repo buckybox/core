@@ -13,7 +13,7 @@
     %strong Next delivery:
     = order.schedule.next_occurrence.strftime("%A %d %b") if order.schedule.next_occurrence
 
-= simple_form_for(order, url: pause_customer_order_path(current_customer, order), html: { method: :put }) do |f|
+= simple_form_for(order, url: pause_customer_order_path(order), html: { method: :put }) do |f|
   = f.error_notification
 
   .customer_pause
@@ -39,5 +39,5 @@
 
     .actions
       = f.button :submit, 'Update Pause'
-      = link_to 'Remove Pause', remove_pause_customer_order_path(current_customer, order), method: :post
+      = link_to 'Remove Pause', remove_pause_customer_order_path(order), method: :post
 

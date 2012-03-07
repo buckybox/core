@@ -19,9 +19,7 @@ $(function() {
         type: 'post',
         data: $('#delivery_list').sortable('serialize'),
         dataType: 'json',
-        url: '/distributors/' +
-          $('#delivery-listings').data('distributor') +
-          '/deliveries/date/' +
+        url: '/distributor/deliveries/date/' +
           $('#delivery-listings').data('date') +
           '/reposition'
       })

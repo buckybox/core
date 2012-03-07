@@ -1,4 +1,4 @@
-class Customer::AddressController < Customer::BaseController
+class Customer::AddressController < Customer::ResourceController
   actions :update
 
   belongs_to :customer, singleton: true
