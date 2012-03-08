@@ -116,14 +116,14 @@ class Distributor < ActiveRecord::Base
     raise(ArgumentError, 'The auto delivery schedule can not be updated this way. Please use the schedule generation method.')
   end
 
-  def generate_daily_lists_schedule(time = Time.new.beginning_of_day)
+  def generate_daily_lists_schedule(time = Time.current.beginning_of_day)
     time = time.change(min: 0, sec: 0, usec: 0) # make sure time starts on the hour
     schedule = Schedule.new(time, duration: 3600) # make sure it lasts for an hour
     schedule.add_recurrence_rule Rule.daily # and have it reoccur daily
     self[:daily_lists_schedule] = schedule.to_hash
   end
 
-  def generate_auto_delivery_schedule(time = Time.new.end_of_day)
+  def generate_auto_delivery_schedule(time = Time.current.end_of_day)
     time = time.change(min: 0, sec: 0, usec: 0) # make sure time starts on the hour
     schedule = Schedule.new(time, duration: 3600) # make sure it lasts for an hour
     schedule.add_recurrence_rule Rule.daily # and have it reoccur daily
@@ -151,11 +151,13 @@ class Distributor < ActiveRecord::Base
   end
 
   def change_to_local_time_zone
-    Time.zone = time_zone || BuckyBox::Application.config.time_zone
+    new_time_zone = [time_zone, BuckyBox::Application.config.time_zone].select(&:present?).first
+    Time.zone = new_time_zone unless new_time_zone.blank?
   end
 
   def use_local_time_zone
-    Time.use_zone(time_zone || BuckyBox::Application.config.time_zone) do
+    new_time_zone = [time_zone, BuckyBox::Application.config.time_zone].select(&:present?).first
+    Time.use_zone(new_time_zone) do
       yield
     end
   end

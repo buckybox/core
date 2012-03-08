@@ -17,11 +17,11 @@ describe Distributor do
   context 'daily automation' do
     context 'default times' do
       before do
-        time_now = Time.new
+        time_now = Time.current
         Time.stub(:new).and_return(time_now)
 
-        @build_lists_time = Time.new.beginning_of_day
-        @delivery_time    = Time.new.end_of_day
+        @build_lists_time = Time.current.beginning_of_day
+        @delivery_time    = Time.current.end_of_day
 
         @distributor = Fabricate.build(:distributor)
         @distributor.generate_daily_lists_schedule
@@ -39,19 +39,19 @@ describe Distributor do
 
     context 'custom times' do
       before do
-        time_now = Time.new
+        time_now = Time.current
         Time.stub(:new).and_return(time_now)
 
-        @build_lists_time = Time.new.beginning_of_day + 6.hours + 32.minutes
-        @delivery_time    = Time.new.beginning_of_day + 18.hours + 49.minutes
+        @build_lists_time = Time.current.beginning_of_day + 6.hours + 32.minutes
+        @delivery_time    = Time.current.beginning_of_day + 18.hours + 49.minutes
 
         @distributor = Fabricate.build(:distributor)
         @distributor.generate_daily_lists_schedule(@build_lists_time)
         @distributor.generate_auto_delivery_schedule(@delivery_time)
         @distributor.save
 
-        @build_lists_time = Time.new.beginning_of_day + 6.hours
-        @delivery_time    = Time.new.beginning_of_day + 18.hours
+        @build_lists_time = Time.current.beginning_of_day + 6.hours
+        @delivery_time    = Time.current.beginning_of_day + 18.hours
       end
 
       specify { @distributor.daily_lists_schedule.start_time == @build_lists_time }
@@ -61,5 +61,44 @@ describe Distributor do
       specify { @distributor.auto_delivery_schedule.to_s == 'Daily' }
       specify { @distributor.auto_delivery_schedule.next_occurrence == (@delivery_time + 1.day) }
     end
+  end
+
+  context 'time zone' do
+    describe '.change_to_local_time_zone' do
+      context 'with no time_zone settings' do
+        before do
+          Time.zone = "Paris"
+          @distributor = Fabricate(:distributor, time_zone: "")
+          @distributor.change_to_local_time_zone
+        end
+        specify { Time.zone.name.should eq "Wellington" }
+      end
+
+      context 'with time_zone set to Berlin' do
+        before do
+          @distributor = Fabricate(:distributor, time_zone: "Berlin")
+          @distributor.change_to_local_time_zone
+        end
+        specify { Time.zone.name.should eq "Berlin" }
+      end
+    end
+
+    describe '.use_local_time_zone' do
+      context 'with no time_zone settings' do
+        before do
+          Time.zone = "Paris"
+          @distributor = Fabricate(:distributor, time_zone: "")
+        end
+        specify { @distributor.use_local_time_zone { Time.zone.name.should eq "Wellington" } }
+      end
+
+      context 'with time_zone set to Berlin' do
+        before do
+          @distributor = Fabricate(:distributor, time_zone: "Berlin")
+        end
+        specify { @distributor.use_local_time_zone { Time.zone.name.should eq "Berlin" } }
+      end
+    end
+
   end
 end

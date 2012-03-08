@@ -52,7 +52,7 @@ class Route < ActiveRecord::Base
 
   def create_schedule
     recurrence_rule = Rule.weekly.day(*delivery_days)
-    new_schedule = Schedule.new(Time.new.beginning_of_day)
+    new_schedule = Schedule.new(Time.current.beginning_of_day)
     new_schedule.add_recurrence_rule(recurrence_rule)
     self.schedule = new_schedule.to_hash
   end
