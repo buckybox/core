@@ -3,9 +3,9 @@ class Distributor::SettingsController < Distributor::BaseController
 
   def business_info
     time = Time.new
-    @default_delivery_time  = Time.new(time.year, time.month, time.day, 18)
-    @default_delivery_days  = 3
-    @default_automatic_time = Time.new(time.year, time.month, time.day, 18)
+    @default_delivery_time  = Time.new(time.year, time.month, time.day, current_distributor.advance_hour)
+    @default_delivery_days  = current_distributor.advance_days
+    @default_automatic_time = Time.new(time.year, time.month, time.day, current_distributor.automatic_delivery_hour)
   end
 
   def boxes

@@ -1,6 +1,4 @@
 class Distributor < ActiveRecord::Base
-  include IceCube
-
   has_one :bank_information,    dependent: :destroy
   has_one :invoice_information, dependent: :destroy
 
@@ -18,9 +16,6 @@ class Distributor < ActiveRecord::Base
   has_many :packing_lists,      dependent: :destroy
   has_many :packages,           dependent: :destroy, through: :packing_lists
 
-  serialize :daily_lists_schedule,   Hash
-  serialize :auto_delivery_schedule, Hash
-
   # Include default devise modules. Others available are:
   # :token_authenticatable, :encryptable, :confirmable, :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable, :registerable,
@@ -36,7 +31,7 @@ class Distributor < ActiveRecord::Base
 
   # Setup accessible (or protected) attributes for your model
   attr_accessible :email, :password, :password_confirmation, :remember_me, :name, :url, :company_logo, :company_logo_cache, :completed_wizard,
-    :remove_company_logo, :support_email, :invoice_threshold_cents, :separate_bucky_fee
+    :remove_company_logo, :support_email, :invoice_threshold_cents, :separate_bucky_fee, :advance_hour, :advance_days, :automatic_delivery_hour
 
   validates_presence_of :email
   validates_uniqueness_of :email
@@ -46,88 +41,50 @@ class Distributor < ActiveRecord::Base
 
   before_validation :parameterize_name
   before_validation :check_emails
-  before_validation :generate_daily_lists_schedule, if: 'daily_lists_schedule.to_s.blank?'
-  before_validation :generate_auto_delivery_schedule, if: 'auto_delivery_schedule.to_s.blank?'
+  before_validation :generate_default_automate_values
+
+  before_save :update_daily_lists, if: 'advance_days_changed?'
 
   # Devise Override: Avoid validations on update or if now password provided
   def password_required?
     password.present? && password.size > 0 || new_record?
   end
 
-  def self.create_daily_lists(time = Time.now)
-    logger.info "--- Checking distributor for daily list generation (#{time}) ---"
-
+  def self.create_daily_lists(time = Time.current)
     all.each do |distributor|
-      logger.info "Processing: #{distributor.id} - #{distributor.name} - #{distributor.daily_lists_schedule.start_time}"
-
-      if distributor.daily_lists_schedule.occurring_at?(time)
-        logger.info '> Creating daily list...'
-
-        successful = distributor.create_daily_lists(time.to_date)
+      if time.hour == advance_hour
+        advance_time = (time + advance_days.days)
+        successful = distributor.create_daily_lists(advance_time.to_date)
 
         if successful
-          logger.info '> Found or created successfully.'
+          CronLog.log("Create daily list for #{distributor.id} at #{advance_time.to_s(:pretty)} successful.")
         else
-          logger.error '> Was not able to create a the daily lists.'
+          CronLog.log("FAILURE: Create daily list for #{distributor.id} at #{advance_time.to_s(:pretty)}.")
         end
       end
     end
   end
 
-  def self.automate_completed_status(time = Time.now)
-    logger.info "--- Marking distributor daily lists as complete (#{time}) ---"
-
+  def self.automate_completed_status(time = Time.current)
     all.each do |distributor|
-      logger.info "Processing: #{distributor.id} - #{distributor.name} - #{distributor.auto_delivery_schedule.start_time}"
-
-      if distributor.auto_delivery_schedule.occurring_at?(time)
-        logger.info 'Marking lists as completed...'
-        successful = distributor.automate_completed_status(time.to_date)
+      if time.hour == automatic_delivery_hour
+        delivery_time = (time - 1.day) # considering the next day as standard across all distributors for now
+        successful = distributor.automate_completed_status(delivery_time.to_date)
 
         if successful
-          logger.info "> All items have been marked as completed for this date."
+          CronLog.log("Automated completion for #{distributor.id} at #{delivery_time.to_s(:pretty)} successful.")
         else
-          logger.error "> Was not able to mark items as complete for this date."
+          CronLog.log("FAILURE: Automated completion for #{distributor.id} at #{delivery_time.to_s(:pretty)}.")
         end
       end
     end
-  end
-
-  def daily_lists_schedule
-    Schedule.from_hash(self[:daily_lists_schedule]) if self[:daily_lists_schedule]
-  end
-
-  def daily_lists_schedule=(daily_lists_schedule)
-    raise(ArgumentError, 'The daily list schedule can not be updated this way. Please use the schedule generation method.')
-  end
-
-  def auto_delivery_schedule
-    Schedule.from_hash(self[:auto_delivery_schedule]) if self[:auto_delivery_schedule]
-  end
-
-  def auto_delivery_schedule=(auto_delivery_schedule)
-    raise(ArgumentError, 'The auto delivery schedule can not be updated this way. Please use the schedule generation method.')
-  end
-
-  def generate_daily_lists_schedule(time = Time.new.beginning_of_day)
-    time = time.change(min: 0, sec: 0, usec: 0) # make sure time starts on the hour
-    schedule = Schedule.new(time, duration: 3600) # make sure it lasts for an hour
-    schedule.add_recurrence_rule Rule.daily # and have it reoccur daily
-    self[:daily_lists_schedule] = schedule.to_hash
-  end
-
-  def generate_auto_delivery_schedule(time = Time.new.end_of_day)
-    time = time.change(min: 0, sec: 0, usec: 0) # make sure time starts on the hour
-    schedule = Schedule.new(time, duration: 3600) # make sure it lasts for an hour
-    schedule.add_recurrence_rule Rule.daily # and have it reoccur daily
-    self[:auto_delivery_schedule] = schedule.to_hash
   end
 
   def create_daily_lists(date = Date.current)
     packing_list = PackingList.generate_list(self, date)
     delivery_list = DeliveryList.generate_list(self, date)
 
-    return packing_list.persisted? && delivery_list.persisted?
+    return packing_list.date == date && delivery_list.date == date
   end
 
   def automate_completed_status(date = Date.yesterday)
@@ -144,6 +101,27 @@ class Distributor < ActiveRecord::Base
   end
 
   private
+
+  def update_daily_lists
+    old_days, new_days = self.advance_days_change
+    old_date = Date.current + old_days.days
+    new_date = Date.current + new_days.days
+
+    if old_days < new_days
+      ((old_date + 1.day)..new_date).each { |date| create_daily_lists(date) }
+    else
+      ((new_date + 1.day)..old_date).each do |date|
+        PackingList.find(id, date).destroy
+        DeliveryList.find(id, date).destroy
+      end
+    end
+  end
+
+  def generate_default_automate_values
+    self.advance_hour = 18            if self.advance_hour.nil?
+    self.advance_days = 3             if self.advance_days.nil?
+    self.automatic_delivery_hour = 18 if self.automatic_delivery_hour.nil?
+  end
 
   def parameterize_name
     self.parameter_name = name.parameterize if self.name

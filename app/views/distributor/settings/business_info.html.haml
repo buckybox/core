@@ -4,7 +4,7 @@
 
 .row
   .four.columns.centered
-    = simple_form_for(current_distributor) do |f|
+    = simple_form_for([:distributor, current_distributor]) do |f|
       = f.error_notification
 
       .inputs
@@ -23,15 +23,15 @@
           %legend Delivery Window
           %p
             Customers must place orders by
-            = select_hour @default_delivery_time, ampm: true
-            = select_tag 'order_days', options_for_select(days_in_advance, selected: @default_delivery_days)
+            = select_hour @default_delivery_time, { ampm: true }, { id: :distributor_advance_hour, name: 'distributor[advance_hour]' }
+            = select_tag 'distributor_advance_days', options_for_select(days_in_advance, selected: @default_delivery_days), name: 'distributor[advance_days]'
             before delivery.
 
         %fieldset.inline-inputs
           %legend Automatic Delivery
           %p
             Automatically assume all deliveries are successfully delivered by
-            = select_hour @default_automatic_time, ampm: true
+            = select_hour @default_automatic_time, { ampm: true }, { id: :distributor_automatic_delivery_hour, name: 'distributor[automatic_delivery_hour]' }
             on the day of delivery.
 
       .actions

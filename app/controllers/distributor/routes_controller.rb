@@ -5,11 +5,11 @@ class Distributor::RoutesController < Distributor::ResourceController
 
   def create
     create! do |success, failure|
-      success.html { redirect_to routes_distributor_settings_url }
+      success.html { redirect_to distributor_settings_routes_url }
     end
   end
 
   def update
-    update! { routes_distributor_settings_url }
+    update! { distributor_settings_routes_url }
   end
 end

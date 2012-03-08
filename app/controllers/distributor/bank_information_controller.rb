@@ -5,14 +5,14 @@ class Distributor::BankInformationController < Distributor::ResourceController
 
   def create
     create! do |success, failure|
-      success.html { redirect_to bank_info_distributor_settings_url }
+      success.html { redirect_to distributor_settings_bank_info_url }
       failure.html { render 'distributor/settings/bank_info' }
     end
   end
 
   def update
     update! do |success, failure|
-      success.html { redirect_to bank_info_distributor_settings_url }
+      success.html { redirect_to distributor_settings_bank_info_url }
       failure.html { render 'distributor/settings/bank_info' }
     end
   end

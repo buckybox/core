@@ -50,6 +50,7 @@ class Invoice < ActiveRecord::Base
       #if invoice = a.create_invoice
         #invoices << invoice
         #CustomerMailer.invoice(invoice).deliver
+        #CronLog.log("Delivered invoice for account #{a.id}")
       #end
     #end
 

@@ -3,12 +3,12 @@ FuturePackingList = Struct.new(:date, :packages, :all_finished, :quantity)
 class PackingList < ActiveRecord::Base
   belongs_to :distributor
 
-  has_many :packages, :dependent => :destroy, :order => :position
+  has_many :packages, dependent: :destroy, order: :position
 
   attr_accessible :distributor, :date
 
   validates_presence_of :distributor, :date
-  validates_uniqueness_of :date, :scope => :distributor_id
+  validates_uniqueness_of :date, scope: :distributor_id
 
   default_scope order(:date)
 
