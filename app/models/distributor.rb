@@ -35,8 +35,9 @@ class Distributor < ActiveRecord::Base
     converter: Proc.new { |value| value.respond_to?(:to_money) ? value.to_money : raise(ArgumentError, "Can't convert #{value.class} to Money") }
 
   # Setup accessible (or protected) attributes for your model
-  attr_accessible :email, :password, :password_confirmation, :remember_me, :name, :url, :company_logo, :company_logo_cache, :completed_wizard,
-    :remove_company_logo, :support_email, :invoice_threshold_cents, :separate_bucky_fee
+  attr_accessible :email, :password, :password_confirmation, :remember_me, :name, :url,
+    :company_logo, :company_logo_cache, :completed_wizard, :remove_company_logo, :support_email,
+    :invoice_threshold_cents, :separate_bucky_fee, :time_zone
 
   validates_presence_of :email
   validates_uniqueness_of :email
