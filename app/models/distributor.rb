@@ -31,7 +31,7 @@ class Distributor < ActiveRecord::Base
 
   # Setup accessible (or protected) attributes for your model
   attr_accessible :email, :password, :password_confirmation, :remember_me, :name, :url, :company_logo, :company_logo_cache, :completed_wizard,
-    :remove_company_logo, :support_email, :invoice_threshold_cents, :separate_bucky_fee, :advance_hour, :advance_days, :automatic_delivery_hour
+    :remove_company_logo, :support_email, :invoice_threshold, :separate_bucky_fee, :advance_hour, :advance_days, :automatic_delivery_hour
 
   validates_presence_of :email
   validates_uniqueness_of :email
@@ -43,7 +43,7 @@ class Distributor < ActiveRecord::Base
   before_validation :check_emails
   before_validation :generate_default_automate_values
 
-  before_save :update_daily_lists, if: 'advance_days_changed?'
+  before_save :update_daily_lists, if: 'advance_days_changed? && !advance_days_was.nil?'
 
   # Devise Override: Avoid validations on update or if now password provided
   def password_required?

@@ -15,13 +15,13 @@ describe Invoice do
   describe "#generate_invoices" do
     before(:each) do
       pending('Invoicing email generation is turned off for now')
-      @account_due_today = order_with_deliveries.account
+      @account_due_today = Fabricaate(:active_recurring_order).account
       @account_due_today.stub(:next_invoice_date).and_return(Date.current)
-      @account_due_tomorrow = order_with_deliveries.account
+      @account_due_tomorrow = Fabricaate(:active_recurring_order).account
       @account_due_tomorrow.stub(:next_invoice_date).and_return(1.day.from_now)
-      @account_due_yesterday = order_with_deliveries.account 
+      @account_due_yesterday = Fabricaate(:active_recurring_order).account 
       @account_due_yesterday.stub(:next_invoice_date).and_return(1.day.ago)
-      @account_with_invoice = order_with_deliveries.account
+      @account_with_invoice = Fabricaate(:active_recurring_order).account
       @account_with_invoice.stub(:next_invoice_date).and_return(Date.current)
       @account_with_invoice.create_invoice
       Account.stub(:all).and_return([@account_due_today,@account_due_tomorrow, @account_due_yesterday, @account_with_invoice])
@@ -47,7 +47,7 @@ describe Invoice do
   describe "calculate_amount" do
     context "with one scheduled delivery" do
       before(:each) do
-        @order = order_with_deliveries
+        @order = Fabricaate(:active_recurring_order)
         @account = @order.account
         @account.stub(:all_occurrences).and_return([{:price => @order.box.price}])
         @invoice = Fabricate(:invoice, :account => @account)

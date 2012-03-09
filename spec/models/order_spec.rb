@@ -232,7 +232,7 @@ describe Order do
 
   describe "#future_deliveries" do
     before(:each) do
-      @order = order_with_deliveries
+      @order = Fabricaate(:active_recurring_order)
       @end_date = 4.weeks.from_now(1.day.ago)
       @results = @order.future_deliveries(@end_date)
     end
