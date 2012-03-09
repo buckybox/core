@@ -10,7 +10,7 @@ module Devise::ControllerHelpers
   end
 
   def customer_sign_in
-    @request.env["devise.mapping"] = Devise.mappings[:admin]
-    sign_in Fabricate(:admin)
+    @request.env["devise.mapping"] = Devise.mappings[:customer]
+    sign_in Fabricate(:customer)
   end
 end
