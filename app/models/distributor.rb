@@ -45,6 +45,8 @@ class Distributor < ActiveRecord::Base
 
   before_save :update_daily_lists, if: 'advance_days_changed? && !advance_days_was.nil?'
 
+  default_scope order('created_at DESC')
+
   # Devise Override: Avoid validations on update or if now password provided
   def password_required?
     password.present? && password.size > 0 || new_record?
@@ -52,8 +54,8 @@ class Distributor < ActiveRecord::Base
 
   def self.create_daily_lists(time = Time.current)
     all.each do |distributor|
-      if time.hour == advance_hour
-        advance_time = (time + advance_days.days)
+      if time.hour == distributor.advance_hour
+        advance_time = (time + distributor.advance_days.days)
         successful = distributor.create_daily_lists(advance_time.to_date)
 
         if successful
@@ -67,7 +69,7 @@ class Distributor < ActiveRecord::Base
 
   def self.automate_completed_status(time = Time.current)
     all.each do |distributor|
-      if time.hour == automatic_delivery_hour
+      if time.hour == distributor.automatic_delivery_hour
         delivery_time = (time - 1.day) # considering the next day as standard across all distributors for now
         successful = distributor.automate_completed_status(delivery_time.to_date)
 

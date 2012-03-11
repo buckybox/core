@@ -1,0 +1,13 @@
+.row
+  %table.twelve.columns
+    %thead
+      %tr
+        %th Log
+        %th Occurred At
+
+    %tbody
+      - @cron_logs.each do |cron_log|
+        %tr
+          %td= cron_log.log
+          %td= cron_log.created_at.to_s(:pretty)
+

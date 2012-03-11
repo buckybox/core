@@ -126,7 +126,9 @@ BuckyBox::Application.routes.draw do
   end
 
   namespace :admin do
-    root to: 'distributors#index'
+    root to: 'dashboard#index'
+
+    resources :cron_logs, only: :index
 
     resources :distributors do
       member do
