@@ -56,45 +56,47 @@ class Distributor < ActiveRecord::Base
   end
 
   def self.create_daily_lists(time = nil)
-    self.change_to_local_timezone
-    time ||= Time.current
-
-    logger.info "--- Checking distributor for daily list generation (#{time}) ---"
+    logger.info "--- Checking distributor for daily list generation (System Time:#{Time.current}) ---"
 
     all.each do |distributor|
-      logger.info "Processing: #{distributor.id} - #{distributor.name} - #{distributor.daily_lists_schedule.start_time}"
+    distributor.use_local_time_zone do
+      time ||= Time.current
 
-      if distributor.daily_lists_schedule.occurring_at?(time)
-        logger.info '> Creating daily list...'
+        logger.info "Processing: #{distributor.id} - #{distributor.name} - #{distributor.daily_lists_schedule.start_time} - Local Time: #{time}"
 
-        successful = distributor.create_daily_lists(time.to_date)
+        if distributor.daily_lists_schedule.occurring_at?(time)
+          logger.info '> Creating daily list...'
 
-        if successful
-          logger.info '> Found or created successfully.'
-        else
-          logger.error '> Was not able to create a the daily lists.'
+          successful = distributor.create_daily_lists(time.to_date)
+
+          if successful
+            logger.info '> Found or created successfully.'
+          else
+            logger.error '> Was not able to create a the daily lists.'
+          end
         end
       end
     end
   end
 
   def self.automate_completed_status(time = nil)
-    self.change_to_local_timezone
-    time ||= Time.current
-
-    logger.info "--- Marking distributor daily lists as complete (#{time}) ---"
+    logger.info "--- Marking distributor daily lists as complete (System Time:#{Time.current}) ---"
 
     all.each do |distributor|
-      logger.info "Processing: #{distributor.id} - #{distributor.name} - #{distributor.auto_delivery_schedule.start_time}"
+    distributor.use_local_time_zone do
+      time ||= Time.current
 
-      if distributor.auto_delivery_schedule.occurring_at?(time)
-        logger.info 'Marking lists as completed...'
-        successful = distributor.automate_completed_status(time.to_date)
+        logger.info "Processing: #{distributor.id} - #{distributor.name} - #{distributor.auto_delivery_schedule.start_time} - Local Time: #{time}"
 
-        if successful
-          logger.info "> All items have been marked as completed for this date."
-        else
-          logger.error "> Was not able to mark items as complete for this date."
+        if distributor.auto_delivery_schedule.occurring_at?(time)
+          logger.info 'Marking lists as completed...'
+          successful = distributor.automate_completed_status(time.to_date)
+
+          if successful
+            logger.info "> All items have been marked as completed for this date."
+          else
+            logger.error "> Was not able to mark items as complete for this date."
+          end
         end
       end
     end
@@ -116,25 +118,36 @@ class Distributor < ActiveRecord::Base
     raise(ArgumentError, 'The auto delivery schedule can not be updated this way. Please use the schedule generation method.')
   end
 
-  def generate_daily_lists_schedule(time = Time.current.beginning_of_day)
-    time = time.change(min: 0, sec: 0, usec: 0) # make sure time starts on the hour
-    schedule = Schedule.new(time, duration: 3600) # make sure it lasts for an hour
-    schedule.add_recurrence_rule Rule.daily # and have it reoccur daily
-    self[:daily_lists_schedule] = schedule.to_hash
+  def generate_daily_lists_schedule(time = nil)
+    use_local_time_zone do
+      time ||= Time.current.beginning_of_day
+
+      time = time.change(min: 0, sec: 0, usec: 0) # make sure time starts on the hour
+      schedule = Schedule.new(time, duration: 3600) # make sure it lasts for an hour
+      schedule.add_recurrence_rule Rule.daily # and have it reoccur daily
+      self[:daily_lists_schedule] = schedule.to_hash
+    end
   end
 
-  def generate_auto_delivery_schedule(time = Time.current.end_of_day)
-    time = time.change(min: 0, sec: 0, usec: 0) # make sure time starts on the hour
-    schedule = Schedule.new(time, duration: 3600) # make sure it lasts for an hour
-    schedule.add_recurrence_rule Rule.daily # and have it reoccur daily
-    self[:auto_delivery_schedule] = schedule.to_hash
+  def generate_auto_delivery_schedule(time = nil)
+    use_local_time_zone do
+      time ||= Time.current.end_of_day
+
+      time = time.change(min: 0, sec: 0, usec: 0) # make sure time starts on the hour
+      schedule = Schedule.new(time, duration: 3600) # make sure it lasts for an hour
+      schedule.add_recurrence_rule Rule.daily # and have it reoccur daily
+      self[:auto_delivery_schedule] = schedule.to_hash
+    end
   end
 
-  def create_daily_lists(date = Date.current)
-    packing_list = PackingList.generate_list(self, date)
-    delivery_list = DeliveryList.generate_list(self, date)
+  def create_daily_lists(date = nil)
+    use_local_time_zone do
+      date = Date.current
+      packing_list = PackingList.generate_list(self, date)
+      delivery_list = DeliveryList.generate_list(self, date)
 
-    return packing_list.persisted? && delivery_list.persisted?
+      return packing_list.persisted? && delivery_list.persisted?
+    end
   end
 
   def automate_completed_status(date = Date.yesterday)
