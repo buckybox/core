@@ -1,5 +1,5 @@
 Fabricator(:delivery) do
-  order!(fabricator: :active_order)
+  order!(fabricator: :order)
   route!
   delivery_list!
   package!

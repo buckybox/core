@@ -6,13 +6,17 @@
       .inputs
         = f.input :name
         = f.input :fee
-        = f.input :monday
-        = f.input :tuesday
-        = f.input :wednesday
-        = f.input :thursday
-        = f.input :friday
-        = f.input :saturday
-        = f.input :sunday
+        #weekdays
+          = f.input :monday
+          = f.input :tuesday
+          = f.input :wednesday
+          = f.input :thursday
+          = f.input :friday
+          = f.input :saturday
+          = f.input :sunday
 
       .actions
-        = f.button :submit
+        - if @route.new_record?
+          = f.button :submit
+        - else
+          = f.button :submit, 'data-conditional-confirm' => "A day has been unchecked, this might affect customer orders, are you sure?", 'data-conditional-on' => 'route_deleted'
