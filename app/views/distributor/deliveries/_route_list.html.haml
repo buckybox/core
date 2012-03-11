@@ -20,7 +20,7 @@
         { id: 'delivery-export', class: 'small radius button', disabled: @selected_date.future? })
 
   - if @items.all? { |i| i.is_a?(Delivery) }
-    %ul#delivery_list{ class: "#{'sortable' if @selected_date.today?}" }
+    %ul#delivery_list.sortable
       - @items.each do |delivery|
         %li.row.data-listings{id: "delivery_#{delivery.id}", class: delivery.status}
           .two.columns
