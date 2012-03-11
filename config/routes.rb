@@ -27,11 +27,11 @@ BuckyBox::Application.routes.draw do
     end
 
     namespace :settings do
-      get 'business_info'
+      get 'business_information'
       get 'boxes'
       get 'routes'
-      get 'bank_info'
-      get 'invoicing_info'
+      get 'bank_information'
+      get 'invoice_information'
       get 'reporting'
     end
 

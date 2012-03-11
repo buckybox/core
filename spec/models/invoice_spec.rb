@@ -47,7 +47,7 @@ describe Invoice do
   describe "calculate_amount" do
     context "with one scheduled delivery" do
       before(:each) do
-        @order = Fabricaate(:active_recurring_order)
+        @order = Fabricate(:active_recurring_order)
         @account = @order.account
         @account.stub(:all_occurrences).and_return([{:price => @order.box.price}])
         @invoice = Fabricate(:invoice, :account => @account)

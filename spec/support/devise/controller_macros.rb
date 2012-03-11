@@ -7,7 +7,7 @@ module Devise::ControllerMacros
     before { distributor_sign_in }
   end
 
-  def as_customers
+  def as_customer
     before { customer_sign_in }
   end
 end

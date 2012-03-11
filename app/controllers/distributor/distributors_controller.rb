@@ -4,9 +4,12 @@ class Distributor::DistributorsController < Distributor::ResourceController
   respond_to :html, :xml, :json
 
   def update
-    update! do |success, failure|
-      success.html { redirect_to distributor_settings_business_info_url }
-      failure.html { render template: 'distributor/settings/business_info' }
-    end
+    update! { distributor_settings_business_information_url }
+  end
+
+  protected
+
+  def begin_of_association_chain
+    nil
   end
 end

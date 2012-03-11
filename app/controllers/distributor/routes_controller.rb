@@ -4,9 +4,7 @@ class Distributor::RoutesController < Distributor::ResourceController
   respond_to :html, :xml, :json
 
   def create
-    create! do |success, failure|
-      success.html { redirect_to distributor_settings_routes_url }
-    end
+    create! { distributor_settings_routes_url }
   end
 
   def update

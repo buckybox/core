@@ -17,6 +17,7 @@ describe Distributor do
   context 'daily automation' do
     context 'default times' do
       before do
+        pending
         time_now = Time.new
         Time.stub(:new).and_return(time_now)
 
@@ -39,6 +40,7 @@ describe Distributor do
 
     context 'custom times' do
       before do
+        pending
         time_now = Time.new
         Time.stub(:new).and_return(time_now)
 

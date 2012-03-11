@@ -1,19 +1,20 @@
 class Distributor::InvoiceInformationController < Distributor::ResourceController
+  defaults singleton: true
   actions :create, :update
 
   respond_to :html, :xml, :json
 
   def create
-    create! notice: "Invoicing Info was successfully created." do |success, failure|
-      success.html { redirect_to distributor_settings_invoicing_info_url }
-      failure.html { render 'distributor/settings/invoicing_info' }
+    create! do |success, failure|
+      success.html { redirect_to distributor_settings_invoice_information_url, notice: 'Invoice information was successfully created.' }
+      failure.html { render 'distributor/settings/invoice_information' }
     end
   end
 
   def update
-    update! notice: "Invoicing Info was successfully updated." do |success, failure|
-      success.html { redirect_to distributor_settings_invoicing_info_url }
-      failure.html { render 'distributor/settings/invoicing_info' }
+    update! do |success, failure|
+      success.html { redirect_to distributor_settings_invoice_information_url, notice: 'Invoice information was successfully updated.' }
+      failure.html { render 'distributor/settings/invoice_information' }
     end
   end
 end

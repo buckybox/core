@@ -91,7 +91,7 @@ class Customer < ActiveRecord::Base
   private
 
   def initialize_number
-    self.number = Customer.next_number(distributor)
+    self.number = Customer.next_number(self.distributor)
   end
 
   def randomize_password_if_not_present

@@ -67,7 +67,7 @@ describe Account do
 
   describe "all_occurrences" do
     before(:each) do
-      @order = Fabricaate(:active_recurring_order)
+      @order = Fabricate(:active_recurring_order)
       @account = @order.account
     end
     it "returns 20 occurrences" do
@@ -79,7 +79,7 @@ describe Account do
   describe "next_invoice_date" do
     context "20 deliveries loaded in the future" do
       before(:each) do
-        @order = Fabricaate(:active_recurring_order)
+        @order = Fabricate(:active_recurring_order)
         @account = @order.account
         @total_scheduled = @account.all_occurrences(4.weeks.from_now).inject(Money.new(0)) { |sum, o| sum += o[:price]}
       end
@@ -161,7 +161,7 @@ describe Account do
     end
 
     it "creates invoice if next invoice date is <= today" do
-      @account = Fabricaate(:active_recurring_order).account
+      @account = Fabricate(:active_recurring_order).account
       @account.stub(:next_invoice_date).and_return(Date.current)
       Invoice.should_receive(:create_for_account)
       @account.create_invoice

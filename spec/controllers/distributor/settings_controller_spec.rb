@@ -3,81 +3,69 @@ require 'spec_helper'
 describe Distributor::SettingsController do
   render_views
 
-  before(:each) do
-    @distributor = Fabricate(:distributor, completed_wizard: true)
-    @customer = Fabricate(:customer, distributor: @distributor)
-    sign_in @distributor
-    @invoice = Fabricate(:invoice, account: @customer.account)
-  end
-
-  describe '#index' do
-    before(:each) { get :index, distributor_id: @distributor.id }
-    specify { response.should redirect_to(routes_distributor_settings_url(@distributor)) }
-  end
+  as_distributor
+  before { @customer = Fabricate(:customer, distributor: @distributor) }
 
   describe '#routes' do
-    before(:each) do
-      get :routes, distributor_id: @distributor.id
-    end
+    before { get :routes, distributor_id: @distributor.id }
+
     specify { assigns(:routes).should eq(@distributor.routes) }
     specify { assigns(:route).should be_a_new(Route) }
   end
 
   describe '#boxes' do
-    before(:each) do
-      get :boxes, distributor_id: @distributor.id
-    end
+    before { get :boxes, distributor_id: @distributor.id }
+
     specify { assigns(:boxes).should eq(@distributor.boxes) }
     specify { assigns(:box).should be_a_new(Box) }
   end
-  
-  describe '#business_info' do
-    before(:each) do
-      get :business_info, distributor_id: @distributor.id
-    end
-    specify { response.should render_template 'distributor/settings/business_info' }
+
+  describe '#business_information' do
+    before { get :business_information, distributor_id: @distributor.id }
+
+    specify { response.should render_template 'distributor/settings/business_information' }
   end
 
-  describe '#bank_info' do
+  describe '#bank_information' do
     context 'without bank_information' do
-      before(:each) do
-        get :bank_info, distributor_id: @distributor.id
-      end
-      specify { response.should render_template 'distributor/settings/bank_info' }
+      before { get :bank_information, distributor_id: @distributor.id }
+
+      specify { response.should render_template 'distributor/settings/bank_information' }
       specify { assigns(:bank_information).should be_a_new(BankInformation) }
     end
+
     context 'with bank_information' do
-      before(:each) do
+      before do
         @bank_information = Fabricate(:bank_information, distributor: @distributor)
-        get :bank_info, distributor_id: @distributor.id
+        get :bank_information, distributor_id: @distributor.id
       end
+
       specify { assigns(:bank_information).should eq(@bank_information) }
     end
   end
-  
-  describe '#invoicing_info' do
+
+  describe '#invoice_information' do
     context 'without invoice_information' do
-      before(:each) do
-        get :invoicing_info, distributor_id: @distributor.id
-      end
-      specify { response.should render_template 'distributor/settings/invoicing_info' }
+      before { get :invoice_information, distributor_id: @distributor.id }
+
+      specify { response.should render_template 'distributor/settings/invoice_information' }
       specify { assigns(:invoice_information).should be_a_new(InvoiceInformation) }
     end
+
     context 'with invoice_information' do
-      before(:each) do
+      before do
         @invoice_information = Fabricate(:invoice_information, distributor: @distributor)
-        get :invoicing_info, distributor_id: @distributor.id
+        get :invoice_information, distributor_id: @distributor.id
       end
-      specify { response.should render_template 'distributor/settings/invoicing_info' }
+
+      specify { response.should render_template 'distributor/settings/invoice_information' }
       specify { assigns(:invoice_information).should eq(@invoice_information) }
     end
   end
 
   describe '#reporting' do
-    before(:each) do
-      get :reporting, distributor_id: @distributor.id
-    end
+    before { get :reporting, distributor_id: @distributor.id }
+
     specify { response.should render_template 'distributor/settings/reporting' }
   end
-
 end

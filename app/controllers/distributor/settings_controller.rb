@@ -1,7 +1,7 @@
 class Distributor::SettingsController < Distributor::BaseController
   respond_to :html, :json
 
-  def business_info
+  def business_information
     time = Time.new
     @default_delivery_time  = Time.new(time.year, time.month, time.day, current_distributor.advance_hour)
     @default_delivery_days  = current_distributor.advance_days
@@ -18,11 +18,11 @@ class Distributor::SettingsController < Distributor::BaseController
     @routes = current_distributor.routes
   end
 
-  def bank_info
+  def bank_information
     @bank_information = current_distributor.bank_information || BankInformation.new
   end
 
-  def invoicing_info
+  def invoice_information
     @invoice_information = current_distributor.invoice_information || InvoiceInformation.new
   end
 
