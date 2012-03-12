@@ -60,7 +60,7 @@ class Distributor < ActiveRecord::Base
 
     all.each do |distributor|
       distributor.use_local_time_zone do
-        time ||= Time.current
+        time = Time.current
 
         logger.info "Processing: #{distributor.id} - #{distributor.name} - #{distributor.daily_lists_schedule.start_time} - Local Time: #{time}"
 
@@ -84,7 +84,7 @@ class Distributor < ActiveRecord::Base
 
     all.each do |distributor|
       distributor.use_local_time_zone do
-        time ||= Time.current
+        time = Time.current
 
         logger.info "Processing: #{distributor.id} - #{distributor.name} - #{distributor.auto_delivery_schedule.start_time} - Local Time: #{time}"
 
