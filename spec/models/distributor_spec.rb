@@ -191,7 +191,7 @@ describe Distributor do
           specify { expect{Distributor.create_daily_lists}.to change{@d_london.packing_lists.count + @d_london.delivery_lists.count}.by 0}
         end
 
-        context 'time set to Longon start of day' do
+        context 'time set to London start of day' do
           before do
             Delorean.time_travel_to(Time.use_zone("London"){Time.current.beginning_of_day}.in_time_zone("Wellington"))
           end
@@ -204,7 +204,7 @@ describe Distributor do
           specify { expect{Distributor.create_daily_lists}.to change{@d_london.packing_lists.count + @d_london.delivery_lists.count}.by 2}
         end
 
-        context 'time set to Longon end of day' do
+        context 'time set to London end of day' do
           before do
             Delorean.time_travel_to(Time.use_zone("London"){Time.current.end_of_day - 59.minutes}.in_time_zone("Wellington"))
           end
