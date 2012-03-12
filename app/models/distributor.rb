@@ -24,7 +24,7 @@ class Distributor < ActiveRecord::Base
   # Include default devise modules. Others available are:
   # :token_authenticatable, :encryptable, :confirmable, :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable, :registerable,
-         :recoverable, :rememberable, :trackable, :validatable
+    :recoverable, :rememberable, :trackable, :validatable
 
   mount_uploader :company_logo, CompanyLogoUploader
 
@@ -55,12 +55,12 @@ class Distributor < ActiveRecord::Base
     password.present? && password.size > 0 || new_record?
   end
 
-  def self.create_daily_lists(time = nil)
-    logger.info "--- Checking distributor for daily list generation (System Time:#{Time.current}) ---"
+  def self.create_daily_lists
+    logger.info "--- Checking distributor for daily list generation (System Time: #{Time.current}) ---"
 
     all.each do |distributor|
-    distributor.use_local_time_zone do
-      time ||= Time.current
+      distributor.use_local_time_zone do
+        time ||= Time.current
 
         logger.info "Processing: #{distributor.id} - #{distributor.name} - #{distributor.daily_lists_schedule.start_time} - Local Time: #{time}"
 
@@ -79,12 +79,12 @@ class Distributor < ActiveRecord::Base
     end
   end
 
-  def self.automate_completed_status(time = nil)
-    logger.info "--- Marking distributor daily lists as complete (System Time:#{Time.current}) ---"
+  def self.automate_completed_status
+    logger.info "--- Marking distributor daily lists as complete (System Time: #{Time.current}) ---"
 
     all.each do |distributor|
-    distributor.use_local_time_zone do
-      time ||= Time.current
+      distributor.use_local_time_zone do
+        time ||= Time.current
 
         logger.info "Processing: #{distributor.id} - #{distributor.name} - #{distributor.auto_delivery_schedule.start_time} - Local Time: #{time}"
 
@@ -140,27 +140,28 @@ class Distributor < ActiveRecord::Base
     end
   end
 
-  def create_daily_lists(date = nil)
-    use_local_time_zone do
-      date = Date.current
-      packing_list = PackingList.generate_list(self, date)
-      delivery_list = DeliveryList.generate_list(self, date)
+  def create_daily_lists(date)
+    packing_list = PackingList.generate_list(self, date)
+    delivery_list = DeliveryList.generate_list(self, date)
 
-      return packing_list.persisted? && delivery_list.persisted?
-    end
+    return packing_list.persisted? && delivery_list.persisted?
   end
 
-  def automate_completed_status(date = Date.yesterday)
-    dates_delivery_lists = delivery_lists.find_by_date(date)
-    dates_packing_lists  = packing_lists.find_by_date(date)
+  # date is always in distributors timezone
+  def automate_completed_status(date = nil)
+    use_local_time_zone do
+      date ||= Date.yesterday #Will return the correct date for this distributor
+      dates_delivery_lists = delivery_lists.find_by_date(date)
+      dates_packing_lists  = packing_lists.find_by_date(date)
 
-    # If the list were not created on this date for some reason create them first
-    create_daily_lists(date) unless !!dates_delivery_lists || !!dates_packing_lists
+      # If the list were not created on this date for some reason create them first
+      create_daily_lists(date) unless !!dates_delivery_lists || !!dates_packing_lists
 
-    successful  = dates_delivery_lists.mark_all_as_auto_delivered
-    successful &= dates_packing_lists.mark_all_as_auto_packed
+      successful  = dates_delivery_lists.mark_all_as_auto_delivered
+      successful &= dates_packing_lists.mark_all_as_auto_packed
 
-    return successful
+      return successful
+    end
   end
 
   def change_to_local_time_zone

@@ -154,67 +154,67 @@ describe Distributor do
 
         context 'time set to Wellington end of day' do
           before do
-            Delorean.time_travel_to(Time.current.end_of_day) # Wellington time zone beginning of day
+            Delorean.time_travel_to(Time.current.end_of_day - 59.minutes) # Wellington time zone beginning of day
           end
           after do
             Delorean.back_to_the_present
           end
           
-          specify { expect{Distributor.create_daily_lists}.to change{@d_welly.packing_lists.count + @d_welly.delivery_lists.count}.by 2}
-          specify { expect{Distributor.create_daily_lists}.to change{@d_perth.packing_lists.count + @d_perth.delivery_lists.count}.by 2}
-          specify { expect{Distributor.create_daily_lists}.to change{@d_london.packing_lists.count + @d_london.delivery_lists.count}.by 2}
+          specify { expect{Distributor.create_daily_lists}.to change{@d_welly.packing_lists.count + @d_welly.delivery_lists.count}.by 0}
+          specify { expect{Distributor.create_daily_lists}.to change{@d_perth.packing_lists.count + @d_perth.delivery_lists.count}.by 0}
+          specify { expect{Distributor.create_daily_lists}.to change{@d_london.packing_lists.count + @d_london.delivery_lists.count}.by 0}
         end
 
         context 'time set to Perth start of day' do
           before do
-            Delorean.time_travel_to(Time.use_zone("Perth"){Time.current.beginning_of_day}.in_time_zone("Wellington")) # Get the start of day time for perth, convert to Wellington, set time to it.
+            Delorean.time_travel_to(Time.use_zone("Perth"){Time.current.beginning_of_day}.in_time_zone("Wellington"))
           end
           after do
             Delorean.back_to_the_present
           end
 
-          specify { expect{Distributor.create_daily_lists}.to change{@d_welly.packing_lists.count}.by 0}
-          specify { expect{Distributor.create_daily_lists}.to change{@d_perth.packing_lists.count}.by 1}
-          specify { expect{Distributor.create_daily_lists}.to change{@d_london.packing_lists.count}.by 0}
+          specify { expect{Distributor.create_daily_lists}.to change{@d_welly.packing_lists.count + @d_welly.delivery_lists.count}.by 0}
+          specify { expect{Distributor.create_daily_lists}.to change{@d_perth.packing_lists.count + @d_perth.delivery_lists.count}.by 2}
+          specify { expect{Distributor.create_daily_lists}.to change{@d_london.packing_lists.count + @d_london.delivery_lists.count}.by 0}
         end
 
         context 'time set to Perth end of day' do
           before do
-            Delorean.time_travel_to(Time.use_zone("Perth"){Time.current.end_of_day}.in_time_zone("Wellington")) # Get the start of day time for perth, convert to Wellington, set time to it.
+            Delorean.time_travel_to(Time.use_zone("Perth"){Time.current.end_of_day - 59.minutes}.in_time_zone("Wellington"))
           end
           after do
             Delorean.back_to_the_present
           end
 
-          specify { expect{Distributor.create_daily_lists}.to change{@d_welly.packing_lists.count}.by 0}
-          specify { expect{Distributor.create_daily_lists}.to change{@d_perth.packing_lists.count}.by 0}
-          specify { expect{Distributor.create_daily_lists}.to change{@d_london.packing_lists.count}.by 0}
+          specify { expect{Distributor.create_daily_lists}.to change{@d_welly.packing_lists.count + @d_welly.delivery_lists.count}.by 0}
+          specify { expect{Distributor.create_daily_lists}.to change{@d_perth.packing_lists.count + @d_perth.delivery_lists.count}.by 0}
+          specify { expect{Distributor.create_daily_lists}.to change{@d_london.packing_lists.count + @d_london.delivery_lists.count}.by 0}
         end
 
         context 'time set to Longon start of day' do
           before do
-            Delorean.time_travel_to(Time.use_zone("London"){Time.current.beginning_of_day}.in_time_zone("Wellington")) # Get the start of day time for perth, convert to Wellington, set time to it.
+            Delorean.time_travel_to(Time.use_zone("London"){Time.current.beginning_of_day}.in_time_zone("Wellington"))
           end
           after do
             Delorean.back_to_the_present
           end
 
-          specify { expect{Distributor.create_daily_lists}.to change{@d_welly.packing_lists.count}.by 0}
-          specify { expect{Distributor.create_daily_lists}.to change{@d_perth.packing_lists.count}.by 0}
-          specify { expect{Distributor.create_daily_lists}.to change{@d_london.packing_lists.count}.by 1}
+          specify { expect{Distributor.create_daily_lists}.to change{@d_welly.packing_lists.count + @d_welly.delivery_lists.count}.by 0}
+          specify { expect{Distributor.create_daily_lists}.to change{@d_perth.packing_lists.count + @d_perth.delivery_lists.count}.by 0}
+          specify { expect{Distributor.create_daily_lists}.to change{@d_london.packing_lists.count + @d_london.delivery_lists.count}.by 2}
         end
 
         context 'time set to Longon end of day' do
           before do
-            Delorean.time_travel_to(Time.use_zone("London"){Time.current.end_of_day}.in_time_zone("Wellington")) # Get the start of day time for perth, convert to Wellington, set time to it.
+            Delorean.time_travel_to(Time.use_zone("London"){Time.current.end_of_day - 59.minutes}.in_time_zone("Wellington"))
           end
           after do
             Delorean.back_to_the_present
           end
 
-          specify { expect{Distributor.create_daily_lists}.to change{@d_welly.packing_lists.count}.by 0}
-          specify { expect{Distributor.create_daily_lists}.to change{@d_perth.packing_lists.count}.by 0}
-          specify { expect{Distributor.create_daily_lists}.to change{@d_london.packing_lists.count}.by 0}
+          specify { expect{Distributor.create_daily_lists}.to change{@d_welly.packing_lists.count + @d_welly.delivery_lists.count}.by 0}
+          specify { expect{Distributor.create_daily_lists}.to change{@d_perth.packing_lists.count + @d_perth.delivery_lists.count}.by 0}
+          specify { expect{Distributor.create_daily_lists}.to change{@d_london.packing_lists.count + @d_london.delivery_lists.count}.by 0}
         end
       end
     end
