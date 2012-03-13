@@ -131,7 +131,7 @@ class Order < ActiveRecord::Base
   def future_deliveries(end_date)
     results = []
     use_local_time_zone do
-      schedule.occurrences_between(Time.current, end_date).each do |occurence|
+      schedule.occurrences_between(Time.current, end_date.in_time_zone).each do |occurence|
         results << { date: occurence.to_date, price: self.price, description: "Delivery for order ##{id}"}
       end
     end
@@ -149,6 +149,15 @@ class Order < ActiveRecord::Base
     result += '+L' unless likes.blank?
     result += '+D' unless dislikes.blank?
     result.upcase
+  end
+  
+  def self.fix_schedule_time_zones
+    Order.all.select do |order|
+      new_schedule = order.schedule
+      new_schedule.start_time = new_schedule.start_time.in_time_zone(order.distributor.get_time_zone)
+      order.schedule = new_schedule
+      [order.save, order]
+    end
   end
 
   protected
