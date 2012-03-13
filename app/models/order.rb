@@ -1,5 +1,5 @@
 class Order < ActiveRecord::Base
-  include IceCube
+  include BuckyScheduling
 
   belongs_to :account
   belongs_to :box
@@ -41,29 +41,9 @@ class Order < ActiveRecord::Base
       raise(ArgumentError, "Unless it is a single order the schedule needs to specify days.")
     end
 
-    schedule = Schedule.new(start_time)
-
-    if frequency == 'single'
-      schedule.add_recurrence_time(start_time)
-    elsif frequency == 'monthly'
-      montly_days_hash = days_by_number.inject({}) { |hash, day| hash[day] = [1]; hash }
-
-      recurrence_rule = Rule.monthly.day_of_week(montly_days_hash)
-      schedule.add_recurrence_rule(recurrence_rule)
-    else
-      if frequency == 'weekly'
-        weeks_between_deliveries = 1
-      elsif frequency == 'fortnightly'
-        weeks_between_deliveries = 2
-      end
-
-      recurrence_rule = Rule.weekly(weeks_between_deliveries).day(*days_by_number)
-      schedule.add_recurrence_rule(recurrence_rule)
-    end
-
-    return schedule
+    BuckyScheduling.create_schedule(start_time, frequency, days_by_number)
   end
-  
+
   def self.deactivate_finished
     logger.info "--- Deactivating orders with no other occurrences ---"
 
@@ -91,6 +71,10 @@ class Order < ActiveRecord::Base
     end
   end
 
+  def local_time_zone
+    distributor.local_time_zone
+  end
+
   def price
     individual_price * quantity
   end
@@ -105,14 +89,6 @@ class Order < ActiveRecord::Base
 
   def just_completed?
     completed_changed? && completed?
-  end
-
-  def schedule
-    Schedule.from_hash(self[:schedule]) if self[:schedule]
-  end
-
-  def schedule=(schedule)
-    self[:schedule] = schedule.to_hash
   end
 
   def add_scheduled_delivery(delivery)
@@ -130,10 +106,8 @@ class Order < ActiveRecord::Base
 
   def future_deliveries(end_date)
     results = []
-    use_local_time_zone do
-      schedule.occurrences_between(Time.current, end_date.in_time_zone).each do |occurence|
-        results << { date: occurence.to_date, price: self.price, description: "Delivery for order ##{id}"}
-      end
+    schedule.occurrences_between(Time.current, end_date).each do |occurence|
+      results << { date: occurence.to_date, price: self.price, description: "Delivery for order ##{id}"}
     end
 
     return results

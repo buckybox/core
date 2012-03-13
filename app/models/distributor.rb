@@ -164,17 +164,17 @@ class Distributor < ActiveRecord::Base
     end
   end
 
-  def get_time_zone
+  def local_time_zone
     [time_zone, BuckyBox::Application.config.time_zone].select(&:present?).first
   end
 
   def change_to_local_time_zone
-    new_time_zone = get_time_zone
+    new_time_zone = local_time_zone
     Time.zone = new_time_zone unless new_time_zone.blank?
   end
 
   def use_local_time_zone
-    new_time_zone = get_time_zone
+    new_time_zone = local_time_zone
     Time.use_zone(new_time_zone) do
       yield
     end
