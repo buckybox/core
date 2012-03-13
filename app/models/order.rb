@@ -130,9 +130,10 @@ class Order < ActiveRecord::Base
 
   def future_deliveries(end_date)
     results = []
-
-    schedule.occurrences_between(Time.current, end_date).each do |occurence|
-      results << { date: occurence.to_date, price: self.price, description: "Delivery for order ##{id}"}
+    use_local_time_zone do
+      schedule.occurrences_between(Time.current, end_date).each do |occurence|
+        results << { date: occurence.to_date, price: self.price, description: "Delivery for order ##{id}"}
+      end
     end
 
     return results
