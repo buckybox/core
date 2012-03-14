@@ -1,5 +1,5 @@
 class Order < ActiveRecord::Base
-  include BuckyScheduling
+  include Bucky
 
   belongs_to :account
   belongs_to :box
@@ -41,7 +41,7 @@ class Order < ActiveRecord::Base
       raise(ArgumentError, "Unless it is a single order the schedule needs to specify days.")
     end
 
-    BuckyScheduling.create_schedule(start_time, frequency, days_by_number)
+    Bucky.create_schedule(start_time, frequency, days_by_number)
   end
 
   def self.deactivate_finished

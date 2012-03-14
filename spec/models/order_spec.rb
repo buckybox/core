@@ -71,7 +71,7 @@ describe Order do
 
     describe 'new schedule' do
       before do
-        @schedule = BuckySchedule.new
+        @schedule = Bucky::Schedule.new
         @schedule.add_recurrence_rule(Rule.weekly.day(:monday, :friday))
         @order.schedule = @schedule
         @order.save
@@ -97,7 +97,7 @@ describe Order do
         @order.frequency = 'single'
         @order.completed = true
 
-        @schedule = BuckySchedule.new(new_single_schedule)
+        @schedule = Bucky::Schedule.new(new_single_schedule)
         @order.schedule = @schedule
 
         @order.save
@@ -114,7 +114,7 @@ describe Order do
         @order.frequency = 'weekly'
         @order.completed = true
 
-        @schedule = BuckySchedule.new(new_recurring_schedule)
+        @schedule = Bucky::Schedule.new(new_recurring_schedule)
         @order.schedule = @schedule
 
         @order.save
@@ -131,7 +131,7 @@ describe Order do
         @order.frequency = 'fortnightly'
         @order.completed = true
 
-        @schedule = BuckySchedule.new(new_recurring_schedule)
+        @schedule = Bucky::Schedule.new(new_recurring_schedule)
         @order.schedule = @schedule
 
         @order.save
@@ -146,7 +146,7 @@ describe Order do
 
   context :schedule_transaction do
     before do
-      schedule = BuckySchedule.new
+      schedule = Bucky::Schedule.new
       schedule.add_recurrence_rule(Rule.weekly.day(:monday, :friday))
       @order.schedule = schedule
     end
@@ -194,7 +194,7 @@ describe Order do
 
   describe '#deactivate_finished' do
     before do
-      rule_schedule = BuckySchedule.new(Time.current - 2.months)
+      rule_schedule = Bucky::Schedule.new(Time.current - 2.months)
       rule_schedule.add_recurrence_rule(Rule.daily(3))
 
       rule_schedule_no_end_date = rule_schedule.clone
@@ -208,11 +208,11 @@ describe Order do
       rule_schedule_end_date_past.end_time = (Time.current - 1.month)
       @order3 = Fabricate(:active_order, :schedule => rule_schedule_end_date_past)
 
-      time_schedule_future = BuckySchedule.new(Time.current - 2.months)
+      time_schedule_future = Bucky::Schedule.new(Time.current - 2.months)
       time_schedule_future.add_recurrence_time(Time.current + 5.days)
       @order4 = Fabricate(:active_order, :schedule => time_schedule_future)
 
-      time_schedule_past = BuckySchedule.new(Time.current - 2.months)
+      time_schedule_past = Bucky::Schedule.new(Time.current - 2.months)
       time_schedule_past.add_recurrence_time(Time.current - 5.days)
       @order5 = Fabricate(:active_order, :schedule => time_schedule_past)
     end

@@ -1,10 +1,10 @@
-module BuckyScheduling
-  include IceCube
+module Bucky
+  autoload :Schedule, 'bucky/schedule'
 
   def schedule
     bs = nil
     if self[:schedule]
-      bs = BuckySchedule.from_hash(self[:schedule])
+      bs = Bucky::Schedule.from_hash(self[:schedule])
       bs.time_zone = local_time_zone
     end
     bs
@@ -17,16 +17,16 @@ module BuckyScheduling
       throw("Please don't pass in a Hash")
     elsif s.nil?
       self[:schedule] = {}
-    elsif s.is_a?(BuckySchedule)
+    elsif s.is_a?(Bucky::Schedule)
       self[:schedule] = s.to_hash
     else
-      throw("Expecting a BuckySchedule but got a #{s.class}")
+      throw("Expecting a Bucky::Schedule but got a #{s.class}")
     end
     #end
   end
   
   def self.create_schedule(start_time, frequency, days_by_number = nil)
-    schedule = BuckySchedule.new(start_time)
+    schedule = Bucky::Schedule.new(start_time)
 
     if frequency == 'single'
       schedule.add_recurrence_time(start_time)
