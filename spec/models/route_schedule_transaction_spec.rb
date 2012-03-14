@@ -1,5 +1,5 @@
 require 'spec_helper'
-include IceCube
+include Bucky
 
 describe RouteScheduleTransaction do
   before { @route_schedule_transaction = Fabricate(:route_schedule_transaction) }

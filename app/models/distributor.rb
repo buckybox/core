@@ -102,6 +102,8 @@ class Distributor < ActiveRecord::Base
     end
   end
 
+# Don't know how to replicate the following behaviour with dynamic methods in lib/bucky.rb
+#
 #  def daily_lists_schedule=(daily_lists_schedule)
 #    raise(ArgumentError, 'The daily list schedule can not be updated this way. Please use the schedule generation method.')
 #  end
@@ -116,7 +118,7 @@ class Distributor < ActiveRecord::Base
 
       time = time.change(min: 0, sec: 0, usec: 0) # make sure time starts on the hour
       schedule = Schedule.new(time, duration: 3600) # make sure it lasts for an hour
-      schedule.add_recurrence_rule Rule.daily # and have it reoccur daily
+      schedule.add_recurrence_rule IceCube::Rule.daily # and have it reoccur daily
       self.daily_lists_schedule = schedule
     end
   end
@@ -127,7 +129,7 @@ class Distributor < ActiveRecord::Base
 
       time = time.change(min: 0, sec: 0, usec: 0) # make sure time starts on the hour
       schedule = Schedule.new(time, duration: 3600) # make sure it lasts for an hour
-      schedule.add_recurrence_rule Rule.daily # and have it reoccur daily
+      schedule.add_recurrence_rule IceCube::Rule.daily # and have it reoccur daily
       self.auto_delivery_schedule = schedule
     end
   end

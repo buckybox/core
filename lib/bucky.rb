@@ -1,6 +1,8 @@
 module Bucky
   autoload :Schedule, 'bucky/schedule'
 
+  DAYS = [:sunday, :monday, :tuesday, :wednesday, :thursday, :friday, :saturday]
+
   def self.included(base)
     base.extend(ClassMethods)
   end
@@ -40,7 +42,7 @@ module Bucky
     elsif frequency == 'monthly'
       monthly_days_hash = days_by_number.inject({}) { |hash, day| hash[day] = [1]; hash }
 
-      recurrence_rule = Rule.monthly.day_of_week(monthly_days_hash)
+      recurrence_rule = IceCube::Rule.monthly.day_of_week(monthly_days_hash)
       schedule.add_recurrence_rule(recurrence_rule)
     else
       if frequency == 'weekly'
@@ -49,7 +51,7 @@ module Bucky
         weeks_between_deliveries = 2
       end
 
-      recurrence_rule = Rule.weekly(weeks_between_deliveries).day(*days_by_number)
+      recurrence_rule = IceCube::Rule.weekly(weeks_between_deliveries).day(*days_by_number)
       schedule.add_recurrence_rule(recurrence_rule)
     end
 
@@ -57,7 +59,7 @@ module Bucky
   end
 
   def remove_recurrence_times_on_day(day)
-    day = Route::DAYS[day] if day.is_a?(Integer) && day.between?(0, 6)
+    day = DAYS[day] if day.is_a?(Integer) && day.between?(0, 6)
     new_schedule = schedule
     schedule.recurrence_times.each do |recurrence_time|
       if recurrence_time.send("#{day}?") # recurrence_time.monday? for example

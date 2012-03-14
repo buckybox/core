@@ -1,5 +1,5 @@
 require 'spec_helper'
-include IceCube
+include Bucky
 
 describe Route do
   before { @route = Fabricate(:route) }

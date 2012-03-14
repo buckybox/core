@@ -1,4 +1,4 @@
-include IceCube
+include Bucky
 
 def new_single_schedule(time = (Time.current + 1.day))
   schedule = Schedule.new(time)
@@ -10,8 +10,7 @@ end
 def new_recurring_schedule(time = (Time.current + 1.day))
   schedule = Schedule.new(time)
 
-  recurrence_rule = Rule.weekly(1).day(:monday, :tuesday, :wednesday, :thursday, :friday)
+  recurrence_rule = IceCube::Rule.weekly(1).day(:monday, :tuesday, :wednesday, :thursday, :friday)
   schedule.add_recurrence_rule(recurrence_rule)
-
   return schedule
 end

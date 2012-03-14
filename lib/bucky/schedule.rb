@@ -110,12 +110,12 @@ module Bucky
                when IceCube::WeeklyRule
                  days = recurrence_rule.to_hash[:validations][:day] || []
 
-                 Rule.weekly(interval).day(*(days - [day]))
+                 IceCube::Rule.weekly(interval).day(*(days - [day]))
                when IceCube::MonthlyRule
                  days = recurrence_rule.to_hash[:validations][:day_of_week].keys || []
 
                  monthly_days_hash = (days - [day]).inject({}) { |hash, day| hash[day] = [1]; hash }
-                 Rule.monthly(interval).day_of_week(monthly_days_hash)
+                 IceCube::Rule.monthly(interval).day_of_week(monthly_days_hash)
                end
 
         if rule.present? && (days - [day]).present?

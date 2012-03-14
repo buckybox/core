@@ -1,5 +1,5 @@
 require 'spec_helper'
-include IceCube
+include Bucky
 
 describe OrderScheduleTransaction do
   before { @order_schedule_transaction = Fabricate(:order_schedule_transaction) }
