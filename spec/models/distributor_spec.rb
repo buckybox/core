@@ -62,4 +62,67 @@ describe Distributor do
       specify { @distributor.auto_delivery_schedule.next_occurrence == (@delivery_time + 1.day) }
     end
   end
+
+  context '#create_aily_lists' do
+    before do
+      @date = Date.current
+      @distributor = Fabricate(:distributor)
+    end
+
+    context 'does not have daily lists' do
+      specify { expect { @distributor.create_daily_lists(@date) }.should change(PackingList, :count).by(1) }
+      specify { expect { @distributor.create_daily_lists(@date) }.should change(DeliveryList, :count).by(1) }
+    end
+
+    context 'already has daily lists' do
+      before { @distributor.create_daily_lists(@date) }
+
+      specify { expect { @distributor.create_daily_lists(@date) }.should_not change(PackingList, :count) }
+      specify { expect { @distributor.create_daily_lists(@date) }.should_not change(DeliveryList, :count) }
+    end
+  end
+
+  context '#automate_completed_status' do
+    before do
+      @date = Date.current + 1.week # just so it if further ahead than the scheudle start date
+      @distributor = Fabricate(:distributor)
+    end
+
+    context 'does not have daily lists' do
+      specify { expect { @distributor.automate_completed_status(@date) }.should change(PackingList, :count).by(1) }
+      specify { expect { @distributor.automate_completed_status(@date) }.should change(DeliveryList, :count).by(1) }
+    end
+
+    context 'already has daily lists' do
+      before { @distributor.create_daily_lists(@date) }
+
+      specify { expect { @distributor.automate_completed_status(@date) }.should_not change(PackingList, :count) }
+      specify { expect { @distributor.automate_completed_status(@date) }.should_not change(DeliveryList, :count) }
+    end
+
+    context 'changing the statuses' do
+      before do
+        box = Fabricate(:box, distributor: @distributor)
+        3.times { Fabricate(:recurring_order, active: true, box: box) }
+        @distributor.automate_completed_status(@date)
+
+        @packing_list  = @distributor.packing_lists.find_by_date(@date)
+        @delivery_list = @distributor.delivery_lists.find_by_date(@date)
+      end
+
+      specify { @packing_list.packages[0].status.should == 'packed' }
+      specify { @packing_list.packages[0].packing_method.should == 'auto' }
+      specify { @packing_list.packages[1].status.should == 'packed' }
+      specify { @packing_list.packages[1].packing_method.should == 'auto' }
+      specify { @packing_list.packages[2].status.should == 'packed' }
+      specify { @packing_list.packages[2].packing_method.should == 'auto' }
+
+      specify { @delivery_list.deliveries[0].status.should == 'delivered' }
+      specify { @delivery_list.deliveries[0].status_change_type.should == 'auto' }
+      specify { @delivery_list.deliveries[1].status.should == 'delivered' }
+      specify { @delivery_list.deliveries[1].status_change_type.should == 'auto' }
+      specify { @delivery_list.deliveries[2].status.should == 'delivered' }
+      specify { @delivery_list.deliveries[2].status_change_type.should == 'auto' }
+    end
+  end
 end

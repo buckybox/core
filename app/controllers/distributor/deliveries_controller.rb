@@ -137,8 +137,6 @@ class Distributor::DeliveriesController < Distributor::BaseController
 
     @packages = current_distributor.packages.find(params[:packages])
 
-    puts @packages.inspect
-
     @packages.each do |package|
       package.status = 'packed'
       package.packing_method = 'manual'
