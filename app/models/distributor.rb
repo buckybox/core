@@ -1,5 +1,5 @@
 class Distributor < ActiveRecord::Base
-  include IceCube
+  include Bucky
 
   has_one :bank_information,    dependent: :destroy
   has_one :invoice_information, dependent: :destroy
@@ -18,8 +18,8 @@ class Distributor < ActiveRecord::Base
   has_many :packing_lists,      dependent: :destroy
   has_many :packages,           dependent: :destroy, through: :packing_lists
 
-  serialize :daily_lists_schedule,   Hash
-  serialize :auto_delivery_schedule, Hash
+  schedule_for :daily_lists_schedule
+  schedule_for :auto_delivery_schedule
 
   # Include default devise modules. Others available are:
   # :token_authenticatable, :encryptable, :confirmable, :lockable, :timeoutable and :omniauthable
@@ -102,21 +102,13 @@ class Distributor < ActiveRecord::Base
     end
   end
 
-  def daily_lists_schedule
-    Schedule.from_hash(self[:daily_lists_schedule]) if self[:daily_lists_schedule]
-  end
-
-  def daily_lists_schedule=(daily_lists_schedule)
-    raise(ArgumentError, 'The daily list schedule can not be updated this way. Please use the schedule generation method.')
-  end
-
-  def auto_delivery_schedule
-    Schedule.from_hash(self[:auto_delivery_schedule]) if self[:auto_delivery_schedule]
-  end
-
-  def auto_delivery_schedule=(auto_delivery_schedule)
-    raise(ArgumentError, 'The auto delivery schedule can not be updated this way. Please use the schedule generation method.')
-  end
+#  def daily_lists_schedule=(daily_lists_schedule)
+#    raise(ArgumentError, 'The daily list schedule can not be updated this way. Please use the schedule generation method.')
+#  end
+#
+#  def auto_delivery_schedule=(auto_delivery_schedule)
+#    raise(ArgumentError, 'The auto delivery schedule can not be updated this way. Please use the schedule generation method.')
+#  end
 
   def generate_daily_lists_schedule(time = nil)
     use_local_time_zone do
@@ -125,7 +117,7 @@ class Distributor < ActiveRecord::Base
       time = time.change(min: 0, sec: 0, usec: 0) # make sure time starts on the hour
       schedule = Schedule.new(time, duration: 3600) # make sure it lasts for an hour
       schedule.add_recurrence_rule Rule.daily # and have it reoccur daily
-      self[:daily_lists_schedule] = schedule.to_hash
+      self.daily_lists_schedule = schedule
     end
   end
 
@@ -136,7 +128,7 @@ class Distributor < ActiveRecord::Base
       time = time.change(min: 0, sec: 0, usec: 0) # make sure time starts on the hour
       schedule = Schedule.new(time, duration: 3600) # make sure it lasts for an hour
       schedule.add_recurrence_rule Rule.daily # and have it reoccur daily
-      self[:auto_delivery_schedule] = schedule.to_hash
+      self.auto_delivery_schedule = schedule
     end
   end
 

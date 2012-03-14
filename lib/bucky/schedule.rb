@@ -1,6 +1,6 @@
 module Bucky
   class Schedule
-    
+
     def initialize(*args)
       if args.first.is_a?(IceCube::Schedule)
         @schedule = IceCube::Schedule.from_hash(args.first.to_hash)
@@ -39,6 +39,10 @@ module Bucky
 
     def occurs_on?(time)
       @schedule.occurs_on?(time)
+    end
+
+    def occurring_at?(time)
+      @schedule.occurring_at?(time)
     end
 
     def next_occurrence(*args)
@@ -103,16 +107,16 @@ module Bucky
         days = nil
 
         rule = case recurrence_rule
-        when IceCube::WeeklyRule
-          days = recurrence_rule.to_hash[:validations][:day] || []
+               when IceCube::WeeklyRule
+                 days = recurrence_rule.to_hash[:validations][:day] || []
 
-          Rule.weekly(interval).day(*(days - [day]))
-        when IceCube::MonthlyRule
-          days = recurrence_rule.to_hash[:validations][:day_of_week].keys || []
+                 Rule.weekly(interval).day(*(days - [day]))
+               when IceCube::MonthlyRule
+                 days = recurrence_rule.to_hash[:validations][:day_of_week].keys || []
 
-          monthly_days_hash = (days - [day]).inject({}) { |hash, day| hash[day] = [1]; hash }
-          Rule.monthly(interval).day_of_week(monthly_days_hash)
-        end
+                 monthly_days_hash = (days - [day]).inject({}) { |hash, day| hash[day] = [1]; hash }
+                 Rule.monthly(interval).day_of_week(monthly_days_hash)
+               end
 
         if rule.present? && (days - [day]).present?
           new_schedule.add_recurrence_rule(rule)

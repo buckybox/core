@@ -1,30 +1,37 @@
 module Bucky
   autoload :Schedule, 'bucky/schedule'
 
-  def schedule
-    bs = nil
-    if self[:schedule]
-      bs = Bucky::Schedule.from_hash(self[:schedule])
-      bs.time_zone = local_time_zone
-    end
-    bs
+  def self.included(base)
+    base.extend(ClassMethods)
   end
 
-  def schedule=(s)
-    #use_local_time_zone do
-    #  s.start_time = s.start_time.in_time_zone
-    if s.is_a?(Hash)
-      throw("Please don't pass in a Hash")
-    elsif s.nil?
-      self[:schedule] = {}
-    elsif s.is_a?(Bucky::Schedule)
-      self[:schedule] = s.to_hash
-    else
-      throw("Expecting a Bucky::Schedule but got a #{s.class}")
+  module ClassMethods
+    def schedule_for(name)
+      self.serialize name, Hash
+
+      define_method name do
+        bs = nil
+        if self[name]
+          bs = Bucky::Schedule.from_hash(self[name])
+          bs.time_zone = local_time_zone
+        end
+        bs
+      end
+
+      define_method "#{name}=" do |s|
+        if s.is_a?(Hash)
+          throw("Please don't pass in a Hash")
+        elsif s.nil?
+          self[name] = {}
+        elsif s.is_a?(Bucky::Schedule)
+          self[name] = s.to_hash
+        else
+          throw("Expecting a Bucky::Schedule but got a #{s.class}")
+        end
+      end
     end
-    #end
   end
-  
+
   def self.create_schedule(start_time, frequency, days_by_number = nil)
     schedule = Bucky::Schedule.new(start_time)
 
@@ -60,8 +67,5 @@ module Bucky
     self.schedule = new_schedule
   end
 
-  def remove_recurrence_day(day)
-    schedule.remove_recurrence_day(day)
-  end
 end
 

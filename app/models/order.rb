@@ -16,8 +16,10 @@ class Order < ActiveRecord::Base
   scope :completed, where(completed: true)
   scope :active, where(active: true)
 
+
+  schedule_for :schedule
+
   acts_as_taggable
-  serialize :schedule, Hash
 
   attr_accessible :box, :box_id, :account, :account_id, :quantity, :likes, :dislikes, :completed, :frequency, :schedule
 
@@ -125,6 +127,10 @@ class Order < ActiveRecord::Base
     result.upcase
   end
   
+  def remove_recurrence_day(day)
+    schedule.remove_recurrence_day(day)
+  end
+
   def self.fix_schedule_time_zones
     Order.all.select do |order|
       new_schedule = order.schedule
