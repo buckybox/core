@@ -49,6 +49,10 @@ module Bucky
       @schedule.next_occurrence(args)
     end
 
+    def next_occurrences(*args)
+      @schedule.next_occurrences(*args)
+    end
+
     def add_recurrence_time(time)
       @schedule.add_recurrence_time(time)
     end
@@ -77,6 +81,14 @@ module Bucky
       @schedule.start_time
     end
 
+    def start_time=(time)
+      @schedule.start_time = time
+    end
+
+    def start_date
+      @schedule.start_date
+    end
+
     def next_occurrence
       @schedule.next_occurrence
     end
@@ -91,6 +103,10 @@ module Bucky
 
     def add_exception_time(time)
       @schedule.add_exception_time(time)
+    end
+
+    def exception_rules
+      @schedule.exception_rules
     end
 
     def remove_recurrence_rule(rule)

@@ -105,6 +105,7 @@ describe Order do
 
       specify { @order.schedule.should_not be_nil }
       specify { @order.schedule.next_occurrence.should_not be_nil }
+      specify { @order.schedule.next_occurrences(28, Time.current).should eq([@order.schedule.next_occurrence]) }
       specify { @order.schedule.to_s.should == @schedule.to_s }
       specify { @order.schedule.next_occurrence == @schedule.next_occurrence }
     end
@@ -122,6 +123,7 @@ describe Order do
 
       specify { @order.schedule.should_not be_nil }
       specify { @order.schedule.next_occurrence.should_not be_nil }
+      specify { @order.schedule.next_occurrences(28, Time.current).size.should eq(28) } 
       specify { @order.schedule.to_s.should == @schedule.to_s }
       specify { @order.schedule.next_occurrence == @schedule.next_occurrence }
     end

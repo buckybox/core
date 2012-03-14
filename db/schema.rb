@@ -193,8 +193,8 @@ ActiveRecord::Schema.define(:version => 20120306032019) do
     t.boolean  "separate_bucky_fee",                     :default => true
     t.text     "daily_lists_schedule"
     t.text     "auto_delivery_schedule"
-    t.string   "time_zone"
     t.string   "support_email"
+    t.string   "time_zone"
   end
 
   add_index "distributors", ["authentication_token"], :name => "index_distributors_on_authentication_token", :unique => true
