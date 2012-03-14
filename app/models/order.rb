@@ -4,8 +4,8 @@ class Order < ActiveRecord::Base
   belongs_to :account
   belongs_to :box
 
-  has_one :distributor, through: :box
   has_one :customer,    through: :account
+  has_one :distributor, through: :customer
   has_one :address,     through: :customer
   has_one :route,       through: :customer
 

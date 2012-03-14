@@ -35,9 +35,11 @@ class Distributor < ActiveRecord::Base
 
   validates_presence_of :email
   validates_uniqueness_of :email
-
   validates_presence_of :name, on: :update
   validates_uniqueness_of :name, on: :update
+  validates_numericality_of :advance_hour, greater_than_or_equal_to: 0
+  validates_numericality_of :advance_days, greater_than_or_equal_to: 1
+  validates_numericality_of :automatic_delivery_hour, greater_than_or_equal_to: 0
 
   before_validation :parameterize_name
   before_validation :check_emails
