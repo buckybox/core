@@ -133,7 +133,7 @@ function updateDeliveryStatus(status, distributor_id, checked_deliveries, date) 
 
   $.ajax({
     type: 'POST',
-    url: '/distributors/' + distributor_id + '/deliveries/update_status.json',
+    url: '/distributor/deliveries/update_status.json',
     dataType: 'json',
     data: $.param(data_hash)
   });
