@@ -2,9 +2,9 @@
   .row.data-headings
     .one.columns= check_box_tag 'all'
     .six.columns.delivery_actions
-      = button_tag 'Delivered', class: 'small radius button', id: 'delivered', disabled: !@real_list
-      = button_tag 'Pending', class: 'small radius button', id: 'pending', disabled: !@real_list
-      = button_tag 'Missed', class: 'small radius button', id: 'missed', disabled: !@real_list
+      = button_tag 'Delivered', class: 'small radius button', id: 'delivered', disabled: @selected_date.future?
+      = button_tag 'Pending', class: 'small radius button', id: 'pending', disabled: @selected_date.future?
+      = button_tag 'Missed', class: 'small radius button', id: 'missed', disabled: @selected_date.future?
       #missed-options.has-flyout
         %table.flyout.large
           %tr
