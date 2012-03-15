@@ -27,8 +27,14 @@ module Distributor::DeliveriesHelper
     return element_id
   end
 
-  def count_class(date_list, date)
-    'has_pending' unless date_list.all_finished
+  def count_class(date_list, distributor)
+    time = date_list.date.to_time + Time.current.hour
+
+    if distributor.orders_closed?(time)
+      'out_of_range'
+    elsif !date_list.all_finished
+      'has_pending'
+    end
   end
 
   def reschedule_dates(route)

@@ -75,6 +75,6 @@ class DeliveryList < ActiveRecord::Base
   end
 
   def all_finished
-    deliveries.all? { |delivery| delivery.status != 'pending' }
+    deliveries.size == 0 || deliveries.all? { |delivery| delivery.status != 'pending' }
   end
 end

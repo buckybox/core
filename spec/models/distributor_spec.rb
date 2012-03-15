@@ -29,8 +29,6 @@ describe Distributor do
       daily_orders(@distributor)
     end
 
-    specify { @distributor.should be_valid }
-
     after { Delorean.back_to_the_present }
 
     context 'for instance' do
@@ -40,6 +38,18 @@ describe Distributor do
       end
 
       context '#create_daily_lists' do
+        context 'does not have daily lists' do
+          specify { expect { @distributor.create_daily_lists(@current_date) }.should change(PackingList, :count).by(1) }
+          specify { expect { @distributor.create_daily_lists(@current_date) }.should change(DeliveryList, :count).by(1) }
+        end
+
+        context 'already has daily lists' do
+          before { @distributor.create_daily_lists(@current_date) }
+
+          specify { expect { @distributor.create_daily_lists(@current_date) }.should_not change(PackingList, :count) }
+          specify { expect { @distributor.create_daily_lists(@current_date) }.should_not change(DeliveryList, :count) }
+        end
+
         context 'with default date' do
           specify { expect { @distributor.create_daily_lists }.should change(@distributor.packing_lists, :count).by(1) }
           specify { expect { @distributor.create_daily_lists }.should change(@distributor.delivery_lists, :count).by(1) }
@@ -68,6 +78,43 @@ describe Distributor do
       end
 
       context '#automate_completed_status' do
+        context 'does not have daily lists' do
+          specify { expect { @distributor.automate_completed_status(@current_date) }.should change(PackingList, :count).by(1) }
+          specify { expect { @distributor.automate_completed_status(@current_date) }.should change(DeliveryList, :count).by(1) }
+        end
+
+        context 'already has daily lists' do
+          before { @distributor.create_daily_lists(@current_date) }
+
+          specify { expect { @distributor.automate_completed_status(@current_date) }.should_not change(PackingList, :count) }
+          specify { expect { @distributor.automate_completed_status(@current_date) }.should_not change(DeliveryList, :count) }
+        end
+
+        context 'changing the statuses' do
+          before do
+            box = Fabricate(:box, distributor: @distributor)
+            3.times { Fabricate(:recurring_order, active: true, box: box) }
+            @distributor.automate_completed_status(@current_date)
+
+            @packing_list  = @distributor.packing_lists.find_by_date(@current_date)
+            @delivery_list = @distributor.delivery_lists.find_by_date(@current_date)
+          end
+
+          specify { @packing_list.packages[0].status.should == 'packed' }
+          specify { @packing_list.packages[0].packing_method.should == 'auto' }
+          specify { @packing_list.packages[1].status.should == 'packed' }
+          specify { @packing_list.packages[1].packing_method.should == 'auto' }
+          specify { @packing_list.packages[2].status.should == 'packed' }
+          specify { @packing_list.packages[2].packing_method.should == 'auto' }
+
+          specify { @delivery_list.deliveries[0].status.should == 'delivered' }
+          specify { @delivery_list.deliveries[0].status_change_type.should == 'auto' }
+          specify { @delivery_list.deliveries[1].status.should == 'delivered' }
+          specify { @delivery_list.deliveries[1].status_change_type.should == 'auto' }
+          specify { @delivery_list.deliveries[2].status.should == 'delivered' }
+          specify { @delivery_list.deliveries[2].status_change_type.should == 'auto' }
+        end
+
         context 'with default date' do
           before { @distributor.create_daily_lists(@current_date - 1.day) }
 
@@ -130,6 +177,28 @@ describe Distributor do
     end
   end
 
+  context 'delivery window methods' do
+    before(:all) do
+      date = Time.new(2012, 03, 15, 18, 32, 45)
+      Delorean.time_travel_to(date)
+
+      @distributor = Fabricate(:distributor)
+      @closing_time = @distributor.closing_time
+    end
+
+    after(:all) { Delorean.back_to_the_present }
+
+    context '#closing_time' do
+      specify { @distributor.closing_time.should == Time.new(2012, 03, 18, 18) }
+    end
+
+    context '#orders_closed?' do
+      specify { @distributor.orders_closed?(@closing_time - 1.hour).should be_false }
+      specify { @distributor.orders_closed?(@closing_time).should be_false }
+      specify { @distributor.orders_closed?(@closing_time + 1.hour).should be_true }
+    end
+  end
+
   def daily_orders(distributor)
     daily_order_schedule = schedule = Schedule.new
     daily_order_schedule.add_recurrence_rule(Rule.daily)
@@ -137,69 +206,6 @@ describe Distributor do
     3.times do
       customer = Fabricate(:customer, distributor: distributor)
       Fabricate(:active_order, account: customer.account, schedule: daily_order_schedule)
-    end
-  end
-
-  context '#create_daily_lists' do
-    before do
-      @date = Date.current
-      @distributor = Fabricate(:distributor)
-    end
-
-    context 'does not have daily lists' do
-      specify { expect { @distributor.create_daily_lists(@date) }.should change(PackingList, :count).by(1) }
-      specify { expect { @distributor.create_daily_lists(@date) }.should change(DeliveryList, :count).by(1) }
-    end
-
-    context 'already has daily lists' do
-      before { @distributor.create_daily_lists(@date) }
-
-      specify { expect { @distributor.create_daily_lists(@date) }.should_not change(PackingList, :count) }
-      specify { expect { @distributor.create_daily_lists(@date) }.should_not change(DeliveryList, :count) }
-    end
-  end
-
-  context '#automate_completed_status' do
-    before do
-      @date = Date.current + 1.week # just so it if further ahead than the scheudle start date
-      @distributor = Fabricate(:distributor)
-    end
-
-    context 'does not have daily lists' do
-      specify { expect { @distributor.automate_completed_status(@date) }.should change(PackingList, :count).by(1) }
-      specify { expect { @distributor.automate_completed_status(@date) }.should change(DeliveryList, :count).by(1) }
-    end
-
-    context 'already has daily lists' do
-      before { @distributor.create_daily_lists(@date) }
-
-      specify { expect { @distributor.automate_completed_status(@date) }.should_not change(PackingList, :count) }
-      specify { expect { @distributor.automate_completed_status(@date) }.should_not change(DeliveryList, :count) }
-    end
-
-    context 'changing the statuses' do
-      before do
-        box = Fabricate(:box, distributor: @distributor)
-        3.times { Fabricate(:recurring_order, active: true, box: box) }
-        @distributor.automate_completed_status(@date)
-
-        @packing_list  = @distributor.packing_lists.find_by_date(@date)
-        @delivery_list = @distributor.delivery_lists.find_by_date(@date)
-      end
-
-      specify { @packing_list.packages[0].status.should == 'packed' }
-      specify { @packing_list.packages[0].packing_method.should == 'auto' }
-      specify { @packing_list.packages[1].status.should == 'packed' }
-      specify { @packing_list.packages[1].packing_method.should == 'auto' }
-      specify { @packing_list.packages[2].status.should == 'packed' }
-      specify { @packing_list.packages[2].packing_method.should == 'auto' }
-
-      specify { @delivery_list.deliveries[0].status.should == 'delivered' }
-      specify { @delivery_list.deliveries[0].status_change_type.should == 'auto' }
-      specify { @delivery_list.deliveries[1].status.should == 'delivered' }
-      specify { @delivery_list.deliveries[1].status_change_type.should == 'auto' }
-      specify { @delivery_list.deliveries[2].status.should == 'delivered' }
-      specify { @delivery_list.deliveries[2].status_change_type.should == 'auto' }
     end
   end
 end
