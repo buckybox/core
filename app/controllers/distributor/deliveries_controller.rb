@@ -33,9 +33,11 @@ class Distributor::DeliveriesController < Distributor::ResourceController
 
       if @route_id != 0
         @items = @all_deliveries.select{ |delivery| delivery.route.id == @route_id }
+        @real_list = @items.all? { |i| i.is_a?(Delivery) }
         @route = @routes.find(@route_id)
       else
         @items = @all_packages
+        @real_list = @items.all? { |i| i.is_a?(Package) }
         @route = @routes.first
       end
     end
