@@ -140,7 +140,7 @@ describe Distributor do
     end
   end
 
-  context '#create_aily_lists' do
+  context '#create_daily_lists' do
     before do
       @date = Date.current
       @distributor = Fabricate(:distributor)
