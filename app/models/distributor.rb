@@ -115,12 +115,18 @@ class Distributor < ActiveRecord::Base
     old_date = Date.current + old_days.days
     new_date = Date.current + new_days.days
 
+    puts old_date
+    puts new_date
+
     if old_days < new_days
       ((old_date + 1.day)..new_date).each { |date| create_daily_lists(date) }
     else
       ((new_date + 1.day)..old_date).each do |date|
-        PackingList.find(id, date).destroy
-        DeliveryList.find(id, date).destroy
+        packing_list = PackingList.find_by_distributor_id_and_date(id, date)
+        packing_list.destroy unless packing_list.nil?
+
+        delivery_list = DeliveryList.find_by_distributor_id_and_date(id, date)
+        delivery_list.destroy unless delivery_list.nil?
       end
     end
   end
