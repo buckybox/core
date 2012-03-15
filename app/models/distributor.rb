@@ -108,15 +108,6 @@ class Distributor < ActiveRecord::Base
     return successful
   end
 
-  def closing_time
-    time = (Time.current + advance_days.days).beginning_of_day
-    time += advance_hour.hours
-  end
-
-  def orders_closed?(time)
-    return closing_time < time
-  end
-
   private
 
   def update_daily_lists

@@ -27,12 +27,10 @@ module Distributor::DeliveriesHelper
     return element_id
   end
 
-  def count_class(date_list, distributor)
-    time = date_list.date.to_time + Time.current.hour
-
-    if distributor.orders_closed?(time)
+  def count_class(date_list)
+    if date_list.is_a?(FutureDeliveryList)
       'out_of_range'
-    elsif !date_list.all_finished
+    elsif !date_list.all_finished?
       'has_pending'
     end
   end

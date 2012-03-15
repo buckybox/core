@@ -1,4 +1,4 @@
-FutureDeliveryList = Struct.new(:date, :deliveries, :all_finished)
+FutureDeliveryList = Struct.new(:date, :deliveries)
 
 class DeliveryList < ActiveRecord::Base
   belongs_to :distributor
@@ -26,7 +26,7 @@ class DeliveryList < ActiveRecord::Base
 
         orders.each { |order| date_orders << order if order.schedule.occurs_on?(date) }
 
-        result << FutureDeliveryList.new(date, date_orders, false)
+        result << FutureDeliveryList.new(date, date_orders)
       end
     end
 
@@ -74,7 +74,12 @@ class DeliveryList < ActiveRecord::Base
     return result
   end
 
-  def all_finished
-    deliveries.size == 0 || deliveries.all? { |delivery| delivery.status != 'pending' }
+  def has_deliveries?
+    @has_deliveries ||= (deliveries.size == 0)
+  end
+
+  def all_finished?
+    @all_finished ||= deliveries.all? { |delivery| delivery.status != 'pending' }
+    has_deliveries? || @all_finished
   end
 end

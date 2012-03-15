@@ -177,28 +177,6 @@ describe Distributor do
     end
   end
 
-  context 'delivery window methods' do
-    before(:all) do
-      date = Time.new(2012, 03, 15, 18, 32, 45)
-      Delorean.time_travel_to(date)
-
-      @distributor = Fabricate(:distributor)
-      @closing_time = @distributor.closing_time
-    end
-
-    after(:all) { Delorean.back_to_the_present }
-
-    context '#closing_time' do
-      specify { @distributor.closing_time.should == Time.new(2012, 03, 18, 18) }
-    end
-
-    context '#orders_closed?' do
-      specify { @distributor.orders_closed?(@closing_time - 1.hour).should be_false }
-      specify { @distributor.orders_closed?(@closing_time).should be_false }
-      specify { @distributor.orders_closed?(@closing_time + 1.hour).should be_true }
-    end
-  end
-
   def daily_orders(distributor)
     daily_order_schedule = schedule = Schedule.new
     daily_order_schedule.add_recurrence_rule(Rule.daily)
