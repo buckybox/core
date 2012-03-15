@@ -173,6 +173,7 @@ describe Distributor do
       end
 
       context '#self.automate_completed_status' do
+        pending
       end
     end
   end
