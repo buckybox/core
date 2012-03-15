@@ -57,7 +57,10 @@ class DeliveryList < ActiveRecord::Base
     packages = packages.sort.map{ |key, value| value }.flatten
 
     packages.each do |package|
-      delivery_list.deliveries.find_or_create_by_package_id(package.id, order: package.order)
+      order = package.order
+      route = order.route
+      # need to pass route as well or the position scope for this delivery list is not set properly
+      delivery_list.deliveries.find_or_create_by_package_id(package.id, order: order, route: route)
     end
 
     return delivery_list
