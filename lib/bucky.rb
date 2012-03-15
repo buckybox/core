@@ -57,17 +57,5 @@ module Bucky
 
     schedule
   end
-
-  def remove_recurrence_times_on_day(day)
-    day = DAYS[day] if day.is_a?(Integer) && day.between?(0, 6)
-    new_schedule = schedule
-    schedule.recurrence_times.each do |recurrence_time|
-      if recurrence_time.send("#{day}?") # recurrence_time.monday? for example
-        new_schedule.remove_recurrence_time(recurrence_time)
-      end
-    end
-    self.schedule = new_schedule
-  end
-
 end
 

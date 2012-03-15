@@ -5,7 +5,7 @@ describe Order do
   before { @order = Fabricate(:order) }
 
   specify { @order.should be_valid }
-  specify { Fabricate(:active_order).should be_valid }
+  specify { Fabricate(:order).should be_valid }
 
   context :quantity do
     specify { Fabricate.build(:order, :quantity => 0).should_not be_valid }
@@ -200,23 +200,23 @@ describe Order do
       rule_schedule.add_recurrence_rule(IceCube::Rule.daily(3))
 
       rule_schedule_no_end_date = rule_schedule.clone
-      @order1 = Fabricate(:active_order, :schedule => rule_schedule_no_end_date)
+      @order1 = Fabricate(:order, :schedule => rule_schedule_no_end_date)
 
       rule_schedule_end_date_future = rule_schedule.clone
       rule_schedule_end_date_future.end_time = (Time.current + 1.month)
-      @order2 = Fabricate(:active_order, :schedule => rule_schedule_end_date_future)
+      @order2 = Fabricate(:order, :schedule => rule_schedule_end_date_future)
 
       rule_schedule_end_date_past = rule_schedule.clone
       rule_schedule_end_date_past.end_time = (Time.current - 1.month)
-      @order3 = Fabricate(:active_order, :schedule => rule_schedule_end_date_past)
+      @order3 = Fabricate(:order, :schedule => rule_schedule_end_date_past)
 
       time_schedule_future = Bucky::Schedule.new(Time.current - 2.months)
       time_schedule_future.add_recurrence_time(Time.current + 5.days)
-      @order4 = Fabricate(:active_order, :schedule => time_schedule_future)
+      @order4 = Fabricate(:order, :schedule => time_schedule_future)
 
       time_schedule_past = Bucky::Schedule.new(Time.current - 2.months)
       time_schedule_past.add_recurrence_time(Time.current - 5.days)
-      @order5 = Fabricate(:active_order, :schedule => time_schedule_past)
+      @order5 = Fabricate(:order, :schedule => time_schedule_past)
     end
 
     specify { expect { Order.deactivate_finished }.should change(Order.active, :count).by(-2) }

@@ -35,6 +35,7 @@ RSpec.configure do |config|
 
   config.before(:each) do
     DatabaseCleaner.start
+    Time.zone = BuckyBox::Application.config.time_zone
   end
 
   config.after(:each) do

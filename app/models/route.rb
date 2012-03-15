@@ -22,9 +22,11 @@ class Route < ActiveRecord::Base
   validate :at_least_one_day_is_selected
 
   before_validation :create_schedule
-  before_save :record_schedule_change, :if => 'schedule_changed?'
+  before_validation :update_schedule, :if => 'schedule_changed?'
 
   default_scope order(:name)
+
+  DAYS = [:sunday, :monday, :tuesday, :wednesday, :thursday, :friday, :saturday]
 
   def self.default_route(distributor)
     distributor.routes.first # For now the first one is the default
@@ -35,7 +37,17 @@ class Route < ActiveRecord::Base
   end
 
   def delivery_days
-    [:monday, :tuesday, :wednesday, :thursday, :friday, :saturday, :sunday].select { |day| self[day] }
+    DAYS.select { |day| self[day] }
+  end
+
+  def delivery_day_numbers(days=delivery_days)
+    days.collect { |day| DAYS.index(day)}
+  end
+
+  def future_orders
+    # Using a join makes the returned models read-only, this is a work around
+    order_ids = Order.where(customers: {route_id: id}).joins(:customer).collect(&:id)
+    Order.where(["id in (?)", order_ids])
   end
 
   def local_time_zone
@@ -57,7 +69,27 @@ class Route < ActiveRecord::Base
     self.schedule = new_schedule
   end
 
-  def record_schedule_change
+  def update_schedule
+    track_schedule_change
+    deleted_day_numbers.each do |day|
+      future_orders.active.each do |order|
+        order.remove_recurrence_day(day)
+        order.remove_recurrence_times_on_day(day)
+        order.deactivate if order.schedule_empty?
+        order.save
+      end
+    end
+  end
+
+  def deleted_days
+    DAYS.select{|day| self.send("#{day.to_s}_was") && !self.send(day)}
+  end
+
+  def deleted_day_numbers(days=deleted_days)
+    delivery_day_numbers(days)
+  end
+
+  def track_schedule_change
     route_schedule_transactions.build(route: self, schedule: self.schedule)
   end
 end

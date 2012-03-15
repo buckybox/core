@@ -97,6 +97,7 @@ describe Distributor do
 
       context 'with time_zone set to Berlin' do
         before do
+          Time.zone = "Paris"
           @distributor = Fabricate(:distributor, time_zone: "Berlin")
         end
         it 'should temporarily change Time.now' do

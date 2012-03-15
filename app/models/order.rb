@@ -29,8 +29,8 @@ class Order < ActiveRecord::Base
   validates_numericality_of :quantity, greater_than: 0
   validates_inclusion_of :frequency, in: FREQUENCIES, message: "%{value} is not a valid frequency"
 
-  before_save :make_active, if: :just_completed?
-  before_save :record_schedule_change
+  before_save :activate, if: :just_completed?
+  before_save :record_schedule_change, if: :schedule_changed?
 
   default_scope order('created_at DESC')
 
@@ -56,7 +56,8 @@ class Order < ActiveRecord::Base
 
         if order.schedule.next_occurrence.nil?
           logger.info '> Deactivating...'
-          order.update_attribute(:active, false)
+          order.deactivate
+          order.save
           logger.info '> Done.'
         end
       end
@@ -106,6 +107,18 @@ class Order < ActiveRecord::Base
     self.schedule = s
   end
 
+  def remove_recurrence_day(day)
+    s = schedule
+    s.remove_recurrence_day(day)
+    self.schedule = s
+  end
+
+  def remove_recurrence_times_on_day(day)
+    s = schedule
+    s.remove_recurrence_times_on_day(day)
+    self.schedule = s
+  end
+
   def future_deliveries(end_date)
     results = []
     schedule.occurrences_between(Time.current, end_date).each do |occurence|
@@ -127,10 +140,6 @@ class Order < ActiveRecord::Base
     result.upcase
   end
   
-  def remove_recurrence_day(day)
-    schedule.remove_recurrence_day(day)
-  end
-
   def self.fix_schedule_time_zones
     Order.all.select do |order|
       new_schedule = order.schedule
@@ -140,10 +149,37 @@ class Order < ActiveRecord::Base
     end
   end
 
+  def schedule_empty?
+    schedule.next_occurrence.blank?
+  end
+  
+  def deactivate
+    self.active = false
+  end
+
+  def pause(start_date, end_date)
+
+    # Could not get controller response to render error, so commented out
+    # for now.
+    if start_date.past? || end_date.past?
+      #errors.add(:base, "Dates can not be in the past")
+      return false
+    elsif end_date <= start_date
+      #errors.add(:base, "Start date can not be past end date")
+      return false
+    end
+
+    updated_schedule = schedule
+    updated_schedule.exception_times.each { |time| updated_schedule.remove_exception_time(time) }
+    (start_date..end_date).each   { |date| updated_schedule.add_exception_time(date.beginning_of_day) }
+    self.schedule = updated_schedule
+    save
+  end
+
   protected
 
   # Manually create the first delivery all following deliveries should be scheduled for creation by the cron job
-  def make_active
+  def activate
     self.active = true
   end
 

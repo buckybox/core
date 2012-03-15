@@ -18,7 +18,11 @@ module Bucky
     end
 
     def to_hash
-      @schedule.to_hash
+      if @schedule.present?
+        @schedule.to_hash
+      else
+        {}
+      end
     end
 
     def frequency
@@ -74,7 +78,7 @@ module Bucky
     end
 
     def occurrences_between(start_time, end_time)
-      @schedule.occurrences_between(start_time, end_time)
+      @schedule.occurrences_between(start_time.in_time_zone, end_time.in_time_zone)
     end
 
     def start_time
@@ -114,14 +118,12 @@ module Bucky
     end
 
     def remove_recurrence_day(day)
-      recurrence_rule = @schedule.recurrence_rules.first
       new_schedule = @schedule
-
+      recurrence_rule = new_schedule.recurrence_rules.first
       if recurrence_rule.present?
         new_schedule.remove_recurrence_rule(recurrence_rule)
         interval = recurrence_rule.to_hash[:interval]
         days = nil
-
         rule = case recurrence_rule
                when IceCube::WeeklyRule
                  days = recurrence_rule.to_hash[:validations][:day] || []
@@ -136,13 +138,24 @@ module Bucky
 
         if rule.present? && (days - [day]).present?
           new_schedule.add_recurrence_rule(rule)
-          self.schedule = new_schedule
+          @schedule = new_schedule
         else
-          self.schedule = nil
+          @schedule = nil
         end
       else
         nil
       end
+    end
+
+    def remove_recurrence_times_on_day(day)
+      day = DAYS[day] if day.is_a?(Integer) && day.between?(0, 6)
+      new_schedule = @schedule
+      new_schedule.recurrence_times.each do |recurrence_time|
+        if recurrence_time.send("#{day}?") # recurrence_time.monday? for example
+          new_schedule.remove_recurrence_time(recurrence_time)
+        end
+      end
+      @schedule = new_schedule
     end
 
     def use_local_time_zone

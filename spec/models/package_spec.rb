@@ -8,7 +8,7 @@ describe Package do
       @address = Fabricate(:address)
       @account = Fabricate(:account, :customer => @address.customer)
       @box = Fabricate(:box, :distributor => @account.distributor)
-      @order = Fabricate(:active_order, :box => @box, :account => @account)
+      @order = Fabricate(:order, :box => @box, :account => @account)
       @package = Fabricate(:package, :order => @order)
     end
 
