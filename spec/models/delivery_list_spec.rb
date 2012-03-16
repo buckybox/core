@@ -64,14 +64,14 @@ describe DeliveryList do
     after { back_to_the_present }
   end
 
-  describe '#all_finished' do
+  describe '#all_finished?' do
     context 'no deliveries are pending' do
       before do
         Fabricate(:delivery, status: 'delivered', delivery_list: @delivery_list)
         Fabricate(:delivery, status: 'delivered', delivery_list: @delivery_list)
       end
 
-      specify { @delivery_list.all_finished.should be_true }
+      specify { @delivery_list.all_finished?.should be_true }
     end
 
     context 'has deliveries that are pending' do
@@ -80,7 +80,7 @@ describe DeliveryList do
         Fabricate(:delivery, status: 'pending', delivery_list: @delivery_list)
       end
 
-      specify { @delivery_list.all_finished.should_not be_true }
+      specify { @delivery_list.all_finished?.should_not be_true }
     end
   end
 end
