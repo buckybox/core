@@ -2,24 +2,38 @@ module Bucky
   class Schedule
 
     def initialize(*args)
-      if args.first.is_a?(IceCube::Schedule)
-        @schedule = IceCube::Schedule.from_hash(args.first.to_hash)
+      if args.blank?
+        @schedule = IceCube::Schedule.new(Time.current.utc)
+      elsif args.first.is_a?(IceCube::Schedule)
+        schedule = args.first
+        # Convert to UTC
+        schedule.start_time = schedule.start_time.utc unless schedule.start_time.blank?
+        schedule.end_time = schedule.end_time.utc unless schedule.end_time.blank?
+
+        @schedule = IceCube::Schedule.from_hash(schedule.to_hash)
       else
-        @schedule = IceCube::Schedule.new(*args)
+        start_time = args.first.utc
+        options = args.second || {}
+        if options[:end_time].present?
+          options[:end_time] = options[:end_time].utc
+        end
+        @schedule = IceCube::Schedule.new(start_time, options)
       end
     end
 
-    def time_zone=(tz)
+    def time_zone=(tz = Time.zone)
       @time_zone = tz.clone
     end
 
     def time_zone
-      @time_zone.clone
+      @time_zone || Time.zone
     end
 
     def to_hash
       if @schedule.present?
-        @schedule.to_hash
+        hash = @schedule.to_hash
+        hash[:start_time] = hash.delete(:start_date)
+        hash
       else
         {}
       end
@@ -34,39 +48,48 @@ module Bucky
     end
 
     def end_time
-      @schedule.end_time
+      @schedule.end_time.in_time_zone(time_zone)
     end
 
     def end_time=(end_time)
-      @schedule.end_time = end_time
+      @schedule.end_time = end_time.utc
     end
 
-    def occurs_on?(time)
-      @schedule.occurs_on?(time)
+    def occurs_on?(date)
+      # Not sure about converting to UTC here or not
+      @schedule.occurs_on?(date)
     end
 
     def occurring_at?(time)
-      @schedule.occurring_at?(time)
+      @schedule.occurring_at?(time.utc)
     end
 
-    def next_occurrence(*args)
-      @schedule.next_occurrence(args)
+    def next_occurrence(from = Time.current)
+      @schedule.next_occurrence(from.utc)
     end
 
-    def next_occurrences(*args)
-      @schedule.next_occurrences(*args)
+    def next_occurrences(num, from = Time.current)
+      @schedule.next_occurrences(num, from.utc)
     end
 
     def add_recurrence_time(time)
-      @schedule.add_recurrence_time(time)
+      @schedule.add_recurrence_time(time.utc)
     end
 
     def remove_recurrence_time(time)
-      @schedule.remove_recurrence_time(time)
+      @schedule.remove_recurrence_time(time.utc)
     end
 
     def recurrence_times
-      @schedule.recurrence_times
+      @schedule.recurrence_times.collect do |recurrence_time|
+        if recurrence_time.respond_to?(:in_time_zone)
+          recurrence_time.in_time_zone(time_zone)
+        elsif recurrence_time.respond_to?(:to_time)
+          recurrence_time.to_time.in_time_zone(time_zone)
+        else
+          recurrence_time
+        end
+      end
     end
 
     def add_recurrence_rule(rule)
@@ -78,15 +101,15 @@ module Bucky
     end
 
     def occurrences_between(start_time, end_time)
-      @schedule.occurrences_between(start_time.in_time_zone, end_time.in_time_zone)
+      @schedule.occurrences_between(start_time.utc, end_time.utc)
     end
 
     def start_time
-      @schedule.start_time
+      @schedule.start_time.in_time_zone(time_zone)
     end
 
     def start_time=(time)
-      @schedule.start_time = time
+      @schedule.start_time = time.utc
     end
 
     def start_date
@@ -102,11 +125,11 @@ module Bucky
     end
 
     def remove_exception_time(time)
-      @schedule.remove_exception_time(time)
+      @schedule.remove_exception_time(time.utc)
     end
 
     def add_exception_time(time)
-      @schedule.add_exception_time(time)
+      @schedule.add_exception_time(time.utc)
     end
 
     def exception_rules
@@ -158,18 +181,24 @@ module Bucky
       @schedule = new_schedule
     end
 
-    def use_local_time_zone
-      Time.use_zone(@time_zone) do
-        yield
-      end
-    end
-
     def to_s
       @schedule.to_s
     end
 
+    def ==(schedule)
+      return false unless schedule.is_a?(Bucky::Schedule)
+      self.to_hash == schedule.to_hash
+    end
+
     def self.from_hash(hash)
+      hash[:start_date] = hash.delete(:start_time) if hash[:start_time].present? #IceCube is moving away from 'date' but this one is still there.
       Bucky::Schedule.new(IceCube::Schedule.from_hash(hash))
+    end
+
+    private
+
+    def ice_cube_schedule
+      @schedule
     end
   end
 end

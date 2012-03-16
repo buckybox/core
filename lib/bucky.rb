@@ -9,6 +9,8 @@ module Bucky
 
   module ClassMethods
     def schedule_for(name)
+      Bucky::Util.record_schedule(self.name, name)
+
       self.serialize name, Hash
 
       define_method name do
@@ -34,11 +36,11 @@ module Bucky
     end
   end
 
-  def self.create_schedule(start_time, frequency, days_by_number = nil)
-    schedule = Bucky::Schedule.new(start_time)
+  def create_schedule_for(name, start_time, frequency, days_by_number = nil)
+    schedule = Bucky::Schedule.new(start_time.utc)
 
     if frequency == 'single'
-      schedule.add_recurrence_time(start_time)
+      schedule.add_recurrence_time(start_time.utc)
     elsif frequency == 'monthly'
       monthly_days_hash = days_by_number.inject({}) { |hash, day| hash[day] = [1]; hash }
 
@@ -55,7 +57,51 @@ module Bucky
       schedule.add_recurrence_rule(recurrence_rule)
     end
 
+    self.send("#{name}=", schedule)
     schedule
+  end
+
+  module Util
+    def self.record_schedule(klass, column)
+      @recorded_schedules ||= {}
+      @recorded_schedules[klass] ||= []
+      @recorded_schedules[klass] << column
+    end
+
+    def self.schedules
+      # Load all models so they can initialize and set up schedules
+      (ActiveRecord::Base.connection.tables - %w[schema_migrations]).each do |table|
+        table.classify.constantize rescue nil
+      end
+      @recorded_schedules.clone
+    end
+
+    def self.update_schedules_time_zone(time_zone = BuckyBox::Application.config.time_zone)
+      Time.use_zone(time_zone) do
+        schedules.each do |klass, schedule_names|
+          klass.constantize.all.each do |klass_instance|
+            schedule_names.each do |schedule_name|
+              schedule = klass_instance.send schedule_name
+              schedule.start_time = schedule.start_time.utc
+              klass_instance.send("#{schedule_name}=", schedule)
+              klass_instance.save!
+            end
+          end
+        end
+      end
+    end
+
+    def self.args_to_utc(*args)
+      utc_args = args.collect do |arg|
+        if arg.respond_to?(:utc)
+          arg.utc
+        elsif arg.respond_to?(:to_time)
+          arg.to_time.utc
+        else
+          arg
+        end
+      end
+    end
   end
 end
 

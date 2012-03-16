@@ -38,12 +38,12 @@ class Order < ActiveRecord::Base
   scope :active,    where(active: true)
   scope :inactive,  where(active: false)
 
-  def self.create_schedule(start_time, frequency, days_by_number = nil)
+  def create_schedule(start_time, frequency, days_by_number = nil)
     if frequency != 'single' && days_by_number.nil?
       raise(ArgumentError, "Unless it is a single order the schedule needs to specify days.")
     end
 
-    Bucky.create_schedule(start_time, frequency, days_by_number)
+    create_schedule_for(:schedule, start_time, frequency, days_by_number)
   end
 
   def self.deactivate_finished
@@ -138,15 +138,6 @@ class Order < ActiveRecord::Base
     result += '+L' unless likes.blank?
     result += '+D' unless dislikes.blank?
     result.upcase
-  end
-  
-  def self.fix_schedule_time_zones
-    Order.all.select do |order|
-      new_schedule = order.schedule
-      new_schedule.start_time = new_schedule.start_time.in_time_zone(order.distributor.get_time_zone)
-      order.schedule = new_schedule
-      [order.save, order]
-    end
   end
 
   def schedule_empty?
