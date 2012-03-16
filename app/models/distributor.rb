@@ -16,6 +16,10 @@ class Distributor < ActiveRecord::Base
   has_many :packing_lists,      dependent: :destroy
   has_many :packages,           dependent: :destroy, through: :packing_lists
 
+  DEFAULT_ADVANCED_HOURS = 18
+  DEFAULT_ADVANCED_DAYS = 3
+  DEFAULT_AUTOMATIC_DELIVERY_HOUR = 18
+
   # Include default devise modules. Others available are:
   # :token_authenticatable, :encryptable, :confirmable, :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable, :registerable,
@@ -56,14 +60,17 @@ class Distributor < ActiveRecord::Base
 
   def self.create_daily_lists(time = Time.current)
     all.each do |distributor|
-      if time.hour == distributor.advance_hour
-        advance_time = (time + distributor.advance_days.days)
-        successful = distributor.create_daily_lists(advance_time.to_date)
+      distributor.use_local_time_zone do
+        local_time = time.in_time_zone
+        if local_time.hour == distributor.advance_hour
+          advance_time = (local_time + distributor.advance_days.days)
+          successful = distributor.create_daily_lists(advance_time.to_date)
 
-        if successful
-          CronLog.log("Create daily list for #{distributor.id} at #{advance_time.to_s(:pretty)} successful.")
-        else
-          CronLog.log("FAILURE: Create daily list for #{distributor.id} at #{advance_time.to_s(:pretty)}.")
+          if successful
+            CronLog.log("Create daily list for #{distributor.id} at #{advance_time.to_s(:pretty)} successful.")
+          else
+            CronLog.log("FAILURE: Create daily list for #{distributor.id} at #{advance_time.to_s(:pretty)}.")
+          end
         end
       end
     end
@@ -71,14 +78,17 @@ class Distributor < ActiveRecord::Base
 
   def self.automate_completed_status(time = Time.current)
     all.each do |distributor|
-      if time.hour == distributor.automatic_delivery_hour
-        delivery_time = (time - 1.day) # considering the next day as standard across all distributors for now
-        successful = distributor.automate_completed_status(delivery_time.to_date)
+      distributor.use_local_time_zone do
+        local_time = time.in_time_zone
+        if local_time.hour == distributor.automatic_delivery_hour
+          delivery_time = (local_time - 1.day) # considering the next day as standard across all distributors for now
+          successful = distributor.automate_completed_status(delivery_time.to_date)
 
-        if successful
-          CronLog.log("Automated completion for #{distributor.id} at #{delivery_time.to_s(:pretty)} successful.")
-        else
-          CronLog.log("FAILURE: Automated completion for #{distributor.id} at #{delivery_time.to_s(:pretty)}.")
+          if successful
+            CronLog.log("Automated completion for #{distributor.id} at #{delivery_time.to_s(:pretty)} successful.")
+          else
+            CronLog.log("FAILURE: Automated completion for #{distributor.id} at #{delivery_time.to_s(:pretty)}.")
+          end
         end
       end
     end
@@ -149,9 +159,9 @@ class Distributor < ActiveRecord::Base
   end
 
   def generate_default_automate_values
-    self.advance_hour = 18            if self.advance_hour.nil?
-    self.advance_days = 3             if self.advance_days.nil?
-    self.automatic_delivery_hour = 18 if self.automatic_delivery_hour.nil?
+    self.advance_hour = DEFAULT_AUTOMATIC_DELIVERY_HOUR            if self.advance_hour.nil?
+    self.advance_days = DEFAULT_ADVANCED_DAYS             if self.advance_days.nil?
+    self.automatic_delivery_hour = DEFAULT_AUTOMATIC_DELIVERY_HOUR if self.automatic_delivery_hour.nil?
   end
 
   def parameterize_name
