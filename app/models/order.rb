@@ -69,7 +69,7 @@ class Order < ActiveRecord::Base
   end
 
   def local_time_zone
-    distributor.local_time_zone
+    (distributor.present? && distributor.local_time_zone) || BuckyBox::Application.config.time_zone
   end
 
   def price
