@@ -5,9 +5,9 @@ class Order < ActiveRecord::Base
   belongs_to :box
 
   has_one :customer,    through: :account
-  has_one :distributor, through: :customer
-  has_one :address,     through: :customer
-  has_one :route,       through: :customer
+  has_one :distributor, through: :account
+  has_one :address,     through: :account
+  has_one :route,       through: :account
 
   has_many :packages
   has_many :deliveries

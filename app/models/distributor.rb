@@ -135,9 +135,6 @@ class Distributor < ActiveRecord::Base
     old_date = Date.current + old_days.days
     new_date = Date.current + new_days.days
 
-    puts old_date
-    puts new_date
-
     if old_days < new_days
       ((old_date + 1.day)..new_date).each { |date| create_daily_lists(date) }
     else

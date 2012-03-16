@@ -6,18 +6,17 @@ describe Order do
     before { @order = Fabricate(:order) }
 
     specify { @order.should be_valid }
-    specify { Fabricate(:order).should be_valid }
 
     context :quantity do
-      specify { Fabricate.build(:order, :quantity => 0).should_not be_valid }
-      specify { Fabricate.build(:order, :quantity => -1).should_not be_valid }
+      specify { Fabricate.build(:order, quantity: 0).should_not be_valid }
+      specify { Fabricate.build(:order, quantity: -1).should_not be_valid }
     end
 
     context :frequency do
       Order::FREQUENCIES.each do |f|
-        specify { Fabricate.build(:order, :frequency => f).should be_valid }
+        specify { Fabricate.build(:order, frequency: f).should be_valid }
       end
-      specify { Fabricate.build(:order, :frequency => 'yearly').should_not be_valid }
+      specify { Fabricate.build(:order, frequency: 'yearly').should_not be_valid }
     end
 
     context :price do
@@ -32,7 +31,6 @@ describe Order do
         { discount: 0.00, fee: 0, quantity: 5, individual_price: 10.00, price: 50.00 },
         { discount: 0.00, fee: 0, quantity: 1, individual_price: 10.00, price: 10.00 }
       ]
-
 
       ORDER_PRICE_PERMUTATIONS.each do |pp|
         context "where discount is #{pp[:discount]}, fee is #{pp[:fee]}, and quantity is #{pp[:quantity]}" do
@@ -50,9 +48,7 @@ describe Order do
 
     context '.create_schedule' do
       Delorean.time_travel_to(Date.parse('2013-02-02')) do
-        before do
-          @order = Fabricate(:order)
-        end
+        before { @order = Fabricate(:order) }
 
         context 'exceptions' do
           %w(weekly fortnightly monthly).each do |frequency|
@@ -69,7 +65,7 @@ describe Order do
 
     context :schedule do
       before do
-        @route = Fabricate(:route, :distributor => @order.distributor)
+        @route = Fabricate(:route, distributor: @order.distributor)
         @order.completed = true
         @order.active = true
       end
@@ -164,8 +160,8 @@ describe Order do
     context 'scheduled_delivery' do
       before do
         @schedule = @order.schedule
-        delivery_list = Fabricate(:delivery_list, :date => Date.current + 5.days)
-        @delivery = Fabricate(:delivery, :delivery_list => delivery_list)
+        delivery_list = Fabricate(:delivery_list, date: Date.current + 5.days)
+        @delivery = Fabricate(:delivery, delivery_list: delivery_list)
         @order.add_scheduled_delivery(@delivery)
         @order.save
       end
@@ -205,23 +201,23 @@ describe Order do
         rule_schedule.add_recurrence_rule(IceCube::Rule.daily(3))
 
         rule_schedule_no_end_date = rule_schedule.clone
-        @order1 = Fabricate(:order, :schedule => rule_schedule_no_end_date)
+        @order1 = Fabricate(:order, schedule: rule_schedule_no_end_date)
 
         rule_schedule_end_date_future = rule_schedule.clone
         rule_schedule_end_date_future.end_time = (Time.current + 1.month)
-        @order2 = Fabricate(:order, :schedule => rule_schedule_end_date_future)
+        @order2 = Fabricate(:order, schedule: rule_schedule_end_date_future)
 
         rule_schedule_end_date_past = rule_schedule.clone
         rule_schedule_end_date_past.end_time = (Time.current - 1.month)
-        @order3 = Fabricate(:order, :schedule => rule_schedule_end_date_past)
+        @order3 = Fabricate(:order, schedule: rule_schedule_end_date_past)
 
         time_schedule_future = Bucky::Schedule.new(Time.current - 2.months)
         time_schedule_future.add_recurrence_time(Time.current + 5.days)
-        @order4 = Fabricate(:order, :schedule => time_schedule_future)
+        @order4 = Fabricate(:order, schedule: time_schedule_future)
 
         time_schedule_past = Bucky::Schedule.new(Time.current - 2.months)
         time_schedule_past.add_recurrence_time(Time.current - 5.days)
-        @order5 = Fabricate(:order, :schedule => time_schedule_past)
+        @order5 = Fabricate(:order, schedule: time_schedule_past)
       end
 
       specify { expect { Order.deactivate_finished }.should change(Order.active, :count).by(-2) }
