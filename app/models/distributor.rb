@@ -19,7 +19,7 @@ class Distributor < ActiveRecord::Base
   # Include default devise modules. Others available are:
   # :token_authenticatable, :encryptable, :confirmable, :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable, :registerable,
-         :recoverable, :rememberable, :trackable, :validatable
+    :recoverable, :rememberable, :trackable, :validatable
 
   mount_uploader :company_logo, CompanyLogoUploader
 
@@ -31,7 +31,7 @@ class Distributor < ActiveRecord::Base
 
   # Setup accessible (or protected) attributes for your model
   attr_accessible :email, :password, :password_confirmation, :remember_me, :name, :url, :company_logo, :company_logo_cache, :completed_wizard,
-    :remove_company_logo, :support_email, :invoice_threshold, :separate_bucky_fee, :advance_hour, :advance_days, :automatic_delivery_hour
+    :remove_company_logo, :support_email, :invoice_threshold, :separate_bucky_fee, :advance_hour, :advance_days, :automatic_delivery_hour, :time_zone
 
   validates_presence_of :email
   validates_uniqueness_of :email
@@ -91,21 +91,41 @@ class Distributor < ActiveRecord::Base
     return packing_list.date == date && delivery_list.date == date
   end
 
-  def automate_completed_status(date = Date.yesterday)
-    dates_delivery_lists = delivery_lists.find_by_date(date)
-    dates_packing_lists  = packing_lists.find_by_date(date)
-
-    # If the list were not created on this date for some reason create them first
-    unless !!dates_delivery_lists || !!dates_packing_lists
-      create_daily_lists(date)
+  # date is always in distributors timezone
+  def automate_completed_status(date = nil)
+    use_local_time_zone do
+      date ||= Date.yesterday #Will return the correct date for this distributor
       dates_delivery_lists = delivery_lists.find_by_date(date)
       dates_packing_lists  = packing_lists.find_by_date(date)
+
+      # If the list were not created on this date for some reason create them first
+      unless !!dates_delivery_lists || !!dates_packing_lists
+        create_daily_lists(date)
+        dates_delivery_lists = delivery_lists.find_by_date(date)
+        dates_packing_lists  = packing_lists.find_by_date(date)
+      end
+
+      successful  = dates_delivery_lists.mark_all_as_auto_delivered
+      successful &= dates_packing_lists.mark_all_as_auto_packed
+
+      return successful
     end
+  end
 
-    successful  = dates_delivery_lists.mark_all_as_auto_delivered
-    successful &= dates_packing_lists.mark_all_as_auto_packed
+  def local_time_zone
+    [time_zone, BuckyBox::Application.config.time_zone].select(&:present?).first
+  end
 
-    return successful
+  def change_to_local_time_zone
+    new_time_zone = local_time_zone
+    Time.zone = new_time_zone unless new_time_zone.blank?
+  end
+
+  def use_local_time_zone
+    new_time_zone = local_time_zone
+    Time.use_zone(new_time_zone) do
+      yield
+    end
   end
 
   private

@@ -1,9 +1,9 @@
 class OrderScheduleTransaction < ActiveRecord::Base
-  include IceCube
+  include Bucky
 
   belongs_to :order
 
-  serialize :schedule, Hash
+  schedule_for :schedule
 
   attr_accessible :order, :schedule
 
@@ -11,11 +11,7 @@ class OrderScheduleTransaction < ActiveRecord::Base
 
   default_scope order('created_at DESC')
 
-  def schedule
-    Schedule.from_hash(self[:schedule]) if self[:schedule]
-  end
-
-  def schedule=(schedule)
-    self[:schedule] = schedule.to_hash
+  def local_time_zone
+    order.local_time_zone if order.present?
   end
 end

@@ -12,6 +12,8 @@ class PackingList < ActiveRecord::Base
 
   default_scope order(:date)
 
+  scope :packed, where(status: 'packed')
+
   def self.collect_lists(distributor, start_date, end_date)
     result = distributor.packing_lists.where(date:start_date..end_date).to_a
 

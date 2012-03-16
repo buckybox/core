@@ -75,7 +75,7 @@ class Account < ActiveRecord::Base
   #future occurrences for all orders on account
   def all_occurrences(end_date)
     occurrences = []
-
+    
     orders.each do |order|
       order.future_deliveries(end_date).each do |occurrence|
         occurrences << occurrence

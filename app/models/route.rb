@@ -1,5 +1,5 @@
 class Route < ActiveRecord::Base
-  include IceCube
+  include Bucky
 
   belongs_to :distributor
 
@@ -14,7 +14,7 @@ class Route < ActiveRecord::Base
     :constructor => Proc.new { |cents, currency| Money.new(cents || 0, currency || Money.default_currency) },
     :converter => Proc.new { |value| value.respond_to?(:to_money) ? value.to_money : raise(ArgumentError, "Can't convert #{value.class} to Money") }
 
-  serialize :schedule, Hash
+  schedule_for :schedule
 
   attr_accessible :distributor, :name, :monday, :tuesday, :wednesday, :thursday, :friday, :saturday, :sunday, :fee
 
@@ -30,10 +30,6 @@ class Route < ActiveRecord::Base
 
   def self.default_route(distributor)
     distributor.routes.first # For now the first one is the default
-  end
-
-  def schedule
-    Schedule.from_hash(self[:schedule]) if self[:schedule]
   end
 
   def next_run
@@ -54,6 +50,10 @@ class Route < ActiveRecord::Base
     Order.where(["id in (?)", order_ids])
   end
 
+  def local_time_zone
+    distributor.local_time_zone
+  end
+
   protected
 
   def at_least_one_day_is_selected
@@ -63,10 +63,10 @@ class Route < ActiveRecord::Base
   end
 
   def create_schedule
-    recurrence_rule = Rule.weekly.day(*delivery_days)
-    new_schedule = Schedule.new(Time.new.beginning_of_day)
+    recurrence_rule = IceCube::Rule.weekly.day(*delivery_days)
+    new_schedule = Schedule.new(Time.current.beginning_of_day)
     new_schedule.add_recurrence_rule(recurrence_rule)
-    self.schedule = new_schedule.to_hash
+    self.schedule = new_schedule
   end
 
   def update_schedule

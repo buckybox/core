@@ -19,7 +19,7 @@ class Distributor::OrdersController < Distributor::ResourceController
     start_time       = Date.parse(params[:start_date]).to_time
     days_by_number   = params[:days].values.map(&:to_i).sort unless frequency == 'single'
 
-    @order.schedule  = Order.create_schedule(start_time, frequency, days_by_number)
+    @order.create_schedule(start_time, frequency, days_by_number)
 
     @order.account   = @account
     @order.completed = true

@@ -201,6 +201,7 @@ ActiveRecord::Schema.define(:version => 20120307232215) do
     t.integer  "advance_hour"
     t.integer  "advance_days"
     t.integer  "automatic_delivery_hour"
+    t.string   "time_zone"
   end
 
   add_index "distributors", ["authentication_token"], :name => "index_distributors_on_authentication_token", :unique => true

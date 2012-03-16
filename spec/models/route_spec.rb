@@ -1,5 +1,5 @@
 require 'spec_helper'
-include IceCube
+include Bucky
 
 #TODO optomized the tests, I confess I didn't do any of that when writing them
 
