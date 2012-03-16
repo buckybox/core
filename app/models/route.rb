@@ -3,16 +3,16 @@ class Route < ActiveRecord::Base
 
   belongs_to :distributor
 
-  has_many :deliveries, :dependent => :destroy
-  has_many :orders, :through => :deliveries
+  has_many :deliveries, dependent: :destroy
+  has_many :orders, through: :deliveries
   has_many :customers
   has_many :route_schedule_transactions
 
   composed_of :fee,
-    :class_name => "Money",
-    :mapping => [%w(fee_cents cents), %w(currency currency_as_string)],
-    :constructor => Proc.new { |cents, currency| Money.new(cents || 0, currency || Money.default_currency) },
-    :converter => Proc.new { |value| value.respond_to?(:to_money) ? value.to_money : raise(ArgumentError, "Can't convert #{value.class} to Money") }
+    class_name: "Money",
+    mapping: [%w(fee_cents cents), %w(currency currency_as_string)],
+    constructor: Proc.new { |cents, currency| Money.new(cents || 0, currency || Money.default_currency) },
+    converter: Proc.new { |value| value.respond_to?(:to_money) ? value.to_money : raise(ArgumentError, "Can't convert #{value.class} to Money") }
 
   schedule_for :schedule
 
@@ -22,7 +22,7 @@ class Route < ActiveRecord::Base
   validate :at_least_one_day_is_selected
 
   before_validation :create_schedule
-  before_validation :update_schedule, :if => 'schedule_changed?'
+  before_validation :update_schedule, if: 'schedule_changed?'
 
   default_scope order(:name)
 

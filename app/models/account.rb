@@ -10,8 +10,8 @@ class Account < ActiveRecord::Base
   has_many :deliveries, through: :orders
   has_many :invoices
 
-  has_one :route, through: :customer
-  has_one :addition, through: :customer
+  has_one :route,    through: :customer
+  has_one :address,  through: :customer
 
   composed_of :balance,
     class_name: "Money",
