@@ -9,6 +9,8 @@ require 'rspec/autorun'
 
 Dir[Rails.root.join("spec/support/**/*.rb")].each { |f| require f }
 
+counter = -1
+
 RSpec.configure do |config|
   config.mock_with :rspec
   config.use_transactional_fixtures = true
@@ -23,6 +25,7 @@ RSpec.configure do |config|
   config.extend Devise::RequestMacros,    type: :request
 
   config.before(:suite) do
+    GC.disable
     DatabaseCleaner.strategy = :truncation
     DatabaseCleaner.clean_with(:truncation)
   end
@@ -34,5 +37,37 @@ RSpec.configure do |config|
 
   config.after(:each) do
     DatabaseCleaner.clean
+  end
+  
+  config.after(:each) do
+    counter += 1
+    if counter > 20
+      GC.enable
+      GC.start
+      GC.disable
+      counter = 0
+    end
+  end
+
+  config.after(:suite) do
+    counter = 0
+  end
+  
+  # Don't need passwords in test DB to be secure, but we would like 'em to be
+  # fast -- and the stretches mechanism is intended to make passwords
+  # computationally expensive.
+  module Devise
+    module Models
+      module DatabaseAuthenticatable
+        protected
+
+        def password_digest(password)
+          password
+        end
+      end
+    end
+  end
+  Devise.setup do |config|
+    config.stretches = 0
   end
 end

@@ -181,8 +181,19 @@ module Bucky
       @schedule = new_schedule
     end
 
+    #Have copied the IceCube::Schedule.to_s method directly here to
+    #convert back from utc.
     def to_s
-      @schedule.to_s
+      to_s_time_format = IceCube::TO_S_TIME_FORMAT
+      pieces = []
+      ed = @schedule.extimes; rd = @schedule.rtimes - ed
+      pieces.concat rd.sort.map { |t| t.in_time_zone(time_zone).strftime(to_s_time_format) }
+      pieces.concat @schedule.rrules.map { |t| t.to_s }
+      pieces.concat @schedule.exrules.map { |t| "not #{t.in_time_zone(time_zone).to_s}" }
+      pieces.concat ed.sort.map { |t| "not on #{t.in_time_zone(time_zone).strftime(to_s_time_format)}" }
+      pieces << "until #{@schedule.end_time.in_time_zone(time_zone).strftime(to_s_time_format)}" if @schedule.end_time
+      pieces.join(' / ')
+      #@schedule.to_s
     end
 
     def ==(schedule)
