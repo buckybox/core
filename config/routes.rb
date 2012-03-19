@@ -115,7 +115,7 @@ BuckyBox::Application.routes.draw do
       end
     end
 
-    resource  :address, only: :update
+    resource  :address, only: :update, controller: 'address'
 
     resources :orders,  only: :update do
       member do
