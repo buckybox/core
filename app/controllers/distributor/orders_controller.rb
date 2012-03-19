@@ -6,14 +6,14 @@ class Distributor::OrdersController < Distributor::ResourceController
 
   def new
     new! do
-      @customer    = @account.customer
-      @route       = @customer.route
+      load_form
     end
   end
 
   def create
     @account         = Account.find(params[:account_id])
     @order           = Order.new(params[:order])
+    load_form
 
     frequency        = params[:order][:frequency]
     start_time       = Date.parse(params[:start_date]).to_time
@@ -107,5 +107,10 @@ class Distributor::OrdersController < Distributor::ResourceController
         format.json { render json: @order.errors, status: :unprocessable_entity }
       end
     end
+  end
+
+  def load_form
+    @customer    = @account.customer
+    @route       = @customer.route
   end
 end
