@@ -3,6 +3,10 @@ class Customer::CustomersController < Customer::ResourceController
 
   respond_to :html, :xml, :json
 
+  def resource
+    current_customer
+  end
+
   def update
     update! { customer_root_url }
   end
