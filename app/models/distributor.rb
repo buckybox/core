@@ -66,10 +66,12 @@ class Distributor < ActiveRecord::Base
           advance_time = (local_time + distributor.advance_days.days)
           successful = distributor.create_daily_lists(advance_time.to_date)
 
+          details = ["#{distributor.name}",
+                     "TZ #{distributor.time_zone} #{Time.current}"].join("\n")
           if successful
-            CronLog.log("Create daily list for #{distributor.id} at #{advance_time.to_s(:pretty)} successful.")
+            CronLog.log("Create daily list for #{distributor.id} at #{advance_time.to_s(:pretty)} successful.", details)
           else
-            CronLog.log("FAILURE: Create daily list for #{distributor.id} at #{advance_time.to_s(:pretty)}.")
+            CronLog.log("FAILURE: Create daily list for #{distributor.id} at #{advance_time.to_s(:pretty)}.", details)
           end
         end
       end
