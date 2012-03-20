@@ -15,7 +15,7 @@ BuckyBox::Application.routes.draw do
 
   namespace :distributor do
     root to: 'dashboard#index'
-    get 'dashboard', constoller: 'dashboard', action: 'index'
+    get 'dashboard', controller: 'dashboard', action: 'index'
 
     namespace :wizard do
       get 'business'
@@ -115,7 +115,7 @@ BuckyBox::Application.routes.draw do
       end
     end
 
-    resource  :address, only: :update
+    resource  :address, only: :update, controller: 'address'
 
     resources :orders,  only: :update do
       member do

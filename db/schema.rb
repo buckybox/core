@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120306032019) do
+ActiveRecord::Schema.define(:version => 20120307232215) do
 
   create_table "accounts", :force => true do |t|
     t.integer  "customer_id"
@@ -97,6 +97,12 @@ ActiveRecord::Schema.define(:version => 20120306032019) do
   end
 
   add_index "boxes", ["distributor_id"], :name => "index_boxes_on_distributor_id"
+
+  create_table "cron_logs", :force => true do |t|
+    t.text     "log"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
 
   create_table "customers", :force => true do |t|
     t.string   "first_name"
@@ -193,8 +199,9 @@ ActiveRecord::Schema.define(:version => 20120306032019) do
     t.boolean  "separate_bucky_fee",                     :default => true
     t.string   "support_email"
     t.string   "time_zone"
-    t.text     "auto_delivery_schedule"
-    t.text     "daily_lists_schedule"
+    t.integer  "advance_hour"
+    t.integer  "advance_days"
+    t.integer  "automatic_delivery_hour"
   end
 
   add_index "distributors", ["authentication_token"], :name => "index_distributors_on_authentication_token", :unique => true

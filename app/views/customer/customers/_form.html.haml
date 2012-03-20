@@ -1,4 +1,4 @@
-= simple_form_for([current_distributor, @customer], html: { method: :put }) do |f|
+= simple_form_for(@customer, url: customer_customer_path(@customer), html: { method: :put }) do |f|
   = f.error_notification
 
   .inputs

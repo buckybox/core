@@ -4,7 +4,7 @@ class Customer::ResourceController < Customer::BaseController
   protected
 
   def begin_of_association_chain
-    current_customer
+    nil
   end
 end
 

@@ -22,14 +22,12 @@ class Customer::OrdersController < Customer::ResourceController
 
     @order.schedule = schedule
 
-    #TODO Notice messages on failure doesn't render to page, didn't really look 
-    #into it as dialog box fields validate themselves (not perfect, but job for later)
     respond_to do |format|
       if @order.pause(start_date, end_date)
         format.html { redirect_to customer_root_path, notice: 'Pause successfully applied.' }
         format.json { head :no_content }
       else
-        format.html { redirect_to customer_root_path, notice: 'There was a problem pausing your order.' }
+        format.html { redirect_to customer_root_path, flash: {error: 'There was a problem pausing your order.'} }
         format.json { render json: @order.errors, status: :unprocessable_entity }
       end
     end
@@ -49,7 +47,7 @@ class Customer::OrdersController < Customer::ResourceController
         format.html { redirect_to customer_root_url, notice: 'Pause successfully removed.' }
         format.json { head :no_content }
       else
-        format.html { redirect_to customer_root_url, error: 'There was a problem removing the pause from your order.' }
+        format.html { redirect_to customer_root_url, flash: {error: 'There was a problem removing the pause from your order.'} }
         format.json { render json: @order.errors, status: :unprocessable_entity }
       end
     end
