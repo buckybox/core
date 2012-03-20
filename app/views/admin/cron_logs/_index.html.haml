@@ -8,6 +8,11 @@
     %tbody
       - @cron_logs.each do |cron_log|
         %tr
-          %td= cron_log.log
+          %td
+            .row.cron-details
+              .ten.columns= simple_format cron_log.log
+              .two.columns= link_to_function("details", "", class: "show-hide-details") if cron_log.details.present?
+            .row
+              .twelve.columns.cron-log-details.hide= simple_format cron_log.details
           %td= cron_log.created_at.to_s(:pretty)
 
