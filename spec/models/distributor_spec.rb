@@ -23,6 +23,120 @@ describe Distributor do
     specify { Fabricate(:distributor, support_email: 'support@example.com').support_email.should == 'support@example.com' }
   end
 
+  context '#generate_required_daily_lists' do
+    after { Delorean.back_to_the_present }
+
+    context 'current time before advance_hour' do
+      before do
+        @current_time = Time.new(2012, 3, 20, Distributor::DEFAULT_AUTOMATIC_DELIVERY_HOUR - 1)
+        @default_days = Distributor::DEFAULT_ADVANCED_DAYS
+        Delorean.time_travel_to(@current_time)
+      end
+
+      context 'new distributor' do
+        before { @distributor = Fabricate.build(:distributor) }
+
+        it 'the generated packing lists should start from today' do
+          @distributor.save
+          @distributor.packing_lists.first.date.should == Date.today
+        end
+
+        specify { expect { @distributor.save }.should change(PackingList, :count).from(0).to(@default_days) }
+        specify { expect { @distributor.save }.should change(DeliveryList, :count).from(0).to(@default_days) }
+      end
+
+      context 'distributor changes advance days' do
+        before do
+          @distributor = Fabricate(:distributor)
+        end
+
+        context 'make a bigger window' do
+          before do
+            @custom_days = @default_days + 2
+            @distributor.advance_days = @custom_days
+          end
+
+          it 'the generated packing lists should start from today' do
+            @distributor.save
+            @distributor.packing_lists.first.date.should == Date.today
+          end
+
+          specify { expect { @distributor.save }.should change(PackingList, :count).from(@default_days).to(@custom_days) }
+          specify { expect { @distributor.save }.should change(DeliveryList, :count).from(@default_days).to(@custom_days) }
+        end
+
+        context 'make a smaller window' do
+          before do
+            @custom_days = @default_days - 2
+            @distributor.advance_days = @custom_days
+          end
+
+          it 'the generated packing lists should start from today' do
+            @distributor.save
+            @distributor.packing_lists.first.date.should == Date.today
+          end
+
+          specify { expect { @distributor.save }.should change(PackingList, :count).from(@default_days).to(@custom_days) }
+          specify { expect { @distributor.save }.should change(DeliveryList, :count).from(@default_days).to(@custom_days) }
+        end
+      end
+    end
+
+    context 'current time after advance_hour' do
+      before do
+        @current_time = Time.new(2012, 3, 20, Distributor::DEFAULT_AUTOMATIC_DELIVERY_HOUR + 1)
+        @default_days = Distributor::DEFAULT_ADVANCED_DAYS
+        Delorean.time_travel_to(@current_time)
+      end
+
+      context 'new distributor' do
+        before { @distributor = Fabricate.build(:distributor) }
+
+        it 'the generated packing lists should start from tomorrow' do
+          @distributor.save
+          @distributor.packing_lists.first.date.should == Date.tomorrow
+        end
+
+        specify { expect { @distributor.save }.should change(PackingList, :count).from(0).to(@default_days) }
+        specify { expect { @distributor.save }.should change(DeliveryList, :count).from(0).to(@default_days) }
+      end
+
+      context 'distributor changes advance days' do
+        before { @distributor = Fabricate(:distributor) }
+
+        context 'make a bigger window' do
+          before do
+            @custom_days = @default_days + 2
+            @distributor.advance_days = @custom_days
+          end
+
+          it 'the generated packing lists should start from tomorrow' do
+            @distributor.save
+            @distributor.packing_lists.first.date.should == Date.tomorrow
+          end
+
+          specify { expect { @distributor.save }.should change(PackingList, :count).from(@default_days).to(@custom_days) }
+          specify { expect { @distributor.save }.should change(DeliveryList, :count).from(@default_days).to(@custom_days) }
+        end
+
+        context 'make a smaller window' do
+          before do
+            @custom_days = @default_days - 2
+            @distributor.advance_days = @custom_days
+          end
+
+          it 'the generated packing lists should start from tomorrow' do
+            @distributor.save
+            @distributor.packing_lists.first.date.should == Date.tomorrow
+          end
+
+          specify { expect { @distributor.save }.should change(PackingList, :count).from(@default_days).to(@custom_days) }
+          specify { expect { @distributor.save }.should change(DeliveryList, :count).from(@default_days).to(@custom_days) }
+        end
+      end
+    end
+  end
+
   context 'cron related methods' do
     before do
       @distributor = Fabricate(:distributor)
@@ -34,6 +148,8 @@ describe Distributor do
     context 'for instance' do
       before do
         @current_date = Date.parse('2012-03-20')
+        @specified_date = @current_date + 3.days
+
         Delorean.time_travel_to(@current_date)
       end
 
@@ -63,8 +179,6 @@ describe Distributor do
         end
 
         context 'specifying the date' do
-          before { @specified_date = @current_date + 3.days }
-
           specify { expect { @distributor.create_daily_lists(@specified_date) }.should change(@distributor.packing_lists, :count).by(1) }
           specify { expect { @distributor.create_daily_lists(@specified_date) }.should change(@distributor.delivery_lists, :count).by(1) }
 
@@ -165,25 +279,15 @@ describe Distributor do
         daily_orders(@distributor3)
       end
 
-      context '#self.create_daily_lists' do
+      context '.create_daily_lists' do
         context '@distributor should generate daily lists' do
           specify { expect { Distributor.create_daily_lists }.should change(PackingList, :count).by(1) }
           specify { expect { Distributor.create_daily_lists }.should change(DeliveryList, :count).by(1) }
         end
       end
 
-      context '#self.automate_completed_status' do
+      context '.automate_completed_status' do
       end
-    end
-  end
-
-  def daily_orders(distributor)
-    daily_order_schedule = schedule = Schedule.new
-    daily_order_schedule.add_recurrence_rule(IceCube::Rule.daily)
-
-    3.times do
-      customer = Fabricate(:customer, distributor: distributor)
-      Fabricate(:active_order, account: customer.account, schedule: daily_order_schedule)
     end
   end
 
@@ -235,28 +339,25 @@ describe Distributor do
       context 'time zone set to Wellington' do
         before do
           Time.zone = "Wellington"
-          
+
           @d_welly = Fabricate.build(:distributor, time_zone: 'Wellington')
           @d_welly.save
 
           @d_perth = Fabricate.build(:distributor, time_zone: 'Perth')
           @d_perth.save
-          
+
           @d_london = Fabricate.build(:distributor, time_zone: 'London')
           @d_london.save
-          
+
           @d_welly_d_list = Fabricate(:delivery_list, distributor: @d_welly, date: Date.yesterday)
           Fabricate(:delivery, delivery_list: @d_welly_d_list)
-
         end
-        
+
+        after { Delorean.back_to_the_present }
+
         context 'time set to Wellington start of day' do
-          before do
-            Delorean.time_travel_to(Time.current.beginning_of_day + Distributor::DEFAULT_ADVANCED_HOURS.hours) # Wellington time zone beginning of day
-          end
-          after do
-            Delorean.back_to_the_present
-          end
+          # Wellington time zone beginning of day 
+          before { Delorean.time_travel_to(Time.current.beginning_of_day + Distributor::DEFAULT_ADVANCED_HOURS.hours) }
 
           specify { expect{Distributor.create_daily_lists}.to change{@d_welly.packing_lists.count + @d_welly.delivery_lists.count}.by 2}
           specify { expect{Distributor.create_daily_lists}.to change{@d_perth.packing_lists.count + @d_perth.delivery_lists.count}.by 0}
@@ -264,25 +365,16 @@ describe Distributor do
         end
 
         context 'time set to Wellington end of day' do
-          before do
-            Delorean.time_travel_to(Time.current.end_of_day + Distributor::DEFAULT_ADVANCED_HOURS.hours - 59.minutes) # Wellington time zone beginning of day
-          end
-          after do
-            Delorean.back_to_the_present
-          end
-          
+          # Wellington time zone beginning of day
+          before { Delorean.time_travel_to(Time.current.end_of_day + Distributor::DEFAULT_ADVANCED_HOURS.hours - 59.minutes) }
+
           specify { expect{Distributor.create_daily_lists}.to change{@d_welly.packing_lists.count + @d_welly.delivery_lists.count}.by 0}
           specify { expect{Distributor.create_daily_lists}.to change{@d_perth.packing_lists.count + @d_perth.delivery_lists.count}.by 0}
           specify { expect{Distributor.create_daily_lists}.to change{@d_london.packing_lists.count + @d_london.delivery_lists.count}.by 0}
         end
 
         context 'time set to Perth start of day' do
-          before do
-            Delorean.time_travel_to(Time.use_zone("Perth"){Time.current.beginning_of_day + Distributor::DEFAULT_ADVANCED_HOURS.hours}.in_time_zone("Wellington"))
-          end
-          after do
-            Delorean.back_to_the_present
-          end
+          before { Delorean.time_travel_to(Time.use_zone("Perth"){Time.current.beginning_of_day + Distributor::DEFAULT_ADVANCED_HOURS.hours}.in_time_zone("Wellington")) }
 
           specify { expect{Distributor.create_daily_lists}.to change{@d_welly.packing_lists.count + @d_welly.delivery_lists.count}.by 0}
           specify { expect{Distributor.create_daily_lists}.to change{@d_perth.packing_lists.count + @d_perth.delivery_lists.count}.by 2}
@@ -290,12 +382,7 @@ describe Distributor do
         end
 
         context 'time set to Perth end of day' do
-          before do
-            Delorean.time_travel_to(Time.use_zone("Perth"){Time.current.end_of_day + Distributor::DEFAULT_ADVANCED_HOURS.hours - 59.minutes}.in_time_zone("Wellington"))
-          end
-          after do
-            Delorean.back_to_the_present
-          end
+          before { Delorean.time_travel_to(Time.use_zone("Perth"){Time.current.end_of_day + Distributor::DEFAULT_ADVANCED_HOURS.hours - 59.minutes}.in_time_zone("Wellington")) }
 
           specify { expect{Distributor.create_daily_lists}.to change{@d_welly.packing_lists.count + @d_welly.delivery_lists.count}.by 0}
           specify { expect{Distributor.create_daily_lists}.to change{@d_perth.packing_lists.count + @d_perth.delivery_lists.count}.by 0}
@@ -303,12 +390,7 @@ describe Distributor do
         end
 
         context 'time set to London start of day' do
-          before do
-            Delorean.time_travel_to(Time.use_zone("London"){Time.current.beginning_of_day + Distributor::DEFAULT_ADVANCED_HOURS.hours}.in_time_zone("Wellington"))
-          end
-          after do
-            Delorean.back_to_the_present
-          end
+          before { Delorean.time_travel_to(Time.use_zone("London"){Time.current.beginning_of_day + Distributor::DEFAULT_ADVANCED_HOURS.hours}.in_time_zone("Wellington")) }
 
           specify { expect{Distributor.create_daily_lists}.to change{@d_welly.packing_lists.count + @d_welly.delivery_lists.count}.by 0}
           specify { expect{Distributor.create_daily_lists}.to change{@d_perth.packing_lists.count + @d_perth.delivery_lists.count}.by 0}
@@ -316,18 +398,25 @@ describe Distributor do
         end
 
         context 'time set to London end of day' do
-          before do
-            Delorean.time_travel_to(Time.use_zone("London"){Time.current.end_of_day + Distributor::DEFAULT_ADVANCED_HOURS.hours - 59.minutes}.in_time_zone("Wellington"))
-          end
-          after do
-            Delorean.back_to_the_present
-          end
+          before { Delorean.time_travel_to(Time.use_zone("London"){Time.current.end_of_day + Distributor::DEFAULT_ADVANCED_HOURS.hours - 59.minutes}.in_time_zone("Wellington")) }
 
           specify { expect{Distributor.create_daily_lists}.to change{@d_welly.packing_lists.count + @d_welly.delivery_lists.count}.by 0}
           specify { expect{Distributor.create_daily_lists}.to change{@d_perth.packing_lists.count + @d_perth.delivery_lists.count}.by 0}
           specify { expect{Distributor.create_daily_lists}.to change{@d_london.packing_lists.count + @d_london.delivery_lists.count}.by 0}
         end
       end
+    end
+  end
+
+  private
+
+  def daily_orders(distributor)
+    daily_order_schedule = schedule = Schedule.new
+    daily_order_schedule.add_recurrence_rule(IceCube::Rule.daily)
+
+    3.times do
+      customer = Fabricate(:customer, distributor: distributor)
+      Fabricate(:active_order, account: customer.account, schedule: daily_order_schedule)
     end
   end
 end
