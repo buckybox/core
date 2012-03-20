@@ -125,11 +125,13 @@ class Distributor < ActiveRecord::Base
       # Only generate the lists that don't exist yet
       start_date = newest_list_date unless newest_list_date.nil?
 
-      (start_date..end_date).each do |date|
-        packing_list = PackingList.generate_list(self, date)
-        delivery_list = DeliveryList.generate_list(self, date)
+      unless start_date == end_date # the packing list already exists so don't boher generating
+        (start_date..end_date).each do |date|
+          packing_list = PackingList.generate_list(self, date)
+          delivery_list = DeliveryList.generate_list(self, date)
 
-        successful &= packing_list.date == date && delivery_list.date == date
+          successful &= packing_list.date == date && delivery_list.date == date
+        end
       end
     end
 

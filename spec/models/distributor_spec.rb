@@ -288,16 +288,4 @@ describe Distributor do
       end
     end
   end
-
-  private
-
-  def daily_orders(distributor)
-    daily_order_schedule = schedule = Schedule.new
-    daily_order_schedule.add_recurrence_rule(IceCube::Rule.daily)
-
-    3.times do
-      customer = Fabricate(:customer, distributor: distributor)
-      Fabricate(:active_order, account: customer.account, schedule: daily_order_schedule)
-    end
-  end
 end

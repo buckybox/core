@@ -1,12 +1,11 @@
 require 'spec_helper'
 
 describe DeliveryList do
-  before { @delivery_list = Fabricate(:delivery_list) }
-
-  specify { @delivery_list.should be_valid }
+  specify { Fabricate.build(:delivery_list).should be_valid }
 
   describe '#mark_all_as_auto_delivered' do
     before do
+      @delivery_list = Fabricate(:delivery_list)
       2.times { Fabricate(:delivery, delivery_list: @delivery_list) }
 
       Fabricate(:delivery, status: 'pending', status_change_type: 'manual', delivery_list: @delivery_list)
@@ -30,7 +29,7 @@ describe DeliveryList do
     specify { expect { @delivery_list.mark_all_as_auto_delivered }.should_not change(@delivery_list.deliveries[0], :status_change_type) }
   end
 
-  describe '#collect_lists' do
+  describe '.collect_lists' do
     before do
       time_travel_to Date.parse('2012-01-23')
 
@@ -48,23 +47,30 @@ describe DeliveryList do
     after { back_to_the_present }
   end
 
-  describe '#generate_list' do
+  describe '.generate_list' do
     before do
-      time_travel_to Date.parse('2012-01-23')
+      time_travel_to Date.current
 
       @distributor = Fabricate(:distributor)
-      box = Fabricate(:box, distributor: @distributor)
-      3.times { Fabricate(:recurring_order, box: box, completed: true) }
-      PackingList.generate_list(@distributor, (Date.current + 1.day))
+      daily_orders(@distributor)
+
+      @advance_days = Distributor::DEFAULT_ADVANCED_DAYS
+      @generate_date = Date.current + @advance_days.days
+
+      time_travel_to @generate_date
+
+      PackingList.generate_list(@distributor, @generate_date)
     end
 
-    specify { expect { DeliveryList.generate_list(@distributor, (Date.current + 1.day)) }.should change(@distributor.delivery_lists, :count).from(0).to(1) }
-    specify { expect { DeliveryList.generate_list(@distributor, (Date.current + 1.day)) }.should change(@distributor.deliveries, :count).from(0).to(3) }
+    specify { expect { DeliveryList.generate_list(@distributor, @generate_date) }.should change(@distributor.delivery_lists, :count).from(@advance_days).to(@advance_days + 1) }
+    specify { expect { DeliveryList.generate_list(@distributor, @generate_date) }.should change(@distributor.deliveries, :count).from(0).to(3) }
 
     after { back_to_the_present }
   end
 
   describe '#all_finished?' do
+    before { @delivery_list = Fabricate(:delivery_list) }
+
     context 'no deliveries are pending' do
       before do
         Fabricate(:delivery, status: 'delivered', delivery_list: @delivery_list)

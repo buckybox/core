@@ -35,7 +35,7 @@ class PackingList < ActiveRecord::Base
     return result
   end
 
-  def self.generate_list(distributor, date = Date.current)
+  def self.generate_list(distributor, date)
     packing_list = PackingList.find_or_create_by_distributor_id_and_date(distributor.id, date)
 
     distributor.orders.active.each do |order|

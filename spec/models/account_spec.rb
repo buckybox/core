@@ -70,10 +70,10 @@ describe Account do
       @order = Fabricate(:active_recurring_order)
       @account = @order.account
     end
+
     it "returns 20 occurrences" do
       @account.all_occurrences(4.weeks.from_now).size.should == 20 
     end
-
   end
 
   describe "next_invoice_date" do
@@ -85,10 +85,11 @@ describe Account do
       end
 
       it "is today if balance is currently below threshold" do
-        @account.stub(:balance).and_return(Money.new(-1000))  
+        @account.stub(:balance).and_return(Money.new(-1000))
         @account.stub(:all_occurrences).and_return([])
         @account.next_invoice_date.should == Date.current
       end
+
       it "is at least 2 days after the first scheduled delivery" do
         @account.stub(:deliveries).and_return([])
         @account.stub(:balance).and_return(Money.new(1000))
@@ -133,6 +134,7 @@ describe Account do
       @account.distributor.stub(:bucky_box_percentage).and_return(0.02) #%
       @account.amount_with_bucky_fee(100).should == 102
     end
+
     it "includes bucky fee if bucky fee is separate" do
       @account.distributor.stub(:separate_bucky_fee).and_return(false)
       @account.distributor.stub(:bucky_box_percentage).and_return(0.02) #%
@@ -178,9 +180,11 @@ describe Account do
       Account.stub(:all).and_return [@a1, @a2]
       @accounts = Account.need_invoicing
     end
+
     it "includes accounts that need invoicing" do
       @accounts.should include(@a1)
     end
+
     it "does not include accounts that need invoicing" do
       @accounts.should_not include(@a2)
     end

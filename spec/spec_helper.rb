@@ -38,7 +38,7 @@ RSpec.configure do |config|
   config.after(:each) do
     DatabaseCleaner.clean
   end
-  
+
   config.after(:each) do
     counter += 1
     if counter > 20
@@ -52,7 +52,7 @@ RSpec.configure do |config|
   config.after(:suite) do
     counter = 0
   end
-  
+
   # Don't need passwords in test DB to be secure, but we would like 'em to be
   # fast -- and the stretches mechanism is intended to make passwords
   # computationally expensive.
