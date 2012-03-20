@@ -15,7 +15,7 @@ BuckyBox::Application.routes.draw do
 
   namespace :distributor do
     root to: 'dashboard#index'
-    get 'dashboard', constoller: 'dashboard', action: 'index'
+    get 'dashboard', controller: 'dashboard', action: 'index'
 
     namespace :wizard do
       get 'business'

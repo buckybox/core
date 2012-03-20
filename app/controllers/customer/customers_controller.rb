@@ -8,7 +8,10 @@ class Customer::CustomersController < Customer::ResourceController
   end
 
   def update
-    update! { customer_root_url }
+    update! do |success, failure|
+      success.html { redirect_to customer_root_url, notice: 'Your information has successfully been updated.' }
+      failure.html { redirect_to customer_root_url, flash:{ error: current_customer.errors.full_messages.join(', ')} }
+    end
   end
 
   def update_password
@@ -19,7 +22,7 @@ class Customer::CustomersController < Customer::ResourceController
         format.html { redirect_to customer_root_url, notice: 'Password successfully updated.' }
         format.json { head :no_content }
       else
-        format.html { redirect_to customer_root_url, error: 'There was a problem changing your password.' }
+        format.html { redirect_to customer_root_url, flash: {error: "There was a problem changing your password. #{current_customer.errors.full_messages.join(', ')}"} }
         format.json { render json: current_customer.errors, status: :unprocessable_entity }
       end
     end

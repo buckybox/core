@@ -82,7 +82,7 @@ class Distributor::OrdersController < Distributor::ResourceController
         format.html { redirect_to [:distributor, @account.customer], notice: 'Pause successfully applied.' }
         format.json { head :no_content }
       else
-        format.html { redirect_to [:distributor, @account.customer], error: 'There was a problem pausing your order.' }
+        format.html { redirect_to [:distributor, @account.customer], flash: {error: 'There was a problem pausing your order.'} }
         format.json { render json: @order.errors, status: :unprocessable_entity }
       end
     end
@@ -103,7 +103,7 @@ class Distributor::OrdersController < Distributor::ResourceController
         format.html { redirect_to [:distributor, @account.customer], notice: 'Pause successfully removed.' }
         format.json { head :no_content }
       else
-        format.html { redirect_to [:distributor, @account.customer], error: 'There was a problem removing the pause from your order.' }
+        format.html { redirect_to [:distributor, @account.customer], flash: {error: 'There was a problem removing the pause from your order.'} }
         format.json { render json: @order.errors, status: :unprocessable_entity }
       end
     end
