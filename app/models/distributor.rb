@@ -19,6 +19,7 @@ class Distributor < ActiveRecord::Base
   DEFAULT_ADVANCED_HOURS = 18
   DEFAULT_ADVANCED_DAYS = 3
   DEFAULT_AUTOMATIC_DELIVERY_HOUR = 18
+  DEFAULT_AUTOMATIC_DELIVERY_DAYS = 1
 
   # Include default devise modules. Others available are:
   # :token_authenticatable, :encryptable, :confirmable, :lockable, :timeoutable and :omniauthable
@@ -49,7 +50,7 @@ class Distributor < ActiveRecord::Base
   before_validation :check_emails
   before_validation :generate_default_automate_values
 
-  before_save :update_daily_lists, if: 'advance_days_changed? && !advance_days_was.nil?'
+  after_save :generate_required_daily_lists
 
   default_scope order('created_at DESC')
 
@@ -62,16 +63,16 @@ class Distributor < ActiveRecord::Base
     all.each do |distributor|
       distributor.use_local_time_zone do
         local_time = time.in_time_zone
+
         if local_time.hour == distributor.advance_hour
-          advance_time = (local_time + distributor.advance_days.days)
-          successful = distributor.create_daily_lists(advance_time.to_date)
+          successful = distributor.generate_required_daily_lists
 
           details = ["#{distributor.name}",
                      "TZ #{distributor.time_zone} #{Time.current}"].join("\n")
           if successful
-            CronLog.log("Create daily list for #{distributor.id} at #{advance_time.to_s(:pretty)} successful.", details)
+            CronLog.log("Create daily list for #{distributor.id} at local time #{local_time.to_s(:pretty)} successful.", details)
           else
-            CronLog.log("FAILURE: Create daily list for #{distributor.id} at #{advance_time.to_s(:pretty)}.", details)
+            CronLog.log("FAILURE: Create daily list for #{distributor.id} at local time #{local_time.to_s(:pretty)}.", details)
           end
         end
       end
@@ -82,46 +83,79 @@ class Distributor < ActiveRecord::Base
     all.each do |distributor|
       distributor.use_local_time_zone do
         local_time = time.in_time_zone
+
         if local_time.hour == distributor.automatic_delivery_hour
-          delivery_time = (local_time - 1.day) # considering the next day as standard across all distributors for now
-          successful = distributor.automate_completed_status(delivery_time.to_date)
+          # considering the next day as standard across all distributors for now
+          successful = distributor.automate_completed_status
 
           if successful
-            CronLog.log("Automated completion for #{distributor.id} at #{delivery_time.to_s(:pretty)} successful.")
+            CronLog.log("Automated completion for #{distributor.id} at local time #{local_time.to_s(:pretty)} successful.")
           else
-            CronLog.log("FAILURE: Automated completion for #{distributor.id} at #{delivery_time.to_s(:pretty)}.")
+            CronLog.log("FAILURE: Automated completion for #{distributor.id} at local time #{local_time.to_s(:pretty)}.")
           end
         end
       end
     end
   end
 
-  def create_daily_lists(date = Date.current)
-    packing_list = PackingList.generate_list(self, date)
-    delivery_list = DeliveryList.generate_list(self, date)
+  def generate_required_daily_lists
+    days_to_generate = (advance_days - 1) # this is because we are including the start date
 
-    return packing_list.date == date && delivery_list.date == date
+    # If we have missed the cutoff point add a day so we start generation from tomorrow
+    if_closed  = ( advance_hour < Time.current.hour ? 1 : 0 )
+    start_date = Date.current + if_closed.day
+    end_date   = Date.current + if_closed.day + days_to_generate.days
+
+    newest_list_date = packing_lists.last.date if packing_lists.last
+
+    successful = true # assume all is good with the world
+
+    if newest_list_date && (newest_list_date > end_date)
+      # Only need to delete the difference
+      start_date = end_date + 1.day
+      end_date = newest_list_date
+
+      (start_date..end_date).each do |date|
+        # Seek and destroy (http://youtu.be/wLBpLz5ELPI?t=3m10s) the lists that are now out of range
+        packing_list  = packing_lists.find_by_date(date)
+        successful &= packing_list.destroy  unless packing_list.nil?
+
+        delivery_list = delivery_lists.find_by_date(date)
+        successful &= delivery_list.destroy unless delivery_list.nil?
+      end
+    else
+      # Only generate the lists that don't exist yet
+      start_date = newest_list_date unless newest_list_date.nil?
+
+      (start_date..end_date).each do |date|
+        packing_list = PackingList.generate_list(self, date)
+        delivery_list = DeliveryList.generate_list(self, date)
+
+        successful &= packing_list.date == date && delivery_list.date == date
+      end
+    end
+
+    return successful
   end
 
-  # date is always in distributors timezone
-  def automate_completed_status(date = nil)
-    use_local_time_zone do
-      date ||= Date.yesterday #Will return the correct date for this distributor
-      dates_delivery_lists = delivery_lists.find_by_date(date)
-      dates_packing_lists  = packing_lists.find_by_date(date)
+  # Date is always in distributors timezone
+  def automate_completed_status
+    # If we have missed the cutoff point add a day so we start auto deliveries from today
+    if_passed  = ( automatic_delivery_hour < Time.current.hour ? 1 : 0 )
 
-      # If the list were not created on this date for some reason create them first
-      unless !!dates_delivery_lists || !!dates_packing_lists
-        create_daily_lists(date)
-        dates_delivery_lists = delivery_lists.find_by_date(date)
-        dates_packing_lists  = packing_lists.find_by_date(date)
-      end
+    date = Date.yesterday + if_passed.day
 
-      successful  = dates_delivery_lists.mark_all_as_auto_delivered
-      successful &= dates_packing_lists.mark_all_as_auto_packed
+    dates_delivery_lists = delivery_lists.find_by_date(date)
+    dates_packing_lists  = packing_lists.find_by_date(date)
 
-      return successful
+    successful = (!!dates_packing_lists && !!dates_delivery_lists)
+
+    if successful
+      successful &= dates_packing_lists.mark_all_as_auto_packed     if dates_packing_lists
+      successful &= dates_delivery_lists.mark_all_as_auto_delivered if dates_delivery_lists
     end
+
+    return successful
   end
 
   def local_time_zone
@@ -142,27 +176,9 @@ class Distributor < ActiveRecord::Base
 
   private
 
-  def update_daily_lists
-    old_days, new_days = self.advance_days_change
-    old_date = Date.current + old_days.days
-    new_date = Date.current + new_days.days
-
-    if old_days < new_days
-      ((old_date + 1.day)..new_date).each { |date| create_daily_lists(date) }
-    else
-      ((new_date + 1.day)..old_date).each do |date|
-        packing_list = PackingList.find_by_distributor_id_and_date(id, date)
-        packing_list.destroy unless packing_list.nil?
-
-        delivery_list = DeliveryList.find_by_distributor_id_and_date(id, date)
-        delivery_list.destroy unless delivery_list.nil?
-      end
-    end
-  end
-
   def generate_default_automate_values
-    self.advance_hour = DEFAULT_AUTOMATIC_DELIVERY_HOUR            if self.advance_hour.nil?
-    self.advance_days = DEFAULT_ADVANCED_DAYS             if self.advance_days.nil?
+    self.advance_hour            = DEFAULT_AUTOMATIC_DELIVERY_HOUR if self.advance_hour.nil?
+    self.advance_days            = DEFAULT_ADVANCED_DAYS           if self.advance_days.nil?
     self.automatic_delivery_hour = DEFAULT_AUTOMATIC_DELIVERY_HOUR if self.automatic_delivery_hour.nil?
   end
 
