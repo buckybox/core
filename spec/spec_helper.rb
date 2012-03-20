@@ -41,7 +41,7 @@ RSpec.configure do |config|
 
   config.after(:each) do
     counter += 1
-    if counter > 20
+    if counter > 15
       GC.enable
       GC.start
       GC.disable
