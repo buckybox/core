@@ -1,5 +1,6 @@
 module Bucky
   autoload :Schedule, 'bucky/schedule'
+  autoload :Import, 'bucky/import'
 
   DAYS = [:sunday, :monday, :tuesday, :wednesday, :thursday, :friday, :saturday]
 
