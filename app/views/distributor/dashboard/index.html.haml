@@ -12,12 +12,12 @@
 - unless @notifications.blank?
   .row#noticeboard
     %h2 Alerts
-    %ul.twelve.columns
-      - @notifications.each do |notification|
-        %li= date_for notification
-        %li{:class => "notification_tag #{notification.event_category}"}= notification.event_category
-        %li.notification_message= notification_message_for notification
-        %li= link_to 'Dismiss', dismiss_notification_distributor_event_path(notification), class: "dismiss small white button radius"
+    - @notifications.each do |notification|
+      .row.individual-notice
+        .two.columns{class: "notification_tag #{notification.event_category}"}= notification.event_category
+        .two.columns= date_for notification
+        .six.columns= notification_message_for notification
+        .two.columns.text-right= link_to '&times;'.html_safe, dismiss_notification_distributor_event_path(notification), class: "dismiss small white button radius"
 
 - unless @accounts.blank?
   .row

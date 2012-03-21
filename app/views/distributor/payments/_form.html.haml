@@ -5,7 +5,7 @@
 
   .inputs
     = f.input :kind, as: :hidden
-    = f.association :account, collection: @customers.collect { |c| [customer_and_number(customer), c.account.id] }, label: 'Customer'
+    = f.association :account, collection: @accounts.collect { |a| [customer_and_number(a.customer), a.id] }, label: 'Customer'
     = f.input :amount
     = f.input :description, input_html: { rows: 4 }
 
