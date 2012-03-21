@@ -1,6 +1,6 @@
 .row
   .twelve.columns
-    = simple_form_for([current_distributor, @route]) do |f|
+    = simple_form_for([:distributor, @route]) do |f|
       = f.error_notification
 
       .inputs

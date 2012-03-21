@@ -8,17 +8,17 @@
       %h3== Tag "#{params[:tag]}"
 
     - if params[:query] || params[:tag]
-      = link_to 'Clear', distributor_customers_path(current_distributor)
+      = link_to 'Clear', distributor_customers_path
 
   .four.columns.text-right
-    = form_tag search_distributor_customers_path(current_distributor), method: :get, class: 'nice' do
+    = form_tag search_distributor_customers_path, method: :get, class: 'nice' do
       = text_field_tag :query, '', placeholder: 'Search For...', class: 'input-text'
       = submit_tag 'Search', class: 'small radius button'
 
 .row
   .nine.columns
     %h3 Customers
-  .three.columns.text-right= link_to 'New Customer', new_distributor_customer_path(current_distributor), class: 'button radius'
+  .three.columns.text-right= link_to 'New Customer', new_distributor_customer_path, class: 'button radius'
 
 - if @customers.blank?
   .row.data-headings
@@ -37,5 +37,5 @@
       .four.columns
         - unless customer.tags.empty?
           - customer.tags.each do |tag|
-            %span.radius.label= link_to tag.name, tag_distributor_customers_path(current_distributor, tag.name)
+            %span.radius.label= link_to tag.name, tag_distributor_customers_path(tag.name)
       .two.columns= customer.account.balance

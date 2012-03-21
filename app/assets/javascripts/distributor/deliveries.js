@@ -19,9 +19,7 @@ $(function() {
         type: 'post',
         data: $('#delivery_list').sortable('serialize'),
         dataType: 'json',
-        url: '/distributors/' +
-          $('#delivery-listings').data('distributor') +
-          '/deliveries/date/' +
+        url: '/distributor/deliveries/date/' +
           $('#delivery-listings').data('date') +
           '/reposition'
       })
@@ -135,7 +133,7 @@ function updateDeliveryStatus(status, distributor_id, checked_deliveries, date) 
 
   $.ajax({
     type: 'POST',
-    url: '/distributors/' + distributor_id + '/deliveries/update_status.json',
+    url: '/distributor/deliveries/update_status.json',
     dataType: 'json',
     data: $.param(data_hash)
   });

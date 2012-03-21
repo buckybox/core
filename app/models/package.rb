@@ -3,13 +3,13 @@ class Package < ActiveRecord::Base
   belongs_to :packing_list
   belongs_to :original_package, class_name: 'Package', foreign_key: 'original_package_id'
 
-  has_one :distributor, through: :packing_list
   has_one :new_package, class_name: 'Package', foreign_key: 'original_package_id'
-  has_one :box, through: :order
-  has_one :route, through: :order
-  has_one :account, through: :order
-  has_one :customer, through: :order
-  has_one :address, through: :order
+  has_one :distributor, through: :packing_list
+  has_one :box,         through: :order
+  has_one :route,       through: :order
+  has_one :account,     through: :order
+  has_one :customer,    through: :order
+  has_one :address,     through: :order
 
   has_many :deliveries
 

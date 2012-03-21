@@ -25,7 +25,7 @@ class Customer < ActiveRecord::Base
     :route, :route_id, :password, :password_confirmation, :remember_me, :tag_list, :discount, :number, :notes
 
   validates_presence_of :first_name, :email, :distributor, :route, :discount
-  validates_uniqueness_of :email, scope: :distributor_id
+  #validates_uniqueness_of :email #This is done within Devise, left here to remind you
   validates_uniqueness_of :number, scope: :distributor_id
   validates_numericality_of :number, greater_than: 0
   validates_numericality_of :discount, greater_than_or_equal_to: 0.0, less_than_or_equal_to: 1.0
@@ -91,7 +91,7 @@ class Customer < ActiveRecord::Base
   private
 
   def initialize_number
-    self.number = Customer.next_number(distributor)
+    self.number = Customer.next_number(self.distributor)
   end
 
   def randomize_password_if_not_present

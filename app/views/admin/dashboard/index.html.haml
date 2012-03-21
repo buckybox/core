@@ -1,0 +1,18 @@
+- title('Admin - Dashboard')
+
+.row
+  .six.columns
+    %p Talk to a dev if you want to delete a distributor account
+
+  .six.columns.text-right
+    = link_to 'New Distributor', new_admin_distributor_path, class: 'button radius'
+    %br
+    %br
+
+- unless @distributors.empty?
+  = render 'admin/distributors/index'
+  = link_to 'Full list of distributors', admin_distributors_path
+
+- unless @cron_logs.empty?
+  = render 'admin/cron_logs/index'
+  = link_to 'See more cron logs.', admin_cron_logs_path

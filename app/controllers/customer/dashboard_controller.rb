@@ -1,7 +1,4 @@
-class Customer::DashboardController < ApplicationController
-  before_filter :authenticate_customer!
-  layout 'customer'
-
+class Customer::DashboardController < Customer::BaseController
   def index
     @customer     = current_customer
     @address      = @customer.address

@@ -1,6 +1,6 @@
-include IceCube
+include Bucky
 
-def new_single_schedule(time = (Time.now + 1.day))
+def new_single_schedule(time = (Time.current + 1.day))
   schedule = Schedule.new(time)
   schedule.add_recurrence_time(time)
 
@@ -10,9 +10,8 @@ end
 def new_recurring_schedule(time = (Time.now + 1.day), days = [:monday, :tuesday, :wednesday, :thursday, :friday])
   schedule = Schedule.new(time)
 
-  recurrence_rule = Rule.weekly(1).day(*days)
+  recurrence_rule = IceCube::Rule.weekly(1).day(*days)
   schedule.add_recurrence_rule(recurrence_rule)
-
   return schedule
 end
 
@@ -24,7 +23,7 @@ def new_monthly_schedule(time = (Time.now + 1.day), days = [0])
   schedule = Schedule.new(time)
 
   monthly_days_hash = days.to_a.inject({}) { |hash, day| hash[day] = [1]; hash }
-  recurrence_rule = Rule.monthly(1).day_of_week(monthly_days_hash)
+  recurrence_rule = IceCube::Rule.monthly(1).day_of_week(monthly_days_hash)
   schedule.add_recurrence_rule(recurrence_rule)
 
   return schedule

@@ -34,7 +34,6 @@ describe Package do
       { discount: 0.00, fee: 0, quantity: 1, calculated_price: 10.00 }
     ]
 
-
     PRICE_PERMUTATIONS.each do |pp|
       context "where discount is #{pp[:discount]}, fee is #{pp[:fee]}, and quantity is #{pp[:quantity]}" do
         before do

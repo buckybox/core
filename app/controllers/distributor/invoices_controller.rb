@@ -1,6 +1,4 @@
-class Distributor::InvoicesController < Distributor::BaseController
-  belongs_to :distributor
-
+class Distributor::InvoicesController < Distributor::ResourceController
   actions :index, :show
 
   def to_send

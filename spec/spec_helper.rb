@@ -7,42 +7,67 @@ require File.expand_path("../../config/environment", __FILE__)
 require 'rspec/rails'
 require 'rspec/autorun'
 
-# Requires supporting ruby files with custom matchers and macros, etc,
-# in spec/support/ and its subdirectories.
 Dir[Rails.root.join("spec/support/**/*.rb")].each { |f| require f }
 
-include Devise::TestHelpers
+counter = -1
 
 RSpec.configure do |config|
-  config.include Delorean
-
   config.mock_with :rspec
-
-  # If you're not using ActiveRecord, or you'd prefer not to run each of your
-  # examples within a transaction, remove the following line or assign false
-  # instead of true.
   config.use_transactional_fixtures = true
+  config.infer_base_class_for_anonymous_controllers = false
 
-  config.include DeviseRequest, :type => :request
-  config.extend DeviseRequestMacros, :type => :request
+  config.include Delorean
+  config.include Devise::TestHelpers,       type: :controller
+  config.include Devise::ControllerHelpers, type: :controller
+  config.include Devise::RequestHelpers,    type: :request
 
-  config.include FabricationHelper
+  config.extend Devise::ControllerMacros, type: :controller
+  config.extend Devise::RequestMacros,    type: :request
 
   config.before(:suite) do
+    GC.disable
     DatabaseCleaner.strategy = :truncation
     DatabaseCleaner.clean_with(:truncation)
   end
 
   config.before(:each) do
     DatabaseCleaner.start
+    Time.zone = BuckyBox::Application.config.time_zone
   end
 
   config.after(:each) do
     DatabaseCleaner.clean
   end
 
-  # If true, the base class of anonymous controllers will be inferred
-  # automatically. This will be the default behavior in future versions of
-  # rspec-rails.
-  config.infer_base_class_for_anonymous_controllers = false
+  config.after(:each) do
+    counter += 1
+    if counter > 15
+      GC.enable
+      GC.start
+      GC.disable
+      counter = 0
+    end
+  end
+
+  config.after(:suite) do
+    counter = 0
+  end
+
+  # Don't need passwords in test DB to be secure, but we would like 'em to be
+  # fast -- and the stretches mechanism is intended to make passwords
+  # computationally expensive.
+  module Devise
+    module Models
+      module DatabaseAuthenticatable
+        protected
+
+        def password_digest(password)
+          password
+        end
+      end
+    end
+  end
+  Devise.setup do |config|
+    config.stretches = 0
+  end
 end

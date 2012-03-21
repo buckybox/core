@@ -1,9 +1,7 @@
-= simple_form_for([@distributor, @account, @order]) do |f|
+= simple_form_for([:distributor, @account, @order]) do |f|
   = f.error_notification
 
   #distributor_order
-    = hidden_field_tag 'distributor_id', @distributor.id
-
     .row
       .four.columns
         .inputs

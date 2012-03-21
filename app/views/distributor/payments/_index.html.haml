@@ -15,7 +15,7 @@
       %tbody
         - @payments.each do |payment|
           %tr
-            %td= payment.created_at.to_s(:db)
+            %td= payment.created_at.to_s(:timestamp)
             %td= customer_badge(payment.customer)
             %td= payment.amount.format
             %td= payment.description

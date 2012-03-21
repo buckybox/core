@@ -42,7 +42,7 @@ function distributor_order_init() {
 function distributor_check_box(distributor_id, box_id) {
   $.ajax({
     type: 'GET',
-    url: '/distributors/' + distributor_id + '/boxes/' + box_id + '.json',
+    url: '/distributor/boxes/' + box_id + '.json',
     dataType: 'json',
     success: function(data) {
       if(data['likes']) {

@@ -10,6 +10,9 @@ class Account < ActiveRecord::Base
   has_many :deliveries, through: :orders
   has_many :invoices
 
+  has_one :route,    through: :customer
+  has_one :address,  through: :customer
+
   composed_of :balance,
     class_name: "Money",
     mapping: [%w(balance_cents cents), %w(currency currency_as_string)],
@@ -82,17 +85,18 @@ class Account < ActiveRecord::Base
       end
     end
 
-    return occurrences.sort {|a,b| a[:date] <=> b[:date] }
+    return occurrences.sort { |a,b| a[:date] <=> b[:date] }
   end
 
-  #this holds the core logic for when an invoice should be raised
+  # This holds the core logic for when an invoice should be raised
   def next_invoice_date
     total = balance
     invoice_date = nil
     occurrences = all_occurrences(4.weeks.from_now)
 
     if total < distributor.invoice_threshold
-      invoice_date =  Date.current
+      # No matter what if the account is below the threshold send out an invoice
+      return Date.current
     else
       occurrences.each do |occurrence|
         total -= amount_with_bucky_fee(occurrence[:price])
@@ -106,6 +110,9 @@ class Account < ActiveRecord::Base
 
     if invoice_date
       invoice_date = Date.current if invoice_date < Date.current
+
+      # After talking to @joshuavial the + 2.days is because of the buisness requirement:
+      # it never send an invoice before 2 days after the first delivery
       if deliveries.size > 0 && deliveries.first.date.present? && deliveries.first.date >= invoice_date
         invoice_date = deliveries.first.date + 2.days
       elsif deliveries.size == 0 && occurrences.first && occurrences.first[:date] >= invoice_date

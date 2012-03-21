@@ -1,16 +1,13 @@
-class Distributor::RoutesController < Distributor::BaseController
-  belongs_to :distributor
+class Distributor::RoutesController < Distributor::ResourceController
   actions :all, except: [ :index, :destroy ]
 
   respond_to :html, :xml, :json
 
   def create
-    create! do |success, failure|
-      success.html { redirect_to routes_distributor_settings_url}
-    end
+    create! { distributor_settings_routes_url }
   end
 
   def update
-    update! { routes_distributor_settings_url }
+    update! { distributor_settings_routes_url }
   end
 end

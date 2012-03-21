@@ -58,7 +58,7 @@ module LayoutHelper
     elsif options.has_key?(:link)
       badge = link_to(content.html_safe, url_for(options[:link]), class: 'customer-badge')
     else
-      badge = link_to(content.html_safe, [customer.distributor, customer], class: 'customer-badge')
+      badge = link_to(content.html_safe, [:distributor, customer], class: 'customer-badge')
     end
 
     return [ options[:before], badge, options[:after] ].join.html_safe

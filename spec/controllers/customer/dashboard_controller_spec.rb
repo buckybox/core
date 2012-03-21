@@ -1,10 +1,7 @@
 require 'spec_helper'
 
 describe Customer::DashboardController do
-  before do
-    @customer = Fabricate(:customer)
-    sign_in @customer
-  end
+  as_customer
 
   describe "GET 'index'" do
     it "returns http success" do

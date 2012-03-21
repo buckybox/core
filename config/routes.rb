@@ -13,25 +13,36 @@ BuckyBox::Application.routes.draw do
     get ':distributor_parameter_name/success',          action: 'success',          as: 'success'
   end
 
-  resources :distributors do
-    resource :bank_information,    controller: 'distributor/bank_information',    only: [:create, :update]
-    resource :invoice_information, controller: 'distributor/invoice_information', only: [:create, :update]
-    resources :boxes,              controller: 'distributor/boxes',               except: :index
-    resources :routes,             controller: 'distributor/routes',              except: :index
-    resources :transactions,       controller: 'distributor/transactions',        only: :create
+  namespace :distributor do
+    root to: 'dashboard#index'
+    get 'dashboard', controller: 'dashboard', action: 'index'
 
-    resources :settings, controller: 'distributor/settings', only: [:index] do
-      collection do
-        get 'routes'
-        get 'boxes'
-        get 'business_info'
-        get 'invoicing_info'
-        get 'bank_info'
-        get 'reporting'
-      end
+    namespace :wizard do
+      get 'business'
+      get 'boxes'
+      get 'routes'
+      get 'payment'
+      get 'billing'
+      get 'success'
     end
 
-    resources :deliveries, controller: 'distributor/deliveries' do
+    namespace :settings do
+      get 'business_information'
+      get 'boxes'
+      get 'routes'
+      get 'bank_information'
+      get 'invoice_information'
+      get 'reporting'
+    end
+
+    resources :distributors,        only: :update
+    resource  :bank_information,    only: [:create, :update]
+    resource  :invoice_information, only: [:create, :update]
+    resources :boxes,               except: [:index, :show]
+    resources :routes,              except: [:index, :show]
+    resources :transactions,        only: :create
+
+    resources :deliveries do
       collection do
         get 'date/:date/view/:view',  action: :index,                as: 'date'
         post 'date/:date/reposition', action: :reposition,           as: 'reposition'
@@ -41,14 +52,14 @@ BuckyBox::Application.routes.draw do
       end
     end
 
-    resources :invoices, controller: 'distributor/invoices' do
+    resources :invoices do
       collection do
         get 'to_send', action: 'to_send', as: 'to_send'
         post 'do_send', action: 'do_send', as: 'do_send'
       end
     end
 
-    resources :payments, controller: 'distributor/payments', only: [:create, :index] do
+    resources :payments, only: [:create, :index] do
       collection do
         get 'upload_transactions', action: 'upload_transactions', as: 'upload_transactions'
         post 'process_upload', action: 'process_upload', as: 'process_upload'
@@ -56,7 +67,7 @@ BuckyBox::Application.routes.draw do
       end
     end
 
-    resources :customers, controller: 'distributor/customers' do
+    resources :customers do
       collection do
         get 'search',   action: :index, as: 'search'
         get 'tag/:tag', action: :index, as: 'tag'
@@ -67,8 +78,8 @@ BuckyBox::Application.routes.draw do
       end
     end
 
-    resources :accounts, controller: 'distributor/accounts', only: :edit do
-      resources :orders, controller: 'distributor/orders', except: [ :index, :show, :destroy ] do
+    resources :accounts, only: :edit do
+      resources :orders, except: [ :index, :show, :destroy ] do
         member do
           put 'deactivate'
           put 'pause'
@@ -86,39 +97,10 @@ BuckyBox::Application.routes.draw do
       end
     end
 
-    resources :events, controller: 'distributor/dashboard' do
+    resources :events do
       member do
         post 'dismiss_notification'
       end
-    end
-  end
-
-  namespace :distributor do
-    root to: 'dashboard#index'
-    get 'dashboard', constoller: 'dashboard', action: 'index'
-
-    namespace :wizard do
-      get 'business'
-      get 'boxes'
-      get 'routes'
-      get 'payment'
-      get 'billing'
-      get 'success'
-    end
-  end
-
-  resources :customers, controller: 'customer/customers', only: :update do
-    resource  :address, controller: 'customer/address', only: :update
-
-    resources :orders,  controller: 'customer/orders',  only: :update do
-      member do
-        put 'pause'
-        post 'remove_pause'
-      end
-    end
-
-    member do
-      put 'update_password'
     end
   end
 
@@ -126,10 +108,27 @@ BuckyBox::Application.routes.draw do
     root to: 'dashboard#index'
     get 'dashboard',               controller: 'dashboard', action: 'index'
     get 'order/:order_id/box/:id', controller: 'dashboard', action: 'box'
+
+    resources :customers, only: :update do
+      member do
+        put 'update_password'
+      end
+    end
+
+    resource  :address, only: :update, controller: 'address'
+
+    resources :orders,  only: :update do
+      member do
+        put 'pause'
+        post 'remove_pause'
+      end
+    end
   end
 
   namespace :admin do
-    root to: 'distributors#index'
+    root to: 'dashboard#index'
+
+    resources :cron_logs, only: :index
 
     resources :distributors do
       member do

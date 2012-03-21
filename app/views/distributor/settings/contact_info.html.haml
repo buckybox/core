@@ -1,6 +1,6 @@
 - title 'Settings', false
 
-= show_settings_sub_nav
+= show_settings_sub_nav(:contact_info)
 
 .row
   .four.columns
@@ -11,6 +11,7 @@
         = f.input :name, :label => false, :placeholder => "Business name"
         = f.input :email, :label => false, :placeholder => "Email"
         = f.input :url, :label => false, :placeholder => "Website"
+        = f.input :time_zone, :as => :time_zone
         = f.input :company_logo
         = f.input :company_logo_cache, :as => :hidden
 

@@ -1,5 +1,5 @@
-module DeviseRequest
-  def simulate_distributor_login
+module Devise::RequestHelpers
+  def simulate_distributor_sign_in
     @distributor = Fabricate(:distributor)
     visit new_distributor_session_path
     fill_in 'Email', :with => @distributor.email
@@ -7,7 +7,7 @@ module DeviseRequest
     click_button 'Sign in'
   end
 
-  def simulate_customer_login
+  def simulate_customer_sign_in
     @customer = Fabricate(:customer)
     visit new_customer_session_path
     fill_in 'Email', :with => @customer.email
@@ -15,3 +15,4 @@ module DeviseRequest
     click_button 'Sign in'
   end
 end
+

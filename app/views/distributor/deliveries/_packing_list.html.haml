@@ -3,14 +3,14 @@
     .one.columns= check_box_tag 'all'
     .six.columns.packing_actions
       = button_to('Print - Master List',
-        master_packing_sheet_distributor_deliveries_path(current_distributor),
-        { id: 'master-print', class: 'small radius button', disabled: @selected_date.future?, form: { target: '_blank' } })
+        master_packing_sheet_distributor_deliveries_path,
+        { id: 'master-print', class: 'small radius button', disabled: !@real_list, form: { target: '_blank' } })
     .five.columns.export.text-right
       = button_to('Export',
-        export_distributor_deliveries_path(current_distributor),
-        { id: 'packing-export', class: 'small radius button', disabled: @selected_date.future? })
+        export_distributor_deliveries_path,
+        { id: 'packing-export', class: 'small radius button', disabled: !@real_list })
 
-  - if @items.all? { |i| i.is_a?(Package) }
+  - if @real_list
     - @items.group_by(&:box).each do |box, array|
       .row.data-headings
         %h5.twelve.columns= box.name

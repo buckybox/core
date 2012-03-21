@@ -1,5 +1,4 @@
 class Distributor::SessionsController < Devise::SessionsController
-
   def new
     analytical.event('view_distributor_sign_in')
     super

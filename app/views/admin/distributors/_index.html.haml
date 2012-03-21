@@ -1,0 +1,21 @@
+.row
+  %table.twelve.columns
+    %thead
+      %tr
+        %th Name
+        %th Email
+        %th Created On
+        %th Actions
+
+    %tbody
+      - @distributors.each do |distributor|
+        %tr
+          %td= distributor.name
+          %td= distributor.email
+          %td= distributor.created_at.to_s(:pretty)
+          %td
+            = link_to 'Show', admin_distributor_path(distributor)
+            \|
+            = link_to 'Edit', edit_admin_distributor_path(distributor)
+            \|
+            = link_to 'Impersonate', impersonate_admin_distributor_path(distributor)

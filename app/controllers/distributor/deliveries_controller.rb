@@ -2,9 +2,8 @@
 
 require 'csv'
 
-class Distributor::DeliveriesController < Distributor::BaseController
+class Distributor::DeliveriesController < Distributor::ResourceController
   custom_actions collection: [:update_status, :master_packing_sheet, :export]
-  belongs_to :distributor
 
   respond_to :html, :xml, except: [:update_status, :export]
   respond_to :json, except: [:master_packing_sheet, :export]
@@ -15,7 +14,7 @@ class Distributor::DeliveriesController < Distributor::BaseController
 
   def index
     unless params[:date] && params[:view]
-      redirect_to date_distributor_deliveries_path(current_distributor, Date.current, 'packing') and return
+      redirect_to date_distributor_deliveries_url(Date.current, 'packing') and return
     end
 
     index! do
@@ -34,9 +33,11 @@ class Distributor::DeliveriesController < Distributor::BaseController
 
       if @route_id != 0
         @items = @all_deliveries.select{ |delivery| delivery.route.id == @route_id }
+        @real_list = @items.all? { |i| i.is_a?(Delivery) }
         @route = @routes.find(@route_id)
       else
         @items = @all_packages
+        @real_list = @items.all? { |i| i.is_a?(Package) }
         @route = @routes.first
       end
     end

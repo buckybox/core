@@ -25,5 +25,5 @@
                 %td= select_tag :customer, options_from_collection_for_select(current_distributor.customers, :id, :name, @customer_remembers["#{index}"]), {:prompt => "None", :name => "customers[#{index}]"}
               - index += 1
           %tr
-            
+
     = render 'statement_options'

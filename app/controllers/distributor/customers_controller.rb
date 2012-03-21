@@ -1,6 +1,4 @@
-class Distributor::CustomersController < Distributor::BaseController
-  belongs_to :distributor
-
+class Distributor::CustomersController < Distributor::ResourceController
   respond_to :html, :xml, :json
 
   def new
@@ -11,11 +9,11 @@ class Distributor::CustomersController < Distributor::BaseController
   end
 
   def create
-    create! { distributor_customer_url(current_distributor, @customer) }
+    create! { distributor_customer_url(@customer) }
   end
 
   def update
-    update! { distributor_customer_url(current_distributor, @customer) }
+    update! { distributor_customer_url(@customer) }
   end
 
   def show
@@ -38,7 +36,7 @@ class Distributor::CustomersController < Distributor::BaseController
       flash[:notice] = "Login details successfully sent"
     end
 
-    redirect_to distributor_customer_url(current_distributor, @customer)
+    redirect_to distributor_customer_url(@customer)
   end
 
   protected
@@ -51,9 +49,9 @@ class Distributor::CustomersController < Distributor::BaseController
     unless params[:query].blank?
 
       if params[:query].to_i == 0
-        @customers = @distributor.customers.search(params[:query])
+        @customers = current_distributor.customers.search(params[:query])
       else
-        @customers = @distributor.customers.where(number: params[:query].to_i)
+        @customers = current_distributor.customers.where(number: params[:query].to_i)
       end
     end
 

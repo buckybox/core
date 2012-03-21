@@ -3,8 +3,8 @@
 = show_settings_sub_nav(:invoicing_info)
 
 .row
-  .four.columns
-    = simple_form_for(@invoice_information, :url => distributor_invoice_information_path(current_distributor)) do |f|
+  .four.columns.centered
+    = simple_form_for(@invoice_information, :url => distributor_invoice_information_path) do |f|
       = f.error_notification
 
       .inputs
