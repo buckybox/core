@@ -149,13 +149,11 @@ class Distributor < ActiveRecord::Base
 
     dates_delivery_lists = delivery_lists.find_by_date(date)
     dates_packing_lists  = packing_lists.find_by_date(date)
-
-    successful = (!!dates_packing_lists && !!dates_delivery_lists)
-
-    if successful
-      successful &= dates_packing_lists.mark_all_as_auto_packed     if dates_packing_lists
-      successful &= dates_delivery_lists.mark_all_as_auto_delivered if dates_delivery_lists
-    end
+    
+    successful = true
+    
+    successful &= dates_packing_lists.mark_all_as_auto_packed     if dates_packing_lists
+    successful &= dates_delivery_lists.mark_all_as_auto_delivered if dates_delivery_lists
 
     return successful
   end
