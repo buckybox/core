@@ -1,0 +1,12 @@
+- title('Admin - Customer Import')
+
+.row
+  .twelve.columns
+    = simple_form_for(:customer_import, url: validate_customer_import_admin_distributor_path, method: :put) do |f|
+      .inputs
+        = f.input :csv, as: :file, label: "CSV File"
+
+      .actions
+        = f.button :submit, "Upload"
+
+

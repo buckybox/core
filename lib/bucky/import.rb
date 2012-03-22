@@ -21,7 +21,7 @@ module Bucky
     DELIVERY_ADDRESS_LINE_2 = "Delivery Address Line 2",
     DELIVERY_SUBURB = "Delivery Suburb",
     DELIVERY_CITY = "Delivery City",
-    DELIVERY_POST_CODE_ZIP = "Delivery Post Code / Zip",
+    DELIVERY_POST_CODE_ZIP = "Delivery Post Code / ZIP",
     DELIVERY_ROUTE = "Delivery Route",
     DELIVERY_INSTRUCTIONS = "Delivery Instructions",
     BOX_TYPE = "Box Type",
@@ -32,10 +32,10 @@ module Bucky
     NEXT_DELIVERY_DATE = "Next Delivery Date"]
 
 
-    def self.import(file, distributor)
+    def self.parse(csv_input, distributor)
       customers = []
       customer = nil
-      CSV.parse(preprocess(file), headers: true) do |row|
+      CSV.parse(preprocess(csv_input), headers: true) do |row|
         customer_number = row[CUSTOMER_NUMBER]
 
         if customer.nil? # Start us off with the first row
@@ -45,12 +45,13 @@ module Bucky
         elsif customer.number != customer_number # No more boxes for that customer, move onto next one BUT check last one is valid first
           log "CUSTOMER"
           log "Customer #{customer.name} is #{customer.valid? ? "valid" : "invalid because #{customer.errors.full_messages.join(', ')}"}"
+          
+          customers << customer
           customer = customer_from_row(row, distributor)
         end
-
-        customers << customer
-
       end
+      customers << customer # Last customer
+
       customers
     end
 
@@ -109,17 +110,26 @@ module Bucky
     # Exclude Rows is the non-blank rows which need to be ignored when parsing
     # the CSV file.
     EXCLUDE_ROWS = [1,2] # 0 is the header row
-    def self.preprocess(file)
+    def self.preprocess(csv_input)
       csv_string = CSV.generate do |csv|
         row_number = 0
 
-        CSV.foreach(file, headers: false) do |row|
+        CSV.parse(csv_input, headers: false) do |row|
           # Check Headers match expectations of defined format
-          if row == 1
-            pass = CSV_HEADERS.all? do |header|
-              row.include? header
+          if row_number == 0
+            # Check all expected headers are spelt correctly and exist
+            problems = []
+            match = CSV_HEADERS.all? do |header|
+              pass = row.include? header 
+              problems << header unless pass
+              pass
             end
-            throw "CSV Header/Title Row doesn't match expected #{CSV_HEADERS.join(", ")}."
+            throw "CSV Headers/Titles was expected to have #{problems.collect{|p| "'#{p}'"}.join(', ')} but only found #{row.collect{|p| "'#{p}'"}.join(", ")}." unless match
+
+            # Check the number of headers match the expected (don't want there to be more than expected
+            expected_header_count = CSV_HEADERS.size
+            actual_header_count = row.size
+            throw "Expected #{expected_header_count} Headers/Titles but there was #{actual_header_count}" unless expected_header_count == actual_header_count
           end
 
           if EXCLUDE_ROWS.include?(row_number)
@@ -139,16 +149,19 @@ module Bucky
     end
 
     def self.test
-      import(TEST_FILE, Distributor.new)
+      from_file(TEST_FILE, Distributor.new)
     end
     
     class Customer
       include ActiveModel::Validations
-
-      attr_accessor :number, :first_name, :last_name, :email, :phone_1, :phone_2,
-        :tags, :notes, :discount, :account_balance, :delivery_address_line_1,
+      
+      DATA_FIELDS = [:number, :first_name, :last_name, :email, :phone_1, :phone_2,
+        :notes, :discount, :account_balance, :delivery_address_line_1,
         :delivery_address_line_2, :delivery_suburb, :delivery_city, :delivery_postcode,
-        :delivery_route, :delivery_instructions, :boxes, :distributor
+        :delivery_route, :delivery_instructions]
+
+      attr_accessor *DATA_FIELDS
+      attr_accessor :distributor, :boxes, :tags
 
       validates_presence_of :number, :first_name, :email, :delivery_address_line_1,
         :delivery_suburb, :delivery_city
@@ -170,16 +183,20 @@ module Bucky
       end
 
       def add_tag(tag)
-        self.tags ||= []
-        self.tags << tag
+        @tags ||= []
+        @tags << tag
       end
 
       def name
         [first_name, last_name].join(" ")
       end
 
+      def tags
+        @tags || []
+      end
+
       def to_s
-        (instance_variables-[:errors, :distributor]).inject({}) do |result, element|
+        instance_variables.inject({}) do |result, element|
           result.merge(element.to_sym => self.send(element.to_s.gsub('@','')))
         end
       end
@@ -194,8 +211,9 @@ module Bucky
     class Box
       include ActiveModel::Validations
 
-      attr_accessor :box_type, :dislikes, :likes, :delivery_frequency, :delivery_days,
-        :next_delivery_date
+      DATA_FIELDS =  [:box_type, :dislikes, :likes, :delivery_frequency, :delivery_days,
+        :next_delivery_date]
+      attr_accessor *DATA_FIELDS
       
       def add_delivery_day(day)
         self.delivery_days ||= []

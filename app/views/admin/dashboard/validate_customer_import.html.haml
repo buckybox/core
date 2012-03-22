@@ -1,0 +1,35 @@
+- title('Admin - Customer Import Check')
+
+.row
+  .nine.columns
+    %h3 Customers
+  - if @customers.blank?
+    %h4 No Customers Found
+  - else
+    %table
+      %thead
+        %tr
+          - Bucky::Import::Customer::DATA_FIELDS.each do |field|
+            %th= field.to_s.capitalize
+          %th Tags
+      %tbody
+        - @customers.each do |customer|
+          %tr
+            - Bucky::Import::Customer::DATA_FIELDS.each do |field|
+              %td= customer.send(field)
+            %td= customer.tags.join(", ")
+          %tr{colspan: Bucky::Import::Customer::DATA_FIELDS.size+1}
+            %td{colspan: Bucky::Import::Customer::DATA_FIELDS.size+1}
+              %table
+                %thead
+                  %tr
+                    - Bucky::Import::Box::DATA_FIELDS.each do |field|
+                      %th= field.to_s.capitalize
+                %tbody
+                  - customer.boxes.each do |box|
+                    %tr
+                      - Bucky::Import::Box::DATA_FIELDS.each do |field|
+                        %td= box.send(field)
+
+
+            
