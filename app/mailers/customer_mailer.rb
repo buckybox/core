@@ -11,7 +11,7 @@ class CustomerMailer < ActionMailer::Base
          subject: "Your Login details for #{@distributor.name}"
   end
 
-  #TODO we are not doing invoicing at the moment
+  # FIXME we are not doing invoicing at the moment
   def invoice invoice
     #@invoice = invoice
     #@account = invoice.account
