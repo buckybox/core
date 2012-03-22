@@ -7,7 +7,7 @@ class Distributor < ActiveRecord::Base
   has_many :orders,             dependent: :destroy, through: :boxes
   has_many :deliveries,         dependent: :destroy, through: :orders
   has_many :payments,           dependent: :destroy
-  has_many :customers
+  has_many :customers,          autosave: true # Want to save those customers added via import_customers
   has_many :accounts,           dependent: :destroy, through: :customers
   has_many :invoices,           dependent: :destroy, through: :accounts
   has_many :transactions,       dependent: :destroy, through: :accounts
@@ -174,6 +174,43 @@ class Distributor < ActiveRecord::Base
     Time.use_zone(new_time_zone) do
       yield
     end
+  end
+  
+  def import_customers(loaded_customers)
+    throw "No customers" if loaded_customers.blank?
+
+    expected = Bucky::Import::Customer
+    throw "Expecting #{expected} but was #{loaded_customers.first.class}" unless loaded_customers.first.class == expected
+    
+    loaded_customers.each do |c|
+      c_route = routes.find_by_name(c.delivery_route)
+      throw "Route #{c.delivery_route} not found for distributor with id #{id}" if c_route.blank?
+
+      customer = self.customers.build(
+      first_name: c.first_name,
+      last_name: c.last_name,
+      email: c.email,
+      route_id: c_route.id,
+      discount: c.discount,
+      number: c.number,
+      notes: c.notes
+      )
+
+      customer.address = Address.new(
+      address_1: c.delivery_address_line_1,
+      address_2: c.delivery_address_line_2,
+      suburb: c.delivery_suburb,
+      city: c.delivery_city,
+      postcode: c.delivery_postcode,
+      delivery_note: c.delivery_instructions,
+      phone_1: c.phone_1,
+      phone_2: c.phone_2
+      )
+
+      customer.account = Account.new
+      customer.account.change_balance_to(c.account_balance, {description: "Inital CSV Import"})
+    end
+    self.save
   end
 
   private

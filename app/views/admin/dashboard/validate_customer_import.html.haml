@@ -31,5 +31,11 @@
                       - Bucky::Import::Box::DATA_FIELDS.each do |field|
                         %td= box.send(field)
 
+.row
+  .twelve.columns
+    = simple_form_for(:customer_import, url: customer_import_upload_admin_distributor_path, method: :post) do |f|
+      .inputs
+        = f.input :csv, as: :file, label: "CSV File"
 
-            
+      .actions
+        = f.button :submit, "Upload & Commit"

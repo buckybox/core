@@ -4,7 +4,7 @@ class Customer < ActiveRecord::Base
   belongs_to :distributor
   belongs_to :route
 
-  has_one :address, dependent: :destroy, inverse_of: :customer
+  has_one :address, dependent: :destroy, inverse_of: :customer, autosave: true
   has_one :account, dependent: :destroy
 
   has_many :transactions, through: :account
