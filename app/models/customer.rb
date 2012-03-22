@@ -25,20 +25,20 @@ class Customer < ActiveRecord::Base
     :route, :route_id, :password, :password_confirmation, :remember_me, :tag_list, :discount, :number, :notes
 
   validates_presence_of :first_name, :email, :distributor, :route, :discount
-  validates_uniqueness_of :email, scope: :distributor_id
+  #validates_uniqueness_of :email #This is done within Devise, left here to remind you
   validates_uniqueness_of :number, scope: :distributor_id
+  validates_numericality_of :number, greater_than: 0
   validates_numericality_of :discount, greater_than_or_equal_to: 0.0, less_than_or_equal_to: 1.0
   validates_associated :account
   validates_associated :address
 
+  before_validation :initialize_number, if: 'number.nil?'
   before_validation :randomize_password_if_not_present
   before_validation :discount_percentage
+  before_validation :format_email
 
   before_create :setup_account
   before_create :setup_address
-
-  before_save :initialize_number, if: 'number.nil?'
-  before_save :format_email
 
   after_create :trigger_new_customer
 
@@ -63,7 +63,7 @@ class Customer < ActiveRecord::Base
     existing_customers = distributor.customers
     result = 1
 
-    unless existing_customers.size == 0
+    unless existing_customers.count == 0
       max_number = distributor.customers.maximum(:number)
       result = max_number + 1
     end
@@ -91,7 +91,7 @@ class Customer < ActiveRecord::Base
   private
 
   def initialize_number
-    self.number = Customer.next_number(distributor)
+    self.number = Customer.next_number(self.distributor)
   end
 
   def randomize_password_if_not_present

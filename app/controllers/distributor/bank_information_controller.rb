@@ -1,13 +1,20 @@
-class Distributor::BankInformationController < Distributor::BaseController
-  belongs_to :distributor, :singleton => true
-  actions :create
+class Distributor::BankInformationController < Distributor::ResourceController
+  defaults singleton: true
+  actions :create, :update
 
   respond_to :html, :xml, :json
 
   def create
     create! do |success, failure|
-      success.html { redirect_to distributor_wizard_billing_url }
-      failure.html { redirect_to :back }
+      success.html { redirect_to distributor_settings_bank_information_url, notice: 'Bank information was successfully created.' }
+      failure.html { render 'distributor/settings/bank_information' }
+    end
+  end
+
+  def update
+    update! do |success, failure|
+      success.html { redirect_to distributor_settings_bank_information_url, notice: 'Bank information was successfully updated.' }
+      failure.html { render 'distributor/settings/bank_information' }
     end
   end
 end

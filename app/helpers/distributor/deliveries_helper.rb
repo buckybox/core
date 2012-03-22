@@ -27,12 +27,16 @@ module Distributor::DeliveriesHelper
     return element_id
   end
 
-  def count_class(date_list, date)
-    'has_pending' unless date_list.all_finished
+  def count_class(date_list)
+    if date_list.is_a?(FutureDeliveryList)
+      'out_of_range'
+    elsif !date_list.all_finished?
+      'has_pending'
+    end
   end
 
   def reschedule_dates(route)
-    dates = route.schedule.next_occurrences(5, Time.now)
+    dates = route.schedule.next_occurrences(5, Time.current)
     options_from_collection_for_select(dates, 'to_date', 'to_date')
   end
 

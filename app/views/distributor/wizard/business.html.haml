@@ -2,7 +2,7 @@
 
 .row
   .four.columns.centered
-    = simple_form_for(current_distributor) do |f|
+    = simple_form_for([:distributor, current_distributor]) do |f|
       = f.error_notification
 
       .inputs

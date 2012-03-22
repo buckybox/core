@@ -10,8 +10,8 @@
 
             - date_list_group.each do |date_list|
               %li
-                = link_to date_distributor_deliveries_path(current_distributor, date_list.date) do
+                = link_to date_distributor_deliveries_path(date_list.date) do
                   .date{ class: date_class(date_list) }= date_list.date.strftime("%d %a")
-                  .count{ id: count_selected(@delivery_lists.first.date, date_list, params[:date]), class: count_class(date_list, params[:date]) }
+                  .count{ id: count_selected(@delivery_lists.first.date, date_list, params[:date]), class: count_class(date_list) }
                     = date_list.deliveries.map(&:quantity).inject(0, :+)
 

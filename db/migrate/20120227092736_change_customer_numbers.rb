@@ -3,6 +3,7 @@ class ChangeCustomerNumbers < ActiveRecord::Migration
   class Customer < ActiveRecord::Base; end
 
   def up
+    Distributor.reset_column_information
     Customer.reset_column_information
 
     remove_column :customers, :number

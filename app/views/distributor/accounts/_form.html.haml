@@ -1,4 +1,4 @@
-= form_tag(change_balance_distributor_account_path(current_distributor, @account), method: :put, class: 'nice') do
+= form_tag(change_balance_distributor_account_path(@account), method: :put, class: 'nice') do
 
   .row
     .four.columns
@@ -18,4 +18,4 @@
     .three.columns
       .actions{style: 'padding-top:12px'}
         = submit_tag 'Add Transaction', class: 'button radius'
-        = link_to 'cancel', distributor_customer_path(current_distributor, @account.customer)
+        = link_to 'cancel', distributor_customer_path(@account.customer)

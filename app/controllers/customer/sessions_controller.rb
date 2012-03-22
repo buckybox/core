@@ -1,5 +1,4 @@
 class Customer::SessionsController < Devise::SessionsController
-
   def new
     analytical.event('view_customer_sign_in')
     super

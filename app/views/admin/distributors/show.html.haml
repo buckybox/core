@@ -1,0 +1,37 @@
+- title("Admin - #{@distributor.name}")
+
+%table
+  %tr
+    %td Name:
+    %td= @distributor.name
+  %tr
+    %td Email:
+    %td= @distributor.email
+  %tr
+    %td Url:
+    %td= @distributor.url
+  %tr
+    %td Timezone:
+    %td= @distributor.time_zone
+  %tr
+    %td Parameter Name:
+    %td= @distributor.parameter_name
+  %tr
+    %td Invoice Threshold:
+    %td= @distributor.invoice_threshold.format
+  %tr
+    %td Separate Bucky Fee:
+    %td= checkmark_boolean(@distributor.separate_bucky_fee)
+
+%table
+  %tr
+    %td Total Customers:
+    %td= @distributor.customers.count
+  %tr
+    %td Deliveries to Date:
+    %td= @distributor.deliveries.delivered.count
+
+
+= link_to 'Edit', edit_admin_distributor_path(@distributor)
+\|
+= link_to 'Back', admin_distributors_path

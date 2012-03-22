@@ -7,17 +7,15 @@
             = flash_bar(kind, message)
 
       .row
-        .six.columns
-          .float-left== #{current_customer.distributor.name}: My Account
-        .six.columns
-          .float-right
-            - if customer_signed_in?
-              Signed in as
-              %strong=  customer_badge(current_customer, link: customer_root_path)
-              \|
-              = link_to 'logout', destroy_customer_session_path, method: :delete
-            - else
-              = link_to 'login', new_customer_session_path
+        .six.columns== #{current_customer.distributor.name}: My Account
+        .six.columns.text-right
+          - if customer_signed_in?
+            Signed in as
+            %strong= customer_badge(current_customer, link: customer_root_path)
+            \|
+            = link_to 'logout', destroy_customer_session_path, method: :delete
+          - else
+            = link_to 'login', new_customer_session_path
 
       #dashboard-content.row
         .twelve.columns

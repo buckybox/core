@@ -1,9 +1,9 @@
 class RouteScheduleTransaction < ActiveRecord::Base
-  include IceCube
+  include Bucky
 
   belongs_to :route
 
-  serialize :schedule, Hash
+  schedule_for :schedule
 
   attr_accessible :route, :schedule
 
@@ -11,11 +11,7 @@ class RouteScheduleTransaction < ActiveRecord::Base
 
   default_scope order('created_at DESC')
 
-  def schedule
-    Schedule.from_hash(self[:schedule]) if self[:schedule]
-  end
-
-  def schedule=(schedule)
-    self[:schedule] = schedule.to_hash
+  def local_time_zone
+    route.local_time_zone
   end
 end

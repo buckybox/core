@@ -1,4 +1,4 @@
-FutureDeliveryList = Struct.new(:date, :deliveries, :all_finished)
+FutureDeliveryList = Struct.new(:date, :deliveries)
 
 class DeliveryList < ActiveRecord::Base
   belongs_to :distributor
@@ -26,14 +26,14 @@ class DeliveryList < ActiveRecord::Base
 
         orders.each { |order| date_orders << order if order.schedule.occurs_on?(date) }
 
-        result << FutureDeliveryList.new(date, date_orders, false)
+        result << FutureDeliveryList.new(date, date_orders)
       end
     end
 
     return result
   end
 
-  def self.generate_list(distributor, date = Date.current)
+  def self.generate_list(distributor, date)
     delivery_list = DeliveryList.find_or_create_by_distributor_id_and_date(distributor.id, date)
     packing_list = PackingList.find_or_create_by_distributor_id_and_date(distributor.id, date)
 
@@ -57,7 +57,10 @@ class DeliveryList < ActiveRecord::Base
     packages = packages.sort.map{ |key, value| value }.flatten
 
     packages.each do |package|
-      delivery_list.deliveries.find_or_create_by_package_id(package.id, order: package.order)
+      order = package.order
+      route = order.route
+      # need to pass route as well or the position scope for this delivery list is not set properly
+      delivery_list.deliveries.find_or_create_by_package_id(package.id, order: order, route: route)
     end
 
     return delivery_list
@@ -71,7 +74,12 @@ class DeliveryList < ActiveRecord::Base
     return result
   end
 
-  def all_finished
-    deliveries.all? { |delivery| delivery.status != 'pending' }
+  def has_deliveries?
+    @has_deliveries ||= (deliveries.size == 0)
+  end
+
+  def all_finished?
+    @all_finished ||= deliveries.all? { |delivery| delivery.status != 'pending' }
+    has_deliveries? || @all_finished
   end
 end

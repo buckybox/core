@@ -31,9 +31,9 @@
               = render partial: 'distributor/orders/pause_form', locals: { order: order }
           %td= order.schedule.next_occurrence.strftime("%B %d") if order.schedule.next_occurrence
           %td
-            = link_to 'edit', edit_distributor_account_order_path(current_distributor, @account, order)
+            = link_to 'edit', edit_distributor_account_order_path(@account, order)
             %br
             = link_to('delete',
-              deactivate_distributor_account_order_path(current_distributor, @account, order),
+              deactivate_distributor_account_order_path(@account, order),
               confirm: 'Are you sure you would like to deactivate this order? It will no longer generate deliveries.',
               method: :put)

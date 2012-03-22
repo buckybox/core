@@ -23,4 +23,20 @@ module Distributor::BaseHelper
       end
     end
   end
+
+  # force_highlighted = :routes
+  # will make the 'Routes' sub_nav title show as highlighted
+  def show_settings_sub_nav(force_highlighted = nil)
+    content_for :sub_nav do 
+      render partial: 'distributor/settings/sub_nav', locals: {force_highlighted: force_highlighted}
+    end
+  end
+
+  def sub_tab(text, path, opts = {})
+    highlighted = current_page?(path) || opts[:force_highlighted].to_s == text.downcase
+
+    content_tag(:dd, class: highlighted ? 'active' : '') do
+      link_to text, path
+    end
+  end
 end

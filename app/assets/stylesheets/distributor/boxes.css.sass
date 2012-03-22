@@ -2,56 +2,26 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
-#boxes
-  nav
-    width: 100%
-    a.button
-      float: right
-
+.box-form
   form
-    input[type="submit"]
-      float: right
-    #box_name, #box_description
-      width: 100%
+    .hint 
+      font-size: .9em
 
-    #box_description
-      height: 270px
+    div.currency > *, div.boolean > *
+      display: inline
 
-    .image-thumbnail
-      display: block
-      width: 200px
-      height: 150px
+    div.currency
+      input
+        width: 5em
+      span.hint, input
+        margin-left: .5em
 
-  .box-entry
-    border: 1px solid #ccc
-    margin: 10px 0
-    padding: 10px 0
-    width: 100%
-    img
-      padding: 5px
-      border: 1px dotted #ccc
-    > .col
-      float: left
-    .action-bar 
-      text-align: center
-    .price
-      width: 100%
-      text-align: center
-      line-height: 1em
-      font-size: 3.3em
-    .status
-      font-size: 1.2em
-      font-weight: bold
-    .status-true
-      color: green
-    .status-false
-      color: red
-    ul.options
-      li ul 
-        margin: 0
-        li
-          display: inline-block
-          margin-left: 5px
-          font-weight: normal 
-      > li
-        font-weight: bold
+    div.file-input
+      display: none
+      border: 1px solid #ddd
+      border-radius: 3px
+      padding: 3px
+
+      .description
+        font-style: italic
+        margin-left: .5em

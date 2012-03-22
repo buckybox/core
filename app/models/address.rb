@@ -1,5 +1,5 @@
 class Address < ActiveRecord::Base
-  belongs_to :customer, :inverse_of => :address
+  belongs_to :customer, inverse_of: :address
 
   attr_accessible :customer, :address_1, :address_2, :suburb, :city, :postcode, :delivery_note, :phone_1, :phone_2, :phone_3
 

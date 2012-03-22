@@ -1,6 +1,5 @@
 - content_for :sub_nav do
   %ul.nav-bar
-    %li= link_to 'Transactions', distributor_transactions_path(current_distributor)
-    %li= link_to 'Invoices', distributor_invoices_path(current_distributor)
-    %li= link_to 'Reconcile', distributor_transactions_path(current_distributor)
-  /= link_to distributor_invoices_path(current_distributor)
+    %li= link_to 'Transactions', distributor_transactions_path
+    %li= link_to 'Invoices', distributor_invoices_path
+    %li= link_to 'Reconcile', distributor_transactions_path

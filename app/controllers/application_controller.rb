@@ -6,4 +6,17 @@ class ApplicationController < ActionController::Base
   else
     analytical :modules=>[], :use_session_store=>true
   end
+
+  before_filter :set_user_time_zone
+
+  private
+
+  def set_user_time_zone
+    distributor = current_distributor || (current_customer.try(:distributor))
+    if distributor.present? && distributor.time_zone.present?
+      Time.zone = distributor.time_zone 
+    else
+      Time.zone = BuckyBox::Application.config.time_zone
+    end
+  end
 end

@@ -4,4 +4,4 @@
 
 = render :partial => 'index', :locals => {:invoices => @invoices}
 
-= link_to "Send Now", do_send_distributor_invoices_path(current_distributor), :class => "button nice", :method => :post
+= link_to "Send Now", do_send_distributor_invoices_path, :class => "button nice", :method => :post

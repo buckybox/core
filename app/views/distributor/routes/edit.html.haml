@@ -1,7 +1,5 @@
-%h1 Editing distributor_route
+- title "Editing #{@route.name}"
+
+= show_settings_sub_nav(:routes)
 
 = render 'form'
-
-= link_to 'Show', @distributor_route
-\|
-= link_to 'Back', distributor_routes_path

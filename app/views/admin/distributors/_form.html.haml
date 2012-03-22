@@ -1,0 +1,21 @@
+= simple_form_for(@distributor, url: [:admin, @distributor]) do |f|
+  = f.error_notification
+
+  .inputs
+    = f.input :name
+    = f.input :url
+    = f.input :email
+    = f.input :support_email
+    = f.input :time_zone, as: :time_zone
+
+    = f.input :invoice_threshold
+    = f.input :separate_bucky_fee
+
+  %hr
+  .inputs
+    Only changed if both are set
+    = f.input :password
+    = f.input :password_confirmation
+
+  .actions
+    = f.button :submit

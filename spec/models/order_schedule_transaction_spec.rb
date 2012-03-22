@@ -1,5 +1,5 @@
 require 'spec_helper'
-include IceCube
+include Bucky
 
 describe OrderScheduleTransaction do
   before { @order_schedule_transaction = Fabricate(:order_schedule_transaction) }
@@ -8,7 +8,7 @@ describe OrderScheduleTransaction do
 
   context :schedule do
     before do
-      @time = Time.now
+      @time = Time.current
       @schedule = Schedule.new(@time)
       @order_schedule_transaction.schedule = @schedule
       @order_schedule_transaction.save
