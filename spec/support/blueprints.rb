@@ -9,7 +9,7 @@ require 'machinist/active_record'
 #   end
 
 Address.blueprint do
-  customer
+  customer { object.customer || Customer.make(:address => object) }
   address_1 { '1 Address St' }
   suburb { 'Suburb' }
   city { 'City' }
@@ -25,6 +25,16 @@ Address.blueprint(:full) do
 end
 
 Customer.blueprint do
+  distributor
+  route
+  first_name { "First Name #{sn}" }
+  email { "customer#{sn}@example.com" }
+  password { 'password' }
+  password_confirmation { 'password' }
+  account
+  address
+  # after_create { |customer| Fabricate(:account, customer: customer) }
+  # after_create { |customer| Fabricate(:address, customer: customer) }
 end
 
 Box.blueprint do
@@ -35,6 +45,10 @@ Box.blueprint do
 end
 
 Distributor.blueprint do
+  name { "Distributor #{sn}" }
+  email { "distributor#{sn}@example.com" }
+  password { 'password' }
+  password_confirmation { 'password' }
 end
 
 BankInformation.blueprint do
@@ -71,4 +85,11 @@ Transaction.blueprint do
 end
 
 Account.blueprint do
+end
+
+Route.blueprint do
+  distributor { Distributor.make(:routes => [object]) }
+  name { "Route #{sn}" }
+  fee { 0 }
+  monday { true }
 end

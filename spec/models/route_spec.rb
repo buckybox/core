@@ -4,75 +4,80 @@ include Bucky
 #TODO optomized the tests, I confess I didn't do any of that when writing them
 
 describe Route do
-  before { @route = Fabricate(:route) }
+  let (:route)       { Route.make }
 
-  specify { @route.should be_valid }
+  specify { route.should be_valid }
 
   context :route_days do
-    specify { Fabricate.build(:route, :monday => false).should_not be_valid }
+    specify { Route.make(:monday => false).should_not be_valid }
   end
 
   context :schedule do
     before do
-      @route.monday    = true
-      @route.wednesday = true
-      @route.friday    = true
-      @route.save
+      route.monday    = true
+      route.wednesday = true
+      route.friday    = true
+      route.save
     end
 
-    specify { @route.schedule.should_not be_nil }
-    specify { @route.schedule.to_s.should == "Weekly on Mondays, Wednesdays, and Fridays" }
+    specify { route.schedule.should_not be_nil }
+    specify { route.schedule.to_s.should == "Weekly on Mondays, Wednesdays, and Fridays" }
   end
 
   context :schedule_transaction do
-    before { @route.sunday = true }
-    specify { expect { @route.save }.should change(RouteScheduleTransaction, :count).by(1) }
+    before do
+      route.save
+      route.sunday = true
+    end
+
+    specify { expect { route.save }.should change(RouteScheduleTransaction, :count).by(1) }
   end
 
   describe '#best_route' do
     it 'should just return the first one for now' do
-      Route.default_route(@route.distributor).should == @route
+      Route.default_route(route.distributor).should == route
     end
   end
 
   describe '#delivery_days' do
-    before { @route.friday = true }
+    before { route.friday = true }
+
     it 'should return any array of all the selected days' do
-      @route.delivery_days.should == [:monday, :friday]
+      route.delivery_days.should == [:monday, :friday]
     end
   end
 
   describe '.deleted_days' do
     before do
-      @route.update_attributes(monday: true, tuesday: true, wednesday: true, thursday: true, friday: true, saturday: true, sunday: true)
-      @route.attributes = {monday: false, tuesday: false, wednesday: false, thursday: false, friday: false, saturday: false, sunday: false}
+      route.update_attributes(monday: true, tuesday: true, wednesday: true, thursday: true, friday: true, saturday: true, sunday: true)
+      route.attributes = {monday: false, tuesday: false, wednesday: false, thursday: false, friday: false, saturday: false, sunday: false}
     end
-    specify { @route.send(:deleted_days).should eq(Route::DAYS) }
+    specify { route.send(:deleted_days).should eq(Route::DAYS) }
   end
 
   describe '.deleted_day_numbers' do
     before do
-      @route.update_attributes(monday: true, tuesday: true, wednesday: true, thursday: true, friday: true, saturday: true, sunday: true)
-      @route.attributes = {monday: false, tuesday: false, wednesday: false, thursday: false, friday: false, saturday: false, sunday: false}
+      route.update_attributes(monday: true, tuesday: true, wednesday: true, thursday: true, friday: true, saturday: true, sunday: true)
+      route.attributes = {monday: false, tuesday: false, wednesday: false, thursday: false, friday: false, saturday: false, sunday: false}
     end
-    specify { @route.send(:deleted_day_numbers).should eq([0,1,2,3,4,5,6]) }
+    specify { route.send(:deleted_day_numbers).should eq([0,1,2,3,4,5,6]) }
   end
-  
+
   describe '.update_schedule' do
     before do
       @schedule_start_time = Time.now
-      @route.update_attributes(monday: true, tuesday: true, wednesday: true, thursday: true, friday: true, saturday: true, sunday: true)
-      @customer = Fabricate(:customer, route: @route, distributor: @route.distributor)
+      route.update_attributes(monday: true, tuesday: true, wednesday: true, thursday: true, friday: true, saturday: true, sunday: true)
+      @customer = Fabricate(:customer, route: route, distributor: route.distributor)
       @account = @customer.account
-      @box = Fabricate(:box, distributor: @route.distributor)
+      @box = Fabricate(:box, distributor: route.distributor)
       @order = Fabricate(:recurring_order, schedule: new_everyday_schedule(@schedule_start_time), account: @account, box: @box)
-      @route.schedule.to_s.should match /Weekly on Sundays, Mondays, Tuesdays, Wednesdays, Thursdays, Fridays, and Saturdays/ 
-      @order.schedule.to_s.should match /Weekly on Sundays, Mondays, Tuesdays, Wednesdays, Thursdays, Fridays, and Saturdays/ 
-      @route.future_orders.should include(@order)
-      
+      route.schedule.to_s.should match /Weekly on Sundays, Mondays, Tuesdays, Wednesdays, Thursdays, Fridays, and Saturdays/
+      @order.schedule.to_s.should match /Weekly on Sundays, Mondays, Tuesdays, Wednesdays, Thursdays, Fridays, and Saturdays/
+      route.future_orders.should include(@order)
+
       # [0, 1, ...] === [:sunday, :monday, ..], kinda
       @monthly_order = Fabricate(:recurring_order, schedule: new_monthly_schedule(@schedule_start_time, [0,1,2,3,4,5,6]), account: @account, box: @box)
-      
+
       @order_times = {}
       @next_times = {}
       @start_pause = 2.weeks.from_now.to_date
@@ -92,15 +97,15 @@ describe Route do
     Route::DAYS.each do |day|
       context "remove_#{day.to_s}" do
         before do
-          @route.send("#{day.to_s}=", false)
-          @route.save
+          route.send("#{day.to_s}=", false)
+          route.save
           @order.reload
           @monthly_order.reload
           @order_times.map{|d, order| order.reload}
         end
         it "should remove only #{day} from the order schedule" do
-          @order.schedule.to_s.should_not match /#{day.to_s}/i 
-          @monthly_order.schedule.to_s.should_not match /#{day.to_s}/i 
+          @order.schedule.to_s.should_not match /#{day.to_s}/i
+          @monthly_order.schedule.to_s.should_not match /#{day.to_s}/i
 
           (Route::DAYS - [day]).each do |remaining_day|
             @order.schedule.to_s.should match /#{remaining_day.to_s}/i
@@ -115,7 +120,7 @@ describe Route do
             @order_times[remaining_day].schedule.recurrence_times.first.should eq(@next_times[remaining_day])
           end
         end
-        
+
         specify { @order.schedule.exception_times.should eq(@pause_range) }
         specify { @monthly_order.schedule.exception_times.should eq(@pause_range) }
 
@@ -131,7 +136,7 @@ describe Route do
 
     context "remove monday and friday" do
       before do
-        @route.update_attributes(monday: false, friday:false)
+        route.update_attributes(monday: false, friday:false)
         @order.reload
         @monthly_order.reload
         @order_times.map{|d, order| order.reload}
@@ -163,7 +168,7 @@ describe Route do
 
       context "and then remove sunday, tuesday, wednesday, thursday, saturday and add monday" do
         before do
-          @route.update_attributes(sunday: false, monday: true, tuesday: false, wednesday: false, thursday: false, friday: false, saturday: false)
+          route.update_attributes(sunday: false, monday: true, tuesday: false, wednesday: false, thursday: false, friday: false, saturday: false)
           @order.reload
           @monthly_order.reload
           @order_times.map{|d, order| order.reload}
@@ -179,7 +184,7 @@ describe Route do
 
     context "remove most days" do
       before do
-        @route.update_attributes(monday: false, tuesday: false, wednesday: false, thursday: false, friday: false, saturday: false)
+        route.update_attributes(monday: false, tuesday: false, wednesday: false, thursday: false, friday: false, saturday: false)
         @order.reload
         @monthly_order.reload
         @order_times.map{|d, order| order.reload}
