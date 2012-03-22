@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe BankInformation do
-  before :all do
+  before do
     @bank_information = Fabricate(:bank_information)
   end
 

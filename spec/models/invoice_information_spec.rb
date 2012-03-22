@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe InvoiceInformation do
-  before :all do
+  before do
     @invoice_information = Fabricate(:invoice_information)
   end
 

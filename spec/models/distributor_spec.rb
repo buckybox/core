@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe Distributor do
   context :initialize do
-    before(:all) { @distributor = Fabricate(:distributor, :email => ' BuckyBox@example.com ') }
+    before(:each) { @distributor = Fabricate(:distributor, :email => ' BuckyBox@example.com ') }
 
     specify { @distributor.should be_valid }
     specify { @distributor.parameter_name.should == @distributor.name.parameterize }

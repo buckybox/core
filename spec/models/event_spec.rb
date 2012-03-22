@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe Event do
-  before :all do 
+  before do
     @event = Fabricate(:billing_event)
   end
 

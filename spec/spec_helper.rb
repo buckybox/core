@@ -13,7 +13,7 @@ counter = -1
 
 RSpec.configure do |config|
   config.mock_with :rspec
-  config.use_transactional_fixtures = true
+  config.use_transactional_fixtures = false
   config.infer_base_class_for_anonymous_controllers = false
 
   config.include Delorean
@@ -26,8 +26,8 @@ RSpec.configure do |config|
 
   config.before(:suite) do
     GC.disable
-    DatabaseCleaner.strategy = :truncation
     DatabaseCleaner.clean_with(:truncation)
+    DatabaseCleaner.strategy = :transaction
   end
 
   config.before(:each) do

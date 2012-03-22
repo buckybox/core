@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe Box do
-  before :all do
+  before do
     @box = Fabricate(:box)
   end
 
