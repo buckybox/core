@@ -98,8 +98,8 @@ class Delivery < ActiveRecord::Base
   def changed_status
     old_status, new_status = self.status_change
 
-    subtract_from_account          if new_status == 'delivered'
-    add_to_account                 if old_status == 'delivered'
+    subtract_from_account if new_status == 'delivered'
+    add_to_account        if old_status == 'delivered'
 
     # Commenting out for now as not doing reschedule repack just yet
     #remove_from_schedule  if old_status == 'rescheduled' || old_status == 'repacked'

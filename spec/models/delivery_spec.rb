@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe Delivery do
-  specify { Fabricate(:delivery).should be_valid }
+  specify { Fabricate.build(:delivery).should be_valid }
   specify { Fabricate(:delivery).status.should == 'pending' }
   specify { Fabricate(:delivery).status_change_type.should == 'auto' }
 

@@ -73,7 +73,7 @@ class Customer < ActiveRecord::Base
   end
 
   def new?
-    deliveries.size == 1
+    deliveries.size <= 1
   end
 
   def name

@@ -83,4 +83,23 @@ describe Customer do
     specify { Customer.search('Smith').size.should == 3 }
     specify { Customer.search('John').size.should == 1 }
   end
+
+  context '#new?' do
+    before { @customer = Fabricate(:customer) }
+
+    context 'customer has 0 deliveries' do
+      before { @customer.deliveries.stub(:size).and_return(0) }
+      specify { @customer.new?.should be_true }
+    end
+
+    context 'customer has 1 delivery' do
+      before { @customer.deliveries.stub(:size).and_return(1) }
+      specify { @customer.new?.should be_true }
+    end
+
+    context 'customer has 2 deliveries' do
+      before { @customer.deliveries.stub(:size).and_return(2) }
+      specify { @customer.new?.should be_false }
+    end
+  end
 end
