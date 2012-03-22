@@ -28,7 +28,7 @@ describe Distributor do
 
     context 'current time before advance_hour' do
       before do
-        @current_time = Time.new(2012, 3, 20, Distributor::DEFAULT_AUTOMATIC_DELIVERY_HOUR - 1)
+        @current_time = Time.zone.local(2012, 3, 20, Distributor::DEFAULT_AUTOMATIC_DELIVERY_HOUR - 1)
         @default_days = Distributor::DEFAULT_ADVANCED_DAYS
         Delorean.time_travel_to(@current_time)
       end
@@ -38,7 +38,7 @@ describe Distributor do
 
         it 'the generated packing lists should start from today' do
           @distributor.save
-          @distributor.packing_lists.first.date.should == Date.today
+          @distributor.packing_lists.first.date.should == Date.current
         end
 
         specify { expect { @distributor.save }.should change(PackingList, :count).from(0).to(@default_days) }
@@ -84,7 +84,7 @@ describe Distributor do
 
     context 'current time after advance_hour' do
       before do
-        @current_time = Time.new(2012, 3, 20, Distributor::DEFAULT_AUTOMATIC_DELIVERY_HOUR + 1)
+        @current_time = Time.zone.local(2012, 3, 20, Distributor::DEFAULT_AUTOMATIC_DELIVERY_HOUR + 1)
         @default_days = Distributor::DEFAULT_ADVANCED_DAYS
         Delorean.time_travel_to(@current_time)
       end
@@ -139,7 +139,7 @@ describe Distributor do
 
   context 'cron related methods' do
     before do
-      @current_time = Time.new(2012, 3, 20, Distributor::DEFAULT_ADVANCED_HOURS)
+      @current_time = Time.zone.local(2012, 3, 20, Distributor::DEFAULT_ADVANCED_HOURS)
       Delorean.time_travel_to(@current_time)
 
       @distributor = Fabricate(:distributor)
@@ -199,7 +199,7 @@ describe Distributor do
           @distributor = Fabricate(:distributor, time_zone: "")
         end
         it 'should temporarily change Time.now' do
-          @distributor.use_local_time_zone { Time.zone.name.should eq "Wellington" } 
+          @distributor.use_local_time_zone { Time.zone.name.should eq "Wellington" }
           Time.zone.name.should eq("Paris")
         end
       end
@@ -210,7 +210,7 @@ describe Distributor do
           @distributor = Fabricate(:distributor, time_zone: "Berlin")
         end
         it 'should temporarily change Time.now' do
-          @distributor.use_local_time_zone { Time.zone.name.should eq "Berlin" } 
+          @distributor.use_local_time_zone { Time.zone.name.should eq "Berlin" }
           Time.zone.name.should eq("Paris")
         end
       end
@@ -237,8 +237,11 @@ describe Distributor do
         after { Delorean.back_to_the_present }
 
         context 'time set to Wellington start of day' do
-          # Wellington time zone beginning of day 
-          before { Delorean.time_travel_to(Time.current.beginning_of_day + 1.day + Distributor::DEFAULT_ADVANCED_HOURS.hours) }
+          # Wellington time zone beginning of day
+          before do
+            time = Time.current.beginning_of_day + 1.day + Distributor::DEFAULT_ADVANCED_HOURS.hours
+            Delorean.time_travel_to(time)
+          end
 
           specify { expect{Distributor.create_daily_lists}.to change{@d_welly.packing_lists.count + @d_welly.delivery_lists.count}.by 2}
           specify { expect{Distributor.create_daily_lists}.to change{@d_perth.packing_lists.count + @d_perth.delivery_lists.count}.by 0}
