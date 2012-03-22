@@ -63,7 +63,7 @@ describe Route do
     specify { route.send(:deleted_day_numbers).should eq([0,1,2,3,4,5,6]) }
   end
 
-  describe '.update_schedule' do
+  describe 'when saving and triggering an update_schedule' do
     before do
       @schedule_start_time = Time.now
       route.update_attributes(monday: true, tuesday: true, wednesday: true, thursday: true, friday: true, saturday: true, sunday: true)
@@ -94,43 +94,43 @@ describe Route do
       end
     end
 
-    Route::DAYS.each do |day|
-      context "remove_#{day.to_s}" do
-        before do
-          route.send("#{day.to_s}=", false)
-          route.save
-          @order.reload
-          @monthly_order.reload
-          @order_times.map{|d, order| order.reload}
+    context "when removing a day" do
+      before do
+        @day = :tuesday
+        route.tuesday = false
+        route.save
+        @order.reload
+        @monthly_order.reload
+        @order_times.map{|d, order| order.reload}
+      end
+
+      it "should remove only the specified day from the order schedule" do
+        @order.schedule.to_s.should_not match /#{@day.to_s}/i
+        @monthly_order.schedule.to_s.should_not match /#{@day.to_s}/i
+
+        (Route::DAYS - [@day]).each do |remaining_day|
+          @order.schedule.to_s.should match /#{remaining_day.to_s}/i
+          @monthly_order.schedule.to_s.should match /#{remaining_day.to_s}/i
+          @monthly_order.schedule.to_s.should match /Monthly/i
         end
-        it "should remove only #{day} from the order schedule" do
-          @order.schedule.to_s.should_not match /#{day.to_s}/i
-          @monthly_order.schedule.to_s.should_not match /#{day.to_s}/i
+      end
 
-          (Route::DAYS - [day]).each do |remaining_day|
-            @order.schedule.to_s.should match /#{remaining_day.to_s}/i
-            @monthly_order.schedule.to_s.should match /#{remaining_day.to_s}/i
-            @monthly_order.schedule.to_s.should match /Monthly/i
-          end
+      it "should remove only the specified day from the scheduled times" do
+        @order_times[@day].schedule.recurrence_times.size.should eq(0)
+        (Route::DAYS - [@day]).each do |remaining_day|
+          @order_times[remaining_day].schedule.recurrence_times.first.should eq(@next_times[remaining_day])
         end
+      end
 
-        it "should remove #{day} from the scheduled times" do
-          @order_times[day].schedule.recurrence_times.size.should eq(0)
-          (Route::DAYS - [day]).each do |remaining_day|
-            @order_times[remaining_day].schedule.recurrence_times.first.should eq(@next_times[remaining_day])
-          end
-        end
+      specify { @order.schedule.exception_times.should eq(@pause_range) }
+      specify { @monthly_order.schedule.exception_times.should eq(@pause_range) }
 
-        specify { @order.schedule.exception_times.should eq(@pause_range) }
-        specify { @monthly_order.schedule.exception_times.should eq(@pause_range) }
+      specify { @order.schedule.start_time.should eq(@schedule_start_time) }
+      specify { @monthly_order.schedule.start_time.should eq(@schedule_start_time) }
 
-        specify { @order.schedule.start_time.should eq(@schedule_start_time) }
-        specify { @monthly_order.schedule.start_time.should eq(@schedule_start_time) }
-
-        Route::DAYS.each do |day|
-          specify { @order_times[day].schedule.start_time.should eq(@next_times[day]) }
-          specify { @order_times[day].schedule.exception_times.should eq(@pause_range)}
-        end
+      Route::DAYS.each do |day|
+        specify { @order_times[day].schedule.start_time.should eq(@next_times[day]) }
+        specify { @order_times[day].schedule.exception_times.should eq(@pause_range)}
       end
     end
 
