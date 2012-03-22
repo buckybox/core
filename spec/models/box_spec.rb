@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe Box do
   before do
-    @box = Fabricate(:box)
+    @box = Box.make
   end
 
   specify { @box.should be_valid }
