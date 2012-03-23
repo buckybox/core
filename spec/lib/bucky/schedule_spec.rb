@@ -75,12 +75,26 @@ describe Schedule do
     end
   end
 
-  context "when removing a recurrence rule day" do
+  context "when removing a recurrence days or times" do
     shared_examples "it has removeable days" do
       it "should remove only the specified day" do
         schedule.to_s.should match /Wednesday/i
         schedule.remove_recurrence_rule_day(3)
         schedule.to_s.should_not match /Wednesday/i
+      end
+    end
+
+    shared_examples "it has removeable recurrance times" do
+      it "should remove a recurrance time on that day" do
+        schedule.add_recurrence_time(Date.parse('next wednesday').to_time)
+        schedule.remove_recurrence_times_on_day(3)
+        schedule.recurrence_times.size.should == 0
+      end
+
+      it "should not remove a recurrance time on another day" do
+        schedule.add_recurrence_time(Date.parse('next wednesday').to_time)
+        schedule.remove_recurrence_times_on_day(2)
+        schedule.recurrence_times.size.should == 1
       end
     end
 
@@ -97,6 +111,7 @@ describe Schedule do
       }
 
       it_behaves_like "it has removeable days"
+      it_behaves_like "it has removeable recurrance times"
     end
 
     context "for recurring schedule" do
@@ -112,6 +127,7 @@ describe Schedule do
       }
 
       it_behaves_like "it has removeable days"
+      it_behaves_like "it has removeable recurrance times"
     end
   end
 end
