@@ -1,32 +1,38 @@
 require 'spec_helper'
 
 describe DeliveryList do
-  specify { Fabricate.build(:delivery_list).should be_valid }
+  let(:fabricated_distributor) { Fabricate.build(:distributor) }
+  let(:fabricated_route) { Fabricate.build(:route) }
+  let(:fabricated_delivery_list) { Fabricate.build(:delivery_list, :distributor => fabricated_distributor) }
+  let(:delivery_list) { DeliveryList.make }
 
-  describe '#mark_all_as_auto_delivered' do
-    before do
-      @delivery_list = Fabricate(:delivery_list)
-      2.times { Fabricate(:delivery, delivery_list: @delivery_list) }
+  specify { delivery_list.should be_valid }
 
-      Fabricate(:delivery, status: 'pending', status_change_type: 'manual', delivery_list: @delivery_list)
-      Fabricate(:delivery, status: 'cancelled', status_change_type: 'manual', delivery_list: @delivery_list)
-      Fabricate(:delivery, status: 'delivered', status_change_type: 'manual', delivery_list: @delivery_list)
+  def delivery_auto_delivering(result = true)
+    delivery = mock_model(Delivery)
+    Delivery.should_receive(:auto_deliver).with(delivery).and_return(result)
+    delivery
+  end
+
+  describe 'when marking all as auto delivered' do
+    it "returns true if there are no deliveries" do
+      delivery_list.mark_all_as_auto_delivered.should be_true
     end
 
-    specify { expect { @delivery_list.mark_all_as_auto_delivered }.should change(@delivery_list.deliveries[4], :status).from('pending').to('delivered') }
-    specify { expect { @delivery_list.mark_all_as_auto_delivered }.should_not change(@delivery_list.deliveries[4], :status_change_type) }
+    it "returns true if all deliveries return true" do
+      delivery_list.deliveries << delivery_auto_delivering
+      delivery_list.deliveries << delivery_auto_delivering
 
-    specify { expect { @delivery_list.mark_all_as_auto_delivered }.should change(@delivery_list.deliveries[3], :status).from('pending').to('delivered') }
-    specify { expect { @delivery_list.mark_all_as_auto_delivered }.should_not change(@delivery_list.deliveries[3], :status_change_type) }
+      delivery_list.mark_all_as_auto_delivered.should be_true
+    end
 
-    specify { expect { @delivery_list.mark_all_as_auto_delivered }.should_not change(@delivery_list.deliveries[2], :status) }
-    specify { expect { @delivery_list.mark_all_as_auto_delivered }.should_not change(@delivery_list.deliveries[2], :status_change_type) }
+    it "returns false if one delivery returns false" do
+      delivery_list.deliveries << delivery_auto_delivering
+      delivery_list.deliveries << delivery_auto_delivering(false)
+      delivery_list.deliveries << delivery_auto_delivering
 
-    specify { expect { @delivery_list.mark_all_as_auto_delivered }.should_not change(@delivery_list.deliveries[1], :status) }
-    specify { expect { @delivery_list.mark_all_as_auto_delivered }.should_not change(@delivery_list.deliveries[1], :status_change_type) }
-
-    specify { expect { @delivery_list.mark_all_as_auto_delivered }.should_not change(@delivery_list.deliveries[0], :status) }
-    specify { expect { @delivery_list.mark_all_as_auto_delivered }.should_not change(@delivery_list.deliveries[0], :status_change_type) }
+      delivery_list.mark_all_as_auto_delivered.should be_false
+    end
   end
 
   describe '.collect_lists' do
@@ -69,24 +75,22 @@ describe DeliveryList do
   end
 
   describe '#all_finished?' do
-    before { @delivery_list = Fabricate(:delivery_list) }
-
     context 'no deliveries are pending' do
       before do
-        Fabricate(:delivery, status: 'delivered', delivery_list: @delivery_list)
-        Fabricate(:delivery, status: 'delivered', delivery_list: @delivery_list)
+        Fabricate(:delivery, status: 'delivered', delivery_list: fabricated_delivery_list)
+        Fabricate(:delivery, status: 'delivered', delivery_list: fabricated_delivery_list)
       end
 
-      specify { @delivery_list.all_finished?.should be_true }
+      specify { fabricated_delivery_list.all_finished?.should be_true }
     end
 
     context 'has deliveries that are pending' do
       before do
-        Fabricate(:delivery, status: 'delivered', delivery_list: @delivery_list)
-        Fabricate(:delivery, status: 'pending', delivery_list: @delivery_list)
+        Fabricate(:delivery, status: 'delivered', delivery_list: fabricated_delivery_list)
+        Fabricate(:delivery, status: 'pending', delivery_list: fabricated_delivery_list)
       end
 
-      specify { @delivery_list.all_finished?.should_not be_true }
+      specify { fabricated_delivery_list.all_finished?.should_not be_true }
     end
   end
 end

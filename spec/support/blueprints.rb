@@ -93,3 +93,8 @@ Route.blueprint do
   fee { 0 }
   monday { true }
 end
+
+DeliveryList.blueprint do
+  distributor
+  date { Date.current - 1.day }
+end
