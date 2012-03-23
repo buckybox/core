@@ -1,24 +1,33 @@
 require 'spec_helper'
 
 describe Event do
-  before :all do 
-    @event = Fabricate(:billing_event)
-  end
+  specify { Fabricate.build(:customer_event).should be_valid }
+  specify { Fabricate.build(:billing_event).should be_valid }
+  specify { Fabricate.build(:delivery_event).should be_valid }
 
-  context :validation do
+  specify { Fabricate.build(:billing_event, event_category: 'not_a_category').should_not be_valid }
+  specify { Fabricate.build(:billing_event, event_type: 'not_a_type').should_not be_valid }
+
+  context '#dismiss!' do
     before do
-      @invalid_event1 = Fabricate.build(:billing_event, :event_category => "not_a_category")
-      @invalid_event2 = Fabricate.build(:billing_event, :event_type => "not_a_type" )
+      @event = Fabricate(:billing_event)
+      @event.dismiss!
     end
 
-    specify { @event.should be_valid }
-    specify { @invalid_event1.should_not be_valid }
-    specify { @invalid_event2.should_not be_valid }
+    specify { @event.dismissed.should be_true }
   end
 
-  context "#dismiss!" do
-    before {@event.dismiss!}
+  context 'customer event methods' do
+    before { @customer = Fabricate(:customer) }
 
-    specify {@event.dismissed.should be_true}
+    context '.new_customer' do
+      specify { expect { Event.new_customer(@customer) }.should change(Event, :count).by(1) }
+      specify { Event.new_customer(@customer).event_type.should == Event::EVENT_TYPES[:customer_new] }
+    end
+
+    context '.create_call_reminder' do
+      specify { expect { Event.create_call_reminder(@customer) }.should change(Event, :count).by(1) }
+      specify { Event.create_call_reminder(@customer).event_type.should == Event::EVENT_TYPES[:customer_call_reminder] }
+    end
   end
 end

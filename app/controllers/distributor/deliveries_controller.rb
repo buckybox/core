@@ -13,6 +13,12 @@ class Distributor::DeliveriesController < Distributor::ResourceController
   NAV_END_DATE   = Date.current + 2.week
 
   def index
+    @routes = current_distributor.routes
+
+    if @routes.empty?
+      redirect_to distributor_settings_routes_url, alert: 'You must create a route before you can view the deliveries page.' and return
+    end
+
     unless params[:date] && params[:view]
       redirect_to date_distributor_deliveries_url(Date.current, 'packing') and return
     end
@@ -20,8 +26,6 @@ class Distributor::DeliveriesController < Distributor::ResourceController
     index! do
       @selected_date = Date.parse(params[:date])
       @route_id = params[:view].to_i
-
-      @routes = current_distributor.routes
 
       @delivery_lists = DeliveryList.collect_lists(current_distributor, NAV_START_DATE, NAV_END_DATE)
       @delivery_list  = @delivery_lists.find { |delivery_list| delivery_list.date == @selected_date }

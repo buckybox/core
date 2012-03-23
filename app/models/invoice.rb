@@ -1,7 +1,8 @@
 class Invoice < ActiveRecord::Base
   belongs_to :account
 
-  has_one :customer, through: :account
+  has_one :distributor, through: :account
+  has_one :customer,    through: :account
 
   composed_of :amount,
     class_name: "Money",
