@@ -195,6 +195,14 @@ module Bucky
         @tags || []
       end
 
+      def discount
+        @discount || 0
+      end
+
+      def account_balance
+        @account_balance || 0
+      end
+
       def to_s
         instance_variables.inject({}) do |result, element|
           result.merge(element.to_sym => self.send(element.to_s.gsub('@','')))
@@ -218,6 +226,10 @@ module Bucky
       def add_delivery_day(day)
         self.delivery_days ||= []
         self.delivery_days << day
+      end
+
+      def delivery_days
+        (@delivery_days.present? && @delivery_days || '')
       end
     end
 

@@ -41,7 +41,11 @@ class Route < ActiveRecord::Base
   end
 
   def delivery_day_numbers(days=delivery_days)
-    days.collect { |day| DAYS.index(day)}
+    Route.delivery_day_numbers(days)
+  end
+
+  def self.delivery_day_numbers(delivery_days)
+    delivery_days.collect { |day| DAYS.index(day)}
   end
 
   def future_orders
