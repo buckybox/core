@@ -2,7 +2,24 @@ require 'spec_helper'
 include Bucky
 
 describe Order do
-  context :with_default_order do
+  context "when removing a day" do
+    let(:order)            { Order.new }
+    let(:order_scheduling) { order }
+    let(:schedule)         { double("schedule", :to_hash => {a: 'b'}) }
+
+    before do
+      order_scheduling.stub(:schedule => schedule)
+    end
+
+    it "should ask the schedule to remove rules and times for that day" do
+      schedule.should_receive(:remove_recurrence_rule_day).with(:tuesday)
+      schedule.should_receive(:remove_recurrence_times_on_day).with(:tuesday)
+      order.remove_day(:tuesday)
+    end
+  end
+
+
+  context :with_default_saved_order do
     before { @order = Fabricate(:order) }
 
     specify { @order.should be_valid }
@@ -44,10 +61,6 @@ describe Order do
           specify { @order.price.should == pp[:price] }
         end
       end
-    end
-
-    context "when removing a day" do
-
     end
 
     context '.create_schedule' do

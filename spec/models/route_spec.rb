@@ -64,6 +64,30 @@ describe Route do
   end
 
   describe 'when saving and triggering an update_schedule' do
+    let(:order)     { double("order", :schedule_empty? => false, :save => true) }
+    let(:route)     { Route.make }
+
+    def stub_future_active_orders(route, orders)
+      scope = double("scope")
+      Order.stub(:for_route_read_only).with(route).and_return(scope)
+      scope.stub(:active).and_return(scope)
+      scope.stub(:each).and_yield(*orders)
+    end
+
+    context "when removing a day" do
+      it "should deactivate the specified day on active orders" do
+        route.wednesday = true
+        route.save!
+        route.wednesday = false
+        stub_future_active_orders(route, [order])
+        order.should_receive(:deactivate_for_day!).with(3)
+
+        route.save
+      end
+    end
+  end
+
+  describe 'when saving and triggering an update_schedule (without mocking)' do
     before do
       @schedule_start_time = Time.now
       route.update_attributes(monday: true, tuesday: true, wednesday: true, thursday: true, friday: true, saturday: true, sunday: true)
