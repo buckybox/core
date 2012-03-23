@@ -26,7 +26,7 @@ describe Schedule do
       specify { @schedule.to_hash[:end_time].should be_utc}
     end
   end
-  
+
   context "#from_hash" do
     before do
       @schedule = Schedule.new
@@ -72,6 +72,46 @@ describe Schedule do
       end
       # Should have finished by now, if not we can assume it will take forever
       @thread.should_not be_alive
+    end
+  end
+
+  context "when removing a recurrence rule day" do
+    shared_examples "it has removeable days" do
+      it "should remove only the specified day" do
+        schedule.to_s.should match /Wednesday/i
+        schedule.remove_recurrence_rule_day(3)
+        schedule.to_s.should_not match /Wednesday/i
+      end
+    end
+
+    context "for single schedule" do
+      let(:schedule) {
+        Schedule.from_hash({
+          :rrules => [
+            {
+              :validations => {:day => [0, 1, 3, 4, 5, 6]},
+              :rule_type => "IceCube::WeeklyRule", :interval=>1
+            }
+          ]
+        })
+      }
+
+      it_behaves_like "it has removeable days"
+    end
+
+    context "for recurring schedule" do
+      let(:schedule) {
+        Schedule.from_hash({
+          :rrules => [
+            {
+              :validations => { :day_of_week => {0=>[1], 1=>[1], 3=>[1], 4=>[1], 5=>[1], 6=>[1]}},
+              :rule_type => "IceCube::MonthlyRule", :interval=>1
+            }
+          ]
+        })
+      }
+
+      it_behaves_like "it has removeable days"
     end
   end
 end

@@ -128,17 +128,6 @@ describe Route do
         @order_times.map{|d, order| order.reload}
       end
 
-      it "should remove only the specified day from the order schedule" do
-        @order.schedule.to_s.should_not match /#{@day.to_s}/i
-        @monthly_order.schedule.to_s.should_not match /#{@day.to_s}/i
-
-        (Route::DAYS - [@day]).each do |remaining_day|
-          @order.schedule.to_s.should match /#{remaining_day.to_s}/i
-          @monthly_order.schedule.to_s.should match /#{remaining_day.to_s}/i
-          @monthly_order.schedule.to_s.should match /Monthly/i
-        end
-      end
-
       it "should remove only the specified day from the scheduled times" do
         @order_times[@day].schedule.recurrence_times.size.should eq(0)
         (Route::DAYS - [@day]).each do |remaining_day|
