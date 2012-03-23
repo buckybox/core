@@ -46,6 +46,10 @@ describe Order do
       end
     end
 
+    context "when removing a day" do
+
+    end
+
     context '.create_schedule' do
       Delorean.time_travel_to(Date.parse('2013-02-02')) do
         before { @order = Fabricate(:order) }
@@ -124,7 +128,7 @@ describe Order do
 
         specify { @order.schedule.should_not be_nil }
         specify { @order.schedule.next_occurrence.should_not be_nil }
-        specify { @order.schedule.next_occurrences(28, Time.current).size.should eq(28) } 
+        specify { @order.schedule.next_occurrences(28, Time.current).size.should eq(28) }
         specify { @order.schedule.to_s.should == @schedule.to_s }
         specify { @order.schedule.next_occurrence == @schedule.next_occurrence }
       end

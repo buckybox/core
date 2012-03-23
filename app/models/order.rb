@@ -101,16 +101,9 @@ class Order < ActiveRecord::Base
     self.schedule = s
   end
 
-  def remove_recurrence_day(day)
-    s = schedule
-    s.remove_recurrence_day(day)
-    self.schedule = s
-  end
-
-  def remove_recurrence_times_on_day(day)
-    s = schedule
-    s.remove_recurrence_times_on_day(day)
-    self.schedule = s
+  def remove_day(day)
+    remove_recurrence_rule_day(day)
+    remove_recurrence_times_on_day(day)
   end
 
   def future_deliveries(end_date)
@@ -171,4 +164,19 @@ class Order < ActiveRecord::Base
   def record_schedule_change
     order_schedule_transactions.build(order: self, schedule: self.schedule)
   end
+
+  private
+
+  def remove_recurrence_rule_day(day)
+    s = schedule
+    s.remove_recurrence_rule_day(day)
+    self.schedule = s
+  end
+
+  def remove_recurrence_times_on_day(day)
+    s = schedule
+    s.remove_recurrence_times_on_day(day)
+    self.schedule = s
+  end
+
 end

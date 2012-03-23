@@ -73,8 +73,7 @@ class Route < ActiveRecord::Base
     track_schedule_change
     deleted_day_numbers.each do |day|
       future_orders.active.each do |order|
-        order.remove_recurrence_day(day)
-        order.remove_recurrence_times_on_day(day)
+        order.remove_day(day)
         order.deactivate if order.schedule_empty?
         order.save
       end
