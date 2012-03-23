@@ -220,6 +220,12 @@ describe Distributor do
       context 'time zone set to Wellington' do
         before do
           Time.zone = "Wellington"
+          @today = [Time.current.year, Time.current.month, Time.current.day]
+          @tomorrow = [Time.current.year, Time.current.month, Time.current.day + 1]
+          @schedule_start = [Distributor::DEFAULT_ADVANCED_HOURS, 0]
+          @schedule_end = [Distributor::DEFAULT_ADVANCED_HOURS - 1, 1]
+
+          Delorean.time_travel_to Time.zone.local(*(@today))
 
           @d_welly = Fabricate.build(:distributor, time_zone: 'Wellington')
           @d_welly.save
@@ -237,11 +243,7 @@ describe Distributor do
         after { Delorean.back_to_the_present }
 
         context 'time set to Wellington start of day' do
-          # Wellington time zone beginning of day
-          before do
-            time = Time.current.beginning_of_day + 1.day + Distributor::DEFAULT_ADVANCED_HOURS.hours
-            Delorean.time_travel_to(time)
-          end
+          before { Delorean.time_travel_to(Time.zone.local(*(@tomorrow + @schedule_start))) }
 
           specify { expect{Distributor.create_daily_lists}.to change{@d_welly.packing_lists.count + @d_welly.delivery_lists.count}.by 2}
           specify { expect{Distributor.create_daily_lists}.to change{@d_perth.packing_lists.count + @d_perth.delivery_lists.count}.by 0}
@@ -249,8 +251,7 @@ describe Distributor do
         end
 
         context 'time set to Wellington end of day' do
-          # Wellington time zone beginning of day
-          before { Delorean.time_travel_to(Time.current.end_of_day + 1.day + Distributor::DEFAULT_ADVANCED_HOURS.hours - 59.minutes) }
+          before { Delorean.time_travel_to(Time.zone.local(*(@tomorrow + @schedule_end))) }
 
           specify { expect{Distributor.create_daily_lists}.to change{@d_welly.packing_lists.count + @d_welly.delivery_lists.count}.by 0}
           specify { expect{Distributor.create_daily_lists}.to change{@d_perth.packing_lists.count + @d_perth.delivery_lists.count}.by 0}
@@ -258,7 +259,7 @@ describe Distributor do
         end
 
         context 'time set to Perth start of day' do
-          before { Delorean.time_travel_to(Time.use_zone("Perth"){Time.current.beginning_of_day + 1.day + Distributor::DEFAULT_ADVANCED_HOURS.hours}.in_time_zone("Wellington")) }
+          before { Delorean.time_travel_to(Time.use_zone("Perth"){Time.zone.local(*(@tomorrow + @schedule_start)) }.in_time_zone("Wellington") ) }
 
           specify { expect{Distributor.create_daily_lists}.to change{@d_welly.packing_lists.count + @d_welly.delivery_lists.count}.by 0}
           specify { expect{Distributor.create_daily_lists}.to change{@d_perth.packing_lists.count + @d_perth.delivery_lists.count}.by 2}
@@ -266,7 +267,7 @@ describe Distributor do
         end
 
         context 'time set to Perth end of day' do
-          before { Delorean.time_travel_to(Time.use_zone("Perth"){Time.current.end_of_day + 1.day + Distributor::DEFAULT_ADVANCED_HOURS.hours - 59.minutes}.in_time_zone("Wellington")) }
+          before { Delorean.time_travel_to(Time.use_zone("Perth"){Time.zone.local(*(@tomorrow + @schedule_end)) }.in_time_zone("Wellington") ) }
 
           specify { expect{Distributor.create_daily_lists}.to change{@d_welly.packing_lists.count + @d_welly.delivery_lists.count}.by 0}
           specify { expect{Distributor.create_daily_lists}.to change{@d_perth.packing_lists.count + @d_perth.delivery_lists.count}.by 0}
@@ -274,15 +275,15 @@ describe Distributor do
         end
 
         context 'time set to London start of day' do
-          before { Delorean.time_travel_to(Time.use_zone("London"){Time.current.beginning_of_day + 1.day + Distributor::DEFAULT_ADVANCED_HOURS.hours}.in_time_zone("Wellington")) }
+          before { Delorean.time_travel_to(Time.use_zone("London"){Time.zone.local(*(@tomorrow + @schedule_start)) }.in_time_zone("Wellington") ) }
 
           specify { expect{Distributor.create_daily_lists}.to change{@d_welly.packing_lists.count + @d_welly.delivery_lists.count}.by 0}
           specify { expect{Distributor.create_daily_lists}.to change{@d_perth.packing_lists.count + @d_perth.delivery_lists.count}.by 0}
-          specify { expect{Distributor.create_daily_lists}.to change{@d_london.packing_lists.count + @d_london.delivery_lists.count}.by 0}
+          specify { expect{Distributor.create_daily_lists}.to change{@d_london.packing_lists.count + @d_london.delivery_lists.count}.by 2}
         end
 
         context 'time set to London end of day' do
-          before { Delorean.time_travel_to(Time.use_zone("London"){Time.current.end_of_day + 1.day + Distributor::DEFAULT_ADVANCED_HOURS.hours - 59.minutes}.in_time_zone("Wellington")) }
+          before { Delorean.time_travel_to(Time.use_zone("London"){Time.zone.local(*(@tomorrow + @schedule_end)) }.in_time_zone("Wellington") ) }
 
           specify { expect{Distributor.create_daily_lists}.to change{@d_welly.packing_lists.count + @d_welly.delivery_lists.count}.by 0}
           specify { expect{Distributor.create_daily_lists}.to change{@d_perth.packing_lists.count + @d_perth.delivery_lists.count}.by 0}
