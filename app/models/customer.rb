@@ -7,6 +7,7 @@ class Customer < ActiveRecord::Base
   has_one :address, dependent: :destroy, inverse_of: :customer
   has_one :account, dependent: :destroy
 
+  has_many :events
   has_many :transactions, through: :account
   has_many :payments,     through: :account
   has_many :orders,       through: :account
@@ -72,7 +73,7 @@ class Customer < ActiveRecord::Base
   end
 
   def new?
-    deliveries.size == 1
+    deliveries.size <= 1
   end
 
   def name
@@ -111,7 +112,7 @@ class Customer < ActiveRecord::Base
   end
 
   def trigger_new_customer
-    Event.trigger(distributor_id, Event::EVENT_TYPES[:customer_new], {event_category: "customer", customer_id: id})
+    Event.new_customer(self)
   end
 
   def format_email
