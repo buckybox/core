@@ -53,6 +53,8 @@ class Package < ActiveRecord::Base
 
   def price
     individual_price * archived_order_quantity
+  rescue => e
+    raise "Error calculating price: #{individual_price.inspect} * #{archived_order_quantity.inspect}"
   end
 
   def quantity

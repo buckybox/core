@@ -31,7 +31,7 @@ Customer.blueprint do
   email { "customer#{sn}@example.com" }
   password { 'password' }
   password_confirmation { 'password' }
-  account
+  account { object.account || Account.make(:customer => object) }
   address
   # after_create { |customer| Fabricate(:account, customer: customer) }
   # after_create { |customer| Fabricate(:address, customer: customer) }
@@ -85,6 +85,7 @@ Transaction.blueprint do
 end
 
 Account.blueprint do
+  customer { object.customer || Customer.make(:account => object) }
 end
 
 Route.blueprint do
@@ -97,4 +98,25 @@ end
 DeliveryList.blueprint do
   distributor
   date { Date.current - 1.day }
+end
+
+Delivery.blueprint do
+  order
+  route
+  delivery_list
+  package
+end
+
+Order.blueprint do
+  account
+  box
+  quantity {1}
+  frequency {'single'}
+  active {true}
+  completed {true}
+end
+
+Package.blueprint do
+  archived_order_quantity { 1 }
+  archived_box_name { "box #{sn}" }
 end

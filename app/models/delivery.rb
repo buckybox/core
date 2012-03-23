@@ -14,16 +14,14 @@ class Delivery < ActiveRecord::Base
 
   attr_accessible :order, :order_id, :route, :status, :status_change_type, :delivery_list, :package, :package_id, :account
 
-  STATUS = %w( pending delivered cancelled rescheduled repacked )
-  STATUS_CHANGE_TYPE = %w( manual auto )
+  STATUS = %w(pending delivered cancelled rescheduled repacked)
+  STATUS_CHANGE_TYPE = %w(manual auto)
 
   validates_presence_of :order, :route, :status, :delivery_list, :package
   validates_inclusion_of :status, in: STATUS, message: "%{value} is not a valid status"
   validates_inclusion_of :status_change_type, in: STATUS_CHANGE_TYPE, message: "%{value} is not a valid status change type"
 
   before_validation :default_route, if: 'route.nil?'
-  before_validation :default_status, if: 'status.nil?'
-  before_validation :default_status_change_type, if: 'status_change_type.nil?'
   before_validation :changed_status, if: 'status_changed?'
 
   before_create :add_delivery_number
@@ -33,6 +31,9 @@ class Delivery < ActiveRecord::Base
   scope :cancelled,   where(status: 'cancelled')
   scope :rescheduled, where(status: 'rescheduled')
   scope :repacked,    where(status: 'repacked')
+
+  default_value_for :status, 'pending'
+  default_value_for :status_change_type, 'auto'
 
   def self.change_statuses(deliveries, new_status, options = {})
     return false unless STATUS.include?(new_status)
@@ -81,14 +82,6 @@ class Delivery < ActiveRecord::Base
 
   def default_route
     self.route = order.route
-  end
-
-  def default_status
-    self.status = 'pending'
-  end
-
-  def default_status_change_type
-    self.status_change_type = 'auto'
   end
 
   def add_delivery_number
