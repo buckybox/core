@@ -1,6 +1,10 @@
 class Event < ActiveRecord::Base
   belongs_to :distributor
 
+  belongs_to :customer
+  belongs_to :delivery
+  belongs_to :invoice
+
   # Setup accessible (or protected) attributes for your model
   attr_accessible :distributor_id, :event_category, :event_type, :customer_id, :invoice_id, :reconciliation_id,
     :transaction_id, :delivery_id, :dismissed, :trigger_on
@@ -60,40 +64,6 @@ class Event < ActiveRecord::Base
       Event::EVENT_TYPES[:customer_call_reminder],
       { event_category: 'customer', customer_id: customer.id, trigger_on: (Time.current + 1.day) }
     )
-  end
-
-  # FIXME: There has to be a better way to do this using inheritance, dynamic method
-  # or SOMETHING like that.
-  def customer
-    Customer.find(customer_id) if customer_id
-  end
-
-  def customer=(customer)
-    self.customer_id = customer.id
-  end
-
-  def delivery
-    Delivery.find(delivery_id) if delivery_id
-  end
-
-  def delivery=(delivery)
-    self.delivery_id = delivery.id
-  end
-
-  def invoice
-    Invoice.find(invoice_id) if invoice_id
-  end
-
-  def invoice=(invoice)
-    self.invoice_id = invoice.id
-  end
-
-  def transaction
-    Transaction.find(transaction_id) if transaction_id
-  end
-
-  def transaction=(transaction)
-    self.transaction_id = transaction.id
   end
 
   private
