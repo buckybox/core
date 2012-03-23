@@ -236,7 +236,7 @@ describe Distributor do
           @d_london = Fabricate.build(:distributor, time_zone: 'London')
           @d_london.save
 
-          @d_welly_d_list = Fabricate(:delivery_list, distributor: @d_welly, date: Date.yesterday)
+          @d_welly_d_list = Fabricate(:delivery_list_with_associations, distributor: @d_welly, date: Date.yesterday)
           Fabricate(:delivery, delivery_list: @d_welly_d_list)
         end
 
