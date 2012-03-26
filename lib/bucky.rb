@@ -40,8 +40,9 @@ module Bucky
   def create_schedule_for(name, start_time, frequency, days_by_number = nil)
     schedule = Bucky::Schedule.new(start_time.utc)
 
-    throw "days_by_number '#{days_by_number}' wasn't valid" if 
-    
+    throw "days_by_number '#{days_by_number}' wasn't valid" if days_by_number.present? && (days_by_number & 0.upto(6).to_a).blank? # [nil, '', nil] & [0,1,2,3,4,5,6] = []
+    days_by_number &= 1.upto(6).to_a
+
     if frequency == 'single'
       schedule.add_recurrence_time(start_time.utc)
     elsif frequency == 'monthly'

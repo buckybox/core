@@ -30,7 +30,8 @@ module Bucky
     DELIVERY_FREQUENCY = "Delivery Frequency",
     DELIVERY_DAYS = "Delivery Day(s)",
     NEXT_DELIVERY_DATE = "Next Delivery Date"]
-
+    
+    @@verbosity = :none
 
     def self.parse(csv_input, distributor)
       customers = []
@@ -73,7 +74,7 @@ module Bucky
       
       customer.notes = row[CUSTOMER_NOTES]
       customer.discount = row[CUSTOMER_DISCOUNT].gsub('%','').to_f / 100.0 unless row[CUSTOMER_DISCOUNT].blank?
-      customer.account_balance = row[CUSTOMER_ACCOUNT_BALANCE]
+      customer.account_balance = row[CUSTOMER_ACCOUNT_BALANCE].to_f
       customer.delivery_address_line_1 = row[DELIVERY_ADDRESS_LINE_1]
       customer.delivery_address_line_2 = row[DELIVERY_ADDRESS_LINE_2]
       customer.delivery_suburb = row[DELIVERY_SUBURB]
@@ -149,7 +150,7 @@ module Bucky
     end
 
     def self.test
-      from_file(TEST_FILE, Distributor.new)
+      parse File.read(TEST_FILE), Distributor.new
     end
     
     class Customer
@@ -234,7 +235,7 @@ module Bucky
     end
 
     def self.log(text)
-      puts text
+      puts text if @@verbosity != :none
     end
   end
 end

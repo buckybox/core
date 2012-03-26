@@ -161,12 +161,12 @@ class Order < ActiveRecord::Base
     save
   end
 
-  protected
-
   # Manually create the first delivery all following deliveries should be scheduled for creation by the cron job
   def activate
     self.active = true
   end
+
+  protected
 
   def record_schedule_change
     order_schedule_transactions.build(order: self, schedule: self.schedule)

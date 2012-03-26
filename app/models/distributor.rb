@@ -221,7 +221,7 @@ class Distributor < ActiveRecord::Base
             delivery_date = Time.zone.parse(b.next_delivery_date)
             throw "Date couldn't be parsed from '#{b.delivery_date}'" if delivery_date.blank?
 
-            delivery_day_numbers = Route.delivery_day_numbers(b.delivery_days.split(',').collect{|d| ":" + d.strip.downcase})
+            delivery_day_numbers = Route.delivery_day_numbers(b.delivery_days.split(',').collect{|d| d.strip.downcase.to_sym})
 
             order = customer.orders.build({
             box: box,
@@ -231,7 +231,7 @@ class Distributor < ActiveRecord::Base
             account: customer.account
             })
             order.create_schedule(delivery_date, b.delivery_frequency, delivery_day_numbers)
-            
+            order.activate
             order.save!
           end
         end
