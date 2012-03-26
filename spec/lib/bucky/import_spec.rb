@@ -2,19 +2,55 @@ require 'spec_helper'
 
 describe Import do
   context '#preprocess' do
-    before do
-      csv = CSV.generate do |csv|
-        csv << Import::CSV_HEADERS
-        csv << ['rubbish','45','more rubbish']
-        csv << ['trash','65','more trash']
-        csv << ['you can see me','for sure']
+    context 'should remove unneeded rows' do
+      before(:all) do
+        csv = CSV.generate do |csv|
+          csv << Import::CSV_HEADERS
+          csv << ['rubbish','45','more rubbish']
+          csv << ['trash','65','more trash']
+          csv << ['you can see me','for sure']
+        end
+        @parsed_csv = Import.preprocess(csv)
       end
-      @parsed_csv = Import.preprocess(csv)
+
+      specify { @parsed_csv.should_not match /(rubbish)|(45)/ }
+      specify { @parsed_csv.should_not match /(trash)|(65)/ }
+      specify { @parsed_csv.should match /you can see me/ }
     end
 
-    specify { @parsed_csv.should_not match /(rubbish)|(45)/ }
-    specify { @parsed_csv.should_not match /(trash)|(65)/ }
-    specify { @parsed_csv.should match /you can see me/ }
+    context 'check headers' do
+      let(:csv_with_less_headers) do
+        CSV.generate do |csv|
+          csv << Import::CSV_HEADERS[0..-2]
+          csv << ['rubbish','45','more rubbish']
+          csv << ['trash','65','more trash']
+          csv << ['you can see me','for sure']
+        end
+      end
+      specify { expect{ Import.preprocess(csv_with_less_headers)}.to raise_error }
+      
+      let(:csv_with_more_headers) do
+        CSV.generate do |csv|
+          csv << (Import::CSV_HEADERS + ["Im not meant to be here"])
+          csv << ['rubbish','45','more rubbish']
+          csv << ['trash','65','more trash']
+          csv << ['you can see me','for sure']
+        end
+      end
+      specify { expect{ Import.preprocess(csv_with_more_headers)}.to raise_error }
+      
+      let(:csv_with_wrong_headers) do
+        CSV.generate do |csv|
+          headers = Import::CSV_HEADERS.clone
+          headers[3] = "Wrong Header"
+          csv << headers
+          csv << ['rubbish','45','more rubbish']
+          csv << ['trash','65','more trash']
+          csv << ['you can see me','for sure']
+        end
+      end
+      specify { expect{ Import.preprocess(csv_with_wrong_headers)}.to raise_error }
+    end
   end
 
   context '#parse' do
@@ -93,6 +129,44 @@ describe Import do
         specify { @boxes.first.delivery_frequency.should eq('Weekly') }
         specify { @boxes.first.delivery_days.should eq('Thursday') }
         specify { @boxes.first.next_delivery_date.should eq("22-Mar-2012") }
+      end
+      
+    end
+
+    context 'William' do
+      before(:all) do
+        @will = @customers[2]
+      end
+      # values from Import::TEST_FILE, last check it is 'spec/support/test_upload_files/bucky_box.csv'
+      specify { @will.name.should eq('William Robberts') }
+      specify { @will.number.should  eq('321') }
+      specify { @will.email.should eq('wr@example.com') }
+      specify { @will.phone_1.should be_nil }
+      specify { @will.phone_2.should be_nil }
+      specify { @will.tags.should eq([]) }
+      specify { @will.notes.should eq('Very Touchy customer') }
+      specify { @will.discount.should eq(0.001) }
+      specify { @will.account_balance.should eq(0) }
+      specify { @will.delivery_address_line_1.should eq('89 Awarua St') }
+      specify { @will.delivery_address_line_2.should eq('Flat 3') }
+      specify { @will.delivery_suburb.should eq('Ngaio') }
+      specify { @will.delivery_city.should eq('Wellington') }
+      specify { @will.delivery_postcode.should eq('543') }
+      specify { @will.delivery_route.should eq('Rural Van') }
+      specify { @will.delivery_instructions.should eq('Door round back please.') }
+
+      context :boxes do
+        before(:all) do
+          @boxes = @will.boxes
+        end
+
+        specify { @boxes.size.should eq(1) }
+        specify { @boxes.first.box_type.should eq('Medium Fruit Box') }
+        specify { @boxes.first.dislikes.should eq('Carrots') }
+        specify { @boxes.first.likes.should eq('Apples') }
+        specify { @boxes.first.delivery_frequency.should eq('Single') }
+        specify { @boxes.first.delivery_days.should eq('') }
+        specify { @boxes.first.next_delivery_date.should eq("21-Apr-2012") }
       end
       
     end
