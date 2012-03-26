@@ -287,5 +287,47 @@ describe Distributor do
         end
       end
     end
+
+    context ".import_customers" do
+      let(:distributor){ Fabricate.build(:distributor, :email => ' BuckyBox@example.com ') }
+
+      specify { expect{distributor.import_customers([])}.to raise_error('No customers') }
+      specify { expect{distributor.import_customers([123, 456, 789])}.to raise_error('Expecting Bucky::Import::Customer but was Fixnum') }
+
+      it "calls import on each customer" do
+        route = mock_model(Route)
+        import_customers = []
+        2.times do |n|
+          customer = double("Customer")
+          customer.stub(:import)
+
+          import_customer = new_import_customer(n)
+          distributor.stub_chain(:routes, :find_by_name).and_return(route)
+          distributor.stub_chain(:customers, :find_by_number).with(n).and_return(customer)
+
+          customer.should_receive(:import).with(import_customer, route)
+          import_customers << import_customer
+        end
+
+        distributor.import_customers(import_customers)
+      end
+
+      it "raises error if can't find route" do
+        import_customer = new_import_customer
+        distributor.stub_chain(:routes, :find_by_name).and_return(nil)
+        distributor.stub_chain(:customers, :find_by_number).and_return(double('Customer'))
+
+        expect{ distributor.import_customers([import_customer]) }.to raise_error('Route  not found for distributor with id ' )
+      end
+    end
+  end
+
+  def new_import_customer(number=1)
+    import_customer = double("Bucky::Import::Customer")
+
+    import_customer.stub(:class).and_return(Bucky::Import::Customer)
+    import_customer.stub(:number).and_return(number)
+    import_customer.stub(:delivery_route)
+    import_customer
   end
 end

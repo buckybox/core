@@ -179,61 +179,17 @@ class Distributor < ActiveRecord::Base
   def import_customers(loaded_customers)
     Distributor.transaction do
       use_local_time_zone do
-        throw "No customers" if loaded_customers.blank?
+        raise "No customers" if loaded_customers.blank?
 
         expected = Bucky::Import::Customer
-        throw "Expecting #{expected} but was #{loaded_customers.first.class}" unless loaded_customers.first.class == expected
+        raise "Expecting #{expected} but was #{loaded_customers.first.class}" unless loaded_customers.first.class == expected
         
         loaded_customers.each do |c|
-          c_route = routes.find_by_name(c.delivery_route)
-          throw "Route #{c.delivery_route} not found for distributor with id #{id}" if c_route.blank?
-
           customer = customers.find_by_number(c.number) || self.customers.build({number: c.number})
-          customer.update_attributes({
-            first_name: c.first_name,
-            last_name: c.last_name,
-            email: c.email,
-            route_id: c_route.id,
-            discount: c.discount,
-            number: c.number,
-            notes: c.notes,
-            address_attributes: {
-              address_1: c.delivery_address_line_1,
-              address_2: c.delivery_address_line_2,
-              suburb: c.delivery_suburb,
-              city: c.delivery_city,
-              postcode: c.delivery_postcode,
-              delivery_note: c.delivery_instructions,
-              phone_1: c.phone_1,
-              phone_2: c.phone_2
-            }
-          })
-          customer.tag_list = c.tags.join(", ")
-          customer.save!
           
-          customer.account.change_balance_to(c.account_balance, {description: "Inital CSV Import"})
-          customer.account.save!
-
-          c.boxes.each do |b|
-            box = boxes.find_by_name(b.box_type)
-            throw "Can't find Box '#{b.box_type}' for distributor with id #{id}" if box.blank?
-
-            delivery_date = Time.zone.parse(b.next_delivery_date)
-            throw "Date couldn't be parsed from '#{b.delivery_date}'" if delivery_date.blank?
-
-            delivery_day_numbers = Route.delivery_day_numbers(b.delivery_days.split(',').collect{|d| d.strip.downcase.to_sym})
-
-            order = customer.orders.build({
-            box: box,
-            quantity: 1,
-            likes: b.likes,
-            dislikes: b.dislikes,
-            account: customer.account
-            })
-            order.create_schedule(delivery_date, b.delivery_frequency, delivery_day_numbers)
-            order.activate
-            order.save!
-          end
+          c_route = routes.find_by_name(c.delivery_route)
+          raise "Route #{c.delivery_route} not found for distributor with id #{id}" if c_route.blank?
+          customer.import(c, c_route)
         end
       end
     end
