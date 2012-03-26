@@ -1,23 +1,26 @@
 - title 'Dashboard', false
 
 - if @notifications.blank? && @payments.blank?
-  %h2 Welcome!
-  %p
-    Please, make sure you have updateded all of your
-    = link_to 'settings', distributor_settings_routes_path
-    and added
-    = link_to 'customers.', distributor_customers_path
-    Otherwise watch this space for notifications to be added soon.
+  .row
+    .twelve.columns
+      %h2 Welcome!
+      %p
+        Please, make sure you have updateded all of your
+        = link_to 'settings', distributor_settings_routes_path
+        and added
+        = link_to 'customers.', distributor_customers_path
+        Otherwise watch this space for notifications to be added soon.
 
 - unless @notifications.blank?
   .row#noticeboard
-    %h2 Alerts
-    - @notifications.each do |notification|
-      .row.individual-notice
-        .two.columns{class: "notification_tag #{notification.event_category}"}= notification.event_category
-        .two.columns= date_for notification
-        .six.columns= notification_message_for notification
-        .two.columns.text-right= link_to '&times;'.html_safe, dismiss_notification_distributor_event_path(notification), class: "dismiss small white button radius"
+    .twelve.columns
+      %h2 Alerts
+      - @notifications.each do |notification|
+        .row.individual-notice
+          .two.columns{class: "notification_tag #{notification.event_category}"}= notification.event_category
+          .two.columns= date_for notification
+          .six.columns= notification_message_for notification
+          .two.columns.text-right= link_to '&times;'.html_safe, dismiss_notification_distributor_event_path(notification), class: "dismiss small white button radius"
 
 - unless @accounts.blank?
   .row

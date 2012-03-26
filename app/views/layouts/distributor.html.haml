@@ -17,20 +17,23 @@
             - if admin_signed_in? 
               = link_to 'logout', unimpersonate_admin_distributors_path
             - else
-              = link_to 'logout', destroy_distributor_session_path, :method => :delete
+              = link_to 'logout', destroy_distributor_session_path, method: :delete
           - else
             = link_to 'login', new_distributor_session_path
 
-      #dashboard-content.row
-        .twelve.columns
-          = render :partial => 'distributor/shared/topic_tabs'
-        .sub-nav-bar
-          = yield(:sub_nav)
+      .row
+        .twelve.columns= render 'distributor/shared/topic_tabs'
 
-          - if show_title?
-            %h1.text-center= yield(:title)
+      .row
+        .twelve.columns= yield(:sub_nav)
 
-          = yield
+      - if show_title?
+        .row
+          .twelve.columns.text-center
+            %h1= yield(:title)
+
+      .row
+        .twelve.columns= yield
 
 = render 'layouts/base'
 
