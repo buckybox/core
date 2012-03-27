@@ -12,19 +12,17 @@
             Signed in as 
             %strong= current_admin.email
             \|
-            = link_to 'logout', destroy_admin_session_path, :method => :delete
+            = link_to 'logout', destroy_admin_session_path, method: :delete
           - else
             = link_to 'login', new_admin_session_path
 
-      #dashboard-content.row
-        .twelve.columns
-        .sub-nav-bar
-          = yield(:sub_nav)
-
-          - if show_title?
+      - if show_title?
+        .row
+          .twelve.columns
             %h1.text-center= yield(:title)
 
-          = yield
+      .row
+        .twelve.columns= yield
 
 = render 'layouts/base'
 
