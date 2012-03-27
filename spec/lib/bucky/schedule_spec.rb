@@ -93,7 +93,7 @@ describe Schedule do
   let(:single){ new_single_schedule(time) }
   let(:weekly){ new_recurring_schedule(time, week, 1) }
   let(:fortnightly){ new_recurring_schedule(time, week, 2) }
-  let(:monthly){ new_monthly_schedule(time, [12]) } #Reoccur on the 12 of every month
+  let(:monthly){ new_monthly_schedule(time, [2]) } #Reoccur on the first tuesday of every month
 
 
   context ".recurrence_type" do
@@ -106,9 +106,25 @@ describe Schedule do
   context ".include?" do
     context :identity do
       specify { single.should include_schedule(new_single_schedule(time)) }
-      specify { weekly.should include_schedule(new_recurring_schedule(time)) }
+      specify { weekly.should include_schedule(new_recurring_schedule(time, week, 1)) }
       specify { fortnightly.should include_schedule(new_recurring_schedule(time, week, 2)) }
       specify { monthly.should include_schedule(new_monthly_schedule(time)) }
+    end
+
+    context :start_times do
+      # If the other schedule starts before this one, then it isn't going to match
+      context "other schedule starts before this one" do
+        specify { weekly.should_not include_schedule(new_recurring_schedule(time - 1.month, week, 1)) }
+        specify { fortnightly.should_not include_schedule(new_recurring_schedule(time - 1.month, week, 2)) }
+        specify { monthly.should_not include_schedule(new_monthly_schedule(time - 1.month)) }
+      end
+
+      # If the other schedule starts after this one it should match
+      context "other schedule starts after this one" do
+        specify { weekly.should include_schedule(new_recurring_schedule(time + 1.month, week, 1)) }
+        specify { fortnightly.should include_schedule(new_recurring_schedule(time + 1.month, week, 2)) }
+        specify { monthly.should include_schedule(new_monthly_schedule(time + 1.month)) }
+      end
     end
     
     context :single do
@@ -146,11 +162,25 @@ describe Schedule do
       specify { monthly.should_not include_schedule(fortnightly) }
       specify { monthly.should_not include_schedule(single) }
       
-      it 'should include singles which fall on a reoccuring day' do
-        next_month = time + 1.month
-        next_12th = Time.zone.local(next_month.year, next_month.month, 12)
-        single_schedule = new_single_schedule(next_12th)
-        monthly.should include_schedule(single_schedule)
+      shared_examples 'it matches single occurrences' do |day|
+        it 'it matches single occurrences' do # Apparently need to nest this with an 'it' so that it can access let(:time) etc
+          next_month = time + 1.month
+          start_of_next_month = Time.zone.local(next_month.year, next_month.month, 1)
+          next_monthly_day = next_day(start_of_next_month, day)
+          monthly_schedule = new_monthly_schedule(time, [day])
+          single_schedule = new_single_schedule(next_monthly_day)
+
+          monthly_schedule.should include_schedule(single_schedule)
+        end
+      end
+      
+      # Check each possible monthly schedule as I am paranoid.
+      # 0 => Monthly on the first Sunday
+      # 1 => Monthly on the first Monday
+      # 2 => Monthly on the first Tuesday
+      # 3 => Monthly on the first Wednesday
+      0.upto(6).to_a.each do |day|
+        it_behaves_like "it matches single occurrences", day
       end
     end
   end

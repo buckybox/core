@@ -173,6 +173,6 @@ class Order < ActiveRecord::Base
   end
 
   def schedule_matches_route
-    errors.add(:schedule, "doesn't match the schedule for Route #{route.name}") if route.schedule.include?(order.schedule)
+    errors.add(:schedule, "doesn't match the schedule for Route #{route.name}") if route.schedule.include?(schedule)
   end
 end
