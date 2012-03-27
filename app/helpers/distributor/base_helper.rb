@@ -17,9 +17,9 @@ module Distributor::BaseHelper
 
     content_tag :li do
       if is_image
-        link_to image_tag(text), path, options.merge(:class => css_class)
+        link_to image_tag(text), path, options.merge(class: css_class)
       else
-        link_to text, path, options.merge(:class => css_class)
+        link_to text, path, options.merge(class: css_class)
       end
     end
   end
