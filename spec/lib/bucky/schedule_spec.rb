@@ -74,4 +74,84 @@ describe Schedule do
       @thread.should_not be_alive
     end
   end
+  
+  RSpec::Matchers.define :include_schedule do |expected|
+    match do |actual|
+      actual.include? expected
+    end
+  end
+  
+  # Day needs to be an integer 0-6 representing the weekday
+  # return the next day that it is the required weekday
+  def next_day(time = Time.current, day)
+    nday = time + ((7 - (time.wday - day)) % 7).days
+    nday == 0 ? 7 : nday
+  end
+  
+  let(:time){ next_day(Time.current, 6) } # Find the next sunday, avoiding weekdays
+  let(:week){ [:monday, :tuesday, :wednesday, :thursday, :friday] }
+  let(:single){ new_single_schedule(time) }
+  let(:weekly){ new_recurring_schedule(time, week, 1) }
+  let(:fortnightly){ new_recurring_schedule(time, week, 2) }
+  let(:monthly){ new_monthly_schedule(time, [12]) } #Reoccur on the 12 of every month
+
+
+  context ".recurrence_type" do
+    specify { single.recurrence_type.should eq(:single) }
+    specify { weekly.recurrence_type.should eq(:weekly) }
+    specify { fortnightly.recurrence_type.should eq(:fortnightly) }
+    specify { monthly.recurrence_type.should eq(:monthly) }
+  end
+
+  context ".include?" do
+    context :identity do
+      specify { single.should include_schedule(new_single_schedule(time)) }
+      specify { weekly.should include_schedule(new_recurring_schedule(time)) }
+      specify { fortnightly.should include_schedule(new_recurring_schedule(time, week, 2)) }
+      specify { monthly.should include_schedule(new_monthly_schedule(time)) }
+    end
+    
+    context :single do
+      specify { single.should_not include_schedule(weekly) }
+      specify { single.should_not include_schedule(fortnightly) }
+      specify { single.should_not include_schedule(monthly) }
+    end
+
+    context :weekly do
+      specify { weekly.should_not include_schedule(single) }
+      specify { weekly.should_not include_schedule(fortnightly) }
+      specify { weekly.should_not include_schedule(monthly) }
+      
+      it 'should include singles which fall on a reoccuring day' do
+        next_tuesday = next_day(time, 2) 
+        single_schedule = new_single_schedule(next_tuesday)
+        weekly.should include_schedule(single_schedule)
+      end
+    end
+
+    context :fortnightly do
+      specify { fortnightly.should_not include_schedule(single) }
+      specify { fortnightly.should_not include_schedule(weekly) }
+      specify { fortnightly.should_not include_schedule(monthly) }
+      
+      it 'should include singles which fall on a reoccuring day' do
+        next_tuesday = next_day(time, 2) 
+        single_schedule = new_single_schedule(next_tuesday)
+        fortnightly.should include_schedule(single_schedule)
+      end
+    end
+
+    context :monthly do
+      specify { monthly.should_not include_schedule(weekly) }
+      specify { monthly.should_not include_schedule(fortnightly) }
+      specify { monthly.should_not include_schedule(single) }
+      
+      it 'should include singles which fall on a reoccuring day' do
+        next_month = time + 1.month
+        next_12th = Time.zone.local(next_month.year, next_month.month, 12)
+        single_schedule = new_single_schedule(next_12th)
+        monthly.should include_schedule(single_schedule)
+      end
+    end
+  end
 end

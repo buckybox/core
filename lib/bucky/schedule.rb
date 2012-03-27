@@ -39,14 +39,6 @@ module Bucky
       end
     end
 
-    def frequency
-      @schedule.frequency
-    end
-
-    def frequency=(frequency)
-      @schedule.frequency = frequency
-    end
-
     def end_time
       @schedule.end_time.in_time_zone(time_zone)
     end
@@ -204,6 +196,63 @@ module Bucky
     def self.from_hash(hash)
       hash[:start_date] = hash.delete(:start_time) if hash[:start_time].present? #IceCube is moving away from 'date' but this one is still there.
       Bucky::Schedule.new(IceCube::Schedule.from_hash(hash))
+    end
+
+
+    # Does the other_schedule fall on days in our schedule?
+    #
+    # Doesn't support matching fortnights into weeks
+    # E.g 'Weekdays Weekly' doesn't include 'Weekdays Fortnightly' dispite logically that being the case
+    def include?(other_schedule)
+      raise "Given schedule is blank" if other_schedule.blank?
+
+      expected = Bucky::Schedule
+      raise "Given schedule isn't a #{expected}" unless other_schedule.is_a?(expected) 
+
+      match = true
+      if [:weekly, :fortnightly].include?(recurrence_type) && other_schedule.recurrence_type == :single
+        match &= ([other_schedule.start_time.wday] - recurrence_days).empty?
+      elsif [:monthly].include?(recurrence_type) && other_schedule.recurrence_type == :single
+        match &= month_days.include?(other_schedule.start_time.day)
+      else
+        match &= (recurrence_type == other_schedule.recurrence_type)
+        match &= (other_schedule.recurrence_days - recurrence_days).empty?
+        # is the other schedules recurrence_days a subset of mine?
+        
+        match &= (recurrence_times == other_schedule.recurrence_times)
+      end
+
+      match
+    end
+
+    # This is very much dependant on how BuckyBox is using IceCube and ignores the possibilites of
+    # an interval higher than 2 and ignores intervals on MonthlyRules
+    #
+    # Doesn't support matching fortnights into weeks
+    # E.g 'Weekdays Weekly' doesn't include 'Weekdays Fortnightly' dispite logically that being the case
+    def recurrence_type
+      if recurrence_rules.present?
+        recurrence_rule = recurrence_rules.first
+        interval = recurrence_rule.to_hash[:interval]
+        type = case recurrence_rule
+               when IceCube::WeeklyRule
+                 interval==1 ? :weekly : :fortnightly
+               when IceCube::MonthlyRule
+                 :monthly
+               end
+      else
+        :single
+      end
+    end
+
+    def recurrence_days
+      days = recurrence_rules.first.to_hash[:validations][:day] if recurrence_rules.first.present?
+      days || []
+    end
+
+    def month_days
+     days = recurrence_rules.first.to_hash[:validations][:day_of_week].keys if recurrence_type == :monthly && recurrence_rules.first.present?
+     days || []
     end
 
     private

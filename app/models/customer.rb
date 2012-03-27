@@ -111,10 +111,10 @@ class Customer < ActiveRecord::Base
     })
 
     self.tag_list = c.tags.join(", ")
-    self.save!
+    self.save! # Blow up on error so transaction is aborted
 
     self.account.change_balance_to(c.account_balance, {description: "Inital CSV Import"})
-    self.account.save!
+    self.account.save! # Blow up on error so transaction is aborted
 
     self.import_boxes(c.boxes)
   end
@@ -138,7 +138,7 @@ class Customer < ActiveRecord::Base
       })
       order.create_schedule(delivery_date, b.delivery_frequency, delivery_day_numbers)
       order.activate
-      order.save!
+      order.save! # Blow up on error so transaction is aborted
     end
   end
 

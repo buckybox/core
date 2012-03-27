@@ -16,7 +16,6 @@ class Order < ActiveRecord::Base
   scope :completed, where(completed: true)
   scope :active, where(active: true)
 
-
   schedule_for :schedule
 
   acts_as_taggable
@@ -28,6 +27,7 @@ class Order < ActiveRecord::Base
   validates_presence_of :box, :quantity, :frequency, :account, :schedule
   validates_numericality_of :quantity, greater_than: 0
   validates_inclusion_of :frequency, in: FREQUENCIES, message: "%{value} is not a valid frequency"
+  validate :schedule_matches_route
 
   before_save :activate, if: :just_completed?
   before_save :record_schedule_change, if: :schedule_changed?
@@ -170,5 +170,9 @@ class Order < ActiveRecord::Base
 
   def record_schedule_change
     order_schedule_transactions.build(order: self, schedule: self.schedule)
+  end
+
+  def schedule_matches_route
+    errors.add(:schedule, "doesn't match the schedule for Route #{route.name}") if route.schedule.include?(order.schedule)
   end
 end
