@@ -1,6 +1,14 @@
 class Distributor::CustomersController < Distributor::ResourceController
   respond_to :html, :xml, :json
 
+  def index
+    if current_distributor.routes.empty?
+      redirect_to distributor_settings_routes_url, alert: 'You must create a route before you can create users.' and return
+    end
+
+    index!
+  end
+
   def new
     new! do
       @address = @customer.build_address

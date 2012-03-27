@@ -20,7 +20,7 @@ module LayoutHelper
     content_for(:head) { javascript_include_tag(*args) }
   end
 
-  FLASH_CLASSES = {notice: 'success', warning: 'warning', error: 'error'}
+  FLASH_CLASSES = {notice: 'success', warning: 'warning', error: 'error', alert: 'error'}
 
   def flash_bar(kind, message)
     classes = "alert-box #{FLASH_CLASSES[kind]}"

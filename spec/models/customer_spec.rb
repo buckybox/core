@@ -1,57 +1,69 @@
 require 'spec_helper'
 
 describe Customer do
-  before { @customer = Fabricate(:customer, email: ' BuckyBox@example.com ') }
+  specify { Fabricate.build(:customer).should be_valid }
 
-  specify { @customer.should be_valid }
-  specify { @customer.email.should == 'buckybox@example.com' }
+  context 'a customer' do
+    before { @customer = Fabricate(:customer) }
 
-  context 'initializing' do
-    before(:each) do
-      @customer = Customer.create!(first_name: 'test',
-                                   last_name: 'test',
-                                   email: 'test@buckybox.com',
-                                   route: Fabricate(:route),
-                                   distributor: Fabricate(:distributor))
+    context 'initializing' do
+      specify { @customer.address.should_not be_nil }
+      specify { @customer.account.should_not be_nil }
+      specify { @customer.number.should_not be_nil }
     end
 
-    specify { @customer.address.should_not be_nil }
-    specify { @customer.account.should_not be_nil }
-    specify { @customer.number.should_not be_nil }
-  end
-
-  context 'number' do
-    before { @customer.number = -1 }
-    specify { @customer.should_not be_valid }
-  end
-
-  context 'random password' do
-    before do
-      @customer.password = @customer.password_confirmation = ''
-      @customer.save
-    end
-
-    specify { @customer.password.should_not be_nil }
-    specify { @customer.randomize_password.length == 12 }
-    specify { Customer.random_string.should_not == Customer.random_string }
-  end
-
-  context 'full name' do
-    describe '#name' do
-      describe 'with only first name' do
-        specify { @customer.name.should == @customer.first_name }
+    context 'email' do
+      before do
+        @customer.email = ' BuckyBox@Example.com '
+        @customer.save
       end
 
-      describe 'with both first and last name' do
-        before { @customer.last_name = 'Lastname' }
-        specify { @customer.name.should == "#{@customer.first_name} #{@customer.last_name}" }
+      specify { @customer.email.should == 'buckybox@example.com' }
+    end
+
+    context 'number' do
+      before { @customer.number = -1 }
+      specify { @customer.should_not be_valid }
+    end
+
+    context 'random password' do
+      before do
+        @customer.password = @customer.password_confirmation = ''
+        @customer.save
+      end
+
+      specify { @customer.password.should_not be_nil }
+      specify { @customer.randomize_password.length == 12 }
+      specify { Customer.random_string.should_not == Customer.random_string }
+    end
+
+    context 'full name' do
+      describe '#name' do
+        describe 'with only first name' do
+          specify { @customer.name.should == @customer.first_name }
+        end
+
+        describe 'with both first and last name' do
+          before { @customer.last_name = 'Lastname' }
+          specify { @customer.name.should == "#{@customer.first_name} #{@customer.last_name}" }
+        end
+      end
+
+      describe '#name=' do
+        before { @customer.name= 'John Smith' }
+        specify { @customer.first_name.should == 'John' }
+        specify { @customer.last_name.should == 'Smith' }
       end
     end
 
-    describe '#name=' do
-      before { @customer.name= 'John Smith' }
-      specify { @customer.first_name.should == 'John' }
-      specify { @customer.last_name.should == 'Smith' }
+    context 'when using tags' do
+      before :each do
+        @customer.tag_list = 'dog, cat, rain'
+        @customer.save
+      end
+
+      specify { @customer.tags.size.should == 3 }
+      specify { @customer.tag_list.sort.should == %w(cat dog rain) }
     end
   end
 
@@ -64,7 +76,7 @@ describe Customer do
 
       Fabricate(:address, city: 'Edinburgh')
       Fabricate(:customer, last_name: 'Smith')
-      Fabricate(:customer, first_name: 'John', :last_name =>'Smith')
+      Fabricate(:customer, first_name: 'John', last_name: 'Smith')
     end
 
     specify { Customer.search('Edinburgh').size.should == 2 }
@@ -72,15 +84,23 @@ describe Customer do
     specify { Customer.search('John').size.should == 1 }
   end
 
-  context 'when using tags' do
-    before :each do
-      @customer = Fabricate(:customer)
-      @customer.tag_list = 'dog, cat, rain'
-      @customer.save
+  context '#new?' do
+    before { @customer = Fabricate(:customer) }
+
+    context 'customer has 0 deliveries' do
+      before { @customer.deliveries.stub(:size).and_return(0) }
+      specify { @customer.new?.should be_true }
     end
 
-    specify { @customer.tags.size.should == 3 }
-    specify { @customer.tag_list.sort.should == %w(cat dog rain) }
+    context 'customer has 1 delivery' do
+      before { @customer.deliveries.stub(:size).and_return(1) }
+      specify { @customer.new?.should be_true }
+    end
+
+    context 'customer has 2 deliveries' do
+      before { @customer.deliveries.stub(:size).and_return(2) }
+      specify { @customer.new?.should be_false }
+    end
   end
 
   context '.import' do
