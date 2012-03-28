@@ -38,29 +38,7 @@ module Bucky
   end
 
   def create_schedule_for(name, start_time, frequency, days_by_number = nil)
-    schedule = Bucky::Schedule.new(start_time.utc)
-
-    throw "days_by_number '#{days_by_number}' wasn't valid" if days_by_number.present? && (days_by_number & 0.upto(6).to_a).blank? # [nil, '', nil] & [0,1,2,3,4,5,6] = []
-    days_by_number &= 1.upto(6).to_a
-
-    if frequency == 'single'
-      schedule.add_recurrence_time(start_time.utc)
-    elsif frequency == 'monthly'
-      monthly_days_hash = days_by_number.inject({}) { |hash, day| hash[day] = [1]; hash }
-
-      recurrence_rule = IceCube::Rule.monthly.day_of_week(monthly_days_hash)
-      schedule.add_recurrence_rule(recurrence_rule)
-    else
-      if frequency == 'weekly'
-        weeks_between_deliveries = 1
-      elsif frequency == 'fortnightly'
-        weeks_between_deliveries = 2
-      end
-
-      recurrence_rule = IceCube::Rule.weekly(weeks_between_deliveries).day(*days_by_number)
-      schedule.add_recurrence_rule(recurrence_rule)
-    end
-
+    schedule = Bucky::Schedule.build(start_time, frequency, days_by_number)
     self.send("#{name}=", schedule)
     schedule
   end

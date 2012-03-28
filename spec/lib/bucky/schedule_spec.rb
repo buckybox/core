@@ -75,9 +75,9 @@ describe Schedule do
     end
   end
   
-  RSpec::Matchers.define :include_schedule do |expected|
+  RSpec::Matchers.define :include_schedule do |expected, strict_start_time|
     match do |actual|
-      actual.include? expected
+      actual.include? expected, (strict_start_time || false)
     end
   end
   
@@ -114,9 +114,9 @@ describe Schedule do
     context :start_times do
       # If the other schedule starts before this one, then it isn't going to match
       context "other schedule starts before this one" do
-        specify { weekly.should_not include_schedule(new_recurring_schedule(time - 1.month, week, 1)) }
-        specify { fortnightly.should_not include_schedule(new_recurring_schedule(time - 1.month, week, 2)) }
-        specify { monthly.should_not include_schedule(new_monthly_schedule(time - 1.month)) }
+        specify { weekly.should_not include_schedule(new_recurring_schedule(time - 1.month, week, 1), true) }
+        specify { fortnightly.should_not include_schedule(new_recurring_schedule(time - 1.month, week, 2), true) }
+        specify { monthly.should_not include_schedule(new_monthly_schedule(time - 1.month), true) }
       end
 
       # If the other schedule starts after this one it should match
@@ -135,7 +135,8 @@ describe Schedule do
 
     context :weekly do
       specify { weekly.should_not include_schedule(single) }
-      specify { weekly.should_not include_schedule(fortnightly) }
+      specify { weekly.should_not include_schedule(new_recurring_schedule(time, [:sunday], 2)) }
+      specify { weekly.should include_schedule(fortnightly) }
       specify { weekly.should include_schedule(monthly) }
       
       it 'should include singles which fall on a reoccuring day' do

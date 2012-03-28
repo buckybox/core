@@ -14,9 +14,12 @@
           %th Tags
       %tbody
         - @customers.each do |customer|
+          -# Sorry I didn't move this to a helper, feel free to do it now tho :)
+          - route = @distributor.routes.find_by_name(customer.delivery_route)
           %tr
             - Bucky::Import::Customer::DATA_FIELDS.each do |field|
-              %td{class: (field==:delivery_route && @distributor.routes.find_by_name(customer.send(field)).blank?) ? "error" : ""}= customer.send(field)
+              -# Sorry I didn't move this to a helper, feel free to do it now tho :)
+              %td{class: (field==:delivery_route && route.blank?) ? "error" : ""}= customer.send(field)
             %td= customer.tags.join(", ")
           %tr{colspan: Bucky::Import::Customer::DATA_FIELDS.size+1}
             %td{colspan: Bucky::Import::Customer::DATA_FIELDS.size+1}
@@ -27,9 +30,11 @@
                       %th= field.to_s.capitalize
                 %tbody
                   - customer.boxes.each do |box|
-                    %tr
+                    -# Sorry I didn't move this to a helper, feel free to do it now tho :)
+                    %tr{class: (route.blank? || !route.schedule.include?(Bucky::Schedule.build(Time.zone.parse(box.next_delivery_date), box.delivery_frequency, Route.delivery_day_numbers(box.delivery_days.split(',').collect{|d| d.strip.downcase.to_sym})))) ? "error" : ""}
                       - Bucky::Import::Box::DATA_FIELDS.each do |field|
-                        %td{class: (field==:box_type && @distributor.boxes.find_by_name(box.send(field)).blank?) ? "error" : ""}= box.send(field)
+                        -# Sorry I didn't move this to a helper, feel free to do it now tho :)
+                        %td{class: (field==:box_type && @distributor.boxes.find_by_name(box.box_type).blank?) ? "error" : ""}= box.send(field)
 
 .row
   .twelve.columns

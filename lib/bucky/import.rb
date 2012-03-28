@@ -46,6 +46,7 @@ module Bucky
         elsif customer.number != customer_number # No more boxes for that customer, move onto next one BUT check last one is valid first
           log "CUSTOMER"
           log "Customer #{customer.name} is #{customer.valid? ? "valid" : "invalid because #{customer.errors.full_messages.join(', ')}"}"
+          raise "Customer #{customer.name} is invalid because #{customer.errors.full_messages.join(', ')}" unless customer.valid?
           
           customers << customer
           customer = customer_from_row(row, distributor)
@@ -99,11 +100,12 @@ module Bucky
       box.box_type = row[BOX_TYPE]
       box.dislikes = row[DISLIKES]
       box.likes = row[LIKES]
-      box.delivery_frequency = row[DELIVERY_FREQUENCY]
+      box.delivery_frequency = row[DELIVERY_FREQUENCY].downcase
       box.delivery_days = row[DELIVERY_DAYS]
       box.next_delivery_date = row[NEXT_DELIVERY_DATE]
       log("BOX")
       log("Box #{box.box_type} is #{box.valid? ? "valid" : "invalid because #{box.errors.full_messages.join(', ')}"}")
+      raise ("Box #{box.box_type} is invalid because #{box.errors.full_messages.join(', ')}") unless box.valid?
       box
     end
 
@@ -168,7 +170,7 @@ module Bucky
         :delivery_suburb, :delivery_city
       validates_numericality_of :number, greater_than: 0
       validates_numericality_of :discount, greater_than_or_equal_to: 0.0, less_than_or_equal_to: 1.0
-      validate :uniqueness_of_number
+      #validate :uniqueness_of_number #Customer import will find or create based on number, left here to remind why
       
       
       @@previous_numbers = []
@@ -219,6 +221,8 @@ module Bucky
 
     class Box
       include ActiveModel::Validations
+      
+      validates_inclusion_of :delivery_frequency, in: %w( single weekly fortnightly monthly )
 
       DATA_FIELDS =  [:box_type, :dislikes, :likes, :delivery_frequency, :delivery_days,
         :next_delivery_date]

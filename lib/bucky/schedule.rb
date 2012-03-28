@@ -1,6 +1,34 @@
 module Bucky
   class Schedule
 
+    def self.build(start_time, frequency, days_by_number)
+      schedule = Bucky::Schedule.new(start_time.utc)
+
+      throw "days_by_number '#{days_by_number}' wasn't valid" if days_by_number.present? && (days_by_number & 0.upto(6).to_a).blank? # [nil, '', nil] & [0,1,2,3,4,5,6] = []
+      days_by_number &= 1.upto(6).to_a
+
+      if frequency == 'single'
+        schedule.add_recurrence_time(start_time.utc)
+      elsif frequency == 'monthly'
+        monthly_days_hash = days_by_number.inject({}) { |hash, day| hash[day] = [1]; hash }
+
+        recurrence_rule = IceCube::Rule.monthly.day_of_week(monthly_days_hash)
+        schedule.add_recurrence_rule(recurrence_rule)
+      else
+        if frequency == 'weekly'
+          weeks_between_deliveries = 1
+        elsif frequency == 'fortnightly'
+          weeks_between_deliveries = 2
+        else
+          raise "#{frequency} does not match the expected single, monthly, weekly, fortnightly"
+        end
+        
+        recurrence_rule = IceCube::Rule.weekly(weeks_between_deliveries).day(*days_by_number)
+        schedule.add_recurrence_rule(recurrence_rule)
+      end
+      schedule
+    end
+
     def initialize(*args)
       if args.blank?
         @schedule = IceCube::Schedule.new(Time.current.utc)
@@ -201,10 +229,7 @@ module Bucky
 
     # Does the other_schedule fall on days in our schedule?
     # Check the spec to see how complex a match this accepts
-    #
-    # Doesn't support matching fortnights into weeks
-    # E.g 'Weekdays Weekly' doesn't include 'Weekdays Fortnightly' dispite logically that being the case
-    def include?(other_schedule)
+    def include?(other_schedule, strict_start_time = false)
       raise "Given schedule is blank" if other_schedule.blank?
 
       expected = Bucky::Schedule
@@ -217,6 +242,11 @@ module Bucky
       elsif recurrence_type == :weekly && other_schedule.recurrence_type == :monthly
         match &= (other_schedule.month_days - recurrence_days).empty? # The repeating days in the monthly schedule need to be a subset of this schedules weekly reoccuring days 
 
+      elsif recurrence_type == :weekly && other_schedule.recurrence_type == :fortnightly
+        match &= (other_schedule.recurrence_days - recurrence_days).empty?
+        # is the other schedules recurrence_days a subset of mine?
+        
+        match &= (recurrence_times == other_schedule.recurrence_times)
       elsif [:monthly].include?(recurrence_type) && other_schedule.recurrence_type == :single
         match &= month_days.include?(other_schedule.start_time.wday)
 
@@ -228,7 +258,7 @@ module Bucky
         match &= (recurrence_times == other_schedule.recurrence_times)
       end
 
-      match &= (start_time <= other_schedule.start_time)
+      match &= (start_time <= other_schedule.start_time) if strict_start_time # Optional
 
       match
     end
