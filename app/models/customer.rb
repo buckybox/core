@@ -136,6 +136,7 @@ class Customer < ActiveRecord::Base
         dislikes: b.dislikes,
         account: self.account
       })
+      account.route = self.route
       order.create_schedule(delivery_date, b.delivery_frequency, delivery_day_numbers)
       order.activate
       order.save! # Blow up on error so transaction is aborted

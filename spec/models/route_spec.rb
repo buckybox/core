@@ -9,7 +9,7 @@ describe Route do
   specify { @route.should be_valid }
 
   context :route_days do
-    specify { Fabricate.build(:route, :monday => false).should_not be_valid }
+    specify { Fabricate.build(:route, Route::DAYS.inject({}){|result, element| result.merge(element => false)}).should_not be_valid }
   end
 
   context :schedule do
@@ -17,6 +17,10 @@ describe Route do
       @route.monday    = true
       @route.wednesday = true
       @route.friday    = true
+      @route.tuesday   = false
+      @route.thursday  = false
+      @route.saturday  = false
+      @route.sunday    = false
       @route.save
     end
 
@@ -25,7 +29,7 @@ describe Route do
   end
 
   context :schedule_transaction do
-    before { @route.sunday = true }
+    before { @route.sunday = false }
     specify { expect { @route.save }.should change(RouteScheduleTransaction, :count).by(1) }
   end
 
@@ -36,7 +40,15 @@ describe Route do
   end
 
   describe '#delivery_days' do
-    before { @route.friday = true }
+    before do
+      @route.monday    = true
+      @route.friday    = true
+      @route.wednesday = false
+      @route.tuesday   = false
+      @route.thursday  = false
+      @route.saturday  = false
+      @route.sunday    = false
+    end
     it 'should return any array of all the selected days' do
       @route.delivery_days.should == [:monday, :friday]
     end
@@ -65,7 +77,7 @@ describe Route do
       @customer = Fabricate(:customer, route: @route, distributor: @route.distributor)
       @account = @customer.account
       @box = Fabricate(:box, distributor: @route.distributor)
-      @order = Fabricate(:recurring_order, schedule: new_everyday_schedule(@schedule_start_time), account: @account, box: @box)
+      @order = Fabricate(:recurring_order, schedule: new_recurring_schedule(@schedule_start_time, Route::DAYS), account: @account, box: @box)
       @route.schedule.to_s.should match /Weekly on Sundays, Mondays, Tuesdays, Wednesdays, Thursdays, Fridays, and Saturdays/ 
       @order.schedule.to_s.should match /Weekly on Sundays, Mondays, Tuesdays, Wednesdays, Thursdays, Fridays, and Saturdays/ 
       @route.future_orders.should include(@order)

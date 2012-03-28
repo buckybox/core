@@ -213,9 +213,13 @@ module Bucky
       match = true
       if [:weekly, :fortnightly].include?(recurrence_type) && other_schedule.recurrence_type == :single
         match &= ([other_schedule.start_time.wday] - recurrence_days).empty?
+
+      elsif recurrence_type == :weekly && other_schedule.recurrence_type == :monthly
+        match &= (other_schedule.month_days - recurrence_days).empty? # The repeating days in the monthly schedule need to be a subset of this schedules weekly reoccuring days 
+
       elsif [:monthly].include?(recurrence_type) && other_schedule.recurrence_type == :single
-        match &= other_schedule.start_time.day <= 7 # Has to be the first weekday of whichever weekday it is, BuckyBox currently limits monthly orders to the first <weekday> {Monthly on the 1st tuesday for example, NOT Monthly on the 2nd tuesday}
         match &= month_days.include?(other_schedule.start_time.wday)
+
       else
         match &= (recurrence_type == other_schedule.recurrence_type)
         match &= (other_schedule.recurrence_days - recurrence_days).empty?

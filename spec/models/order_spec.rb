@@ -197,8 +197,7 @@ describe Order do
 
     describe '#deactivate_finished' do
       before do
-        rule_schedule = Bucky::Schedule.new(Time.current - 2.months)
-        rule_schedule.add_recurrence_rule(IceCube::Rule.daily(3))
+        rule_schedule = new_recurring_schedule(Time.current - 2.months)
 
         rule_schedule_no_end_date = rule_schedule.clone
         @order1 = Fabricate(:order, schedule: rule_schedule_no_end_date)

@@ -108,6 +108,8 @@ describe Customer do
 
     it "should import customer with all fields" do
       route = mock_model(Route)
+      route.stub_chain(:schedule, :include?).and_return(true)
+
       boxes = []
       box = box_mock({box_type: "Rural Van"})
       customer.stub_chain(:distributor, :boxes, :find_by_name).with("Rural Van").and_return(mock_model('Box'))

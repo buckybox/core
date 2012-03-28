@@ -136,7 +136,7 @@ describe Schedule do
     context :weekly do
       specify { weekly.should_not include_schedule(single) }
       specify { weekly.should_not include_schedule(fortnightly) }
-      specify { weekly.should_not include_schedule(monthly) }
+      specify { weekly.should include_schedule(monthly) }
       
       it 'should include singles which fall on a reoccuring day' do
         next_tuesday = next_day(time, 2) 

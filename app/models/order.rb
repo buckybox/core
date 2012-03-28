@@ -27,7 +27,7 @@ class Order < ActiveRecord::Base
   validates_presence_of :box, :quantity, :frequency, :account, :schedule
   validates_numericality_of :quantity, greater_than: 0
   validates_inclusion_of :frequency, in: FREQUENCIES, message: "%{value} is not a valid frequency"
-  validate :schedule_matches_route
+  validate :schedule_includes_route
 
   before_save :activate, if: :just_completed?
   before_save :record_schedule_change, if: :schedule_changed?
@@ -172,7 +172,10 @@ class Order < ActiveRecord::Base
     order_schedule_transactions.build(order: self, schedule: self.schedule)
   end
 
-  def schedule_matches_route
-    errors.add(:schedule, "doesn't match the schedule for Route #{route.name}") if route.schedule.include?(schedule)
+  def schedule_includes_route
+    unless account.route.schedule.include?(schedule)
+      errors.add(:schedule, "Route #{account.route.name}'s schedule '#{account.route.schedule.start_time} #{account.route.schedule} doesn't include this order's schedule of '#{schedule.start_time} #{schedule}'")
+    end
+    # account.route and not route because sometimes route isn't around at creation time but account.route has it in memory
   end
 end
