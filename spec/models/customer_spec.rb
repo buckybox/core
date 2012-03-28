@@ -208,7 +208,7 @@ describe Customer do
       box_type: "Rural Van",
       dislikes: "Onions",
       likes: "Carrots",
-      delivery_frequency: "Weekly",
+      delivery_frequency: "weekly",
       delivery_days: "Monday, Tuesday, Friday",
       next_delivery_date: "23-Mar-2013"
           }.merge(opts)

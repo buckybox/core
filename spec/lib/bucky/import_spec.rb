@@ -89,7 +89,7 @@ describe Import do
         specify { @boxes.collect(&:box_type).should eq(['Standard Box', 'Medium Fruit Box', 'Large Mixed Box']) }
         specify { @boxes.collect(&:dislikes).should eq(['Onions',nil,nil]) }
         specify { @boxes.collect(&:likes).should eq([nil,nil,nil]) }
-        specify { @boxes.collect(&:delivery_frequency).should eq(['Weekly', 'Single', 'Fortnightly']) }
+        specify { @boxes.collect(&:delivery_frequency).should eq(['weekly', 'single', 'fortnightly']) }
         specify { @boxes.collect(&:delivery_days).should eq(['Monday, Tuesday, Wednesday', '', 'Friday']) }
         specify { @boxes.collect(&:next_delivery_date).should eq(["21-Mar-2012", "26-Mar-2012", "30-Mar-2012"]) }
       end
@@ -126,7 +126,7 @@ describe Import do
         specify { @boxes.first.box_type.should eq('Standard Box') }
         specify { @boxes.first.dislikes.should be_nil }
         specify { @boxes.first.likes.should be_nil }
-        specify { @boxes.first.delivery_frequency.should eq('Weekly') }
+        specify { @boxes.first.delivery_frequency.should eq('weekly') }
         specify { @boxes.first.delivery_days.should eq('Thursday') }
         specify { @boxes.first.next_delivery_date.should eq("22-Mar-2012") }
       end
@@ -164,7 +164,7 @@ describe Import do
         specify { @boxes.first.box_type.should eq('Medium Fruit Box') }
         specify { @boxes.first.dislikes.should eq('Carrots') }
         specify { @boxes.first.likes.should eq('Apples') }
-        specify { @boxes.first.delivery_frequency.should eq('Single') }
+        specify { @boxes.first.delivery_frequency.should eq('single') }
         specify { @boxes.first.delivery_days.should eq('') }
         specify { @boxes.first.next_delivery_date.should eq("21-Apr-2012") }
       end
