@@ -16,7 +16,6 @@ class Order < ActiveRecord::Base
   scope :completed, where(completed: true)
   scope :active, where(active: true)
 
-
   schedule_for :schedule
 
   acts_as_taggable

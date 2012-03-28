@@ -118,7 +118,7 @@ BuckyBox::Application.routes.draw do
     resource  :address, only: :update
     resources :boxes, only: :show
 
-    resources :orders,  only: [ :new, :create, :update ] do
+    resources :orders, only: [ :new, :create, :update ] do
       member do
         put 'pause'
         post 'remove_pause'

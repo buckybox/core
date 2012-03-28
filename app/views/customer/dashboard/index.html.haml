@@ -11,7 +11,7 @@
         .nine.columns
           %h3 My Orders
         .three.columns.text-right
-          = link_to 'New Order', new_customer_order_path(current_customer), class: 'radius button'
+          = link_to 'New Order', new_customer_order_path, class: 'radius button'
       .row
         .twelve.columns
           = render 'customer/orders/index' unless @orders.empty?

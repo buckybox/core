@@ -7,6 +7,20 @@ class Customer::OrdersController < Customer::ResourceController
     update! { customer_root_url }
   end
 
+  def create
+    @order           = Order.new(params[:order])
+    @order.account   = current_customer.account
+    @order.completed = true
+
+    frequency        = params[:order][:frequency]
+    start_time       = Date.parse(params[:start_date]).to_time
+    days_by_number   = params[:days].values.map(&:to_i).sort unless frequency == 'single'
+
+    @order.create_schedule(start_time, frequency, days_by_number)
+
+    create! { customer_root_url }
+  end
+
   def pause
     @order     = Order.find(params[:id])
     start_date = Date.parse(params['start_date'])

@@ -29,8 +29,7 @@ class Distributor::OrdersController < Distributor::ResourceController
 
   def edit
     edit! do
-      @customer    = @account.customer
-      @route       = @customer.route
+      load_form
     end
   end
 

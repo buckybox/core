@@ -9,6 +9,10 @@ class Distributor::DistributorsController < Distributor::ResourceController
 
   protected
 
+  def resource
+    current_distributor
+  end
+
   def begin_of_association_chain
     nil
   end
