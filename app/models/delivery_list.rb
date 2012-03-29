@@ -68,9 +68,7 @@ class DeliveryList < ActiveRecord::Base
 
   def mark_all_as_auto_delivered
     result = true
-
     deliveries.each { |delivery| result &= Delivery.auto_deliver(delivery) }
-
     return result
   end
 
