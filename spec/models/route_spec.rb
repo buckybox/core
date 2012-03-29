@@ -1,15 +1,13 @@
 require 'spec_helper'
 include Bucky
 
-#TODO optomized the tests, I confess I didn't do any of that when writing them
-
 describe Route do
-  let (:route)       { Route.make }
+  let (:route) { Fabricate.build(:route) }
 
   specify { route.should be_valid }
 
   context :route_days do
-    specify { Route.make(:monday => false).should_not be_valid }
+    specify { Fabricate.build(:route, monday: false).should_not be_valid }
   end
 
   context :schedule do
@@ -34,8 +32,13 @@ describe Route do
   end
 
   describe '#best_route' do
+    before do
+      @distributor = Fabricate.build(:distributor)
+      @distributor.routes.stub(:first).and_return(route)
+    end
+
     it 'should just return the first one for now' do
-      Route.default_route(route.distributor).should == route
+      Route.default_route(@distributor).should == route
     end
   end
 
@@ -64,11 +67,11 @@ describe Route do
   end
 
   describe 'when saving and triggering an update_schedule' do
-    let(:order)     { double("order", :schedule_empty? => false, :save => true) }
-    let(:route)     { Route.make }
+    let(:order) { double('order', schedule_empty?: false, save: true) }
+    let(:route) { Fabricate.build(:route) }
 
     def stub_future_active_orders(route, orders)
-      scope = double("scope")
+      scope = double('scope')
       Order.stub(:for_route_read_only).with(route).and_return(scope)
       scope.stub(:active).and_return(scope)
       scope.stub(:each).and_yield(*orders)

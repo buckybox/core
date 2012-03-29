@@ -65,7 +65,6 @@ end
 
 group :test do
   gem 'fabrication'
-  gem 'machinist'
   gem 'database_cleaner'
 
   gem 'delorean'

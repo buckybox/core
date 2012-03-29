@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe Delivery do
-  let(:delivery) { Delivery.make }
+  let(:delivery) { Fabricate.build(:delivery) }
 
   specify { delivery.should be_valid }
   specify { delivery.status.should == 'pending' }
@@ -12,11 +12,11 @@ describe Delivery do
       describe "for new record" do
         (Delivery::STATUS - ['delivered']).each do |s|
           it "is valid for status = #{s}" do
-            Delivery.make(status: s).should be_valid
+            Fabricate.build(:delivery, status: s).should be_valid
           end
 
           it "is valid if manually changed to status = #{s}" do
-            Delivery.make(status: s, status_change_type: 'manual').should be_valid
+            Fabricate.build(:delivery, status: s, status_change_type: 'manual').should be_valid
           end
         end
       end
@@ -41,17 +41,17 @@ describe Delivery do
         end
       end
 
-      specify { Delivery.make(status: 'lame').should_not be_valid }
-      specify { Delivery.make(status_change_type: 'lame').should_not be_valid }
+      specify { Fabricate.build(:delivery, status: 'lame').should_not be_valid }
+      specify { Fabricate.build(:delivery, status_change_type: 'lame').should_not be_valid }
     end
 
     describe '#future_status?' do
       it "is true if status is pending" do
-        Delivery.make(status: 'pending').future_status?.should be_true
+        Fabricate.build(:delivery, status: 'pending').future_status?.should be_true
       end
 
       it "is false if status is not pending" do
-        Delivery.make(status: 'cancelled').future_status?.should be_false
+        Fabricate.build(:delivery, status: 'cancelled').future_status?.should be_false
       end
     end
   end

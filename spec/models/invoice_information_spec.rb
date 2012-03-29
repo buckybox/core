@@ -1,10 +1,8 @@
 require 'spec_helper'
 
 describe InvoiceInformation do
-  before do
-    @invoice_information = InvoiceInformation.make
-  end
+  let(:invoice_information) { Fabricate.build(:invoice_information) }
 
-  specify { @invoice_information.should be_valid }
+  specify { invoice_information.should be_valid }
 end
 
