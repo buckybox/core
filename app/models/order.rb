@@ -57,6 +57,12 @@ class Order < ActiveRecord::Base
     end
   end
 
+  def self.for_route_read_only(route)
+    # Using a join makes the returned models read-only, this is a work around
+    order_ids = Order.where(customers: {route_id: route.id}).joins(:customer).collect(&:id)
+    Order.where(["id in (?)", order_ids])
+  end
+
   def change_to_local_time_zone
     distributor.change_to_local_time_zone
   end
@@ -100,16 +106,15 @@ class Order < ActiveRecord::Base
     self.schedule = s
   end
 
-  def remove_recurrence_day(day)
-    s = schedule
-    s.remove_recurrence_day(day)
-    self.schedule = s
+  def remove_day(day)
+    remove_recurrence_rule_day(day)
+    remove_recurrence_times_on_day(day)
   end
 
-  def remove_recurrence_times_on_day(day)
-    s = schedule
-    s.remove_recurrence_times_on_day(day)
-    self.schedule = s
+  def deactivate_for_day!(day)
+    remove_day(day)
+    deactivate if schedule_empty?
+    save!
   end
 
   def future_deliveries(end_date)
@@ -170,4 +175,19 @@ class Order < ActiveRecord::Base
   def record_schedule_change
     order_schedule_transactions.build(order: self, schedule: self.schedule)
   end
+
+  private
+
+  def remove_recurrence_rule_day(day)
+    s = schedule
+    s.remove_recurrence_rule_day(day)
+    self.schedule = s
+  end
+
+  def remove_recurrence_times_on_day(day)
+    s = schedule
+    s.remove_recurrence_times_on_day(day)
+    self.schedule = s
+  end
+
 end

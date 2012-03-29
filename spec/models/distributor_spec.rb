@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe Distributor do
   context :initialize do
-    before(:all) { @distributor = Fabricate(:distributor, :email => ' BuckyBox@example.com ') }
+    before(:each) { @distributor = Fabricate(:distributor, :email => ' BuckyBox@example.com ') }
 
     specify { @distributor.should be_valid }
     specify { @distributor.parameter_name.should == @distributor.name.parameterize }
@@ -38,7 +38,7 @@ describe Distributor do
 
         it 'the generated packing lists should start from today' do
           @distributor.save
-          @distributor.packing_lists.first.date.should == Date.today
+          @distributor.packing_lists.first.date.should == Date.current
         end
 
         specify { expect { @distributor.save }.should change(PackingList, :count).from(0).to(@default_days) }
@@ -199,7 +199,7 @@ describe Distributor do
           @distributor = Fabricate(:distributor, time_zone: "")
         end
         it 'should temporarily change Time.now' do
-          @distributor.use_local_time_zone { Time.zone.name.should eq "Wellington" } 
+          @distributor.use_local_time_zone { Time.zone.name.should eq "Wellington" }
           Time.zone.name.should eq("Paris")
         end
       end
@@ -210,7 +210,7 @@ describe Distributor do
           @distributor = Fabricate(:distributor, time_zone: "Berlin")
         end
         it 'should temporarily change Time.now' do
-          @distributor.use_local_time_zone { Time.zone.name.should eq "Berlin" } 
+          @distributor.use_local_time_zone { Time.zone.name.should eq "Berlin" }
           Time.zone.name.should eq("Paris")
         end
       end
@@ -236,7 +236,7 @@ describe Distributor do
           @d_london = Fabricate.build(:distributor, time_zone: 'London')
           @d_london.save
 
-          @d_welly_d_list = Fabricate(:delivery_list, distributor: @d_welly, date: Date.yesterday)
+          @d_welly_d_list = Fabricate(:delivery_list_with_associations, distributor: @d_welly, date: Date.yesterday)
           Fabricate(:delivery, delivery_list: @d_welly_d_list)
         end
 

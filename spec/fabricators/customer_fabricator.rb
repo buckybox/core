@@ -6,5 +6,5 @@ Fabricator(:customer) do
   password 'password'
   password_confirmation { |customer| customer.password }
   after_create { |customer| Fabricate(:account, customer: customer) }
-  after_create { |customer| Fabricate(:address, customer: customer) }
+  after_create { |customer| Fabricate(:address_with_associations, customer: customer) }
 end

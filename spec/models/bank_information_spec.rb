@@ -1,8 +1,8 @@
 require 'spec_helper'
 
 describe BankInformation do
-  before :all do
-    @bank_information = Fabricate(:bank_information)
+  before do
+    @bank_information = Fabricate.build(:bank_information)
   end
 
   specify { @bank_information.should be_valid }
