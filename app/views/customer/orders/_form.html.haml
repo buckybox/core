@@ -5,7 +5,7 @@
     .row
       .columns{class: (order.new_record? ? 'four' : 'six')}
         .inputs
-          = f.association :box, collection: box_collection(current_customer, with_price: true), include_blank: false
+          = f.association :box, collection: box_collection(current_customer, with_price: true), include_blank: false, input_html: { style: 'width:245px;' }
           = f.input :quantity
           = f.input :frequency, collection: order_frequencies, include_blank: false unless order.persisted?
 
