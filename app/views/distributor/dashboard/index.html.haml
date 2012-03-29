@@ -1,21 +1,34 @@
 - title 'Dashboard', false
 
-- unless @notifications.blank?
-  #noticeboard
-    %h2 Alerts
-    - @notifications.each do |notification|
-      %ul
-        %li= date_for notification
-        %li{:class => "notification_tag #{notification.event_category}"}= notification.event_category
-        %li.notification_message= notification_message_for notification
-        %li= link_to 'Dismiss', dismiss_notification_distributor_event_path(notification), class: "dismiss small white button radius"
+- if @notifications.blank? && @payments.blank?
+  .row
+    .twelve.columns
+      %h2 Welcome!
+      %p
+        Please, make sure you have updateded all of your
+        = link_to 'settings', distributor_settings_routes_path
+        and added
+        = link_to 'customers.', distributor_customers_path
+        Otherwise watch this space for notifications to be added soon.
 
-.row
-  .twelve.columns
-    %h2 Individual Customer Payments
-.row
-  .four.columns
-    = render 'distributor/payments/form'
-  .eight.columns
-    = render 'distributor/payments/index'
+- unless @notifications.blank?
+  .row#noticeboard
+    .twelve.columns
+      %h2 Alerts
+      - @notifications.each do |notification|
+        .row.individual-notice
+          .two.columns{class: "notification_tag #{notification.event_category}"}= notification.event_category
+          .two.columns= date_for notification
+          .six.columns= notification_message_for notification
+          .two.columns.text-right= link_to '&times;'.html_safe, dismiss_notification_distributor_event_path(notification), class: "dismiss small white button radius"
+
+- unless @accounts.blank?
+  .row
+    .twelve.columns
+      %h2 Individual Customer Payments
+  .row
+    .four.columns
+      = render 'distributor/payments/form'
+    .eight.columns
+      = render 'distributor/payments/index'
 

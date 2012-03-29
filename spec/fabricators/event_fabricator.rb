@@ -1,21 +1,21 @@
-Fabricator(:customer_event, :from => :event) do
-  distributor!
+Fabricator(:customer_event, from: :event) do
+  customer!
+  distributor! { |event| event.customer.distributor }
   event_category { 'customer' }
-  event_type { Event::EVENT_TYPES[:customer_new] }
-  customer_id { Fabricate(:customer).id }
+  event_type { 'customer_new' }
 end
 
-Fabricator(:billing_event, :from => :event) do
-  distributor!
-  event_category { 'billing' }
-  event_type { Event::EVENT_TYPES[:invoice_reminder] }
-  invoice_id { Fabricate(:invoice).id }
+Fabricator(:billing_event, from: :event) do
+  invoice!
+  distributor! { |event| event.invoice.distributor }
   reconciliation_id 1
+  event_category { 'billing' }
+  event_type { 'invoice_reminder' }
 end
 
-Fabricator(:delivery_event, :from => :event) do
-  distributor!
+Fabricator(:delivery_event, from: :event) do
+  delivery!
+  distributor! { |event| event.delivery.distributor }
   event_category { 'delivery' }
-  event_type { Event::EVENT_TYPES[:delivery_pending] }
-  customer_id { Fabricate(:customer).id }
+  event_type { 'delivery_pending' }
 end
