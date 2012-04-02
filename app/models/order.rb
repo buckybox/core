@@ -22,14 +22,14 @@ class Order < ActiveRecord::Base
 
   attr_accessible :box, :box_id, :account, :account_id, :quantity, :likes, :dislikes, :completed, :frequency, :schedule
 
-  FREQUENCIES = %w( single weekly fortnightly monthly )
+  FREQUENCIES = %w(single weekly fortnightly monthly)
 
-  validates_presence_of :box, :quantity, :frequency, :account, :schedule
+  validates_presence_of :account_id, :box_id, :quantity, :frequency, :schedule
   validates_numericality_of :quantity, greater_than: 0
   validates_inclusion_of :frequency, in: FREQUENCIES, message: "%{value} is not a valid frequency"
 
-  before_save :activate, if: :just_completed?
-  before_save :record_schedule_change, if: :schedule_changed?
+  before_validation :activate, if: :just_completed?
+  before_validation :record_schedule_change, if: :schedule_changed?
 
   default_scope order('created_at DESC')
 

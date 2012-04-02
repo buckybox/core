@@ -10,7 +10,7 @@ class Delivery < ActiveRecord::Base
   has_one :address,     through: :order
   has_one :customer,    through: :order
 
-  acts_as_list scope: [ :delivery_list_id, :route_id ]
+  acts_as_list scope: [:delivery_list_id, :route_id]
 
   attr_accessible :order, :order_id, :route, :status, :status_change_type, :delivery_list, :package, :package_id, :account
 
