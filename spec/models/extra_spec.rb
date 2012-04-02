@@ -1,5 +1,9 @@
 require 'spec_helper'
 
 describe Extra do
-  pending "add some examples to (or delete) #{__FILE__}"
+  before :all do
+    @extra = Fabricate.build(:extra)
+  end
+
+  specify { @extra.should be_valid }
 end

@@ -237,10 +237,11 @@ ActiveRecord::Schema.define(:version => 20120329014533) do
   add_index "events", ["distributor_id"], :name => "index_events_on_distributor_id"
 
   create_table "extras", :force => true do |t|
-    t.string   "title"
+    t.string   "name"
     t.string   "unit"
     t.integer  "distributor_id"
     t.integer  "price_cents"
+    t.string   "currency"
     t.datetime "created_at",     :null => false
     t.datetime "updated_at",     :null => false
   end

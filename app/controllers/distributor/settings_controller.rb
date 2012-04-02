@@ -7,15 +7,20 @@ class Distributor::SettingsController < Distributor::BaseController
     @default_delivery_days  = current_distributor.advance_days
     @default_automatic_time = Time.new(time.year, time.month, time.day, current_distributor.automatic_delivery_hour)
   end
+  
+  def routes
+    @route = Route.new
+    @routes = current_distributor.routes
+  end
+
+  def extras
+    @extra = Extra.new
+    @extras = current_distributor.extras
+  end
 
   def boxes
     @box = Box.new
     @boxes = current_distributor.boxes
-  end
-
-  def routes
-    @route = Route.new
-    @routes = current_distributor.routes
   end
 
   def bank_information

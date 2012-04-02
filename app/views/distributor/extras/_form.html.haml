@@ -1,0 +1,15 @@
+.row.extra-form
+  .twelve.columns
+    = simple_form_for([:distributor, @extra]) do |f|
+      = f.error_notification
+
+      .row
+        .five.columns
+          .inputs
+            = f.input :name, label: false, placeholder: 'Eggs', size: 20
+            = f.input :unit, label: false, placeholder: '1/2 Doz', size: 20
+            = f.input :price, as: :currency, label: false, input_html: { class: 'input-text' }
+
+      .row
+        .twelve.columns.text-right
+          .actions= f.button :submit

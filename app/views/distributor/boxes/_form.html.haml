@@ -12,17 +12,15 @@
             %h4 Custom boxes
             = f.input :likes, label: 'Enable likes'
             = f.input :dislikes, label: 'Enable dislikes'
+            = f.input :extra_option, label: 'Extras', collection: Box::EXTRA_OPTIONS, include_blank: false
+            = f.input :extras_limit, label: 'How many extras can be put in the box?'
+            =# JS updates prop 'min' in distributor/boxes.js
 
         .four.columns
           = f.input :description
 
         .four.columns
           .inputs
-            %h4 Delivery options
-            = f.input :available_single, label: 'One-time delivery'
-            = f.input :available_weekly, label: 'Weekly'
-            = f.input :available_fourtnightly, label: 'Fortnightly'
-
             %h4 Choose your logo
             = f.input :box_image, label: false, hint: 'Any jpeg, gif or png image file'
             = f.input :box_image_cache, as: :hidden

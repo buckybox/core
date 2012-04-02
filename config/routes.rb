@@ -28,6 +28,7 @@ BuckyBox::Application.routes.draw do
 
     namespace :settings do
       get 'business_information'
+      get 'extras'
       get 'boxes'
       get 'routes'
       get 'bank_information'
@@ -39,6 +40,7 @@ BuckyBox::Application.routes.draw do
     resource  :bank_information,    only: [:create, :update]
     resource  :invoice_information, only: [:create, :update]
     resources :boxes,               except: [:index, :show]
+    resources :extras,               except: [:index, :show]
     resources :routes,              except: [:index, :show]
     resources :transactions,        only: :create
 
