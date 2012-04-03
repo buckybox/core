@@ -13,8 +13,10 @@
             = f.input :likes, label: 'Enable likes'
             = f.input :dislikes, label: 'Enable dislikes'
             = f.input :extra_option, label: 'Extras', collection: Box::EXTRA_OPTIONS, include_blank: false
-            = f.input :extras_limit, label: 'How many extras can be put in the box?'
-            =# JS updates prop 'min' in distributor/boxes.js
+            #extras_form
+              = f.input :extras_limit, label: 'Limited to', hint: 'per box', input_html: { class: 'input-text' }
+              =# JS updates prop 'min' in distributor/boxes.js
+              = f.association :extras, collection: current_distributor.extras, as: :check_boxes, label: false
 
         .four.columns
           = f.input :description

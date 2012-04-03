@@ -12,7 +12,7 @@ describe Distributor::BoxesController do
         post :create, {
           box: {
             name: 'yodas box', price: '246', likes: '1', dislikes: '1', available_single: '1', available_weekly: '0',
-            available_fourtnightly: '1', description: "tasty selection of herbs from Yoda's garden."
+            available_fourtnightly: '1', description: "tasty selection of herbs from Yoda's garden.", extras_limit: 0
           }
         }
       end

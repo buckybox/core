@@ -10,11 +10,15 @@
     div.currency > *, div.boolean > *
       display: inline
 
-    div.currency
+    div.currency, div.integer
       input
         width: 5em
       span.hint, input
         margin-left: .5em
+
+    div.integer
+      label, input.input-text
+        display: inline-block
 
     div.file-input
       display: none
@@ -25,3 +29,9 @@
       .description
         font-style: italic
         margin-left: .5em
+
+#extras_form
+  input.check_boxes, label.collection_check_boxes
+    display: inline-block
+  div.check_boxes span
+    display: block

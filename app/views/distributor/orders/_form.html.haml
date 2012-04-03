@@ -6,7 +6,18 @@
       .four.columns
         .inputs
           = f.association :box, collection: box_collection(@customer, with_price: true), include_blank: false
-          = f.input :quantity
+          :javascript
+            var box_extras = {#{@customer.distributor.boxes.collect{|b| "#{b.id}: #{b.extras_limit}" }.join(", ")}};
+          #extras_selection
+            .extra_not_allowed
+              No extras.
+            .extra_limited
+              Extras per box limited to
+              %span#extras_limit 0
+              \.
+            .extra_unlimited
+              Many extras allowed.
+            = render 'extras', locals: {extras: @customer.box.extras}
 
           - unless @order.persisted?
             = f.input :frequency, collection: order_frequencies, include_blank: false

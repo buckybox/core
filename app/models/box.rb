@@ -2,15 +2,17 @@ class Box < ActiveRecord::Base
   belongs_to :distributor
 
   has_many :orders
+  has_many :box_extras
+  has_many :extras, through: :box_extras
 
   mount_uploader :box_image, BoxImageUploader
 
   # Setup accessible (or protected) attributes for your model
   attr_accessible :distributor, :name, :description, :likes, :dislikes, :price, :available_single, :available_weekly, 
-    :available_fourtnightly, :box_image, :box_image_cache, :remove_box_image, :extras_limit
+    :available_fourtnightly, :box_image, :box_image_cache, :remove_box_image, :extras_limit, :extra_ids
 
   validates_presence_of :distributor, :name, :description, :price
-  validates :extras_limit, numericality: { greater_than: -1 }
+  validates :extras_limit, numericality: { greater_than: -2 }
 
   default_scope order(:name)
   
