@@ -12,6 +12,8 @@ class Order < ActiveRecord::Base
   has_many :packages
   has_many :deliveries
   has_many :order_schedule_transactions
+  has_many :order_extras, autosave: true
+  has_many :extras, through: :order_extras
 
   scope :completed, where(completed: true)
   scope :active, where(active: true)
@@ -21,7 +23,7 @@ class Order < ActiveRecord::Base
 
   acts_as_taggable
 
-  attr_accessible :box, :box_id, :account, :account_id, :quantity, :likes, :dislikes, :completed, :frequency, :schedule
+  attr_accessible :box, :box_id, :account, :account_id, :quantity, :likes, :dislikes, :completed, :frequency, :schedule, :order_extras
 
   FREQUENCIES = %w( single weekly fortnightly monthly )
 
@@ -159,6 +161,19 @@ class Order < ActiveRecord::Base
     (start_date..end_date).each   { |date| updated_schedule.add_exception_time(date.beginning_of_day) }
     self.schedule = updated_schedule
     save
+  end
+
+  def order_extras=(hash)
+    raise "I wasn't expecting you to set these directly" unless hash.is_a?(Hash)
+    
+    order_extras.destroy_all
+
+    hash.each do |id, params|
+      count = params[:count]
+      next if count.to_i.zero?
+      order_extra = order_extras.build(extra_id: id)
+      order_extra.count = count
+    end
   end
 
   protected

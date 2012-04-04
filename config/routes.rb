@@ -88,6 +88,11 @@ BuckyBox::Application.routes.draw do
           post 'remove_pause'
         end
       end
+      resources :boxes do
+        member do
+          get 'extras'
+        end
+      end
 
       member do
         put 'change_balance', action: :change_balance, as: 'change_balance'

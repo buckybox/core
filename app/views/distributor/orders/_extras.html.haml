@@ -1,0 +1,8 @@
+<!doctype html> 
+-# Without doctype I would get this in chrome : Uncaught Error: HIERARCHY_REQUEST_ERR: DOM Exception 3
+- if box.present? && box.extras.size > 0
+  = simple_fields_for(:order) do |ef|
+    - box.extras.each do |extra|
+      - order_extra = order.order_extras.select{|e| e.extra_id == extra.id}.first # Instead of find by, get them all and pick it from the array, single DB request, not many
+      = ef.input "order_extras[#{extra.id}][count]", label: extra.name, input_html: { class: 'input-text', value: (order_extra && order_extra.count) || 0, id: "order_extras_#{extra.id}_count"}, as: :integer
+
