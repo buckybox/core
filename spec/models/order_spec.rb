@@ -217,16 +217,13 @@ describe Order do
         rule_schedule = Bucky::Schedule.new(Time.current - 2.months)
         rule_schedule.add_recurrence_rule(IceCube::Rule.daily(3))
 
-        rule_schedule_no_end_date = rule_schedule.clone
-        @order1 = Fabricate(:order, schedule: rule_schedule_no_end_date)
+        @order1 = Fabricate(:order, schedule: rule_schedule)
 
-        rule_schedule_end_date_future = rule_schedule.clone
-        rule_schedule_end_date_future.end_time = (Time.current + 1.month)
-        @order2 = Fabricate(:order, schedule: rule_schedule_end_date_future)
+        rule_schedule.end_time = (Time.current + 1.month)
+        @order2 = Fabricate(:order, schedule: rule_schedule)
 
-        rule_schedule_end_date_past = rule_schedule.clone
-        rule_schedule_end_date_past.end_time = (Time.current - 1.month)
-        @order3 = Fabricate(:order, schedule: rule_schedule_end_date_past)
+        rule_schedule.end_time = (Time.current - 1.month)
+        @order3 = Fabricate(:order, schedule: rule_schedule)
 
         time_schedule_future = Bucky::Schedule.new(Time.current - 2.months)
         time_schedule_future.add_recurrence_time(Time.current + 5.days)

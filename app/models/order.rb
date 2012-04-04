@@ -39,20 +39,11 @@ class Order < ActiveRecord::Base
 
   delegate :local_time_zone, to: :distributor, allow_nil: true
 
-  def create_schedule(start_time, frequency, days_by_number = nil)
-    if frequency != 'single' && days_by_number.nil?
-      raise(ArgumentError, "Unless it is a single order the schedule needs to specify days.")
-    end
-
-    create_schedule_for(:schedule, start_time, frequency, days_by_number)
-  end
-
   def self.deactivate_finished
     active.each do |order|
       order.use_local_time_zone do
         if order.schedule.next_occurrence.nil?
-          order.deactivate
-          order.save
+          order.update_attribute(:active, false)
           CronLog.log("Deactivated order #{order.id}")
         end
       end
@@ -63,6 +54,14 @@ class Order < ActiveRecord::Base
     # Using a join makes the returned models read-only, this is a work around
     order_ids = Order.where(customers: {route_id: route.id}).joins(:customer).collect(&:id)
     Order.where(["id in (?)", order_ids])
+  end
+
+  def create_schedule(start_time, frequency, days_by_number = nil)
+    if frequency != 'single' && days_by_number.nil?
+      raise(ArgumentError, "Unless it is a single order the schedule needs to specify days.")
+    end
+
+    create_schedule_for(:schedule, start_time, frequency, days_by_number)
   end
 
   def change_to_local_time_zone

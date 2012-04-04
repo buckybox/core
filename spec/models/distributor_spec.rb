@@ -168,6 +168,7 @@ describe Distributor do
       end
 
       context '.automate_completed_status' do
+        pending 'Perhaps I should do this?'
       end
     end
   end

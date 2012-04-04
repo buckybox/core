@@ -39,11 +39,9 @@ class Delivery < ActiveRecord::Base
     return false unless STATUS.include?(new_status)
     return false if (new_status == 'rescheduled' || new_status == 'repacked') && options[:date].nil?
 
-    result = true
-
-    deliveries.each do |delivery|
+    result = deliveries.all? do |delivery|
       delivery.status = new_status
-      result &= delivery.save!
+      delivery.save
     end
 
     return result
