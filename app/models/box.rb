@@ -24,12 +24,20 @@ class Box < ActiveRecord::Base
 
   EXTRA_OPTIONS = ["No", "Limited", "Unlimited"]
   def extra_option(include_count = false)
-    if extras_limit.blank? || extras_limit.zero?
+    if extras_not_allowed
       "No"
-    elsif extras_limit == -1
+    elsif extras_unlimited?
       "Unlimited"
     else
       include_count ? "Limited(#{extras_limit})" : "Limited"
     end
+  end
+
+  def extras_unlimited?
+    extras_limit == -1
+  end
+
+  def extras_not_allowed
+    extras_limit.blank? || extras_limit.zero?
   end
 end

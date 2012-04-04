@@ -308,7 +308,7 @@ ActiveRecord::Schema.define(:version => 20120329014533) do
     t.integer  "account_id"
     t.text     "schedule"
     t.boolean  "active",         :default => false,    :null => false
-    t.boolean  "extras_reoccur"
+    t.boolean  "extras_one_off"
   end
 
   add_index "orders", ["account_id"], :name => "index_orders_on_account_id"
