@@ -33,6 +33,7 @@ gem 'ice_cube'
 gem 'whenever'
 gem 'newrelic_rpm'
 gem 'acts_as_list'
+gem 'default_value_for'
 
 group :development do
   gem 'nifty-generators', require: false

@@ -26,7 +26,7 @@ describe Schedule do
       specify { @schedule.to_hash[:end_time].should be_utc}
     end
   end
-  
+
   context "#from_hash" do
     before do
       @schedule = Schedule.new
@@ -72,6 +72,62 @@ describe Schedule do
       end
       # Should have finished by now, if not we can assume it will take forever
       @thread.should_not be_alive
+    end
+  end
+
+  context "when removing a recurrence days or times" do
+    shared_examples "it has removeable days" do
+      it "should remove only the specified day" do
+        schedule.to_s.should match /Wednesday/i
+        schedule.remove_recurrence_rule_day(3)
+        schedule.to_s.should_not match /Wednesday/i
+      end
+    end
+
+    shared_examples "it has removeable recurrance times" do
+      it "should remove a recurrance time on that day" do
+        schedule.add_recurrence_time(Date.parse('next wednesday').to_time)
+        schedule.remove_recurrence_times_on_day(3)
+        schedule.recurrence_times.size.should == 0
+      end
+
+      it "should not remove a recurrance time on another day" do
+        schedule.add_recurrence_time(Date.parse('next wednesday').to_time)
+        schedule.remove_recurrence_times_on_day(2)
+        schedule.recurrence_times.size.should == 1
+      end
+    end
+
+    context "for single schedule" do
+      let(:schedule) {
+        Schedule.from_hash({
+          :rrules => [
+            {
+              :validations => {:day => [0, 1, 3, 4, 5, 6]},
+              :rule_type => "IceCube::WeeklyRule", :interval=>1
+            }
+          ]
+        })
+      }
+
+      it_behaves_like "it has removeable days"
+      it_behaves_like "it has removeable recurrance times"
+    end
+
+    context "for recurring schedule" do
+      let(:schedule) {
+        Schedule.from_hash({
+          :rrules => [
+            {
+              :validations => { :day_of_week => {0=>[1], 1=>[1], 3=>[1], 4=>[1], 5=>[1], 6=>[1]}},
+              :rule_type => "IceCube::MonthlyRule", :interval=>1
+            }
+          ]
+        })
+      }
+
+      it_behaves_like "it has removeable days"
+      it_behaves_like "it has removeable recurrance times"
     end
   end
 end

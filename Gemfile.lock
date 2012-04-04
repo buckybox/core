@@ -74,6 +74,7 @@ GEM
     columnize (0.3.6)
     daemons (1.1.8)
     database_cleaner (0.7.1)
+    default_value_for (1.0.7)
     delorean (1.2.0)
       chronic
     devise (1.5.3)
@@ -296,6 +297,7 @@ DEPENDENCIES
   carrierwave
   coffee-rails
   database_cleaner
+  default_value_for
   delorean
   devise (~> 1.5.3)
   fabrication

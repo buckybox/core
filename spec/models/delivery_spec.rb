@@ -1,15 +1,44 @@
 require 'spec_helper'
 
 describe Delivery do
-  specify { Fabricate.build(:delivery).should be_valid }
-  specify { Fabricate(:delivery).status.should == 'pending' }
-  specify { Fabricate(:delivery).status_change_type.should == 'auto' }
+  let(:delivery) { Fabricate.build(:delivery) }
+
+  specify { delivery.should be_valid }
+  specify { delivery.status.should == 'pending' }
+  specify { delivery.status_change_type.should == 'auto' }
 
   context :status do
     describe 'validity' do
-      Delivery::STATUS.each do |s|
-        specify { Fabricate.build(:delivery, status: s).should be_valid }
-        specify { Fabricate.build(:delivery, status: s, status_change_type: 'manual').should be_valid }
+      describe "for new record" do
+        (Delivery::STATUS - ['delivered']).each do |s|
+          it "is valid for status = #{s}" do
+            Fabricate.build(:delivery, status: s).should be_valid
+          end
+
+          it "is valid if manually changed to status = #{s}" do
+            Fabricate.build(:delivery, status: s, status_change_type: 'manual').should be_valid
+          end
+        end
+      end
+
+      describe "for existing record" do
+        before do
+          delivery.save!
+          delivery.order.save!
+          delivery.order.account.save!
+        end
+
+        it "is valid for status = delivered" do
+          delivery.status = 'delivered'
+          delivery.should be_valid
+        end
+
+        it "is valid if manually changed to status = delivered" do
+          delivery.save!
+          delivery.status = 'delivered'
+          delivery.status_change_type = 'manual'
+          delivery.should be_valid
+        end
       end
 
       specify { Fabricate.build(:delivery, status: 'lame').should_not be_valid }
@@ -17,10 +46,12 @@ describe Delivery do
     end
 
     describe '#future_status?' do
-      specify { Fabricate.build(:delivery, status: 'pending').future_status?.should be_true }
+      it "is true if status is pending" do
+        Fabricate.build(:delivery, status: 'pending').future_status?.should be_true
+      end
 
-      (Delivery::STATUS - %w(pending)).each do |s|
-        specify { Fabricate.build(:delivery, status: s).future_status?.should be_false }
+      it "is false if status is not pending" do
+        Fabricate.build(:delivery, status: 'cancelled').future_status?.should be_false
       end
     end
   end
