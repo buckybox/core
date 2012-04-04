@@ -6,7 +6,7 @@ class Route < ActiveRecord::Base
   has_many :deliveries, dependent: :destroy
   has_many :orders, through: :deliveries
   has_many :customers
-  has_many :route_schedule_transactions
+  has_many :route_schedule_transactions, autosave: true
 
   composed_of :fee,
     class_name: "Money",
@@ -18,17 +18,18 @@ class Route < ActiveRecord::Base
 
   attr_accessible :distributor, :name, :monday, :tuesday, :wednesday, :thursday, :friday, :saturday, :sunday, :fee
 
-  validates_presence_of :distributor, :name, :schedule, :fee
+  validates_presence_of :distributor_id, :name, :schedule, :fee
   validate :at_least_one_day_is_selected
 
   before_validation :create_schedule
-  before_validation :update_schedule, if: 'schedule_changed?'
+  before_save :record_schedule_change, if: :schedule_changed?
+  before_save :update_order_schedules, if: :schedule_changed?
 
   default_scope order(:name)
 
   DAYS = [:sunday, :monday, :tuesday, :wednesday, :thursday, :friday, :saturday]
 
-  delegate :local_time_zone, :to => :distributor
+  delegate :local_time_zone, to: :distributor, allow_nil: true
 
   def self.default_route(distributor)
     distributor.routes.first # For now the first one is the default
@@ -65,8 +66,7 @@ class Route < ActiveRecord::Base
     self.schedule = new_schedule
   end
 
-  def update_schedule
-    track_schedule_change
+  def update_order_schedules
     deleted_day_numbers.each do |day|
       future_orders.active.each do |order|
         order.deactivate_for_day!(day)
@@ -82,7 +82,7 @@ class Route < ActiveRecord::Base
     delivery_day_numbers(days)
   end
 
-  def track_schedule_change
+  def record_schedule_change
     route_schedule_transactions.build(route: self, schedule: self.schedule)
   end
 end

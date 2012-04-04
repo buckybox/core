@@ -10,11 +10,11 @@ describe PackingList do
     end
 
     specify { expect { @packing_list.mark_all_as_auto_packed }.should change(@packing_list.packages[0], :status).from('unpacked').to('packed') }
-    specify { expect { @packing_list.mark_all_as_auto_packed }.should change(@packing_list.packages[0], :packing_method).from(nil).to('auto') }
+    specify { expect { @packing_list.mark_all_as_auto_packed }.should_not change(@packing_list.packages[0], :packing_method) }
     specify { expect { @packing_list.mark_all_as_auto_packed }.should change(@packing_list.packages[1], :status).from('unpacked').to('packed') }
-    specify { expect { @packing_list.mark_all_as_auto_packed }.should change(@packing_list.packages[1], :packing_method).from(nil).to('auto') }
+    specify { expect { @packing_list.mark_all_as_auto_packed }.should_not change(@packing_list.packages[1], :packing_method) }
     specify { expect { @packing_list.mark_all_as_auto_packed }.should change(@packing_list.packages[2], :status).from('unpacked').to('packed') }
-    specify { expect { @packing_list.mark_all_as_auto_packed }.should change(@packing_list.packages[2], :packing_method).from(nil).to('auto') }
+    specify { expect { @packing_list.mark_all_as_auto_packed }.should_not change(@packing_list.packages[2], :packing_method) }
   end
 
   describe '.collect_lists' do

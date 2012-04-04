@@ -11,7 +11,7 @@ class Order < ActiveRecord::Base
 
   has_many :packages
   has_many :deliveries
-  has_many :order_schedule_transactions
+  has_many :order_schedule_transactions, autosave: true
 
   scope :completed, where(completed: true)
   scope :active, where(active: true)
@@ -36,6 +36,8 @@ class Order < ActiveRecord::Base
   scope :completed, where(completed: true)
   scope :active,    where(active: true)
   scope :inactive,  where(active: false)
+
+  delegate :local_time_zone, to: :distributor, allow_nil: true
 
   def create_schedule(start_time, frequency, days_by_number = nil)
     if frequency != 'single' && days_by_number.nil?
@@ -71,10 +73,6 @@ class Order < ActiveRecord::Base
     distributor.use_local_time_zone do
       yield
     end
-  end
-
-  def local_time_zone
-    (distributor.present? && distributor.local_time_zone) || BuckyBox::Application.config.time_zone
   end
 
   def price
@@ -173,7 +171,7 @@ class Order < ActiveRecord::Base
   end
 
   def record_schedule_change
-    order_schedule_transactions.build(order: self, schedule: self.schedule)
+    order_schedule_transactions.new(order: self, schedule: self.schedule)
   end
 
   private

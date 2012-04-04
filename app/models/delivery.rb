@@ -17,7 +17,7 @@ class Delivery < ActiveRecord::Base
   STATUS = %w(pending delivered cancelled rescheduled repacked)
   STATUS_CHANGE_TYPE = %w(manual auto)
 
-  validates_presence_of :order, :route, :status, :delivery_list, :package
+  validates_presence_of :order_id, :delivery_list_id, :route_id, :package_id, :status
   validates_inclusion_of :status, in: STATUS, message: "%{value} is not a valid status"
   validates_inclusion_of :status_change_type, in: STATUS_CHANGE_TYPE, message: "%{value} is not a valid status change type"
 

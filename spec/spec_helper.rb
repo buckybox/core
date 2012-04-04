@@ -67,6 +67,7 @@ RSpec.configure do |config|
       end
     end
   end
+
   Devise.setup do |config|
     config.stretches = 0
   end

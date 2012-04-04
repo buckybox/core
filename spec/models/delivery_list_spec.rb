@@ -75,6 +75,8 @@ describe DeliveryList do
   end
 
   describe '#all_finished?' do
+    before { fabricated_delivery_list.save }
+
     context 'no deliveries are pending' do
       before do
         Fabricate(:delivery, status: 'delivered', delivery_list: fabricated_delivery_list)

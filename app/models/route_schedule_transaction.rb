@@ -3,6 +3,8 @@ class RouteScheduleTransaction < ActiveRecord::Base
 
   belongs_to :route
 
+  has_one :distributor, through: :route
+
   schedule_for :schedule
 
   attr_accessible :route, :schedule
@@ -11,7 +13,5 @@ class RouteScheduleTransaction < ActiveRecord::Base
 
   default_scope order('created_at DESC')
 
-  def local_time_zone
-    route.local_time_zone
-  end
+  delegate :local_time_zone, to: :distributor, allow_nil: true
 end

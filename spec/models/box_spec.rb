@@ -1,9 +1,7 @@
 require 'spec_helper'
 
 describe Box do
-  before do
-    @box = Fabricate.build(:box)
-  end
+  let (:box) { Fabricate.build(:box) }
 
-  specify { @box.should be_valid }
+  specify { box.should be_valid }
 end

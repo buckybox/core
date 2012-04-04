@@ -32,16 +32,16 @@ class Package < ActiveRecord::Base
   STATUS = %w(unpacked packed)
   PACKING_METHOD = %w(manual auto)
 
-  validates_presence_of :packing_list, :status, :order
+  validates_presence_of :order, :packing_list_id, :status
   validates_inclusion_of :status, in: STATUS, message: "%{value} is not a valid status"
   validates_inclusion_of :packing_method, in: PACKING_METHOD, message: "%{value} is not a valid packing method", if: 'status == "packed"'
-
-  before_validation :default_status, if: 'status.nil?'
-  before_validation :default_packing_method, if: 'status == "packed" && packing_method.nil?'
 
   before_save :archive_data
 
   scope :originals, where(original_package_id:nil)
+
+  default_value_for :status, 'unpacked'
+  default_value_for :packing_method, 'auto'
 
   def self.calculated_price(box_price, route_fee, customer_discount)
     box_price         = box_price.price            if box_price.is_a?(Box)
@@ -72,14 +72,6 @@ class Package < ActiveRecord::Base
   end
 
   private
-
-  def default_status
-    self.status = 'unpacked'
-  end
-
-  def default_packing_method
-    self.packing_method = 'manual'
-  end
 
   def archive_data
     self.archived_address           = address.join(', ')

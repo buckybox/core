@@ -3,6 +3,8 @@ class OrderScheduleTransaction < ActiveRecord::Base
 
   belongs_to :order
 
+  has_one :distributor, through: :order
+
   schedule_for :schedule
 
   attr_accessible :order, :schedule
@@ -11,7 +13,5 @@ class OrderScheduleTransaction < ActiveRecord::Base
 
   default_scope order('created_at DESC')
 
-  def local_time_zone
-    order.local_time_zone if order.present?
-  end
+  delegate :local_time_zone, to: :distributor, allow_nil: true
 end
