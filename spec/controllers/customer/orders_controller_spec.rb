@@ -20,20 +20,32 @@ describe Customer::OrdersController do
     describe 'with invalid params' do
       before { post :create, { order: {} } }
 
-      specify { assigns(:order).should be_a(Order) }
-      specify { assigns(:order).should_not be_persisted }
+      specify { response.should redirect_to(customer_root_url) }
     end
   end
 
   describe "PUT 'update'" do
+    before do
+      @id    = Fabricate(:order, quantity: 1, account: @customer.account).id
+      @order = { quantity: 3 }
+    end
+
     describe 'with valid params' do
-      it 'creates a new order' do
-      end
+      before { put :update, { id: @id, order: @order } }
+
+      specify { assigns(:order).should be_a(Order) }
+      specify { assigns(:order).should be_persisted }
+      specify { assigns(:order).quantity.should == 3 }
     end
 
     describe 'with invalid params' do
-      it 'creates a new order' do
+      before do
+        @order[:frequency] = 'all of the times!'
+        put :update, { id: @id, order: @order }
       end
+
+      specify { Order.last.quantity.should == 1 }
+      specify { response.should redirect_to(customer_root_url) }
     end
   end
 end

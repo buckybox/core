@@ -4,7 +4,10 @@ class Customer::OrdersController < Customer::ResourceController
   respond_to :html, :xml, :json
 
   def update
-    update! { customer_root_url }
+    update! do |success, failure|
+      success.html { redirect_to customer_root_url }
+      failure.html { redirect_to customer_root_url }
+    end
   end
 
   def create
@@ -20,7 +23,10 @@ class Customer::OrdersController < Customer::ResourceController
       @order.create_schedule(start_time, frequency, days_by_number)
     end
 
-    create! { customer_root_url }
+    create! do |success, failure|
+      success.html { redirect_to customer_root_url }
+      failure.html { redirect_to customer_root_url }
+    end
   end
 
   def pause
