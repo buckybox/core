@@ -17,7 +17,7 @@
         %tr
           %td= order.id
           %td= order.box.name
-          %td= order.extras.collect{|extra| extra.name}.join(', ')
+          %td= order.extras_description
           %td= order.quantity
           %td= order.price.format
           %td= order.schedule.start_date.strftime("%B %d, %Y")

@@ -23,7 +23,7 @@ class Order < ActiveRecord::Base
 
   acts_as_taggable
 
-  attr_accessible :box, :box_id, :account, :account_id, :quantity, :likes, :dislikes, :completed, :frequency, :schedule, :order_extras
+  attr_accessible :box, :box_id, :account, :account_id, :quantity, :likes, :dislikes, :completed, :frequency, :schedule, :order_extras, :extras_one_off
 
   FREQUENCIES = %w( single weekly fortnightly monthly )
 
@@ -168,16 +168,25 @@ class Order < ActiveRecord::Base
     save
   end
 
-  def order_extras=(hash)
-    raise "I wasn't expecting you to set these directly" unless hash.is_a?(Hash)
+  def order_extras=(collection)
+    raise "I wasn't expecting you to set these directly" unless collection.is_a?(Hash) || collection.is_a?(Array)
     
     order_extras.destroy_all
 
-    hash.each do |id, params|
+    collection.to_a.compact.each do |id, params|
       count = params[:count]
       next if count.to_i.zero?
       order_extra = order_extras.build(extra_id: id)
       order_extra.count = count
+    end
+  end
+
+  def extras_description
+    extras_string = order_extras.collect{|extra| "#{extra.name}(#{extra.count})"}.join(', ')
+    if schedule.frequency.single?
+      extras_string
+    else
+      extras_string + (extras_one_off? ? ", one off" : ", reoccuring") if order_extras.count > 0
     end
   end
 

@@ -39,12 +39,44 @@ module Bucky
       end
     end
 
+    # Return :single, :weekly, :fortnightly or :monthly
     def frequency
-      @schedule.frequency
+      if recurrence_rules.empty? && recurrence_times.size == 1
+        Frequency.new(:single)
+      else
+        case recurrence_rules.first.to_hash[:rule_type]
+        when "IceCube::WeeklyRule"
+          case recurrence_rules.first.to_hash[:interval]
+          when 1
+            Frequency.new(:weekly)
+          when 2
+            Frequency.new(:fortnightly)
+          else
+            raise "Unknown frequency for #{self.inspect}, #{schedule.inspect}"
+          end
+        when "IceCube::MonthlyRule"
+          Frequency.new(:monthly)
+        else
+          raise "Unknown frequency for #{self.inspect}, #{schedule.inspect}"
+        end
+      end
     end
 
-    def frequency=(frequency)
-      @schedule.frequency = frequency
+    # Helper class for schedule.frequency
+    class Frequency
+      attr_accessor :frequency
+      def initialize(f)
+        @frequency = f
+      end
+      [:single, :weekly, :fortnightly, :monthly].each do |f|
+        # define single?, weekly?, fortnightly? & monthly?
+        define_method "#{f.to_s}?" do
+          @frequency == f
+        end
+      end
+      def to_s
+        @frequency.to_s
+      end
     end
 
     def end_time
