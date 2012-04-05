@@ -4,6 +4,6 @@ module Distributor::OrdersHelper
   end
 
   def order_start_dates(route)
-    route.schedule.next_occurrences(28, Time.current).map { |time| [time.strftime("%A, %B %d, %Y"), time.to_date] }
+    route.schedule.next_occurrences(28, route.distributor.window_end_at.to_time).map { |time| [time.strftime("%A, %B %d, %Y"), time.to_date] }
   end
 end

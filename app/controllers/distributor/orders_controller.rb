@@ -15,11 +15,7 @@ class Distributor::OrdersController < Distributor::ResourceController
     @order         = Order.new(params[:order])
     load_form
 
-    frequency      = params[:order][:frequency]
-    start_time     = Date.parse(params[:start_date]).to_time
-    days_by_number = params[:days].values.map(&:to_i).sort unless frequency == 'single'
-
-    @order.create_schedule(start_time, frequency, days_by_number)
+    @order.create_schedule(params[:start_date], params[:order][:frequency], params[:days])
 
     @order.account   = @account
     @order.completed = true
@@ -109,7 +105,7 @@ class Distributor::OrdersController < Distributor::ResourceController
   end
 
   def load_form
-    @customer    = @account.customer
-    @route       = @customer.route
+    @customer = @account.customer
+    @route    = @customer.route
   end
 end

@@ -15,13 +15,7 @@ class Customer::OrdersController < Customer::ResourceController
     @order.account   = current_customer.account
     @order.completed = true
 
-    if params[:start_date] && params[:days]
-      frequency        = params[:order][:frequency]
-      start_time       = Date.parse(params[:start_date]).to_time
-      days_by_number   = params[:days].values.map(&:to_i).sort unless frequency == 'single'
-
-      @order.create_schedule(start_time, frequency, days_by_number)
-    end
+    @order.create_schedule(params[:start_date], params[:order][:frequency], params[:days])
 
     create! do |success, failure|
       success.html { redirect_to customer_root_url }

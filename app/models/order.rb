@@ -57,8 +57,16 @@ class Order < ActiveRecord::Base
   end
 
   def create_schedule(start_time, frequency, days_by_number = nil)
+    if start_time.is_a?(String)
+      start_time = Date.parse(start_time).to_time
+    elsif start_time.is_a?(Date)
+      start_time = start_time.to_time
+    end
+
     if frequency != 'single' && days_by_number.nil?
-      raise(ArgumentError, "Unless it is a single order the schedule needs to specify days.")
+      raise(ArgumentError, 'Unless it is a single order the schedule needs to specify days.')
+    elsif !days_by_number.nil?
+      days_by_number = days_by_number.values.map(&:to_i)
     end
 
     create_schedule_for(:schedule, start_time, frequency, days_by_number)

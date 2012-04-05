@@ -58,7 +58,8 @@ module Bucky
     end
 
     self.send("#{name}=", schedule)
-    schedule
+
+    return schedule
   end
 
   module Util
