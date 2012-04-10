@@ -34,7 +34,6 @@ describe Customer::OrdersController do
         before do
           @order[:frequency] = 'single'
           @order.delete(:box_id)
-          debugger
 
           post :create, { order: @order, start_date: @start_date }
         end
