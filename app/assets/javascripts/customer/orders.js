@@ -22,14 +22,7 @@ $(function() {
   });
 
   $('.customer_order #order_frequency').change(function() {
-    var days = $(this).closest('.customer_order').find('#days');
-
-    if($(this).val() === 'single') {
-      days.hide();
-    }
-    else {
-      days.show();
-    }
+    day_display($(this));
   });
 });
 
@@ -37,8 +30,17 @@ function customer_order_init() {
   $('.customer_order').each( function() {
     var box_id = $('#order_box_id', this).val();
 
+    day_display($('.customer_order #order_frequency'));
+
     if(box_id) { customer_check_box(box_id, $(this)); }
   });
+}
+
+function day_display(frequency_selector) {
+  var days = frequency_selector.closest('.customer_order').find('#days');
+  var frequency = frequency_selector.val();
+
+  (frequency === 'single' ? days.hide() : days.show() );
 }
 
 function customer_check_box(box_id, current_order) {

@@ -19,7 +19,7 @@ class Customer::OrdersController < Customer::ResourceController
 
     create! do |success, failure|
       success.html { redirect_to customer_root_url }
-      failure.html { redirect_to customer_root_url }
+      failure.html { render action: 'new' }
     end
   end
 

@@ -24,7 +24,8 @@ class Order < ActiveRecord::Base
 
   FREQUENCIES = %w(single weekly fortnightly monthly)
 
-  validates_presence_of :account_id, :box_id, :quantity, :frequency, :schedule
+  validates_presence_of :account_id, :box_id, :quantity, :frequency
+  validates_length_of :schedule, minimum: 1, too_short: 'need more data to create the schedule' # we may want a custom validator sometime
   validates_numericality_of :quantity, greater_than: 0
   validates_inclusion_of :frequency, in: FREQUENCIES, message: "%{value} is not a valid frequency"
 
@@ -63,13 +64,13 @@ class Order < ActiveRecord::Base
       start_time = start_time.to_time
     end
 
-    if frequency != 'single' && days_by_number.nil?
-      raise(ArgumentError, 'Unless it is a single order the schedule needs to specify days.')
+    if frequency == 'single'
+      create_schedule_for(:schedule, start_time, frequency)
     elsif !days_by_number.nil?
       days_by_number = days_by_number.values.map(&:to_i)
-    end
 
-    create_schedule_for(:schedule, start_time, frequency, days_by_number)
+      create_schedule_for(:schedule, start_time, frequency, days_by_number)
+    end
   end
 
   def change_to_local_time_zone

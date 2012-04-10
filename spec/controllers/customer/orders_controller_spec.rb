@@ -4,23 +4,49 @@ describe Customer::OrdersController do
   as_customer
 
   describe "POST 'create'" do
-    describe 'with valid params' do
-      before do
-        order      = { quantity: 1, frequency: 'weekly', completed: true, box_id: 1 }
-        start_date = Date.current
-        days       = { tuesday: 2, wednesday: 3 }
+    before do
+      @order      = { quantity: 1, frequency: 'weekly', completed: true, box_id: 1 }
+      @start_date = Date.current
+      @days       = { tuesday: 2, wednesday: 3 }
+    end
 
-        post :create, { order: order, start_date: start_date, days: days }
+    describe 'with valid params' do
+      context 'for a one off order' do
+        before do
+          @order[:frequency] = 'single'
+          post :create, { order: @order, start_date: @start_date }
+        end
+
+        specify { assigns(:order).should be_a(Order) }
+        specify { assigns(:order).should be_persisted }
       end
 
-      specify { assigns(:order).should be_a(Order) }
-      specify { assigns(:order).should be_persisted }
+      context 'for a reccuring order' do
+        before { post :create, { order: @order, start_date: @start_date, days: @days } }
+
+        specify { assigns(:order).should be_a(Order) }
+        specify { assigns(:order).should be_persisted }
+      end
     end
 
     describe 'with invalid params' do
-      before { post :create, { order: {} } }
+      context 'for a one off order' do
+        before do
+          @order[:frequency] = 'single'
+          @order.delete(:box_id)
+          debugger
 
-      specify { response.should redirect_to(customer_root_url) }
+          post :create, { order: @order, start_date: @start_date }
+        end
+
+        specify { response.should render_template('new') }
+      end
+
+      context 'for a reccuring order' do
+        before { post :create, { order: @order, start_date: @start_date } }
+
+        specify { response.should render_template('new') }
+      end
     end
   end
 
