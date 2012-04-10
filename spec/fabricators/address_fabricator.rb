@@ -1,8 +1,12 @@
 Fabricator(:address) do
-  customer!
+  customer
   address_1 { '1 Address St' }
   suburb { 'Suburb' }
   city { 'City' }
+end
+
+Fabricator(:address_with_associations, from: :address) do
+  customer!
 end
 
 Fabricator(:full_address, from: :address) do
@@ -13,3 +17,4 @@ Fabricator(:full_address, from: :address) do
   phone_2 { '22-222-222-2222' }
   phone_3 { '33-333-333-3333' }
 end
+

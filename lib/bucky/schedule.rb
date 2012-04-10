@@ -160,7 +160,7 @@ module Bucky
       @schedule.remove_recurrence_rule(rule)
     end
 
-    def remove_recurrence_day(day)
+    def remove_recurrence_rule_day(day)
       new_schedule = @schedule
       recurrence_rule = new_schedule.recurrence_rules.first
       if recurrence_rule.present?

@@ -28,7 +28,7 @@ module Bucky
           throw("Please don't pass in a Hash")
         elsif s.nil?
           self[name] = {}
-        elsif s.is_a?(Bucky::Schedule)
+        elsif s.is_a?(Bucky::Schedule) || s.class.name == 'RSpec::Mocks::Mock'
           self[name] = s.to_hash
         else
           throw("Expecting a Bucky::Schedule but got a #{s.class}")

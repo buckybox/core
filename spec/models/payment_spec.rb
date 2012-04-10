@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe Payment do
-  before :all do
+  before do
     @payment = Fabricate(:payment)
   end
 

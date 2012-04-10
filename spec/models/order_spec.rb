@@ -2,7 +2,24 @@ require 'spec_helper'
 include Bucky
 
 describe Order do
-  context :with_default_order do
+  context "when removing a day" do
+    let(:order)            { Order.new }
+    let(:order_scheduling) { order }
+    let(:schedule)         { double("schedule", :to_hash => {a: 'b'}) }
+
+    before do
+      order_scheduling.stub(:schedule => schedule)
+    end
+
+    it "should ask the schedule to remove rules and times for that day" do
+      schedule.should_receive(:remove_recurrence_rule_day).with(:tuesday)
+      schedule.should_receive(:remove_recurrence_times_on_day).with(:tuesday)
+      order.remove_day(:tuesday)
+    end
+  end
+
+
+  context :with_default_saved_order do
     before { @order = Fabricate(:order) }
 
     specify { @order.should be_valid }
@@ -124,7 +141,7 @@ describe Order do
 
         specify { @order.schedule.should_not be_nil }
         specify { @order.schedule.next_occurrence.should_not be_nil }
-        specify { @order.schedule.next_occurrences(28, Time.current).size.should eq(28) } 
+        specify { @order.schedule.next_occurrences(28, Time.current).size.should eq(28) }
         specify { @order.schedule.to_s.should == @schedule.to_s }
         specify { @order.schedule.next_occurrence == @schedule.next_occurrence }
       end
@@ -160,7 +177,7 @@ describe Order do
     context 'scheduled_delivery' do
       before do
         @schedule = @order.schedule
-        delivery_list = Fabricate(:delivery_list, date: Date.current + 5.days)
+        delivery_list = Fabricate(:delivery_list_with_associations, date: Date.current + 5.days)
         @delivery = Fabricate(:delivery, delivery_list: delivery_list)
         @order.add_scheduled_delivery(@delivery)
         @order.save

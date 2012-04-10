@@ -29,7 +29,7 @@ describe BankStatement do
     context :associations do
       before :each do
         @statement.save!
-        hash = {"0" => "1"}
+        hash = {"0" => @customer.id.to_s}
         @statement.process_statement!(hash)
       end
 

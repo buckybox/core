@@ -28,6 +28,8 @@ class Route < ActiveRecord::Base
 
   DAYS = [:sunday, :monday, :tuesday, :wednesday, :thursday, :friday, :saturday]
 
+  delegate :local_time_zone, :to => :distributor
+
   def self.default_route(distributor)
     distributor.routes.first # For now the first one is the default
   end
@@ -49,13 +51,7 @@ class Route < ActiveRecord::Base
   end
 
   def future_orders
-    # Using a join makes the returned models read-only, this is a work around
-    order_ids = Order.where(customers: {route_id: id}).joins(:customer).collect(&:id)
-    Order.where(["id in (?)", order_ids])
-  end
-
-  def local_time_zone
-    distributor.local_time_zone
+    Order.for_route_read_only(self)
   end
 
   protected
@@ -85,10 +81,7 @@ class Route < ActiveRecord::Base
     track_schedule_change
     deleted_day_numbers.each do |day|
       future_orders.active.each do |order|
-        order.remove_recurrence_day(day)
-        order.remove_recurrence_times_on_day(day)
-        order.deactivate if order.schedule_empty?
-        order.save
+        order.deactivate_for_day!(day)
       end
     end
   end

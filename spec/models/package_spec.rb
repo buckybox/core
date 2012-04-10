@@ -5,7 +5,7 @@ describe Package do
 
   context :archive_data do
     before do
-      @address = Fabricate(:address)
+      @address = Fabricate(:address_with_associations)
       @account = Fabricate(:account, :customer => @address.customer)
       @box = Fabricate(:box, :distributor => @account.distributor)
       @order = Fabricate(:order, :box => @box, :account => @account)
