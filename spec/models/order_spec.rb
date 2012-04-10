@@ -2,7 +2,7 @@ require 'spec_helper'
 include Bucky
 
 describe Order do
-  context "when removing a day" do
+  context 'when removing a day' do
     let(:order)            { Order.new }
     let(:order_scheduling) { order }
     let(:schedule)         { double("schedule", :to_hash => {a: 'b'}) }
@@ -19,7 +19,7 @@ describe Order do
   end
 
 
-  context :with_default_saved_order do
+  context 'with default saved order' do
     before { @order = Fabricate(:order) }
 
     specify { @order.should be_valid }
@@ -63,7 +63,7 @@ describe Order do
       end
     end
 
-    context '.create_schedule' do
+    context '#create_schedule' do
       Delorean.time_travel_to(Date.parse('2013-02-02')) do
         before { @order = Fabricate(:order) }
 

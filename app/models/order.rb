@@ -67,7 +67,7 @@ class Order < ActiveRecord::Base
     if frequency == 'single'
       create_schedule_for(:schedule, start_time, frequency)
     elsif !days_by_number.nil?
-      days_by_number = days_by_number.values.map(&:to_i)
+      days_by_number = days_by_number.values.map(&:to_i) if days_by_number.is_a?(Hash)
 
       create_schedule_for(:schedule, start_time, frequency, days_by_number)
     end
