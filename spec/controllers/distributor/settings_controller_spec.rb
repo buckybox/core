@@ -20,6 +20,13 @@ describe Distributor::SettingsController do
     specify { assigns(:box).should be_a_new(Box) }
   end
 
+  describe '#extras' do
+    before { get :extras, distributor_id: @distributor.id }
+
+    specify { assigns(:extras).should eq(@distributor.extras) }
+    specify { assigns(:extra).should be_a_new(Extra) }
+  end
+
   describe '#business_information' do
     before { get :business_information, distributor_id: @distributor.id }
 

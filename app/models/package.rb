@@ -39,9 +39,11 @@ class Package < ActiveRecord::Base
   before_validation :default_status, if: 'status.nil?'
   before_validation :default_packing_method, if: 'status == "packed" && packing_method.nil?'
 
-  before_save :archive_data
+  before_save :archive_data # TODO maybe this should be before_create?
 
   scope :originals, where(original_package_id:nil)
+
+  serialize :archived_extras
 
   def self.calculated_price(box_price, route_fee, customer_discount)
     box_price         = box_price.price            if box_price.is_a?(Box)
@@ -91,5 +93,12 @@ class Package < ActiveRecord::Base
     self.archived_route_fee         = route.fee
     self.archived_customer_discount = customer.discount
     self.archived_order_quantity    = order.quantity
+    archive_extras
+  end
+
+  def archive_extras
+    if archived_extras.blank?
+      self.archived_extras          = order.pack_and_update_extras
+    end
   end
 end

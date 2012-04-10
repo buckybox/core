@@ -1,5 +1,5 @@
 Fabricator(:order_extra) do
-  order_id 1
-  extra_id 1
+  order { Fabricate(:order) }
+  extra { Fabricate(:extra) }
   count 1
 end

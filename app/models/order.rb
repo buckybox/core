@@ -190,6 +190,17 @@ class Order < ActiveRecord::Base
     end
   end
 
+  def pack_and_update_extras
+    packed_extras = order_extras.collect(&:to_hash)
+    clear_extras if extras_one_off # Now that the extras are in a package, we don't need them on the order anymore, unless it reoccurs
+
+    packed_extras
+  end
+
+  def clear_extras
+    self.extras = []
+  end
+
   protected
 
   # Manually create the first delivery all following deliveries should be scheduled for creation by the cron job

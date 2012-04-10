@@ -4,7 +4,12 @@ describe Distributor::BoxesController do
   render_views
 
   as_distributor
-  before { @customer = Fabricate(:customer, distributor: @distributor) }
+
+  before do
+    @extras = 2.times.collect{Fabricate(:extra, distributor: @distributor)}
+    @extra_ids = @extras.collect(&:id)
+    @customer = Fabricate(:customer, distributor: @distributor)
+  end
 
   describe '#create' do
     context 'with valid params' do
@@ -12,7 +17,8 @@ describe Distributor::BoxesController do
         post :create, {
           box: {
             name: 'yodas box', price: '246', likes: '1', dislikes: '1', available_single: '1', available_weekly: '0',
-            available_fourtnightly: '1', description: "tasty selection of herbs from Yoda's garden.", extras_limit: 0
+            available_fourtnightly: '1', description: "tasty selection of herbs from Yoda's garden.", extras_limit: 0,
+            extra_ids: @extra_ids
           }
         }
       end

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120329014533) do
+ActiveRecord::Schema.define(:version => 20120410023926) do
 
   create_table "accounts", :force => true do |t|
     t.integer  "customer_id"
@@ -332,6 +332,7 @@ ActiveRecord::Schema.define(:version => 20120329014533) do
     t.integer  "archived_fee_cents",         :default => 0
     t.string   "archived_fee_currency"
     t.decimal  "archived_customer_discount", :default => 0.0, :null => false
+    t.text     "archived_extras"
   end
 
   add_index "packages", ["order_id"], :name => "index_packages_on_order_id"
