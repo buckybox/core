@@ -69,7 +69,7 @@ describe Order do
 
         context 'exceptions' do
           %w(weekly fortnightly monthly).each do |frequency|
-            specify { expect { @order.create_schedule(Time.current, frequency) }.should raise_error }
+            specify { @order.create_schedule(Time.current, frequency).should be_nil }
           end
         end
 
