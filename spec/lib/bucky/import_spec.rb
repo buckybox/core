@@ -10,6 +10,7 @@ describe Import do
           csv << ['trash','65','more trash']
           csv << ['you can see me','for sure']
         end
+
         @parsed_csv = Import.preprocess(csv)
       end
 
@@ -28,7 +29,7 @@ describe Import do
         end
       end
       specify { expect{ Import.preprocess(csv_with_less_headers)}.to raise_error }
-      
+
       let(:csv_with_more_headers) do
         CSV.generate do |csv|
           csv << (Import::CSV_HEADERS + ["Im not meant to be here"])
@@ -38,7 +39,7 @@ describe Import do
         end
       end
       specify { expect{ Import.preprocess(csv_with_more_headers)}.to raise_error }
-      
+
       let(:csv_with_wrong_headers) do
         CSV.generate do |csv|
           headers = Import::CSV_HEADERS.clone
@@ -58,7 +59,7 @@ describe Import do
       @customers = Import.parse(File.read(Import::TEST_FILE), Distributor.new) # Bucky::Import::Customer
     end
     specify { @customers.size.should eq(4) }
-    
+
     context 'John' do
       before(:all) do
         @john = @customers.first
@@ -130,7 +131,6 @@ describe Import do
         specify { @boxes.first.delivery_days.should eq('Thursday') }
         specify { @boxes.first.next_delivery_date.should eq("22-Mar-2012") }
       end
-      
     end
 
     context 'William' do
@@ -168,7 +168,6 @@ describe Import do
         specify { @boxes.first.delivery_days.should eq('') }
         specify { @boxes.first.next_delivery_date.should eq("21-Apr-2012") }
       end
-      
     end
   end
 end

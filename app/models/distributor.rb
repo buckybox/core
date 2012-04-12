@@ -149,9 +149,9 @@ class Distributor < ActiveRecord::Base
 
     dates_delivery_lists = delivery_lists.find_by_date(date)
     dates_packing_lists  = packing_lists.find_by_date(date)
-    
+
     successful = true
-    
+
     successful &= dates_packing_lists.mark_all_as_auto_packed     if dates_packing_lists
     successful &= dates_delivery_lists.mark_all_as_auto_delivered if dates_delivery_lists
 
@@ -173,7 +173,7 @@ class Distributor < ActiveRecord::Base
       yield
     end
   end
-  
+
   def import_customers(loaded_customers)
     Distributor.transaction do
       use_local_time_zone do
@@ -181,10 +181,10 @@ class Distributor < ActiveRecord::Base
 
         expected = Bucky::Import::Customer
         raise "Expecting #{expected} but was #{loaded_customers.first.class}" unless loaded_customers.first.class == expected
-        
+
         loaded_customers.each do |c|
           customer = customers.find_by_number(c.number) || self.customers.build({number: c.number})
-          
+
           c_route = routes.find_by_name(c.delivery_route)
           raise "Route #{c.delivery_route} not found for distributor with id #{id}" if c_route.blank?
           customer.import(c, c_route)
