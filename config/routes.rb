@@ -133,6 +133,9 @@ BuckyBox::Application.routes.draw do
     resources :distributors do
       member do
         get 'impersonate'
+        get 'customer_import'
+        put 'validate_customer_import'
+        post 'customer_import_upload'
       end
 
       collection do

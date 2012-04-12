@@ -43,7 +43,11 @@ class Route < ActiveRecord::Base
   end
 
   def delivery_day_numbers(days=delivery_days)
-    days.collect { |day| DAYS.index(day)}
+    Route.delivery_day_numbers(days)
+  end
+
+  def self.delivery_day_numbers(delivery_days)
+    delivery_days.collect { |day| DAYS.index(day)}
   end
 
   def future_orders
@@ -58,9 +62,17 @@ class Route < ActiveRecord::Base
     end
   end
 
+  def start_time=(time)
+    @start_time = time
+  end
+
+  def start_time
+    @start_time || Time.current.beginning_of_day
+  end
+
   def create_schedule
     recurrence_rule = IceCube::Rule.weekly.day(*delivery_days)
-    new_schedule = Bucky::Schedule.new(Time.current.beginning_of_day)
+    new_schedule = Bucky::Schedule.new(self.start_time)
     new_schedule.add_recurrence_rule(recurrence_rule)
     self.schedule = new_schedule
   end
