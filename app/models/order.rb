@@ -41,6 +41,8 @@ class Order < ActiveRecord::Base
   scope :active,    where(active: true)
   scope :inactive,  where(active: false)
 
+  default_value_for :extras_one_off, false
+
   def create_schedule(start_time, frequency, days_by_number = nil)
     if frequency != 'single' && days_by_number.nil?
       raise(ArgumentError, "Unless it is a single order the schedule needs to specify days.")
