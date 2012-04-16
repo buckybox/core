@@ -20,7 +20,6 @@ module Admin::DistributorsHelper
   end
 
   def box_type_status(distributor, box)
-    debugger if distributor.boxes.find_by_name(box.box_type).blank?
     distributor.boxes.find_by_name(box.box_type).blank? ? ERROR_CLASS : PASS_CLASS
   end
 end
