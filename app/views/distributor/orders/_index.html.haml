@@ -17,10 +17,10 @@
         %tr
           %td= order.id
           %td= order.box.name
-          %td= order.extras_description
+          %td= order.extras_description(true)
           %td= order.quantity
           %td= order.price.format
-          %td= order.schedule.start_date.strftime("%B %d, %Y")
+          %td= order.schedule.start_time.strftime("%B %d, %Y")
           %td
             = order_schedule(order)
             - if order.schedule.exception_times.empty?

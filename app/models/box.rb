@@ -33,6 +33,10 @@ class Box < ActiveRecord::Base
     end
   end
 
+  def extras_limit
+    self[:extras_limit] || 0
+  end
+
   def extras_unlimited?
     extras_limit == -1
   end

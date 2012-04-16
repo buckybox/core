@@ -195,4 +195,26 @@ class Distributor < ActiveRecord::Base
 
     self.support_email = self.email if self.support_email.blank?
   end
+
+  # This is meant to be run within console for dev work via Distributor.send(:travel_forward_a_day)
+  # This will simulate the cron jobs each hour and move the time forward 1 day. It is designed to
+  # be run repeatedly to move forward a day at a time
+  def self.travel_forward_a_day(day=1)
+    #every 1.hour do
+    @@original_time ||= Time.current
+    @@advanced ||= 0
+    (24*day).times.each do |h|
+      h+=1 # start at 1, not 0
+
+      Delorean.time_travel_to (@@original_time + (@@advanced*day.days) + h.hours)
+
+      CronLog.log("Checking distributors for automatic daily list creation.")
+      Distributor.create_daily_lists
+      CronLog.log("Checking deliveries and packages for automatic completion.")
+      Distributor.automate_completed_status
+      CronLog.log("Checking orders, deactivating those without any more deliveries.")
+      Order.deactivate_finished
+    end
+    @@advanced += day
+  end
 end

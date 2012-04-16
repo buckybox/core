@@ -15,4 +15,16 @@ class Extra < ActiveRecord::Base
   def to_hash
     {name: name, unit: unit, price_cents: price_cents, currency: currency}
   end
+
+  def name_with_unit
+    "#{name} [#{unit}]"
+  end
+
+  def name_with_price(customer_discount)
+    "#{name} - #{price_with_discount(customer_discount).format} / #{unit}"
+  end
+
+  def price_with_discount(customer_discount)
+    Package.calculated_extras_price([self.to_hash.merge(count: 1)], customer_discount)
+  end
 end

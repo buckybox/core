@@ -30,6 +30,7 @@ class Order < ActiveRecord::Base
   validates_presence_of :box, :quantity, :frequency, :account, :schedule
   validates_numericality_of :quantity, greater_than: 0
   validates_inclusion_of :frequency, in: FREQUENCIES, message: "%{value} is not a valid frequency"
+  validate :extras_within_box_limit
 
   before_save :activate, if: :just_completed?
   before_save :record_schedule_change, if: :schedule_changed?
@@ -81,11 +82,17 @@ class Order < ActiveRecord::Base
   end
 
   def price
-    individual_price * quantity
+    result = individual_price * quantity
+    result += extras_price if extras.present?
+    result
   end
 
   def individual_price
     Package.calculated_price(box, route, customer)
+  end
+
+  def extras_price
+    Package.calculated_extras_price(order_extras, customer)
   end
 
   def customer= cust
@@ -181,9 +188,9 @@ class Order < ActiveRecord::Base
     end
   end
 
-  def extras_description
-    extras_string = order_extras.collect{|extra| "#{extra.name}(#{extra.count})"}.join(', ')
-    if schedule.frequency.single?
+  def extras_description(show_frequency=false)
+    extras_string = Package.extras_description(order_extras)
+    if schedule.frequency.single? || !show_frequency
       extras_string
     else
       extras_string + (extras_one_off? ? ", one off" : ", reoccuring") if order_extras.count > 0
@@ -201,6 +208,14 @@ class Order < ActiveRecord::Base
     self.extras = []
   end
 
+  def contents_description
+    Package.contents_description(box, quantity, order_extras)
+  end
+
+  def extras_summary
+    Package.extras_summary(order_extras)
+  end
+
   protected
 
   # Manually create the first delivery all following deliveries should be scheduled for creation by the cron job
@@ -210,6 +225,14 @@ class Order < ActiveRecord::Base
 
   def record_schedule_change
     order_schedule_transactions.build(order: self, schedule: self.schedule)
+  end
+
+  def extras_within_box_limit
+    errors.add(:base, "There is more than #{box.extras_limit} extras for this box") unless extras_count <= box.extras_limit || box.extras_unlimited?
+  end
+
+  def extras_count
+    order_extras.collect(&:count).sum
   end
 
   private

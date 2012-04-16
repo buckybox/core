@@ -10,7 +10,7 @@
         = f.input :last_name
         = f.association :route, :collection => current_distributor.routes, :include_blank => false
         = f.input :tag_list, :label => 'Customer tags', :hint => 'Comma separated'
-        = f.input :discount
+        = f.input :discount, input_html: {step: 0.01}
         = f.input :notes
 
     .six.columns

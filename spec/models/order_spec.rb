@@ -285,4 +285,6 @@ describe Order do
       order.pack_and_update_extras.should eq([{count: 3, name: "iPhone 4s", unit: "one", price_cents: 99995, currency: "NZD"}, {count: 1, name: "Apple", unit: "kg", price_cents: 295, currency: "NZD"}])
     end
   end
+
+  it "should validate extras limit"
 end

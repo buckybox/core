@@ -61,6 +61,7 @@ group :development, :test do
   gem 'mailcatcher', require: false
 
   gem 'simplecov',   require: false
+  gem 'delorean'
 end
 
 group :test do
@@ -78,4 +79,5 @@ end
 
 group :staging do
   gem 'mail_safe'
+  gem 'delorean'
 end

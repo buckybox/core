@@ -9,14 +9,19 @@
             = f.input :name, label: false, placeholder: 'Name', size: 20
             = f.input :price, as: :currency, label: false, input_html: { class: 'input-text' }, hint: 'per box'
 
-            %h4 Custom boxes
-            = f.input :likes, label: 'Enable likes'
-            = f.input :dislikes, label: 'Enable dislikes'
-            = f.input :extra_option, label: 'Extras', collection: Box::EXTRA_OPTIONS, include_blank: false
-            #extras_form
-              = f.input :extras_limit, label: 'Limited to', hint: 'per box', input_html: { class: 'input-text' }
-              =# JS updates prop 'min' in distributor/boxes.js
-              = f.association :extras, collection: current_distributor.extras, as: :check_boxes, label: false
+            %fieldset
+              %h4 Custom boxes
+              = f.input :likes, label: 'Enable likes'
+              = f.input :dislikes, label: 'Enable dislikes'
+            %fieldset
+              %h4 Extras
+              = f.input :extra_option, label: false, collection: Box::EXTRA_OPTIONS, include_blank: false
+              #extras_form
+                = f.input :extras_limit, label: 'Limited to', hint: 'per box', input_html: { class: 'input-text' }
+                =# JS updates prop 'min' in distributor/boxes.js
+                .input.check_boxes.optional
+                  =# Simple form forgets to wrap it :\
+                  = f.collection_check_boxes :extra_ids, current_distributor.extras, :id, :name_with_unit
 
         .four.columns
           = f.input :description

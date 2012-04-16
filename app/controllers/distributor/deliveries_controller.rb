@@ -82,6 +82,7 @@ class Distributor::DeliveriesController < Distributor::ResourceController
       ]
 
       deliveries.each do |delivery|
+        package  = delivery.package
         route    = delivery.route
         order    = delivery.order
         customer = delivery.customer
@@ -116,7 +117,7 @@ class Distributor::DeliveriesController < Distributor::ResourceController
             box.name,
             order.likes,
             order.dislikes,
-            nil
+            package.extras_description
           ]
         end
       end
