@@ -38,7 +38,7 @@ BuckyBox::Application.routes.draw do
     resources :distributors,        only: :update
     resource  :bank_information,    only: [:create, :update]
     resource  :invoice_information, only: [:create, :update]
-    resources :boxes,               except: [:index, :show]
+    resources :boxes,               except: :index
     resources :routes,              except: [:index, :show]
     resources :transactions,        only: :create
 
