@@ -4,7 +4,6 @@ Fabricator(:order) do
   quantity 1
   frequency 'single'
   schedule { new_single_schedule }
-  active true
   completed true
 end
 
@@ -13,7 +12,7 @@ Fabricator(:active_order, from: :order) do
   active true
 end
 
-Fabricator(:inactive_order, :from => :order) do
+Fabricator(:inactive_order, from: :order) do
   active false
 end
 

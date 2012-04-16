@@ -13,6 +13,6 @@ class Transaction < ActiveRecord::Base
 
   KINDS = %w(delivery payment amend)
 
-  validates_presence_of :account, :kind, :amount, :description
+  validates_presence_of :account_id, :kind, :amount, :description
   validates :kind, inclusion: { in: KINDS, message: "%{value} is not a valid kind of transaction" }
 end

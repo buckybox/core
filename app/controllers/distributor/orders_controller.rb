@@ -11,15 +11,11 @@ class Distributor::OrdersController < Distributor::ResourceController
   end
 
   def create
-    @account         = Account.find(params[:account_id])
-    @order           = Order.new(params[:order])
+    @account       = Account.find(params[:account_id])
+    @order         = Order.new(params[:order])
     load_form
 
-    frequency        = params[:order][:frequency]
-    start_time       = Date.parse(params[:start_date]).to_time
-    days_by_number   = params[:days].values.map(&:to_i).sort unless frequency == 'single'
-
-    @order.create_schedule(start_time, frequency, days_by_number)
+    @order.create_schedule(params[:start_date], params[:order][:frequency], params[:days])
 
     @order.account   = @account
     @order.completed = true
@@ -29,14 +25,13 @@ class Distributor::OrdersController < Distributor::ResourceController
 
   def edit
     edit! do
-      @customer    = @account.customer
-      @route       = @customer.route
+      load_form
     end
   end
 
   def update
-    @account     = current_distributor.accounts.find(params[:account_id])
-    @order       = current_distributor.orders.find(params[:id])
+    @account = current_distributor.accounts.find(params[:account_id])
+    @order   = current_distributor.orders.find(params[:id])
 
     # Not allowing changes to the schedule at the moment
     # Will revisit when we have time to build a proper UI for it
@@ -61,8 +56,8 @@ class Distributor::OrdersController < Distributor::ResourceController
   end
 
   def pause
-    @account     = Account.find(params[:account_id])
-    @order       = Order.find(params[:id])
+    @account   = Account.find(params[:account_id])
+    @order     = Order.find(params[:id])
 
     start_date = Date.parse(params['start_date'])
     end_date   = Date.parse(params['end_date']) - 1.day
@@ -89,8 +84,8 @@ class Distributor::OrdersController < Distributor::ResourceController
   end
 
   def remove_pause
-    @account     = Account.find(params[:account_id])
-    @order       = Order.find(params[:id])
+    @account   = Account.find(params[:account_id])
+    @order     = Order.find(params[:id])
 
     schedule   = @order.schedule
 
@@ -110,7 +105,7 @@ class Distributor::OrdersController < Distributor::ResourceController
   end
 
   def load_form
-    @customer    = @account.customer
-    @route       = @customer.route
+    @customer = @account.customer
+    @route    = @customer.route
   end
 end

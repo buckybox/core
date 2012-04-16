@@ -10,14 +10,14 @@ class Delivery < ActiveRecord::Base
   has_one :address,     through: :order
   has_one :customer,    through: :order
 
-  acts_as_list scope: [ :delivery_list_id, :route_id ]
+  acts_as_list scope: [:delivery_list_id, :route_id]
 
   attr_accessible :order, :order_id, :route, :status, :status_change_type, :delivery_list, :package, :package_id, :account
 
   STATUS = %w(pending delivered cancelled rescheduled repacked)
   STATUS_CHANGE_TYPE = %w(manual auto)
 
-  validates_presence_of :order, :route, :status, :delivery_list, :package
+  validates_presence_of :order_id, :delivery_list_id, :route_id, :package_id, :status
   validates_inclusion_of :status, in: STATUS, message: "%{value} is not a valid status"
   validates_inclusion_of :status_change_type, in: STATUS_CHANGE_TYPE, message: "%{value} is not a valid status change type"
 
@@ -39,11 +39,9 @@ class Delivery < ActiveRecord::Base
     return false unless STATUS.include?(new_status)
     return false if (new_status == 'rescheduled' || new_status == 'repacked') && options[:date].nil?
 
-    result = true
-
-    deliveries.each do |delivery|
+    result = deliveries.all? do |delivery|
       delivery.status = new_status
-      result &= delivery.save!
+      delivery.save
     end
 
     return result

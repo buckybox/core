@@ -97,8 +97,7 @@ describe Delivery do
 
     context '#self.change_statuses' do
       before do
-        @deliveries = []
-        3.times { |s| @deliveries << Fabricate(:delivery) }
+        @deliveries = [Fabricate.build(:delivery)]
       end
 
       specify { Delivery.change_statuses(@deliveries, 'bad_status').should be_false }
@@ -108,10 +107,10 @@ describe Delivery do
     end
 
     context '#self.auto_deliver' do
-      specify { expect { Fabricate(:delivery).should change(Delivery.last, :status).to('delivered') } }
-      specify { expect { Fabricate(:delivery, status_change_type: 'manual', status: 'delivered').should_not change(Delivery.last, :status_change_type).to('auto') } }
-      specify { expect { Fabricate(:delivery, status_change_type: 'manual', status: 'cancelled').should_not change(Delivery.last, :status).to('delivered') } }
-      specify { expect { Fabricate(:delivery, status_change_type: 'manual', status: 'pending').should_not change(Delivery.last, :status).to('delivered') } }
+      specify { expect { Fabricate.build(:delivery).should change(Delivery.last, :status).to('delivered') } }
+      specify { expect { Fabricate.build(:delivery, status_change_type: 'manual', status: 'delivered').should_not change(Delivery.last, :status_change_type).to('auto') } }
+      specify { expect { Fabricate.build(:delivery, status_change_type: 'manual', status: 'cancelled').should_not change(Delivery.last, :status).to('delivered') } }
+      specify { expect { Fabricate.build(:delivery, status_change_type: 'manual', status: 'pending').should_not change(Delivery.last, :status).to('delivered') } }
     end
   end
 end

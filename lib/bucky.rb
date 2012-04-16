@@ -40,7 +40,8 @@ module Bucky
   def create_schedule_for(name, start_time, frequency, days_by_number = nil)
     schedule = Bucky::Schedule.build(start_time, frequency, days_by_number)
     self.send("#{name}=", schedule)
-    schedule
+
+    return schedule
   end
 
   module Util

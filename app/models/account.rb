@@ -21,7 +21,7 @@ class Account < ActiveRecord::Base
 
   attr_accessible :customer, :tag_list
 
-  validates_presence_of :customer, :balance
+  validates_presence_of :customer_id, :balance
 
   before_validation :default_balance_and_currency
   validates_presence_of :customer, :balance

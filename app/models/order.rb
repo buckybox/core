@@ -11,7 +11,7 @@ class Order < ActiveRecord::Base
 
   has_many :packages
   has_many :deliveries
-  has_many :order_schedule_transactions
+  has_many :order_schedule_transactions, autosave: true
 
   scope :completed, where(completed: true)
   scope :active, where(active: true)
@@ -22,15 +22,16 @@ class Order < ActiveRecord::Base
 
   attr_accessible :box, :box_id, :account, :account_id, :quantity, :likes, :dislikes, :completed, :frequency, :schedule
 
-  FREQUENCIES = %w( single weekly fortnightly monthly )
+  FREQUENCIES = %w(single weekly fortnightly monthly)
 
-  validates_presence_of :box, :quantity, :frequency, :account, :schedule
+  validates_presence_of :account_id, :box_id, :quantity, :frequency
+  validates_length_of :schedule, minimum: 1, too_short: 'need more data to create the schedule' # we may want a custom validator sometime
   validates_numericality_of :quantity, greater_than: 0
   validates_inclusion_of :frequency, in: FREQUENCIES, message: "%{value} is not a valid frequency"
   validate :schedule_includes_route
 
-  before_save :activate, if: :just_completed?
-  before_save :record_schedule_change, if: :schedule_changed?
+  before_validation :activate, if: :just_completed?
+  before_validation :record_schedule_change, if: :schedule_changed?
 
   default_scope order('created_at DESC')
 
@@ -38,20 +39,13 @@ class Order < ActiveRecord::Base
   scope :active,    where(active: true)
   scope :inactive,  where(active: false)
 
-  def create_schedule(start_time, frequency, days_by_number = nil)
-    if frequency != 'single' && days_by_number.nil?
-      raise(ArgumentError, "Unless it is a single order the schedule needs to specify days.")
-    end
-
-    create_schedule_for(:schedule, start_time, frequency, days_by_number)
-  end
+  delegate :local_time_zone, to: :distributor, allow_nil: true
 
   def self.deactivate_finished
     active.each do |order|
       order.use_local_time_zone do
         if order.schedule.next_occurrence.nil?
-          order.deactivate
-          order.save
+          order.update_attribute(:active, false)
           CronLog.log("Deactivated order #{order.id}")
         end
       end
@@ -64,6 +58,22 @@ class Order < ActiveRecord::Base
     Order.where(["id in (?)", order_ids])
   end
 
+  def create_schedule(start_time, frequency, days_by_number = nil)
+    if start_time.is_a?(String)
+      start_time = Date.parse(start_time).to_time
+    elsif start_time.is_a?(Date)
+      start_time = start_time.to_time
+    end
+
+    if frequency == 'single'
+      create_schedule_for(:schedule, start_time, frequency)
+    elsif !days_by_number.nil?
+      days_by_number = days_by_number.values.map(&:to_i) if days_by_number.is_a?(Hash)
+
+      create_schedule_for(:schedule, start_time, frequency, days_by_number)
+    end
+  end
+
   def change_to_local_time_zone
     distributor.change_to_local_time_zone
   end
@@ -72,10 +82,6 @@ class Order < ActiveRecord::Base
     distributor.use_local_time_zone do
       yield
     end
-  end
-
-  def local_time_zone
-    (distributor.present? && distributor.local_time_zone) || BuckyBox::Application.config.time_zone
   end
 
   def price
@@ -174,7 +180,7 @@ class Order < ActiveRecord::Base
   protected
 
   def record_schedule_change
-    order_schedule_transactions.build(order: self, schedule: self.schedule)
+    order_schedule_transactions.new(order: self, schedule: self.schedule)
   end
 
   def schedule_includes_route

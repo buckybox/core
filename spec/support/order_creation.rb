@@ -1,5 +1,5 @@
 def daily_orders(distributor, n = 3)
-  daily_order_schedule = schedule = Schedule.new
+  daily_order_schedule = Schedule.new
   daily_order_schedule.add_recurrence_rule(IceCube::Rule.daily)
 
   n.times do

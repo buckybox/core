@@ -22,10 +22,10 @@ $(function() {
 
   $('#distributor_order #order_frequency').change(function() {
     if($(this).val() === 'single') {
-      $('#days').hide();
+      $('#distributor_order #days').hide();
     }
     else {
-      $('#days').show();
+      $('#distributor_order #days').show();
     }
   });
 });

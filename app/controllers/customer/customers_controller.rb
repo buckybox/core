@@ -3,10 +3,6 @@ class Customer::CustomersController < Customer::ResourceController
 
   respond_to :html, :xml, :json
 
-  def resource
-    current_customer
-  end
-
   def update
     update! do |success, failure|
       success.html { redirect_to customer_root_url, notice: 'Your information has successfully been updated.' }
@@ -26,5 +22,15 @@ class Customer::CustomersController < Customer::ResourceController
         format.json { render json: current_customer.errors, status: :unprocessable_entity }
       end
     end
+  end
+
+  protected
+
+  def resource
+    current_customer
+  end
+
+  def begin_of_association_chain
+    nil
   end
 end

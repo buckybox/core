@@ -10,11 +10,11 @@ describe PackingList do
     end
 
     specify { expect { @packing_list.mark_all_as_auto_packed }.should change(@packing_list.packages[0], :status).from('unpacked').to('packed') }
-    specify { expect { @packing_list.mark_all_as_auto_packed }.should change(@packing_list.packages[0], :packing_method).from(nil).to('auto') }
+    specify { expect { @packing_list.mark_all_as_auto_packed }.should_not change(@packing_list.packages[0], :packing_method) }
     specify { expect { @packing_list.mark_all_as_auto_packed }.should change(@packing_list.packages[1], :status).from('unpacked').to('packed') }
-    specify { expect { @packing_list.mark_all_as_auto_packed }.should change(@packing_list.packages[1], :packing_method).from(nil).to('auto') }
+    specify { expect { @packing_list.mark_all_as_auto_packed }.should_not change(@packing_list.packages[1], :packing_method) }
     specify { expect { @packing_list.mark_all_as_auto_packed }.should change(@packing_list.packages[2], :status).from('unpacked').to('packed') }
-    specify { expect { @packing_list.mark_all_as_auto_packed }.should change(@packing_list.packages[2], :packing_method).from(nil).to('auto') }
+    specify { expect { @packing_list.mark_all_as_auto_packed }.should_not change(@packing_list.packages[2], :packing_method) }
   end
 
   describe '.collect_lists' do
@@ -22,15 +22,14 @@ describe PackingList do
       time_travel_to Date.parse('2012-01-23')
 
       @distributor = Fabricate(:distributor)
-      box = Fabricate(:box, distributor: @distributor)
-      3.times { Fabricate(:recurring_order, completed: true, box: box) }
+      daily_orders(@distributor, 1)
 
       time_travel_to Date.parse('2012-01-30')
 
-      ((Date.current - 1.week)..Date.current).each { |date| PackingList.generate_list(@distributor, date) }
+      ((Date.current - 1.day)..Date.current).each { |date| PackingList.generate_list(@distributor, date) }
     end
 
-    specify { PackingList.collect_lists(@distributor, (Date.current - 1.week), (Date.current + 1.week)).should be_kind_of(Array) }
+    specify { PackingList.collect_lists(@distributor, (Date.current - 1.day), (Date.current + 1.day)).should be_kind_of(Array) }
 
     after { back_to_the_present }
   end

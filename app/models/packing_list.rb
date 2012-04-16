@@ -7,7 +7,7 @@ class PackingList < ActiveRecord::Base
 
   attr_accessible :distributor, :date
 
-  validates_presence_of :distributor, :date
+  validates_presence_of :distributor_id, :date
   validates_uniqueness_of :date, scope: :distributor_id
 
   default_scope order(:date)

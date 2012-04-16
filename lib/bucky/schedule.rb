@@ -49,7 +49,8 @@ module Bucky
       end
     end
 
-    def time_zone=(tz = Time.zone)
+    def time_zone=(tz)
+      tz = Time.zone if tz.nil?
       @time_zone = tz.clone
     end
 

@@ -2,7 +2,7 @@ require 'spec_helper'
 include Bucky
 
 describe Order do
-  context "when removing a day" do
+  context 'when removing a day' do
     let(:order)            { Order.new }
     let(:order_scheduling) { order }
     let(:schedule)         { double("schedule", :to_hash => {a: 'b'}) }
@@ -19,7 +19,7 @@ describe Order do
   end
 
 
-  context :with_default_saved_order do
+  context 'with default saved order' do
     before { @order = Fabricate(:order) }
 
     specify { @order.should be_valid }
@@ -63,13 +63,13 @@ describe Order do
       end
     end
 
-    context '.create_schedule' do
+    context '#create_schedule' do
       Delorean.time_travel_to(Date.parse('2013-02-02')) do
         before { @order = Fabricate(:order) }
 
         context 'exceptions' do
           %w(weekly fortnightly monthly).each do |frequency|
-            specify { expect { @order.create_schedule(Time.current, frequency) }.should raise_error }
+            specify { @order.create_schedule(Time.current, frequency).should be_nil }
           end
         end
 
@@ -216,16 +216,13 @@ describe Order do
       before do
         rule_schedule = new_recurring_schedule(Time.current - 2.months)
 
-        rule_schedule_no_end_date = rule_schedule.clone
-        @order1 = Fabricate(:order, schedule: rule_schedule_no_end_date)
+        @order1 = Fabricate(:order, schedule: rule_schedule)
 
-        rule_schedule_end_date_future = rule_schedule.clone
-        rule_schedule_end_date_future.end_time = (Time.current + 1.month)
-        @order2 = Fabricate(:order, schedule: rule_schedule_end_date_future)
+        rule_schedule.end_time = (Time.current + 1.month)
+        @order2 = Fabricate(:order, schedule: rule_schedule)
 
-        rule_schedule_end_date_past = rule_schedule.clone
-        rule_schedule_end_date_past.end_time = (Time.current - 1.month)
-        @order3 = Fabricate(:order, schedule: rule_schedule_end_date_past)
+        rule_schedule.end_time = (Time.current - 1.month)
+        @order3 = Fabricate(:order, schedule: rule_schedule)
 
         time_schedule_future = Bucky::Schedule.new(Time.current - 2.months)
         time_schedule_future.add_recurrence_time(Time.current + 5.days)

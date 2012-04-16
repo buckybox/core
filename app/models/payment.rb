@@ -15,7 +15,7 @@ class Payment < ActiveRecord::Base
 
   KINDS = %w(bank_transfer credit_card manual)
 
-  validates_presence_of :distributor, :account, :amount, :kind, :description
+  validates_presence_of :distributor_id, :account_id, :amount, :kind, :description
   validates_inclusion_of :kind, :in => KINDS, :message => "%{value} is not a valid kind of payment"
   validates_numericality_of :amount, :greater_than => 0
 

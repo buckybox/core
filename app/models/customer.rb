@@ -25,8 +25,7 @@ class Customer < ActiveRecord::Base
   attr_accessible :address_attributes, :first_name, :last_name, :email, :name, :distributor_id, :distributor,
     :route, :route_id, :password, :password_confirmation, :remember_me, :tag_list, :discount, :number, :notes
 
-  validates_presence_of :first_name, :email, :distributor, :route, :discount
-  #validates_uniqueness_of :email #This is done within Devise, left here to remind you
+  validates_presence_of :distributor_id, :route_id, :first_name, :email, :discount
   validates_uniqueness_of :number, scope: :distributor_id
   validates_numericality_of :number, greater_than: 0
   validates_numericality_of :discount, greater_than_or_equal_to: 0.0, less_than_or_equal_to: 1.0
