@@ -4,7 +4,7 @@ class Customer < ActiveRecord::Base
   belongs_to :distributor
   belongs_to :route
 
-  has_one :address, dependent: :destroy, inverse_of: :customer
+  has_one :address, dependent: :destroy, inverse_of: :customer, autosave: true
   has_one :account, dependent: :destroy
 
   has_many :events
@@ -25,8 +25,7 @@ class Customer < ActiveRecord::Base
   attr_accessible :address_attributes, :first_name, :last_name, :email, :name, :distributor_id, :distributor,
     :route, :route_id, :password, :password_confirmation, :remember_me, :tag_list, :discount, :number, :notes
 
-  validates_presence_of :first_name, :email, :distributor, :route, :discount
-  #validates_uniqueness_of :email #This is done within Devise, left here to remind you
+  validates_presence_of :distributor_id, :route_id, :first_name, :email, :discount
   validates_uniqueness_of :number, scope: :distributor_id
   validates_numericality_of :number, greater_than: 0
   validates_numericality_of :discount, greater_than_or_equal_to: 0.0, less_than_or_equal_to: 1.0
@@ -87,6 +86,60 @@ class Customer < ActiveRecord::Base
   def randomize_password
     self.password = Customer.random_string(12)
     self.password_confirmation = password
+  end
+
+  def import(c, c_route)
+    self.update_attributes({
+      first_name: c.first_name,
+      last_name: c.last_name,
+      email: c.email,
+      route: c_route,
+      discount: c.discount,
+      number: c.number,
+      notes: c.notes,
+      address_attributes: {
+        address_1: c.delivery_address_line_1,
+        address_2: c.delivery_address_line_2,
+        suburb: c.delivery_suburb,
+        city: c.delivery_city,
+        postcode: c.delivery_postcode,
+        delivery_note: c.delivery_instructions,
+        phone_1: c.phone_1,
+        phone_2: c.phone_2
+      }
+    })
+
+    self.tag_list = c.tags.join(", ")
+    self.save! # Blow up on error so transaction is aborted
+
+    self.account.change_balance_to(c.account_balance, {description: "Inital CSV Import"})
+    self.account.save! # Blow up on error so transaction is aborted
+
+    self.import_boxes(c.boxes)
+  end
+
+  def import_boxes(c_boxes)
+    c_boxes.each do |b|
+      box = distributor.boxes.find_by_name(b.box_type)
+      raise "Can't find Box '#{b.box_type}' for distributor with id #{id}" if box.blank?
+
+      delivery_date = Time.zone.parse(b.next_delivery_date)
+      raise "Date couldn't be parsed from '#{b.delivery_date}'" if delivery_date.blank?
+
+      delivery_day_numbers = Route.delivery_day_numbers(b.delivery_days.split(',').collect{|d| d.strip.downcase.to_sym})
+
+      order = self.orders.build({
+        box: box,
+        quantity: 1,
+        likes: b.likes,
+        dislikes: b.dislikes,
+        account: self.account
+      })
+      account.route = self.route
+      order.create_schedule(delivery_date, b.delivery_frequency, delivery_day_numbers)
+      order.activate
+      order.save! # Blow up on error so transaction is aborted
+    end
   end
 
   private

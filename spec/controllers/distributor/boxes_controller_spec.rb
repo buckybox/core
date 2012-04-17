@@ -2,7 +2,6 @@ require 'spec_helper'
 
 describe Distributor::BoxesController do
   render_views
-
   as_distributor
 
   before do
@@ -10,10 +9,16 @@ describe Distributor::BoxesController do
     @extra_ids = @extras.collect(&:id)
     @customer = Fabricate(:customer, distributor: @distributor)
   end
+  let(:box) { Fabricate(:box, distributor: @distributor, price: 234) }
+
+  describe '#show' do
+    before { get :show, format: :json, id: box.id }
+    specify { response.should be_success }
+  end
 
   describe '#create' do
     context 'with valid params' do
-      before(:each) do
+      before do
         post :create, {
           box: {
             name: 'yodas box', price: '246', likes: '1', dislikes: '1', available_single: '1', available_weekly: '0',
@@ -29,9 +34,7 @@ describe Distributor::BoxesController do
     end
 
     context 'with invalid params' do
-      before(:each) do
-        post :create, { box: { name: 'yoda' } }
-      end
+      before { post :create, { box: { name: 'yoda' } } }
 
       specify { assigns(:box).name.should eq('yoda') }
       specify { response.should render_template('boxes/new') }
@@ -40,10 +43,7 @@ describe Distributor::BoxesController do
 
   describe '#update' do
     context 'with valid params' do
-      before(:each) do
-        @box = Fabricate(:box, distributor: @distributor, price: 234)
-        put :update, { id: @box.id, box: { price: 123 } }
-      end
+      before { put :update, { id: box.id, box: { price: 123 } } }
 
       specify { flash[:notice].should eq('Box was successfully updated.') }
       specify { assigns(:box).price.should eq(123) }
@@ -51,10 +51,7 @@ describe Distributor::BoxesController do
     end
 
     context 'with invalid params' do
-      before(:each) do
-        @box = Fabricate(:box, distributor: @distributor, price: 234)
-        put :update, { id: @box.id, box: {name: ''} }
-      end
+      before { put :update, { id: box.id, box: {name: ''} } }
 
       specify { assigns(:box).price.should eq(234) }
       specify { response.should render_template('boxes/edit') }

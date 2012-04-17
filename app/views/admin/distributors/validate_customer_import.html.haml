@@ -1,0 +1,51 @@
+- title('Admin - Customer Import Check')
+
+.row
+  .twelve.columns
+    - if @customers.blank?
+      %h3 No Customers Found
+    - else
+      - @customers.each do |customer|
+        - route = @distributor.routes.find_by_name(customer.delivery_route)
+
+        .row
+          %h3.twelve.columns{style: 'border-bottom:1px solid grey;'}== Customer ##{customer.number}
+        .row
+          - group_count = (@customer_data_fields.size / 3.0).ceil
+
+          - @customer_data_fields.in_groups_of(group_count, false).each do |field_group|
+            %dl.four.columns.import-list
+              - field_group.each do |field|
+                %dt
+                  = field.to_s.titleize
+
+                  - if field == :tags
+                    %dd= customer.tags.join(', ')
+                  - elsif field == :delivery_route
+                    %dd{ class: delivery_route_status(route) }= customer.delivery_route
+                  - else
+                    %dd= customer.send(field)
+
+        .row
+          %table.twelve.columns
+            %thead
+              %tr
+                - @order_data_fields.each do |field|
+                  %th= field.to_s.titleize
+            %tbody
+              - customer.boxes.each do |box|
+                %tr{ class: order_status(route, box) }
+                  - @order_data_fields.each do |field|
+                    - if field == :box_type
+                      %td{ class: box_type_status(@distributor, box) }= box.box_type
+                    - else
+                      %td= box.send(field)
+
+.row
+  .twelve.columns
+    = simple_form_for(:customer_import, url: customer_import_upload_admin_distributor_path, method: :post) do |f|
+      .inputs
+        = f.input :csv, as: :file, label: "CSV File"
+
+      .actions
+        = f.button :submit, "Upload & Commit"

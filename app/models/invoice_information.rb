@@ -4,6 +4,6 @@ class InvoiceInformation < ActiveRecord::Base
   attr_accessible :distributor, :gst_number, :billing_address_1, :billing_address_2, :billing_suburb, :billing_city,
     :billing_postcode, :phone
 
-  validates_presence_of :distributor, :gst_number, :billing_address_1, :billing_suburb, :billing_city,
+  validates_presence_of :distributor_id, :gst_number, :billing_address_1, :billing_suburb, :billing_city,
     :billing_postcode, :phone
 end

@@ -8,7 +8,7 @@ class Distributor < ActiveRecord::Base
   has_many :orders,             dependent: :destroy, through: :boxes
   has_many :deliveries,         dependent: :destroy, through: :orders
   has_many :payments,           dependent: :destroy
-  has_many :customers
+  has_many :customers,          autosave: true # Want to save those customers added via import_customers
   has_many :accounts,           dependent: :destroy, through: :customers
   has_many :invoices,           dependent: :destroy, through: :accounts
   has_many :transactions,       dependent: :destroy, through: :accounts
@@ -49,11 +49,14 @@ class Distributor < ActiveRecord::Base
 
   before_validation :parameterize_name
   before_validation :check_emails
-  before_validation :generate_default_automate_values
 
   after_save :generate_required_daily_lists
 
   default_scope order('created_at DESC')
+
+  default_value_for :advance_hour,            DEFAULT_AUTOMATIC_DELIVERY_HOUR
+  default_value_for :advance_days,            DEFAULT_ADVANCED_DAYS
+  default_value_for :automatic_delivery_hour, DEFAULT_AUTOMATIC_DELIVERY_HOUR
 
   # Devise Override: Avoid validations on update or if now password provided
   def password_required?
@@ -99,13 +102,19 @@ class Distributor < ActiveRecord::Base
     end
   end
 
-  def generate_required_daily_lists
-    days_to_generate = (advance_days - 1) # this is because we are including the start date
-
+  def window_start_from
     # If we have missed the cutoff point add a day so we start generation from tomorrow
-    if_closed  = ( advance_hour < Time.current.hour ? 1 : 0 )
-    start_date = Date.current + if_closed.day
-    end_date   = Date.current + if_closed.day + days_to_generate.days
+    Date.current + ( advance_hour < Time.current.hour ? 1 : 0 ).days
+  end
+
+  def window_end_at
+    days_to_generate = (advance_days - 1) # this is because we are including the start date
+    window_start_from + days_to_generate.days
+  end
+
+  def generate_required_daily_lists
+    start_date = window_start_from
+    end_date   = window_end_at
 
     newest_list_date = packing_lists.last.date if packing_lists.last
 
@@ -150,9 +159,9 @@ class Distributor < ActiveRecord::Base
 
     dates_delivery_lists = delivery_lists.find_by_date(date)
     dates_packing_lists  = packing_lists.find_by_date(date)
-    
+
     successful = true
-    
+
     successful &= dates_packing_lists.mark_all_as_auto_packed     if dates_packing_lists
     successful &= dates_delivery_lists.mark_all_as_auto_delivered if dates_delivery_lists
 
@@ -170,18 +179,32 @@ class Distributor < ActiveRecord::Base
 
   def use_local_time_zone
     new_time_zone = local_time_zone
+
     Time.use_zone(new_time_zone) do
       yield
     end
   end
 
-  private
+  def import_customers(loaded_customers)
+    Distributor.transaction do
+      use_local_time_zone do
+        raise "No customers" if loaded_customers.blank?
 
-  def generate_default_automate_values
-    self.advance_hour            = DEFAULT_AUTOMATIC_DELIVERY_HOUR if self.advance_hour.nil?
-    self.advance_days            = DEFAULT_ADVANCED_DAYS           if self.advance_days.nil?
-    self.automatic_delivery_hour = DEFAULT_AUTOMATIC_DELIVERY_HOUR if self.automatic_delivery_hour.nil?
+        expected = Bucky::Import::Customer
+        raise "Expecting #{expected} but was #{loaded_customers.first.class}" unless loaded_customers.first.class == expected
+
+        loaded_customers.each do |c|
+          customer = customers.find_by_number(c.number) || self.customers.build({number: c.number})
+
+          c_route = routes.find_by_name(c.delivery_route)
+          raise "Route #{c.delivery_route} not found for distributor with id #{id}" if c_route.blank?
+          customer.import(c, c_route)
+        end
+      end
+    end
   end
+
+  private
 
   def parameterize_name
     self.parameter_name = name.parameterize if self.name

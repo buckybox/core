@@ -9,53 +9,58 @@ $(function() {
   }
 
   $('.customer_order #order_box_id').change(function() {
-    var order_id = $(this).first().parent().parent().parent().children('#order_id').val();
     var box_id = $(this).val();
-
-    var order_css_id = '#edit_order_' + order_id;
-
-    $(order_css_id + ' #order_likes').val('');
-    $(order_css_id + ' #order_dislikes').val('');
+    var current_order = $(this).closest('.customer_order');
 
     if(box_id) {
-      customer_check_box(order_id, box_id);
+      customer_check_box(box_id, current_order);
     }
     else {
-      $(order_css_id + ' #likes_input').hide();
-      $(order_css_id + ' #dislikes_input').hide();
+      current_order.find('#likes_input').hide();
+      current_order.find('#dislikes_input').hide();
     }
+  });
+
+  $('.customer_order #order_frequency').change(function() {
+    day_display($(this));
   });
 });
 
 function customer_order_init() {
   $('.customer_order').each( function() {
-    var order_id = $('#order_id', this).val();
     var box_id = $('#order_box_id', this).val();
 
-    if(order_id && box_id) { customer_check_box(order_id, box_id); }
+    day_display($('.customer_order #order_frequency'));
+
+    if(box_id) { customer_check_box(box_id, $(this)); }
   });
 }
 
-function customer_check_box(order_id, box_id) {
+function day_display(frequency_selector) {
+  var days = frequency_selector.closest('.customer_order').find('#days');
+  var frequency = frequency_selector.val();
+
+  (frequency === 'single' ? days.hide() : days.show() );
+}
+
+function customer_check_box(box_id, current_order) {
   $.ajax({
     type: 'GET',
-    url: '/customer/order/' + order_id + '/box/' + box_id + '.json',
+    url: '/customer/boxes/' + box_id + '.json',
     dataType: 'json',
     success: function(data) {
-      var order_css_id = '#edit_order_' + data['order']['id'];
-
-      if(data['box']['likes']) {
-        $(order_css_id + ' #likes_input').show();
+      if(data['likes']) {
+        current_order.find('#likes_input').show();
       }
       else {
-        $(order_css_id + ' #likes_input').hide();
+        current_order.find('#likes_input').hide();
       }
 
-      if(data['box']['dislikes']) {
-        $(order_css_id + ' #dislikes_input').show();
+      if(data['dislikes']) {
+        current_order.find('#dislikes_input').show();
       }
       else {
-        $(order_css_id + ' #dislikes_input').hide();
+        current_order.find('#dislikes_input').hide();
       }
     }
   });

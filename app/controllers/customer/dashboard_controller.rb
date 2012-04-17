@@ -6,6 +6,8 @@ class Customer::DashboardController < Customer::BaseController
     @balance      = @customer.account.balance
     @transactions = @customer.transactions.limit(5)
     @distributor  = @customer.distributor
+
+    @order = @customer.orders.new
   end
 
   def box

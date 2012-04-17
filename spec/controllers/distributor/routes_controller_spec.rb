@@ -4,7 +4,7 @@ describe Distributor::RoutesController do
   render_views
 
   as_distributor
-  before { @customer = Fabricate(:customer, :distributor => @distributor) }
+  before { @customer = Fabricate(:customer, distributor: @distributor) }
 
   describe '#create' do
     context 'with valid params' do

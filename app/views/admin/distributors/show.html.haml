@@ -1,5 +1,9 @@
 - title("Admin - #{@distributor.name}")
 
+.row
+  .nine.columns
+  .three.columns= link_to "Upload Customer Data", customer_import_admin_distributor_path(@distributor)
+
 %table
   %tr
     %td Name:
