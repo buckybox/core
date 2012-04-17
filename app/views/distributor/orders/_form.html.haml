@@ -5,14 +5,14 @@
     .row
       .four.columns
         .inputs
-          = f.association :box, collection: box_collection(@account.customer, with_price: true), include_blank: false
-          :javascript
-            current_account_id = #{@account.id};
-          #extras_form.row
-            = render partial: 'extras', locals: {account: @account, order: @order, box: @order.box }
+          = f.association :box, collection: box_collection(@account.customer, with_price: true), include_blank: false, input_html: {id: "distributor_order_box_id"}
 
           - unless @order.persisted?
             = f.input :frequency, collection: order_frequencies, include_blank: false
+          :javascript
+            current_account_id = #{@account.id};
+          #distributor_extras_form.row
+            = render partial: 'extras', locals: {account: @account, order: @order, box: @order.box }
 
       .four.columns
         .inputs

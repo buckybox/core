@@ -123,8 +123,11 @@ BuckyBox::Application.routes.draw do
     end
 
     resource  :address, only: :update
-    resources :boxes, only: :show
-
+    resources :boxes, only: [:show] do
+      member do
+        get 'extras'
+      end
+    end
     resources :orders, only: [ :new, :create, :update ] do
       member do
         put 'pause'
