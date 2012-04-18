@@ -131,6 +131,10 @@ class Package < ActiveRecord::Base
     order_extras.collect{|e| "#{e[:count]}x #{e[:name]} #{e[:unit]}"}.join(', ')
   end
 
+  def archived_extras
+    self[:archived_extras] || []
+  end
+
   private
 
   def archive_data
