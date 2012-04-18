@@ -16,22 +16,24 @@ module Bucky
 
       define_method name do
         bs = nil
+
         if self[name]
           bs = Bucky::Schedule.from_hash(self[name])
           bs.time_zone = local_time_zone
         end
+
         bs
       end
 
       define_method "#{name}=" do |s|
         if s.is_a?(Hash)
-          throw("Please don't pass in a Hash")
+          throw "Please don't pass in a Hash"
         elsif s.nil?
           self[name] = {}
         elsif s.is_a?(Bucky::Schedule) || s.class.name == 'RSpec::Mocks::Mock'
           self[name] = s.to_hash
         else
-          throw("Expecting a Bucky::Schedule but got a #{s.class}")
+          throw "Expecting a Bucky::Schedule but got a #{s.class}"
         end
       end
     end
@@ -56,6 +58,7 @@ module Bucky
       (ActiveRecord::Base.connection.tables - %w[schema_migrations]).each do |table|
         table.classify.constantize rescue nil
       end
+
       @recorded_schedules.clone
     end
 

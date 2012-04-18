@@ -5,6 +5,7 @@ module Bucky
       schedule = Bucky::Schedule.new(start_time.utc)
 
       throw "days_by_number '#{days_by_number}' wasn't valid" if days_by_number.present? && (days_by_number & 0.upto(6).to_a).blank? # [nil, '', nil] & [0,1,2,3,4,5,6] = []
+
       days_by_number &= 1.upto(6).to_a
 
       if frequency == 'single'
@@ -22,11 +23,12 @@ module Bucky
         else
           raise "#{frequency} does not match the expected single, monthly, weekly, fortnightly"
         end
-        
+
         recurrence_rule = IceCube::Rule.weekly(weeks_between_deliveries).day(*days_by_number)
         schedule.add_recurrence_rule(recurrence_rule)
       end
-      schedule
+
+      return schedule
     end
 
     def initialize(*args)
@@ -34,6 +36,7 @@ module Bucky
         @schedule = IceCube::Schedule.new(Time.current.utc)
       elsif args.first.is_a?(IceCube::Schedule)
         schedule = args.first
+
         # Convert to UTC
         schedule.start_time = schedule.start_time.utc unless schedule.start_time.blank?
         schedule.end_time = schedule.end_time.utc unless schedule.end_time.blank?
@@ -42,9 +45,11 @@ module Bucky
       else
         start_time = args.first.utc
         options = args.second || {}
+
         if options[:end_time].present?
           options[:end_time] = options[:end_time].utc
         end
+
         @schedule = IceCube::Schedule.new(start_time, options)
       end
     end
@@ -66,14 +71,6 @@ module Bucky
       else
         {}
       end
-    end
-
-    def end_time
-      @schedule.end_time.in_time_zone(time_zone)
-    end
-
-    def end_time=(end_time)
-      @schedule.end_time = end_time.utc
     end
 
     def occurs_on?(date)
@@ -125,8 +122,16 @@ module Bucky
       @schedule.occurrences_between(start_time.utc, end_time.utc)
     end
 
+    def end_time
+      @schedule.end_time.in_time_zone(time_zone) if @schedule.end_time
+    end
+
+    def end_time=(end_time)
+      @schedule.end_time = end_time.utc
+    end
+
     def start_time
-      @schedule.start_time.in_time_zone(time_zone)
+      @schedule.start_time.in_time_zone(time_zone) if @schedule.start_time
     end
 
     def start_time=(time)
@@ -138,7 +143,7 @@ module Bucky
     end
 
     def next_occurrence
-      @schedule.next_occurrence
+      @schedule.next_occurrence.in_time_zone(time_zone) if @schedule.next_occurrence
     end
 
     def exception_times
@@ -246,7 +251,7 @@ module Bucky
       elsif recurrence_type == :weekly && other_schedule.recurrence_type == :fortnightly
         match &= (other_schedule.recurrence_days - recurrence_days).empty?
         # is the other schedules recurrence_days a subset of mine?
-        
+
         match &= (recurrence_times == other_schedule.recurrence_times)
       elsif [:monthly].include?(recurrence_type) && other_schedule.recurrence_type == :single
         match &= month_days.include?(other_schedule.start_time.wday)
@@ -255,7 +260,7 @@ module Bucky
         match &= (recurrence_type == other_schedule.recurrence_type)
         match &= (other_schedule.recurrence_days - recurrence_days).empty?
         # is the other schedules recurrence_days a subset of mine?
-        
+
         match &= (recurrence_times == other_schedule.recurrence_times)
       end
 

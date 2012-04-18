@@ -69,7 +69,6 @@ class Order < ActiveRecord::Base
       create_schedule_for(:schedule, start_time, frequency)
     elsif !days_by_number.nil?
       days_by_number = days_by_number.values.map(&:to_i) if days_by_number.is_a?(Hash)
-
       create_schedule_for(:schedule, start_time, frequency, days_by_number)
     end
   end
@@ -142,7 +141,8 @@ class Order < ActiveRecord::Base
     result = box.name
     result += '+L' unless likes.blank?
     result += '+D' unless dislikes.blank?
-    result.upcase
+
+    return result.upcase
   end
 
   def schedule_empty?
@@ -154,14 +154,10 @@ class Order < ActiveRecord::Base
   end
 
   def pause(start_date, end_date)
-
-    # Could not get controller response to render error, so commented out
-    # for now.
+    # Could not get controller response to render error, so returning false on error instead for now.
     if start_date.past? || end_date.past?
-      #errors.add(:base, "Dates can not be in the past")
       return false
     elsif end_date <= start_date
-      #errors.add(:base, "Start date can not be past end date")
       return false
     end
 
@@ -177,7 +173,7 @@ class Order < ActiveRecord::Base
     self.active = true
   end
 
-  protected
+  private
 
   def record_schedule_change
     order_schedule_transactions.new(order: self, schedule: self.schedule)
@@ -189,8 +185,6 @@ class Order < ActiveRecord::Base
     end
     # account.route and not route because sometimes route isn't around at creation time but account.route has it in memory
   end
-
-  private
 
   def remove_recurrence_rule_day(day)
     s = schedule

@@ -4,7 +4,7 @@ include Bucky
 describe Schedule do
   context "#new" do
     context "with no args" do
-      specify { lambda{ Schedule.new }.should_not raise_error }
+      specify { expect{ Schedule.new }.should_not raise_error }
       specify { Schedule.new.to_hash[:start_time].should be_utc }
     end
 
@@ -13,6 +13,7 @@ describe Schedule do
         @time = Time.now
         @schedule = Schedule.new(@time)
       end
+
       specify { @schedule.to_hash[:start_time].should be_utc}
     end
 
@@ -22,15 +23,14 @@ describe Schedule do
         @end_time = @time + 2.weeks
         @schedule = Schedule.new(@time, {end_time: @end_time})
       end
+
       specify { @schedule.to_hash[:start_time].should be_utc}
       specify { @schedule.to_hash[:end_time].should be_utc}
     end
   end
 
   context "#from_hash" do
-    before do
-      @schedule = Schedule.new
-    end
+    before { @schedule = Schedule.new }
     specify { Schedule.from_hash(@schedule.to_hash).should == @schedule }
   end
 
@@ -40,6 +40,7 @@ describe Schedule do
       @schedule.add_recurrence_time(1.week.from_now)
       @schedule.add_recurrence_time(Time.current)
     end
+
     specify { @schedule.send(:ice_cube_schedule).rtimes.each{|recurrence_time| recurrence_time.should be_utc } }
     specify { Time.use_zone("London") { @schedule.recurrence_times.each{|recurrence_time| recurrence_time.time_zone.to_s.should match(/London/)}} }
   end
@@ -62,7 +63,9 @@ describe Schedule do
         Time.zone = "London"
         @schedule.occurrences_between(Time.current, 4.weeks.from_now)
       end
+
       count = 0
+
       while count < 10
         # Let it break early if we have fixed it
         break unless @thread.alive?
@@ -70,30 +73,31 @@ describe Schedule do
         # Sleep so that it has some time on the CPU
         sleep 0.01
       end
+
       # Should have finished by now, if not we can assume it will take forever
       @thread.should_not be_alive
     end
   end
-  
+
   RSpec::Matchers.define :include_schedule do |expected, strict_start_time|
     match do |actual|
       actual.include? expected, (strict_start_time || false)
     end
   end
-  
+
   # Day needs to be an integer 0-6 representing the weekday
   # return the next day that it is the required weekday
   def next_day(time = Time.current, day)
     nday = time + ((7 - (time.wday - day)) % 7).days
     nday == 0 ? 7 : nday
   end
-  
-  let(:time){ next_day(Time.current, 6) } # Find the next sunday, avoiding weekdays
-  let(:week){ [:monday, :tuesday, :wednesday, :thursday, :friday] }
-  let(:single){ new_single_schedule(time) }
-  let(:weekly){ new_recurring_schedule(time, week, 1) }
-  let(:fortnightly){ new_recurring_schedule(time, week, 2) }
-  let(:monthly){ new_monthly_schedule(time, [2]) } #Reoccur on the first tuesday of every month
+
+  let(:time) { next_day(Time.current, 6) } # Find the next sunday, avoiding weekdays
+  let(:week) { [:monday, :tuesday, :wednesday, :thursday, :friday] }
+  let(:single) { new_single_schedule(time) }
+  let(:weekly) { new_recurring_schedule(time, week, 1) }
+  let(:fortnightly) { new_recurring_schedule(time, week, 2) }
+  let(:monthly) { new_monthly_schedule(time, [2]) } #Reoccur on the first tuesday of every month
 
 
   context ".recurrence_type" do
@@ -126,7 +130,7 @@ describe Schedule do
         specify { monthly.should include_schedule(new_monthly_schedule(time + 1.month)) }
       end
     end
-    
+
     context :single do
       specify { single.should_not include_schedule(weekly) }
       specify { single.should_not include_schedule(fortnightly) }
@@ -138,9 +142,9 @@ describe Schedule do
       specify { weekly.should_not include_schedule(new_recurring_schedule(time, [:sunday], 2)) }
       specify { weekly.should include_schedule(fortnightly) }
       specify { weekly.should include_schedule(monthly) }
-      
+
       it 'should include singles which fall on a reoccuring day' do
-        next_tuesday = next_day(time, 2) 
+        next_tuesday = next_day(time, 2)
         single_schedule = new_single_schedule(next_tuesday)
         weekly.should include_schedule(single_schedule)
       end
@@ -150,7 +154,7 @@ describe Schedule do
       specify { fortnightly.should_not include_schedule(single) }
       specify { fortnightly.should_not include_schedule(weekly) }
       specify { fortnightly.should_not include_schedule(monthly) }
-      
+
       it 'should include singles which fall on a reoccuring day' do
         next_tuesday = next_day(time, 2) 
         single_schedule = new_single_schedule(next_tuesday)
@@ -162,7 +166,7 @@ describe Schedule do
       specify { monthly.should_not include_schedule(weekly) }
       specify { monthly.should_not include_schedule(fortnightly) }
       specify { monthly.should_not include_schedule(single) }
-      
+
       shared_examples 'it matches single occurrences' do |day|
         it 'it matches single occurrences' do # Apparently need to nest this with an 'it' so that it can access let(:time) etc
           next_month = time + 1.month
@@ -174,7 +178,7 @@ describe Schedule do
           monthly_schedule.should include_schedule(single_schedule)
         end
       end
-      
+
       # Check each possible monthly schedule as I am paranoid.
       # 0 => Monthly on the first Sunday
       # 1 => Monthly on the first Monday
