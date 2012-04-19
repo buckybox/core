@@ -15,13 +15,15 @@
               = f.input :dislikes, label: 'Enable dislikes'
             %fieldset
               %h4 Extras
-              = f.input :extra_option, label: false, collection: Box::EXTRA_OPTIONS, include_blank: false
-              #extras_form
-                = f.input :extras_limit, label: 'Limited to', hint: 'per box', input_html: { class: 'input-text' }
-                =# JS updates prop 'min' in distributor/boxes.js
-                .input.check_boxes.optional
-                  =# Simple form forgets to wrap it :\
-                  = f.collection_check_boxes :extra_ids, current_distributor.extras, :id, :name_with_unit
+              %p Extras are additional sale items that can be included for delivery with this box.
+              = f.input :extras_limit, label: false, collection: Box::EXTRA_OPTIONS, include_blank: false
+              #box_extras
+                = f.input :all_extras, label: false, collection: [['from the entire extras catalog', true], ['selected from the items below', false]], include_blank: false
+                #box_extras_collection
+                  =# JS updates prop 'min' in distributor/boxes.js
+                  .input.check_boxes.optional
+                    =# Simple form forgets to wrap it :\
+                    = f.collection_check_boxes :extra_ids, current_distributor.extras, :id, :name_with_unit
 
         .four.columns
           = f.input :description
@@ -37,4 +39,4 @@
 
       .row
         .twelve.columns.text-right
-          .actions= f.button :submit
+          .actions= f.button :submit, id: "box_submit"

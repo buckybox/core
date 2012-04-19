@@ -24,7 +24,9 @@ class Box < ActiveRecord::Base
 
   default_value_for :extras_limit, 0
 
-  EXTRA_OPTIONS = ["No", "Limited", "Unlimited"]
+  EXTRA_OPTIONS = (["disable extras", "allow any number of extra items"]+1.upto(10).collect{|i| "allow #{i} extra items"}).zip([0,-1]+1.upto(10).to_a)
+  # [["disable extras", 0],["allow any number of extra items", -1],["allow 1 extra items", 1], ["allow 2 extra items", 2], ["allow n extra items, n]..]
+
   def extra_option(include_count = false)
     if extras_not_allowed
       "No"
@@ -42,4 +44,17 @@ class Box < ActiveRecord::Base
   def extras_not_allowed
     extras_limit.blank? || extras_limit.zero?
   end
+
+  # Used to select which drop down value is selected
+  # on extras form
+  def all_extras?
+    if new_record? # By default show 'from the entire extras catalog'
+      true
+    elsif distributor.present?
+      distributor.extra_ids.sort == extra_ids.sort
+    else
+      false
+    end
+  end
+  alias :all_extras :all_extras? # I prefer to have '?' on the end of methods but simple_form won't take it as an attribute
 end

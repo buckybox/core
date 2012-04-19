@@ -6,7 +6,7 @@ class Distributor::BoxesController < Distributor::ResourceController
   before_filter :filter_params, only: [:create, :update]
 
   def filter_params
-    params[:box] = params[:box].slice!(:extra_option)
+    params[:box] = params[:box].slice!(:all_extras)
   end
 
   def create
