@@ -6,7 +6,7 @@ module Bucky
 
       throw "days_by_number '#{days_by_number}' wasn't valid" if days_by_number.present? && (days_by_number & 0.upto(6).to_a).blank? # [nil, '', nil] & [0,1,2,3,4,5,6] = []
 
-      days_by_number &= 1.upto(6).to_a
+      days_by_number = adjust_days_for_time_zone(schedule, days_by_number)
 
       if frequency == 'single'
         schedule.add_recurrence_time(start_time.utc)
@@ -46,9 +46,7 @@ module Bucky
         start_time = args.first.utc
         options = args.second || {}
 
-        if options[:end_time].present?
-          options[:end_time] = options[:end_time].utc
-        end
+        options[:end_time] = options[:end_time].utc if options[:end_time].present?
 
         @schedule = IceCube::Schedule.new(start_time, options)
       end
@@ -138,10 +136,6 @@ module Bucky
       @schedule.start_time = time.utc
     end
 
-    def start_date
-      @schedule.start_date
-    end
-
     def next_occurrence
       @schedule.next_occurrence.in_time_zone(time_zone) if @schedule.next_occurrence
     end
@@ -169,10 +163,12 @@ module Bucky
     def remove_recurrence_rule_day(day)
       new_schedule = @schedule
       recurrence_rule = new_schedule.recurrence_rules.first
+
       if recurrence_rule.present?
         new_schedule.remove_recurrence_rule(recurrence_rule)
         interval = recurrence_rule.to_hash[:interval]
         days = nil
+
         rule = case recurrence_rule
                when IceCube::WeeklyRule
                  days = recurrence_rule.to_hash[:validations][:day] || []
@@ -199,11 +195,13 @@ module Bucky
     def remove_recurrence_times_on_day(day)
       day = DAYS[day] if day.is_a?(Integer) && day.between?(0, 6)
       new_schedule = @schedule
+
       recurrence_times.each do |recurrence_time|
         if recurrence_time.send("#{day}?") # recurrence_time.monday? for example
           new_schedule.remove_recurrence_time(recurrence_time)
         end
       end
+
       @schedule = new_schedule
     end
 
@@ -219,7 +217,6 @@ module Bucky
       pieces.concat ed.sort.map { |t| "not on #{t.in_time_zone(time_zone).strftime(to_s_time_format)}" }
       pieces << "until #{@schedule.end_time.in_time_zone(time_zone).strftime(to_s_time_format)}" if @schedule.end_time
       pieces.join(' / ')
-      #@schedule.to_s
     end
 
     def ==(schedule)
@@ -295,14 +292,25 @@ module Bucky
     end
 
     def month_days
-     days = recurrence_rules.first.to_hash[:validations][:day_of_week].keys if recurrence_type == :monthly && recurrence_rules.first.present?
-     days || []
+      days = recurrence_rules.first.to_hash[:validations][:day_of_week].keys if recurrence_type == :monthly && recurrence_rules.first.present?
+      days || []
     end
 
     private
 
     def ice_cube_schedule
       @schedule
+    end
+
+    def self.adjust_days_for_time_zone(schedule, days_by_number)
+      schedule.adjust_days_for_time_zone(days_by_number)
+    end
+
+    def adjust_days_for_time_zone(days_by_number)
+      # Adjust to UTC based days
+      days_by_number.map { |d| (d - 1) % 7 } if schedule.time_zone.utc_offset > 0
+
+      return days_by_number.map { |d| d % 7 } # make sure days are 0 - 6
     end
   end
 end

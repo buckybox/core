@@ -49,7 +49,7 @@ describe Schedule do
     before do
       Time.zone = "Wellington"
       Delorean.time_travel_to(Time.parse("2012-03-15 15:47:08")) #It was failing at this point, and I am not sure if it was because London time 'GMT' goes to BST in 4 weeks-ish
-      @schedule = Bucky::Schedule.from_hash({:start_date=>Time.parse("2012-02-14 00:00:00"), :rrules=>[{:validations=>{:day=>[0, 1, 2, 3, 4, 5, 6]}, :rule_type=>"IceCube::WeeklyRule", :interval=>1}], :exrules=>[], :rtimes=>[], :extimes=>[]})
+      @schedule = Bucky::Schedule.from_hash({ start_date: Time.parse("2012-02-14 00:00:00"), rrules: [{ validations: { day: [0, 1, 2, 3, 4, 5, 6] }, rule_type: "IceCube::WeeklyRule", interval: 1 }], exrules: [], rtimes: [], extimes: [] })
       @thread = nil
     end
 
@@ -216,10 +216,10 @@ describe Schedule do
     context "for single schedule" do
       let(:schedule) {
         Schedule.from_hash({
-          :rrules => [
+          rrules: [
             {
-              :validations => {:day => [0, 1, 3, 4, 5, 6]},
-              :rule_type => "IceCube::WeeklyRule", :interval=>1
+              validations: { day: [0, 1, 3, 4, 5, 6] },
+              rule_type: "IceCube::WeeklyRule", interval: 1
             }
           ]
         })
@@ -232,10 +232,10 @@ describe Schedule do
     context "for recurring schedule" do
       let(:schedule) {
         Schedule.from_hash({
-          :rrules => [
+          rrules: [
             {
-              :validations => { :day_of_week => {0=>[1], 1=>[1], 3=>[1], 4=>[1], 5=>[1], 6=>[1]}},
-              :rule_type => "IceCube::MonthlyRule", :interval=>1
+              validations: { day_of_week: { 0 => [1], 1 => [1], 3 => [1], 4 => [1], 5 => [1], 6 => [1] } },
+              rule_type: "IceCube::MonthlyRule", interval: 1
             }
           ]
         })
