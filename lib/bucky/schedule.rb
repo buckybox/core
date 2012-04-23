@@ -27,7 +27,7 @@ class Bucky::Schedule < IceCube::Schedule
       monthly_days_hash = days_by_number.inject({}) { |hash, day| hash[day] = [1]; hash }
 
       recurrence_rule = IceCube::Rule.monthly.day_of_week(monthly_days_hash)
-      schedule.add_recurrence_rule(recurrence_rule)
+      schedule.add_recurrence_rule(recurrence_rulegst)
     else
       if frequency == 'weekly'
         weeks_between_deliveries = 1
@@ -43,23 +43,6 @@ class Bucky::Schedule < IceCube::Schedule
 
     return schedule
   end
-
-  def time_zone=(tz)
-    tz = Time.zone if tz.nil?
-    @time_zone = tz.clone
-  end
-
-  def time_zone
-    @time_zone || Time.zone
-  end
-
-  ################################################################################################
-  #                                                                                              #
-  #  This is where the magic happens! Converting schedule timezones (times and rules) to UTC     #
-  #  for database persistance and back into the application timezone for app use.                #
-  #                                                                                              #
-  ################################################################################################
-
 
   ################################################################################################
   #                                                                                              #

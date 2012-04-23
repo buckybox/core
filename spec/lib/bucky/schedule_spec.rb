@@ -126,5 +126,30 @@ describe Bucky::Schedule do
         specify { @new_schedule.to_s.should == @schedule.to_s }
       end
     end
+
+    describe 'save as one timezone and recreate in another' do
+      before do
+        Time.zone       = 'Hong Kong'
+        @current_time   = Time.current
+        @time           = @current_time + time_offset
+        @exception_time = (@current_time + exception_offset).beginning_of_day
+
+        @schedule = Bucky::Schedule.new(@current_time)
+        @schedule.add_recurrence_time(@time)
+        @schedule.add_exception_time(@exception_time)
+        @schedule.add_recurrence_rule(weekly_rule)
+        @schedule.add_recurrence_rule(monthly_rule)
+        @schedule_hash = @schedule.to_hash
+
+        Time.zone = 'Mazatlan'
+        @new_schedule = Bucky::Schedule.from_hash(@schedule_hash)
+      end
+
+      specify { @new_schedule.start_time.to_s.should == (@schedule.start_time.in_time_zone('Mazatlan')).to_s }
+      specify { @new_schedule.recurrence_times[0].to_s.should == (@time.in_time_zone('Mazatlan')).to_s }
+      specify { @new_schedule.exception_times[0].to_s.should == (@exception_time.in_time_zone('Mazatlan')).to_s }
+      specify { @new_schedule.recurrence_rules[0].to_s.should == 'Weekly on Tuesdays, Fridays, and Saturdays' }
+      specify { @new_schedule.recurrence_rules[1].to_s.should == 'Monthly on the 1st Saturday when it is the 1st Tuesday when it is the 1st Friday' }
+    end
   end
 end
