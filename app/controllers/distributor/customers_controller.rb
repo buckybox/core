@@ -17,11 +17,15 @@ class Distributor::CustomersController < Distributor::ResourceController
   end
 
   def create
-    create! { distributor_customer_url(@customer) }
+    create! do |success, failure|
+      success.html { redirect_to distributor_customer_url(@customer) }
+    end
   end
 
   def update
-    update! { distributor_customer_url(@customer) }
+    update! do |success, failure|
+      success.html { redirect_to distributor_customer_url(@customer) }
+    end
   end
 
   def show
