@@ -48,6 +48,10 @@ group :development do
   gem 'ruby-debug19', require: 'ruby-debug'
   gem 'hirb'
   gem 'wirble'
+  gem 'rb-fsevent', :require => false if RUBY_PLATFORM =~ /darwin/i
+  gem 'guard-rspec'
+  gem 'guard-spork'
+  gem 'spork'
 end
 
 group :development, :test do

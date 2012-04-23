@@ -16,6 +16,11 @@ describe Distributor::BoxesController do
     specify { response.should be_success }
   end
 
+  describe '#edit' do
+    before { get :edit, format: :json, id: box.id }
+    specify { response.should be_success }
+  end
+
   describe '#create' do
     context 'with valid params' do
       before do
@@ -23,7 +28,7 @@ describe Distributor::BoxesController do
           box: {
             name: 'yodas box', price: '246', likes: '1', dislikes: '1', available_single: '1', available_weekly: '0',
             available_fourtnightly: '1', description: "tasty selection of herbs from Yoda's garden.", extras_limit: 0,
-            extra_ids: @extra_ids
+            extra_ids: @extra_ids, all_extras: false
           }
         }
       end
