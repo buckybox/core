@@ -20,6 +20,45 @@ describe Bucky::Schedule do
     end
   end
 
+  describe '#build' do
+    let(:start_time) { Time.current + 3.days }
+
+    context 'single' do
+      before { @schedule = Bucky::Schedule.build(start_time, 'single') }
+
+      specify { @schedule.start_time.should == start_time }
+      specify { @schedule.recurrence_times[0].should == start_time }
+    end
+
+    context 'weekly' do
+      before { @schedule = Bucky::Schedule.build(start_time, 'weekly', [0, 3, 6]) }
+
+      specify { @schedule.start_time.should == start_time }
+      specify { @schedule.recurrence_rules[0].to_s.should == 'Weekly on Sundays, Wednesdays, and Saturdays' }
+    end
+
+    context 'fortnightly' do
+      before { @schedule = Bucky::Schedule.build(start_time, 'fortnightly', [0, 3, 6]) }
+
+      specify { @schedule.start_time.should == start_time }
+      specify { @schedule.recurrence_rules[0].to_s.should == 'Every 2 weeks on Sundays, Wednesdays, and Saturdays' }
+    end
+
+    context 'monthly' do
+      before { @schedule = Bucky::Schedule.build(start_time, 'monthly', [0, 3, 6]) }
+
+      specify { @schedule.start_time.should == start_time }
+      specify { @schedule.recurrence_rules[0].to_s.should == 'Monthly on the 1st Sunday when it is the 1st Wednesday when it is the 1st Saturday' }
+    end
+
+    context 'bad parameters' do
+      specify { expect { Bucky::Schedule.build(start_time, 'all_the_days', [0, 3, 7]) }.should raise_error  }
+      specify { expect { Bucky::Schedule.build(start_time, 'monthly') }.should raise_error  }
+      specify { expect { Bucky::Schedule.build(start_time, 'monthly', [0, 3, 7]) }.should raise_error  }
+      specify { expect { Bucky::Schedule.build(start_time, 'monthly', [-1, 3, 6]) }.should raise_error }
+    end
+  end
+
   # This if very much only testing how we use IceCube (and how we have modified it)
   # Recurrence Times
   # Recurrence Rules (Weekly day, Montly days_of_week)

@@ -10,31 +10,33 @@ class Bucky::Schedule < IceCube::Schedule
 
   ################################################################################################
   #                                                                                              #
-  #  Pretty specific to BuckyBox. The common way we create schedules.                            #
+  #  Pretty specific to BuckyBox. The common way we create schedules, data in distributor time   #
+  #  zone to be converted to UTC on persistance.                                                 #
   #                                                                                              #
   ################################################################################################
 
-  def self.build(start_time, frequency, days_by_number)
-    schedule = Bucky::Schedule.new(start_time.utc)
+  def self.build(start_time, frequency, days_by_number = nil)
+    # Check the params are in the correct format
+    if days_by_number.present? && (days_by_number.empty? || days_by_number.any? { |n| 0 > n || n > 6 })
+      raise "days_by_number '#{days_by_number}' wasn't valid"
+    elsif !%w{single weekly fortnightly monthly}.include?(frequency)
+      raise "#{frequency} does not match the expected single, monthly, weekly, fortnightly"
+    end
 
-    throw "days_by_number '#{days_by_number}' wasn't valid" if days_by_number.present? && (days_by_number & 0.upto(6).to_a).blank? # [nil, '', nil] & [0,1,2,3,4,5,6] = []
-
-    days_by_number = adjust_days_for_time_zone(schedule, days_by_number)
+    schedule = Bucky::Schedule.new(start_time)
 
     if frequency == 'single'
-      schedule.add_recurrence_time(start_time.utc)
+      schedule.add_recurrence_time(start_time)
     elsif frequency == 'monthly'
       monthly_days_hash = days_by_number.inject({}) { |hash, day| hash[day] = [1]; hash }
 
       recurrence_rule = IceCube::Rule.monthly.day_of_week(monthly_days_hash)
-      schedule.add_recurrence_rule(recurrence_rulegst)
+      schedule.add_recurrence_rule(recurrence_rule)
     else
       if frequency == 'weekly'
         weeks_between_deliveries = 1
       elsif frequency == 'fortnightly'
         weeks_between_deliveries = 2
-      else
-        raise "#{frequency} does not match the expected single, monthly, weekly, fortnightly"
       end
 
       recurrence_rule = IceCube::Rule.weekly(weeks_between_deliveries).day(*days_by_number)
