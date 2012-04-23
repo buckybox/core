@@ -210,7 +210,7 @@ class Order < ActiveRecord::Base
     if schedule.frequency.single? || !show_frequency
       extras_string
     else
-      extras_string + (extras_one_off? ? ", one off" : ", reoccuring") if order_extras.count > 0
+      extras_string + (extras_one_off? ? ", include in the next delivery only" : ", include with every delivery") if order_extras.count > 0
     end
   end
 
