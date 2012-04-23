@@ -4,6 +4,12 @@ class Distributor::OrdersController < Distributor::ResourceController
 
   respond_to :html, :xml, :json
 
+  before_filter :filter_params, only: [:create, :update]
+
+  def filter_params
+    params[:order] = params[:order].slice!(:include_extras)
+  end
+
   def new
     new! do
       load_form

@@ -11,7 +11,7 @@
           :javascript
             current_customer_id = #{current_customer.id};
           #customer_extras_form.row
-            = render partial: 'customer/orders/extras', locals: {account: current_customer.account, order: @order, box: box_collection(current_customer).first}
+            = render partial: 'customer/orders/extras', locals: {account: current_customer.account, order: order, box: order.box || box_collection(current_customer).first}
 
       - unless order.persisted?
         .columns.four
@@ -49,5 +49,5 @@
 
     .row
       .twelve.columns
-        .actions= f.button :submit
+        .actions= f.button :submit, id: "order_submit"
 

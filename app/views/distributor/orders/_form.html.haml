@@ -12,7 +12,7 @@
           :javascript
             current_account_id = #{@account.id};
           #distributor_extras_form.row
-            = render partial: 'extras', locals: {account: @account, order: @order, box: box_collection(@account.customer).first }
+            = render partial: 'extras', locals: {account: @account, order: @order, box: @order.box || box_collection(@account.customer).first }
 
       .four.columns
         .inputs
@@ -52,4 +52,4 @@
     .row
       .twelve.columns
         .actions
-          = f.button :submit
+          = f.button :submit, id: "order_submit"

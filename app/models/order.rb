@@ -238,6 +238,14 @@ class Order < ActiveRecord::Base
     self.active = true
   end
 
+  def include_extras
+    new_record? || !order_extras.count.zero?
+  end
+  
+  def extras_count
+    order_extras.collect(&:count).sum
+  end
+
   protected
 
   def record_schedule_change
@@ -255,10 +263,6 @@ class Order < ActiveRecord::Base
     if !box.extras_unlimited? && extras_count > box.extras_limit
       errors.add(:base, "There is more than #{box.extras_limit} extras for this box") 
     end
-  end
-
-  def extras_count
-    order_extras.collect(&:count).sum
   end
 
   private

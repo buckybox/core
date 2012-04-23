@@ -2,16 +2,18 @@
   %table.twelve.columns
     %thead
       %tr
-        %th Order
+        %th Box
+        %th Extras
         %th Price
-        %th{style: 'width:40%;'} Schedule
+        %th{style: 'width:30%;'} Schedule
         %th Next Delivery
         %th
 
     %tbody
       - @orders.each do |order|
         %tr
-          %td== #{order.quantity}x #{order.box.name}
+          %td= order.box.name
+          %td= order.extras_description(true)
           %td= order.price.format
           %td
             = order_schedule(order)
@@ -20,5 +22,5 @@
               = link_to 'pause order', '#', data: {'reveal-id' => "pause-modal-#{order.id}"}
           %td= order.schedule.next_occurrence.to_s(:month_date_year) if order.schedule.next_occurrence
           %td
-            = link_to 'change order', '#', data: {'reveal-id' => "order-modal-#{order.id}"}
+            = link_to 'change order', edit_customer_order_path(order) 
 

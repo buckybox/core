@@ -17,7 +17,7 @@
           %td= image_tag(box.box_image.thumb.url) if box.box_image?
           %td= box.name
           %td= box.price.format
-          %td= box.extra_option(true)
+          %td= box.extra_option
           %td= checkmark_boolean(box.likes)
           %td= checkmark_boolean(box.dislikes)
           %td= box.description

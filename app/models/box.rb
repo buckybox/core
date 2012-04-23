@@ -26,29 +26,39 @@ class Box < ActiveRecord::Base
 
   EXTRA_OPTIONS = (["disable extras", "allow any number of extra items"]+1.upto(10).collect{|i| "allow #{i} extra items"}).zip([0,-1]+1.upto(10).to_a)
   # [["disable extras", 0],["allow any number of extra items", -1],["allow 1 extra items", 1], ["allow 2 extra items", 2], ["allow n extra items, n]..]
-
-  def extra_option(include_count = false)
-    if extras_not_allowed
-      "No"
-    elsif extras_unlimited?
-      "Unlimited"
-    else
-      include_count ? "Limited(#{extras_limit})" : "Limited"
-    end
-  end
-
+  
   def extras_unlimited?
     extras_limit == -1
   end
 
-  def extras_not_allowed
-    extras_limit.blank? || extras_limit.zero?
+  def extras_not_allowed?
+    (extras_limit.blank? || extras_limit.zero?)
+  end
+
+  def extras_allowed?
+    !extras_not_allowed?
+  end
+
+  def extra_option
+    if extras_unlimited?
+      "any number of extras"
+    elsif extras_disabled?
+      "disabled"
+    elsif extras_limit == 1
+      "1 extra allowed"
+    else
+      "#{extras_limit} extras allowed"
+    end
+  end
+
+  def extras_disabled?
+    extras_limit == 0
   end
 
   # Used to select which drop down value is selected
   # on extras form
   def all_extras?
-    if new_record? # By default show 'from the entire extras catalog'
+    if new_record? || extras_disabled? # By default show 'from the entire extras catalog'
       true
     elsif distributor.present?
       distributor.extra_ids.sort == extra_ids.sort

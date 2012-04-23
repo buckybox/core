@@ -26,8 +26,15 @@ $ ->
       box_id = $("#distributor_order_box_id").val()
       $.get "/distributor/accounts/#{current_account_id}/boxes/#{box_id}/extras", (data) ->
         $("#distributor_extras_form").html(data)
+        update_order_extras_collection = ->
+          include_extras = $("#order_include_extras").prop("checked")
+          if include_extras
+            $("#order_extras").show()
+          else
+            $("#order_extras").hide()
+        $("#order_include_extras").change(update_order_extras_collection)
+        update_order_extras_collection()
     $("#distributor_order_box_id").change(update_distributor_box_extras)
-    update_distributor_box_extras()
 
   # Update the extra checkboxes to reflect the selections made by above drop downs, then submit form
   $("#box_submit").click ->

@@ -73,7 +73,7 @@ describe Customer::OrdersController do
       end
 
       specify { Order.last.quantity.should == 1 }
-      specify { response.should redirect_to(customer_root_url) }
+      specify { response.should render_template('edit') }
     end
   end
 end
