@@ -7,7 +7,8 @@ GIT
 
 GIT
   remote: git://github.com/ootoovak/ice_cube.git
-  revision: 7cbb9b66d562a3f51d1a991d5c233eb672ea8fa3
+  revision: c3700e2c456d57b578c818942d9812040c925a70
+  ref: c3700e2
   specs:
     ice_cube (0.8.0)
 

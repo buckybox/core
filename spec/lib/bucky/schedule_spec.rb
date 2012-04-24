@@ -26,6 +26,7 @@ describe Bucky::Schedule do
     context 'single' do
       before { @schedule = Bucky::Schedule.build(start_time, 'single') }
 
+      specify { @schedule.class.should == Bucky::Schedule }
       specify { @schedule.start_time.should == start_time }
       specify { @schedule.recurrence_times[0].should == start_time }
     end
@@ -33,6 +34,7 @@ describe Bucky::Schedule do
     context 'weekly' do
       before { @schedule = Bucky::Schedule.build(start_time, 'weekly', [0, 3, 6]) }
 
+      specify { @schedule.class.should == Bucky::Schedule }
       specify { @schedule.start_time.should == start_time }
       specify { @schedule.recurrence_rules[0].to_s.should == 'Weekly on Sundays, Wednesdays, and Saturdays' }
     end
@@ -40,6 +42,7 @@ describe Bucky::Schedule do
     context 'fortnightly' do
       before { @schedule = Bucky::Schedule.build(start_time, 'fortnightly', [0, 3, 6]) }
 
+      specify { @schedule.class.should == Bucky::Schedule }
       specify { @schedule.start_time.should == start_time }
       specify { @schedule.recurrence_rules[0].to_s.should == 'Every 2 weeks on Sundays, Wednesdays, and Saturdays' }
     end
@@ -47,6 +50,7 @@ describe Bucky::Schedule do
     context 'monthly' do
       before { @schedule = Bucky::Schedule.build(start_time, 'monthly', [0, 3, 6]) }
 
+      specify { @schedule.class.should == Bucky::Schedule }
       specify { @schedule.start_time.should == start_time }
       specify { @schedule.recurrence_rules[0].to_s.should == 'Monthly on the 1st Sunday when it is the 1st Wednesday when it is the 1st Saturday' }
     end
@@ -97,6 +101,7 @@ describe Bucky::Schedule do
       describe '#from_hash' do
         before { @new_schedule = Bucky::Schedule.from_hash(@schedule.to_hash) }
 
+        specify { @new_schedule.class.should == Bucky::Schedule }
         specify { @new_schedule.start_time.to_s.should == @schedule.start_time.to_s }
         specify { @new_schedule.to_s.should == @schedule.to_s }
       end
@@ -129,6 +134,7 @@ describe Bucky::Schedule do
       describe '#from_hash' do
         before { @new_schedule = Bucky::Schedule.from_hash(@schedule.to_hash) }
 
+        specify { @new_schedule.class.should == Bucky::Schedule }
         specify { @new_schedule.start_time.to_s.should == @schedule.start_time.to_s }
         specify { @new_schedule.to_s.should == @schedule.to_s }
       end
@@ -161,6 +167,7 @@ describe Bucky::Schedule do
       describe '#from_hash' do
         before { @new_schedule = Bucky::Schedule.from_hash(@schedule.to_hash) }
 
+        specify { @new_schedule.class.should == Bucky::Schedule }
         specify { @new_schedule.start_time.to_s.should == @schedule.start_time.to_s }
         specify { @new_schedule.to_s.should == @schedule.to_s }
       end
@@ -184,6 +191,7 @@ describe Bucky::Schedule do
         @new_schedule = Bucky::Schedule.from_hash(@schedule_hash)
       end
 
+      specify { @new_schedule.class.should == Bucky::Schedule }
       specify { @new_schedule.start_time.to_s.should == (@schedule.start_time.in_time_zone('Mazatlan')).to_s }
       specify { @new_schedule.recurrence_times[0].to_s.should == (@time.in_time_zone('Mazatlan')).to_s }
       specify { @new_schedule.exception_times[0].to_s.should == (@exception_time.in_time_zone('Mazatlan')).to_s }

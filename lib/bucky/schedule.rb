@@ -46,6 +46,14 @@ class Bucky::Schedule < IceCube::Schedule
     return schedule
   end
 
+  def to_hash
+    super
+  end
+
+  def from_hash(data, options = {})
+    super
+  end
+
   ################################################################################################
   #                                                                                              #
   #  Methods to help deal with mass changes to schedules.                                        #
@@ -168,7 +176,7 @@ class Bucky::Schedule < IceCube::Schedule
     days || []
   end
 
-private
+  private
 
   def ice_cube_schedule
     @schedule
