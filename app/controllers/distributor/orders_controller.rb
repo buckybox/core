@@ -68,7 +68,7 @@ class Distributor::OrdersController < Distributor::ResourceController
     redirect_to [:distributor, @account.customer], warning: 'Start date can not be past end date' and return if end_date <= start_date
 
     schedule.exception_times.each { |time| schedule.remove_exception_time(time) }
-    (start_date..end_date).each   { |date| schedule.add_exception_time(date.to_time) }
+    (start_date..end_date).each   { |date| schedule.add_exception_time(date.to_time_in_current_zone) }
 
     @order.schedule = schedule
 

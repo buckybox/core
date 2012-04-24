@@ -19,7 +19,7 @@ gem 'jquery-rails'
 gem 'devise', '~> 1.5.3'
 gem 'multi_json', '~> 1.0.4'
 gem 'simple_form', '~> 1.5.2'
-gem 'ice_cube', ref:'c3700e2', git: 'git://github.com/ootoovak/ice_cube.git' # patched to persist data (that we use) in UTC timezone
+gem 'ice_cube', git: 'git://github.com/ootoovak/ice_cube.git' # patched to persist data (that we use) in UTC timezone
 gem 'inherited_resources'
 gem 'mini_magick'
 gem 'carrierwave'

@@ -46,14 +46,6 @@ class Bucky::Schedule < IceCube::Schedule
     return schedule
   end
 
-  def to_hash
-    super
-  end
-
-  def from_hash(data, options = {})
-    super
-  end
-
   ################################################################################################
   #                                                                                              #
   #  Methods to help deal with mass changes to schedules.                                        #
@@ -113,12 +105,13 @@ class Bucky::Schedule < IceCube::Schedule
   # Does the other_schedule fall on days in our schedule?
   # Check the spec to see how complex a match this accepts
   def include?(other_schedule, strict_start_time = false)
-    raise "Given schedule is blank" if other_schedule.blank?
+    return false if other_schedule.blank?
 
     expected = Bucky::Schedule
     raise "Given schedule isn't a #{expected}" unless other_schedule.is_a?(expected) 
 
     match = true
+
     if [:weekly, :fortnightly].include?(recurrence_type) && other_schedule.recurrence_type == :single
       match &= ([other_schedule.start_time.wday] - recurrence_days).empty?
 

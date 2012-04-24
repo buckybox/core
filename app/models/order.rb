@@ -60,9 +60,9 @@ class Order < ActiveRecord::Base
 
   def create_schedule(start_time, frequency, days_by_number = nil)
     if start_time.is_a?(String)
-      start_time = Date.parse(start_time).to_time
+      start_time = Time.zone.parse(start_time)
     elsif start_time.is_a?(Date)
-      start_time = start_time.to_time
+      start_time = start_time.to_time_in_current_zone
     end
 
     if frequency == 'single'
@@ -101,7 +101,7 @@ class Order < ActiveRecord::Base
 
   def add_scheduled_delivery(delivery)
     s = self.schedule
-    s.add_recurrence_time(delivery.date.to_time)
+    s.add_recurrence_time(delivery.date.to_time_in_current_zone)
     self.schedule = s
   end
 
@@ -163,9 +163,10 @@ class Order < ActiveRecord::Base
 
     updated_schedule = schedule
     updated_schedule.exception_times.each { |time| updated_schedule.remove_exception_time(time) }
-    (start_date..end_date).each   { |date| updated_schedule.add_exception_time(date.beginning_of_day) }
+    (start_date..end_date).each { |date| updated_schedule.add_exception_time(date.beginning_of_day) }
     self.schedule = updated_schedule
-    save
+
+    return save
   end
 
   # Manually create the first delivery all following deliveries should be scheduled for creation by the cron job
@@ -181,7 +182,7 @@ class Order < ActiveRecord::Base
 
   def schedule_includes_route
     unless account.route.schedule.include?(schedule)
-      errors.add(:schedule, "Route #{account.route.name}'s schedule '#{account.route.schedule.start_time} #{account.route.schedule} doesn't include this order's schedule of '#{schedule.start_time} #{schedule}'")
+      errors.add(:schedule, "Route #{account.route.name}'s schedule '#{account.route.schedule} doesn't include this order's schedule of '#{schedule}'")
     end
     # account.route and not route because sometimes route isn't around at creation time but account.route has it in memory
   end
