@@ -184,7 +184,6 @@ class Order < ActiveRecord::Base
     unless account.route.schedule.include?(schedule)
       errors.add(:schedule, "Route #{account.route.name}'s schedule '#{account.route.schedule} doesn't include this order's schedule of '#{schedule}'")
     end
-    # account.route and not route because sometimes route isn't around at creation time but account.route has it in memory
   end
 
   def remove_recurrence_rule_day(day)

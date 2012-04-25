@@ -48,6 +48,54 @@ class Bucky::Schedule < IceCube::Schedule
 
   ################################################################################################
   #                                                                                              #
+  #  Overriding or helper methods.                                                               #
+  #                                                                                              #
+  ################################################################################################
+
+  def ==(schedule)
+    return false unless schedule.is_a?(Bucky::Schedule)
+    self.to_hash == schedule.to_hash
+  end
+
+  # Does the other_schedule fall on days in our schedule?
+  # Check the spec to see how complex a match this accepts
+  def include?(other_schedule, strict_start_time = false)
+    return false if other_schedule.blank?
+
+    expected = Bucky::Schedule
+    raise "Given schedule isn't a #{expected}" unless other_schedule.is_a?(expected) 
+
+    match = true
+
+    if [:weekly, :fortnightly].include?(recurrence_type) && other_schedule.recurrence_type == :single
+      match &= ([other_schedule.start_time.wday] - recurrence_days).empty?
+
+    elsif recurrence_type == :weekly && other_schedule.recurrence_type == :monthly
+      match &= (other_schedule.month_days - recurrence_days).empty? # The repeating days in the monthly schedule need to be a subset of this schedules weekly reoccuring days 
+
+    elsif recurrence_type == :weekly && other_schedule.recurrence_type == :fortnightly
+      match &= (other_schedule.recurrence_days - recurrence_days).empty?
+      # is the other schedules recurrence_days a subset of mine?
+
+      match &= (recurrence_times == other_schedule.recurrence_times)
+    elsif [:monthly].include?(recurrence_type) && other_schedule.recurrence_type == :single
+      match &= month_days.include?(other_schedule.start_time.wday)
+
+    else
+      match &= (recurrence_type == other_schedule.recurrence_type)
+      match &= (other_schedule.recurrence_days - recurrence_days).empty?
+      # is the other schedules recurrence_days a subset of mine?
+
+      match &= (recurrence_times == other_schedule.recurrence_times)
+    end
+
+    match &= (start_time <= other_schedule.start_time) if strict_start_time # Optional
+
+    match
+  end
+
+  ################################################################################################
+  #                                                                                              #
   #  Methods to help deal with mass changes to schedules.                                        #
   #                                                                                              #
   ################################################################################################
@@ -97,48 +145,6 @@ class Bucky::Schedule < IceCube::Schedule
     @schedule = new_schedule
   end
 
-  def ==(schedule)
-    return false unless schedule.is_a?(Bucky::Schedule)
-    self.to_hash == schedule.to_hash
-  end
-
-  # Does the other_schedule fall on days in our schedule?
-  # Check the spec to see how complex a match this accepts
-  def include?(other_schedule, strict_start_time = false)
-    return false if other_schedule.blank?
-
-    expected = Bucky::Schedule
-    raise "Given schedule isn't a #{expected}" unless other_schedule.is_a?(expected) 
-
-    match = true
-
-    if [:weekly, :fortnightly].include?(recurrence_type) && other_schedule.recurrence_type == :single
-      match &= ([other_schedule.start_time.wday] - recurrence_days).empty?
-
-    elsif recurrence_type == :weekly && other_schedule.recurrence_type == :monthly
-      match &= (other_schedule.month_days - recurrence_days).empty? # The repeating days in the monthly schedule need to be a subset of this schedules weekly reoccuring days 
-
-    elsif recurrence_type == :weekly && other_schedule.recurrence_type == :fortnightly
-      match &= (other_schedule.recurrence_days - recurrence_days).empty?
-      # is the other schedules recurrence_days a subset of mine?
-
-      match &= (recurrence_times == other_schedule.recurrence_times)
-    elsif [:monthly].include?(recurrence_type) && other_schedule.recurrence_type == :single
-      match &= month_days.include?(other_schedule.start_time.wday)
-
-    else
-      match &= (recurrence_type == other_schedule.recurrence_type)
-      match &= (other_schedule.recurrence_days - recurrence_days).empty?
-      # is the other schedules recurrence_days a subset of mine?
-
-      match &= (recurrence_times == other_schedule.recurrence_times)
-    end
-
-    match &= (start_time <= other_schedule.start_time) if strict_start_time # Optional
-
-    match
-  end
-
   # This is very much dependant on how BuckyBox is using IceCube and ignores the possibilites of
   # an interval higher than 2 and ignores intervals on MonthlyRules
   #
@@ -167,11 +173,5 @@ class Bucky::Schedule < IceCube::Schedule
   def month_days
     days = recurrence_rules.first.to_hash[:validations][:day_of_week].keys if recurrence_type == :monthly && recurrence_rules.first.present?
     days || []
-  end
-
-  private
-
-  def ice_cube_schedule
-    @schedule
   end
 end
