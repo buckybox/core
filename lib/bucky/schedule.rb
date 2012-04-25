@@ -131,48 +131,39 @@ class Bucky::Schedule < IceCube::Schedule
   #                                                                                              #
   ################################################################################################
 
+  DAYS = [:sunday, :monday, :tuesday, :wednesday, :thursday, :friday, :saturday]
+
   def remove_recurrence_rule_day(day)
-    new_schedule = @schedule
-    recurrence_rule = new_schedule.recurrence_rules.first
+    recurrence_rule = self.recurrence_rules.first
 
     if recurrence_rule.present?
-      new_schedule.remove_recurrence_rule(recurrence_rule)
+      self.remove_recurrence_rule(recurrence_rule)
       interval = recurrence_rule.to_hash[:interval]
       days = nil
 
       rule = case recurrence_rule
              when IceCube::WeeklyRule
                days = recurrence_rule.to_hash[:validations][:day] || []
-
                IceCube::Rule.weekly(interval).day(*(days - [day]))
              when IceCube::MonthlyRule
                days = recurrence_rule.to_hash[:validations][:day_of_week].keys || []
-
                monthly_days_hash = (days - [day]).inject({}) { |hash, day| hash[day] = [1]; hash }
                IceCube::Rule.monthly(interval).day_of_week(monthly_days_hash)
              end
 
       if rule.present? && (days - [day]).present?
-        new_schedule.add_recurrence_rule(rule)
-        @schedule = new_schedule
-      else
-        @schedule = nil
+        self.add_recurrence_rule(rule)
       end
-    else
-      nil
     end
   end
 
   def remove_recurrence_times_on_day(day)
-    day = DAYS[day] if day.is_a?(Integer) && day.between?(0, 6)
-    new_schedule = @schedule
+    day = IceCube::TimeUtil::DAYS.keys[day] if day.is_a?(Integer) && day.between?(0, 6)
 
     recurrence_times.each do |recurrence_time|
       if recurrence_time.send("#{day}?") # recurrence_time.monday? for example
-        new_schedule.remove_recurrence_time(recurrence_time)
+        self.remove_recurrence_time(recurrence_time)
       end
     end
-
-    @schedule = new_schedule
   end
 end

@@ -155,10 +155,10 @@ describe Bucky::Schedule do
 
     describe 'save as one timezone and recreate in another' do
       before do
-        Time.zone       = 'Hong Kong'
+        Time.zone      = 'Hong Kong'
         @schedule_hash = full_schedule.to_hash
 
-        Time.zone = 'Mazatlan'
+        Time.zone     = 'Mazatlan'
         @new_schedule = Bucky::Schedule.from_hash(@schedule_hash)
       end
 
@@ -276,9 +276,60 @@ describe Bucky::Schedule do
     specify { monthly.month_days.should == [2] }
   end
 
-  describe '#remove_recurrence_rule_day' do
-  end
+  context 'when removing a recurrence days or times' do
+    shared_examples 'it has removeable days' do
+      before { schedule.remove_recurrence_rule_day(3) }
+      specify { schedule.to_s.should_not match /Wednesday/i }
+    end
 
-  describe '#remove_recurrence_times_on_day' do
+    shared_examples 'it has removeable recurrance times' do
+      before { schedule.add_recurrence_time(Time.zone.parse('next wednesday')) }
+
+      context 'should remove a recurrance time on that day' do
+        before { schedule.remove_recurrence_times_on_day(3) }
+        specify { schedule.recurrence_times.size.should == 0 }
+      end
+
+      context 'should not remove a recurrance time on another day' do
+        before { schedule.remove_recurrence_times_on_day(2) }
+        specify { schedule.recurrence_times.size.should == 1 }
+      end
+    end
+
+    context 'before UTC' do
+      before { Time.zone = 'Hong Kong' }
+
+      context 'for single schedule' do
+        let(:schedule) { new_everyday_schedule(Time.current) }
+
+        it_behaves_like 'it has removeable days'
+        it_behaves_like 'it has removeable recurrance times'
+      end
+
+      context 'for recurring schedule' do
+        let(:schedule) { new_monthly_schedule(Time.current, (0..6).to_a, ) }
+
+        it_behaves_like 'it has removeable days'
+        it_behaves_like 'it has removeable recurrance times'
+      end
+    end
+
+    context 'after UTC' do
+      before { Time.zone = 'Mazatlan' }
+
+      context 'for single schedule' do
+        let(:schedule) { new_everyday_schedule(Time.current) }
+
+        it_behaves_like 'it has removeable days'
+        it_behaves_like 'it has removeable recurrance times'
+      end
+
+      context 'for recurring schedule' do
+        let(:schedule) { new_monthly_schedule(Time.current, (0..6).to_a, ) }
+
+        it_behaves_like 'it has removeable days'
+        it_behaves_like 'it has removeable recurrance times'
+      end
+    end
   end
 end
