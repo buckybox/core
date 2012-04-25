@@ -1,7 +1,13 @@
 require 'spec_helper'
 
 describe Bucky::Schedule do
-  let(:time)     { Time.current }
+  let(:time)        { Time.current }
+  let(:next_sunday) { next_day(:sunday) }
+  let(:work_week)   { [:monday, :tuesday, :wednesday, :thursday, :friday] }
+  let(:single)      { new_single_schedule(next_sunday) }
+  let(:weekly)      { new_recurring_schedule(next_sunday, work_week, 1) }
+  let(:fortnightly) { new_recurring_schedule(next_sunday, work_week, 2) }
+  let(:monthly)     { new_monthly_schedule(next_sunday, [2]) }
 
   describe '#initialize' do
     let(:end_time) { time + 1.week }
@@ -70,132 +76,96 @@ describe Bucky::Schedule do
   # Exception Times
   # NOT Exception Rules
   context 'persistance' do
-    let(:weekly_rule)      { IceCube::Rule.weekly.day(0, 3, 6) }
-    let(:monthly_rule)     { IceCube::Rule.monthly.day_of_week(0 => [1], 3 => [1], 6 => [1]) }
     let(:time_offset)      { 1.week }
     let(:exception_offset) { 3.days }
+    let(:single_time)      { time + time_offset }
+    let(:weekly_rule)      { IceCube::Rule.weekly.day(0, 3, 6) }
+    let(:monthly_rule)     { IceCube::Rule.monthly.day_of_week(0 => [1], 3 => [1], 6 => [1]) }
+    let(:exception_time)   { (time + exception_offset).beginning_of_day }
+    let(:full_schedule)    { new_full_schedule(time, single_time, weekly_rule, monthly_rule, exception_time) }
 
     context 'before utc' do
-      before do
-        Time.zone       = 'Hong Kong'
-        @current_time   = Time.current
-        @time           = @current_time + time_offset
-        @exception_time = (@current_time + exception_offset).beginning_of_day
-
-        @schedule = Bucky::Schedule.new(@current_time)
-        @schedule.add_recurrence_time(@time)
-        @schedule.add_exception_time(@exception_time)
-        @schedule.add_recurrence_rule(weekly_rule)
-        @schedule.add_recurrence_rule(monthly_rule)
-      end
+      before { Time.zone = 'Hong Kong' }
 
       describe '#to_hash' do
-        before { @hash = @schedule.to_hash }
+        before { @hash = full_schedule.to_hash }
 
-        specify { @hash[:start_date].should == @current_time.utc }
-        specify { @hash[:rtimes][0].should == @time.utc }
-        specify { @hash[:extimes][0].should == @exception_time.utc }
+        specify { @hash[:start_date].should == time.utc }
+        specify { @hash[:rtimes][0].should == single_time.utc }
+        specify { @hash[:extimes][0].should == exception_time.utc }
         specify { @hash[:rrules][0][:validations][:day].should == [6, 2, 5] }
         specify { @hash[:rrules][1][:validations][:day_of_week].should == { 6 => [1], 2 => [1], 5 => [1] } }
       end
 
       describe '#from_hash' do
-        before { @new_schedule = Bucky::Schedule.from_hash(@schedule.to_hash) }
+        before { @new_schedule = Bucky::Schedule.from_hash(full_schedule.to_hash) }
 
         specify { @new_schedule.class.should == Bucky::Schedule }
-        specify { @new_schedule.start_time.to_s.should == @schedule.start_time.to_s }
-        specify { @new_schedule.to_s.should == @schedule.to_s }
+        specify { @new_schedule.start_time.to_s.should == full_schedule.start_time.to_s }
+        specify { @new_schedule.start_time.zone.should == Time.current.zone }
+        specify { @new_schedule.to_s.should == full_schedule.to_s }
       end
     end
 
     context 'at utc' do
-      before do
-        Time.zone       = 'UTC'
-        @current_time   = Time.current
-        @time           = @current_time + time_offset
-        @exception_time = (@current_time + exception_offset).beginning_of_day
-
-        @schedule = Bucky::Schedule.new(@current_time)
-        @schedule.add_recurrence_time(@time)
-        @schedule.add_exception_time(@exception_time)
-        @schedule.add_recurrence_rule(weekly_rule)
-        @schedule.add_recurrence_rule(monthly_rule)
-      end
+      before { Time.zone = 'UTC' }
 
       describe '#to_hash' do
-        before { @hash = @schedule.to_hash }
+        before { @hash = full_schedule.to_hash }
 
-        specify { @hash[:start_date].should == @current_time.utc }
-        specify { @hash[:rtimes][0].should == @time.utc }
-        specify { @hash[:extimes][0].should == @exception_time.utc }
+        specify { @hash[:start_date].should == time.utc }
+        specify { @hash[:rtimes][0].should == single_time.utc }
+        specify { @hash[:extimes][0].should == exception_time.utc }
         specify { @hash[:rrules][0][:validations][:day].should == [0, 3, 6] }
         specify { @hash[:rrules][1][:validations][:day_of_week].should == { 0 => [1], 3 => [1], 6 => [1] } }
       end
 
       describe '#from_hash' do
-        before { @new_schedule = Bucky::Schedule.from_hash(@schedule.to_hash) }
+        before { @new_schedule = Bucky::Schedule.from_hash(full_schedule.to_hash) }
 
         specify { @new_schedule.class.should == Bucky::Schedule }
-        specify { @new_schedule.start_time.to_s.should == @schedule.start_time.to_s }
-        specify { @new_schedule.to_s.should == @schedule.to_s }
+        specify { @new_schedule.start_time.to_s.should == full_schedule.start_time.to_s }
+        specify { @new_schedule.start_time.zone.should == Time.current.zone }
+        specify { @new_schedule.to_s.should == full_schedule.to_s }
       end
     end
 
     context 'after utc' do
-      before do
-        Time.zone       = 'Mazatlan'
-        @current_time   = Time.current
-        @time           = @current_time + time_offset
-        @exception_time = (@current_time + exception_offset).beginning_of_day
-
-        @schedule = Bucky::Schedule.new(@current_time)
-        @schedule.add_recurrence_time(@time)
-        @schedule.add_exception_time(@exception_time)
-        @schedule.add_recurrence_rule(weekly_rule)
-        @schedule.add_recurrence_rule(monthly_rule)
-      end
+      before { Time.zone = 'Mazatlan' }
 
       describe '#to_hash' do
-        before { @hash = @schedule.to_hash }
+        before { @hash = full_schedule.to_hash }
 
-        specify { @hash[:start_date].should == @current_time.utc }
-        specify { @hash[:rtimes][0].should == @time.utc }
-        specify { @hash[:extimes][0].should == @exception_time.utc }
+        specify { @hash[:start_date].should == time.utc }
+        specify { @hash[:rtimes][0].should == single_time.utc }
+        specify { @hash[:extimes][0].should == exception_time.utc }
         specify { @hash[:rrules][0][:validations][:day].should == [0, 3, 6] }
         specify { @hash[:rrules][1][:validations][:day_of_week].should == { 0 => [1], 3 => [1], 6 => [1] } }
       end
 
       describe '#from_hash' do
-        before { @new_schedule = Bucky::Schedule.from_hash(@schedule.to_hash) }
+        before { @new_schedule = Bucky::Schedule.from_hash(full_schedule.to_hash) }
 
         specify { @new_schedule.class.should == Bucky::Schedule }
-        specify { @new_schedule.start_time.to_s.should == @schedule.start_time.to_s }
-        specify { @new_schedule.to_s.should == @schedule.to_s }
+        specify { @new_schedule.start_time.to_s.should == full_schedule.start_time.to_s }
+        specify { @new_schedule.start_time.zone.should == Time.current.zone }
+        specify { @new_schedule.to_s.should == full_schedule.to_s }
       end
     end
 
     describe 'save as one timezone and recreate in another' do
       before do
         Time.zone       = 'Hong Kong'
-        @current_time   = Time.current
-        @time           = @current_time + time_offset
-        @exception_time = (@current_time + exception_offset).beginning_of_day
-
-        @schedule = Bucky::Schedule.new(@current_time)
-        @schedule.add_recurrence_time(@time)
-        @schedule.add_exception_time(@exception_time)
-        @schedule.add_recurrence_rule(weekly_rule)
-        @schedule.add_recurrence_rule(monthly_rule)
-        @schedule_hash = @schedule.to_hash
+        @schedule_hash = full_schedule.to_hash
 
         Time.zone = 'Mazatlan'
         @new_schedule = Bucky::Schedule.from_hash(@schedule_hash)
       end
 
       specify { @new_schedule.class.should == Bucky::Schedule }
-      specify { @new_schedule.start_time.to_s.should == (@schedule.start_time.in_time_zone('Mazatlan')).to_s }
-      specify { @new_schedule.recurrence_times[0].to_s.should == (@time.in_time_zone('Mazatlan')).to_s }
-      specify { @new_schedule.exception_times[0].to_s.should == (@exception_time.in_time_zone('Mazatlan')).to_s }
+      specify { @new_schedule.start_time.to_s.should == (full_schedule.start_time.in_time_zone('Mazatlan')).to_s }
+      specify { @new_schedule.recurrence_times[0].to_s.should == (single_time.in_time_zone('Mazatlan')).to_s }
+      specify { @new_schedule.exception_times[0].to_s.should == (exception_time.in_time_zone('Mazatlan')).to_s }
       specify { @new_schedule.recurrence_rules[0].to_s.should == 'Weekly on Tuesdays, Fridays, and Saturdays' }
       specify { @new_schedule.recurrence_rules[1].to_s.should == 'Monthly on the 1st Saturday when it is the 1st Tuesday when it is the 1st Friday' }
     end
@@ -212,32 +182,25 @@ describe Bucky::Schedule do
   end
 
   describe "#include?" do
-    let(:next_sunday) { next_day(:sunday) }
-    let(:week)        { [:monday, :tuesday, :wednesday, :thursday, :friday] }
-    let(:single)      { new_single_schedule(next_sunday) }
-    let(:weekly)      { new_recurring_schedule(next_sunday, week, 1) }
-    let(:fortnightly) { new_recurring_schedule(next_sunday, week, 2) }
-    let(:monthly)     { new_monthly_schedule(next_sunday, [2]) } #Reoccur on the first tuesday of every month
-
     context :identity do
       specify { single.should include_schedule(new_single_schedule(next_sunday)) }
-      specify { weekly.should include_schedule(new_recurring_schedule(next_sunday, week, 1)) }
-      specify { fortnightly.should include_schedule(new_recurring_schedule(next_sunday, week, 2)) }
+      specify { weekly.should include_schedule(new_recurring_schedule(next_sunday, work_week, 1)) }
+      specify { fortnightly.should include_schedule(new_recurring_schedule(next_sunday, work_week, 2)) }
       specify { monthly.should include_schedule(new_monthly_schedule(next_sunday)) }
     end
 
     context :start_times do
       # If the other schedule starts before this one, then it isn't going to match
       context "other schedule starts before this one" do
-        specify { weekly.should_not include_schedule(new_recurring_schedule(next_sunday - 1.month, week, 1), true) }
-        specify { fortnightly.should_not include_schedule(new_recurring_schedule(next_sunday - 1.month, week, 2), true) }
+        specify { weekly.should_not include_schedule(new_recurring_schedule(next_sunday - 1.month, work_week, 1), true) }
+        specify { fortnightly.should_not include_schedule(new_recurring_schedule(next_sunday - 1.month, work_week, 2), true) }
         specify { monthly.should_not include_schedule(new_monthly_schedule(next_sunday - 1.month), true) }
       end
 
       # If the other schedule starts after this one it should match
       context "other schedule starts after this one" do
-        specify { weekly.should include_schedule(new_recurring_schedule(next_sunday + 1.month, week, 1)) }
-        specify { fortnightly.should include_schedule(new_recurring_schedule(next_sunday + 1.month, week, 2)) }
+        specify { weekly.should include_schedule(new_recurring_schedule(next_sunday + 1.month, work_week, 1)) }
+        specify { fortnightly.should include_schedule(new_recurring_schedule(next_sunday + 1.month, work_week, 2)) }
         specify { monthly.should include_schedule(new_monthly_schedule(next_sunday + 1.month)) }
       end
     end
@@ -290,5 +253,32 @@ describe Bucky::Schedule do
         end
       end
     end
+  end
+
+  describe "#recurrence_type" do
+    specify { single.recurrence_type.should eq(:single) }
+    specify { weekly.recurrence_type.should eq(:weekly) }
+    specify { fortnightly.recurrence_type.should eq(:fortnightly) }
+    specify { monthly.recurrence_type.should eq(:monthly) }
+  end
+
+  describe '#recurrence_days' do
+    specify { single.recurrence_days.should == [] }
+    specify { weekly.recurrence_days.should == [1, 2, 3, 4, 5] }
+    specify { fortnightly.recurrence_days.should == [1, 2, 3, 4, 5] }
+    specify { monthly.recurrence_days.should == [] }
+  end
+
+  describe '#month_days' do
+    specify { single.month_days.should == [] }
+    specify { weekly.month_days.should == [] }
+    specify { fortnightly.month_days.should == [] }
+    specify { monthly.month_days.should == [2] }
+  end
+
+  describe '#remove_recurrence_rule_day' do
+  end
+
+  describe '#remove_recurrence_times_on_day' do
   end
 end

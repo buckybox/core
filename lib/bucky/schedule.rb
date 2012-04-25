@@ -91,7 +91,38 @@ class Bucky::Schedule < IceCube::Schedule
 
     match &= (start_time <= other_schedule.start_time) if strict_start_time # Optional
 
-    match
+    return match
+  end
+
+  # This is very much dependant on how BuckyBox is using IceCube and ignores the possibilites of
+  # an interval higher than 2 and ignores intervals on MonthlyRules
+  #
+  # Doesn't support matching fortnights into weeks
+  # E.g 'Weekdays Weekly' doesn't include 'Weekdays Fortnightly' dispite logically that being the case
+  def recurrence_type
+    if recurrence_rules.present?
+      recurrence_rule = recurrence_rules.first
+      interval        = recurrence_rule.to_hash[:interval]
+
+      type = case recurrence_rule
+             when IceCube::WeeklyRule
+               interval == 1 ? :weekly : :fortnightly
+             when IceCube::MonthlyRule
+               :monthly
+             end
+    else
+      :single
+    end
+  end
+
+  def recurrence_days
+    days = recurrence_rules.first.to_hash[:validations][:day] if recurrence_rules.first.present?
+    days || []
+  end
+
+  def month_days
+    days = recurrence_rules.first.to_hash[:validations][:day_of_week].keys if recurrence_type == :monthly && recurrence_rules.first.present?
+    days || []
   end
 
   ################################################################################################
@@ -143,35 +174,5 @@ class Bucky::Schedule < IceCube::Schedule
     end
 
     @schedule = new_schedule
-  end
-
-  # This is very much dependant on how BuckyBox is using IceCube and ignores the possibilites of
-  # an interval higher than 2 and ignores intervals on MonthlyRules
-  #
-  # Doesn't support matching fortnights into weeks
-  # E.g 'Weekdays Weekly' doesn't include 'Weekdays Fortnightly' dispite logically that being the case
-  def recurrence_type
-    if recurrence_rules.present?
-      recurrence_rule = recurrence_rules.first
-      interval = recurrence_rule.to_hash[:interval]
-      type = case recurrence_rule
-             when IceCube::WeeklyRule
-               interval==1 ? :weekly : :fortnightly
-             when IceCube::MonthlyRule
-               :monthly
-             end
-    else
-      :single
-    end
-  end
-
-  def recurrence_days
-    days = recurrence_rules.first.to_hash[:validations][:day] if recurrence_rules.first.present?
-    days || []
-  end
-
-  def month_days
-    days = recurrence_rules.first.to_hash[:validations][:day_of_week].keys if recurrence_type == :monthly && recurrence_rules.first.present?
-    days || []
   end
 end

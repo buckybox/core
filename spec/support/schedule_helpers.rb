@@ -38,6 +38,17 @@ def new_monthly_schedule(time = (Time.current + 1.day), days = [0], interval=1)
   return schedule
 end
 
+def new_full_schedule(time, single_time, weekly_rule, monthly_rule, exception_time)
+  schedule = Bucky::Schedule.new(time)
+
+  schedule.add_recurrence_time(single_time)
+  schedule.add_exception_time(exception_time)
+  schedule.add_recurrence_rule(weekly_rule)
+  schedule.add_recurrence_rule(monthly_rule)
+
+  return schedule
+end
+
 # Day needs to be an integer 0-6 representing the weekday
 # return the next day that it is the required weekday
 def next_day(day, time = Time.current)
