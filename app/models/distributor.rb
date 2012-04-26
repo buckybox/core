@@ -217,10 +217,23 @@ class Distributor < ActiveRecord::Base
     else
       search_extras = box.extras.alphabetically
     end
-    search_extras.select{|extra| extra.match_import_extra?(e)}.
+
+    matches = search_extras.select{|extra| extra.match_import_extra?(e)}.
       collect{|extra_match| [extra_match.fuzzy_match(e),extra_match]}.
       select{|fuzzy_match| fuzzy_match.first > 0.8}. # Set a lower threashold which weeds out almost matches and force the data to be fixed.  Make the user go fix the csv file.
-      sort{|a,b| b.first <=> a.first}.first.try(:last) # Pick the best match if more than one
+      sort{|a,b| b.first <=> a.first}
+
+    match = if matches.size > 1 && matches.first.first == matches[1].first
+      # At-least the first two matches have the same fuzzy_match (probably no unit set)
+      # So return the first one alphabetically so that it is consistent
+      matches.select{|match| match.first == matches.first.first}. #Select those which have the same fuzzy_match
+        collect(&:last). # discard the fuzzy_match number
+        sort_by{|extra| "#{extra.name} #{extra.unit}"}.first # Sort alphabeticaly
+    else
+      matches.first.last
+    end
+
+    match
   end
 
   def find_box_from_import(box)

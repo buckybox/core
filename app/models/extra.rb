@@ -43,7 +43,7 @@ class Extra < ActiveRecord::Base
     if extra.unit.blank?
       match *= 1.0 # If the unit was missed, assume to match any unit
     else
-      unit_match = Bucky::Util.fuzzy_match(unit.gsub(/ +/,''), extra.unit.gsub(/ +/,''))
+      unit_match = Bucky::Util.fuzzy_match(unit.gsub(/ +/,''), extra.unit.gsub(/ +/,'')) # Ignore extra and missing spaces ' '
       match *= (0.9+(unit_match*0.1)) # Reduce impact of a poor unit match
     end
     match
