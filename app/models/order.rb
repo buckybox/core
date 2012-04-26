@@ -25,10 +25,9 @@ class Order < ActiveRecord::Base
   FREQUENCIES = %w(single weekly fortnightly monthly)
 
   validates_presence_of :account_id, :box_id, :quantity, :frequency
-  validates_length_of :schedule, minimum: 1, too_short: 'need more data to create the schedule' # we may want a custom validator sometime
   validates_numericality_of :quantity, greater_than: 0
   validates_inclusion_of :frequency, in: FREQUENCIES, message: "%{value} is not a valid frequency"
-  validate :schedule_includes_route
+  validate :schedule_includes_route, unless: :schedule_empty?
 
   before_validation :activate, if: :just_completed?
   before_validation :record_schedule_change, if: :schedule_changed?
@@ -53,9 +52,10 @@ class Order < ActiveRecord::Base
   end
 
   def self.for_route_read_only(route)
-    # Using a join makes the returned models read-only, this is a work around
-    order_ids = Order.where(customers: {route_id: route.id}).joins(:customer).collect(&:id)
-    Order.where(["id in (?)", order_ids])
+    # Getting the data needed via a join
+    order_ids = Order.where(customers: { route_id: route.id }).joins(:customer).map(&:id)
+    # The join causes the returned models to be read-only. Thus, must to another search to get updateable models returned.
+    Order.where(id: order_ids)
   end
 
   def create_schedule(start_time, frequency, days_by_number = nil)
@@ -112,24 +112,29 @@ class Order < ActiveRecord::Base
     self.schedule = s
   end
 
+  def future_deliveries(end_date)
+    results = []
+
+    schedule.occurrences_between(Time.current, end_date).each do |occurence|
+      results << { date: occurence.to_date, price: self.price, description: "Delivery for order ##{id}"}
+    end
+
+    return results
+  end
+
   def remove_day(day)
     remove_recurrence_rule_day(day)
     remove_recurrence_times_on_day(day)
   end
 
   def deactivate_for_day!(day)
-    remove_day(day)
+    remove_day(day) unless schedule_empty?
     deactivate if schedule_empty?
     save!
   end
 
-  def future_deliveries(end_date)
-    results = []
-    schedule.occurrences_between(Time.current, end_date).each do |occurence|
-      results << { date: occurence.to_date, price: self.price, description: "Delivery for order ##{id}"}
-    end
-
-    return results
+  def schedule_empty?
+    schedule.next_occurrence.blank? || schedule.empty?
   end
 
   def string_pluralize
@@ -143,10 +148,6 @@ class Order < ActiveRecord::Base
     result += '+D' unless dislikes.blank?
 
     return result.upcase
-  end
-
-  def schedule_empty?
-    schedule.next_occurrence.blank?
   end
 
   def deactivate

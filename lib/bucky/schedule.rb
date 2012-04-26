@@ -8,6 +8,8 @@
 
 class Bucky::Schedule < IceCube::Schedule
 
+  DAYS = IceCube::TimeUtil::DAYS.keys
+
   ################################################################################################
   #                                                                                              #
   #  Pretty specific to BuckyBox. The common way we create schedules, data in distributor time   #
@@ -55,6 +57,13 @@ class Bucky::Schedule < IceCube::Schedule
   def ==(schedule)
     return false unless schedule.is_a?(Bucky::Schedule)
     self.to_hash == schedule.to_hash
+  end
+
+  def empty?
+    schedule_hash = to_hash
+    schedule_hash.delete(:start_date)
+
+    return schedule_hash.values.all?(&:empty?)
   end
 
   # Does the other_schedule fall on days in our schedule?
@@ -131,8 +140,6 @@ class Bucky::Schedule < IceCube::Schedule
   #                                                                                              #
   ################################################################################################
 
-  DAYS = [:sunday, :monday, :tuesday, :wednesday, :thursday, :friday, :saturday]
-
   def remove_recurrence_rule_day(day)
     recurrence_rule = self.recurrence_rules.first
 
@@ -158,7 +165,7 @@ class Bucky::Schedule < IceCube::Schedule
   end
 
   def remove_recurrence_times_on_day(day)
-    day = IceCube::TimeUtil::DAYS.keys[day] if day.is_a?(Integer) && day.between?(0, 6)
+    day = DAYS[day] if day.is_a?(Integer) && day.between?(0, 6)
 
     recurrence_times.each do |recurrence_time|
       if recurrence_time.send("#{day}?") # recurrence_time.monday? for example

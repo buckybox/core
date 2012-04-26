@@ -181,6 +181,15 @@ describe Bucky::Schedule do
     specify { s1.should_not == s3 }
   end
 
+  describe '#emtpy?' do
+    let(:schedule) { Bucky::Schedule.new(time) }
+
+    specify { schedule.empty?.should be_true }
+    specify { single.empty?.should_not be_true }
+    specify { weekly.empty?.should_not be_true }
+    specify { monthly.empty?.should_not be_true }
+  end
+
   describe "#include?" do
     context :identity do
       specify { single.should include_schedule(new_single_schedule(next_sunday)) }
