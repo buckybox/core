@@ -283,4 +283,54 @@ describe Order do
   end
 
   it "should validate extras limit"
+
+  context "with extras", :focus do
+    before do
+      @distributor = Fabricate(:distributor)
+      @extras = 2.times.collect{Fabricate(:extra, distributor: @distributor)}
+      @extra_ids = @extras.collect(&:id)
+
+      @order_extras = {@extra_ids.first.to_s => {count: 3},
+                      @extra_ids.last.to_s => {count: 1}}
+
+      @box = Fabricate(:box, extras_limit: 5, distributor: @distributor)
+
+      @params = Fabricate.attributes_for(:order, box_id: @box.id)
+      @params.merge!(order_extras: @order_extras)
+    end
+
+    it "should create order_extras from extra_ids" do
+      order = Order.create(@params)
+      order.should be_valid
+      order.order_extras.collect(&:extra_id).sort.should eq(@extra_ids.sort)
+
+      order.extras_count.should eq(4)
+      order.order_extras.find_by_extra_id(@extra_ids.first).count.should eq(3)
+      order.order_extras.find_by_extra_id(@extra_ids.last).count.should eq(1)
+    end
+
+    it "should validate extras limit" do
+      @params[:box].update_attribute(:extras_limit, 3)
+
+      order = Order.create(@params)
+      order.should_not be_valid
+      order.errors[:base].should include("There is more than 3 extras for this box")
+    end
+
+    it "should update extras and delete old ones" do
+      order = Order.create(@params)
+      order.should be_valid
+      
+      @order_extras[@extra_ids.first.to_s][:count] = 0
+      new_extra = Fabricate(:extra, distributor: @distributor)
+      @order_extras.merge!(new_extra.id => {count: 2})
+      
+      order.update_attributes(order_extras: @order_extras)
+      order.should be_valid
+
+      order.order_extras.collect(&:extra_id).should_not include(@extra_ids.first)
+      order.extras_count.should eq(3)
+    end
+
+  end
 end

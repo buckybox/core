@@ -260,7 +260,7 @@ class Order < ActiveRecord::Base
   end
 
   def extras_within_box_limit
-    if !box.extras_unlimited? && extras_count > box.extras_limit
+    if box.present? && !box.extras_unlimited? && extras_count > box.extras_limit
       errors.add(:base, "There is more than #{box.extras_limit} extras for this box") 
     end
   end

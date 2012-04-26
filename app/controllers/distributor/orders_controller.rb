@@ -17,7 +17,7 @@ class Distributor::OrdersController < Distributor::ResourceController
   end
 
   def create
-    @account       = Account.find(params[:account_id])
+    @account       = current_distributor.accounts.find(params[:account_id])
     @order         = Order.new(params[:order])
     load_form
 
@@ -26,7 +26,11 @@ class Distributor::OrdersController < Distributor::ResourceController
     @order.account   = @account
     @order.completed = true
 
-    create! { [:distributor, @account.customer] }
+    if @order.save
+      redirect_to [:distributor, @account.customer]
+    else
+      render 'new'
+    end
   end
 
   def edit
@@ -43,7 +47,11 @@ class Distributor::OrdersController < Distributor::ResourceController
     # Will revisit when we have time to build a proper UI for it
     params[:order].delete(:frequency)
 
-    update! { [:distributor, @account.customer] }
+    if @order.update_attributes(params[:order])
+      redirect_to [:distributor, @account.customer]
+    else
+      render 'edit'
+    end
   end
 
   def deactivate
