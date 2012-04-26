@@ -117,8 +117,16 @@ module Bucky
       box.delivery_frequency = row[DELIVERY_FREQUENCY].downcase if row[DELIVERY_FREQUENCY].is_a?(String)
       box.delivery_days      = row[DELIVERY_DAYS]
       box.next_delivery_date = row[NEXT_DELIVERY_DATE]
+      
+      extra_field = row[EXTRAS]
+      if extra_field.present?
+        recurring = extra_field.match(/#recurring/i)
+        recurring ||= extra_field.match(/#one off/i).blank?
+        box.extras_recurring = recurring
 
-      extras_from_row(row).map{|extra| box.add_extra(extra)}
+        extra_field = extra_field.gsub(/#recurring/i,'').gsub(/#one off/i,'')
+        extras_from_row(extra_field).map{|extra| box.add_extra(extra)}
+      end
 
       log("BOX")
       log("Box #{box.box_type} is #{box.valid? ? "valid" : "invalid because #{box.errors.full_messages.join(', ')}"}")
@@ -127,8 +135,8 @@ module Bucky
       return box
     end
 
-    def self.extras_from_row(row)
-      extra_strings = (row[EXTRAS] || '').split(',').collect(&:strip).compact
+    def self.extras_from_row(extra_field)
+      extra_strings = extra_field.split(',').collect(&:strip).reject(&:blank?)
       extras = extra_strings.collect{|string| extra_from_string(string)}
       extras
     end
@@ -137,7 +145,6 @@ module Bucky
     UNIT_REGEX = /\(.+\)/
     def self.extra_from_string(string)
       extra = Extra.new
-
       extra.count = string.match(COUNT_REGEX)[0].gsub(/ ?x/,'').to_i#Extract 71x and remove 'x' from end
       extra.unit = string.match(UNIT_REGEX)[0][1..-1][0..-2] if string.match(UNIT_REGEX) #Extract (600ml) and remove '(' & ')'
       extra.name = string.gsub(COUNT_REGEX, '').gsub(UNIT_REGEX, '').strip
@@ -265,7 +272,7 @@ module Bucky
       validates_inclusion_of :delivery_frequency, in: %w(single weekly fortnightly monthly)
 
       DATA_FIELDS =  [:box_type, :extras, :dislikes, :likes, :delivery_frequency, :delivery_days,
-        :next_delivery_date]
+        :next_delivery_date, :extras_recurring]
       attr_accessor *DATA_FIELDS
 
       def add_delivery_day(day)
@@ -278,15 +285,21 @@ module Bucky
       end
 
       def add_extra(extra)
+        raise "#{extra.errors.full_messages.join(', ')}" unless extra.valid?
         self.extras ||= []
         self.extras << extra
+      end
+
+      def extras_recurring?
+        !!extras_recurring
       end
     end
 
     class Extra
       include ActiveModel::Validations
 
-      validates_numericality_of :count, min: 0
+      #validates_numericality_of :count, minimum: 1
+      validates :count, numericality: {greater_than: 0}
 
       DATA_FIELDS = [:name, :count, :unit]
       attr_accessor *DATA_FIELDS

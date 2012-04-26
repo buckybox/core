@@ -281,7 +281,7 @@ module Bucky
         match &= ([other_schedule.start_time.wday] - recurrence_days).empty?
 
       elsif recurrence_type == :weekly && other_schedule.recurrence_type == :monthly
-        match &= (other_schedule.month_days - recurrence_days).empty? # The repeating days in the monthly schedule need to be a subset of this schedules weekly reoccuring days 
+        match &= (other_schedule.month_days - recurrence_days).empty? # The repeating days in the monthly schedule need to be a subset of this schedules weekly recurring days 
 
       elsif recurrence_type == :weekly && other_schedule.recurrence_type == :fortnightly
         match &= (other_schedule.recurrence_days - recurrence_days).empty?

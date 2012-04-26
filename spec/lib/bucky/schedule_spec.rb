@@ -44,7 +44,7 @@ describe Schedule do
     specify { Time.use_zone("London") { @schedule.recurrence_times.each{|recurrence_time| recurrence_time.time_zone.to_s.should match(/London/)}} }
   end
 
-  context :with_reoccuring_schedule do
+  context :with_recurring_schedule do
     before do
       Time.zone = "Wellington"
       Delorean.time_travel_to(Time.parse("2012-03-15 15:47:08")) #It was failing at this point, and I am not sure if it was because London time 'GMT' goes to BST in 4 weeks-ish
@@ -139,7 +139,7 @@ describe Schedule do
       specify { weekly.should include_schedule(fortnightly) }
       specify { weekly.should include_schedule(monthly) }
       
-      it 'should include singles which fall on a reoccuring day' do
+      it 'should include singles which fall on a recurring day' do
         next_tuesday = next_day(time, 2) 
         single_schedule = new_single_schedule(next_tuesday)
         weekly.should include_schedule(single_schedule)
@@ -151,7 +151,7 @@ describe Schedule do
       specify { fortnightly.should_not include_schedule(weekly) }
       specify { fortnightly.should_not include_schedule(monthly) }
       
-      it 'should include singles which fall on a reoccuring day' do
+      it 'should include singles which fall on a recurring day' do
         next_tuesday = next_day(time, 2) 
         single_schedule = new_single_schedule(next_tuesday)
         fortnightly.should include_schedule(single_schedule)

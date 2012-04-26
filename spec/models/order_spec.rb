@@ -273,7 +273,7 @@ describe Order do
       order.pack_and_update_extras.should eq([{count: 3, name: "iPhone 4s", unit: "one", price_cents: 99995, currency: "NZD"}, {count: 1, name: "Apple", unit: "kg", price_cents: 295, currency: "NZD"}])
     end
     
-    it "keeps extras when it is a reoccuring order and returns hash" do
+    it "keeps extras when it is a recurring order and returns hash" do
       order = Fabricate.build(:order, extras_one_off: false)
       order.stub(:order_extras, :collect).and_return([{count: 3, name: "iPhone 4s", unit: "one", price_cents: 99995, currency: "NZD"}, {count: 1, name: "Apple", unit: "kg", price_cents: 295, currency: "NZD"}])
       

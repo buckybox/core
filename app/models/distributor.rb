@@ -237,7 +237,11 @@ class Distributor < ActiveRecord::Base
   end
 
   def find_box_from_import(box)
-    boxes.find_by_name(box.box_type)
+    if box.is_a?(Box) && box_ids.include?(box.id)
+      box
+    else
+      boxes.find_by_name(box.box_type)
+    end
   end
 
   private

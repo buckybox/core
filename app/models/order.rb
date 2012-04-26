@@ -197,11 +197,13 @@ class Order < ActiveRecord::Base
     
     order_extras.destroy_all
 
+    #return nil if collection.blank?
+
     collection.to_a.compact.each do |id, params|
       count = params[:count]
       next if count.to_i.zero?
       order_extra = order_extras.build(extra_id: id)
-      order_extra.count = count
+      order_extra.count = count.to_i
     end
   end
 
@@ -244,6 +246,14 @@ class Order < ActiveRecord::Base
   
   def extras_count
     order_extras.collect(&:count).sum
+  end
+
+  def import_extras(b_extras)
+    params = b_extras.inject({}) do |params, extra|
+      found_extra = distributor.find_extra_from_import(extra, box)
+      params.merge(found_extra.id.to_s => {count: extra.count})
+    end
+    self.order_extras = params
   end
 
   protected
