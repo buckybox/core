@@ -13,6 +13,8 @@ class Extra < ActiveRecord::Base
     :constructor => Proc.new { |cents, currency| Money.new(cents || 0, currency || Money.default_currency) },
     :converter => Proc.new { |value| value.respond_to?(:to_money) ? value.to_money : raise(ArgumentError, "Can't convert #{value.class} to Money") }
 
+  after_create :update_distributors_boxes # This ensures that new extras are added to boxes which "include the entire catalog".  Currently the system doesn't understand the concept of "include the entire catalog" but only infers it from seeing that all extras for a given distributor are set on a given box.  This was an oversight and should be fixed in refactoring. #TODO
+
   def to_hash
     {name: name, unit: unit, price_cents: price_cents, currency: currency}
   end
@@ -47,5 +49,16 @@ class Extra < ActiveRecord::Base
       match *= (0.9+(unit_match*0.1)) # Reduce impact of a poor unit match
     end
     match
+  end
+
+  # Add this newly created extra onto all boxes which look like they are following
+  # the "entire catalog" setting.  At the moment we can only infer that from seeing
+  # all the extras available set on each particular box
+  def update_distributors_boxes
+    distributor.boxes.each do |box|
+      if box.extras_allowed? && box.has_all_extras?(self)
+        box.extras << self
+      end
+    end
   end
 end

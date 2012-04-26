@@ -54,6 +54,11 @@ class Box < ActiveRecord::Base
   def extras_disabled?
     extras_limit == 0
   end
+  
+  def has_all_extras?(exclude=[])
+    exclude = [exclude] unless exclude.is_a?(Array)
+    (distributor.extras - exclude).sort == extras.sort
+  end
 
   # Used to select which drop down value is selected
   # on extras form
@@ -61,7 +66,7 @@ class Box < ActiveRecord::Base
     if new_record? || extras_disabled? # By default show 'from the entire extras catalog'
       true
     elsif distributor.present?
-      distributor.extra_ids.sort == extra_ids.sort
+      has_all_extras?
     else
       false
     end

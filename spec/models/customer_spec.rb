@@ -221,4 +221,8 @@ describe Customer do
 
     box
   end
+
+  def extra_mock(opts={})
+    
+  end
 end

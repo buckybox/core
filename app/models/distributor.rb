@@ -230,7 +230,7 @@ class Distributor < ActiveRecord::Base
         collect(&:last). # discard the fuzzy_match number
         sort_by{|extra| "#{extra.name} #{extra.unit}"}.first # Sort alphabeticaly
     else
-      matches.first.last
+      matches.first.last if matches.first.present?
     end
 
     match
