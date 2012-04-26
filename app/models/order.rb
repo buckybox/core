@@ -134,7 +134,7 @@ class Order < ActiveRecord::Base
   end
 
   def schedule_empty?
-    schedule.next_occurrence.blank? || schedule.empty?
+    schedule.nil? || schedule.next_occurrence.blank? || schedule.empty?
   end
 
   def string_pluralize

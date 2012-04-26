@@ -9,7 +9,7 @@ class RouteScheduleTransaction < ActiveRecord::Base
 
   attr_accessible :route, :schedule
 
-  validates_presence_of :route, :schedule
+  validates_presence_of :route
 
   default_scope order('created_at DESC')
 

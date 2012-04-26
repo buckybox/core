@@ -61,9 +61,9 @@ class Bucky::Schedule < IceCube::Schedule
 
   def empty?
     schedule_hash = to_hash
-    schedule_hash.delete(:start_date)
+    schedule_hash = schedule_hash.values.select { |x| x.is_a?(Array) } # We are only interested in what is stored in arrays (occurrence times, rules, )
 
-    return schedule_hash.values.all?(&:empty?)
+    return schedule_hash.all?(&:empty?) # If those things are empty we are considering the schedule empty
   end
 
   # Does the other_schedule fall on days in our schedule?
