@@ -23,7 +23,7 @@ describe Distributor::SettingsController do
   describe '#extras' do
     before { get :extras, distributor_id: @distributor.id }
 
-    specify { assigns(:extras).should eq(@distributor.extras) }
+    specify { assigns(:extras).should eq(@distributor.extras.alphabetically) }
     specify { assigns(:extra).should be_a_new(Extra) }
   end
 

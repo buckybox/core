@@ -11,7 +11,7 @@
       #order_extras
         - unless box.extras_unlimited?
           %p This box is limited to #{box.extras_limit} extras.
-        - box.extras.each do |extra|
+        - box.extras.alphabetically.each do |extra|
           - order_extra = order.order_extras.select{|e| e.extra_id == extra.id}.first # Instead of find by, get them all and pick it from the array, single DB request, not many
           = f.input "order_extras[#{extra.id}][count]", label: extra.name_with_price(account.customer), input_html: { min: 0, class: 'input-text', value: (order_extra && order_extra.count) || 0, id: "order_extras_#{extra.id}_count"}, as: :integer
         = simple_fields_for(order) do |f|

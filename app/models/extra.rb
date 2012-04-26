@@ -5,6 +5,7 @@ class Extra < ActiveRecord::Base
   validates_presence_of :distributor, :name, :unit, :price
 
   attr_accessible :distributor, :name, :unit, :price
+  scope :alphabetically, order('name ASC, unit ASC')
 
   composed_of :price,
     :class_name => "Money",

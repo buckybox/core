@@ -15,7 +15,7 @@ class Distributor::SettingsController < Distributor::BaseController
 
   def extras
     @extra = Extra.new
-    @extras = current_distributor.extras
+    @extras = current_distributor.extras.alphabetically
   end
 
   def boxes

@@ -23,7 +23,7 @@
                   =# JS updates prop 'min' in distributor/boxes.js
                   .input.check_boxes.optional
                     =# Simple form forgets to wrap it :\
-                    = f.collection_check_boxes :extra_ids, current_distributor.extras, :id, :name_with_unit
+                    = f.collection_check_boxes :extra_ids, current_distributor.extras.alphabetically, :id, :name_with_unit
 
         .four.columns
           = f.input :description
