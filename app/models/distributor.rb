@@ -204,6 +204,29 @@ class Distributor < ActiveRecord::Base
     end
   end
 
+  # Find extra from import script, if given a box, limit it
+  # to the boxes allowed extras
+  def find_extra_from_import(e, box=nil)
+    search_extras = []
+    box = box.present? ? find_box_from_import(box) : nil
+
+    if box.blank?
+      search_extras = extras.alphabetically
+    elsif box.extras_not_allowed?
+      []
+    else
+      search_extras = box.extras.alphabetically
+    end
+    search_extras.select{|extra| extra.match_import_extra?(e)}.
+      collect{|extra_match| [extra_match.fuzzy_match(e),extra_match]}.
+      select{|fuzzy_match| fuzzy_match.first > 0.8}. # Set a lower threashold which weeds out almost matches and force the data to be fixed.  Make the user go fix the csv file.
+      sort{|a,b| b.first <=> a.first}.first.try(:last) # Pick the best match if more than one
+  end
+
+  def find_box_from_import(box)
+    boxes.find_by_name(box.box_type)
+  end
+
   private
 
   def parameterize_name

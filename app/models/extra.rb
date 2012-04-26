@@ -18,14 +18,34 @@ class Extra < ActiveRecord::Base
   end
 
   def name_with_unit
-    "#{name} [#{unit}]"
+    "#{name} (#{unit})"
   end
 
   def name_with_price(customer_discount)
-    "#{name} - #{price_with_discount(customer_discount).format} / #{unit}"
+    "#{name} - #{price_with_discount(customer_discount).format} (#{unit})"
   end
 
   def price_with_discount(customer_discount)
     Package.calculated_extras_price([self.to_hash.merge(count: 1)], customer_discount)
+  end
+
+  FUZZY_MATCH_THRESHOLD = 0.80
+  def match_import_extra?(extra)
+    Bucky::Util.fuzzy_match(name, extra.name) > FUZZY_MATCH_THRESHOLD &&
+      (extra.unit.blank? || Bucky::Util.fuzzy_match(extra.unit.gsub(/ +/,''), extra.unit.gsub(/ +/,'')))
+  end
+
+  def fuzzy_match(extra)
+    return 0 if extra.blank?
+    match = 1.0
+    name_match = Bucky::Util.fuzzy_match(name, extra.name)
+    match *= name_match
+    if extra.unit.blank?
+      match *= 1.0 # If the unit was missed, assume to match any unit
+    else
+      unit_match = Bucky::Util.fuzzy_match(unit.gsub(/ +/,''), extra.unit.gsub(/ +/,''))
+      match *= (0.9+(unit_match*0.1)) # Reduce impact of a poor unit match
+    end
+    match
   end
 end

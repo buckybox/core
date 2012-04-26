@@ -26,11 +26,17 @@ module Bucky
       DELIVERY_ROUTE           = "Delivery Route",
       DELIVERY_INSTRUCTIONS    = "Delivery Instructions",
       BOX_TYPE                 = "Box Type",
+      EXTRAS                   = "Extras",
       DISLIKES                 = "Dislikes",
       LIKES                    = "Likes",
       DELIVERY_FREQUENCY       = "Delivery Frequency",
       DELIVERY_DAYS            = "Delivery Day(s)",
       NEXT_DELIVERY_DATE       = "Next Delivery Date"
+    ]
+
+    #TODO
+    CSV_OPTIONAL_HEADERS = [
+      EXTRAS
     ]
 
     @@verbosity = :none
@@ -112,11 +118,30 @@ module Bucky
       box.delivery_days      = row[DELIVERY_DAYS]
       box.next_delivery_date = row[NEXT_DELIVERY_DATE]
 
+      extras_from_row(row).map{|extra| box.add_extra(extra)}
+
       log("BOX")
       log("Box #{box.box_type} is #{box.valid? ? "valid" : "invalid because #{box.errors.full_messages.join(', ')}"}")
       raise ("Box #{box.box_type} is invalid because #{box.errors.full_messages.join(', ')}") unless box.valid?
 
       return box
+    end
+
+    def self.extras_from_row(row)
+      extra_strings = (row[EXTRAS] || '').split(',').collect(&:strip).compact
+      extras = extra_strings.collect{|string| extra_from_string(string)}
+      extras
+    end
+    
+    COUNT_REGEX = /(\d)+ ?x/
+    UNIT_REGEX = /\(.+\)/
+    def self.extra_from_string(string)
+      extra = Extra.new
+
+      extra.count = string.match(COUNT_REGEX)[0].gsub(/ ?x/,'').to_i#Extract 71x and remove 'x' from end
+      extra.unit = string.match(UNIT_REGEX)[0][1..-1][0..-2] if string.match(UNIT_REGEX) #Extract (600ml) and remove '(' & ')'
+      extra.name = string.gsub(COUNT_REGEX, '').gsub(UNIT_REGEX, '').strip
+      extra
     end
 
     # Strip blank rows and get into a consistent state
@@ -239,7 +264,7 @@ module Bucky
 
       validates_inclusion_of :delivery_frequency, in: %w(single weekly fortnightly monthly)
 
-      DATA_FIELDS =  [:box_type, :dislikes, :likes, :delivery_frequency, :delivery_days,
+      DATA_FIELDS =  [:box_type, :extras, :dislikes, :likes, :delivery_frequency, :delivery_days,
         :next_delivery_date]
       attr_accessor *DATA_FIELDS
 
@@ -251,10 +276,29 @@ module Bucky
       def delivery_days
         (@delivery_days.present? && @delivery_days || '')
       end
+
+      def add_extra(extra)
+        self.extras ||= []
+        self.extras << extra
+      end
     end
 
+    class Extra
+      include ActiveModel::Validations
+
+      validates_numericality_of :count, min: 0
+
+      DATA_FIELDS = [:name, :count, :unit]
+      attr_accessor *DATA_FIELDS
+
+      def to_s
+        "#{count}x #{name} (#{unit})"
+      end
+    end
+    
     def self.log(text)
       puts text if @@verbosity != :none
     end
+
   end
 end

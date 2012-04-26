@@ -1,11 +1,11 @@
-"Customer Number","Customer First Name","Customer Last Name","Customer Email","Customer Phone 1","Customer Phone 2","Customer Tags","Customer Notes","Customer Discount","Customer Account Balance","Payment Type","Payment Token","Delivery Address Line 1","Delivery Address Line 2","Delivery Suburb","Delivery City","Delivery Post Code / ZIP","Delivery Route","Delivery Instructions","Box Type","Dislikes","Likes","Delivery Frequency","Delivery Day(s)","Next Delivery Date"
-,,,,,,"Separated by commas",,"between 0 - 1.0 (e.g. 0.2 = 20% discount)",,"reserved for future use","reserved for future use",,,,,,,,,,,"Single, Weekly, Fortnightly or Monthly","e.g. 
+"Customer Number","Customer First Name","Customer Last Name","Customer Email","Customer Phone 1","Customer Phone 2","Customer Tags","Customer Notes","Customer Discount","Customer Account Balance","Payment Type","Payment Token","Delivery Address Line 1","Delivery Address Line 2","Delivery Suburb","Delivery City","Delivery Post Code / ZIP","Delivery Route","Delivery Instructions","Box Type","Dislikes","Likes","Extras","Delivery Frequency","Delivery Day(s)","Next Delivery Date"
+,,,,,,"Separated by commas",,"between 0 - 1.0 (e.g. 0.2 = 20% discount)",,"reserved for future use","reserved for future use",,,,,,,,,,,,"Single, Weekly, Fortnightly or Monthly","e.g. 
 ""Monday, Wednesday, Friday""
 ""Thursday""",
-,,,,,,,,,,,,,,,,,,,,,,,,
-1121,"John","Doe","jd@example.com","0800 128 1231","021 8167 7811","referral, discount2",,"20%",75.55,,,"221 Old Porirua Rd",,"Ngaio","Wellington",,"CBD Van","Leave on deck, by door at side of house","Standard Box","Onions",,"Weekly","Monday, Tuesday, Wednesday","21-Mar-2012"
-1121,,,,,,,,,,,,,,,,,,,"Medium Fruit Box",,,"Single",,"26-Mar-2012"
-1121,,,,,,,,,,,,,,,,,,,"Large Mixed Box",,,"Fortnightly","Friday","30-Mar-2012"
-921,"Mary","Lamb","ml@example.com","04 234 2342",,,,,0,,,"12 Hill Rd",,"Aro Valley","Wellington",,"CBD Van",,"Standard Box",,,"Weekly","Thursday","22-Mar-2012"
-321,"William","Robberts","wr@example.com",,,,"Very Touchy customer",0.10%,,,,"89 Awarua St","Flat 3","Ngaio","Wellington",543,"Rural Van","Door round back please.","Medium Fruit Box","Carrots","Apples","Single",,"21-Apr-2012"
-123,"Jenny","Craig","j.c@example.com","04 121 4321",,"promo",,,80.55,,,"542 Ponsony Road",,"Ponsonby","Auckland",1042,"AKCBD Van",,"Large Mixed Box","Tomatos","Grapefruit","Fortnightly",,"23-Apr-2012"
+,,,,,,,,,,,,,,,,,,,,,,,,,
+1121,"John","Doe","jd@example.com","0800 128 1231","021 8167 7811","referral, discount2",,"20%",75.55,,,"221 Old Porirua Rd",,"Ngaio","Wellington",,"CBD Van","Leave on deck, by door at side of house","Standard Box","Onions",,"1x Oronge Juice (600 ml), 2x organic sugar","Weekly","Monday, Tuesday, Wednesday","21-Mar-2012"
+1121,,,,,,,,,,,,,,,,,,,"Medium Fruit Box",,,,"Single",,"26-Mar-2012"
+1121,,,,,,,,,,,,,,,,,,,"Large Mixed Box",,,"1 x eggs, 3 x Orange Juice (600L), 1x Orange Juice (1 L), 2x Organic Sugar","Fortnightly","Friday","30-Mar-2012"
+921,"Mary","Lamb","ml@example.com","04 234 2342",,,,,0,,,"12 Hill Rd",,"Aro Valley","Wellington",,"CBD Van",,"Standard Box",,,,"Weekly","Thursday","22-Mar-2012"
+321,"William","Robberts","wr@example.com",,,,"Very Touchy customer","0.10%",,,,"89 Awarua St","Flat 3","Ngaio","Wellington",543,"Rural Van","Door round back please.","Medium Fruit Box","Carrots","Apples","2 xOrgonic Sugar","Single",,"21-Apr-2012"
+123,"Jenny","Craig","j.c@example.com","04 121 4321",,"promo",,,80.55,,,"542 Ponsony Road",,"Ponsonby","Auckland",1042,"AKCBD Van",,"Large Mixed Box","Tomatos","Grapefruit","2xEggs, 1x Orange Juice (1 L), 1x Orange Juice ( 600 ml ), 2x Organic Sugar","Fortnightly",,"23-Apr-2012"
