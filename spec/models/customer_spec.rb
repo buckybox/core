@@ -119,6 +119,8 @@ describe Customer do
       customer.stub_chain(:distributor, :boxes, :find_by_name).with("City Van").and_return(mock_model('Box', extras_unlimited?: true))
       boxes << box
 
+      Distributor.any_instance.stub(:find_extra_from_import).and_return(mock_model('Extra'))
+
       attrs = {
         first_name: 'Jordan',
         last_name: 'Carter',

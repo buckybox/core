@@ -239,8 +239,10 @@ class Distributor < ActiveRecord::Base
   def find_box_from_import(box)
     if box.is_a?(Box) && box_ids.include?(box.id)
       box
-    else
+    elsif box.is_a?(Bucky::Import::Box)
       boxes.find_by_name(box.box_type)
+    else
+      raise "Couldn't find the box #{box.inspect} for this distributor #{distributor.inspect}"
     end
   end
 

@@ -252,6 +252,7 @@ class Order < ActiveRecord::Base
   def import_extras(b_extras)
     params = b_extras.inject({}) do |params, extra|
       found_extra = distributor.find_extra_from_import(extra, box)
+      raise "Didn't find an extra to import" if found_extra.blank?
       params.merge(found_extra.id.to_s => {count: extra.count})
     end
     self.order_extras = params
