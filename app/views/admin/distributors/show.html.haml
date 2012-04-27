@@ -26,6 +26,9 @@
   %tr
     %td Separate Bucky Fee:
     %td= checkmark_boolean(@distributor.separate_bucky_fee)
+  %tr
+    %td Created On
+    %td= @distributor.created_at.to_s(:pretty)
 
 %table
   %tr
