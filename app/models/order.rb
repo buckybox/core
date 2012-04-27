@@ -46,6 +46,7 @@ class Order < ActiveRecord::Base
   delegate :local_time_zone, to: :distributor, allow_nil: true
 
   default_value_for :extras_one_off, false
+  default_value_for :quantity, 1
 
   def create_schedule(start_time, frequency, days_by_number = nil)
     if frequency != 'single' && days_by_number.nil?

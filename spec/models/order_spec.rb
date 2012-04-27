@@ -284,7 +284,7 @@ describe Order do
 
   it "should validate extras limit"
 
-  context "with extras", :focus do
+  context "with extras" do
     before do
       @distributor = Fabricate(:distributor)
       @extras = 2.times.collect{Fabricate(:extra, distributor: @distributor)}

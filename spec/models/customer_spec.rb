@@ -212,7 +212,9 @@ describe Customer do
       delivery_days: "Monday, Tuesday, Friday",
       next_delivery_date: "23-Mar-2013",
       extras_limit: 3,
-      extras_unlimited?: false
+      extras_unlimited?: false,
+      extras_recurring?: true,
+      extras: 2.times.collect{extra_mock}
           }.merge(opts)
     extras = { 'class'.to_sym => Bucky::Import::Box }
     attrs.merge(extras).each do |key, value|
@@ -223,6 +225,17 @@ describe Customer do
   end
 
   def extra_mock(opts={})
-    
+    extra = double("Bucky::Import::Extra")
+    attrs = {
+      count: 1,
+      name: "Bacon",
+      unit: "7 slices"
+          }.merge(opts)
+    extras = { 'class'.to_sym => Bucky::Import::Extra }
+    attrs.merge(extras).each do |key, value|
+      extra.stub(key).and_return(value)
+    end
+
+    extra
   end
 end
