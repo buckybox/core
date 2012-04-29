@@ -13,6 +13,9 @@ class Order < ActiveRecord::Base
   has_many :deliveries
   has_many :order_schedule_transactions, autosave: true
 
+  has_many :order_extras, autosave: true
+  has_many :extras, through: :order_extras
+
   scope :completed, where(completed: true)
   scope :active, where(active: true)
 
@@ -20,7 +23,7 @@ class Order < ActiveRecord::Base
 
   acts_as_taggable
 
-  attr_accessible :box, :box_id, :account, :account_id, :quantity, :likes, :dislikes, :completed, :frequency, :schedule
+  attr_accessible :box, :box_id, :account, :account_id, :quantity, :likes, :dislikes, :completed, :frequency, :schedule, :order_extras, :extras_one_off
 
   FREQUENCIES = %w(single weekly fortnightly monthly)
 
@@ -28,6 +31,7 @@ class Order < ActiveRecord::Base
   validates_numericality_of :quantity, greater_than: 0
   validates_inclusion_of :frequency, in: FREQUENCIES, message: "%{value} is not a valid frequency"
   validate :schedule_includes_route, unless: :schedule_empty?
+  validate :extras_within_box_limit
 
   before_validation :activate, if: :just_completed?
   before_validation :record_schedule_change, if: :schedule_changed?
@@ -39,6 +43,17 @@ class Order < ActiveRecord::Base
   scope :inactive,  where(active: false)
 
   delegate :local_time_zone, to: :distributor, allow_nil: true
+
+  default_value_for :extras_one_off, false
+  default_value_for :quantity, 1
+
+  def create_schedule(start_time, frequency, days_by_number = nil)
+    if frequency != 'single' && days_by_number.nil?
+      raise(ArgumentError, "Unless it is a single order the schedule needs to specify days.")
+    end
+
+    create_schedule_for(:schedule, start_time, frequency, days_by_number)
+  end
 
   def self.deactivate_finished
     active.each do |order|
@@ -84,11 +99,17 @@ class Order < ActiveRecord::Base
   end
 
   def price
-    individual_price * quantity
+    result = individual_price * quantity
+    result += extras_price if extras.present?
+    result
   end
 
   def individual_price
     Package.calculated_price(box, route, customer)
+  end
+
+  def extras_price
+    Package.calculated_extras_price(order_extras, customer)
   end
 
   def customer= cust
@@ -170,12 +191,72 @@ class Order < ActiveRecord::Base
     return save
   end
 
+  def order_extras=(collection)
+    raise "I wasn't expecting you to set these directly" unless collection.is_a?(Hash) || collection.is_a?(Array)
+    
+    order_extras.destroy_all
+
+    #return nil if collection.blank?
+
+    collection.to_a.compact.each do |id, params|
+      count = params[:count]
+      next if count.to_i.zero?
+      order_extra = order_extras.build(extra_id: id)
+      order_extra.count = count.to_i
+    end
+  end
+
+  def extras_description(show_frequency=false)
+    extras_string = Package.extras_description(order_extras)
+    if schedule.frequency.single? || !show_frequency
+      extras_string
+    else
+      extras_string + (extras_one_off? ? ", include in the next delivery only" : ", include with every delivery") if order_extras.count > 0
+    end
+  end
+
+  def pack_and_update_extras
+    packed_extras = order_extras.collect(&:to_hash)
+    clear_extras if extras_one_off # Now that the extras are in a package, we don't need them on the order anymore, unless it reoccurs
+
+    packed_extras
+  end
+
+  def clear_extras
+    self.extras = []
+  end
+
+  def contents_description
+    Package.contents_description(box, quantity, order_extras)
+  end
+
+  def extras_summary
+    Package.extras_summary(order_extras)
+  end
+
   # Manually create the first delivery all following deliveries should be scheduled for creation by the cron job
   def activate
     self.active = true
   end
 
-  private
+  def include_extras
+    new_record? || !order_extras.count.zero?
+  end
+  
+  def extras_count
+    order_extras.collect(&:count).sum
+  end
+
+  def import_extras(b_extras)
+    params = b_extras.inject({}) do |params, extra|
+      found_extra = distributor.find_extra_from_import(extra, box)
+      raise "Didn't find an extra to import" if found_extra.blank?
+      params.merge(found_extra.id.to_s => {count: extra.count})
+    end
+    self.order_extras = params
+  end
+
+  protected
 
   def record_schedule_change
     order_schedule_transactions.new(order: self, schedule: self.schedule)
@@ -186,6 +267,14 @@ class Order < ActiveRecord::Base
       errors.add(:schedule, "Route #{account.route.name}'s schedule '#{account.route.schedule} doesn't include this order's schedule of '#{schedule}'")
     end
   end
+
+  def extras_within_box_limit
+    if box.present? && !box.extras_unlimited? && extras_count > box.extras_limit
+      errors.add(:base, "There is more than #{box.extras_limit} extras for this box") 
+    end
+  end
+
+  private
 
   def remove_recurrence_rule_day(day)
     s = schedule

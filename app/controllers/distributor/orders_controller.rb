@@ -4,6 +4,12 @@ class Distributor::OrdersController < Distributor::ResourceController
 
   respond_to :html, :xml, :json
 
+  before_filter :filter_params, only: [:create, :update]
+
+  def filter_params
+    params[:order] = params[:order].slice!(:include_extras)
+  end
+
   def new
     new! do
       load_form
@@ -11,7 +17,8 @@ class Distributor::OrdersController < Distributor::ResourceController
   end
 
   def create
-    @account = Account.find(params[:account_id])
+    @account       = current_distributor.accounts.find(params[:account_id])
+
     load_form
 
     order_hash = params[:order]
@@ -20,7 +27,11 @@ class Distributor::OrdersController < Distributor::ResourceController
     @order = Order.new(order_hash)
     @order.create_schedule(params[:start_date], params[:order][:frequency], params[:days])
 
-    create! { [:distributor, @account.customer] }
+    if @order.save
+      redirect_to [:distributor, @account.customer]
+    else
+      render 'new'
+    end
   end
 
   def edit
@@ -37,7 +48,11 @@ class Distributor::OrdersController < Distributor::ResourceController
     # Will revisit when we have time to build a proper UI for it
     params[:order].delete(:frequency)
 
-    update! { [:distributor, @account.customer] }
+    if @order.update_attributes(params[:order])
+      redirect_to [:distributor, @account.customer]
+    else
+      render 'edit'
+    end
   end
 
   def deactivate

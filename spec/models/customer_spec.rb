@@ -111,13 +111,15 @@ describe Customer do
       route.stub_chain(:schedule, :include?).and_return(true)
 
       boxes = []
-      box = box_mock({box_type: "Rural Van"})
-      customer.stub_chain(:distributor, :boxes, :find_by_name).with("Rural Van").and_return(mock_model('Box'))
+      box = box_mock({box_type: "Rural Van", extras_unlimited?: true})
+      customer.stub_chain(:distributor, :boxes, :find_by_name).with("Rural Van").and_return(mock_model('Box', extras_unlimited?: true))
       boxes << box
 
-      box = box_mock({box_type: "City Van"})
-      customer.stub_chain(:distributor, :boxes, :find_by_name).with("City Van").and_return(mock_model('Box'))
+      box = box_mock({box_type: "City Van", extras_unlimited?: true})
+      customer.stub_chain(:distributor, :boxes, :find_by_name).with("City Van").and_return(mock_model('Box', extras_unlimited?: true))
       boxes << box
+
+      Distributor.any_instance.stub(:find_extra_from_import).and_return(mock_model('Extra'))
 
       attrs = {
         first_name: 'Jordan',
@@ -192,7 +194,7 @@ describe Customer do
       phone_1: '0800 999 666 333',
       phone_2: '0800 BOWIES IN SPACE',
       tags: ["Flight of the concords", "rock"],
-      boxes: 2.times.collect{box_mock}
+      boxes: 2.times.collect{box_mock},
     }.merge(opts)
     extras = { 'class'.to_sym => Bucky::Import::Customer }
     attrs.merge(extras).each do |key, value|
@@ -210,7 +212,11 @@ describe Customer do
       likes: "Carrots",
       delivery_frequency: "weekly",
       delivery_days: "Monday, Tuesday, Friday",
-      next_delivery_date: "23-Mar-2013"
+      next_delivery_date: "23-Mar-2013",
+      extras_limit: 3,
+      extras_unlimited?: false,
+      extras_recurring?: true,
+      extras: 2.times.collect{extra_mock}
           }.merge(opts)
     extras = { 'class'.to_sym => Bucky::Import::Box }
     attrs.merge(extras).each do |key, value|
@@ -218,5 +224,20 @@ describe Customer do
     end
 
     box
+  end
+
+  def extra_mock(opts={})
+    extra = double("Bucky::Import::Extra")
+    attrs = {
+      count: 1,
+      name: "Bacon",
+      unit: "7 slices"
+          }.merge(opts)
+    extras = { 'class'.to_sym => Bucky::Import::Extra }
+    attrs.merge(extras).each do |key, value|
+      extra.stub(key).and_return(value)
+    end
+
+    extra
   end
 end

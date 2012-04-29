@@ -23,7 +23,7 @@
               = render partial: 'status_icons', locals: { status: package.status }
               = package.id
             .five.columns= package.archived_address
-            .two.columns== #{package.archived_order_quantity}x #{package.archived_box_name}
+            .two.columns== #{package.contents_description}
             .three.columns= customer_badge(package.customer, customer_name: package.archived_customer_name, short: true)
   - else
     - @items.group_by(&:box).each do |box, array|
@@ -38,5 +38,5 @@
               = image_tag 'icon-status-pending.png', title: 'UNPACKED package', class: 'icon-pending'
               N/A
             .five.columns= order.address.join(', ')
-            .two.columns== #{order.quantity}x #{order.box.name}
+            .two.columns== #{order.contents_description}
             .three.columns= customer_badge(order.customer)

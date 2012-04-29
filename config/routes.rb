@@ -28,6 +28,7 @@ BuckyBox::Application.routes.draw do
 
     namespace :settings do
       get 'business_information'
+      get 'extras'
       get 'boxes'
       get 'routes'
       get 'bank_information'
@@ -38,7 +39,8 @@ BuckyBox::Application.routes.draw do
     resources :distributors,        only: :update
     resource  :bank_information,    only: [:create, :update]
     resource  :invoice_information, only: [:create, :update]
-    resources :boxes,               except: :index
+    resources :boxes,               except: [:index, :show]
+    resources :extras,               except: [:index, :show]
     resources :routes,              except: [:index, :show]
     resources :transactions,        only: :create
 
@@ -86,6 +88,11 @@ BuckyBox::Application.routes.draw do
           post 'remove_pause'
         end
       end
+      resources :boxes do
+        member do
+          get 'extras'
+        end
+      end
 
       member do
         put 'change_balance', action: :change_balance, as: 'change_balance'
@@ -116,9 +123,12 @@ BuckyBox::Application.routes.draw do
     end
 
     resource  :address, only: :update
-    resources :boxes, only: :show
-
-    resources :orders, only: [ :new, :create, :update ] do
+    resources :boxes, only: [:show] do
+      member do
+        get 'extras'
+      end
+    end
+    resources :orders, only: [ :new, :edit, :create, :update] do
       member do
         put 'pause'
         post 'remove_pause'

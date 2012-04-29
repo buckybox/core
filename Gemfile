@@ -34,6 +34,7 @@ gem 'whenever'
 gem 'newrelic_rpm'
 gem 'acts_as_list'
 gem 'default_value_for'
+gem 'fuzzy-string-match', require: 'fuzzystringmatch' # This performs fuzzy matching on the import script
 
 group :development do
   gem 'nifty-generators', require: false
@@ -48,6 +49,12 @@ group :development do
   gem 'ruby-debug19', require: 'ruby-debug'
   gem 'hirb'
   gem 'wirble'
+  gem 'rb-fsevent', :require => false if RUBY_PLATFORM =~ /darwin/i
+  gem 'guard-rspec'
+  gem 'guard-spork'
+  #gem 'growl_notify'
+  gem 'spork-rails'
+  gem 'pry-remote'
 end
 
 group :development, :test do
@@ -61,6 +68,7 @@ group :development, :test do
   gem 'mailcatcher', require: false
 
   gem 'simplecov',   require: false
+  gem 'delorean'
 end
 
 group :test do
@@ -78,4 +86,5 @@ end
 
 group :staging do
   gem 'mail_safe'
+  gem 'delorean'
 end

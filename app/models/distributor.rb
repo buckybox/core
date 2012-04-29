@@ -2,6 +2,7 @@ class Distributor < ActiveRecord::Base
   has_one :bank_information,    dependent: :destroy
   has_one :invoice_information, dependent: :destroy
 
+  has_many :extras,              dependent: :destroy
   has_many :boxes,              dependent: :destroy
   has_many :routes,             dependent: :destroy
   has_many :orders,             dependent: :destroy, through: :boxes
@@ -201,6 +202,48 @@ class Distributor < ActiveRecord::Base
     end
   end
 
+  # Find extra from import script, if given a box, limit it
+  # to the boxes allowed extras
+  def find_extra_from_import(e, box=nil)
+    search_extras = []
+    box = box.present? ? find_box_from_import(box) : nil
+
+    if box.blank?
+      search_extras = extras.alphabetically
+    elsif box.extras_not_allowed?
+      []
+    else
+      search_extras = box.extras.alphabetically
+    end
+
+    matches = search_extras.select{|extra| extra.match_import_extra?(e)}.
+      collect{|extra_match| [extra_match.fuzzy_match(e),extra_match]}.
+      select{|fuzzy_match| fuzzy_match.first > 0.8}. # Set a lower threashold which weeds out almost matches and force the data to be fixed.  Make the user go fix the csv file.
+      sort{|a,b| b.first <=> a.first}
+
+    match = if matches.size > 1 && matches.first.first == matches[1].first
+      # At-least the first two matches have the same fuzzy_match (probably no unit set)
+      # So return the first one alphabetically so that it is consistent
+      matches.select{|match| match.first == matches.first.first}. #Select those which have the same fuzzy_match
+        collect(&:last). # discard the fuzzy_match number
+        sort_by{|extra| "#{extra.name} #{extra.unit}"}.first # Sort alphabeticaly
+    else
+      matches.first.last if matches.first.present?
+    end
+
+    match
+  end
+
+  def find_box_from_import(box)
+    if box.is_a?(Box) && box_ids.include?(box.id)
+      box
+    elsif box.is_a?(Bucky::Import::Box)
+      boxes.find_by_name(box.box_type)
+    else
+      raise "Couldn't find the box #{box.inspect} for this distributor #{distributor.inspect}"
+    end
+  end
+
   private
 
   def parameterize_name
@@ -214,5 +257,27 @@ class Distributor < ActiveRecord::Base
     end
 
     self.support_email = self.email if self.support_email.blank?
+  end
+
+  # This is meant to be run within console for dev work via Distributor.send(:travel_forward_a_day)
+  # This will simulate the cron jobs each hour and move the time forward 1 day. It is designed to
+  # be run repeatedly to move forward a day at a time
+  def self.travel_forward_a_day(day=1)
+    #every 1.hour do
+    @@original_time ||= Time.current
+    @@advanced ||= 0
+    (24*day).times.each do |h|
+      h+=1 # start at 1, not 0
+
+      Delorean.time_travel_to (@@original_time + (@@advanced*day.days) + h.hours)
+
+      CronLog.log("Checking distributors for automatic daily list creation.")
+      Distributor.create_daily_lists
+      CronLog.log("Checking deliveries and packages for automatic completion.")
+      Distributor.automate_completed_status
+      CronLog.log("Checking orders, deactivating those without any more deliveries.")
+      Order.deactivate_finished
+    end
+    @@advanced += day
   end
 end

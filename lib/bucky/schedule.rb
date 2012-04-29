@@ -48,6 +48,46 @@ class Bucky::Schedule < IceCube::Schedule
     return schedule
   end
 
+  # Return :single, :weekly, :fortnightly or :monthly
+  def frequency
+    if recurrence_rules.empty? && recurrence_times.size == 1
+      Frequency.new(:single)
+    else
+      case recurrence_rules.first.to_hash[:rule_type]
+      when "IceCube::WeeklyRule"
+        case recurrence_rules.first.to_hash[:interval]
+        when 1
+          Frequency.new(:weekly)
+        when 2
+          Frequency.new(:fortnightly)
+        else
+          raise "Unknown frequency for #{self.inspect}, #{schedule.inspect}"
+        end
+      when "IceCube::MonthlyRule"
+        Frequency.new(:monthly)
+      else
+        raise "Unknown frequency for #{self.inspect}, #{schedule.inspect}"
+      end
+    end
+  end
+
+  # Helper class for schedule.frequency
+  class Frequency
+    attr_accessor :frequency
+    def initialize(f)
+      @frequency = f
+    end
+    [:single, :weekly, :fortnightly, :monthly].each do |f|
+      # define single?, weekly?, fortnightly? & monthly?
+      define_method "#{f.to_s}?" do
+        @frequency == f
+      end
+    end
+    def to_s
+      @frequency.to_s
+    end
+  end
+
   ################################################################################################
   #                                                                                              #
   #  Overriding or helper methods.                                                               #
@@ -164,9 +204,49 @@ class Bucky::Schedule < IceCube::Schedule
     end
   end
 
+  def ==(schedule)
+    return false unless schedule.is_a?(Bucky::Schedule)
+    self.to_hash == schedule.to_hash
+  end
+
+  # Does the other_schedule fall on days in our schedule?
+  # Check the spec to see how complex a match this accepts
+  def include?(other_schedule, strict_start_time = false)
+    raise "Given schedule is blank" if other_schedule.blank?
+
+    expected = Bucky::Schedule
+    raise "Given schedule isn't a #{expected}" unless other_schedule.is_a?(expected) 
+
+    match = true
+    if [:weekly, :fortnightly].include?(recurrence_type) && other_schedule.recurrence_type == :single
+      match &= ([other_schedule.start_time.wday] - recurrence_days).empty?
+
+    elsif recurrence_type == :weekly && other_schedule.recurrence_type == :monthly
+      match &= (other_schedule.month_days - recurrence_days).empty? # The repeating days in the monthly schedule need to be a subset of this schedules weekly recurring days 
+
+    elsif recurrence_type == :weekly && other_schedule.recurrence_type == :fortnightly
+      match &= (other_schedule.recurrence_days - recurrence_days).empty?
+      # is the other schedules recurrence_days a subset of mine?
+
+      match &= (recurrence_times == other_schedule.recurrence_times)
+    elsif [:monthly].include?(recurrence_type) && other_schedule.recurrence_type == :single
+      match &= month_days.include?(other_schedule.start_time.wday)
+
+    else
+      match &= (recurrence_type == other_schedule.recurrence_type)
+      match &= (other_schedule.recurrence_days - recurrence_days).empty?
+      # is the other schedules recurrence_days a subset of mine?
+
+      match &= (recurrence_times == other_schedule.recurrence_times)
+    end
+
+    match &= (start_time <= other_schedule.start_time) if strict_start_time # Optional
+
+    match
+  end
+
   def remove_recurrence_times_on_day(day)
     day = DAYS[day] if day.is_a?(Integer) && day.between?(0, 6)
-
     recurrence_times.each do |recurrence_time|
       if recurrence_time.send("#{day}?") # recurrence_time.monday? for example
         self.remove_recurrence_time(recurrence_time)
