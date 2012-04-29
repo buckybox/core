@@ -42,19 +42,15 @@ group :development do
   gem 'capistrano'
   gem 'capistrano_colors'
 
-  # ruby-debug needs extra stuff to work on 1.9.3, see here -> https://gist.github.com/1885892
-  # consider using Pry instead https://github.com/pry/pry
-  gem 'linecache19', '0.5.13'
-  gem 'ruby-debug-base19', '0.11.26'
-  gem 'ruby-debug19', require: 'ruby-debug'
   gem 'hirb'
   gem 'wirble'
   gem 'rb-fsevent', :require => false if RUBY_PLATFORM =~ /darwin/i
+
   gem 'guard-rspec'
   gem 'guard-spork'
-  #gem 'growl_notify'
+
   gem 'spork-rails'
-  gem 'pry-remote'
+  gem 'pry-remote' # Pry: the active and easier to install ruby-debug
 end
 
 group :development, :test do
