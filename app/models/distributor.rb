@@ -51,8 +51,6 @@ class Distributor < ActiveRecord::Base
 
   after_save :generate_required_daily_lists
 
-  default_scope order('created_at DESC')
-
   default_value_for :advance_hour,            DEFAULT_AUTOMATIC_DELIVERY_HOUR
   default_value_for :advance_days,            DEFAULT_ADVANCED_DAYS
   default_value_for :automatic_delivery_hour, DEFAULT_AUTOMATIC_DELIVERY_HOUR

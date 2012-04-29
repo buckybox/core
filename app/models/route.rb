@@ -22,12 +22,10 @@ class Route < ActiveRecord::Base
   validate :at_least_one_day_is_selected
 
   before_validation :create_schedule
-  before_save :record_schedule_change, if: :schedule_changed?
   before_save :update_order_schedules, if: :schedule_changed?
+  before_save :record_schedule_change, if: :schedule_changed?
 
   default_scope order(:name)
-
-  DAYS = [:sunday, :monday, :tuesday, :wednesday, :thursday, :friday, :saturday]
 
   delegate :local_time_zone, to: :distributor, allow_nil: true
 
@@ -40,15 +38,15 @@ class Route < ActiveRecord::Base
   end
 
   def delivery_days
-    DAYS.select { |day| self[day] }
+    Bucky::Schedule::DAYS.select { |day| self[day] }
   end
 
-  def delivery_day_numbers(days=delivery_days)
+  def delivery_day_numbers(days = delivery_days)
     Route.delivery_day_numbers(days)
   end
 
   def self.delivery_day_numbers(delivery_days)
-    delivery_days.collect { |day| DAYS.index(day)}
+    delivery_days.collect { |day| Bucky::Schedule::DAYS.index(day)}
   end
 
   def future_orders
@@ -56,12 +54,6 @@ class Route < ActiveRecord::Base
   end
 
   protected
-
-  def at_least_one_day_is_selected
-    unless [monday, tuesday, wednesday, thursday, friday, saturday, sunday].any?
-      errors[:base] << "You must select at least one day for the route."
-    end
-  end
 
   def start_time=(time)
     @start_time = time
@@ -71,11 +63,33 @@ class Route < ActiveRecord::Base
     @start_time || Time.current.beginning_of_day
   end
 
+  def deleted_days
+    Bucky::Schedule::DAYS.select{|day| self.send("#{day.to_s}_was") && !self.send(day)}
+  end
+
+  def deleted_day_numbers(days = deleted_days)
+    delivery_day_numbers(days)
+  end
+
+  private
+
+  def at_least_one_day_is_selected
+    unless [monday, tuesday, wednesday, thursday, friday, saturday, sunday].any?
+      errors[:base] << "You must select at least one day for the route."
+    end
+  end
+
   def create_schedule
-    recurrence_rule = IceCube::Rule.weekly.day(*delivery_days)
     new_schedule = Bucky::Schedule.new(self.start_time)
+
+    recurrence_rule = IceCube::Rule.weekly.day(*delivery_days)
     new_schedule.add_recurrence_rule(recurrence_rule)
+
     self.schedule = new_schedule
+  end
+
+  def record_schedule_change
+    route_schedule_transactions.build(route: self, schedule: self.schedule)
   end
 
   def update_order_schedules
@@ -84,17 +98,5 @@ class Route < ActiveRecord::Base
         order.deactivate_for_day!(day)
       end
     end
-  end
-
-  def deleted_days
-    DAYS.select{|day| self.send("#{day.to_s}_was") && !self.send(day)}
-  end
-
-  def deleted_day_numbers(days=deleted_days)
-    delivery_day_numbers(days)
-  end
-
-  def record_schedule_change
-    route_schedule_transactions.build(route: self, schedule: self.schedule)
   end
 end

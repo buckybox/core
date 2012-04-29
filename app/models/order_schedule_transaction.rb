@@ -9,7 +9,7 @@ class OrderScheduleTransaction < ActiveRecord::Base
 
   attr_accessible :order, :schedule
 
-  validates_presence_of :order, :schedule
+  validates_presence_of :order
 
   default_scope order('created_at DESC')
 

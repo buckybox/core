@@ -1,5 +1,5 @@
 class Distributor::RoutesController < Distributor::ResourceController
-  actions :all, except: [ :index, :destroy ]
+  actions :all, except: [:index, :destroy]
 
   respond_to :html, :xml, :json
 

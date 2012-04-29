@@ -30,11 +30,11 @@ describe Customer::OrdersController do
     end
 
     describe 'with invalid params' do
+      before { @order.delete(:box_id) }
+
       context 'for a one off order' do
         before do
           @order[:frequency] = 'single'
-          @order.delete(:box_id)
-
           post :create, { order: @order, start_date: @start_date }
         end
 

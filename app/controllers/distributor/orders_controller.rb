@@ -11,14 +11,14 @@ class Distributor::OrdersController < Distributor::ResourceController
   end
 
   def create
-    @account       = Account.find(params[:account_id])
-    @order         = Order.new(params[:order])
+    @account = Account.find(params[:account_id])
     load_form
 
-    @order.create_schedule(params[:start_date], params[:order][:frequency], params[:days])
+    order_hash = params[:order]
+    order_hash.merge!({account_id: @account.id, completed: true})
 
-    @order.account   = @account
-    @order.completed = true
+    @order = Order.new(order_hash)
+    @order.create_schedule(params[:start_date], params[:order][:frequency], params[:days])
 
     create! { [:distributor, @account.customer] }
   end
@@ -42,7 +42,7 @@ class Distributor::OrdersController < Distributor::ResourceController
 
   def deactivate
     @account = Account.find(params[:account_id])
-    @order = Order.find(params[:id])
+    @order   = Order.find(params[:id])
 
     respond_to do |format|
       if @order.update_attribute(:active, false)
@@ -68,7 +68,7 @@ class Distributor::OrdersController < Distributor::ResourceController
     redirect_to [:distributor, @account.customer], warning: 'Start date can not be past end date' and return if end_date <= start_date
 
     schedule.exception_times.each { |time| schedule.remove_exception_time(time) }
-    (start_date..end_date).each   { |date| schedule.add_exception_time(date.to_time) }
+    (start_date..end_date).each   { |date| schedule.add_exception_time(date.to_time_in_current_zone) }
 
     @order.schedule = schedule
 
@@ -84,10 +84,10 @@ class Distributor::OrdersController < Distributor::ResourceController
   end
 
   def remove_pause
-    @account   = Account.find(params[:account_id])
-    @order     = Order.find(params[:id])
+    @account = Account.find(params[:account_id])
+    @order   = Order.find(params[:id])
 
-    schedule   = @order.schedule
+    schedule = @order.schedule
 
     schedule.exception_times.each { |time| schedule.remove_exception_time(time) }
 
@@ -103,6 +103,8 @@ class Distributor::OrdersController < Distributor::ResourceController
       end
     end
   end
+
+  private
 
   def load_form
     @customer = @account.customer

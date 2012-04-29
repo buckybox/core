@@ -33,7 +33,7 @@ class Customer::OrdersController < Customer::ResourceController
 
     schedule = @order.schedule
     schedule.exception_times.each { |time| schedule.remove_exception_time(time) }
-    (start_date..end_date).each   { |date| schedule.add_exception_time(date.to_time) }
+    (start_date..end_date).each   { |date| schedule.add_exception_time(date.to_time_in_current_zone) }
 
     @order.schedule = schedule
 

@@ -14,7 +14,7 @@ class ApplicationController < ActionController::Base
   def set_user_time_zone
     distributor = current_distributor || (current_customer.try(:distributor))
     if distributor.present? && distributor.time_zone.present?
-      Time.zone = distributor.time_zone 
+      Time.zone = distributor.time_zone
     else
       Time.zone = BuckyBox::Application.config.time_zone
     end

@@ -22,7 +22,7 @@ describe Route do
   context :schedule_transaction do
     before do
       route.save
-      route.sunday = true
+      route.sunday = false
     end
 
     specify { expect { route.save }.should change(RouteScheduleTransaction, :count).by(1) }
@@ -52,7 +52,7 @@ describe Route do
       route.update_attributes(monday: true, tuesday: true, wednesday: true, thursday: true, friday: true, saturday: true, sunday: true)
       route.attributes = {monday: false, tuesday: false, wednesday: false, thursday: false, friday: false, saturday: false, sunday: false}
     end
-    specify { route.send(:deleted_days).should eq(Route::DAYS) }
+    specify { route.send(:deleted_days).should eq(Bucky::Schedule::DAYS) }
   end
 
   describe '.deleted_day_numbers' do
@@ -62,7 +62,7 @@ describe Route do
     end
     specify { route.send(:deleted_day_numbers).should eq([0,1,2,3,4,5,6]) }
   end
-  
+
   describe '.update_schedule' do
     before do
       @schedule_start_time = Time.now
@@ -74,10 +74,10 @@ describe Route do
       route.schedule.to_s.should match /Weekly on Sundays, Mondays, Tuesdays, Wednesdays, Thursdays, Fridays, and Saturdays/ 
       @order.schedule.to_s.should match /Weekly on Sundays, Mondays, Tuesdays, Wednesdays, Thursdays, Fridays, and Saturdays/ 
       route.future_orders.should include(@order)
-      
+
       # [0, 1, ...] === [:sunday, :monday, ..], kinda
       @monthly_order = Fabricate(:recurring_order, schedule: new_monthly_schedule(@schedule_start_time, [0,1,2,3,4,5,6]), account: @account, box: @box)
-      
+
       @order_times = {}
       @next_times = {}
       @start_pause = 2.weeks.from_now.to_date
