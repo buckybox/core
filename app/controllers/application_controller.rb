@@ -9,13 +9,16 @@ class ApplicationController < ActionController::Base
 
   around_filter :hack_time if Rails.env.development?
   before_filter :set_user_time_zone
+  before_filter :set_user_currency
 
   private
 
   def hack_time
     past = params.delete(:time_travel_to)
+
     @@past ||= nil
     @@past = past unless past.blank?
+
     if @@past.blank?
       yield
     else
@@ -27,11 +30,20 @@ class ApplicationController < ActionController::Base
   end
 
   def set_user_time_zone
-    distributor = current_distributor || (current_customer.try(:distributor))
+    distributor = current_distributor || current_customer.try(:distributor)
+
     if distributor.present? && distributor.time_zone.present?
       Time.zone = distributor.time_zone
     else
       Time.zone = BuckyBox::Application.config.time_zone
+    end
+  end
+
+  def set_user_currency
+    distributor = current_distributor || current_customer.try(:distributor)
+
+    if distributor.present? && distributor.currency.present?
+      Money.default_currency = Money::Currency.new(distributor.time_zone)
     end
   end
 end

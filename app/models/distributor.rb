@@ -17,6 +17,8 @@ class Distributor < ActiveRecord::Base
   has_many :packing_lists,      dependent: :destroy
   has_many :packages,           dependent: :destroy, through: :packing_lists
 
+  DEFAULT_TIME_ZONE = 'Wellington'
+  DEFAULT_CURRENCY = 'NZD'
   DEFAULT_ADVANCED_HOURS = 18
   DEFAULT_ADVANCED_DAYS = 3
   DEFAULT_AUTOMATIC_DELIVERY_HOUR = 18
@@ -52,6 +54,8 @@ class Distributor < ActiveRecord::Base
 
   after_save :generate_required_daily_lists
 
+  default_value_for :time_zone,               DEFAULT_TIME_ZONE
+  default_value_for :currency,                DEFAULT_CURRENCY
   default_value_for :advance_hour,            DEFAULT_AUTOMATIC_DELIVERY_HOUR
   default_value_for :advance_days,            DEFAULT_ADVANCED_DAYS
   default_value_for :automatic_delivery_hour, DEFAULT_AUTOMATIC_DELIVERY_HOUR
@@ -69,8 +73,8 @@ class Distributor < ActiveRecord::Base
         if local_time.hour == distributor.advance_hour
           successful = distributor.generate_required_daily_lists
 
-          details = ["#{distributor.name}",
-                     "TZ #{distributor.time_zone} #{Time.current}"].join("\n")
+          details = ["#{distributor.name}", "TZ #{distributor.time_zone} #{Time.current}"].join("\n")
+
           if successful
             CronLog.log("Create daily list for #{distributor.id} at local time #{local_time.to_s(:pretty)} successful.", details)
           else
