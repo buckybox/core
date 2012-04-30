@@ -31,7 +31,7 @@ class Distributor < ActiveRecord::Base
 
   composed_of :invoice_threshold,
     class_name: "Money",
-    mapping: [%w(invoice_threshold_cents cents), %w(currency currency_as_string)],
+    mapping: [%w(invoice_threshold_cents cents), %w(invoice_threshold_currency currency_as_string)],
     constructor: Proc.new { |cents, currency| Money.new(cents || 0, currency || Money.default_currency) },
     converter: Proc.new { |value| value.respond_to?(:to_money) ? value.to_money : raise(ArgumentError, "Can't convert #{value.class} to Money") }
 
