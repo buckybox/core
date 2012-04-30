@@ -326,7 +326,7 @@ describe Distributor do
       expect{ distributor.import_customers([import_customer]) }.to raise_error('Route  not found for distributor with id ' )
     end
 
-    context ".find_extra_from_import", :focus do
+    context ".find_extra_from_import" do
       before do
         @s = {}
         search_extras = [
