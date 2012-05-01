@@ -43,7 +43,7 @@ class ApplicationController < ActionController::Base
     distributor = current_distributor || current_customer.try(:distributor)
 
     if distributor.present? && distributor.currency.present?
-      Money.default_currency = Money::Currency.new(distributor.time_zone)
+      Money.default_currency = Money::Currency.new(distributor.currency)
     end
   end
 end

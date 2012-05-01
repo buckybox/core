@@ -1,5 +1,4 @@
 class Extra < ActiveRecord::Base
-
   belongs_to :distributor
 
   validates_presence_of :distributor, :name, :unit, :price

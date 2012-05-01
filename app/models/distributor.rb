@@ -18,7 +18,7 @@ class Distributor < ActiveRecord::Base
   has_many :packages,           dependent: :destroy, through: :packing_lists
 
   DEFAULT_TIME_ZONE = 'Wellington'
-  DEFAULT_CURRENCY = 'NZD'
+  DEFAULT_CURRENCY = 'nzd'
   DEFAULT_ADVANCED_HOURS = 18
   DEFAULT_ADVANCED_DAYS = 3
   DEFAULT_AUTOMATIC_DELIVERY_HOUR = 18
@@ -39,7 +39,8 @@ class Distributor < ActiveRecord::Base
 
   # Setup accessible (or protected) attributes for your model
   attr_accessible :email, :password, :password_confirmation, :remember_me, :name, :url, :company_logo, :company_logo_cache, :completed_wizard,
-    :remove_company_logo, :support_email, :invoice_threshold, :separate_bucky_fee, :advance_hour, :advance_days, :automatic_delivery_hour, :time_zone
+    :remove_company_logo, :support_email, :invoice_threshold, :separate_bucky_fee, :advance_hour, :advance_days, :automatic_delivery_hour,
+    :time_zone, :currency
 
   validates_presence_of :email
   validates_uniqueness_of :email
