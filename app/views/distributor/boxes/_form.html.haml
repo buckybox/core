@@ -9,20 +9,27 @@
             = f.input :name, label: false, placeholder: 'Name', size: 20
             = f.input :price, as: :currency, label: false, input_html: { class: 'input-text' }, hint: 'per box'
 
-            %h4 Custom boxes
-            = f.input :likes, label: 'Enable likes'
-            = f.input :dislikes, label: 'Enable dislikes'
+            %fieldset
+              %h4 Custom boxes
+              = f.input :likes, label: 'Enable likes'
+              = f.input :dislikes, label: 'Enable dislikes'
+            %fieldset
+              %h4 Extras
+              %p Extras are additional sale items that can be included for delivery with this box.
+              = f.input :extras_limit, label: false, collection: Box::EXTRA_OPTIONS, include_blank: false
+              #box_extras
+                = f.input :all_extras, label: false, collection: [['from the entire extras catalog', true], ['selected from the items below', false]], include_blank: false
+                #box_extras_collection
+                  =# JS updates prop 'min' in distributor/boxes.js
+                  .input.check_boxes.optional
+                    =# Simple form forgets to wrap it :\
+                    = f.collection_check_boxes :extra_ids, current_distributor.extras.alphabetically, :id, :name_with_unit
 
         .four.columns
           = f.input :description
 
         .four.columns
           .inputs
-            %h4 Delivery options
-            = f.input :available_single, label: 'One-time delivery'
-            = f.input :available_weekly, label: 'Weekly'
-            = f.input :available_fourtnightly, label: 'Fortnightly'
-
             %h4 Choose your logo
             = f.input :box_image, label: false, hint: 'Any jpeg, gif or png image file'
             = f.input :box_image_cache, as: :hidden
@@ -32,4 +39,4 @@
 
       .row
         .twelve.columns.text-right
-          .actions= f.button :submit
+          .actions= f.button :submit, id: "box_submit"

@@ -5,6 +5,9 @@ describe Customer::OrdersController do
 
   describe "POST 'create'" do
     before do
+      @box = mock_model(Box, {extras_limit: 3, extras_unlimited?: false})
+      Order.any_instance.stub(:box).and_return(@box)
+
       @order      = { quantity: 1, frequency: 'weekly', completed: true, box_id: 1 }
       @start_date = Date.current
       @days       = { tuesday: 2, wednesday: 3 }
@@ -30,11 +33,11 @@ describe Customer::OrdersController do
     end
 
     describe 'with invalid params' do
+      before { @order.delete(:box_id) }
+
       context 'for a one off order' do
         before do
           @order[:frequency] = 'single'
-          @order.delete(:box_id)
-
           post :create, { order: @order, start_date: @start_date }
         end
 
@@ -70,7 +73,7 @@ describe Customer::OrdersController do
       end
 
       specify { Order.last.quantity.should == 1 }
-      specify { response.should redirect_to(customer_root_url) }
+      specify { response.should render_template('edit') }
     end
   end
 end

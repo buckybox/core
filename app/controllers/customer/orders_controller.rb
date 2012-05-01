@@ -1,12 +1,18 @@
 class Customer::OrdersController < Customer::ResourceController
-  actions :new, :create, :update
+  actions :new, :edit, :create, :update
 
   respond_to :html, :xml, :json
+  
+  before_filter :filter_params, only: [:create, :update]
+
+  def filter_params
+    params[:order] = params[:order].slice!(:include_extras)
+  end
 
   def update
     update! do |success, failure|
       success.html { redirect_to customer_root_url }
-      failure.html { redirect_to customer_root_url }
+      failure.html { render 'edit' }
     end
   end
 
@@ -33,7 +39,7 @@ class Customer::OrdersController < Customer::ResourceController
 
     schedule = @order.schedule
     schedule.exception_times.each { |time| schedule.remove_exception_time(time) }
-    (start_date..end_date).each   { |date| schedule.add_exception_time(date.to_time) }
+    (start_date..end_date).each   { |date| schedule.add_exception_time(date.to_time_in_current_zone) }
 
     @order.schedule = schedule
 

@@ -1,4 +1,9 @@
 class Admin::DistributorsController < Admin::ResourceController
+  def index
+    @distributors = Distributor.order('name')
+    index!
+  end
+
   def impersonate
     distributor = Distributor.find(params[:id])
     sign_in(distributor)

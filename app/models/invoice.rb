@@ -73,7 +73,7 @@ class Invoice < ActiveRecord::Base
     real_deliveries = account_deliveries.map { |d| { date: d.date, amount: account.amount_with_bucky_fee(d.package.price), description: d.description } }
 
     #save all_occurrences
-    account_occurrences = account.all_occurrences(end_date.to_time)
+    account_occurrences = account.all_occurrences(end_date.to_time_in_current_zone)
     occurrences = account_occurrences.map { |o| { date: o[:date], description: o[:description], amount: account.amount_with_bucky_fee(o[:price]) } }
 
     self.deliveries = real_deliveries + occurrences

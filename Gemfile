@@ -19,6 +19,7 @@ gem 'jquery-rails'
 gem 'devise', '~> 1.5.3'
 gem 'multi_json', '~> 1.0.4'
 gem 'simple_form', '~> 1.5.2'
+gem 'ice_cube', git: 'git://github.com/ootoovak/ice_cube.git' # patched to persist data (that we use) in UTC timezone
 gem 'inherited_resources'
 gem 'mini_magick'
 gem 'carrierwave'
@@ -29,11 +30,11 @@ gem 'kaminari'
 gem 'airbrake'
 gem 'analytical'
 gem 'postmark-rails'
-gem 'ice_cube'
 gem 'whenever'
 gem 'newrelic_rpm'
 gem 'acts_as_list'
 gem 'default_value_for'
+gem 'fuzzy-string-match', require: 'fuzzystringmatch' # This performs fuzzy matching on the import script
 
 group :development do
   gem 'nifty-generators', require: false
@@ -41,13 +42,15 @@ group :development do
   gem 'capistrano'
   gem 'capistrano_colors'
 
-  # ruby-debug needs extra stuff to work on 1.9.3, see here -> https://gist.github.com/1885892
-  # consider using Pry instead https://github.com/pry/pry
-  gem 'linecache19', '0.5.13'
-  gem 'ruby-debug-base19', '0.11.26'
-  gem 'ruby-debug19', require: 'ruby-debug'
   gem 'hirb'
   gem 'wirble'
+  gem 'rb-fsevent', :require => false if RUBY_PLATFORM =~ /darwin/i
+
+  gem 'guard-rspec'
+  gem 'guard-spork'
+
+  gem 'spork-rails'
+  gem 'pry-remote' # Pry: the active and easier to install ruby-debug
 end
 
 group :development, :test do
@@ -61,6 +64,7 @@ group :development, :test do
   gem 'mailcatcher', require: false
 
   gem 'simplecov',   require: false
+  gem 'delorean'
 end
 
 group :test do
@@ -78,4 +82,5 @@ end
 
 group :staging do
   gem 'mail_safe'
+  gem 'delorean'
 end

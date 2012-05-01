@@ -4,6 +4,12 @@ class Distributor::OrdersController < Distributor::ResourceController
 
   respond_to :html, :xml, :json
 
+  before_filter :filter_params, only: [:create, :update]
+
+  def filter_params
+    params[:order] = params[:order].slice!(:include_extras)
+  end
+
   def new
     new! do
       load_form
@@ -11,16 +17,21 @@ class Distributor::OrdersController < Distributor::ResourceController
   end
 
   def create
-    @account       = Account.find(params[:account_id])
-    @order         = Order.new(params[:order])
+    @account       = current_distributor.accounts.find(params[:account_id])
+
     load_form
 
+    order_hash = params[:order]
+    order_hash.merge!({account_id: @account.id, completed: true})
+
+    @order = Order.new(order_hash)
     @order.create_schedule(params[:start_date], params[:order][:frequency], params[:days])
 
-    @order.account   = @account
-    @order.completed = true
-
-    create! { [:distributor, @account.customer] }
+    if @order.save
+      redirect_to [:distributor, @account.customer]
+    else
+      render 'new'
+    end
   end
 
   def edit
@@ -37,12 +48,16 @@ class Distributor::OrdersController < Distributor::ResourceController
     # Will revisit when we have time to build a proper UI for it
     params[:order].delete(:frequency)
 
-    update! { [:distributor, @account.customer] }
+    if @order.update_attributes(params[:order])
+      redirect_to [:distributor, @account.customer]
+    else
+      render 'edit'
+    end
   end
 
   def deactivate
     @account = Account.find(params[:account_id])
-    @order = Order.find(params[:id])
+    @order   = Order.find(params[:id])
 
     respond_to do |format|
       if @order.update_attribute(:active, false)
@@ -68,7 +83,7 @@ class Distributor::OrdersController < Distributor::ResourceController
     redirect_to [:distributor, @account.customer], warning: 'Start date can not be past end date' and return if end_date <= start_date
 
     schedule.exception_times.each { |time| schedule.remove_exception_time(time) }
-    (start_date..end_date).each   { |date| schedule.add_exception_time(date.to_time) }
+    (start_date..end_date).each   { |date| schedule.add_exception_time(date.to_time_in_current_zone) }
 
     @order.schedule = schedule
 
@@ -84,10 +99,10 @@ class Distributor::OrdersController < Distributor::ResourceController
   end
 
   def remove_pause
-    @account   = Account.find(params[:account_id])
-    @order     = Order.find(params[:id])
+    @account = Account.find(params[:account_id])
+    @order   = Order.find(params[:id])
 
-    schedule   = @order.schedule
+    schedule = @order.schedule
 
     schedule.exception_times.each { |time| schedule.remove_exception_time(time) }
 
@@ -103,6 +118,8 @@ class Distributor::OrdersController < Distributor::ResourceController
       end
     end
   end
+
+  private
 
   def load_form
     @customer = @account.customer

@@ -23,10 +23,18 @@
           .twelve.columns.summary
             %strong Summary
             %ul
+              - if params[:view] == "packing"
+                %li.strong Boxes
               - @items.group_by(&:box).each do |box, array|
                 %li
-                  %span= array.map(&:quantity).inject(0, :+)
+                  %span= array.map(&:quantity).sum
                   = box.name
+              - if params[:view] == "packing"
+                %li.strong Extras
+                - @items.collect(&:extras_summary).flatten.group_by{|g| "#{g[:name]} #{g[:unit]}"}.each do |extra, array|
+                  %li
+                    %span= array.collect{|a| a[:count].to_i}.sum
+                    = "#{extra}"
 
     - if @items.blank?
       .nine.columns

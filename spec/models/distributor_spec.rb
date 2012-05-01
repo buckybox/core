@@ -292,37 +292,77 @@ describe Distributor do
         end
       end
     end
+  end
 
-    context ".import_customers" do
-      let(:distributor){ Fabricate.build(:distributor, :email => ' BuckyBox@example.com ') }
+  context ".import_customers" do
+    let(:distributor){ Fabricate.build(:distributor, :email => ' BuckyBox@example.com ') }
 
-      specify { expect{distributor.import_customers([])}.to raise_error('No customers') }
-      specify { expect{distributor.import_customers([123, 456, 789])}.to raise_error('Expecting Bucky::Import::Customer but was Fixnum') }
+    specify { expect{distributor.import_customers([])}.to raise_error('No customers') }
+    specify { expect{distributor.import_customers([123, 456, 789])}.to raise_error('Expecting Bucky::Import::Customer but was Fixnum') }
 
-      it "calls import on each customer" do
-        route = mock_model(Route)
-        import_customers = []
-        2.times do |n|
-          customer = double("Customer")
-          customer.stub(:import)
+    it "calls import on each customer" do
+      route = mock_model(Route)
+      import_customers = []
+      2.times do |n|
+        customer = double("Customer")
+        customer.stub(:import)
 
-          import_customer = new_import_customer(n)
-          distributor.stub_chain(:routes, :find_by_name).and_return(route)
-          distributor.stub_chain(:customers, :find_by_number).with(n).and_return(customer)
+        import_customer = new_import_customer(n)
+        distributor.stub_chain(:routes, :find_by_name).and_return(route)
+        distributor.stub_chain(:customers, :find_by_number).with(n).and_return(customer)
 
-          customer.should_receive(:import).with(import_customer, route)
-          import_customers << import_customer
-        end
-
-        distributor.import_customers(import_customers)
+        customer.should_receive(:import).with(import_customer, route)
+        import_customers << import_customer
       end
 
-      it "raises error if can't find route" do
-        import_customer = new_import_customer
-        distributor.stub_chain(:routes, :find_by_name).and_return(nil)
-        distributor.stub_chain(:customers, :find_by_number).and_return(double('Customer'))
+      distributor.import_customers(import_customers)
+    end
 
-        expect{ distributor.import_customers([import_customer]) }.to raise_error('Route  not found for distributor with id ' )
+    it "raises error if can't find route" do
+      import_customer = new_import_customer
+      distributor.stub_chain(:routes, :find_by_name).and_return(nil)
+      distributor.stub_chain(:customers, :find_by_number).and_return(double('Customer'))
+
+      expect{ distributor.import_customers([import_customer]) }.to raise_error('Route  not found for distributor with id ' )
+    end
+
+    context ".find_extra_from_import" do
+      before do
+        @s = {}
+        search_extras = [
+          [:oj600 , "Orange Juice"  , "600 ml"]    ,
+          [:oj650 , "Orange Juice"  , "650 ml"]    ,
+          [:oj1   , "Orange Juice"  , "1L"]        ,
+          [:os800 , "Organic Sugar" , "800 g"]     ,
+          [:os15  , "Organic Sugar" , "1.5 kg"]    ,
+          [:e6    , "Eggs"          , "1 / 2 Doz"] ,
+          [:e12    , "Eggs"          , "Doz"]
+        ].collect{|sym, name, unit| @s.merge!(sym => Fabricate.build(:extra, {name: name, unit:unit}))[sym]}
+        @distributor = Fabricate.build(:distributor)
+        @distributor.stub_chain(:extras, :alphabetically).and_return(search_extras)
+        @box = mock_model(Box)
+        @box.stub_chain(:extras, :alphabeticaly).and_return(search_extras)
+      end
+      
+      # Name           , unit , match
+      [
+        ["Orange Juice" , "1L" , :oj1],
+        ["Oronge juice" , "1L" , :oj1],
+        ["Orang uice" , "1L" , :oj1],
+        ["Orange Juice" , "1 L" , :oj1],
+        ["Orange Juice" , "1" , :oj1],
+        ["Orange Juice" , "600" , :oj600],
+        ["Orange Juice" , "60" , :oj600],
+        ["Orange Juice" , "6" , :oj600],
+        ["Egg" , "Doz" , :e12],
+        ["Eggs" , "1/2 Doz" , :e6],
+        ["organic suga" , "" , :os15],
+        ["orgaanic sugar" , "800g" , :os800],
+        ["o juice", "600 ml", :nil],
+        ["not in list", "", :nil],
+        ["sugar juice", "", :nil]
+      ].each do |name, unit, match|
+        specify {@distributor.find_extra_from_import(mock('Extra', {name: name, unit: unit})).should eq(@s[match])}
       end
     end
   end

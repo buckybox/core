@@ -38,6 +38,14 @@
                   - @order_data_fields.each do |field|
                     - if field == :box_type
                       %td{ class: box_type_status(@distributor, box) }= box.box_type
+                    - elsif field == :extras
+                      -if box.extras.present?
+                        %td{ class: extras_status(@distributor, box.extras, box)}
+                          %div= box.extras_recurring? ? "Recurring" : "One off"
+                          - box.extras.each do |extra|
+                            %div{ class: extra_status(@distributor, extra, box)}= show_extra(@distributor, extra, box)
+                      -else
+                        %td
                     - else
                       %td= box.send(field)
 

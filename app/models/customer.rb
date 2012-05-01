@@ -133,11 +133,14 @@ class Customer < ActiveRecord::Base
         quantity: 1,
         likes: b.likes,
         dislikes: b.dislikes,
-        account: self.account
+        account: self.account,
+        extras_one_off: b.extras_recurring?
       })
       account.route = self.route
       order.create_schedule(delivery_date, b.delivery_frequency, delivery_day_numbers)
       order.activate
+
+      order.import_extras(b.extras) unless b.extras.blank?
       order.save! # Blow up on error so transaction is aborted
     end
   end

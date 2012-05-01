@@ -49,11 +49,6 @@
     = link_to '&#215;'.html_safe, '#', class: 'close-reveal-modal'
     = render partial: 'customer/orders/pause_form', locals: { order: order }
 
-  .reveal-modal{id: "order-modal-#{order.id}"}
-    %h2 Change Your Order
-    = link_to '&#215;'.html_safe, '#', class: 'close-reveal-modal'
-    = render partial: 'customer/orders/form', locals: { order: order }
-
 #address-modal.reveal-modal
   %h2 Change Your Address
   = link_to '&#215;'.html_safe, '#', class: 'close-reveal-modal'

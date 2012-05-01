@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120320030645) do
+ActiveRecord::Schema.define(:version => 20120426220552) do
 
   create_table "accounts", :force => true do |t|
     t.integer  "customer_id"
@@ -79,6 +79,13 @@ ActiveRecord::Schema.define(:version => 20120320030645) do
 
   add_index "bank_statements", ["distributor_id"], :name => "index_bank_statements_on_distributor_id"
 
+  create_table "box_extras", :force => true do |t|
+    t.integer  "box_id"
+    t.integer  "extra_id"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
   create_table "boxes", :force => true do |t|
     t.integer  "distributor_id"
     t.string   "name"
@@ -94,6 +101,7 @@ ActiveRecord::Schema.define(:version => 20120320030645) do
     t.datetime "updated_at"
     t.string   "box_image"
     t.boolean  "available_monthly",      :default => false, :null => false
+    t.integer  "extras_limit",           :default => 0
   end
 
   add_index "boxes", ["distributor_id"], :name => "index_boxes_on_distributor_id"
@@ -228,6 +236,16 @@ ActiveRecord::Schema.define(:version => 20120320030645) do
 
   add_index "events", ["distributor_id"], :name => "index_events_on_distributor_id"
 
+  create_table "extras", :force => true do |t|
+    t.string   "name"
+    t.string   "unit"
+    t.integer  "distributor_id"
+    t.integer  "price_cents"
+    t.string   "currency"
+    t.datetime "created_at",     :null => false
+    t.datetime "updated_at",     :null => false
+  end
+
   create_table "invoice_information", :force => true do |t|
     t.integer  "distributor_id"
     t.string   "gst_number"
@@ -259,6 +277,14 @@ ActiveRecord::Schema.define(:version => 20120320030645) do
     t.datetime "updated_at"
   end
 
+  create_table "order_extras", :force => true do |t|
+    t.integer  "order_id"
+    t.integer  "extra_id"
+    t.integer  "count"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
   create_table "order_schedule_transactions", :force => true do |t|
     t.integer  "order_id"
     t.text     "schedule"
@@ -272,16 +298,17 @@ ActiveRecord::Schema.define(:version => 20120320030645) do
 
   create_table "orders", :force => true do |t|
     t.integer  "box_id"
-    t.integer  "quantity",   :default => 1,        :null => false
+    t.integer  "quantity",       :default => 1,        :null => false
     t.text     "likes"
     t.text     "dislikes"
-    t.string   "frequency",  :default => "single", :null => false
-    t.boolean  "completed",  :default => false,    :null => false
+    t.string   "frequency",      :default => "single", :null => false
+    t.boolean  "completed",      :default => false,    :null => false
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "account_id"
     t.text     "schedule"
-    t.boolean  "active",     :default => false,    :null => false
+    t.boolean  "active",         :default => false,    :null => false
+    t.boolean  "extras_one_off", :default => true
   end
 
   add_index "orders", ["account_id"], :name => "index_orders_on_account_id"
@@ -305,6 +332,7 @@ ActiveRecord::Schema.define(:version => 20120320030645) do
     t.integer  "archived_fee_cents",         :default => 0
     t.string   "archived_fee_currency"
     t.decimal  "archived_customer_discount", :default => 0.0, :null => false
+    t.text     "archived_extras"
   end
 
   add_index "packages", ["order_id"], :name => "index_packages_on_order_id"

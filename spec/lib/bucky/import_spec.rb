@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Import do
+describe Bucky::Import do
   context '#preprocess' do
     context 'should remove unneeded rows' do
       before(:all) do
@@ -93,6 +93,17 @@ describe Import do
         specify { @boxes.collect(&:delivery_frequency).should eq(['weekly', 'single', 'fortnightly']) }
         specify { @boxes.collect(&:delivery_days).should eq(['Monday, Tuesday, Wednesday', '', 'Friday']) }
         specify { @boxes.collect(&:next_delivery_date).should eq(["21-Mar-2012", "26-Mar-2012", "30-Mar-2012"]) }
+        specify { @boxes.collect(&:extras_recurring?).should eq([false, false, true]) }
+
+        context :extras do
+          before(:all) do
+            @extras = @boxes.collect(&:extras).flatten.compact
+          end
+          specify { @extras.size.should eq(6)}
+          specify { @extras.collect(&:name).should eq(["Oronge Juice", "orga nic sugar", "eggs", "Orange Juice", "Orange Juice", "Organic Sugar"]) }
+          specify { @extras.collect(&:unit).should eq(["600 ml", nil, nil, "600L", "1 L", nil]) }
+          specify { @extras.collect(&:count).should eq([1, 2, 1, 3, 1, 2]) }
+        end
       end
     end
 
@@ -130,6 +141,17 @@ describe Import do
         specify { @boxes.first.delivery_frequency.should eq('weekly') }
         specify { @boxes.first.delivery_days.should eq('Thursday') }
         specify { @boxes.first.next_delivery_date.should eq("22-Mar-2012") }
+        specify { @boxes.collect(&:extras_recurring?).should eq([false]) }
+
+        context :extras do
+          before(:all) do
+            @extras = @boxes.collect(&:extras).flatten.compact
+          end
+          specify { @extras.size.should eq(0)}
+          specify { @extras.collect(&:name).should eq([]) }
+          specify { @extras.collect(&:unit).should eq([]) }
+          specify { @extras.collect(&:count).should eq([]) }
+        end
       end
     end
 
@@ -167,6 +189,17 @@ describe Import do
         specify { @boxes.first.delivery_frequency.should eq('single') }
         specify { @boxes.first.delivery_days.should eq('') }
         specify { @boxes.first.next_delivery_date.should eq("21-Apr-2012") }
+        specify { @boxes.collect(&:extras_recurring?).should eq([true]) }
+
+        context :extras do
+          before(:all) do
+            @extras = @boxes.collect(&:extras).flatten.compact
+          end
+          specify { @extras.size.should eq(1)}
+          specify { @extras.collect(&:name).should eq(["Orgonic Sugar"]) }
+          specify { @extras.collect(&:unit).should eq([nil]) }
+          specify { @extras.collect(&:count).should eq([2]) }
+        end
       end
     end
   end

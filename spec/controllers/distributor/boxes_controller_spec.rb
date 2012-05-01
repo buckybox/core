@@ -4,10 +4,20 @@ describe Distributor::BoxesController do
   render_views
   as_distributor
 
+  before do
+    @extras = 2.times.collect{Fabricate(:extra, distributor: @distributor)}
+    @extra_ids = @extras.collect(&:id)
+    @customer = Fabricate(:customer, distributor: @distributor)
+  end
   let(:box) { Fabricate(:box, distributor: @distributor, price: 234) }
 
   describe '#show' do
     before { get :show, format: :json, id: box.id }
+    specify { response.should be_success }
+  end
+
+  describe '#edit' do
+    before { get :edit, format: :json, id: box.id }
     specify { response.should be_success }
   end
 
@@ -17,7 +27,8 @@ describe Distributor::BoxesController do
         post :create, {
           box: {
             name: 'yodas box', price: '246', likes: '1', dislikes: '1', available_single: '1', available_weekly: '0',
-            available_fourtnightly: '1', description: "tasty selection of herbs from Yoda's garden."
+            available_fourtnightly: '1', description: "tasty selection of herbs from Yoda's garden.", extras_limit: 0,
+            extra_ids: @extra_ids, all_extras: false
           }
         }
       end
