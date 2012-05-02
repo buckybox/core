@@ -30,7 +30,7 @@ class Extra < ActiveRecord::Base
     Package.calculated_extras_price([self.to_hash.merge(count: 1)], customer_discount)
   end
 
-  FUZZY_MATCH_THRESHOLD = 0.80
+  FUZZY_MATCH_THRESHOLD = 0.8
   def match_import_extra?(extra)
     Bucky::Util.fuzzy_match(name, extra.name) > FUZZY_MATCH_THRESHOLD &&
       (extra.unit.blank? || Bucky::Util.fuzzy_match(extra.unit.gsub(/ +/,''), extra.unit.gsub(/ +/,'')))

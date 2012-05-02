@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Import do
+describe Bucky::Import do
   context '#preprocess' do
     context 'should remove unneeded rows' do
       before(:all) do

@@ -223,7 +223,7 @@ class Distributor < ActiveRecord::Base
 
     matches = search_extras.select{|extra| extra.match_import_extra?(e)}.
       collect{|extra_match| [extra_match.fuzzy_match(e),extra_match]}.
-      select{|fuzzy_match| fuzzy_match.first > 0.8}. # Set a lower threashold which weeds out almost matches and force the data to be fixed.  Make the user go fix the csv file.
+      select{|fuzzy_match| fuzzy_match.first > Extra::FUZZY_MATCH_THRESHOLD}. # Set a lower threashold which weeds out almost matches and force the data to be fixed.  Make the user go fix the csv file.
       sort{|a,b| b.first <=> a.first}
 
     match = if matches.size > 1 && matches.first.first == matches[1].first
