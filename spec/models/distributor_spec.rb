@@ -315,16 +315,16 @@ describe Distributor do
       expect { distributor.import_customers([import_customer]) }.to raise_error('Route  not found for distributor with id ' )
     end
 
-    context ".find_extra_from_import" do
+    context '.find_extra_from_import' do
       before do
         search_extras = [
-          [:oj600, "Orange Juice",  "600 ml"   ],
-          [:oj650, "Orange Juice",  "650 ml"   ],
-          [:oj1,   "Orange Juice",  "1L"       ],
-          [:os800, "Organic Sugar", "800 g"    ],
-          [:os15,  "Organic Sugar", "1.5 kg"   ],
-          [:e6,    "Eggs",          "1 / 2 Doz"],
-          [:e12,   "Eggs",          "Doz"      ]
+          [:oj600, 'Orange Juice',  '600 ml'   ],
+          [:oj650, 'Orange Juice',  '650 ml'   ],
+          [:oj1,   'Orange Juice',  '1L'       ],
+          [:os800, 'Organic Sugar', '800 g'    ],
+          [:os15,  'Organic Sugar', '1.5 kg'   ],
+          [:e6,    'Eggs',          '1 / 2 Doz'],
+          [:e12,   'Eggs',          'Doz'      ]
         ]
         @s = {}
 
@@ -337,25 +337,25 @@ describe Distributor do
       end
 
       EXTRAS_IMPORT_TESTS = [
-        ["Orange Juice",   "1L",      :oj1  ],
-        ["Oronge juice",   "1L",      :oj1  ],
-        ["Orang uice",     "1L",      :oj1  ],
-        ["Orange Juice",   "1 L",     :oj1  ],
-        ["Orange Juice",   "1",       :oj1  ],
-        ["Orange Juice",   "600",     :oj600],
-        ["Orange Juice",   "60",      :oj600],
-        ["Orange Juice",   "6",       :oj600],
-        ["Egg",            "Doz",     :e12  ],
-        ["Eggs",           "1/2 Doz", :e6   ],
-        ["organic suga",   "",        :os15 ],
-        ["orgaanic sugar", "800g",    :os800],
-        ["o juice",        "600 ml",  :nil  ],
-        ["not in list",    "",        :nil  ],
-        ["sugar juice",    "",        :nil  ]
+        ['Orange Juice',   '1L',      :oj1  ],
+        ['Oronge juice',   '1L',      :oj1  ],
+        ['Orang uice',     '1L',      :oj1  ],
+        ['Orange Juice',   '1 L',     :oj1  ],
+        ['Orange Juice',   '1',       :oj1  ],
+        ['Orange Juice',   '600',     :oj600],
+        ['Orange Juice',   '60',      :oj600],
+        ['Orange Juice',   '6',       :oj600],
+        ['Egg',            'Doz',     :e12  ],
+        ['Eggs',           '1/2 Doz', :e6   ],
+        ['organic suga',   '',        :os15 ],
+        ['orgaanic sugar', '800g',    :os800],
+        ['o juice',        '600 ml',  :nil  ],
+        ['not in list',    '',        :nil  ],
+        ['sugar juice',    '',        :nil  ]
       ]
 
       EXTRAS_IMPORT_TESTS.each do |name, unit, match|
-        specify { @distributor.find_extra_from_import(mock('Extra', {name: name, unit: unit})).should eq(@s[match]) }
+        specify { @distributor.find_extra_from_import(mock('Extra', { name: name, unit: unit })).should eq(@s[match]) }
       end
     end
   end

@@ -4,7 +4,7 @@ describe Distributor::BankInformationController do
   render_views
 
   as_distributor
-  before { @customer = Fabricate(:customer, :distributor => @distributor) }
+  before { @customer = Fabricate(:customer, distributor: @distributor) }
 
   describe '#create' do
     context 'with valid params' do
@@ -26,7 +26,7 @@ describe Distributor::BankInformationController do
         post :create, { bank_information: { account_name: '' } }
       end
 
-      specify { assigns(:bank_information).errors[:account_name].size.should eq(1)}
+      specify { assigns(:bank_information).errors[:account_name].size.should eq(1) }
       specify { assigns(:bank_information).account_name.should eq('') }
       specify { response.should render_template('distributor/settings/bank_information') }
     end
