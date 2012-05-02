@@ -15,18 +15,18 @@ class Box < ActiveRecord::Base
   validates :extras_limit, numericality: { greater_than: -2 }
 
   default_scope order(:name)
-  
+
   composed_of :price,
-    :class_name => "Money",
-    :mapping => [%w(price_cents cents), %w(currency currency_as_string)],
-    :constructor => Proc.new { |cents, currency| Money.new(cents || 0, currency || Money.default_currency) },
-    :converter => Proc.new { |value| value.respond_to?(:to_money) ? value.to_money : raise(ArgumentError, "Can't convert #{value.class} to Money") }
+    class_name: "Money",
+    mapping: [%w(price_cents cents), %w(currency currency_as_string)],
+    constructor: Proc.new { |cents, currency| Money.new(cents || 0, currency || Money.default_currency) },
+    converter: Proc.new { |value| value.respond_to?(:to_money) ? value.to_money : raise(ArgumentError, "Can't convert #{value.class} to Money") }
 
   default_value_for :extras_limit, 0
 
   EXTRA_OPTIONS = (["disable extras", "allow any number of extra items"]+1.upto(10).collect{|i| "allow #{i} extra items"}).zip([0,-1]+1.upto(10).to_a)
   # [["disable extras", 0],["allow any number of extra items", -1],["allow 1 extra items", 1], ["allow 2 extra items", 2], ["allow n extra items, n]..]
-  
+
   def extras_unlimited?
     extras_limit == -1
   end
