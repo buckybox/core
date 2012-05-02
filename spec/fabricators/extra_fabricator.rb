@@ -1,6 +1,6 @@
 Fabricator(:extra) do
+  distributor!
   name { sequence(:name) { |i| "Extra #{i}" } }
-  unit "single"
-  distributor { Fabricate.build(:distributor)}
+  unit 'single'
   price 295
 end

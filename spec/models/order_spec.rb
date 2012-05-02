@@ -177,7 +177,7 @@ describe Order do
     context 'scheduled_delivery' do
       before do
         @schedule = @order.schedule
-        delivery_list = Fabricate(:delivery_list_with_associations, date: Date.current + 5.days)
+        delivery_list = Fabricate(:delivery_list, date: Date.current + 5.days)
         @delivery = Fabricate(:delivery, delivery_list: delivery_list)
         @order.add_scheduled_delivery(@delivery)
         @order.save

@@ -22,11 +22,8 @@ describe Distributor::BankInformationController do
     end
 
     context 'with invalid params' do
-      before(:each) do
-        post :create, { bank_information: { account_name: '' } }
-      end
+      before { post :create, { bank_information: { account_name: '' } } }
 
-      specify { assigns(:bank_information).errors[:account_name].size.should eq(1) }
       specify { assigns(:bank_information).account_name.should eq('') }
       specify { response.should render_template('distributor/settings/bank_information') }
     end
@@ -50,7 +47,6 @@ describe Distributor::BankInformationController do
         put :update, { bank_information: { account_name: '' } }
       end
 
-      specify { assigns(:bank_information).errors.size.should eq(1) }
       specify { assigns(:bank_information).account_name.should eq('') }
       specify { response.should render_template('distributor/settings/bank_information') }
     end

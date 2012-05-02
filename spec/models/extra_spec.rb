@@ -1,9 +1,7 @@
 require 'spec_helper'
 
 describe Extra do
-  before :all do
-    @extra = Fabricate.build(:extra)
-  end
+  let(:extra) { Fabricate.build(:extra) }
 
-  specify { @extra.should be_valid }
+  specify { extra.should be_valid }
 end
