@@ -6,10 +6,10 @@ describe Package do
   context :archive_data do
     before do
       @address = Fabricate(:address_with_associations)
-      @account = Fabricate(:account, :customer => @address.customer)
-      @box = Fabricate(:box, :distributor => @account.distributor)
-      @order = Fabricate(:order, :box => @box, :account => @account)
-      @package = Fabricate(:package, :order => @order)
+      @account = Fabricate(:account, customer: @address.customer)
+      @box = Fabricate(:box, distributor: @account.distributor)
+      @order = Fabricate(:order, box: @box, account: @account)
+      @package = Fabricate(:package, order: @order)
     end
 
     specify { @package.archived_address.should == @address.join(', ') }

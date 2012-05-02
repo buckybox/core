@@ -1,5 +1,5 @@
 Fabricator(:address) do
-  customer
+  customer!
   address_1 { '1 Address St' }
   suburb { 'Suburb' }
   city { 'City' }

@@ -3,7 +3,7 @@ require 'spec_helper'
 describe DeliveryList do
   let(:fabricated_distributor) { Fabricate.build(:distributor) }
   let(:fabricated_route) { Fabricate.build(:route) }
-  let(:fabricated_delivery_list) { Fabricate.build(:delivery_list_with_associations, :distributor => fabricated_distributor) }
+  let(:fabricated_delivery_list) { Fabricate.build(:delivery_list, distributor: fabricated_distributor) }
   let(:delivery_list) { Fabricate.build(:delivery_list) }
 
   specify { delivery_list.should be_valid }

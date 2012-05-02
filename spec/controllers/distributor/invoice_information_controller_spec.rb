@@ -27,7 +27,6 @@ describe Distributor::InvoiceInformationController do
         post :create, { invoice_information: { gst_number: '' } }
       end
 
-      specify { assigns(:invoice_information).errors[:gst_number].size.should eq(1)}
       specify { assigns(:invoice_information).gst_number.should eq('') }
       specify { response.should render_template('distributor/settings/invoice_information') }
     end
@@ -51,7 +50,6 @@ describe Distributor::InvoiceInformationController do
         put :update, { invoice_information: { gst_number: '' } }
       end
 
-      specify { assigns(:invoice_information).errors.size.should eq(1) }
       specify { assigns(:invoice_information).gst_number.should eq('') }
       specify { response.should render_template('distributor/settings/invoice_information') }
     end
