@@ -2,7 +2,7 @@ class Distributor < ActiveRecord::Base
   has_one :bank_information,    dependent: :destroy
   has_one :invoice_information, dependent: :destroy
 
-  has_many :extras,              dependent: :destroy
+  has_many :extras,             dependent: :destroy
   has_many :boxes,              dependent: :destroy
   has_many :routes,             dependent: :destroy
   has_many :orders,             dependent: :destroy, through: :boxes
