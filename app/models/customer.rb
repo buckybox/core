@@ -71,6 +71,10 @@ class Customer < ActiveRecord::Base
     return result
   end
 
+  def formated_number
+    "%04d" % number
+  end
+
   def new?
     deliveries.size <= 1
   end

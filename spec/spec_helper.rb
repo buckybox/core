@@ -96,6 +96,8 @@ Spork.each_run do
   # https://github.com/sporkrb/spork/issues/37#issuecomment-4330248
   silence_warnings do
     Dir["#{Rails.root}/app/models/**/*.rb"].each {|f| load f}
+    Dir["#{Rails.root}/lib/bucky/**/*.rb"].each {|f| load f}
+    Dir["#{Rails.root}/lib/bucky.rb"].each {|f| load f}
   end
 
 end
