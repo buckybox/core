@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120501015452) do
+ActiveRecord::Schema.define(:version => 20120501032413) do
 
   create_table "accounts", :force => true do |t|
     t.integer  "customer_id"
@@ -245,6 +245,26 @@ ActiveRecord::Schema.define(:version => 20120501015452) do
     t.string   "currency"
     t.datetime "created_at",     :null => false
     t.datetime "updated_at",     :null => false
+  end
+
+  create_table "import_transaction_lists", :force => true do |t|
+    t.integer  "distributor_id"
+    t.boolean  "draft"
+    t.integer  "account_type"
+    t.integer  "source_type"
+    t.datetime "created_at",     :null => false
+    t.datetime "updated_at",     :null => false
+  end
+
+  create_table "import_transactions", :force => true do |t|
+    t.integer  "customer_id"
+    t.datetime "transaction_time"
+    t.integer  "amount_cents"
+    t.boolean  "removed"
+    t.text     "description"
+    t.float    "customer_match"
+    t.datetime "created_at",       :null => false
+    t.datetime "updated_at",       :null => false
   end
 
   create_table "invoice_information", :force => true do |t|

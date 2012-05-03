@@ -6,7 +6,7 @@ class CreateImportTransactions < ActiveRecord::Migration
       t.integer :amount_cents
       t.boolean :removed
       t.text :description
-      t.floata :customer_match
+      t.float :customer_match
 
       t.timestamps
     end
