@@ -27,24 +27,8 @@ class Bucky::TransactionImports::Row
     @possible_references ||= description.scan(NUMBER_REFERENCE_REGEX).to_a.flatten
   end
 
-  def reference_customer_matches(customers)
-    customer_references = customers.inject({}){|hash, c| hash.merge(c.formated_number => c)}
-    matches = number_reference.collect{|ref| customer_references[ref]}
-    matches.compact
-  end
-
-  def account_customer_matches(customers)
-    account_matches = customers.select do |customer|
-      customer.account.balance.to_f == amount
-    end
-
-    if account_matches.size == 1
-      account_matches
-    else
-      customers
-    end
-  end
-
+  # Returns a number 0.0 -> 1.0 indicating how confident we
+  # are that this payment comes from customer
   def customer_match(customer)
     ref_confidence = customer_match_reference(customer)
     balance_confidence = customer_match_balance(customer)
