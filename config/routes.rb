@@ -1,11 +1,11 @@
 BuckyBox::Application.routes.draw do
-  devise_for :admins, controllers: { sessions: 'admin/sessions' }
+  devise_for :admins,       controllers: { sessions: 'admin/sessions' }
   devise_for :distributors, controllers: { sessions: 'distributor/sessions' }
   devise_for :customers,    controllers: { sessions: 'customer/sessions' }
 
   root to: 'distributor/dashboard#index'
 
-  namespace :market do
+  namespace :webstore do
     get ':distributor_parameter_name',                  action: 'store',            as: 'store'
     get ':distributor_parameter_name/buy/:box_id',      action: 'buy',              as: 'buy'
     get ':distributor_parameter_name/customer_details', action: 'customer_details', as: 'customer_details'
@@ -36,13 +36,13 @@ BuckyBox::Application.routes.draw do
       get 'reporting'
     end
 
-    resources :distributors,        only: :update
-    resource  :bank_information,    only: [:create, :update]
-    resource  :invoice_information, only: [:create, :update]
+    resources :distributors,        only:   :update
+    resource  :bank_information,    only:   [:create, :update]
+    resource  :invoice_information, only:   [:create, :update]
     resources :boxes,               except: [:index, :show]
-    resources :extras,               except: [:index, :show]
+    resources :extras,              except: [:index, :show]
     resources :routes,              except: [:index, :show]
-    resources :transactions,        only: :create
+    resources :transactions,        only:   :create
 
     resources :deliveries do
       collection do

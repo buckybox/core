@@ -54,7 +54,7 @@ class Box < ActiveRecord::Base
   def extras_disabled?
     extras_limit == 0
   end
-  
+
   def has_all_extras?(exclude=[])
     exclude = [exclude] unless exclude.is_a?(Array)
     (distributor.extras - exclude).sort == extras.sort

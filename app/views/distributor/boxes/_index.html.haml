@@ -14,7 +14,7 @@
     %tbody
       - @boxes.each do |box|
         %tr
-          %td= image_tag(box.box_image.thumb.url) if box.box_image?
+          %td= image_tag(box.box_image.thumb.url)
           %td= box.name
           %td= box.price.format
           %td= box.extra_option

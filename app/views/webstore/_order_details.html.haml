@@ -1,4 +1,4 @@
-= image_tag(@box.box_image.url) if @box.box_image?
+= image_tag(@box.box_image.url)
 %h4== Price: #{@box.price}
 %h4== Quantity: #{@order.persisted? ? @order.quantity : '-'}
 %h3== Total: #{@order.persisted? ? (@box.price * @order.quantity) : '-'}
