@@ -100,6 +100,7 @@ describe Bucky::TransactionImports::Row do
 end
 
 def mock_customer(formated_number, balance = 0.0, orders = [0.0])
+  # Setting the id below helps identify when a test fails
   mc = mock_model(Customer, formated_number: formated_number, id: formated_number)
   mc.stub_chain(:account, :balance, :to_f).and_return(balance)
   mc.stub(:orders).and_return(orders.collect{|o| stub(Order, price: o)})
