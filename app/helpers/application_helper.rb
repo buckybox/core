@@ -1,4 +1,23 @@
 module ApplicationHelper
+  FEATURED_CURRENCIES = [:gbp, :aud, :hkd, :usd, :nzd]
+
+  def currency_name(key)
+    hash = currency_hash
+    hash[key.to_sym]
+  end
+
+  def currency_hash
+    @currency_hash ||= Money::Currency.table.inject({}) { |h, (k,v)| h[k] = "#{v[:name]} (#{v[:iso_code]})"; h }
+  end
+
+  def select_currencies
+    hash = currency_hash
+
+    currencies = []
+    FEATURED_CURRENCIES.each { |fc| currencies << [hash.delete(fc), fc] }
+    currencies += hash.invert.to_a
+  end
+
   def order_schedule(order, options = {})
     joiner = (options[:join_with].nil? ? '<br/>' : options[:join_with])
     schedule = order.schedule
