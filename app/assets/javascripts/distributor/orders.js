@@ -4,15 +4,14 @@
 $(function() {
   if($('#distributor_order').length > 0) { distributor_order_init(); }
 
-  $('#distributor_order #order_box_id').change(function() {
-    var distributor_id = $('#distributor_id').val();
+  $('#distributor_order #distributor_order_box_id').change(function() {
     var box_id = $(this).val();
 
     $('#order_likes').val('');
     $('#order_dislikes').val('');
 
     if(box_id) {
-      distributor_check_box(distributor_id, box_id);
+      distributor_check_box(box_id);
     }
     else {
       $('#likes_input').hide();
@@ -31,15 +30,14 @@ $(function() {
 });
 
 function distributor_order_init() {
-  var distributor_id = $('#distributor_id').val();
-  var box_id = $('#order_box_id').val();
+  var box_id = $('#distributor_order_box_id').val();
   var frequency = $('#order_frequency').val();
 
-  if(distributor_id && box_id) { distributor_check_box(distributor_id, box_id); }
+  if(box_id) { distributor_check_box(box_id); }
   if(frequency && (frequency !== 'single')) { $('#days').show(); }
 }
 
-function distributor_check_box(distributor_id, box_id) {
+function distributor_check_box(box_id) {
   $.ajax({
     type: 'GET',
     url: '/distributor/boxes/' + box_id + '.json',
