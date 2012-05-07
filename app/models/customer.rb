@@ -75,6 +75,10 @@ class Customer < ActiveRecord::Base
     "%04d" % number
   end
 
+  def badge
+    "#{formated_number} #{name}"
+  end
+
   def new?
     deliveries.size <= 1
   end

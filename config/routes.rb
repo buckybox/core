@@ -65,6 +65,7 @@ BuckyBox::Application.routes.draw do
       collection do
         get 'upload_transactions', action: 'upload_transactions', as: 'upload_transactions'
         post 'process_upload', action: 'process_upload', as: 'process_upload'
+        post 'commit_upload', action: 'commit_upload', as: 'commit_upload'
         post 'create_from_csv', action: 'create_from_csv', as: 'create_from_csv'
       end
     end

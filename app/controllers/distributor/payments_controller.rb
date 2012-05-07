@@ -25,13 +25,12 @@ class Distributor::PaymentsController < Distributor::ResourceController
   end
 
   def process_upload
-    @statement = BankStatement.new(params['bank_statement'])
-    @statement.distributor = current_distributor
-    unless @statement.valid?
+    @kiwibank = Bucky::TransactionImports::Kiwibank.new
+    @kiwibank.import(params['bank_statement']["statement_file"].path)
+    unless @kiwibank.valid?
       return render :index
     end
-    @statement.save!
-    @customer_remembers = @statement.customer_remembers
+    @transaction_list = @kiwibank.transactions_for_display(current_distributor)
     render :upload_transactions
   end
 

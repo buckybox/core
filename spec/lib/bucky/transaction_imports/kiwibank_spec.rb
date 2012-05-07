@@ -5,8 +5,6 @@ include Bucky::TransactionImports
 describe Bucky::TransactionImports::Kiwibank do
 
   describe ".import" do
-    specify { Kiwibank.new.import(Kiwibank::TEST_FILE)}
-
     context :with_test_csv do
       let(:good_csv_data) do
         csv = []
@@ -31,6 +29,9 @@ describe Bucky::TransactionImports::Kiwibank do
         csv << ["14 Oct 2010", "AP#5577411 FROM J E SMITH ;Payment from J E SMITH", "", ""]
         csv << ["15 Oct 2010", "", "", "50"]
         csv << ["15 Oct 2010", "AP#5577411 FROM J E SMITH ;Payment from J E SMITH", "", "34.34.3350"]
+        csv << ["15 Oct 2010", "AP#5577411 FROM J E SMITH ;Payment from J E SMITH", "", ""]
+        csv << ["", "", "", ""]
+        csv << ["", "FROM SOCIAL CAPITAL LIMITED ;Social Capit Wages", "", "111.11"]
         csv
       end
 
@@ -71,6 +72,24 @@ describe Bucky::TransactionImports::Kiwibank do
         importer = Kiwibank.new
         importer.import_csv(csv_string(bad_csv_data))
         importer.should_not be_valid
+      end
+    end
+    
+    context :full_test do
+      
+      let(:distributor){Fabricate(:distributor)}
+
+      before(:all) do
+        @kiwibank = Kiwibank.new
+        @kiwibank.import(Kiwibank::TEST_FILE)
+      end
+
+      specify { @kiwibank.should be_valid}
+      specify { @kiwibank.credit_rows.size.should eq(60)}
+      specify { @kiwibank.debit_rows.size.should eq(16)}
+
+      it "should present transactions with possible matches" do
+        @kiwibank.transactions_for_display(distributor).size.should eq 76
       end
     end
   end

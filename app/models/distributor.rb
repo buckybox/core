@@ -17,6 +17,9 @@ class Distributor < ActiveRecord::Base
   has_many :packing_lists,      dependent: :destroy
   has_many :packages,           dependent: :destroy, through: :packing_lists
 
+  has_many :import_transaction_lists
+  has_many :import_transactions, through: :import_transaction_lists
+
   DEFAULT_TIME_ZONE = 'Wellington'
   DEFAULT_CURRENCY = 'nzd'
   DEFAULT_ADVANCED_HOURS = 18

@@ -369,4 +369,12 @@ describe Distributor do
 
     return import_customer
   end
+
+  describe ".find_duplicate_import_transactions" do
+    it "should find duplicate import transactions" do
+      distributor.stub_chain(:import_transactions, :where).with({date: Date.parse("12 Oct 2011"), description: "hello kitty here is payment", amount: 234.65})
+
+      distributor.find_duplicate_import_transactions(Date.parse("12 Oct 2011", "hello kitty here is payment", amount: 234.65))
+    end
+  end
 end
