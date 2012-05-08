@@ -10,19 +10,18 @@
 
     %fieldset
       %h5 Extras
-      = simple_fields_for(:extra) do |f|
-        = f.input :include_extras, as: :boolean, label: "include extras"
+      = f.simple_fields_for(:extra) do |g|
+        = g.input :include_extras, as: :boolean, label: "include extras"
 
         #webstore_extras{ style: 'display:none;' }
           - unless @box.extras_unlimited?
             %p This box is limited to #{@box.extras_limit} extras.
 
           - @box.extras.alphabetically.each do |extra|
-            = f.input "extras[#{extra.id}][count]", label: extra.name_with_price, input_html: { min: 0, class: 'input-text', value: 0, id: "extras_#{extra.id}_count" }, as: :integer
+            = g.input "extras[#{extra.id}][count]", label: extra.name_with_price, input_html: { min: 0, class: 'input-text', value: 0, id: "extras_#{extra.id}_count" }, as: :integer
 
-          = f.input :extras_one_off, as: :select, collection: [["include with every delivery", false], ["include in the next delivery only", true]], label: false, include_blank: false
-
-        %p Extras can be either a one off order or every delivery.
+      = f.input :extras_one_off, as: :select, collection: [["include with every delivery", false], ["include in the next delivery only", true]], label: false, include_blank: false
+      %p Extras can be either a one off order or every delivery.
 
   .actions
     = f.button :submit, 'Next'

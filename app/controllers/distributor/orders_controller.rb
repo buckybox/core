@@ -17,12 +17,12 @@ class Distributor::OrdersController < Distributor::ResourceController
   end
 
   def create
-    @account       = current_distributor.accounts.find(params[:account_id])
+    @account = current_distributor.accounts.find(params[:account_id])
 
     load_form
 
     order_hash = params[:order]
-    order_hash.merge!({account_id: @account.id, completed: true})
+    order_hash.merge!({ account_id: @account.id, completed: true })
 
     @order = Order.new(order_hash)
     @order.create_schedule(params[:start_date], params[:order][:frequency], params[:days])

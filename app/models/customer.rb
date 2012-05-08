@@ -44,6 +44,8 @@ class Customer < ActiveRecord::Base
 
   default_scope order(:first_name)
 
+  default_value_for :discount, 0
+
   pg_search_scope :search,
     against: [ :first_name, :last_name, :email ],
     associated_against: {

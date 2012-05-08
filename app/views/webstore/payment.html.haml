@@ -22,4 +22,4 @@
       %td Make sure you use reference: 
       %td= @distributor.bank_information.customer_message
 
-= button_to 'Next', market_success_path(@distributor.parameter_name, @order), :method => :get, :class => 'button radius'
+= button_to 'Next', webstore_success_path(@distributor.parameter_name), :class => 'button radius'

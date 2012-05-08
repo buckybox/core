@@ -195,7 +195,7 @@ class Order < ActiveRecord::Base
 
   def order_extras=(collection)
     raise "I wasn't expecting you to set these directly" unless collection.is_a?(Hash) || collection.is_a?(Array)
-    
+
     order_extras.destroy_all
 
     #return nil if collection.blank?
