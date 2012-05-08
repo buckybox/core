@@ -14,9 +14,9 @@ class WebstoreController < ApplicationController
   end
 
   def customer_details
-    likes = params[:likes]
-    dislikes = params[:dislikes]
-    extras = params[:extras]
+    likes    = params[:buy][:likes]
+    dislikes = params[:buy][:dislikes]
+    extras   = params[:extra]
 
     add_to_cart(likes: likes, dislikes: dislikes, extras: extras)
   end
@@ -38,9 +38,9 @@ class WebstoreController < ApplicationController
 
   private
 
-  def add_to_cart(args, options = {})
-    session[:cart] = { order: {} } if !session[:cart].blank? || options[:force_clear]
-    session[:cart][:order].merge(args)
+  def add_to_cart(args)
+    session[:cart] = { order: {} } if args.delete(:force_clear) || session[:cart].blank?
+    session[:cart][:order].merge!(args)
   end
 
   def get_box

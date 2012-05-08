@@ -25,8 +25,12 @@ class Extra < ActiveRecord::Base
     "#{name} (#{unit})"
   end
 
-  def name_with_price(customer_discount)
-    "#{name} - #{price_with_discount(customer_discount).format} (#{unit})"
+  def name_with_price(customer_discount = nil)
+    if customer_discount
+      "#{name} - #{price_with_discount(customer_discount).format} (#{unit})"
+    else
+      "#{name} - #{price.format} (#{unit})"
+    end
   end
 
   def price_with_discount(customer_discount)

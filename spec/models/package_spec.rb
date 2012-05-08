@@ -7,8 +7,8 @@ describe Package do
     before do
       @address = Fabricate(:address_with_associations)
       @account = Fabricate(:account, customer: @address.customer)
-      @box = Fabricate(:box, distributor: @account.distributor)
-      @order = Fabricate(:order, box: @box, account: @account)
+      @box     = Fabricate(:box, distributor: @account.distributor)
+      @order   = Fabricate(:order, box: @box, account: @account)
       @package = Fabricate(:package, order: @order)
     end
 
@@ -37,9 +37,9 @@ describe Package do
     PRICE_PERMUTATIONS.each do |pp|
       context "where discount is #{pp[:discount]}, fee is #{pp[:fee]}, and quantity is #{pp[:quantity]}" do
         before do
-          @route = Fabricate(:route, fee: pp[:fee])
+          @route    = Fabricate(:route, fee: pp[:fee])
           @customer = Fabricate(:customer, discount: pp[:discount], route: @route)
-          @order = Fabricate(:order, quantity: pp[:quantity], account: @customer.account)
+          @order    = Fabricate(:order, quantity: pp[:quantity], account: @customer.account)
         end
 
         specify { Package.calculated_price(@box, @route, @customer).should == pp[:calculated_price] }
@@ -49,8 +49,7 @@ describe Package do
 
   context '#individual_price' do
     before do
-      @package = Fabricate(:package)
-
+      @package  = Fabricate(:package)
       @price    = @package.archived_box_price
       @fee      = @package.archived_route_fee
       @discount = @package.archived_customer_discount

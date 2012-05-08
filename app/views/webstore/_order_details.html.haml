@@ -12,5 +12,7 @@
     = checkmark_boolean(order_details[:box].likes)
     \| Dislikes:
     = checkmark_boolean(order_details[:box].dislikes)
+    \| Extras:
+    = checkmark_boolean(order_details[:box].extras_allowed?)
 .row
   %p.twlve.columns= order_details[:box].description

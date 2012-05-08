@@ -1,15 +1,17 @@
 - title 'Customer Details'
 
 %h2 Existing Customer Login
-= simple_form_for(Customer.new, :as => :customer, :url => session_path(:customer)) do |f|
+
+= simple_form_for(Customer.new, as: :customer, url: session_path(:customer)) do |f|
   .inputs
-    = f.input :email, :required => true, :label => false, :placeholder => "Email", :autofocus => true
-    = f.input :password, :required => true, :label => false, :placeholder => "Password"
-    = f.input :remember_me, :as => :boolean if Devise.mappings[:customer].rememberable?
+    = f.input :email, required: true, label: false, placeholder: "Email", autofocus: true
+    = f.input :password, required: true, label: false, placeholder: "Password"
+    = f.input :remember_me, as: :boolean if Devise.mappings[:customer].rememberable?
+
   .actions
     = f.button :submit, "Customer Login"
 
-= form_tag(webstore_payment_path, class: 'nice', method: get) do |f|
+= simple_form_for(:customer_details, url: webstore_payment_path) do |f|
   .inputs
     = f.input :first_name
     = f.input :last_name
@@ -21,12 +23,11 @@
       = g.input :suburb
       = g.input :city
       = g.input :postcode
-      = g.input :delivery_note
+      = g.input :delivery_note, as: :text, input_html: { rows: '4' }
       = g.input :phone_1
       = g.input :phone_2
       = g.input :phone_3
 
   .actions
     = f.button :submit, 'Next'
-
 

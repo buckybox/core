@@ -1,27 +1,28 @@
 - title 'Place Order'
 
-= form_tag(webstore_customer_details_path, class: 'nice', method: :get) do |f|
+= simple_form_for(:buy, url: webstore_customer_details_path(@distributor.parameter_name)) do |f|
+  = f.error_notification
+
   .inputs
-    = select_tag :frequency, options_from_collection_for_select(order_frequencies, :first, :last), include_blank: false
-    = text_area_tag :likes if @box.likes?
-    = text_area_tag :dislikes if @box.dislikes?
+    = f.input :frequency, collection: Order::FREQUENCIES.map{ |fr| [fr.titleize, fr] }, include_blank: false
+    = f.input :likes, as: :text, input_html: { rows: '4' } if @box.likes?
+    = f.input :dislikes, as: :text, input_html: { rows: '4' } if @box.dislikes?
 
-    - if @box.extras_allowed?
-      %fieldset
-        %h5 Extras
-        = label_tag :include_extras, 'Include extras'
-        = check_box_tag :include_extras
+    %fieldset
+      %h5 Extras
+      = simple_fields_for(:extra) do |f|
+        = f.input :include_extras, as: :boolean, label: "include extras"
 
-        - unless @box.extras_unlimited?
-          %p This @box is limited to #{@box.extras_limit} extras.
+        #webstore_extras{ style: 'display:none;' }
+          - unless @box.extras_unlimited?
+            %p This box is limited to #{@box.extras_limit} extras.
 
-        - @box.extras.alphabetically.each do |extra|
-          = label_tag "extras[#{extra.id}][count]", extra.name_with_unit
-          = text_field_tag "extras[#{extra.id}][count]", "", class: 'input-text', value: 0, id: "extras_#{extra.id}_count"
-          = select_tag :extras_one_off, options_from_collection_for_select([["include with every delivery", false], ["include in the next delivery only", true]], :first, :last), include_blank: false
+          - @box.extras.alphabetically.each do |extra|
+            = f.input "extras[#{extra.id}][count]", label: extra.name_with_price, input_html: { min: 0, class: 'input-text', value: 0, id: "extras_#{extra.id}_count" }, as: :integer
+
+          = f.input :extras_one_off, as: :select, collection: [["include with every delivery", false], ["include in the next delivery only", true]], label: false, include_blank: false
 
         %p Extras can be either a one off order or every delivery.
 
   .actions
-    = submit_tag 'Next', class: 'button radius'
-
+    = f.button :submit, 'Next'

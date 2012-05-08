@@ -8,7 +8,7 @@
 
       .row
         .three.columns
-          = image_tag(@distributor.company_logo.url) if @distributor.company_logo?
+          = image_tag(@distributor.company_logo.url)
 
         .nine.columns
           %strong= @distributor.name

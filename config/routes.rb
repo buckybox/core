@@ -6,11 +6,11 @@ BuckyBox::Application.routes.draw do
   root to: 'distributor/dashboard#index'
 
   namespace :webstore do
-    get ':distributor_parameter_name',                  action: 'store',            as: 'store'
-    get ':distributor_parameter_name/buy/:box_id',      action: 'buy',              as: 'buy'
-    get ':distributor_parameter_name/customer_details', action: 'customer_details', as: 'customer_details'
-    get ':distributor_parameter_name/payment',          action: 'payment',          as: 'payment'
-    get ':distributor_parameter_name/success',          action: 'success',          as: 'success'
+    get ':distributor_parameter_name',                   action: 'store',            as: 'store'
+    get ':distributor_parameter_name/buy/:box_id',       action: 'buy',              as: 'buy'
+    post ':distributor_parameter_name/customer_details', action: 'customer_details', as: 'customer_details'
+    post ':distributor_parameter_name/payment',          action: 'payment',          as: 'payment'
+    post ':distributor_parameter_name/success',          action: 'success',          as: 'success'
   end
 
   namespace :distributor do
@@ -56,7 +56,7 @@ BuckyBox::Application.routes.draw do
 
     resources :invoices do
       collection do
-        get 'to_send', action: 'to_send', as: 'to_send'
+        get 'to_send',  action: 'to_send', as: 'to_send'
         post 'do_send', action: 'do_send', as: 'do_send'
       end
     end
@@ -64,8 +64,8 @@ BuckyBox::Application.routes.draw do
     resources :payments, only: [:create, :index] do
       collection do
         get 'upload_transactions', action: 'upload_transactions', as: 'upload_transactions'
-        post 'process_upload', action: 'process_upload', as: 'process_upload'
-        post 'create_from_csv', action: 'create_from_csv', as: 'create_from_csv'
+        post 'process_upload',     action: 'process_upload', as: 'process_upload'
+        post 'create_from_csv',    action: 'create_from_csv', as: 'create_from_csv'
       end
     end
 
@@ -100,7 +100,7 @@ BuckyBox::Application.routes.draw do
 
       member do
         get 'receive_payment', action: :receive_payment, as: 'receive_payment'
-        post 'save_payment', action: :save_payment, as: 'save_payment'
+        post 'save_payment',   action: :save_payment, as: 'save_payment'
       end
     end
 
