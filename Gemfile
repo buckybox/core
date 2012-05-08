@@ -49,8 +49,9 @@ group :development do
   gem 'guard-rspec'
   gem 'guard-spork'
 
+  gem 'pry-rails' # Pry: the active and easier to install ruby-debug
+  gem 'pry-remote' # Needed for using pry in spork
   gem 'spork-rails'
-  gem 'pry-remote' # Pry: the active and easier to install ruby-debug
 end
 
 group :development, :test do

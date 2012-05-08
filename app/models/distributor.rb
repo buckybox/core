@@ -2,7 +2,7 @@ class Distributor < ActiveRecord::Base
   has_one :bank_information,    dependent: :destroy
   has_one :invoice_information, dependent: :destroy
 
-  has_many :extras,              dependent: :destroy
+  has_many :extras,             dependent: :destroy
   has_many :boxes,              dependent: :destroy
   has_many :routes,             dependent: :destroy
   has_many :orders,             dependent: :destroy, through: :boxes
@@ -17,6 +17,8 @@ class Distributor < ActiveRecord::Base
   has_many :packing_lists,      dependent: :destroy
   has_many :packages,           dependent: :destroy, through: :packing_lists
 
+  DEFAULT_TIME_ZONE = 'Wellington'
+  DEFAULT_CURRENCY = 'nzd'
   DEFAULT_ADVANCED_HOURS = 18
   DEFAULT_ADVANCED_DAYS = 3
   DEFAULT_AUTOMATIC_DELIVERY_HOUR = 18
@@ -31,13 +33,14 @@ class Distributor < ActiveRecord::Base
 
   composed_of :invoice_threshold,
     class_name: "Money",
-    mapping: [%w(invoice_threshold_cents cents), %w(currency currency_as_string)],
+    mapping: [%w(invoice_threshold_cents cents), %w(invoice_threshold_currency currency_as_string)],
     constructor: Proc.new { |cents, currency| Money.new(cents || 0, currency || Money.default_currency) },
     converter: Proc.new { |value| value.respond_to?(:to_money) ? value.to_money : raise(ArgumentError, "Can't convert #{value.class} to Money") }
 
   # Setup accessible (or protected) attributes for your model
   attr_accessible :email, :password, :password_confirmation, :remember_me, :name, :url, :company_logo, :company_logo_cache, :completed_wizard,
-    :remove_company_logo, :support_email, :invoice_threshold, :separate_bucky_fee, :advance_hour, :advance_days, :automatic_delivery_hour, :time_zone
+    :remove_company_logo, :support_email, :invoice_threshold, :separate_bucky_fee, :advance_hour, :advance_days, :automatic_delivery_hour,
+    :time_zone, :currency
 
   validates_presence_of :email
   validates_uniqueness_of :email
@@ -52,6 +55,8 @@ class Distributor < ActiveRecord::Base
 
   after_save :generate_required_daily_lists
 
+  default_value_for :time_zone,               DEFAULT_TIME_ZONE
+  default_value_for :currency,                DEFAULT_CURRENCY
   default_value_for :advance_hour,            DEFAULT_AUTOMATIC_DELIVERY_HOUR
   default_value_for :advance_days,            DEFAULT_ADVANCED_DAYS
   default_value_for :automatic_delivery_hour, DEFAULT_AUTOMATIC_DELIVERY_HOUR
@@ -69,8 +74,8 @@ class Distributor < ActiveRecord::Base
         if local_time.hour == distributor.advance_hour
           successful = distributor.generate_required_daily_lists
 
-          details = ["#{distributor.name}",
-                     "TZ #{distributor.time_zone} #{Time.current}"].join("\n")
+          details = ["#{distributor.name}", "TZ #{distributor.time_zone} #{Time.current}"].join("\n")
+
           if successful
             CronLog.log("Create daily list for #{distributor.id} at local time #{local_time.to_s(:pretty)} successful.", details)
           else
