@@ -1,12 +1,16 @@
 - title 'Customer Details'
 
-= simple_form_for(@customer) do |f|
-  = f.error_notification
-
+%h2 Existing Customer Login
+= simple_form_for(Customer.new, :as => :customer, :url => session_path(:customer)) do |f|
   .inputs
-    = hidden_field_tag :order_id,  @order.id
-    = f.association :distributor, :as => :hidden
-    = f.input :email, :as => :hidden
+    = f.input :email, :required => true, :label => false, :placeholder => "Email", :autofocus => true
+    = f.input :password, :required => true, :label => false, :placeholder => "Password"
+    = f.input :remember_me, :as => :boolean if Devise.mappings[:customer].rememberable?
+  .actions
+    = f.button :submit, "Customer Login"
+
+= form_tag(webstore_payment_path, class: 'nice', method: get) do |f|
+  .inputs
     = f.input :first_name
     = f.input :last_name
 

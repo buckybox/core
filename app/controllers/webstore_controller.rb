@@ -1,46 +1,53 @@
 class WebstoreController < ApplicationController
   before_filter :get_distributor
-  before_filter :get_order_from_session, :except => [:store, :buy]
+  before_filter :get_box, except: :store
 
   def store
     @hide_sidebars = true
     @boxes = @distributor.boxes
-    analytical.event('view_store', :with => {:distributor_id => @distributor.id})
   end
 
   def buy
-    @box = Box.find(params[:box_id])
-    @order = Order.new(:box => @box)
-    analytical.event('begin_order', :with => {:distributor_id => @distributor.id, :box => @box.id})
+    box_id = params[:box_id]
+
+    add_to_cart(box_id: box_id, force_clear: true)
   end
 
   def customer_details
-    @customer = Customer.new if @customer.nil?
-    @customer.email = params[:email]
-    @customer.distributor = @distributor
-    @address = @customer.build_address
+    likes = params[:likes]
+    dislikes = params[:dislikes]
+    extras = params[:extras]
+
+    add_to_cart(likes: likes, dislikes: dislikes, extras: extras)
   end
 
   def payment
+    address = params[:address]
+
+    add_to_cart(address: address) unless address.blank?
   end
 
   def success
-    @order.completed = true
-    @order.save
+    #create_customer
+    #create_order
+  end
 
-    analytical.event('complete_order', :with => {:distributor_id => @distributor.id})
-    session[:order_id] = nil
-    @box = @order.box
+  def create_password
+    # save password
   end
 
   private
 
-  def get_order_from_session
-    @order = Order.find(session[:order_id])
-    @box = @order.box
-    @customer = @order.customer
-    unless @order
-      redirect_to market_store_url(@distributor.parameter_name)
+  def add_to_cart(args, options = {})
+    session[:cart] = { order: {} } if !session[:cart].blank? || options[:force_clear]
+    session[:cart][:order].merge(args)
+  end
+
+  def get_box
+    if params[:box_id]
+      @box = Box.find(params[:box_id])
+    else
+      @box = Box.find(session[:cart][:order][:box_id])
     end
   end
 

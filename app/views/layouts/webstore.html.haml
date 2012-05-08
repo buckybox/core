@@ -12,10 +12,7 @@
 
         .nine.columns
           %strong= @distributor.name
-          %p 
-            = distributor_address(@distributor, :single_line => true)
-            %br
-            = @distributor.invoice_information.phone_1
+          %p= @distributor.invoice_information.join
 
       .row
         .twelve.columns
@@ -24,8 +21,7 @@
               = yield
           - else
             #content.row
-              #details.four.columns
-                = render :partial => 'market/order_details'
+              #details.four.columns= render partial: 'webstore/order_details', object: { box: @box }
 
               .eight.columns
                 - if show_title?

@@ -26,6 +26,8 @@ class Order < ActiveRecord::Base
   attr_accessible :box, :box_id, :account, :account_id, :quantity, :likes, :dislikes, :completed, :frequency, :schedule, :order_extras, :extras_one_off
 
   FREQUENCIES = %w(single weekly fortnightly monthly)
+  IS_ONE_OFF  = false
+  QUANTITY    = 1
 
   validates_presence_of :account_id, :box_id, :quantity, :frequency
   validates_numericality_of :quantity, greater_than: 0
@@ -44,8 +46,8 @@ class Order < ActiveRecord::Base
 
   delegate :local_time_zone, to: :distributor, allow_nil: true
 
-  default_value_for :extras_one_off, false
-  default_value_for :quantity, 1
+  default_value_for :extras_one_off, IS_ONE_OFF
+  default_value_for :quantity, QUANTITY
 
   def create_schedule(start_time, frequency, days_by_number = nil)
     if frequency != 'single' && days_by_number.nil?

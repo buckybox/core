@@ -6,7 +6,6 @@ class Extra < ActiveRecord::Base
   validates_presence_of :distributor, :name, :unit, :price
 
   attr_accessible :distributor, :name, :unit, :price
-  scope :alphabetically, order('name ASC, unit ASC')
 
   composed_of :price,
     class_name: "Money",
@@ -15,6 +14,8 @@ class Extra < ActiveRecord::Base
     converter: Proc.new { |value| value.respond_to?(:to_money) ? value.to_money : raise(ArgumentError, "Can't convert #{value.class} to Money") }
 
   after_create :update_distributors_boxes # This ensures that new extras are added to boxes which "include the entire catalog".  Currently the system doesn't understand the concept of "include the entire catalog" but only infers it from seeing that all extras for a given distributor are set on a given box.  This was an oversight and should be fixed in refactoring. #TODO
+
+  scope :alphabetically, order('name ASC, unit ASC')
 
   def to_hash
     { name: name, unit: unit, price_cents: price_cents, currency: currency }
@@ -39,6 +40,7 @@ class Extra < ActiveRecord::Base
 
   def fuzzy_match(extra)
     return 0 if extra.blank?
+
     match = 1.0
     name_match = Bucky::Util.fuzzy_match(name, extra.name)
     match *= name_match

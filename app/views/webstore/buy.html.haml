@@ -1,19 +1,27 @@
 - title 'Place Order'
 
-= simple_form_for(@order) do |f|
-  = f.error_notification
-
+= form_tag(webstore_customer_details_path, class: 'nice', method: :get) do |f|
   .inputs
-    = label_tag :email, :class => "email required" do
-      %abbr{:title => 'required'} *
-      Your Email
-    = text_field_tag :email, nil, :class => "email required input-text", :required => 'required'
-    = f.association :box, :as => :hidden
-    = f.input :quantity
-    = f.input :frequency, :collection => Order::FREQUENCIES.map{ |fr| [fr.titleize, fr] }, :include_blank => false 
-    = f.input :likes, :input_html => {:rows => '4'} if @box.likes?
-    = f.input :dislikes, :input_html => {:rows => '4'} if @box.dislikes?
+    = select_tag :frequency, options_from_collection_for_select(order_frequencies, :first, :last), include_blank: false
+    = text_area_tag :likes if @box.likes?
+    = text_area_tag :dislikes if @box.dislikes?
+
+    - if @box.extras_allowed?
+      %fieldset
+        %h5 Extras
+        = label_tag :include_extras, 'Include extras'
+        = check_box_tag :include_extras
+
+        - unless @box.extras_unlimited?
+          %p This @box is limited to #{@box.extras_limit} extras.
+
+        - @box.extras.alphabetically.each do |extra|
+          = label_tag "extras[#{extra.id}][count]", extra.name_with_unit
+          = text_field_tag "extras[#{extra.id}][count]", "", class: 'input-text', value: 0, id: "extras_#{extra.id}_count"
+          = select_tag :extras_one_off, options_from_collection_for_select([["include with every delivery", false], ["include in the next delivery only", true]], :first, :last), include_blank: false
+
+        %p Extras can be either a one off order or every delivery.
 
   .actions
-    = f.button :submit, 'Next'
+    = submit_tag 'Next', class: 'button radius'
 
