@@ -8,7 +8,7 @@ $(function() {
     $('.date_picker').dateinput({ format: 'yyyy-mm-dd', min: -1 });
   }
 
-  $('.customer_order #order_box_id').change(function() {
+  $('.customer_order #customer_order_box_id').change(function() {
     var box_id = $(this).val();
     var current_order = $(this).closest('.customer_order');
 
@@ -28,7 +28,7 @@ $(function() {
 
 function customer_order_init() {
   $('.customer_order').each( function() {
-    var box_id = $('#order_box_id', this).val();
+    var box_id = $('#customer_order_box_id', this).val();
 
     day_display($('.customer_order #order_frequency'));
 
