@@ -2,16 +2,16 @@
 
 %p Thanks, we've received your order for:
 
-%p
-  == Box Name: #{@box.name}
-  %br
-  == At: #{@box.price}
-  %br
-  == Quantity of: #{@order.quantity}
-  %br
-  == For a total of: #{@box.price * @order.quantity}
-  %br
-  == Ariving every: #{@order.frequency}
+%ul
+  %li
+    %strong Box Name:
+    = @box.name
+  %li
+    %strong At:
+    = @box.price.format
+  %li
+    %strong Ariving every:
+    = @order.frequency
 
 %p We shall email you confirming your delivery date, or if there's any problems with your voucher code.
 

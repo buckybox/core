@@ -70,6 +70,7 @@ class WebstoreController < ApplicationController
     extras = cart_hash.delete(:extras)["extras"]
     order = account.orders.new(cart_hash)
     order.order_extras = extras
+    order.completed = true
     order.save
 
     return order
