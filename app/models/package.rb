@@ -115,8 +115,7 @@ class Package < ActiveRecord::Base
   end
 
   def self.extras_summary(archived_extras)
-    archived_extras = archived_extras.map(&:to_hash) unless archived_extras.is_a? Hash
-    archived_extras
+    archived_extras.is_a?(Hash) ? archived_extras : archived_extras.map(&:to_hash)
   end
 
   def self.contents_description(box_name, quantity, order_extras)
@@ -124,7 +123,8 @@ class Package < ActiveRecord::Base
 
     result = "#{quantity}x #{box_name}"
     result << ", #{extras_description(order_extras)}" if order_extras.present?
-    result
+
+    return result
   end
 
   def self.extras_description(order_extras)

@@ -49,14 +49,6 @@ class Order < ActiveRecord::Base
   default_value_for :extras_one_off, IS_ONE_OFF
   default_value_for :quantity, QUANTITY
 
-  def create_schedule(start_time, frequency, days_by_number = nil)
-    if frequency != 'single' && days_by_number.nil?
-      raise(ArgumentError, "Unless it is a single order the schedule needs to specify days.")
-    end
-
-    create_schedule_for(:schedule, start_time, frequency, days_by_number)
-  end
-
   def self.deactivate_finished
     active.each do |order|
       order.use_local_time_zone do
@@ -103,7 +95,7 @@ class Order < ActiveRecord::Base
   def price
     result = individual_price * quantity
     result += extras_price if extras.present?
-    result
+    return result
   end
 
   def individual_price
@@ -198,8 +190,6 @@ class Order < ActiveRecord::Base
 
     order_extras.destroy_all
 
-    #return nil if collection.blank?
-
     collection.to_a.compact.each do |id, params|
       count = params[:count]
       next if count.to_i.zero?
@@ -210,6 +200,7 @@ class Order < ActiveRecord::Base
 
   def extras_description(show_frequency=false)
     extras_string = Package.extras_description(order_extras)
+
     if schedule.frequency.single? || !show_frequency
       extras_string
     else
@@ -221,7 +212,7 @@ class Order < ActiveRecord::Base
     packed_extras = order_extras.collect(&:to_hash)
     clear_extras if extras_one_off # Now that the extras are in a package, we don't need them on the order anymore, unless it reoccurs
 
-    packed_extras
+    return packed_extras
   end
 
   def clear_extras
@@ -244,7 +235,7 @@ class Order < ActiveRecord::Base
   def include_extras
     new_record? || !order_extras.count.zero?
   end
-  
+
   def extras_count
     order_extras.collect(&:count).sum
   end
@@ -255,6 +246,7 @@ class Order < ActiveRecord::Base
       raise "Didn't find an extra to import" if found_extra.blank?
       params.merge(found_extra.id.to_s => {count: extra.count})
     end
+
     self.order_extras = params
   end
 

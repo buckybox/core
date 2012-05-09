@@ -1,44 +1,34 @@
 - title 'Customer Details'
 
-%h2 Login
-%h3 (Existing customers)
-
-= simple_form_for(Customer.new, as: :customer, url: session_path(:customer)) do |f|
-  .inputs
-    = f.input :email, required: true, label: false, placeholder: "Email", autofocus: true
-    = f.input :password, required: true, label: false, placeholder: "Password"
-    = f.input :remember_me, as: :boolean if Devise.mappings[:customer].rememberable?
-
-  .actions
-    = f.button :submit, "Customer Login"
-
-%hr
-
 %h2 Delivery Details
 %h3 (New customers)
 
 = simple_form_for(:customer_details, url: webstore_payment_path) do |f|
   = f.error_notification
 
-  .inputs
-    = f.input :first_name
-    = f.input :last_name
-    = f.input :email
+  .row.inputs
+    .six.columns
+      = f.input :first_name
+      = f.input :last_name, required: false
+      = f.input :email
 
-  = f.simple_fields_for(:address) do |g|
-    .inputs
-      .row
-        .six.columns
-          = g.input :address_1
-          = g.input :address_2
-          = g.input :suburb
-          = g.input :city
-          = g.input :postcode
-        .six.columns
-          = g.input :delivery_note, as: :text, input_html: { rows: '4' }
-          = g.input :phone_1
-          = g.input :phone_2
-          = g.input :phone_3
+      = f.simple_fields_for(:address) do |g|
+        = g.input :address_1
+        = g.input :address_2, required: false
+        = g.input :suburb
+        = g.input :city
+        = g.input :postcode, required: false
+
+    .six.columns
+      = f.simple_fields_for(:address) do |g|
+        = g.input :phone_1, required: false
+        = g.input :phone_2, required: false
+        = g.input :phone_3, required: false
+        = g.input :delivery_note, as: :text, input_html: { rows: '9' }, required: false
+
+      = simple_fields_for(:route) do |h|
+        = h.input :frequency, collection: order_frequencies, include_blank: false
+        = h.input :start_date, collection: all_order_start_dates(@distributor), label: 'When would you like the delivery?', include_blank: false
 
   .actions
     = f.button :submit, 'Next'

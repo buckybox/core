@@ -33,8 +33,16 @@ class Route < ActiveRecord::Base
     distributor.routes.first # For now the first one is the default
   end
 
+  def self.default_route_on(distributor, time)
+    distributor.routes.find { |r| r.delivers_on?(time) }
+  end
+
   def next_run
     schedule.next_occurrence
+  end
+
+  def delivers_on?(time)
+    schedule.occurs_on?(time.to_time)
   end
 
   def delivery_days

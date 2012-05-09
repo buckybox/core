@@ -16,20 +16,21 @@ class WebstoreController < ApplicationController
   def customer_details
     likes          = params[:buy][:likes]
     dislikes       = params[:buy][:dislikes]
-    frequency      = params[:buy][:frequency]
     extras_one_off = params[:buy][:extras_one_off]
     extras         = params[:buy][:extra]
 
-    add_to_cart(likes: likes, dislikes: dislikes, frequency: frequency, extras_one_off: extras_one_off, extras: extras)
+    add_to_cart(likes: likes, dislikes: dislikes, extras_one_off: extras_one_off, extras: extras)
   end
 
   def payment
-    customer = params[:customer_details]
+    customer   = params[:customer_details]
+    frequency  = params[:route][:frequency]
+    start_date = params[:route][:start_date]
 
-    add_to_cart(customer: customer) unless customer.blank?
+    add_to_cart(customer: customer, frequency: frequency, start_date: start_date)
     order = create_order_from_cart(session[:cart])
 
-    session[:cart] = { box_id: @box.id, order_id: order.id }
+    add_to_cart(box_id: @box.id, order_id: order.id, force_clear: true)
   end
 
   def success
@@ -52,26 +53,35 @@ class WebstoreController < ApplicationController
   end
 
   def add_to_cart(args)
-    session[:cart] = { } if args.delete(:force_clear) || session[:cart].blank?
+    session[:cart] = {} if args.delete(:force_clear) || session[:cart].blank?
     session[:cart].merge!(args)
   end
 
   def create_order_from_cart(cart_hash)
-    address_hash = cart_hash[:customer].delete('address')
-    customer_hash = cart_hash.delete(:customer)
+    order = nil
 
-    route = Route.default_route(@distributor)
-    customer_hash.merge!(route_id: route.id)
-    customer = @distributor.customers.new(customer_hash)
-    address = Address.new(address_hash.merge(customer: customer))
-    customer.save
+    ActiveRecord::Base.transaction do
+      start_date = Date.parse(cart_hash.delete(:start_date))
 
-    account = customer.account
-    extras = cart_hash.delete(:extras)["extras"]
-    order = account.orders.new(cart_hash)
-    order.order_extras = extras
-    order.completed = true
-    order.save
+      address_hash = cart_hash[:customer].delete('address')
+      customer_hash = cart_hash.delete(:customer)
+
+      route = Route.default_route_on(@distributor, start_date)
+
+      customer_hash.merge!(route_id: route.id)
+      customer = @distributor.customers.new(customer_hash)
+      address = Address.new(address_hash.merge(customer: customer))
+      customer.save!
+
+      account = customer.account
+      extras = cart_hash.delete(:extras)["extras"]
+
+      order = account.orders.new(cart_hash)
+      order.order_extras = extras
+      order.completed = true
+      order.create_schedule(start_date, cart_hash[:frequency], [start_date.wday])
+      order.save!
+    end
 
     return order
   end
