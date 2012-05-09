@@ -19,7 +19,7 @@
       %td Account Number: 
       %td= @distributor.bank_information.account_number
     %tr
-      %td Make sure you use reference: 
+      %td Make sure you use reference:
       %td= @distributor.bank_information.customer_message
 
 = button_to 'Next', webstore_success_path(@distributor.parameter_name), :class => 'button radius'

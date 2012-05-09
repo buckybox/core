@@ -8,7 +8,7 @@ module Distributor::OrdersHelper
     return next_occurrences.map { |time| [time.strftime("%A, %B %d, %Y"), time.to_date] }
   end
 
-  def all_order_start_dates(distributor, count = 10)
+  def all_order_start_dates(distributor, count = 14)
     next_occurrences = distributor.routes.inject([]) { |a,r| a += order_start_dates(r, count); a }
     return next_occurrences.uniq.sort{ |a,b| a[1] <=> b[1] }
   end
