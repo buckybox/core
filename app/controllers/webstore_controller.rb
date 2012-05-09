@@ -23,6 +23,13 @@ class WebstoreController < ApplicationController
   end
 
   def payment
+    email = params[:customer_details][:email]
+
+    if Customer.find_by_email(email)
+      flash[:notice] = 'You email exists, please use another or log in first instead.'
+      render :customer_details and return
+    end
+
     customer   = params[:customer_details]
     frequency  = params[:route][:frequency]
     start_date = params[:route][:start_date]
