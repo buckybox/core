@@ -78,7 +78,7 @@ class Distributor::DeliveriesController < Distributor::ResourceController
         'Order Number', 'Delivery Number', 'Delivery Date', 'Customer Number', 'Customer First Name',
         'Customer Last Name', 'Customer Phone', 'New Customer', 'Delivery Address Line 1', 'Delivery Address Line 2',
         'Delivery Address Suburb', 'Delivery Address City', 'Delivery Address Postcode', 'Delivery Note',
-        'Box Contents Short Description', 'Box Type', 'Box Likes', 'Box Dislikes', 'Box Extra Line Items'
+        'Box Contents Short Description', 'Box Type', 'Box Likes', 'Box Dislikes', 'Box Extra Line Items', 'Price'
       ]
 
       deliveries.each do |delivery|
@@ -117,7 +117,8 @@ class Distributor::DeliveriesController < Distributor::ResourceController
             box.name,
             order.likes,
             order.dislikes,
-            package.extras_description
+            package.extras_description,
+            package.price
           ]
         end
       end

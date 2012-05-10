@@ -41,7 +41,7 @@ class Package < ActiveRecord::Base
 
   before_save :archive_data # TODO maybe this should be before_create?
 
-  scope :originals, where(original_package_id:nil)
+  scope :originals, where(original_package_id: nil)
 
   serialize :archived_extras
 
@@ -49,9 +49,9 @@ class Package < ActiveRecord::Base
   default_value_for :packing_method, 'auto'
 
   def self.calculated_price(box_price, route_fee, customer_discount)
-    box_price         = box_price.price            if box_price.is_a?(Box)
-    route_fee         = route_fee.fee              if route_fee.is_a?(Route)
-    
+    box_price = box_price.price if box_price.is_a?(Box)
+    route_fee = route_fee.fee   if route_fee.is_a?(Route)
+
     total_price = box_price + route_fee
     discounted(total_price, customer_discount)
   end
@@ -59,7 +59,7 @@ class Package < ActiveRecord::Base
   def self.calculated_extras_price(order_extras, customer_discount)
     order_extras = order_extras.collect(&:to_hash) unless order_extras.is_a? Hash
     customer_discount = customer_discount.discount if customer_discount.is_a?(Customer)
-    
+
     total_price = order_extras.collect do |order_extra|
       money = Money.new(order_extra[:price_cents], order_extra[:currency])
       count = (order_extra[:count] || 0)
