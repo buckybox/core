@@ -12,7 +12,7 @@
     %dt Notes
     %dd= current_customer.address.delivery_note
 
-    = simple_form_for(:route, url: webstore_payment_path) do |f|
+    = simple_form_for(:route, url: webstore_payment_path(@distributor.parameter_name)) do |f|
       .inputs
         = f.input :frequency, collection: order_frequencies, include_blank: false
         = f.input :start_date, collection: order_start_dates(current_customer.route), label: 'When would you like the delivery?', include_blank: false
@@ -23,7 +23,6 @@
 - else
   %h2 Login
   %h3 (Existing customer)
-
   = simple_form_for(Customer.new, as: :customer, url: session_path(:customer)) do |f|
     = f.error_notification
 
@@ -40,7 +39,7 @@
   %h2 Delivery Details
   %h3 (New customers)
 
-  = simple_form_for(:customer_details, url: webstore_payment_path) do |f|
+  = simple_form_for(:customer_details, url: webstore_payment_path(@distributor.parameter_name)) do |f|
     = f.error_notification
 
     .row.inputs

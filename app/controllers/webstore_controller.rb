@@ -14,12 +14,16 @@ class WebstoreController < ApplicationController
   end
 
   def customer_details
-    likes          = params[:buy][:likes]
-    dislikes       = params[:buy][:dislikes]
-    extras_one_off = params[:buy][:extras_one_off]
-    extras         = params[:buy][:extra]
+    if params[:buy]
+      likes          = params[:buy][:likes]
+      dislikes       = params[:buy][:dislikes]
+      extras_one_off = params[:buy][:extras_one_off]
+      extras         = params[:buy][:extra]
 
-    add_to_cart(likes: likes, dislikes: dislikes, extras_one_off: extras_one_off, extras: extras)
+      add_to_cart(likes: likes, dislikes: dislikes, extras_one_off: extras_one_off, extras: extras)
+    end
+
+    session[:customer_return_to] = webstore_customer_details_url(@distributor.parameter_name, method: :post)
   end
 
   def payment

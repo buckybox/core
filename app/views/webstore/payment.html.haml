@@ -3,11 +3,11 @@
 %table
   %thead
     %tr
-      %th{:colspan => 2} Bank Transfer Information
+      %th{ colspan: 2 } Bank Transfer Information
 
   %tbody
     %tr
-      %td{:colspan => 2} Use the below information to make payment via bank transfer.
+      %td{ colspan: 2 } Use the below information to make payment via bank transfer.
 
     %tr
       %td Bank: 
@@ -22,4 +22,4 @@
       %td Make sure you use reference:
       %td= @distributor.bank_information.customer_message
 
-= button_to 'Next', webstore_success_path(@distributor.parameter_name), :class => 'button radius'
+= button_to 'Next', webstore_success_path(@distributor.parameter_name), class: 'button radius'
