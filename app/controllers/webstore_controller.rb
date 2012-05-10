@@ -23,7 +23,7 @@ class WebstoreController < ApplicationController
       add_to_cart(likes: likes, dislikes: dislikes, extras_one_off: extras_one_off, extras: extras)
     end
 
-    session[:customer_return_to] = webstore_customer_details_url(@distributor.parameter_name, method: :post)
+    session[:customer_return_to] = webstore_customer_details_url(@distributor.parameter_name)
   end
 
   def payment
