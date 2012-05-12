@@ -66,7 +66,6 @@ class Order < ActiveRecord::Base
   end
 
   def create_schedule(start_time, frequency, days_by_number = nil)
-    binding.pry
     if start_time.is_a?(String)
       start_time = Time.zone.parse(start_time)
     elsif start_time.is_a?(Date)
