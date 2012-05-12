@@ -17,7 +17,7 @@ class Distributor::OrdersController < Distributor::ResourceController
   end
 
   def create
-    @account       = current_distributor.accounts.find(params[:account_id])
+    @account = current_distributor.accounts.find(params[:account_id])
 
     load_form
 
@@ -25,12 +25,15 @@ class Distributor::OrdersController < Distributor::ResourceController
     order_hash.merge!({account_id: @account.id, completed: true})
 
     @order = Order.new(order_hash)
-    @order.create_schedule(params[:start_date], params[:order][:frequency], params[:days])
 
-    if @order.save
-      redirect_to [:distributor, @account.customer]
-    else
-      render 'new'
+    unless @order.create_schedule(params[:start_date], params[:order][:frequency], params[:days])
+      flash[:error] = "Unless it is a single order, orders need a day of the week selection."
+      render 'new' and return
+    end
+
+    create!  do |success, failure|
+      success.html { redirect_to [:distributor, @account.customer] }
+      failure.html { render 'new' }
     end
   end
 
@@ -48,10 +51,9 @@ class Distributor::OrdersController < Distributor::ResourceController
     # Will revisit when we have time to build a proper UI for it
     params[:order].delete(:frequency)
 
-    if @order.update_attributes(params[:order])
-      redirect_to [:distributor, @account.customer]
-    else
-      render 'edit'
+    update!  do |success, failure|
+      success.html { redirect_to [:distributor, @account.customer] }
+      failure.html { render 'edit' }
     end
   end
 
