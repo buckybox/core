@@ -2,7 +2,7 @@ class Customer::OrdersController < Customer::ResourceController
   actions :new, :edit, :create, :update
 
   respond_to :html, :xml, :json
-  
+
   before_filter :filter_params, only: [:create, :update]
 
   def filter_params
@@ -21,10 +21,7 @@ class Customer::OrdersController < Customer::ResourceController
     @order.account   = current_customer.account
     @order.completed = true
 
-    unless @order.create_schedule(params[:start_date], params[:order][:frequency], params[:days])
-      flash[:error] = "Unless it is a single order, orders need a day of the week selection."
-      render 'new' and return
-    end
+    @order.create_schedule(params[:start_date], params[:order][:frequency], params[:days])
 
     create! do |success, failure|
       success.html { redirect_to customer_root_url }

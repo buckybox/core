@@ -26,10 +26,7 @@ class Distributor::OrdersController < Distributor::ResourceController
 
     @order = Order.new(order_hash)
 
-    unless @order.create_schedule(params[:start_date], params[:order][:frequency], params[:days])
-      flash[:error] = "Unless it is a single order, orders need a day of the week selection."
-      render 'new' and return
-    end
+    @order.create_schedule(params[:start_date], params[:order][:frequency], params[:days])
 
     create!  do |success, failure|
       success.html { redirect_to [:distributor, @account.customer] }

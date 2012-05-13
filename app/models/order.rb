@@ -30,7 +30,7 @@ class Order < ActiveRecord::Base
   validates_presence_of :account_id, :box_id, :quantity, :frequency
   validates_numericality_of :quantity, greater_than: 0
   validates_inclusion_of :frequency, in: FREQUENCIES, message: "%{value} is not a valid frequency"
-  validate :schedule_includes_route, unless: :schedule_empty?
+  validate :schedule_includes_route
   validate :extras_within_box_limit
 
   before_validation :activate, if: :just_completed?
