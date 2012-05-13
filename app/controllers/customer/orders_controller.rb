@@ -21,11 +21,14 @@ class Customer::OrdersController < Customer::ResourceController
     @order.account   = current_customer.account
     @order.completed = true
 
-    @order.create_schedule(params[:start_date], params[:order][:frequency], params[:days])
+    unless @order.create_schedule(params[:start_date], params[:order][:frequency], params[:days])
+      flash[:error] = "Unless it is a single order, orders need a day of the week selection."
+      render 'new' and return
+    end
 
     create! do |success, failure|
       success.html { redirect_to customer_root_url }
-      failure.html { render action: 'new' }
+      failure.html { render 'new' }
     end
   end
 
