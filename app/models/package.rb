@@ -41,16 +41,18 @@ class Package < ActiveRecord::Base
 
   before_save :archive_data # TODO maybe this should be before_create?
 
-  scope :originals, where(original_package_id:nil)
+  scope :originals, where(original_package_id: nil)
 
   serialize :archived_extras
 
   default_value_for :status, 'unpacked'
   default_value_for :packing_method, 'auto'
 
+  delegate :date, to: :packing_list, allow_nil: true
+
   def self.calculated_price(box_price, route_fee, customer_discount)
-    box_price         = box_price.price            if box_price.is_a?(Box)
-    route_fee         = route_fee.fee              if route_fee.is_a?(Route)
+    box_price = box_price.price if box_price.is_a?(Box)
+    route_fee = route_fee.fee   if route_fee.is_a?(Route)
 
     total_price = box_price + route_fee
 
@@ -77,9 +79,11 @@ class Package < ActiveRecord::Base
   end
 
   def price
-    result = individual_price * archived_order_quantity
+    result = individual_price
+    result = result * archived_order_quantity if archived_order_quantity
     result += individual_extras_price if archived_extras.present?
-    result
+
+    return result
   rescue => e
     raise "Error calculating price: #{individual_price.inspect} * #{archived_order_quantity.inspect}"
   end
@@ -136,6 +140,49 @@ class Package < ActiveRecord::Base
     self[:archived_extras] || []
   end
 
+  # TODO: Not sure if this fits in the model might need to go in Delivery CSV model down the road
+  def self.csv_headers
+    [
+      'Delivery Route', 'Delivery Sequence Number', 'Delivery Pickup Point Name',
+      'Order Number', 'Package Number', 'Delivery Date', 'Customer Number', 'Customer First Name',
+      'Customer Last Name', 'Customer Phone', 'New Customer', 'Delivery Address Line 1', 'Delivery Address Line 2',
+      'Delivery Address Suburb', 'Delivery Address City', 'Delivery Address Postcode', 'Delivery Note',
+      'Box Contents Short Description', 'Box Type', 'Box Likes', 'Box Dislikes', 'Box Extra Line Items', 'Price'
+    ]
+  end
+
+  def to_csv
+    # At the moment a package only has one delivery. This will change with recheduling, repacking and the 
+    # refactor. Was included because we thought we were going to do rescheduling sooner then we did.
+    delivery = deliveries.first
+
+    [
+      route.name,
+      ((!delivery.nil? && delivery.position) ? ("%03d" % delivery.position) : nil),
+      nil,
+      order.id,
+      id,
+      date.strftime("%-d %b %Y"),
+      customer.number,
+      customer.first_name,
+      customer.last_name,
+      address.phone_1,
+      (customer.new? ? 'NEW' : nil),
+      address.address_1,
+      address.address_2,
+      address.suburb,
+      address.city,
+      address.postcode,
+      address.delivery_note,
+      order.string_sort_code,
+      box.name,
+      order.likes,
+      order.dislikes,
+      extras_description,
+      price
+    ]
+  end
+
   private
 
   def archive_data
@@ -148,12 +195,13 @@ class Package < ActiveRecord::Base
     self.archived_route_fee         = route.fee
     self.archived_customer_discount = customer.discount
     self.archived_order_quantity    = order.quantity
-    archive_extras
+
+    return archive_extras
   end
 
   def archive_extras
     if archived_extras.blank?
-      self.archived_extras          = order.pack_and_update_extras
+      self.archived_extras = order.pack_and_update_extras
     end
   end
 end

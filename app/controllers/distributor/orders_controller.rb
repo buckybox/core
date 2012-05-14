@@ -25,12 +25,12 @@ class Distributor::OrdersController < Distributor::ResourceController
     order_hash.merge!({ account_id: @account.id, completed: true })
 
     @order = Order.new(order_hash)
+
     @order.create_schedule(params[:start_date], params[:order][:frequency], params[:days])
 
-    if @order.save
-      redirect_to [:distributor, @account.customer]
-    else
-      render 'new'
+    create!  do |success, failure|
+      success.html { redirect_to [:distributor, @account.customer] }
+      failure.html { render 'new' }
     end
   end
 
@@ -48,10 +48,9 @@ class Distributor::OrdersController < Distributor::ResourceController
     # Will revisit when we have time to build a proper UI for it
     params[:order].delete(:frequency)
 
-    if @order.update_attributes(params[:order])
-      redirect_to [:distributor, @account.customer]
-    else
-      render 'edit'
+    update!  do |success, failure|
+      success.html { redirect_to [:distributor, @account.customer] }
+      failure.html { render 'edit' }
     end
   end
 
