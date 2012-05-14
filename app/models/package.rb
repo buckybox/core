@@ -139,7 +139,7 @@ class Package < ActiveRecord::Base
   def self.csv_headers
     [
       'Delivery Route', 'Delivery Sequence Number', 'Delivery Pickup Point Name',
-      'Order Number', 'Delivery Number', 'Delivery Date', 'Customer Number', 'Customer First Name',
+      'Order Number', 'Package Number', 'Delivery Date', 'Customer Number', 'Customer First Name',
       'Customer Last Name', 'Customer Phone', 'New Customer', 'Delivery Address Line 1', 'Delivery Address Line 2',
       'Delivery Address Suburb', 'Delivery Address City', 'Delivery Address Postcode', 'Delivery Note',
       'Box Contents Short Description', 'Box Type', 'Box Likes', 'Box Dislikes', 'Box Extra Line Items', 'Price'
@@ -156,7 +156,7 @@ class Package < ActiveRecord::Base
       "%03d" % delivery.position,
       nil,
       order.id,
-      delivery.id,
+      id,
       delivery.date.strftime("%-d %b %Y"),
       customer.number,
       customer.first_name,

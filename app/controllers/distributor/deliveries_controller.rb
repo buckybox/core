@@ -67,19 +67,18 @@ class Distributor::DeliveriesController < Distributor::ResourceController
     export_type = (params[:deliveries] ? 'delivery' : 'packing')
 
     if export_type == 'delivery'
-      export_items = current_distributor.deliveries.where(id: params[:deliveries]).reverse
-
-      csv_output = CSV.generate do |csv|
-        csv << Delivery.csv_headers
-        export_items.each { |delivery| csv << delivery.to_csv }
-      end
+      export_items = current_distributor.deliveries.where(id: params[:deliveries])
+      export_items = export_items.sort_by { |ei| ei.delivery_number }
+      csv_headers = Delivery.csv_headers
     else
       export_items = current_distributor.packages.where(id: params[:packages])
+      export_items = export_items.sort_by { |ei| [ei.archived_box_name, ei.id] }
+      csv_headers = Package.csv_headers
+    end
 
-      csv_output = CSV.generate do |csv|
-        csv << Package.csv_headers
-        export_items.each { |package| csv << package.to_csv }
-      end
+    csv_output = CSV.generate do |csv|
+      csv << csv_headers
+      export_items.each { |package| csv << package.to_csv }
     end
 
     if export_items
