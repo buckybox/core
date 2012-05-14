@@ -77,15 +77,15 @@ describe Package do
   end
 
   context '.csv_headers' do
-    specify { Package.csv_headers.size.should == 22 }
+    specify { Package.csv_headers.size.should == 23 }
   end
 
   context '#to_csv' do
     specify { package.to_csv[0].should == package.route.name }
-    specify { package.to_csv[2].should == package.order.id }
-    specify { package.to_csv[3].should == package.id }
-    specify { package.to_csv[4].should == package.date.strftime("%-d %b %Y") }
-    specify { package.to_csv[5].should == package.customer.number }
-    specify { package.to_csv[6].should == package.customer.first_name }
+    specify { package.to_csv[3].should == package.order.id }
+    specify { package.to_csv[4].should == package.id }
+    specify { package.to_csv[5].should == package.date.strftime("%-d %b %Y") }
+    specify { package.to_csv[6].should == package.customer.number }
+    specify { package.to_csv[7].should == package.customer.first_name }
   end
 end

@@ -157,7 +157,7 @@ class Package < ActiveRecord::Base
 
     [
       route.name,
-      (delivery.position ? ("%03d" % delivery.position) : nil),
+      ((!delivery.nil? && delivery.position) ? ("%03d" % delivery.position) : nil),
       nil,
       order.id,
       id,
