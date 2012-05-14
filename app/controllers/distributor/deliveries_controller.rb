@@ -71,8 +71,16 @@ class Distributor::DeliveriesController < Distributor::ResourceController
       export_items = export_items.sort_by { |ei| ei.position }
       csv_headers = Delivery.csv_headers
     else
-      export_items = current_distributor.packages.where(id: params[:packages])
-      export_items = export_items.sort_by { |ei| [ei.archived_box_name, ei.id] }
+      packages = current_distributor.packages.where(id: params[:packages])
+
+      export_items = []
+
+      packages.group_by(&:box).each do |box, array|
+        array.each do |package|
+          export_items << package
+        end
+      end
+
       csv_headers = Package.csv_headers
     end
 

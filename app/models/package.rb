@@ -142,7 +142,7 @@ class Package < ActiveRecord::Base
   # TODO: Not sure if this fits in the model might need to go in Delivery CSV model down the road
   def self.csv_headers
     [
-      'Delivery Route', 'Delivery Pickup Point Name',
+      'Delivery Route', 'Delivery Sequence Number', 'Delivery Pickup Point Name',
       'Order Number', 'Package Number', 'Delivery Date', 'Customer Number', 'Customer First Name',
       'Customer Last Name', 'Customer Phone', 'New Customer', 'Delivery Address Line 1', 'Delivery Address Line 2',
       'Delivery Address Suburb', 'Delivery Address City', 'Delivery Address Postcode', 'Delivery Note',
@@ -157,6 +157,7 @@ class Package < ActiveRecord::Base
 
     [
       route.name,
+      (delivery.position ? ("%03d" % delivery.position) : nil),
       nil,
       order.id,
       id,
