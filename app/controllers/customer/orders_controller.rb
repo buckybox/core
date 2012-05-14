@@ -2,7 +2,7 @@ class Customer::OrdersController < Customer::ResourceController
   actions :new, :edit, :create, :update
 
   respond_to :html, :xml, :json
-  
+
   before_filter :filter_params, only: [:create, :update]
 
   def filter_params
@@ -25,7 +25,7 @@ class Customer::OrdersController < Customer::ResourceController
 
     create! do |success, failure|
       success.html { redirect_to customer_root_url }
-      failure.html { render action: 'new' }
+      failure.html { render 'new' }
     end
   end
 

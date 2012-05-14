@@ -30,7 +30,7 @@ class Order < ActiveRecord::Base
   validates_presence_of :account_id, :box_id, :quantity, :frequency
   validates_numericality_of :quantity, greater_than: 0
   validates_inclusion_of :frequency, in: FREQUENCIES, message: "%{value} is not a valid frequency"
-  validate :schedule_includes_route, unless: :schedule_empty?
+  validate :schedule_includes_route
   validate :extras_within_box_limit
 
   before_validation :activate, if: :just_completed?
@@ -46,14 +46,6 @@ class Order < ActiveRecord::Base
 
   default_value_for :extras_one_off, false
   default_value_for :quantity, 1
-
-  def create_schedule(start_time, frequency, days_by_number = nil)
-    if frequency != 'single' && days_by_number.nil?
-      raise(ArgumentError, "Unless it is a single order the schedule needs to specify days.")
-    end
-
-    create_schedule_for(:schedule, start_time, frequency, days_by_number)
-  end
 
   def self.deactivate_finished
     active.each do |order|
@@ -193,10 +185,8 @@ class Order < ActiveRecord::Base
 
   def order_extras=(collection)
     raise "I wasn't expecting you to set these directly" unless collection.is_a?(Hash) || collection.is_a?(Array)
-    
-    order_extras.destroy_all
 
-    #return nil if collection.blank?
+    order_extras.destroy_all
 
     collection.to_a.compact.each do |id, params|
       count = params[:count]
@@ -208,6 +198,7 @@ class Order < ActiveRecord::Base
 
   def extras_description(show_frequency=false)
     extras_string = Package.extras_description(order_extras)
+
     if schedule.frequency.single? || !show_frequency
       extras_string
     else
@@ -270,7 +261,7 @@ class Order < ActiveRecord::Base
 
   def extras_within_box_limit
     if box.present? && !box.extras_unlimited? && extras_count > box.extras_limit
-      errors.add(:base, "There is more than #{box.extras_limit} extras for this box") 
+      errors.add(:base, "There is more than #{box.extras_limit} extras for this box")
     end
   end
 
