@@ -135,6 +135,49 @@ class Package < ActiveRecord::Base
     self[:archived_extras] || []
   end
 
+  # TODO: Not sure if this fits in the model might need to go in Delivery CSV model down the road
+  def self.csv_headers
+    [
+      'Delivery Route', 'Delivery Sequence Number', 'Delivery Pickup Point Name',
+      'Order Number', 'Delivery Number', 'Delivery Date', 'Customer Number', 'Customer First Name',
+      'Customer Last Name', 'Customer Phone', 'New Customer', 'Delivery Address Line 1', 'Delivery Address Line 2',
+      'Delivery Address Suburb', 'Delivery Address City', 'Delivery Address Postcode', 'Delivery Note',
+      'Box Contents Short Description', 'Box Type', 'Box Likes', 'Box Dislikes', 'Box Extra Line Items', 'Price'
+    ]
+  end
+
+  def to_csv
+    # At the moment a package only has one delivery. This will change with recheduling, repacking and the 
+    # refactor. Was included because we thought we were going to do rescheduling sooner then we did.
+    delivery = deliveries.first
+
+    [
+      route.name,
+      "%03d" % delivery.position,
+      nil,
+      order.id,
+      delivery.id,
+      delivery.date.strftime("%-d %b %Y"),
+      customer.number,
+      customer.first_name,
+      customer.last_name,
+      address.phone_1,
+      (delivery.customer.new? ? 'NEW' : nil),
+      address.address_1,
+      address.address_2,
+      address.suburb,
+      address.city,
+      address.postcode,
+      address.delivery_note,
+      order.string_sort_code,
+      box.name,
+      order.likes,
+      order.dislikes,
+      extras_description,
+      price
+    ]
+  end
+
   private
 
   def archive_data

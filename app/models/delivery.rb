@@ -76,6 +76,41 @@ class Delivery < ActiveRecord::Base
     "[ID##{id}] Delivery of #{package.contents_description} at #{package.price} each."
   end
 
+  # TODO: Not sure if this fits in the model might need to go in Delivery CSV model down the road
+  def self.csv_headers
+    [
+      'Delivery Route', 'Delivery Sequence Number', 'Delivery Pickup Point Name',
+      'Order Number', 'Delivery Number', 'Delivery Date', 'Customer Number', 'Customer First Name',
+      'Customer Last Name', 'Customer Phone', 'New Customer', 'Delivery Address Line 1', 'Delivery Address Line 2',
+      'Delivery Address Suburb', 'Delivery Address City', 'Delivery Address Postcode', 'Delivery Note',
+      'Box Contents Short Description', 'Price'
+    ]
+  end
+
+  def to_csv
+    [
+      route.name,
+      "%03d" % position,
+      nil,
+      order.id,
+      id,
+      date.strftime("%-d %b %Y"),
+      customer.number,
+      customer.first_name,
+      customer.last_name,
+      address.phone_1,
+      (customer.new? ? 'NEW' : nil),
+      address.address_1,
+      address.address_2,
+      address.suburb,
+      address.city,
+      address.postcode,
+      address.delivery_note,
+      order.string_sort_code,
+      package.price
+    ]
+  end
+
   private
 
   def default_route
