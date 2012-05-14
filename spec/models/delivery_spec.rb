@@ -113,4 +113,12 @@ describe Delivery do
       specify { expect { Fabricate.build(:delivery, status_change_type: 'manual', status: 'pending').should_not change(Delivery.last, :status).to('delivered') } }
     end
   end
+
+  context '.csv_headers' do
+    specify { Delivery.csv_headers.size.should == 19 }
+  end
+
+  context '#to_csv' do
+    specify { delivery.to_csv.map(&:to_s).should == ["Route 1", "", "", "1", "", "13 May 2012", "1", "First Name 0", "", "", "NEW", "1 Address St", "", "Suburb", "City", "", "", "BOX 0", "10.00"] }
+  end
 end

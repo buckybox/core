@@ -48,6 +48,8 @@ class Package < ActiveRecord::Base
   default_value_for :status, 'unpacked'
   default_value_for :packing_method, 'auto'
 
+  delegate :date, to: :packing_list, allow_nil: true
+
   def self.calculated_price(box_price, route_fee, customer_discount)
     box_price = box_price.price if box_price.is_a?(Box)
     route_fee = route_fee.fee   if route_fee.is_a?(Route)
@@ -78,7 +80,7 @@ class Package < ActiveRecord::Base
   def price
     result = individual_price * archived_order_quantity
     result += individual_extras_price if archived_extras.present?
-    result
+    return result
   rescue => e
     raise "Error calculating price: #{individual_price.inspect} * #{archived_order_quantity.inspect}"
   end
@@ -123,7 +125,7 @@ class Package < ActiveRecord::Base
 
     result = "#{quantity}x #{box_name}"
     result << ", #{extras_description(order_extras)}" if order_extras.present?
-    result
+    return result
   end
 
   def self.extras_description(order_extras)
@@ -138,7 +140,7 @@ class Package < ActiveRecord::Base
   # TODO: Not sure if this fits in the model might need to go in Delivery CSV model down the road
   def self.csv_headers
     [
-      'Delivery Route', 'Delivery Sequence Number', 'Delivery Pickup Point Name',
+      'Delivery Route', 'Delivery Pickup Point Name',
       'Order Number', 'Package Number', 'Delivery Date', 'Customer Number', 'Customer First Name',
       'Customer Last Name', 'Customer Phone', 'New Customer', 'Delivery Address Line 1', 'Delivery Address Line 2',
       'Delivery Address Suburb', 'Delivery Address City', 'Delivery Address Postcode', 'Delivery Note',
@@ -153,16 +155,15 @@ class Package < ActiveRecord::Base
 
     [
       route.name,
-      "%03d" % delivery.position,
       nil,
       order.id,
       id,
-      delivery.date.strftime("%-d %b %Y"),
+      date.strftime("%-d %b %Y"),
       customer.number,
       customer.first_name,
       customer.last_name,
       address.phone_1,
-      (delivery.customer.new? ? 'NEW' : nil),
+      (customer.new? ? 'NEW' : nil),
       address.address_1,
       address.address_2,
       address.suburb,
@@ -190,12 +191,13 @@ class Package < ActiveRecord::Base
     self.archived_route_fee         = route.fee
     self.archived_customer_discount = customer.discount
     self.archived_order_quantity    = order.quantity
-    archive_extras
+
+    return archive_extras
   end
 
   def archive_extras
     if archived_extras.blank?
-      self.archived_extras          = order.pack_and_update_extras
+      self.archived_extras = order.pack_and_update_extras
     end
   end
 end

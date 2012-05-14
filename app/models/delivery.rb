@@ -35,6 +35,8 @@ class Delivery < ActiveRecord::Base
   default_value_for :status, 'pending'
   default_value_for :status_change_type, 'auto'
 
+  delegate :date, to: :delivery_list, allow_nil: true
+
   def self.change_statuses(deliveries, new_status, options = {})
     return false unless STATUS.include?(new_status)
     return false if (new_status == 'rescheduled' || new_status == 'repacked') && options[:date].nil?
@@ -58,10 +60,6 @@ class Delivery < ActiveRecord::Base
     end
 
     return auto_delivered
-  end
-
-  def date
-    delivery_list.date
   end
 
   def quantity
@@ -90,7 +88,7 @@ class Delivery < ActiveRecord::Base
   def to_csv
     [
       route.name,
-      "%03d" % position,
+      (position ? ("%03d" % position) : nil),
       nil,
       order.id,
       id,
