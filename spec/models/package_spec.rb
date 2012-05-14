@@ -81,6 +81,11 @@ describe Package do
   end
 
   context '#to_csv' do
-    specify { package.to_csv.map(&:to_s).should == '' }
+    specify { package.to_csv[0].should == package.route.name }
+    specify { package.to_csv[2].should == package.order.id }
+    specify { package.to_csv[3].should == package.id }
+    specify { package.to_csv[4].should == package.date.strftime("%-d %b %Y") }
+    specify { package.to_csv[5].should == package.customer.number }
+    specify { package.to_csv[6].should == package.customer.first_name }
   end
 end

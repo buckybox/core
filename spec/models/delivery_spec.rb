@@ -119,6 +119,11 @@ describe Delivery do
   end
 
   context '#to_csv' do
-    specify { delivery.to_csv.map(&:to_s).should == ["Route 1", "", "", "1", "", "13 May 2012", "1", "First Name 0", "", "", "NEW", "1 Address St", "", "Suburb", "City", "", "", "BOX 0", "10.00"] }
+    specify { delivery.to_csv[0].should == delivery.route.name }
+    specify { delivery.to_csv[3].should == delivery.order.id }
+    specify { delivery.to_csv[4].should == delivery.id }
+    specify { delivery.to_csv[5].should == delivery.date.strftime("%-d %b %Y") }
+    specify { delivery.to_csv[6].should == delivery.customer.number }
+    specify { delivery.to_csv[7].should == delivery.customer.first_name }
   end
 end

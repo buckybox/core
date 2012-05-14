@@ -78,8 +78,10 @@ class Package < ActiveRecord::Base
   end
 
   def price
-    result = individual_price * archived_order_quantity
+    result = individual_price
+    result = result * archived_order_quantity if archived_order_quantity
     result += individual_extras_price if archived_extras.present?
+
     return result
   rescue => e
     raise "Error calculating price: #{individual_price.inspect} * #{archived_order_quantity.inspect}"

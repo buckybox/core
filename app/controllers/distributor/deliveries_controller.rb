@@ -64,9 +64,9 @@ class Distributor::DeliveriesController < Distributor::ResourceController
   def export
     redirect_to :back and return unless params[:deliveries] || params[:packages]
 
-    export_type = (params[:deliveries] ? 'delivery' : 'packing')
+    export_type = (params[:deliveries] ? :delivery : :packing)
 
-    if export_type == 'delivery'
+    if export_type == :delivery
       export_items = current_distributor.deliveries.where(id: params[:deliveries])
       export_items = export_items.sort_by { |ei| ei.delivery_number }
       csv_headers = Delivery.csv_headers
