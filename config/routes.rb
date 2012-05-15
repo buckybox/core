@@ -16,6 +16,7 @@ BuckyBox::Application.routes.draw do
   namespace :distributor do
     root to: 'dashboard#index'
     get 'dashboard', controller: 'dashboard', action: 'index'
+    post 'events/:id/dismiss', controller: 'dashboard', action: 'dismiss_event', as: 'dismiss_event'
 
     namespace :wizard do
       get 'business'
@@ -40,7 +41,7 @@ BuckyBox::Application.routes.draw do
     resource  :bank_information,    only: [:create, :update]
     resource  :invoice_information, only: [:create, :update]
     resources :boxes,               except: [:index]
-    resources :extras,               except: [:index, :show]
+    resources :extras,              except: [:index, :show]
     resources :routes,              except: [:index, :show]
     resources :transactions,        only: :create
 
@@ -101,12 +102,6 @@ BuckyBox::Application.routes.draw do
       member do
         get 'receive_payment', action: :receive_payment, as: 'receive_payment'
         post 'save_payment', action: :save_payment, as: 'save_payment'
-      end
-    end
-
-    resources :events do
-      member do
-        post 'dismiss_notification'
       end
     end
   end
