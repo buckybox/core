@@ -6,7 +6,7 @@ class Admin::DistributorsController < Admin::ResourceController
 
   def impersonate
     distributor = Distributor.find(params[:id])
-    sign_in(distributor)
+    sign_in(distributor, bypass: true) # bypass means it won't update last logged in stats
 
     redirect_to distributor_root_url
   end

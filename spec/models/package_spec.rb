@@ -1,7 +1,9 @@
 require 'spec_helper'
 
 describe Package do
-  specify { Fabricate(:package).should be_valid }
+  let(:package) { Fabricate.build(:package) }
+
+  specify { package.should be_valid }
 
   context :archive_data do
     before do
@@ -49,21 +51,19 @@ describe Package do
 
   context '#individual_price' do
     before do
-      @package = Fabricate(:package)
+      @price    = package.archived_box_price
+      @fee      = package.archived_route_fee
+      @discount = package.archived_customer_discount
 
-      @price    = @package.archived_box_price
-      @fee      = @package.archived_route_fee
-      @discount = @package.archived_customer_discount
-
-      box = @package.box
+      box = package.box
       box.price = 25
       box.save
 
-      route = @package.route
+      route = package.route
       route.fee = 10
       route.save
 
-      customer = @package.customer
+      customer = package.customer
       customer.discount = 0.2
       customer.save
 
@@ -72,7 +72,20 @@ describe Package do
       @new_discount = customer.discount
     end
 
-    specify { @package.individual_price.should == Package.calculated_price(@price, @fee, @discount) }
-    specify { @package.individual_price.should_not == Package.calculated_price(@new_price, @new_fee, @new_discount) }
+    specify { package.individual_price.should == Package.calculated_price(@price, @fee, @discount) }
+    specify { package.individual_price.should_not == Package.calculated_price(@new_price, @new_fee, @new_discount) }
+  end
+
+  context '.csv_headers' do
+    specify { Package.csv_headers.size.should == 23 }
+  end
+
+  context '#to_csv' do
+    specify { package.to_csv[0].should == package.route.name }
+    specify { package.to_csv[3].should == package.order.id }
+    specify { package.to_csv[4].should == package.id }
+    specify { package.to_csv[5].should == package.date.strftime("%-d %b %Y") }
+    specify { package.to_csv[6].should == package.customer.number }
+    specify { package.to_csv[7].should == package.customer.first_name }
   end
 end
