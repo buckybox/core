@@ -13,14 +13,6 @@ class ImportTransaction < ActiveRecord::Base
 
   attr_accessible :customer, :customer_id, :transaction_date, :amount_cents, :removed, :description, :confidence, :import_transaction_list, :match, :draft
   
-  scope :ordered, order("transaction_date ASC, created_at ASC")
-  scope :draft, where(['import_transactions.draft = ?', true])
-  scope :processed, where(['import_transactions.draft = ?', false])
-
-  validate :customer_belongs_to_distributor
-
-  after_validation :update_account, if: :changed?
-  
   MATCH_MATCHED = "matched"
   MATCH_UNABLE_TO_MATCH = "unable_to_match"
   MATCH_DUPLICATE = "duplicate"
@@ -31,7 +23,26 @@ class ImportTransaction < ActiveRecord::Base
                  MATCH_UNABLE_TO_MATCH => 3}
   MATCH_SELECT = MATCH_TYPES.except(MATCH_MATCHED).collect{|symbol, index| [symbol.humanize, symbol]}
 
+  scope :ordered, order("transaction_date ASC, created_at ASC")
+  scope :draft, where(['import_transactions.draft = ?', true])
+  scope :processed, where(['import_transactions.draft = ?', false])
 
+  scope :matched, where(["match = ?", MATCH_TYPES[MATCH_MATCHED]])
+  scope :not_matched, where(["match != ?", MATCH_TYPES[MATCH_MATCHED]])
+
+  scope :unable_to_match, where(["match = ?", MATCH_TYPES[MATCH_UNABLE_TO_MATCH]])
+  scope :not_unable_to_match, where(["match != ?", MATCH_TYPES[MATCH_UNABLE_TO_MATCH]])
+
+  scope :duplicate, where(["match = ?", MATCH_TYPES[MATCH_DUPLICATE]])
+  scope :not_duplicate, where(["match != ?", MATCH_TYPES[MATCH_DUPLICATE]])
+
+  scope :not_a_customer, where(["match = ?", MATCH_TYPES[MATCH_NOT_A_CUSTOMER]])
+  scope :not_not_a_customer, where(["match != ?", MATCH_TYPES[MATCH_NOT_A_CUSTOMER]])
+
+  validate :customer_belongs_to_distributor
+
+  after_validation :update_account, if: :changed?
+  
   def self.new_from_row(row, import_transaction_list, distributor)
     match_result = row.single_customer_match(distributor)
     ImportTransaction.new(

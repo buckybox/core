@@ -253,7 +253,7 @@ class Distributor < ActiveRecord::Base
   end
 
   def find_duplicate_import_transactions(date, description, amount)
-    import_transactions.processed.where(transaction_date: date, description: description, amount_cents: (amount * 100).to_i)
+    import_transactions.processed.not_duplicate.where(transaction_date: date, description: description, amount_cents: (amount * 100).to_i)
   end
 
   private

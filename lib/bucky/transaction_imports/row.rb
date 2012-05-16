@@ -117,10 +117,10 @@ module Bucky::TransactionImports
     end
 
     def single_customer_match(distributor)
-      if not_customer?
-        MatchResult.not_a_customer(1.0)
-      elsif duplicate?(distributor)
+      if duplicate?(distributor)
         MatchResult.duplicate_match(1.0)
+      elsif not_customer?
+        MatchResult.not_a_customer(1.0)
       else
         matches = customers_match_with_confidence(distributor.customers)
         match = matches.first
