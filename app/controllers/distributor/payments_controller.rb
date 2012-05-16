@@ -3,9 +3,16 @@ class Distributor::PaymentsController < Distributor::ResourceController
 
   respond_to :html, :xml, :json
 
+  before_filter :load_import_transaction_list, only: [:process_payments, :show]
+
+  def show
+    render :match_payments
+  end
+
   def index 
-    @payments = current_distributor.payments.bank_transfer.order('created_at DESC')
-    @statement = BankStatement.new
+    #@payments = current_distributor.payments.bank_transfer.order('created_at DESC')
+    @import_transaction_list = ImportTransactionList.new
+    @import_transaction_lists = current_distributor.import_transaction_lists.ordered
   end
 
   def create
@@ -24,6 +31,24 @@ class Distributor::PaymentsController < Distributor::ResourceController
     end
   end
 
+  def match_payments
+    @import_transaction_list = current_distributor.import_transaction_lists.build(params['import_transaction_list'])
+    if @import_transaction_list.save
+      render :match_payments
+    else
+      render :index
+    end
+  end
+
+  def process_payments
+    if @import_transaction_list.update_attributes(@import_transaction_list.process_import_transactions_attributes(params[:import_transaction_list]))
+      redirect_to distributor_payments_url, notice: "Payments processed successfully"
+    else
+      flash.now[:alert] = "There was a problem"
+      render :match_payments
+    end
+  end
+
   def process_upload
     @kiwibank = Bucky::TransactionImports::Kiwibank.new
     @kiwibank.import(params['bank_statement']["statement_file"].path)
@@ -39,5 +64,11 @@ class Distributor::PaymentsController < Distributor::ResourceController
     @statement.process_statement!(params['customers'])
 
     redirect_to distributor_payments_url
+  end
+
+  private
+
+  def load_import_transaction_list
+    @import_transaction_list = current_distributor.import_transaction_lists.find(params[:id])
   end
 end

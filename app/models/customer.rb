@@ -153,6 +153,10 @@ class Customer < ActiveRecord::Base
     end
   end
 
+  def <=>(b)
+    self.name <=> b.name
+  end
+
   private
 
   def initialize_number

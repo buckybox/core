@@ -22,42 +22,62 @@ module Bucky::TransactionImports
     def date
       Date.parse(@date_string)
     end
-
-    NUMBER_REFERENCE_REGEX = /#(\d+)/
-    def number_reference
-      @possible_references ||= description.scan(NUMBER_REFERENCE_REGEX).to_a.flatten
-    end
+    
+    MATCH_STRATEGY = [[:previous_match, 1.0],
+                      [:number_match, 1.0],
+                      [:name_match, 0.8],
+                      [:account_match, 0.7]]
 
     # Returns a number 0.0 -> 1.0 indicating how confident we
     # are that this payment comes from customer
     # 0.0 no confidence
     # 1.0 total confidence
     def match_confidence(customer)
-      ref_confidence = match_confidence_reference(customer)
-      balance_confidence = match_confidence_balance(customer)
-      order_price_confidence = customer_order_price_match(customer)
-      
-      ref_confidence * 0.8 +
-        balance_confidence * 0.15 +
-        order_price_confidence * 0.05
+      current_confidence = 0.0
+      MATCH_STRATEGY.each do |method, confidence|
+        current_confidence += self.send(method, customer) * confidence
+        break if current_confidence > 0.8
+      end
+      current_confidence
     end
 
-    def match_confidence_reference(customer)
+    def previous_match(customer)
+      0.0
+    end
+
+    def number_match(customer)
       number_reference.collect do |number_reference|
-        fuzzy_match(customer.formated_number, number_reference)
+        if customer.formated_number == number_reference
+          1
+        else
+          0
+        end
       end.sort.last || 0
     end
 
-    # Check amount from row and compare to customer account balance
-    def match_confidence_balance(customer)
-      Row.amount_match(amount, customer.account.balance.to_f)
+    def name_match(customer)
+      regex = Regexp.new(customer.name.gsub(/\W+/, ".*"), true)
+      if description.match(regex)
+        1
+      else
+        regex = Regexp.new("#{customer.first_name.first} #{customer.last_name}".gsub(/\W+/, ".*"), true)
+        description.match(regex).present? ? 0.90 : 0
+      end
     end
 
-    # Check current order prices against row amount
-    def customer_order_price_match(customer)
-      customer.orders.collect do |order|
+    def account_match(customer)
+      balance_match = Row.amount_match(amount, customer.account.balance.to_f)
+      order_match = customer.orders.collect do |order|
         Row.amount_match(amount, order.price.to_f)
       end.sort.last || 0
+
+      balance_match * 0.8 +
+        order_match * 0.2
+    end
+
+    NUMBER_REFERENCE_REGEX = /(\d+)/
+    def number_reference
+      @possible_references ||= description.scan(NUMBER_REFERENCE_REGEX).to_a.flatten
     end
 
     # Return a number between 0.0 and 1.0
@@ -65,7 +85,7 @@ module Bucky::TransactionImports
     # amount & balance are.
     # Check tests for examples
     def self.amount_match(amount, balance)
-      if balance < 0
+      result = if balance < 0
         balance *= -1
         if amount <= balance
           amount.to_f / balance.to_f
@@ -75,29 +95,30 @@ module Bucky::TransactionImports
       else
         0
       end
+      if result < 0 || result > 1
+        puts "======= WTF ======="
+        puts "That shouldn't be #{result}"
+        puts "#{amount}, #{balance}"
+      else
+        result
+      end
     end
 
     def customers_match_with_confidence(customers)
-      customers.collect{|customer|
-        [customer, match_confidence(customer)]
-      }.sort_by(&:last).select{|match|
-        match.last > 0.7
-      }.reverse
-    end
-
-    def customers_match(distributor)
-      customers_match_with_confidence(distributor.customers).collect(&:first).sort_by(&:formated_number)
+      if not_customer? # Don't search for customers that match if we know its not going to match
+        []
+      else
+        customers.collect{|customer|
+          MatchResult.new(customer, match_confidence(customer))
+        }.sort.select{|result|
+          result.confidence > 0.7
+        }.reverse
+      end
     end
 
     def single_customer_match(distributor)
-      customers_match_with_confidence(distributor.customers).collect(&:first)
-    end
-
-    def match_previous_matches(distributor)
-      matches = distributor.customers.select{|c|
-        c.previous_matches.include?(description)
-      }
-      return matches.first
+      matches = customers_match_with_confidence(distributor.customers)
+      matches.first
     end
 
     def duplicate?(distributor)
@@ -115,6 +136,10 @@ module Bucky::TransactionImports
     def debit?
       !credit?
     end
+
+    def not_customer?
+      debit?
+    end
       
     def to_s
       "#{date} #{description} #{amount}"
@@ -123,6 +148,23 @@ module Bucky::TransactionImports
 
     def fuzzy_match(a, b)
       Bucky::Util.fuzzy_match(a, b)
+    end
+  end
+
+  class MatchResult
+    attr_accessor :customer, :confidence
+
+    def initialize(customer, confidence)
+      self.customer = customer
+      self.confidence = confidence
+    end
+
+    def <=>(b)
+      if self.confidence == b.confidence
+        self.customer <=> b.customer
+      else
+        self.confidence <=> b.confidence
+      end
     end
   end
 end

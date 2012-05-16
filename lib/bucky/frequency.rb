@@ -16,4 +16,8 @@ class Bucky::Frequency
   def to_s
     @frequency.to_s
   end
+
+  def reoccurs?
+    @frequency != :single
+  end
 end

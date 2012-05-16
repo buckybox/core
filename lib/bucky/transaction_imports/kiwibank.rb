@@ -52,11 +52,5 @@ module Bucky::TransactionImports
       end
       result
     end
-
-    def transactions_for_display(distributor)
-      import_transaction_list = distributor.import_transaction_lists.build
-      import_transaction_list.load_rows(rows)
-      import_transaction_list
-    end
   end
 end

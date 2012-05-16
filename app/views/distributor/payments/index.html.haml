@@ -1,12 +1,12 @@
-= simple_form_for([:distributor, @statement], url: process_upload_distributor_payments_path, html: {:multipart => true} ) do |f|
+= simple_form_for(@import_transaction_list, url: match_payments_distributor_payments_path, html: {:multipart => true} ) do |f|
   %fieldset
     %legend Import data from your bank
     %p Please select the bank statement provided by your bank (.csv file)
     = f.error_notification
-    = f.input :statement_file, label: false
+    = f.input :csv_file, label: false
 
     .actions
-      = f.button :submit
+      = f.button :submit, "Upload"
 .row
   .twelve.columns
-    =# render 'distributor/payments/index'
+    = render 'distributor/payments/index'

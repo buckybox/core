@@ -252,6 +252,8 @@ ActiveRecord::Schema.define(:version => 20120501032413) do
     t.boolean  "draft"
     t.integer  "account_type"
     t.integer  "source_type"
+    t.string   "csv_file"
+    t.boolean  "confirmed"
     t.datetime "created_at",     :null => false
     t.datetime "updated_at",     :null => false
   end
@@ -262,9 +264,11 @@ ActiveRecord::Schema.define(:version => 20120501032413) do
     t.integer  "amount_cents"
     t.boolean  "removed"
     t.text     "description"
-    t.float    "customer_match"
-    t.datetime "created_at",       :null => false
-    t.datetime "updated_at",       :null => false
+    t.float    "confidence"
+    t.integer  "import_transaction_list_id"
+    t.integer  "match"
+    t.datetime "created_at",                 :null => false
+    t.datetime "updated_at",                 :null => false
   end
 
   create_table "invoice_information", :force => true do |t|
