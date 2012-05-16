@@ -109,7 +109,7 @@ module Bucky::TransactionImports
         []
       else
         customers.collect{|customer|
-          MatchResult.new(customer, match_confidence(customer))
+          MatchResult.customer_match(customer, match_confidence(customer))
         }.sort.select{|result|
           result.confidence > 0.7
         }.reverse
@@ -117,8 +117,15 @@ module Bucky::TransactionImports
     end
 
     def single_customer_match(distributor)
-      matches = customers_match_with_confidence(distributor.customers)
-      matches.first
+      if not_customer?
+        MatchResult.not_a_customer(1.0)
+      elsif duplicate?(distributor)
+        MatchResult.duplicate_match(1.0)
+      else
+        matches = customers_match_with_confidence(distributor.customers)
+        match = matches.first
+        match.present? ? match : MatchResult.unable_to_match
+      end
     end
 
     def duplicate?(distributor)
@@ -152,11 +159,28 @@ module Bucky::TransactionImports
   end
 
   class MatchResult
-    attr_accessor :customer, :confidence
-
-    def initialize(customer, confidence)
+    attr_accessor :customer, :confidence, :type
+    
+    def initialize(customer, confidence, type)
       self.customer = customer
       self.confidence = confidence
+      self.type = type
+    end
+
+    def self.customer_match(customer, confidence)
+      MatchResult.new(customer, confidence, :match)
+    end
+
+    def self.duplicate_match(confidence)
+      MatchResult.new(nil, confidence, :duplicate)
+    end
+
+    def self.not_a_customer(confidence)
+      MatchResult.new(nil, confidence, :not_a_customer)
+    end
+
+    def self.unable_to_match
+      MatchResult.new(nil, 0.0, :unable_to_match)
     end
 
     def <=>(b)

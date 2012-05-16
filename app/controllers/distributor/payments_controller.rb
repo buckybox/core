@@ -41,7 +41,7 @@ class Distributor::PaymentsController < Distributor::ResourceController
   end
 
   def process_payments
-    if @import_transaction_list.update_attributes(@import_transaction_list.process_import_transactions_attributes(params[:import_transaction_list]))
+    if @import_transaction_list.process_attributes(@import_transaction_list.process_import_transactions_attributes(params[:import_transaction_list]))
       redirect_to distributor_payments_url, notice: "Payments processed successfully"
     else
       flash.now[:alert] = "There was a problem"

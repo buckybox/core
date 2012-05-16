@@ -20,6 +20,7 @@
           = f.simple_fields_for(:import_transactions, import_transaction) do |tf|
             %tr
               = tf.input :id, as: :hidden
+              = tf.input :draft, as: :hidden, input_html: {value: false}
               %td= import_transaction.transaction_time.to_s(:transaction)
               %td= import_transaction.description
               %td= import_transaction.amount.format

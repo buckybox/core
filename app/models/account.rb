@@ -67,6 +67,18 @@ class Account < ActiveRecord::Base
   def subtract_from_balance(amount, options = {})
     add_to_balance((amount * -1), options)
   end
+  
+  # Return transaction id
+  def make_payment(amount, description, date)
+    transaction = add_to_balance(amount, {kind: 'payment', description: "CSV uploaded - #{date.to_s(:transaction)} #{description}"})
+    save!
+    transaction.reload
+  end
+
+  def undo_payment(amount, description, date)
+    subtract_from_balance(amount, {kind: 'amend', description: "CSV amended - #{date.to_s(:transaction)} #{description}"})
+    save
+  end
 
   #all accounts that need invoicing
   def self.need_invoicing

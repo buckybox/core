@@ -252,6 +252,10 @@ class Distributor < ActiveRecord::Base
     end
   end
 
+  def find_duplicate_import_transactions(date, description, amount)
+    import_transactions.processed.where(transaction_time: date, description: description, amount_cents: amount.to_i)
+  end
+
   private
 
   def parameterize_name

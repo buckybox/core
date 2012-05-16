@@ -15,7 +15,7 @@ class ImportTransactionList < ActiveRecord::Base
 
   before_create :import_rows
 
-  default_value_for :confirmed, false
+  default_value_for :draft, true
 
   scope :ordered, order("created_at DESC")
 
@@ -74,12 +74,16 @@ class ImportTransactionList < ActiveRecord::Base
     import_transaction_list_attributes
   end
 
-  private
-
-  def mark_processed
+  def process_attributes(attr)
     self.draft = false
-    save #import_transactions has autosave, which should do the business of saving and validating the above
+    update_attributes(attr.merge(draft: false))
   end
+
+  def processed?
+    !draft?
+  end
+
+  private
 
   def csv_ready
     errors.add(:csv_file, "Seems to be a problem with csv file.") unless csv_valid?

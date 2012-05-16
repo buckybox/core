@@ -9,6 +9,8 @@ class CreateImportTransactions < ActiveRecord::Migration
       t.float :confidence
       t.integer :import_transaction_list_id
       t.integer :match
+      t.integer :transaction_id
+      t.boolean :draft
 
       t.timestamps
     end

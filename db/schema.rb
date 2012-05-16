@@ -253,7 +253,6 @@ ActiveRecord::Schema.define(:version => 20120501032413) do
     t.integer  "account_type"
     t.integer  "source_type"
     t.string   "csv_file"
-    t.boolean  "confirmed"
     t.datetime "created_at",     :null => false
     t.datetime "updated_at",     :null => false
   end
@@ -267,6 +266,8 @@ ActiveRecord::Schema.define(:version => 20120501032413) do
     t.float    "confidence"
     t.integer  "import_transaction_list_id"
     t.integer  "match"
+    t.integer  "transaction_id"
+    t.boolean  "draft"
     t.datetime "created_at",                 :null => false
     t.datetime "updated_at",                 :null => false
   end
