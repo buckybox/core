@@ -11,10 +11,11 @@ class ImportTransaction < ActiveRecord::Base
     constructor: Proc.new { |cents, currency| Money.new(cents || 0, currency || Money.default_currency) },
     converter: Proc.new { |value| value.respond_to?(:to_money) ? value.to_money : raise(ArgumentError, "Can't convert #{value.class} to Money") }
 
-  attr_accessible :customer, :customer_id, :transaction_time, :amount_cents, :removed, :description, :confidence, :import_transaction_list, :match, :draft
+  attr_accessible :customer, :customer_id, :transaction_date, :amount_cents, :removed, :description, :confidence, :import_transaction_list, :match, :draft
   
-  scope :ordered, order("transaction_time ASC")
-  scope :processed, where("transaction_id is not NULL")
+  scope :ordered, order("transaction_date ASC, created_at ASC")
+  scope :draft, where(['import_transactions.draft = ?', true])
+  scope :processed, where(['import_transactions.draft = ?', false])
 
   validate :customer_belongs_to_distributor
 
@@ -35,8 +36,8 @@ class ImportTransaction < ActiveRecord::Base
     match_result = row.single_customer_match(distributor)
     ImportTransaction.new(
       customer: match_result.customer,
-      transaction_time: row.date,
-      amount_cents: row.amount * 100,
+      transaction_date: row.date,
+      amount_cents: (row.amount * 100).to_i,
       removed: false,
       description: row.description,
       confidence: match_result.confidence,
@@ -62,7 +63,7 @@ class ImportTransaction < ActiveRecord::Base
   end
 
   def row
-    Bucky::TransactionImports::Row.new(transaction_time, description, amount_cents)
+    Bucky::TransactionImports::Row.new(transaction_date, description, amount_cents)
   end
 
   def possible_customers
@@ -108,13 +109,13 @@ class ImportTransaction < ActiveRecord::Base
   def update_account
       # Undo payment to the previous matched customer if they are no longer the match
       if customer_id_changed? && customer_was.present?
-        customer_was.account.undo_payment(amount, description, transaction_time) 
+        customer_was.account.undo_payment(amount, description, transaction_date) 
         self.transaction = nil
       end
 
       # Create new payments if a new customer has been assigned
       if !draft && is_matched? && !transaction_created? && customer.present?
-        self.transaction = customer.account.make_payment(amount, description, transaction_time) 
+        self.transaction = customer.account.make_payment(amount, description, transaction_date) 
       end
   end
   

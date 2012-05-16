@@ -259,7 +259,7 @@ ActiveRecord::Schema.define(:version => 20120501032413) do
 
   create_table "import_transactions", :force => true do |t|
     t.integer  "customer_id"
-    t.datetime "transaction_time"
+    t.date     "transaction_date"
     t.integer  "amount_cents"
     t.boolean  "removed"
     t.text     "description"
