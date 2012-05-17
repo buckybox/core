@@ -23,9 +23,9 @@ module Bucky::TransactionImports
       Date.parse(@date_string)
     end
     
-    MATCH_STRATEGY = [[:number_match, 1.0],
-                      [:name_match, 0.9],
-                      [:account_match, 0.8]]
+    MATCH_STRATEGY = [[:number_match, 0.8],
+                      [:name_match, 0.8],
+                      [:account_match, 0.5]]
 
     # Returns a number 0.0 -> 1.0 indicating how confident we
     # are that this payment comes from customer
@@ -37,7 +37,7 @@ module Bucky::TransactionImports
         current_confidence += self.send(method, customer) * confidence
         break if current_confidence > 0.8
       end
-      current_confidence
+      [1.0, current_confidence].min
     end
 
     def previous_match(distributor)
@@ -48,6 +48,8 @@ module Bucky::TransactionImports
       number_reference.collect do |number_reference|
         if customer.formated_number == number_reference
           1
+        elsif customer.formated_number == ("%04d" % number_reference)
+          0.6
         else
           0
         end
@@ -60,12 +62,12 @@ module Bucky::TransactionImports
         1
       else
         regex = Regexp.new("#{customer.first_name.first} #{customer.last_name}".gsub(/\W+/, ".*"), true)
-        description.match(regex).present? ? 0.90 : 0
+        description.match(regex).present? ? 0.9 : 0
       end
     end
 
     def account_match(customer)
-      balance_match = Row.amount_match(amount, customer.account.balance.to_f)
+      balance_match = amount == (-1.0 * customer.account.balance.to_f) ? 1.0 : 0
       balance_match
     end
 
@@ -105,7 +107,7 @@ module Bucky::TransactionImports
         customers.collect{|customer|
           MatchResult.customer_match(customer, match_confidence(customer))
         }.sort.select{|result|
-          result.confidence > 0.3
+          result.confidence >= 0.48
         }.reverse
       end
     end
