@@ -49,7 +49,7 @@ module Bucky::TransactionImports
         if customer.formated_number == number_reference
           1
         elsif customer.formated_number == ("%04d" % number_reference)
-          0.6
+          0.7
         else
           0
         end
@@ -67,8 +67,12 @@ module Bucky::TransactionImports
     end
 
     def account_match(customer)
-      balance_match = amount == (-1.0 * customer.account.balance.to_f) ? 1.0 : 0
-      balance_match
+      if amount == (-1.0 * customer.account.balance.to_f) && # Account matches amount (account must be negative)
+        customer.distributor.accounts.where(["customers.id != ? AND accounts.balance_cents = ?", customer.id, -100 * amount]).count.zero? # No other accounts match the amount
+        1.0
+      else
+        0
+      end
     end
 
     NUMBER_REFERENCE_REGEX = /(\d+)/
