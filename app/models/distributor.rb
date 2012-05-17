@@ -256,6 +256,10 @@ class Distributor < ActiveRecord::Base
     import_transactions.processed.not_duplicate.where(transaction_date: date, description: description, amount_cents: (amount * 100).to_i)
   end
 
+  def find_previous_match(description)
+    import_transactions.matched.where(description: description).ordered.last
+  end
+
   private
 
   def parameterize_name

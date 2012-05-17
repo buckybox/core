@@ -23,8 +23,7 @@ module Bucky::TransactionImports
       Date.parse(@date_string)
     end
     
-    MATCH_STRATEGY = [[:previous_match, 1.0],
-                      [:number_match, 1.0],
+    MATCH_STRATEGY = [[:number_match, 1.0],
                       [:name_match, 0.8],
                       [:account_match, 0.7]]
 
@@ -41,8 +40,8 @@ module Bucky::TransactionImports
       current_confidence
     end
 
-    def previous_match(customer)
-      0.0
+    def previous_match(distributor)
+      distributor.find_previous_match(description)
     end
 
     def number_match(customer)
@@ -121,6 +120,8 @@ module Bucky::TransactionImports
         MatchResult.duplicate_match(1.0)
       elsif not_customer?
         MatchResult.not_a_customer(1.0)
+      elsif (@prev_match = previous_match(distributor)).present?
+        MatchResult.customer_match(@prev_match.customer, 1.0)
       else
         matches = customers_match_with_confidence(distributor.customers)
         match = matches.first

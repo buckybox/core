@@ -119,7 +119,7 @@ class ImportTransaction < ActiveRecord::Base
 
   def update_account
     # Undo payment to the previous matched customer if they are no longer the match
-    if customer_id_changed? && customer_was.present?
+    if customer_id_changed? && customer_was.present? && payment_created?
       self.payment.reverse_payment!
       self.payment = nil
     end

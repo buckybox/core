@@ -45,6 +45,6 @@ class ImportTransactionListUploader < CarrierWave::Uploader::Base
   # Override the filename of the uploaded files:
   # Avoid using model.id or version_name here, see uploader/store.rb for details.
   def filename
-    "bank_statement_#{Time.current.to_s(:bank)}_#{File.extname(super)}" if original_filename
+    "import_transaction_list_#{Time.current.to_s(:bank)}_#{File.extname(super)}" if original_filename
   end
 end
