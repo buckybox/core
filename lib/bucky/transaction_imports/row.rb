@@ -24,8 +24,8 @@ module Bucky::TransactionImports
     end
     
     MATCH_STRATEGY = [[:number_match, 1.0],
-                      [:name_match, 0.8],
-                      [:account_match, 0.7]]
+                      [:name_match, 0.9],
+                      [:account_match, 0.8]]
 
     # Returns a number 0.0 -> 1.0 indicating how confident we
     # are that this payment comes from customer
@@ -66,12 +66,7 @@ module Bucky::TransactionImports
 
     def account_match(customer)
       balance_match = Row.amount_match(amount, customer.account.balance.to_f)
-      order_match = customer.orders.collect do |order|
-        Row.amount_match(amount, order.price.to_f)
-      end.sort.last || 0
-
-      balance_match * 0.8 +
-        order_match * 0.2
+      balance_match
     end
 
     NUMBER_REFERENCE_REGEX = /(\d+)/
@@ -110,7 +105,7 @@ module Bucky::TransactionImports
         customers.collect{|customer|
           MatchResult.customer_match(customer, match_confidence(customer))
         }.sort.select{|result|
-          result.confidence > 0.7
+          result.confidence > 0.3
         }.reverse
       end
     end

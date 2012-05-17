@@ -257,7 +257,7 @@ class Distributor < ActiveRecord::Base
   end
 
   def find_previous_match(description)
-    import_transactions.matched.where(description: description).ordered.last
+    import_transactions.processed.matched.where(description: description).ordered.last
   end
 
   private
