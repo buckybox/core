@@ -157,6 +157,10 @@ class Customer < ActiveRecord::Base
     self.name <=> b.name
   end
 
+  def make_import_payment(amount, description, date)
+    Payment.create!(distributor: distributor, account: account, amount: amount, kind: 'unspecified', source: 'import', description: "Import - #{date.to_s(:transaction)} #{description}")
+  end
+
   private
 
   def initialize_number

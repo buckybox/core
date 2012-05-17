@@ -15,4 +15,8 @@ class Transaction < ActiveRecord::Base
 
   validates_presence_of :account_id, :kind, :amount, :description
   validates :kind, inclusion: { in: KINDS, message: "%{value} is not a valid kind of transaction" }
+
+  def reverse_transaction!
+    account.reverse_transaction!(amount, description)
+  end
 end

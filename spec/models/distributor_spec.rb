@@ -372,9 +372,9 @@ describe Distributor do
 
   describe ".find_duplicate_import_transactions" do
     it "should find duplicate import transactions" do
-      distributor.stub_chain(:import_transactions, :where).with({date: Date.parse("12 Oct 2011"), description: "hello kitty here is payment", amount: 234.65})
+      distributor.stub_chain(:import_transactions, :processed, :not_duplicate, :where).with({transaction_date: Date.parse("12 Oct 2011"), description: "hello kitty here is payment", amount_cents: 23465})
 
-      distributor.find_duplicate_import_transactions(Date.parse("12 Oct 2011", "hello kitty here is payment", amount: 234.65))
+      distributor.find_duplicate_import_transactions(Date.parse("12 Oct 2011"), "hello kitty here is payment", 234.65)
     end
   end
 end

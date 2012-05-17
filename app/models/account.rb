@@ -68,16 +68,10 @@ class Account < ActiveRecord::Base
     add_to_balance((amount * -1), options)
   end
   
-  # Return transaction id
-  def make_payment(amount, description, date)
-    transaction = add_to_balance(amount, {kind: 'payment', description: "CSV uploaded - #{date.to_s(:transaction)} #{description}"})
+  def reverse_transaction!(amount, description)
+    reversal_transaction = subtract_from_balance(amount, {kind: 'amend', description: "REVERSED " + description})
     save!
-    transaction.reload
-  end
-
-  def undo_payment(amount, description, date)
-    subtract_from_balance(amount, {kind: 'amend', description: "CSV amended - #{date.to_s(:transaction)} #{description}"})
-    save
+    reversal_transaction
   end
 
   #all accounts that need invoicing

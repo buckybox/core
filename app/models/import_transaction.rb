@@ -3,7 +3,7 @@ class ImportTransaction < ActiveRecord::Base
   belongs_to :import_transaction_list
   has_one :distributor, through: :import_transaction_list
   belongs_to :customer
-  belongs_to :transaction
+  belongs_to :payment
 
   composed_of :amount,
     class_name: "Money",
@@ -111,23 +111,23 @@ class ImportTransaction < ActiveRecord::Base
     distributor.customers.find_by_id(customer_id_was)
   end
 
-  def transaction_created?
-    transaction.present?
+  def payment_created?
+    payment.present?
   end
 
   private
 
   def update_account
-      # Undo payment to the previous matched customer if they are no longer the match
-      if customer_id_changed? && customer_was.present?
-        customer_was.account.undo_payment(amount, description, transaction_date) 
-        self.transaction = nil
-      end
+    # Undo payment to the previous matched customer if they are no longer the match
+    if customer_id_changed? && customer_was.present?
+      self.payment.reverse_payment!
+      self.payment = nil
+    end
 
-      # Create new payments if a new customer has been assigned
-      if !draft && is_matched? && !transaction_created? && customer.present?
-        self.transaction = customer.account.make_payment(amount, description, transaction_date) 
-      end
+    # Create new payments if a new customer has been assigned
+    if !draft && is_matched? && !payment_created? && customer.present?
+      self.payment = customer.make_import_payment(amount, description, transaction_date) 
+    end
   end
   
   def customer_belongs_to_distributor

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120501032413) do
+ActiveRecord::Schema.define(:version => 20120517011651) do
 
   create_table "accounts", :force => true do |t|
     t.integer  "customer_id"
@@ -270,6 +270,7 @@ ActiveRecord::Schema.define(:version => 20120501032413) do
     t.boolean  "draft"
     t.datetime "created_at",                 :null => false
     t.datetime "updated_at",                 :null => false
+    t.integer  "payment_id"
   end
 
   create_table "invoice_information", :force => true do |t|
@@ -377,7 +378,7 @@ ActiveRecord::Schema.define(:version => 20120501032413) do
   create_table "payments", :force => true do |t|
     t.integer  "distributor_id"
     t.integer  "account_id"
-    t.integer  "amount_cents",      :default => 0, :null => false
+    t.integer  "amount_cents",            :default => 0, :null => false
     t.string   "currency"
     t.string   "kind"
     t.text     "description"
@@ -385,6 +386,11 @@ ActiveRecord::Schema.define(:version => 20120501032413) do
     t.datetime "updated_at"
     t.integer  "bank_statement_id"
     t.string   "reference"
+    t.boolean  "reversed"
+    t.datetime "reversed_at"
+    t.integer  "transaction_id"
+    t.integer  "reversal_transaction_id"
+    t.string   "source"
   end
 
   add_index "payments", ["account_id"], :name => "index_payments_on_account_id"

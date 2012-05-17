@@ -12,7 +12,7 @@ describe Distributor::DashboardController do
     @custormer_evt = Fabricate(:customer_event, distributor: @distributor)
     @dismissed_evt = Fabricate(:customer_event, distributor: @distributor, dismissed: true)
     Account.stub(:need_invoicing).and_return([Fabricate(:account)])
-    Fabricate(:payment, :distributor => @distributor, :kind => 'manual') 
+    Fabricate(:payment, :distributor => @distributor, :source => 'manual')
   end
 
   context 'visiting dashboard' do
