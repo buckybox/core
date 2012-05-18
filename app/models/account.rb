@@ -49,14 +49,14 @@ class Account < ActiveRecord::Base
     amount = amount.to_money
     amount_difference = amount - balance
 
-    options.merge!(kind: 'amend') unless options[:kind]
-    options.merge!(description: 'Manual Transaction.') unless options[:description]
+    transactionable = (options[:transactionable] ? options[:transactionable] : self)
+    description = (options[:description] ? options[:description] : 'Manual Transaction.')
 
     write_attribute(:balance_cents, amount.cents)
     write_attribute(:currency, amount.currency.to_s || Money.default_currency.to_s)
     clear_aggregation_cache # without this the composed_of balance attribute does not update
 
-    transactions.build(kind: options[:kind], amount: amount_difference, description: options[:description])
+    transactions.build(amount: amount_difference, transactionable: transactionable, description: description)
   end
 
   def add_to_balance(amount, options = {})

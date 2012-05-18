@@ -10,6 +10,8 @@ class Delivery < ActiveRecord::Base
   has_one :address,     through: :order
   has_one :customer,    through: :order
 
+  has_many :transactions, as: :transactionable
+
   acts_as_list scope: [:delivery_list_id, :route_id]
 
   attr_accessible :order, :order_id, :route, :status, :status_change_type, :delivery_list, :package, :package_id, :account
@@ -67,7 +69,7 @@ class Delivery < ActiveRecord::Base
   end
 
   def future_status?
-    status == 'pending'
+    status == 'pending' # This is the only status that is valid for deliveries in the future
   end
 
   def reposition!(position)
@@ -75,7 +77,7 @@ class Delivery < ActiveRecord::Base
   end
 
   def description
-    "[ID##{id}] Delivery of #{package.contents_description} at #{package.price} each."
+    "Delivery of #{package.contents_description} at #{package.price} each."
   end
 
   # TODO: Not sure if this fits in the model might need to go in Delivery CSV model down the road
@@ -113,6 +115,10 @@ class Delivery < ActiveRecord::Base
     ]
   end
 
+  def paid_on_delivery
+    # Essentially a distributor "beez in the trap" (http://youtu.be/VY0cDbb5A_8?t=7m7s) here
+  end
+
   private
 
   def default_route
@@ -129,34 +135,28 @@ class Delivery < ActiveRecord::Base
     subtract_from_account if new_status == 'delivered'
     add_to_account        if old_status == 'delivered'
 
-    # Commenting out for now as not doing reschedule repack just yet
-    #remove_from_schedule  if old_status == 'rescheduled' || old_status == 'repacked'
-    #add_to_schedule       if new_status == 'rescheduled' || new_status == 'repacked'
-
     Event.create_call_reminder(customer) if new_status == 'delivered' && customer.new?
   end
 
   def subtract_from_account
     account.subtract_from_balance(
       package.price,
-      kind: 'delivery',
-      description: "[ID##{id}] Delivery was made of #{package.contents_description} at #{package.price}."
+      transactionable: self,
+      description: "Delivery was made of #{package.contents_description} at #{package.price}."
     )
-    errors.add(:base, 'Problem subtracting balance from account on delivery status change.') unless account.save
+    errors.add(:base, 'Problem subtracting balance from account on delivery status change.') unless account.valid?
   end
 
   def add_to_account
     account.add_to_balance(
       package.price,
-      kind: 'delivery',
-      description: "[ID##{id}] Delivery reversal. #{package.contents_description} at #{package.price}."
+      transactionable: self,
+      description: "Delivery reversal. #{package.contents_description} at #{package.price}."
     )
-    errors.add(:base, 'Problem adding balance from account on delivery status change.') unless account.save
+    errors.add(:base, 'Problem adding balance from account on delivery status change.') unless account.valid?
   end
 
   def remove_from_schedule
-    #order.remove_scheduled_delivery(new_delivery) if new_delivery
-
     unless new_delivery
       errors.add(:base, 'There is no "new delivery" to remove from the schedule so this status change can not be completed.')
     end

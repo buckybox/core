@@ -27,9 +27,11 @@
             = check_box_tag delivery.order_id, '1', false, data: { delivery: delivery.id }
             = render partial: 'status_icons', locals: { status: delivery.status }
             = delivery.delivery_number
-          .five.columns= delivery.package.archived_address
+          .three.columns= delivery.package.archived_address
           .two.columns== #{delivery.package.contents_description}
           .three.columns= customer_badge(delivery.customer, customer_name: delivery.package.archived_customer_name, short: true)
+          .two.columns.text-right
+            %span.radius.label{ style: 'margin-right:10px' }= link_to 'PAID', paid_distributor_delivery_path(delivery), class: 'delivery-paid'
   - else
     %ul
       - @items.each do |order|
@@ -38,6 +40,6 @@
             = check_box_tag order.id, '1', false
             = image_tag 'icon-status-pending.png', title: 'PENDING delivery', class: 'icon-pending'
             N/A
-          .five.columns= order.address.join(', ')
+          .three.columns= order.address.join(', ')
           .two.columns== #{order.contents_description}
           .three.columns= customer_badge(order.customer)

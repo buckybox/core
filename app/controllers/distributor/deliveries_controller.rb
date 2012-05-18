@@ -122,4 +122,10 @@ class Distributor::DeliveriesController < Distributor::ResourceController
       head :bad_request
     end
   end
+
+  def paid
+    binding.pry
+
+    head :ok
+  end
 end

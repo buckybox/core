@@ -53,6 +53,10 @@ BuckyBox::Application.routes.draw do
         post 'master_packing_sheet',  action: :master_packing_sheet, as: 'master_packing_sheet'
         post 'export',                action: :export,               as: 'export'
       end
+
+      member do
+        post 'paid', action: :paid, as: 'paid'
+      end
     end
 
     resources :invoices do
@@ -76,7 +80,7 @@ BuckyBox::Application.routes.draw do
         get 'tag/:tag', action: :index, as: 'tag'
       end
 
-      member  do
+      member do
         get :send_login_details
       end
     end
