@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120517011651) do
+ActiveRecord::Schema.define(:version => 20120521041038) do
 
   create_table "accounts", :force => true do |t|
     t.integer  "customer_id"
@@ -255,6 +255,7 @@ ActiveRecord::Schema.define(:version => 20120517011651) do
     t.string   "csv_file"
     t.datetime "created_at",     :null => false
     t.datetime "updated_at",     :null => false
+    t.string   "file_format"
   end
 
   create_table "import_transactions", :force => true do |t|

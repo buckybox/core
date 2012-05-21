@@ -161,6 +161,10 @@ class Customer < ActiveRecord::Base
     Payment.create!(distributor: distributor, account: account, amount: amount, kind: 'unspecified', source: 'import', description: "Import - #{date.to_s(:transaction)} #{description}")
   end
 
+  def has_first_and_last_name?
+    first_name.present? && last_name.present?
+  end
+
   private
 
   def initialize_number

@@ -7,17 +7,21 @@ class ImportTransactionList < ActiveRecord::Base
   
   mount_uploader :csv_file, ImportTransactionListUploader
 
-  ACCOUNTS = [:kiwibank, :paypal]
+  FILE_FORMATS = [["Kiwibank", "kiwibank"], ["St George Australia", "st_george_au"]]
+  ACCOUNTS = [:kiwibank, :paypal, :st_george_au]
   SOURCES = [:manual, :kiwibank_csv]
 
-  validates_presence_of :csv_file, if: :new_record?
-  validate :csv_ready, if: :new_record?
+  validate :csv_ready, on: :create
+  validates_presence_of :csv_file
+  validates_inclusion_of :file_format, in: FILE_FORMATS.collect(&:last)
 
   before_create :import_rows
 
   default_value_for :draft, true
 
   scope :ordered, order("created_at DESC")
+
+  attr_accessible :csv_file, :file_format
 
   def account
     ACCOUNTS[account_type]
@@ -35,15 +39,19 @@ class ImportTransactionList < ActiveRecord::Base
   end
   
   def csv_valid?
-    csv_parser.valid?
+    csv_parser.present? && csv_parser.valid?
+  end
+
+  def parser_class
+    "Bucky::TransactionImports::#{file_format.camelize}".constantize
   end
   
   def csv_parser
-    if @kiwibank.blank?
-      @kiwibank = Bucky::TransactionImports::Kiwibank.new
-      @kiwibank.import(self.csv_file.current_path)
+    if @parser.blank?
+      @parser = parser_class.new
+      @parser.import(self.csv_file.current_path)
     end
-    @kiwibank
+    @parser
   end
 
   def process_import_transactions_attributes(import_transaction_list_attributes)
@@ -86,6 +94,6 @@ class ImportTransactionList < ActiveRecord::Base
   private
 
   def csv_ready
-    errors.add(:csv_file, "Seems to be a problem with csv file.") unless csv_valid?
+    errors.add(:csv_file, "Seems to be a problem with the csv file.") unless csv_valid?
   end
 end

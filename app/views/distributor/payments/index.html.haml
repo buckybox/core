@@ -3,6 +3,9 @@
     %legend Import data from your bank
     %p Please select the bank statement provided by your bank (.csv file)
     = f.error_notification
+    - if @import_transaction_list.errors.present?
+      %span.error= @import_transaction_list.csv_parser.rows.reject(&:valid?).collect{|r| r.errors.full_messages.join(', ')}.join(', ')
+    = f.input :file_format, as: :select, collection: ImportTransactionList::FILE_FORMATS, label: "CSV File Format", include_blank: false
     = f.input :csv_file, label: false
 
     .actions

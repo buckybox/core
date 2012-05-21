@@ -34,7 +34,7 @@ class Distributor::PaymentsController < Distributor::ResourceController
   def match_payments
     @import_transaction_list = current_distributor.import_transaction_lists.build(params['import_transaction_list'])
     if @import_transaction_list.save
-      render :match_payments
+      redirect_to distributor_payment_path(@import_transaction_list)
     else
       render :index
     end

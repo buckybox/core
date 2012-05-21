@@ -23,31 +23,33 @@ module Bucky::TransactionImports
 
     def self.get_description(customer)
       name = case rand(100)
-             when 0..25
+             when 0..5
                "#{customer.first_name.first} #{customer.last_name}"
-             when 26..50
+             when 6..20
                customer.name
              else
                ""
              end
       number = case rand(100)
-               when 0..75
+               when 0..30
                  customer.badge
+               when 31..60
+                 customer.number
                else
                  ""
                end
-      gibbrish = ["payment", "box", "veggies"].shuffle.first
-      [name, number, gibbrish].shuffle.join(" ")
+      gibbrish = ((customer.orders.active.collect{|o| o.box.name}) + ["payment", "box", "veggies", "veggies box", customer.distributor.name, "fruit box payment"]).shuffle.first
+      [name, number, gibbrish].shuffle.join(rand(10) > 5 ? " " : "; ")
     end
 
     def self.get_amount(customer)
       price = customer.orders.active.shuffle.first.price rescue nil
-      r = rand(customer.account.balance_cents.abs/100)
+      balance = customer.account.balance_cents.abs/100.0
       case rand(100)
-      when 0..50
-        r
+      when 0..10
+        balance
       else
-        price.present? ? price : r
+        price.present? ? price : rand(200..1000) / 10.0
       end
     end
   end

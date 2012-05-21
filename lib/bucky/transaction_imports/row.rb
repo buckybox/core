@@ -3,24 +3,24 @@ module Bucky::TransactionImports
 
     include ActiveModel::Validations
 
-    attr_accessor :date_string, :amount, :description
+    attr_accessor :date_string, :amount_string, :description, :index, :parser
 
-    validates :amount, numericality: true
-    validates :date_string, presence: true
-    validates :description, presence: true
+    validate :row_is_valid
 
-    AMOUNT_REGEX = /\A[+-]?\d+?(\.\d+)?\Z/
-    
-    def initialize(date_string, description, amount)
-      @date_string = date_string
-      @description = description
-      if amount.present? && (amount.is_a?(Integer) || amount.is_a?(Float) || amount.match(AMOUNT_REGEX))
-        @amount = amount.to_f
-      end
+    def initialize(date_string, description, amount_string, index=nil, parser=nil)
+      self.date_string = date_string
+      self.description = description
+      self.amount_string = amount_string
+      self.index = index
+      self.parser = parser
     end
 
     def date
       Date.parse(@date_string)
+    end
+
+    def amount
+      @amount_string.to_f
     end
     
     MATCH_STRATEGY = [[:number_match, 0.8],
@@ -46,23 +46,27 @@ module Bucky::TransactionImports
 
     def number_match(customer)
       number_reference.collect do |number_reference|
-        if customer.formated_number == number_reference
+        if customer.formated_number == number_reference # Match the full 0014 to 0014
           1
-        elsif customer.formated_number == ("%04d" % number_reference)
+        elsif customer.formated_number == ("%04d" % number_reference.to_i) # Match partial 14 -> 0014
           0.7
         else
           0
         end
-      end.sort.last || 0
+      end.sort.last || 0 # Out of all the numbers in the description, pick the best match
     end
 
     def name_match(customer)
-      regex = Regexp.new(customer.name.gsub(/\W+/, ".*"), true)
+      regex = Regexp.new(customer.name.gsub(/\W+/, ".{0,3}"), true) # 0,3 means that it allows 0 -> 3 chars between the first and last name, be it a space or a dot or some other mistake
       if description.match(regex)
+        # Match first and last name, ignoring case
         1
-      else
-        regex = Regexp.new("#{customer.first_name.first} #{customer.last_name}".gsub(/\W+/, ".*"), true)
+      elsif customer.has_first_and_last_name? # This fixes a bug where someone only has a first name (Say Phoenix) and the regex created is P.* which matches "payment" which isn't good!
+        # Match first inital and last name
+        regex = Regexp.new("#{customer.first_name.first} #{customer.last_name}".gsub(/\W+/, ".{0,3}"), true)
         description.match(regex).present? ? 0.9 : 0
+      else
+        0
       end
     end
 
@@ -75,7 +79,7 @@ module Bucky::TransactionImports
       end
     end
 
-    NUMBER_REFERENCE_REGEX = /(\d+)/
+    NUMBER_REFERENCE_REGEX = / (\d+) /
     def number_reference
       @possible_references ||= description.scan(NUMBER_REFERENCE_REGEX).to_a.flatten
     end
@@ -153,6 +157,29 @@ module Bucky::TransactionImports
     def to_s
       "#{date} #{description} #{amount}"
     end
+
+    def row_is_valid
+      unless date_valid? && description_valid? && amount_valid?
+        errors.add(:base, "The file you uploaded didn't match what we expected a #{parser.bank_name} file to look like.  There was a problem on row #{index}, make sure it matches the expected format #{parser.expected_format}")
+      end
+    end
+
+    def date_valid?
+      Date.parse(date_string) # Will throw ArgumentError: invalid date
+      true
+    rescue
+      false
+    end
+
+    def description_valid?
+      description.present?
+    end
+
+    AMOUNT_REGEX = /\A[+-]?\d+?(\.\d+)?\Z/
+    def amount_valid?
+      amount_string.present? && amount_string.match(AMOUNT_REGEX).present?
+    end
+
     private
 
     def fuzzy_match(a, b)
