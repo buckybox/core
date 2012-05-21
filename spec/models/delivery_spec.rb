@@ -15,7 +15,7 @@ describe Delivery do
   context :status do
     describe 'validity' do
       describe "for new record" do
-        (Delivery::STATUS - ['delivered']).each do |s|
+        (Delivery.state_machines[:status].states.map(&:name) - [:delivered]).each do |s|
           specify { Fabricate.build(:delivery, status: s).should be_valid }
           specify { Fabricate.build(:delivery, status: s, status_change_type: 'manual').should be_valid }
         end
@@ -32,10 +32,13 @@ describe Delivery do
   end
 
   context 'changing status' do
-    #Account balance starts at $0.00
     context 'when changed to delivered' do
       shared_examples 'it deducts accounts' do
-        before { @delivery.save }
+        before do
+          @package          = @delivery.package
+          @starting_balance = @delivery.account.balance
+          @delivery.deliver
+        end
 
         specify { @delivery.account.balance.should == @starting_balance - @package.price }
         specify { @delivery.transactions.should_not be_empty }
@@ -44,35 +47,20 @@ describe Delivery do
       end
 
       context 'from pending' do
-        before do
-          @delivery = delivery_pending
-          @package = @delivery.package
-
-          @starting_balance = @delivery.account.balance
-          @delivery.status = 'delivered'
-        end
+        before { @delivery = delivery_pending }
 
         it_behaves_like 'it deducts accounts'
       end
 
       context 'from cancelled' do
-        before do
-          @delivery = delivery_cancelled
-          @package = @delivery.package
-
-          @starting_balance = @delivery.account.balance
-          @delivery.status = 'delivered'
-        end
+        before { @delivery = delivery_cancelled }
 
         it_behaves_like 'it deducts accounts'
       end
     end
 
-    # Account balance starts at $-20.00
     context 'when changed from delivered' do
       shared_examples 'it adds to accounts' do
-        before { @delivery.save }
-
         specify { @delivery.account.balance.should == @starting_balance + @package.price }
         specify { @delivery.transactions.should_not be_empty }
         specify { @delivery.transactions.last.transactionable.should == @delivery }
@@ -85,7 +73,7 @@ describe Delivery do
           @package = @delivery.package
 
           @starting_balance = @delivery.account.balance
-          @delivery.status = 'pending'
+          @delivery.pend
         end
 
         it_behaves_like 'it adds to accounts'
@@ -97,7 +85,7 @@ describe Delivery do
           @package = @delivery.package
 
           @starting_balance = @delivery.account.balance
-          @delivery.status = 'cancelled'
+          @delivery.cancel
         end
 
         it_behaves_like 'it adds to accounts'
@@ -109,9 +97,8 @@ describe Delivery do
     before { @deliveries = [delivery] }
 
     specify { Delivery.change_statuses(@deliveries, 'bad_status').should be_false }
-    specify { Delivery.change_statuses(@deliveries, 'rescheduled').should be_false }
-    specify { Delivery.change_statuses(@deliveries, 'delivered').should be_true }
-    specify { Delivery.change_statuses(@deliveries, 'rescheduled', date: (Date.current + 2.days).to_s).should be_true }
+    specify { Delivery.change_statuses(@deliveries, 'cancel').should be_true }
+    specify { Delivery.change_statuses(@deliveries, 'deliver').should be_true }
   end
 
   describe '.auto_deliver' do

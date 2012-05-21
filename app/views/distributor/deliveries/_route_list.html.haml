@@ -12,7 +12,7 @@
             %td= label_tag 'missed_cancelled', 'Cancel delivery'
             %td
           %tr
-            %td{colspan: 2}
+            %td{ colspan: 2 }
             %td= button_tag 'Commit', class: 'small radius button', id: 'commit-missed'
     .five.columns.export.text-right
       = button_to('Export',
@@ -22,7 +22,7 @@
   - if @real_list
     %ul#delivery_list.sortable
       - @items.each do |delivery|
-        %li.row.data-listings{id: "delivery_#{delivery.id}", class: delivery.status}
+        %li.row.data-listings{ id: "delivery_#{delivery.id}", class: delivery.status }
           .two.columns
             = check_box_tag delivery.order_id, '1', false, data: { delivery: delivery.id }
             = render partial: 'status_icons', locals: { status: delivery.status }

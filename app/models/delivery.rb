@@ -16,35 +16,46 @@ class Delivery < ActiveRecord::Base
 
   attr_accessible :order, :order_id, :route, :status, :status_change_type, :delivery_list, :package, :package_id, :account
 
-  STATUS = %w(pending delivered cancelled rescheduled repacked)
   STATUS_CHANGE_TYPE = %w(manual auto)
 
   validates_presence_of :order_id, :delivery_list_id, :route_id, :package_id, :status
-  validates_inclusion_of :status, in: STATUS, message: "%{value} is not a valid status"
   validates_inclusion_of :status_change_type, in: STATUS_CHANGE_TYPE, message: "%{value} is not a valid status change type"
 
   before_validation :default_route, if: 'route.nil?'
-  before_validation :changed_status, if: 'status_changed?'
 
   before_create :add_delivery_number
 
-  scope :pending,     where(status: 'pending')
-  scope :delivered,   where(status: 'delivered')
-  scope :cancelled,   where(status: 'cancelled')
-  scope :rescheduled, where(status: 'rescheduled')
-  scope :repacked,    where(status: 'repacked')
+  scope :pending,   where(status: 'pending')
+  scope :delivered, where(status: 'delivered')
+  scope :cancelled, where(status: 'cancelled')
 
-  default_value_for :status, 'pending'
   default_value_for :status_change_type, 'auto'
 
   delegate :date, to: :delivery_list, allow_nil: true
 
-  def self.change_statuses(deliveries, new_status, options = {})
-    return false unless STATUS.include?(new_status)
-    return false if (new_status == 'rescheduled' || new_status == 'repacked') && options[:date].nil?
+  state_machine :status, initial: :pending do
+    before_transition on: :deliver, do: :subtract_from_account
+    before_transition on: [:pend, :cancel], do: :add_to_account
 
+    event :deliver do
+      transition all - :delivered => :delivered
+    end
+
+    event :pend do
+      transition all - :pending => :pending
+    end
+
+    event :cancel do
+      transition all - :cancelled => :cancelled
+    end
+
+    state :delivered do
+    end
+  end
+
+  def self.change_statuses(deliveries, new_status, options = {})
     result = deliveries.all? do |delivery|
-      delivery.status = new_status
+      delivery.status_event = new_status
       delivery.save
     end
 
@@ -55,8 +66,8 @@ class Delivery < ActiveRecord::Base
     auto_delivered = false
 
     unless delivery.status_change_type == 'manual'
-      delivery.status = 'delivered'
       delivery.status_change_type = 'auto'
+      delivery.status_event = 'deliver'
 
       auto_delivered = delivery.save
     end
@@ -69,7 +80,7 @@ class Delivery < ActiveRecord::Base
   end
 
   def future_status?
-    status == 'pending' # This is the only status that is valid for deliveries in the future
+    pending? # This is the only status that is valid for deliveries in the future
   end
 
   def reposition!(position)
@@ -122,20 +133,11 @@ class Delivery < ActiveRecord::Base
   private
 
   def default_route
-    self.route = order.route
+    self.route = order.route if order
   end
 
   def add_delivery_number
     self.delivery_number = self.position
-  end
-
-  def changed_status
-    old_status, new_status = self.status_change
-
-    subtract_from_account if new_status == 'delivered'
-    add_to_account        if old_status == 'delivered'
-
-    Event.create_call_reminder(customer) if new_status == 'delivered' && customer.new?
   end
 
   def subtract_from_account
@@ -144,7 +146,6 @@ class Delivery < ActiveRecord::Base
       transactionable: self,
       description: "Delivery was made of #{package.contents_description} at #{package.price}."
     )
-    errors.add(:base, 'Problem subtracting balance from account on delivery status change.') unless account.valid?
   end
 
   def add_to_account
@@ -153,7 +154,10 @@ class Delivery < ActiveRecord::Base
       transactionable: self,
       description: "Delivery reversal. #{package.contents_description} at #{package.price}."
     )
-    errors.add(:base, 'Problem adding balance from account on delivery status change.') unless account.valid?
+  end
+
+  def customer_callback
+    Event.create_call_reminder(customer)
   end
 
   def remove_from_schedule
