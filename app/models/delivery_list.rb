@@ -23,8 +23,14 @@ class DeliveryList < ActiveRecord::Base
 
       (future_start_date..end_date).each do |date|
         date_orders = []
+        wday = date.wday
 
         orders.each { |order| date_orders << order if order.schedule.occurs_on?(date) }
+
+        date_orders = date_orders.sort_by do |order|
+          delivery = order.customer.deliveries.select{ |d| d.date.wday == wday }.last
+          delivery ? delivery.position : 9999
+        end
 
         result << FutureDeliveryList.new(date, date_orders)
       end
