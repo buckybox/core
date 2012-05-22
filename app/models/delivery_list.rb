@@ -37,11 +37,17 @@ class DeliveryList < ActiveRecord::Base
     delivery_list = DeliveryList.find_or_create_by_distributor_id_and_date(distributor.id, date)
     packing_list  = PackingList.find_or_create_by_distributor_id_and_date(distributor.id, date)
 
+    # Collecting via packing list rather than orders so that delivery generation is explicitly
+    # linked with packages.
     packages = {}
+    current_wday = delivery_list.date.wday
 
     # Determine the order of this delivery list based on previous deliveries
     packing_list.packages.each do |package|
-      last_delivery = package.order.deliveries.last
+      previous_deliveries = package.customer.deliveries
+
+      # Look back only on the same day of the week as routes are generally sorted by days of the week
+      last_delivery = previous_deliveries.select{ |d| d.date.wday == current_wday }.last
 
       if last_delivery
         position = last_delivery.position
@@ -59,6 +65,7 @@ class DeliveryList < ActiveRecord::Base
     packages.each do |package|
       order = package.order
       route = order.route
+
       # need to pass route as well or the position scope for this delivery list is not set properly
       delivery_list.deliveries.find_or_create_by_package_id(package.id, order: order, route: route)
     end
