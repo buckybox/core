@@ -26,8 +26,7 @@ module Bucky::TransactionImports
     end
     
     def add_row(date, description, amount, index, parser)
-      @rows ||= []
-      @rows << Row.new(date, description, amount, index, parser)
+      rows << Row.new(date, description, amount, index, parser)
     end
 
     def credit_rows
@@ -39,9 +38,14 @@ module Bucky::TransactionImports
     end
 
     def rows_are_valid
-      unless @rows.all?(&:valid?)
+      unless rows.all?(&:valid?)
         errors.add(:base, "There was a problem with the file you uploaded.")
       end
+    end
+
+    def rows
+      @rows ||= []
+      @rows
     end
 
     #def errors

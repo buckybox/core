@@ -7,13 +7,13 @@ class ImportTransactionList < ActiveRecord::Base
   
   mount_uploader :csv_file, ImportTransactionListUploader
 
-  FILE_FORMATS = [["Kiwibank", "kiwibank"], ["St George Australia", "st_george_au"]]
-  ACCOUNTS = [:kiwibank, :paypal, :st_george_au]
+  FILE_FORMATS = [["Kiwibank", "kiwibank"], ["St George Australia", "st_george_au"], ["BNZ", "bnz"]]
+  ACCOUNTS = [:kiwibank, :paypal, :st_george_au, :bnz]
   SOURCES = [:manual, :kiwibank_csv]
 
   validate :csv_ready, on: :create
-  validates_presence_of :csv_file
-  validates_inclusion_of :file_format, in: FILE_FORMATS.collect(&:last)
+  validates :file_format, inclusion: {in: FILE_FORMATS.collect(&:last)}
+  validates :csv_file, presence: true
 
   before_create :import_rows
 
@@ -37,11 +37,11 @@ class ImportTransactionList < ActiveRecord::Base
     end
     import_transactions
   end
-  
-  def csv_valid?
-    csv_parser.present? && csv_parser.valid?
-  end
 
+  def file_format
+    read_attribute(:file_format) || FILE_FORMATS.first.last
+  end
+  
   def parser_class
     "Bucky::TransactionImports::#{file_format.camelize}".constantize
   end
@@ -49,7 +49,7 @@ class ImportTransactionList < ActiveRecord::Base
   def csv_parser
     if @parser.blank?
       @parser = parser_class.new
-      @parser.import(self.csv_file.current_path)
+      @parser.import(csv_file.current_path) if errors.blank? && csv_file.present?
     end
     @parser
   end
@@ -89,6 +89,10 @@ class ImportTransactionList < ActiveRecord::Base
 
   def processed?
     !draft?
+  end
+
+  def csv_valid?
+    errors.blank? && csv_parser.present? && csv_parser.valid?
   end
 
   private

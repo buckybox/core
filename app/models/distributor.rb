@@ -260,6 +260,11 @@ class Distributor < ActiveRecord::Base
     import_transactions.processed.matched.where(description: description).ordered.last
   end
 
+  def last_csv_format
+    last_import = import_transaction_lists.order("created_at DESC").first
+    last_import.present? ? last_import.file_format : nil
+  end
+
   private
 
   def parameterize_name
