@@ -3,16 +3,17 @@ module Bucky::TransactionImports
 
     include ActiveModel::Validations
 
-    attr_accessor :date_string, :amount_string, :description, :index, :parser
+    attr_accessor :date_string, :amount_string, :description, :index, :raw_data, :parser
 
     validate :row_is_valid
 
-    def initialize(date_string, description, amount_string, index=nil, parser=nil)
+    def initialize(date_string, description, amount_string, index=nil, raw_data=nil, parser=nil)
       self.date_string = date_string
       self.description = description
       self.amount_string = amount_string
       self.index = index
       self.parser = parser
+      self.raw_data = raw_data
     end
 
     def date

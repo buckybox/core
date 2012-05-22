@@ -25,8 +25,8 @@ module Bucky::TransactionImports
       raise "This method needs to be defined in a child class"
     end
     
-    def add_row(date, description, amount, index, parser)
-      rows << Row.new(date, description, amount, index, parser)
+    def add_row(date, description, amount, index, raw_data, parser)
+      rows << Row.new(date, description, amount, index, raw_data, parser)
     end
 
     def credit_rows

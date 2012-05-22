@@ -22,11 +22,17 @@ module Bucky::TransactionImports
         credit = row[i(:credit)]
         amount = debit.present? ? ('-' + debit) : credit
 
-        add_row(date, description, amount, index, self)
+        add_row(date, description, amount, index, raw_data(row), self)
         index += 1
       end
 
       rows
+    end
+
+    def raw_data(row)
+      COLUMNS.inject({}) do |hash, element|
+        hash.merge(element => row[i(element)])
+      end
     end
 
     def i(column)

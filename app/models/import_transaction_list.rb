@@ -24,7 +24,7 @@ class ImportTransactionList < ActiveRecord::Base
   attr_accessible :csv_file, :file_format, :import_transactions_attributes, :draft
 
   def account
-    ACCOUNTS[account_type]
+    file_format#ACCOUNTS[account_type]
   end
 
   def source

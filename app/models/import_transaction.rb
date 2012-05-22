@@ -11,8 +11,10 @@ class ImportTransaction < ActiveRecord::Base
     constructor: Proc.new { |cents, currency| Money.new(cents || 0, currency || Money.default_currency) },
     converter: Proc.new { |value| value.respond_to?(:to_money) ? value.to_money : raise(ArgumentError, "Can't convert #{value.class} to Money") }
 
-  attr_accessible :customer, :customer_id, :transaction_date, :amount_cents, :removed, :description, :confidence, :import_transaction_list, :match, :draft
+  attr_accessible :customer, :customer_id, :transaction_date, :amount_cents, :removed, :description, :confidence, :import_transaction_list, :match, :draft, :raw_data
   
+  serialize :raw_data
+
   MATCH_MATCHED = "matched"
   MATCH_UNABLE_TO_MATCH = "unable_to_match"
   MATCH_DUPLICATE = "duplicate"
@@ -54,7 +56,8 @@ class ImportTransaction < ActiveRecord::Base
       confidence: match_result.confidence,
       import_transaction_list: import_transaction_list,
       match: match_type(match_result),
-      draft: true
+      draft: true,
+      raw_data: row.raw_data
     )
   end
 
@@ -113,6 +116,10 @@ class ImportTransaction < ActiveRecord::Base
 
   def payment_created?
     payment.present?
+  end
+
+  def raw_data
+    read_attribute(:raw_data) || {}
   end
 
   private

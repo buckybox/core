@@ -12,7 +12,7 @@ class Distributor::PaymentsController < Distributor::ResourceController
   def index 
     #@payments = current_distributor.payments.bank_transfer.order('created_at DESC')
     @import_transaction_list = ImportTransactionList.new
-    @import_transaction_lists = current_distributor.import_transaction_lists.ordered
+    @import_transaction_lists = current_distributor.import_transaction_lists.ordered.limit(20)
   end
 
   def create
