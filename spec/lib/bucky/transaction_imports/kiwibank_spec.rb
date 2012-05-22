@@ -49,9 +49,10 @@ describe Bucky::TransactionImports::Kiwibank do
         date = good_csv_data[1][0]
         description = good_csv_data[1][1]
         amount = good_csv_data[1][3]
+        parser = Kiwibank.new
         Row.stub(:new)
-        Row.should_receive(:new).with(date, description, amount).at_least(:once)
-        Kiwibank.new.import_csv(csv_string(good_csv_data))
+        Row.should_receive(:new).with(date, description, amount, 1, parser).at_least(:once)
+        parser.import_csv(csv_string(good_csv_data))
       end
 
       it "should create valid rows" do
