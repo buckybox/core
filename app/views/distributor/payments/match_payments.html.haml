@@ -16,7 +16,7 @@
           %th Account
           %th Customer
       %tbody
-        - @import_transaction_list.import_transactions.each do |import_transaction|
+        - @import_transaction_list.import_transactions.ordered.each do |import_transaction|
           = f.simple_fields_for(:import_transactions, import_transaction) do |tf|
             %tr
               = tf.input :id, as: :hidden

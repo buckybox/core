@@ -21,7 +21,7 @@ class ImportTransactionList < ActiveRecord::Base
 
   scope :ordered, order("created_at DESC")
 
-  attr_accessible :csv_file, :file_format
+  attr_accessible :csv_file, :file_format, :import_transactions_attributes, :draft
 
   def account
     ACCOUNTS[account_type]
