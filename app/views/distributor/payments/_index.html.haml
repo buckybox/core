@@ -17,5 +17,5 @@
           %tr
             %td= link_to(i.created_at.to_s(:timestamp), distributor_payment_path(i))
             %td= i.draft? ? "Draft" : "Processed"
-            %td Kiwibank
+            %td= i.account
             %td= i.import_transactions.count
