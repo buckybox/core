@@ -66,6 +66,22 @@ class DeliveryList < ActiveRecord::Base
     return delivery_list
   end
 
+  def reposition(delivery_order)
+    raise 'Your delivery ids do not match' if delivery_order.map(&:to_i).sort != delivery_ids.sort
+
+    all_saved = true
+
+    Delivery.transaction do
+      delivery_order.each_with_index do |delivery_id, index|
+        delivery = deliveries.find(delivery_id)
+        delivery.position = index + 1
+        all_saved &= delivery.save
+      end
+    end
+
+    return all_saved
+  end
+
   def mark_all_as_auto_delivered
     result = true
     deliveries.each { |delivery| result &= Delivery.auto_deliver(delivery) }
