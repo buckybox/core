@@ -24,8 +24,8 @@ module Bucky::TransactionImports
     end
 
     def raw_data(row)
-      COLUMNS.inject({}) do |hash, element|
-        hash.merge(element => row[COLUMNS.index(column)])
+      (COLUMNS-[:empty]).inject({}) do |hash, element|
+        hash.merge(element => row[COLUMNS.index(element)])
       end
     end
 
