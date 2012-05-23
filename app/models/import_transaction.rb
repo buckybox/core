@@ -41,6 +41,9 @@ class ImportTransaction < ActiveRecord::Base
   scope :not_a_customer, where(["match = ?", MATCH_TYPES[MATCH_NOT_A_CUSTOMER]])
   scope :not_not_a_customer, where(["match != ?", MATCH_TYPES[MATCH_NOT_A_CUSTOMER]])
 
+  scope :removed, where(removed: true)
+  scope :not_removed, where(removed: false)
+
   validate :customer_belongs_to_distributor
 
   after_validation :update_account, if: :changed?
@@ -120,6 +123,15 @@ class ImportTransaction < ActiveRecord::Base
 
   def raw_data
     read_attribute(:raw_data) || {}
+  end
+
+  def remove!
+    return true if removed?
+    ImportTransaction.transaction do
+      payment.reverse_payment! if payment.present?
+      self.removed = true
+      save!
+    end
   end
 
   private

@@ -61,7 +61,7 @@ BuckyBox::Application.routes.draw do
       end
     end
 
-    resources :payments, only: [:create, :index, :show] do
+    resources :payments, only: [:create, :index, :show, :destroy] do
       collection do
         get 'upload_transactions', action: 'upload_transactions', as: 'upload_transactions'
         post 'process_upload', action: 'process_upload', as: 'process_upload'

@@ -1,0 +1,3 @@
+$("#import_transaction_<%= @import_transaction.id%>").next().hide("highlight",{}, 500, function(){$(this).remove();});
+$("#import_transaction_<%= @import_transaction.id%>").hide("highlight",{}, 500, function(){$(this).remove();});
+// Highlight the elements, fade them, then remove them

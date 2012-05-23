@@ -14,9 +14,9 @@
           %th Account
           %th Customer
       %tbody
-        - @import_transaction_list.import_transactions.ordered.each do |import_transaction|
+        - @import_transaction_list.import_transactions.not_removed.ordered.each do |import_transaction|
           = f.simple_fields_for(:import_transactions, import_transaction) do |tf|
-            %tr.row_description
+            %tr.row_description{id: "import_transaction_#{import_transaction.id}"}
               = tf.input :id, as: :hidden
               = tf.input :draft, as: :hidden, input_html: {value: false}
               %td= import_transaction.transaction_date.to_s(:transaction)
@@ -33,7 +33,7 @@
                   %div= "#{key.to_s.humanize}: #{value}"
               %td
               %td
-              %td
+              %td.remove= link_to("remove transaction", distributor_payment_path(import_transaction), method: :delete, confirm: "This will remove this transaction and reverse any changes it made to any accounts.", remote: true)
 
 
   .row

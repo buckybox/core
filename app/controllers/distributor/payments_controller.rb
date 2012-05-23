@@ -66,6 +66,13 @@ class Distributor::PaymentsController < Distributor::ResourceController
     redirect_to distributor_payments_url
   end
 
+  def destroy
+    @import_transaction = current_distributor.import_transactions.find(params[:id])
+    if @import_transaction.removed? || @import_transaction.remove!
+      render :destroy
+    end
+  end
+
   private
 
   def load_import_transaction_list

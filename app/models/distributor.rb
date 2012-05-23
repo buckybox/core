@@ -253,11 +253,11 @@ class Distributor < ActiveRecord::Base
   end
 
   def find_duplicate_import_transactions(date, description, amount)
-    import_transactions.processed.not_duplicate.where(transaction_date: date, description: description, amount_cents: (amount * 100).to_i)
+    import_transactions.processed.not_duplicate.not_removed.where(transaction_date: date, description: description, amount_cents: (amount * 100).to_i)
   end
 
   def find_previous_match(description)
-    import_transactions.processed.matched.where(description: description).ordered.last
+    import_transactions.processed.matched.not_removed.where(description: description).ordered.last
   end
 
   def last_csv_format
