@@ -33,7 +33,7 @@
                   %div= "#{key.to_s.humanize}: #{value}"
               %td
               %td
-              %td.remove= link_to("remove transaction", distributor_payment_path(import_transaction), method: :delete, confirm: "This will remove this transaction and reverse any changes it made to any accounts.", remote: true)
+              %td.remove= link_to("remove transaction", distributor_payment_path(import_transaction), method: :delete, confirm: "This will also reverse any changes made to customer accounts", remote: true)
 
 
   .row
