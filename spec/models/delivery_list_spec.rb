@@ -1,17 +1,17 @@
 require 'spec_helper'
 
 describe DeliveryList do
-  let(:fabricated_distributor) { Fabricate.build(:distributor) }
-  let(:fabricated_route) { Fabricate.build(:route) }
-  let(:fabricated_delivery_list) { Fabricate.build(:delivery_list, distributor: fabricated_distributor) }
-  let(:delivery_list) { Fabricate.build(:delivery_list) }
+  let(:distributor) { Fabricate.build(:distributor) }
+  let(:route) { Fabricate.build(:route) }
+  let(:delivery_list) { Fabricate.build(:delivery_list, distributor: distributor) }
+  let(:delivery) { Fabricate.build(:delivery, delivery_list: delivery_list) }
 
   specify { delivery_list.should be_valid }
 
   def delivery_auto_delivering(result = true)
     delivery = mock_model(Delivery)
     Delivery.should_receive(:auto_deliver).with(delivery).and_return(result)
-    delivery
+    return delivery
   end
 
   describe 'when marking all as auto delivered' do
@@ -93,6 +93,32 @@ describe DeliveryList do
       end
 
       specify { fabricated_delivery_list.all_finished?.should_not be_true }
+    end
+  end
+
+  describe '#reposition' do
+    context 'delivery ids must match' do
+      before do
+        @ids = [1, 2, 3]
+        delivery_list.stub(:delivery_ids).and_return(@ids)
+
+        delivery_list.deliveries.stub(:find).and_return(delivery)
+        delivery.stub(:reposition!).and_return(true)
+      end
+
+      specify { expect { delivery_list.reposition([2, 1, 3]) }.should_not raise_error(RuntimeError) }
+      specify { expect { delivery_list.reposition([2, 5, 3]) }.should raise_error(RuntimeError) }
+    end
+
+    context 'should update delivery list positions' do
+      before do
+        delivery_list.save
+        3.times { Fabricate(:delivery, delivery_list: delivery_list) }
+        @ids = delivery_list.delivery_ids
+        @new_ids = @ids.shuffle
+      end
+
+      specify { expect { delivery_list.reposition(@new_ids) }.should change(delivery_list, :delivery_ids).to(@new_ids) }
     end
   end
 end

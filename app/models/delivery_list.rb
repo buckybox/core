@@ -27,6 +27,7 @@ class DeliveryList < ActiveRecord::Base
 
         orders.each { |order| date_orders << order if order.schedule.occurs_on?(date) }
 
+        # This emulates the ordering when lists are actually created
         date_orders = date_orders.sort_by do |order|
           delivery = order.customer.deliveries.select{ |d| d.date.wday == wday }.last
           delivery ? delivery.position : 9999
@@ -87,8 +88,7 @@ class DeliveryList < ActiveRecord::Base
     Delivery.transaction do
       delivery_order.each_with_index do |delivery_id, index|
         delivery = deliveries.find(delivery_id)
-        delivery.position = index + 1
-        all_saved &= delivery.save
+        all_saved &= delivery.reposition!(index + 1)
       end
     end
 
