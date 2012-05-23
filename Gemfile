@@ -55,7 +55,6 @@ group :development do
   gem 'pry-remote' # Needed for using pry in spork
   gem 'pry-rails'
   gem 'pry-nav'
-  gem 'pry-stack_explorer'
   gem 'pry-coolline'
 end
 

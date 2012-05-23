@@ -60,7 +60,7 @@ describe DeliveryList do
       @distributor = Fabricate(:distributor)
       daily_orders(@distributor)
 
-      @advance_days = Distributor::DEFAULT_ADVANCED_DAYS
+      @advance_days  = Distributor::DEFAULT_ADVANCED_DAYS
       @generate_date = Date.current + @advance_days.days
 
       time_travel_to @generate_date
@@ -71,28 +71,47 @@ describe DeliveryList do
     specify { expect { DeliveryList.generate_list(@distributor, @generate_date) }.should change(@distributor.delivery_lists, :count).from(@advance_days).to(@advance_days + 1) }
     specify { expect { DeliveryList.generate_list(@distributor, @generate_date) }.should change(@distributor.deliveries, :count).from(0).to(3) }
 
+    context 'for the next week' do
+      before do
+        @dl1 = DeliveryList.generate_list(@distributor, @generate_date)
+        PackingList.generate_list(@distributor, @generate_date + 1.week)
+        @dl2 = DeliveryList.generate_list(@distributor, @generate_date + 1.week)
+      end
+
+      specify { @dl2.deliveries.map{|d| "#{d.customer.number}/#{d.position}"}.should == @dl1.deliveries.map{|d| "#{d.customer.number}/#{d.position}"} }
+
+      context 'and the week after that' do
+        before do
+          PackingList.generate_list(@distributor, @generate_date + 2.week)
+          @dl3 = DeliveryList.generate_list(@distributor, @generate_date + 2.week)
+        end
+
+        specify { @dl3.deliveries.map{|d| "#{d.customer.number}/#{d.position}"}.should == @dl2.deliveries.map{|d| "#{d.customer.number}/#{d.position}"} }
+      end
+    end
+
     after { back_to_the_present }
   end
 
   describe '#all_finished?' do
-    before { fabricated_delivery_list.save }
+    before { delivery_list.save }
 
     context 'no deliveries are pending' do
       before do
-        Fabricate(:delivery, status: 'delivered', delivery_list: fabricated_delivery_list)
-        Fabricate(:delivery, status: 'delivered', delivery_list: fabricated_delivery_list)
+        Fabricate(:delivery, status: 'delivered', delivery_list: delivery_list)
+        Fabricate(:delivery, status: 'delivered', delivery_list: delivery_list)
       end
 
-      specify { fabricated_delivery_list.all_finished?.should be_true }
+      specify { delivery_list.all_finished?.should be_true }
     end
 
     context 'has deliveries that are pending' do
       before do
-        Fabricate(:delivery, status: 'delivered', delivery_list: fabricated_delivery_list)
-        Fabricate(:delivery, status: 'pending', delivery_list: fabricated_delivery_list)
+        Fabricate(:delivery, status: 'delivered', delivery_list: delivery_list)
+        Fabricate(:delivery, status: 'pending', delivery_list: delivery_list)
       end
 
-      specify { fabricated_delivery_list.all_finished?.should_not be_true }
+      specify { delivery_list.all_finished?.should_not be_true }
     end
   end
 
