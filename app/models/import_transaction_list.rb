@@ -7,7 +7,7 @@ class ImportTransactionList < ActiveRecord::Base
   
   mount_uploader :csv_file, ImportTransactionListUploader
 
-  FILE_FORMATS = [["Kiwibank", "kiwibank"], ["St George Australia", "st_george_au"], ["BNZ", "bnz"]]
+  FILE_FORMATS = [["Kiwibank", "kiwibank"], ["St George Australia", "st_george_au"], ["Paypal", "paypal"], ["BNZ", "bnz"]]
   ACCOUNTS = [:kiwibank, :paypal, :st_george_au, :bnz]
   SOURCES = [:manual, :kiwibank_csv]
 
@@ -39,7 +39,12 @@ class ImportTransactionList < ActiveRecord::Base
   end
 
   def file_format
-    read_attribute(:file_format) || FILE_FORMATS.first.last
+    in_db = read_attribute(:file_format)
+    if in_db.present?
+      in_db
+    else
+      distributor.present? ? distributor.last_csv_format : FILE_FORMATS.first.last
+    end
   end
   
   def parser_class

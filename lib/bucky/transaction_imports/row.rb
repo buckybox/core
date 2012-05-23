@@ -24,7 +24,8 @@ module Bucky::TransactionImports
       @amount_string.to_f
     end
     
-    MATCH_STRATEGY = [[:number_match, 0.8],
+    MATCH_STRATEGY = [[:email_match, 1.0],
+                      [:number_match, 0.8],
                       [:name_match, 0.8],
                       [:account_match, 0.5]]
 
@@ -43,6 +44,14 @@ module Bucky::TransactionImports
 
     def previous_match(distributor)
       distributor.find_previous_match(description)
+    end
+
+    def email_match(customer)
+      if customer.email.present? && description.match(Regexp.escape(customer.email))
+        1.0
+      else
+        0.0
+      end
     end
 
     def number_match(customer)
