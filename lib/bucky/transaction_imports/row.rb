@@ -67,13 +67,13 @@ module Bucky::TransactionImports
     end
 
     def name_match(customer)
-      regex = Regexp.new(customer.name.gsub(/\W+/, ".{0,3}"), true) # 0,3 means that it allows 0 -> 3 chars between the first and last name, be it a space or a dot or some other mistake
+      regex = Regexp.new(Regexp.escape(customer.name).gsub(/\W+/, ".{0,3}"), true) # 0,3 means that it allows 0 -> 3 chars between the first and last name, be it a space or a dot or some other mistake
       if description.match(regex)
         # Match first and last name, ignoring case
         1
       elsif customer.has_first_and_last_name? # This fixes a bug where someone only has a first name (Say Phoenix) and the regex created is P.* which matches "payment" which isn't good!
         # Match first inital and last name
-        regex = Regexp.new("#{customer.first_name.first} #{customer.last_name}".gsub(/\W+/, ".{0,3}"), true)
+        regex = Regexp.new("#{Regexp.escape(customer.first_name.first)} #{Regexp.escape(customer.last_name)}".gsub(/\W+/, ".{0,3}"), true)
         description.match(regex).present? ? 0.9 : 0
       else
         0
