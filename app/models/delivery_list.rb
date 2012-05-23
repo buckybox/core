@@ -29,7 +29,7 @@ class DeliveryList < ActiveRecord::Base
 
         # This emulates the ordering when lists are actually created
         date_orders = date_orders.sort_by do |order|
-          delivery = order.customer.deliveries.select{ |d| d.date.wday == wday }.last
+          delivery = DeliveryList.last_week_delivery(wday, order.customer.deliveries)
           delivery ? delivery.position : 9999
         end
 
@@ -54,7 +54,7 @@ class DeliveryList < ActiveRecord::Base
       previous_deliveries = package.customer.deliveries
 
       # Look back only on the same day of the week as routes are generally sorted by days of the week
-      last_delivery = previous_deliveries.select{ |d| d.date.wday == current_wday }.last
+      last_delivery = DeliveryList.last_week_delivery(current_wday, previous_deliveries)
 
       if last_delivery
         position = last_delivery.position
@@ -108,5 +108,11 @@ class DeliveryList < ActiveRecord::Base
   def all_finished?
     @all_finished ||= deliveries.all? { |delivery| delivery.status != 'pending' }
     has_deliveries? || @all_finished
+  end
+
+  private
+
+  def self.last_week_delivery(day_of_the_week, deliveries)
+    deliveries.select{ |d| d.date.wday == day_of_the_week }.sort{ |a,b| a.date <=> b.date }.last
   end
 end
