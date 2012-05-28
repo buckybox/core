@@ -116,6 +116,17 @@ describe DeliveryList do
   end
 
   describe '#reposition' do
+    context 'makes sure the deliveries are from the same route' do
+      before do
+        delivery_list.save
+        delivery.save
+        @diff_route = Fabricate(:delivery, delivery_list: delivery_list)
+        delivery_list.stub(:delivery_ids).and_return([delivery, @diff_route])
+      end
+
+      specify { expect { delivery_list.reposition([@diff_route.id, delivery.id]) }.should raise_error(RuntimeError) }
+    end
+
     context 'delivery ids must match' do
       before do
         @ids = [1, 2, 3]

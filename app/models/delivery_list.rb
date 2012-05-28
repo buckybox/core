@@ -81,7 +81,11 @@ class DeliveryList < ActiveRecord::Base
   end
 
   def reposition(delivery_order)
-    raise 'Your delivery ids do not match' if delivery_order.map(&:to_i).sort != delivery_ids.sort
+    # Assuming all routes are from the same route, if not it will fail on match anyway
+    route_id = Delivery.find(delivery_order.first).route_id
+    existing_ids = deliveries.where(route_id:route_id).map(&:id)
+
+    raise 'Your delivery ids do not match' if delivery_order.map(&:to_i).sort != existing_ids.sort
 
     all_saved = true
 
