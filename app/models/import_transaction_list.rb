@@ -71,15 +71,10 @@ class ImportTransactionList < ActiveRecord::Base
 
     # Pull out the non customer_ids (duplicate, not_a_customer, etc..)
     transactions_attributes.each do |id, transaction_attributes|
-      if ImportTransaction::MATCH_TYPES.include?(transaction_attributes['customer_id'])
-        transaction_attributes['match'] = transaction_attributes['customer_id']
-        transaction_attributes['customer_id'] = nil
-      else
-        transaction_attributes['match'] = ImportTransaction::MATCH_MATCHED
-      end
+      ImportTransaction.process_attributes(transaction_attributes)
     end
 
-    #Remove any customers which shouldn't be here
+    # Remove any customers which shouldn't be here
     hash_customer_ids = distributor.customer_ids.inject({}){|hash, element| hash.merge(element.to_s => true)}
     transactions_attributes = transactions_attributes.select do |id, transaction_attributes|
       hash_customer_ids.key?(transaction_attributes[:customer_id])

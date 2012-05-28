@@ -74,6 +74,9 @@ BuckyBox::Application.routes.draw do
       end
     end
 
+    resources :import_transactions, only: [:update] do
+    end
+
     resources :customers do
       collection do
         get 'search',   action: :index, as: 'search'

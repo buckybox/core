@@ -1,0 +1,2 @@
+$("#edit_row_match_<%= @import_transaction.id %>").html('<%= j(render partial: "distributor/payments/processed_row_detail", locals: {import_transaction: @import_transaction}) %>');
+$("#edit_row_match_<%= @import_transaction.id %>").closest("tr").effect('highlight')

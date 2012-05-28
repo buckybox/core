@@ -6,7 +6,11 @@ class Distributor::PaymentsController < Distributor::ResourceController
   before_filter :load_import_transaction_list, only: [:process_payments, :show]
 
   def show
-    render :match_payments
+    if @import_transaction_list.draft?
+      render :match_payments
+    else
+      render :processed_payments
+    end
   end
 
   def index 

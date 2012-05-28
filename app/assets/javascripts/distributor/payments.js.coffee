@@ -4,4 +4,10 @@
 $ ->
   $(".row_description").click ->
     $(this).next().toggle()
-
+    $(this).closest("tr.row_description").find(".edit_row_match").toggle()
+    $(this).closest("tr.row_description").find(".show_row_match").toggle()
+  $("div.edit_row_match input[type=submit]").click((event) ->
+    event.stopPropagation() # Dont trigger the .row_description click
+    $(this).prop('disabled', 'disabled')
+    $(this).closest('tr').find('form').submit()
+  )

@@ -5,35 +5,36 @@
     .row.errors
       = @import_transaction_list.errors.full_messages.join(", ")
   .row
-    %table.twelve.columns.payments
-      %thead
-        %tr
-          %th Date
-          %th{width: '400px'} Description
-          %th Amount
-          %th Account
-          %th Customer
-      %tbody
-        - @import_transaction_list.import_transactions.not_removed.ordered.each do |import_transaction|
-          = f.simple_fields_for(:import_transactions, import_transaction) do |tf|
-            %tr.row_description{id: "import_transaction_#{import_transaction.id}"}
-              = tf.input :id, as: :hidden
-              = tf.input :draft, as: :hidden, input_html: {value: false}
-              %td= import_transaction.transaction_date.to_s(:transaction)
-              %td= import_transaction.description
-              %td= import_transaction.amount.format
-              %td= @import_transaction_list.account
-              %td
-                %span{style: "display: inline-block"}= tf.input :customer_id, as: :select, collection: import_transaction.possible_customers, selected: import_transaction.match_id, label: false
-                %span= "*" + "*" * (4 * tf.object.confidence)
-            %tr.row_details{style: "display: none;"}
-              %td
-              %td
-                - import_transaction.raw_data.each do |key, value|
-                  %div= "#{key.to_s.humanize}: #{value}"
-              %td
-              %td
-              %td.remove= link_to("remove transaction", distributor_payment_path(import_transaction), method: :delete, confirm: "This will also reverse any changes made to customer accounts", remote: true)
+    .twelve.columns
+      %table.payments
+        %thead
+          %tr
+            %th Date
+            %th{width: '400px'} Description
+            %th Amount
+            %th Account
+            %th Customer
+        %tbody
+          - @import_transaction_list.import_transactions.not_removed.ordered.each do |import_transaction|
+            = f.simple_fields_for(:import_transactions, import_transaction) do |tf|
+              %tr.row_description{id: "import_transaction_#{import_transaction.id}"}
+                = tf.input :id, as: :hidden
+                = tf.input :draft, as: :hidden, input_html: {value: false}
+                %td= import_transaction.transaction_date.to_s(:transaction)
+                %td= import_transaction.description
+                %td= import_transaction.amount.format
+                %td= @import_transaction_list.account
+                %td
+                  %span{style: "display: inline-block"}= tf.input :customer_id, as: :select, collection: import_transaction.possible_customers, selected: import_transaction.match_id, label: false
+                  %span= "*" + "*" * (4 * tf.object.confidence)
+              %tr.row_details{style: "display: none;"}
+                %td
+                %td
+                  - import_transaction.raw_data.each do |key, value|
+                    %div= "#{key.to_s.humanize}: #{value}"
+                %td
+                %td
+                %td
 
 
   .row

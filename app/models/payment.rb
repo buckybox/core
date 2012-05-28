@@ -22,7 +22,7 @@ class Payment < ActiveRecord::Base
   validates_presence_of :distributor_id, :account_id, :amount, :kind, :description
   validates_inclusion_of :kind, :in => KINDS, :message => "%{value} is not a valid kind of payment"
   validates_inclusion_of :source, :in => SOURCES, :message => "%{value} is not a valid source of payment"
-  validates_numericality_of :amount, :greater_than => 0
+  validates_numericality_of :amount
 
   after_create :update_account
 

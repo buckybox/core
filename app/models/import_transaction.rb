@@ -85,10 +85,10 @@ class ImportTransaction < ActiveRecord::Base
 
   def possible_customers
     result = customer.present? ? [[customer.badge, customer.id]] : []
-    result += (MATCH_SELECT +
-               distributor.customers.reject{|c| c.id == customer_id}.collect{|c|
+    result += draft? ? MATCH_SELECT : [[MATCH_NOT_A_CUSTOMER.humanize, MATCH_NOT_A_CUSTOMER]]
+    result += distributor.customers.reject{|c| c.id == customer_id}.collect{|c|
                  [c.badge, c.id]
-               })
+               }
     result
   end
 
@@ -109,7 +109,7 @@ class ImportTransaction < ActiveRecord::Base
     customer_id || match
   end
 
-  def is_matched?
+  def matched?
     match == MATCH_MATCHED && customer.present?
   end
 
@@ -134,6 +134,16 @@ class ImportTransaction < ActiveRecord::Base
     end
   end
 
+  def self.process_attributes(transaction_attributes)
+    if ImportTransaction::MATCH_TYPES.include?(transaction_attributes['customer_id'])
+      transaction_attributes['match'] = transaction_attributes['customer_id']
+      transaction_attributes['customer_id'] = nil
+    else
+      transaction_attributes['match'] = ImportTransaction::MATCH_MATCHED
+    end
+    transaction_attributes
+  end
+
   private
 
   def update_account
@@ -144,7 +154,7 @@ class ImportTransaction < ActiveRecord::Base
     end
 
     # Create new payments if a new customer has been assigned
-    if !draft && is_matched? && !payment_created? && customer.present?
+    if !draft && matched? && !payment_created? && customer.present?
       self.payment = customer.make_import_payment(amount, description, transaction_date) 
     end
   end
