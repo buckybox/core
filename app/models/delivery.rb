@@ -70,6 +70,10 @@ class Delivery < ActiveRecord::Base
     status == 'pending'
   end
 
+  def reposition!(position)
+    update_attribute(:position, position)
+  end
+
   def description
     "[ID##{id}] Delivery of #{package.contents_description} at #{package.price} each."
   end

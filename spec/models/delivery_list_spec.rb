@@ -1,17 +1,17 @@
 require 'spec_helper'
 
 describe DeliveryList do
-  let(:fabricated_distributor) { Fabricate.build(:distributor) }
-  let(:fabricated_route) { Fabricate.build(:route) }
-  let(:fabricated_delivery_list) { Fabricate.build(:delivery_list, distributor: fabricated_distributor) }
-  let(:delivery_list) { Fabricate.build(:delivery_list) }
+  let(:distributor) { Fabricate.build(:distributor) }
+  let(:route) { Fabricate.build(:route) }
+  let(:delivery_list) { Fabricate.build(:delivery_list, distributor: distributor) }
+  let(:delivery) { Fabricate.build(:delivery, delivery_list: delivery_list) }
 
   specify { delivery_list.should be_valid }
 
   def delivery_auto_delivering(result = true)
     delivery = mock_model(Delivery)
     Delivery.should_receive(:auto_deliver).with(delivery).and_return(result)
-    delivery
+    return delivery
   end
 
   describe 'when marking all as auto delivered' do
@@ -60,7 +60,7 @@ describe DeliveryList do
       @distributor = Fabricate(:distributor)
       daily_orders(@distributor)
 
-      @advance_days = Distributor::DEFAULT_ADVANCED_DAYS
+      @advance_days  = Distributor::DEFAULT_ADVANCED_DAYS
       @generate_date = Date.current + @advance_days.days
 
       time_travel_to @generate_date
@@ -71,28 +71,73 @@ describe DeliveryList do
     specify { expect { DeliveryList.generate_list(@distributor, @generate_date) }.should change(@distributor.delivery_lists, :count).from(@advance_days).to(@advance_days + 1) }
     specify { expect { DeliveryList.generate_list(@distributor, @generate_date) }.should change(@distributor.deliveries, :count).from(0).to(3) }
 
+    context 'for the next week' do
+      before do
+        @dl1 = DeliveryList.generate_list(@distributor, @generate_date)
+        PackingList.generate_list(@distributor, @generate_date + 1.week)
+        @dl2 = DeliveryList.generate_list(@distributor, @generate_date + 1.week)
+      end
+
+      specify { @dl2.deliveries.map{|d| "#{d.customer.number}/#{d.position}"}.should == @dl1.deliveries.map{|d| "#{d.customer.number}/#{d.position}"} }
+
+      context 'and the week after that' do
+        before do
+          PackingList.generate_list(@distributor, @generate_date + 2.week)
+          @dl3 = DeliveryList.generate_list(@distributor, @generate_date + 2.week)
+        end
+
+        specify { @dl3.deliveries.map{|d| "#{d.customer.number}/#{d.position}"}.should == @dl2.deliveries.map{|d| "#{d.customer.number}/#{d.position}"} }
+      end
+    end
+
     after { back_to_the_present }
   end
 
   describe '#all_finished?' do
-    before { fabricated_delivery_list.save }
+    before { delivery_list.save }
 
     context 'no deliveries are pending' do
       before do
-        Fabricate(:delivery, status: 'delivered', delivery_list: fabricated_delivery_list)
-        Fabricate(:delivery, status: 'delivered', delivery_list: fabricated_delivery_list)
+        Fabricate(:delivery, status: 'delivered', delivery_list: delivery_list)
+        Fabricate(:delivery, status: 'delivered', delivery_list: delivery_list)
       end
 
-      specify { fabricated_delivery_list.all_finished?.should be_true }
+      specify { delivery_list.all_finished?.should be_true }
     end
 
     context 'has deliveries that are pending' do
       before do
-        Fabricate(:delivery, status: 'delivered', delivery_list: fabricated_delivery_list)
-        Fabricate(:delivery, status: 'pending', delivery_list: fabricated_delivery_list)
+        Fabricate(:delivery, status: 'delivered', delivery_list: delivery_list)
+        Fabricate(:delivery, status: 'pending', delivery_list: delivery_list)
       end
 
-      specify { fabricated_delivery_list.all_finished?.should_not be_true }
+      specify { delivery_list.all_finished?.should_not be_true }
+    end
+  end
+
+  describe '#reposition' do
+    context 'delivery ids must match' do
+      before do
+        @ids = [1, 2, 3]
+        delivery_list.stub(:delivery_ids).and_return(@ids)
+
+        delivery_list.deliveries.stub(:find).and_return(delivery)
+        delivery.stub(:reposition!).and_return(true)
+      end
+
+      specify { expect { delivery_list.reposition([2, 1, 3]) }.should_not raise_error(RuntimeError) }
+      specify { expect { delivery_list.reposition([2, 5, 3]) }.should raise_error(RuntimeError) }
+    end
+
+    context 'should update delivery list positions' do
+      before do
+        delivery_list.save
+        3.times { Fabricate(:delivery, delivery_list: delivery_list) }
+        @ids = delivery_list.delivery_ids
+        @new_ids = @ids.shuffle
+      end
+
+      specify { expect { delivery_list.reposition(@new_ids) }.should change(delivery_list, :delivery_ids).to(@new_ids) }
     end
   end
 end

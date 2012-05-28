@@ -126,4 +126,8 @@ describe Delivery do
     specify { delivery.to_csv[6].should == delivery.customer.number }
     specify { delivery.to_csv[7].should == delivery.customer.first_name }
   end
+
+  describe '#reposition!' do
+    specify { expect { delivery.reposition!(101) }.to change(delivery, :position).to(101) }
+  end
 end
