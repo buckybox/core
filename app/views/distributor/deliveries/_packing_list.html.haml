@@ -11,7 +11,7 @@
         { id: 'packing-export', class: 'small radius button', disabled: !@real_list })
 
   - if @real_list
-    - @items.group_by(&:box).each do |box, array|
+    - @items.group_by(&:box).sort{ |a,b| a.first.name <=> b.first.name }.each do |box, array|
       .row.data-headings
         %h5.twelve.columns= box.name
 
@@ -26,7 +26,7 @@
             .two.columns== #{package.contents_description}
             .three.columns= customer_badge(package.customer, customer_name: package.archived_customer_name, short: true)
   - else
-    - @items.group_by(&:box).each do |box, array|
+    - @items.group_by(&:box).sort{ |a,b| a.first.name <=> b.first.name }.each do |box, array|
       .row.data-headings
         %h5.twelve.columns= box.name
 
