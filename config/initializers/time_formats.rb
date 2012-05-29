@@ -1,4 +1,6 @@
+Time::DATE_FORMATS[:weekday] = "%A"
 Time::DATE_FORMATS[:month_and_year] = "%B %Y"
+Time::DATE_FORMATS[:day_month_and_year] = "%-d %B %Y"
 Time::DATE_FORMATS[:timestamp] = "%Y-%m-%d %H:%M:%S"
 Time::DATE_FORMATS[:month_date_year] = "%A %d %b"
 Time::DATE_FORMATS[:date_month] = "%d %B"

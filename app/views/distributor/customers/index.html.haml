@@ -25,17 +25,34 @@
     %h4.twelve.columns No Customers To Display
 - else
   .row.data-headings
-    %h4.three.columns Route
-    %h4.three.columns Customer
-    %h4.four.columns Tags
-    %h4.two.columns Balance
+    .four.columns
+      .row
+        %h4.seven.columns Customer Name
+        %h4.five.columns
+    .five.columns
+      .row
+        %h4.five.columns Next Delivery
+        %h4.seven.columns
+    .three.columns
+      .row
+        %h4.six.columns Route
+        %h4.six.columns Balance
 
   - @customers.each do |customer|
     .row.data-listings
-      .three.columns= customer.route.name
-      .three.columns= customer_badge(customer)
       .four.columns
-        - unless customer.tags.empty?
-          - customer.tags.each do |tag|
-            %span.radius.label= link_to tag.name, tag_distributor_customers_path(tag.name)
-      .two.columns= customer.account.balance.format
+        .row
+          .seven.columns= customer_badge(customer)
+          .five.columns
+            - unless customer.tags.empty?
+              - customer.tags.each do |tag|
+                %span.radius.label= link_to tag.name, tag_distributor_customers_path(tag.name)
+      .five.columns
+        .row
+          .five.columns= next_customer_delivery_occurrence(customer)
+          .seven.columns= next_customer_delivery_box_name(customer)
+      .three.columns
+        .row
+          .six.columns= customer.route.name
+          .six.columns= customer.account.balance.format
+
