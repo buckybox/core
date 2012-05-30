@@ -42,7 +42,7 @@
           - if false#@import_transaction_list.errors.present?
             .row.errors
               = @import_transaction_list.errors.full_messages.join(", ")
-          %tr.row_description{id: "import_transaction_#{import_transaction.id}", 'data-row-id' => import_transaction.id}
+          %tr{class: (import_transaction.matched? ? "row_description" : "row_description not_a_customer"),id: "import_transaction_#{import_transaction.id}", 'data-row-id' => import_transaction.id}
             %td= import_transaction.transaction_date.to_s(:transaction)
             %td= import_transaction.description
             %td= import_transaction.amount.format

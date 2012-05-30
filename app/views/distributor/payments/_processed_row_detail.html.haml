@@ -7,5 +7,3 @@
 %div.show_row_match
   - if import_transaction.matched?
     = customer_badge(import_transaction.customer, {link: false})
-  - else
-    = import_transaction.match.humanize

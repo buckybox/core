@@ -15,9 +15,14 @@ table.payments
   tbody
     tr.row_action td
       text-align: center
-    .row_description:hover
-      background: #ddd
-      cursor: pointer
+    .row_description
+      &:hover
+        background: #ddd
+        cursor: pointer
+      &.not_a_customer
+        background: #FFF
+        td
+          color: #aaa
     tr:nth-child(4n-2)
       background: whiteSmoke
     .row_details:nth-child(4n)
