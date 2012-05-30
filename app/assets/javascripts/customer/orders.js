@@ -5,7 +5,7 @@ $(function() {
   if($('.customer_order').length > 0) { customer_order_init(); }
 
   if($('.customer_pause').length > 0) {
-    $('.date_picker').dateinput({ format: 'yyyy-mm-dd', min: -1 });
+    $('.date_picker').dateinput({ format: 'yyyy-mm-dd' });
   }
 
   $('.customer_order #customer_order_box_id').change(function() {
