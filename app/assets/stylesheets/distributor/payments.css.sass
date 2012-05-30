@@ -12,6 +12,12 @@ fieldset.options_bar
 
 table.payments
   width: 100%
+  thead
+    th
+      &.amount
+        text-align: right
+        span
+          margin-right: 20px
   tbody
     tr.row_action
       td
@@ -32,6 +38,8 @@ table.payments
       td
         &.amount
           text-align: right
+          span
+            margin-right: 20px
         form
           margin: 0
     tr:nth-child(4n-2)

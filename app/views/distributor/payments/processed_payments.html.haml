@@ -7,7 +7,8 @@
         %tr
           %th Date
           %th{width: '400px'} Description
-          %th Amount
+          %th.amount
+            %span Amount
           %th Account
           %th Customer
           %th
@@ -20,7 +21,7 @@
             %td= import_transaction.transaction_date.to_s(:transaction)
             %td= import_transaction.description
             %td= import_transaction.amount.format
-            %td= @import_transaction_list.account
+            %td= import_transaction.account
             %td{colspan: 2, id: "edit_row_match_#{import_transaction.id}"}
               = render partial: 'processed_row_detail', locals: {import_transaction: import_transaction}
 

@@ -9,7 +9,8 @@
           %tr
             %th Date
             %th{width: '400px'} Description
-            %th Amount
+            %th.amount
+              %span Amount
             %th Account
             %th Customer
         %tbody
@@ -20,8 +21,9 @@
                 = tf.input :draft, as: :hidden, input_html: {value: false}
                 %td= import_transaction.transaction_date.to_s(:transaction)
                 %td= import_transaction.description
-                %td= import_transaction.amount.format
-                %td= import_transaction_list.account
+                %td.amount
+                  %span= import_transaction.amount.format
+                %td= import_transaction.account
                 %td
                   %span{style: "display: inline-block"}= tf.input :customer_id, as: :select, collection: import_transaction.possible_customers, selected: import_transaction.match_id, label: false
                   %span= "*" + "*" * (4 * tf.object.confidence)

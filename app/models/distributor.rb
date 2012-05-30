@@ -43,7 +43,7 @@ class Distributor < ActiveRecord::Base
   # Setup accessible (or protected) attributes for your model
   attr_accessible :email, :password, :password_confirmation, :remember_me, :name, :url, :company_logo, :company_logo_cache, :completed_wizard,
     :remove_company_logo, :support_email, :invoice_threshold, :separate_bucky_fee, :advance_hour, :advance_days, :automatic_delivery_hour,
-    :time_zone, :currency
+    :time_zone, :currency, :bank_deposit, :paypal, :bank_deposit_format
 
   validates_presence_of :email
   validates_uniqueness_of :email
@@ -52,6 +52,7 @@ class Distributor < ActiveRecord::Base
   validates_numericality_of :advance_hour, greater_than_or_equal_to: 0
   validates_numericality_of :advance_days, greater_than_or_equal_to: 1
   validates_numericality_of :automatic_delivery_hour, greater_than_or_equal_to: 0
+  validates_presence_of :bank_deposit_format, if: :bank_deposit?
 
   before_validation :parameterize_name
   before_validation :check_emails
@@ -63,6 +64,10 @@ class Distributor < ActiveRecord::Base
   default_value_for :advance_hour,            DEFAULT_AUTOMATIC_DELIVERY_HOUR
   default_value_for :advance_days,            DEFAULT_ADVANCED_DAYS
   default_value_for :automatic_delivery_hour, DEFAULT_AUTOMATIC_DELIVERY_HOUR
+
+  default_value_for :bank_deposit, true
+  default_value_for :paypal, false
+  default_value_for :bank_deposit_format, ImportTransactionList::FILE_FORMATS.first.last # Kiwibank
 
   # Devise Override: Avoid validations on update or if now password provided
   def password_required?
@@ -263,6 +268,25 @@ class Distributor < ActiveRecord::Base
   def last_csv_format
     last_import = import_transaction_lists.order("created_at DESC").first
     last_import.present? ? last_import.file_format : nil
+  end
+
+  def supported_csv_formats
+    result = ""
+    result << ImportTransactionList::FILE_FORMATS.find{|name, code| code == bank_deposit_format}.first if bank_deposit?
+    result << " or " if bank_deposit? && paypal?
+    result << "Paypal" if paypal?
+    result
+  end
+
+  def available_csv_formats_select
+    select_options = []
+    select_options << ImportTransactionList::FILE_FORMATS.find{|name, code| code == bank_deposit_format} if bank_deposit?
+    select_options << ImportTransactionList::FILE_FORMATS.find{|name, code| code == "paypal"} if paypal?
+    select_options
+  end
+
+  def can_upload_payments?
+    available_csv_formats_select.present?
   end
 
   private

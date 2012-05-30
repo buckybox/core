@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120522033509) do
+ActiveRecord::Schema.define(:version => 20120530080733) do
 
   create_table "accounts", :force => true do |t|
     t.integer  "customer_id"
@@ -212,6 +212,9 @@ ActiveRecord::Schema.define(:version => 20120522033509) do
     t.integer  "advance_days"
     t.integer  "automatic_delivery_hour"
     t.string   "currency"
+    t.boolean  "bank_deposit"
+    t.boolean  "paypal"
+    t.string   "bank_deposit_format"
   end
 
   add_index "distributors", ["authentication_token"], :name => "index_distributors_on_authentication_token", :unique => true

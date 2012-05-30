@@ -26,7 +26,11 @@ class ImportTransactionList < ActiveRecord::Base
   attr_accessible :csv_file, :file_format, :import_transactions_attributes, :draft
 
   def account
-    file_format#ACCOUNTS[account_type]
+    ImportTransactionList.label_for_file_format(file_format)
+  end
+
+  def self.label_for_file_format(file_format)
+    FILE_FORMATS.find{|name, code| code == file_format}.first
   end
 
   def source
