@@ -21,12 +21,20 @@ table.payments
         cursor: pointer
       &.not_a_customer
         background: #FFF
+        line-height: 12px
         td
           color: #aaa
+          line-height: 12px
+          padding: 5px 10px
+      td
+        &.amount
+          text-align: right
+        form
+          margin: 0
     tr:nth-child(4n-2)
-      background: whiteSmoke
-    .row_details:nth-child(4n)
-      background: #eee
+      background: #f3f3f3
+    tr:nth-child(4n-4)
+      background: #e9e9e9
     td.remove
       vertical-align: bottom
       text-align: right
