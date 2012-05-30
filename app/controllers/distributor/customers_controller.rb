@@ -59,7 +59,6 @@ class Distributor::CustomersController < Distributor::ResourceController
     @customers = @customers.tagged_with(params[:tag]) unless params[:tag].blank?
 
     unless params[:query].blank?
-
       if params[:query].to_i == 0
         @customers = current_distributor.customers.search(params[:query])
       else
@@ -67,6 +66,10 @@ class Distributor::CustomersController < Distributor::ResourceController
       end
     end
 
-    @customers = @customers.page(params[:page]) if params[:page]
+    has_upcoming_deliveries = @customers.select { |c| c.next_delivery_time }
+    has_no_upcoming_deliveries = @customers.to_a - has_upcoming_deliveries
+    has_upcoming_deliveries = has_upcoming_deliveries.sort { |a,b| a.next_delivery_time <=> b.next_delivery_time }
+
+    @customers = has_upcoming_deliveries + has_no_upcoming_deliveries
   end
 end

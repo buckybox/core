@@ -177,7 +177,7 @@ class Order < ActiveRecord::Base
 
     updated_schedule = schedule
     updated_schedule.exception_times.each { |time| updated_schedule.remove_exception_time(time) }
-    (start_date..(end_date - 1.day)).each { |date| updated_schedule.add_exception_time(date.beginning_of_day) }
+    (start_date..end_date).each { |date| updated_schedule.add_exception_time(date.beginning_of_day) }
     self.schedule = updated_schedule
 
     return save

@@ -130,7 +130,9 @@ describe DeliveryList do
     context 'delivery ids must match' do
       before do
         @ids = [1, 2, 3]
-        delivery_list.stub(:delivery_ids).and_return(@ids)
+
+        Delivery.stub_chain(:find, :route_id)
+        delivery_list.stub_chain(:deliveries, :where, :map).and_return(@ids)
 
         delivery_list.deliveries.stub(:find).and_return(delivery)
         delivery.stub(:reposition!).and_return(true)
@@ -143,7 +145,9 @@ describe DeliveryList do
     context 'should update delivery list positions' do
       before do
         delivery_list.save
-        3.times { Fabricate(:delivery, delivery_list: delivery_list) }
+        d1 = Fabricate(:delivery, delivery_list: delivery_list)
+        d2 = Fabricate(:delivery, delivery_list: delivery_list, route: d1.route)
+        d3 = Fabricate(:delivery, delivery_list: delivery_list, route: d1.route)
         @ids = delivery_list.delivery_ids
         @new_ids = @ids.shuffle
       end

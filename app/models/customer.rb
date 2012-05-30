@@ -145,6 +145,16 @@ class Customer < ActiveRecord::Base
     end
   end
 
+  def order_with_next_delivery
+    order = orders.active.sort{ |a,b| b.schedule.next_occurrence <=> a.schedule.next_occurrence }.first
+    return order if order && order.schedule.next_occurrence
+  end
+
+  def next_delivery_time
+    order = order_with_next_delivery
+    order.schedule.next_occurrence if order
+  end
+
   private
 
   def initialize_number
