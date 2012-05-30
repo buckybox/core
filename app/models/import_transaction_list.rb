@@ -20,6 +20,8 @@ class ImportTransactionList < ActiveRecord::Base
   default_value_for :draft, true
 
   scope :ordered, order("created_at DESC")
+  scope :draft, where(['import_transaction_lists.draft = ?', true])
+  scope :processed, where(['import_transaction_lists.draft = ?', false])
 
   attr_accessible :csv_file, :file_format, :import_transactions_attributes, :draft
 
@@ -52,7 +54,7 @@ class ImportTransactionList < ActiveRecord::Base
   end
   
   def csv_parser
-    if @parser.blank?
+    if @parser.blank? && file_format.present?
       @parser = parser_class.new
       @parser.import(csv_file.current_path) if errors.blank? && csv_file.present?
     end

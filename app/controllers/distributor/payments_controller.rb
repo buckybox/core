@@ -5,18 +5,20 @@ class Distributor::PaymentsController < Distributor::ResourceController
 
   before_filter :load_import_transaction_list, only: [:process_payments, :show]
 
-  def show
-    if @import_transaction_list.draft?
-      render :match_payments
-    else
-      render :processed_payments
-    end
-  end
-
   def index 
     #@payments = current_distributor.payments.bank_transfer.order('created_at DESC')
+    #@import_transaction_lists = current_distributor.import_transaction_lists.ordered.limit(20)
     @import_transaction_list = current_distributor.import_transaction_lists.new
-    @import_transaction_lists = current_distributor.import_transaction_lists.ordered.limit(20)
+    load_index
+  end
+  
+  def match_payments
+    @import_transaction_list = current_distributor.import_transaction_lists.build(params['import_transaction_list'])
+    if @import_transaction_list.save
+      @import_transaction_list = current_distributor.import_transaction_lists.new
+    end
+    load_index
+    render :index
   end
 
   def create
@@ -32,15 +34,6 @@ class Distributor::PaymentsController < Distributor::ResourceController
         end
         redirect_to distributor_dashboard_url
       end
-    end
-  end
-
-  def match_payments
-    @import_transaction_list = current_distributor.import_transaction_lists.build(params['import_transaction_list'])
-    if @import_transaction_list.save
-      redirect_to distributor_payment_path(@import_transaction_list)
-    else
-      render :index
     end
   end
 
@@ -78,6 +71,17 @@ class Distributor::PaymentsController < Distributor::ResourceController
   end
 
   private
+
+  def load_index
+    @import_transactions = current_distributor.import_transactions.processed.not_removed.not_duplicate.ordered.limit(50)
+    if @import_transactions.present?
+      start_date = @import_transactions.first.transaction_date
+      end_date = @import_transactions.last.transaction_date
+      @import_transaction_lists = current_distributor.import_transaction_lists.draft.select("import_transaction_lists.id").joins(:import_transactions).group("import_transaction_lists.id").having(["max(import_transactions.transaction_date) > ?", end_date]).order("max(import_transactions.transaction_date)")
+    else
+      @import_transaction_lists = current_distributor.import_transaction_lists.draft.ordered.limit(5)
+    end
+  end
 
   def load_import_transaction_list
     @import_transaction_list = current_distributor.import_transaction_lists.find(params[:id])

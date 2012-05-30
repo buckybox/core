@@ -19,13 +19,13 @@ class ImportTransaction < ActiveRecord::Base
   MATCH_UNABLE_TO_MATCH = "unable_to_match"
   MATCH_DUPLICATE = "don't import (duplicate detected)"
   MATCH_NOT_A_CUSTOMER = "not_a_customer"
-  MATCH_TYPES = {MATCH_MATCHED => 0,
+  MATCH_TYPES = {MATCH_MATCHED => 1,
                  MATCH_NOT_A_CUSTOMER => 1,
                  MATCH_DUPLICATE => 2,
                  MATCH_UNABLE_TO_MATCH => 3}
   MATCH_SELECT = MATCH_TYPES.except(MATCH_MATCHED).collect{|symbol, index| [symbol.humanize, symbol]}
 
-  scope :ordered, order("transaction_date ASC, created_at ASC")
+  scope :ordered, order("transaction_date DESC, created_at DESC")
   scope :draft, where(['import_transactions.draft = ?', true])
   scope :processed, where(['import_transactions.draft = ?', false])
 
@@ -47,6 +47,8 @@ class ImportTransaction < ActiveRecord::Base
   validate :customer_belongs_to_distributor
 
   after_validation :update_account, if: :changed?
+
+  delegate :account, to: :import_transaction_list
   
   def self.new_from_row(row, import_transaction_list, distributor)
     match_result = row.single_customer_match(distributor)
