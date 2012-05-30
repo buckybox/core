@@ -19,7 +19,7 @@ class ImportTransaction < ActiveRecord::Base
   MATCH_UNABLE_TO_MATCH = "unable_to_match"
   MATCH_DUPLICATE = "don't import (duplicate detected)"
   MATCH_NOT_A_CUSTOMER = "not_a_customer"
-  MATCH_TYPES = {MATCH_MATCHED => 1,
+  MATCH_TYPES = {MATCH_MATCHED => 0,
                  MATCH_NOT_A_CUSTOMER => 1,
                  MATCH_DUPLICATE => 2,
                  MATCH_UNABLE_TO_MATCH => 3}
