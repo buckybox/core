@@ -6,4 +6,4 @@
     = f.submit "update"
 %div.show_row_match
   - if import_transaction.matched?
-    = customer_badge(import_transaction.customer, {link: false})
+    = customer_badge(import_transaction.customer)

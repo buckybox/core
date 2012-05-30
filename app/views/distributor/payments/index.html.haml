@@ -23,10 +23,10 @@
           %th{width: '400px'} Description
           %th Amount
           %th Account
-          %th Customer
+          %th{width: '240px'} Customer
           %th
       %tbody
-        %tr.row_action
+        %tr.row_action.import_more_transactions
           %td{colspan: 6}= link_to((@import_transactions.blank? ? "Import transactions" : "Import more transactions"), "", {'data-reveal-id'=> 'upload_more_transactions', id: 'upload_more_transactions_link'})
         - if @import_transactions.blank?
           - @import_transaction_lists.each do |import_transaction_list|
