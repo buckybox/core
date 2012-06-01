@@ -124,6 +124,13 @@ $(function() {
 
     return false;
   });
+
+  $('.delivery-paid').click(function() {
+    console.info('You Paid!');
+    $.ajax({url: $(this).attr('href'), type: 'POST'});
+
+    return false;
+  });
 });
 
 function updateDeliveryStatus(status, distributor_id, checked_deliveries, date) {
