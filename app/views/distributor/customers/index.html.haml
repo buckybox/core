@@ -36,21 +36,22 @@
         %h4.six.columns Route
         %h4.six.columns Balance
 
-  - @customers.each do |customer|
-    .row.data-listings
-      .five.columns
-        .row
-          .seven.columns= customer_badge(customer)
-          .five.columns
-            - unless customer.tags.empty?
-              - customer.tags.each do |tag|
-                %span.radius.label= link_to tag.name, tag_distributor_customers_path(tag.name)
-      .four.columns
-        .row
-          .four.columns= next_customer_delivery_occurrence(customer)
-          .eight.columns= next_customer_delivery_box_name(customer)
-      .three.columns
-        .row
-          .six.columns= customer.route.name
-          .six.columns= customer.account.balance.format
+  #customers
+    - @customers.each do |customer|
+      .row.data-listings
+        .five.columns
+          .row
+            .seven.columns= customer_badge(customer)
+            .five.columns
+              - unless customer.tags.empty?
+                - customer.tags.each do |tag|
+                  %span.radius.label= link_to tag.name, tag_distributor_customers_path(tag.name)
+        .four.columns
+          .row
+            .four.columns= next_customer_delivery_occurrence(customer)
+            .eight.columns= next_customer_delivery_box_name(customer)
+        .three.columns
+          .row
+            .six.columns= customer.route.name
+            .six.columns= customer.account.balance.format
 

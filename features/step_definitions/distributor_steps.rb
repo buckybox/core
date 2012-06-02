@@ -29,7 +29,6 @@ end
 
 Then /^the payment is recorded against that customer$/ do
   visit distributor_customer_path(@customer)
-  save_and_open_page
   within_table('transactions') do
     page.should have_content('$127.00')
   end

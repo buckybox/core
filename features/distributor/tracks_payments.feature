@@ -1,9 +1,8 @@
 Feature: Distributor tracks payments
-  In order to sell veggies
+  In order to keep track of whether veggies have been paid for
   As a distributor
   I want to be able to track customer payments
 
-@todo
 Scenario: distributor records payment manually
   Given a distributor looking at their dashboard
   When I submit valid payment details
