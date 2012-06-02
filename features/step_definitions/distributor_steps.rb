@@ -7,7 +7,7 @@ end
 
 Given /^I am a distributor$/ do
   @distributor = Fabricate(:distributor, :password => "password", :password_confirmation => 'password')
-  @customer = Fabricate(:customer, :distributor => @distributor)
+  step "I have an existing customer"
   login_as(@distributor)
 end
 
