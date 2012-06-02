@@ -4,6 +4,10 @@
 $(function() {
   if($('#distributor_order').length > 0) { distributor_order_init(); }
 
+  if($('#distributor_order').length > 0) {
+    $('.date_picker').dateinput({ format: 'yyyy-mm-dd' });
+  }
+
   $('#distributor_order #distributor_order_box_id').change(function() {
     var box_id = $(this).val();
 

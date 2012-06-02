@@ -23,8 +23,15 @@ class DeliveryList < ActiveRecord::Base
 
       (future_start_date..end_date).each do |date|
         date_orders = []
+        wday = date.wday
 
         orders.each { |order| date_orders << order if order.schedule.occurs_on?(date) }
+
+        # This emulates the ordering when lists are actually created
+        date_orders = date_orders.sort_by do |order|
+          delivery = DeliveryList.last_week_delivery(wday, order.customer.deliveries)
+          delivery ? delivery.position : 9999
+        end
 
         result << FutureDeliveryList.new(date, date_orders)
       end
@@ -34,14 +41,20 @@ class DeliveryList < ActiveRecord::Base
   end
 
   def self.generate_list(distributor, date)
-    delivery_list = DeliveryList.find_or_create_by_distributor_id_and_date(distributor.id, date)
     packing_list  = PackingList.find_or_create_by_distributor_id_and_date(distributor.id, date)
+    delivery_list = DeliveryList.find_or_create_by_distributor_id_and_date(distributor.id, date)
 
+    # Collecting via packing list rather than orders so that delivery generation is explicitly
+    # linked with packages.
     packages = {}
+    current_wday = delivery_list.date.wday
 
     # Determine the order of this delivery list based on previous deliveries
     packing_list.packages.each do |package|
-      last_delivery = package.order.deliveries.last
+      previous_deliveries = package.customer.deliveries
+
+      # Look back only on the same day of the week as routes are generally sorted by days of the week
+      last_delivery = DeliveryList.last_week_delivery(current_wday, previous_deliveries)
 
       if last_delivery
         position = last_delivery.position
@@ -59,11 +72,31 @@ class DeliveryList < ActiveRecord::Base
     packages.each do |package|
       order = package.order
       route = order.route
+
       # need to pass route as well or the position scope for this delivery list is not set properly
       delivery_list.deliveries.find_or_create_by_package_id(package.id, order: order, route: route)
     end
 
     return delivery_list
+  end
+
+  def reposition(delivery_order)
+    # Assuming all routes are from the same route, if not it will fail on match anyway
+    route_id = Delivery.find(delivery_order.first).route_id
+    existing_ids = deliveries.where(route_id:route_id).map(&:id)
+
+    raise 'Your delivery ids do not match' if delivery_order.map(&:to_i).sort != existing_ids.sort
+
+    all_saved = true
+
+    Delivery.transaction do
+      delivery_order.each_with_index do |delivery_id, index|
+        delivery = deliveries.find(delivery_id)
+        all_saved &= delivery.reposition!(index + 1)
+      end
+    end
+
+    return all_saved
   end
 
   def mark_all_as_auto_delivered
@@ -79,5 +112,11 @@ class DeliveryList < ActiveRecord::Base
   def all_finished?
     @all_finished ||= deliveries.all? { |delivery| delivery.status != 'pending' }
     has_deliveries? || @all_finished
+  end
+
+  private
+
+  def self.last_week_delivery(day_of_the_week, deliveries)
+    deliveries.select{ |d| d.date.wday == day_of_the_week }.sort{ |a,b| a.date <=> b.date }.last
   end
 end

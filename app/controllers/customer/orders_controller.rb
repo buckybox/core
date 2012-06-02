@@ -32,16 +32,10 @@ class Customer::OrdersController < Customer::ResourceController
   def pause
     @order     = Order.find(params[:id])
     start_date = Date.parse(params['start_date'])
-    end_date   = Date.parse(params['end_date']) - 1.day
+    end_date   = Date.parse(params['end_date'])
 
     redirect_to customer_root_url, warning: 'Dates can not be in the past' and return if start_date.past? || end_date.past?
     redirect_to customer_root_url, warning: 'Start date can not be past end date' and return if end_date <= start_date
-
-    schedule = @order.schedule
-    schedule.exception_times.each { |time| schedule.remove_exception_time(time) }
-    (start_date..end_date).each   { |date| schedule.add_exception_time(date.to_time_in_current_zone) }
-
-    @order.schedule = schedule
 
     respond_to do |format|
       if @order.pause(start_date, end_date)

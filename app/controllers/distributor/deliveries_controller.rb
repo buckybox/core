@@ -36,13 +36,13 @@ class Distributor::DeliveriesController < Distributor::ResourceController
       @all_packages  = @packing_list.packages
 
       if @route_id != 0
-        @items = @all_deliveries.select{ |delivery| delivery.route.id == @route_id }
+        @items     = @all_deliveries.select{ |delivery| delivery.route.id == @route_id }
         @real_list = @items.all? { |i| i.is_a?(Delivery) }
-        @route = @routes.find(@route_id)
+        @route     = @routes.find(@route_id)
       else
-        @items = @all_packages
+        @items     = @all_packages
         @real_list = @items.all? { |i| i.is_a?(Package) }
-        @route = @routes.first
+        @route     = @routes.first
       end
     end
   end
@@ -114,20 +114,9 @@ class Distributor::DeliveriesController < Distributor::ResourceController
   end
 
   def reposition
-    date = Date.parse(params[:date])
-    delivery_order = params[:delivery]
+    delivery_list = current_distributor.delivery_lists.find_by_date(params[:date])
 
-    @delivery_list = current_distributor.delivery_lists.find_by_date(Date.parse(params[:date]))
-
-    all_saved = true
-
-    delivery_order.each_with_index do |delivery_id, index|
-      delivery = current_distributor.deliveries.find(delivery_id)
-      delivery.position = index + 1
-      all_saved &= delivery.save
-    end
-
-    if all_saved
+    if delivery_list.reposition(params[:delivery])
       head :ok
     else
       head :bad_request
