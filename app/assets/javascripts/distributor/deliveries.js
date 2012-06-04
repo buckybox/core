@@ -88,12 +88,12 @@ $(function() {
     $('#delivery-listings #all').prop('checked', false);
   });
 
-  $('#delivery-listings #delivered, #delivery-listings #pending').click(function() {
+  $('#delivery-listings #delivered, #delivery-listings #pending, #delivery-listings #paied').click(function() {
     var distributor_id = $('#delivery-listings').data('distributor');
-    var id = $(this).attr('id');
+    var status = $(this).attr('id');
     var checked_deliveries = $('#delivery-listings .data-listings input[type=checkbox]:checked');
 
-    updateDeliveryStatus(id, distributor_id, checked_deliveries);
+    updateDeliveryStatus(status, distributor_id, checked_deliveries);
 
     checked_deliveries.prop('checked', false);
     $('#delivery-listings #all').prop('checked', false);
@@ -112,7 +112,7 @@ $(function() {
     var missed_option = $('#missed-options input:radio[name=missed]:checked').val();
     var date = undefined;
 
-    if(missed_option === 'rescheduled' || missed_option === 'repacked') {
+    if(missed_option === 'reschedule' || missed_option === 'repack') {
       date = $('#date_' + missed_option).val();
     }
 

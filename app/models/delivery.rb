@@ -34,12 +34,10 @@ class Delivery < ActiveRecord::Base
   delegate :date, to: :delivery_list, allow_nil: true
 
   state_machine :status, initial: :pending do
-    before_transition on: :deliver, do: :subtract_from_account
-    before_transition on: [:pend, :cancel], do: :add_to_account
+    after_transition on: [:deliver, :pay], do: :subtract_from_account
+    after_transition on: :pay, do: :payment_on_delivery
 
-    event :deliver do
-      transition all - :delivered => :delivered
-    end
+    before_transition on: [:pend, :cancel], do: :reverse_account_changes
 
     event :pend do
       transition all - :pending => :pending
@@ -49,7 +47,12 @@ class Delivery < ActiveRecord::Base
       transition all - :cancelled => :cancelled
     end
 
-    state :delivered do
+    event :deliver do
+      transition all - :delivered => :delivered
+    end
+
+    event :pay do
+      transition all - :paid => :paid
     end
   end
 
@@ -140,19 +143,36 @@ class Delivery < ActiveRecord::Base
     self.delivery_number = self.position
   end
 
-  def subtract_from_account
+  def reverse_account_changes
+    reverse_payment_on_delivery if paid?
+    add_to_account
+  end
+
+  def payment_on_delivery
+    add_to_account('Payment on delivery.')
+  end
+
+  def reverse_payment_on_delivery
+    subtract_from_account('Payment on delivery reversed.')
+  end
+
+  def subtract_from_account(description = nil)
+    description = description || 'Delivery was made.'
+
     account.subtract_from_balance(
       package.price,
       transactionable: self,
-      description: "Delivery was made of #{package.contents_description} at #{package.price}."
+      description: "#{description} #{package.contents_description} at #{package.price}."
     )
   end
 
-  def add_to_account
+  def add_to_account(description = nil)
+    description = description || 'Delivery reversal.'
+
     account.add_to_balance(
       package.price,
       transactionable: self,
-      description: "Delivery reversal. #{package.contents_description} at #{package.price}."
+      description: "#{description} #{package.contents_description} at #{package.price}."
     )
   end
 

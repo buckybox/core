@@ -1,10 +1,11 @@
 .nine.columns
   .row.data-headings
     .one.columns= check_box_tag 'all'
-    .six.columns.delivery_actions
-      = button_tag 'Delivered', class: 'small radius button', id: 'delivered', disabled: @selected_date.future?
+    .seven.columns.delivery_actions
       = button_tag 'Pending', class: 'small radius button', id: 'pending', disabled: @selected_date.future?
-      = button_tag 'Missed', class: 'small radius button', id: 'missed', disabled: @selected_date.future?
+      = button_tag 'Delivered', class: 'small radius button', id: 'delivered', disabled: @selected_date.future?
+      = button_tag 'Paid on Delivery', class: 'small radius button green', id: 'paied', disabled: @selected_date.future?
+      = button_tag 'Missed', class: 'small radius button red', id: 'missed', disabled: @selected_date.future?
       #missed-options.has-flyout
         %table.flyout.large
           %tr
@@ -13,8 +14,8 @@
             %td
           %tr
             %td{ colspan: 2 }
-            %td= button_tag 'Commit', class: 'small radius button', id: 'commit-missed'
-    .five.columns.export.text-right
+            %td= button_tag 'Commit', class: 'small radius button red', id: 'commit-missed'
+    .four.columns.export.text-right
       = button_to('Export',
         export_distributor_deliveries_path,
         { id: 'delivery-export', class: 'small radius button', disabled: !@real_list })
@@ -27,11 +28,9 @@
             = check_box_tag delivery.order_id, '1', false, data: { delivery: delivery.id }
             = render partial: 'status_icons', locals: { status: delivery.status }
             = delivery.delivery_number
-          .three.columns= delivery.package.archived_address
-          .two.columns== #{delivery.package.contents_description}
+          .four.columns= delivery.package.archived_address
+          .three.columns== #{delivery.package.contents_description}
           .three.columns= customer_badge(delivery.customer, customer_name: delivery.package.archived_customer_name, short: true)
-          .two.columns.text-right
-            %span.radius.label{ style: 'margin-right:10px' }= link_to 'PAID', paid_distributor_delivery_path(delivery), class: 'delivery-paid'
   - else
     %ul
       - @items.each do |order|
@@ -40,6 +39,6 @@
             = check_box_tag order.id, '1', false
             = image_tag 'icon-status-pending.png', title: 'PENDING delivery', class: 'icon-pending'
             N/A
-          .three.columns= order.address.join(', ')
-          .two.columns== #{order.contents_description}
+          .four.columns= order.address.join(', ')
+          .three.columns== #{order.contents_description}
           .three.columns= customer_badge(order.customer)
