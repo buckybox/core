@@ -285,8 +285,12 @@ class Distributor < ActiveRecord::Base
     select_options
   end
 
+  def show_payments_tab?
+    available_csv_formats_select.present?
+  end
+
   def can_upload_payments?
-    available_csv_formats_select.present? && import_transaction_lists.draft.count.zero?
+    show_payments_tab? && import_transaction_lists.draft.count.zero?
   end
 
   private
