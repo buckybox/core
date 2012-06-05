@@ -14,4 +14,12 @@ module Distributor::PaymentsHelper
     @last_import_transaction = import_transaction
     result.compact
   end
+
+  def remaining_draft_import_transaction_lists(import_transaction_lists)
+    if import_transaction_lists.present?
+      import_transaction_lists - (@already_shown || [])
+    else
+      []
+    end
+  end
 end

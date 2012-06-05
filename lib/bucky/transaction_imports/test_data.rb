@@ -2,12 +2,12 @@ module Bucky::TransactionImports
   class TestData
     require 'csv'
 
-    def self.generate_kiwibank(distributor)
+    def self.generate_kiwibank(distributor, time_ago=2.days, period=1.month)
       CSV.open("kiwibank_test.csv", "wb") do |csv| 
         csv << ["Date"]
         
-        date = 1.month.ago
-        while date < 1.day.ago
+        date = time_ago
+        while date < (time_ago + period)
           distributor.customers.each do |customer|
             csv << [date.strftime("%d %b %Y"), get_description(customer), '', get_amount(customer)] if rand(100) > 95
           end

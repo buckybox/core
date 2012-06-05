@@ -35,7 +35,7 @@
           %tr.row_action.import_more_transactions.hidden
         - if @import_transactions.blank?
           - @import_transaction_lists.each do |import_transaction_list|
-            %tr
+            %tr.draft_import_transaction_list
               %td{colspan: 6}
                 = render partial: 'draft_transactions', locals: {import_transaction_list: import_transaction_list}
             %tr.hidden
