@@ -217,10 +217,6 @@ class Order < ActiveRecord::Base
     self.extras = []
   end
 
-  def contents_description
-    Package.contents_description(box, quantity, order_extras)
-  end
-
   def extras_summary
     Package.extras_summary(order_extras)
   end
@@ -233,7 +229,7 @@ class Order < ActiveRecord::Base
   def include_extras
     new_record? || !order_extras.count.zero?
   end
-  
+
   def extras_count
     order_extras.collect(&:count).sum
   end

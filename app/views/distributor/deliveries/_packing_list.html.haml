@@ -22,8 +22,8 @@
               = check_box_tag package.order_id, '1', false, data: { package: package.id }
               = render partial: 'status_icons', locals: { status: package.status }
               = package.id
-            .five.columns= package.archived_address
-            .two.columns== #{package.contents_description}
+            .five.columns= display_address(package)
+            .two.columns= contents_description(package)
             .three.columns= customer_badge(package.customer, customer_name: package.archived_customer_name, short: true)
   - else
     - @items.group_by(&:box).sort{ |a,b| a.first.name <=> b.first.name }.each do |box, array|
@@ -37,6 +37,6 @@
               = check_box_tag order.id, '1', false
               = image_tag 'icon-status-pending.png', title: 'UNPACKED package', class: 'icon-pending'
               N/A
-            .five.columns= order.address.join(', ')
-            .two.columns== #{order.contents_description}
+            .five.columns= display_address(order)
+            .two.columns= contents_description(order)
             .three.columns= customer_badge(order.customer)

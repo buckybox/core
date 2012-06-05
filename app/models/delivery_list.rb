@@ -110,7 +110,7 @@ class DeliveryList < ActiveRecord::Base
   end
 
   def all_finished?
-    @all_finished ||= deliveries.all? { |delivery| delivery.pending? }
+    @all_finished ||= !deliveries.any? { |d| d.pending? }
     return has_deliveries? || @all_finished
   end
 

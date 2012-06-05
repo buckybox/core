@@ -1,10 +1,9 @@
 .nine.columns
   .row.data-headings
     .one.columns= check_box_tag 'all'
-    .seven.columns.delivery_actions
+    .five.columns.delivery_actions
       = button_tag 'Pending', class: 'small radius button', id: 'pending', disabled: @selected_date.future?
       = button_tag 'Delivered', class: 'small radius button', id: 'delivered', disabled: @selected_date.future?
-      = button_tag 'Paid on Delivery', class: 'small radius button green', id: 'paied', disabled: @selected_date.future?
       = button_tag 'Missed', class: 'small radius button red', id: 'missed', disabled: @selected_date.future?
       #missed-options.has-flyout
         %table.flyout.large
@@ -15,7 +14,9 @@
           %tr
             %td{ colspan: 2 }
             %td= button_tag 'Commit', class: 'small radius button red', id: 'commit-missed'
-    .four.columns.export.text-right
+    .three.columns
+      = button_tag 'Paid', class: 'small radius button green', id: 'paied', disabled: @selected_date.future?
+    .three.columns.export.text-right
       = button_to('Export',
         export_distributor_deliveries_path,
         { id: 'delivery-export', class: 'small radius button', disabled: !@real_list })
@@ -28,8 +29,8 @@
             = check_box_tag delivery.order_id, '1', false, data: { delivery: delivery.id }
             = render partial: 'status_icons', locals: { status: delivery.status }
             = delivery.delivery_number
-          .four.columns= delivery.package.archived_address
-          .three.columns== #{delivery.package.contents_description}
+          .four.columns= display_address(delivery)
+          .three.columns= contents_description(delivery)
           .three.columns= customer_badge(delivery.customer, customer_name: delivery.package.archived_customer_name, short: true)
   - else
     %ul
@@ -39,6 +40,6 @@
             = check_box_tag order.id, '1', false
             = image_tag 'icon-status-pending.png', title: 'PENDING delivery', class: 'icon-pending'
             N/A
-          .four.columns= order.address.join(', ')
-          .three.columns== #{order.contents_description}
+          .four.columns= display_address(order)
+          .three.columns= contents_description(order)
           .three.columns= customer_badge(order.customer)

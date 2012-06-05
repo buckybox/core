@@ -58,4 +58,22 @@ module Distributor::DeliveriesHelper
   def icon_display(status, icon_status)
     'display:none;' unless status == icon_status
   end
+
+  def display_address(item)
+    if item.is_a?(Order)
+      item.address.address_1
+    else
+      item = item.package if item.is_a?(Delivery)
+      item.archived_address.split(', ').first
+    end
+  end
+
+  def contents_description(item)
+    if item.is_a?(Order)
+      Package.contents_description(item.box, item.order_extras)
+    else
+      item = item.package if item.is_a?(Delivery)
+      item.contents_description
+    end
+  end
 end
