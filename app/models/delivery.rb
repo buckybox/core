@@ -34,9 +34,8 @@ class Delivery < ActiveRecord::Base
   delegate :date, to: :delivery_list, allow_nil: true
 
   state_machine :status, initial: :pending do
-    after_transition on: [:deliver, :pay], do: :subtract_from_account
-    after_transition on: :pay, do: :payment_on_delivery
-
+    before_transition on: [:deliver, :pay], do: :subtract_from_account
+    before_transition on: :pay, do: :payment_on_delivery
     before_transition on: [:pend, :cancel], do: :reverse_account_changes
 
     event :pend do
@@ -129,10 +128,6 @@ class Delivery < ActiveRecord::Base
     ]
   end
 
-  def paid_on_delivery
-    # Essentially a distributor "beez in the trap" (http://youtu.be/VY0cDbb5A_8?t=7m7s) here
-  end
-
   private
 
   def default_route
@@ -149,15 +144,17 @@ class Delivery < ActiveRecord::Base
   end
 
   def payment_on_delivery
-    add_to_account('Payment on delivery.')
+    # The distributor "beez in the trap" (http://youtu.be/VY0cDbb5A_8?t=7m7s) here
+    add_to_account(description: 'Payment on delivery.')
   end
 
   def reverse_payment_on_delivery
-    subtract_from_account('Payment on delivery reversed.')
+    subtract_from_account(description: 'Payment on delivery reversed.')
   end
 
-  def subtract_from_account(description = nil)
-    description = description || 'Delivery was made.'
+  def subtract_from_account(options = {})
+    description = 'Delivery was made.'
+    description = options[:description] if options.is_a?(Hash) && options[:description]
 
     account.subtract_from_balance(
       package.price,
@@ -166,8 +163,9 @@ class Delivery < ActiveRecord::Base
     )
   end
 
-  def add_to_account(description = nil)
-    description = description || 'Delivery reversal.'
+  def add_to_account(options = {})
+    description = 'Delivery reversal.'
+    description = options[:description] if options.is_a?(Hash) && options[:description]
 
     account.add_to_balance(
       package.price,
