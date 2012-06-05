@@ -27,10 +27,7 @@ class Distributor < ActiveRecord::Base
   DEFAULT_AUTOMATIC_DELIVERY_HOUR = 18
   DEFAULT_AUTOMATIC_DELIVERY_DAYS = 1
 
-  # Include default devise modules. Others available are:
-  # :token_authenticatable, :encryptable, :confirmable, :lockable, :timeoutable and :omniauthable
-  devise :database_authenticatable, :registerable,
-    :recoverable, :rememberable, :trackable, :validatable
+  devise :database_authenticatable, :recoverable, :rememberable, :trackable, :validatable
 
   mount_uploader :company_logo, CompanyLogoUploader
 
@@ -138,8 +135,8 @@ class Distributor < ActiveRecord::Base
 
       (start_date..end_date).each do |date|
         # Seek and destroy (http://youtu.be/wLBpLz5ELPI?t=3m10s) the lists that are now out of range
-        packing_list  = packing_lists.find_by_date(date)
-        successful &= packing_list.destroy  unless packing_list.nil?
+        packing_list = packing_lists.find_by_date(date)
+        successful &= packing_list.destroy unless packing_list.nil?
 
         delivery_list = delivery_lists.find_by_date(date)
         successful &= delivery_list.destroy unless delivery_list.nil?

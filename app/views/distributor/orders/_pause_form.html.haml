@@ -28,14 +28,14 @@
         Pause date
       = text_field_tag('start_date',
         pause_date,
-        { class: 'date_picker string required input-text', required: 'required', size: 50 })
+        { class: 'date_picker string required input-text', required: 'required', size: 50, min: (current_distributor.window_end_at + 1.day) })
 
       = label_tag 'end_date', class: 'string required' do
         %abbr{title: 'Resume date'}*
         Resume date
       = text_field_tag('end_date',
         resume_date,
-        { class: 'date_picker string required input-text', required: 'required', size: 50 })
+        { class: 'date_picker string required input-text', required: 'required', size: 50, min: (current_distributor.window_end_at + 2.days) })
 
     .actions
       = f.button :submit, 'Update Pause'

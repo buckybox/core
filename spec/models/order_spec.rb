@@ -18,7 +18,6 @@ describe Order do
     end
   end
 
-
   context 'with default saved order' do
     before { @order = Fabricate(:order) }
 

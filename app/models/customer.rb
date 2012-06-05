@@ -13,10 +13,7 @@ class Customer < ActiveRecord::Base
   has_many :orders,       through: :account
   has_many :deliveries,   through: :orders
 
-  # Include default devise modules. Others available are:
-  # :token_authenticatable, :encryptable, :confirmable, :lockable, :timeoutable and :omniauthable
-  devise :database_authenticatable, :registerable,
-    :recoverable, :rememberable, :trackable, :validatable
+  devise :database_authenticatable, :recoverable, :rememberable, :trackable, :validatable
 
   acts_as_taggable
 
@@ -163,6 +160,16 @@ class Customer < ActiveRecord::Base
 
   def has_first_and_last_name?
     first_name.present? && last_name.present?
+  end
+  
+  def order_with_next_delivery
+    order = orders.active.sort{ |a,b| b.schedule.next_occurrence <=> a.schedule.next_occurrence }.first
+    return order if order && order.schedule.next_occurrence
+  end
+
+  def next_delivery_time
+    order = order_with_next_delivery
+    order.schedule.next_occurrence if order
   end
 
   private

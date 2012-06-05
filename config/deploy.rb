@@ -1,6 +1,7 @@
 set :application, 'bucky_box'
 set :user, application
 set :repository,  "git@github.com:enspiral/#{application}.git"
+set :keep_releases, 4
 
 set :scm, :git
 set :use_sudo, false
@@ -53,6 +54,7 @@ end
 after 'deploy:assets:symlink' do
   deploy.symlink_configs
 end
+after "deploy:restart", "deploy:cleanup" # Delete old project folders
 
 require './config/boot'
 require 'capistrano_colors'
