@@ -89,7 +89,7 @@ module Bucky::TransactionImports
       end
     end
 
-    NUMBER_REFERENCE_REGEX = / (\d+) /
+    NUMBER_REFERENCE_REGEX = /(\d+)/
     def number_reference
       @possible_references ||= description.scan(NUMBER_REFERENCE_REGEX).to_a.flatten
     end

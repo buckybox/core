@@ -15,11 +15,6 @@ describe Payment do
     specify { Fabricate.build(:payment, :kind => 'trees').should_not be_valid }
   end
 
-  context :amount do
-    specify { Fabricate.build(:payment, :amount => 0).should_not be_valid }
-    specify { Fabricate.build(:payment, :amount => -1).should_not be_valid }
-  end
-
   context '#update_account' do
     specify { @payment.account.balance.should == @payment.amount }
     specify { @payment.account.transactions.should_not be_empty }

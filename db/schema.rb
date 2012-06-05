@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120530080733) do
+ActiveRecord::Schema.define(:version => 20120605050350) do
 
   create_table "accounts", :force => true do |t|
     t.integer  "customer_id"
@@ -261,6 +261,8 @@ ActiveRecord::Schema.define(:version => 20120530080733) do
     t.string   "file_format"
   end
 
+  add_index "import_transaction_lists", ["distributor_id", "draft"], :name => "index_import_transaction_lists_on_distributor_id_and_draft"
+
   create_table "import_transactions", :force => true do |t|
     t.integer  "customer_id"
     t.date     "transaction_date"
@@ -277,6 +279,11 @@ ActiveRecord::Schema.define(:version => 20120530080733) do
     t.integer  "payment_id"
     t.text     "raw_data"
   end
+
+  add_index "import_transactions", ["import_transaction_list_id", "draft"], :name => "index_import_draft"
+  add_index "import_transactions", ["import_transaction_list_id", "match"], :name => "index_import_match"
+  add_index "import_transactions", ["import_transaction_list_id", "removed"], :name => "index_import_removed"
+  add_index "import_transactions", ["import_transaction_list_id"], :name => "index_import_transactions_on_import_transaction_list_id"
 
   create_table "invoice_information", :force => true do |t|
     t.integer  "distributor_id"

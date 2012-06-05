@@ -51,7 +51,7 @@ describe Bucky::TransactionImports::Kiwibank do
         amount = good_csv_data[1][3]
         parser = Kiwibank.new
         Row.stub(:new)
-        Row.should_receive(:new).with(date, description, amount, 1, parser).at_least(:once)
+        Row.should_receive(:new).with(date, description, amount, 1, {:date=>"12 Oct 2010", :description=>"INTEREST CREDIT ;", :amount=>"0.5", :balance=>nil}, parser).at_least(:once)
         parser.import_csv(csv_string(good_csv_data))
       end
 

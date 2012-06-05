@@ -1,22 +1,19 @@
 %h2 Customer Payments
 
-#upload_more_transactions.reveal-modal
-  = simple_form_for(@import_transaction_list, url: match_payments_distributor_payments_path, html: {:multipart => true} ) do |f|
-    %fieldset
-      %legend Select the transaction data you wish to import:
-      %p= "Login to #{current_distributor.supported_csv_formats} to download/export your bank transactions in CSV format"
-      = f.error_notification
-      - if @import_transaction_list.csv_parser.present? && !@import_transaction_list.csv_parser.rows.reject(&:valid?).size.zero?
-        %span.error= @import_transaction_list.csv_parser.rows.find(&:invalid?).errors.full_messages.join(', ')
-      - if current_distributor.available_csv_formats_select.size == 1
-        = f.input :file_format, as: :hidden, input_html: {value: current_distributor.available_csv_formats_select.first.last}
-      - else
-        = f.input :file_format, as: :select, collection: current_distributor.available_csv_formats_select, include_blank: false
-      = f.input :csv_file, label: false
-      %br
-
-      .actions
-        = f.button :submit, "Upload"
+- if current_distributor.can_upload_payments?
+  #upload_more_transactions.reveal-modal
+    = simple_form_for(@import_transaction_list, url: match_payments_distributor_payments_path, html: {:multipart => true} ) do |f|
+      %fieldset
+        %legend Select the transaction data you wish to import:
+        %p= "Login to #{current_distributor.supported_csv_formats} to download/export your bank transactions in CSV format"
+        = f.error_notification
+        - if @import_transaction_list.csv_parser.present? && !@import_transaction_list.csv_parser.rows.reject(&:valid?).size.zero?
+          %span.error= @import_transaction_list.csv_parser.rows.find(&:invalid?).errors.full_messages.join(', ')
+        - if current_distributor.available_csv_formats_select.size == 1
+          = f.input :file_format, as: :hidden, input_html: {value: current_distributor.available_csv_formats_select.first.last}
+        - else
+          = f.input :file_format, as: :select, collection: current_distributor.available_csv_formats_select, include_blank: false
+        = f.input :csv_file, label: false, input_html: {class: "auto_submit"}
 
 .row
   .twelve.columns
@@ -34,11 +31,16 @@
         - if current_distributor.can_upload_payments?
           %tr.row_action.import_more_transactions
             %td{colspan: 6}= link_to((@import_transactions.blank? ? "Import transactions" : "Import more transactions"), "", {'data-reveal-id'=> 'upload_more_transactions', id: 'upload_more_transactions_link'})
+        - else
+          %tr.row_action.import_more_transactions.hidden
         - if @import_transactions.blank?
           - @import_transaction_lists.each do |import_transaction_list|
             %tr
               %td{colspan: 6}
                 = render partial: 'draft_transactions', locals: {import_transaction_list: import_transaction_list}
+            %tr.hidden
+
+
         = render partial: 'distributor/import_transactions/rows'
         %tr.row_action
           %td{colspan: 6}= link_to_function "load more", "window.payments.load_more_rows_on_bottom()" unless @import_transactions.blank?

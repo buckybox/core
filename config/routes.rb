@@ -80,6 +80,8 @@ BuckyBox::Application.routes.draw do
       end
     end
 
+    resources :import_transaction_lists, only: [:destroy]
+
     resources :customers do
       collection do
         get 'search',   action: :index, as: 'search'

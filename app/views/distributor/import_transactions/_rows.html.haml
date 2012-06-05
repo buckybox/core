@@ -1,9 +1,10 @@
 - @import_transactions.each do |import_transaction|
   - if (@current_draft_import_transaction_list = show_draft_import_transaction_list(import_transaction, @import_transaction_lists)).present?
     - @current_draft_import_transaction_list.each do |import_transaction_list|
-      %tr
+      %tr.draft_import_transaction_list
         %td{colspan: 6}
           = render partial: 'distributor/payments/draft_transactions', locals: {import_transaction_list: import_transaction_list}
+      %tr.hidden
   - if false#@import_transaction_list.errors.present?
     .row.errors
       = @import_transaction_list.errors.full_messages.join(", ")

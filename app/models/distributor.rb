@@ -286,7 +286,7 @@ class Distributor < ActiveRecord::Base
   end
 
   def can_upload_payments?
-    available_csv_formats_select.present?
+    available_csv_formats_select.present? && import_transaction_lists.draft.count.zero?
   end
 
   private

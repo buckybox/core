@@ -16,7 +16,6 @@ class Distributor::ImportTransactionsController < Distributor::ResourceControlle
     else
       @import_transaction_lists = []
     end
-    #binding.pry_remote
     @last_row_reached = @import_transactions.blank? || @import_transactions.last == import_transactions_arel.last
   end
 end

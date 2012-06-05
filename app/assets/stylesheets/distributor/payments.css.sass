@@ -19,29 +19,32 @@ table.payments
         span
           margin-right: 20px
   tbody
-    tr.row_action
-      td
-        text-align: center
-      &.import_more_transactions
-        background: #FDE49B
+    tr
+      &.row_action
         td
-          padding: 4px 10px
-    .row_description
-      &:hover
-        background: #ddd
-      &.not_a_customer
-        line-height: 12px
-        td
-          color: #aaa
+          text-align: center
+        &.import_more_transactions
+          background: #FDE49B
+          td
+            padding: 4px 10px
+      .row_description
+        &:hover
+          background: #ddd
+        &.not_a_customer
           line-height: 12px
-          padding: 5px 10px
-      td
-        &.amount
-          text-align: right
-          span
-            margin-right: 20px
-        form
-          margin: 0
+          td
+            color: #aaa
+            line-height: 12px
+            padding: 5px 10px
+        td
+          &.amount
+            text-align: right
+            span
+              margin-right: 20px
+          form
+            margin: 0
+      &.draft_import_transaction_list
+        background: #FDE49B !important
     tr:nth-child(4n-2)
       background: #f3f3f3
     tr:nth-child(4n-4)

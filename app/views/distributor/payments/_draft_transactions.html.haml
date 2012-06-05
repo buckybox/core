@@ -38,5 +38,6 @@
 
 
   .row
-    .two.columns.offset-by-ten
+    .two.columns.centered
+      = link_to "Cancel", distributor_import_transaction_list_path(import_transaction_list), confirm: "This will delete these uploaded transactions", method: :delete
       = f.submit "Save"
