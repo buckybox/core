@@ -24,10 +24,7 @@ class Distributor < ActiveRecord::Base
   DEFAULT_AUTOMATIC_DELIVERY_HOUR = 18
   DEFAULT_AUTOMATIC_DELIVERY_DAYS = 1
 
-  # Include default devise modules. Others available are:
-  # :token_authenticatable, :encryptable, :confirmable, :lockable, :timeoutable and :omniauthable
-  devise :database_authenticatable, :registerable,
-    :recoverable, :rememberable, :trackable, :validatable
+  devise :database_authenticatable, :recoverable, :rememberable, :trackable, :validatable
 
   mount_uploader :company_logo, CompanyLogoUploader
 
