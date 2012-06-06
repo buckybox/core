@@ -67,6 +67,12 @@ class Account < ActiveRecord::Base
   def subtract_from_balance(amount, options = {})
     add_to_balance((amount * -1), options)
   end
+  
+  def reverse_transaction!(amount, description)
+    reversal_transaction = subtract_from_balance(amount, {kind: 'amend', description: "REVERSED " + description})
+    save!
+    reversal_transaction
+  end
 
   #all accounts that need invoicing
   def self.need_invoicing
