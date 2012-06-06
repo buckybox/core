@@ -13,8 +13,8 @@
           - if current_distributor.available_csv_formats_select.size == 1
             = f.input :file_format, as: :hidden, input_html: {value: current_distributor.available_csv_formats_select.first.last}
           - else
-            = f.input :file_format, as: :select, collection: current_distributor.available_csv_formats_select, include_blank: false, label: 'Import transactions'
-          = f.input :csv_file, label: false, input_html: {class: "auto_submit"}
+            = f.input :file_format, as: :select, collection: current_distributor.available_csv_formats_select, include_blank: false
+          = f.input :csv_file, label: false, input_html: {class: "auto_submit", label: "Import transactions"}
         .ajax_loader_gif{style: 'display:none;'}
 
 .row

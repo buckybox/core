@@ -5,14 +5,14 @@
   .row
     .twelve.columns
       %table.payments
-        %thead
+        %thead{style: 'display: none;'}
           %tr
-            %th Date
-            %th{width: '350px'} Description
+            %th
+            %th{width: '350px'}
             %th.amount
-              %span Amount
-            %th Payment Type
-            %th Customer
+              %span
+            %th
+            %th
         %tbody
           - import_transaction_list.import_transactions.not_removed.ordered.each do |import_transaction|
             = f.simple_fields_for(:import_transactions, import_transaction) do |tf|
