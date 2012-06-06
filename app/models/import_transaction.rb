@@ -146,6 +146,19 @@ class ImportTransaction < ActiveRecord::Base
     transaction_attributes
   end
 
+  def payment_type
+    if matched?
+      case account
+      when 'Paypal'
+        'Paypal'
+      else
+        'Bank Deposit'
+      end
+    else
+      ''
+    end
+  end
+
   private
 
   def update_account

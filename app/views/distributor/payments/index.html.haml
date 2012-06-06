@@ -6,14 +6,16 @@
       %fieldset
         %legend Select the transaction data you wish to import:
         %p= "Login to #{current_distributor.supported_csv_formats} to download/export your bank transactions in CSV format"
-        = f.error_notification
-        - if @import_transaction_list.csv_parser.present? && !@import_transaction_list.csv_parser.rows.reject(&:valid?).size.zero?
-          %span.error= @import_transaction_list.csv_parser.rows.find(&:invalid?).errors.full_messages.join(', ')
-        - if current_distributor.available_csv_formats_select.size == 1
-          = f.input :file_format, as: :hidden, input_html: {value: current_distributor.available_csv_formats_select.first.last}
-        - else
-          = f.input :file_format, as: :select, collection: current_distributor.available_csv_formats_select, include_blank: false
-        = f.input :csv_file, label: false, input_html: {class: "auto_submit"}
+        .form_fields.ajax_loader_hide
+          = f.error_notification
+          - if @import_transaction_list.csv_parser.present? && !@import_transaction_list.csv_parser.rows.reject(&:valid?).size.zero?
+            %span.error= @import_transaction_list.csv_parser.rows.find(&:invalid?).errors.full_messages.join(', ')
+          - if current_distributor.available_csv_formats_select.size == 1
+            = f.input :file_format, as: :hidden, input_html: {value: current_distributor.available_csv_formats_select.first.last}
+          - else
+            = f.input :file_format, as: :select, collection: current_distributor.available_csv_formats_select, include_blank: false, label: 'Import transactions'
+          = f.input :csv_file, label: false, input_html: {class: "auto_submit"}
+        .ajax_loader_gif{style: 'display:none;'}
 
 .row
   .twelve.columns
@@ -24,7 +26,7 @@
           %th{width: '350px'} Description
           %th.amount
             %span Amount
-          %th Account
+          %th Payment Type
           %th{width: '240px'} Customer
           %th
       %tbody
@@ -43,7 +45,7 @@
 
         = render partial: 'distributor/import_transactions/rows'
         %tr.row_action
-          %td{colspan: 6}= link_to_function "load more", "window.payments.load_more_rows_on_bottom()" unless @import_transactions.blank?
+          %td{colspan: 6}= link_to_function "more...", "window.payments.load_more_rows_on_bottom()" unless @import_transactions.blank?
 
 - if @import_transaction_list.csv_parser.present? && !@import_transaction_list.csv_parser.rows.reject(&:valid?).size.zero?
   :javascript

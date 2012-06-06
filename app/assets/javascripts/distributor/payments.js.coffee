@@ -5,6 +5,8 @@ $ ->
   window.payments = {
     load: ->
       $(".auto_submit").change ->
+        $('.ajax_loader_hide').hide()
+        $('.ajax_loader_gif').show()
         $(this).closest('form').submit()
     reload: ->
       $(".row_description").unbind()
