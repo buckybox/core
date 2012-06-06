@@ -46,7 +46,7 @@ module LayoutHelper
   def customer_badge(customer, options = {})
     content = ''
 
-    customer_id = "%04d" % customer.number
+    customer_id = customer.formated_number
     content += content_tag(:span, "#{customer_id}", class: 'customer-id')
 
     customer_name = options[:customer_name] || customer.name

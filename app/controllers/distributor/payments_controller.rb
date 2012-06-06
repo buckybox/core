@@ -3,9 +3,22 @@ class Distributor::PaymentsController < Distributor::ResourceController
 
   respond_to :html, :xml, :json
 
+  before_filter :load_import_transaction_list, only: [:process_payments, :show]
+
   def index 
-    @payments = current_distributor.payments.bank_transfer.order('created_at DESC')
-    @statement = BankStatement.new
+    #@payments = current_distributor.payments.bank_transfer.order('created_at DESC')
+    #@import_transaction_lists = current_distributor.import_transaction_lists.ordered.limit(20)
+    @import_transaction_list = current_distributor.import_transaction_lists.new
+    load_index
+  end
+  
+  def match_payments
+    @import_transaction_list = current_distributor.import_transaction_lists.build(params['import_transaction_list'])
+    if @import_transaction_list.save
+      @import_transaction_list = current_distributor.import_transaction_lists.new
+    end
+    load_index
+    render :index
   end
 
   def create
@@ -24,14 +37,22 @@ class Distributor::PaymentsController < Distributor::ResourceController
     end
   end
 
+  def process_payments
+    if @import_transaction_list.process_attributes(@import_transaction_list.process_import_transactions_attributes(params[:import_transaction_list]))
+      redirect_to distributor_payments_url, notice: "Payments processed successfully"
+    else
+      flash.now[:alert] = "There was a problem"
+      render :match_payments
+    end
+  end
+
   def process_upload
-    @statement = BankStatement.new(params['bank_statement'])
-    @statement.distributor = current_distributor
-    unless @statement.valid?
+    @kiwibank = Bucky::TransactionImports::Kiwibank.new
+    @kiwibank.import(params['bank_statement']["statement_file"].path)
+    unless @kiwibank.valid?
       return render :index
     end
-    @statement.save!
-    @customer_remembers = @statement.customer_remembers
+    @transaction_list = @kiwibank.transactions_for_display(current_distributor)
     render :upload_transactions
   end
 
@@ -40,5 +61,23 @@ class Distributor::PaymentsController < Distributor::ResourceController
     @statement.process_statement!(params['customers'])
 
     redirect_to distributor_payments_url
+  end
+
+  def destroy
+    @import_transaction = current_distributor.import_transactions.find(params[:id])
+    if @import_transaction.removed? || @import_transaction.remove!
+      render :destroy
+    end
+  end
+
+  private
+
+  def load_index
+    @import_transactions = current_distributor.import_transactions.processed.not_removed.not_duplicate.ordered.limit(50)
+    @import_transaction_lists = current_distributor.import_transaction_lists.draft
+  end
+
+  def load_import_transaction_list
+    @import_transaction_list = current_distributor.import_transaction_lists.find(params[:id])
   end
 end

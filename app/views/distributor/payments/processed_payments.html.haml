@@ -1,0 +1,35 @@
+%h2 Customer Payments
+
+.row
+  .twelve.columns
+    %table.payments
+      %thead
+        %tr
+          %th Date
+          %th{width: '400px'} Description
+          %th.amount
+            %span Amount
+          %th Account
+          %th Customer
+          %th
+      %tbody
+        - @import_transaction_list.import_transactions.not_removed.ordered.each do |import_transaction|
+          - if @import_transaction_list.errors.present?
+            .row.errors
+              = @import_transaction_list.errors.full_messages.join(", ")
+          %tr.row_description{id: "import_transaction_#{import_transaction.id}"}
+            %td= import_transaction.transaction_date.to_s(:transaction)
+            %td= import_transaction.description
+            %td= import_transaction.amount.format
+            %td= import_transaction.account
+            %td{colspan: 2, id: "edit_row_match_#{import_transaction.id}"}
+              = render partial: 'processed_row_detail', locals: {import_transaction: import_transaction}
+
+          %tr.row_details{style: "display: none;"}
+            %td
+            %td
+              - import_transaction.raw_data.each do |key, value|
+                %div= "#{key.to_s.humanize}: #{value}"
+            %td
+            %td
+            %td.remove{colspan: 2}= link_to("remove transaction", distributor_payment_path(import_transaction), method: :delete, confirm: "This will also reverse any changes made to customer accounts", remote: true)

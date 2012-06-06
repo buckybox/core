@@ -6,7 +6,7 @@ describe Payment do
   specify { payment.should be_valid }
 
   context :kinds do
-    %w(bank_transfer credit_card manual).each do |k|
+    %w(bank_transfer credit_card unspecified).each do |k|
       specify { Fabricate.build(:payment, kind: k).should be_valid }
     end
 

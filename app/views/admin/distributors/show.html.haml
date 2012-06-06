@@ -21,6 +21,15 @@
     %td Currency:
     %td= currency_name(@distributor.currency)
   %tr
+    %td Bank Deposit:
+    %td= checkmark_boolean(@distributor.bank_deposit?)
+  %tr
+    %td Paypal:
+    %td= checkmark_boolean(@distributor.paypal?)
+  %tr
+    %td Bank File Format:
+    %td= @distributor.bank_deposit_format
+  %tr
     %td Parameter Name:
     %td= @distributor.parameter_name
   %tr

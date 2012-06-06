@@ -16,4 +16,8 @@ class Transaction < ActiveRecord::Base
   validates :transactionable_type, inclusion: { in: TRANSACTIONABLE_TYPE, message: "%{value} is not a valid kind of transaction type." }
 
   default_scope order('created_at DESC')
+
+  def reverse_transaction!
+    account.reverse_transaction!(amount, description)
+  end
 end
