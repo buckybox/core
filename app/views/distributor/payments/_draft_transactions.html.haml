@@ -20,7 +20,7 @@
                 = tf.input :id, as: :hidden
                 = tf.input :draft, as: :hidden, input_html: {value: false}
                 %td= import_transaction.transaction_date.to_s(:transaction)
-                %td= import_transaction.description
+                %td= truncate(import_transaction.description, length: 70)
                 %td.amount
                   %span= import_transaction.amount.format
                 %td= import_transaction.payment_type

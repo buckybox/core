@@ -74,13 +74,7 @@ class Distributor::PaymentsController < Distributor::ResourceController
 
   def load_index
     @import_transactions = current_distributor.import_transactions.processed.not_removed.not_duplicate.ordered.limit(50)
-    if @import_transactions.present?
-      start_date = @import_transactions.first.transaction_date
-      end_date = @import_transactions.last.transaction_date
-      @import_transaction_lists = current_distributor.import_transaction_lists.draft.select("import_transaction_lists.id").joins(:import_transactions).group("import_transaction_lists.id").having(["max(import_transactions.transaction_date) > ?", end_date]).order("max(import_transactions.transaction_date)")
-    else
-      @import_transaction_lists = current_distributor.import_transaction_lists.draft.ordered.limit(5)
-    end
+    @import_transaction_lists = current_distributor.import_transaction_lists.draft
   end
 
   def load_import_transaction_list

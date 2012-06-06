@@ -1,13 +1,7 @@
 - @import_transactions.each do |import_transaction|
-  - if (@current_draft_import_transaction_list = show_draft_import_transaction_list(import_transaction, @import_transaction_lists)).present?
-    - @current_draft_import_transaction_list.each do |import_transaction_list|
-      %tr.draft_import_transaction_list
-        %td{colspan: 6}
-          = render partial: 'distributor/payments/draft_transactions', locals: {import_transaction_list: import_transaction_list}
-      %tr.hidden
   %tr{class: (import_transaction.matched? ? "row_description matched" : "row_description not_a_customer"),id: "import_transaction_#{import_transaction.id}", 'data-row-id' => import_transaction.id}
     %td= import_transaction.transaction_date.to_s(:transaction)
-    %td= import_transaction.description
+    %td= truncate(import_transaction.description, length: 70)
     %td.amount
       %span= import_transaction.amount.format
     %td= import_transaction.payment_type
@@ -22,9 +16,3 @@
     %td
     %td
     %td.remove{colspan: 2}= link_to("remove transaction", distributor_payment_path(import_transaction), method: :delete, confirm: "This will also reverse any changes made to customer accounts", remote: true)
-- if (@remaining_draft_import_transaction_lists = remaining_draft_import_transaction_lists(@import_transaction_lists)).present?
-  - @remaining_draft_import_transaction_lists.each do |import_transaction_list|
-    %tr.draft_import_transaction_list
-      %td{colspan: 6}
-        = render partial: 'distributor/payments/draft_transactions', locals: {import_transaction_list: import_transaction_list}
-    %tr.hidden

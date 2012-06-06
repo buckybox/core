@@ -28,8 +28,14 @@ $ ->
         event.stopPropagation()
         window.load($(this).attr('href'))
       )
+
+      # Reset ajax spinners
+      $('.ajax_loader_hide').show()
+      $('.ajax_loader_gif').hide()
     load_more_rows_on_bottom: ->
       last_row_id = $("tr.row_description:last").attr("data-row-id")
+      $('.ajax_loader_hide').hide()
+      $('.ajax_loader_gif').show()
       $.getScript("/distributor/import_transactions/#{last_row_id}/load_more_rows/bottom")
   }
   window.payments.load()

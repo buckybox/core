@@ -35,17 +35,18 @@
             %td{colspan: 6}= link_to((@import_transactions.blank? ? "Import transactions" : "Import more transactions"), "", {'data-reveal-id'=> 'upload_more_transactions', id: 'upload_more_transactions_link'})
         - else
           %tr.row_action.import_more_transactions.hidden
-        - if @import_transactions.blank?
-          - @import_transaction_lists.each do |import_transaction_list|
-            %tr.draft_import_transaction_list
-              %td{colspan: 6}
-                = render partial: 'draft_transactions', locals: {import_transaction_list: import_transaction_list}
-            %tr.hidden
+        - @import_transaction_lists.each do |import_transaction_list|
+          %tr.draft_import_transaction_list
+            %td{colspan: 6}
+              = render partial: 'draft_transactions', locals: {import_transaction_list: import_transaction_list}
+          %tr.hidden
 
 
         = render partial: 'distributor/import_transactions/rows'
         %tr.row_action
-          %td{colspan: 6}= link_to_function "more...", "window.payments.load_more_rows_on_bottom()" unless @import_transactions.blank?
+          %td{colspan: 6}
+            .ajax_loader_hide= link_to_function "more...", "window.payments.load_more_rows_on_bottom()" unless @import_transactions.blank?
+            .ajax_loader_gif{style:'display: none;'}
 
 - if @import_transaction_list.csv_parser.present? && !@import_transaction_list.csv_parser.rows.reject(&:valid?).size.zero?
   :javascript
