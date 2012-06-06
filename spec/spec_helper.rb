@@ -96,8 +96,6 @@ end
 
 Spork.each_run do
   # This code will be run each time you run your specs.
-<<<<<<< HEAD
-=======
 
   # https://github.com/sporkrb/spork/issues/37#issuecomment-4330248
   silence_warnings do
@@ -105,8 +103,6 @@ Spork.each_run do
     Dir["#{Rails.root}/lib/bucky/**/*.rb"].each {|f| load f}
     Dir["#{Rails.root}/lib/bucky.rb"].each {|f| load f}
   end
-
->>>>>>> master
 end
 
 # --- Instructions ---
