@@ -112,14 +112,24 @@ describe Customer do
         @o2 = Fabricate.build(:active_recurring_order)
         @o3 = Fabricate.build(:active_recurring_order)
 
-        customer.stub_chain(:orders, :active).and_return([@o1, @o2, @o3])
+        customer.stub(:orders).and_return([@o1, @o2, @o3])
       end
 
       specify { customer.order_with_next_delivery.should == @o3 }
+
+      context 'and order without next delivery' do
+        before do
+          @o4 = Fabricate.build(:order)
+          @o4.stub_chain(:schedule, :next_occurrence).and_return(nil)
+          customer.stub(:orders).and_return([@o1, @o2, @o3])
+        end
+
+        specify { customer.order_with_next_delivery.should == @o3 }
+      end
     end
 
     context 'without orders' do
-      before { customer.stub_chain(:orders, :active).and_return([]) }
+      before { customer.stub(:orders).and_return([]) }
       specify { customer.order_with_next_delivery.should == nil }
     end
   end

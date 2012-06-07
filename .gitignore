@@ -21,6 +21,7 @@
 /tmp
 *.swp
 *.swo
+.~lock*
 
 .DS_Store
 public/system/
@@ -28,3 +29,4 @@ public/system/
 config/database.yml
 Session.vim
 coverage/
+public/

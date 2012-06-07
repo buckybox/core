@@ -62,13 +62,26 @@ BuckyBox::Application.routes.draw do
       end
     end
 
-    resources :payments, only: [:create, :index] do
+    resources :payments, only: [:create, :index, :show, :destroy] do
       collection do
         get 'upload_transactions', action: 'upload_transactions', as: 'upload_transactions'
-        post 'process_upload', action: 'process_upload', as: 'process_upload'
+        post 'commit_upload', action: 'commit_upload', as: 'commit_upload'
         post 'create_from_csv', action: 'create_from_csv', as: 'create_from_csv'
+        post 'process_upload',     action: 'process_upload', as: 'process_upload'
+        post 'index', action: 'match_payments', as: 'match_payments'
+      end
+      member do
+        put 'process_payments', action: 'process_payments', as: 'process_payments'
       end
     end
+
+    resources :import_transactions, only: [:update] do
+      member do
+        get 'load_more_rows/:position', action: 'load_more_rows', as: 'load_more_rows'
+      end
+    end
+
+    resources :import_transaction_lists, only: [:destroy]
 
     resources :customers do
       collection do

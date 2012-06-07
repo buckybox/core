@@ -19,5 +19,5 @@
           %td= transaction.kind.titleize
           %td= transaction.amount
           %td= transaction.description
-          %td= transaction.created_at.strftime('%Y-%m-%d')
+          %td= transaction.display_date.to_s(:transaction)
 

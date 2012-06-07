@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120501015452) do
+ActiveRecord::Schema.define(:version => 20120607041557) do
 
   create_table "accounts", :force => true do |t|
     t.integer  "customer_id"
@@ -212,6 +212,9 @@ ActiveRecord::Schema.define(:version => 20120501015452) do
     t.integer  "advance_days"
     t.integer  "automatic_delivery_hour"
     t.string   "currency"
+    t.boolean  "bank_deposit"
+    t.boolean  "paypal"
+    t.string   "bank_deposit_format"
   end
 
   add_index "distributors", ["authentication_token"], :name => "index_distributors_on_authentication_token", :unique => true
@@ -246,6 +249,41 @@ ActiveRecord::Schema.define(:version => 20120501015452) do
     t.datetime "created_at",     :null => false
     t.datetime "updated_at",     :null => false
   end
+
+  create_table "import_transaction_lists", :force => true do |t|
+    t.integer  "distributor_id"
+    t.boolean  "draft"
+    t.integer  "account_type"
+    t.integer  "source_type"
+    t.string   "csv_file"
+    t.datetime "created_at",     :null => false
+    t.datetime "updated_at",     :null => false
+    t.string   "file_format"
+  end
+
+  add_index "import_transaction_lists", ["distributor_id", "draft"], :name => "index_import_transaction_lists_on_distributor_id_and_draft"
+
+  create_table "import_transactions", :force => true do |t|
+    t.integer  "customer_id"
+    t.date     "transaction_date"
+    t.integer  "amount_cents"
+    t.boolean  "removed"
+    t.text     "description"
+    t.float    "confidence"
+    t.integer  "import_transaction_list_id"
+    t.integer  "match"
+    t.integer  "transaction_id"
+    t.boolean  "draft"
+    t.datetime "created_at",                 :null => false
+    t.datetime "updated_at",                 :null => false
+    t.integer  "payment_id"
+    t.text     "raw_data"
+  end
+
+  add_index "import_transactions", ["import_transaction_list_id", "draft"], :name => "index_import_draft"
+  add_index "import_transactions", ["import_transaction_list_id", "match"], :name => "index_import_match"
+  add_index "import_transactions", ["import_transaction_list_id", "removed"], :name => "index_import_removed"
+  add_index "import_transactions", ["import_transaction_list_id"], :name => "index_import_transactions_on_import_transaction_list_id"
 
   create_table "invoice_information", :force => true do |t|
     t.integer  "distributor_id"
@@ -352,7 +390,7 @@ ActiveRecord::Schema.define(:version => 20120501015452) do
   create_table "payments", :force => true do |t|
     t.integer  "distributor_id"
     t.integer  "account_id"
-    t.integer  "amount_cents",      :default => 0, :null => false
+    t.integer  "amount_cents",            :default => 0, :null => false
     t.string   "currency"
     t.string   "kind"
     t.text     "description"
@@ -360,6 +398,12 @@ ActiveRecord::Schema.define(:version => 20120501015452) do
     t.datetime "updated_at"
     t.integer  "bank_statement_id"
     t.string   "reference"
+    t.boolean  "reversed"
+    t.datetime "reversed_at"
+    t.integer  "transaction_id"
+    t.integer  "reversal_transaction_id"
+    t.string   "source"
+    t.date     "payment_date"
   end
 
   add_index "payments", ["account_id"], :name => "index_payments_on_account_id"
@@ -418,6 +462,7 @@ ActiveRecord::Schema.define(:version => 20120501015452) do
     t.text     "description"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.date     "display_date"
   end
 
   add_index "transactions", ["account_id"], :name => "index_transactions_on_account_id"

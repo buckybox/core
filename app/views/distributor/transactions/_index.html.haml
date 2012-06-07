@@ -2,13 +2,13 @@
   %table.twelve.columns#transactions
     %thead
       %tr
-        %th Timestamp
-        %th Amount
-        %th Description
+        %th Date
+        %th Details
+        %th Transaction
 
     %tbody
       - @transactions.each do |transaction|
         %tr
-          %td= transaction.created_at.to_s(:db)
-          %td= transaction.amount.format
+          %td= transaction.display_date.to_s(:transaction)
           %td= transaction.description
+          %td= transaction.amount.format
