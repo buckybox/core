@@ -9,14 +9,14 @@ class Transaction < ActiveRecord::Base
 
   attr_accessible :account, :kind, :amount, :description, :display_date
 
-  default_scope order('created_at DESC')
-
   KINDS = %w(delivery payment amend)
 
   validates_presence_of :account_id, :kind, :amount, :description, :display_date
   validates :kind, inclusion: { in: KINDS, message: "%{value} is not a valid kind of transaction" }
 
   before_validation :set_display_date
+
+  default_scope order('display_date DESC')
 
   def reverse_transaction!
     account.reverse_transaction!(amount, description)
