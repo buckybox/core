@@ -4,16 +4,16 @@ class ImportTransactionList < ActiveRecord::Base
   has_many :import_transactions, autosave: true, validate: true, dependent: :destroy
 
   accepts_nested_attributes_for :import_transactions
-  
+
   mount_uploader :csv_file, ImportTransactionListUploader
 
   FILE_FORMATS = [["Kiwibank", "kiwibank"], ["St George Australia", "st_george_au"], ["Paypal", "paypal"], ["BNZ", "bnz"]]
   ACCOUNTS = [:kiwibank, :paypal, :st_george_au, :bnz]
   SOURCES = [:manual, :kiwibank_csv]
 
+  validates_presence_of :csv_file
+  validates_inclusion_of :file_format, in: FILE_FORMATS.map(&:last)
   validate :csv_ready, on: :create
-  validates :file_format, inclusion: {in: FILE_FORMATS.collect(&:last)}
-  validates :csv_file, presence: true
 
   before_create :import_rows
 
@@ -30,7 +30,7 @@ class ImportTransactionList < ActiveRecord::Base
   end
 
   def self.label_for_file_format(file_format)
-    FILE_FORMATS.find{|name, code| code == file_format}.first
+    FILE_FORMATS.find{ |name, code| code == file_format }.first
   end
 
   def source
@@ -41,34 +41,37 @@ class ImportTransactionList < ActiveRecord::Base
     csv_parser.rows.each do |row|
       import_transactions << ImportTransaction.new_from_row(row, self, distributor)
     end
-    import_transactions
+
+    return import_transactions
   end
 
   def file_format
     in_db = read_attribute(:file_format)
+
     if in_db.present?
       in_db
     else
       distributor.present? ? distributor.last_csv_format : FILE_FORMATS.first.last
     end
   end
-  
+
   def parser_class
     "Bucky::TransactionImports::#{file_format.camelize}".constantize
   end
-  
+
   def csv_parser
     if @parser.blank? && file_format.present?
       @parser = parser_class.new
       @parser.import(csv_file.current_path) if errors.blank? && csv_file.present?
     end
-    @parser
+
+    return @parser
   end
 
   def process_import_transactions_attributes(import_transaction_list_attributes)
     # Expecting transactions_attributes to look like [1, {"id": 234, "customer_id":12 },
     #                                                 2, {"id": 65, "customer_id":1}....]
-    transactions_attributes = import_transaction_list_attributes[:import_transactions_attributes]                                                 
+    transactions_attributes = import_transaction_list_attributes[:import_transactions_attributes]
 
     hash_transactions_attributes = transactions_attributes.clone.inject({}) do |hash, element|
       element = element.last
@@ -81,11 +84,12 @@ class ImportTransactionList < ActiveRecord::Base
     end
 
     # Remove any customers which shouldn't be here
-    hash_customer_ids = distributor.customer_ids.inject({}){|hash, element| hash.merge(element.to_s => true)}
+    hash_customer_ids = distributor.customer_ids.inject({}) { |hash, element| hash.merge(element.to_s => true) }
     transactions_attributes = transactions_attributes.select do |id, transaction_attributes|
       hash_customer_ids.key?(transaction_attributes[:customer_id])
     end
-    import_transaction_list_attributes
+
+    return import_transaction_list_attributes
   end
 
   def process_attributes(attr)

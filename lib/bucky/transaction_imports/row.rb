@@ -23,7 +23,7 @@ module Bucky::TransactionImports
     def amount
       @amount_string.to_f
     end
-    
+
     MATCH_STRATEGY = [[:email_match, 1.0],
                       [:number_match, 0.8],
                       [:name_match, 0.8],
@@ -163,7 +163,7 @@ module Bucky::TransactionImports
     def not_customer?
       debit?
     end
-      
+
     def to_s
       "#{date} #{description} #{amount}"
     end
@@ -199,7 +199,7 @@ module Bucky::TransactionImports
 
   class MatchResult
     attr_accessor :customer, :confidence, :type
-    
+
     def initialize(customer, confidence, type)
       self.customer = customer
       self.confidence = confidence

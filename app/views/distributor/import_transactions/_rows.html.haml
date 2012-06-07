@@ -1,5 +1,5 @@
 - @import_transactions.each do |import_transaction|
-  %tr{class: (import_transaction.matched? ? "row_description matched" : "row_description not_a_customer"),id: "import_transaction_#{import_transaction.id}", 'data-row-id' => import_transaction.id}
+  %tr{ class: (import_transaction.matched? ? "row_description matched" : "row_description not_a_customer"), id: "import_transaction_#{import_transaction.id}", 'data-row-id' => import_transaction.id }
     %td= import_transaction.transaction_date.to_s(:transaction)
     %td= truncate(import_transaction.description, length: 70)
     %td.amount

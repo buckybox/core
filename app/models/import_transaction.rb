@@ -12,7 +12,7 @@ class ImportTransaction < ActiveRecord::Base
     converter: Proc.new { |value| value.respond_to?(:to_money) ? value.to_money : raise(ArgumentError, "Can't convert #{value.class} to Money") }
 
   attr_accessible :customer, :customer_id, :transaction_date, :amount_cents, :removed, :description, :confidence, :import_transaction_list, :match, :draft, :raw_data
-  
+
   serialize :raw_data
 
   MATCH_MATCHED = "matched"
@@ -49,9 +49,10 @@ class ImportTransaction < ActiveRecord::Base
   after_validation :update_account, if: :changed?
 
   delegate :account, to: :import_transaction_list
-  
+
   def self.new_from_row(row, import_transaction_list, distributor)
     match_result = row.single_customer_match(distributor)
+
     ImportTransaction.new(
       customer: match_result.customer,
       transaction_date: row.date,
@@ -88,10 +89,9 @@ class ImportTransaction < ActiveRecord::Base
   def possible_customers
     result = customer.present? ? [[customer.badge, customer.id]] : []
     result += draft? ? MATCH_SELECT : [[MATCH_NOT_A_CUSTOMER.humanize, MATCH_NOT_A_CUSTOMER]]
-    result += distributor.customers.reject{|c| c.id == customer_id}.collect{|c|
-                 [c.badge, c.id]
-               }
-    result
+    result += distributor.customers.reject{|c| c.id == customer_id}.collect { |c| [c.badge, c.id] }
+
+    return result
   end
 
   def confidence
@@ -129,6 +129,7 @@ class ImportTransaction < ActiveRecord::Base
 
   def remove!
     return true if removed?
+
     ImportTransaction.transaction do
       payment.reverse_payment! if payment.present?
       self.removed = true
@@ -143,7 +144,8 @@ class ImportTransaction < ActiveRecord::Base
     else
       transaction_attributes['match'] = ImportTransaction::MATCH_MATCHED
     end
-    transaction_attributes
+
+    return transaction_attributes
   end
 
   def payment_type
@@ -173,7 +175,7 @@ class ImportTransaction < ActiveRecord::Base
       self.payment = customer.make_import_payment(amount, description, transaction_date) 
     end
   end
-  
+
   def customer_belongs_to_distributor
     errors.add(:base, "Customer isn't known to this distributor") unless customer_id.blank? || distributor.customer_ids.include?(customer_id)
   end
