@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120605050350) do
+ActiveRecord::Schema.define(:version => 20120607041557) do
 
   create_table "accounts", :force => true do |t|
     t.integer  "customer_id"
@@ -403,6 +403,7 @@ ActiveRecord::Schema.define(:version => 20120605050350) do
     t.integer  "transaction_id"
     t.integer  "reversal_transaction_id"
     t.string   "source"
+    t.date     "payment_date"
   end
 
   add_index "payments", ["account_id"], :name => "index_payments_on_account_id"
@@ -460,6 +461,7 @@ ActiveRecord::Schema.define(:version => 20120605050350) do
     t.text     "description"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.date     "display_date"
     t.integer  "transactionable_id"
     t.string   "transactionable_type"
   end

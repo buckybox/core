@@ -56,7 +56,9 @@ class Account < ActiveRecord::Base
     write_attribute(:currency, amount.currency.to_s || Money.default_currency.to_s)
     clear_aggregation_cache # without this the composed_of balance attribute does not update
 
-    transactions.build(amount: amount_difference, transactionable: transactionable, description: description)
+    transaction_options = { amount: amount_difference, transactionable: transactionable, description: description }
+    transaction_options.merge!(display_date: options[:display_date]) if options[:display_date]
+    transactions.build(transaction_options)
   end
 
   def add_to_balance(amount, options = {})
@@ -67,9 +69,9 @@ class Account < ActiveRecord::Base
   def subtract_from_balance(amount, options = {})
     add_to_balance((amount * -1), options)
   end
-  
+
   def reverse_transaction!(amount, description)
-    reversal_transaction = subtract_from_balance(amount, {kind: 'amend', description: "REVERSED " + description})
+    reversal_transaction = subtract_from_balance(amount, { kind: 'amend', description: "REVERSED " + description })
     save!
     reversal_transaction
   end

@@ -6,24 +6,26 @@ class Distributor::PaymentsController < Distributor::ResourceController
   before_filter :load_import_transaction_list, only: [:process_payments, :show]
 
   def index 
-    #@payments = current_distributor.payments.bank_transfer.order('created_at DESC')
-    #@import_transaction_lists = current_distributor.import_transaction_lists.ordered.limit(20)
     @import_transaction_list = current_distributor.import_transaction_lists.new
     load_index
   end
-  
+
   def match_payments
-    @import_transaction_list = current_distributor.import_transaction_lists.build(params['import_transaction_list'])
+    @import_transaction_list = current_distributor.import_transaction_lists.build(params[:import_transaction_list])
+
     if @import_transaction_list.save
       @import_transaction_list = current_distributor.import_transaction_lists.new
     end
+
     load_index
+
     render :index
   end
 
   def create
     create! do |success, failure|
       success.html { redirect_to distributor_dashboard_url }
+
       failure.html do
         if params[:payment][:account_id].blank?
           flash[:error] = 'Please, select a customer for this payment.'
@@ -38,7 +40,9 @@ class Distributor::PaymentsController < Distributor::ResourceController
   end
 
   def process_payments
-    if @import_transaction_list.process_attributes(@import_transaction_list.process_import_transactions_attributes(params[:import_transaction_list]))
+    processed_data = @import_transaction_list.process_import_transactions_attributes(params[:import_transaction_list])
+
+    if @import_transaction_list.process_attributes(processed_data)
       redirect_to distributor_payments_url, notice: "Payments processed successfully"
     else
       flash.now[:alert] = "There was a problem"
@@ -49,10 +53,13 @@ class Distributor::PaymentsController < Distributor::ResourceController
   def process_upload
     @kiwibank = Bucky::TransactionImports::Kiwibank.new
     @kiwibank.import(params['bank_statement']["statement_file"].path)
+
     unless @kiwibank.valid?
       return render :index
     end
+
     @transaction_list = @kiwibank.transactions_for_display(current_distributor)
+
     render :upload_transactions
   end
 
@@ -65,6 +72,7 @@ class Distributor::PaymentsController < Distributor::ResourceController
 
   def destroy
     @import_transaction = current_distributor.import_transactions.find(params[:id])
+
     if @import_transaction.removed? || @import_transaction.remove!
       render :destroy
     end
