@@ -12,7 +12,7 @@
 
       - @transactions.each do |transaction|
         %tr
-          %td= transaction.created_at.to_date.to_s(:rfc822)
+          %td= transaction.display_date.to_s(:transaction)
           %td= transaction.description
           %td= transaction.amount.format
           %td= (@balance - transaction_total).format
