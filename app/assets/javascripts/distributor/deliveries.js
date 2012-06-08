@@ -93,7 +93,12 @@ $(function() {
     var status = $(this).attr('id');
     var checked_deliveries = $('#delivery-listings .data-listings input[type=checkbox]:checked');
 
-    updateDeliveryStatus(status, distributor_id, checked_deliveries);
+    if(status == 'paid') {
+      makePayments(distributor_id, checked_deliveries);
+    }
+    else {
+      updateDeliveryStatus(status, distributor_id, checked_deliveries);
+    }
 
     checked_deliveries.prop('checked', false);
     $('#delivery-listings #all').prop('checked', false);
@@ -101,7 +106,7 @@ $(function() {
     return false;
   });
 
-  $('#delivery-listings #missed').click(function() {
+  $('#delivery-listings #more-delivery-options').click(function() {
      $('#delivery-listings .flyout').toggle();
      return false;
   });
@@ -161,3 +166,14 @@ function updateDeliveryStatus(status, distributor_id, checked_deliveries, date) 
   });
 }
 
+function makePayments(distributor_id, checked_deliveries) {
+  var ckbx_ids = $.map(checked_deliveries, function(ckbx) { return $(ckbx).data('delivery'); });
+  var data_hash = { 'deliveries': ckbx_ids, 'status': status };
+
+  $.ajax({
+    type: 'POST',
+    url: '/distributor/deliveries/make_payment.json',
+    dataType: 'json',
+    data: $.param(data_hash)
+  });
+}

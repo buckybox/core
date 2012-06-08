@@ -1,22 +1,19 @@
 .nine.columns
   .row.data-headings
-    .one.columns= check_box_tag 'all'
-    .five.columns.delivery_actions
-      = button_tag 'Pending', class: 'small radius button', id: 'pending', disabled: @selected_date.future?
+    .seven.columns.delivery_actions
+      = check_box_tag 'all'
       = button_tag 'Delivered', class: 'small radius button', id: 'delivered', disabled: @selected_date.future?
-      = button_tag 'Missed', class: 'small radius button red', id: 'missed', disabled: @selected_date.future?
+      = button_tag '&#9660; More'.html_safe, class: 'small radius button', id: 'more-delivery-options', disabled: @selected_date.future?
       #missed-options.has-flyout
-        %table.flyout.large
-          %tr
-            %td= radio_button_tag 'missed', 'cancelled'
-            %td= label_tag 'missed_cancelled', 'Cancel delivery'
-            %td
-          %tr
-            %td{ colspan: 2 }
-            %td= button_tag 'Commit', class: 'small radius button red', id: 'commit-missed'
-    .three.columns
-      = button_tag 'Paid', class: 'small radius button green', id: 'paied', disabled: @selected_date.future?
-    .three.columns.export.text-right
+        .flyout
+          %ul
+            %li= link_to 'Delivery Pending', '#', id: 'pending'
+            %li= link_to 'Delivery Cancelled', '#', id: 'cancelled'
+          %hr
+          %ul
+            %li= link_to 'Payment on Delivery', '#', id: 'payment-on-delivery'
+            %li= link_to 'Undo Payment', '#', id: 'cancelled'
+    .five.columns.export.text-right
       = button_to('Export',
         export_distributor_deliveries_path,
         { id: 'delivery-export', class: 'small radius button', disabled: !@real_list })

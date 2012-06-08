@@ -34,8 +34,7 @@ class Delivery < ActiveRecord::Base
   delegate :date, to: :delivery_list, allow_nil: true
 
   state_machine :status, initial: :pending do
-    before_transition on: [:deliver, :pay], do: :subtract_from_account
-    before_transition on: :pay, do: :payment_on_delivery
+    before_transition on: :deliver, do: :subtract_from_account
     before_transition on: [:pend, :cancel], do: :reverse_account_changes
 
     event :pend do
@@ -48,10 +47,6 @@ class Delivery < ActiveRecord::Base
 
     event :deliver do
       transition all - :delivered => :delivered
-    end
-
-    event :pay do
-      transition all - :paid => :paid
     end
   end
 
