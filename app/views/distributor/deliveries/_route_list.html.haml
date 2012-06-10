@@ -1,6 +1,6 @@
 .nine.columns
   .row.data-headings
-    .seven.columns.delivery_actions
+    #route-controls.seven.columns.delivery_actions
       = check_box_tag 'all'
       = button_tag 'Delivered', class: 'small radius button', id: 'delivered', disabled: @selected_date.future?
       = button_tag '&#9660; More'.html_safe, class: 'small radius button', id: 'more-delivery-options', disabled: @selected_date.future?
@@ -12,7 +12,7 @@
           %hr
           %ul
             %li= link_to 'Payment on Delivery', '#', id: 'payment-on-delivery'
-            %li= link_to 'Undo Payment', '#', id: 'cancelled'
+            %li= link_to 'Undo Payment', '#', id: 'undo-payment'
     .five.columns.export.text-right
       = button_to('Export',
         export_distributor_deliveries_path,
@@ -22,21 +22,31 @@
     %ul#delivery_list.sortable
       - @items.each do |delivery|
         %li.row.data-listings{ id: "delivery_#{delivery.id}", class: delivery.status }
-          .two.columns
-            = check_box_tag delivery.order_id, '1', false, data: { delivery: delivery.id }
-            = render partial: 'status_icons', locals: { status: delivery.status }
-            = delivery.delivery_number
-          .four.columns= display_address(delivery)
-          .three.columns= contents_description(delivery)
-          .three.columns= customer_badge(delivery.customer, customer_name: delivery.package.archived_customer_name, short: true)
+          .three.columns
+            .row
+              .four.columns
+                = check_box_tag delivery.order_id, '1', false, data: { delivery: delivery.id }
+                = render partial: 'status_icons', locals: { status: delivery.status }
+              .four.columns= delivery.delivery_number
+              .four.columns
+                %span#paid-label.green.radius.label PAID
+          .nine.columns
+            .row
+              .four.columns= display_address(delivery)
+              .four.columns= contents_description(delivery)
+              .four.columns= customer_badge(delivery.customer, customer_name: delivery.package.archived_customer_name, short: true)
   - else
     %ul
       - @items.each do |order|
         %li.row.data-listings.pending
-          .two.columns
-            = check_box_tag order.id, '1', false
-            = image_tag 'icon-status-pending.png', title: 'PENDING delivery', class: 'icon-pending'
-            N/A
-          .four.columns= display_address(order)
-          .three.columns= contents_description(order)
-          .three.columns= customer_badge(order.customer)
+          .three.columns
+            .row
+              .four.columns
+                = check_box_tag order.id, '1', false
+                = image_tag 'icon-status-pending.png', title: 'PENDING delivery', class: 'icon-pending'
+              .eight.columns
+          .nine.columns
+            .row
+              .four.columns= display_address(order)
+              .four.columns= contents_description(order)
+              .four.columns= customer_badge(order.customer)

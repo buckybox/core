@@ -88,13 +88,14 @@ $(function() {
     $('#delivery-listings #all').prop('checked', false);
   });
 
-  $('#delivery-listings #delivered, #delivery-listings #pending, #delivery-listings #paied').click(function() {
+  $('#route-controls #delivered, #missed-options a').click(function() {
     var distributor_id = $('#delivery-listings').data('distributor');
     var status = $(this).attr('id');
     var checked_deliveries = $('#delivery-listings .data-listings input[type=checkbox]:checked');
 
-    if(status == 'paid') {
-      makePayments(distributor_id, checked_deliveries);
+    if(status == 'payment-on-delivery' && status == 'undo-payment') {
+      reverse_payment = (status == 'undo-payment');
+      makePayments(distributor_id, checked_deliveries, reverse_payment);
     }
     else {
       updateDeliveryStatus(status, distributor_id, checked_deliveries);
@@ -109,32 +110,6 @@ $(function() {
   $('#delivery-listings #more-delivery-options').click(function() {
      $('#delivery-listings .flyout').toggle();
      return false;
-  });
-
-  $('#commit-missed').click(function() {
-    var distributor_id = $('#delivery-listings').data('distributor');
-    var checked_deliveries = $('#delivery-listings .data-listings input[type=checkbox]:checked');
-    var missed_option = $('#missed-options input:radio[name=missed]:checked').val();
-    var date = undefined;
-
-    if(missed_option === 'reschedule' || missed_option === 'repack') {
-      date = $('#date_' + missed_option).val();
-    }
-
-    updateDeliveryStatus(missed_option, distributor_id, checked_deliveries, date);
-
-    checked_deliveries.prop('checked', false);
-    $('#delivery-listings #all').prop('checked', false);
-    $('#delivery-listings .flyout').toggle();
-
-    return false;
-  });
-
-  $('.delivery-paid').click(function() {
-    console.info('You Paid!');
-    $.ajax({url: $(this).attr('href'), type: 'POST'});
-
-    return false;
   });
 });
 
@@ -166,9 +141,10 @@ function updateDeliveryStatus(status, distributor_id, checked_deliveries, date) 
   });
 }
 
-function makePayments(distributor_id, checked_deliveries) {
+function makePayments(distributor_id, checked_deliveries, reverse_payment) {
   var ckbx_ids = $.map(checked_deliveries, function(ckbx) { return $(ckbx).data('delivery'); });
   var data_hash = { 'deliveries': ckbx_ids, 'status': status };
+  if(reverse_payment) { data_hash['reverse_payment'] = true; }
 
   $.ajax({
     type: 'POST',
