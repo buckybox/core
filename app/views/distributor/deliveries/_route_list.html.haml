@@ -7,12 +7,16 @@
       #missed-options.has-flyout
         .flyout
           %ul
-            %li= link_to 'Delivery Pending', '#', id: 'pending'
-            %li= link_to 'Delivery Cancelled', '#', id: 'cancelled'
+            = link_to '#', id: 'pending' do
+              %li Delivery Pending
+            = link_to '#', id: 'cancelled' do
+              %li Delivery Cancelled
           %hr
           %ul
-            %li= link_to 'Payment on Delivery', '#', id: 'payment-on-delivery'
-            %li= link_to 'Undo Payment', '#', id: 'undo-payment'
+            = link_to '#', id: 'payment-on-delivery' do
+              %li Payment on Delivery
+            = link_to '#', id: 'undo-payment' do
+              %li Undo Payment
     .five.columns.export.text-right
       = button_to('Export',
         export_distributor_deliveries_path,
