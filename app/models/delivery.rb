@@ -50,15 +50,6 @@ class Delivery < ActiveRecord::Base
     end
   end
 
-  def self.change_statuses(deliveries, new_status, options = {})
-    result = deliveries.all? do |delivery|
-      delivery.status_event = new_status
-      delivery.save
-    end
-
-    return result
-  end
-
   def self.auto_deliver(delivery)
     auto_delivered = false
 
@@ -70,6 +61,41 @@ class Delivery < ActiveRecord::Base
     end
 
     return auto_delivered
+  end
+
+  def self.change_statuses(deliveries, new_status, options = {})
+    result = deliveries.all? do |delivery|
+      delivery.status_event = new_status
+      delivery.save
+    end
+
+    return result
+  end
+
+  def self.pay_on_delivery(deliveries)
+    payment_date = Date.current
+
+    deliveries.each do |delivery|
+      delivery.payment.create(
+        distributor: distributor,
+        account: account,
+        amount: amount,
+        kind: 'unspecified',
+        source: 'pay_on_delivery',
+        description: "Payment on delivery - #{payment_date.to_s(:transaction)}",
+        payment_date: payment_date
+      )
+    end
+  end
+
+  def self.reverse_pay_on_delivery(deliveries)
+    deliveries.each do |delivery|
+      delivery.payment.reverse_payment! if delivery.paid?
+    end
+  end
+
+  def paid?
+    !payment.nil?
   end
 
   def quantity

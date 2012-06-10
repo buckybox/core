@@ -126,7 +126,7 @@ function updateDeliveryStatus(status, distributor_id, checked_deliveries, date) 
   });
 
   $.each(checked_deliveries, function(i, ckbx) {
-    var holder = $(ckbx).parent().parent();
+    var holder = $(ckbx).closest('.data-listings');
 
     var statuses = ['pending', 'delivered', 'cancelled', 'rescheduled', 'repacked'];
     statuses.splice(statuses.indexOf(status), 1);
@@ -151,5 +151,17 @@ function makePayments(distributor_id, checked_deliveries, reverse_payment) {
     url: '/distributor/deliveries/make_payment.json',
     dataType: 'json',
     data: $.param(data_hash)
+  });
+
+  $.each(checked_deliveries, function(i, ckbx) {
+    var holder = $(ckbx).closest('.data-listings');
+    var paidLabel = holder.find('.paid-label');
+
+    if(reverse_payment) {
+      paidLabel.hide();
+    }
+    else {
+      paidLabel.show();
+    }
   });
 }
