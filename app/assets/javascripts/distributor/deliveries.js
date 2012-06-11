@@ -93,8 +93,8 @@ $(function() {
     var status = $(this).attr('id');
     var checked_deliveries = $('#delivery-listings .data-listings input[type=checkbox]:checked');
 
-    if(status == 'payment-on-delivery' && status == 'undo-payment') {
-      reverse_payment = (status == 'undo-payment');
+    if(status === 'payment-on-delivery' || status === 'undo-payment') {
+      reverse_payment = (status === 'undo-payment');
       makePayments(distributor_id, checked_deliveries, reverse_payment);
     }
     else {
@@ -103,6 +103,7 @@ $(function() {
 
     checked_deliveries.prop('checked', false);
     $('#delivery-listings #all').prop('checked', false);
+    $('#delivery-listings .flyout').hide();
 
     return false;
   });
