@@ -24,9 +24,17 @@ class Deduction < ActiveRecord::Base
   validates_presence_of :distributor_id, :account_id, :amount, :kind, :description, :deductable_id, :deductable_type
   validates_inclusion_of :kind, in: KINDS, message: "%{value} is not a valid kind of payment"
   validates_inclusion_of :source, in: SOURCES, message: "%{value} is not a valid source of payment"
-  validates_numericality_of :amount
+  validates_numericality_of :amount, greater_than: 0
 
-  before_create :make_deduction!
+  after_create :make_deduction!
+
+  scope :delivery,    where(kind: 'delivery')
+  scope :unspecified, where(kind: 'unspecified')
+
+  scope :manual,   where(source: 'manual')
+  scope :delivery, where(source: 'delivery')
+
+  scope :reversed, where(reversed: true)
 
   default_value_for :reversed, false
   default_value_for :kind,     'unspecified'
