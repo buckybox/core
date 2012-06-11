@@ -173,7 +173,7 @@ class Delivery < ActiveRecord::Base
   end
 
   def reverse_deduction
-    self.deduction.reverse_deduction!
+    self.deduction.reverse_deduction! unless self.deduction.nil?
   end
 
   def customer_callback
