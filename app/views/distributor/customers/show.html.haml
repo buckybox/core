@@ -17,7 +17,9 @@
       %li.email= "Email: #{@customer.email}"
 
   .three.columns
-    %h4== Balance: #{@account.balance.format}
+    %h4
+      Balance:
+      %span#account-balance= @account.balance.format
     %br
     %h4 Notes:
     = @customer.notes
