@@ -12,13 +12,9 @@ class Transaction < ActiveRecord::Base
 
   validates_presence_of :account_id, :transactionable_id, :transactionable_type, :amount, :description, :display_date
 
-  before_validation :set_display_date
-
   default_scope order('display_date DESC')
 
-  private
-
-  def set_display_date
-    self.display_date = Time.zone.now.to_date if self.display_date.nil?
+  default_value_for :display_date do
+    display_date = Date.current
   end
 end

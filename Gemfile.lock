@@ -96,7 +96,7 @@ GEM
     eventmachine (0.12.10)
     execjs (1.4.0)
       multi_json (~> 1.0)
-    fabrication (2.0.1)
+    fabrication (1.4.1)
     ffi (1.0.11)
     fuubar (1.0.0)
       rspec (~> 2.0)
@@ -332,7 +332,7 @@ DEPENDENCIES
   default_value_for
   delorean
   devise (~> 1.5.3)
-  fabrication
+  fabrication (~> 1.4.1)
   fuubar
   fuzzy-string-match
   guard

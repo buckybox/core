@@ -74,7 +74,7 @@ group :development, :test do
 end
 
 group :test do
-  gem 'fabrication'
+  gem 'fabrication', '~> 1.4.1'
   gem 'database_cleaner'
 
   gem 'delorean'

@@ -24,10 +24,9 @@ class Payment < ActiveRecord::Base
   validates_presence_of :distributor_id, :account_id, :amount, :kind, :description, :payment_date, :payable_id, :payable_type
   validates_inclusion_of :kind, in: KINDS, message: "%{value} is not a valid kind of payment"
   validates_inclusion_of :source, in: SOURCES, message: "%{value} is not a valid source of payment"
-  validates_numericality_of :amount
+  validates_numericality_of :amount, greater_than: 0
 
   after_create :make_payment!
-  before_validation :set_payment_date
 
   scope :bank_transfer, where(kind: 'bank_transfer')
   scope :credit_card,   where(kind: 'credit_card')
@@ -43,6 +42,9 @@ class Payment < ActiveRecord::Base
   default_value_for :reversed, false
   default_value_for :kind,     'unspecified'
   default_value_for :source,   'manual'
+  default_value_for :payment_date do
+    payment_date = Date.current
+  end
 
   def reverse_payment!
     raise "This payment has already been reversed." if self.reversal_transaction.present?
@@ -59,10 +61,6 @@ class Payment < ActiveRecord::Base
   end
 
   private
-
-  def set_payment_date
-    self.payment_date = Time.current.to_date if self.payment_date.nil?
-  end
 
   def make_payment!
     raise "This payment has already been applied!" if self.transaction.present?
