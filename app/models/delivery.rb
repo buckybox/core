@@ -4,6 +4,8 @@ class Delivery < ActiveRecord::Base
   belongs_to :route
   belongs_to :package
 
+  has_one :payment,     as: :payable
+  has_one :deduction,   as: :deductable
   has_one :distributor, through: :delivery_list
   has_one :box,         through: :order
   has_one :account,     through: :order
@@ -34,8 +36,8 @@ class Delivery < ActiveRecord::Base
   delegate :date, to: :delivery_list, allow_nil: true
 
   state_machine :status, initial: :pending do
-    before_transition on: :deliver, do: :subtract_from_account
-    before_transition on: [:pend, :cancel], do: :reverse_account_changes
+    before_transition on: :deliver, do: :deduct_account
+    before_transition on: [:pend, :cancel], do: :reverse_deduction
 
     event :pend do
       transition all - :pending => :pending
@@ -79,7 +81,7 @@ class Delivery < ActiveRecord::Base
       delivery.payment.create(
         distributor: distributor,
         account: account,
-        amount: amount,
+        amount: package.price,
         kind: 'unspecified',
         source: 'pay_on_delivery',
         description: "Payment on delivery - #{payment_date.to_s(:transaction)}",
@@ -159,40 +161,19 @@ class Delivery < ActiveRecord::Base
     self.delivery_number = self.position
   end
 
-  def reverse_account_changes
-    reverse_payment_on_delivery if paid?
-    add_to_account
+  def deduct_account
+   self.deduction.create!(
+     distributor: distributor,
+     account: account,
+     amount: package.price,
+     kind: 'delivery',
+     source: 'import',
+     description: 'Delivery was made.'
+   )
   end
 
-  def payment_on_delivery
-    # The distributor "beez in the trap" (http://youtu.be/VY0cDbb5A_8?t=7m7s) here
-    add_to_account(description: 'Payment on delivery.')
-  end
-
-  def reverse_payment_on_delivery
-    subtract_from_account(description: 'Payment on delivery reversed.')
-  end
-
-  def subtract_from_account(options = {})
-    description = 'Delivery was made.'
-    description = options[:description] if options.is_a?(Hash) && options[:description]
-
-    account.subtract_from_balance(
-      package.price,
-      transactionable: self,
-      description: "#{description} #{package.contents_description} at #{package.price}."
-    )
-  end
-
-  def add_to_account(options = {})
-    description = 'Delivery reversal.'
-    description = options[:description] if options.is_a?(Hash) && options[:description]
-
-    account.add_to_balance(
-      package.price,
-      transactionable: self,
-      description: "#{description} #{package.contents_description} at #{package.price}."
-    )
+  def reverse_deduction
+    self.deduction.reverse_deduction!
   end
 
   def customer_callback

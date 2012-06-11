@@ -5,7 +5,6 @@ class Account < ActiveRecord::Base
 
   has_many :orders, dependent: :destroy
   has_many :payments, dependent: :destroy
-
   has_many :transactions, autosave: true
   has_many :deliveries, through: :orders
   has_many :invoices
@@ -68,12 +67,6 @@ class Account < ActiveRecord::Base
 
   def subtract_from_balance(amount, options = {})
     add_to_balance((amount * -1), options)
-  end
-
-  def reverse_transaction!(amount, description)
-    reversal_transaction = subtract_from_balance(amount, { kind: 'amend', description: "REVERSED " + description })
-    save!
-    reversal_transaction
   end
 
   #all accounts that need invoicing

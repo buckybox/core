@@ -33,7 +33,7 @@
                 = render partial: 'status_icons', locals: { status: delivery.status }
               .four.columns= delivery.delivery_number
               .four.columns
-                %span{ style: "#{'display: inline;' if delivery.paid?}" }.paid-label.green.radius.label PAID
+                %span.paid-label.green.radius.label{ style: "#{'display: inline;' if delivery.paid?}" } PAID
           .nine.columns
             .row
               .four.columns= display_address(delivery)

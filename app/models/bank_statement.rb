@@ -3,7 +3,7 @@ require 'csv'
 class BankStatement < ActiveRecord::Base
   belongs_to :distributor
 
-  has_many :payments
+  has_many :payments, as: :payable
 
   mount_uploader :statement_file, BankStatementUploader
 
@@ -13,7 +13,7 @@ class BankStatement < ActiveRecord::Base
   attr_accessible :distributor, :statement_file
 
   def process_statement!(customers_ids)
-    it=0
+    it = 0
 
     CSV.foreach(statement_file.path, :headers => :first_row) do |row|
       if row['Amount'].to_i > 0
