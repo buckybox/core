@@ -84,6 +84,8 @@ group :test do
 
   gem 'guard-rspec'
   gem 'fuubar'
+
+  gem 'cucumber-rails'
 end
 
 group :staging do
