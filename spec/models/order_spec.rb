@@ -267,15 +267,15 @@ describe Order do
     it "removes extras when it is a one off and returns hash" do
       order = Fabricate.build(:order, extras_one_off: true)
       order.stub(:order_extras, :collect).and_return([{count: 3, name: "iPhone 4s", unit: "one", price_cents: 99995, currency: "NZD"}, {count: 1, name: "Apple", unit: "kg", price_cents: 295, currency: "NZD"}])
-      
+
       order.should_receive(:clear_extras)
       order.pack_and_update_extras.should eq([{count: 3, name: "iPhone 4s", unit: "one", price_cents: 99995, currency: "NZD"}, {count: 1, name: "Apple", unit: "kg", price_cents: 295, currency: "NZD"}])
     end
-    
+
     it "keeps extras when it is a recurring order and returns hash" do
       order = Fabricate.build(:order, extras_one_off: false)
       order.stub(:order_extras, :collect).and_return([{count: 3, name: "iPhone 4s", unit: "one", price_cents: 99995, currency: "NZD"}, {count: 1, name: "Apple", unit: "kg", price_cents: 295, currency: "NZD"}])
-      
+
       order.should_not_receive(:clear_extras)
       order.pack_and_update_extras.should eq([{count: 3, name: "iPhone 4s", unit: "one", price_cents: 99995, currency: "NZD"}, {count: 1, name: "Apple", unit: "kg", price_cents: 295, currency: "NZD"}])
     end
@@ -309,7 +309,7 @@ describe Order do
     end
 
     it "should validate extras limit" do
-      @params[:box].update_attribute(:extras_limit, 3)
+      Box.find(@params[:box_id]).update_attribute(:extras_limit, 3)
 
       order = Order.create(@params)
       order.should_not be_valid
@@ -319,17 +319,16 @@ describe Order do
     it "should update extras and delete old ones" do
       order = Order.create(@params)
       order.should be_valid
-      
+
       @order_extras[@extra_ids.first.to_s][:count] = 0
       new_extra = Fabricate(:extra, distributor: @distributor)
       @order_extras.merge!(new_extra.id => {count: 2})
-      
+
       order.update_attributes(order_extras: @order_extras)
       order.should be_valid
 
       order.order_extras.collect(&:extra_id).should_not include(@extra_ids.first)
       order.extras_count.should eq(3)
     end
-
   end
 end

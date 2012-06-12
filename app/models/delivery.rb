@@ -4,13 +4,14 @@ class Delivery < ActiveRecord::Base
   belongs_to :route
   belongs_to :package
 
-  has_one :payment,     as: :payable
-  has_one :deduction,   as: :deductable
   has_one :distributor, through: :delivery_list
   has_one :box,         through: :order
   has_one :account,     through: :order
   has_one :address,     through: :order
   has_one :customer,    through: :order
+
+  has_many :payments,   as: :payable
+  has_many :deductions, as: :deductable
 
   acts_as_list scope: [:delivery_list_id, :route_id]
 
@@ -76,15 +77,17 @@ class Delivery < ActiveRecord::Base
     payment_date = Date.current
 
     deliveries.each do |delivery|
-      payment = delivery.create_payment(
-        distributor: delivery.distributor,
-        account: delivery.account,
-        amount: delivery.package.price,
-        kind: 'unspecified',
-        source: 'pay_on_delivery',
-        description: "Payment on delivery - #{payment_date.to_s(:transaction)}",
-        payment_date: payment_date
-      )
+      unless delivery.paid?
+        delivery.payments.create(
+          distributor: delivery.distributor,
+          account: delivery.account,
+          amount: delivery.package.price,
+          kind: 'unspecified',
+          source: 'pay_on_delivery',
+          description: "Payment on delivery - #{payment_date.to_s(:transaction)}",
+          payment_date: payment_date
+        )
+      end
     end
   end
 
@@ -94,8 +97,20 @@ class Delivery < ActiveRecord::Base
     end
   end
 
+  def payment
+    @payment ||= payments.order(:created_at).last
+  end
+
+  def deduction
+    @deduction ||= deductions.order(:created_at).last
+  end
+
   def paid?
-    !payment.nil?
+    !payment.nil? && !payment.reversed
+  end
+
+  def deducted?
+    !deduction.nil? && !deduction.reversed
   end
 
   def quantity
@@ -160,18 +175,20 @@ class Delivery < ActiveRecord::Base
   end
 
   def deduct_account
-    self.build_deduction(
-      distributor: distributor,
-      account: account,
-      amount: package.price,
-      kind: 'delivery',
-      source: 'delivery',
-      description: 'Delivery was made.'
-    )
+    unless self.deducted?
+      self.deductions.build(
+        distributor: distributor,
+        account: account,
+        amount: package.price,
+        kind: 'delivery',
+        source: 'delivery',
+        description: 'Delivery was made.'
+      )
+    end
   end
 
   def reverse_deduction
-    self.deduction.reverse_deduction! unless self.deduction.nil?
+    self.deduction.reverse_deduction! if self.deducted?
   end
 
   def customer_callback

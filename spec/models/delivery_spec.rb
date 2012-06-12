@@ -35,14 +35,13 @@ describe Delivery do
     context 'when changed to delivered' do
       shared_examples 'it deducts accounts' do
         before do
-          @package          = @delivery.package
+          @price            = @delivery.package.price
           @starting_balance = @delivery.account.balance
           @delivery.deliver
-          @delivery.save
         end
 
-        specify { @delivery.deduction.should_not be_nil }
-        specify { @delivery.account.balance.should == @starting_balance - @package.price }
+        specify { @delivery.deducted?.should be_true }
+        specify { @delivery.account(true).balance.should == @starting_balance - @price }
       end
 
       context 'from pending' do
@@ -59,33 +58,25 @@ describe Delivery do
     end
 
     context 'when changed from delivered' do
+      before do
+          @delivery = delivery_pending
+          @starting_balance = @delivery.account.balance
+          @delivery.deliver
+      end
+
       shared_examples 'it adds to accounts' do
-        specify { @delivery.deduction.should_not be_nil }
-        specify { @delivery.account.balance.should == @starting_balance + @package.price }
+        specify { @delivery.deducted?.should be_false }
+        specify { @delivery.account(true).balance.should == @starting_balance }
       end
 
       context 'to pending' do
-        before do
-          @delivery = delivery_delivered
-          @package = @delivery.package
-
-          @starting_balance = @delivery.account.balance
-          @delivery.pend
-          @delivery.save
-        end
+        before { @delivery.pend }
 
         it_behaves_like 'it adds to accounts'
       end
 
       context 'to cancelled' do
-        before do
-          @delivery = delivery_delivered
-          @package = @delivery.package
-
-          @starting_balance = @delivery.account.balance
-          @delivery.cancel
-          @delivery.save
-        end
+        before { @delivery.cancel }
 
         it_behaves_like 'it adds to accounts'
       end
@@ -93,7 +84,10 @@ describe Delivery do
   end
 
   describe '.change_statuses' do
-    before { @deliveries = [delivery] }
+    before do
+      delivery.save
+      @deliveries = [delivery]
+    end
 
     specify { Delivery.change_statuses(@deliveries, 'bad_status').should be_false }
     specify { Delivery.change_statuses(@deliveries, 'cancel').should be_true }

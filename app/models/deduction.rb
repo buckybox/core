@@ -2,11 +2,11 @@ class Deduction < ActiveRecord::Base
   belongs_to :distributor
   belongs_to :account, autosave: true
   belongs_to :deductable, polymorphic: true
+  belongs_to :transaction
+  belongs_to :reversal_transaction, class_name: 'Transaction'
 
   has_one :customer, through: :account
 
-  belongs_to :transaction
-  belongs_to :reversal_transaction, class_name: 'Transaction'
   has_many :transactions, as: :transactionable
 
   composed_of :amount,
