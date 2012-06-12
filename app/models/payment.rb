@@ -18,7 +18,7 @@ class Payment < ActiveRecord::Base
   attr_accessible :account, :account_id, :amount, :kind, :description, :distributor, :reference, :source,
     :payment_date, :payable, :payable_id, :payable_type
 
-  KINDS = %w(bank_transfer credit_card cash unspecified)
+  KINDS = %w(bank_transfer credit_card cash delivery unspecified)
   SOURCES = %W(manual import pay_on_delivery)
 
   validates_presence_of :distributor_id, :account_id, :amount, :kind, :description, :payment_date, :payable_id, :payable_type
