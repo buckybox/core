@@ -155,14 +155,15 @@ class Customer < ActiveRecord::Base
   end
 
   def make_import_payment(amount, description, date)
-    Payment.create!(
+    Payment.new(
       distributor: distributor,
       account: account,
       amount: amount,
       kind: 'unspecified',
       source: 'import',
       description: "Import - #{date.to_s(:transaction)} #{description}",
-      payment_date: date
+      payment_date: date,
+      payable: self
     )
   end
 
