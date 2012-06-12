@@ -5,8 +5,8 @@ describe Delivery do
   let(:package) { delivery.package }
 
   let(:delivery_pending) { Fabricate(:delivery, status: 'pending') }
-  let(:delivery_cancelled) { Fabricate(:delivery, status: 'cancelled' ) }
-  let(:delivery_delivered) { Fabricate(:delivery, status: 'delivered' ) }
+  let(:delivery_cancelled) { Fabricate(:delivery, status: 'cancelled') }
+  let(:delivery_delivered) { Fabricate(:delivery, status: 'delivered') }
 
   specify { delivery.should be_valid }
   specify { delivery.status.should == 'pending' }
@@ -38,12 +38,11 @@ describe Delivery do
           @package          = @delivery.package
           @starting_balance = @delivery.account.balance
           @delivery.deliver
+          @delivery.save
         end
 
+        specify { @delivery.deduction.should_not be_nil }
         specify { @delivery.account.balance.should == @starting_balance - @package.price }
-        specify { @delivery.transactions.should_not be_empty }
-        specify { @delivery.transactions.last.transactionable.should == @delivery }
-        specify { @delivery.transactions.last.amount.should == -@package.price }
       end
 
       context 'from pending' do
@@ -61,10 +60,8 @@ describe Delivery do
 
     context 'when changed from delivered' do
       shared_examples 'it adds to accounts' do
+        specify { @delivery.deduction.should_not be_nil }
         specify { @delivery.account.balance.should == @starting_balance + @package.price }
-        specify { @delivery.transactions.should_not be_empty }
-        specify { @delivery.transactions.last.transactionable.should == @delivery }
-        specify { @delivery.transactions.last.amount.should == @package.price }
       end
 
       context 'to pending' do
@@ -74,6 +71,7 @@ describe Delivery do
 
           @starting_balance = @delivery.account.balance
           @delivery.pend
+          @delivery.save
         end
 
         it_behaves_like 'it adds to accounts'
@@ -86,6 +84,7 @@ describe Delivery do
 
           @starting_balance = @delivery.account.balance
           @delivery.cancel
+          @delivery.save
         end
 
         it_behaves_like 'it adds to accounts'

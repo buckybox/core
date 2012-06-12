@@ -69,9 +69,9 @@ class Distributor::DeliveriesController < Distributor::ResourceController
     result = false
 
     if params[:reverse_payment]
-      result = Delivery.pay_on_delivery(deliveries)
-    else
       result = Delivery.reverse_pay_on_delivery(deliveries)
+    else
+      result = Delivery.pay_on_delivery(deliveries)
     end
 
     if result

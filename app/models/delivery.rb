@@ -12,15 +12,13 @@ class Delivery < ActiveRecord::Base
   has_one :address,     through: :order
   has_one :customer,    through: :order
 
-  has_many :transactions, as: :transactionable
-
   acts_as_list scope: [:delivery_list_id, :route_id]
 
   attr_accessible :order, :order_id, :route, :status, :status_change_type, :delivery_list, :package, :package_id, :account
 
   STATUS_CHANGE_TYPE = %w(manual auto)
 
-  validates_presence_of :order_id, :delivery_list_id, :route_id, :package_id, :status
+  validates_presence_of :order_id, :delivery_list_id, :route_id, :package_id, :status, :status_change_type
   validates_inclusion_of :status_change_type, in: STATUS_CHANGE_TYPE, message: "%{value} is not a valid status change type"
 
   before_validation :default_route, if: 'route.nil?'
@@ -78,10 +76,10 @@ class Delivery < ActiveRecord::Base
     payment_date = Date.current
 
     deliveries.each do |delivery|
-      delivery.payment.create(
-        distributor: distributor,
-        account: account,
-        amount: package.price,
+      payment = delivery.create_payment(
+        distributor: delivery.distributor,
+        account: delivery.account,
+        amount: delivery.package.price,
         kind: 'unspecified',
         source: 'pay_on_delivery',
         description: "Payment on delivery - #{payment_date.to_s(:transaction)}",
@@ -162,14 +160,14 @@ class Delivery < ActiveRecord::Base
   end
 
   def deduct_account
-   self.deduction.create!(
-     distributor: distributor,
-     account: account,
-     amount: package.price,
-     kind: 'delivery',
-     source: 'import',
-     description: 'Delivery was made.'
-   )
+    self.build_deduction(
+      distributor: distributor,
+      account: account,
+      amount: package.price,
+      kind: 'delivery',
+      source: 'delivery',
+      description: 'Delivery was made.'
+    )
   end
 
   def reverse_deduction

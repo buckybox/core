@@ -12,7 +12,7 @@ class Transaction < ActiveRecord::Base
 
   validates_presence_of :account_id, :transactionable_id, :transactionable_type, :amount, :description, :display_date
 
-  default_scope order('display_date DESC')
+  default_scope order('display_date DESC, created_at DESC')
 
   default_value_for :display_date do
     display_date = Date.current
