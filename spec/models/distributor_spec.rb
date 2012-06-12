@@ -25,7 +25,7 @@ describe Distributor do
 
   context 'delivery window parameters' do
     specify { Fabricate.build(:distributor, advance_hour: -1).should_not be_valid }
-    specify { Fabricate.build(:distributor, advance_days: 0).should_not be_valid }
+    specify { Fabricate.build(:distributor, advance_days: -1).should_not be_valid }
     specify { Fabricate.build(:distributor, automatic_delivery_hour: -1).should_not be_valid }
   end
 
