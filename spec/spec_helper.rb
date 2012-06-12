@@ -14,6 +14,7 @@ Spork.prefork do
   SimpleCov.start 'rails'
 
   # Prevent main application to eager_load in the prefork block (do not load files in autoload_paths)
+  # https://github.com/pluginaweek/state_machine/issues/163
   require 'rails/application'
   Spork.trap_method(Rails::Application, :eager_load!)
 
@@ -96,13 +97,6 @@ end
 
 Spork.each_run do
   # This code will be run each time you run your specs.
-
-  # https://github.com/sporkrb/spork/issues/37#issuecomment-4330248
-  silence_warnings do
-    Dir["#{Rails.root}/app/models/**/*.rb"].each {|f| load f}
-    Dir["#{Rails.root}/lib/bucky/**/*.rb"].each {|f| load f}
-    Dir["#{Rails.root}/lib/bucky.rb"].each {|f| load f}
-  end
 end
 
 # --- Instructions ---
