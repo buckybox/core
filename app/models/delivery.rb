@@ -82,7 +82,7 @@ class Delivery < ActiveRecord::Base
           distributor: delivery.distributor,
           account: delivery.account,
           amount: delivery.package.price,
-          kind: 'unspecified',
+          kind: 'delivery',
           source: 'pay_on_delivery',
           description: "Payment on delivery - #{payment_date.to_s(:transaction)}",
           payment_date: payment_date
