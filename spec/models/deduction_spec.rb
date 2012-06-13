@@ -22,7 +22,7 @@ describe Deduction do
   end
 
   context :amount do
-    specify { Fabricate.build(:deduction, amount: 0).should_not be_valid }
+    specify { Fabricate.build(:deduction, amount: 0).should be_valid }
     specify { Fabricate.build(:deduction, amount: -1).should_not be_valid }
   end
 
@@ -41,7 +41,7 @@ describe Deduction do
       specify { deduction.account.balance.should == @account_amount - @amount }
     end
 
-    describe '#make_deduction' do
+    describe '#reverse_deduction' do
       before { deduction.reverse_deduction! }
 
       specify { deduction.reversed.should be_true }

@@ -22,7 +22,7 @@ describe Payment do
   end
 
   context :amount do
-    specify { Fabricate.build(:payment, amount: 0).should_not be_valid }
+    specify { Fabricate.build(:payment, amount: 0).should be_valid }
     specify { Fabricate.build(:payment, amount: -1).should_not be_valid }
   end
 

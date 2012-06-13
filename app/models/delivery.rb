@@ -84,7 +84,7 @@ class Delivery < ActiveRecord::Base
           amount: delivery.package.price,
           kind: 'delivery',
           source: 'pay_on_delivery',
-          description: "Payment on delivery - #{payment_date.to_s(:transaction)}",
+          description: "Payment on delivery of #{delivery.description}.",
           payment_date: payment_date
         )
       end
@@ -126,7 +126,7 @@ class Delivery < ActiveRecord::Base
   end
 
   def description
-    "Delivery of #{package.contents_description} at #{package.price} each."
+    "#{package.contents_description} at #{package.price} each"
   end
 
   # TODO: Not sure if this fits in the model might need to go in Delivery CSV model down the road
@@ -182,7 +182,7 @@ class Delivery < ActiveRecord::Base
         amount: package.price,
         kind: 'delivery',
         source: 'delivery',
-        description: 'Delivery was made.'
+        description: "Deliveries made of #{description}."
       )
     end
   end

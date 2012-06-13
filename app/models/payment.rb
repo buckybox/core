@@ -24,7 +24,7 @@ class Payment < ActiveRecord::Base
   validates_presence_of :distributor_id, :account_id, :amount, :kind, :description, :payment_date, :payable_id, :payable_type
   validates_inclusion_of :kind, in: KINDS, message: "%{value} is not a valid kind of payment"
   validates_inclusion_of :source, in: SOURCES, message: "%{value} is not a valid source of payment"
-  validates_numericality_of :amount, greater_than: 0
+  validates_numericality_of :amount, greater_than_or_equal_to: 0
 
   after_create :make_payment!
 
@@ -52,7 +52,7 @@ class Payment < ActiveRecord::Base
     self.reversed = true
     self.reversed_at = Time.current
 
-    options = { kind: 'amend', description: "REVERSED " + self.transaction.description }
+    options = { kind: 'amend', description: "[REVERSED] " + self.transaction.description }
     self.reversal_transaction = self.account.subtract_from_balance(self.amount, options)
 
     self.save
@@ -68,7 +68,7 @@ class Payment < ActiveRecord::Base
     self.transaction = account.add_to_balance(
       amount,
       transactionable: self,
-      description: "Recieved a payment by #{kind.humanize.downcase}.",
+      description: description,
       display_date: payment_date
     )
 

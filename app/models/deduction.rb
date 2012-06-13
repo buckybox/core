@@ -24,7 +24,7 @@ class Deduction < ActiveRecord::Base
   validates_presence_of :distributor_id, :account_id, :amount, :kind, :description, :deductable_id, :deductable_type
   validates_inclusion_of :kind, in: KINDS, message: "%{value} is not a valid kind of payment"
   validates_inclusion_of :source, in: SOURCES, message: "%{value} is not a valid source of payment"
-  validates_numericality_of :amount, greater_than: 0
+  validates_numericality_of :amount, greater_than_or_equal_to: 0
 
   after_create :make_deduction!
 
@@ -46,7 +46,7 @@ class Deduction < ActiveRecord::Base
     self.reversed = true
     self.reversed_at = Time.current
 
-    options = { kind: 'amend', description: "REVERSED " + self.transaction.description }
+    options = { kind: 'amend', description: "[REVERSED] " + self.transaction.description }
     self.reversal_transaction = self.account.add_to_balance(self.amount, options)
 
     self.save
@@ -62,7 +62,7 @@ class Deduction < ActiveRecord::Base
     self.transaction = account.subtract_from_balance(
       amount,
       transactionable: self,
-      description: "Made a deduction by #{kind.humanize.downcase}.",
+      description: description,
       display_date: Date.current
     )
 
