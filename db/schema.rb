@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120611015841) do
+ActiveRecord::Schema.define(:version => 20120613015239) do
 
   create_table "accounts", :force => true do |t|
     t.integer  "customer_id"
@@ -166,6 +166,7 @@ ActiveRecord::Schema.define(:version => 20120611015841) do
     t.string   "deductable_type"
     t.datetime "created_at",                             :null => false
     t.datetime "updated_at",                             :null => false
+    t.datetime "display_time"
   end
 
   add_index "deductions", ["account_id"], :name => "index_deductions_on_account_id"
@@ -423,7 +424,7 @@ ActiveRecord::Schema.define(:version => 20120611015841) do
     t.integer  "transaction_id"
     t.integer  "reversal_transaction_id"
     t.string   "source"
-    t.date     "payment_date"
+    t.datetime "display_time"
     t.integer  "payable_id"
     t.string   "payable_type"
   end
@@ -483,7 +484,7 @@ ActiveRecord::Schema.define(:version => 20120611015841) do
     t.text     "description"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.date     "display_date"
+    t.datetime "display_time"
     t.integer  "transactionable_id"
     t.string   "transactionable_type"
   end

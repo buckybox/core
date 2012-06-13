@@ -56,7 +56,7 @@ class Account < ActiveRecord::Base
     clear_aggregation_cache # without this the composed_of balance attribute does not update
 
     transaction_options = { amount: amount_difference, transactionable: transactionable, description: description }
-    transaction_options.merge!(display_date: options[:display_date]) if options[:display_date]
+    transaction_options.merge!(display_time: options[:display_time]) if options[:display_time]
     transactions.build(transaction_options)
   end
 

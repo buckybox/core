@@ -16,7 +16,7 @@ class Deduction < ActiveRecord::Base
     converter: Proc.new { |value| value.respond_to?(:to_money) ? value.to_money : raise(ArgumentError, "Can't convert #{value.class} to Money") }
 
   attr_accessible :account, :account_id, :amount, :kind, :description, :distributor, :source,
-    :deductable, :deductable_id, :deductable_type
+    :display_time, :deductable, :deductable_id, :deductable_type
 
   KINDS = %w(delivery unspecified)
   SOURCES = %W(manual delivery)
@@ -39,6 +39,9 @@ class Deduction < ActiveRecord::Base
   default_value_for :reversed, false
   default_value_for :kind,     'unspecified'
   default_value_for :source,   'manual'
+  default_value_for :display_time do
+    display_time = Time.current
+  end
 
   def reverse_deduction!
     raise "This deduction has already been reversed." if self.reversal_transaction.present?
@@ -46,7 +49,7 @@ class Deduction < ActiveRecord::Base
     self.reversed = true
     self.reversed_at = Time.current
 
-    options = { kind: 'amend', description: "[REVERSED] " + self.transaction.description }
+    options = { description: "[REVERSED] " + self.transaction.description, display_time: self.reversed_at }
     self.reversal_transaction = self.account.add_to_balance(self.amount, options)
 
     self.save
@@ -63,7 +66,7 @@ class Deduction < ActiveRecord::Base
       amount,
       transactionable: self,
       description: description,
-      display_date: Date.current
+      display_time: display_time
     )
 
     self.save

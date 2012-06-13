@@ -183,8 +183,8 @@ describe Order do
       end
 
       describe '#add_scheduled_delivery' do
-        specify { @order.schedule.occurs_on?(@delivery.date.to_time).should be_true }
-        specify { @order.schedule.occurs_on?((@delivery.date - 1.day).to_time).should_not be_true }
+        specify { @order.schedule.occurs_on?(@delivery.date.to_time_in_current_zone).should be_true }
+        specify { @order.schedule.occurs_on?((@delivery.date - 1.day).to_time_in_current_zone).should_not be_true }
       end
 
       describe '#remove_scheduled_delivery' do
@@ -193,7 +193,7 @@ describe Order do
           @order.save
         end
 
-        specify { @order.schedule.occurs_on?(@delivery.date.to_time).should_not be_true }
+        specify { @order.schedule.occurs_on?(@delivery.date.to_time_in_current_zone).should_not be_true }
       end
     end
 

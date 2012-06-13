@@ -74,8 +74,6 @@ class Delivery < ActiveRecord::Base
   end
 
   def self.pay_on_delivery(deliveries)
-    payment_date = Date.current
-
     deliveries.each do |delivery|
       unless delivery.paid?
         delivery.payments.create(
@@ -85,7 +83,7 @@ class Delivery < ActiveRecord::Base
           kind: 'delivery',
           source: 'pay_on_delivery',
           description: "Payment on delivery of #{delivery.description}.",
-          payment_date: payment_date
+          display_time: delivery.date.to_time_in_current_zone
         )
       end
     end
@@ -182,7 +180,8 @@ class Delivery < ActiveRecord::Base
         amount: package.price,
         kind: 'delivery',
         source: 'delivery',
-        description: "Deliveries made of #{description}."
+        description: "Deliveries made of #{description}.",
+        display_time: date.to_time_in_current_zone
       )
     end
   end

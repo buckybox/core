@@ -162,7 +162,7 @@ class Customer < ActiveRecord::Base
       kind: 'unspecified',
       source: 'import',
       description: "Import - #{date.to_s(:transaction)} #{description}",
-      payment_date: date,
+      payment_time: date.to_time_in_current_zone,
       payable: self
     )
   end
