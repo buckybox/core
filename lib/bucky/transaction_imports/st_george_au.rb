@@ -2,16 +2,10 @@ module Bucky::TransactionImports
   class StGeorgeAu < CsvImport
     TEST_FILE = File.new(File.join(Rails.root, "spec/support/test_upload_files/transaction_imports/st_george_au.csv"))
     
-    COLUMNS = [:date, :description, :debit, :credit, :balance]
+    set_columns :date, :description, :debit, :credit, :balance
+    set_bank_name "St George Australia"
+    set_header true
 
-    def expected_format
-      "DATE , DESCRIPTION, DEBIT, CREDIT, BALANCE.  The first row is ignored."
-    end
-
-    def bank_name
-      "St George Australia"
-    end
-    
     def import_csv(csv)
       transaction_rows = []
       index = 1
@@ -27,16 +21,6 @@ module Bucky::TransactionImports
       end
 
       rows
-    end
-
-    def raw_data(row)
-      COLUMNS.inject({}) do |hash, element|
-        hash.merge(element => row[i(element)])
-      end
-    end
-
-    def i(column)
-      COLUMNS.index(column)
     end
   end
 end
