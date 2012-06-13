@@ -9,7 +9,8 @@ class AddPolymorphicAssocciationToPayments < ActiveRecord::Migration
 
     Payment.all.each do |payment|
       bsid = payment.read_attribute(:bank_statement_id)
-      payment.update_attributes(payable_id: bsid, payable_type: 'BankStatement')
+      payment.update_attribute(:payable_id, bsid)
+      payment.update_attribute(:payable_type, 'BankStatement')
     end
 
     remove_column :payments, :bank_statement_id
