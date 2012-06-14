@@ -2,21 +2,16 @@ module Bucky::TransactionImports
   class Bnz < CsvImport
     TEST_FILE = File.new(File.join(Rails.root, "spec/support/test_upload_files/transaction_imports/bnz.csv"))
     
-    COLUMNS = [:date, :amount, :payee, :particulars, :code, :reference, :tran_type]
+    set_columns :date, :amount, :payee, :particulars, :code, :reference, :tran_type
+    set_bank_name "BNZ"
+    set_header true
 
-    def expected_format
-      "DATE, AMOUNT, PAYEE, PARTICULARS, CODE, REFERENCE, TRAN TYPE.  First row is ignored (header)."
-    end
-
-    def bank_name
-      "BNZ"
-    end
-    
     def import_csv(csv)
       transaction_rows = []
       index = 1
       CSV.parse(csv, headers: true, skip_blanks: true) do |row|
         date = row[i(:date)]
+        date = Date.strptime(date, "%d/%m/%y").strftime("%d/%m/%Y") rescue nil # Fails to recognise "03/23/12" correctly as 2012
         description = concat(row, :payee, :particulars, :code, :reference)
         amount = row[i(:amount)]
 
@@ -27,18 +22,5 @@ module Bucky::TransactionImports
       rows
     end
 
-    def raw_data(row)
-      COLUMNS.inject({}) do |hash, element|
-        hash.merge(element => row[i(element)])
-      end
-    end
-
-    def i(column)
-      COLUMNS.index(column)
-    end
-
-    def concat(row, *columns)
-      columns.collect{|c| row[i(c)] }.join(" ")
-    end
   end
 end

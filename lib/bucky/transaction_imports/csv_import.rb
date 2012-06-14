@@ -48,9 +48,66 @@ module Bucky::TransactionImports
       @rows
     end
 
-    #def errors
-    #  Struct.new(:full_messages).new(@rows.collect{|r| r.errors.blank? ? nil : r.to_s + " " + r.errors.full_messages.join(', ')}.select(&:present?))
-    #end
+    def self.set_columns(*cols)
+      @columns = cols
+    end
+    def self.columns
+      @columns
+    end
+    def columns
+      self.class.columns
+    end
+    
+    def self.set_bank_name(name)
+      @bank_name = name
+    end
+    def self.bank_name
+      @bank_name
+    end
+    def bank_name
+      self.class.bank_name
+    end
+
+    def self.set_header(bool)
+        return @header = bool
+    end
+    def self.header?
+      @header
+    end
+    def header?
+      self.class.header?
+    end
+    
+    def raw_data(row)
+      (columns-[:empty]).inject({}) do |hash, element|
+        hash.merge(element => row[i(element)])
+      end
+    end
+
+    def i(col)
+      columns.index(col)
+    end
+
+    def concat(row, *cols)
+      cols.collect{|c| row[i(c)] }.join(" ")
+    end
+    
+    # Given a CSV row and a list of columns (:date, :description, :amount)
+    # Return those columns values defined in COLUMNS as an array from
+    # the row
+    def get_columns(row, *cols)
+      result = []
+      cols.each do |col|
+        result << row[columns.index(col)]
+      end
+      result
+    end
+
+    def expected_format
+      response = columns.collect{|col| col == :empty ? "IGNORED" : col.to_s.upcase}.join(", ") + "."
+      response += "  First row is " + (header? ? "ignored (header)." : "included (no header).")
+      response
+    end
 
   end
 end

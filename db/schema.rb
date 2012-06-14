@@ -276,7 +276,6 @@ ActiveRecord::Schema.define(:version => 20120614000606) do
     t.integer  "distributor_id"
     t.boolean  "draft"
     t.integer  "account_type"
-    t.integer  "source_type"
     t.string   "csv_file"
     t.datetime "created_at",     :null => false
     t.datetime "updated_at",     :null => false

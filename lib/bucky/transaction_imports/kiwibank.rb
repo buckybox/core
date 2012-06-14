@@ -2,15 +2,9 @@ module Bucky::TransactionImports
   class Kiwibank < CsvImport
     TEST_FILE = File.new(File.join(Rails.root, "spec/support/test_upload_files/transaction_imports/kiwibank.csv"))
     
-    COLUMNS = [:date, :description, :empty, :amount, :balance]
-    
-    def expected_format
-      "(DATE , DESCRIPTION, ignored, AMOUNT).  With first row ignored"
-    end
-
-    def bank_name
-      "Kiwibank"
-    end
+    set_columns :date, :description, :empty, :amount, :balance
+    set_bank_name "Kiwibank"
+    set_header true
     
     def import_csv(csv)
       transaction_rows = []
@@ -21,23 +15,6 @@ module Bucky::TransactionImports
       end
 
       rows
-    end
-
-    def raw_data(row)
-      (COLUMNS-[:empty]).inject({}) do |hash, element|
-        hash.merge(element => row[COLUMNS.index(element)])
-      end
-    end
-
-    # Given a CSV row and a list of columns (:date, :description, :amount)
-    # Return those columns values defined in COLUMNS as an array from
-    # the row
-    def get_columns(row, *columns)
-      result = []
-      columns.each do |column|
-        result << row[COLUMNS.index(column)]
-      end
-      result
     end
   end
 end
