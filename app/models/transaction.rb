@@ -12,9 +12,11 @@ class Transaction < ActiveRecord::Base
 
   validates_presence_of :account_id, :transactionable_id, :transactionable_type, :amount, :description, :display_time
 
-  default_scope order('display_time DESC, created_at DESC')
-
   default_value_for :display_time do
     display_time = Date.current
+  end
+
+  def manual?
+    transactionable_type == 'Account' || transactionable.manual? if transactionable
   end
 end

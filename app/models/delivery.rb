@@ -54,7 +54,7 @@ class Delivery < ActiveRecord::Base
   def self.auto_deliver(delivery)
     auto_delivered = false
 
-    unless delivery.status_change_type == 'manual'
+    unless delivery.manual?
       delivery.status_change_type = 'auto'
       delivery.status_event = 'deliver'
 
@@ -109,6 +109,10 @@ class Delivery < ActiveRecord::Base
 
   def deducted?
     !deduction.nil? && !deduction.reversed
+  end
+
+  def manual?
+    status_change_type == 'manual'
   end
 
   def quantity

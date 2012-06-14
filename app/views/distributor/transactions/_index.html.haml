@@ -2,13 +2,21 @@
   %table.twelve.columns#transactions
     %thead
       %tr
-        %th Date
+        %th 
+          Transaction
+          %br
+          Processed
+        %th
+          Transaction
+          %br
+          Date
         %th Details
         %th Transaction
 
     %tbody
       - @transactions.each do |transaction|
-        %tr
+        %tr{ style: "color: #{transaction.manual? ? '#000' : '#666'}" }
+          %td= transaction.created_at.to_s(:transaction)
           %td= transaction.display_time.to_s(:transaction)
           %td= transaction.description
           %td= transaction.amount.format

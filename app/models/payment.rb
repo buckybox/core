@@ -60,6 +60,10 @@ class Payment < ActiveRecord::Base
     return self.reversal_transaction
   end
 
+  def manual?
+    source == 'manual'
+  end
+
   private
 
   def make_payment!
