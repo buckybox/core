@@ -81,10 +81,6 @@ describe Bucky::TransactionImports::Kiwibank do
         specify { @kiwibank.should be_valid}
         specify { @kiwibank.credit_rows.size.should eq(60)}
         specify { @kiwibank.debit_rows.size.should eq(16)}
-
-        it "should present transactions with possible matches" do
-          #@kiwibank.transactions_for_display(distributor).import_transactions.size.should eq 76
-        end
       end
 
       context :test_data do
@@ -120,28 +116,6 @@ describe Bucky::TransactionImports::Kiwibank do
           csv.a "18 Nov 2011", "Kate Barns 0011", "20"
           csv
         }
-
-        #before(:each) do
-        #  @kiwibank = Kiwibank.new
-        #  @kiwibank.import_csv(csv.csv_string)
-        #  @transaction_list = @kiwibank.transactions_for_display(distributor)
-        #end
-
-        #it "should find johns payments" do
-        #  johns_transactions = @transaction_list.import_transactions.select{|t| t.customer == customer0001}
-        #  puts @transaction_list.import_transactions.collect(&:inspect)
-        #  johns_transactions.size.should eq(2)
-        #end
-
-        #it "should find james payments" do
-        #  james_transactions = @transaction_list.import_transactions.select{|t| t.customer == customer0005}
-        #  james_transactions.size.should eq(2)
-        #end
-
-        #it "should find kates payments" do
-        #  kates_transactions = @transaction_list.import_transactions.select{|t| t.customer == customer0011}
-        #  kates_transactions.size.should eq(2)
-        #end
       end
     end
   end

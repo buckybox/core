@@ -7,9 +7,8 @@ class ImportTransactionList < ActiveRecord::Base
 
   mount_uploader :csv_file, ImportTransactionListUploader
 
-  FILE_FORMATS = [["Kiwibank", "kiwibank"], ["St George Australia", "st_george_au"], ["Paypal", "paypal"], ["BNZ", "bnz"]]
-  ACCOUNTS = [:kiwibank, :paypal, :st_george_au, :bnz]
-  SOURCES = [:manual, :kiwibank_csv]
+  FILE_FORMATS = [["Kiwibank", "kiwibank"], ["St George Australia", "st_george_au"], ["Paypal", "paypal"], ["BNZ", "bnz"], ["National Bank", "national"]]
+  ACCOUNTS = [:kiwibank, :paypal, :st_george_au, :bnz, :national]
 
   validates_presence_of :csv_file
   validates_inclusion_of :file_format, in: FILE_FORMATS.map(&:last)
@@ -31,10 +30,6 @@ class ImportTransactionList < ActiveRecord::Base
 
   def self.label_for_file_format(file_format)
     FILE_FORMATS.find{ |name, code| code == file_format }.first
-  end
-
-  def source
-    SOURCES[source_type]
   end
 
   def import_rows
