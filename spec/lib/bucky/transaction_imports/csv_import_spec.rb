@@ -18,35 +18,35 @@ shared_examples_for "a csv import" do
   end
 end
 
-describe Bnz do
+describe Bucky::TransactionImports::Bnz do
   it_should_behave_like "a csv import" do
     let(:expected_row_count){44}
     let(:expected_date){"2011/12/12"}
   end
 end
 
-describe Kiwibank do
+describe Bucky::TransactionImports::Kiwibank do
   it_should_behave_like "a csv import" do
     let(:expected_row_count){76}
     let(:expected_date){"2012/04/03"}
   end
 end
 
-describe National do
+describe Bucky::TransactionImports::National do
   it_should_behave_like "a csv import" do
     let(:expected_row_count){60}
     let(:expected_date){"2012/06/07"}
   end
 end
 
-describe Paypal do
+describe Bucky::TransactionImports::Paypal do
   it_should_behave_like "a csv import" do
     let(:expected_row_count){1}
     let(:expected_date){"2012/04/23"}
   end
 end
 
-describe StGeorgeAu do
+describe Bucky::TransactionImports::StGeorgeAu do
   it_should_behave_like "a csv import" do
     let(:expected_row_count){92}
     let(:expected_date){"2012/04/18"}
