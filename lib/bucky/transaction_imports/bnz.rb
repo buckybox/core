@@ -11,6 +11,7 @@ module Bucky::TransactionImports
       index = 1
       CSV.parse(csv, headers: true, skip_blanks: true) do |row|
         date = row[i(:date)]
+        date = Date.strptime(date, "%d/%m/%y").strftime("%d/%m/%Y") # Fails to recognise "03/23/12" correctly as 2012
         description = concat(row, :payee, :particulars, :code, :reference)
         amount = row[i(:amount)]
 
