@@ -81,7 +81,7 @@ class Delivery < ActiveRecord::Base
           account: delivery.account,
           amount: delivery.package.price,
           kind: 'delivery',
-          source: 'pay_on_delivery',
+          source: 'manual',
           description: "Payment on delivery of #{delivery.description}.",
           display_time: delivery.date.to_time_in_current_zone
         )
@@ -183,7 +183,7 @@ class Delivery < ActiveRecord::Base
         account: account,
         amount: package.price,
         kind: 'delivery',
-        source: 'delivery',
+        source: status_change_type,
         description: "Deliveries made of #{description}.",
         display_time: date.to_time_in_current_zone
       )

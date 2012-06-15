@@ -19,7 +19,7 @@ class Payment < ActiveRecord::Base
     :display_time, :payable, :payable_id, :payable_type
 
   KINDS = %w(bank_transfer credit_card cash delivery unspecified)
-  SOURCES = %W(manual import pay_on_delivery)
+  SOURCES = %W(manual import)
 
   validates_presence_of :distributor_id, :account_id, :amount, :kind, :description, :display_time, :payable_id, :payable_type
   validates_inclusion_of :kind, in: KINDS, message: "%{value} is not a valid kind of payment"

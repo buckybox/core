@@ -35,7 +35,7 @@ class CreateDeductionsForPastDeliveries < ActiveRecord::Migration
           deductable_type: 'Delivery',
           reversed: false,
           kind: 'delivery',
-          source: 'delivery',
+          source: 'auto',
           display_time: created_at,
           transaction_id: transaction.id
         )

@@ -19,7 +19,7 @@ class Deduction < ActiveRecord::Base
     :display_time, :deductable, :deductable_id, :deductable_type
 
   KINDS = %w(delivery unspecified)
-  SOURCES = %W(manual delivery)
+  SOURCES = %W(manual auto) # delivery uses both manual and auto
 
   validates_presence_of :distributor_id, :account_id, :amount, :kind, :description, :deductable_id, :deductable_type
   validates_inclusion_of :kind, in: KINDS, message: "%{value} is not a valid kind of payment"

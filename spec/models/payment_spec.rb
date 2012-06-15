@@ -14,7 +14,7 @@ describe Payment do
   end
 
   context :source do
-    %w(manual import pay_on_delivery).each do |s|
+    %w(manual import).each do |s|
       specify { Fabricate.build(:payment, source: s).should be_valid }
     end
 

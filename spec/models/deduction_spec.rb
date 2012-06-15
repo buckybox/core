@@ -14,7 +14,7 @@ describe Deduction do
   end
 
   context :source do
-    %w(manual delivery).each do |s|
+    %w(manual auto).each do |s|
       specify { Fabricate.build(:deduction, source: s).should be_valid }
     end
 
