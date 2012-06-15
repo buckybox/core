@@ -177,13 +177,19 @@ class Delivery < ActiveRecord::Base
   end
 
   def deduct_account
+    source = 'manual'
+
+    if self.status_change_type_changed? && self.status_change_type_change.last == 'auto'
+      source = 'auto' 
+    end
+
     unless self.deducted?
       self.deductions.build(
         distributor: distributor,
         account: account,
         amount: package.price,
         kind: 'delivery',
-        source: status_change_type,
+        source: source,
         description: "Deliveries made of #{description}.",
         display_time: date.to_time_in_current_zone
       )

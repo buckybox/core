@@ -52,7 +52,7 @@ class Payment < ActiveRecord::Base
     self.reversed = true
     self.reversed_at = Time.current
 
-    options = { description: "[REVERSED] " + self.transaction.description, display_time: self.reversed_at }
+    options = { description: "[REVERSED] " + self.transaction.description, display_time: self.display_time }
     self.reversal_transaction = self.account.subtract_from_balance(self.amount, options)
 
     self.save
