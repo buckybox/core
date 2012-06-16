@@ -19,21 +19,3 @@ Given /^a distributor looking at their dashboard$/ do
   step "I am a distributor"
   step "I am on the dashboard"
 end
-
-When /^I submit valid payment details$/ do
-  select "##{@customer.id} #{@customer.name}", :from => "Customer"
-  fill_in "Amount", :with => "127.00"
-  fill_in "Description", :with => "awesome payment"
-  click_button "Create Payment"
-end
-
-Then /^the payment is recorded against that customer$/ do
-  visit distributor_customer_path(@customer)
-  within_table('transactions') do
-    page.should have_content('$127.00')
-  end
-end
-
-Then /^the customer balance increases by the payment amount$/ do
-  page.should have_css('#account-balance', :text => '$127.00')
-end
