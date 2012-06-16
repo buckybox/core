@@ -45,7 +45,7 @@ group :development do
 
   gem 'hirb'
   gem 'wirble'
-  gem 'rb-fsevent', :require => false if RUBY_PLATFORM =~ /darwin/i
+  gem 'rb-fsevent', require: false if RUBY_PLATFORM =~ /darwin/i
 
   gem 'guard-rspec'
   gem 'guard-spork'
@@ -85,7 +85,7 @@ group :test do
   gem 'guard-rspec'
   gem 'fuubar'
 
-  gem 'cucumber-rails'
+  gem 'cucumber-rails', require: false
 end
 
 group :staging do
