@@ -8,9 +8,9 @@
         = f.input :email
         = f.input :first_name
         = f.input :last_name
-        = f.association :route, :collection => current_distributor.routes, :include_blank => false
-        = f.input :tag_list, :label => 'Customer tags', :hint => 'Comma separated'
-        = f.input :discount, input_html: {step: 0.01}
+        = f.association :route, collection: current_distributor.routes, include_blank: false
+        = f.input :tag_list, label: 'Customer tags', hint: 'Comma separated'
+        = f.input :discount, input_html: { step: 0.0001 }
         = f.input :notes
 
     .six.columns
