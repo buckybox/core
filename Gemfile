@@ -35,6 +35,7 @@ gem 'newrelic_rpm'
 gem 'acts_as_list'
 gem 'default_value_for'
 gem 'fuzzy-string-match', require: 'fuzzystringmatch' # This performs fuzzy matching on the import script
+gem 'state_machine'
 
 group :development do
   gem 'nifty-generators', require: false
@@ -73,7 +74,7 @@ group :development, :test do
 end
 
 group :test do
-  gem 'fabrication'
+  gem 'fabrication', '~> 1.4.1'
   gem 'database_cleaner'
 
   gem 'delorean'

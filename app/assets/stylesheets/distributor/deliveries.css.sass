@@ -85,13 +85,36 @@ $cal-nav-divider: darken($cal-nav-base, 50%)
       margin: -5px 0 10px
       padding-left: 10px
 
+  #delivered
+    -webkit-border-top-right-radius: 0
+    border-top-right-radius: 0
+    -webkit-border-bottom-right-radius: 0
+    border-bottom-right-radius: 0
+
+  #more-delivery-options
+    -webkit-border-top-left-radius: 0
+    border-top-left-radius: 0
+    -webkit-border-bottom-left-radius: 0
+    border-top-bottom-radius: 0
+    margin-left: -3px
+
   .flyout
     display: none
-    top: 30px
-    left: 191px
+    top: 29px
+    left: 110px
     width: auto
-    select
-      display: inline
+    padding: 5px 0
+    hr
+      margin: 5px 0
+    ul
+      margin: 0
+      li
+        font-weight: bold
+        margin: 0
+        padding: 5px 15px
+        &:hover
+          color: #ffffff
+          background-color: #00A6FC
 
   .data-headings
     form
@@ -100,13 +123,17 @@ $cal-nav-divider: darken($cal-nav-base, 50%)
   .data-listings
     &.pending, &.unpacked
       background-color: #FFF0D8
-    &.delivered, &.packed
+    &.delivered, &.paid, &.packed
       background-color: #F0F0F0
     &.cancelled, &.rescheduled, &.repacked
       background-color: #F0F0F0
       text-decoration: line-through
     img
       vertical-align: -5px
+    .paid-label
+      display: none
+      &:hover
+        background-color: #7FAE00
 
   .ui-state-highlight
     height: 38px

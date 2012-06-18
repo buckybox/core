@@ -5,7 +5,6 @@ class Account < ActiveRecord::Base
 
   has_many :orders, dependent: :destroy
   has_many :payments, dependent: :destroy
-
   has_many :transactions, autosave: true
   has_many :deliveries, through: :orders
   has_many :invoices
@@ -49,15 +48,15 @@ class Account < ActiveRecord::Base
     amount = amount.to_money
     amount_difference = amount - balance
 
-    options.merge!(kind: 'amend') unless options[:kind]
-    options.merge!(description: 'Manual Transaction.') unless options[:description]
+    transactionable = (options[:transactionable] ? options[:transactionable] : self)
+    description = (options[:description] ? options[:description] : 'Manual Transaction.')
 
     write_attribute(:balance_cents, amount.cents)
     write_attribute(:currency, amount.currency.to_s || Money.default_currency.to_s)
     clear_aggregation_cache # without this the composed_of balance attribute does not update
 
-    transaction_options = { kind: options[:kind], amount: amount_difference, description: options[:description] }
-    transaction_options.merge!(display_date: options[:display_date]) if options[:display_date]
+    transaction_options = { amount: amount_difference, transactionable: transactionable, description: description }
+    transaction_options.merge!(display_time: options[:display_time]) if options[:display_time]
     transactions.build(transaction_options)
   end
 
@@ -68,12 +67,6 @@ class Account < ActiveRecord::Base
 
   def subtract_from_balance(amount, options = {})
     add_to_balance((amount * -1), options)
-  end
-
-  def reverse_transaction!(amount, description)
-    reversal_transaction = subtract_from_balance(amount, { kind: 'amend', description: "REVERSED " + description })
-    save!
-    reversal_transaction
   end
 
   #all accounts that need invoicing

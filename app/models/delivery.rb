@@ -10,51 +10,53 @@ class Delivery < ActiveRecord::Base
   has_one :address,     through: :order
   has_one :customer,    through: :order
 
+  has_many :payments,   as: :payable
+  has_many :deductions, as: :deductable
+
   acts_as_list scope: [:delivery_list_id, :route_id]
 
   attr_accessible :order, :order_id, :route, :status, :status_change_type, :delivery_list, :package, :package_id, :account
 
-  STATUS = %w(pending delivered cancelled rescheduled repacked)
   STATUS_CHANGE_TYPE = %w(manual auto)
 
-  validates_presence_of :order_id, :delivery_list_id, :route_id, :package_id, :status
-  validates_inclusion_of :status, in: STATUS, message: "%{value} is not a valid status"
+  validates_presence_of :order_id, :delivery_list_id, :route_id, :package_id, :status, :status_change_type
   validates_inclusion_of :status_change_type, in: STATUS_CHANGE_TYPE, message: "%{value} is not a valid status change type"
 
   before_validation :default_route, if: 'route.nil?'
-  before_validation :changed_status, if: 'status_changed?'
 
   before_create :add_delivery_number
 
-  scope :pending,     where(status: 'pending')
-  scope :delivered,   where(status: 'delivered')
-  scope :cancelled,   where(status: 'cancelled')
-  scope :rescheduled, where(status: 'rescheduled')
-  scope :repacked,    where(status: 'repacked')
+  scope :pending,   where(status: 'pending')
+  scope :delivered, where(status: 'delivered')
+  scope :cancelled, where(status: 'cancelled')
 
-  default_value_for :status, 'pending'
   default_value_for :status_change_type, 'auto'
 
   delegate :date, to: :delivery_list, allow_nil: true
 
-  def self.change_statuses(deliveries, new_status, options = {})
-    return false unless STATUS.include?(new_status)
-    return false if (new_status == 'rescheduled' || new_status == 'repacked') && options[:date].nil?
+  state_machine :status, initial: :pending do
+    before_transition on: :deliver, do: :deduct_account
+    before_transition on: [:pend, :cancel], do: :reverse_deduction
 
-    result = deliveries.all? do |delivery|
-      delivery.status = new_status
-      delivery.save
+    event :pend do
+      transition all - :pending => :pending
     end
 
-    return result
+    event :cancel do
+      transition all - :cancelled => :cancelled
+    end
+
+    event :deliver do
+      transition all - :delivered => :delivered
+    end
   end
 
   def self.auto_deliver(delivery)
     auto_delivered = false
 
-    unless delivery.status_change_type == 'manual'
-      delivery.status = 'delivered'
+    unless delivery.manual?
       delivery.status_change_type = 'auto'
+      delivery.status_event = 'deliver'
 
       auto_delivered = delivery.save
     end
@@ -62,12 +64,63 @@ class Delivery < ActiveRecord::Base
     return auto_delivered
   end
 
+  def self.change_statuses(deliveries, new_status, options = {})
+    result = deliveries.all? do |delivery|
+      delivery.status_event = new_status
+      delivery.save
+    end
+
+    return result
+  end
+
+  def self.pay_on_delivery(deliveries)
+    deliveries.each do |delivery|
+      unless delivery.paid?
+        delivery.payments.create(
+          distributor: delivery.distributor,
+          account: delivery.account,
+          amount: delivery.package.price,
+          kind: 'delivery',
+          source: 'manual',
+          description: "Payment on delivery of #{delivery.description}.",
+          display_time: delivery.date.to_time_in_current_zone
+        )
+      end
+    end
+  end
+
+  def self.reverse_pay_on_delivery(deliveries)
+    deliveries.each do |delivery|
+      delivery.payment.reverse_payment! if delivery.paid?
+    end
+  end
+
+  def payment
+    @payment ||= payments.order(:created_at).last
+  end
+
+  def deduction
+    @deduction ||= deductions.order(:created_at).last
+  end
+
+  def paid?
+    !payment.nil? && !payment.reversed
+  end
+
+  def deducted?
+    !deduction.nil? && !deduction.reversed
+  end
+
+  def manual?
+    status_change_type == 'manual'
+  end
+
   def quantity
     package.archived_order_quantity
   end
 
   def future_status?
-    status == 'pending'
+    pending? # This is the only status that is valid for deliveries in the future
   end
 
   def reposition!(position)
@@ -75,7 +128,7 @@ class Delivery < ActiveRecord::Base
   end
 
   def description
-    "[ID##{id}] Delivery of #{package.contents_description} at #{package.price} each."
+    "#{package.contents_description} at #{package.price} each"
   end
 
   # TODO: Not sure if this fits in the model might need to go in Delivery CSV model down the road
@@ -116,47 +169,42 @@ class Delivery < ActiveRecord::Base
   private
 
   def default_route
-    self.route = order.route
+    self.route = order.route if order
   end
 
   def add_delivery_number
     self.delivery_number = self.position
   end
 
-  def changed_status
-    old_status, new_status = self.status_change
+  def deduct_account
+    source = 'manual'
 
-    subtract_from_account if new_status == 'delivered'
-    add_to_account        if old_status == 'delivered'
+    if self.status_change_type_changed? && self.status_change_type_change.last == 'auto'
+      source = 'auto' 
+    end
 
-    # Commenting out for now as not doing reschedule repack just yet
-    #remove_from_schedule  if old_status == 'rescheduled' || old_status == 'repacked'
-    #add_to_schedule       if new_status == 'rescheduled' || new_status == 'repacked'
-
-    Event.create_call_reminder(customer) if new_status == 'delivered' && customer.new?
+    unless self.deducted?
+      self.deductions.build(
+        distributor: distributor,
+        account: account,
+        amount: package.price,
+        kind: 'delivery',
+        source: source,
+        description: "Deliveries made of #{description}.",
+        display_time: date.to_time_in_current_zone
+      )
+    end
   end
 
-  def subtract_from_account
-    account.subtract_from_balance(
-      package.price,
-      kind: 'delivery',
-      description: "[ID##{id}] Delivery was made of #{package.contents_description} at #{package.price}."
-    )
-    errors.add(:base, 'Problem subtracting balance from account on delivery status change.') unless account.save
+  def reverse_deduction
+    self.deduction.reverse_deduction! if self.deducted?
   end
 
-  def add_to_account
-    account.add_to_balance(
-      package.price,
-      kind: 'delivery',
-      description: "[ID##{id}] Delivery reversal. #{package.contents_description} at #{package.price}."
-    )
-    errors.add(:base, 'Problem adding balance from account on delivery status change.') unless account.save
+  def customer_callback
+    Event.create_call_reminder(customer)
   end
 
   def remove_from_schedule
-    #order.remove_scheduled_delivery(new_delivery) if new_delivery
-
     unless new_delivery
       errors.add(:base, 'There is no "new delivery" to remove from the schedule so this status change can not be completed.')
     end
