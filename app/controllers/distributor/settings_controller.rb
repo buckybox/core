@@ -32,7 +32,7 @@ class Distributor::SettingsController < Distributor::BaseController
   end
 
   def stock_list
-    @stock_list = StockItem.to_list(current_distributor)
+    @names = StockItem.to_list(current_distributor)
   end
 
   def reporting

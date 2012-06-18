@@ -150,6 +150,28 @@ ActiveRecord::Schema.define(:version => 20120617101936) do
   add_index "customers", ["route_id"], :name => "index_customers_on_route_id"
   add_index "customers", ["unlock_token"], :name => "index_customers_on_unlock_token", :unique => true
 
+  create_table "deductions", :force => true do |t|
+    t.integer  "distributor_id"
+    t.integer  "account_id",              :default => 0, :null => false
+    t.integer  "amount_cents"
+    t.string   "currency"
+    t.string   "kind"
+    t.text     "description"
+    t.boolean  "reversed"
+    t.datetime "reversed_at"
+    t.integer  "transaction_id"
+    t.integer  "reversal_transaction_id"
+    t.string   "source"
+    t.integer  "deductable_id"
+    t.string   "deductable_type"
+    t.datetime "created_at",                             :null => false
+    t.datetime "updated_at",                             :null => false
+    t.datetime "display_time"
+  end
+
+  add_index "deductions", ["account_id"], :name => "index_deductions_on_account_id"
+  add_index "deductions", ["distributor_id"], :name => "index_deductions_on_distributor_id"
+
   create_table "deliveries", :force => true do |t|
     t.integer  "order_id"
     t.datetime "created_at"
@@ -395,14 +417,15 @@ ActiveRecord::Schema.define(:version => 20120617101936) do
     t.text     "description"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "bank_statement_id"
     t.string   "reference"
     t.boolean  "reversed"
     t.datetime "reversed_at"
     t.integer  "transaction_id"
     t.integer  "reversal_transaction_id"
     t.string   "source"
-    t.date     "payment_date"
+    t.datetime "display_time"
+    t.integer  "payable_id"
+    t.string   "payable_type"
   end
 
   add_index "payments", ["account_id"], :name => "index_payments_on_account_id"
@@ -464,13 +487,14 @@ ActiveRecord::Schema.define(:version => 20120617101936) do
 
   create_table "transactions", :force => true do |t|
     t.integer  "account_id"
-    t.string   "kind"
-    t.integer  "amount_cents", :default => 0, :null => false
+    t.integer  "amount_cents",         :default => 0, :null => false
     t.string   "currency"
     t.text     "description"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.date     "display_date"
+    t.datetime "display_time"
+    t.integer  "transactionable_id"
+    t.string   "transactionable_type"
   end
 
   add_index "transactions", ["account_id"], :name => "index_transactions_on_account_id"

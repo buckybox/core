@@ -1,0 +1,7 @@
+.row
+  .four.columns.centered
+    = simple_form_for(:stock_list, url: distributor_stock_items_path) do |f|
+      = f.error_notification
+
+      .inputs= f.input :names, as: :text, input_html: { value: @names }
+      .action= f.button :submit, 'Update List'

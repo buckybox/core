@@ -14,7 +14,7 @@ class StockItem < ActiveRecord::Base
 
     distributor.stock_items.each { |si| si.destroy }
 
-    text.split("\n").inject([]) do |result, name|
+    text.split(/\r\n?/).inject([]) do |result, name|
       result << distributor.stock_items.find_or_create_by_name(name)
       result
     end
