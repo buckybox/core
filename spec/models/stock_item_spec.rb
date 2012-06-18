@@ -14,7 +14,7 @@ describe StockItem do
       stock_item.name = @old_item_name
       stock_item.save
 
-      @text = "apples\noranges\npears"
+      @text = "oranges\napples\npears\nApples"
     end
 
     specify { expect{ StockItem.from_list!(distributor, '') }.should raise_error }
@@ -27,6 +27,11 @@ describe StockItem do
   end
 
   describe '.to_list' do
-    
+    before do
+      @distributor = Fabricate(:distributor)
+      %w(oranges apples pears).each { |name| Fabricate(:stock_item, name: name, distributor: @distributor) }
+    end
+
+    specify { StockItem.to_list(@distributor).should == "apples\noranges\npears" }
   end
 end

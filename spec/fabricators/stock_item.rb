@@ -1,4 +1,4 @@
 Fabricator(:stock_item) do
   distributor!
-  name 'Apple'
+  name 'grapes'
 end
