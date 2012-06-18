@@ -1,4 +1,4 @@
-Fabricator(:distributor_item) do
+Fabricator(:stock_item) do
   distributor!
   name 'Apple'
 end

@@ -34,6 +34,7 @@ BuckyBox::Application.routes.draw do
       get 'routes'
       get 'bank_information'
       get 'invoice_information'
+      get 'stock_list'
       get 'reporting'
     end
 

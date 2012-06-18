@@ -16,6 +16,7 @@ class Distributor < ActiveRecord::Base
   has_many :delivery_lists,     dependent: :destroy
   has_many :packing_lists,      dependent: :destroy
   has_many :packages,           dependent: :destroy, through: :packing_lists
+  has_many :stock_items,        dependent: :destroy
 
   has_many :import_transaction_lists
   has_many :import_transactions, through: :import_transaction_lists

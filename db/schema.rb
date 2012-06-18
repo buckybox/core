@@ -176,15 +176,6 @@ ActiveRecord::Schema.define(:version => 20120617101936) do
 
   add_index "delivery_lists", ["distributor_id"], :name => "index_delivery_lists_on_distributor_id"
 
-  create_table "distributor_items", :force => true do |t|
-    t.integer  "distributor_id"
-    t.string   "name"
-    t.datetime "created_at",     :null => false
-    t.datetime "updated_at",     :null => false
-  end
-
-  add_index "distributor_items", ["distributor_id"], :name => "index_distributor_items_on_distributor_id"
-
   create_table "distributors", :force => true do |t|
     t.string   "email",                                     :default => "",     :null => false
     t.string   "encrypted_password",         :limit => 128, :default => "",     :null => false
@@ -444,6 +435,15 @@ ActiveRecord::Schema.define(:version => 20120617101936) do
   end
 
   add_index "routes", ["distributor_id"], :name => "index_routes_on_distributor_id"
+
+  create_table "stock_items", :force => true do |t|
+    t.integer  "distributor_id"
+    t.string   "name"
+    t.datetime "created_at",     :null => false
+    t.datetime "updated_at",     :null => false
+  end
+
+  add_index "stock_items", ["distributor_id"], :name => "index_stock_items_on_distributor_id"
 
   create_table "taggings", :force => true do |t|
     t.integer  "tag_id"
