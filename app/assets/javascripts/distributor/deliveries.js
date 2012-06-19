@@ -88,45 +88,32 @@ $(function() {
     $('#delivery-listings #all').prop('checked', false);
   });
 
-  $('#delivery-listings #delivered, #delivery-listings #pending').click(function() {
-    var distributor_id = $('#delivery-listings').data('distributor');
-    var id = $(this).attr('id');
+  $('#route-controls #delivered, #missed-options a').click(function() {
+    var status = $(this).attr('id');
     var checked_deliveries = $('#delivery-listings .data-listings input[type=checkbox]:checked');
 
-    updateDeliveryStatus(id, distributor_id, checked_deliveries);
+    if(status === 'payment-on-delivery' || status === 'undo-payment') {
+      reverse_payment = (status === 'undo-payment');
+      makePayments(checked_deliveries, reverse_payment);
+    }
+    else {
+      updateDeliveryStatus(status, checked_deliveries);
+    }
 
     checked_deliveries.prop('checked', false);
     $('#delivery-listings #all').prop('checked', false);
+    $('#delivery-listings .flyout').hide();
 
     return false;
   });
 
-  $('#delivery-listings #missed').click(function() {
+  $('#delivery-listings #more-delivery-options').click(function() {
      $('#delivery-listings .flyout').toggle();
      return false;
   });
-
-  $('#commit-missed').click(function() {
-    var distributor_id = $('#delivery-listings').data('distributor');
-    var checked_deliveries = $('#delivery-listings .data-listings input[type=checkbox]:checked');
-    var missed_option = $('#missed-options input:radio[name=missed]:checked').val();
-    var date = undefined;
-
-    if(missed_option === 'rescheduled' || missed_option === 'repacked') {
-      date = $('#date_' + missed_option).val();
-    }
-
-    updateDeliveryStatus(missed_option, distributor_id, checked_deliveries, date);
-
-    checked_deliveries.prop('checked', false);
-    $('#delivery-listings #all').prop('checked', false);
-    $('#delivery-listings .flyout').toggle();
-
-    return false;
-  });
 });
 
-function updateDeliveryStatus(status, distributor_id, checked_deliveries, date) {
+function updateDeliveryStatus(status, checked_deliveries, date) {
   var ckbx_ids = $.map(checked_deliveries, function(ckbx) { return $(ckbx).data('delivery'); });
   var data_hash = { 'deliveries': ckbx_ids, 'status': status };
   if(date) { data_hash['date'] = date; }
@@ -139,7 +126,7 @@ function updateDeliveryStatus(status, distributor_id, checked_deliveries, date) 
   });
 
   $.each(checked_deliveries, function(i, ckbx) {
-    var holder = $(ckbx).parent().parent();
+    var holder = $(ckbx).closest('.data-listings');
 
     var statuses = ['pending', 'delivered', 'cancelled', 'rescheduled', 'repacked'];
     statuses.splice(statuses.indexOf(status), 1);
@@ -154,3 +141,27 @@ function updateDeliveryStatus(status, distributor_id, checked_deliveries, date) 
   });
 }
 
+function makePayments(checked_deliveries, reverse_payment) {
+  var ckbx_ids = $.map(checked_deliveries, function(ckbx) { return $(ckbx).data('delivery'); });
+  var data_hash = { 'deliveries': ckbx_ids };
+  if(reverse_payment) { data_hash['reverse_payment'] = true; }
+
+  $.ajax({
+    type: 'POST',
+    url: '/distributor/deliveries/make_payment.json',
+    dataType: 'json',
+    data: $.param(data_hash)
+  });
+
+  $.each(checked_deliveries, function(i, ckbx) {
+    var holder = $(ckbx).closest('.data-listings');
+    var paidLabel = holder.find('.paid-label');
+
+    if(reverse_payment) {
+      paidLabel.hide();
+    }
+    else {
+      paidLabel.show();
+    }
+  });
+}

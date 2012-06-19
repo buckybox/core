@@ -13,6 +13,11 @@ Spork.prefork do
   require 'simplecov'
   SimpleCov.start 'rails'
 
+  # Prevent main application to eager_load in the prefork block (do not load files in autoload_paths)
+  # https://github.com/pluginaweek/state_machine/issues/163
+  require 'rails/application'
+  Spork.trap_method(Rails::Application, :eager_load!)
+
   require File.expand_path("../../config/environment", __FILE__)
   require 'rspec/rails'
   require 'rspec/autorun'
@@ -26,11 +31,11 @@ Spork.prefork do
     config.mock_with :rspec
     config.use_transactional_fixtures = false
     config.infer_base_class_for_anonymous_controllers = false
-    
+
     # as per http://railscasts.com/episodes/285-spork
     config.treat_symbols_as_metadata_keys_with_true_values = true
     config.filter_run :focus => true
-    config.run_all_when_everything_filtered = true  
+    config.run_all_when_everything_filtered = true
 
     config.include Delorean
     config.include Devise::TestHelpers,       type: :controller
@@ -92,14 +97,6 @@ end
 
 Spork.each_run do
   # This code will be run each time you run your specs.
-
-  # https://github.com/sporkrb/spork/issues/37#issuecomment-4330248
-  silence_warnings do
-    Dir["#{Rails.root}/app/models/**/*.rb"].each {|f| load f}
-    Dir["#{Rails.root}/lib/bucky/**/*.rb"].each {|f| load f}
-    Dir["#{Rails.root}/lib/bucky.rb"].each {|f| load f}
-  end
-
 end
 
 # --- Instructions ---

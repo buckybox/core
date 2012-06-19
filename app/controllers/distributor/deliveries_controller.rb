@@ -12,6 +12,9 @@ class Distributor::DeliveriesController < Distributor::ResourceController
   NAV_START_DATE = Date.current - 2.week
   NAV_END_DATE   = Date.current + 2.week
 
+  # Should no longer need this when JS and views are looked at again. For now it translates between the old and new status system.
+  LEGACY_STATUS_TRANSLATION = {'pending' => 'pend', 'cancelled' => 'cancel', 'delivered' => 'deliver'}
+
   def index
     @routes = current_distributor.routes
 
@@ -49,12 +52,29 @@ class Distributor::DeliveriesController < Distributor::ResourceController
 
   def update_status
     deliveries = current_distributor.deliveries.where(id: params[:deliveries])
-    status = params[:status]
+    status = LEGACY_STATUS_TRANSLATION[params[:status]]
 
     options = {}
     options[:date] = params[:date] if params[:date]
 
     if Delivery.change_statuses(deliveries, status, options)
+      head :ok
+    else
+      head :bad_request
+    end
+  end
+
+  def make_payment
+    deliveries = current_distributor.deliveries.where(id: params[:deliveries])
+    result = false
+
+    if params[:reverse_payment]
+      result = Delivery.reverse_pay_on_delivery(deliveries)
+    else
+      result = Delivery.pay_on_delivery(deliveries)
+    end
+
+    if result
       head :ok
     else
       head :bad_request

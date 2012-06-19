@@ -34,7 +34,7 @@ describe BankStatement do
       end
 
       it 'sets a statement_id to the payments' do
-        Payment.last.bank_statement_id.should == @statement.id
+        Payment.last.payable_id.should == @statement.id
       end
     end
   end

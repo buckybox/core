@@ -52,6 +52,7 @@ BuckyBox::Application.routes.draw do
         get 'date/:date/view/:view',  action: :index,                as: 'date'
         post 'date/:date/reposition', action: :reposition,           as: 'reposition'
         post 'update_status',         action: :update_status,        as: 'update_status'
+        post 'make_payment',          action: :make_payment,         as: 'make_payment'
         post 'master_packing_sheet',  action: :master_packing_sheet, as: 'master_packing_sheet'
         post 'export',                action: :export,               as: 'export'
       end
@@ -92,7 +93,7 @@ BuckyBox::Application.routes.draw do
         get 'tag/:tag', action: :index, as: 'tag'
       end
 
-      member  do
+      member do
         get :send_login_details
       end
     end
