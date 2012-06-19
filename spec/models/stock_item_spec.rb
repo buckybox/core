@@ -7,31 +7,37 @@ describe StockItem do
   specify { stock_item.should be_valid }
 
   describe '.from_list!' do
-    before do
-      @old_item_name = 'mice'
-
-      # as an existing list item
-      stock_item.name = @old_item_name
-      stock_item.save
-
-      @text = "oranges\napples\npears\nApples"
+    context :invalid do
+      specify { StockItem.from_list!(distributor, '').should be_false }
     end
 
-    specify { expect{ StockItem.from_list!(distributor, '') }.should raise_error }
-    specify { expect{ StockItem.from_list!(distributor, @text) }.should change(distributor.stock_items(true), :count).from(1).to(3) }
+    context :valid do
+      before do
+        @old_item_name = 'mice'
 
-    specify { StockItem.from_list!(distributor, @text).map(&:name).include?(@old_item_name).should_not be_true }
-    specify { StockItem.from_list!(distributor, @text).map(&:name).include?('apples').should be_true }
-    specify { StockItem.from_list!(distributor, @text).map(&:name).include?('oranges').should be_true }
-    specify { StockItem.from_list!(distributor, @text).map(&:name).include?('pears').should be_true }
+        # as an existing list item
+        stock_item.name = @old_item_name
+        stock_item.save
+
+        @text = "oranges\nKiwi fruit\napples\npears\nApples"
+      end
+
+      specify { expect{ StockItem.from_list!(distributor, @text) }.should change(distributor.stock_items(true), :count).from(1).to(4) }
+
+      specify { StockItem.from_list!(distributor, @text).map(&:name).include?(@old_item_name).should_not be_true }
+      specify { StockItem.from_list!(distributor, @text).map(&:name).include?('Apples').should be_true }
+      specify { StockItem.from_list!(distributor, @text).map(&:name).include?('Oranges').should be_true }
+      specify { StockItem.from_list!(distributor, @text).map(&:name).include?('Pears').should be_true }
+      specify { StockItem.from_list!(distributor, @text).map(&:name).include?('Kiwi Fruit').should be_true }
+    end
   end
 
   describe '.to_list' do
     before do
       @distributor = Fabricate(:distributor)
-      %w(oranges apples pears).each { |name| Fabricate(:stock_item, name: name, distributor: @distributor) }
+      %w(oranges apples pears kiwi\ fruit).each { |name| Fabricate(:stock_item, name: name, distributor: @distributor) }
     end
 
-    specify { StockItem.to_list(@distributor).should == "apples\noranges\npears" }
+    specify { StockItem.to_list(@distributor).should == "Apples\nKiwi Fruit\nOranges\nPears" }
   end
 end

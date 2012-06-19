@@ -10,11 +10,11 @@ class StockItem < ActiveRecord::Base
   before_validation :cleanup_name
 
   def self.from_list!(distributor, text)
-    raise 'You can not create stock items with blank text' if text.blank?
+    return false if text.blank?
 
     distributor.stock_items.each { |si| si.destroy }
 
-    text.split(/\r\n?/).inject([]) do |result, name|
+    text.split(/\r\n?|\r?\n/).inject([]) do |result, name|
       result << distributor.stock_items.find_or_create_by_name(name)
       result
     end
@@ -27,6 +27,6 @@ class StockItem < ActiveRecord::Base
   private
 
   def cleanup_name
-    self.name.downcase!
+    self.name = self.name.titleize
   end
 end

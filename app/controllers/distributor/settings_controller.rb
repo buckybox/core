@@ -33,6 +33,7 @@ class Distributor::SettingsController < Distributor::BaseController
 
   def stock_list
     @names = StockItem.to_list(current_distributor)
+    binding.pry
   end
 
   def reporting
