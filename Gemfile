@@ -36,6 +36,10 @@ gem 'acts_as_list'
 gem 'default_value_for'
 gem 'fuzzy-string-match', require: 'fuzzystringmatch' # This performs fuzzy matching on the import script
 
+group :install do
+  gem 'sprinkle_packages'
+end
+
 group :development do
   gem 'nifty-generators', require: false
 

@@ -1,7 +1,14 @@
+# Multistage deploy
+require 'capistrano/ext/multistage'
+set :stages, %w(production staging local)
+set :default_stage, "local"
+require File.expand_path('../capistrano_database.rb', __FILE__)
+
 set :application, 'bucky_box'
 set :user, application
 set :repository,  "git@github.com:enspiral/#{application}.git"
 set :keep_releases, 4
+set :deploy_via, :remote_cache
 
 set :scm, :git
 set :use_sudo, false
@@ -10,32 +17,9 @@ set :rake, 'bundle exec rake'
 set :whenever_command, 'bundle exec whenever'
 set :ssh_options, { :forward_agent => true }
 
-task :staging do
-  set :domain, '173.255.206.188'
-  set :rails_env, :staging
-  set :stage, rails_env
-  set :deploy_to, "/home/#{application}/#{rails_env}"
-  set :branch, rails_env
-  
-  role :web, domain
-  role :app, domain
-  role :db,  domain, :primary => true
-end
-
-task :production do
-  set :domain, '173.255.206.188'
-  set :rails_env, :production
-  set :stage, rails_env
-  set :deploy_to, "/home/#{application}/#{rails_env}"
-  set :branch, rails_env
-  
-  role :web, domain
-  role :app, domain
-  role :db,  domain, :primary => true
-end
-
 set :whenever_environment, defer { stage }
 set :whenever_identifier, defer { "#{application}_#{stage}" }
+default_run_options[:pty] = true
 
 namespace :deploy do
   [:stop, :start, :restart].each do |task_name|
@@ -46,7 +30,8 @@ namespace :deploy do
 
   task :symlink_configs do
     run %( cd #{release_path} &&
-      ln -nfs #{shared_path}/config/database.yml #{release_path}/config/database.yml
+      ln -nfs #{shared_path}/config/database.yml #{release_path}/config/database.yml &&
+      ln -nfs #{shared_path}/log/ #{release_path}/log/
     )
   end
 end
@@ -62,3 +47,27 @@ require 'bundler/capistrano'
 require 'whenever/capistrano'
 require 'airbrake/capistrano'
 
+# This is here to provide support of capistrano variables in sprinkle
+begin
+  Sprinkle::Package::Package.set_variables = self.variables
+rescue NameError
+end
+
+namespace :provision do
+  task :app, :roles => [:app] do
+    system("bundle exec sprinkle -v -s config/install.rb") ##{rails_env}")
+    deploy.setup
+    deploy
+  end
+
+  task :copy_old_data, :roles => [:db] do
+    # Don't prompt to trust key
+    put "|1|zPk8yrT60vbIFZ9yWcDS2f4khdY=|oaBi/EPW/ZZzeX7mx5sQJ5SIKZY= ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAqBbKLy2pvTiRgz4VGgrRfp5fTZJcn9iRicIys/LF8PTn+bNtelSNdxKSK4V1JsYFy8PzYfR9EASXPkti9uVEYnX4ZmskKNiGuNTcCl29E38f1Ml0bI9mg5ynfjCzRzvzCI9pTNMv+NptyqvM+DMV2pknjxzgzqTZYzbTL/rEy7AgquCJzkFbBpEYzN6R7lNfsNgst9LBcUpHnVgKWyZdQjO9bN1XeANQU2aWTd2pG07hoRNVGYaYi8puNEqCOMaNm1hFKrMXRW6stRNqqD2o6nSpiQfLh1vW9Ufx2YES/qh/glQadc4wub0u9ck4DuumB8elGFk2PK1oQ7faNddedQ==
+|1|wGu2HJ6mTMsZaZh7PTjq17aOhE4=|JJcx6qs4i/xvWdv6V/u8b9d+LVQ= ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAqBbKLy2pvTiRgz4VGgrRfp5fTZJcn9iRicIys/LF8PTn+bNtelSNdxKSK4V1JsYFy8PzYfR9EASXPkti9uVEYnX4ZmskKNiGuNTcCl29E38f1Ml0bI9mg5ynfjCzRzvzCI9pTNMv+NptyqvM+DMV2pknjxzgzqTZYzbTL/rEy7AgquCJzkFbBpEYzN6R7lNfsNgst9LBcUpHnVgKWyZdQjO9bN1XeANQU2aWTd2pG07hoRNVGYaYi8puNEqCOMaNm1hFKrMXRW6stRNqqD2o6nSpiQfLh1vW9Ufx2YES/qh/glQadc4wub0u9ck4DuumB8elGFk2PK1oQ7faNddedQ==", "/home/bucky_box/.ssh/known_hosts_tmp"
+    run "cat /home/bucky_box/.ssh/known_hosts_tmp >> ~/.ssh/known_hosts"
+    run "rm /home/bucky_box/.ssh/known_hosts_tmp"
+
+    # Copy prod data
+    run(%(ssh bucky_box@my.buckybox.com -C "pg_dump -U bucky_box -i -F c -b bucky_box_production" | pg_restore -d bucky_box_staging))
+  end
+end

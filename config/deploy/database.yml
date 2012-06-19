@@ -1,0 +1,13 @@
+staging: &postgres
+  adapter: postgresql
+  encoding: utf8
+  timeout: 5000
+  pool: 5
+  username: bucky_box
+  database: bucky_box_staging
+production:
+  <<: *postgres
+  database: bucky_box_production
+local:
+  <<: *postgres
+  database: bucky_box_staging
