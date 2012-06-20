@@ -3,7 +3,7 @@ class Address < ActiveRecord::Base
 
   attr_accessible :customer, :address_1, :address_2, :suburb, :city, :postcode, :delivery_note, :phone_1, :phone_2, :phone_3
 
-  validates_presence_of :customer, :address_1, :suburb, :city
+  validates_presence_of :customer, :address_1, :city
 
   def join(join_with = ', ', options = {})
     result = [address_1]
