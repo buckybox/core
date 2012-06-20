@@ -77,6 +77,6 @@ after 'deploy:assets:symlink' do
   deploy.symlink_configs
 end
 
-before "deploy", "campfire", "deploy:campfire_before"
-after "deploy:restart", "deploy:campfire_after", "deploy:cleanup"
+before "deploy", "deploy:campfire", "deploy:pre_announce"
+after "deploy:restart", "deploy:cleanup", "deploy:post_announce"
 
