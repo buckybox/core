@@ -37,12 +37,12 @@ gem 'default_value_for'
 gem 'fuzzy-string-match', require: 'fuzzystringmatch' # This performs fuzzy matching on the import script
 gem 'state_machine'
 
-gem 'capistrano'
-gem 'capistrano_colors'
-gem 'capistrano-campfire'
-
 group :development do
   gem 'nifty-generators', require: false
+
+  gem 'capistrano'
+  gem 'capistrano_colors'
+  gem 'capistrano-campfire'
 
   gem 'hirb'
   gem 'wirble'
