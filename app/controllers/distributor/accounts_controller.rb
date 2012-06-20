@@ -11,9 +11,9 @@ class Distributor::AccountsController < Distributor::ResourceController
       note = params[:note]
 
       if note.blank?
-        @account.change_balance_to(new_balance)
+        @account.change_balance_to(new_balance, display_time: params[:date])
       else
-        @account.change_balance_to(new_balance, description:note)
+        @account.change_balance_to(new_balance, description:note, display_time: params[:date])
       end
     else
       flash[:error] = 'Change in balance must be a number and not zero.'
