@@ -48,7 +48,6 @@ set :campfire_options, :account => 'enspiral',
                        :room => 'Bucky Box',
                        :token => 'e70855b772add9a9daa5c74c948c3f98ef31dc96',
                        :ssl => true
-set :someone, ENV['CAMPFIRE_NAME'] || `whoami`.strip
 
 namespace :deploy do
   [:stop, :start, :restart].each do |task_name|
@@ -64,13 +63,13 @@ namespace :deploy do
   end
 
   task :campfire_before do
-    target = fetch(:stage, 'production')
-    campfire_room.speak "#{someone} started deploying #{application} #{branch} to #{target}"
+    someone = ENV['CAMPFIRE_NAME'] || `whoami`.strip
+    campfire_room.speak "#{someone} started deploying #{application} #{branch} to #{stage}"
   end
 
   task :campfire_after do
-    target = fetch(:stage, 'production')
-    campfire_room.speak "#{someone} finished deploying #{application} #{branch} to #{target}"
+    someone = ENV['CAMPFIRE_NAME'] || `whoami`.strip
+    campfire_room.speak "#{someone} finished deploying #{application} #{branch} to #{stage}"
   end
 end
 
