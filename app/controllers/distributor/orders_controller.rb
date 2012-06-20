@@ -60,7 +60,7 @@ class Distributor::OrdersController < Distributor::ResourceController
 
     respond_to do |format|
       if @order.update_attribute(:active, false)
-        format.html { redirect_to [:distributor, @account.customer], notice: 'Order was successfully deactivated.' }
+        format.html { redirect_to [:distributor, @account.customer], notice: 'Order was successfully deactivated. Please be aware deliveries already created in the "yellow zone" on your deliveries screen will not be removed.' }
         format.json { head :no_content }
       else
         format.html { redirect_to [:distributor, @account.customer], warning: 'Error while trying to deactivate order.' }
@@ -70,8 +70,8 @@ class Distributor::OrdersController < Distributor::ResourceController
   end
 
   def pause
-    @account   = Account.find(params[:account_id])
-    @order     = Order.find(params[:id])
+    @account = Account.find(params[:account_id])
+    @order   = Order.find(params[:id])
 
     start_date = Date.parse(params['start_date'])
     end_date   = Date.parse(params['end_date'])
@@ -84,7 +84,7 @@ class Distributor::OrdersController < Distributor::ResourceController
         format.html { redirect_to [:distributor, @account.customer], notice: 'Pause successfully applied.' }
         format.json { head :no_content }
       else
-        format.html { redirect_to [:distributor, @account.customer], flash: {error: 'There was a problem pausing your order.'} }
+        format.html { redirect_to [:distributor, @account.customer], flash: { error: 'There was a problem pausing your order.' } }
         format.json { render json: @order.errors, status: :unprocessable_entity }
       end
     end
