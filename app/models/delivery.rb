@@ -82,7 +82,7 @@ class Delivery < ActiveRecord::Base
           amount: delivery.package.price,
           kind: 'delivery',
           source: 'manual',
-          description: "Payment on delivery of #{delivery.description}.",
+          description: 'Payment made on delivery',
           display_time: delivery.date.to_time_in_current_zone
         )
       end
@@ -128,7 +128,10 @@ class Delivery < ActiveRecord::Base
   end
 
   def description
-    "#{package.contents_description} at #{package.price} each"
+    desc_str = (quantity > 1 ? "(#{quantity}x) " : '')
+    desc_str += package.contents_description
+
+    return desc_str
   end
 
   # TODO: Not sure if this fits in the model might need to go in Delivery CSV model down the road
@@ -190,7 +193,7 @@ class Delivery < ActiveRecord::Base
         amount: package.price,
         kind: 'delivery',
         source: source,
-        description: "Deliveries made of #{description}.",
+        description: "Delivery of #{description}.",
         display_time: date.to_time_in_current_zone
       )
     end

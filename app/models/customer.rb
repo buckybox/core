@@ -154,14 +154,14 @@ class Customer < ActiveRecord::Base
     self.name <=> b.name
   end
 
-  def make_import_payment(amount, description, date)
+  def make_import_payment(amount, payment_type, date)
     Payment.new(
       distributor: distributor,
       account: account,
       amount: amount,
       kind: 'unspecified',
       source: 'import',
-      description: "Import - #{date.to_s(:transaction)} #{description}",
+      description: "Payment made by #{payment_type}",
       display_time: date.to_time_in_current_zone,
       payable: self
     )
