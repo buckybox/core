@@ -193,7 +193,7 @@ class Delivery < ActiveRecord::Base
         amount: package.price,
         kind: 'delivery',
         source: source,
-        description: "Delivery of #{description}.",
+        description: "Delivery of #{description}",
         display_time: date.to_time_in_current_zone
       )
     end
