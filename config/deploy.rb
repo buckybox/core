@@ -5,6 +5,13 @@ require 'whenever/capistrano'
 require 'airbrake/capistrano'
 require 'tinder'
 
+# HAX for Tinder until this is fixed: https://github.com/capistrano/capistrano/issues/168#issuecomment-4144687
+Capistrano::Configuration::Namespaces::Namespace.class_eval do
+  def capture(*args)
+    parent.capture *args
+  end
+end
+
 set :application, 'bucky_box'
 set :user, application
 set :repository,  "git@github.com:enspiral/#{application}.git"
