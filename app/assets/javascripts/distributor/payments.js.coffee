@@ -8,6 +8,13 @@ $ ->
         $('.ajax_loader_hide').hide()
         $('.ajax_loader_gif').show()
         $(this).closest('form').submit()
+      $("#upload_more_transactions_link").click((event) ->
+        $('#upload_more_transactions .error_notification').hide()
+        $('#upload_more_transactions .error').hide()
+        $("#upload_more_transactions").reveal()
+        event.stopPropagation()
+        false
+      )
     reload: ->
       $(".row_description").unbind()
       $(".row_description").click ->
