@@ -42,7 +42,7 @@ group :development do
 
   gem 'capistrano'
   gem 'capistrano_colors'
-  gem 'capistrano-campfire'
+  gem 'tinder'
 
   gem 'hirb'
   gem 'wirble'

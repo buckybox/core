@@ -3,6 +3,7 @@ require 'capistrano_colors'
 require 'bundler/capistrano'
 require 'whenever/capistrano'
 require 'airbrake/capistrano'
+require 'tinder'
 
 set :application, 'bucky_box'
 set :user, application
@@ -43,11 +44,6 @@ end
 set :whenever_environment, defer { stage }
 set :whenever_identifier, defer { "#{application}_#{stage}" }
 
-#set :campfire_options, :account => 'enspiral',
-                       #:room => 'Bucky Box',
-                       #:token => 'e70855b772add9a9daa5c74c948c3f98ef31dc96',
-                       #:ssl => true
-
 namespace :deploy do
   [:stop, :start, :restart].each do |task_name|
     task task_name, :roles => [:app] do
@@ -61,22 +57,26 @@ namespace :deploy do
     )
   end
 
-#  task :campfire_before do
-    #someone = ENV['CAMPFIRE_NAME'] || `whoami`.strip
-    #campfire_room.speak "#{someone} started deploying #{application} #{branch} to #{stage}"
-  #end
+  task :campfire do
+    config = YAML.load_file("config/campfire.yml")
+    campfire = Tinder::Campfire.new config['account'], token: config['token'], ssl: config['ssl']
+    ROOM = campfire.find_room_by_name config['room']
+    ANOUNCE_USER = ENV['CAMPFIRE_NAME'] || `whoami`.strip
+  end
 
-  #task :campfire_after do
-    #someone = ENV['CAMPFIRE_NAME'] || `whoami`.strip
-    #campfire_room.speak "#{someone} finished deploying #{application} #{branch} to #{stage}"
-  #end
+  task :pre_announce do
+    ROOM.speak "#{ANOUNCE_USER} is preparing to deploy #{application} to #{stage}"
+  end
+
+  task :post_announce do
+    ROOM.speak "#{ANOUNCE_USER} finished deploying #{application} to #{stage}"
+  end
 end
 
 after 'deploy:assets:symlink' do
   deploy.symlink_configs
 end
 
-before "deploy", "deploy:campfire_before"
-#after "deploy:restart", "deploy:campfire_after"
-after "deploy:restart", "deploy:cleanup"
+before "deploy", "campfire", "deploy:campfire_before"
+after "deploy:restart", "deploy:campfire_after", "deploy:cleanup"
 
