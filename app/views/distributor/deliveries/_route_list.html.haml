@@ -2,8 +2,8 @@
   .row.data-headings
     #route-controls.seven.columns.delivery_actions
       = check_box_tag 'all'
-      = button_tag 'Delivered', class: 'small radius button', id: 'delivered', disabled: @selected_date.future?
-      = button_tag '&#9660; More'.html_safe, class: 'small radius button', id: 'more-delivery-options', disabled: @selected_date.future?
+      = button_tag 'Delivered', class: 'small radius button', id: 'delivered', disabled: !@real_list
+      = button_tag '&#9660; More'.html_safe, class: 'small radius button', id: 'more-delivery-options', disabled: !@real_list
       #missed-options.has-flyout
         .flyout
           %ul
