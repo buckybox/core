@@ -9,8 +9,8 @@ class Distributor::DeliveriesController < Distributor::ResourceController
   respond_to :json, except: [:master_packing_sheet, :export]
   respond_to :csv, only: :export
 
-  NAV_START_DATE = Date.current - 2.week
-  NAV_END_DATE   = Date.current + 2.week
+  NAV_START_DATE = Date.current - 9.week
+  NAV_END_DATE   = Date.current + 3.week
 
   # Should no longer need this when JS and views are looked at again. For now it translates between the old and new status system.
   LEGACY_STATUS_TRANSLATION = {'pending' => 'pend', 'cancelled' => 'cancel', 'delivered' => 'deliver'}
