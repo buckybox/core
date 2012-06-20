@@ -77,7 +77,12 @@ namespace :deploy do
 
   task :post_announce do
     ROOM.speak "#{ANOUNCE_USER} finished deploying #{application} to #{stage}"
-    ROOM.speak "http://media.giantbomb.com/uploads/5/58937/2135457-success_baby_kid.jpg" #Change when MemeGen back up
+
+    if stage == :production
+      ROOM.speak 'http://i3.kym-cdn.com/photos/images/original/000/011/296/success_baby.jpg'
+    elsif stage == :staging
+      ROOM.speak 'http://i2.kym-cdn.com/photos/images/original/000/012/960/wikiimage-1.png'
+    end
   end
 end
 
