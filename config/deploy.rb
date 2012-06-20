@@ -76,5 +76,9 @@ end
 after 'deploy:assets:symlink' do
   deploy.symlink_configs
 end
+
+before "deploy", "deploy:campfire_before"
+after "deploy:restart", "deploy:campfire_after"
+
 after "deploy:restart", "deploy:cleanup" # Delete old project folders
 
