@@ -60,7 +60,7 @@ class Distributor::OrdersController < Distributor::ResourceController
 
     respond_to do |format|
       if @order.update_attribute(:active, false)
-        format.html { redirect_to [:distributor, @account.customer], notice: 'Order was successfully deactivated. Please be aware deliveries already created in the "yellow zone" on your deliveries screen will not be removed.' }
+        format.html { redirect_to [:distributor, @account.customer], notice: 'Order was successfully deactivated.' }
         format.json { head :no_content }
       else
         format.html { redirect_to [:distributor, @account.customer], warning: 'Error while trying to deactivate order.' }
