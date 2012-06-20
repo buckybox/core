@@ -77,6 +77,7 @@ namespace :deploy do
 
   task :post_announce do
     ROOM.speak "#{ANOUNCE_USER} finished deploying #{application} to #{stage}"
+    ROOM.speak "http://media.giantbomb.com/uploads/5/58937/2135457-success_baby_kid.jpg" #Change when MemeGen back up
   end
 end
 
