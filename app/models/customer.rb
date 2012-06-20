@@ -172,7 +172,7 @@ class Customer < ActiveRecord::Base
   end
 
   def order_with_next_delivery
-    has_next_delivery = orders.select { |o| o.schedule.next_occurrence }
+    has_next_delivery = orders.active.select { |o| o.schedule.next_occurrence }
     order = has_next_delivery.sort{ |a,b| b.schedule.next_occurrence <=> a.schedule.next_occurrence }.first
     return order
   end
