@@ -1,3 +1,10 @@
+require './config/boot'
+require 'capistrano_colors'
+require 'bundler/capistrano'
+require 'whenever/capistrano'
+require 'airbrake/capistrano'
+require 'capistrano/campfire'
+
 set :application, 'bucky_box'
 set :user, application
 set :repository,  "git@github.com:enspiral/#{application}.git"
@@ -16,7 +23,7 @@ task :staging do
   set :stage, rails_env
   set :deploy_to, "/home/#{application}/#{rails_env}"
   set :branch, rails_env
-  
+
   role :web, domain
   role :app, domain
   role :db,  domain, :primary => true
@@ -28,7 +35,7 @@ task :production do
   set :stage, rails_env
   set :deploy_to, "/home/#{application}/#{rails_env}"
   set :branch, rails_env
-  
+
   role :web, domain
   role :app, domain
   role :db,  domain, :primary => true
@@ -36,6 +43,12 @@ end
 
 set :whenever_environment, defer { stage }
 set :whenever_identifier, defer { "#{application}_#{stage}" }
+
+set :campfire_options, :account => 'enspiral',
+                       :room => 'Bucky Box',
+                       :token => 'e70855b772add9a9daa5c74c948c3f98ef31dc96',
+                       :ssl => true
+set :someone, ENV['CAMPFIRE_NAME'] || `whoami`.strip
 
 namespace :deploy do
   [:stop, :start, :restart].each do |task_name|
@@ -49,16 +62,20 @@ namespace :deploy do
       ln -nfs #{shared_path}/config/database.yml #{release_path}/config/database.yml
     )
   end
+
+  task :campfire_before do
+    target = fetch(:stage, 'production')
+    campfire_room.speak "#{someone} started deploying #{application} #{branch} to #{target}"
+  end
+
+  task :campfire_after do
+    target = fetch(:stage, 'production')
+    campfire_room.speak "#{someone} finished deploying #{application} #{branch} to #{target}"
+  end
 end
 
 after 'deploy:assets:symlink' do
   deploy.symlink_configs
 end
 after "deploy:restart", "deploy:cleanup" # Delete old project folders
-
-require './config/boot'
-require 'capistrano_colors'
-require 'bundler/capistrano'
-require 'whenever/capistrano'
-require 'airbrake/capistrano'
 
