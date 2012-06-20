@@ -3,7 +3,6 @@ require 'capistrano_colors'
 require 'bundler/capistrano'
 require 'whenever/capistrano'
 require 'airbrake/capistrano'
-require 'capistrano/campfire'
 
 set :application, 'bucky_box'
 set :user, application
@@ -44,10 +43,10 @@ end
 set :whenever_environment, defer { stage }
 set :whenever_identifier, defer { "#{application}_#{stage}" }
 
-set :campfire_options, :account => 'enspiral',
-                       :room => 'Bucky Box',
-                       :token => 'e70855b772add9a9daa5c74c948c3f98ef31dc96',
-                       :ssl => true
+#set :campfire_options, :account => 'enspiral',
+                       #:room => 'Bucky Box',
+                       #:token => 'e70855b772add9a9daa5c74c948c3f98ef31dc96',
+                       #:ssl => true
 
 namespace :deploy do
   [:stop, :start, :restart].each do |task_name|
@@ -62,15 +61,15 @@ namespace :deploy do
     )
   end
 
-  task :campfire_before do
-    someone = ENV['CAMPFIRE_NAME'] || `whoami`.strip
-    campfire_room.speak "#{someone} started deploying #{application} #{branch} to #{stage}"
-  end
+#  task :campfire_before do
+    #someone = ENV['CAMPFIRE_NAME'] || `whoami`.strip
+    #campfire_room.speak "#{someone} started deploying #{application} #{branch} to #{stage}"
+  #end
 
-  task :campfire_after do
-    someone = ENV['CAMPFIRE_NAME'] || `whoami`.strip
-    campfire_room.speak "#{someone} finished deploying #{application} #{branch} to #{stage}"
-  end
+  #task :campfire_after do
+    #someone = ENV['CAMPFIRE_NAME'] || `whoami`.strip
+    #campfire_room.speak "#{someone} finished deploying #{application} #{branch} to #{stage}"
+  #end
 end
 
 after 'deploy:assets:symlink' do
@@ -78,5 +77,6 @@ after 'deploy:assets:symlink' do
 end
 
 before "deploy", "deploy:campfire_before"
-after "deploy:restart", "deploy:cleanup", "deploy:campfire_after"
+#after "deploy:restart", "deploy:campfire_after"
+after "deploy:restart", "deploy:cleanup"
 
