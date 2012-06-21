@@ -64,24 +64,27 @@ namespace :deploy do
     )
   end
 
-  task :campfire do
+  task :pre_announce do
     config = YAML.load_file("config/campfire.yml")
     campfire = Tinder::Campfire.new config['account'], token: config['token'], ssl: config['ssl']
-    ROOM = campfire.find_room_by_name config['room']
-    ANOUNCE_USER = ENV['CAMPFIRE_NAME'] || `whoami`.strip
-  end
+    room = campfire.find_room_by_name config['room']
+    announce_user = ENV['CAMPFIRE_NAME'] || `whoami`.strip
 
-  task :pre_announce do
-    ROOM.speak "#{ANOUNCE_USER} is preparing to deploy #{application} to #{stage}"
+    room.speak "#{announce_user} is preparing to deploy #{application} to #{stage}"
   end
 
   task :post_announce do
-    ROOM.speak "#{ANOUNCE_USER} finished deploying #{application} to #{stage}"
+    config = YAML.load_file("config/campfire.yml")
+    campfire = Tinder::Campfire.new config['account'], token: config['token'], ssl: config['ssl']
+    room = campfire.find_room_by_name config['room']
+    announce_user = ENV['CAMPFIRE_NAME'] || `whoami`.strip
+
+    room.speak "#{announce_user} finished deploying #{application} to #{stage}"
 
     if stage == :production
-      ROOM.speak 'http://i3.kym-cdn.com/photos/images/original/000/011/296/success_baby.jpg'
+      room.speak 'http://i3.kym-cdn.com/photos/images/original/000/011/296/success_baby.jpg'
     elsif stage == :staging
-      ROOM.speak 'http://i2.kym-cdn.com/photos/images/original/000/012/960/wikiimage-1.png'
+      room.speak 'http://i2.kym-cdn.com/photos/images/original/000/012/960/wikiimage-1.png'
     end
   end
 end
@@ -90,6 +93,7 @@ after 'deploy:assets:symlink' do
   deploy.symlink_configs
 end
 
-before "deploy", "deploy:campfire", "deploy:pre_announce"
+before "deploy", "deploy:pre_announce"
+after "deploy:update_code", "deploy:migrate"
 after "deploy:restart", "deploy:cleanup", "deploy:post_announce"
 
