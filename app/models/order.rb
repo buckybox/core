@@ -23,7 +23,8 @@ class Order < ActiveRecord::Base
 
   acts_as_taggable
 
-  attr_accessible :box, :box_id, :account, :account_id, :quantity, :likes, :dislikes, :completed, :frequency, :schedule, :order_extras, :extras_one_off
+  attr_accessible :box, :box_id, :account, :account_id, :quantity, :likes, :dislikes, :completed, :frequency, :schedule, 
+    :order_extras, :extras_one_off
 
   FREQUENCIES = %w(single weekly fortnightly monthly)
   IS_ONE_OFF  = false
@@ -217,10 +218,6 @@ class Order < ActiveRecord::Base
 
   def clear_extras
     self.extras = []
-  end
-
-  def contents_description
-    Package.contents_description(box, quantity, order_extras)
   end
 
   def extras_summary

@@ -13,10 +13,7 @@ class Customer < ActiveRecord::Base
   has_many :orders,       through: :account
   has_many :deliveries,   through: :orders
 
-  # Include default devise modules. Others available are:
-  # :token_authenticatable, :encryptable, :confirmable, :lockable, :timeoutable and :omniauthable
-  devise :database_authenticatable, :registerable,
-    :recoverable, :rememberable, :trackable, :validatable
+  devise :database_authenticatable, :recoverable, :rememberable, :trackable, :validatable
 
   acts_as_taggable
 
@@ -71,6 +68,14 @@ class Customer < ActiveRecord::Base
     end
 
     return result
+  end
+
+  def formated_number
+    "%04d" % number
+  end
+
+  def badge
+    "#{formated_number} #{name}"
   end
 
   def new?
@@ -145,6 +150,38 @@ class Customer < ActiveRecord::Base
       order.import_extras(b.extras) unless b.extras.blank?
       order.save! # Blow up on error so transaction is aborted
     end
+  end
+
+  def <=>(b)
+    self.name <=> b.name
+  end
+
+  def make_import_payment(amount, payment_type, date)
+    Payment.new(
+      distributor: distributor,
+      account: account,
+      amount: amount,
+      kind: 'unspecified',
+      source: 'import',
+      description: "Payment made by #{payment_type}",
+      display_time: date.to_time_in_current_zone,
+      payable: self
+    )
+  end
+
+  def has_first_and_last_name?
+    first_name.present? && last_name.present?
+  end
+
+  def order_with_next_delivery
+    has_next_delivery = orders.active.select { |o| o.schedule.next_occurrence }
+    order = has_next_delivery.sort{ |a,b| b.schedule.next_occurrence <=> a.schedule.next_occurrence }.first
+    return order
+  end
+
+  def next_delivery_time
+    order = order_with_next_delivery
+    order.schedule.next_occurrence if order
   end
 
   private

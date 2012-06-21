@@ -17,6 +17,9 @@ class Distributor < ActiveRecord::Base
   has_many :packing_lists,      dependent: :destroy
   has_many :packages,           dependent: :destroy, through: :packing_lists
 
+  has_many :import_transaction_lists
+  has_many :import_transactions, through: :import_transaction_lists
+
   DEFAULT_TIME_ZONE = 'Wellington'
   DEFAULT_CURRENCY = 'nzd'
   DEFAULT_ADVANCED_HOURS = 18
@@ -24,10 +27,7 @@ class Distributor < ActiveRecord::Base
   DEFAULT_AUTOMATIC_DELIVERY_HOUR = 18
   DEFAULT_AUTOMATIC_DELIVERY_DAYS = 1
 
-  # Include default devise modules. Others available are:
-  # :token_authenticatable, :encryptable, :confirmable, :lockable, :timeoutable and :omniauthable
-  devise :database_authenticatable, :registerable,
-    :recoverable, :rememberable, :trackable, :validatable
+  devise :database_authenticatable, :recoverable, :rememberable, :trackable, :validatable
 
   mount_uploader :company_logo, CompanyLogoUploader
 
@@ -40,15 +40,16 @@ class Distributor < ActiveRecord::Base
   # Setup accessible (or protected) attributes for your model
   attr_accessible :email, :password, :password_confirmation, :remember_me, :name, :url, :company_logo, :company_logo_cache, :completed_wizard,
     :remove_company_logo, :support_email, :invoice_threshold, :separate_bucky_fee, :advance_hour, :advance_days, :automatic_delivery_hour,
-    :time_zone, :currency
+    :time_zone, :currency, :bank_deposit, :paypal, :bank_deposit_format
 
   validates_presence_of :email
   validates_uniqueness_of :email
   validates_presence_of :name, on: :update
   validates_uniqueness_of :name, on: :update
   validates_numericality_of :advance_hour, greater_than_or_equal_to: 0
-  validates_numericality_of :advance_days, greater_than_or_equal_to: 1
+  validates_numericality_of :advance_days, greater_than_or_equal_to: 0
   validates_numericality_of :automatic_delivery_hour, greater_than_or_equal_to: 0
+  validates_presence_of :bank_deposit_format, if: :bank_deposit?
 
   before_validation :parameterize_name
   before_validation :check_emails
@@ -60,6 +61,10 @@ class Distributor < ActiveRecord::Base
   default_value_for :advance_hour,            DEFAULT_AUTOMATIC_DELIVERY_HOUR
   default_value_for :advance_days,            DEFAULT_ADVANCED_DAYS
   default_value_for :automatic_delivery_hour, DEFAULT_AUTOMATIC_DELIVERY_HOUR
+
+  default_value_for :bank_deposit, true
+  default_value_for :paypal, false
+  default_value_for :bank_deposit_format, ImportTransactionList::FILE_FORMATS.first.last # Kiwibank
 
   # Devise Override: Avoid validations on update or if now password provided
   def password_required?
@@ -130,8 +135,8 @@ class Distributor < ActiveRecord::Base
 
       (start_date..end_date).each do |date|
         # Seek and destroy (http://youtu.be/wLBpLz5ELPI?t=3m10s) the lists that are now out of range
-        packing_list  = packing_lists.find_by_date(date)
-        successful &= packing_list.destroy  unless packing_list.nil?
+        packing_list = packing_lists.find_by_date(date)
+        successful &= packing_list.destroy unless packing_list.nil?
 
         delivery_list = delivery_lists.find_by_date(date)
         successful &= delivery_list.destroy unless delivery_list.nil?
@@ -247,6 +252,42 @@ class Distributor < ActiveRecord::Base
     else
       raise "Couldn't find the box #{box.inspect} for this distributor #{distributor.inspect}"
     end
+  end
+
+  def find_duplicate_import_transactions(date, description, amount)
+    import_transactions.processed.not_duplicate.not_removed.where(transaction_date: date, description: description, amount_cents: (amount * 100).to_i)
+  end
+
+  def find_previous_match(description)
+    import_transactions.processed.matched.not_removed.where(description: description).ordered.last
+  end
+
+  def last_csv_format
+    last_import = import_transaction_lists.order("created_at DESC").first
+    last_import.present? ? last_import.file_format : nil
+  end
+
+  def supported_csv_formats
+    result = ""
+    result << ImportTransactionList::FILE_FORMATS.find{|name, code| code == bank_deposit_format}.first if bank_deposit?
+    result << " or " if bank_deposit? && paypal?
+    result << "Paypal" if paypal?
+    result
+  end
+
+  def available_csv_formats_select
+    select_options = []
+    select_options << ImportTransactionList::FILE_FORMATS.find{|name, code| code == bank_deposit_format} if bank_deposit?
+    select_options << ImportTransactionList::FILE_FORMATS.find{|name, code| code == "paypal"} if paypal?
+    select_options
+  end
+
+  def show_payments_tab?
+    available_csv_formats_select.present?
+  end
+
+  def can_upload_payments?
+    show_payments_tab? && import_transaction_lists.draft.count.zero?
   end
 
   private

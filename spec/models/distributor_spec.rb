@@ -25,7 +25,7 @@ describe Distributor do
 
   context 'delivery window parameters' do
     specify { Fabricate.build(:distributor, advance_hour: -1).should_not be_valid }
-    specify { Fabricate.build(:distributor, advance_days: 0).should_not be_valid }
+    specify { Fabricate.build(:distributor, advance_days: -1).should_not be_valid }
     specify { Fabricate.build(:distributor, automatic_delivery_hour: -1).should_not be_valid }
   end
 
@@ -368,5 +368,13 @@ describe Distributor do
     import_customer.stub(:delivery_route)
 
     return import_customer
+  end
+
+  describe ".find_duplicate_import_transactions" do
+    it "should find duplicate import transactions" do
+      distributor.stub_chain(:import_transactions, :processed, :not_duplicate, :not_removed, :where).with({transaction_date: Date.parse("12 Oct 2011"), description: "hello kitty here is payment", amount_cents: 23465})
+
+      distributor.find_duplicate_import_transactions(Date.parse("12 Oct 2011"), "hello kitty here is payment", 234.65)
+    end
   end
 end

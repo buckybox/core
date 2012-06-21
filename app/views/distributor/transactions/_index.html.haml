@@ -1,14 +1,30 @@
 .row
-  %table.twelve.columns
+  %table.twelve.columns#transactions
     %thead
       %tr
-        %th Timestamp
-        %th Amount
+        %th
+          Transaction
+          %br
+          Processed
+        %th
+          Transaction
+          %br
+          Date
         %th Description
+        %th Transaction
+        %th Balance
 
     %tbody
+      - transaction_total = Money.new(0) # manual calculation until we start storing historical balance
+
       - @transactions.each do |transaction|
+        - td_class = (transaction.manual? ? '' : 'auto')
+
         %tr
-          %td= transaction.created_at.to_s(:db)
-          %td= transaction.amount.format
-          %td= transaction.description
+          %td{ class: td_class }= transaction.created_at.to_s(:transaction)
+          %td{ class: td_class }= transaction.display_time.to_s(:transaction)
+          %td{ class: td_class }= transaction.description
+          %td{ class: td_class }= transaction.amount.format
+          %td{ class: td_class }= (transaction.account.balance - transaction_total).format
+
+        - transaction_total += transaction.amount

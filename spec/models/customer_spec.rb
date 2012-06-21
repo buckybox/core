@@ -1,7 +1,9 @@
 require 'spec_helper'
 
 describe Customer do
-  specify { Fabricate.build(:customer).should be_valid }
+  let(:customer) { Fabricate.build(:customer) }
+
+  specify { customer.should be_valid }
 
   context 'a customer' do
     before { @customer = Fabricate(:customer) }
@@ -103,7 +105,45 @@ describe Customer do
     end
   end
 
-  context '.import' do
+  describe '#order_with_next_delivery' do
+    context 'with orders' do
+      before do
+        @o1 = Fabricate.build(:active_recurring_order)
+        @o2 = Fabricate.build(:active_recurring_order)
+        @o3 = Fabricate.build(:active_recurring_order)
+
+        customer.stub_chain(:orders, :active).and_return([@o1, @o2, @o3])
+      end
+
+      specify { customer.order_with_next_delivery.should == @o3 }
+
+      context 'and order without next delivery' do
+        before do
+          @o4 = Fabricate.build(:order)
+          @o4.stub_chain(:schedule, :next_occurrence).and_return(nil)
+          customer.stub_chain(:orders, :active).and_return([@o1, @o2, @o3])
+        end
+
+        specify { customer.order_with_next_delivery.should == @o3 }
+      end
+    end
+
+    context 'without orders' do
+      before { customer.stub_chain(:orders, :active).and_return([]) }
+      specify { customer.order_with_next_delivery.should == nil }
+    end
+  end
+
+  describe '#next_delivery_time' do
+    before do
+      @order = Fabricate.build(:active_recurring_order)
+      customer.stub(:order_with_next_delivery).and_return(@order)
+    end
+
+    specify { customer.next_delivery_time.should == @order.schedule.next_occurrence }
+  end
+
+  describe '.import' do
     let(:customer){ Fabricate.build(:customer) }
 
     it "should import customer with all fields" do

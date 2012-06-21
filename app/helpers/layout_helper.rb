@@ -20,7 +20,7 @@ module LayoutHelper
     content_for(:head) { javascript_include_tag(*args) }
   end
 
-  FLASH_CLASSES = {notice: 'success', warning: 'warning', error: 'error', alert: 'error'}
+  FLASH_CLASSES = { notice: 'success', warning: 'warning', error: 'error', alert: 'error' }
 
   def flash_bar(kind, message)
     classes = "alert-box #{FLASH_CLASSES[kind]}"
@@ -46,7 +46,7 @@ module LayoutHelper
   def customer_badge(customer, options = {})
     content = ''
 
-    customer_id = "%04d" % customer.number
+    customer_id = customer.formated_number
     content += content_tag(:span, "#{customer_id}", class: 'customer-id')
 
     customer_name = options[:customer_name] || customer.name

@@ -16,6 +16,7 @@ BuckyBox::Application.routes.draw do
   namespace :distributor do
     root to: 'dashboard#index'
     get 'dashboard', controller: 'dashboard', action: 'index'
+    post 'events/:id/dismiss', controller: 'dashboard', action: 'dismiss_event', as: 'dismiss_event'
 
     namespace :wizard do
       get 'business'
@@ -49,6 +50,7 @@ BuckyBox::Application.routes.draw do
         get 'date/:date/view/:view',  action: :index,                as: 'date'
         post 'date/:date/reposition', action: :reposition,           as: 'reposition'
         post 'update_status',         action: :update_status,        as: 'update_status'
+        post 'make_payment',          action: :make_payment,         as: 'make_payment'
         post 'master_packing_sheet',  action: :master_packing_sheet, as: 'master_packing_sheet'
         post 'export',                action: :export,               as: 'export'
       end
@@ -61,13 +63,27 @@ BuckyBox::Application.routes.draw do
       end
     end
 
-    resources :payments, only: [:create, :index] do
+    resources :payments, only: [:create, :index, :show, :destroy] do
       collection do
         get 'upload_transactions', action: 'upload_transactions', as: 'upload_transactions'
-        post 'process_upload',     action: 'process_upload', as: 'process_upload'
-        post 'create_from_csv',    action: 'create_from_csv', as: 'create_from_csv'
+        post 'commit_upload',      action: 'commit_upload',       as: 'commit_upload'
+        post 'create_from_csv',    action: 'create_from_csv',     as: 'create_from_csv'
+        post 'process_upload',     action: 'process_upload',      as: 'process_upload'
+        post 'index',              action: 'match_payments',      as: 'match_payments'
+      end
+
+      member do
+        put 'process_payments', action: 'process_payments', as: 'process_payments'
       end
     end
+
+    resources :import_transactions, only: [:update] do
+      member do
+        get 'load_more_rows/:position', action: 'load_more_rows', as: 'load_more_rows'
+      end
+    end
+
+    resources :import_transaction_lists, only: [:destroy]
 
     resources :customers do
       collection do
@@ -75,7 +91,7 @@ BuckyBox::Application.routes.draw do
         get 'tag/:tag', action: :index, as: 'tag'
       end
 
-      member  do
+      member do
         get :send_login_details
       end
     end
@@ -101,12 +117,6 @@ BuckyBox::Application.routes.draw do
       member do
         get 'receive_payment', action: :receive_payment, as: 'receive_payment'
         post 'save_payment',   action: :save_payment, as: 'save_payment'
-      end
-    end
-
-    resources :events do
-      member do
-        post 'dismiss_notification'
       end
     end
   end

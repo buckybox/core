@@ -1,12 +1,57 @@
-= simple_form_for([:distributor, @statement], url: process_upload_distributor_payments_path, html: {:multipart => true} ) do |f|
-  %fieldset
-    %legend Import data from your bank
-    %p Please select the bank statement provided by your bank (.csv file)
-    = f.error_notification
-    = f.input :statement_file, label: false
+%h2 Customer Payments
 
-    .actions
-      = f.button :submit
+- if current_distributor.can_upload_payments?
+  #upload_more_transactions.reveal-modal
+    = simple_form_for(@import_transaction_list, url: match_payments_distributor_payments_path, html: { multipart: true } ) do |f|
+      %fieldset
+        %legend Select the transaction data you wish to import:
+        %p= "Login to #{current_distributor.supported_csv_formats} to download/export your bank transactions in CSV format"
+        .form_fields.ajax_loader_hide
+          = f.error_notification
+          - if @import_transaction_list.csv_parser.present? && !@import_transaction_list.csv_parser.rows.reject(&:valid?).size.zero?
+            %span.error= @import_transaction_list.csv_parser.rows.find(&:invalid?).errors.full_messages.join(', ')
+          - if current_distributor.available_csv_formats_select.size == 1
+            = f.input :file_format, as: :hidden, input_html: {value: current_distributor.available_csv_formats_select.first.last}
+          - else
+            = f.input :file_format, as: :select, collection: current_distributor.available_csv_formats_select, include_blank: false
+          = f.input :csv_file, label: false, input_html: {class: "auto_submit", label: "Import transactions"}
+        .ajax_loader_gif{style: 'display:none;'}
+
 .row
   .twelve.columns
-    = render 'distributor/payments/index'
+    %table.payments
+      %thead
+        %tr
+          %th Date
+          %th{ width: '350px' } Description
+          %th.amount
+            %span Amount
+          %th Payment Type
+          %th{ width: '240px' } Customer
+          %th
+      %tbody
+        - if current_distributor.can_upload_payments?
+          %tr.row_action.import_more_transactions
+            %td{ colspan: 6 }
+              = link_to((@import_transactions.blank? ? "Import transactions" : "Import more transactions"), "", {id: 'upload_more_transactions_link'})
+        - else
+          %tr.row_action.import_more_transactions.hidden
+        - @import_transaction_lists.each do |import_transaction_list|
+          %tr.draft_import_transaction_list
+            %td{ colspan: 6 }
+              = render partial: 'draft_transactions', locals: {import_transaction_list: import_transaction_list}
+          %tr.hidden
+
+
+        = render partial: 'distributor/import_transactions/rows'
+
+        %tr.row_action
+          %td{ colspan: 6 }
+            .ajax_loader_hide= link_to_function "more...", "window.payments.load_more_rows_on_bottom()" unless @import_transactions.blank?
+            .ajax_loader_gif{style:'display: none;'}
+
+- if @import_transaction_list.csv_parser.present? && !@import_transaction_list.csv_parser.rows.reject(&:valid?).size.zero?
+  :javascript
+    $(function() {
+      $("#upload_more_transactions").reveal();
+    })

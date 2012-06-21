@@ -6,7 +6,6 @@
         %th Extras
         %th Price
         %th{style: 'width:30%;'} Schedule
-        %th Next Delivery
         %th
 
     %tbody
@@ -20,7 +19,5 @@
             - if order.schedule.exception_times.empty?
               %br
               = link_to 'pause order', '#', data: {'reveal-id' => "pause-modal-#{order.id}"}
-          %td= order.schedule.next_occurrence.to_s(:month_date_year) if order.schedule.next_occurrence
-          %td
-            = link_to 'change order', edit_customer_order_path(order) 
+          %td= link_to 'change order', edit_customer_order_path(order) 
 

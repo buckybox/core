@@ -29,7 +29,7 @@ class Package < ActiveRecord::Base
 
   attr_accessible :order, :order_id, :packing_list, :status, :position
 
-  STATUS = %w(unpacked packed)
+  STATUS = %w(unpacked packed) #TODO: change to state_mchine next time this is touched
   PACKING_METHOD = %w(manual auto)
 
   validates_presence_of :order, :packing_list_id, :status
@@ -106,10 +106,6 @@ class Package < ActiveRecord::Base
     "#{quantity || 0} " + ((quantity == 1 || quantity =~ /^1(\.0+)?$/) ? box_name : box_name.pluralize)
   end
 
-  def contents_description
-    Package.contents_description(archived_box_name, archived_order_quantity, archived_extras)
-  end
-
   def extras_description
     Package.extras_description(archived_extras)
   end
@@ -122,13 +118,17 @@ class Package < ActiveRecord::Base
     archived_extras.is_a?(Hash) ? archived_extras : archived_extras.map(&:to_hash)
   end
 
-  def self.contents_description(box_name, quantity, order_extras)
+  def self.contents_description(box_name, order_extras)
     box_name = box_name.name if box_name.is_a? Box
 
-    result = "#{quantity}x #{box_name}"
+    result = "#{box_name}"
     result << ", #{extras_description(order_extras)}" if order_extras.present?
 
     return result
+  end
+
+  def contents_description
+    Package.contents_description(archived_box_name, archived_extras)
   end
 
   def self.extras_description(order_extras)
@@ -185,6 +185,7 @@ class Package < ActiveRecord::Base
 
   private
 
+  # TODO: Need to revisit this find best solutoin, whether it is Papertrail or in it's own model.
   def archive_data
     self.archived_address           = address.join(', ')
 
