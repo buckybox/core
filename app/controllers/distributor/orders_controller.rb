@@ -70,8 +70,8 @@ class Distributor::OrdersController < Distributor::ResourceController
   end
 
   def pause
-    @account   = Account.find(params[:account_id])
-    @order     = Order.find(params[:id])
+    @account = Account.find(params[:account_id])
+    @order   = Order.find(params[:id])
 
     start_date = Date.parse(params['start_date'])
     end_date   = Date.parse(params['end_date'])
@@ -84,7 +84,7 @@ class Distributor::OrdersController < Distributor::ResourceController
         format.html { redirect_to [:distributor, @account.customer], notice: 'Pause successfully applied.' }
         format.json { head :no_content }
       else
-        format.html { redirect_to [:distributor, @account.customer], flash: {error: 'There was a problem pausing your order.'} }
+        format.html { redirect_to [:distributor, @account.customer], flash: { error: 'There was a problem pausing your order.' } }
         format.json { render json: @order.errors, status: :unprocessable_entity }
       end
     end

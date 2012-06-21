@@ -8,7 +8,7 @@
         %th Quantity
         %th Total Cost
         %th Start Date
-        %th{style: 'width:25%;'} Schedule
+        %th{ style: 'width:25%;' } Schedule
         %th Actions
 
     %tbody
@@ -35,5 +35,5 @@
             %br
             = link_to('delete',
               deactivate_distributor_account_order_path(@account, order),
-              confirm: 'Are you sure you would like to deactivate this order? It will no longer generate deliveries.',
+              confirm: order_delete_warning(order),
               method: :put)
