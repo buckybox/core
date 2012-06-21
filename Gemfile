@@ -42,6 +42,7 @@ group :development do
 
   gem 'capistrano'
   gem 'capistrano_colors'
+  gem 'tinder'
 
   gem 'hirb'
   gem 'wirble'
