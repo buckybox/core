@@ -59,5 +59,7 @@ policy :myapp, :roles => :app do
   requires :postgres_and_gem
   requires :setup_db
   requires :nodejs
+  requires :postfix
+  requires :monit
 end
 
