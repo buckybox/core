@@ -4,6 +4,7 @@
 $ ->
   window.payments = {
     load: ->
+      $(".chosen-payee-select").chosen()
       $(".auto_submit").change ->
         $('.ajax_loader_hide').hide()
         $('.ajax_loader_gif').show()
@@ -16,6 +17,7 @@ $ ->
         false
       )
     reload: ->
+      $(".chosen-payee-select").chosen()
       $(".row_description").unbind()
       $(".row_description").click ->
         $(this).next().toggle()
