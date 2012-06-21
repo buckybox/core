@@ -3,13 +3,13 @@ class Address < ActiveRecord::Base
 
   attr_accessible :customer, :address_1, :address_2, :suburb, :city, :postcode, :delivery_note, :phone_1, :phone_2, :phone_3
 
-  validates_presence_of :customer, :address_1, :city
+  validates_presence_of :customer, :address_1
 
   def join(join_with = ', ', options = {})
     result = [address_1]
     result << address_2 unless address_2.blank?
-    result << suburb
-    result << city
+    result << suburb unless suburb.blank?
+    result << city unless city.blank?
 
     if options[:with_postcode]
       result << postcode unless postcode.blank?
