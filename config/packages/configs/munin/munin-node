@@ -1,0 +1,4 @@
+
+[passenger_*]
+user munin
+command ruby %c

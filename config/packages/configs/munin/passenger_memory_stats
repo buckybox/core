@@ -1,0 +1,28 @@
+#!/usr/bin/env ruby
+ 
+def output_config
+  puts <<-END
+graph_category App
+graph_title Passenger memory stats 
+graph_vlabel count
+
+memory.label memory
+END
+  exit 0
+end
+ 
+def output_values
+  status = `sudo passenger-memory-stats | tail -1` 
+  unless $?.success?
+    $stderr.puts "failed executing passenger-memory-stats"
+    exit 1
+  end
+  status =~ /(\d+\.\d+)/
+  puts "memory.value #{$1}"
+end
+ 
+if ARGV[0] == "config"
+  output_config
+else
+  output_values
+end

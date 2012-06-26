@@ -3,7 +3,7 @@ package :munin, :provides => :reporting do
   apt 'munin munin-node munin-plugins-extra'
   
   verify do
-    has_executable 'munin'
+    has_file '/etc/munin/munin.conf'
   end
 end
 

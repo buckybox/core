@@ -62,5 +62,6 @@ policy :myapp, :roles => :app do
   requires :postfix
   requires :monit
   requires :munin
+  requires :munin_passenger
 end
 

@@ -1,5 +1,5 @@
-set :port, 27879
-set :domain, '50.56.218.56'
+set :port, 3887
+set :domain, '108.171.183.164'
 set :rails_env, :staging
 set :stage, rails_env
 set :deploy_to, "/home/#{application}/#{rails_env}"
