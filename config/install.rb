@@ -61,5 +61,6 @@ policy :myapp, :roles => :app do
   requires :nodejs
   requires :postfix
   requires :monit
+  requires :munin
 end
 
