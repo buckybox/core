@@ -1,7 +1,13 @@
 .row
-  .four.columns.centered
+  .twelve.columns.mod-background
     = simple_form_for(:stock_list, url: distributor_stock_items_path) do |f|
       = f.error_notification
 
-      .inputs= f.input :names, as: :text, input_html: { value: @names }
-      .action= f.button :submit, 'Update List'
+      .row
+        .eleven.columns.centered
+          %h5 Add new items
+          .inputs= f.input :names, as: :text, label: false, placeholder: @placeholder_text, input_html: { class: 'expand short' }
+
+      .row
+        .three.columns.centered
+          .action= f.button :submit, 'Add New Items'

@@ -1,5 +1,15 @@
 - title 'Stock List'
 - show_settings_sub_nav
 
-= render partial: 'distributor/stock_items/form'
+.row.data-headings
+  %h4.six.columns Item
+  %h4.six.columns.text-right Customer Preferences
 
+.row.data-listings
+  .twelve.columns
+    = render partial: 'distributor/stock_items/form'
+
+- @stock_items.each do |stock_item|
+  .row.data-listings
+    .six.columns= stock_item.name
+    .six.columns [ICON]

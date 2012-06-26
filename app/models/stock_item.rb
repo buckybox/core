@@ -9,6 +9,8 @@ class StockItem < ActiveRecord::Base
 
   before_validation :cleanup_name
 
+  default_scope order(:name)
+
   def self.from_list!(distributor, text)
     return false if text.blank?
 
