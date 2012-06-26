@@ -55,7 +55,7 @@ end
 
 namespace :provision do
   task :app, :roles => [:app] do
-    system("bundle exec sprinkle -v -s config/install.rb") ##{rails_env}")
+    system("bundle exec sprinkle -v -s config/install.rb #{rails_env}")
     deploy.setup
     deploy
   end

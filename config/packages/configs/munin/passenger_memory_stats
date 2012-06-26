@@ -2,8 +2,8 @@
  
 def output_config
   puts <<-END
-graph_category App
-graph_title Passenger memory stats 
+graph_category Passenger
+graph_title memory
 graph_vlabel count
 
 memory.label memory

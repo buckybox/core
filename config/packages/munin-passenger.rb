@@ -9,6 +9,7 @@ package :munin_passenger, :provides => :monitoring do
 
   push_text File.read(MUNIN_NODE), tmp_file do
     post :install, "su -c 'cat #{tmp_file} >> /etc/munin/plugin-conf.d/munin-node'"
+    post :install, "rm #{tmp_file}"
   end
 
   push_text File.read(MUNIN_PASSENGER_STATUS_CONFIG_PATH), tmp_file do
@@ -21,7 +22,7 @@ package :munin_passenger, :provides => :monitoring do
     post :install, "mv #{tmp_file} /usr/share/munin/plugins/passenger_memory_stats"
     post :install, 'chmod a+x /usr/share/munin/plugins/passenger_memory_stats'
     post :install, 'ln -sf /usr/share/munin/plugins/passenger_memory_stats /etc/munin/plugins/passenger_memory_stats'
-    post :install, 'su -c \'echo "munin   ALL=(ALL) NOPASSWD:/usr/bin/passenger-status, /usr/bin/passenger-memory-stats" >> /etc/sudoers\''
+    post :install, 'chown -R root:root /usr/share/munin/plugins'
     post :install, 'restart munin-node'
   end
   

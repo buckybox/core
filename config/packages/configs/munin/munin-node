@@ -1,4 +1,4 @@
 
 [passenger_*]
-user munin
+user root
 command ruby %c
