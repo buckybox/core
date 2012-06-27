@@ -1,13 +1,18 @@
 - title 'Stock List'
 - show_settings_sub_nav
 
+.row
+  .twelve.columns
+    = link_to 'Edit', distributor_settings_stock_list_path(edit: true), class: 'button radius float-right'
+
 .row.data-headings
   %h4.six.columns Item
   %h4.six.columns.text-right Customer Preferences
 
-.row.data-listings
-  .twelve.columns
-    = render partial: 'distributor/stock_items/form'
+- if @edit_mode
+  .row.data-listings
+    .twelve.columns
+      = render partial: 'distributor/stock_items/form'
 
 - @stock_items.each do |stock_item|
   .row.data-listings

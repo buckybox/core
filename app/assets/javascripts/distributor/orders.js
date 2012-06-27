@@ -49,6 +49,7 @@ function distributor_check_box(box_id) {
     success: function(data) {
       if(data['likes']) {
         $('#likes_input').show();
+        $('#likes_input select').chosen();
       }
       else {
         $('#likes_input').hide();
@@ -56,6 +57,7 @@ function distributor_check_box(box_id) {
 
       if(data['dislikes']) {
         $('#dislikes_input').show();
+        $('#dislikes_input select').chosen();
       }
       else {
         $('#dislikes_input').hide();

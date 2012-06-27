@@ -16,8 +16,8 @@ $(function() {
       customer_check_box(box_id, current_order);
     }
     else {
-      current_order.find('#likes_input').hide();
-      current_order.find('#dislikes_input').hide();
+      current_order.find('#likes_input_chzn').hide();
+      current_order.find('#dislikes_input_chzn').hide();
     }
   });
 

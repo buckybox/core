@@ -12,12 +12,22 @@
           :javascript
             current_account_id = #{@account.id};
           #distributor_extras_form.row
-            = render partial: 'extras', locals: {account: @account, order: @order, box: @order.box || box_collection(@account.customer).first }
+            = render partial: 'extras', locals: { account: @account, order: @order, box: @order.box || box_collection(@account.customer).first }
 
       .four.columns
         .inputs
-          = f.input :likes, wrapper_html: { id: 'likes_input' }
-          = f.input :dislikes, wrapper_html: { id: 'dislikes_input' }
+          #likes_input
+            .row
+              .twelve.columns
+                = f.label :likes, 'Substitutes'
+                .row
+                  = select_tag :likes_input, options_from_collection_for_select(@stock_list, :name, :name), multiple: true, class: 'twelve columns', data: { placeholder: "Choose any substitutes..." }
+          #dislikes_input
+            .row
+              .twelve.columns
+                = f.label :dislikes
+                .row
+                  = select_tag :dislikes_input, options_from_collection_for_select(@stock_list, :name, :name), multiple: true, class: 'twelve columns', data: { placeholder: "Choose any dislikes..." }
 
       .four.columns
         - unless @order.persisted?

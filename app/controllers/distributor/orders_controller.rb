@@ -11,6 +11,8 @@ class Distributor::OrdersController < Distributor::ResourceController
   end
 
   def new
+    @stock_list = current_distributor.stock_items
+
     new! do
       load_form
     end
@@ -20,6 +22,7 @@ class Distributor::OrdersController < Distributor::ResourceController
     @account = current_distributor.accounts.find(params[:account_id])
 
     load_form
+    translate_likes_and_dislikes
 
     order_hash = params[:order]
     order_hash.merge!({account_id: @account.id, completed: true})
@@ -112,6 +115,11 @@ class Distributor::OrdersController < Distributor::ResourceController
   end
 
   private
+
+  def translate_likes_and_dislikes
+    params[:order][:likes] = params[:likes_input].join(',')
+    params[:order][:dislikes] = params[:dislikes_input].join(',')
+  end
 
   def load_form
     @customer = @account.customer
