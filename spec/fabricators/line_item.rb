@@ -1,4 +1,4 @@
-Fabricator(:stock_item) do
+Fabricator(:line_item) do
   distributor!
   name 'grapes'
 end

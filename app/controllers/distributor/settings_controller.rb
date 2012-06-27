@@ -34,7 +34,7 @@ class Distributor::SettingsController < Distributor::BaseController
   def stock_list
     @edit_mode = params[:edit] || false
 
-    @stock_items = current_distributor.stock_items
+    @line_items = current_distributor.line_items
     @placeholder_text = 'Enter items one per line or separated by commas. e.g. Silverbeet, Cabbage, Celery'
   end
 

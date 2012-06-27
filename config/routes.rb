@@ -45,7 +45,7 @@ BuckyBox::Application.routes.draw do
     resources :extras,              except: [:index, :show]
     resources :routes,              except: [:index, :show]
     resources :transactions,        only: :create
-    resources :stock_items,         only: :create
+    resources :line_items,          except: [:index, :show]
 
     resources :deliveries do
       collection do

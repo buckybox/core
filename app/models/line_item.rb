@@ -1,4 +1,4 @@
-class StockItem < ActiveRecord::Base
+class LineItem < ActiveRecord::Base
   belongs_to :distributor
 
   attr_accessible :distributor, :name
@@ -14,16 +14,16 @@ class StockItem < ActiveRecord::Base
   def self.from_list!(distributor, text)
     return false if text.blank?
 
-    distributor.stock_items.each { |si| si.destroy }
+    distributor.line_items.each { |si| si.destroy }
 
     text.split(/\r\n?|\r?\n/).inject([]) do |result, name|
-      result << distributor.stock_items.find_or_create_by_name(name)
+      result << distributor.line_items.find_or_create_by_name(name)
       result
     end
   end
 
   def self.to_list(distributor)
-    distributor.stock_items.order(:name).map(&:name).join("\n")
+    distributor.line_items.order(:name).map(&:name).join("\n")
   end
 
   private

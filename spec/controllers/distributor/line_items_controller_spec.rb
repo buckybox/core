@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Distributor::StockItemsController do
+describe Distributor::LineItemsController do
   render_views
 
   as_distributor

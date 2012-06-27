@@ -12,9 +12,9 @@
 - if @edit_mode
   .row.data-listings
     .twelve.columns
-      = render partial: 'distributor/stock_items/form'
+      = render partial: 'distributor/line_items/form'
 
-- @stock_items.each do |stock_item|
+- @line_items.each do |line_item|
   .row.data-listings
-    .six.columns= stock_item.name
-    .six.columns [ICON]
+    .six.columns= line_item.name
+    .six.columns.text-right [ICON]

@@ -11,7 +11,7 @@ class Distributor::OrdersController < Distributor::ResourceController
   end
 
   def new
-    @stock_list = current_distributor.stock_items
+    @stock_list = current_distributor.line_items
 
     new! do
       load_form
