@@ -10,6 +10,7 @@ class Customer < ActiveRecord::Base
   has_many :events
   has_many :transactions, through: :account
   has_many :payments,     through: :account
+  has_many :deductions,   through: :account
   has_many :orders,       through: :account
   has_many :deliveries,   through: :orders
 
@@ -152,19 +153,6 @@ class Customer < ActiveRecord::Base
 
   def <=>(b)
     self.name <=> b.name
-  end
-
-  def make_import_payment(amount, payment_type, date)
-    Payment.new(
-      distributor: distributor,
-      account: account,
-      amount: amount,
-      kind: 'unspecified',
-      source: 'import',
-      description: "Payment made by #{payment_type}",
-      display_time: date.to_time_in_current_zone,
-      payable: self
-    )
   end
 
   def has_first_and_last_name?

@@ -172,7 +172,16 @@ class ImportTransaction < ActiveRecord::Base
 
     # Create new payments if a new customer has been assigned
     if !draft && matched? && !payment_created? && customer.present?
-      self.payment = customer.make_import_payment(amount, payment_type, transaction_date) 
+      self.create_payment(
+        distributor: distributor,
+        account: customer.account,
+        amount: amount,
+        kind: 'unspecified',
+        source: 'import',
+        description: "Payment made by #{payment_type}",
+        display_time: transaction_date.to_time_in_current_zone,
+        payable: self
+      )
     end
   end
 
