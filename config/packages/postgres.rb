@@ -36,7 +36,7 @@ package :create_db_user do
   end
 
   verify do
-    runner %(su postgres -c "psql postgres -tAc \\"SELECT 1 FROM pg_roles WHERE rolname='bucky_box'\\"" | grep -q 1)
+    runner %(su postgres -c "psql postgres -tAc \\"SELECT 1 FROM pg_roles WHERE rolname='#{Package.fetch(:application)}'\\"" | grep -q 1)
   end
 end
 

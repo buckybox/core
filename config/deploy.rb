@@ -4,9 +4,9 @@ set :stages, %w(production staging local)
 set :default_stage, "local"
 require File.expand_path('../capistrano_database.rb', __FILE__)
 
-set :application, 'bucky_box'
+set :application, 'buckybox'
 set :user, application
-set :repository,  "git@github.com:enspiral/#{application}.git"
+set :repository,  "git@github.com:enspiral/bucky_box.git"
 set :keep_releases, 4
 set :deploy_via, :remote_cache
 
@@ -55,19 +55,24 @@ end
 
 namespace :provision do
   task :app, :roles => [:app] do
-    system("bundle exec sprinkle -v -s config/install.rb #{rails_env}")
-    deploy.setup
-    deploy
+    puts "Provisioing system for #{rails_env.upcase}"
+    puts "#{domain}:#{port}"
+    puts "Check that is correct.."
+    raise "Bailed out of the provisioning cause I got scared" unless Capistrano::CLI.ui.ask("Super sure? (Y/n)")[0].downcase == 'y'
+    if system("bundle exec sprinkle -v -s config/install.rb #{rails_env}")
+      deploy.setup
+      deploy
+    end
   end
 
   task :copy_old_data, :roles => [:db] do
     # Don't prompt to trust key
     put "|1|zPk8yrT60vbIFZ9yWcDS2f4khdY=|oaBi/EPW/ZZzeX7mx5sQJ5SIKZY= ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAqBbKLy2pvTiRgz4VGgrRfp5fTZJcn9iRicIys/LF8PTn+bNtelSNdxKSK4V1JsYFy8PzYfR9EASXPkti9uVEYnX4ZmskKNiGuNTcCl29E38f1Ml0bI9mg5ynfjCzRzvzCI9pTNMv+NptyqvM+DMV2pknjxzgzqTZYzbTL/rEy7AgquCJzkFbBpEYzN6R7lNfsNgst9LBcUpHnVgKWyZdQjO9bN1XeANQU2aWTd2pG07hoRNVGYaYi8puNEqCOMaNm1hFKrMXRW6stRNqqD2o6nSpiQfLh1vW9Ufx2YES/qh/glQadc4wub0u9ck4DuumB8elGFk2PK1oQ7faNddedQ==
-|1|wGu2HJ6mTMsZaZh7PTjq17aOhE4=|JJcx6qs4i/xvWdv6V/u8b9d+LVQ= ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAqBbKLy2pvTiRgz4VGgrRfp5fTZJcn9iRicIys/LF8PTn+bNtelSNdxKSK4V1JsYFy8PzYfR9EASXPkti9uVEYnX4ZmskKNiGuNTcCl29E38f1Ml0bI9mg5ynfjCzRzvzCI9pTNMv+NptyqvM+DMV2pknjxzgzqTZYzbTL/rEy7AgquCJzkFbBpEYzN6R7lNfsNgst9LBcUpHnVgKWyZdQjO9bN1XeANQU2aWTd2pG07hoRNVGYaYi8puNEqCOMaNm1hFKrMXRW6stRNqqD2o6nSpiQfLh1vW9Ufx2YES/qh/glQadc4wub0u9ck4DuumB8elGFk2PK1oQ7faNddedQ==", "/home/bucky_box/.ssh/known_hosts_tmp"
-    run "cat /home/bucky_box/.ssh/known_hosts_tmp >> ~/.ssh/known_hosts"
-    run "rm /home/bucky_box/.ssh/known_hosts_tmp"
+|1|wGu2HJ6mTMsZaZh7PTjq17aOhE4=|JJcx6qs4i/xvWdv6V/u8b9d+LVQ= ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAqBbKLy2pvTiRgz4VGgrRfp5fTZJcn9iRicIys/LF8PTn+bNtelSNdxKSK4V1JsYFy8PzYfR9EASXPkti9uVEYnX4ZmskKNiGuNTcCl29E38f1Ml0bI9mg5ynfjCzRzvzCI9pTNMv+NptyqvM+DMV2pknjxzgzqTZYzbTL/rEy7AgquCJzkFbBpEYzN6R7lNfsNgst9LBcUpHnVgKWyZdQjO9bN1XeANQU2aWTd2pG07hoRNVGYaYi8puNEqCOMaNm1hFKrMXRW6stRNqqD2o6nSpiQfLh1vW9Ufx2YES/qh/glQadc4wub0u9ck4DuumB8elGFk2PK1oQ7faNddedQ==", "/home/#{application}/.ssh/known_hosts_tmp"
+    run "cat /home/#{application}/.ssh/known_hosts_tmp >> ~/.ssh/known_hosts"
+    run "rm /home/#{application}/.ssh/known_hosts_tmp"
 
     # Copy prod data
-    run(%(ssh bucky_box@my.buckybox.com -C "pg_dump -U bucky_box -i -F c -b bucky_box_production" | pg_restore -d bucky_box_staging))
+    run(%(ssh bucky_box@my.buckybox.com -C "pg_dump -U bucky_box -i -F c -b bucky_box_production" | pg_restore -O -d bucky_box_#{rails_env}))
   end
 end

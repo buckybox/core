@@ -1,4 +1,5 @@
-set :domain, '173.255.206.188'
+set :port, 17766
+set :domain, '198.101.213.84' #rackspace's internal ip FYI 10.179.166.196
 set :rails_env, :production
 set :stage, rails_env
 set :deploy_to, "/home/#{application}/#{rails_env}"

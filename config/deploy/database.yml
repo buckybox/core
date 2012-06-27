@@ -3,7 +3,7 @@ staging: &postgres
   encoding: utf8
   timeout: 5000
   pool: 5
-  username: bucky_box
+  username: buckybox
   database: bucky_box_staging
 production:
   <<: *postgres
