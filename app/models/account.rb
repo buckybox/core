@@ -5,6 +5,7 @@ class Account < ActiveRecord::Base
 
   has_many :orders, dependent: :destroy
   has_many :payments, dependent: :destroy
+  has_many :deductions, dependent: :destroy
   has_many :transactions, autosave: true
   has_many :deliveries, through: :orders
   has_many :invoices
@@ -23,13 +24,12 @@ class Account < ActiveRecord::Base
   validates_presence_of :customer_id, :balance
 
   before_validation :default_balance_and_currency
-  validates_presence_of :customer, :balance
 
   # A way to double check that the transactions and the balance have not gone out of sync.
   # THIS SHOULD NEVER HAPPEN! If it does fix the root cause don't make this write a new balance.
   # Likely somewhere a transaction is being created manually.
   def calculate_balance
-    total = transactions.sum(:amount_cents)
+    (transactions.sum(:amount_cents) / 100.0).to_money
   end
 
   def balance_cents=(value)

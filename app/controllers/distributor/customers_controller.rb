@@ -32,9 +32,11 @@ class Distributor::CustomersController < Distributor::ResourceController
     show! do
       @address      = @customer.address
       @account      = @customer.account
-      @transactions = @account.transactions
       @orders       = @account.orders.active
       @deliveries   = @account.deliveries
+
+      @transactions = @account.transactions
+      @transactions_sum = @account.calculate_balance
     end
   end
 

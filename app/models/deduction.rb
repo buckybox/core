@@ -49,7 +49,7 @@ class Deduction < ActiveRecord::Base
     self.reversed = true
     self.reversed_at = Time.current
 
-    options = { description: "[REVERSED] " + self.transaction.description, display_time: self.display_time }
+    options = { description: "[REVERSED] " + self.description, display_time: self.display_time }
     self.reversal_transaction = self.account.add_to_balance(self.amount, options)
 
     self.save
