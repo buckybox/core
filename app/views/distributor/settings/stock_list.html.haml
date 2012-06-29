@@ -1,20 +1,40 @@
 - title 'Stock List'
 - show_settings_sub_nav
 
-.row
-  .twelve.columns
-    = link_to 'Edit', distributor_settings_stock_list_path(edit: true), class: 'button radius float-right'
-
-.row.data-headings
-  %h4.six.columns Item
-  %h4.six.columns.text-right Customer Preferences
-
 - if @edit_mode
+  .row
+    #stock-list-controls.twelve.columns
+      = link_to 'Done', distributor_settings_stock_list_path, class: 'button radius red float-right'
+      = link_to 'cancel', distributor_settings_stock_list_path, class: 'float-right', id: 'cancel-link'
+
+  .row.data-headings
+    %h4.six.columns Item
+    %h4.six.columns.text-right Customer Preferences
+
   .row.data-listings
     .twelve.columns
       = render partial: 'distributor/line_items/form'
 
-- @line_items.each do |line_item|
-  .row.data-listings
-    .six.columns= line_item.name
-    .six.columns= line_item_use(line_item)
+  = simple_form_for(:some_thing, url: distributor_line_items_path) do |f|
+    = simple_fields_for :some_things do |g|
+      - @line_items.each do |line_item|
+        .line-item.row.data-listings
+          .five.columns
+            = g.input "line_item[#{line_item.id}]", as: :string, label: false, placeholder: "remove item #{line_item.name}", input_html: { value: line_item.name, class: 'expand' }
+            .block.remove &times;
+          .four.columns= line_item_total(line_item)
+          .three.columns= line_item_use(line_item)
+
+- else
+  .row
+    #stock-list-controls.twelve.columns
+      = link_to 'Edit', distributor_settings_stock_list_path(edit: true), class: 'button radius float-right'
+
+  .row.data-headings
+    %h4.six.columns Item
+    %h4.six.columns.text-right Customer Preferences
+
+  - @line_items.each do |line_item|
+    .line-item.row.data-listings
+      .six.columns= line_item.name
+      .six.columns= line_item_use(line_item)
