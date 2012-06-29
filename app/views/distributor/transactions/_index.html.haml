@@ -15,7 +15,7 @@
         %th Balance
 
     %tbody
-      - transaction_total = Money.new(0) # manual calculation until we start storing historical balance
+      - running_balance = @transactions_sum
 
       - @transactions.each do |transaction|
         - td_class = (transaction.manual? ? '' : 'auto')
@@ -25,6 +25,6 @@
           %td{ class: td_class }= transaction.display_time.to_s(:transaction)
           %td{ class: td_class }= transaction.description
           %td{ class: td_class }= transaction.amount.format
-          %td{ class: td_class }= (transaction.account.balance - transaction_total).format
+          %td{ class: td_class }= running_balance.format
 
-        - transaction_total += transaction.amount
+        - running_balance -= transaction.amount
