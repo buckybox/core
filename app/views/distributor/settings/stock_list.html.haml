@@ -17,4 +17,4 @@
 - @line_items.each do |line_item|
   .row.data-listings
     .six.columns= line_item.name
-    .six.columns.text-right [ICON]
+    .six.columns= line_item_use(line_item)

@@ -3,10 +3,10 @@ class Account < ActiveRecord::Base
 
   has_one :distributor, through: :customer
 
-  has_many :orders, dependent: :destroy
-  has_many :payments, dependent: :destroy
+  has_many :orders,       dependent: :destroy
+  has_many :payments,     dependent: :destroy
   has_many :transactions, autosave: true
-  has_many :deliveries, through: :orders
+  has_many :deliveries,   through: :orders
   has_many :invoices
 
   has_one :route,    through: :customer

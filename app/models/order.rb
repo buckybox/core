@@ -11,9 +11,12 @@ class Order < ActiveRecord::Base
 
   has_many :packages
   has_many :deliveries
-  has_many :order_schedule_transactions, autosave: true
+  has_many :exclusions
+  has_many :substitutions
 
-  has_many :order_extras, autosave: true
+  has_many :order_schedule_transactions, autosave: true
+  has_many :order_extras,                autosave: true
+
   has_many :extras, through: :order_extras
 
   scope :completed, where(completed: true)

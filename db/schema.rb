@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120617101936) do
+ActiveRecord::Schema.define(:version => 20120627235203) do
 
   create_table "accounts", :force => true do |t|
     t.integer  "customer_id"
@@ -262,6 +262,16 @@ ActiveRecord::Schema.define(:version => 20120617101936) do
 
   add_index "events", ["distributor_id"], :name => "index_events_on_distributor_id"
 
+  create_table "exclusions", :force => true do |t|
+    t.integer  "order_id"
+    t.integer  "line_item_id"
+    t.datetime "created_at",   :null => false
+    t.datetime "updated_at",   :null => false
+  end
+
+  add_index "exclusions", ["line_item_id"], :name => "index_exclusions_on_line_item_id"
+  add_index "exclusions", ["order_id"], :name => "index_exclusions_on_order_id"
+
   create_table "extras", :force => true do |t|
     t.string   "name"
     t.string   "unit"
@@ -467,6 +477,16 @@ ActiveRecord::Schema.define(:version => 20120617101936) do
   end
 
   add_index "routes", ["distributor_id"], :name => "index_routes_on_distributor_id"
+
+  create_table "substitutions", :force => true do |t|
+    t.integer  "order_id"
+    t.integer  "line_item_id"
+    t.datetime "created_at",   :null => false
+    t.datetime "updated_at",   :null => false
+  end
+
+  add_index "substitutions", ["line_item_id"], :name => "index_substitutions_on_line_item_id"
+  add_index "substitutions", ["order_id"], :name => "index_substitutions_on_order_id"
 
   create_table "taggings", :force => true do |t|
     t.integer  "tag_id"

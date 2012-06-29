@@ -40,4 +40,36 @@ describe LineItem do
 
     specify { LineItem.to_list(@distributor).should == "Apples\nKiwi Fruit\nOranges\nPears" }
   end
+
+  context 'line item customer counts' do
+    describe '#exclusions_count_by_customer' do
+      before do
+        e1 = Fabricate.build(:exclusion)
+        e1.stub_chain(:customer, :id).and_return(1)
+        e2 = Fabricate.build(:exclusion)
+        e2.stub_chain(:customer, :id).and_return(2)
+        e3 = Fabricate.build(:exclusion)
+        e3.stub_chain(:customer, :id).and_return(1)
+
+        line_item.stub(:exclusions).and_return([e1, e2, e3])
+      end
+
+      specify { line_item.exclusions_count_by_customer.should == 2 }
+    end
+
+    describe '#substitution_count_by_customer' do
+      before do
+        s1 = Fabricate.build(:substitution)
+        s1.stub_chain(:customer, :id).and_return(1)
+        s2 = Fabricate.build(:substitution)
+        s2.stub_chain(:customer, :id).and_return(2)
+        s3 = Fabricate.build(:substitution)
+        s3.stub_chain(:customer, :id).and_return(1)
+
+        line_item.stub(:substitutions).and_return([s1, s2, s3])
+      end
+
+      specify { line_item.substitution_count_by_customer.should == 2 }
+    end
+  end
 end

@@ -1,6 +1,9 @@
 class LineItem < ActiveRecord::Base
   belongs_to :distributor
 
+  has_many :exclusions
+  has_many :substitutions
+
   attr_accessible :distributor, :name
 
   validates_presence_of :distributor, :name
@@ -24,6 +27,14 @@ class LineItem < ActiveRecord::Base
 
   def self.to_list(distributor)
     distributor.line_items.order(:name).map(&:name).join("\n")
+  end
+
+  def exclusions_count_by_customer
+    exclusions.uniq_by{ |e| e.customer.id }.size
+  end
+
+  def substitution_count_by_customer
+    substitutions.uniq_by{ |e| e.customer.id }.size
   end
 
   private
