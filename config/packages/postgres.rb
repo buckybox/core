@@ -52,7 +52,26 @@ package :create_db do
   end
 end
 
+POSTGRESQL_CONF = File.expand_path(File.join(File.dirname(__FILE__), 'configs', 'postgres', 'postgresql.conf'))
+package :configure_db do
+  describe 'Configure postgresql to our needs via postgresql.conf'
+  requires :postgres
+  tmp_file = '/tmp/postgresql.conf'
+  remote_file = '/etc/postgresql/9.1/main/postgresql.conf'
+  
+  push_text File.read(POSTGRESQL_CONF), tmp_file do
+    post :install, "mv #{tmp_file} #{remote_file}"
+    post :install, "chown postgres:postgres #{remote_file}"
+    post :install, '/etc/init.d/postgresql restart'
+  end
+
+  verify do
+    matches_local(POSTGRESQL_CONF, remote_file)
+  end
+end
+
 package :setup_db do
   requires :create_db_user
   requires :create_db
+  requires :configure_db
 end
