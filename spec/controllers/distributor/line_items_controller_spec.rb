@@ -12,7 +12,7 @@ describe Distributor::LineItemsController do
       end
 
       specify { flash[:notice].should eq('The stock list was successfully updated.') }
-      specify { response.should redirect_to(distributor_settings_stock_list_url) }
+      specify { response.should redirect_to(distributor_settings_stock_list_url(edit: true)) }
     end
 
     context 'with valid params' do
@@ -21,7 +21,7 @@ describe Distributor::LineItemsController do
       end
 
       specify { flash[:error].should eq('Could not update the stock list.') }
-      specify { response.should redirect_to(distributor_settings_stock_list_url) }
+      specify { response.should redirect_to(distributor_settings_stock_list_url(edit: true)) }
     end
   end
 end
