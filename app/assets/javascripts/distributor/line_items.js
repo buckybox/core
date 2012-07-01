@@ -3,4 +3,8 @@ $(function() {
     input = $(this).parent().find('input.input-text')[0];
     $(input).val('');
   });
+
+  $('#stock-list-controls #submit-button').click(function() {
+    $('#bulk-update').submit();
+  });
 });

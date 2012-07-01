@@ -17,8 +17,8 @@ ActiveRecord::Schema.define(:version => 20120629013033) do
     t.integer  "customer_id"
     t.integer  "balance_cents", :default => 0, :null => false
     t.string   "currency"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                   :null => false
+    t.datetime "updated_at",                   :null => false
   end
 
   add_index "accounts", ["customer_id"], :name => "index_accounts_on_customer_id"
@@ -31,8 +31,8 @@ ActiveRecord::Schema.define(:version => 20120629013033) do
     t.string   "city"
     t.string   "postcode"
     t.text     "delivery_note"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",    :null => false
+    t.datetime "updated_at",    :null => false
     t.string   "phone_1"
     t.string   "phone_2"
     t.string   "phone_3"
@@ -64,8 +64,8 @@ ActiveRecord::Schema.define(:version => 20120629013033) do
     t.string   "account_name"
     t.string   "account_number"
     t.text     "customer_message"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",       :null => false
+    t.datetime "updated_at",       :null => false
   end
 
   add_index "bank_information", ["distributor_id"], :name => "index_bank_information_on_distributor_id"
@@ -97,8 +97,8 @@ ActiveRecord::Schema.define(:version => 20120629013033) do
     t.boolean  "available_single",       :default => false, :null => false
     t.boolean  "available_weekly",       :default => false, :null => false
     t.boolean  "available_fourtnightly", :default => false, :null => false
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                                :null => false
+    t.datetime "updated_at",                                :null => false
     t.string   "box_image"
     t.boolean  "available_monthly",      :default => false, :null => false
     t.integer  "extras_limit",           :default => 0
@@ -116,8 +116,8 @@ ActiveRecord::Schema.define(:version => 20120629013033) do
   create_table "customers", :force => true do |t|
     t.string   "first_name"
     t.string   "email"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                                               :null => false
+    t.datetime "updated_at",                                               :null => false
     t.string   "last_name"
     t.integer  "distributor_id"
     t.integer  "route_id"
@@ -175,8 +175,8 @@ ActiveRecord::Schema.define(:version => 20120629013033) do
 
   create_table "deliveries", :force => true do |t|
     t.integer  "order_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",         :null => false
+    t.datetime "updated_at",         :null => false
     t.string   "status"
     t.integer  "route_id"
     t.string   "status_change_type"
@@ -218,8 +218,8 @@ ActiveRecord::Schema.define(:version => 20120629013033) do
     t.string   "unlock_token"
     t.datetime "locked_at"
     t.string   "authentication_token"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                                                    :null => false
+    t.datetime "updated_at",                                                    :null => false
     t.string   "name"
     t.string   "url"
     t.string   "company_logo"
@@ -229,8 +229,8 @@ ActiveRecord::Schema.define(:version => 20120629013033) do
     t.string   "invoice_threshold_currency"
     t.decimal  "bucky_box_percentage",                      :default => 0.0175, :null => false
     t.boolean  "separate_bucky_fee",                        :default => true
-    t.string   "support_email"
     t.string   "time_zone"
+    t.string   "support_email"
     t.integer  "advance_hour"
     t.integer  "advance_days"
     t.integer  "automatic_delivery_hour"
@@ -256,8 +256,8 @@ ActiveRecord::Schema.define(:version => 20120629013033) do
     t.integer  "transaction_id"
     t.integer  "delivery_id"
     t.boolean  "dismissed",         :default => false, :null => false
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                           :null => false
+    t.datetime "updated_at",                           :null => false
     t.datetime "trigger_on"
   end
 
@@ -325,8 +325,8 @@ ActiveRecord::Schema.define(:version => 20120629013033) do
     t.string   "billing_suburb"
     t.string   "billing_city"
     t.string   "billing_postcode"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",        :null => false
+    t.datetime "updated_at",        :null => false
     t.string   "phone"
   end
 
@@ -344,8 +344,8 @@ ActiveRecord::Schema.define(:version => 20120629013033) do
     t.text     "transactions"
     t.text     "deliveries"
     t.boolean  "paid",          :default => false
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                       :null => false
+    t.datetime "updated_at",                       :null => false
   end
 
   create_table "line_items", :force => true do |t|
@@ -369,8 +369,8 @@ ActiveRecord::Schema.define(:version => 20120629013033) do
     t.integer  "order_id"
     t.text     "schedule"
     t.integer  "delivery_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
   end
 
   add_index "order_schedule_transactions", ["delivery_id"], :name => "index_order_schedule_transactions_on_delivery_id"
@@ -383,8 +383,8 @@ ActiveRecord::Schema.define(:version => 20120629013033) do
     t.text     "dislikes"
     t.string   "frequency",      :default => "single", :null => false
     t.boolean  "completed",      :default => false,    :null => false
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                           :null => false
+    t.datetime "updated_at",                           :null => false
     t.integer  "account_id"
     t.text     "schedule"
     t.boolean  "active",         :default => false,    :null => false
@@ -435,8 +435,8 @@ ActiveRecord::Schema.define(:version => 20120629013033) do
     t.string   "currency"
     t.string   "kind"
     t.text     "description"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                             :null => false
+    t.datetime "updated_at",                             :null => false
     t.string   "reference"
     t.boolean  "reversed"
     t.datetime "reversed_at"
@@ -454,8 +454,8 @@ ActiveRecord::Schema.define(:version => 20120629013033) do
   create_table "route_schedule_transactions", :force => true do |t|
     t.integer  "route_id"
     t.text     "schedule"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
   end
 
   add_index "route_schedule_transactions", ["route_id"], :name => "index_route_schedule_transactions_on_route_id"
@@ -470,8 +470,8 @@ ActiveRecord::Schema.define(:version => 20120629013033) do
     t.boolean  "friday",         :default => false, :null => false
     t.boolean  "saturday",       :default => false, :null => false
     t.boolean  "sunday",         :default => false, :null => false
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                        :null => false
+    t.datetime "updated_at",                        :null => false
     t.text     "schedule"
     t.integer  "fee_cents",      :default => 0
     t.string   "currency"
@@ -511,11 +511,11 @@ ActiveRecord::Schema.define(:version => 20120629013033) do
     t.integer  "amount_cents",         :default => 0, :null => false
     t.string   "currency"
     t.text     "description"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.datetime "display_time"
+    t.datetime "created_at",                          :null => false
+    t.datetime "updated_at",                          :null => false
     t.integer  "transactionable_id"
     t.string   "transactionable_type"
+    t.datetime "display_time"
   end
 
   add_index "transactions", ["account_id"], :name => "index_transactions_on_account_id"

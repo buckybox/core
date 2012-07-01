@@ -1,8 +1,8 @@
 class LineItem < ActiveRecord::Base
   belongs_to :distributor
 
-  has_many :exclusions
-  has_many :substitutions
+  has_many :exclusions,    dependent: :destroy
+  has_many :substitutions, dependent: :destroy
 
   attr_accessible :distributor, :name
 
@@ -14,19 +14,35 @@ class LineItem < ActiveRecord::Base
 
   default_scope order(:name)
 
-  def self.from_list!(distributor, text)
+  def self.from_list(distributor, text)
     return false if text.blank?
 
-    distributor.line_items.each { |si| si.destroy }
-
-    text.split(/\r\n?|\r?\n/).inject([]) do |result, name|
+    text.split(/\r\n?|\r?\n|\s*,\s*/).inject([]) do |result, name|
       result << distributor.line_items.find_or_create_by_name(name)
       result
     end
+
+    return all.blank? ? nil : all
   end
 
-  def self.to_list(distributor)
-    distributor.line_items.order(:name).map(&:name).join("\n")
+  def self.bulk_update(distributor, line_item_hash)
+    line_item_hash.each do |id, name|
+      line_item = LineItem.find(id)
+      name = name.titleize
+
+      if name.blank?
+        line_item.destroy
+      elsif name != line_item.name
+        new_line_item = LineItem.find_or_create_by_name(name, distributor: distributor)
+        move_exclustions_and_substitutions!(line_item, new_line_item)
+      end
+    end
+  end
+
+  def self.move_exclustions_and_substitutions!(old_line_item, new_line_item)
+    Exclusion.change_line_items!(old_line_item, new_line_item)
+    Substitution.change_line_items!(old_line_item, new_line_item)
+    old_line_item.delete
   end
 
   def exclusions_count_by_customer
