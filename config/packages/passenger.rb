@@ -1,10 +1,11 @@
 package :nginx, :provides => :webserver do
     
   config_file = "/usr/local/nginx/conf/nginx.conf"
+  config_text = File.read(File.join(File.dirname(__FILE__), 'configs', 'nginx', 'nginx.conf')).gsub('#{RAILS_ENV}', Package.stage)
   init_file = "/etc/init.d/nginx"
   tmp_file = "/tmp/nginx"
 
-  push_text(File.read(File.join(File.dirname(__FILE__), 'configs', 'nginx', 'nginx.conf')).gsub(/\#\{RAILS_ENV\}/, stage), tmp_file) do
+  push_text(config_text, tmp_file) do
     post :install, "mv #{tmp_file} #{config_file}"
     post :install, "mkdir -p /usr/local/nginx/sites-available"
     post :install, "mkdir -p /usr/local/nginx/sites-enabled"
