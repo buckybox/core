@@ -2,13 +2,29 @@
   %table.twelve.columns#transactions
     %thead
       %tr
-        %th Date
-        %th Details
+        %th
+          Transaction
+          %br
+          Processed
+        %th
+          Transaction
+          %br
+          Date
+        %th Description
         %th Transaction
+        %th Balance
 
     %tbody
+      - running_balance = @transactions_sum
+
       - @transactions.each do |transaction|
+        - td_class = (transaction.manual? ? '' : 'auto')
+
         %tr
-          %td= transaction.display_date.to_s(:transaction)
-          %td= transaction.description
-          %td= transaction.amount.format
+          %td{ class: td_class }= transaction.created_at.to_s(:transaction)
+          %td{ class: td_class }= transaction.display_time.to_s(:transaction)
+          %td{ class: td_class }= transaction.description
+          %td{ class: td_class }= transaction.amount.format
+          %td{ class: td_class }= running_balance.format
+
+        - running_balance -= transaction.amount

@@ -35,6 +35,7 @@ gem 'newrelic_rpm'
 gem 'acts_as_list'
 gem 'default_value_for'
 gem 'fuzzy-string-match', require: 'fuzzystringmatch' # This performs fuzzy matching on the import script
+gem 'state_machine'
 
 group :install do
   gem 'sprinkle_packages'
@@ -45,10 +46,11 @@ group :development do
 
   gem 'capistrano'
   gem 'capistrano_colors'
+  gem 'tinder'
 
   gem 'hirb'
   gem 'wirble'
-  gem 'rb-fsevent', :require => false if RUBY_PLATFORM =~ /darwin/i
+  gem 'rb-fsevent', require: false if RUBY_PLATFORM =~ /darwin/i
 
   gem 'guard-rspec'
   gem 'guard-spork'
@@ -77,7 +79,7 @@ group :development, :test do
 end
 
 group :test do
-  gem 'fabrication'
+  gem 'fabrication', '~> 1.4.1'
   gem 'database_cleaner'
 
   gem 'delorean'
@@ -88,7 +90,7 @@ group :test do
   gem 'guard-rspec'
   gem 'fuubar'
 
-  gem 'cucumber-rails'
+  gem 'cucumber-rails', require: false
 end
 
 group :staging do

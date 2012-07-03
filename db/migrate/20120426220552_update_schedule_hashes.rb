@@ -13,22 +13,22 @@ class UpdateScheduleHashes < ActiveRecord::Migration
     Route.reset_column_information
 
     Order.all.each do |order|
-      account_id = order.read_attribute(:account_id)
-      account = Account.find_by_id(account_id)
-      customer_id = account.read_attribute(:customer_id) if account
-      customer = Customer.find_by_id(customer_id)
+      account_id     = order.read_attribute(:account_id)
+      account        = Account.find_by_id(account_id)
+      customer_id    = account.read_attribute(:customer_id) if account
+      customer       = Customer.find_by_id(customer_id)
       distributor_id = customer.read_attribute(:distributor_id) if customer
-      distributor = Distributor.find_by_id(distributor_id)
+      distributor    = Distributor.find_by_id(distributor_id)
 
 
       convert_schedule_days_to_utc(order, distributor)
     end
 
     Route.all.each do |route|
-      customer_id = route.read_attribute(:customer_id)
-      customer = Customer.find_by_id(customer_id)
+      customer_id    = route.read_attribute(:customer_id)
+      customer       = Customer.find_by_id(customer_id)
       distributor_id = customer.read_attribute(:distributor_id) if customer
-      distributor = Distributor.find_by_id(distributor_id)
+      distributor    = Distributor.find_by_id(distributor_id)
 
       convert_schedule_days_to_utc(route, distributor)
     end
@@ -42,12 +42,12 @@ class UpdateScheduleHashes < ActiveRecord::Migration
 
   def convert_schedule_days_to_utc(object, distributor)
     if distributor
-      time_zone = distributor.read_attribute(:time_zone)
-      Time.zone = time_zone if time_zone
+      time_zone  = distributor.read_attribute(:time_zone)
+      Time.zone  = time_zone if time_zone
       before_utc = (Time.zone.utc_offset > 0)
     end
 
-    schedule_hash = YAML::load(object.read_attribute(:schedule))
+    schedule_hash  = YAML::load(object.read_attribute(:schedule))
     schedule_rules = schedule_hash[:rrules] if schedule_hash
 
     # Only need to convert rules as time are already stored in UTC time

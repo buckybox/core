@@ -4,16 +4,16 @@ class Distributor::AccountsController < Distributor::ResourceController
   def change_balance
     @account = Account.find(params[:id])
 
-    delta_cents = params[:delta].to_i
+    delta_cents = (params[:delta].to_f * 100.0).to_i
 
     if delta_cents != 0
-      new_balance = @account.balance + Money.new(delta_cents * 100)
+      new_balance = @account.balance + Money.new(delta_cents)
       note = params[:note]
 
       if note.blank?
-        @account.change_balance_to(new_balance)
+        @account.change_balance_to(new_balance, display_time: params[:date])
       else
-        @account.change_balance_to(new_balance, description:note)
+        @account.change_balance_to(new_balance, description:note, display_time: params[:date])
       end
     else
       flash[:error] = 'Change in balance must be a number and not zero.'

@@ -33,7 +33,7 @@
         - if current_distributor.can_upload_payments?
           %tr.row_action.import_more_transactions
             %td{ colspan: 6 }
-              = link_to((@import_transactions.blank? ? "Import transactions" : "Import more transactions"), "", {'data-reveal-id'=> 'upload_more_transactions', id: 'upload_more_transactions_link'})
+              = link_to((@import_transactions.blank? ? "Import transactions" : "Import more transactions"), "", {id: 'upload_more_transactions_link'})
         - else
           %tr.row_action.import_more_transactions.hidden
         - @import_transaction_lists.each do |import_transaction_list|
@@ -53,5 +53,5 @@
 - if @import_transaction_list.csv_parser.present? && !@import_transaction_list.csv_parser.rows.reject(&:valid?).size.zero?
   :javascript
     $(function() {
-      $("#upload_more_transactions_link").click();
+      $("#upload_more_transactions").reveal();
     })

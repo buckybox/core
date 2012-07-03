@@ -10,6 +10,7 @@ class Customer < ActiveRecord::Base
   has_many :events
   has_many :transactions, through: :account
   has_many :payments,     through: :account
+  has_many :deductions,   through: :account
   has_many :orders,       through: :account
   has_many :deliveries,   through: :orders
 
@@ -154,24 +155,12 @@ class Customer < ActiveRecord::Base
     self.name <=> b.name
   end
 
-  def make_import_payment(amount, description, date)
-    Payment.create!(
-      distributor: distributor,
-      account: account,
-      amount: amount,
-      kind: 'unspecified',
-      source: 'import',
-      description: "Import - #{date.to_s(:transaction)} #{description}",
-      payment_date: date
-    )
-  end
-
   def has_first_and_last_name?
     first_name.present? && last_name.present?
   end
 
   def order_with_next_delivery
-    has_next_delivery = orders.select { |o| o.schedule.next_occurrence }
+    has_next_delivery = orders.active.select { |o| o.schedule.next_occurrence }
     order = has_next_delivery.sort{ |a,b| b.schedule.next_occurrence <=> a.schedule.next_occurrence }.first
     return order
   end

@@ -1,7 +1,7 @@
-class Payment < ActiveRecord::Base
+class Deduction < ActiveRecord::Base
   belongs_to :distributor
   belongs_to :account, autosave: true
-  belongs_to :payable, polymorphic: true
+  belongs_to :deductable, polymorphic: true
   belongs_to :transaction
   belongs_to :reversal_transaction, class_name: 'Transaction'
 
@@ -15,27 +15,24 @@ class Payment < ActiveRecord::Base
     constructor: Proc.new { |cents, currency| Money.new(cents || 0, currency || Money.default_currency) },
     converter: Proc.new { |value| value.respond_to?(:to_money) ? value.to_money : raise(ArgumentError, "Can't convert #{value.class} to Money") }
 
-  attr_accessible :account, :account_id, :amount, :kind, :description, :distributor, :reference, :source,
-    :display_time, :payable, :payable_id, :payable_type
+  attr_accessible :account, :account_id, :amount, :kind, :description, :distributor, :source,
+    :display_time, :deductable, :deductable_id, :deductable_type
 
-  KINDS = %w(bank_transfer credit_card cash delivery unspecified)
-  SOURCES = %W(manual import)
+  KINDS = %w(delivery unspecified)
+  SOURCES = %W(manual auto) # delivery uses both manual and auto
 
-  validates_presence_of :distributor_id, :account_id, :amount, :kind, :description, :display_time, :payable_id, :payable_type
+  validates_presence_of :distributor_id, :account_id, :amount, :kind, :description, :deductable_id, :deductable_type
   validates_inclusion_of :kind, in: KINDS, message: "%{value} is not a valid kind of payment"
   validates_inclusion_of :source, in: SOURCES, message: "%{value} is not a valid source of payment"
   validates_numericality_of :amount, greater_than_or_equal_to: 0
 
-  after_create :make_payment!
+  after_create :make_deduction!
 
-  scope :bank_transfer, where(kind: 'bank_transfer')
-  scope :credit_card,   where(kind: 'credit_card')
-  scope :cash,          where(kind: 'cash')
-  scope :unspecified,   where(kind: 'unspecified')
+  scope :delivery,    where(kind: 'delivery')
+  scope :unspecified, where(kind: 'unspecified')
 
-  scope :manual,          where(source: 'manual')
-  scope :import,          where(source: 'import')
-  scope :pay_on_delivery, where(source: 'pay_on_delivery')
+  scope :manual,   where(source: 'manual')
+  scope :delivery, where(source: 'delivery')
 
   scope :reversed, where(reversed: true)
 
@@ -46,14 +43,14 @@ class Payment < ActiveRecord::Base
     display_time = Time.current
   end
 
-  def reverse_payment!
-    raise "This payment has already been reversed." if self.reversal_transaction.present?
+  def reverse_deduction!
+    raise "This deduction has already been reversed." if self.reversal_transaction.present?
 
     self.reversed = true
     self.reversed_at = Time.current
 
     options = { description: "[REVERSED] " + self.description, display_time: self.display_time }
-    self.reversal_transaction = self.account.subtract_from_balance(self.amount, options)
+    self.reversal_transaction = self.account.add_to_balance(self.amount, options)
 
     self.save
 
@@ -66,10 +63,10 @@ class Payment < ActiveRecord::Base
 
   private
 
-  def make_payment!
-    raise "This payment has already been applied!" if self.transaction.present?
+  def make_deduction!
+    raise "This deduction has already been applied!" if self.transaction.present?
 
-    self.transaction = account.add_to_balance(
+    self.transaction = account.subtract_from_balance(
       amount,
       transactionable: self,
       description: description,
