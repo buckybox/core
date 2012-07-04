@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Bucky Box - 500</title>
+
+  <style type="text/css">
+    #error_page { text-align: center; }
+    #error_page img { margin: 10px auto; }
+    #error_page h1 { margin-bottom: 20px; }
+    body { font-family:"Helvetica Neue", "HelveticaNeue", Helvetica, Arial, "Lucida Grande", sans-serif;font-size:13px;font-size:1.3rem;line-height:18px; }
+  </style>
+</head>
+
+<body>
+  <div class='container'>
+    <div class='row'>
+      <div class='ten columns centered' id='error_page'>
+        <img alt="Buckyerrorlogo" src="/buckyerrorlogo.png" />
+        <p style="color: red; font-size: 16px; line-height: 20px;">
+           The system is down for <%= reason ? reason : "maintenance" %>
+           as of <%= Time.now.strftime("%H:%M %Z") %>.
+         </p>
+         <p style="color: #666;">
+           It'll be back <%= deadline ? deadline : "shortly" %>.
+         </p>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
