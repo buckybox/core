@@ -3,39 +3,46 @@
 # You can use CoffeeScript in this file: http://jashkenas.github.com/coffee-script/
 $ ->
   window.payments = {
+    # Run once on page load
     load: ->
-      $(".chosen-payee-select").chosen()
+      # Submit file upload when file is selected
       $(".auto_submit").change ->
         $('.ajax_loader_hide').hide()
         $('.ajax_loader_gif').show()
         $(this).closest('form').submit()
+
+      # Hide errors when lightbox is hidden
       $("#upload_more_transactions_link").click((event) ->
         $('#upload_more_transactions .error_notification').hide()
         $('#upload_more_transactions .error').hide()
         $("#upload_more_transactions").reveal()
-        event.stopPropagation()
         false
       )
+    # Run once at page load and every time the page changes
     reload: ->
-      $(".chosen-payee-select").chosen()
+      # Apply chosen to the selct inputs
+      $("select.chosen-payee-select").each((index, value) ->
+        edit_row_match = $(value).closest('.edit_row_match')
+        edit_row_match_visible = edit_row_match.is(":visible")
+        #hack to get around chosen.js width issue which happens when the select box is hidden when it is applied
+        edit_row_match.show() unless edit_row_match_visible
+        $(value).chosen()
+        edit_row_match.hide() unless edit_row_match_visible
+      )
+
       $(".row_description").unbind()
-      $(".row_description").click ->
-        $(this).next().toggle()
-        $(this).closest("tr.row_description").find(".edit_row_match").toggle()
-        $(this).closest("tr.row_description").find(".show_row_match").toggle()
+      $(".row_description").click((event) ->
+        console.log(event.target)
+        clicked = $(event.target)
+        if clicked.is("td") || clicked.is("div.show_row_match") || clicked.is("form") || clicked.is("div.row")
+          $(this).next().toggle()
+          $(this).closest("tr.row_description").find(".edit_row_match").toggle()
+          $(this).closest("tr.row_description").find(".show_row_match").toggle()
+      )
       $("div.edit_row_match input[type=submit]").unbind()
       $("div.edit_row_match input[type=submit]").click((event) ->
         $(this).prop('disabled', 'disabled')
         $(this).closest('tr').find('form').submit()
-        event.stopPropagation() # Dont trigger the .row_description click
-      )
-
-      # Don't trigger the .row_description click when clicking a
-      # customer badge
-      $("table.payments a.customer-badge").unbind()
-      $("table.payments a.customer-badge").click((event) ->
-        event.stopPropagation()
-        window.load($(this).attr('href'))
       )
 
       # Reset ajax spinners
