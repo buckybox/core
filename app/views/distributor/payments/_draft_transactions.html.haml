@@ -39,5 +39,5 @@
 
   .row
     .five.columns.centered
-      = link_to "Cancel", distributor_import_transaction_list_path(import_transaction_list), confirm: "This will delete these uploaded transactions", method: :delete, style: 'margin-right: 5px;'
-      = f.submit "Import & Assign Transactions", class: 'button'
+      = link_to "Cancel", distributor_import_transaction_list_path(import_transaction_list), method: :delete, style: 'margin-right: 5px;'
+      = f.submit "Import & Assign Transactions", class: 'button radius'
