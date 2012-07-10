@@ -161,6 +161,18 @@ class ImportTransaction < ActiveRecord::Base
     end
   end
 
+  def confidence_high?
+    confidence >= 0.75
+  end
+
+  def confidence_low?
+    confidence < 0.5
+  end
+
+  def confidence_middle?
+    !confidence_high && !confidence_low
+  end
+
   private
 
   def update_account
