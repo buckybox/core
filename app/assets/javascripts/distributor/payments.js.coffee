@@ -18,6 +18,14 @@ $ ->
         $("#upload_more_transactions").reveal()
         false
       )
+      # Change background to grey when a payment match is changed
+      $("select.chosen-payee-select").change((event)->
+        background = $(event.target).closest(".chosen-background")
+        background.addClass('grey')
+        background.removeClass('yellow')
+        background.removeClass('red')
+        background.removeClass('green')
+      )
     # Run once at page load and every time the page changes
     reload: ->
       # Apply chosen to the select inputs
