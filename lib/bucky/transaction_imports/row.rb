@@ -59,7 +59,7 @@ module Bucky::TransactionImports
         if customer.formated_number == number_reference # Match the full 0014 to 0014
           1
         elsif customer.formated_number == ("%04d" % number_reference.to_i) # Match partial 14 -> 0014
-          0.7
+          0.3
         else
           0
         end
@@ -125,7 +125,7 @@ module Bucky::TransactionImports
         customers.collect{|customer|
           MatchResult.customer_match(customer, match_confidence(customer))
         }.sort.select{|result|
-          result.confidence >= 0.48
+          result.confidence >= 0.48 # Threshold for selecting a match
         }.reverse
       end
     end
