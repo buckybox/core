@@ -115,6 +115,10 @@ class ImportTransaction < ActiveRecord::Base
     match == MATCH_MATCHED && customer.present?
   end
 
+  def duplicate?
+    match == MATCH_DUPLICATE
+  end
+
   def customer_was
     distributor.customers.find_by_id(customer_id_was)
   end
@@ -159,6 +163,14 @@ class ImportTransaction < ActiveRecord::Base
     else
       ''
     end
+  end
+
+  def confidence_high?
+    confidence >= 0.75
+  end
+
+  def confidence_middle?
+    !confidence_high && !confidence_low
   end
 
   private

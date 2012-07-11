@@ -22,4 +22,14 @@ module Distributor::PaymentsHelper
       []
     end
   end
+
+  def payment_color(import_transaction)
+    if import_transaction.duplicate?
+      'red'
+    elsif import_transaction.confidence_high?
+      'green'
+    else
+      'yellow'
+    end
+  end
 end

@@ -1,9 +1,10 @@
-%div.edit_row_match{style: "display: none;"}
-  = simple_form_for(import_transaction, url: distributor_import_transaction_path(import_transaction),:method => :put, remote: true) do |f|
+%div.edit_row_match{style: 'display: none'}
+  = simple_form_for(import_transaction, url: distributor_import_transaction_path(import_transaction), :method => :put, remote: true) do |f|
     = f.input :id, as: :hidden
     = f.input :draft, as: :hidden, input_html: {value: false}
-    = f.input :customer_id, as: :select, collection: import_transaction.possible_customers, selected: import_transaction.match_id, label: false
-    = f.submit "update"
+    .row{style: "width: 223px; float:left"}
+      = f.input :customer_id, as: :select, collection: import_transaction.possible_customers, selected: import_transaction.match_id, label: false, input_html: { id: "import_transaction_customer_id_#{import_transaction.id}", class: 'twelve columns chosen-payee-select not-draft-payment' }
+    = f.submit "update", class: "button tiny radius", style: "float: left; width: 40px; padding-left: 3px"
 %div.show_row_match
   - if import_transaction.matched?
     = customer_badge(import_transaction.customer)
