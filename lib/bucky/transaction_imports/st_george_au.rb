@@ -10,6 +10,7 @@ module Bucky::TransactionImports
       transaction_rows = []
       index = 1
       CSV.parse(csv, headers: true, skip_blanks: true) do |row|
+        next if skip?(row)
         date = row[i(:date)]
         description = row[i(:description)]
         debit = row[i(:debit)]
@@ -21,6 +22,12 @@ module Bucky::TransactionImports
       end
 
       rows
+    end
+
+    # Skip a row if it is not transaction data (Namely, it is Closing or Opening balance)
+    def skip?(row)
+    ["Closing Balance", "Opening Balance"].include?(row[i(:description)]) && 
+      [row[i(:date)], row[i(:debit)], row[i(:credit)]].all?(&:blank?)
     end
   end
 end
