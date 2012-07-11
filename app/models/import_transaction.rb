@@ -115,6 +115,10 @@ class ImportTransaction < ActiveRecord::Base
     match == MATCH_MATCHED && customer.present?
   end
 
+  def duplicate?
+    match == MATCH_DUPLICATE
+  end
+
   def customer_was
     distributor.customers.find_by_id(customer_id_was)
   end
