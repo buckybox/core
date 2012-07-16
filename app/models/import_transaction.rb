@@ -181,7 +181,6 @@ class ImportTransaction < ActiveRecord::Base
       self.payment.reverse_payment!
       self.payment = nil
     end
-
     # Create new payments if a new customer has been assigned
     if !draft && matched? && !payment_created? && customer.present?
       self.create_payment(
