@@ -189,7 +189,7 @@ class ImportTransaction < ActiveRecord::Base
         amount: amount,
         kind: 'unspecified',
         source: 'import',
-        description: "Payment made by #{payment_type}",
+        description: payment_description(payment_type, amount),
         display_time: transaction_date.to_time_in_current_zone,
         payable: self
       )
@@ -199,4 +199,13 @@ class ImportTransaction < ActiveRecord::Base
   def customer_belongs_to_distributor
     errors.add(:base, "Customer isn't known to this distributor") unless customer_id.blank? || distributor.customer_ids.include?(customer_id)
   end
+
+  def payment_description(payment_type, amount)
+    if amount > 0
+      "Payment made by #{payment_type}"
+    else
+      "Refund made by #{payment_type}"
+    end
+  end
+
 end
