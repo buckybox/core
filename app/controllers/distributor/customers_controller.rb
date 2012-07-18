@@ -56,7 +56,7 @@ class Distributor::CustomersController < Distributor::ResourceController
   protected
 
   def collection
-    @customers = end_of_association_chain.includes(:tags, :address, account: {active_orders: {}})
+    @customers = end_of_association_chain.includes(:tags, :address, :route, account: {active_orders: {box: {}}})
 
     @customers = @customers.tagged_with(params[:tag]) unless params[:tag].blank?
 

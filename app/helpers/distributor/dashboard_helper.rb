@@ -3,11 +3,11 @@ module Distributor::DashboardHelper
     case notification.event_type
       when Event::EVENT_TYPES[:customer_new]
         # TODO Show address and Add dropdown to assign delivery address
-        customer = Customer.find notification.customer_id
+        customer = notification.customer
         "New customer #{link_to_customer customer}".html_safe
 
       when Event::EVENT_TYPES[:customer_call_reminder]
-        customer = Customer.find notification.customer_id
+        customer = notification.customer
         "Follow up call #{link_to_customer customer}".html_safe
 
       when Event::EVENT_TYPES[:delivery_scheduler_issue]
@@ -18,11 +18,11 @@ module Distributor::DashboardHelper
 
       when Event::EVENT_TYPES[:credit_limit_reached]
         # TODO This is the message that should appear when the limit is reached. If limit continues to be exceded next days display "Credit Limit continues to be exceeded for [CUSTOMER NAME/ID]" instead
-        customer = Customer.find notification.customer_id
+        customer = notification.customer
         "Credit Limit reached for #{link_to_customer customer}, deliveries will be halted".html_safe
 
       when Event::EVENT_TYPES[:payment_overdue]
-        customer = Customer.find notification.customer_id
+        customer = notification.customer
         "Payment overdue for #{link_to_customer customer}".html_safe
 
       when Event::EVENT_TYPES[:invoice_reminder]
@@ -32,11 +32,11 @@ module Distributor::DashboardHelper
         "#{link_to_invoice notification.invoice_id} has been sent by email".html_safe
 
       when Event::EVENT_TYPES[:transaction_success]
-        transaction = Transaction.find notification.transaction_id
+        transaction = notification.transaction
         "#{link_to_transaction transaction.id} was successfully made (#{transaction.amount})".html_safe
 
       when Event::EVENT_TYPES[:transaction_failure]
-        transaction = Transaction.find notification.transaction_id
+        transaction = notification.transaction
         "#{link_to_transaction transaction.id} declined, will try again next week (#{transaction.amount})".html_safe
     end
   end

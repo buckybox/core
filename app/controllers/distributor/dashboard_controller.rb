@@ -1,6 +1,6 @@
 class Distributor::DashboardController < Distributor::BaseController
   def index
-    @events   = current_distributor.events.active.current
+    @events   = current_distributor.events.active.current.scoped.includes(:customer, :delivery, :transaction)
     @payments = current_distributor.payments.manual.order('created_at DESC').limit(10)
     @payment  = current_distributor.payments.new(source: 'manual')
     @accounts = current_distributor.accounts.includes(:customer).sort { |a,b| a.customer.name <=> b.customer.name }
