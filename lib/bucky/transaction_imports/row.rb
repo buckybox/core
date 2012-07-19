@@ -10,7 +10,7 @@ module Bucky::TransactionImports
     def initialize(date_string, description, amount_string, index=nil, raw_data=nil, parser=nil)
       self.date_string = date_string
       self.description = description
-      self.amount_string = amount_string
+      self.amount_string = amount_string.gsub(/,/,'')
       self.index = index
       self.parser = parser
       self.raw_data = raw_data
@@ -71,7 +71,7 @@ module Bucky::TransactionImports
       if description.match(regex)
         # Match first and last name, ignoring case
         1
-      elsif customer.has_first_and_last_name? # This fixes a bug where someone only has a first name (Say Phoenix) and the regex created is P.* which matches "payment" which isn't good!
+      elsif customer.has_first_and_last_name? && customer.last_name.size > 1 # This fixes a bug where someone only has a first name (Say Phoenix) and the regex created is P.* which matches "payment" which isn't good!
         # Match first inital and last name
         regex = Regexp.new("#{Regexp.escape(customer.first_name.first)} #{Regexp.escape(customer.last_name)}".gsub(/\W+/, ".{0,3}"), true)
         description.match(regex).present? ? 0.9 : 0
@@ -170,7 +170,7 @@ module Bucky::TransactionImports
 
     def row_is_valid
       unless date_valid? && description_valid? && amount_valid?
-        errors.add(:base, "The file you uploaded didn't match what we expected a #{parser.bank_name} file to look like.  There was a problem on row #{index}, make sure it matches the expected format #{parser.expected_format}")
+        errors.add(:base, "The file you uploaded didn't match what we expected a #{parser.bank_name} file to look like.  There was a problem on row #{index-1}, make sure it matches the expected format #{parser.expected_format}")
       end
     end
 
