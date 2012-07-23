@@ -61,7 +61,7 @@ module Distributor::DeliveriesHelper
 
   def display_address(item)
     if item.is_a?(Order)
-      item.address.address_1
+      item.account.customer.address.address_1
     else
       item = item.package if item.is_a?(Delivery)
       item.archived_address.split(', ').first

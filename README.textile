@@ -30,6 +30,6 @@ h2. Best Practices
 
 h2. Replace Staging Data With Production Data
 
-bc. taps server postgres://bucky_box:[production_db_password]@localhost/bucky_box_production user [random_password]
+bc. taps server postgres://buckybox:[production_db_password]@localhost/buckybox_production user [random_password]
 
-bc. taps pull postgres://bucky_box:[staging_db_password]@localhost/bucky_box_staging http://user:[random_password]@my.buckybox.com:5000
+bc. taps pull postgres://buckybox:[staging_db_password]@localhost/buckybox_staging http://user:[random_password]@my.buckybox.com:5000

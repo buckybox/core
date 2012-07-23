@@ -4,6 +4,7 @@ class Event < ActiveRecord::Base
   belongs_to :customer
   belongs_to :delivery
   belongs_to :invoice
+  belongs_to :transaction
 
   # Setup accessible (or protected) attributes for your model
   attr_accessible :distributor_id, :event_category, :event_type, :customer_id, :invoice_id, :reconciliation_id,

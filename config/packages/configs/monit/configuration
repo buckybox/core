@@ -1,0 +1,30 @@
+set daemon 60
+set logfile syslog facility log_daemon
+set mailserver localhost               # primary mailserver
+set mail-format { from: monit@buckybox.com }
+set alert jordan@buckybox.com                       # receive all alerts
+set eventqueue
+    basedir /var/monit  # set the base directory where events will be stored
+    slots 100           # optionaly limit the queue size
+set httpd port 2812 and
+   use address localhost  # only accept connection from localhost
+   allow localhost        # allow localhost to connect to the server and
+   allow admin:'@dr1nk'      # require user 'admin' with password 'monit'
+check system localhost
+  if loadavg (1min) > 4 then alert
+  if loadavg (5min) > 2 then alert
+  if memory usage > 75% then alert
+  if cpu usage (user) > 70% then alert
+  if cpu usage (system) > 30% then alert
+  if cpu usage (wait) > 20% then alert
+check process nginx with pidfile /var/run/nginx.pid
+  start program = "/etc/init.d/nginx start"
+  stop program = "/etc/init.d/nginx stop"
+#if children > 250 then restart
+#if loadavg(5min) greater than 10 for 8 cycles then stop
+#if 3 restarts within 5 cycles then timeout
+
+check process postgres with pidfile /var/lib/postgresql/9.1/main/postmaster.pid
+  start program = "/etc/init.d/postgresql start"
+  stop program  = "/etc/init.d/postgresql stop"
+#  include /etc/monit.d/*

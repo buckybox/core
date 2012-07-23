@@ -38,6 +38,10 @@ gem 'fuzzy-string-match', require: 'fuzzystringmatch' # This performs fuzzy matc
 gem 'state_machine'
 gem 'chosen-rails'
 
+group :install do
+  gem 'sprinkle_packages'
+end
+
 group :development do
   gem 'nifty-generators', require: false
 
@@ -46,7 +50,7 @@ group :development do
   gem 'capistrano'
   gem 'capistrano_colors'
   gem 'tinder'
-
+  gem 'term-ansicolor'
   gem 'hirb'
   gem 'wirble'
   gem 'rb-fsevent', require: false if RUBY_PLATFORM =~ /darwin/i

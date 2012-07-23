@@ -11,7 +11,9 @@ module Bucky::TransactionImports
       index = 1
       CSV.parse(csv, headers: true, skip_blanks: true) do |row|
         date = row[i(:date)]
-        description = row[i(:from_email_address)]
+        name_and_email = [row[i(:name)], row[i(:from_email_address)]].join(" ")
+        type = row[i(:type)]
+        description = [name_and_email, type].reject(&:blank?).first
         amount = row[i(:gross)]
         add_row(date, description, amount, index, raw_data(row), self)
         index += 1

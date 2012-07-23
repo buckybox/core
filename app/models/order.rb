@@ -247,6 +247,10 @@ class Order < ActiveRecord::Base
     self.order_extras = params
   end
 
+  def route_id
+    account.customer.route_id
+  end
+
   protected
 
   def record_schedule_change
