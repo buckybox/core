@@ -4,7 +4,7 @@ class Substitution < ActiveRecord::Base
 
   has_one :customer, through: :order
 
-  attr_accessible :order, :line_item
+  attr_accessible :order, :line_item, :order_id, :line_item_id
 
   validates_presence_of :order, :line_item
   validates_uniqueness_of :line_item_id, scope: :order_id
@@ -14,5 +14,9 @@ class Substitution < ActiveRecord::Base
       s.update_attribute(:line_item_id, new_line_item.id)
       s.save
     end
+  end
+
+  def name
+    line_item.name
   end
 end

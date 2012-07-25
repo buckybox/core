@@ -17,6 +17,12 @@
       .four.columns
         .inputs
           #likes_input
+            = f.association :exclusions
+          #dislikes_input
+            = f.association :substitutions
+
+        .inputs
+          #likes_input
             .row
               .twelve.columns
                 = f.label :likes, 'Substitutes'

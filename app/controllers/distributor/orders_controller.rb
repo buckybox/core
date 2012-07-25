@@ -38,6 +38,8 @@ class Distributor::OrdersController < Distributor::ResourceController
   end
 
   def edit
+    @stock_list = current_distributor.line_items
+
     edit! do
       load_form
     end
