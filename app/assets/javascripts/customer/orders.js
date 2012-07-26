@@ -51,6 +51,7 @@ function customer_check_box(box_id, current_order) {
     success: function(data) {
       if(data['likes']) {
         current_order.find('#likes_input').show();
+        current_order.find('#likes_input select').chosen();
       }
       else {
         current_order.find('#likes_input').hide();
@@ -58,6 +59,7 @@ function customer_check_box(box_id, current_order) {
 
       if(data['dislikes']) {
         current_order.find('#dislikes_input').show();
+        current_order.find('#dislikes_input select').chosen();
       }
       else {
         current_order.find('#dislikes_input').hide();
