@@ -6,6 +6,8 @@ class MakeLikesAndDislikesAtomic < ActiveRecord::Migration
   class Customer < ActiveRecord::Base; end
   class LineItem < ActiveRecord::Base; end
 
+  SPLITTING_REGEX = /\s*,\s*|\s+and\s+|\s+or\s+|\s*;\s*|\s*\.\s*|\s*\/\s*/
+
   def up
     Distributor.reset_column_information
     Box.reset_column_information
@@ -26,23 +28,11 @@ class MakeLikesAndDislikesAtomic < ActiveRecord::Migration
       if orders
         #---------- Create the line item list ----------
         orders.each do |order|
-          dislikes   = order.read_attribute(:dislikes)
+          dislikes = order.read_attribute(:dislikes)
+          all_dislikes += sanitize_items(dislikes) if dislikes
 
-          if dislikes
-            dislikes = dislikes.split(/\s*,\s*|\s+and\s+|\s+or\s+|\s*;\s*|\s*\.\s*|\s*\/\s*/)
-            dislikes = dislikes.map { |s| remove_common_non_item_words(s) }
-            dislikes = dislikes.reject { |s| s.empty? || s.scan(/\w+/).size > 2 }
-            all_dislikes += dislikes
-          end
-
-          likes      = order.read_attribute(:likes)
-
-          if likes
-            likes = likes.split(/\s*,\s*|\s+and\s+|\s+or\s+|\s*;\s*|\s*\.\s*|\s*\/\s*/)
-            likes = likes.map { |s| remove_common_non_item_words(s) }
-            likes = likes.reject { |s| s.empty? || s.scan(/\w+/).size > 2 }
-            all_likes += likes
-          end
+          likes = order.read_attribute(:likes)
+          all_likes += sanitize_items(likes) if likes
         end
 
         all_items = (all_likes + all_dislikes).uniq
@@ -58,15 +48,13 @@ class MakeLikesAndDislikesAtomic < ActiveRecord::Migration
           order_requests = ''
 
           if original_dislikes
-            dislikes = original_dislikes.split(/\s*,\s*|\s+and\s+|\s+or\s+|\s*;\s*|\s*\.\s*|\s*\/\s*/)
-            dislikes = dislikes.map { |s| remove_common_non_item_words(s) }
-            dislikes = dislikes.reject { |s| s.empty? || s.scan(/\w+/).size > 2 }
+            dislikes = sanitize_items(original_dislikes)
 
             unless dislikes.empty?
               order_requests += "\nORDER ID#{id} DISLIKES:\n" + original_dislikes
 
               dislikes.each do |name|
-                line_item = LineItem.find_by_name(name)
+                line_item = LineItem.find_by_distributor_id_and_name(distributor_id, name)
 
                 if line_item
                   line_item_id = line_item.read_attribute(:id)
@@ -77,15 +65,13 @@ class MakeLikesAndDislikesAtomic < ActiveRecord::Migration
 
             # because we don't need substitutions if there are no exclusions
             if original_likes
-              likes = original_likes.split(/\s*,\s*|\s+and\s+|\s+or\s+|\s*;\s*|\s*\.\s*|\s*\/\s*/)
-              likes = likes.map { |s| remove_common_non_item_words(s) }
-              likes = likes.reject { |s| s.empty? || s.scan(/\w+/).size > 2 }
+              likes = sanitize_items(original_likes)
 
               unless likes.empty?
                 order_requests += "\nORDER ID#{id} LIKES:\n" + original_likes
 
                 likes.each do |name|
-                  line_item = LineItem.find_by_name(name)
+                  line_item = LineItem.find_by_distributor_id_and_name(distributor_id, name)
 
                   if line_item
                     line_item_id = line_item.read_attribute(:id)
@@ -117,7 +103,15 @@ class MakeLikesAndDislikesAtomic < ActiveRecord::Migration
     # Data reversal is not going to happen
   end
 
-  def remove_common_non_item_words(string)
+  def sanitize_items(items)
+    items = items.split(SPLITTING_REGEX)
+    items = items.map { |s| remove_common_non_item_words_and_format(s) }
+    items = items.reject { |s| s.empty? || s.scan(/\w+/).size > 2 }
+
+    return items
+  end
+
+  def remove_common_non_item_words_and_format(string)
     string.downcase!
 
     string.gsub!(/\s*-\s*/, ' ')
@@ -128,6 +122,7 @@ class MakeLikesAndDislikesAtomic < ActiveRecord::Migration
     string.gsub!(/yes\s+/, '')
     string.gsub!(/less\s+/, '')
     string.gsub!(/more\s+/, '')
+    string.gsub!(/never\s+/, '')
     string.gsub!(/2\s?x\s+/, '')
     string.gsub!(/.*\s+fruit.*/, '')
     string.gsub!(/.*\s+vegetables.*/, '')
@@ -149,7 +144,11 @@ class MakeLikesAndDislikesAtomic < ActiveRecord::Migration
     string.gsub!(/max/, '')
     string.gsub!(/\sf1/, '')
     string.gsub!(/\sok/, '')
+    string.gsub!(/\r\n?|\r?\n/, '')
 
-    return string.strip
+    string = string.squeeze(' ').strip.pluralize.titleize
+
+    return string
   end
 end
+
