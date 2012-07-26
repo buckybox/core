@@ -20,7 +20,7 @@
       - @line_items.each do |line_item|
         .line-item.row.data-listings
           .five.columns
-            = g.input "items[#{line_item.id}]", as: :string, label: false, required: false, placeholder: "remove item #{line_item.name}", input_html: { value: line_item.name, class: 'expand' }
+            = g.input "items[#{line_item.id}]", as: :string, label: false, required: false, placeholder: "remove item #{line_item.name}", input_html: { value: line_item.name, class: 'expand', data: { original_value: line_item.name } }
             .block.remove &times;
           .four.columns= line_item_total(line_item)
           .three.columns= line_item_use(line_item)
