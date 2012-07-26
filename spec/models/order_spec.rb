@@ -2,14 +2,13 @@ require 'spec_helper'
 include Bucky
 
 describe Order do
-  context 'when removing a day' do
-    let(:order)            { Order.new }
-    let(:order_scheduling) { order }
-    let(:schedule)         { double("schedule", :to_hash => {a: 'b'}) }
+  let(:order) { Fabricate.build(:order) }
 
-    before do
-      order_scheduling.stub(:schedule => schedule)
-    end
+  context 'when removing a day' do
+    let(:order_scheduling) { order }
+    let(:schedule)         { double("schedule", to_hash: { a: 'b' }) }
+
+    before { order_scheduling.stub(schedule: schedule) }
 
     it "should ask the schedule to remove rules and times for that day" do
       schedule.should_receive(:remove_recurrence_rule_day).with(:tuesday)
@@ -19,9 +18,7 @@ describe Order do
   end
 
   context 'with default saved order' do
-    before { @order = Fabricate(:order) }
-
-    specify { @order.should be_valid }
+    specify { order.should be_valid }
 
     context :quantity do
       specify { Fabricate.build(:order, quantity: 0).should_not be_valid }
@@ -32,6 +29,7 @@ describe Order do
       Order::FREQUENCIES.each do |f|
         specify { Fabricate.build(:order, frequency: f).should be_valid }
       end
+
       specify { Fabricate.build(:order, frequency: 'yearly').should_not be_valid }
     end
 
@@ -263,6 +261,44 @@ describe Order do
     end
   end
 
+  describe '#update_exclusions' do
+    before do
+      order.save
+      @e1 = Fabricate(:exclusion, order: order)
+      @e2 = Fabricate(:exclusion, order: order)
+      @e3 = Fabricate(:exclusion, order: order)
+
+      @li1_id = @e1.line_item_id
+      @li2_id = @e2.line_item_id
+      @li3_id = @e3.line_item_id
+      @li4_id = Fabricate(:line_item).id
+
+      order.update_exclusions([@li1_id, @li4_id])
+      order.save
+    end
+
+    specify { order.exclusion_ids.should == [@li1_id, @li4_id] }
+  end
+
+  describe '#update_substitutions' do
+    before do
+      order.save
+      @e1 = Fabricate(:substitution, order: order)
+      @e2 = Fabricate(:substitution, order: order)
+      @e3 = Fabricate(:substitution, order: order)
+
+      @li1_id = @e1.line_item_id
+      @li2_id = @e2.line_item_id
+      @li3_id = @e3.line_item_id
+      @li4_id = Fabricate(:line_item).id
+
+      order.update_substitutions([@li1_id, @li4_id])
+      order.save
+    end
+
+    specify { order.substitution_ids.should == [@li1_id, @li4_id] }
+  end
+
   describe '.pack_and_update_extras' do
     it "removes extras when it is a one off and returns hash" do
       order = Fabricate.build(:order, extras_one_off: true)
@@ -280,8 +316,6 @@ describe Order do
       order.pack_and_update_extras.should eq([{count: 3, name: "iPhone 4s", unit: "one", price_cents: 99995, currency: "NZD"}, {count: 1, name: "Apple", unit: "kg", price_cents: 295, currency: "NZD"}])
     end
   end
-
-  it "should validate extras limit"
 
   context "with extras" do
     before do

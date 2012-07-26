@@ -11,9 +11,8 @@ class Order < ActiveRecord::Base
 
   has_many :packages
   has_many :deliveries
-  has_many :exclusions
-  has_many :substitutions
-
+  has_many :exclusions,                  autosave: true
+  has_many :substitutions,               autosave: true
   has_many :order_schedule_transactions, autosave: true
   has_many :order_extras,                autosave: true
 
@@ -82,6 +81,24 @@ class Order < ActiveRecord::Base
       days_by_number = days_by_number.values.map(&:to_i) if days_by_number.is_a?(Hash)
       create_schedule_for(:schedule, start_time, frequency, days_by_number)
     end
+  end
+
+  def update_exclusions(line_item_ids)
+    exclusion_line_item_ids = exclusions.map { |x| x.line_item_id.to_s }
+    to_delete = exclusion_line_item_ids - line_item_ids
+    to_create = line_item_ids - exclusion_line_item_ids
+
+    exclusions.each { |x| x.mark_for_destruction if to_delete.include?(x.line_item_id.to_s) }
+    to_create.each { |liid| exclusions.find_or_initialize_by_line_item_id(liid) }
+  end
+
+  def update_substitutions(line_item_ids)
+    substitution_line_item_ids = substitutions.map { |x| x.line_item_id.to_s }
+    to_delete = substitution_line_item_ids - line_item_ids
+    to_create = line_item_ids - substitution_line_item_ids
+
+    substitutions.each { |x| x.mark_for_destruction if to_delete.include?(x.line_item_id.to_s) }
+    to_create.each { |liid| substitutions.find_or_initialize_by_line_item_id(liid) }
   end
 
   def change_to_local_time_zone
