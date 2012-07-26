@@ -16,24 +16,18 @@
 
       .four.columns
         .inputs
-          #likes_input
-            = f.association :exclusions
-          #dislikes_input
-            = f.association :substitutions
-
-        .inputs
-          #likes_input
-            .row
-              .twelve.columns
-                = f.label :likes, 'Substitutes'
-                .row
-                  = select_tag :likes_input, options_from_collection_for_select(@stock_list, :name, :name), multiple: true, class: 'twelve columns', data: { placeholder: "Choose any substitutes..." }
           #dislikes_input
             .row
               .twelve.columns
                 = f.label :dislikes
                 .row
-                  = select_tag :dislikes_input, options_from_collection_for_select(@stock_list, :name, :name), multiple: true, class: 'twelve columns', data: { placeholder: "Choose any dislikes..." }
+                  = select_tag :dislikes_input, options_from_collection_for_select(@stock_list, :id, :name, @dislikes_list), multiple: true, class: 'twelve columns', data: { placeholder: "Choose any dislikes..." }
+          #likes_input
+            .row
+              .twelve.columns
+                = f.label :likes, 'Substitutes'
+                .row
+                  = select_tag :likes_input, options_from_collection_for_select(@stock_list, :id, :name, @likes_list), multiple: true, class: 'twelve columns', data: { placeholder: "Choose any substitutes..." }
 
       .four.columns
         - unless @order.persisted?

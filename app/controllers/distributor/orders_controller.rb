@@ -11,9 +11,11 @@ class Distributor::OrdersController < Distributor::ResourceController
   end
 
   def new
-    @stock_list = current_distributor.line_items
-
     new! do
+      @stock_list = current_distributor.line_items
+      @dislikes_list = nil
+      @likes_list = nil
+
       load_form
     end
   end
@@ -38,9 +40,11 @@ class Distributor::OrdersController < Distributor::ResourceController
   end
 
   def edit
-    @stock_list = current_distributor.line_items
-
     edit! do
+      @stock_list = current_distributor.line_items
+      @dislikes_list = @order.exclusions.map { |e| e.line_item_id.to_s }
+      @likes_list = @order.substitutions.map { |s| s.line_item_id.to_s }
+
       load_form
     end
   end

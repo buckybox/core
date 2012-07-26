@@ -20,10 +20,10 @@ class Distributor < ActiveRecord::Base
   has_many :import_transaction_lists, dependent: :destroy
   has_many :import_transactions,      dependent: :destroy, through: :import_transaction_lists
 
-  DEFAULT_TIME_ZONE = 'Wellington'
-  DEFAULT_CURRENCY = 'nzd'
-  DEFAULT_ADVANCED_HOURS = 18
-  DEFAULT_ADVANCED_DAYS = 3
+  DEFAULT_TIME_ZONE               = 'Wellington'
+  DEFAULT_CURRENCY                = 'nzd'
+  DEFAULT_ADVANCED_HOURS          = 18
+  DEFAULT_ADVANCED_DAYS           = 3
   DEFAULT_AUTOMATIC_DELIVERY_HOUR = 18
   DEFAULT_AUTOMATIC_DELIVERY_DAYS = 1
 
