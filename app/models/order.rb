@@ -25,7 +25,7 @@ class Order < ActiveRecord::Base
 
   acts_as_taggable
 
-  attr_accessible :box, :box_id, :account, :account_id, :quantity, :likes, :dislikes, :completed, :frequency, :schedule, 
+  attr_accessible :box, :box_id, :account, :account_id, :quantity, :completed, :frequency, :schedule, 
     :order_extras, :extras_one_off
 
   FREQUENCIES = %w(single weekly fortnightly monthly)
@@ -84,20 +84,28 @@ class Order < ActiveRecord::Base
   end
 
   def update_exclusions(line_item_ids)
-    exclusion_line_item_ids = exclusions.map { |x| x.line_item_id.to_s }
+    return if line_item_ids.nil?
+
+    line_item_ids = line_item_ids.map(&:to_i)
+    exclusion_line_item_ids = exclusions.map { |x| x.line_item_id }
+
     to_delete = exclusion_line_item_ids - line_item_ids
     to_create = line_item_ids - exclusion_line_item_ids
 
-    exclusions.each { |x| x.mark_for_destruction if to_delete.include?(x.line_item_id.to_s) }
+    exclusions.each { |x| x.mark_for_destruction if to_delete.include?(x.line_item_id) }
     to_create.each { |liid| exclusions.find_or_initialize_by_line_item_id(liid) }
   end
 
   def update_substitutions(line_item_ids)
-    substitution_line_item_ids = substitutions.map { |x| x.line_item_id.to_s }
+    return if line_item_ids.nil?
+
+    line_item_ids = line_item_ids.map(&:to_i)
+    substitution_line_item_ids = substitutions.map { |x| x.line_item_id }
+
     to_delete = substitution_line_item_ids - line_item_ids
     to_create = line_item_ids - substitution_line_item_ids
 
-    substitutions.each { |x| x.mark_for_destruction if to_delete.include?(x.line_item_id.to_s) }
+    substitutions.each { |x| x.mark_for_destruction if to_delete.include?(x.line_item_id) }
     to_create.each { |liid| substitutions.find_or_initialize_by_line_item_id(liid) }
   end
 
@@ -178,8 +186,8 @@ class Order < ActiveRecord::Base
 
   def string_sort_code
     result = box.name
-    result += '+L' unless likes.blank?
-    result += '+D' unless dislikes.blank?
+    result += '+L' unless exclusions.empty?
+    result += '+D' unless substitutions.empty?
 
     return result.upcase
   end

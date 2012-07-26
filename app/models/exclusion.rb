@@ -15,4 +15,8 @@ class Exclusion < ActiveRecord::Base
       e.save
     end
   end
+
+  def name
+    line_item.name
+  end
 end

@@ -15,4 +15,8 @@ class Substitution < ActiveRecord::Base
       s.save
     end
   end
+
+  def name
+    line_item.name
+  end
 end

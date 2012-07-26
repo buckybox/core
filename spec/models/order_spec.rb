@@ -62,102 +62,103 @@ describe Order do
 
     context '#create_schedule' do
       Delorean.time_travel_to(Date.parse('2013-02-02')) do
-        before { @order = Fabricate(:order) }
+        before { order.save }
 
         context 'exceptions' do
           %w(weekly fortnightly monthly).each do |frequency|
-            specify { @order.create_schedule(Time.current, frequency).should be_nil }
+            specify { order.create_schedule(Time.current, frequency).should be_nil }
           end
         end
 
-        specify { @order.create_schedule(Time.current, 'single').to_s.should == Time.current.strftime("%B %e, %Y") }
-        specify { @order.create_schedule(Time.current, 'weekly', [1, 3]).to_s.should == 'Weekly on Mondays and Wednesdays' }
-        specify { @order.create_schedule(Time.current, 'fortnightly', [1, 3]).to_s.should == 'Every 2 weeks on Mondays and Wednesdays' }
-        specify { @order.create_schedule(Time.current, 'monthly', [1, 3]).to_s.should == 'Monthly on the 1st Monday when it is the 1st Wednesday' }
+        specify { order.create_schedule(Time.current, 'single').to_s.should == Time.current.strftime("%B %e, %Y") }
+        specify { order.create_schedule(Time.current, 'weekly', [1, 3]).to_s.should == 'Weekly on Mondays and Wednesdays' }
+        specify { order.create_schedule(Time.current, 'fortnightly', [1, 3]).to_s.should == 'Every 2 weeks on Mondays and Wednesdays' }
+        specify { order.create_schedule(Time.current, 'monthly', [1, 3]).to_s.should == 'Monthly on the 1st Monday when it is the 1st Wednesday' }
       end
     end
 
     context :schedule do
       before do
-        @route = Fabricate(:route, distributor: @order.distributor)
-        @order.completed = true
-        @order.active = true
+        order.save
+        @route = Fabricate(:route, distributor: order.distributor)
+        order.completed = true
+        order.active = true
       end
 
       describe 'new schedule' do
         before do
           @schedule = Bucky::Schedule.new
           @schedule.add_recurrence_rule(IceCube::Rule.weekly.day(:monday, :friday))
-          @order.schedule = @schedule
-          @order.save
+          order.schedule = @schedule
+          order.save
         end
 
-        specify { @order.schedule.to_hash.should == @schedule.to_hash }
+        specify { order.schedule.to_hash.should == @schedule.to_hash }
       end
 
       describe 'change schedule' do
         before do
-          @schedule = @order.schedule
+          @schedule = order.schedule
           @schedule.add_recurrence_time(Time.current + 5.days)
           @schedule.add_recurrence_rule(IceCube::Rule.weekly(2).day(:monday, :tuesday))
-          @order.schedule = @schedule
-          @order.save
+          order.schedule = @schedule
+          order.save
         end
 
-        specify { @order.schedule.to_hash.should == @schedule.to_hash }
+        specify { order.schedule.to_hash.should == @schedule.to_hash }
       end
 
       context :single do
         before do
-          @order.frequency = 'single'
-          @order.completed = true
+          order.frequency = 'single'
+          order.completed = true
 
           @schedule = new_single_schedule
-          @order.schedule = @schedule
+          order.schedule = @schedule
 
-          @order.save
+          order.save
         end
 
-        specify { @order.schedule.should_not be_nil }
-        specify { @order.schedule.next_occurrence.should_not be_nil }
-        specify { @order.schedule.next_occurrences(28, Time.current).should eq([@order.schedule.next_occurrence]) }
-        specify { @order.schedule.to_s.should == @schedule.to_s }
-        specify { @order.schedule.next_occurrence == @schedule.next_occurrence }
+        specify { order.schedule.should_not be_nil }
+        specify { order.schedule.next_occurrence.should_not be_nil }
+        specify { order.schedule.next_occurrences(28, Time.current).should eq([order.schedule.next_occurrence]) }
+        specify { order.schedule.to_s.should == @schedule.to_s }
+        specify { order.schedule.next_occurrence == @schedule.next_occurrence }
       end
 
       context :weekly do
         before do
-          @order.frequency = 'weekly'
-          @order.completed = true
+          order.frequency = 'weekly'
+          order.completed = true
 
           @schedule = new_recurring_schedule
-          @order.schedule = @schedule
+          order.schedule = @schedule
 
-          @order.save
+          order.save
         end
 
-        specify { @order.schedule.should_not be_nil }
-        specify { @order.schedule.next_occurrence.should_not be_nil }
-        specify { @order.schedule.next_occurrences(28, Time.current).size.should eq(28) }
-        specify { @order.schedule.to_s.should == @schedule.to_s }
-        specify { @order.schedule.next_occurrence == @schedule.next_occurrence }
+        specify { order.schedule.should_not be_nil }
+        specify { order.schedule.next_occurrence.should_not be_nil }
+        specify { order.schedule.next_occurrences(28, Time.current).size.should eq(28) }
+        specify { order.schedule.to_s.should == @schedule.to_s }
+        specify { order.schedule.next_occurrence == @schedule.next_occurrence }
       end
 
       context :fortnightly do
         before do
-          @order.frequency = 'fortnightly'
-          @order.completed = true
+          order.frequency = 'fortnightly'
+          order.completed = true
 
           @schedule = new_recurring_schedule
-          @order.schedule = @schedule
+          order.schedule = @schedule
 
-          @order.save
+          order.save
         end
 
-        specify { @order.schedule.should_not be_nil }
-        specify { @order.schedule.next_occurrence.should_not be_nil }
-        specify { @order.schedule.to_s.should == @schedule.to_s }
-        specify { @order.schedule.next_occurrence == @schedule.next_occurrence }
+        specify { order.schedule.should_not be_nil }
+        specify { order.schedule.next_occurrence.should_not be_nil }
+        specify { order.schedule.to_s.should == @schedule.to_s }
+        specify { order.schedule.next_occurrence == @schedule.next_occurrence }
       end
     end
 
@@ -165,46 +166,46 @@ describe Order do
       before do
         schedule = Bucky::Schedule.new
         schedule.add_recurrence_rule(IceCube::Rule.weekly.day(:monday, :friday))
-        @order.schedule = schedule
+        order.schedule = schedule
       end
 
-      specify { expect { @order.save }.should change(OrderScheduleTransaction, :count).by(1) }
+      specify { expect { order.save }.should change(OrderScheduleTransaction, :count).by(1) }
     end
 
     context 'scheduled_delivery' do
       before do
-        @schedule = @order.schedule
+        @schedule = order.schedule
         delivery_list = Fabricate(:delivery_list, date: Date.current + 5.days)
         @delivery = Fabricate(:delivery, delivery_list: delivery_list)
-        @order.add_scheduled_delivery(@delivery)
-        @order.save
+        order.add_scheduled_delivery(@delivery)
+        order.save
       end
 
       describe '#add_scheduled_delivery' do
-        specify { @order.schedule.occurs_on?(@delivery.date.to_time_in_current_zone).should be_true }
-        specify { @order.schedule.occurs_on?((@delivery.date - 1.day).to_time_in_current_zone).should_not be_true }
+        specify { order.schedule.occurs_on?(@delivery.date.to_time_in_current_zone).should be_true }
+        specify { order.schedule.occurs_on?((@delivery.date - 1.day).to_time_in_current_zone).should_not be_true }
       end
 
       describe '#remove_scheduled_delivery' do
         before do
-          @order.remove_scheduled_delivery(@delivery)
-          @order.save
+          order.remove_scheduled_delivery(@delivery)
+          order.save
         end
 
-        specify { @order.schedule.occurs_on?(@delivery.date.to_time_in_current_zone).should_not be_true }
+        specify { order.schedule.occurs_on?(@delivery.date.to_time_in_current_zone).should_not be_true }
       end
     end
 
     describe '#string_pluralize' do
       context "when the quantity is 1" do
-        before { @order.quantity = 1 }
-        specify { @order.string_pluralize.should == "1 #{@order.box.name}" }
+        before { order.quantity = 1 }
+        specify { order.string_pluralize.should == "1 #{order.box.name}" }
       end
 
       [0, 2].each do |q|
         context "when the quantity is #{q}" do
-          before { @order.quantity = q }
-          specify { @order.string_pluralize.should == "#{q} #{@order.box.name}s" }
+          before { order.quantity = q }
+          specify { order.string_pluralize.should == "#{q} #{order.box.name}s" }
         end
       end
     end
@@ -268,35 +269,35 @@ describe Order do
       @e2 = Fabricate(:exclusion, order: order)
       @e3 = Fabricate(:exclusion, order: order)
 
-      @li1_id = @e1.line_item_id
-      @li2_id = @e2.line_item_id
-      @li3_id = @e3.line_item_id
-      @li4_id = Fabricate(:line_item).id
+      @e1_id = @e1.line_item_id
+      @e2_id = @e2.line_item_id
+      @e3_id = @e3.line_item_id
+      @e4_id = Fabricate(:line_item).id
 
-      order.update_exclusions([@li1_id, @li4_id])
+      order.update_exclusions([@e1_id, @e4_id])
       order.save
     end
 
-    specify { order.exclusion_ids.should == [@li1_id, @li4_id] }
+    specify { order.exclusion_ids.should == [@e1_id, @e4_id] }
   end
 
   describe '#update_substitutions' do
     before do
       order.save
-      @e1 = Fabricate(:substitution, order: order)
-      @e2 = Fabricate(:substitution, order: order)
-      @e3 = Fabricate(:substitution, order: order)
+      @s1 = Fabricate(:substitution, order: order)
+      @s2 = Fabricate(:substitution, order: order)
+      @s3 = Fabricate(:substitution, order: order)
 
-      @li1_id = @e1.line_item_id
-      @li2_id = @e2.line_item_id
-      @li3_id = @e3.line_item_id
-      @li4_id = Fabricate(:line_item).id
+      @s1_id = @s1.line_item_id
+      @s2_id = @s2.line_item_id
+      @s3_id = @s3.line_item_id
+      @s4_id = Fabricate(:line_item).id
 
-      order.update_substitutions([@li1_id, @li4_id])
+      order.update_substitutions([@s1_id, @s4_id])
       order.save
     end
 
-    specify { order.substitution_ids.should == [@li1_id, @li4_id] }
+    specify { order.substitution_ids.should == [@s1_id, @s4_id] }
   end
 
   describe '.pack_and_update_extras' do
