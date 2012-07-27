@@ -24,21 +24,25 @@
 
   - if @real_list
     %ul#delivery_list.sortable
-      - @items.each do |delivery|
-        %li.row.data-listings{ id: "delivery_#{delivery.id}", class: delivery.status }
-          .three.columns
-            .row
-              .four.columns
-                = check_box_tag delivery.order_id, '1', false, data: { delivery: delivery.id }
-                = render partial: 'status_icons', locals: { status: delivery.status }
-              .four.columns= delivery.delivery_number
-              .four.columns
-                %span.paid-label.green.radius.label{ style: "#{'display: inline;' if delivery.paid?}" } PAID
-          .nine.columns
-            .row
-              .four.columns= display_address(delivery)
-              .four.columns= contents_description(delivery)
-              .four.columns= customer_badge(delivery.customer, customer_name: delivery.package.archived_customer_name, short: true)
+      - @items.group_by{|delivery| delivery.order.address.address_hash}.each do |addressh_hash, deliveries|
+        %li.row
+          .twelve.columns
+            %ul
+              - deliveries.each do |delivery|
+                %li.row.data-listings{id: "delivery_#{delivery.id}", class: delivery.status }
+                  .three.columns
+                    .row
+                      .four.columns
+                        = check_box_tag delivery.order_id, '1', false, data: { delivery: delivery.id }
+                        = render partial: 'status_icons', locals: { status: delivery.status }
+                      .four.columns= delivery.delivery_number
+                      .four.columns
+                        %span.paid-label.green.radius.label{ style: "#{'display: inline;' if delivery.paid?}" } PAID
+                  .nine.columns
+                    .row
+                      .four.columns= display_address(delivery)
+                      .four.columns= contents_description(delivery)
+                      .four.columns= customer_badge(delivery.customer, customer_name: delivery.package.archived_customer_name, short: true)
   - else
     %ul
       - @items.each do |order|

@@ -5,6 +5,8 @@ class Address < ActiveRecord::Base
 
   validates_presence_of :customer, :address_1
 
+  before_save :update_address_hash
+
   def join(join_with = ', ', options = {})
     result = [address_1]
     result << address_2 unless address_2.blank?
@@ -22,5 +24,23 @@ class Address < ActiveRecord::Base
     end
 
     return result.join(join_with).html_safe
+  end
+
+  def ==(address)
+    address.is_a?(Address) && [:address_1, :address_2, :suburb, :city].all?{ |a|
+      send(a) == address.send(a)
+    }
+  end
+
+  def address_hash
+    self[:address_hash] || compute_address_hash
+  end
+
+  def compute_address_hash
+    Digest::SHA1.hexdigest([:address_1, :address_2, :suburb, :city].collect{|a| send(a).downcase.strip rescue ''}.join(''))
+  end
+
+  def update_address_hash
+    self.address_hash = compute_address_hash
   end
 end

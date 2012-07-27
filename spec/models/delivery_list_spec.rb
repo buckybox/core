@@ -15,18 +15,18 @@ describe DeliveryList do
   end
 
   describe 'when marking all as auto delivered' do
-    it "returns true if there are no deliveries" do
+    it 'returns true if there are no deliveries' do
       delivery_list.mark_all_as_auto_delivered.should be_true
     end
 
-    it "returns true if all deliveries return true" do
+    it 'returns true if all deliveries return true' do
       delivery_list.deliveries << delivery_auto_delivering
       delivery_list.deliveries << delivery_auto_delivering
 
       delivery_list.mark_all_as_auto_delivered.should be_true
     end
 
-    it "returns false if one delivery returns false" do
+    it 'returns false if one delivery returns false' do
       delivery_list.deliveries << delivery_auto_delivering
       delivery_list.deliveries << delivery_auto_delivering(false)
       delivery_list.deliveries << delivery_auto_delivering
@@ -132,6 +132,7 @@ describe DeliveryList do
         @ids = [1, 2, 3]
 
         Delivery.stub_chain(:find, :route_id)
+        Delivery.stub_chain(:find, :delivery_list, :date, :wday)
         delivery_list.stub_chain(:deliveries, :where, :map).and_return(@ids)
 
         delivery_list.deliveries.stub(:find).and_return(delivery)
@@ -145,14 +146,76 @@ describe DeliveryList do
     context 'should update delivery list positions' do
       before do
         delivery_list.save
-        d1 = Fabricate(:delivery, delivery_list: delivery_list)
-        d2 = Fabricate(:delivery, delivery_list: delivery_list, route: d1.route)
-        d3 = Fabricate(:delivery, delivery_list: delivery_list, route: d1.route)
+        d1 = fab_delivery(delivery_list, distributor)
+        d2 = fab_delivery(delivery_list, distributor, d1.route)
+        d3 = fab_delivery(delivery_list, distributor, d1.route)
         @ids = delivery_list.delivery_ids
-        @new_ids = @ids.shuffle
+        @new_ids = [@ids.last, @ids.first, @ids[1]]
       end
 
-      specify { expect { delivery_list.reposition(@new_ids) }.should change(delivery_list, :delivery_ids).to(@new_ids) }
+      specify { expect { delivery_list.reposition(@new_ids)}.should change(delivery_list, :delivery_ids).to(@new_ids) }
+
+      it 'should update the delivery list for the next week' do
+        delivery_list.reposition(@new_ids)
+        addresses = delivery_list.deliveries.collect(&:address)
+        PackingList.generate_list(distributor, delivery_list.date+1.week)
+        next_delivery_list = DeliveryList.generate_list(distributor, delivery_list.date+1.week)
+
+        next_delivery_list.deliveries.collect(&:address).should eq(addresses)
+      end
+
+      it 'should put new deliveries at the top of the list' do
+        date = delivery_list.date
+        delivery_list.reposition(@new_ids)
+        addresses = delivery_list.deliveries.collect(&:address)
+        
+        account = Fabricate(:account, customer: Fabricate(:customer, distributor: distributor))
+        order = Fabricate(:active_order, account: account, schedule: new_single_schedule(date.to_time))
+
+        PackingList.generate_list(distributor, date)
+        next_delivery_list = DeliveryList.generate_list(distributor, date)
+
+        next_delivery_list.deliveries.collect(&:address).should eq([account.address]+addresses)
+      end
+    end
+
+    context 'with duplicate or similar addresses' do
+      before do
+        delivery_list.save
+        route = Fabricate(:route, distributor: distributor)
+        @d1 = fab_delivery(delivery_list, distributor, route)
+        @d2 = fab_delivery(delivery_list, distributor, route)
+        @d3 = fab_delivery(delivery_list, distributor, route)
+        
+        d1_address = @d1.order.address
+        address = Fabricate.build(:address, address_1: d1_address.address_1, address_2: d1_address.address_2, suburb: d1_address.suburb, city: d1_address.city, delivery_note: "Im different")
+        @d4 = fab_delivery(delivery_list, distributor, route, address)
+
+        @ids = [@d1.id, @d2.id, @d3.id, @d4.id]
+      end
+
+      it 'should order deliveries by default to be in order of creation' do
+        delivery_list.delivery_ids.should eq(@ids)
+      end
+
+      it 'should keep similiar addresses together' do
+        delivery_list.reposition(@ids)
+        delivery_list.delivery_ids.should eq([@d1.id, @d4.id, @d2.id, @d3.id])
+      end
     end
   end
+end
+
+def fab_delivery(delivery_list, distributor, route=nil, address=nil)
+  route ||= Fabricate(:route, distributor: distributor)
+  address ||= Fabricate.build(:address)
+  account = Fabricate.build(:account)
+
+  customer = Fabricate(:customer_without_after_create, distributor: distributor, route: route)
+  address.customer = customer
+  address.save!
+  account.customer = customer
+  account.save!
+
+  Fabricate(:delivery, delivery_list: delivery_list, order: Fabricate(:recurring_order_everyday, account: account), route: route)
 end

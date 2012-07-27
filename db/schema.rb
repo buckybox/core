@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120614000606) do
+ActiveRecord::Schema.define(:version => 20120726014507) do
 
   create_table "accounts", :force => true do |t|
     t.integer  "customer_id"
@@ -36,8 +36,10 @@ ActiveRecord::Schema.define(:version => 20120614000606) do
     t.string   "phone_1"
     t.string   "phone_2"
     t.string   "phone_3"
+    t.string   "address_hash"
   end
 
+  add_index "addresses", ["address_hash"], :name => "index_addresses_on_address_hash"
   add_index "addresses", ["customer_id"], :name => "index_addresses_on_customer_id"
 
   create_table "admins", :force => true do |t|
@@ -183,6 +185,7 @@ ActiveRecord::Schema.define(:version => 20120614000606) do
     t.integer  "position"
     t.integer  "package_id"
     t.integer  "delivery_number"
+    t.integer  "dso",                :default => -1
   end
 
   add_index "deliveries", ["delivery_list_id"], :name => "index_deliveries_on_delivery_list_id"
@@ -197,6 +200,15 @@ ActiveRecord::Schema.define(:version => 20120614000606) do
   end
 
   add_index "delivery_lists", ["distributor_id"], :name => "index_delivery_lists_on_distributor_id"
+
+  create_table "delivery_sequence_orders", :force => true do |t|
+    t.string   "address_hash"
+    t.integer  "route_id"
+    t.integer  "day"
+    t.integer  "position"
+    t.datetime "created_at",   :null => false
+    t.datetime "updated_at",   :null => false
+  end
 
   create_table "distributors", :force => true do |t|
     t.string   "email",                                     :default => "",     :null => false
