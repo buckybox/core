@@ -28,12 +28,7 @@ class DeliveryList < ActiveRecord::Base
         orders.each { |order| date_orders << order if order.schedule.occurs_on?(date) }
 
         # This emulates the ordering when lists are actually created
-        date_orders = date_orders.sort_by do |order|
-          delivery = DeliveryList.last_week_delivery(wday, order.customer.deliveries)
-          delivery ? delivery.position : 9999
-        end
-
-        result << FutureDeliveryList.new(date, date_orders)
+        result << FutureDeliveryList.new(date, date_orders.sort_by{|order| order.dso(wday)})
       end
     end
 
@@ -51,20 +46,9 @@ class DeliveryList < ActiveRecord::Base
 
     # Determine the order of this delivery list based on previous deliveries
     packing_list.packages.each do |package|
-      previous_deliveries = package.customer.deliveries
-
-      # Look back only on the same day of the week as routes are generally sorted by days of the week
-      last_delivery = DeliveryList.last_week_delivery(current_wday, previous_deliveries)
-
-      if last_delivery
-        position = last_delivery.position
-        packages[position] = [] unless packages[position]
-        packages[position] << package
-      else
-        #sufficiantly large number to insure it is at the end
-        packages[9999] = [] unless packages[9999]
-        packages[9999] << package
-      end
+      position = package.order.dso(date.wday)
+      packages[position] = [] unless packages[position]
+      packages[position] << package
     end
 
     packages = packages.sort.map{ |key, value| value }.flatten
@@ -109,7 +93,7 @@ class DeliveryList < ActiveRecord::Base
       unique_addresses.each_with_index do |address, index|
         dso = DeliverySequenceOrder.find_by_address_hash_and_route_id_and_day(address.address_hash, route_id, day)
         dso ||= DeliverySequenceOrder.new(address_hash: address.address_hash, route_id: route_id, day: day)
-        dso.position = index
+        dso.position = index+1 #start at 1, not 0
         all_saved &= dso.save
       end
     end
@@ -130,11 +114,5 @@ class DeliveryList < ActiveRecord::Base
   def all_finished?
     @all_finished ||= !deliveries.any? { |d| d.pending? }
     return has_deliveries? || @all_finished
-  end
-
-  private
-
-  def self.last_week_delivery(day_of_the_week, deliveries)
-    deliveries.select{ |d| d.date.wday == day_of_the_week }.sort{ |a,b| a.date <=> b.date }.last
   end
 end

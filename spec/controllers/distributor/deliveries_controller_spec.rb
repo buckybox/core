@@ -20,6 +20,11 @@ describe Distributor::DeliveriesController do
       assigns[:all_deliveries].should eq(@deliveries.sort_by(&:dso))
     end
 
+    it "should order future deliveries based on the DSO" do
+      get :index, {date: @date+1.week, view: 'deliveries'}
+      assigns[:all_deliveries].should eq(@deliveries.sort_by(&:dso).collect(&:order))
+    end
+
     it "should update the position of a delivery when placed between two others" do
       delivery_list = mock_model(DeliveryList)
       delivery_ids = ['2', '1', '3']

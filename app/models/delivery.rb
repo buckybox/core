@@ -193,7 +193,8 @@ class Delivery < ActiveRecord::Base
   end
 
   def add_delivery_number
-    self.delivery_number = self.position
+    update_dso
+    self.delivery_number = self.dso
   end
 
   def deduct_account

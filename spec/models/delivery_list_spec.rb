@@ -153,7 +153,10 @@ describe DeliveryList do
         @new_ids = [@ids.last, @ids.first, @ids[1]]
       end
 
-      specify { expect { delivery_list.reposition(@new_ids)}.should change(delivery_list, :delivery_ids).to(@new_ids) }
+      it 'should change delivry order' do
+        expect { delivery_list.reposition(@new_ids)}.should change(delivery_list, :delivery_ids).to(@new_ids)
+        delivery_list.deliveries.collect(&:delivery_number).should eq([3,1,2])
+      end
 
       it 'should update the delivery list for the next week' do
         delivery_list.reposition(@new_ids)
@@ -162,6 +165,7 @@ describe DeliveryList do
         next_delivery_list = DeliveryList.generate_list(distributor, delivery_list.date+1.week)
 
         next_delivery_list.deliveries.collect(&:address).should eq(addresses)
+        next_delivery_list.deliveries.collect(&:delivery_number).should eq([1,2,3])
       end
 
       it 'should put new deliveries at the top of the list' do
@@ -170,12 +174,15 @@ describe DeliveryList do
         addresses = delivery_list.deliveries.collect(&:address)
         
         account = Fabricate(:account, customer: Fabricate(:customer, distributor: distributor))
+        account2 = Fabricate(:account, customer: Fabricate(:customer, distributor: distributor))
         order = Fabricate(:active_order, account: account, schedule: new_single_schedule(date.to_time))
+        order2 = Fabricate(:active_order, account: account2, schedule: new_single_schedule(date.to_time))
 
         PackingList.generate_list(distributor, date)
         next_delivery_list = DeliveryList.generate_list(distributor, date)
 
-        next_delivery_list.deliveries.collect(&:address).should eq([account.address]+addresses)
+        next_delivery_list.deliveries.collect(&:address).should eq([account2.address, account.address]+addresses)
+        next_delivery_list.deliveries.collect(&:delivery_number).should eq([1,2,3,4,5])
       end
     end
 
