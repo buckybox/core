@@ -278,7 +278,7 @@ describe Order do
       order.save
     end
 
-    specify { order.exclusion_ids.should == [@e1_id, @e4_id] }
+    specify { order.exclusions.map(&:line_item_id).should == [@e1_id, @e4_id] }
   end
 
   describe '#update_substitutions' do
@@ -297,7 +297,7 @@ describe Order do
       order.save
     end
 
-    specify { order.substitution_ids.should == [@s1_id, @s4_id] }
+    specify { order.substitutions.map(&:line_item_id).should == [@s1_id, @s4_id] }
   end
 
   describe '.pack_and_update_extras' do
