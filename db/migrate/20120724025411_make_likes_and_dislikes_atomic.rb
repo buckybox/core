@@ -80,7 +80,10 @@ class MakeLikesAndDislikesAtomic < ActiveRecord::Migration
             end
           end
 
-          order_requests += "\nORDER ID#{id} ORIGINAL LIKES:\n" + original_likes if original_likes
+          if original_likes
+            likes = sanitize_items(original_likes)
+            order_requests += "\nORDER ID#{id} ORIGINAL LIKES:\n" + original_likes unless likes.empty?
+          end
 
           account      = Account.find_by_id(account_id)
           customer_id  = account.read_attribute(:customer_id)

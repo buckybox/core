@@ -16,13 +16,27 @@ $(function() {
       customer_check_box(box_id, current_order);
     }
     else {
-      current_order.find('#likes_input_chzn').hide();
-      current_order.find('#dislikes_input_chzn').hide();
+      current_order.find('#dislikes_input').hide();
+      current_order.find('#likes_input').hide();
     }
   });
 
   $('.customer_order #order_frequency').change(function() {
     day_display($(this));
+  });
+
+  $('.customer_order #dislikes_input').change(function() {
+    likes_input = $('#likes_input');
+    dislikes_input = $('#dislikes_input');
+
+    if(!dislikes_input.is(':hidden') && dislikes_input.find('option:selected').length > 0) {
+      likes_input.show();
+    }
+    else {
+      likes_input.find('option:selected').attr('selected', false);
+      likes_input.find('select').trigger('liszt:updated');
+      likes_input.hide();
+    }
   });
 });
 
@@ -49,20 +63,18 @@ function customer_check_box(box_id, current_order) {
     url: '/customer/boxes/' + box_id + '.json',
     dataType: 'json',
     success: function(data) {
-      if(data['likes']) {
-        current_order.find('#likes_input').show();
-        current_order.find('#likes_input select').chosen();
-      }
-      else {
-        current_order.find('#likes_input').hide();
-      }
-
       if(data['dislikes']) {
         current_order.find('#dislikes_input').show();
-        current_order.find('#dislikes_input select').chosen();
       }
       else {
-        current_order.find('#dislikes_input').hide();
+        current_order.find('#dislikes_input select').hide();
+      }
+
+      if(data['likes'] && current_order.find('#dislikes_input').find('option:selected').length > 0) {
+        current_order.find('#likes_input').show();
+      }
+      else {
+        current_order.find('#likes_input select').hide();
       }
     }
   });

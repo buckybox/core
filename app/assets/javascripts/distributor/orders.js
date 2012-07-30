@@ -8,6 +8,13 @@ $(function() {
     $('.date_picker').dateinput({ format: 'yyyy-mm-dd' });
   }
 
+  $('#dislikes_input').show();
+  $('#dislikes_input select').chosen();
+  $('#dislikes_input').hide();
+  $('#likes_input').show();
+  $('#likes_input select').chosen();
+  $('#likes_input').hide();
+
   $('#distributor_order #distributor_order_box_id').change(function() {
     var box_id = $(this).val();
 
@@ -19,6 +26,7 @@ $(function() {
     }
     else {
       $('#dislikes_input').hide();
+      $('#likes_input').hide();
     }
   });
 
@@ -31,13 +39,12 @@ $(function() {
     }
   });
 
-  $('#dislikes_input').change(function() {
+  $('#distributor_order #dislikes_input').change(function() {
     likes_input = $('#likes_input');
     dislikes_input = $('#dislikes_input');
 
     if(!dislikes_input.is(':hidden') && dislikes_input.find('option:selected').length > 0) {
       likes_input.show();
-      likes_input.find('select').chosen();
     }
     else {
       likes_input.find('option:selected').attr('selected', false);
@@ -63,13 +70,15 @@ function distributor_check_box(box_id) {
     success: function(data) {
       if(data['dislikes']) {
         $('#dislikes_input').show();
-        $('#dislikes_input select').chosen();
       }
       else {
         $('#dislikes_input').hide();
       }
 
-      if(!data['likes']) {
+      if(data['likes'] && $('#dislikes_input').find('option:selected').length > 0) {
+        $('#likes_input').show();
+      }
+      else {
         $('#likes_input').hide();
       }
     }
