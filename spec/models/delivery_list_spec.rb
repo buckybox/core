@@ -15,21 +15,26 @@ describe DeliveryList do
   end
 
   describe 'when marking all as auto delivered' do
+    before do
+      @deliveries = []
+      delivery_list.stub_chain(:deliveries, :ordered).and_return(@deliveries)
+    end
+
     it 'returns true if there are no deliveries' do
       delivery_list.mark_all_as_auto_delivered.should be_true
     end
 
     it 'returns true if all deliveries return true' do
-      delivery_list.deliveries << delivery_auto_delivering
-      delivery_list.deliveries << delivery_auto_delivering
+      @deliveries << delivery_auto_delivering
+      @deliveries << delivery_auto_delivering
 
       delivery_list.mark_all_as_auto_delivered.should be_true
     end
 
     it 'returns false if one delivery returns false' do
-      delivery_list.deliveries << delivery_auto_delivering
-      delivery_list.deliveries << delivery_auto_delivering(false)
-      delivery_list.deliveries << delivery_auto_delivering
+      @deliveries << delivery_auto_delivering
+      @deliveries << delivery_auto_delivering(false)
+      @deliveries << delivery_auto_delivering
 
       delivery_list.mark_all_as_auto_delivered.should be_false
     end
@@ -78,7 +83,7 @@ describe DeliveryList do
         @dl2 = DeliveryList.generate_list(@distributor, @generate_date + 1.week)
       end
 
-      specify { @dl2.deliveries.map{|d| "#{d.customer.number}/#{d.position}"}.should == @dl1.deliveries.map{|d| "#{d.customer.number}/#{d.position}"} }
+      specify { @dl2.deliveries.ordered.map{|d| "#{d.customer.number}/#{d.position}"}.should == @dl1.deliveries.ordered.map{|d| "#{d.customer.number}/#{d.position}"} }
 
       context 'and the week after that' do
         before do
@@ -86,7 +91,7 @@ describe DeliveryList do
           @dl3 = DeliveryList.generate_list(@distributor, @generate_date + 2.week)
         end
 
-        specify { @dl3.deliveries.map{|d| "#{d.customer.number}/#{d.position}"}.should == @dl2.deliveries.map{|d| "#{d.customer.number}/#{d.position}"} }
+        specify { @dl3.deliveries.ordered.map{|d| "#{d.customer.number}/#{d.position}"}.should == @dl2.deliveries.ordered.map{|d| "#{d.customer.number}/#{d.position}"} }
       end
     end
 
@@ -133,9 +138,9 @@ describe DeliveryList do
 
         Delivery.stub_chain(:find, :route_id)
         Delivery.stub_chain(:find, :delivery_list, :date, :wday)
-        delivery_list.stub_chain(:deliveries, :where, :map).and_return(@ids)
+        delivery_list.stub_chain(:deliveries, :ordered, :where, :map).and_return(@ids)
 
-        delivery_list.deliveries.stub(:find).and_return(delivery)
+        delivery_list.deliveries.stub_chain(:ordered, :find).and_return(delivery)
         delivery.stub(:reposition!).and_return(true)
       end
 
@@ -149,29 +154,29 @@ describe DeliveryList do
         d1 = fab_delivery(delivery_list, distributor)
         d2 = fab_delivery(delivery_list, distributor, d1.route)
         d3 = fab_delivery(delivery_list, distributor, d1.route)
-        @ids = delivery_list.delivery_ids
+        @ids = delivery_list.reload.deliveries.ordered.collect(&:id)
         @new_ids = [@ids.last, @ids.first, @ids[1]]
       end
 
-      it 'should change delivry order' do
-        expect { delivery_list.reposition(@new_ids)}.should change(delivery_list, :delivery_ids).to(@new_ids)
-        delivery_list.deliveries.collect(&:delivery_number).should eq([3,1,2])
+      it 'should change delivery order' do
+        expect { delivery_list.reposition(@new_ids)}.should change{delivery_list.deliveries.ordered.collect(&:id)}.to(@new_ids)
+        delivery_list.reload.deliveries.ordered.collect(&:delivery_number).should eq([3,1,2])
       end
 
       it 'should update the delivery list for the next week' do
         delivery_list.reposition(@new_ids)
-        addresses = delivery_list.deliveries.collect(&:address)
+        addresses = delivery_list.deliveries.ordered.collect(&:address)
         PackingList.generate_list(distributor, delivery_list.date+1.week)
         next_delivery_list = DeliveryList.generate_list(distributor, delivery_list.date+1.week)
 
-        next_delivery_list.deliveries.collect(&:address).should eq(addresses)
-        next_delivery_list.deliveries.collect(&:delivery_number).should eq([1,2,3])
+        next_delivery_list.deliveries.ordered.collect(&:address).should eq(addresses)
+        next_delivery_list.deliveries.ordered.collect(&:delivery_number).should eq([1,2,3])
       end
 
       it 'should put new deliveries at the top of the list' do
         date = delivery_list.date
         delivery_list.reposition(@new_ids)
-        addresses = delivery_list.deliveries.collect(&:address)
+        addresses = delivery_list.deliveries.ordered.collect(&:address)
         
         account = Fabricate(:account, customer: Fabricate(:customer, distributor: distributor))
         account2 = Fabricate(:account, customer: Fabricate(:customer, distributor: distributor))
@@ -181,8 +186,8 @@ describe DeliveryList do
         PackingList.generate_list(distributor, date)
         next_delivery_list = DeliveryList.generate_list(distributor, date)
 
-        next_delivery_list.deliveries.collect(&:address).should eq([account2.address, account.address]+addresses)
-        next_delivery_list.deliveries.collect(&:delivery_number).should eq([1,2,3,4,5])
+        next_delivery_list.deliveries.ordered.collect(&:address).should eq([account2.address, account.address]+addresses)
+        next_delivery_list.deliveries.ordered.collect(&:delivery_number).should eq([4,5,3,1,2])
       end
     end
 
@@ -202,12 +207,16 @@ describe DeliveryList do
       end
 
       it 'should order deliveries by default to be in order of creation' do
-        delivery_list.delivery_ids.should eq(@ids)
+        delivery_list.deliveries.ordered.collect(&:id).should eq(@ids)
       end
 
       it 'should keep similiar addresses together' do
         delivery_list.reposition(@ids)
-        delivery_list.delivery_ids.should eq([@d1.id, @d4.id, @d2.id, @d3.id])
+        delivery_list.deliveries.ordered.collect(&:id).should eq([@d1.id, @d4.id, @d2.id, @d3.id])
+      end
+
+      it 'should give similiar addresses the same delivery number' do
+        delivery_list.deliveries.ordered.collect(&:id).should eq([1, 1, 2, 3])
       end
     end
   end

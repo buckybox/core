@@ -3,7 +3,7 @@ FutureDeliveryList = Struct.new(:date, :deliveries)
 class DeliveryList < ActiveRecord::Base
   belongs_to :distributor
 
-  has_many :deliveries, dependent: :destroy, order: "dso ASC, created_at ASC"
+  has_many :deliveries, dependent: :destroy
 
   attr_accessible :distributor, :distributor_id, :date
 
@@ -52,13 +52,14 @@ class DeliveryList < ActiveRecord::Base
     end
 
     packages = packages.sort.map{ |key, value| value }.flatten
-
+    
     packages.each do |package|
       order = package.order
       route = order.route
 
       # need to pass route as well or the position scope for this delivery list is not set properly
       delivery = delivery_list.deliveries.find_or_create_by_package_id(package.id, order: order, route: route)
+
       delivery.update_dso
       delivery.save! if delivery.changed?
     end
@@ -70,7 +71,7 @@ class DeliveryList < ActiveRecord::Base
     # Assuming all routes are from the same route, if not it will fail on match anyway
     first_delivery = Delivery.find(delivery_order.first)
     route_id = first_delivery.route_id
-    existing_ids = deliveries.where(route_id:route_id).map(&:id)
+    existing_ids = deliveries.ordered.where(route_id:route_id).map(&:id)
     day = first_delivery.delivery_list.date.wday
 
     raise 'Your delivery ids do not match' if delivery_order.map(&:to_i).sort != existing_ids.sort
@@ -103,16 +104,32 @@ class DeliveryList < ActiveRecord::Base
 
   def mark_all_as_auto_delivered
     result = true
-    deliveries.each { |delivery| result &= Delivery.auto_deliver(delivery) }
+    deliveries.ordered.each { |delivery| result &= Delivery.auto_deliver(delivery) }
     return result
   end
 
   def has_deliveries?
-    @has_deliveries ||= (deliveries.size == 0)
+    @has_deliveries ||= (deliveries(true).count == 0)
   end
 
   def all_finished?
-    @all_finished ||= !deliveries.any? { |d| d.pending? }
+    @all_finished ||= !deliveries(true).any? { |d| d.pending? }
     return has_deliveries? || @all_finished
+  end
+
+  def get_delivery_number(delivery)
+    throw "This isn't my delivery" if delivery.delivery_list_id != self.id
+
+    delivery_to_same_address = deliveries(true).select{|d| d.address_hash == delivery.address_hash && d.id != delivery.id}.first
+    binding.pry
+    
+    if delivery_to_same_address
+      delivery_to_same_address.delivery_number
+    else
+      @delivery_number ||= {}
+      @delivery_number[self.id] = deliveries(true).order(:delivery_number).last.delivery_number if deliveries(true).order(:delivery_number).last
+      @delivery_number[self.id] ||= 0
+      @delivery_number[self.id] += 1
+    end
   end
 end

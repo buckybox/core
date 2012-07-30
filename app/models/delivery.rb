@@ -25,16 +25,17 @@ class Delivery < ActiveRecord::Base
   before_validation :default_route, if: 'route.nil?'
 
   before_save :update_dso
-  before_create :add_delivery_number
+  before_create :set_delivery_number
 
   scope :pending,   where(status: 'pending')
   scope :delivered, where(status: 'delivered')
   scope :cancelled, where(status: 'cancelled')
-  scope :ordered, order('dso ASC')
+  scope :ordered, order('dso ASC, created_at ASC')
 
   default_value_for :status_change_type, 'auto'
 
   delegate :date, to: :delivery_list, allow_nil: true
+  delegate :address_hash, to: :address
 
   state_machine :status, initial: :pending do
     before_transition on: :deliver, do: :deduct_account
@@ -186,15 +187,15 @@ class Delivery < ActiveRecord::Base
     self.dso = DeliverySequenceOrder.for_delivery(self).position
   end
 
+  def set_delivery_number
+    update_dso
+    self.delivery_number = delivery_list.get_delivery_number(self)
+  end
+
   private
 
   def default_route
     self.route = order.route if order
-  end
-
-  def add_delivery_number
-    update_dso
-    self.delivery_number = self.dso
   end
 
   def deduct_account

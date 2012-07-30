@@ -114,8 +114,8 @@ class Account < ActiveRecord::Base
 
       # After talking to @joshuavial the + 2.days is because of the buisness requirement:
       # it never send an invoice before 2 days after the first delivery
-      if deliveries.size > 0 && deliveries.first.date.present? && deliveries.first.date >= invoice_date
-        invoice_date = deliveries.first.date + 2.days
+      if deliveries.size > 0 && deliveries.ordered.first.date.present? && deliveries.ordered.first.date >= invoice_date
+        invoice_date = deliveries.ordered.first.date + 2.days
       elsif deliveries.size == 0 && occurrences.first && occurrences.first[:date] >= invoice_date
         invoice_date = occurrences.first[:date] + 2.days
       end
