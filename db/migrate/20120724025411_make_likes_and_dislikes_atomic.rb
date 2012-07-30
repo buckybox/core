@@ -51,7 +51,7 @@ class MakeLikesAndDislikesAtomic < ActiveRecord::Migration
             dislikes = sanitize_items(original_dislikes)
 
             unless dislikes.empty?
-              order_requests += "\nORDER ID#{id} DISLIKES:\n" + original_dislikes
+              order_requests += "\nORDER ID#{id} ORIGINAL DISLIKES:\n" + original_dislikes
 
               dislikes.each do |name|
                 line_item = LineItem.find_by_distributor_id_and_name(distributor_id, name)
@@ -68,8 +68,6 @@ class MakeLikesAndDislikesAtomic < ActiveRecord::Migration
               likes = sanitize_items(original_likes)
 
               unless likes.empty?
-                order_requests += "\nORDER ID#{id} LIKES:\n" + original_likes
-
                 likes.each do |name|
                   line_item = LineItem.find_by_distributor_id_and_name(distributor_id, name)
 
@@ -81,6 +79,8 @@ class MakeLikesAndDislikesAtomic < ActiveRecord::Migration
               end
             end
           end
+
+          order_requests += "\nORDER ID#{id} ORIGINAL LIKES:\n" + original_likes if original_likes
 
           account      = Account.find_by_id(account_id)
           customer_id  = account.read_attribute(:customer_id)
@@ -146,7 +146,7 @@ class MakeLikesAndDislikesAtomic < ActiveRecord::Migration
     string.gsub!(/\sok/, '')
     string.gsub!(/\r\n?|\r?\n/, '')
 
-    string = string.squeeze(' ').strip.pluralize.titleize
+    string = string.squeeze(' ').strip.singularize.titleize
 
     return string
   end
