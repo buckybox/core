@@ -16,7 +16,7 @@ class Distributor::LineItemsController < Distributor::ResourceController
   def bulk_update
     if LineItem.bulk_update(current_distributor, params[:line][:items])
       flash[:notice] = 'The stock list was successfully updated.'
-      redirect_to distributor_settings_stock_list_url(edit: true)
+      redirect_to distributor_settings_stock_list_url
     else
       flash[:error] = 'Could not update the stock list.'
       redirect_to distributor_settings_stock_list_url(edit: true)

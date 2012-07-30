@@ -20,11 +20,13 @@ module Distributor::SettingsHelper
     exclusion_count    = line_item.exclusions_count_by_customer
     substitution_count = line_item.substitution_count_by_customer
 
-    label_text = []
-    label_text << "-#{exclusion_count}"    if exclusion_count > 0
-    label_text << "+#{substitution_count}" if substitution_count > 0
-    label_text = label_text.join(' ')
+    has_exclusions = (exclusion_count > 0)
+    has_substitutions = (substitution_count > 0)
 
-    content_tag(:div, label_text, class: 'block count float-right') unless label_text.blank?
+    content = image_tag('icon-customer.png', class: 'float-left') if has_exclusions || has_substitutions
+    content += content_tag(:div, "-#{exclusion_count}", title: 'exclude for 1 customer', class: 'float-left') if has_exclusions
+    content += content_tag(:div, "+#{substitution_count}", title: 'substitute for 1 customer', class: 'float-left') if has_substitutions
+
+    content_tag(:div, content.html_safe, class: 'block count float-right') if content
   end
 end
