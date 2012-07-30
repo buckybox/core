@@ -32,7 +32,11 @@ class Distributor::DeliveriesController < Distributor::ResourceController
 
       @delivery_lists = DeliveryList.collect_lists(current_distributor, NAV_START_DATE, NAV_END_DATE)
       @delivery_list  = @delivery_lists.find { |delivery_list| delivery_list.date == @selected_date }
-      @all_deliveries = @delivery_list.deliveries.ordered
+      if @delivery_list.is_a? DeliveryList
+        @all_deliveries = @delivery_list.deliveries.ordered
+      else
+        @all_deliveries = @delivery_list.deliveries
+      end
 
       @packing_lists = PackingList.collect_lists(current_distributor, NAV_START_DATE, NAV_END_DATE)
       @packing_list  = @packing_lists.find  { |packing_list| packing_list.date == @selected_date }

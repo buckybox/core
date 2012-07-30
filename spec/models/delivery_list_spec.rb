@@ -218,7 +218,8 @@ describe DeliveryList do
       end
 
       it 'should give similiar addresses the same delivery number' do
-        delivery_list.deliveries.ordered.collect(&:id).should eq([1, 1, 2, 3])
+        delivery_list.reposition(@ids)
+        delivery_list.deliveries.ordered.collect(&:delivery_number).should eq([1, 1, 2, 3])
       end
     end
   end
