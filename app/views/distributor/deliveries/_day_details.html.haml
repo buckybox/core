@@ -14,7 +14,7 @@
           - @routes.each do |route|
             = link_to date_distributor_deliveries_path(@selected_date, route.id) do
               %h6{ class: "#{'selected' if @route_id == route.id}" }
-                %span= @all_deliveries.select{ |delivery| delivery.route.id == route.id }.map(&:quantity).inject(0, :+)
+                %span= @all_deliveries.select{ |delivery| delivery.route_id == route.id }.map(&:quantity).inject(0, :+)
                 = route.name.truncate(19)
                 = image_tag 'icon-route.png'
 

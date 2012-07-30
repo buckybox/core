@@ -23,7 +23,7 @@ describe Payment do
 
   context :amount do
     specify { Fabricate.build(:payment, amount: 0).should be_valid }
-    specify { Fabricate.build(:payment, amount: -1).should_not be_valid }
+    specify { Fabricate.build(:payment, amount: -1).should be_valid }
   end
 
   context 'affecting account balance' do
@@ -52,6 +52,17 @@ describe Payment do
 
       specify { payment.account.balance.should == @account_amount }
     end
+  end
+
+  context 'negative payment reducing account' do
+    let(:account){Fabricate(:account)}
+    let(:payment){Fabricate.build(:payment, amount: -10, account: account)}
+    
+    it "should reduce account balance" do
+      payment.save
+      account.reload.balance_cents.should eq(-1000)
+    end
+
   end
 end
 

@@ -73,6 +73,8 @@ describe DeliveryList do
       PackingList.generate_list(@distributor, @generate_date)
     end
 
+    after { back_to_the_present }
+
     specify { expect { DeliveryList.generate_list(@distributor, @generate_date) }.should change(@distributor.delivery_lists, :count).from(@advance_days).to(@advance_days + 1) }
     specify { expect { DeliveryList.generate_list(@distributor, @generate_date) }.should change(@distributor.deliveries, :count).from(0).to(3) }
 

@@ -36,10 +36,11 @@ class Distributor::DeliveriesController < Distributor::ResourceController
 
       @packing_lists = PackingList.collect_lists(current_distributor, NAV_START_DATE, NAV_END_DATE)
       @packing_list  = @packing_lists.find  { |packing_list| packing_list.date == @selected_date }
+      
       @all_packages  = @packing_list.packages
 
       if @route_id != 0
-        @items     = @all_deliveries.select{ |delivery| delivery.route.id == @route_id }
+        @items     = @all_deliveries.select{ |delivery| delivery.route_id == @route_id }
         @real_list = @items.all? { |i| i.is_a?(Delivery) }
         @route     = @routes.find(@route_id)
       else

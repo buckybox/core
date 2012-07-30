@@ -13,13 +13,13 @@ class DeliveryList < ActiveRecord::Base
   default_scope order(:date)
 
   def self.collect_lists(distributor, start_date, end_date)
-    result = distributor.delivery_lists.where(date:start_date..end_date).to_a
+    result = DeliveryList.includes(deliveries: {package: {customer: {address: {}}}}).where(date:start_date..end_date, distributor_id: distributor.id).to_a
 
     if end_date.future?
       future_start_date = start_date
       future_start_date = (result.last.date + 1.day) if result.last
 
-      orders = distributor.orders.active
+      orders = distributor.orders.active.includes({ account: {customer: {address:{}, deliveries: {delivery_list: {}}}}, order_extras: {}, box: {}})
 
       (future_start_date..end_date).each do |date|
         date_orders = []

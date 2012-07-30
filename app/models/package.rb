@@ -147,7 +147,8 @@ class Package < ActiveRecord::Base
       'Order Number', 'Package Number', 'Delivery Date', 'Customer Number', 'Customer First Name',
       'Customer Last Name', 'Customer Phone', 'New Customer', 'Delivery Address Line 1', 'Delivery Address Line 2',
       'Delivery Address Suburb', 'Delivery Address City', 'Delivery Address Postcode', 'Delivery Note',
-      'Box Contents Short Description', 'Box Type', 'Box Likes', 'Box Dislikes', 'Box Extra Line Items', 'Price'
+      'Box Contents Short Description', 'Box Type', 'Box Likes', 'Box Dislikes', 'Box Extra Line Items',
+      'Price', 'Customer Email'
     ]
   end
 
@@ -179,7 +180,8 @@ class Package < ActiveRecord::Base
       order.likes,
       order.dislikes,
       extras_description,
-      price
+      price,
+      customer.email
     ]
   end
 

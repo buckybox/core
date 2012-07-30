@@ -249,6 +249,10 @@ class Order < ActiveRecord::Base
     dso && dso.position || -1
   end
 
+  def route_id
+    account.customer.route_id
+  end
+
   protected
 
   def record_schedule_change

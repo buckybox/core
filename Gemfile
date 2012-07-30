@@ -48,7 +48,7 @@ group :development do
   gem 'capistrano'
   gem 'capistrano_colors'
   gem 'tinder'
-
+  gem 'term-ansicolor'
   gem 'hirb'
   gem 'wirble'
   gem 'rb-fsevent', require: false if RUBY_PLATFORM =~ /darwin/i
