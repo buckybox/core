@@ -18,29 +18,30 @@ describe Distributor::OrdersController do
   describe '#new' do
     it 'should render new' do
       @account.stub_chain(:orders, :build)
-      get :new, id: 7
+      get :new, account_id: @account.id
       response.should render_template('new')
     end
   end
 
   describe '#edit' do
     it 'should render edit' do
-      @account.stub_chain(:orders, :find)
-      get :edit, id: 7
+      @order = mock_model(Order, { create_schedule: nil, exclusions: [], substitutions: [] })
+      @account.stub_chain(:orders, :find).and_return(@order)
+      get :edit, account_id: @account.id, id: 7
       response.should render_template('edit')
     end
   end
 
   describe '#create' do
     before do
-      @order = mock_model(Order, { create_schedule: nil })
+      @order = mock_model(Order, { create_schedule: nil, update_exclusions: true, update_substitutions: true })
       @order.stub(:account_id=)
       @order.stub(:completed=)
       Order.stub(:new).and_return(@order)
     end
 
     def do_create
-      post :create, order: { menu: 'chicken fries' }
+      post :create, account_id: @account.id, order: { menu: 'chicken fries' }
     end
 
     it 'should create an order' do
@@ -51,13 +52,13 @@ describe Distributor::OrdersController do
 
     it 'should save the order' do
       Order.should_receive(:new).with('menu' => 'chicken fries', 'account_id' => @account.id, 'completed' => true).and_return(@order)
-      @order.should_receive(:save).and_return(true)
+      @order.stub(:save).and_return(true)
       do_create
     end
 
     it 'should render new' do
       Order.should_receive(:new).with('menu' => 'chicken fries', 'account_id' => @account.id, 'completed' => true).and_return(@order)
-      @order.should_receive(:save).and_return(false)
+      @order.stub(:save).and_return(false)
       @order.stub(:errors).and_return(['error'])
       do_create
       response.should render_template('new')
@@ -66,12 +67,12 @@ describe Distributor::OrdersController do
 
   describe '#update' do
     before do
-      @order = mock_model(Order)
+      @order = mock_model(Order, { update_exclusions: true, update_substitutions: true })
       Distributor.any_instance.stub_chain(:orders, :find).and_return(@order)
     end
 
     def do_update
-      put :update, order: { menu: 'roast beef' }, id: 7
+      put :update, account_id: @account.id, order: { menu: 'roast beef' }, id: 7
     end
 
     it 'should update order' do
