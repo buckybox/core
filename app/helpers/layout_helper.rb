@@ -44,22 +44,21 @@ module LayoutHelper
   end
 
   def customer_badge(customer, options = {})
-    content = ''
+    customer_id = customer.formated_number.to_s
 
-    customer_id = customer.formated_number
-    content += content_tag(:span, "#{customer_id}", class: 'customer-id')
+    if options[:link] == false
+      content = content_tag(:span, customer_id, class: 'customer-id')
+    elsif options.has_key?(:link)
+      content = link_to(customer_id, url_for(options[:link]), class: 'customer-id')
+    else
+      content = link_to(customer_id, [:distributor, customer], class: 'customer-id')
+    end
 
     customer_name = options[:customer_name] || customer.name
     customer_name = truncate(customer_name, length: 18) if options[:short]
     content += content_tag(:span, customer_name, class: 'customer-name')
 
-    if options[:link] == false
-      badge = content_tag(:span, content.html_safe, class: 'customer-badge')
-    elsif options.has_key?(:link)
-      badge = link_to(content.html_safe, url_for(options[:link]), class: 'customer-badge')
-    else
-      badge = link_to(content.html_safe, [:distributor, customer], class: 'customer-badge')
-    end
+    badge = content_tag(:span, content.html_safe, class: 'customer-badge')
 
     return [ options[:before], badge, options[:after] ].join.html_safe
   end

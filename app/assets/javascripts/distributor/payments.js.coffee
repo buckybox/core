@@ -44,7 +44,7 @@ $ ->
       $(".row_description").unbind()
       $(".row_description").click((event) ->
         clicked = $(event.target)
-        if clicked.is("td") || clicked.is("div.show_row_match") || clicked.is("form") || clicked.is("div.row")
+        if clicked.is("td") || clicked.is("div.show_row_match") || clicked.is("form") || clicked.is("div.row") || clicked.is("span.customer-name")
           $(this).next().toggle()
           $(this).closest("tr.row_description").find(".edit_row_match").toggle()
           $(this).closest("tr.row_description").find(".show_row_match").toggle()
