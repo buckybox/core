@@ -18,7 +18,6 @@ $(function() {
       distributor_check_box(box_id);
     }
     else {
-      $('#likes_input').hide();
       $('#dislikes_input').hide();
     }
   });
@@ -29,6 +28,21 @@ $(function() {
     }
     else {
       $('#distributor_order #days').show();
+    }
+  });
+
+  $('#dislikes_input').change(function() {
+    likes_input = $('#likes_input');
+    dislikes_input = $('#dislikes_input');
+
+    if(!dislikes_input.is(':hidden') && dislikes_input.find('option:selected').length > 0) {
+      likes_input.show();
+      likes_input.find('select').chosen();
+    }
+    else {
+      likes_input.find('option:selected').attr('selected', false);
+      likes_input.find('select').trigger('liszt:updated');
+      likes_input.hide();
     }
   });
 });
@@ -47,20 +61,16 @@ function distributor_check_box(box_id) {
     url: '/distributor/boxes/' + box_id + '.json',
     dataType: 'json',
     success: function(data) {
-      if(data['likes']) {
-        $('#likes_input').show();
-        $('#likes_input select').chosen();
-      }
-      else {
-        $('#likes_input').hide();
-      }
-
       if(data['dislikes']) {
         $('#dislikes_input').show();
         $('#dislikes_input select').chosen();
       }
       else {
         $('#dislikes_input').hide();
+      }
+
+      if(!data['likes']) {
+        $('#likes_input').hide();
       }
     }
   });

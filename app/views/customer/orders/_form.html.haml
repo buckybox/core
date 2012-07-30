@@ -46,15 +46,15 @@
           #dislikes_input
             .row
               .twelve.columns
-                = f.label :dislikes
+                = f.label :dislikes, 'Exclusions'
                 .row
-                  = select_tag :dislikes_input, options_from_collection_for_select(@stock_list, :id, :name, @dislikes_list), multiple: true, class: 'twelve columns', data: { placeholder: "Choose any dislikes..." }
+                  = select_tag :dislikes_input, options_from_collection_for_select(@stock_list, :id, :name, @dislikes_list), multiple: true, class: 'twelve columns', data: { placeholder: "Exclude these items..." }
           #likes_input
             .row
               .twelve.columns
                 = f.label :likes, 'Substitutes'
                 .row
-                  = select_tag :likes_input, options_from_collection_for_select(@stock_list, :id, :name, @likes_list), multiple: true, class: 'twelve columns', data: { placeholder: "Choose any substitutes..." }
+                  = select_tag :likes_input, options_from_collection_for_select(@stock_list, :id, :name, @likes_list), multiple: true, class: 'twelve columns', data: { placeholder: "Substitute for these items..." }
 
 
 
