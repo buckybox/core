@@ -154,8 +154,9 @@ describe DeliveryList do
       before do
         delivery_list.save
         d1 = fab_delivery(delivery_list, distributor)
-        d2 = fab_delivery(delivery_list, distributor, d1.route)
-        d3 = fab_delivery(delivery_list, distributor, d1.route)
+        @route = d1.route
+        d2 = fab_delivery(delivery_list, distributor, @route)
+        d3 = fab_delivery(delivery_list, distributor, @route)
         @ids = delivery_list.reload.deliveries.ordered.collect(&:id)
         @new_ids = [@ids.last, @ids.first, @ids[1]]
       end
@@ -180,10 +181,11 @@ describe DeliveryList do
         delivery_list.reposition(@new_ids)
         addresses = delivery_list.deliveries.ordered.collect(&:address)
         
-        account = Fabricate(:account, customer: Fabricate(:customer, distributor: distributor))
-        account2 = Fabricate(:account, customer: Fabricate(:customer, distributor: distributor))
-        order = Fabricate(:active_order, account: account, schedule: new_single_schedule(date.to_time))
-        order2 = Fabricate(:active_order, account: account2, schedule: new_single_schedule(date.to_time))
+        box = Fabricate(:box, distributor: distributor)
+        account = Fabricate(:account, customer: Fabricate(:customer, distributor: distributor, route: @route))
+        account2 = Fabricate(:account, customer: Fabricate(:customer, distributor: distributor, route: @route))
+        order = Fabricate(:active_order, account: account, schedule: new_single_schedule(date.to_time), box: box)
+        order2 = Fabricate(:active_order, account: account2, schedule: new_single_schedule(date.to_time), box: box)
 
         PackingList.generate_list(distributor, date)
         next_delivery_list = DeliveryList.generate_list(distributor, date)

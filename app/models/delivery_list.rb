@@ -28,7 +28,10 @@ class DeliveryList < ActiveRecord::Base
         orders.each { |order| date_orders << order if order.schedule.occurs_on?(date) }
 
         # This emulates the ordering when lists are actually created
-        result << FutureDeliveryList.new(date, date_orders.sort_by{|order| order.dso(wday)})
+        result << FutureDeliveryList.new(date, date_orders.sort { |a,b|
+          comp = a.dso(wday) <=> b.dso(wday)
+          comp.zero? ? (b.created_at <=> a.created_at) : comp
+        })
       end
     end
 
@@ -126,7 +129,8 @@ class DeliveryList < ActiveRecord::Base
       delivery_to_same_address.delivery_number
     else
       @delivery_number ||= {}
-      @delivery_number[self.id] = deliveries(true).order(:delivery_number).last.delivery_number if deliveries(true).order(:delivery_number).last
+      last_delivery = deliveries(true).where(route_id: delivery.route.id).order(:delivery_number).last
+      @delivery_number[self.id] = last_delivery.delivery_number if last_delivery
       @delivery_number[self.id] ||= 0
       @delivery_number[self.id] += 1
     end
