@@ -1,6 +1,6 @@
 = customer_title(@account.customer, title: "Edit Order for #{customer_and_number(@account.customer)}")
 
-= render 'form'
+= render 'shared/orders/form'
 
 = link_to 'Show', [:distributor, @account, @order]
 \|

@@ -15,6 +15,7 @@ class Distributor::OrdersController < Distributor::ResourceController
       @stock_list    = current_distributor.line_items
       @dislikes_list = nil
       @likes_list    = nil
+      @form_params   = [:distributor, @account, @order]
 
       load_form
     end
@@ -47,6 +48,7 @@ class Distributor::OrdersController < Distributor::ResourceController
       @stock_list    = current_distributor.line_items
       @dislikes_list = @order.exclusions.map { |e| e.line_item_id.to_s }
       @likes_list    = @order.substitutions.map { |s| s.line_item_id.to_s }
+      @form_params   = [:distributor, @account, @order]
 
       load_form
     end

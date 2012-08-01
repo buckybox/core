@@ -1,6 +1,6 @@
 = customer_title(current_customer, link: customer_root_path, title: "Update Order for #{customer_and_number(current_customer)}")
 
-= render partial: 'customer/orders/form', locals: { order: @order }
+= render partial: 'shared/orders/form'
 
 = link_to 'Cancel', customer_root_path
 

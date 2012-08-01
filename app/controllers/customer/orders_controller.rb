@@ -14,6 +14,9 @@ class Customer::OrdersController < Customer::ResourceController
       @stock_list    = current_customer.distributor.line_items
       @dislikes_list = nil
       @likes_list    = nil
+      @form_params   = [:customer, @order]
+
+      load_form
     end
   end
 
@@ -39,6 +42,9 @@ class Customer::OrdersController < Customer::ResourceController
       @stock_list    = current_customer.distributor.line_items
       @dislikes_list = @order.exclusions.map { |e| e.line_item_id.to_s }
       @likes_list    = @order.substitutions.map { |s| s.line_item_id.to_s }
+      @form_params   = [:customer, @order]
+
+      load_form
     end
   end
 
@@ -95,5 +101,13 @@ class Customer::OrdersController < Customer::ResourceController
 
   def collection
     @orders ||= end_of_association_chain.active
+  end
+
+  private
+
+  def load_form
+    @customer = current_customer
+    @account  = @customer.account
+    @route    = @customer.route
   end
 end
