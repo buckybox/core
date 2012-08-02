@@ -33,23 +33,41 @@ $(function() {
   });
 
   $('.order .dislikes_input').change(function() {
-    var current_order = $(this).closest('.order');
+    var current_order  = $(this).closest('.order');
+    var likes_input    = current_order.find('.likes_input');
+    var dislikes_input = current_order.find('.dislikes_input');
 
-    likes_input = current_order.find('.likes_input');
-    dislikes_input = current_order.find('.dislikes_input');
+    disable_the_others_options(dislikes_input, likes_input);
 
     if(!dislikes_input.is(':hidden') && dislikes_input.find('option:selected').length > 0) {
       likes_input.show();
     }
     else {
-      likes_input.find('option:selected').attr('selected', false);
+      likes_input.find('option:selected').removeAttr('selected');
       likes_input.find('select').trigger('liszt:updated');
       likes_input.hide();
     }
   });
 
+  $('.order .likes_input').change(function() {
+    var current_order  = $(this).closest('.order');
+    var likes_input    = current_order.find('.likes_input');
+    var dislikes_input = current_order.find('.dislikes_input');
+
+    disable_the_others_options(likes_input, dislikes_input);
+
+    if(dislikes_input.find('option:selected').length == 0) {
+      likes_input.find('option:selected').each(function() {
+        $(this).removeAttr('selected');
+        likes_input.hide();
+
+        likes_input.find('select').trigger("liszt:updated");
+      });
+    }
+  });
+
   $(".order .include_extras").change(function() {
-     var current_order = $(this).closest('.order');
+    var current_order = $(this).closest('.order');
     update_order_extras_collection(current_order);
   });
 
@@ -64,6 +82,16 @@ $(function() {
     return true;
   });
 });
+
+function disable_the_others_options(affecting_input, effected_input) {
+  affecting_input.find('option:selected').each(function() {
+    counter = effected_input.find("option[value='" + $(this).val() + "']");
+    counter.attr('disabled', 'disabled');
+    counter.removeAttr('selected');
+  });
+
+  effected_input.find('select').trigger("liszt:updated");
+}
 
 function order_init() {
   $('.order').each( function() {
