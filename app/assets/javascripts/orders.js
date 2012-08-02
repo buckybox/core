@@ -11,7 +11,7 @@ $(function() {
     $('.order .likes_input').hide();
   }
 
-  if($('.pause') > 0) {
+  if($('.pause').length > 0) {
     $('.order .date_picker').dateinput({ format: 'yyyy-mm-dd' });
   }
 
@@ -21,6 +21,7 @@ $(function() {
 
     if(box_id) {
       order_check_box(box_id, current_order);
+      update_customer_box_extras(current_order);
     }
     else {
       current_order.find('.dislikes_input').hide();
@@ -29,7 +30,7 @@ $(function() {
   });
 
   $('.order select.frequency').change(function() {
-    day_display(this);
+    day_display($(this));
   });
 
   $('.order .dislikes_input').change(function() {
@@ -98,7 +99,7 @@ function order_init() {
     var box_id = $(this).find('select.box').val();
 
     day_display($(this).find('select.frequency'));
-    update_order_extras_collection(this);
+    update_order_extras_collection($(this));
 
     if(box_id) { order_check_box(box_id, $(this)); }
   });
@@ -139,12 +140,25 @@ function order_check_box(box_id, current_order) {
 }
 
 function update_order_extras_collection(current_order) {
-  var include_extras = $(current_order).find("#order_include_extras").prop("checked");
+  var include_extras = current_order.find("#order_include_extras").prop("checked");
 
   if (include_extras) {
-    $(current_order).find("#order_extras").show();
+    current_order.find(".extras").show();
   } 
   else {
-    $(current_order).find("#order_extras").hide();
+    current_order.find(".extras").hide();
   }
+};
+
+function update_customer_box_extras(current_order) {
+  var box_id = current_order.find('select.box').val();
+  var path_root = $(location).attr('pathname').split('/')[1];
+
+  var url = '/' + path_root;
+  if(typeof current_account_id != 'undefined') { url += '/accounts/' + current_account_id; }
+  url += '/boxes/' + box_id + '/extras';
+
+  $.get(url, function(data) {
+    current_order.find(".order_extras").html(data);
+  });
 };
