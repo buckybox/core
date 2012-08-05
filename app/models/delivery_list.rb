@@ -135,4 +135,8 @@ class DeliveryList < ActiveRecord::Base
       @delivery_number[self.id] += 1
     end
   end
+
+  def archived?
+    date.past?
+  end
 end

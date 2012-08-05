@@ -23,7 +23,7 @@
         { id: 'delivery-export', class: 'small radius button', disabled: !@real_list })
 
   - if @real_list
-    %ul#delivery_list.sortable
+    %ul#delivery_list{class: (@delivery_list.date.past? ? '' : 'sortable')}
       - @items.group_by{|delivery| delivery.order.address.address_hash}.each do |addressh_hash, deliveries|
         %li.row
           .twelve.columns

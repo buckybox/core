@@ -12,6 +12,7 @@ class DeliverySequenceOrder < ActiveRecord::Base
   def update_dso
     Delivery.matching_dso(self).each do |delivery|
       next if delivery.dso == position
+      next if delivery.archived?
       delivery.dso = position
       delivery.save!
     end

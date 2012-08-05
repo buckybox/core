@@ -153,6 +153,7 @@ describe DeliveryList do
     context 'should update delivery list positions' do
       before do
         delivery_list.save
+        DeliveryList.any_instance.stub(:archived?).and_return(false)
         d1 = fab_delivery(delivery_list, distributor)
         @route = d1.route
         d2 = fab_delivery(delivery_list, distributor, @route)
@@ -162,11 +163,13 @@ describe DeliveryList do
       end
 
       it 'should change delivery order' do
+        DeliveryList.any_instance.stub(:archived?).and_return(false)
         expect { delivery_list.reposition(@new_ids)}.should change{delivery_list.deliveries.ordered.collect(&:id)}.to(@new_ids)
         delivery_list.reload.deliveries.ordered.collect(&:delivery_number).should eq([3,1,2])
       end
 
       it 'should update the delivery list for the next week' do
+        DeliveryList.any_instance.stub(:archived?).and_return(false)
         delivery_list.reposition(@new_ids)
         addresses = delivery_list.deliveries.ordered.collect(&:address)
         PackingList.generate_list(distributor, delivery_list.date+1.week)
@@ -177,6 +180,7 @@ describe DeliveryList do
       end
 
       it 'should put new deliveries at the top of the list' do
+        DeliveryList.any_instance.stub(:archived?).and_return(false)
         date = delivery_list.date
         delivery_list.reposition(@new_ids)
         addresses = delivery_list.deliveries.ordered.collect(&:address)
@@ -215,11 +219,13 @@ describe DeliveryList do
       end
 
       it 'should keep similiar addresses together' do
+        DeliveryList.any_instance.stub(:archived?).and_return(false)
         delivery_list.reposition(@ids)
         delivery_list.deliveries.ordered.collect(&:id).should eq([@d1.id, @d4.id, @d2.id, @d3.id])
       end
 
       it 'should give similiar addresses the same delivery number' do
+        DeliveryList.any_instance.stub(:archived?).and_return(false)
         delivery_list.reposition(@ids)
         delivery_list.deliveries.ordered.collect(&:delivery_number).should eq([1, 1, 2, 3])
       end

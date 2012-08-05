@@ -36,6 +36,7 @@ class Delivery < ActiveRecord::Base
 
   delegate :date, to: :delivery_list, allow_nil: true
   delegate :address_hash, to: :address
+  delegate :archived?, to: :delivery_list, allow_nil: true
 
   state_machine :status, initial: :pending do
     before_transition on: :deliver, do: :deduct_account
