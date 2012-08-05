@@ -13,7 +13,7 @@ describe Distributor::DeliveriesController do
         delivery_for_distributor(@distributor, @route, @box, @date, position)
       }
     end
-      
+    
     it "should order deliveries based on the DSO" do
       get :index, {date: @date, view: 'deliveries'}
 
