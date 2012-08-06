@@ -9,6 +9,8 @@ class Exclusion < ActiveRecord::Base
   validates_presence_of :order, :line_item
   validates_uniqueness_of :line_item_id, scope: :order_id
 
+  scope :active, includes(:order).where("orders.active = ?", true)
+
   def self.change_line_items!(old_line_item, new_line_item)
     old_line_item.exclusions.each do |e|
       e.update_attribute(:line_item_id, new_line_item.id)

@@ -5,6 +5,19 @@ describe Substitution do
 
   specify { substitution.should be_valid }
 
+  context 'active substitution' do
+    before do
+      substitution.save
+
+      inactive_substitution = substitution.clone
+      inactive_substitution.order = Fabricate(:inactive_order)
+      inactive_substitution.save
+    end
+
+    specify { Substitution.active.size.should == 1 }
+    specify { Substitution.active.first.should == substitution }
+  end
+
   describe '.change_line_items!' do
     before do
       @old_line_item  = Fabricate(:line_item)

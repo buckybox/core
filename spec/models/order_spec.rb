@@ -262,42 +262,49 @@ describe Order do
     end
   end
 
-  describe '#update_exclusions' do
+  context 'order requests' do
     before do
-      order.save
-      @e1 = Fabricate(:exclusion, order: order)
-      @e2 = Fabricate(:exclusion, order: order)
-      @e3 = Fabricate(:exclusion, order: order)
-
-      @e1_id = @e1.line_item_id
-      @e2_id = @e2.line_item_id
-      @e3_id = @e3.line_item_id
-      @e4_id = Fabricate(:line_item).id
-
-      order.update_exclusions([@e1_id, @e4_id])
-      order.save
+      Box.any_instance.stub(:likes?).and_return(true)
+      Box.any_instance.stub(:dislikes?).and_return(true)
     end
 
-    specify { order.exclusions.map(&:line_item_id).should == [@e1_id, @e4_id] }
-  end
+    describe '#update_exclusions' do
+      before do
+        order.save
+        @e1 = Fabricate(:exclusion, order: order)
+        @e2 = Fabricate(:exclusion, order: order)
+        @e3 = Fabricate(:exclusion, order: order)
 
-  describe '#update_substitutions' do
-    before do
-      order.save
-      @s1 = Fabricate(:substitution, order: order)
-      @s2 = Fabricate(:substitution, order: order)
-      @s3 = Fabricate(:substitution, order: order)
+        @e1_id = @e1.line_item_id
+        @e2_id = @e2.line_item_id
+        @e3_id = @e3.line_item_id
+        @e4_id = Fabricate(:line_item).id
 
-      @s1_id = @s1.line_item_id
-      @s2_id = @s2.line_item_id
-      @s3_id = @s3.line_item_id
-      @s4_id = Fabricate(:line_item).id
+        order.update_exclusions([@e1_id, @e4_id])
+        order.save
+      end
 
-      order.update_substitutions([@s1_id, @s4_id])
-      order.save
+      specify { order.exclusions.map(&:line_item_id).should == [@e1_id, @e4_id] }
     end
 
-    specify { order.substitutions.map(&:line_item_id).should == [@s1_id, @s4_id] }
+    describe '#update_substitutions' do
+      before do
+        order.save
+        @s1 = Fabricate(:substitution, order: order)
+        @s2 = Fabricate(:substitution, order: order)
+        @s3 = Fabricate(:substitution, order: order)
+
+        @s1_id = @s1.line_item_id
+        @s2_id = @s2.line_item_id
+        @s3_id = @s3.line_item_id
+        @s4_id = Fabricate(:line_item).id
+
+        order.update_substitutions([@s1_id, @s4_id])
+        order.save
+      end
+
+      specify { order.substitutions.map(&:line_item_id).should == [@s1_id, @s4_id] }
+    end
   end
 
   describe '.pack_and_update_extras' do

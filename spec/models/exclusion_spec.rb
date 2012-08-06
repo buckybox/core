@@ -5,6 +5,19 @@ describe Exclusion do
 
   specify { exclusion.should be_valid }
 
+  context 'active exclusions' do
+    before do
+      exclusion.save
+
+      inactive_exclusion = exclusion.clone
+      inactive_exclusion.order = Fabricate(:inactive_order)
+      inactive_exclusion.save
+    end
+
+    specify { Exclusion.active.size.should == 1 }
+    specify { Exclusion.active.first.should == exclusion }
+  end
+
   describe '.change_line_items!' do
     before do
       @old_line_item = Fabricate(:line_item)

@@ -24,8 +24,8 @@ module Distributor::SettingsHelper
     has_substitutions = (substitution_count > 0)
 
     content = image_tag('icon-customer.png', class: 'float-left') if has_exclusions || has_substitutions
-    content += content_tag(:div, "-#{exclusion_count}", title: 'exclude for 1 customer', class: 'float-left') if has_exclusions
-    content += content_tag(:div, "+#{substitution_count}", title: 'substitute for 1 customer', class: 'float-left') if has_substitutions
+    content += content_tag(:div, "-#{exclusion_count}", title: "exclude for #{pluralize(exclusion_count, 'customer')}", class: 'float-left') if has_exclusions
+    content += content_tag(:div, "+#{substitution_count}", title: "substitute for #{pluralize(substitution_count, 'customer')}", class: 'float-left') if has_substitutions
 
     content_tag(:div, content.html_safe, class: 'block count float-right') if content
   end

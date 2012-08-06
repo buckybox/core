@@ -46,11 +46,11 @@ class LineItem < ActiveRecord::Base
   end
 
   def exclusions_count_by_customer
-    exclusions.uniq_by{ |e| e.customer.id }.size
+    exclusions.active.uniq_by{ |e| e.customer.id }.size
   end
 
   def substitution_count_by_customer
-    substitutions.uniq_by{ |e| e.customer.id }.size
+    substitutions.active.uniq_by{ |e| e.customer.id }.size
   end
 
   private

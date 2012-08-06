@@ -12,10 +12,10 @@ describe Distributor::LineItemsController do
       end
 
       specify { flash[:notice].should eq('The stock list was successfully updated.') }
-      specify { response.should redirect_to(distributor_settings_stock_list_url(edit: true)) }
+      specify { response.should redirect_to(distributor_settings_stock_list_url) }
     end
 
-    context 'with valid params' do
+    context 'with invalid params' do
       before do
         post :create, { stock_list: { names: "" } }
       end

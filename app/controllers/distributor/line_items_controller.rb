@@ -6,7 +6,7 @@ class Distributor::LineItemsController < Distributor::ResourceController
   def create
     if LineItem.from_list(current_distributor, params[:stock_list][:names])
       flash[:notice] = 'The stock list was successfully updated.'
-      redirect_to distributor_settings_stock_list_url(edit: true)
+      redirect_to distributor_settings_stock_list_url
     else
       flash[:error] = 'Could not update the stock list.'
       redirect_to distributor_settings_stock_list_url(edit: true)

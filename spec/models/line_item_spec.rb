@@ -95,7 +95,7 @@ describe LineItem do
         e3 = Fabricate.build(:exclusion)
         e3.stub_chain(:customer, :id).and_return(1)
 
-        line_item.stub(:exclusions).and_return([e1, e2, e3])
+        line_item.stub_chain(:exclusions, :active).and_return([e1, e2, e3])
       end
 
       specify { line_item.exclusions_count_by_customer.should == 2 }
@@ -110,7 +110,7 @@ describe LineItem do
         s3 = Fabricate.build(:substitution)
         s3.stub_chain(:customer, :id).and_return(1)
 
-        line_item.stub(:substitutions).and_return([s1, s2, s3])
+        line_item.stub_chain(:substitutions, :active).and_return([s1, s2, s3])
       end
 
       specify { line_item.substitution_count_by_customer.should == 2 }
