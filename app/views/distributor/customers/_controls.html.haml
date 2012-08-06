@@ -1,0 +1,14 @@
+.row.page-controls.customer-controls
+  .eight.columns
+    - if params[:query]
+      %h3== Searching "#{params[:query]}"
+    - elsif params[:tag]
+      %h3== Tag "#{params[:tag]}"
+
+    - if params[:query] || params[:tag]
+      = link_to 'Clear', distributor_customers_path
+
+  .four.columns.text-right.search
+    = form_tag search_distributor_customers_path, method: :get, class: 'nice' do
+      = text_field_tag :query, '', placeholder: 'Search For...', class: 'input-text'
+      = submit_tag 'Search', class: 'small radius button'
