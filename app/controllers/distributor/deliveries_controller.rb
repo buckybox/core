@@ -93,7 +93,7 @@ class Distributor::DeliveriesController < Distributor::ResourceController
 
     if export_type == :delivery
       export_items = current_distributor.deliveries.ordered.where(id: params[:deliveries])
-      export_items = export_items.sort_by { |ei| ei.position }
+      export_items = export_items.sort_by { |ei| ei.dso }
       csv_headers = Delivery.csv_headers
     else
       packages = current_distributor.packages.where(id: params[:packages])

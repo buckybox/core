@@ -156,7 +156,7 @@ class Delivery < ActiveRecord::Base
   def to_csv
     [
       route.name,
-      (position ? ("%03d" % position) : nil),
+      (delivery_number ? ("%03d" % delivery_number) : nil),
       nil,
       order.id,
       id,
