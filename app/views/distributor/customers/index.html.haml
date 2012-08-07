@@ -1,11 +1,6 @@
 - title 'Customers', false
 = render 'controls'
 
-.row
-  .nine.columns
-    %h3 Customers
-  .three.columns.text-right= link_to 'New Customer', new_distributor_customer_path, class: 'button radius'
-
 - if @customers.blank?
   .row.data-headings
     %h4.twelve.columns No Customers To Display
@@ -23,6 +18,10 @@
         %h4.six.columns Balance
 
   #customers
+    .row
+      #add-customer.twelve.columns.text-center.add-colour
+        = link_to 'Create a new customer', new_distributor_customer_path, id: 'new-customer'
+
     - @customers.each do |customer|
       .row.data-listings
         .five.columns
