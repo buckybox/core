@@ -155,11 +155,11 @@ class Package < ActiveRecord::Base
   def to_csv
     # At the moment a package only has one delivery. This will change with recheduling, repacking and the 
     # refactor. Was included because we thought we were going to do rescheduling sooner then we did.
-    delivery = deliveries.first
+    delivery = deliveries.ordered.first
 
     [
       route.name,
-      ((!delivery.nil? && delivery.position) ? ("%03d" % delivery.position) : nil),
+      ((!delivery.nil? && delivery.delivery_number) ? ("%03d" % delivery.delivery_number) : nil),
       nil,
       order.id,
       id,
@@ -177,8 +177,8 @@ class Package < ActiveRecord::Base
       address.delivery_note,
       order.string_sort_code,
       box.name,
-      order.likes,
-      order.dislikes,
+      order.substitutions.map(&:name).join(', '),
+      order.exclusions.map(&:name).join(', '),
       extras_description,
       price,
       customer.email

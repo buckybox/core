@@ -3,12 +3,12 @@ class Account < ActiveRecord::Base
 
   has_one :distributor, through: :customer
 
-  has_many :orders, dependent: :destroy
+  has_many :orders,        dependent: :destroy
+  has_many :payments,      dependent: :destroy
+  has_many :deductions,    dependent: :destroy
   has_many :active_orders, class_name: 'Order', conditions: {active: true}
-  has_many :payments, dependent: :destroy
-  has_many :deductions, dependent: :destroy
-  has_many :transactions, autosave: true
-  has_many :deliveries, through: :orders
+  has_many :transactions,  autosave: true
+  has_many :deliveries,    through: :orders
   has_many :invoices
 
   has_one :route,    through: :customer
@@ -115,8 +115,8 @@ class Account < ActiveRecord::Base
 
       # After talking to @joshuavial the + 2.days is because of the buisness requirement:
       # it never send an invoice before 2 days after the first delivery
-      if deliveries.size > 0 && deliveries.first.date.present? && deliveries.first.date >= invoice_date
-        invoice_date = deliveries.first.date + 2.days
+      if deliveries.size > 0 && deliveries.ordered.first.date.present? && deliveries.ordered.first.date >= invoice_date
+        invoice_date = deliveries.ordered.first.date + 2.days
       elsif deliveries.size == 0 && occurrences.first && occurrences.first[:date] >= invoice_date
         invoice_date = occurrences.first[:date] + 2.days
       end

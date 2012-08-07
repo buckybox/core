@@ -45,6 +45,8 @@ end
 group :development do
   gem 'nifty-generators', require: false
 
+  gem 'ruby-prof' # profiling with /newrelic
+
   gem 'capistrano'
   gem 'capistrano_colors'
   gem 'tinder'

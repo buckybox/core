@@ -118,4 +118,10 @@ describe Delivery do
   describe '#reposition!' do
     specify { expect { delivery.reposition!(101) }.to change(delivery, :position).to(101) }
   end
+
+  describe '#matching_dso' do
+    before do
+      
+    end
+  end
 end

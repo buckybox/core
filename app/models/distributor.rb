@@ -1,29 +1,29 @@
 class Distributor < ActiveRecord::Base
-  has_one :bank_information,    dependent: :destroy
-  has_one :invoice_information, dependent: :destroy
+  has_one :bank_information,          dependent: :destroy
+  has_one :invoice_information,       dependent: :destroy
 
-  has_many :extras,             dependent: :destroy
-  has_many :boxes,              dependent: :destroy
-  has_many :routes,             dependent: :destroy
-  has_many :orders,             dependent: :destroy, through: :boxes
-  has_many :deliveries,         dependent: :destroy, through: :orders
-  has_many :payments,           dependent: :destroy
-  has_many :customers,          autosave: true # Want to save those customers added via import_customers
-  has_many :accounts,           dependent: :destroy, through: :customers
-  has_many :invoices,           dependent: :destroy, through: :accounts
-  has_many :transactions,       dependent: :destroy, through: :accounts
-  has_many :events
-  has_many :delivery_lists,     dependent: :destroy
-  has_many :packing_lists,      dependent: :destroy
-  has_many :packages,           dependent: :destroy, through: :packing_lists
+  has_many :extras,                   dependent: :destroy
+  has_many :boxes,                    dependent: :destroy
+  has_many :routes,                   dependent: :destroy
+  has_many :orders,                   dependent: :destroy, through: :boxes
+  has_many :deliveries,               dependent: :destroy, through: :orders
+  has_many :payments,                 dependent: :destroy
+  has_many :customers,                dependent: :destroy, autosave: true # Want to save those customers added via import_customers
+  has_many :accounts,                 dependent: :destroy, through: :customers
+  has_many :invoices,                 dependent: :destroy, through: :accounts
+  has_many :transactions,             dependent: :destroy, through: :accounts
+  has_many :events,                   dependent: :destroy
+  has_many :delivery_lists,           dependent: :destroy
+  has_many :packing_lists,            dependent: :destroy
+  has_many :packages,                 dependent: :destroy, through: :packing_lists
+  has_many :line_items,               dependent: :destroy
+  has_many :import_transaction_lists, dependent: :destroy
+  has_many :import_transactions,      dependent: :destroy, through: :import_transaction_lists
 
-  has_many :import_transaction_lists
-  has_many :import_transactions, through: :import_transaction_lists
-
-  DEFAULT_TIME_ZONE = 'Wellington'
-  DEFAULT_CURRENCY = 'nzd'
-  DEFAULT_ADVANCED_HOURS = 18
-  DEFAULT_ADVANCED_DAYS = 3
+  DEFAULT_TIME_ZONE               = 'Wellington'
+  DEFAULT_CURRENCY                = 'nzd'
+  DEFAULT_ADVANCED_HOURS          = 18
+  DEFAULT_ADVANCED_DAYS           = 3
   DEFAULT_AUTOMATIC_DELIVERY_HOUR = 18
   DEFAULT_AUTOMATIC_DELIVERY_DAYS = 1
 
