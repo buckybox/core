@@ -34,6 +34,7 @@ BuckyBox::Application.routes.draw do
       get 'routes'
       get 'bank_information'
       get 'invoice_information'
+      get 'stock_list'
       get 'reporting'
     end
 
@@ -44,6 +45,12 @@ BuckyBox::Application.routes.draw do
     resources :extras,              except: [:index, :show]
     resources :routes,              except: [:index, :show]
     resources :transactions,        only: :create
+
+    resources :line_items, except: [:index, :show, :update] do
+      collection do
+        put 'bulk_update', action: :bulk_update, as: 'bulk_update'
+      end
+    end
 
     resources :deliveries do
       collection do
@@ -66,10 +73,10 @@ BuckyBox::Application.routes.draw do
     resources :payments, only: [:create, :index, :show, :destroy] do
       collection do
         get 'upload_transactions', action: 'upload_transactions', as: 'upload_transactions'
-        post 'commit_upload', action: 'commit_upload', as: 'commit_upload'
-        post 'create_from_csv', action: 'create_from_csv', as: 'create_from_csv'
-        post 'process_upload',     action: 'process_upload', as: 'process_upload'
-        post 'index', action: 'match_payments', as: 'match_payments'
+        post 'commit_upload',      action: 'commit_upload',       as: 'commit_upload'
+        post 'create_from_csv',    action: 'create_from_csv',     as: 'create_from_csv'
+        post 'process_upload',     action: 'process_upload',      as: 'process_upload'
+        post 'index',              action: 'match_payments',      as: 'match_payments'
       end
 
       member do

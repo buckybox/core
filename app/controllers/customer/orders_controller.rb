@@ -9,10 +9,14 @@ class Customer::OrdersController < Customer::ResourceController
     params[:order] = params[:order].slice!(:include_extras)
   end
 
-  def update
-    update! do |success, failure|
-      success.html { redirect_to customer_root_url }
-      failure.html { render 'edit' }
+  def new
+    new! do
+      @stock_list    = current_customer.distributor.line_items
+      @dislikes_list = nil
+      @likes_list    = nil
+      @form_params   = [:customer, @order]
+
+      load_form
     end
   end
 
@@ -24,8 +28,34 @@ class Customer::OrdersController < Customer::ResourceController
     @order.create_schedule(params[:start_date], params[:order][:frequency], params[:days])
 
     create! do |success, failure|
+      @order.update_exclusions(params[:dislikes_input])
+      @order.update_substitutions(params[:likes_input])
+      @order.save
+
       success.html { redirect_to customer_root_url }
       failure.html { render 'new' }
+    end
+  end
+
+  def edit
+    edit! do
+      @stock_list    = current_customer.distributor.line_items
+      @dislikes_list = @order.exclusions.map { |e| e.line_item_id.to_s }
+      @likes_list    = @order.substitutions.map { |s| s.line_item_id.to_s }
+      @form_params   = [:customer, @order]
+
+      load_form
+    end
+  end
+
+  def update
+    @order = current_customer.orders.find(params[:id])
+    @order.update_exclusions(params[:dislikes_input])
+    @order.update_substitutions(params[:likes_input])
+
+    update! do |success, failure|
+      success.html { redirect_to customer_root_url }
+      failure.html { render 'edit' }
     end
   end
 
@@ -71,5 +101,13 @@ class Customer::OrdersController < Customer::ResourceController
 
   def collection
     @orders ||= end_of_association_chain.active
+  end
+
+  private
+
+  def load_form
+    @customer = current_customer
+    @account  = @customer.account
+    @route    = @customer.route
   end
 end

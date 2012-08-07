@@ -137,8 +137,8 @@ class Customer < ActiveRecord::Base
       order = self.orders.build({
         box: box,
         quantity: 1,
-        likes: b.likes,
-        dislikes: b.dislikes,
+        #likes: b.likes,
+        #dislikes: b.dislikes,
         account: self.account,
         extras_one_off: b.extras_recurring?
       })

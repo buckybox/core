@@ -177,8 +177,8 @@ class Package < ActiveRecord::Base
       address.delivery_note,
       order.string_sort_code,
       box.name,
-      order.likes,
-      order.dislikes,
+      order.substitutions.map(&:name).join(', '),
+      order.exclusions.map(&:name).join(', '),
       extras_description,
       price,
       customer.email

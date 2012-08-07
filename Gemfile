@@ -1,7 +1,7 @@
 source 'http://rubygems.org'
 
 # Core
-gem 'rails', '~> 3.2.1'
+gem 'rails', '~> 3.2.6'
 
 # Database
 gem 'pg'
@@ -44,6 +44,8 @@ end
 
 group :development do
   gem 'nifty-generators', require: false
+
+  gem 'ruby-prof' # profiling with /newrelic
 
   gem 'capistrano'
   gem 'capistrano_colors'

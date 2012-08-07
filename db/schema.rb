@@ -123,11 +123,11 @@ ActiveRecord::Schema.define(:version => 20120730233824) do
     t.string   "last_name"
     t.integer  "distributor_id"
     t.integer  "route_id"
-    t.string   "encrypted_password",     :limit => 128, :default => "",  :null => false
+    t.string   "encrypted_password",       :limit => 128, :default => "",  :null => false
     t.string   "reset_password_token"
     t.datetime "reset_password_sent_at"
     t.datetime "remember_created_at"
-    t.integer  "sign_in_count",                         :default => 0
+    t.integer  "sign_in_count",                           :default => 0
     t.datetime "current_sign_in_at"
     t.datetime "last_sign_in_at"
     t.string   "current_sign_in_ip"
@@ -136,13 +136,14 @@ ActiveRecord::Schema.define(:version => 20120730233824) do
     t.string   "confirmation_token"
     t.datetime "confirmed_at"
     t.datetime "confirmation_sent_at"
-    t.integer  "failed_attempts",                       :default => 0
+    t.integer  "failed_attempts",                         :default => 0
     t.string   "unlock_token"
     t.datetime "locked_at"
     t.string   "authentication_token"
-    t.decimal  "discount",                              :default => 0.0, :null => false
+    t.decimal  "discount",                                :default => 0.0, :null => false
     t.integer  "number"
     t.text     "notes"
+    t.text     "special_order_preference"
   end
 
   add_index "customers", ["authentication_token"], :name => "index_customers_on_authentication_token", :unique => true
@@ -274,6 +275,16 @@ ActiveRecord::Schema.define(:version => 20120730233824) do
 
   add_index "events", ["distributor_id"], :name => "index_events_on_distributor_id"
 
+  create_table "exclusions", :force => true do |t|
+    t.integer  "order_id"
+    t.integer  "line_item_id"
+    t.datetime "created_at",   :null => false
+    t.datetime "updated_at",   :null => false
+  end
+
+  add_index "exclusions", ["line_item_id"], :name => "index_exclusions_on_line_item_id"
+  add_index "exclusions", ["order_id"], :name => "index_exclusions_on_order_id"
+
   create_table "extras", :force => true do |t|
     t.string   "name"
     t.string   "unit"
@@ -349,6 +360,15 @@ ActiveRecord::Schema.define(:version => 20120730233824) do
     t.datetime "updated_at"
   end
 
+  create_table "line_items", :force => true do |t|
+    t.integer  "distributor_id"
+    t.string   "name"
+    t.datetime "created_at",     :null => false
+    t.datetime "updated_at",     :null => false
+  end
+
+  add_index "line_items", ["distributor_id"], :name => "index_line_items_on_distributor_id"
+
   create_table "order_extras", :force => true do |t|
     t.integer  "order_id"
     t.integer  "extra_id"
@@ -371,8 +391,6 @@ ActiveRecord::Schema.define(:version => 20120730233824) do
   create_table "orders", :force => true do |t|
     t.integer  "box_id"
     t.integer  "quantity",       :default => 1,        :null => false
-    t.text     "likes"
-    t.text     "dislikes"
     t.string   "frequency",      :default => "single", :null => false
     t.boolean  "completed",      :default => false,    :null => false
     t.datetime "created_at"
@@ -470,6 +488,16 @@ ActiveRecord::Schema.define(:version => 20120730233824) do
   end
 
   add_index "routes", ["distributor_id"], :name => "index_routes_on_distributor_id"
+
+  create_table "substitutions", :force => true do |t|
+    t.integer  "order_id"
+    t.integer  "line_item_id"
+    t.datetime "created_at",   :null => false
+    t.datetime "updated_at",   :null => false
+  end
+
+  add_index "substitutions", ["line_item_id"], :name => "index_substitutions_on_line_item_id"
+  add_index "substitutions", ["order_id"], :name => "index_substitutions_on_order_id"
 
   create_table "taggings", :force => true do |t|
     t.integer  "tag_id"

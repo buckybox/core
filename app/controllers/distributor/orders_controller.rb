@@ -12,6 +12,11 @@ class Distributor::OrdersController < Distributor::ResourceController
 
   def new
     new! do
+      @stock_list    = current_distributor.line_items
+      @dislikes_list = nil
+      @likes_list    = nil
+      @form_params   = [:distributor, @account, @order]
+
       load_form
     end
   end
@@ -29,6 +34,10 @@ class Distributor::OrdersController < Distributor::ResourceController
     @order.create_schedule(params[:start_date], params[:order][:frequency], params[:days])
 
     create!  do |success, failure|
+      @order.update_exclusions(params[:dislikes_input])
+      @order.update_substitutions(params[:likes_input])
+      @order.save
+
       success.html { redirect_to [:distributor, @account.customer] }
       failure.html { render 'new' }
     end
@@ -36,6 +45,11 @@ class Distributor::OrdersController < Distributor::ResourceController
 
   def edit
     edit! do
+      @stock_list    = current_distributor.line_items
+      @dislikes_list = @order.exclusions.map { |e| e.line_item_id.to_s }
+      @likes_list    = @order.substitutions.map { |s| s.line_item_id.to_s }
+      @form_params   = [:distributor, @account, @order]
+
       load_form
     end
   end
@@ -43,6 +57,9 @@ class Distributor::OrdersController < Distributor::ResourceController
   def update
     @account = current_distributor.accounts.find(params[:account_id])
     @order   = current_distributor.orders.find(params[:id])
+
+    @order.update_exclusions(params[:dislikes_input])
+    @order.update_substitutions(params[:likes_input])
 
     # Not allowing changes to the schedule at the moment
     # Will revisit when we have time to build a proper UI for it
