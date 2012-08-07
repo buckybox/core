@@ -14,10 +14,13 @@ $(function() {
     placeholder:'ui-state-highlight',
     curser: 'move',
     opacity: 0.8,
+    start: function(e, ui){
+       ui.placeholder.height(ui.item.height());
+    },
     update: function() {
       $.ajax({
         type: 'post',
-        data: $('#delivery_list').sortable('serialize'),
+        data: $.map($('#delivery_list li li.row.data-listings'), function(val){return "delivery[]=" + $(val).attr('id').match(/\d+/)}).join("&"),
         dataType: 'json',
         url: '/distributor/deliveries/date/' +
           $('#delivery-listings').data('date') +
