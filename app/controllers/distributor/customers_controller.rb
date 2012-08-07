@@ -33,7 +33,7 @@ class Distributor::CustomersController < Distributor::ResourceController
       @address      = @customer.address
       @account      = @customer.account
       @orders       = @account.orders.active
-      @deliveries   = @account.deliveries
+      @deliveries   = @account.deliveries.ordered
 
       @transactions = @account.transactions
       @transactions_sum = @account.calculate_balance

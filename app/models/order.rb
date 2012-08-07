@@ -244,6 +244,11 @@ class Order < ActiveRecord::Base
     self.order_extras = params
   end
 
+  def dso(wday)
+    dso = DeliverySequenceOrder.where(address_hash: address.address_hash, day: wday, route_id: route.id).first
+    dso && dso.position || -1
+  end
+
   def route_id
     account.customer.route_id
   end

@@ -21,6 +21,11 @@ Fabricator(:recurring_order, from: :order) do
   schedule { new_recurring_schedule }
 end
 
+Fabricator(:recurring_order_everyday, from: :order) do
+  frequency 'weekly'
+  schedule { new_everyday_schedule }
+end
+
 Fabricator(:active_recurring_order, from: :recurring_order) do
   completed true
   active true

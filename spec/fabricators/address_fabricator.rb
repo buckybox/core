@@ -1,6 +1,6 @@
 Fabricator(:address) do
   customer!
-  address_1 { '1 Address St' }
+  address_1 { sequence(:address_1){|i| "#{i} Address St" }}
   suburb { 'Suburb' }
   city { 'City' }
 end
