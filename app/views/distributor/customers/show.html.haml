@@ -33,11 +33,15 @@
       = simple_format(@address.delivery_note, class: 'highlight-colour')
       = link_to 'edit delivery details', edit_distributor_customer_path(@customer)
 
-  .eight.columns
+  #customer-associations.eight.columns
     .row
       .twelve.columns
-        %h4 Notes:
-        = @customer.notes
+        %h3 Notes
+        = simple_form_for([:distributor, @customer]) do |f|
+          .inputs
+            = f.input :notes, label: false, input_html: { class: 'expand' }
+          .actions
+            = f.button :submit, 'Update', class: 'float-right'
 
     .row
       .nine.columns
