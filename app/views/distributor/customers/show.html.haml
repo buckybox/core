@@ -1,33 +1,37 @@
 = render 'controls'
 
 .row
-  .four.columns
-    = customer_title(@customer, html_tag: :h5)
-    - @customer.tags.each do |t|
-      = content_tag(:span, link_to(t.name, tag_distributor_customers_path(t.name)), class: 'radius label') unless @customer.tags.empty?
-    %br
-    %span#account-balance= @account.balance.format
-    = link_to "Discount #{@customer.discount * 100}%", '#' if @customer.discount > 0
+  #customer-details.four.columns
+    #section-one
+      = customer_title(@customer)
+      - @customer.tags.each do |t|
+        = content_tag(:span, link_to(t.name, tag_distributor_customers_path(t.name)), class: 'radius label') unless @customer.tags.empty?
 
-    %ul
-      %li== Email: #{@customer.email}
-      - unless @address.phone_1.blank?
-        %li== Phone 1: #{@address.phone_1}
+      #account-information
+        %span.important= @account.balance.format
+        = link_to "Discount #{@customer.discount * 100}%", '#' if @customer.discount > 0
 
-    = link_to 'edit customer details', edit_distributor_customer_path(@customer)
-    %br
-    = link_to 'send login details', send_login_details_distributor_customer_path(@customer), confirm: "Are you sure? This will reset the users password."
-    (User's password will be reset)
+      %ul
+        %li== Email: #{@customer.email}
+        - unless @address.phone_1.blank?
+          %li== Phone 1: #{@address.phone_1}
 
-    %h6== Delivery Service: #{@customer.route.name}
-    %ul
-      - if @address
-        %li= @address.address_1
-        %li= @address.address_2 if @address.address_2
-        %li= @address.suburb
-        %li= @address.city
-    = @address.delivery_note
-    = link_to 'edit customer details', edit_distributor_customer_path(@customer)
+      = simple_format(@customer.special_order_preference, class: 'highlight-colour')
+
+      = link_to 'edit customer profile', edit_distributor_customer_path(@customer)
+      %br
+      = link_to 'send login details', send_login_details_distributor_customer_path(@customer), confirm: 'Are you sure? This will reset the users password.'
+
+    #section-two
+      .important== Delivery Service: #{@customer.route.name}
+      %ul
+        - if @address
+          %li= @address.address_1
+          %li= @address.address_2 if @address.address_2
+          %li= @address.suburb
+          %li= @address.city
+      = simple_format(@address.delivery_note, class: 'highlight-colour')
+      = link_to 'edit delivery details', edit_distributor_customer_path(@customer)
 
   .eight.columns
     .row
