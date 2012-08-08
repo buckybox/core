@@ -21,7 +21,8 @@ class Customer < ActiveRecord::Base
   accepts_nested_attributes_for :address
 
   attr_accessible :address_attributes, :first_name, :last_name, :email, :name, :distributor_id, :distributor,
-    :route, :route_id, :password, :password_confirmation, :remember_me, :tag_list, :discount, :number, :notes
+    :route, :route_id, :password, :password_confirmation, :remember_me, :tag_list, :discount, :number, :notes,
+    :special_order_preference
 
   validates_presence_of :distributor_id, :route_id, :first_name, :email, :discount
   validates_uniqueness_of :number, scope: :distributor_id
