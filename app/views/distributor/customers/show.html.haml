@@ -1,83 +1,63 @@
-= customer_title(@customer)
+= render 'controls'
 
 .row
-  .three.columns
-    %ul.vcard
-      %li.fn= @customer.name
-      - if @address
-        %li.adr= @address.address_1
-        - if @address.address_2
-          %li.adr= @address.address_2
-        %li.adr= @address.suburb
-        %li.adr= @address.city
-        %li.adr= @address.postcode
-        %li.tel= "Phone 1: #{@address.phone_1}" unless @address.phone_1.blank?
-        %li.tel= "Phone 2: #{@address.phone_2}" unless @address.phone_2.blank?
-        %li.tel= "Phone 3: #{@address.phone_3}" unless @address.phone_3.blank?
-      %li.email= "Email: #{@customer.email}"
-
-  .three.columns
-    %h4
-      Balance:
-      %span#account-balance= @account.balance.format
-
-  .two.columns
-    - unless @customer.tags.empty?
-      %h4 Tags:
-      - @customer.tags.each do |tag|
-        %span.radius.label= link_to tag.name, tag_distributor_customers_path(tag.name)
-
   .four.columns
-    = link_to 'Edit Customer Details', edit_distributor_customer_path(@customer)
+    = customer_title(@customer, html_tag: :h5)
+    - @customer.tags.each do |t|
+      = content_tag(:span, link_to(t.name, tag_distributor_customers_path(t.name)), class: 'radius label') unless @customer.tags.empty?
     %br
-    = link_to 'Send login details', send_login_details_distributor_customer_path(@customer), :confirm => "Are you sure? This will reset the users password."
+    %span#account-balance= @account.balance.format
+    = link_to "Discount #{@customer.discount * 100}%", '#' if @customer.discount > 0
+
+    %ul
+      %li== Email: #{@customer.email}
+      - unless @address.phone_1.blank?
+        %li== Phone 1: #{@address.phone_1}
+
+    = link_to 'edit customer details', edit_distributor_customer_path(@customer)
+    %br
+    = link_to 'send login details', send_login_details_distributor_customer_path(@customer), confirm: "Are you sure? This will reset the users password."
     (User's password will be reset)
-    %br
-    = link_to 'Back to Customer List', distributor_customers_path
 
-- unless @customer.notes.blank?
-  .row
-    .five.columns
-      %h3 Notes
-    .seven.columns
-      %p{ style: 'margin: 15px 0 0 0' } (e.g. credit card bounced, to follow up)
-  .row
-    .twelve.columns= simple_format(@customer.notes)
+    %h6== Delivery Service: #{@customer.route.name}
+    %ul
+      - if @address
+        %li= @address.address_1
+        %li= @address.address_2 if @address.address_2
+        %li= @address.suburb
+        %li= @address.city
+    = @address.delivery_note
+    = link_to 'edit customer details', edit_distributor_customer_path(@customer)
 
-- unless @customer.special_order_preference.blank?
-  .row
-    .five.columns
-      %h3 Special Order Preferences
-    .seven.columns
-      %p{ style: 'margin: 15px 0 0 0' } (e.g. more leafy greens)
-  .row
-    .twelve.columns= simple_format(@customer.special_order_preference)
+  .eight.columns
+    .row
+      .twelve.columns
+        %h4 Notes:
+        = @customer.notes
 
-%hr
+    .row
+      .nine.columns
+        %h3 Orders
+      .three.columns.text-right
+        = link_to 'New Order', new_distributor_account_order_path(@account), class: 'button radius'
 
-.row
-  .nine.columns
-    %h3 Orders
-  .three.columns.text-right
-    = link_to 'New Order', new_distributor_account_order_path(@account), :class => 'button radius'
+    = render 'distributor/orders/index' unless @orders.empty?
 
-= render 'distributor/orders/index' unless @orders.empty?
+    %hr
 
-%hr
+    .row
+      .twelve.columns
+        %h3 Deliveries
 
-.row
-  .twelve.columns
-    %h3 Deliveries
+    = render 'distributor/deliveries/index' unless @deliveries.empty?
 
-= render 'distributor/deliveries/index' unless @deliveries.empty?
+    %hr
 
-%hr
+    .row
+      .nine.columns
+        %h3 Transactions
+      .three.columns.text-right
+        = link_to 'Add Transaction', edit_distributor_account_path(@account), class: 'button radius'
 
-.row
-  .nine.columns
-    %h3 Transactions
-  .three.columns.text-right
-    = link_to 'Add Transaction', edit_distributor_account_path(@account), :class => 'button radius'
-
-= render 'distributor/transactions/index' unless @transactions.empty?
+    = render 'distributor/transactions/index' unless @transactions.empty?
 
