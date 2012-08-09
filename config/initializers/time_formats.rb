@@ -1,4 +1,5 @@
 Date::DATE_FORMATS[:transaction] = "%d %b '%y"
+Date::DATE_FORMATS[:date_short_month] = "%d %b"
 
 Time::DATE_FORMATS[:weekday] = "%A"
 Time::DATE_FORMATS[:month_and_year] = "%B %Y"
