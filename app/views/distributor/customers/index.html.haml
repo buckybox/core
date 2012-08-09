@@ -19,8 +19,8 @@
 
   #customers
     .row
-      #add-customer.twelve.columns.text-center.add-colour
-        = link_to 'Create a new customer', new_distributor_customer_path, id: 'new-customer'
+      .twelve.columns.add-colour.data-list-new-link
+        = link_to 'Create a new customer', new_distributor_customer_path
 
     - @customers.each do |customer|
       .row.data-listings

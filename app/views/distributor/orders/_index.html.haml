@@ -1,16 +1,5 @@
 .row
   %table.twelve.columns
-    %thead
-      %tr
-        %th Order #
-        %th Box
-        %th Extras
-        %th Quantity
-        %th Total Cost
-        %th Start Date
-        %th{ style: 'width:25%;' } Schedule
-        %th Actions
-
     %tbody
       - @orders.each do |order|
         %tr

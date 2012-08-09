@@ -43,6 +43,8 @@ group :install do
 end
 
 group :development do
+  gem 'puma'
+
   gem 'nifty-generators', require: false
 
   gem 'ruby-prof' # profiling with /newrelic

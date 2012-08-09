@@ -34,7 +34,7 @@
       = link_to 'edit delivery details', edit_distributor_customer_path(@customer)
 
   #customer-associations.eight.columns
-    .row
+    .row.section
       .twelve.columns
         %h3 Notes
         = simple_form_for([:distributor, @customer]) do |f|
@@ -43,29 +43,21 @@
           .actions
             = f.button :submit, 'Update', class: 'float-right'
 
-    .row
-      .nine.columns
-        %h3 Orders
-      .three.columns.text-right
-        = link_to 'New Order', new_distributor_account_order_path(@account), class: 'button radius'
-
-    = render 'distributor/orders/index' unless @orders.empty?
-
-    %hr
-
-    .row
+    .row.section
       .twelve.columns
-        %h3 Deliveries
+        %h3 Orders
+        .row
+          .twelve.columns.add-colour.data-list-new-link
+            = link_to 'Create a new order', new_distributor_account_order_path(@account)
 
-    = render 'distributor/deliveries/index' unless @deliveries.empty?
+        = render 'distributor/orders/index' unless @orders.empty?
 
-    %hr
-
-    .row
-      .nine.columns
+    .row.section
+      .twelve.columns
         %h3 Transactions
-      .three.columns.text-right
-        = link_to 'Add Transaction', edit_distributor_account_path(@account), class: 'button radius'
+        .row
+          .twelve.columns.add-colour
+            = link_to 'Add Transaction', edit_distributor_account_path(@account), class: 'button radius'
 
-    = render 'distributor/transactions/index' unless @transactions.empty?
+        = render 'distributor/transactions/index' unless @transactions.empty?
 

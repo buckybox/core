@@ -221,11 +221,13 @@ GEM
       io-console (~> 0.3.0)
     pry-nav (0.2.2)
       pry (~> 0.9.10)
-    pry-rails (0.1.6)
+    pry-rails (0.2.0)
       pry
     pry-remote (0.1.6)
       pry (~> 0.9)
       slop (~> 3.0)
+    puma (1.5.0)
+      rack (~> 1.2)
     rack (1.4.1)
     rack-cache (1.2)
       rack (>= 0.4)
@@ -408,6 +410,7 @@ DEPENDENCIES
   pry-nav
   pry-rails
   pry-remote
+  puma
   rails (~> 3.2.7)
   rb-fchange
   rb-fsevent
