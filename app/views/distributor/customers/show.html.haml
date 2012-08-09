@@ -46,14 +46,10 @@
     .row.section
       .twelve.columns
         %h3 Orders
-        .row
-          .twelve.columns.add-colour.data-list-new-link
-            = link_to 'Create a new order', new_distributor_account_order_path(@account)
-
-        = render 'distributor/orders/index' unless @orders.empty?
+        = render 'distributor/orders/index'
 
     .row.section
       .twelve.columns
         %h3 Transactions
-        = render 'distributor/transactions/index' unless @transactions.empty?
+        = render 'distributor/transactions/index'
 

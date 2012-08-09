@@ -7,6 +7,11 @@
 .row
   %table#orders.twelve.columns
     %tbody
+      %tr
+        %td.data-list-new-link.add-colour
+          .row
+            .twelve.columns
+              = link_to 'Create a new order', new_distributor_account_order_path(@account)
       - @orders.each do |order|
         %tr
           %td
