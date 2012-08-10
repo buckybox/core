@@ -77,7 +77,7 @@ describe Package do
   end
 
   context '.csv_headers' do
-    specify { Package.csv_headers.size.should == 24 }
+    specify { Package.csv_headers.size.should == 25 }
   end
 
   context '#to_csv' do
