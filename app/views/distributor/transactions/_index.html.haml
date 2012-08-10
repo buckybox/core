@@ -1,5 +1,3 @@
-- running_balance = @transactions_sum
-
 .row
   .twelve.columns
     = form_tag(change_balance_distributor_account_path(@account), method: :put, class: 'nice') do
@@ -33,6 +31,8 @@
                         = text_field_tag 'delta', '0.00', required: 'required', class: 'string input-text expand required text-right'
                   .two.columns.text-right
                     .actions= submit_tag 'Add', class: 'button radius small'
+
+            - running_balance = @transactions_sum
 
             - @transactions.each do |transaction|
               - td_class = (transaction.manual? ? '' : 'auto')

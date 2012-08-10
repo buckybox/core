@@ -29,8 +29,8 @@ class Account < ActiveRecord::Base
   # A way to double check that the transactions and the balance have not gone out of sync.
   # THIS SHOULD NEVER HAPPEN! If it does fix the root cause don't make this write a new balance.
   # Likely somewhere a transaction is being created manually.
-  def calculate_balance
-    (transactions.sum(:amount_cents) / 100.0).to_money
+  def calculate_balance(offset_size = 0)
+    (transactions.offset(offset_size).sum(&:amount_cents) / 100.0).to_money
   end
 
   def balance_cents=(value)
