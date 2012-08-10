@@ -119,8 +119,8 @@ function order_check_box(box_id, current_order) {
 
   $.ajax({
     type: 'GET',
-    url: '/' + path_root + '/boxes/' + box_id + '.json',
     dataType: 'json',
+    url: '/' + path_root + '/boxes/' + box_id + '.json',
     success: function(data) {
       if(data['dislikes']) {
         current_order.find('.dislikes_input').show();

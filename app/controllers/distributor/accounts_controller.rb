@@ -29,4 +29,11 @@ class Distributor::AccountsController < Distributor::ResourceController
       end
     end
   end
+
+  def more_transactions
+    @account = current_distributor.accounts.find(params[:id])
+    @transactions = @account.transactions.offset(params[:position]).limit(6)
+
+    render partial: 'distributor/accounts/more_transactions'
+  end
 end

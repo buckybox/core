@@ -4,7 +4,7 @@
   .twelve.columns
     = form_tag(change_balance_distributor_account_path(@account), method: :put, class: 'nice') do
       .row
-        %table#transactions.twelve.columns
+        %table#transactions.twelve.columns{ data: { account: @account.id } }
           %thead
             %tr
               %th
@@ -37,7 +37,7 @@
             - @transactions.each do |transaction|
               - td_class = (transaction.manual? ? '' : 'auto')
 
-              %tr
+              %tr.transaction-data
                 %td{ class: td_class }
                   .row
                     .two.columns= transaction.created_at.to_s(:transaction)
@@ -47,3 +47,10 @@
                     .two.columns.text-right= running_balance.format
 
               - running_balance -= transaction.amount
+
+            %tr
+              %td
+                .row
+                  #more-transactions.twelve.columns.text-center
+                    = link_to 'more...', '#'
+                    #ajax-loader
