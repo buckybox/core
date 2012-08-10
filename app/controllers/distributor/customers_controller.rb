@@ -32,9 +32,11 @@ class Distributor::CustomersController < Distributor::ResourceController
     show! do
       @address      = @customer.address
       @account      = @customer.account
-      @transactions = @account.transactions
       @orders       = @account.orders.active
-      @deliveries   = @account.deliveries
+      @deliveries   = @account.deliveries.ordered
+
+      @transactions = @account.transactions
+      @transactions_sum = @account.calculate_balance
     end
   end
 
@@ -54,7 +56,7 @@ class Distributor::CustomersController < Distributor::ResourceController
   protected
 
   def collection
-    @customers = end_of_association_chain.includes(:address, :account)
+    @customers = end_of_association_chain.includes(:tags, :address, :route, account: {active_orders: {box: {}}})
 
     @customers = @customers.tagged_with(params[:tag]) unless params[:tag].blank?
 

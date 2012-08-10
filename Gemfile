@@ -1,7 +1,7 @@
 source 'http://rubygems.org'
 
 # Core
-gem 'rails', '~> 3.2.1'
+gem 'rails', '~> 3.2.6'
 
 # Database
 gem 'pg'
@@ -36,14 +36,21 @@ gem 'acts_as_list'
 gem 'default_value_for'
 gem 'fuzzy-string-match', require: 'fuzzystringmatch' # This performs fuzzy matching on the import script
 gem 'state_machine'
+gem 'chosen-rails'
+
+group :install do
+  gem 'sprinkle_packages'
+end
 
 group :development do
   gem 'nifty-generators', require: false
 
+  gem 'ruby-prof' # profiling with /newrelic
+
   gem 'capistrano'
   gem 'capistrano_colors'
   gem 'tinder'
-
+  gem 'term-ansicolor'
   gem 'hirb'
   gem 'wirble'
   gem 'rb-fsevent', require: false if RUBY_PLATFORM =~ /darwin/i

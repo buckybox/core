@@ -20,9 +20,6 @@
     %h4
       Balance:
       %span#account-balance= @account.balance.format
-    %br
-    %h4 Notes:
-    = @customer.notes
 
   .two.columns
     - unless @customer.tags.empty?
@@ -37,6 +34,24 @@
     (User's password will be reset)
     %br
     = link_to 'Back to Customer List', distributor_customers_path
+
+- unless @customer.notes.blank?
+  .row
+    .five.columns
+      %h3 Notes
+    .seven.columns
+      %p{ style: 'margin: 15px 0 0 0' } (e.g. credit card bounced, to follow up)
+  .row
+    .twelve.columns= simple_format(@customer.notes)
+
+- unless @customer.special_order_preference.blank?
+  .row
+    .five.columns
+      %h3 Special Order Preferences
+    .seven.columns
+      %p{ style: 'margin: 15px 0 0 0' } (e.g. more leafy greens)
+  .row
+    .twelve.columns= simple_format(@customer.special_order_preference)
 
 %hr
 

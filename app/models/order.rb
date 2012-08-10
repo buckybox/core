@@ -11,9 +11,11 @@ class Order < ActiveRecord::Base
 
   has_many :packages
   has_many :deliveries
+  has_many :exclusions,                  autosave: true
+  has_many :substitutions,               autosave: true
   has_many :order_schedule_transactions, autosave: true
+  has_many :order_extras,                autosave: true
 
-  has_many :order_extras, autosave: true
   has_many :extras, through: :order_extras
 
   scope :completed, where(completed: true)
@@ -23,7 +25,7 @@ class Order < ActiveRecord::Base
 
   acts_as_taggable
 
-  attr_accessible :box, :box_id, :account, :account_id, :quantity, :likes, :dislikes, :completed, :frequency, :schedule, 
+  attr_accessible :box, :box_id, :account, :account_id, :quantity, :completed, :frequency, :schedule, 
     :order_extras, :extras_one_off
 
   FREQUENCIES = %w(single weekly fortnightly monthly)
@@ -81,6 +83,32 @@ class Order < ActiveRecord::Base
       days_by_number = days_by_number.values.map(&:to_i) if days_by_number.is_a?(Hash)
       create_schedule_for(:schedule, start_time, frequency, days_by_number)
     end
+  end
+
+  def update_exclusions(line_item_ids)
+    return if line_item_ids.nil? || !box.dislikes? || !box.likes?
+
+    line_item_ids = line_item_ids.map(&:to_i)
+    exclusion_line_item_ids = exclusions.map { |x| x.line_item_id }
+
+    to_delete = exclusion_line_item_ids - line_item_ids
+    to_create = line_item_ids - exclusion_line_item_ids
+
+    exclusions.each { |x| x.mark_for_destruction if to_delete.include?(x.line_item_id) }
+    to_create.each { |liid| exclusions.find_or_initialize_by_line_item_id(liid) }
+  end
+
+  def update_substitutions(line_item_ids)
+    return if line_item_ids.nil? || !box.dislikes? || !box.likes?
+
+    line_item_ids = line_item_ids.map(&:to_i)
+    substitution_line_item_ids = substitutions.map { |x| x.line_item_id }
+
+    to_delete = substitution_line_item_ids - line_item_ids
+    to_create = line_item_ids - substitution_line_item_ids
+
+    substitutions.each { |x| x.mark_for_destruction if to_delete.include?(x.line_item_id) }
+    to_create.each { |liid| substitutions.find_or_initialize_by_line_item_id(liid) }
   end
 
   def change_to_local_time_zone
@@ -160,8 +188,8 @@ class Order < ActiveRecord::Base
 
   def string_sort_code
     result = box.name
-    result += '+L' unless likes.blank?
-    result += '+D' unless dislikes.blank?
+    result += '+L' unless exclusions.empty?
+    result += '+D' unless substitutions.empty?
 
     return result.upcase
   end
@@ -245,6 +273,15 @@ class Order < ActiveRecord::Base
     end
 
     self.order_extras = params
+  end
+
+  def dso(wday)
+    dso = DeliverySequenceOrder.where(address_hash: address.address_hash, day: wday, route_id: route.id).first
+    dso && dso.position || -1
+  end
+
+  def route_id
+    account.customer.route_id
   end
 
   protected

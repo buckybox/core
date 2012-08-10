@@ -32,7 +32,7 @@
     %tr
       %th{colspan: 4} Deliveries
 
-    - invoice.deliveries.each do |d| 
+    - invoice.deliveries.ordered.each do |d| 
       %tr
         %td= d[:date]
         %td= d[:description]

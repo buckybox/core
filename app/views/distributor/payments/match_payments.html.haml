@@ -25,7 +25,7 @@
                 %td= import_transaction.amount.format
                 %td= @import_transaction_list.account
                 %td
-                  %span{style: "display: inline-block"}= tf.input :customer_id, as: :select, collection: import_transaction.possible_customers, selected: import_transaction.match_id, label: false
+                  %span{style: "display: inline-block"}= tf.input :customer_id, as: :select, collection: import_transaction.possible_customers, selected: import_transaction.match_id, label: false, input_html: { class: 'chosen-payee-select' }
                   %span= "*" + "*" * (4 * tf.object.confidence)
               %tr.row_details{style: "display: none;"}
                 %td

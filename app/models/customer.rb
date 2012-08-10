@@ -10,6 +10,7 @@ class Customer < ActiveRecord::Base
   has_many :events
   has_many :transactions, through: :account
   has_many :payments,     through: :account
+  has_many :deductions,   through: :account
   has_many :orders,       through: :account
   has_many :deliveries,   through: :orders
 
@@ -20,7 +21,8 @@ class Customer < ActiveRecord::Base
   accepts_nested_attributes_for :address
 
   attr_accessible :address_attributes, :first_name, :last_name, :email, :name, :distributor_id, :distributor,
-    :route, :route_id, :password, :password_confirmation, :remember_me, :tag_list, :discount, :number, :notes
+    :route, :route_id, :password, :password_confirmation, :remember_me, :tag_list, :discount, :number, :notes,
+    :special_order_preference
 
   validates_presence_of :distributor_id, :route_id, :first_name, :email, :discount
   validates_uniqueness_of :number, scope: :distributor_id
@@ -138,8 +140,8 @@ class Customer < ActiveRecord::Base
       order = self.orders.build({
         box: box,
         quantity: 1,
-        likes: b.likes,
-        dislikes: b.dislikes,
+        #likes: b.likes,
+        #dislikes: b.dislikes,
         account: self.account,
         extras_one_off: b.extras_recurring?
       })
@@ -156,25 +158,12 @@ class Customer < ActiveRecord::Base
     self.name <=> b.name
   end
 
-  def make_import_payment(amount, payment_type, date)
-    Payment.new(
-      distributor: distributor,
-      account: account,
-      amount: amount,
-      kind: 'unspecified',
-      source: 'import',
-      description: "Payment made by #{payment_type}",
-      display_time: date.to_time_in_current_zone,
-      payable: self
-    )
-  end
-
   def has_first_and_last_name?
     first_name.present? && last_name.present?
   end
 
   def order_with_next_delivery
-    has_next_delivery = orders.active.select { |o| o.schedule.next_occurrence }
+    has_next_delivery = account.active_orders.select { |o| o.schedule.next_occurrence }
     order = has_next_delivery.sort{ |a,b| b.schedule.next_occurrence <=> a.schedule.next_occurrence }.first
     return order
   end

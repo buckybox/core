@@ -147,18 +147,19 @@ class Package < ActiveRecord::Base
       'Order Number', 'Package Number', 'Delivery Date', 'Customer Number', 'Customer First Name',
       'Customer Last Name', 'Customer Phone', 'New Customer', 'Delivery Address Line 1', 'Delivery Address Line 2',
       'Delivery Address Suburb', 'Delivery Address City', 'Delivery Address Postcode', 'Delivery Note',
-      'Box Contents Short Description', 'Box Type', 'Box Likes', 'Box Dislikes', 'Box Extra Line Items', 'Price'
+      'Box Contents Short Description', 'Box Type', 'Box Likes', 'Box Dislikes', 'Box Extra Line Items',
+      'Price', 'Customer Email', 'Customer Special Order Preference'
     ]
   end
 
   def to_csv
     # At the moment a package only has one delivery. This will change with recheduling, repacking and the 
     # refactor. Was included because we thought we were going to do rescheduling sooner then we did.
-    delivery = deliveries.first
+    delivery = deliveries.ordered.first
 
     [
       route.name,
-      ((!delivery.nil? && delivery.position) ? ("%03d" % delivery.position) : nil),
+      ((!delivery.nil? && delivery.delivery_number) ? ("%03d" % delivery.delivery_number) : nil),
       nil,
       order.id,
       id,
@@ -176,10 +177,12 @@ class Package < ActiveRecord::Base
       address.delivery_note,
       order.string_sort_code,
       box.name,
-      order.likes,
-      order.dislikes,
+      order.substitutions.map(&:name).join(', '),
+      order.exclusions.map(&:name).join(', '),
       extras_description,
-      price
+      price,
+      customer.email,
+      customer.special_order_preference
     ]
   end
 

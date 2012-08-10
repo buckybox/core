@@ -6,7 +6,8 @@ class Customer::BoxesController < Customer::ResourceController
   def extras
     order = Order.new
     box = current_customer.distributor.boxes.find_by_id(params[:id]) || Box.new
-    render partial: 'customer/orders/extras', locals: {account: current_customer.account, order: order, box: box}
+
+    render partial: 'shared/orders/extras', locals: { account: current_customer.account, order: order, box: box }
   end
 
   protected

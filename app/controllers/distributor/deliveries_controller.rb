@@ -32,14 +32,19 @@ class Distributor::DeliveriesController < Distributor::ResourceController
 
       @delivery_lists = DeliveryList.collect_lists(current_distributor, NAV_START_DATE, NAV_END_DATE)
       @delivery_list  = @delivery_lists.find { |delivery_list| delivery_list.date == @selected_date }
-      @all_deliveries = @delivery_list.deliveries
+      if @delivery_list.is_a? DeliveryList
+        @all_deliveries = @delivery_list.deliveries.ordered
+      else
+        @all_deliveries = @delivery_list.deliveries
+      end
 
       @packing_lists = PackingList.collect_lists(current_distributor, NAV_START_DATE, NAV_END_DATE)
       @packing_list  = @packing_lists.find  { |packing_list| packing_list.date == @selected_date }
+      
       @all_packages  = @packing_list.packages
 
       if @route_id != 0
-        @items     = @all_deliveries.select{ |delivery| delivery.route.id == @route_id }
+        @items     = @all_deliveries.select{ |delivery| delivery.route_id == @route_id }
         @real_list = @items.all? { |i| i.is_a?(Delivery) }
         @route     = @routes.find(@route_id)
       else
@@ -51,7 +56,7 @@ class Distributor::DeliveriesController < Distributor::ResourceController
   end
 
   def update_status
-    deliveries = current_distributor.deliveries.where(id: params[:deliveries])
+    deliveries = current_distributor.deliveries.ordered.where(id: params[:deliveries])
     status = LEGACY_STATUS_TRANSLATION[params[:status]]
 
     options = {}
@@ -65,7 +70,7 @@ class Distributor::DeliveriesController < Distributor::ResourceController
   end
 
   def make_payment
-    deliveries = current_distributor.deliveries.where(id: params[:deliveries])
+    deliveries = current_distributor.deliveries.ordered.where(id: params[:deliveries])
     result = false
 
     if params[:reverse_payment]
@@ -87,8 +92,8 @@ class Distributor::DeliveriesController < Distributor::ResourceController
     export_type = (params[:deliveries] ? :delivery : :packing)
 
     if export_type == :delivery
-      export_items = current_distributor.deliveries.where(id: params[:deliveries])
-      export_items = export_items.sort_by { |ei| ei.position }
+      export_items = current_distributor.deliveries.ordered.where(id: params[:deliveries])
+      export_items = export_items.sort_by { |ei| ei.dso }
       csv_headers = Delivery.csv_headers
     else
       packages = current_distributor.packages.where(id: params[:packages])

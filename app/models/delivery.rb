@@ -24,15 +24,19 @@ class Delivery < ActiveRecord::Base
 
   before_validation :default_route, if: 'route.nil?'
 
-  before_create :add_delivery_number
+  before_save :update_dso
+  before_create :set_delivery_number
 
   scope :pending,   where(status: 'pending')
   scope :delivered, where(status: 'delivered')
   scope :cancelled, where(status: 'cancelled')
+  scope :ordered, order('dso ASC, created_at ASC')
 
   default_value_for :status_change_type, 'auto'
 
   delegate :date, to: :delivery_list, allow_nil: true
+  delegate :address_hash, to: :address
+  delegate :archived?, to: :delivery_list, allow_nil: true
 
   state_machine :status, initial: :pending do
     before_transition on: :deliver, do: :deduct_account
@@ -126,6 +130,10 @@ class Delivery < ActiveRecord::Base
   def reposition!(position)
     update_attribute(:position, position)
   end
+  
+  def reposition_dso!(dso)
+    update_attribute(:dso, dso)
+  end
 
   def description
     desc_str = (quantity > 1 ? "(#{quantity}x) " : '')
@@ -141,14 +149,14 @@ class Delivery < ActiveRecord::Base
       'Order Number', 'Delivery Number', 'Delivery Date', 'Customer Number', 'Customer First Name',
       'Customer Last Name', 'Customer Phone', 'New Customer', 'Delivery Address Line 1', 'Delivery Address Line 2',
       'Delivery Address Suburb', 'Delivery Address City', 'Delivery Address Postcode', 'Delivery Note',
-      'Box Contents Short Description', 'Price'
+      'Box Contents Short Description', 'Price', 'Customer Email'
     ]
   end
 
   def to_csv
     [
       route.name,
-      (position ? ("%03d" % position) : nil),
+      (delivery_number ? ("%03d" % delivery_number) : nil),
       nil,
       order.id,
       id,
@@ -165,18 +173,31 @@ class Delivery < ActiveRecord::Base
       address.postcode,
       address.delivery_note,
       order.string_sort_code,
-      package.price
+      package.price,
+      customer.email
     ]
+  end
+
+  def self.matching_dso(delivery_sequence_order)
+    delivery_ids = Delivery.joins(account: {customer: {address: {}}}).where(['deliveries.route_id = ? AND addresses.address_hash = ?', delivery_sequence_order.route_id, delivery_sequence_order.address_hash]).select{|delivery|
+      delivery.delivery_list.date.wday == delivery_sequence_order.day
+    }.collect(&:id)
+    Delivery.where(['id in (?)', delivery_ids])
+  end
+
+  def update_dso
+    self.dso = DeliverySequenceOrder.for_delivery(self).position
+  end
+
+  def set_delivery_number
+    update_dso
+    self.delivery_number = delivery_list.get_delivery_number(self)
   end
 
   private
 
   def default_route
     self.route = order.route if order
-  end
-
-  def add_delivery_number
-    self.delivery_number = self.position
   end
 
   def deduct_account

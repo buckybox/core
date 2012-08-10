@@ -34,6 +34,7 @@ BuckyBox::Application.routes.draw do
       get 'routes'
       get 'bank_information'
       get 'invoice_information'
+      get 'stock_list'
       get 'reporting'
     end
 
@@ -44,6 +45,12 @@ BuckyBox::Application.routes.draw do
     resources :extras,              except: [:index, :show]
     resources :routes,              except: [:index, :show]
     resources :transactions,        only:   :create
+
+    resources :line_items, except: [:index, :show, :update] do
+      collection do
+        put 'bulk_update', action: :bulk_update, as: 'bulk_update'
+      end
+    end
 
     resources :deliveries do
       collection do

@@ -12,6 +12,7 @@
         = f.input :tag_list, label: 'Customer tags', hint: 'Comma separated'
         = f.input :discount, input_html: { step: 0.0001 }
         = f.input :notes
+        = f.input :special_order_preference
 
     .six.columns
       = f.simple_fields_for :address do |g|

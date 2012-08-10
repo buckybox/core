@@ -77,7 +77,7 @@ describe Package do
   end
 
   context '.csv_headers' do
-    specify { Package.csv_headers.size.should == 23 }
+    specify { Package.csv_headers.size.should == 25 }
   end
 
   context '#to_csv' do
@@ -87,5 +87,6 @@ describe Package do
     specify { package.to_csv[5].should == package.date.strftime("%-d %b %Y") }
     specify { package.to_csv[6].should == package.customer.number }
     specify { package.to_csv[7].should == package.customer.first_name }
+    specify { package.to_csv[23].should == package.customer.email }
   end
 end

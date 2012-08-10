@@ -108,7 +108,7 @@ describe Admin::DistributorsController do
   describe 'impersonate' do
     it 'should sign in as a distributor' do
       get :impersonate, id: Fabricate(:distributor).id
-      @controller.distributor_signed_in?.should be_true
+      response.should redirect_to(distributor_root_url)
     end
   end
 
