@@ -44,7 +44,7 @@
         %h3 Notes
         = simple_form_for([:distributor, @customer]) do |f|
           .inputs
-            = f.input :notes, label: false, input_html: { class: 'expand' }
+            = f.input :notes, placeholder: 'E.g. Credit card bounced 23 July, to follow up', label: false, input_html: { class: 'expand' }
           .actions
             = f.button :submit, 'Update', class: 'float-right'
 
