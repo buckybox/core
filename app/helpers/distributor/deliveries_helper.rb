@@ -80,11 +80,13 @@ module Distributor::DeliveriesHelper
   def customer_delivery_links(order)
     deliveries = order.deliveries.includes(:delivery_list).where('delivery_lists.date > ?', Date.current)
 
-    delivery_links = deliveries.map do |d|
+    delivery_links = deliveries[0..3].map do |d|
       date = d.date
       date_str = date.to_s(:date_short_month)
       link_to date_str, date_distributor_deliveries_path(date, d.route_id)
     end
+
+    delivery_links << '...' if deliveries.size > 4
 
     return delivery_links.join(', ').html_safe
   end
