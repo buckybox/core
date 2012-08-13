@@ -16,7 +16,8 @@
         - unless @address.phone_1.blank?
           %li== Phone 1: #{@address.phone_1}
 
-      = simple_format(@customer.special_order_preference, class: 'highlight-colour')
+      - unless @customer.special_order_preference.blank?
+        %p.highlight-colour= @customer.special_order_preference
 
       = link_to 'edit customer profile', edit_distributor_customer_path(@customer)
 
@@ -28,7 +29,10 @@
           %li= @address.address_2 if @address.address_2
           %li= @address.suburb
           %li= @address.city
-      = simple_format(@address.delivery_note, class: 'highlight-colour')
+
+      - unless @address.delivery_note.blank?
+        %p.highlight-colour= @address.delivery_note
+
       = link_to 'edit delivery details', edit_distributor_customer_path(@customer)
       %br
       %br
