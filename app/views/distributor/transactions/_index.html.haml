@@ -1,6 +1,6 @@
 .row
   .twelve.columns
-    = form_tag(change_balance_distributor_account_path(@account), method: :put, class: 'nice') do
+    = form_tag(change_balance_distributor_account_path(@account, anchor: 'transactions'), method: :put, class: 'nice') do
       .row
         %table#transactions.twelve.columns{ data: { account: @account.id } }
           %thead

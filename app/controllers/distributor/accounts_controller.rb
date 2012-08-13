@@ -24,7 +24,7 @@ class Distributor::AccountsController < Distributor::ResourceController
         format.html { redirect_to [:distributor, @account.customer], notice: 'Account balance was successfully updated.' }
         format.json { head :no_content }
       else
-        format.html { render action: 'edit' }
+        format.html { redirect_to [:distributor, @account.customer] }
         format.json { render json: @account.errors, status: :unprocessable_entity }
       end
     end
