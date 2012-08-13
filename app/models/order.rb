@@ -236,12 +236,15 @@ class Order < ActiveRecord::Base
   end
 
   def customisation_description
-    exclusions_string = 'Exclude '
-    exclusions_string += exclusions.includes(:line_item).map(&:name).join(', ')
-    substitution_string = 'Substitute '
-    substitution_string += substitutions.includes(:line_item).map(&:name).join(', ')
+    exclusions_string = exclusions.includes(:line_item).map(&:name).join(', ')
+    substitution_string = substitutions.includes(:line_item).map(&:name).join(', ')
 
-    return "#{exclusions_string} / #{substitution_string}"
+    unless exclusions_string.blank?
+      result_string = "Exclude #{exclusions_string}"
+      result_string += "/ Substitute #{substitution_string}" unless substitution_string.blank?
+    end
+
+    return result_string
   end
 
   def pack_and_update_extras
