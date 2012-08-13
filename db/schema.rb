@@ -11,12 +11,11 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120730233824) do
+ActiveRecord::Schema.define(:version => 20120812232427) do
 
   create_table "accounts", :force => true do |t|
     t.integer  "customer_id"
     t.integer  "balance_cents", :default => 0, :null => false
-    t.string   "currency"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -95,7 +94,6 @@ ActiveRecord::Schema.define(:version => 20120730233824) do
     t.boolean  "likes",                  :default => false, :null => false
     t.boolean  "dislikes",               :default => false, :null => false
     t.integer  "price_cents",            :default => 0,     :null => false
-    t.string   "currency"
     t.boolean  "available_single",       :default => false, :null => false
     t.boolean  "available_weekly",       :default => false, :null => false
     t.boolean  "available_fourtnightly", :default => false, :null => false
@@ -157,7 +155,6 @@ ActiveRecord::Schema.define(:version => 20120730233824) do
     t.integer  "distributor_id"
     t.integer  "account_id",              :default => 0, :null => false
     t.integer  "amount_cents"
-    t.string   "currency"
     t.string   "kind"
     t.text     "description"
     t.boolean  "reversed"
@@ -212,12 +209,12 @@ ActiveRecord::Schema.define(:version => 20120730233824) do
   end
 
   create_table "distributors", :force => true do |t|
-    t.string   "email",                                     :default => "",     :null => false
-    t.string   "encrypted_password",         :limit => 128, :default => "",     :null => false
+    t.string   "email",                                  :default => "",     :null => false
+    t.string   "encrypted_password",      :limit => 128, :default => "",     :null => false
     t.string   "reset_password_token"
     t.datetime "reset_password_sent_at"
     t.datetime "remember_created_at"
-    t.integer  "sign_in_count",                             :default => 0
+    t.integer  "sign_in_count",                          :default => 0
     t.datetime "current_sign_in_at"
     t.datetime "last_sign_in_at"
     t.string   "current_sign_in_ip"
@@ -226,7 +223,7 @@ ActiveRecord::Schema.define(:version => 20120730233824) do
     t.string   "confirmation_token"
     t.datetime "confirmed_at"
     t.datetime "confirmation_sent_at"
-    t.integer  "failed_attempts",                           :default => 0
+    t.integer  "failed_attempts",                        :default => 0
     t.string   "unlock_token"
     t.datetime "locked_at"
     t.string   "authentication_token"
@@ -235,12 +232,11 @@ ActiveRecord::Schema.define(:version => 20120730233824) do
     t.string   "name"
     t.string   "url"
     t.string   "company_logo"
-    t.boolean  "completed_wizard",                          :default => false,  :null => false
+    t.boolean  "completed_wizard",                       :default => false,  :null => false
     t.string   "parameter_name"
-    t.integer  "invoice_threshold_cents",                   :default => -500
-    t.string   "invoice_threshold_currency"
-    t.decimal  "bucky_box_percentage",                      :default => 0.0175, :null => false
-    t.boolean  "separate_bucky_fee",                        :default => true
+    t.integer  "invoice_threshold_cents",                :default => -500
+    t.decimal  "bucky_box_percentage",                   :default => 0.0175, :null => false
+    t.boolean  "separate_bucky_fee",                     :default => true
     t.string   "support_email"
     t.string   "time_zone"
     t.integer  "advance_hour"
@@ -290,7 +286,6 @@ ActiveRecord::Schema.define(:version => 20120730233824) do
     t.string   "unit"
     t.integer  "distributor_id"
     t.integer  "price_cents"
-    t.string   "currency"
     t.datetime "created_at",     :null => false
     t.datetime "updated_at",     :null => false
   end
@@ -349,7 +344,6 @@ ActiveRecord::Schema.define(:version => 20120730233824) do
     t.integer  "number"
     t.integer  "amount_cents"
     t.integer  "balance_cents"
-    t.string   "currency"
     t.date     "date"
     t.date     "start_date"
     t.date     "end_date"
@@ -417,10 +411,9 @@ ActiveRecord::Schema.define(:version => 20120730233824) do
     t.integer  "archived_order_quantity"
     t.string   "archived_box_name"
     t.integer  "archived_price_cents",       :default => 0
-    t.string   "archived_price_currency"
+    t.string   "currency"
     t.string   "archived_customer_name"
     t.integer  "archived_fee_cents",         :default => 0
-    t.string   "archived_fee_currency"
     t.decimal  "archived_customer_discount", :default => 0.0, :null => false
     t.text     "archived_extras"
   end
@@ -442,7 +435,6 @@ ActiveRecord::Schema.define(:version => 20120730233824) do
     t.integer  "distributor_id"
     t.integer  "account_id"
     t.integer  "amount_cents",            :default => 0, :null => false
-    t.string   "currency"
     t.string   "kind"
     t.text     "description"
     t.datetime "created_at"
@@ -484,7 +476,6 @@ ActiveRecord::Schema.define(:version => 20120730233824) do
     t.datetime "updated_at"
     t.text     "schedule"
     t.integer  "fee_cents",      :default => 0
-    t.string   "currency"
   end
 
   add_index "routes", ["distributor_id"], :name => "index_routes_on_distributor_id"

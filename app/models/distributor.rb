@@ -31,11 +31,7 @@ class Distributor < ActiveRecord::Base
 
   mount_uploader :company_logo, CompanyLogoUploader
 
-  composed_of :invoice_threshold,
-    class_name: "Money",
-    mapping: [%w(invoice_threshold_cents cents), %w(invoice_threshold_currency currency_as_string)],
-    constructor: Proc.new { |cents, currency| Money.new(cents || 0, currency || Money.default_currency) },
-    converter: Proc.new { |value| value.respond_to?(:to_money) ? value.to_money : raise(ArgumentError, "Can't convert #{value.class} to Money") }
+  monetize :invoice_threshold
 
   # Setup accessible (or protected) attributes for your model
   attr_accessible :email, :password, :password_confirmation, :remember_me, :name, :url, :company_logo, :company_logo_cache, :completed_wizard,
@@ -234,7 +230,7 @@ class Distributor < ActiveRecord::Base
     match = if matches.size > 1 && matches.first.first == matches[1].first
       # At-least the first two matches have the same fuzzy_match (probably no unit set)
       # So return the first one alphabetically so that it is consistent
-      matches.select{|match| match.first == matches.first.first}. #Select those which have the same fuzzy_match
+      matches.select{ |m| m.first == matches.first.first }. #Select those which have the same fuzzy_match
         collect(&:last). # discard the fuzzy_match number
         sort_by{|extra| "#{extra.name} #{extra.unit}"}.first # Sort alphabeticaly
     else
@@ -312,10 +308,10 @@ class Distributor < ActiveRecord::Base
     #every 1.hour do
     @@original_time ||= Time.current
     @@advanced ||= 0
-    (24*day).times.each do |h|
-      h+=1 # start at 1, not 0
+    (24 * day).times.each do |h|
+      h += 1 # start at 1, not 0
 
-      Delorean.time_travel_to (@@original_time + (@@advanced*day.days) + h.hours)
+      Delorean.time_travel_to(@@original_time + (@@advanced*day.days) + h.hours)
 
       CronLog.log("Checking distributors for automatic daily list creation.")
       Distributor.create_daily_lists

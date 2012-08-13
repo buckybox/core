@@ -13,17 +13,8 @@ class Package < ActiveRecord::Base
 
   has_many :deliveries
 
-  composed_of :archived_box_price,
-    class_name: "Money",
-    mapping: [%w(archived_price_cents cents), %w(archived_price_currency currency_as_string)],
-    constructor: Proc.new { |cents, currency| Money.new(cents || 0, currency || Money.default_currency) },
-    converter: Proc.new { |value| value.respond_to?(:to_money) ? value.to_money : raise(ArgumentError, "Can't convert #{value.class} to Money") }
-
-  composed_of :archived_route_fee,
-    class_name: "Money",
-    mapping: [%w(archived_fee_cents cents), %w(archived_fee_currency currency_as_string)],
-    constructor: Proc.new { |cents, currency| Money.new(cents || 0, currency || Money.default_currency) },
-    converter: Proc.new { |value| value.respond_to?(:to_money) ? value.to_money : raise(ArgumentError, "Can't convert #{value.class} to Money") }
+  monetize :archived_box_price
+  monetize :archived_route_fee
 
   acts_as_list scope: :packing_list_id
 
@@ -83,7 +74,7 @@ class Package < ActiveRecord::Base
     result += individual_extras_price if archived_extras.present?
 
     return result
-  rescue => e
+  rescue
     raise "Error calculating price: #{individual_price.inspect} * #{archived_order_quantity.inspect}"
   end
 
