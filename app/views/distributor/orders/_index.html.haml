@@ -19,7 +19,8 @@
               .four.columns
                 %ul
                   %li.box-name.larger-font= order.box.name
-                  %li= order.extras_description(true)
+                  %li= order_customisation(order)
+                  %li= order_extras(order)
                   %li= link_to 'edit', edit_distributor_account_order_path(@account, order)
               .five.columns
                 %ul
