@@ -83,6 +83,5 @@ if Rails.env.development?
     puts "#{rm_noise}=> QueryTrace #{QueryTrace.status}"
   end
 
-  QueryTrace.enable! if ENV['QUERY_TRACE']
-  puts "=> QueryTrace #{QueryTrace.status}; CTRL-\\ to toggle"
+  QueryTrace.enable!
 end

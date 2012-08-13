@@ -26,6 +26,7 @@ class Delivery < ActiveRecord::Base
 
   before_save :update_dso
   before_create :set_delivery_number
+  after_save :clear_cache
 
   scope :pending,   where(status: 'pending')
   scope :delivered, where(status: 'delivered')
@@ -120,7 +121,9 @@ class Delivery < ActiveRecord::Base
   end
 
   def quantity
-    package.archived_order_quantity
+    Bucky::Cache.fetch([self, 'quantity']) do
+      package.archived_order_quantity
+    end
   end
 
   def future_status?
@@ -192,6 +195,10 @@ class Delivery < ActiveRecord::Base
   def set_delivery_number
     update_dso
     self.delivery_number = delivery_list.get_delivery_number(self)
+  end
+
+  def clear_cache
+    delivery_list.touch
   end
 
   private

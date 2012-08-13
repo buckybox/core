@@ -10,9 +10,9 @@ class ApplicationController < ActionController::Base
   around_filter :hack_time if Rails.env.development?
   before_filter :set_user_time_zone
   before_filter :set_user_currency
-
+  
   private
-
+  
   def hack_time
     past = params.delete(:time_travel_to)
 
@@ -27,6 +27,7 @@ class ApplicationController < ActionController::Base
         yield
       end
     end
+    Bucky::Cache.output_log
   end
 
   def set_user_time_zone

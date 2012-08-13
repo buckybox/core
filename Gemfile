@@ -12,6 +12,8 @@ group :assets do
   gem 'zurb-foundation'
 end
 
+gem 'redis', '~> 2.2.1'
+gem 'redis-store', '~> 1.0.0'
 gem 'haml-rails'
 gem 'sass-rails'
 gem 'jquery-rails'
@@ -43,6 +45,7 @@ group :install do
 end
 
 group :development do
+  gem 'bullet'
   gem 'nifty-generators', require: false
 
   gem 'ruby-prof' # profiling with /newrelic

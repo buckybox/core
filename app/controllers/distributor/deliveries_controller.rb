@@ -27,30 +27,34 @@ class Distributor::DeliveriesController < Distributor::ResourceController
     end
 
     index! do
+
       @selected_date = Date.parse(params[:date])
       @route_id = params[:view].to_i
+      @delivery_list = current_distributor.delivery_lists.where(date: params[:date]).first
 
-      @delivery_lists = DeliveryList.collect_lists(current_distributor, NAV_START_DATE, NAV_END_DATE)
-      @delivery_list  = @delivery_lists.find { |delivery_list| delivery_list.date == @selected_date }
-      if @delivery_list.is_a? DeliveryList
-        @all_deliveries = @delivery_list.deliveries.ordered
-      else
-        @all_deliveries = @delivery_list.deliveries
-      end
+      @date_navigation = (NAV_START_DATE..NAV_END_DATE).to_a
+      @months = @date_navigation.group_by(&:month)
 
-      @packing_lists = PackingList.collect_lists(current_distributor, NAV_START_DATE, NAV_END_DATE)
-      @packing_list  = @packing_lists.find  { |packing_list| packing_list.date == @selected_date }
-      
-      @all_packages  = @packing_list.packages
-
-      if @route_id != 0
-        @items     = @all_deliveries.select{ |delivery| delivery.route_id == @route_id }
-        @real_list = @items.all? { |i| i.is_a?(Delivery) }
-        @route     = @routes.find(@route_id)
-      else
+      if @route_id.zero?
+        @packing_lists = PackingList.collect_lists(current_distributor, NAV_START_DATE, NAV_END_DATE)
+        @packing_list  = @packing_lists.find  { |packing_list| packing_list.date == @selected_date }
+        
+        @all_packages  = @packing_list.packages
+        
         @items     = @all_packages
         @real_list = @items.all? { |i| i.is_a?(Package) }
         @route     = @routes.first
+      else
+        if @delivery_list
+          @all_deliveries = @delivery_list.deliveries.ordered
+        else
+          @delivery_list = DeliveryList.collect_list(current_distributor, @selected_date)
+          @all_deliveries = @delivery_list.deliveries
+        end
+        
+        @items     = @all_deliveries.select{ |delivery| delivery.route_id == @route_id }
+        @real_list = @items.all? { |i| i.is_a?(Delivery) }
+        @route     = @routes.find(@route_id)
       end
     end
   end

@@ -290,6 +290,10 @@ class Distributor < ActiveRecord::Base
     show_payments_tab? && import_transaction_lists.draft.count.zero?
   end
 
+  def cache_key
+    @cache_key ||= "#{id}/#{name}/#{updated_at}"
+  end
+
   private
 
   def parameterize_name

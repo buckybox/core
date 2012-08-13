@@ -15,6 +15,7 @@ class DeliverySequenceOrder < ActiveRecord::Base
       next if delivery.archived?
       delivery.dso = position
       delivery.save!
+      delete_cache
     end
   end
 
@@ -27,5 +28,16 @@ class DeliverySequenceOrder < ActiveRecord::Base
     dso = DeliverySequenceOrder.where(attrs).first
     dso ||= DeliverySequenceOrder.create(attrs)
     dso
+  end
+
+  def delete_cache
+    Bucky::Cache.delete([address_hash, wday, route_id])
+  end
+
+  def self.position_for(address_hash, wday, route_id)
+    Bucky::Cache.fetch([address_hash, wday, route_id]) do
+      dso = DeliverySequenceOrder.where(address_hash: address_hash, day: wday, route_id: route_id).first
+      dso && dso.position
+    end
   end
 end
