@@ -9,7 +9,7 @@ gem 'pg'
 group :assets do
   gem 'coffee-rails'
   gem 'uglifier'
-  gem 'zurb-foundation'
+  gem 'zurb-foundation', '~> 2.2.1.2'
 end
 
 gem 'haml-rails'
