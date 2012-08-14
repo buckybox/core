@@ -32,7 +32,7 @@
   - analytical.identify(current_distributor.id, email: current_distributor.email) if current_distributor
   = raw analytical.head_append_javascript
 
-%body
+%body{ class: "#{'not-production-background' unless Rails.env.production?}" }
   = raw analytical.body_prepend_javascript
 
   = render 'layouts/server_warnings'
