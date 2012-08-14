@@ -73,5 +73,6 @@ policy :myapp, :roles => :app do
   requires :monit
   requires :munin
   requires :munin_passenger
+  requires :redis
 end
 
