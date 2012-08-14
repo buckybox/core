@@ -33,7 +33,7 @@
       - unless @address.delivery_note.blank?
         %p.highlight-colour= @address.delivery_note
 
-      = link_to 'edit delivery details', edit_distributor_customer_path(@customer)
+      = link_to 'edit delivery details', edit_distributor_customer_path(@customer, form_type: :delivery)
       %br
       %br
       = link_to 'send login details', send_login_details_distributor_customer_path(@customer), confirm: 'Are you sure? This will reset the users password.'
