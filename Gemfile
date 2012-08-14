@@ -70,7 +70,7 @@ group :development do
 end
 
 group :development, :test do
-  gem 'rspec-rails'
+  gem 'rspec-rails', '~> 2.10.0'
   gem 'guard'
 
   gem 'rb-inotify',  require: false
