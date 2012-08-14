@@ -88,6 +88,9 @@ module Distributor::DeliveriesHelper
 
     delivery_links << '...' if deliveries.size > 4
 
-    return delivery_links.join(', ').html_safe
+    result = delivery_links.join(', ').html_safe
+    result = image_tag('icon-route.png', class: 'delivery-icon') + result unless delivery_links.blank?
+
+    return result
   end
 end

@@ -37,6 +37,5 @@
                     confirm: order_delete_warning(order), method: :put)
             .row
               .five.columns.offset-by-four
-                = image_tag 'icon-route.png', class: 'delivery-icon'
                 = customer_delivery_links(order)
 
