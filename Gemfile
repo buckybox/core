@@ -6,13 +6,6 @@ gem 'rails', '~> 3.2.8'
 # Database
 gem 'pg', '~> 0.14.0'
 
-group :assets do
-  gem 'sass-rails', '~> 3.2.5'
-  gem 'coffee-rails', '~> 3.2.2'
-  gem 'uglifier', '~> 1.2.7'
-  gem 'zurb-foundation', '~> 2.2.1.2'
-end
-
 gem 'haml-rails', '~> 0.3.4'
 gem 'jquery-rails', '~> 2.0.2'
 gem 'chosen-rails', '~> 0.9.8.1'
@@ -38,11 +31,22 @@ gem 'analytical', '~> 3.0.12'
 gem 'newrelic_rpm', '~> 3.4.1'
 gem 'airbrake', '~> 3.1.2'
 
+########## THE GEMS ABOVE ARE THE ONLY ONES THAT RUN ON PRODUCTION ##########
+
+group :assets do
+  gem 'sass-rails', '~> 3.2.5'
+  gem 'coffee-rails', '~> 3.2.2'
+  gem 'uglifier', '~> 1.2.7'
+  gem 'zurb-foundation', '~> 2.2.1.2'
+end
+
 group :install do
   gem 'sprinkle_packages', '~> 0.0.1'
 end
 
 group :development do
+  gem 'puma', require: false
+
   gem 'nifty-generators', '~> 0.4.6', require: false
 
   gem 'ruby-prof', '~> 0.11.2' # profiling with /newrelic
