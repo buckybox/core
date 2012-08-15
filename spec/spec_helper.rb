@@ -10,8 +10,12 @@ Spork.prefork do
 
   ENV["RAILS_ENV"] ||= 'test'
 
-  require 'simplecov'
-  SimpleCov.start 'rails'
+  # Don't run coverage all the time. Use COVERAGE=true rspec spec to
+  # refresh coverage stats.
+  if ENV['COVERAGE']
+    require 'simplecov'
+    SimpleCov.start 'rails'
+  end
 
   # Prevent main application to eager_load in the prefork block (do not load files in autoload_paths)
   # https://github.com/pluginaweek/state_machine/issues/163
