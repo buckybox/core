@@ -9,7 +9,7 @@ class Deduction < ActiveRecord::Base
 
   has_many :transactions, as: :transactionable
 
-  monetize :amount
+  monetize :amount_cents
 
   attr_accessible :account, :account_id, :amount, :kind, :description, :distributor, :source,
     :display_time, :deductable, :deductable_id, :deductable_type

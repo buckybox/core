@@ -14,7 +14,7 @@ class Account < ActiveRecord::Base
   has_one :route,    through: :customer
   has_one :address,  through: :customer
 
-  monetize :balance
+  monetize :balance_cents
 
   attr_accessible :customer, :tag_list
 

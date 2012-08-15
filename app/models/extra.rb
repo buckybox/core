@@ -8,7 +8,7 @@ class Extra < ActiveRecord::Base
   attr_accessible :distributor, :name, :unit, :price
   scope :alphabetically, order('name ASC, unit ASC')
 
-  monetize :price
+  monetize :price_cents
 
   after_create :update_distributors_boxes # This ensures that new extras are added to boxes which "include the entire catalog".  Currently the system doesn't understand the concept of "include the entire catalog" but only infers it from seeing that all extras for a given distributor are set on a given box.  This was an oversight and should be fixed in refactoring. #TODO
 

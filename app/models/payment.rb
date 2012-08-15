@@ -9,7 +9,7 @@ class Payment < ActiveRecord::Base
 
   has_many :transactions, as: :transactionable
 
-  monetize :amount
+  monetize :amount_cents
 
   attr_accessible :account, :account_id, :amount, :kind, :description, :distributor, :reference, :source,
     :display_time, :payable, :payable_id, :payable_type
@@ -39,7 +39,7 @@ class Payment < ActiveRecord::Base
   default_value_for :kind,     'unspecified'
   default_value_for :source,   'manual'
   default_value_for :display_time do
-    display_time = Time.current
+    Time.current
   end
 
   def reverse_payment!

@@ -5,7 +5,7 @@ class ImportTransaction < ActiveRecord::Base
   belongs_to :customer
   belongs_to :payment
 
-  monetize :amount
+  monetize :amount_cents
 
   attr_accessible :customer, :customer_id, :transaction_date, :amount_cents, :removed, :description, :confidence, :import_transaction_list, :match, :draft, :raw_data
 

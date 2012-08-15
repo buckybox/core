@@ -16,7 +16,7 @@ class Box < ActiveRecord::Base
 
   default_scope order(:name)
 
-  monetize :price
+  monetize :price_cents
 
   default_value_for :extras_limit, 0
 

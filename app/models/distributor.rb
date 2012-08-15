@@ -31,7 +31,7 @@ class Distributor < ActiveRecord::Base
 
   mount_uploader :company_logo, CompanyLogoUploader
 
-  monetize :invoice_threshold
+  monetize :invoice_threshold_cents
 
   # Setup accessible (or protected) attributes for your model
   attr_accessible :email, :password, :password_confirmation, :remember_me, :name, :url, :company_logo, :company_logo_cache, :completed_wizard,

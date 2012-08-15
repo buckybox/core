@@ -13,8 +13,8 @@ class Package < ActiveRecord::Base
 
   has_many :deliveries
 
-  monetize :archived_box_price
-  monetize :archived_route_fee
+  monetize :archived_box_price_cents
+  monetize :archived_route_fee_cents
 
   acts_as_list scope: :packing_list_id
 

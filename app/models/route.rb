@@ -8,7 +8,7 @@ class Route < ActiveRecord::Base
   has_many :customers
   has_many :route_schedule_transactions, autosave: true
 
-  monetize :fee
+  monetize :fee_cents
 
   schedule_for :schedule
 

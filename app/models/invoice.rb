@@ -4,8 +4,8 @@ class Invoice < ActiveRecord::Base
   has_one :distributor, through: :account
   has_one :customer,    through: :account
 
-  monetize :amount
-  monetize :balance
+  monetize :amount_cents
+  monetize :balance_cents
 
   serialize :transactions
   serialize :deliveries
