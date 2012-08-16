@@ -72,7 +72,7 @@ group :development do
 end
 
 group :development, :test do
-  gem 'rspec-rails', '~> 2.11.0'
+  gem 'rspec-rails', '~> 2.10.0'
   gem 'guard', '~> 1.3.0'
 
   gem 'rb-inotify', '~> 0.8.8',  require: false
@@ -86,7 +86,7 @@ group :development, :test do
 end
 
 group :test do
-  gem 'fabrication', '~> 2.2.2'
+  gem 'fabrication', '~> 1.4.1'
   gem 'database_cleaner', '~> 0.8.0'
 
   gem 'delorean', '~> 2.0.0'

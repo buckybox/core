@@ -60,6 +60,8 @@ class Distributor < ActiveRecord::Base
 
   default_value_for :bank_deposit, true
   default_value_for :paypal, false
+  default_value_for :invoice_threshold_cents, -500
+  default_value_for :bucky_box_percentage, 0.0175
   default_value_for :bank_deposit_format, ImportTransactionList::FILE_FORMATS.first.last # Kiwibank
 
   # Devise Override: Avoid validations on update or if now password provided
