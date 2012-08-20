@@ -13,7 +13,7 @@ class Extra < ActiveRecord::Base
   after_create :update_distributors_boxes # This ensures that new extras are added to boxes which "include the entire catalog".  Currently the system doesn't understand the concept of "include the entire catalog" but only infers it from seeing that all extras for a given distributor are set on a given box.  This was an oversight and should be fixed in refactoring. #TODO
 
   def to_hash
-    { name: name, unit: unit, price_cents: price_cents, currency: Money.default_currency.to_s }
+    { name: name, unit: unit, price_cents: price_cents, currency: currency }
   end
 
   def name_with_unit

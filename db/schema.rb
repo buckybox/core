@@ -16,6 +16,7 @@ ActiveRecord::Schema.define(:version => 20120815093134) do
   create_table "accounts", :force => true do |t|
     t.integer  "customer_id"
     t.integer  "balance_cents", :default => 0, :null => false
+    t.string   "currency"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -94,6 +95,7 @@ ActiveRecord::Schema.define(:version => 20120815093134) do
     t.boolean  "likes",                  :default => false, :null => false
     t.boolean  "dislikes",               :default => false, :null => false
     t.integer  "price_cents",            :default => 0,     :null => false
+    t.string   "currency"
     t.boolean  "available_single",       :default => false, :null => false
     t.boolean  "available_weekly",       :default => false, :null => false
     t.boolean  "available_fourtnightly", :default => false, :null => false
@@ -155,6 +157,7 @@ ActiveRecord::Schema.define(:version => 20120815093134) do
     t.integer  "distributor_id"
     t.integer  "account_id",              :default => 0, :null => false
     t.integer  "amount_cents",            :default => 0, :null => false
+    t.string   "currency"
     t.string   "kind"
     t.text     "description"
     t.boolean  "reversed"
@@ -286,6 +289,7 @@ ActiveRecord::Schema.define(:version => 20120815093134) do
     t.string   "unit"
     t.integer  "distributor_id"
     t.integer  "price_cents",    :default => 0, :null => false
+    t.string   "currency"
     t.datetime "created_at",                    :null => false
     t.datetime "updated_at",                    :null => false
   end
@@ -344,6 +348,7 @@ ActiveRecord::Schema.define(:version => 20120815093134) do
     t.integer  "number"
     t.integer  "amount_cents",  :default => 0,     :null => false
     t.integer  "balance_cents", :default => 0,     :null => false
+    t.string   "currency"
     t.date     "date"
     t.date     "start_date"
     t.date     "end_date"
@@ -435,6 +440,7 @@ ActiveRecord::Schema.define(:version => 20120815093134) do
     t.integer  "distributor_id"
     t.integer  "account_id"
     t.integer  "amount_cents",            :default => 0, :null => false
+    t.string   "currency"
     t.string   "kind"
     t.text     "description"
     t.datetime "created_at"
@@ -476,6 +482,7 @@ ActiveRecord::Schema.define(:version => 20120815093134) do
     t.datetime "updated_at"
     t.text     "schedule"
     t.integer  "fee_cents",      :default => 0,     :null => false
+    t.string   "currency"
   end
 
   add_index "routes", ["distributor_id"], :name => "index_routes_on_distributor_id"

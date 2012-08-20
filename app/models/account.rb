@@ -20,7 +20,7 @@ class Account < ActiveRecord::Base
 
   validates_presence_of :customer_id, :balance
 
-  before_validation :default_balance
+  before_validation :default_balance_and_currency
 
   # A way to double check that the transactions and the balance have not gone out of sync.
   # THIS SHOULD NEVER HAPPEN! If it does fix the root cause don't make this write a new balance.
@@ -143,7 +143,8 @@ class Account < ActiveRecord::Base
 
   private
 
-  def default_balance
+  def default_balance_and_currency
     write_attribute(:balance_cents, 0) if balance_cents.blank?
+    write_attribute(:currency, Money.default_currency.to_s) if currency.blank?
   end
 end
