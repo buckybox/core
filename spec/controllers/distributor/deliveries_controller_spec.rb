@@ -35,5 +35,11 @@ describe Distributor::DeliveriesController do
 
       post :reposition, {date: @date_string, delivery: delivery_ids}
     end
+
+    it "should order csv based on DSO" do
+      Delivery.should_receive(:build_csv_for_export).with(:delivery, @distributor, ["1","2","6"], nil).and_return("")
+
+      post :export, {deliveries: [1,2,6]}
+    end
   end
 end
