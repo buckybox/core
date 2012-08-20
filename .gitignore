@@ -24,9 +24,13 @@
 .~lock*
 
 .DS_Store
-public/system/
 .sass-cache/
 config/database.yml
 Session.vim
 coverage/
-public/
+
+# Ignore some public sub-directories
+public/system/
+public/uploads/
+public/assets/
+public/stylesheets/

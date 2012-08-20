@@ -7,6 +7,7 @@ gem 'rails', '~> 3.2.8'
 gem 'pg', '~> 0.14.0'
 
 gem 'haml-rails', '~> 0.3.4'
+gem 'sass-rails', '~> 3.2.5'
 gem 'jquery-rails', '~> 2.0.2'
 gem 'chosen-rails', '~> 0.9.8.1'
 
@@ -34,7 +35,6 @@ gem 'airbrake', '~> 3.1.2'
 ########## THE GEMS ABOVE ARE THE ONLY ONES THAT RUN ON PRODUCTION ##########
 
 group :assets do
-  gem 'sass-rails', '~> 3.2.5'
   gem 'coffee-rails', '~> 3.2.2'
   gem 'uglifier', '~> 1.2.7'
   gem 'zurb-foundation', '~> 2.2.1.2'

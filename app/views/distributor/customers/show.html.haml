@@ -1,83 +1,60 @@
-= customer_title(@customer)
+= render 'controls'
 
 .row
-  .three.columns
-    %ul.vcard
-      %li.fn= @customer.name
-      - if @address
-        %li.adr= @address.address_1
-        - if @address.address_2
-          %li.adr= @address.address_2
-        %li.adr= @address.suburb
-        %li.adr= @address.city
-        %li.adr= @address.postcode
-        %li.tel= "Phone 1: #{@address.phone_1}" unless @address.phone_1.blank?
-        %li.tel= "Phone 2: #{@address.phone_2}" unless @address.phone_2.blank?
-        %li.tel= "Phone 3: #{@address.phone_3}" unless @address.phone_3.blank?
-      %li.email= "Email: #{@customer.email}"
+  #customer-details.four.columns
+    #section-one
+      = customer_title(@customer)
+      - @customer.tags.each do |t|
+        = content_tag(:span, link_to(t.name, tag_distributor_customers_path(t.name)), class: 'radius label') unless @customer.tags.empty?
 
-  .three.columns
-    %h4
-      Balance:
-      %span#account-balance= @account.balance.format
+      #account-information
+        %span.important= @account.balance.format
+        = link_to "Discount #{@customer.discount * 100}%", edit_distributor_customer_path(@customer) if @customer.discount > 0
 
-  .two.columns
-    - unless @customer.tags.empty?
-      %h4 Tags:
-      - @customer.tags.each do |tag|
-        %span.radius.label= link_to tag.name, tag_distributor_customers_path(tag.name)
+      %ul
+        %li== Email: #{@customer.email}
+        - unless @address.phone_1.blank?
+          %li== Phone 1: #{@address.phone_1}
 
-  .four.columns
-    = link_to 'Edit Customer Details', edit_distributor_customer_path(@customer)
-    %br
-    = link_to 'Send login details', send_login_details_distributor_customer_path(@customer), :confirm => "Are you sure? This will reset the users password."
-    (User's password will be reset)
-    %br
-    = link_to 'Back to Customer List', distributor_customers_path
+      - unless @customer.special_order_preference.blank?
+        %p.highlight-colour= @customer.special_order_preference
 
-- unless @customer.notes.blank?
-  .row
-    .five.columns
-      %h3 Notes
-    .seven.columns
-      %p{ style: 'margin: 15px 0 0 0' } (e.g. credit card bounced, to follow up)
-  .row
-    .twelve.columns= simple_format(@customer.notes)
+      = link_to 'edit customer profile', edit_distributor_customer_path(@customer)
 
-- unless @customer.special_order_preference.blank?
-  .row
-    .five.columns
-      %h3 Special Order Preferences
-    .seven.columns
-      %p{ style: 'margin: 15px 0 0 0' } (e.g. more leafy greens)
-  .row
-    .twelve.columns= simple_format(@customer.special_order_preference)
+    #section-two
+      .important== Delivery Service: #{@customer.route.name}
+      %ul
+        - if @address
+          %li= @address.address_1
+          %li= @address.address_2 if @address.address_2
+          %li= @address.suburb
+          %li= @address.city
 
-%hr
+      - unless @address.delivery_note.blank?
+        %p.highlight-colour= @address.delivery_note
 
-.row
-  .nine.columns
-    %h3 Orders
-  .three.columns.text-right
-    = link_to 'New Order', new_distributor_account_order_path(@account), :class => 'button radius'
+      = link_to 'edit delivery details', edit_distributor_customer_path(@customer, form_type: :delivery)
+      %br
+      %br
+      = link_to 'send login details', send_login_details_distributor_customer_path(@customer), confirm: 'Are you sure? This will reset the users password.'
 
-= render 'distributor/orders/index' unless @orders.empty?
+  #customer-associations.eight.columns
+    .row.section
+      .twelve.columns
+        %h3 Notes
+        = simple_form_for([:distributor, @customer]) do |f|
+          .inputs
+            = f.input :notes, placeholder: 'E.g. Credit card bounced 23 July, to follow up', label: false, input_html: { class: 'expand' }
+          .actions
+            = f.button :submit, 'Update', class: 'float-right'
 
-%hr
+    .row.section
+      .twelve.columns
+        %h3 Orders
+        = render 'distributor/orders/index'
 
-.row
-  .twelve.columns
-    %h3 Deliveries
-
-= render 'distributor/deliveries/index' unless @deliveries.empty?
-
-%hr
-
-.row
-  .nine.columns
-    %h3 Transactions
-  .three.columns.text-right
-    = link_to 'Add Transaction', edit_distributor_account_path(@account), :class => 'button radius'
-
-= render 'distributor/transactions/index' unless @transactions.empty?
+    .row.section
+      .twelve.columns
+        %h3 Transactions
+        = render 'distributor/transactions/index'
 

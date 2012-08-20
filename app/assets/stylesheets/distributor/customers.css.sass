@@ -1,3 +1,98 @@
 // Place all the styles related to the Distributor::Customers controller here.
 // They will automatically be included in application.css.
 // You can use Sass here: http://sass-lang.com/
+
+.customer-controls
+  margin-bottom: 10px
+
+  #information
+    a
+      margin: 2px 0 0 14px
+
+    h3
+      display: inline
+      margin-left: 14px
+
+  #search
+    form
+      margin: 3px 14px 0 0
+      height: 30px
+
+      input
+        display: inline
+        &[type=text]
+          margin: 0 8px 0 0
+
+.data-list-new-link
+  height: 18px
+  padding: 7px 0
+  text-align: center
+
+#customer-details
+  h1
+    font-size: 24px
+    margin-bottom: 3px
+
+  ul
+    margin-bottom: 8px
+    li
+      margin-bottom: 0px
+
+  p
+    padding: 5px 8px
+    margin-bottom: 8px
+    font-style: italic
+
+  .important
+    font-weight: bold
+    font-size: 115%
+
+  #section-one
+    margin-bottom: 50px
+
+    #account-information
+      overflow: auto
+      margin-bottom: 8px
+
+      span, a
+        margin-right: 5px
+        display: block
+        float: left
+
+#customer-associations
+  .section
+    margin-bottom: 40px
+
+  #customer_notes
+    background-color: #FFF0B2
+    height: 75px
+
+  #orders
+    li
+      margin: 0
+
+    .box-name
+      font-weight: bold
+
+    .delivery-icon
+      position: relative
+      top: 6px
+
+  #transactions
+    #transaction-form
+      td
+        padding-top: 2px
+        padding-bottom: 2px
+      input.input-text, textarea, select
+        font-size: 12px
+        margin: 0
+    #more-transactions
+      #ajax-loader
+        background: image-url('ajax-loader.gif')
+        width: 16px
+        height: 16px
+        margin: 0 auto
+        display: none
+
+#customer-edit
+  margin-top: 0.5em
