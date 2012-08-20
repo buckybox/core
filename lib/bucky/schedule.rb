@@ -197,3 +197,24 @@ class Bucky::Schedule < IceCube::Schedule
     end
   end
 end
+
+#  Schedule
+#
+#  recur | start_date | end_date | month_day | mon | tue | wed | thu | fri | sat | sun
+#
+#  ScheduleExceptions
+#
+#  start_date | forever | end_date
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
