@@ -1,30 +1,56 @@
 .row
-  %table.twelve.columns#transactions
-    %thead
-      %tr
-        %th
-          Transaction
-          %br
-          Processed
-        %th
-          Transaction
-          %br
-          Date
-        %th Description
-        %th Transaction
-        %th Balance
+  .twelve.columns
+    = form_tag(change_balance_distributor_account_path(@account, anchor: 'transactions'), method: :put, class: 'nice') do
+      .row
+        %table#transactions.twelve.columns{ data: { account: @account.id } }
+          %thead
+            %tr
+              %th
+                .row
+                  .two.columns Transaction Processed
+                  .two.columns Transaction Date
+                  .four.columns Description
+                  .two.columns.text-right Transaction
+                  .two.columns.text-right Balance
 
-    %tbody
-      - running_balance = @transactions_sum
+          %tbody
+            %tr#transaction-form.add-colour
+              %td
+                .row
+                  .two.columns.offset-by-two
+                    .inputs
+                      .input.string.required.input-text
+                        = text_field_tag 'date', Time.zone.today.to_s(:date_picker), id: 'transaction_date', class: 'string input-text expand'
+                  .four.columns
+                    .inputs
+                      .input.input-text
+                        = text_area_tag 'note', '', rows: 1, placeholder: 'e.g. Discount Credit Applied', class: 'text expand'
+                  .two.columns
+                    .inputs
+                      .input.string.required.input-text
+                        = text_field_tag 'delta', '0.00', required: 'required', class: 'string input-text expand required text-right'
+                  .two.columns.text-right
+                    .actions= submit_tag 'Add', class: 'button radius small'
 
-      - @transactions.each do |transaction|
-        - td_class = (transaction.manual? ? '' : 'auto')
+            - running_balance = @transactions_sum
 
-        %tr
-          %td{ class: td_class }= transaction.created_at.to_s(:transaction)
-          %td{ class: td_class }= transaction.display_time.to_s(:transaction)
-          %td{ class: td_class }= transaction.description
-          %td{ class: td_class }= transaction.amount.format
-          %td{ class: td_class }= running_balance.format
+            - @transactions.each do |transaction|
+              - td_class = (transaction.manual? ? '' : 'auto')
 
-        - running_balance -= transaction.amount
+              %tr.transaction-data
+                %td{ class: td_class }
+                  .row
+                    .two.columns= transaction.created_at.to_s(:transaction)
+                    .two.columns= transaction.display_time.to_s(:transaction)
+                    .four.columns= transaction.description
+                    .two.columns.text-right= transaction.amount.format
+                    .two.columns.text-right= running_balance.format
+
+              - running_balance -= transaction.amount
+
+            %tr
+              %td
+                .row
+                  #more-transactions.twelve.columns.text-center
+                    = link_to 'more...', '#'
+                    #ajax-loader

@@ -1,24 +1,5 @@
 - title 'Customers', false
-
-.row.page-controls
-  .eight.columns
-    - if params[:query]
-      %h3== Searching "#{params[:query]}"
-    - elsif params[:tag]
-      %h3== Tag "#{params[:tag]}"
-
-    - if params[:query] || params[:tag]
-      = link_to 'Clear', distributor_customers_path
-
-  .four.columns.text-right
-    = form_tag search_distributor_customers_path, method: :get, class: 'nice' do
-      = text_field_tag :query, '', placeholder: 'Search For...', class: 'input-text'
-      = submit_tag 'Search', class: 'small radius button'
-
-.row
-  .nine.columns
-    %h3 Customers
-  .three.columns.text-right= link_to 'New Customer', new_distributor_customer_path, class: 'button radius'
+= render 'controls'
 
 - if @customers.blank?
   .row.data-headings
@@ -37,6 +18,10 @@
         %h4.six.columns Balance
 
   #customers
+    .row
+      .twelve.columns.add-colour.data-list-new-link
+        = link_to 'Create a new customer', new_distributor_customer_path
+
     - @customers.each do |customer|
       .row.data-listings
         .five.columns

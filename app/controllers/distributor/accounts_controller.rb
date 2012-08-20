@@ -24,9 +24,19 @@ class Distributor::AccountsController < Distributor::ResourceController
         format.html { redirect_to [:distributor, @account.customer], notice: 'Account balance was successfully updated.' }
         format.json { head :no_content }
       else
-        format.html { render action: 'edit' }
+        format.html { redirect_to [:distributor, @account.customer] }
         format.json { render json: @account.errors, status: :unprocessable_entity }
       end
     end
+  end
+
+  def more_transactions
+    offset_size = params[:position].to_i
+
+    @account = current_distributor.accounts.find(params[:id])
+    @transactions = @account.transactions.offset(offset_size).limit(6)
+    @transactions_sum = @account.calculate_balance(offset_size)
+
+    render partial: 'distributor/accounts/more_transactions'
   end
 end

@@ -1,7 +1,7 @@
 source 'http://rubygems.org'
 
 # Core
-gem 'rails', '~> 3.2.6'
+gem 'rails', '~> 3.2.7'
 
 # Database
 gem 'pg'
@@ -9,7 +9,7 @@ gem 'pg'
 group :assets do
   gem 'coffee-rails'
   gem 'uglifier'
-  gem 'zurb-foundation'
+  gem 'zurb-foundation', '~> 2.2.1.2'
 end
 
 gem 'haml-rails'
@@ -43,6 +43,8 @@ group :install do
 end
 
 group :development do
+  gem 'puma'
+
   gem 'nifty-generators', require: false
 
   gem 'ruby-prof' # profiling with /newrelic
@@ -68,7 +70,7 @@ group :development do
 end
 
 group :development, :test do
-  gem 'rspec-rails'
+  gem 'rspec-rails', '~> 2.10.0'
   gem 'guard'
 
   gem 'rb-inotify',  require: false
