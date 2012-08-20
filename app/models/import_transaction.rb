@@ -5,11 +5,7 @@ class ImportTransaction < ActiveRecord::Base
   belongs_to :customer
   belongs_to :payment
 
-  composed_of :amount,
-    class_name: "Money",
-    mapping: [%w(amount_cents cents), %w(currency currency_as_string)],
-    constructor: Proc.new { |cents, currency| Money.new(cents || 0, currency || Money.default_currency) },
-    converter: Proc.new { |value| value.respond_to?(:to_money) ? value.to_money : raise(ArgumentError, "Can't convert #{value.class} to Money") }
+  monetize :amount_cents
 
   attr_accessible :customer, :customer_id, :transaction_date, :amount_cents, :removed, :description, :confidence, :import_transaction_list, :match, :draft, :raw_data
 

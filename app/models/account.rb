@@ -6,7 +6,7 @@ class Account < ActiveRecord::Base
   has_many :orders,        dependent: :destroy
   has_many :payments,      dependent: :destroy
   has_many :deductions,    dependent: :destroy
-  has_many :active_orders, class_name: 'Order', conditions: {active: true}
+  has_many :active_orders, class_name: 'Order', conditions: { active: true }
   has_many :transactions,  autosave: true
   has_many :deliveries,    through: :orders
   has_many :invoices
@@ -14,11 +14,7 @@ class Account < ActiveRecord::Base
   has_one :route,    through: :customer
   has_one :address,  through: :customer
 
-  composed_of :balance,
-    class_name: "Money",
-    mapping: [%w(balance_cents cents), %w(currency currency_as_string)],
-    constructor: Proc.new { |cents, currency| Money.new(cents || 0, currency || Money.default_currency) },
-    converter: Proc.new { |value| value.respond_to?(:to_money) ? value.to_money : raise(ArgumentError, "Can't convert #{value.class} to Money") }
+  monetize :balance_cents
 
   attr_accessible :customer, :tag_list
 
@@ -53,7 +49,6 @@ class Account < ActiveRecord::Base
     description = (options[:description] ? options[:description] : 'Manual Transaction.')
 
     write_attribute(:balance_cents, amount.cents)
-    write_attribute(:currency, amount.currency.to_s || Money.default_currency.to_s)
     clear_aggregation_cache # without this the composed_of balance attribute does not update
 
     transaction_options = { amount: amount_difference, transactionable: transactionable, description: description }
@@ -143,9 +138,7 @@ class Account < ActiveRecord::Base
   end
 
   def create_invoice
-    if needs_invoicing?
-      invoice = Invoice.create_for_account(self)
-    end
+    Invoice.create_for_account(self) if needs_invoicing?
   end
 
   private

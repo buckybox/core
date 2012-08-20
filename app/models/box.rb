@@ -16,11 +16,7 @@ class Box < ActiveRecord::Base
 
   default_scope order(:name)
 
-  composed_of :price,
-    class_name: "Money",
-    mapping: [%w(price_cents cents), %w(currency currency_as_string)],
-    constructor: Proc.new { |cents, currency| Money.new(cents || 0, currency || Money.default_currency) },
-    converter: Proc.new { |value| value.respond_to?(:to_money) ? value.to_money : raise(ArgumentError, "Can't convert #{value.class} to Money") }
+  monetize :price_cents
 
   default_value_for :extras_limit, 0
 
@@ -54,7 +50,7 @@ class Box < ActiveRecord::Base
   def extras_disabled?
     extras_limit == 0
   end
-  
+
   def has_all_extras?(exclude=[])
     exclude = [exclude] unless exclude.is_a?(Array)
     (distributor.extras - exclude).sort == extras.sort
