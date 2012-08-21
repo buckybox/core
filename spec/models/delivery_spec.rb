@@ -129,12 +129,16 @@ describe Delivery do
         dso.position = i
         dso.save
       end
+      d.map(&:save)
       d
     }
 
     it 'should return csv order by dso' do
-      binding.pry
-      Delivery.build_csv_for_export(:delivery, distributor, deliveries.collect(&:id), nil).should eq("")
+      csv = CSV.parse(Delivery.build_csv_for_export(:delivery, distributor, deliveries.collect(&:id), nil))
+      delivery_number_column = 1
+      csv[1][delivery_number_column].should eq('003')
+      csv[2][delivery_number_column].should eq('001')
+      csv[3][delivery_number_column].should eq('002')
     end
   end
 end
