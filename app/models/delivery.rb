@@ -194,6 +194,34 @@ class Delivery < ActiveRecord::Base
     self.delivery_number = delivery_list.get_delivery_number(self)
   end
 
+  # Pulled directly out of deliveries_controller#export
+  def self.build_csv_for_export(export_type, distributor, delivery_ids, package_ids)
+    if export_type == :delivery
+      export_items = distributor.deliveries.ordered.where(id: delivery_ids)
+      export_items = export_items.sort_by { |ei| ei.dso }
+      csv_headers = Delivery.csv_headers
+    else
+      packages = distributor.packages.where(id: package_ids)
+
+      export_items = []
+
+      packages.group_by(&:box).each do |box, array|
+        array.each do |package|
+          export_items << package
+        end
+      end
+
+      csv_headers = Package.csv_headers
+    end
+
+    csv_output = CSV.generate do |csv|
+      csv << csv_headers
+      export_items.each { |export_item| csv << export_item.to_csv }
+    end
+
+    export_items ? csv_output : nil
+  end
+
   private
 
   def default_route
