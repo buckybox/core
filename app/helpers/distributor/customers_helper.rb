@@ -23,4 +23,12 @@ module Distributor::CustomersHelper
     description = order.extras_description(true)
     content_tag(:span, truncate(description), title: description)
   end
+
+  def order_pause_select(order)
+    order.schedule.next_occurrences(8).map { |s| [s.to_date.to_s(:pause), s.to_date] }
+  end
+
+  def order_resume_select(order)
+    order.schedule.next_occurrences(8).map { |s| [s.to_date.to_s(:pause), s.to_date] }
+  end
 end

@@ -25,5 +25,39 @@ $(function() {
 
     return false;
   });
+
+  $('.initial-link a').click(function() {
+    fromPausingElementFind(this, '.initial-link').hide();
+    fromPausingElementFind(this, '.form-selection').show();
+    return false;
+  });
+
+  $('.remove-link a').click(function() {
+    fromPausingElementFind(this, '.form-selection').hide();
+    fromPausingElementFind(this, '.initial-link').show();
+    return false;
+  });
+
+  $('.cancel-link a').click(function() {
+    fromPausingElementFind(this, '.form-selection').hide();
+    fromPausingElementFind(this, '.initial-link').show();
+    return false;
+  });
+
+  $('.form-selection form :submit').click(function() {
+    fromPausingElementFind(this, '.form-selection').hide();
+    fromPausingElementFind(this, '.resulting-link').show();
+    return false;
+  });
+
+  $('.resulting-link a').click(function() {
+    fromPausingElementFind(this, '.resulting-link').hide();
+    fromPausingElementFind(this, '.form-selection').show();
+    fromPausingElementFind(this, '.remove-link').show();
+    return false;
+  });
 });
 
+function fromPausingElementFind(startElement, findName) {
+  return $(startElement).closest('.info-controller').find(findName);
+}

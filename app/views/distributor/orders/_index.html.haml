@@ -1,9 +1,3 @@
-- @orders.each do |order|
-  .reveal-modal{id: "pause-modal-#{order.id}"}
-    %h2 Pause Your Order
-    = link_to '&#215;'.html_safe, '#', class: 'close-reveal-modal'
-    = render partial: 'distributor/orders/pause_form', locals: { order: order }
-
 .row
   %table#orders.twelve.columns
     %tbody
@@ -22,14 +16,12 @@
                   %li= order_customisation(order)
                   %li= order_extras(order)
                   %li= link_to 'edit', edit_distributor_account_order_path(@account, order)
-              .five.columns
+              .six.columns
                 %ul
                   %li.larger-font= order_schedule(order, exception_rules: false, exception_times: false)
                   %li= order_schedule(order, recurrence_rules: false, recurrence_times: false)
-                  %li
-                    - if order.schedule.exception_times.empty?
-                      %li= link_to 'pause', '#', data: {'reveal-id' => "pause-modal-#{order.id}"}
-              .three.columns
+                  %li= render partial: 'pausing', locals: { order: order }
+              .two.columns
                 %ul.text-right
                   %li.larger-font= order.price.format
                   %li= link_to('remove order',
