@@ -32,21 +32,38 @@ $(function() {
     return false;
   });
 
-  $('.remove-link a').click(function() {
-    fromPausingElementFind(this, '.form-selection').hide();
-    fromPausingElementFind(this, '.initial-link').show();
-    return false;
-  });
-
   $('.cancel-link a').click(function() {
     fromPausingElementFind(this, '.form-selection').hide();
     fromPausingElementFind(this, '.initial-link').show();
     return false;
   });
 
-  $('.form-selection form :submit').click(function() {
+  $('.remove-link a').click(function() {
+    fromPausingElementFind(this, '.form-selection').hide();
+    fromPausingElementFind(this, '.remove-link').hide();
+    fromPausingElementFind(this, '.initial-link').show();
+    return false;
+  });
+
+  $('.pause .remove-link a').click(function() {
+    resume = $(this).closest('.pausing').find('.resume');
+    resume.hide();
+    resume.find('.initial-link').show();
+    resume.find('.form-selection').hide();
+    resume.find('.remove-link').hide();
+    resume.find('.resulting-link').hide();
+    return false;
+  });
+
+  $('.form-selection :submit').click(function() {
     fromPausingElementFind(this, '.form-selection').hide();
     fromPausingElementFind(this, '.resulting-link').show();
+    return false;
+  });
+
+  $('.pause .form-selection :submit').click(function() {
+    resume = $(this).closest('.pausing').find('.resume');
+    resume.show();
     return false;
   });
 
