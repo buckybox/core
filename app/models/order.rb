@@ -18,6 +18,8 @@ class Order < ActiveRecord::Base
 
   has_many :extras, through: :order_extras
 
+  has_one :schedule_rule
+
   scope :completed, where(completed: true)
   scope :active, where(active: true)
 
@@ -290,6 +292,17 @@ class Order < ActiveRecord::Base
 
   def route_id
     account.customer.route_id
+  end
+
+  def self.order_count(distributor, date)
+    distributor.use_local_time_zone do
+      datetime = date.to_time
+      sql_template = File.read(File.join(Rails.root,'db/templates/find_schedules.sql'))
+      sql_template.gsub!(':dow', datetime.strftime('%a').downcase) # put the day selector in, i.e mon or thu..
+      sql_template.gsub!(':date', date.to_s(:db))
+      sql_template.gsub!(':distributor_id', distributor.id.to_s)
+      ActiveRecord::Base.connection.execute(sql_template)[0]['count'].to_i
+    end
   end
 
   protected

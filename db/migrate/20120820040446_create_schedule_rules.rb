@@ -2,9 +2,7 @@ class CreateScheduleRules < ActiveRecord::Migration
   def change
     create_table :schedule_rules do |t|
       t.string :recur
-      t.timestamp :start_datetime
-      t.date :end_datetime
-      t.integer :month_day
+      t.date :start
       t.boolean :mon
       t.boolean :tue
       t.boolean :wed
@@ -13,6 +11,7 @@ class CreateScheduleRules < ActiveRecord::Migration
       t.boolean :sat
       t.boolean :sun
       t.integer :order_id
+      t.integer :schedule_pause_id
 
       t.timestamps
     end

@@ -1,32 +1,37 @@
-select count(*)
+select count(*) as count
 from orders
-inner join accounts on orders.account_id = accounts.id
-inner join customers on accounts.customer_id = customers.id
+inner join boxes on boxes.id = orders.box_id
 inner join schedule_rules on schedule_rules.order_id = orders.id
-where customers.distributor_id = 14
+full outer join schedule_pauses on schedule_pauses.id = schedule_rules.schedule_pause_id
+where boxes.distributor_id = :distributor_id
 AND orders.active = 't'
 AND (	(
-	recur is NULL AND start_datetime = (timestamp '2012-08-22 14:00:00')
+		recur is NULL AND schedule_rules.start = ':date'
 	)
 	OR 
 	(
-	recur = 'weekly' AND start_datetime <= (timestamp '2012-08-22 14:00:00')
-	AND wed = 't'
+		recur = 'weekly' AND schedule_rules.start <= ':date'
+		AND :dow = 't'
 	)
 	OR 
 	(
-	recur = 'fortnightly' AND start_datetime <= (timestamp '2012-08-22 14:00:00')
-	AND wed = 't'
-	AND ((CAST(EXTRACT('epoch' from ((timestamp '2012-08-22 14:00:00') - (start_datetime +  CAST(CAST((EXTRACT(DOW from (timestamp '2012-08-22 14:00:00')) - EXTRACT(DOW from start_datetime)) AS integer)||' days' as interval)) + 
-		CASE
-		WHEN EXTRACT(DOW from start_datetime) >= EXTRACT(DOW from (timestamp '2012-08-22 14:00:00')) THEN interval '7 days'
-		ELSE interval '0 days'
-		END)) as integer) / (7*24*60*60)) % 2) = 0
+		recur = 'fortnightly' AND schedule_rules.start <= ':date'
+		AND :dow = 't'
+		AND (((date(':date') - (schedule_rules.start + CAST((EXTRACT(DOW from date(':date')) - EXTRACT(DOW from schedule_rules.start)) AS integer) + 
+			CASE
+			WHEN EXTRACT(DOW from schedule_rules.start) > EXTRACT(DOW from date(':date')) THEN 7
+			ELSE 0
+			END)) / 7) % 2) = 0
 	)
 	OR
 	(
-	recur = 'monthly' AND start_datetime <= (timestamp '2012-08-22 14:00:00')
-	AND wed = 't'
-	AND EXTRACT(DAY from (timestamp '2012-08-22 14:00:00')) < 8
+		recur = 'monthly' AND schedule_rules.start <= ':date'
+		AND :dow = 't' AND EXTRACT(DAY from date(':date')) < 8
 	)
+)AND (
+	schedule_pauses.start is NULL
+	OR
+	schedule_pauses.start > (date ':date')
+	OR
+	schedule_pauses.finish < (date ':date')
 )

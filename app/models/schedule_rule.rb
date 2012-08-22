@@ -1,40 +1,36 @@
 class ScheduleRule < ActiveRecord::Base
-  attr_accessible :finish, :fri, :mon, :month_day, :recur, :sat, :start_datetime, :sun, :thu, :tue, :wed, :order_id
+  attr_accessible :fri, :mon, :month_day, :recur, :sat, :start, :sun, :thu, :tue, :wed, :order_id
 
   DAYS = [:mon, :tue, :wed, :thu, :fri, :sat, :sun]
   RECUR = [:one_off, :weekly, :fortnightly, :monthly]
 
   belongs_to :order
-  
-  def initalize(attrs)
-    defaults = {time_zone: 'UTC'}
-    super.new(defaults.merge(attrs))
-  end
+  belongs_to :schedule_pause
 
   def self.one_off(datetime)
-    ScheduleRule.new(start_datetime: datetime)
+    ScheduleRule.new(start: datetime)
   end
 
-  def self.recur_on(start_datetime, days, recur)
+  def self.recur_on(start, days, recur)
     days &= DAYS #whitelist
     days = days.inject({}){|h, i| h.merge(i => true)} #Turn array into hash
     days = DAYS.inject({}){|h, i| h.merge(i => false)}.merge(days) # Fill out the rest with false
 
     throw "recur '#{recur}' is :weekly or :fortnightly" unless [:weekly, :fortnightly, :monthly].include?(recur)
 
-    ScheduleRule.new(days.merge(recur: recur, start_datetime: start_datetime))
+    ScheduleRule.new(days.merge(recur: recur, start: start))
   end
 
-  def self.weekly(start_datetime, days)
-    recur_on(start_datetime, days, :weekly)
+  def self.weekly(start, days)
+    recur_on(start, days, :weekly)
   end
 
-  def self.fortnightly(start_datetime, days)
-    recur_on(start_datetime, days, :fortnightly)
+  def self.fortnightly(start, days)
+    recur_on(start, days, :fortnightly)
   end
 
-  def self.monthly(start_datetime, days)
-    recur_on(start_datetime, days, :monthly)
+  def self.monthly(start, days)
+    recur_on(start, days, :monthly)
   end
 
   def recur
@@ -49,7 +45,7 @@ class ScheduleRule < ActiveRecord::Base
   def occurs_on?(datetime)
     case recur
     when :one_off
-      start_datetime == datetime
+      start== datetime
     when :weekly
       weekly_occurs_on?(datetime)
     when :fortnightly
@@ -61,12 +57,12 @@ class ScheduleRule < ActiveRecord::Base
 
   def weekly_occurs_on?(datetime)
     day = datetime.strftime("%a").downcase.to_sym
-    self.send("#{day}?") && start_datetime <= datetime
+    self.send("#{day}?") && start<= datetime
   end
 
   def fortnightly_occurs_on?(datetime)
-    # So, theory is, the difference between the start_datetime and the date in question as days, devided by 7 should give the number of weeks since the start_datetime.  If the number is even, we are on a fortnightly.
-    first_occurence = start_datetime + (datetime.wday - start_datetime.wday) + (start_datetime.wday >= datetime.wday ? 7 : 0)
+    # So, theory is, the difference between the startand the date in question as days, devided by 7 should give the number of weeks since the start.  If the number is even, we are on a fortnightly.
+    first_occurence = start+ (datetime.wday - start.wday) + (start.wday > datetime.wday ? 7 : 0)
     weekly_occurs_on?(datetime) && ((datetime - first_occurence) / 7).to_i.even? # 7 days in a week
   end
 
@@ -77,34 +73,34 @@ class ScheduleRule < ActiveRecord::Base
   def self.generate_data(count)
     count.times do
       days = DAYS.shuffle[0..(rand(7))]
-      start_datetime = Date.today - 700.days + (rand(1400).days)
+      start= Date.today - 700.days + (rand(1400).days)
       recur = [:one_off, :weekly, :fortnightly, :monthly].shuffle.first
       case recur
       when :one_off
-        ScheduleRule.one_off(start_datetime)
+        ScheduleRule.one_off(start)
       when :weekly
-        ScheduleRule.weekly(start_datetime, days)
+        ScheduleRule.weekly(start, days)
       when :fortnightly
-        ScheduleRule.fortnightly(start_datetime, days)
+        ScheduleRule.fortnightly(start, days)
       when :monthly
-        ScheduleRule.monthly(start_datetime, days)
+        ScheduleRule.monthly(start, days)
       end.save
     end
   end
 
   def self.ice_cube(schedule)
-    start_datetime = schedule.start_time
+    start = schedule.start_time.to_date
     days = schedule.recurrence_days.map{|d| Date::DAYNAMES[d][0..2].downcase.to_sym}
 
     case schedule.frequency.to_s
     when 'single'
-      ScheduleRule.one_off(start_datetime)
+      ScheduleRule.one_off(start)
     when 'weekly'
-      ScheduleRule.weekly(start_datetime, days)
+      ScheduleRule.weekly(start, days)
     when 'fortnightly'
-      ScheduleRule.fortnightly(start_datetime, days)
+      ScheduleRule.fortnightly(start, days)
     when 'monthly'
-      ScheduleRule.monthly(start_datetime, days)
+      ScheduleRule.monthly(start, days)
     end
   end
 
@@ -115,6 +111,13 @@ class ScheduleRule < ActiveRecord::Base
         begin
           s = ice_cube(o.schedule)
           s.order = o
+          
+          unless o.schedule.extimes.empty?
+            sp = SchedulePause.from_ice_cube(o.schedule) 
+            sp.save!
+            s.schedule_pause = sp
+          end
+
           s.save!
         rescue => e
           puts e
