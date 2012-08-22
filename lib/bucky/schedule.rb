@@ -113,12 +113,12 @@ class Bucky::Schedule < IceCube::Schedule
       recurrence_rule = recurrence_rules.first
       interval        = recurrence_rule.to_hash[:interval]
 
-      type = case recurrence_rule
-             when IceCube::WeeklyRule
-               interval == 1 ? :weekly : :fortnightly
-             when IceCube::MonthlyRule
-               :monthly
-             end
+      case recurrence_rule
+      when IceCube::WeeklyRule
+       interval == 1 ? :weekly : :fortnightly
+      when IceCube::MonthlyRule
+       :monthly
+      end
     else
       :single
     end
@@ -157,6 +157,11 @@ class Bucky::Schedule < IceCube::Schedule
     end
   end
 
+  # Unintuitive API but done as not to break backwards compatibility
+  def occurrences(closing_time, other_start_time = start_time)
+    find_occurrences(other_start_time, closing_time)
+  end
+
   ################################################################################################
   #                                                                                              #
   #  Methods to help deal with mass changes to schedules.                                        #
@@ -177,7 +182,7 @@ class Bucky::Schedule < IceCube::Schedule
                IceCube::Rule.weekly(interval).day(*(days - [day]))
              when IceCube::MonthlyRule
                days = recurrence_rule.to_hash[:validations][:day_of_week].keys || []
-               monthly_days_hash = (days - [day]).inject({}) { |hash, day| hash[day] = [1]; hash }
+               monthly_days_hash = (days - [day]).inject({}) { |hash, d| hash[d] = [1]; hash }
                IceCube::Rule.monthly(interval).day_of_week(monthly_days_hash)
              end
 
