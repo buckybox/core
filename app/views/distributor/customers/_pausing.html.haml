@@ -5,25 +5,25 @@
       = simple_form_for(order, url: pause_distributor_account_order_path(order.account, order), html: { method: :put }) do |f|
         .inputs.float-left
           = f.simple_fields_for(:pause) do |p|
-            = p.input :pause_date, collection: order_pause_select(order), include_blank: false, label: false, input_html: { class: 'float-left' }
+            = p.input :pause_date, collection: order_pause_select(order), selected: order_pause_start_date(order), include_blank: false, label: false, input_html: { class: 'float-left' }
         .action.float-left
           = f.button :submit, 'Pause', class: 'tiny'
       .remove-link= link_to 'remove', '#'
       .cancel-link= link_to 'cancel', '#'
     .resulting-link
       = link_to 'pausing', '#'
-      == on #{'Wed 19 Apr'}
+      == on #{order_pause_start_date_formatted(order)}
   .resume.info-controller
     .initial-link= link_to 'until further notice', '#'
     .form-selection
       = simple_form_for(order, url: pause_distributor_account_order_path(order.account, order), html: { method: :put }) do |f|
         .inputs.float-left
           = f.simple_fields_for(:pause) do |p|
-            = p.input :pause_date, collection: order_resume_select(order), include_blank: false, label: false, input_html: { class: 'float-left' }
+            = p.input :pause_date, collection: order_resume_select(order), selected: order_pause_end_date(order), include_blank: false, label: false, input_html: { class: 'float-left' }
         .action.float-left
           = f.button :submit, 'Resume', class: 'tiny'
       .remove-link= link_to 'remove', '#', class: 'links'
       .cancel-link= link_to 'cancel', '#', class: 'links'
     .resulting-link
       = link_to 'resume', '#'
-      == on #{'Mon 24 Apr'}
+      == on #{order_pause_end_date_formatted(order)}
