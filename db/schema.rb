@@ -488,10 +488,9 @@ ActiveRecord::Schema.define(:version => 20120820040446) do
   add_index "routes", ["distributor_id"], :name => "index_routes_on_distributor_id"
 
   create_table "schedule_rules", :force => true do |t|
-    t.string   "time_zone"
     t.string   "recur"
-    t.date     "start_date"
-    t.date     "end_date"
+    t.datetime "start_datetime"
+    t.date     "end_datetime"
     t.integer  "month_day"
     t.boolean  "mon"
     t.boolean  "tue"
@@ -500,8 +499,9 @@ ActiveRecord::Schema.define(:version => 20120820040446) do
     t.boolean  "fri"
     t.boolean  "sat"
     t.boolean  "sun"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
+    t.integer  "order_id"
+    t.datetime "created_at",     :null => false
+    t.datetime "updated_at",     :null => false
   end
 
   create_table "substitutions", :force => true do |t|
