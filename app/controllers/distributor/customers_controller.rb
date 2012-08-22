@@ -41,7 +41,7 @@ class Distributor::CustomersController < Distributor::ResourceController
       @orders       = @account.orders.active
       @deliveries   = @account.deliveries.ordered
 
-      @transactions = @account.transactions.limit(6)
+      @transactions     = @account.transactions.limit(6)
       @transactions_sum = @account.calculate_balance
     end
   end
