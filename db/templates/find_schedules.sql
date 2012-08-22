@@ -1,4 +1,4 @@
-select count(*) as count
+select sum(orders.quantity) as count
 from orders
 inner join boxes on boxes.id = orders.box_id
 inner join schedule_rules on schedule_rules.order_id = orders.id
