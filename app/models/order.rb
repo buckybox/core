@@ -196,7 +196,7 @@ class Order < ActiveRecord::Base
     self.active = false
   end
 
-  def pause(start_date, end_date)
+  def pause!(start_date, end_date)
     # Could not get controller response to render error, so returning false on error instead for now.
     if start_date.past? || end_date.past?
       return false
@@ -204,10 +204,24 @@ class Order < ActiveRecord::Base
       return false
     end
 
+    # Because we want to iterate by day and not by second
+    start_date       = start_date.to_date if start_date.is_a?(Time)
+    end_date         = end_date.to_date   if end_date.is_a?(Time)
+    updated_schedule = schedule
+
+    updated_schedule.exception_times.each { |time| updated_schedule.remove_exception_time(time) }
+
+    (start_date..end_date).each { |date| updated_schedule.add_exception_time(date.to_time_in_current_zone) }
+
+    self.schedule = updated_schedule
+
+    return save
+  end
+
+  def remove_pause!
     updated_schedule = schedule
     updated_schedule.exception_times.each { |time| updated_schedule.remove_exception_time(time) }
-    (start_date..end_date).each { |date| updated_schedule.add_exception_time(date.beginning_of_day) }
-    self.schedule = updated_schedule
+    schedule = schedule
 
     return save
   end

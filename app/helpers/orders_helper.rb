@@ -91,7 +91,11 @@ module OrdersHelper
 
   def order_pause_end_date(order)
     date = order.schedule.exception_times.last
+    first_date = order.schedule.exception_times.first
+
+    date = nil if date && (date - first_date) >= 366.days
     date = date.to_date + 1.day if date # the +1 day is shown as the resume day so a day after the last exception date
+
     return date
   end
 
