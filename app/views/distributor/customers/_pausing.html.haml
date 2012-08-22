@@ -16,7 +16,7 @@
       .remove-link= link_to 'remove', remove_pause_distributor_account_order_path(order.account, order)
       .cancel-link= link_to 'cancel', '#'
 
-    .resulting-link{ style: "display: #{pause_date ? 'block' : 'none'};" }
+    .resulting-link{ style: "display: #{pause_date ? 'block' : 'none'};", data: { date: pause_date } }
       = link_to 'pausing', '#'
       %span== on #{order_pause_start_date_formatted(order)}
 
@@ -34,6 +34,6 @@
       .remove-link= link_to 'remove', remove_resume_distributor_account_order_path(order.account, order), class: 'links'
       .cancel-link= link_to 'cancel', '#', class: 'links'
 
-    .resulting-link{ style: "display: #{resume_date ? 'block' : 'none'};" }
+    .resulting-link{ style: "display: #{resume_date ? 'block' : 'none'};", data: { date: resume_date } }
       = link_to 'resuming', '#'
       %span== on #{order_pause_end_date_formatted(order)}

@@ -34,7 +34,16 @@ $(function() {
 
   $('.cancel-link a').click(function() {
     fromPausingElementFind(this, '.form-selection').hide();
-    fromPausingElementFind(this, '.initial-link').show();
+
+    var resulting_link = fromPausingElementFind(this, '.resulting-link');
+
+    if(resulting_link.data('date')) {
+      resulting_link.show();
+    }
+    else {
+      fromPausingElementFind(this, '.initial-link').show();
+    }
+
     return false;
   });
 
@@ -55,11 +64,7 @@ $(function() {
 
     var url = $(this).attr('href');
 
-    $.ajax({
-      type: 'POST',
-      dataType: 'json',
-      url: url,
-    });
+    $.ajax({ type: 'POST', dataType: 'json', url: url });
 
     return false;
   });
@@ -67,11 +72,7 @@ $(function() {
   $('.resume .remove-link a').click(function() {
     var url = $(this).attr('href');
 
-    $.ajax({
-      type: 'POST',
-      dataType: 'json',
-      url: url,
-    });
+    $.ajax({ type: 'POST', dataType: 'json', url: url });
 
     return false;
   });
