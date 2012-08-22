@@ -46,12 +46,33 @@ $(function() {
   });
 
   $('.pause .remove-link a').click(function() {
-    resume = $(this).closest('.pausing').find('.resume');
+    var resume = $(this).closest('.pausing').find('.resume');
     resume.hide();
     resume.find('.initial-link').show();
     resume.find('.form-selection').hide();
     resume.find('.remove-link').hide();
     resume.find('.resulting-link').hide();
+
+    var url = $(this).attr('href');
+
+    $.ajax({
+      type: 'POST',
+      dataType: 'json',
+      url: url,
+    });
+
+    return false;
+  });
+
+  $('.resume .remove-link a').click(function() {
+    var url = $(this).attr('href');
+
+    $.ajax({
+      type: 'POST',
+      dataType: 'json',
+      url: url,
+    });
+
     return false;
   });
 
@@ -64,6 +85,45 @@ $(function() {
   $('.pause .form-selection :submit').click(function() {
     resume = $(this).closest('.pausing').find('.resume');
     resume.show();
+
+    var form = fromPausingElementFind(this, '.form-selection form');
+    var url  = form.attr('action');
+    var date = form.find('select :selected').val();
+
+    $.ajax({
+      type: 'PUT',
+      dataType: 'json',
+      url: url,
+      data: $.param({ date: date }),
+      success: function(data) {
+        var pausing_order = $('#pausing_order_' + data['id']);
+        var resulting_span = pausing_order.find(' .pause .resulting-link span');
+        var text = 'on ' + data['formatted_date'];
+
+        resulting_span.text(text);
+      }
+    });
+
+    return false;
+  });
+
+  $('.resume .form-selection :submit').click(function() {
+    var form = fromPausingElementFind(this, '.form-selection form');
+    var url  = form.attr('action');
+    var date = form.find('select :selected').val();
+
+    $.ajax({
+      type: 'PUT',
+      dataType: 'json',
+      url: url,
+      data: $.param({ date: date }),
+      success: function(data) {
+        var resulting_span = $('#pausing_order_' + data['id'] + ' .resume .resulting-link span');
+        var text = 'on ' + data['formatted_date'];
+        resulting_span.text(text);
+      }
+    });
+
     return false;
   });
 
