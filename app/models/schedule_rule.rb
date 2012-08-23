@@ -5,7 +5,7 @@ class ScheduleRule < ActiveRecord::Base
   RECUR = [:one_off, :weekly, :fortnightly, :monthly]
 
   belongs_to :order
-  belongs_to :schedule_pause
+  belongs_to :schedule_pause, dependent: :destroy
 
   def self.one_off(datetime)
     ScheduleRule.new(start: datetime)
@@ -88,6 +88,18 @@ class ScheduleRule < ActiveRecord::Base
     end
   end
 
+  def self.copy_orders_schedule(o)
+    s = ice_cube(o.schedule)
+    s.order = o
+
+    unless o.schedule.extimes.empty?
+      sp = SchedulePause.from_ice_cube(o.schedule) 
+      sp.save!
+      s.schedule_pause = sp
+    end
+    s
+  end
+
   def self.ice_cube(schedule)
     start = schedule.start_time.to_date
     days = schedule.recurrence_days.map{|d| Date::DAYNAMES[d][0..2].downcase.to_sym}
@@ -109,15 +121,7 @@ class ScheduleRule < ActiveRecord::Base
       Time.zone = d.time_zone
       d.orders.all.each do |o|
         begin
-          s = ice_cube(o.schedule)
-          s.order = o
-          
-          unless o.schedule.extimes.empty?
-            sp = SchedulePause.from_ice_cube(o.schedule) 
-            sp.save!
-            s.schedule_pause = sp
-          end
-
+          s = copy_orders_schedule(o)
           s.save!
         rescue => e
           puts e
