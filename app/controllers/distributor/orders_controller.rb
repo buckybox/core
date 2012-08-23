@@ -90,7 +90,7 @@ class Distributor::OrdersController < Distributor::ResourceController
     @order = Order.find(params[:id])
 
     start_date = Date.parse(params[:date])
-    end_date   = start_date + 366.days
+    end_date   = Bucky::Schedule.until_further_notice(start_date)
 
     respond_to do |format|
       if @order.pause!(start_date, end_date)
@@ -132,7 +132,7 @@ class Distributor::OrdersController < Distributor::ResourceController
     @order = Order.find(params[:id])
 
     start_date = @order.schedule.exception_times.first.to_date
-    end_date   = start_date + 366.days
+    end_date   = Bucky::Schedule.until_further_notice(start_date)
 
     respond_to do |format|
       if @order.pause!(start_date, end_date)
