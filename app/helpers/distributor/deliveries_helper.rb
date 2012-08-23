@@ -77,15 +77,11 @@ module Distributor::DeliveriesHelper
   end
 
   def delivery_quantity(distributor, date, route_id=nil)
-    Bucky::Cache.fetch([distributor, date, route_id, 'delivery_quantity']) do
-      delivery_list = current_distributor.delivery_lists.where(date: date).first
-      if delivery_list
-        delivery_list.quantity_for(route_id)
-      else
-        deliveries = DeliveryList.collect_list(distributor, date).deliveries
-        deliveries = deliveries.select{|order| order.customer.route_id == route_id} if route_id
-        deliveries.collect{|order| order.quantity}.sum
-      end
+    delivery_list = current_distributor.delivery_lists.where(date: date).first
+    if delivery_list
+      delivery_list.quantity_for(route_id)
+    else
+      Order.order_count(distributor, date)
     end
   end
 
