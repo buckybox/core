@@ -8,12 +8,12 @@ gem 'pg', '~> 0.14.0'
 
 gem 'haml-rails', '~> 0.3.4'
 gem 'sass-rails', '~> 3.2.5'
-gem 'jquery-rails', '~> 2.0.2'
+gem 'jquery-rails', '~> 2.1.1'
 gem 'chosen-rails', '~> 0.9.8.1'
 
 gem 'devise', '~> 2.1.2'
 gem 'multi_json', '~> 1.3.6'
-gem 'simple_form', '~> 2.0.2'
+gem 'simple_form', '~> 1.5.2'
 gem 'ice_cube', git: 'git://github.com/ootoovak/ice_cube.git' # patched to persist data (that we use) in UTC timezone
 gem 'inherited_resources', '~> 1.3.1'
 gem 'mini_magick', '~> 3.4'
@@ -45,6 +45,7 @@ group :install do
 end
 
 group :development do
+  gem 'bullet'
   gem 'puma', require: false
 
   gem 'nifty-generators', '~> 0.4.6', require: false

@@ -286,8 +286,8 @@ class Order < ActiveRecord::Base
   end
 
   def dso(wday)
-    dso = DeliverySequenceOrder.where(address_hash: address.address_hash, day: wday, route_id: route.id).first
-    dso && dso.position || -1
+    dso_position = DeliverySequenceOrder.position_for(address.address_hash, wday, route.id)
+    dso_position || -1
   end
 
   def route_id

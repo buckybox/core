@@ -1,15 +1,14 @@
 module Distributor::DeliveriesHelper
   CALENDAR_DATE_SIZE = 59
 
-  def calendar_nav_length(delivery_lists)
-    number_of_month_dividers = delivery_lists.group_by{|dl| dl.date.month}.size
-    nav_length = delivery_lists.size + number_of_month_dividers
+  def calendar_nav_length(dates, months)
+    nav_length = dates.size + months.size
 
     return "width:#{nav_length * CALENDAR_DATE_SIZE}px;"
   end
 
-  def date_class(date_list)
-    'today' if date_list.date.today?
+  def date_class(date)
+    'today' if date.today?
   end
 
   def count_selected(start_date, date_list, date)
@@ -18,19 +17,19 @@ module Distributor::DeliveriesHelper
     scroll_date = date - 1.week
     scroll_date = start_date if scroll_date < start_date
 
-    if date == date_list.date
+    if date == date_list
       element_id = 'selected'
-    elsif scroll_date == date_list.date
+    elsif scroll_date == date_list
       element_id = 'scroll-to'
     end
 
     return element_id
   end
 
-  def count_class(date_list)
-    if date_list.is_a?(FutureDeliveryList)
+  def count_class(current_distributor, date)
+    if current_distributor.delivery_lists.where(date: date).count.zero?
       'out_of_range'
-    elsif !date_list.all_finished?
+    elsif !current_distributor.delivery_lists.where(date: date).first.all_finished?
       'has_pending'
     end
   end
@@ -74,6 +73,19 @@ module Distributor::DeliveriesHelper
     else
       item = item.package if item.is_a?(Delivery)
       item.contents_description
+    end
+  end
+
+  def delivery_quantity(distributor, date, route_id=nil)
+    Bucky::Cache.fetch([distributor, date, route_id, 'delivery_quantity']) do
+      delivery_list = current_distributor.delivery_lists.where(date: date).first
+      if delivery_list
+        delivery_list.quantity_for(route_id)
+      else
+        deliveries = DeliveryList.collect_list(distributor, date).deliveries
+        deliveries = deliveries.select{|order| order.customer.route_id == route_id} if route_id
+        deliveries.collect{|order| order.quantity}.sum
+      end
     end
   end
 
