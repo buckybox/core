@@ -8,7 +8,7 @@ gem 'pg', '~> 0.14.0'
 
 gem 'haml-rails', '~> 0.3.4'
 gem 'sass-rails', '~> 3.2.5'
-gem 'jquery-rails', '~> 2.0.2'
+gem 'jquery-rails', '~> 2.1.1'
 gem 'chosen-rails', '~> 0.9.8.1'
 
 gem 'devise', '~> 2.1.2'
