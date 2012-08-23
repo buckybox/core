@@ -112,6 +112,7 @@ class ScheduleRule < ActiveRecord::Base
     when 'fortnightly'
       ScheduleRule.fortnightly(start, days)
     when 'monthly'
+      days = schedule.rrules.first.to_hash[:validations][:day_of_week].collect(&:first).map{|d| Date::DAYNAMES[d][0..2].downcase.to_sym}
       ScheduleRule.monthly(start, days)
     end
   end

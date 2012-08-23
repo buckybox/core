@@ -1,9 +1,11 @@
 select :select
 from orders
-inner join boxes on boxes.id = orders.box_id
+inner join accounts on accounts.id = orders.account_id
+inner join customers on customers.id = accounts.customer_id
 inner join schedule_rules on schedule_rules.order_id = orders.id
 full outer join schedule_pauses on schedule_pauses.id = schedule_rules.schedule_pause_id
-where boxes.distributor_id = :distributor_id
+where customers.distributor_id = :distributor_id
+AND customers.route_id = :route_id
 AND orders.active = 't'
 AND (	(
 		recur is NULL AND schedule_rules.start = ':date'

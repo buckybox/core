@@ -295,14 +295,9 @@ class Order < ActiveRecord::Base
     account.customer.route_id
   end
 
-  def self.order_count(distributor, date)
+  def self.order_count(distributor, date, route_id=nil)
     distributor.use_local_time_zone do
-      datetime = date.to_time
-      sql_template = File.read(File.join(Rails.root,'db/templates/find_schedules.sql'))
-      sql_template.gsub!(':dow', datetime.strftime('%a').downcase) # put the day selector in, i.e mon or thu..
-      sql_template.gsub!(':date', date.to_s(:db))
-      sql_template.gsub!(':distributor_id', distributor.id.to_s)
-      ActiveRecord::Base.connection.execute(sql_template)[0]['count'].to_i
+      Bucky::Sql.order_count(distributor, date, route_id)
     end
   end
 

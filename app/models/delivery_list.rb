@@ -13,37 +13,33 @@ class DeliveryList < ActiveRecord::Base
   default_scope order(:date)
 
   def self.collect_lists(distributor, start_date, end_date)
-      result = DeliveryList.includes(deliveries: {package: {customer: {address: {}}}}).where(date:start_date..end_date, distributor_id: distributor.id).to_a
+    result = DeliveryList.includes(deliveries: {package: {customer: {address: {}}}}).where(date:start_date..end_date, distributor_id: distributor.id).to_a
 
-      if end_date.future?
-        future_start_date = start_date
-        future_start_date = (result.last.date + 1.day) if result.last
+    if end_date.future?
+      future_start_date = start_date
+      future_start_date = (result.last.date + 1.day) if result.last
 
-        orders = distributor.orders.active.includes({ account: {customer: {address:{}, deliveries: {delivery_list: {}}}}, order_extras: {}, box: {}})
-
-        (future_start_date..end_date).each do |date|
-          result << collect_list(distributor, date, orders)
-        end
+      (future_start_date..end_date).each do |date|
+        result << collect_list(distributor, date)
       end
+    end
 
-      return result
+    return result
   end
 
-  def self.collect_list(distributor, date, orders=nil)
-    orders_key = orders.nil? ? 'nil' : orders.collect(&:id)
-    Bucky::Cache.fetch([distributor, date, orders_key, 'collect_list']) do
-      date_orders = []
-      wday = date.wday
-      orders ||= distributor.orders.active.includes({ account: {customer: {address:{}, deliveries: {delivery_list: {}}}}, order_extras: {}, box: {}})
+  def self.collect_list(distributor, date)
+    date_orders = []
+    wday = date.wday
+    
+    order_ids = Bucky::Sql.order_ids(distributor, date)
+    date_orders = distributor.orders.active.where(id: order_ids).includes({ account: {customer: {address:{}, deliveries: {delivery_list: {}}}}, order_extras: {}, box: {}})
 
-      orders.each { |order| date_orders << order if order.schedule.occurs_on?(date) }
 
-      # This emulates the ordering when lists are actually created
-      FutureDeliveryList.new(date, date_orders.sort { |a,b|
-        comp = a.dso(wday) <=> b.dso(wday)
-        comp.zero? ? (b.created_at <=> a.created_at) : comp
-      })
-    end
+    # This emulates the ordering when lists are actually created
+    FutureDeliveryList.new(date, date_orders.sort { |a,b|
+      comp = a.dso(wday) <=> b.dso(wday)
+      comp.zero? ? (b.created_at <=> a.created_at) : comp
+    })
   end
 
   def self.generate_list(distributor, date)
@@ -63,7 +59,7 @@ class DeliveryList < ActiveRecord::Base
     end
 
     packages = packages.sort.map{ |key, value| value }.flatten
-    
+
     packages.each do |package|
       order = package.order
       route = order.route
@@ -120,22 +116,18 @@ class DeliveryList < ActiveRecord::Base
   end
 
   def has_deliveries?
-    Bucky::Cache.fetch([self, :has_deliveries?]) do
-      deliveries.count.zero?
-    end
+    deliveries.count.zero?
   end
 
   def all_finished?
-    Bucky::Cache.fetch([self, :all_finished?]) do
-      deliveries.pending.count.zero?
-    end
+    deliveries.pending.count.zero?
   end
 
   def get_delivery_number(delivery)
     throw "This isn't my delivery" if delivery.delivery_list_id != self.id
-    
+
     delivery_to_same_address = deliveries(true).select{|d| d.address_hash == delivery.address_hash && d.id != delivery.id}.first
-    
+
     if delivery_to_same_address
       delivery_to_same_address.delivery_number
     else

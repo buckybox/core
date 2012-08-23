@@ -81,7 +81,7 @@ module Distributor::DeliveriesHelper
     if delivery_list
       delivery_list.quantity_for(route_id)
     else
-      Order.order_count(distributor, date)
+      Order.order_count(distributor, date, route_id)
     end
   end
 

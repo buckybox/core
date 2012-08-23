@@ -36,8 +36,7 @@ class Distributor::DeliveriesController < Distributor::ResourceController
       @months = @date_navigation.group_by(&:month)
 
       if @route_id.zero?
-        @packing_lists = PackingList.collect_lists(current_distributor, NAV_START_DATE, NAV_END_DATE)
-        @packing_list  = @packing_lists.find  { |packing_list| packing_list.date == @selected_date }
+        @packing_list  = PackingList.collect_list(current_distributor, @selected_date)
         
         @all_packages  = @packing_list.packages
         
