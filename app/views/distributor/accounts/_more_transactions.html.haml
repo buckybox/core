@@ -1,0 +1,15 @@
+- running_balance = @transactions_sum
+
+- @transactions.each do |transaction|
+  - td_class = (transaction.manual? ? '' : 'auto')
+
+  %tr.transaction-data
+    %td{ class: td_class }
+      .row
+        .two.columns= transaction.created_at.to_s(:transaction)
+        .two.columns= transaction.display_time.to_s(:transaction)
+        .four.columns= transaction.description
+        .two.columns.text-right= transaction.amount.format
+        .two.columns.text-right= running_balance.format
+
+  - running_balance -= transaction.amount

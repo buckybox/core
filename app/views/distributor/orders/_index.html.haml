@@ -1,39 +1,41 @@
-.row
-  %table.twelve.columns
-    %thead
-      %tr
-        %th Order #
-        %th Box
-        %th Extras
-        %th Quantity
-        %th Total Cost
-        %th Start Date
-        %th{ style: 'width:25%;' } Schedule
-        %th Actions
+- @orders.each do |order|
+  .reveal-modal{id: "pause-modal-#{order.id}"}
+    %h2 Pause Your Order
+    = link_to '&#215;'.html_safe, '#', class: 'close-reveal-modal'
+    = render partial: 'distributor/orders/pause_form', locals: { order: order }
 
+.row
+  %table#orders.twelve.columns
     %tbody
+      %tr
+        %td.data-list-new-link.add-colour
+          .row
+            .twelve.columns
+              = link_to 'Create a new order', new_distributor_account_order_path(@account)
       - @orders.each do |order|
         %tr
-          %td= order.id
-          %td= order.box.name
-          %td= order.extras_description(true)
-          %td= order.quantity
-          %td= order.price.format
-          %td= order.schedule.start_time.strftime("%B %d, %Y")
           %td
-            = order_schedule(order)
-            - if order.schedule.exception_times.empty?
-              %br
-              = link_to 'pause order', '#', data: {'reveal-id' => "pause-modal-#{order.id}"}
+            .row
+              .four.columns
+                %ul
+                  %li.box-name.larger-font= order.box.name
+                  %li= order_customisation(order)
+                  %li= order_extras(order)
+                  %li= link_to 'edit', edit_distributor_account_order_path(@account, order)
+              .five.columns
+                %ul
+                  %li.larger-font= order_schedule(order, exception_rules: false, exception_times: false)
+                  %li= order_schedule(order, recurrence_rules: false, recurrence_times: false)
+                  %li
+                    - if order.schedule.exception_times.empty?
+                      %li= link_to 'pause', '#', data: {'reveal-id' => "pause-modal-#{order.id}"}
+              .three.columns
+                %ul.text-right
+                  %li.larger-font= order.price.format
+                  %li= link_to('remove order',
+                    deactivate_distributor_account_order_path(@account, order),
+                    confirm: order_delete_warning(order), method: :put)
+            .row
+              .five.columns.offset-by-four
+                = customer_delivery_links(order)
 
-            .reveal-modal{id: "pause-modal-#{order.id}"}
-              %h2 Pause Your Order
-              = link_to '&#215;'.html_safe, '#', class: 'close-reveal-modal'
-              = render partial: 'distributor/orders/pause_form', locals: { order: order }
-          %td
-            = link_to 'edit', edit_distributor_account_order_path(@account, order)
-            %br
-            = link_to('delete',
-              deactivate_distributor_account_order_path(@account, order),
-              confirm: order_delete_warning(order),
-              method: :put)

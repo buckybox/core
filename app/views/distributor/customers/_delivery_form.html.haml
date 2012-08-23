@@ -2,12 +2,9 @@
   = f.error_notification
 
   .row
-    .six.columns
-      = render partial: 'personal_form_inputs', locals: { f: f }
-
-    .six.columns
+    .six.columns.centered
       = render partial: 'delivery_form_inputs', locals: { f: f }
 
       .actions
-        = f.button :submit
-        = link_to 'Cancel', :back
+        = f.button :submit, 'Update'
+        = link_to 'cancel', :back

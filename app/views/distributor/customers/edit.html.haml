@@ -1,4 +1,6 @@
-= customer_title(@customer, title: "Editing #{customer_and_number(@customer)}'s Details")
+.row
+  #customer-edit.six.columns.centered
+    = customer_title(@customer, title: "Editing #{customer_and_number(@customer)}'s Details")
 
-= render 'form'
+= render @form_type
 

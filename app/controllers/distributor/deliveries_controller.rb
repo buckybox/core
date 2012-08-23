@@ -95,30 +95,9 @@ class Distributor::DeliveriesController < Distributor::ResourceController
 
     export_type = (params[:deliveries] ? :delivery : :packing)
 
-    if export_type == :delivery
-      export_items = current_distributor.deliveries.ordered.where(id: params[:deliveries])
-      export_items = export_items.sort_by { |ei| ei.dso }
-      csv_headers = Delivery.csv_headers
-    else
-      packages = current_distributor.packages.where(id: params[:packages])
+    csv_output = Delivery.build_csv_for_export(export_type, current_distributor, params[:deliveries], params[:packages])
 
-      export_items = []
-
-      packages.group_by(&:box).each do |box, array|
-        array.each do |package|
-          export_items << package
-        end
-      end
-
-      csv_headers = Package.csv_headers
-    end
-
-    csv_output = CSV.generate do |csv|
-      csv << csv_headers
-      export_items.each { |package| csv << package.to_csv }
-    end
-
-    if export_items
+    if csv_output
       filename = "bucky-box-#{export_type}-export-#{Date.current.to_s}.csv"
       type     = 'text/csv; charset=utf-8; header=present'
 

@@ -225,7 +225,7 @@ class Order < ActiveRecord::Base
     end
   end
 
-  def extras_description(show_frequency=false)
+  def extras_description(show_frequency = false)
     extras_string = Package.extras_description(order_extras)
 
     if schedule.frequency.single? || !show_frequency
@@ -233,6 +233,18 @@ class Order < ActiveRecord::Base
     else
       extras_string + (extras_one_off? ? ", include in the next delivery only" : ", include with every delivery") if order_extras.count > 0
     end
+  end
+
+  def customisation_description
+    exclusions_string = exclusions.includes(:line_item).map(&:name).join(', ')
+    substitution_string = substitutions.includes(:line_item).map(&:name).join(', ')
+
+    unless exclusions_string.blank?
+      result_string = "Exclude #{exclusions_string}"
+      result_string += "/ Substitute #{substitution_string}" unless substitution_string.blank?
+    end
+
+    return result_string
   end
 
   def pack_and_update_extras
@@ -264,12 +276,11 @@ class Order < ActiveRecord::Base
   end
 
   def import_extras(b_extras)
-    params = b_extras.inject({}) do |params, extra|
+    self.order_extras = b_extras.inject({}) do |params, extra|
       found_extra = distributor.find_extra_from_import(extra, box)
       raise "Didn't find an extra to import" if found_extra.blank?
       params.merge(found_extra.id.to_s => {count: extra.count})
     end
-    self.order_extras = params
   end
 
   def dso(wday)
