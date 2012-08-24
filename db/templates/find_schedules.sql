@@ -24,7 +24,7 @@ AND (	(
 		recur = 'monthly' AND schedule_rules.start <= ':date'
 		AND :dow = 't' AND EXTRACT(DAY from date(':date')) < 8
 	)
-)AND (
+) AND (
 	schedule_pauses.start is NULL
 	OR
 	schedule_pauses.start > (date ':date')

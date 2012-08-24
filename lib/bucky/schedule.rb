@@ -138,6 +138,8 @@ class Bucky::Schedule < IceCube::Schedule
   def frequency
     if recurrence_rules.empty? && recurrence_times.size == 1
       Bucky::Frequency.new(:single)
+    elsif recurrence_rules.nil? || recurrence_rules.empty?
+      raise "Unknown frequency for #{self.inspect}"
     else
       case recurrence_rules.first.to_hash[:rule_type]
       when "IceCube::WeeklyRule"
@@ -147,12 +149,12 @@ class Bucky::Schedule < IceCube::Schedule
         when 2
           Bucky::Frequency.new(:fortnightly)
         else
-          raise "Unknown frequency for #{self.inspect}, #{schedule.inspect}"
+          raise "Unknown frequency for #{self.inspect}"
         end
       when "IceCube::MonthlyRule"
         Bucky::Frequency.new(:monthly)
       else
-        raise "Unknown frequency for #{self.inspect}, #{schedule.inspect}"
+        raise "Unknown frequency for #{self.inspect}"
       end
     end
   end

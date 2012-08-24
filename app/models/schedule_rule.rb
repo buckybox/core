@@ -45,7 +45,7 @@ class ScheduleRule < ActiveRecord::Base
   def occurs_on?(datetime)
     case recur
     when :one_off
-      start== datetime
+      start == datetime
     when :weekly
       weekly_occurs_on?(datetime)
     when :fortnightly
@@ -131,14 +131,33 @@ class ScheduleRule < ActiveRecord::Base
     end
   end
 
-  def self.test
+  def self.test(d_id=nil, days=100)
     Distributor.all.each do |d|
+      next if d_id && d_id != d.id
       d.use_local_time_zone do
-        ((Date.tomorrow)..(Date.tomorrow+100.days)).each do |date|
-          throw "FUCK #{d.id} - #{date.to_s}" unless DeliveryList.collect_list(d, date).deliveries.collect(&:id).sort == Bucky::Sql.order_ids(d, date).sort
+        ((Date.tomorrow)..(Date.tomorrow+days.days)).each do |date|
+          throw "FUCK #{d.id} - #{date.to_s}" unless collect_list(d, date).deliveries.collect(&:id).sort == Bucky::Sql.order_ids(d, date).sort
         end
       end
     end
   end
+
+  FutureDeliveryList = Struct.new(:date, :deliveries)
+
+  # For testing accuracy
+  def self.collect_list(distributor, date, orders=nil)
+    date_orders = []
+    wday = date.wday
+    
+    orders ||= distributor.orders.active.includes({ account: {customer: {address:{}, deliveries: {delivery_list: {}}}}, order_extras: {}, box: {}})
+
+    orders.each { |order| date_orders << order if order.schedule.occurs_on?(date) }
+
+    # This emulates the ordering when lists are actually created
+    FutureDeliveryList.new(date, date_orders.sort { |a,b|
+      comp = a.dso(wday) <=> b.dso(wday)
+      comp.zero? ? (b.created_at <=> a.created_at) : comp
+    })
+  end  
   
 end
