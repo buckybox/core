@@ -19,11 +19,7 @@ AND (	(
 	(
 		recur = 'fortnightly' AND schedule_rules.start <= ':date'
 		AND :dow = 't'
-		AND (((date(':date') - (schedule_rules.start + CAST((EXTRACT(DOW from date(':date')) - EXTRACT(DOW from schedule_rules.start)) AS integer) + 
-			CASE
-			WHEN EXTRACT(DOW from schedule_rules.start) > EXTRACT(DOW from date(':date')) THEN 7
-			ELSE 0
-			END)) / 7) % 2) = 0
+		AND (((date(':date') - (schedule_rules.start - CAST(EXTRACT(DOW from schedule_rules.start) AS integer))) / 7) % 2) = 0
 	)
 	OR
 	(

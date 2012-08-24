@@ -62,7 +62,7 @@ class ScheduleRule < ActiveRecord::Base
 
   def fortnightly_occurs_on?(datetime)
     # So, theory is, the difference between the startand the date in question as days, devided by 7 should give the number of weeks since the start.  If the number is even, we are on a fortnightly.
-    first_occurence = start+ (datetime.wday - start.wday) + (start.wday > datetime.wday ? 7 : 0)
+    first_occurence = start - start.wday
     weekly_occurs_on?(datetime) && ((datetime - first_occurence) / 7).to_i.even? # 7 days in a week
   end
 
@@ -130,4 +130,15 @@ class ScheduleRule < ActiveRecord::Base
       end
     end
   end
+
+  def self.test
+    Distributor.all.each do |d|
+      d.use_local_time_zone do
+        ((Date.tomorrow)..(Date.tomorrow+100.days)).each do |date|
+          throw "FUCK #{d.id} - #{date.to_s}" unless DeliveryList.collect_list(d, date).deliveries.collect(&:id).sort == Bucky::Sql.order_ids(d, date).sort
+        end
+      end
+    end
+  end
+  
 end
