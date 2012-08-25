@@ -196,36 +196,6 @@ class Order < ActiveRecord::Base
     self.active = false
   end
 
-  def pause!(start_date, end_date)
-    # Could not get controller response to render error, so returning false on error instead for now.
-    if start_date.past? || end_date.past?
-      return false
-    elsif end_date <= start_date
-      return false
-    end
-
-    # Because we want to iterate by day and not by second
-    start_date       = start_date.to_date if start_date.is_a?(Time)
-    end_date         = end_date.to_date   if end_date.is_a?(Time)
-    updated_schedule = schedule
-
-    updated_schedule.exception_times.each { |time| updated_schedule.remove_exception_time(time) }
-
-    (start_date..end_date).each { |date| updated_schedule.add_exception_time(date.to_time_in_current_zone) }
-
-    self.schedule = updated_schedule
-
-    return save
-  end
-
-  def remove_pause!
-    updated_schedule = schedule
-    updated_schedule.exception_times.each { |time| updated_schedule.remove_exception_time(time) }
-    schedule = schedule
-
-    return save
-  end
-
   def order_extras=(collection)
     raise "I wasn't expecting you to set these directly" unless collection.is_a?(Hash) || collection.is_a?(Array)
 
@@ -237,6 +207,64 @@ class Order < ActiveRecord::Base
       order_extra = order_extras.build(extra_id: id)
       order_extra.count = count.to_i
     end
+  end
+
+  def pause!(start_date, end_date)
+    return false if start_date.past? || end_date.past? || (end_date < start_date)
+
+    new_schedule = self.schedule
+    new_schedule.pause(start_date, end_date)
+    self.schedule = new_schedule
+    self.save
+  end
+
+  def remove_pause!
+    new_schedule = self.schedule
+    new_schedule.remove_pause
+    self.schedule = new_schedule
+    self.save
+  end
+
+  def pause_date
+    schedule.pause_date
+  end
+
+  def resume_date
+    schedule.resume_date
+  end
+
+  def possible_pause_dates(look_ahead = 8.weeks)
+    start_time          = distributor.window_end_at.to_time_in_current_zone + 1.day
+    end_time            = start_time + look_ahead
+    existing_pause_date = pause_date
+
+    select_array = schedule.occurrences(end_time, start_time).map { |s| [s.to_date.to_s(:pause), s.to_date] }
+
+    if existing_pause_date && !select_array.index(existing_pause_date)
+      select_array << [existing_pause_date.to_s(:pause), existing_pause_date]
+      select_array.sort! { |a,b| a.second <=> b.second }
+    end
+
+    return select_array
+  end
+
+  def possible_resume_dates(look_ahead = 12.weeks)
+    if pause_date
+      start_time           = pause_date.to_time_in_current_zone
+      end_time             = start_time + look_ahead
+      existing_resume_date = pause_date
+
+      no_pause_schedule = self.schedule
+      no_pause_schedule = no_pause_schedule.remove_pause
+      select_array      = no_pause_schedule.occurrences(end_time, start_time).map { |s| [s.to_date.to_s(:pause), s.to_date] }
+
+      if existing_resume_date && !select_array.index(existing_resume_date)
+        select_array << [existing_resume_date.to_s(:pause), existing_resume_date]
+        select_array.sort! { |a,b| a.second <=> b.second }
+      end
+    end
+
+    return select_array || []
   end
 
   def extras_description(show_frequency = false)

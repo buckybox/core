@@ -48,59 +48,13 @@ module OrdersHelper
     return string_schedule.join(joiner).html_safe
   end
 
-  def order_pause_select(order)
-    start_time = Time.now
-    end_time = start_time + 8.weeks
-    select_array = order.schedule.occurrences(end_time, start_time).map { |s| [s.to_date.to_s(:pause), s.to_date] }
-
-    existing_pause_start = order_pause_start_date(order)
-
-    if existing_pause_start && !select_array.index(existing_pause_start)
-      select_array << [existing_pause_start.to_s(:pause), existing_pause_start]
-      select_array.sort! { |a,b| a.second <=> b.second }
-    end
-
-    return select_array
-  end
-
-  def order_resume_select(order)
-    start_time = Time.now
-    end_time = start_time + 12.weeks
-    select_array = order.schedule.occurrences(end_time, start_time).map { |s| [s.to_date.to_s(:pause), s.to_date] }
-
-    existing_pause_end = order_pause_end_date(order)
-
-    if existing_pause_end && !select_array.index(existing_pause_end)
-      select_array << [existing_pause_end.to_s(:pause), existing_pause_end]
-      select_array.sort! { |a,b| a.second <=> b.second }
-    end
-
-    return select_array
-  end
-
-  def order_pause_start_date(order)
-    date = order.schedule.exception_times.first
-    date = date.to_date if date
-    return date
-  end
-
-  def order_pause_start_date_formatted(order)
-    date = order_pause_start_date(order)
+  def order_pause_date_formatted(order)
+    date = order.pause_date
     return date.nil? ? '' : date.to_s(:pause)
   end
 
-  def order_pause_end_date(order)
-    date = order.schedule.exception_times.last
-    first_date = order.schedule.exception_times.first
-
-    date = nil if date && (date - first_date) >= 366.days
-    date = date.to_date + 1.day if date # the +1 day is shown as the resume day so a day after the last exception date
-
-    return date
-  end
-
-  def order_pause_end_date_formatted(order)
-    date = order_pause_end_date(order)
+  def order_resume_date_formatted(order)
+    date = order.resume_date
     return date.nil? ? '' : date.to_s(:pause)
   end
 end

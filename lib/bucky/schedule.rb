@@ -9,6 +9,7 @@
 class Bucky::Schedule < IceCube::Schedule
 
   DAYS = IceCube::TimeUtil::DAYS.keys
+  PAUSE_UFN = 366.days
 
   ################################################################################################
   #                                                                                              #
@@ -164,6 +165,37 @@ class Bucky::Schedule < IceCube::Schedule
   # Unintuitive API but done as not to break backwards compatibility
   def occurrences(closing_time, other_start_time = start_time)
     find_occurrences(other_start_time, closing_time)
+  end
+
+  def pause(start_date, end_date)
+    # If there was an old pause remove it first
+    exception_times.each { |time| remove_exception_time(time) }
+
+    # Because we want to iterate by day and not by second
+    start_date = start_date.to_date if start_date.is_a?(Time)
+    end_date   = end_date.to_date   if end_date.is_a?(Time)
+    (start_date..end_date).each { |date| add_exception_time(date.to_time_in_current_zone) }
+  end
+
+  def remove_pause
+    exception_times.each { |time| remove_exception_time(time) }
+    return self
+  end
+
+  def pause_date
+    date = exception_times.first
+    date = date.to_date if date
+    return date
+  end
+
+  def resume_date
+    date = exception_times.last
+    first_date = exception_times.first
+
+    date = nil if date && (date - first_date) >= PAUSE_UFN
+    date = date.to_date + 1.day if date # the +1 day is shown as the resume day so a day after the last exception date
+
+    return date
   end
 
   ################################################################################################

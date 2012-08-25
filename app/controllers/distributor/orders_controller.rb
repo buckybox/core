@@ -5,6 +5,7 @@ class Distributor::OrdersController < Distributor::ResourceController
   respond_to :html, :xml, :json
 
   before_filter :filter_params, only: [:create, :update]
+  before_filter :get_order, only: [:pause, :remove_pause, :resume, :remove_resume, :pause_dates, :resume_dates]
 
   def filter_params
     params[:order] = params[:order].slice!(:include_extras)
@@ -87,8 +88,6 @@ class Distributor::OrdersController < Distributor::ResourceController
   end
 
   def pause
-    @order = Order.find(params[:id])
-
     start_date = Date.parse(params[:date])
     end_date   = Bucky::Schedule.until_further_notice(start_date)
 
@@ -102,8 +101,6 @@ class Distributor::OrdersController < Distributor::ResourceController
   end
 
   def remove_pause
-    @order = Order.find(params[:id])
-
     respond_to do |format|
       if @order.remove_pause!
         format.json { head :ok }
@@ -113,9 +110,11 @@ class Distributor::OrdersController < Distributor::ResourceController
     end
   end
 
-  def resume
-    @order = Order.find(params[:id])
+  def pause_dates
+    render json: @order.possible_pause_dates
+  end
 
+  def resume
     start_date = @order.schedule.exception_times.first.to_date
     end_date   = Date.parse(params[:date])
 
@@ -129,8 +128,6 @@ class Distributor::OrdersController < Distributor::ResourceController
   end
 
   def remove_resume
-    @order = Order.find(params[:id])
-
     start_date = @order.schedule.exception_times.first.to_date
     end_date   = Bucky::Schedule.until_further_notice(start_date)
 
@@ -143,7 +140,15 @@ class Distributor::OrdersController < Distributor::ResourceController
     end
   end
 
+  def resume_dates
+    render json: @order.possible_resume_dates
+  end
+
   private
+
+  def get_order
+    @order = Order.find(params[:id])
+  end
 
   def load_form
     @customer = @account.customer
