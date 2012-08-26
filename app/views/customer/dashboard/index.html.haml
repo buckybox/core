@@ -13,7 +13,7 @@
         .three.columns.text-right
           = link_to 'New Order', new_customer_order_path, class: 'radius button'
       .row
-        .twelve.columns
+        #customer-orders.twelve.columns
           = render 'customer/orders/index' unless @orders.empty?
 
     .panel
@@ -42,12 +42,6 @@
           = link_to 'change my email', '#', data: {'reveal-id' => 'email-modal'}
           %br
           = link_to 'change my password', '#', data: {'reveal-id' => 'password-modal'}
-
-- @orders.each do |order|
-  .reveal-modal{id: "pause-modal-#{order.id}"}
-    %h2 Pause Your Order
-    = link_to '&#215;'.html_safe, '#', class: 'close-reveal-modal'
-    = render partial: 'customer/orders/pause_form', locals: { order: order }
 
 #address-modal.reveal-modal
   %h2 Change Your Address
