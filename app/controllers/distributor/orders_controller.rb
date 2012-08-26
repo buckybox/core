@@ -93,7 +93,8 @@ class Distributor::OrdersController < Distributor::ResourceController
 
     respond_to do |format|
       if @order.pause!(start_date, end_date)
-        json = { id: @order.id, resume_dates: @order.possible_resume_dates, formatted_date: @order.pause_date.to_s(:pause) }
+        date = @order.pause_date
+        json = { id: @order.id, date: date, formatted_date: date.to_s(:pause), resume_dates: @order.possible_resume_dates }
         format.json { render json: json }
       else
         format.json { head :bad_request }
@@ -121,7 +122,8 @@ class Distributor::OrdersController < Distributor::ResourceController
 
     respond_to do |format|
       if @order.pause!(start_date, end_date)
-        json = { id: @order.id, formatted_date: @order.resume_date.to_s(:pause) }
+        date = @order.resume_date
+        json = { id: @order.id, date: date, formatted_date: date.to_s(:pause) }
         format.json { render json: json }
       else
         format.json { head :bad_request }
