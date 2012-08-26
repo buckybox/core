@@ -77,19 +77,12 @@ $(function() {
     return false;
   });
 
-  $('.form-selection :submit').click(function() {
-    fromPausingElementFind(this, '.form-selection').hide();
-    fromPausingElementFind(this, '.resulting-link').show();
-    return false;
-  });
-
   $('.pause .form-selection :submit').click(function() {
-    resume = $(this).closest('.pausing').find('.resume');
-    resume.show();
-
     var form = fromPausingElementFind(this, '.form-selection form');
     var url  = form.attr('action');
     var date = form.find('select :selected').val();
+
+    $(this).attr('disabled', true);
 
     $.ajax({
       type: 'PUT',
@@ -98,10 +91,23 @@ $(function() {
       data: $.param({ date: date }),
       success: function(data) {
         var pausing_order = $('#pausing_order_' + data['id']);
-        var resulting_span = pausing_order.find(' .pause .resulting-link span');
-        var text = 'on ' + data['formatted_date'];
 
-        resulting_span.text(text);
+        var resulting_span = pausing_order.find('.pause .resulting-link span');
+        resulting_span.text('on ' + data['formatted_date']);
+
+        var resume_select = pausing_order.find('.resume .form-selection select');
+        var select_options = '';
+
+        $.each(data['resume_dates'], function(index, value) {
+          select_options += '<option value="' + value[1] + '">' + value[0] + '</option>';
+        });
+
+        resume_select.html(select_options);
+
+        pausing_order.find('.pause .form-selection :submit').attr('disabled', false);
+        pausing_order.find('.pause .form-selection').hide();
+        pausing_order.find('.pause .resulting-link').show();
+        pausing_order.find('.resume').show();
       }
     });
 
@@ -113,15 +119,22 @@ $(function() {
     var url  = form.attr('action');
     var date = form.find('select :selected').val();
 
+    $(this).attr('disabled', true);
+
     $.ajax({
       type: 'PUT',
       dataType: 'json',
       url: url,
       data: $.param({ date: date }),
       success: function(data) {
-        var resulting_span = $('#pausing_order_' + data['id'] + ' .resume .resulting-link span');
-        var text = 'on ' + data['formatted_date'];
-        resulting_span.text(text);
+        var pausing_order = $('#pausing_order_' + data['id']);
+
+        var resulting_span = pausing_order.find('.resume .resulting-link span');
+        resulting_span.text('on ' + data['formatted_date']);
+
+        pausing_order.find('.resume .form-selection :submit').attr('disabled', false);
+        pausing_order.find('.resume .form-selection').hide();
+        pausing_order.find('.resume .resulting-link').show();
       }
     });
 
