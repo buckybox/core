@@ -27,7 +27,6 @@ class ApplicationController < ActionController::Base
         yield
       end
     end
-    Bucky::Cache.output_log
   end
 
   def set_user_time_zone
