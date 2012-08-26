@@ -19,7 +19,8 @@
               .six.columns
                 %ul
                   %li.larger-font= order_schedule(order, exception_rules: false, exception_times: false)
-                  %li= render partial: 'distributor/orders/pausing', locals: { order: order }
+                  - if order.reoccurs?
+                    %li= render partial: 'distributor/orders/pausing', locals: { order: order }
               .two.columns
                 %ul.text-right
                   %li.larger-font= order.price.format
