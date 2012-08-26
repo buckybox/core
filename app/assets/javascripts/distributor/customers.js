@@ -107,6 +107,11 @@ $(function() {
         pausing_order.find('.pause .form-selection :submit').attr('disabled', false);
         pausing_order.find('.pause .form-selection').hide();
         resulting_link.show();
+
+        pausing_order.find('.resume .form-selection').hide();
+        pausing_order.find('.resume .remove-link').hide();
+        pausing_order.find('.resume .resulting-link').hide();
+        pausing_order.find('.resume .initial-link').show();
         pausing_order.find('.resume').show();
       }
     });

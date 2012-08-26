@@ -262,10 +262,10 @@ class Order < ActiveRecord::Base
 
       no_pause_schedule = self.schedule
       no_pause_schedule = no_pause_schedule.remove_pause
-      select_array      = no_pause_schedule.occurrences(end_time, start_time).map { |s| [(s + 1.day).to_date.to_s(:pause), s.to_date] }
+      select_array      = no_pause_schedule.occurrences(end_time, start_time).map { |s| [(s + 1.day).to_date.to_s(:pause), (s + 1.day).to_date] }
 
-      if existing_resume_date && !select_array.index([existing_resume_date.to_s(:pause), (existing_resume_date - 1.day)])
-        select_array << [existing_resume_date.to_s(:pause), (existing_resume_date - 1.day)]
+      if existing_resume_date && !select_array.index([existing_resume_date.to_s(:pause), existing_resume_date])
+        select_array << [existing_resume_date.to_s(:pause), existing_resume_date]
         select_array.sort! { |a,b| a.second <=> b.second }
       end
     end
