@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe ScheduleRule, :focus do
+describe ScheduleRule do
   context :one_off do
     let(:date){ Date.parse('2012-08-20') }
     let(:schedule){ ScheduleRule.one_off(date) }
