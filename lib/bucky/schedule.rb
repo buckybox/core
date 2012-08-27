@@ -56,7 +56,7 @@ class Bucky::Schedule < IceCube::Schedule
   ################################################################################################
 
   def self.until_further_notice(start_time)
-    start_time + 366.days # hack for pause, figuring if it is paused for over a year then likely order will be deleted before then
+    start_time + PAUSE_UFN # hack for pause, figuring if it is paused for over a year then likely order will be deleted before then
   end
 
   def ==(schedule)
