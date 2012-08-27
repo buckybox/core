@@ -118,7 +118,7 @@ class Distributor::OrdersController < Distributor::ResourceController
 
   def resume
     start_date = @order.schedule.exception_times.first.to_date
-    end_date   = Date.parse(params[:date]) - 1.day
+    end_date   = Date.parse(params[:date]) - 1.day #Because we want to pause a day before the resume day
 
     respond_to do |format|
       if @order.pause!(start_date, end_date)

@@ -256,13 +256,13 @@ class Order < ActiveRecord::Base
 
   def possible_resume_dates(look_ahead = 12.weeks)
     if pause_date
-      start_time           = pause_date.to_time_in_current_zone
+      start_time           = (pause_date + 1.day).to_time_in_current_zone
       end_time             = start_time + look_ahead
       existing_resume_date = resume_date
 
       no_pause_schedule = self.schedule
       no_pause_schedule = no_pause_schedule.remove_pause
-      select_array      = no_pause_schedule.occurrences(end_time, start_time).map { |s| [(s + 1.day).to_date.to_s(:pause), (s + 1.day).to_date] }
+      select_array      = no_pause_schedule.occurrences(end_time, start_time).map { |s| [s.to_date.to_s(:pause), s.to_date] }
 
       if existing_resume_date && !select_array.index([existing_resume_date.to_s(:pause), existing_resume_date])
         select_array << [existing_resume_date.to_s(:pause), existing_resume_date]
