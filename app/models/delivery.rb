@@ -120,9 +120,7 @@ class Delivery < ActiveRecord::Base
   end
 
   def quantity
-    Bucky::Cache.fetch([self, 'quantity']) do
-      package.archived_order_quantity
-    end
+    package.archived_order_quantity
   end
 
   def future_status?
