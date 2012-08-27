@@ -3,15 +3,15 @@
 %html
   %head
     = raw analytical.head_prepend_javascript
-    %meta{ charset: "utf-8" }
+    %meta{ charset: 'utf-8' }
 
-    %title= content_for?(:title) ? "Bucky Box - #{yield(:title)}" : "Bucky Box"
+    %title= content_for?(:title) ? "Bucky Box - #{yield(:title)}" : 'Bucky Box'
 
     -# Included CSS Files
-    = stylesheet_link_tag "bucky_box"
+    = stylesheet_link_tag 'application'
 
     -# Included JS Files
-    = javascript_include_tag "bucky_box"
+    = javascript_include_tag 'application'
 
     = csrf_meta_tag
 
