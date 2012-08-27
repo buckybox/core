@@ -61,7 +61,7 @@ class ScheduleRule < ActiveRecord::Base
   end
 
   def fortnightly_occurs_on?(datetime)
-    # So, theory is, the difference between the startand the date in question as days, devided by 7 should give the number of weeks since the start.  If the number is even, we are on a fortnightly.
+    # So, theory is, the difference between the start and the date in question as days, devided by 7 should give the number of weeks since the start.  If the number is even, we are on a fortnightly.
     first_occurence = start - start.wday
     weekly_occurs_on?(datetime) && ((datetime - first_occurence) / 7).to_i.even? # 7 days in a week
   end

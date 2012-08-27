@@ -67,17 +67,17 @@ describe ScheduleRule do
       end
 
       it 'should occur on first sunday' do
-        first_occurrence = Date.parse('2012-09-02')
+        first_occurrence = Date.parse('2012-09-09')
         schedule.occurs_on?(first_occurrence).should be_true
       end
       
       it 'should occur on 10th sunday' do
-        first_occurrence = Date.parse('2012-09-02')
+        first_occurrence = Date.parse('2012-09-09')
         schedule.occurs_on?(first_occurrence+10.weeks).should be_true
       end
 
       it 'should occur on 1000th sunday' do
-        first_occurrence = Date.parse('2012-09-02')
+        first_occurrence = Date.parse('2012-09-09')
         schedule.occurs_on?(first_occurrence+1000.weeks).should be_true
       end
     end
