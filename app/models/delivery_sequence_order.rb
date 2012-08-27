@@ -28,4 +28,9 @@ class DeliverySequenceOrder < ActiveRecord::Base
     dso ||= DeliverySequenceOrder.create(attrs)
     dso
   end
+
+  def self.position_for(address_hash, wday, route_id)
+    dso = DeliverySequenceOrder.where(address_hash: address_hash, day: wday, route_id: route_id).first
+    dso && dso.position
+  end
 end

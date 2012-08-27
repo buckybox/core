@@ -18,10 +18,13 @@ class Order < ActiveRecord::Base
 
   has_many :extras, through: :order_extras
 
+  has_one :schedule_rule, autosave: true
+
   scope :completed, where(completed: true)
   scope :active, where(active: true)
 
   schedule_for :schedule
+  before_save :update_schedule_rule
 
   acts_as_taggable
 
@@ -284,15 +287,26 @@ class Order < ActiveRecord::Base
   end
 
   def dso(wday)
-    dso = DeliverySequenceOrder.where(address_hash: address.address_hash, day: wday, route_id: route.id).first
-    dso && dso.position || -1
+    dso_position = DeliverySequenceOrder.position_for(address.address_hash, wday, route.id)
+    dso_position || -1
   end
 
   def route_id
     account.customer.route_id
   end
 
+  def self.order_count(distributor, date, route_id=nil)
+    distributor.use_local_time_zone do
+      Bucky::Sql.order_count(distributor, date, route_id)
+    end
+  end
+
   protected
+
+  def update_schedule_rule
+      schedule_rule.destroy if schedule_rule
+      self.schedule_rule = ScheduleRule.copy_orders_schedule(self) rescue nil #TODO remove rescue nil
+  end
 
   def record_schedule_change
     order_schedule_transactions.new(order: self, schedule: self.schedule)

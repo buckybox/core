@@ -4,4 +4,3 @@ Fabricator(:delivery) do
   route!
   package!
 end
-

@@ -24,15 +24,25 @@ class PackingList < ActiveRecord::Base
       orders = distributor.orders.active.includes({ account: {customer: {address:{}, deliveries: {delivery_list: {}}}}, order_extras: {}, box: {}})
 
       (future_start_date..end_date).each do |date|
-        date_orders = []
-
-        orders.each { |order| date_orders << order if order.schedule.occurs_on?(date) }
-
-        result << FuturePackingList.new(date, date_orders, false)
+        result << collect_list(distributor, date, orders)
       end
     end
 
     return result
+  end
+
+  def self.collect_list(distributor, date, orders=nil)
+    if distributor.packing_lists.where(date: date).count > 0
+      distributor.packing_lists.where(date: date).includes({ packages: {}}).first
+    else
+      date_orders = []
+      
+      orders ||= distributor.orders.active.includes({ account: {customer: {address:{}, deliveries: {delivery_list: {}}}}, order_extras: {}, box: {}})
+
+      orders.each { |order| date_orders << order if order.schedule.occurs_on?(date) }
+
+      FuturePackingList.new(date, date_orders, false)
+    end
   end
 
   def self.generate_list(distributor, date)
