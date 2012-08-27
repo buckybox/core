@@ -38,6 +38,7 @@ group :assets do
   gem 'coffee-rails', '~> 3.2.2'
   gem 'uglifier', '~> 1.2.7'
   gem 'zurb-foundation', '~> 2.2.1.2'
+  gem 'compass-rails', '~> 1.0.3'
 end
 
 group :install do
