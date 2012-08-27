@@ -108,6 +108,8 @@ BuckyBox::Application.routes.draw do
           put 'deactivate'
           put 'pause'
           post 'remove_pause'
+          put 'resume'
+          post 'remove_resume'
         end
       end
 
@@ -147,6 +149,8 @@ BuckyBox::Application.routes.draw do
       member do
         put 'pause'
         post 'remove_pause'
+        put 'resume'
+        post 'remove_resume'
       end
     end
   end

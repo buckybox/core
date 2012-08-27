@@ -13,14 +13,4 @@ module Distributor::CustomersHelper
     order = customer.order_with_next_delivery
     order.box.name if order
   end
-
-  def order_customisation(order)
-    description = order.customisation_description
-    content_tag(:span, truncate(description), title: description)
-  end
-
-  def order_extras(order)
-    description = order.extras_description(true)
-    content_tag(:span, truncate(description), title: description)
-  end
 end

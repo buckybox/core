@@ -3,6 +3,48 @@ include Bucky
 
 describe Order do
   let(:order) { Fabricate.build(:order) }
+  let(:order_schedule) { Fabricate.build(:recurring_order_everyday) }
+
+  context 'pausing' do
+    describe '#pause!' do
+      context 'invalid dates' do
+        specify { order_schedule.pause!(Date.current - 1.day, Date.current + 1.day).should be_false }
+        specify { order_schedule.pause!(Date.current + 1.day, Date.current - 1.day).should be_false }
+        specify { order_schedule.pause!(Date.current + 3.days, Date.current + 1.day).should be_false }
+      end
+
+      context 'should create a pause' do
+        before do
+          @start_date = Date.current + 1.day
+          @end_date = Date.current + 3.days
+          order_schedule.pause!(@start_date, @end_date)
+        end
+
+        specify { order_schedule.schedule.exception_times.should_not be_empty }
+        specify { order_schedule.schedule.exception_times.first.should == @start_date.to_time_in_current_zone }
+        specify { order_schedule.schedule.exception_times.last.should == @end_date.to_time_in_current_zone }
+      end
+    end
+
+    describe '#remove_pause!' do
+      before do
+        order_schedule.pause!(Date.current + 1.day, Date.current + 3.days)
+        order_schedule.remove_pause!
+      end
+
+      specify { order_schedule.schedule.exception_times.should be_empty }
+    end
+
+    describe '#pause_date' do
+      before { order_schedule.pause!(Date.current + 1.day, Date.current + 3.days) }
+      specify { order_schedule.pause_date.should == order_schedule.schedule.pause_date }
+    end
+
+    describe '#resume_date' do
+      before { order_schedule.pause!(Date.current + 1.day, Date.current + 3.days) }
+      specify { order_schedule.resume_date.should == order_schedule.schedule.resume_date }
+    end
+  end
 
   context 'when removing a day' do
     let(:order_scheduling) { order }

@@ -36,12 +36,11 @@ class Distributor::CustomersController < Distributor::ResourceController
 
   def show
     show! do
-      @address      = @customer.address
-      @account      = @customer.account
-      @orders       = @account.orders.active
-      @deliveries   = @account.deliveries.ordered
-
-      @transactions = @account.transactions.limit(6)
+      @address          = @customer.address
+      @account          = @customer.account
+      @orders           = @account.orders.active
+      @deliveries       = @account.deliveries.ordered
+      @transactions     = @account.transactions.limit(6)
       @transactions_sum = @account.calculate_balance
     end
   end
