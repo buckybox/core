@@ -12,11 +12,6 @@ class Customer::OrdersController < Customer::ResourceController
 
   def new
     new! do
-      @stock_list    = current_customer.distributor.line_items
-      @dislikes_list = nil
-      @likes_list    = nil
-      @form_params   = [:customer, @order]
-
       load_form
     end
   end
@@ -34,17 +29,16 @@ class Customer::OrdersController < Customer::ResourceController
       @order.save
 
       success.html { redirect_to customer_root_url }
-      failure.html { render 'new' }
+      failure.html do
+        load_form
+        flash[:error] = 'There was a problem creating this order.'
+        render 'new'
+      end
     end
   end
 
   def edit
     edit! do
-      @stock_list    = current_customer.distributor.line_items
-      @dislikes_list = @order.exclusions.map { |e| e.line_item_id.to_s }
-      @likes_list    = @order.substitutions.map { |s| s.line_item_id.to_s }
-      @form_params   = [:customer, @order]
-
       load_form
     end
   end
@@ -56,7 +50,11 @@ class Customer::OrdersController < Customer::ResourceController
 
     update! do |success, failure|
       success.html { redirect_to customer_root_url }
-      failure.html { render 'edit' }
+      failure.html do
+        load_form
+        flash[:error] = 'There was a problem creating this order.'
+        render 'edit'
+      end
     end
   end
 
@@ -137,5 +135,9 @@ class Customer::OrdersController < Customer::ResourceController
     @customer = current_customer
     @account  = @customer.account
     @route    = @customer.route
+    @stock_list    = current_customer.distributor.line_items
+    @form_params   = [:customer, @order]
+    @dislikes_list = @order.exclusions.map { |e| e.line_item_id.to_s }
+    @likes_list    = @order.substitutions.map { |s| s.line_item_id.to_s }
   end
 end
