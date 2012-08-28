@@ -3,11 +3,11 @@ $(function() {
     order_init();
 
     $('.order .dislikes_input').show();
-    $('.order .dislikes_input select').chosen();
+    $('.order .dislikes_input select').select2();
     $('.order .dislikes_input').hide();
 
     $('.order .likes_input').show();
-    $('.order .likes_input select').chosen();
+    $('.order .likes_input select').select2();
     $('.order .likes_input').hide();
   }
 

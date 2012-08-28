@@ -30,14 +30,14 @@ $ ->
     reload: ->
       # Apply chosen to the select inputs
       # Draft payments are always visible, so save rendering time by not doing the visible check (I think quiet costly)
-      $("select.chosen-payee-select.draft-payment").chosen()
+      $("select.chosen-payee-select.draft-payment").select2()
       # Perform visible check on those that will probably be hidden
       $("select.chosen-payee-select.not-draft-payment").each((index, value) ->
         edit_row_match = $(value).closest('.edit_row_match')
         edit_row_match_visible = edit_row_match.is(":visible")
         #hack to get around chosen.js width issue which happens when the select box is hidden when it is applied
         edit_row_match.show() unless edit_row_match_visible
-        $(value).chosen()
+        $(value).select2()
         edit_row_match.hide() unless edit_row_match_visible
       )
 

@@ -10,7 +10,7 @@ gem 'haml-rails', '~> 0.3.4'
 gem 'sass-rails', '~> 3.2.5'
 gem 'jquery-rails', '~> 2.1.1'
 gem 'bootstrap-sass', '~> 2.0.4.0'
-gem 'chosen-rails', '~> 0.9.8.1'
+gem 'select2-rails', '~> 0.9.8.1'
 
 gem 'devise', '~> 2.1.2'
 gem 'multi_json', '~> 1.3.6'
