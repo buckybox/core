@@ -17,7 +17,7 @@ describe Distributor::OrdersController do
 
   describe '#new' do
     it 'should render new' do
-      @account.stub_chain(:orders, :build)
+      @account.stub_chain(:orders, :build).and_return(Order.new(account_id: @account.id))
       get :new, account_id: @account.id
       response.should render_template('new')
     end
@@ -34,7 +34,7 @@ describe Distributor::OrdersController do
 
   describe '#create' do
     before do
-      @order = mock_model(Order, { create_schedule: nil, update_exclusions: true, update_substitutions: true })
+      @order = mock_model(Order, { create_schedule: nil, update_exclusions: true, update_substitutions: true, exclusions: [], substitutions: [] })
       @order.stub(:account_id=)
       @order.stub(:completed=)
       Order.stub(:new).and_return(@order)
@@ -67,7 +67,7 @@ describe Distributor::OrdersController do
 
   describe '#update' do
     before do
-      @order = mock_model(Order, { update_exclusions: true, update_substitutions: true })
+      @order = mock_model(Order, { update_exclusions: true, update_substitutions: true, exclusions: [], substitutions: [] })
       Distributor.any_instance.stub_chain(:orders, :find).and_return(@order)
     end
 
