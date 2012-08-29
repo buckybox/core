@@ -1,11 +1,11 @@
-.nine.columns
+.span9
   .row.data-headings
-    .one.columns= check_box_tag 'all'
-    .six.columns.packing_actions
+    .span1= check_box_tag 'all'
+    .span6.packing_actions
       = button_to('Print - Master List',
         master_packing_sheet_distributor_deliveries_path,
         { id: 'master-print', class: 'small radius button', disabled: !@real_list, form: { target: '_blank' } })
-    .five.columns.export.text-right
+    .span5.export.text-right
       = button_to('Export',
         export_distributor_deliveries_path,
         { id: 'packing-export', class: 'small radius button', disabled: !@real_list })
@@ -13,38 +13,38 @@
   - if @real_list
     - @items.group_by(&:box).sort{ |a,b| a.first.name <=> b.first.name }.each do |box, array|
       .row.data-headings
-        %h5.twelve.columns= box.name
+        %h5.span12= box.name
 
       %ul
         - array.each do |package|
           %li.row.data-listings{ class: package.status }
-            .three.columns
+            .span3
               .row
-                .four.columns
+                .span4
                   = check_box_tag package.order_id, '1', false, data: { package: package.id }
                   = render partial: 'status_icons', locals: { status: package.status }
-                .eight.columns= package.id
-            .nine.columns
+                .span8= package.id
+            .span9
               .row
-                .four.columns= display_address(package)
-                .four.columns= contents_description(package)
-                .four.columns= customer_badge(package.customer, customer_name: package.archived_customer_name, short: true)
+                .span4= display_address(package)
+                .span4= contents_description(package)
+                .span4= customer_badge(package.customer, customer_name: package.archived_customer_name, short: true)
   - else
     - @items.group_by(&:box).sort{ |a,b| a.first.name <=> b.first.name }.each do |box, array|
       .row.data-headings
-        %h5.twelve.columns= box.name
+        %h5.span12= box.name
 
       %ul
         - array.each do |order|
           %li.row.data-listings.pending
-            .three.columns
+            .span3
               .row
-                .four.columns
+                .span4
                   = check_box_tag order.id, '1', false
                   = image_tag 'icon-status-pending.png', title: 'UNPACKED package', class: 'icon-pending'
-                .eight.columns
-            .nine.columns
+                .span8
+            .span9
               .row
-                .four.columns= display_address(order)
-                .four.columns= contents_description(order)
-                .four.columns= customer_badge(order.account.customer)
+                .span4= display_address(order)
+                .span4= contents_description(order)
+                .span4= customer_badge(order.account.customer)

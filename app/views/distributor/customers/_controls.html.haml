@@ -1,6 +1,6 @@
 - content_for :sub_nav do
   .row.page-controls.customer-controls
-    #information.seven.columns
+    #information.span7
       - unless request.fullpath =~ /\/distributor\/customers\/\d+.*/
         - if params[:query]
           %h3== Searching "#{params[:query]}"
@@ -12,7 +12,7 @@
       - else
         = link_to '« Back to Customer List', distributor_customers_path, class: 'small radius button'
 
-    #search.five.columns.text-right
+    #search.span5.text-right
       = form_tag search_distributor_customers_path, method: :get, class: 'nice' do
         = submit_tag 'Search', class: 'small radius button float-right'
         = text_field_tag :query, '', placeholder: 'Customer Number, Name, Address', class: 'input-text float-right'

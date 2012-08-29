@@ -2,13 +2,13 @@
   %body
     .container
       .row
-        .twelve.columns
+        .span12
           - flash.each do |kind, message|
             = flash_bar(kind, message)
 
       .row
-        .six.columns== #{current_customer.distributor.name}: My Account
-        .six.columns.text-right
+        .span6== #{current_customer.distributor.name}: My Account
+        .span6.text-right
           - if customer_signed_in?
             Signed in as
             %strong= customer_badge(current_customer, link: customer_root_path)
@@ -19,11 +19,11 @@
 
       - if show_title?
         .row
-          .twelve.columns
+          .span12
             %h1.text-center= yield(:title)
 
       .row
-        .twelve.columns= yield
+        .span12= yield
 
 = render 'layouts/base'
 

@@ -2,12 +2,12 @@
   %body
     .container
       .row
-        .twelve.columns
+        .span12
           - flash.each do |kind, message|
             = flash_bar(kind, message)
 
       .row
-        .twelve.columns.text-right
+        .span12.text-right
           - if distributor_signed_in?
             Signed in as 
             %strong= current_distributor.name
@@ -22,18 +22,18 @@
             = link_to 'login', new_distributor_session_path
 
       .row
-        .twelve.columns= render 'distributor/shared/topic_tabs'
+        .span12= render 'distributor/shared/topic_tabs'
 
       .row
-        .twelve.columns= yield(:sub_nav)
+        .span12= yield(:sub_nav)
 
       - if show_title?
         .row
-          .twelve.columns.text-center
+          .span12.text-center
             %h1= yield(:title)
 
       .row
-        .twelve.columns= yield
+        .span12= yield
 
 = render 'layouts/base'
 

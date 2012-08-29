@@ -5,7 +5,7 @@
   $(function() { print(); });
 
 .row
-  .twelve.columns
+  .span12
     - @packages.group_by(&:box).sort{ |a,b| a.first.name <=> b.first.name }.each do |box, array|
       %table{:style => 'width:100%; border-collapse:collapse; margin-bottom:20px;'}
         %thead

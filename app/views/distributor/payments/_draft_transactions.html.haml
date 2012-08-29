@@ -3,7 +3,7 @@
     .row.errors
       = import_transaction_list.errors.full_messages.join(", ")
   .row
-    .twelve.columns
+    .span12
       %table.payments
         %thead
           %tr
@@ -38,6 +38,6 @@
 
 
   .row
-    .five.columns.centered
+    .span5.centered
       = link_to "Cancel", distributor_import_transaction_list_path(import_transaction_list), method: :delete, style: 'margin-right: 5px;', id: 'payment_upload_cancel'
       = f.submit "Import & Assign Transactions", class: 'button radius'

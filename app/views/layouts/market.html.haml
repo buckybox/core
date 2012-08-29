@@ -2,15 +2,15 @@
   %body
     .container
       .row
-        .twelve.columns
+        .span12
           - flash.each do |kind, message|
             = flash_bar(kind, message)
 
       .row
-        .three.columns
+        .span3
           = image_tag(@distributor.company_logo.url) if @distributor.company_logo?
 
-        .nine.columns
+        .span9
           %strong= @distributor.name
           %p 
             = distributor_address(@distributor, :single_line => true)
@@ -18,16 +18,16 @@
             = @distributor.invoice_information.phone_1
 
       .row
-        .twelve.columns
+        .span12
           - if @hide_sidebars
             #content
               = yield
           - else
             #content.row
-              #details.four.columns
+              #details.span4
                 = render :partial => 'market/order_details'
 
-              .eight.columns
+              .span8
                 - if show_title?
                   %h1= yield(:title)
 

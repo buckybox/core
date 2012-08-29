@@ -2,12 +2,12 @@
   %body
     .container
       .row
-        .twelve.columns
+        .span12
           - flash.each do |kind, message|
             = flash_bar(kind, message)
 
       .row
-        .twelve.columns.text-right
+        .span12.text-right
           - if admin_signed_in?
             Signed in as 
             %strong= current_admin.email
@@ -18,11 +18,11 @@
 
       - if show_title?
         .row
-          .twelve.columns
+          .span12
             %h1.text-center= yield(:title)
 
       .row
-        .twelve.columns= yield
+        .span12= yield
 
 = render 'layouts/base'
 

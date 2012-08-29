@@ -3,38 +3,38 @@
 
 - if @edit_mode
   .row
-    #stock-list-controls.twelve.columns
+    #stock-list-controls.span12
       = link_to 'Done', '#', class: 'button radius red float-right', id: 'submit-button'
       = link_to 'cancel', distributor_settings_stock_list_path, class: 'float-right', id: 'cancel-link'
 
   .row.data-headings
-    %h4.six.columns Item
-    %h4.six.columns.text-right Customer Preferences
+    %h4.span6 Item
+    %h4.span6.text-right Customer Preferences
 
   .row.data-listings
-    .twelve.columns
+    .span12
       = render partial: 'distributor/line_items/form'
 
   = simple_form_for(:edited, url: bulk_update_distributor_line_items_path, method: :put, html: { id: 'bulk-update' }) do |f|
     = simple_fields_for :line do |g|
       - @line_items.each do |line_item|
         .line-item.row.data-listings
-          .five.columns
+          .span5
             = g.input "items[#{line_item.id}]", as: :string, label: false, required: false, placeholder: "remove item #{line_item.name}", input_html: { value: line_item.name, class: 'expand', data: { original_value: line_item.name } }
             .block.remove &times;
-          .four.columns= line_item_total(line_item)
-          .three.columns= line_item_use(line_item)
+          .span4= line_item_total(line_item)
+          .span3= line_item_use(line_item)
 
 - else
   .row
-    #stock-list-controls.twelve.columns
+    #stock-list-controls.span12
       = link_to 'Edit', distributor_settings_stock_list_path(edit: true), class: 'button radius float-right'
 
   .row.data-headings
-    %h4.six.columns Item
-    %h4.six.columns.text-right Customer Preferences
+    %h4.span6 Item
+    %h4.span6.text-right Customer Preferences
 
   - @line_items.each do |line_item|
     .line-item.row.data-listings
-      .six.columns= line_item.name
-      .six.columns= line_item_use(line_item)
+      .span6= line_item.name
+      .span6= line_item_use(line_item)

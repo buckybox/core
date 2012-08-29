@@ -2,7 +2,7 @@
 
 - if @events.blank?
   .row
-    .twelve.columns
+    .span12
       %h2 Welcome!
       %p
         Please, make sure you have updateded all of your
@@ -13,13 +13,13 @@
 
 - unless @events.blank?
   .row#noticeboard
-    .twelve.columns
+    .span12
       %h2 Alerts
       - @events.each do |event|
         .row.individual-notice
-          .two.columns{class: "notification_tag #{event.event_category}"}= event.event_category
-          .two.columns= date_for(event)
-          .six.columns= notification_message_for(event)
-          .two.columns.text-right
+          .span2{class: "notification_tag #{event.event_category}"}= event.event_category
+          .span2= date_for(event)
+          .span6= notification_message_for(event)
+          .span2.text-right
             = link_to '&times;'.html_safe, distributor_dismiss_event_path(event), class: "dismiss small white button radius"
 

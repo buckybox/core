@@ -3,40 +3,40 @@
 
 - if @customers.blank?
   .row.data-headings
-    %h4.twelve.columns No Customers To Display
+    %h4.span12 No Customers To Display
 - else
   .row.data-headings
-    .five.columns
+    .span5
       .row
-        %h4.tweleve.columns Customer Name
-    .four.columns
+        %h4.span12 Customer Name
+    .span4
       .row
-        %h4.tweleve.columns Next Delivery
-    .three.columns
+        %h4.span12 Next Delivery
+    .span3
       .row
-        %h4.six.columns Route
-        %h4.six.columns Balance
+        %h4.span6 Route
+        %h4.span6 Balance
 
   #customers
     .row
-      .twelve.columns.add-colour.data-list-new-link
+      .span12.add-colour.data-list-new-link
         = link_to 'Create a new customer', new_distributor_customer_path
 
     - @customers.each do |customer|
       .row.data-listings
-        .five.columns
+        .span5
           .row
-            .seven.columns= customer_badge(customer)
-            .five.columns
+            .span7= customer_badge(customer)
+            .span5
               - unless customer.tags.empty?
                 - customer.tags.each do |tag|
                   %span.radius.label= link_to tag.name, tag_distributor_customers_path(tag.name)
-        .four.columns
+        .span4
           .row
-            .four.columns= next_customer_delivery_occurrence(customer)
-            .eight.columns= next_customer_delivery_box_name(customer)
-        .three.columns
+            .span4= next_customer_delivery_occurrence(customer)
+            .span8= next_customer_delivery_box_name(customer)
+        .span3
           .row
-            .six.columns= customer.route.name
-            .six.columns= customer.account.balance.format
+            .span6= customer.route.name
+            .span6= customer.account.balance.format
 

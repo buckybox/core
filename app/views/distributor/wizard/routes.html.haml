@@ -1,7 +1,7 @@
 - title "Your Routes"
 
 .row
-  .four.columns
+  .span4
     = simple_form_for([:distributor, @route]) do |f|
       = f.error_notification
 
@@ -21,6 +21,6 @@
 
     = button_to 'Next', distributor_wizard_payment_path, :method => :get, :class => 'button radius'
 
-  .eight.columns
+  .span8
     = render :partial => 'distributor/routes/index'
 

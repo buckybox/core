@@ -1,5 +1,5 @@
 .row
-  %table.twelve.columns
+  %table.span12
     %thead
       %tr
         %th Log
@@ -10,9 +10,9 @@
         %tr
           %td
             .row.cron-details
-              .ten.columns= simple_format cron_log.log
-              .two.columns= link_to_function("details", "", class: "show-hide-details") if cron_log.details.present?
+              .span10= simple_format cron_log.log
+              .span2= link_to_function("details", "", class: "show-hide-details") if cron_log.details.present?
             .row
-              .twelve.columns.cron-log-details.hide= simple_format cron_log.details
+              .span12.cron-log-details.hide= simple_format cron_log.details
           %td= cron_log.created_at.to_s(:pretty)
 

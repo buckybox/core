@@ -1,7 +1,7 @@
 = render 'controls'
 
 .row
-  #customer-details.four.columns
+  #customer-details.span4
     #section-one
       = customer_title(@customer)
       - @customer.tags.each do |t|
@@ -38,9 +38,9 @@
       %br
       = link_to 'send login details', send_login_details_distributor_customer_path(@customer), confirm: 'Are you sure? This will reset the users password.'
 
-  #customer-associations.eight.columns
+  #customer-associations.span8
     .row.section
-      .twelve.columns
+      .span12
         %h3 Notes
         = simple_form_for([:distributor, @customer]) do |f|
           .inputs
@@ -49,12 +49,12 @@
             = f.button :submit, 'Update', class: 'float-right'
 
     .row.section
-      .twelve.columns
+      .span12
         %h3 Orders
         = render 'distributor/orders/index'
 
     .row.section
-      .twelve.columns
+      .span12
         %h3 Transactions
         = render 'distributor/transactions/index'
 

@@ -1,40 +1,40 @@
 = customer_title(current_customer, link: customer_root_path)
 
 .row
-  .twelve.columns.text-center
+  .span12.text-center
     %h2== Account Balance #{current_customer.account.balance.format}
 
 .row
-  .nine.columns
+  .span9
     .panel
       .row
-        .nine.columns
+        .span9
           %h3 My Orders
-        .three.columns.text-right
+        .span3.text-right
           = link_to 'New Order', new_customer_order_path, class: 'radius button'
       .row
-        #customer-orders.twelve.columns
+        #customer-orders.span12
           = render 'customer/orders/index' unless @orders.empty?
 
     .panel
       .row
-        .twelve.columns
+        .span12
           %h3 Account Statement
       .row
-        .twelve.columns
+        .span12
           = render 'customer/transactions/index' unless @transactions.empty?
 
-  .three.columns
+  .span3
     .panel
       %strong Deliver To:
       .row
-        .twelve.columns
+        .span12
           = current_customer.address.join('<br/>', with_phone:true)
           %br
           = link_to 'change my delivery address', '#', data: {'reveal-id' => 'address-modal'}
 
       .row
-        #customer-controls.twelve.columns
+        #customer-controls.span12
           = customer_badge(current_customer, link: customer_root_path)
           %br
           = current_customer.email

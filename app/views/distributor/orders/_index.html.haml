@@ -1,33 +1,33 @@
 .row
-  %table#orders.twelve.columns
+  %table#orders.span12
     %tbody
       %tr
         %td.data-list-new-link.add-colour
           .row
-            .twelve.columns
+            .span12
               = link_to 'Create a new order', new_distributor_account_order_path(@account)
       - @orders.each do |order|
         %tr
           %td
             .row
-              .four.columns
+              .span4
                 %ul
                   %li.box-name.larger-font= order.box.name
                   %li= order_customisation(order)
                   %li= order_extras(order)
                   %li= link_to 'edit', edit_distributor_account_order_path(@account, order)
-              .six.columns
+              .span6
                 %ul
                   %li.larger-font= order_schedule(order, exception_rules: false, exception_times: false)
                   - if order.reoccurs?
                     %li= render partial: 'distributor/orders/pausing', locals: { order: order }
-              .two.columns
+              .span2
                 %ul.text-right
                   %li.larger-font= order.price.format
                   %li= link_to('remove order',
                     deactivate_distributor_account_order_path(@account, order),
                     confirm: order_delete_warning(order), method: :put)
             .row
-              .five.columns.offset-by-four
+              .span5.offset4
                 = customer_delivery_links(order)
 

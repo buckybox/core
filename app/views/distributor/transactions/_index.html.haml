@@ -1,35 +1,35 @@
 .row
-  .twelve.columns
+  .span12
     = form_tag(change_balance_distributor_account_path(@account, anchor: 'transactions'), method: :put, class: 'nice') do
       .row
-        %table#transactions.twelve.columns{ data: { account: @account.id } }
+        %table#transactions.span12{ data: { account: @account.id } }
           %thead
             %tr
               %th
                 .row
-                  .two.columns Transaction Processed
-                  .two.columns Transaction Date
-                  .four.columns Description
-                  .two.columns.text-right Transaction
-                  .two.columns.text-right Balance
+                  .span2 Transaction Processed
+                  .span2 Transaction Date
+                  .span4 Description
+                  .span2.text-right Transaction
+                  .span2.text-right Balance
 
           %tbody
             %tr#transaction-form.add-colour
               %td
                 .row
-                  .two.columns.offset-by-two
+                  .span2.offset2
                     .inputs
                       .input.string.required.input-text
                         = text_field_tag 'date', Time.zone.today.to_s(:date_picker), id: 'transaction_date', class: 'string input-text expand'
-                  .four.columns
+                  .span4
                     .inputs
                       .input.input-text
                         = text_area_tag 'note', '', rows: 1, placeholder: 'e.g. Discount Credit Applied', class: 'text expand'
-                  .two.columns
+                  .span2
                     .inputs
                       .input.string.required.input-text
                         = text_field_tag 'delta', '0.00', required: 'required', class: 'string input-text expand required text-right'
-                  .two.columns.text-right
+                  .span2.text-right
                     .actions= submit_tag 'Add', class: 'button radius small'
 
             - running_balance = @transactions_sum
@@ -40,17 +40,17 @@
               %tr.transaction-data
                 %td{ class: td_class }
                   .row
-                    .two.columns= transaction.created_at.to_s(:transaction)
-                    .two.columns= transaction.display_time.to_s(:transaction)
-                    .four.columns= transaction.description
-                    .two.columns.text-right= transaction.amount.format
-                    .two.columns.text-right= running_balance.format
+                    .span2= transaction.created_at.to_s(:transaction)
+                    .span2= transaction.display_time.to_s(:transaction)
+                    .span4= transaction.description
+                    .span2.text-right= transaction.amount.format
+                    .span2.text-right= running_balance.format
 
               - running_balance -= transaction.amount
 
             %tr
               %td
                 .row
-                  #more-transactions.twelve.columns.text-center
+                  #more-transactions.span12.text-center
                     = link_to 'more...', '#'
                     #ajax-loader

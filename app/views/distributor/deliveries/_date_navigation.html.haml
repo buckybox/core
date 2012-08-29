@@ -1,6 +1,6 @@
 - unless @date_navigation.empty?
   .row
-    .twelve.columns
+    .span12
       #calendar-navigation
         %ul{ style: calendar_nav_length(@date_navigation, @months) }
           - @months.each do |month, dates| #@delivery_lists.group_by{ |date_list| date_list.date.month }.each do |month, date_list_group|

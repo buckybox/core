@@ -2,12 +2,12 @@
   = simple_form_for([:distributor, @extra]) do |f|
     = f.error_notification
     .inputs
-      .four.columns
+      .span4
         = f.input :name, label: false, placeholder: 'Eggs', input_html:{class: 'expand'}
-      .three.columns
+      .span3
         = f.input :unit, label: false, placeholder: '1/2 Doz', input_html: {class: 'expand'}
-      .two.columns
+      .span2
         = f.input :price, as: :currency, label: false, input_html: { class: 'input-text expand' }
-      .two.columns.offset-by-one
+      .span2.offset1
         .actions
           = f.button :submit, "Add Extra"

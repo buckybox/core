@@ -2,7 +2,7 @@
   = f.error_notification
 
   .row
-    .four.columns
+    .span4
       .inputs
         = f.association :box, collection: box_collection(@customer, with_price: true), include_blank: false, input_html: { class: 'box' }
 
@@ -15,22 +15,22 @@
               var current_account_id = #{@account.id};
           = render partial: 'shared/orders/extras', locals: { account: @account, order: @order, box: @order.box || box_collection(@customer).first }
 
-    .four.columns
+    .span4
       .inputs
         .dislikes_input
           .row
-            .twelve.columns
+            .span12
               = f.label :dislikes, 'Exclusions'
               .row
-                = select_tag :dislikes_input, options_from_collection_for_select(@stock_list, :id, :name, @dislikes_list), multiple: true, class: 'twelve columns', data: { placeholder: "Exclude these items..." }
+                = select_tag :dislikes_input, options_from_collection_for_select(@stock_list, :id, :name, @dislikes_list), multiple: true, class: 'span12', data: { placeholder: "Exclude these items..." }
         .likes_input
           .row
-            .twelve.columns
+            .span12
               = f.label :likes, 'Substitutes'
               .row
-                = select_tag :likes_input, options_from_collection_for_select(@stock_list, :id, :name, @likes_list), multiple: true, class: 'twelve columns', data: { placeholder: "Substitute for these items..." }
+                = select_tag :likes_input, options_from_collection_for_select(@stock_list, :id, :name, @likes_list), multiple: true, class: 'span12', data: { placeholder: "Substitute for these items..." }
 
-    .four.columns
+    .span4
       - unless @order.persisted?
         %h3= @route.name
         .inputs
@@ -61,7 +61,7 @@
               %td= label_tag :days_sunday, 'Sunday'
 
   .row
-    .twelve.columns
+    .span12
       .actions
         = f.button :submit
 

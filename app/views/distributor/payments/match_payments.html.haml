@@ -5,7 +5,7 @@
     .row.errors
       = @import_transaction_list.errors.full_messages.join(", ")
   .row
-    .twelve.columns
+    .span12
       %table.payments
         %thead
           %tr
@@ -38,5 +38,5 @@
 
 
   .row
-    .two.columns.offset-by-ten
+    .span2.offset10
       = f.submit "Save"
