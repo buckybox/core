@@ -6,8 +6,10 @@
     = f.input :url
     = f.input :email
     = f.input :support_email
+    = f.association :country, collection: Country.all, include_blank: false
     = f.input :time_zone, as: :time_zone
     = f.input :currency, collection: select_currencies, include_blank: false if @distributor.new_record?
+    = f.input :consumer_delivery_fee, as: :decimal
     = f.input :bank_deposit
     = f.input :paypal
     = f.input :bank_deposit_format, collection: ImportTransactionList::FILE_FORMATS.reject{|name, code| code == 'paypal'}, as: :select

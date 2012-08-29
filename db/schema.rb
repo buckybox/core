@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120822031706) do
+ActiveRecord::Schema.define(:version => 20120829004318) do
 
   create_table "accounts", :force => true do |t|
     t.integer  "customer_id"
@@ -107,6 +107,15 @@ ActiveRecord::Schema.define(:version => 20120822031706) do
   end
 
   add_index "boxes", ["distributor_id"], :name => "index_boxes_on_distributor_id"
+
+  create_table "countries", :force => true do |t|
+    t.string   "name"
+    t.string   "default_currency"
+    t.string   "default_time_zone"
+    t.integer  "default_consumer_fee"
+    t.datetime "created_at",           :null => false
+    t.datetime "updated_at",           :null => false
+  end
 
   create_table "cron_logs", :force => true do |t|
     t.text     "log"
@@ -249,6 +258,8 @@ ActiveRecord::Schema.define(:version => 20120822031706) do
     t.boolean  "bank_deposit"
     t.boolean  "paypal"
     t.string   "bank_deposit_format"
+    t.integer  "country_id"
+    t.integer  "consumer_delivery_fee"
   end
 
   add_index "distributors", ["authentication_token"], :name => "index_distributors_on_authentication_token", :unique => true
