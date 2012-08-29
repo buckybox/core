@@ -9,4 +9,10 @@
 //= require jquery_ujs
 //= require bootstrap
 //= require select2
+//= require handlebars
+//= require ember
+//= require ember-data
+//= require_self
+//= require bucky_box
+BuckyBox = Ember.Application.create();
 //= require_tree .
