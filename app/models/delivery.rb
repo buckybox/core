@@ -83,7 +83,7 @@ class Delivery < ActiveRecord::Base
         delivery.payments.create(
           distributor: delivery.distributor,
           account: delivery.account,
-          amount: delivery.package.price,
+          amount: delivery.payment_amount,
           kind: 'delivery',
           source: 'manual',
           description: 'Payment made on delivery',
@@ -220,6 +220,14 @@ class Delivery < ActiveRecord::Base
     end
 
     export_items ? csv_output : nil
+  end
+
+  def payment_amount
+    if distributor.separate_bucky_fee
+      package.price + distributor.consumer_delivery_fee_money
+    else
+      package.price
+    end
   end
 
   private

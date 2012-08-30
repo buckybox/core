@@ -41,6 +41,7 @@ class Distributor < ActiveRecord::Base
     :time_zone, :currency, :bank_deposit, :paypal, :bank_deposit_format,
     :country_id, :consumer_delivery_fee
 
+  validates_presence_of :country
   validates_presence_of :email
   validates_uniqueness_of :email
   validates_presence_of :name, on: :update
@@ -293,6 +294,10 @@ class Distributor < ActiveRecord::Base
 
   def cache_key
     @cache_key ||= "#{id}/#{name}/#{updated_at}"
+  end
+
+  def consumer_delivery_fee_money
+    Money.new(consumer_delivery_fee, currency)
   end
 
   private

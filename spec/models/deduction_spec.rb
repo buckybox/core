@@ -30,6 +30,9 @@ describe Deduction do
     before do
       @account_amount = deduction.account.balance
       @amount = deduction.amount
+      @fee = Money.new(25)
+      deduction.stub_chain(:distributor, :separate_bucky_fee).and_return(true)
+      deduction.stub_chain(:distributor, :consumer_delivery_fee_money).and_return(@fee)
       deduction.save
     end
 
@@ -38,7 +41,8 @@ describe Deduction do
       specify { deduction.transaction.persisted?.should be_true }
       specify { deduction.transaction.amount.should == -@amount }
 
-      specify { deduction.account.balance.should == @account_amount - @amount }
+      specify { deduction.account.balance.should == @account_amount - @amount - @fee}
+      specify { deduction.bucky_fee.amount.should == -@fee}
     end
 
     describe '#reverse_deduction' do
@@ -49,6 +53,7 @@ describe Deduction do
       specify { deduction.reversal_transaction.should_not be_nil }
       specify { deduction.reversal_transaction.persisted?.should be_true }
       specify { deduction.reversal_transaction.amount.should == @amount }
+      specify { deduction.reversal_fee.should_not be_nil }
 
       specify { deduction.account.balance.should == @account_amount }
     end

@@ -1,6 +1,6 @@
 Fabricator(:country) do
-  name "MyString"
-  currency "MyString"
-  default_time_zone "MyString"
-  default_consumer_fee 1
+  name "New Zealand"
+  default_currency "Pies"
+  default_time_zone "Wellington"
+  default_consumer_fee 0.20
 end
