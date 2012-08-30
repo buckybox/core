@@ -7,28 +7,21 @@
 
     %title= content_for?(:title) ? "Bucky Box - #{yield(:title)}" : 'Bucky Box'
 
-    -# Included CSS Files
-    = stylesheet_link_tag 'application'
-
-    -# Included JS Files
-    = javascript_include_tag 'application'
-
     = csrf_meta_tag
+
+    = yield(:head)
 
     - if Rails.env.production?
       = favicon_link_tag
+    - elsif Rails.env.staging?
+      = favicon_link_tag '/favicon-gray.ico'
     - else
-      = favicon_link_tag '/favicon-grayscale.ico'
-
-    = yield(:head)
+      = favicon_link_tag '/favicon-red.ico'
 
     - analytical.identify(current_distributor.id, email: current_distributor.email) if current_distributor
     = raw analytical.head_append_javascript
 
   %body
     = raw analytical.body_prepend_javascript
-
-    = render 'layouts/server_warnings'
     = yield(:body)
-
     = raw analytical.body_append_javascript

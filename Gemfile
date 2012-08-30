@@ -7,7 +7,6 @@ gem 'rails', '~> 3.2.8'
 gem 'pg', '~> 0.14.0'
 
 gem 'haml-rails', '~> 0.3.4'
-gem 'sass-rails', '~> 3.2.5'
 gem 'jquery-rails', '~> 2.1.1'
 gem 'bootstrap-sass', '~> 2.0.4.0'
 gem 'select2-rails', '~> 3.1.1'
@@ -39,6 +38,7 @@ gem 'airbrake', '~> 3.1.2'
 group :assets do
   gem 'coffee-rails', '~> 3.2.2'
   gem 'uglifier', '~> 1.2.7'
+  gem 'sass-rails', '~> 3.2.5'
   gem 'compass-rails', '~> 1.0.3'
 end
 

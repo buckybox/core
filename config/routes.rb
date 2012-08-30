@@ -3,7 +3,7 @@ BuckyBox::Application.routes.draw do
   devise_for :distributors, controllers: { sessions: 'distributor/sessions' }
   devise_for :customers,    controllers: { sessions: 'customer/sessions' }
 
-  root to: 'distributor/dashboard#index'
+  root to: 'distributor/customers#index'
 
   namespace :market do
     get ':distributor_parameter_name',                  action: 'store',            as: 'store'
@@ -14,9 +14,7 @@ BuckyBox::Application.routes.draw do
   end
 
   namespace :distributor do
-    root to: 'dashboard#index'
-    get 'dashboard', controller: 'dashboard', action: 'index'
-    post 'events/:id/dismiss', controller: 'dashboard', action: 'dismiss_event', as: 'dismiss_event'
+    root to: 'customers#index'
 
     namespace :wizard do
       get 'business'

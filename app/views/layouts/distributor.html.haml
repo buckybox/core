@@ -1,31 +1,16 @@
+- stylesheet 'distributor'
+- javascript 'distributor'
+
 - content_for :body do
   %body
     .container
       .row
         .span12
           - flash.each do |kind, message|
-            = flash_bar(kind, message)
+            = flash_bar(message, kind: kind)
 
       .row
-        .span12.text-right
-          - if distributor_signed_in?
-            Signed in as 
-            %strong= current_distributor.name
-            \|
-            = link_to 'settings', distributor_settings_business_information_path
-            \|
-            - if admin_signed_in? 
-              = link_to 'logout', unimpersonate_admin_distributors_path
-            - else
-              = link_to 'logout', destroy_distributor_session_path, method: :delete
-          - else
-            = link_to 'login', new_distributor_session_path
-
-      .row
-        .span12= render 'distributor/shared/topic_tabs'
-
-      .row
-        .span12= yield(:sub_nav)
+        .span12= render 'layouts/distributor/user_nav'
 
       - if show_title?
         .row
@@ -33,7 +18,11 @@
             %h1= yield(:title)
 
       .row
-        .span12= yield
+        .span2= render 'distributor/shared/topic_tabs'
+        .span10
+          .row
+            .span12= yield(:sub_nav)
+            .span12= yield
 
 = render 'layouts/base'
 

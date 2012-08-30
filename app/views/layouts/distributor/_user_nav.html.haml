@@ -1,0 +1,13 @@
+.tabbable.tabs-below
+  %ul.nav.nav-tabs.pull-right
+    %li.active.dropdown.pull-right
+      = link_to '#', class: 'dropdown-toggle', data: { toggle: 'dropdown' } do
+        = current_distributor.name
+        %b.caret
+      %ul.dropdown-menu
+        %li= link_to 'settings', distributor_settings_business_information_path
+        %li
+          - if admin_signed_in? 
+            = link_to 'logout', unimpersonate_admin_distributors_path
+          - else
+            = link_to 'logout', destroy_distributor_session_path, method: :delete
