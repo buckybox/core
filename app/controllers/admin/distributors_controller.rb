@@ -44,7 +44,7 @@ class Admin::DistributorsController < Admin::ResourceController
     
     render json: {time_zone: ActiveSupport::TimeZone.new(@country.default_time_zone).name,
                   currency: Money.parse(@country.default_currency).currency.id,
-                  fee: @country.default_consumer_fee / 100.0}
+                  fee: @country.default_consumer_fee_cents / 100.0}
   end
 
   private
