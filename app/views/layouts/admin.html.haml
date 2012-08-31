@@ -4,7 +4,7 @@
       .row
         .span12
           - flash.each do |kind, message|
-            = flash_bar(kind, message)
+            = flash_bar(message, kind: kind)
 
       .row
         .span12.text-right
