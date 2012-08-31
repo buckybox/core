@@ -45,8 +45,8 @@ group :install do
 end
 
 group :development do
-  gem 'puma', require: false
-  gem 'bullet', require: false
+  gem 'puma', '~> 1.6.1', require: false
+  gem 'bullet', '~> 4.1.6', require: false
 
   gem 'nifty-generators', '~> 0.4.6', require: false
 
@@ -106,6 +106,6 @@ group :development, :staging do
   gem 'oink', require: 'oink'
 end
 
-group :development, :testin, :staging do
+group :development, :test, :staging do
   gem 'delorean', '~> 2.0.0'
 end
