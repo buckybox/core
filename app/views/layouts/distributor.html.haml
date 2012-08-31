@@ -18,7 +18,9 @@
             %h1= yield(:title)
 
       .row
-        .span2= render 'distributor/shared/topic_tabs'
+        .span2
+          = image_tag 'bucky-logo.png'
+          = render 'distributor/shared/topic_tabs'
         .span10
           .row
             .span12= yield(:sub_nav)
