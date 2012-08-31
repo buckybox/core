@@ -45,8 +45,10 @@ group :install do
 end
 
 group :development do
-  #gem 'bullet'
   gem 'puma', require: false
+
+  gem 'bullet', require: false
+  gem 'oink', require: 'oink'
 
   gem 'nifty-generators', '~> 0.4.6', require: false
 
