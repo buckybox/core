@@ -32,7 +32,7 @@ describe Deduction do
       @amount = deduction.amount
       @fee = Money.new(25)
       deduction.stub_chain(:distributor, :separate_bucky_fee).and_return(true)
-      deduction.stub_chain(:distributor, :consumer_delivery_fee_money).and_return(@fee)
+      deduction.stub_chain(:distributor, :consumer_delivery_fee).and_return(@fee)
       deduction.save
     end
 

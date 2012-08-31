@@ -21,6 +21,12 @@
     %td Currency:
     %td= currency_name(@distributor.currency)
   %tr
+    %td Consumer Delivery Fee:
+    %td= @distributor.consumer_delivery_fee.format
+  %tr
+    %td Separate Bucky Fee:
+    %td= checkmark_boolean(@distributor.separate_bucky_fee)
+  %tr
     %td Bank Deposit:
     %td= checkmark_boolean(@distributor.bank_deposit?)
   %tr
@@ -35,9 +41,6 @@
   %tr
     %td Invoice Threshold:
     %td= @distributor.invoice_threshold.format
-  %tr
-    %td Separate Bucky Fee:
-    %td= checkmark_boolean(@distributor.separate_bucky_fee)
   %tr
     %td Created On
     %td= @distributor.created_at.to_s(:pretty)

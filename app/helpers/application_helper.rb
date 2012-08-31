@@ -3,7 +3,7 @@ module ApplicationHelper
 
   def currency_name(key)
     hash = currency_hash
-    hash[key.to_sym]
+    hash[key.downcase.to_sym]
   end
 
   def currency_hash

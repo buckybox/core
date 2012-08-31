@@ -1,13 +1,14 @@
 "Country Name","Currency","Default Time Zone","Default Consumer Fee"
-"US","USD","Pacific Time (US & Canada)",1
-"AU","AUD","Sydney",0.01
-"NZ","NZD","Auckland",0.001
-"UK","GBP","London",2
-"Spain","EUR","Madrid",3
-"HK","HKD","Hong Kong",4
-"Europe","EUR","London",56
-"Argentina","ARS","Buenos Aires",6
-"Turkey","TRY","Istanbul",7
-"Thailand","THB","Bangkok",8
-"China","CNY","Beijing",9
-"India","INR","Chennai",0
+"US","USD","Pacific Time (US & Canada)",0.1
+"AU","AUD","Sydney",0.1
+"NZ","NZD","Auckland",0.1
+"UK","GBP","London",0.1
+"Spain","EUR","Madrid",0.1
+"HK","HKD","Hong Kong",1
+"Europe","EUR","London",0.1
+"Argentina","ARS","Buenos Aires",0.25
+"Turkey","TRY","Istanbul",0.1
+"Thailand","THB","Bangkok",1
+"China","CNY","Beijing",0.1
+"India","INR","New Delhi",1
+"Mexico","MXN","Mexico City",0.5

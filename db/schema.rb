@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120830003818) do
+ActiveRecord::Schema.define(:version => 20120831022656) do
 
   create_table "accounts", :force => true do |t|
     t.integer  "customer_id"
@@ -112,9 +112,9 @@ ActiveRecord::Schema.define(:version => 20120830003818) do
     t.string   "name"
     t.string   "default_currency"
     t.string   "default_time_zone"
-    t.integer  "default_consumer_fee"
-    t.datetime "created_at",           :null => false
-    t.datetime "updated_at",           :null => false
+    t.integer  "default_consumer_fee_cents"
+    t.datetime "created_at",                 :null => false
+    t.datetime "updated_at",                 :null => false
   end
 
   create_table "cron_logs", :force => true do |t|
@@ -221,12 +221,12 @@ ActiveRecord::Schema.define(:version => 20120830003818) do
   end
 
   create_table "distributors", :force => true do |t|
-    t.string   "email",                                  :default => "",    :null => false
-    t.string   "encrypted_password",      :limit => 128, :default => "",    :null => false
+    t.string   "email",                                      :default => "",    :null => false
+    t.string   "encrypted_password",          :limit => 128, :default => "",    :null => false
     t.string   "reset_password_token"
     t.datetime "reset_password_sent_at"
     t.datetime "remember_created_at"
-    t.integer  "sign_in_count",                          :default => 0
+    t.integer  "sign_in_count",                              :default => 0
     t.datetime "current_sign_in_at"
     t.datetime "last_sign_in_at"
     t.string   "current_sign_in_ip"
@@ -235,7 +235,7 @@ ActiveRecord::Schema.define(:version => 20120830003818) do
     t.string   "confirmation_token"
     t.datetime "confirmed_at"
     t.datetime "confirmation_sent_at"
-    t.integer  "failed_attempts",                        :default => 0
+    t.integer  "failed_attempts",                            :default => 0
     t.string   "unlock_token"
     t.datetime "locked_at"
     t.string   "authentication_token"
@@ -244,11 +244,11 @@ ActiveRecord::Schema.define(:version => 20120830003818) do
     t.string   "name"
     t.string   "url"
     t.string   "company_logo"
-    t.boolean  "completed_wizard",                       :default => false, :null => false
+    t.boolean  "completed_wizard",                           :default => false, :null => false
     t.string   "parameter_name"
-    t.integer  "invoice_threshold_cents",                :default => 0,     :null => false
-    t.decimal  "bucky_box_percentage",                                      :null => false
-    t.boolean  "separate_bucky_fee",                     :default => true
+    t.integer  "invoice_threshold_cents",                    :default => 0,     :null => false
+    t.decimal  "bucky_box_percentage",                                          :null => false
+    t.boolean  "separate_bucky_fee",                         :default => true
     t.string   "support_email"
     t.string   "time_zone"
     t.integer  "advance_hour"
@@ -259,7 +259,7 @@ ActiveRecord::Schema.define(:version => 20120830003818) do
     t.boolean  "paypal"
     t.string   "bank_deposit_format"
     t.integer  "country_id"
-    t.integer  "consumer_delivery_fee"
+    t.integer  "consumer_delivery_fee_cents"
   end
 
   add_index "distributors", ["authentication_token"], :name => "index_distributors_on_authentication_token", :unique => true

@@ -224,7 +224,7 @@ class Delivery < ActiveRecord::Base
 
   def payment_amount
     if distributor.separate_bucky_fee
-      package.price + distributor.consumer_delivery_fee_money
+      package.price + distributor.consumer_delivery_fee
     else
       package.price
     end

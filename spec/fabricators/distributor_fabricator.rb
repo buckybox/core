@@ -4,7 +4,7 @@ Fabricator(:distributor) do
   password 'password'
   password_confirmation { |distributor| distributor.password }
   country
-  consumer_delivery_fee 0.20
+  consumer_delivery_fee_cents 0
 end
 
 Fabricator(:distributor_with_information, from: :distributor) do

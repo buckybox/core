@@ -1,5 +1,5 @@
 class Country < ActiveRecord::Base
-  attr_accessible :default_currency, :default_consumer_fee, :default_time_zone, :name
+  attr_accessible :default_currency, :default_consumer_fee_cents, :default_time_zone, :name
 
   has_many :distributors
 

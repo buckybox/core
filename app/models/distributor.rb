@@ -34,12 +34,13 @@ class Distributor < ActiveRecord::Base
   mount_uploader :company_logo, CompanyLogoUploader
 
   monetize :invoice_threshold_cents
+  monetize :consumer_delivery_fee_cents
 
   # Setup accessible (or protected) attributes for your model
   attr_accessible :email, :password, :password_confirmation, :remember_me, :name, :url, :company_logo, :company_logo_cache, :completed_wizard,
     :remove_company_logo, :support_email, :invoice_threshold, :separate_bucky_fee, :advance_hour, :advance_days, :automatic_delivery_hour,
     :time_zone, :currency, :bank_deposit, :paypal, :bank_deposit_format,
-    :country_id, :consumer_delivery_fee
+    :country_id, :consumer_delivery_fee, :consumer_delivery_fee_cents
 
   validates_presence_of :country
   validates_presence_of :email
@@ -296,10 +297,6 @@ class Distributor < ActiveRecord::Base
     @cache_key ||= "#{id}/#{name}/#{updated_at}"
   end
 
-  def consumer_delivery_fee_money
-    Money.new(consumer_delivery_fee, currency)
-  end
-
   private
 
   def parameterize_name
@@ -335,19 +332,5 @@ class Distributor < ActiveRecord::Base
       Order.deactivate_finished
     end
     @@advanced += day
-  end
-
-  require 'csv'
-  def self.load_settings
-    Country.transaction do
-      CSV.foreach(File.join(Rails.root,"config/distributor_settings.csv"), headers: true) do |row|
-        country = Country.find_by_name(row['Country Name']) || Country.new
-        country.attributes = {name: row['Country Name'],
-                      default_currency: row['Currency'],
-                      default_time_zone: row['Default Time Zone'],
-                      default_consumer_fee: row['Default Consumer Fee'].to_f * 100}
-        country.save!
-      end
-    end
   end
 end
