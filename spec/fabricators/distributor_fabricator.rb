@@ -3,7 +3,7 @@ Fabricator(:distributor) do
   email { sequence(:email) { |i| "distributor#{i}@example.com" } }
   password 'password'
   password_confirmation { |distributor| distributor.password }
-  country
+  country!
   consumer_delivery_fee_cents 0
 end
 
