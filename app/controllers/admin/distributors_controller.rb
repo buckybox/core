@@ -39,6 +39,12 @@ class Admin::DistributorsController < Admin::ResourceController
     end
   end
 
+  def invoice
+    @distributor = Distributor.find(params[:id])
+
+    render json: @distributor.invoice_for_range(params[:start_date], params[:end_date])
+  end
+
   private
 
   def parse_csv
