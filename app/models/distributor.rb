@@ -303,9 +303,11 @@ class Distributor < ActiveRecord::Base
 
       value = delivery_lists.where(["date >= ? AND date <= ?", start.to_date, finish.to_date]).collect{|dl| dl.deliveries.delivered.count.zero? ? Money.new(0, currency) : dl.deliveries.delivered.collect{|w| w.package.price}.sum}.sum
 
+      formatted = value == 0 ? Money.new(0, currency).format : value.format
+
       return {delivered: delivered,
       cancelled: cancelled,
-      value: value.format}
+      value: formatted}
     end
   end
 
