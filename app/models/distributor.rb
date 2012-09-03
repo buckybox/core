@@ -293,18 +293,27 @@ class Distributor < ActiveRecord::Base
   end
 
   def invoice_for_range(start_date, end_date)
+    use_local_time_zone do
+      start = Date.parse(start_date)
+      finish = Date.parse(end_date)
+
+      delivered = delivery_lists.where(["date >= ? AND date <= ?", start.to_date, finish.to_date]).collect{|dl| dl.deliveries.delivered.size}.sum
+
+      cancelled = delivery_lists.where(["date >= ? AND date <= ?", start.to_date, finish.to_date]).collect{|dl| dl.deliveries.cancelled.size}.sum
+
+      value = delivery_lists.where(["date >= ? AND date <= ?", start.to_date, finish.to_date]).collect{|dl| dl.deliveries.delivered.count.zero? ? Money.new(0, currency) : dl.deliveries.delivered.collect{|w| w.package.price}.sum}.sum
+
+      return {delivered: delivered,
+      cancelled: cancelled,
+      value: value.format}
+    end
+  end
+
+  def check(start_date, end_date)
     start = Date.parse(start_date)
     finish = Date.parse(end_date)
 
-    delivered = delivery_lists.where(["date >= ? AND date <= ?", start.to_date, finish.to_date]).collect{|dl| dl.deliveries.delivered.size}.sum
-
-    cancelled = delivery_lists.where(["date >= ? AND date <= ?", start.to_date, finish.to_date]).collect{|dl| dl.deliveries.cancelled.size}.sum
-
-    value = delivery_lists.where(["date >= ? AND date <= ?", start.to_date, finish.to_date]).collect{|dl| dl.deliveries.delivered.collect{|w| w.package.price.dollars rescue 0}.sum}.sum
-
-    return {delivered: delivered,
-    cancelled: cancelled,
-    value: Money.new(value*100.0, currency).format}
+    delivery_lists.where(["date >= ? AND date <= ?", start.to_date, finish.to_date]).collect{|dl| dl.deliveries}
   end
 
   private
