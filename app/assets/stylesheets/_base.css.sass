@@ -3,53 +3,6 @@
 @import 'bootstrap-responsive'
 @import 'select2'
 
-//------ Site wide colours
+@import 'site_wide'
+@import 'bootstrap_overrides'
 
-$badge-id: #CCCCCC
-$badge-name: #EEEEEE
-$badge-text: #000000
-
-$note-colour: #FFF0B2
-$action-colour: #FDE49B
-$action-color-hover: darken($action-colour, 15%)
-$archived-colour: #F0F0F0
-$forcasting-colour: #D4E2C5
-
-$content-background: #FFFFFF
-$content-border: #D3D3D3
-
-$negative-colour: #D0381B
-
-//----- Site wide styles
-
-.text-right
-  text-align: right
-
-.text-center
-  text-align: center
-
-a.link-label:hover
-  text-decoration: none
-
-.non-production-background
-  background-image: image-url('not-production-background.png')
-
-.customer-badge
-  display: inline-block
-  color: $badge-text
-  background-color: $badge-name
-  +border-radius(0.2em)
-  .customer-id
-    font-weight: bold
-    display: inline-block
-    color: $badge-text
-    background-color: $badge-id
-    padding: 0 0.2em
-    +border-radius(0.2em)
-    &:hover
-      color: $badge-id
-      background-color: $badge-text
-      text-decoration: none
-  .customer-name
-    font-weight: normal
-    padding: 0 0.2em

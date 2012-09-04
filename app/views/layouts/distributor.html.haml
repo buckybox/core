@@ -11,11 +11,6 @@
   .row
     .span12= render 'layouts/distributor/user_nav'
 
-  - if show_title?
-    .row
-      .span12.text-center
-        %h1= yield(:title)
-
   .row
     .span1
       #site-nav
@@ -28,6 +23,11 @@
             .span12
               - if yield(:sub_nav)
                 = yield(:sub_nav)
+
+          - if show_title?
+            .row-fluid
+              .span12.text-center
+                %h1= yield(:title)
 
           .row-fluid
             .span12= yield

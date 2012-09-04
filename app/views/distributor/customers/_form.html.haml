@@ -1,13 +1,14 @@
 = simple_form_for([:distributor, @customer]) do |f|
   = f.error_notification
 
-  .row
+  .row-fluid
     .span6
       = render partial: 'personal_form_inputs', locals: { f: f }
 
     .span6
       = render partial: 'delivery_form_inputs', locals: { f: f }
 
-      .actions
-        = f.button :submit
-        = link_to 'Cancel', :back
+  .row-fluid
+    .span12.form-actions
+      = f.button :submit
+      = link_to 'Cancel', :back

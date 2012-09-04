@@ -14,7 +14,7 @@ module Distributor::BaseHelper
   # force_highlighted = :routes
   # will make the 'Routes' sub_nav title show as highlighted
   def show_settings_sub_nav(force_highlighted = nil)
-    content_for :sub_nav do 
+    content_for :sub_nav do
       render partial: 'distributor/settings/sub_nav', locals: {force_highlighted: force_highlighted}
     end
   end
@@ -28,7 +28,9 @@ module Distributor::BaseHelper
   end
 
   def distributor_nav_li(text, link, options = {})
-    klass = 'active' if /^#{link}/ =~ request.fullpath
+    current_path = request.fullpath
+    klass = 'active' if /^#{link}/ =~ current_path
+    klass = 'active' if link == '/distributor/customers' && (current_path == '/' || current_path == '/distributor')
 
     list_item = content_tag(:div, nil, class: 'nav-arrow')
 
