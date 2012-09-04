@@ -9,8 +9,10 @@ $ ->
         $("#distributor_time_zone").val(data.time_zone)
         $("#distributor_currency").val(data.currency)
         $("#distributor_consumer_delivery_fee").val(data.fee)
+        $("#currency_code").html(data.currency)
       , 'json'
       )
   $('#distributor_country_id').change ->
     load_settings()
-  load_settings()
+  $('#distributor_currency').change ->
+    $("#currency_code").html($('#distributor_currency').val())

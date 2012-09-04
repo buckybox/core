@@ -14,5 +14,6 @@ module ApplicationHelper
     hash = currency_hash
     currencies = FEATURED_CURRENCIES.each_with_object([]) { |fc, a| a << [hash.delete(fc), fc] }
     currencies += hash.invert.to_a
+    currencies.collect{|a,b| [a, b.to_s.upcase]}
   end
 end

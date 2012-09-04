@@ -6,10 +6,14 @@
     = f.input :url
     = f.input :email
     = f.input :support_email
-    = f.association :country, collection: Country.all, include_blank: false
-    = f.input :time_zone, as: :time_zone
-    = f.input :currency, collection: select_currencies, include_blank: false if @distributor.new_record? || @distributor.currency.blank?
-    = f.input :consumer_delivery_fee, as: :decimal
+    = f.association :country, collection: Country.all, include_blank: false, input_html: {disabled: !@distributor.new_record?}
+    = f.input :time_zone, as: :time_zone, input_html: {disabled: !@distributor.new_record?}
+    = f.input :currency, collection: select_currencies, include_blank: false, input_html: {disabled: !@distributor.new_record?}
+    .input.numeric.currency.optional
+      %label.currency.optional{:for => "distributor_consumer_delivery_fee"} Consumer delivery fee
+      %input#distributor_consumer_delivery_fee.numeric.currency.optional{:name => "distributor[consumer_delivery_fee]", :step => "any", :type => "number", :value => @distributor.consumer_delivery_fee}
+      %span
+        %strong#currency_code= @distributor.currency.upcase
     = f.input :separate_bucky_fee
     = f.input :bank_deposit
     = f.input :paypal
