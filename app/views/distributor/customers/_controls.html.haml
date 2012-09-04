@@ -1,18 +1,27 @@
 - content_for :sub_nav do
-  .row.page-controls.customer-controls
-    #information.span7
-      - unless request.fullpath =~ /\/distributor\/customers\/\d+.*/
-        - if params[:query]
-          %h3== Searching "#{params[:query]}"
-        - elsif params[:tag]
-          %h3== Tag "#{params[:tag]}"
+  .navbar
+    .navbar-inner
+      .container
+        = link_to '#', class: 'btn btn-navbar', data: { toggle: 'collapse', target: '.nav-collapse' } do
+          %span.icon-bar
+          %span.icon-bar
+          %span.icon-bar
 
-        - if params[:query] || params[:tag]
-          = link_to 'Clear', distributor_customers_path
-      - else
-        = link_to '« Back to Customer List', distributor_customers_path, class: 'small radius button'
+        - unless /\/distributor\/customers\/\d+.*/ =~ request.fullpath
+          - if params[:query]
+            .brand
+              Searching
+              %strong= params[:query]
+              %small= link_to 'clear', distributor_customers_path
+          - elsif params[:tag]
+            .brand
+              Tag
+              %strong= params[:tag]
+              %small= link_to 'clear', distributor_customers_path
+        - else
+          = link_to '« Back to Customer List', distributor_customers_path, class: 'btn btn-primary'
 
-    #search.span5.text-right
-      = form_tag search_distributor_customers_path, method: :get, class: 'nice' do
-        = submit_tag 'Search', class: 'small radius button float-right'
-        = text_field_tag :query, '', placeholder: 'Customer Number, Name, Address', class: 'input-text float-right'
+        .nav-collapse
+          = form_tag search_distributor_customers_path, method: :get, class: 'navbar-form pull-right' do
+            = text_field_tag :query, '', placeholder: 'Customer Number, Name, Address', class: 'search-query input-xlarge'
+            = submit_tag 'Search', class: 'btn'

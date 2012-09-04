@@ -64,5 +64,7 @@ module BuckyBox
       g.test_framework      :rspec, fixture: true
       g.fixture_replacement :fabrication
     end
+
+    config.middleware.use(Oink::Middleware)
   end
 end

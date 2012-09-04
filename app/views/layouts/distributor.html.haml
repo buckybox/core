@@ -2,28 +2,34 @@
 - javascript 'distributor'
 
 - content_for :body do
-  %body
-    .container
-      .row
-        .span12
-          - flash.each do |kind, message|
-            = flash_bar(message, kind: kind)
+  - unless flash.empty?
+    .row
+      .span12
+        - flash.each do |kind, message|
+          = flash_bar(message, kind: kind)
 
-      .row
-        .span12= render 'layouts/distributor/user_nav'
+  .row
+    .span12= render 'layouts/distributor/user_nav'
 
-      - if show_title?
-        .row
-          .span12.text-center
-            %h1= yield(:title)
+  - if show_title?
+    .row
+      .span12.text-center
+        %h1= yield(:title)
 
-      .row
-        .span2
-          = image_tag 'bucky-logo.png'
-          = render 'distributor/shared/topic_tabs'
-        .span10
-          .row
-            .span12= yield(:sub_nav)
+  .row
+    .span1
+      #site-nav
+        = image_tag 'logo-grey.png', alt: 'Bucky Box', id: 'logo'
+        = render 'distributor/shared/topic_tabs'
+    .span11
+      #content
+        .containter-fluid
+          .row-fluid
+            .span12
+              - if yield(:sub_nav)
+                = yield(:sub_nav)
+
+          .row-fluid
             .span12= yield
 
 = render 'layouts/base'

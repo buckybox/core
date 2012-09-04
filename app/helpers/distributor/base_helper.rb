@@ -26,4 +26,17 @@ module Distributor::BaseHelper
       link_to text, path
     end
   end
+
+  def distributor_nav_li(text, link, options = {})
+    klass = 'active' if /^#{link}/ =~ request.fullpath
+
+    list_item = content_tag(:div, nil, class: 'nav-arrow')
+
+    list_item += content_tag :a, href: link, id: options.delete(:link_id) do
+      content_tag(:div, nil, class: 'nav-image') +
+      content_tag(:div, text, class: 'nav-text')
+    end
+
+    return content_tag(:li, list_item, class: klass)
+  end
 end

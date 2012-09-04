@@ -1,4 +1,4 @@
-%ul.site-navigation
-  %li= link_to image_tag('nav-customers.png'), distributor_customers_path
-  %li= link_to image_tag('nav-deliveries.png'), distributor_deliveries_path
-  %li= link_to image_tag('nav-payments.png'), distributor_payments_path if current_distributor.show_payments_tab?
+%ul.unstyled
+  = distributor_nav_li('Customers', distributor_customers_path, link_id: 'nav-customers')
+  = distributor_nav_li('Deliveries', distributor_deliveries_path, link_id: 'nav-deliveries')
+  = distributor_nav_li('Payments', distributor_payments_path, link_id: 'nav-payments')

@@ -2,41 +2,29 @@
 = render 'controls'
 
 - if @customers.blank?
-  .row.data-headings
-    %h4.span12 No Customers To Display
+  %h3 There are no customers to display
 - else
-  .row.data-headings
-    .span5
-      .row
-        %h4.span12 Customer Name
-    .span4
-      .row
-        %h4.span12 Next Delivery
-    .span3
-      .row
-        %h4.span6 Route
-        %h4.span6 Balance
+  %table.table
+    %thead
+      %tr.muted
+        %th{ colspan: 2 } Customer
+        %th{ colspan: 3 } Next Delivery
+        %th Balance
 
-  #customers
-    .row
-      .span12.add-colour.data-list-new-link
-        = link_to 'Create a new customer', new_distributor_customer_path
+    %tbody
+      %tr
+        %td{ colspan: 6 }= link_to 'Create a new customer', new_distributor_customer_path
 
-    - @customers.each do |customer|
-      .row.data-listings
-        .span5
-          .row
-            .span7= customer_badge(customer)
-            .span5
-              - unless customer.tags.empty?
-                - customer.tags.each do |tag|
-                  %span.radius.label= link_to tag.name, tag_distributor_customers_path(tag.name)
-        .span4
-          .row
-            .span4= next_customer_delivery_occurrence(customer)
-            .span8= next_customer_delivery_box_name(customer)
-        .span3
-          .row
-            .span6= customer.route.name
-            .span6= customer.account.balance.format
+      - @customers.each do |customer|
+        %tr
+          %td= customer_badge(customer)
+          %td
+            - unless customer.tags.empty?
+              - customer.tags.each do |tag|
+                = link_to tag_distributor_customers_path(tag.name), class: 'link-label' do
+                  %span.label.label-info= tag.name
+          %td= next_customer_delivery_occurrence(customer)
+          %td= next_customer_delivery_box_name(customer)
+          %td= customer.route.name
+          %td= customer.account.balance
 

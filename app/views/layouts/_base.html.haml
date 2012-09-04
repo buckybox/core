@@ -23,5 +23,5 @@
 
   %body
     = raw analytical.body_prepend_javascript
-    = yield(:body)
+    .container= yield(:body)
     = raw analytical.body_append_javascript

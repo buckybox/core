@@ -25,7 +25,7 @@ module LayoutHelper
 
   def flash_bar(message, options = {})
     classes = 'alert'
-    clases += FLASH_CLASSES[options[:kind]] if options[:kind]
+    classes += FLASH_CLASSES[options[:kind]] if options[:kind]
 
     message = button_tag('&times;'.html_safe, type: 'button', class: 'close', data: { dismiss: 'alert' }) + message
 

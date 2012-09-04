@@ -8,7 +8,7 @@ gem 'pg', '~> 0.14.0'
 
 gem 'haml-rails', '~> 0.3.4'
 gem 'jquery-rails', '~> 2.1.1'
-gem 'bootstrap-sass', '~> 2.0.4.0'
+gem 'bootstrap-sass', git: 'git://github.com/dszczyt/bootstrap-sass.git'
 gem 'select2-rails', '~> 3.1.1'
 gem 'ember-rails', '~> 0.7.0'
 
@@ -47,10 +47,10 @@ group :install do
 end
 
 group :development do
-  #gem 'bullet'
-  gem 'puma', require: false
+  gem 'puma', '~> 1.6.2', require: false
+  gem 'bullet', '~> 4.1.6', require: false
 
-  gem 'nifty-generators', '~> 0.4.6', require: false
+  gem 'oink', '~> 0.9.3', require: 'oink'
 
   gem 'ruby-prof', '~> 0.11.2' # profiling with /newrelic
 
@@ -60,7 +60,6 @@ group :development do
   gem 'term-ansicolor', '~> 1.0.7'
   gem 'hirb', '~> 0.7.0'
   gem 'wirble', '~> 0.1.3'
-  gem 'rb-fsevent', '~> 0.9.1', require: false if RUBY_PLATFORM =~ /darwin/i
 
   gem 'guard-rspec', '~> 1.2.1'
   gem 'guard-spork', '~> 1.1.0'
@@ -79,7 +78,7 @@ group :development, :test do
   gem 'guard', '~> 1.3.0'
 
   gem 'rb-inotify', '~> 0.8.8',  require: false
-  gem 'rb-fsevent', '~> 0.9.1',  require: false
+  gem 'rb-fsevent', '~> 0.9.1',  require: false if RUBY_PLATFORM =~ /darwin/i
   gem 'rb-fchange', '~> 0.0.5',  require: false
 
   gem 'mailcatcher', '~> 0.5.8', require: false
