@@ -16,5 +16,5 @@ $ ->
     load_settings()
   $('#distributor_currency').change ->
     $("#currency_code").html($('#distributor_currency').val())
-  if !$('#distributor_country_id').attr('disabled') && !$(".error_notification")
+  if !$('#distributor_country_id').attr('disabled') && $(".error_notification").size() == 0
     load_settings()
