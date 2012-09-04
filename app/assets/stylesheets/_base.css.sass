@@ -1,5 +1,3 @@
-//= require_self
-
 @import 'compass'
 @import 'bootstrap'
 @import 'bootstrap-responsive'
@@ -13,11 +11,14 @@ $badge-text: #000000
 
 $note-colour: #FFF0B2
 $action-colour: #FDE49B
+$action-color-hover: darken($action-colour, 15%)
 $archived-colour: #F0F0F0
 $forcasting-colour: #D4E2C5
 
 $content-background: #FFFFFF
 $content-border: #D3D3D3
+
+$negative-colour: #D0381B
 
 //----- Site wide styles
 
@@ -48,6 +49,7 @@ a.link-label:hover
     &:hover
       color: $badge-id
       background-color: $badge-text
+      text-decoration: none
   .customer-name
     font-weight: normal
     padding: 0 0.2em

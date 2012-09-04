@@ -1,0 +1,21 @@
+th.balance
+  text-align: right
+
+td#new-customer
+  padding: 8px 0px
+  a
+    display: block
+    padding: 3px 0px
+    text-align: center
+    background-color: $action-colour
+    +border-radius(0.4em)
+    &:hover
+      text-decoration: none
+      background-color: $action-color-hover
+
+td.balance
+  text-align: right
+  font-size: large
+  font-weight: bold
+  &.negative
+    color: $negative-colour

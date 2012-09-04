@@ -1,7 +1,5 @@
-//= require_self
-//= require_tree ./distributor
-
 @import 'base'
+@import 'distributor/customers'
 
 =site-nav-link($selector, $image)
   a#{$selector}
@@ -65,14 +63,20 @@ body
     .nav-tabs
       border-top-width: 0px
       li.active
-        a
+        a.dropdown-toggle
           padding: 4px 12px
-          color: #0088CC
+          color: $linkColor
           margin-right: 0px
           background-color: inherit
+          .caret
+            border-top-color: $linkColor
+            border-bottom-color: $linkColor
         &.open
-          a
-            color: #005580
+          a.dropdown-toggle
+            color: $linkColorHover
+            .caret
+              border-top-color: $linkColorHover
+              border-bottom-color: $linkColorHover
 
   #content
     background-color: $content-background

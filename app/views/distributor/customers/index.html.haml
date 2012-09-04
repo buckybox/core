@@ -9,11 +9,11 @@
       %tr.muted
         %th{ colspan: 2 } Customer
         %th{ colspan: 3 } Next Delivery
-        %th Balance
+        %th.balance Balance
 
     %tbody
       %tr
-        %td{ colspan: 6 }= link_to 'Create a new customer', new_distributor_customer_path
+        %td#new-customer{ colspan: 6 }= link_to 'Create a new customer', new_distributor_customer_path
 
       - @customers.each do |customer|
         %tr
@@ -26,5 +26,5 @@
           %td= next_customer_delivery_occurrence(customer)
           %td= next_customer_delivery_box_name(customer)
           %td= customer.route.name
-          %td= customer.account.balance
+          %td.balance{ class: "#{'negative' if customer.account.balance.negative?}" }= customer.account.balance
 
