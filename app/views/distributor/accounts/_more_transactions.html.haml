@@ -5,7 +5,7 @@
 
   %tr.transaction-data
     %td{ class: td_class }
-      .row
+      .row-fluid
         .span2= transaction.created_at.to_s(:transaction)
         .span2= transaction.display_time.to_s(:transaction)
         .span4= transaction.description

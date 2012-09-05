@@ -7,21 +7,21 @@
           %span.icon-bar
           %span.icon-bar
 
-        - unless /\/distributor\/customers\/\d+.*/ =~ request.fullpath
-          - if params[:query]
-            .brand
-              Searching
-              %strong= params[:query]
-              %small= link_to 'clear', distributor_customers_path
-          - elsif params[:tag]
-            .brand
-              Tag
-              %strong= params[:tag]
-              %small= link_to 'clear', distributor_customers_path
-        - else
-          = link_to '« Back to Customer List', distributor_customers_path, class: 'btn btn-primary'
-
         .nav-collapse
+          - unless /\/distributor\/customers\/\d+.*/ =~ request.fullpath
+            - if params[:query]
+              .brand
+                Searching
+                %strong= params[:query]
+                %small= link_to 'clear', distributor_customers_path
+            - elsif params[:tag]
+              .brand
+                Tag
+                %strong= params[:tag]
+                %small= link_to 'clear', distributor_customers_path
+          - else
+            = link_to '« Back to Customer List', distributor_customers_path, class: 'btn btn-primary'
+
           = form_tag search_distributor_customers_path, method: :get, class: 'navbar-form pull-right' do
             = text_field_tag :query, '', placeholder: 'Customer Number, Name, Address', class: 'search-query input-xlarge'
             = submit_tag 'Search', class: 'btn'

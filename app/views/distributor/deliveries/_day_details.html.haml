@@ -1,9 +1,9 @@
 - if @selected_date
-  #delivery-listings.row{ data: { distributor: current_distributor.id, date: @selected_date } }
+  #delivery-listings.row-fluid{ data: { distributor: current_distributor.id, date: @selected_date } }
     .span3
-      .row.data-headings
+      .row-fluid.data-headings
         %h5.span12= @selected_date.strftime("%A %d %B") if @selected_date
-      .row
+      .row-fluid
         .span12.route-name
           = link_to date_distributor_deliveries_path(@selected_date, 'packing') do
             %h6{ class: "#{'selected' if @route_id == 0}" }
@@ -19,7 +19,7 @@
                 = image_tag 'icon-route.png'
 
       - unless @items.blank?
-        .row
+        .row-fluid
           .span12.summary
             %strong Summary
             %ul

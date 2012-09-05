@@ -1,9 +1,9 @@
-.row.box-form
+.row-fluid.box-form
   .span12
     = simple_form_for([:distributor, @box]) do |f|
       = f.error_notification
 
-      .row
+      .row-fluid
         .span4
           .inputs
             = f.input :name, label: false, placeholder: 'Name', size: 20
@@ -37,6 +37,6 @@
             .uploaded_image= image_tag(@box.box_image.url) if @box.box_image?
             .image-thumbnail
 
-      .row
+      .row-fluid
         .span12.text-right
           .actions= f.button :submit, id: "box_submit"

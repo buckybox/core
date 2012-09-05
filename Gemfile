@@ -8,7 +8,7 @@ gem 'pg', '~> 0.14.0'
 
 gem 'haml-rails', '~> 0.3.4'
 gem 'jquery-rails', '~> 2.1.1'
-gem 'bootstrap-sass', git: 'git://github.com/dszczyt/bootstrap-sass.git'
+gem 'bootstrap-sass', git: 'git://github.com/thomas-mcdonald/bootstrap-sass', branch: '2.1-wip'
 gem 'select2-rails', '~> 3.1.1'
 gem 'ember-rails', '~> 0.7.0'
 

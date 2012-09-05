@@ -1,15 +1,15 @@
-.row
+.row-fluid
   %table#orders.span12
     %tbody
       %tr
         %td.data-list-new-link.add-colour
-          .row
+          .row-fluid
             .span12
               = link_to 'Create a new order', new_distributor_account_order_path(@account)
       - @orders.each do |order|
         %tr
           %td
-            .row
+            .row-fluid
               .span4
                 %ul
                   %li.box-name.larger-font= order.box.name
@@ -27,7 +27,7 @@
                   %li= link_to('remove order',
                     deactivate_distributor_account_order_path(@account, order),
                     confirm: order_delete_warning(order), method: :put)
-            .row
+            .row-fluid
               .span5.offset4
                 = customer_delivery_links(order)
 

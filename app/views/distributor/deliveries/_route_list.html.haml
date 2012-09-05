@@ -1,5 +1,5 @@
 .span9
-  .row.data-headings
+  .row-fluid.data-headings
     #route-controls.span7.delivery_actions
       = check_box_tag 'all'
       = button_tag 'Delivered', class: 'small radius button', id: 'delivered', disabled: !@real_list
@@ -25,13 +25,13 @@
   - if @real_list
     %ul#delivery_list{class: (@delivery_list.date.past? ? '' : 'sortable')}
       - @items.group_by{|delivery| delivery.order.address.address_hash}.each do |addressh_hash, deliveries|
-        %li.row
+        %li.row-fluid
           .span12
             %ul
               - deliveries.each do |delivery|
-                %li.row.data-listings{id: "delivery_#{delivery.id}", class: delivery.status }
+                %li.row-fluid.data-listings{id: "delivery_#{delivery.id}", class: delivery.status }
                   .span3
-                    .row
+                    .row-fluid
                       .span4
                         = check_box_tag delivery.order_id, '1', false, data: { delivery: delivery.id }
                         = render partial: 'status_icons', locals: { status: delivery.status }
@@ -39,22 +39,22 @@
                       .span4
                         %span.paid-label.green.radius.label{ style: "#{'display: inline;' if delivery.paid?}" } PAID
                   .span9
-                    .row
+                    .row-fluid
                       .span4= display_address(delivery)
                       .span4= contents_description(delivery)
                       .span4= customer_badge(delivery.customer, customer_name: delivery.package.archived_customer_name, short: true)
   - else
     %ul
       - @items.each do |order|
-        %li.row.data-listings.pending
+        %li.row-fluid.data-listings.pending
           .span3
-            .row
+            .row-fluid
               .span4
                 = check_box_tag order.id, '1', false
                 = image_tag 'icon-status-pending.png', title: 'PENDING delivery', class: 'icon-pending'
               .span8
           .span9
-            .row
+            .row-fluid
               .span4= display_address(order)
               .span4= contents_description(order)
               .span4= customer_badge(order.customer)

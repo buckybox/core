@@ -17,7 +17,7 @@
           = f.input :csv_file, label: false, input_html: {class: "auto_submit", label: "Import transactions"}
         .ajax_loader_gif{style: 'display:none;'}
 
-.row
+.row-fluid
   .span12
     %table.payments
       %thead
@@ -31,11 +31,11 @@
           %th
       %tbody
         - if current_distributor.can_upload_payments?
-          %tr.row_action.import_more_transactions
+          %tr.row-fluid_action.import_more_transactions
             %td{ colspan: 6 }
               = link_to((@import_transactions.blank? ? "Import transactions" : "Import more transactions"), "", {id: 'upload_more_transactions_link'})
         - else
-          %tr.row_action.import_more_transactions.hidden
+          %tr.row-fluid_action.import_more_transactions.hidden
         - @import_transaction_lists.each do |import_transaction_list|
           %tr.draft_import_transaction_list
             %td{ colspan: 6 }
@@ -45,7 +45,7 @@
 
         = render partial: 'distributor/import_transactions/rows'
 
-        %tr.row_action
+        %tr.row-fluid_action
           %td{ colspan: 6 }
             .ajax_loader_hide= link_to_function "more...", "window.payments.load_more_rows_on_bottom()" unless @import_transactions.blank?
             .ajax_loader_gif{style:'display: none;'}

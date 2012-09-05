@@ -1,7 +1,7 @@
 = simple_form_for([:distributor, @customer]) do |f|
   = f.error_notification
 
-  .row
+  .row-fluid
     .span6.centered
       = render partial: 'delivery_form_inputs', locals: { f: f }
 

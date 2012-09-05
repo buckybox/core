@@ -1,7 +1,7 @@
 - title 'Settings', false
 - show_settings_sub_nav(:bank_info)
 
-.row
+.row-fluid
   .span4
     = simple_form_for(@invoice_information, :url => distributor_invoice_information_path) do |f|
       = f.error_notification

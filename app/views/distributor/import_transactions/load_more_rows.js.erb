@@ -1,5 +1,5 @@
-$("tr.row_details:last").after('<%= j(render partial: "distributor/import_transactions/rows") %>');
+$("tr.row-fluid_details:last").after('<%= j(render partial: "distributor/import_transactions/rows") %>');
 window.payments.reload();
 <% if @last_row_reached %>
-  $("tr.row_action:last a").hide();
+  $("tr.row-fluid_action:last a").hide();
 <% end %>

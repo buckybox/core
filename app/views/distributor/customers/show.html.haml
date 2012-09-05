@@ -1,6 +1,6 @@
 = render 'controls'
 
-.row
+.row-fluid
   #customer-details.span4
     #section-one
       = customer_title(@customer)
@@ -39,7 +39,7 @@
       = link_to 'send login details', send_login_details_distributor_customer_path(@customer), confirm: 'Are you sure? This will reset the users password.'
 
   #customer-associations.span8
-    .row.section
+    .row-fluid.section
       .span12
         %h3 Notes
         = simple_form_for([:distributor, @customer]) do |f|
@@ -48,12 +48,12 @@
           .actions
             = f.button :submit, 'Update', class: 'float-right'
 
-    .row.section
+    .row-fluid.section
       .span12
         %h3 Orders
         = render 'distributor/orders/index'
 
-    .row.section
+    .row-fluid.section
       .span12
         %h3 Transactions
         = render 'distributor/transactions/index'

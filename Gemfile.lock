@@ -1,14 +1,15 @@
 GIT
-  remote: git://github.com/dszczyt/bootstrap-sass.git
-  revision: 3a31b98bc5be690a5c113add74f781ff6ad6dd4f
-  specs:
-    bootstrap-sass (2.1.0.1)
-
-GIT
   remote: git://github.com/ootoovak/ice_cube.git
   revision: ae193983768903184425d5aa3194f5412884b62f
   specs:
     ice_cube (0.8.0)
+
+GIT
+  remote: git://github.com/thomas-mcdonald/bootstrap-sass
+  revision: 433891e27d0ca43db7b6078621149b6c8d51c46c
+  branch: 2.1-wip
+  specs:
+    bootstrap-sass (2.1.0.0)
 
 GEM
   remote: http://rubygems.org/
