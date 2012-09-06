@@ -1,5 +1,3 @@
-require 'extras/simple_form_extensions'
-
 # Use this setup block to configure all options available in SimpleForm.
 SimpleForm.setup do |config|
   # Wrappers are used by the form builder to generate a
@@ -48,6 +46,17 @@ SimpleForm.setup do |config|
   end
 
   config.wrappers :bootstrap, :tag => 'div', :class => 'control-group', :error_class => 'error' do |b|
+    b.use :html5
+    b.use :placeholder
+    b.use :label
+    b.wrapper :tag => 'div', :class => 'controls' do |ba|
+      ba.use :input
+      ba.use :error, :wrap_with => { :tag => 'span', :class => 'help-inline' }
+      ba.use :hint,  :wrap_with => { :tag => 'p', :class => 'help-block' }
+    end
+  end
+
+  config.wrappers :inline, :tag => 'div', :error_class => 'error' do |b|
     b.use :html5
     b.use :placeholder
     b.use :label
@@ -140,7 +149,7 @@ SimpleForm.setup do |config|
   config.label_class = 'control-label'
 
   # You can define the class to use on all forms. Default is simple_form.
-  config.form_class = 'simple_form form-horizontal'
+  # config.form_class = :simple_form
 
   # You can define which elements should obtain additional classes
   # config.generate_additional_classes_for = [:wrapper, :label, :input]
@@ -161,7 +170,7 @@ SimpleForm.setup do |config|
   # config.input_mappings = { /count/ => :integer }
 
   # Default priority for time_zone inputs.
-  # config.time_zone_priority = nil
+  config.time_zone_priority = /Auckland/
 
   # Default priority for country inputs.
   # config.country_priority = nil

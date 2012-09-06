@@ -14,10 +14,8 @@
 //----- Customer show
 
 #customer-details
-  h1#title-badge
-    font-size: 20px
-    line-height: 26px
-    margin: 0px
+  h1
+    margin-top: 0px
   #account-information
     margin-top: 0.5em
     small
@@ -43,27 +41,48 @@
         background-color: $note-colour
         margin-bottom: 0px
   #orders
-    .pausing
-      .form-selection
-        display: none
-        overflow: auto
-        form
-          margin-bottom: 0px
-          .inputs
-            select
-              margin-bottom: 0px
-        .remove-link
-          display: none
-        .remove-link, .cancel-link
-          float: left
-          padding: 3px 0 3px 5px
-      .resulting-link
-        display: none
-  #orders
     td.name
       width: 30%
     td.schedule
       width: 50%
+    .pausing
+      a, span
+        font-size: 12px
+      .pause
+        .form-selection
+          input[type='submit']
+            width: 55px
+      .form-selection
+        display: none
+        overflow: hidden
+        padding: 4px 6px 1px 5px
+        width: 196px
+        height: 26px
+        margin-bottom: 2px
+        +background-image(linear-gradient(#999999, #7B7B7B))
+        +border-radius(0.3em)
+        form
+          float: left
+          margin-bottom: 0px
+          .control-group
+            float: left
+            margin-bottom: 0px
+            select
+              font-size: 11px
+              height: 23px
+              margin-right: 3px
+        .remove-link
+          display: none
+        .remove-link, .cancel-link
+          float: left
+          padding: 2px
+          a
+            color: #ffffff
+            display: block
+            line-height: 18px
+            margin-left: 5px
+      .resulting-link
+        display: none
   #transactions
     #new-transaction
       td
