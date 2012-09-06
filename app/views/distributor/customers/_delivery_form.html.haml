@@ -2,9 +2,10 @@
   = f.error_notification
 
   .row-fluid
-    .span6.centered
+    .span12
       = render partial: 'delivery_form_inputs', locals: { f: f }
 
-      .actions
-        = f.button :submit, 'Update'
-        = link_to 'cancel', :back
+  .row-fluid
+    .span12.form-actions
+      = f.button :submit, 'Update'
+      = link_to 'cancel', :back

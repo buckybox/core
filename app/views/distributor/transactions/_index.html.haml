@@ -1,56 +1,44 @@
 .row-fluid
   .span12
-    = form_tag(change_balance_distributor_account_path(@account, anchor: 'transactions'), method: :put, class: 'nice') do
-      .row-fluid
-        %table#transactions.span12{ data: { account: @account.id } }
-          %thead
-            %tr
-              %th
-                .row-fluid
-                  .span2 Transaction Processed
-                  .span2 Transaction Date
-                  .span4 Description
-                  .span2.text-right Transaction
-                  .span2.text-right Balance
+    = form_tag(change_balance_distributor_account_path(@account, anchor: 'transactions'), method: :put, class: 'form-inline') do
+      %table#transactions.table.table-bordered.table-striped.no-horizontal-dividers{ data: { account: @account.id } }
+        %thead
+          %tr
+            %th Processed
+            %th Date
+            %th Details
+            %th.text-right Transaction
+            %th.text-right Balance
 
-          %tbody
-            %tr#transaction-form.add-colour
-              %td
-                .row-fluid
-                  .span2.offset2
-                    .inputs
-                      .input.string.required.input-text
-                        = text_field_tag 'date', Time.zone.today.to_s(:date_picker), id: 'transaction_date', class: 'string input-text expand'
-                  .span4
-                    .inputs
-                      .input.input-text
-                        = text_area_tag 'note', '', rows: 1, placeholder: 'e.g. Discount Credit Applied', class: 'text expand'
-                  .span2
-                    .inputs
-                      .input.string.required.input-text
-                        = text_field_tag 'delta', '0.00', required: 'required', class: 'string input-text expand required text-right'
-                  .span2.text-right
-                    .actions= submit_tag 'Add', class: 'button radius small'
+        %tbody
+          %tr#new-transaction.new-form
+            %td
+              .new-form-input
+            %td
+              .new-form-input= text_field_tag 'date', Time.zone.today.to_s(:date_picker), id: 'transaction_date', class: 'input-small'
+            %td
+              .new-form-input= text_area_tag 'note', '', rows: 1, placeholder: 'e.g. Discount Credit Applied', class: 'input-xlarge'
+            %td
+              .new-form-input= text_field_tag 'delta', '0.00', required: 'required', class: 'input-mini'
+            %td
+              .new-form-input=submit_tag 'Add', class: 'btn btn-primary'
 
-            - running_balance = @transactions_sum
+          - running_balance = @transactions_sum
 
-            - @transactions.each do |transaction|
-              - td_class = (transaction.manual? ? '' : 'auto')
+          - @transactions.each do |transaction|
+            - td_class = (transaction.manual? ? '' : 'auto')
 
-              %tr.transaction-data
-                %td{ class: td_class }
-                  .row-fluid
-                    .span2= transaction.created_at.to_s(:transaction)
-                    .span2= transaction.display_time.to_s(:transaction)
-                    .span4= transaction.description
-                    .span2.text-right= transaction.amount.format
-                    .span2.text-right= running_balance.format
+            %tr{ class: td_class }
+              %td= transaction.created_at.to_s(:transaction)
+              %td= transaction.display_time.to_s(:transaction)
+              %td= transaction.description
+              %td.text-right= transaction.amount
+              %td.text-right
+                %strong= running_balance
 
-              - running_balance -= transaction.amount
+            - running_balance -= transaction.amount
 
-            %tr
-              %td
-                .row-fluid
-                  #more-transactions.span12.text-center
-                    = link_to 'more...', '#'
-                    #ajax-loader
+          %tr
+            %td#more-transactions{ colspan: 5 }
+              = link_to 'more...', '#'
+              #ajax-loader

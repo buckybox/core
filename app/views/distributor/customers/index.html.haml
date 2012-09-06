@@ -4,7 +4,7 @@
 - if @customers.blank?
   %h3 There are no customers to display
 - else
-  %table.table
+  %table#customers.table
     %thead
       %tr.muted
         %th{ colspan: 2 } Customer
@@ -12,8 +12,8 @@
         %th.balance Balance
 
     %tbody
-      %tr
-        %td#new-customer{ colspan: 6 }= link_to 'Create a new customer', new_distributor_customer_path
+      %tr.new-row
+        %td{ colspan: 6 }= link_to 'Create a new customer', new_distributor_customer_path
 
       - @customers.each do |customer|
         %tr

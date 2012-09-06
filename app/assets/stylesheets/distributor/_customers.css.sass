@@ -1,24 +1,73 @@
 //----- Customer index
 
-th.balance
-  text-align: right
+#customers
+  th.balance
+    text-align: right
 
-td#new-customer
-  padding: 8px 0px
-  a
-    display: block
-    padding: 3px 0px
-    text-align: center
-    background-color: $action-colour
-    +border-radius(0.4em)
-    &:hover
-      text-decoration: none
-      background-color: $action-color-hover
+  td.balance
+    text-align: right
+    font-size: large
+    font-weight: bold
+    &.negative
+      color: $negative-colour
 
-td.balance
-  text-align: right
-  font-size: large
-  font-weight: bold
-  &.negative
-    color: $negative-colour
+//----- Customer show
 
+#customer-details
+  h1#title-badge
+    font-size: 20px
+    line-height: 26px
+    margin: 0px
+  #account-information
+    margin-top: 0.5em
+    small
+      margin-left: 1em
+  ul
+    margin-top: 0.5em
+
+  #section-two
+    margin-top: 3em
+
+    address
+      font-weight: bold
+      margin-bottom: 1em
+
+#customer-associations
+  span.label
+    margin-bottom: 0.5em
+    display: inline-block
+  #note-section
+    .control-group
+      margin-bottom: 5px
+      textarea
+        background-color: $note-colour
+        margin-bottom: 0px
+  #orders
+    .pausing
+      .form-selection
+        display: none
+        overflow: auto
+        form
+          margin-bottom: 0px
+          .inputs
+            select
+              margin-bottom: 0px
+        .remove-link
+          display: none
+        .remove-link, .cancel-link
+          float: left
+          padding: 3px 0 3px 5px
+      .resulting-link
+        display: none
+  #orders
+    td.name
+      width: 30%
+    td.schedule
+      width: 50%
+  #transactions
+    #new-transaction
+      td
+        .new-form-input
+          height: 30px
+    #more-transactions
+      text-align: center

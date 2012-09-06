@@ -4,7 +4,7 @@
 .pausing{ id: "pausing_order_#{order.id}" }
   .pause.info-controller
     .initial-link{ style: "display: #{pause_date ? 'none' : 'block'};" }
-      = link_to 'pause', '#'
+      %small= link_to 'pause', '#'
 
     .form-selection
       = simple_form_for(order, url: pause_distributor_account_order_path(order.account, order)) do |f|

@@ -1,5 +1,50 @@
+//= require_tree ./vendor
+
 @import 'base'
 @import 'distributor/customers'
+
+p.note-field
+  background-color: $note-colour
+  padding: 0.25em 0.5em
+  +border-radius(0.2em)
+
+table.table
+  tr.new-row
+    td
+      background-color: $tableBackground
+      padding: 5px 8px
+      a
+        display: block
+        padding: 5px 0px
+        text-align: center
+        background-color: $action-colour
+        +border-radius(0.4em)
+        &:hover
+          text-decoration: none
+          background-color: $action-color-hover
+  &.table-bordered
+    tr.new-row
+      td
+        padding: 5px
+
+table.table
+  tr.new-form
+    td
+      background-color: $tableBackground
+      padding: 5px 0px
+      .new-form-input
+        display: block
+        padding: 5px 0px
+        text-align: center
+        background-color: $action-colour
+      &:first-child
+        .new-form-input
+          margin-left: 5px
+          +border-left-radius(0.4em)
+      &:last-child
+        .new-form-input
+          margin-right: 5px
+          +border-right-radius(0.4em)
 
 =site-nav-link($selector, $image)
   a#{$selector}

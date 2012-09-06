@@ -39,13 +39,15 @@ module LayoutHelper
   def customer_title(customer, options = {})
     html_tag = options.delete(:html_tag) || :h1
 
-    text_alignment = {}
-    text_alignment[:class] = 'text-center' if options.delete(:center)
+    html_options = { class: '', id: '' }
+    html_options[:class] += 'text-center' if options.delete(:center)
+    html_options[:class] += options.delete(:class).to_s
+    html_options[:id] = options.delete(:id) if options[:id]
 
     title_text = options.delete(:title) || customer_and_number(customer)
     title(title_text, false)
 
-    return content_tag(html_tag, customer_badge(customer, options), text_alignment)
+    return content_tag(html_tag, customer_badge(customer, options), html_options)
   end
 
   def customer_and_number(customer)

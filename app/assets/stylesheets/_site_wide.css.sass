@@ -1,11 +1,13 @@
+//= require_tree ./vendor
+
 //------ Site wide colours
 
 $badge-id: #CCCCCC
 $badge-name: #EEEEEE
 $badge-text: #000000
 
-$note-colour: #FFF0B2
-$action-colour: #FDE49B
+$note-colour: #FEF7DF
+$action-colour: #FAE1A3
 $action-color-hover: darken($action-colour, 15%)
 $archived-colour: #F0F0F0
 $forcasting-colour: #D4E2C5
@@ -17,17 +19,27 @@ $negative-colour: #D0381B
 
 //----- Site wide styles
 
-.text-right
+.non-production-background
+  background-image: image-url('not-production-background.png')
+
+.text-right, td.text-right, th.text-right
   text-align: right
 
 .text-center
   text-align: center
 
+.important
+  font-size: 150%
+  line-height: 150%
+  font-weight: bold
+
 a.link-label:hover
   text-decoration: none
 
-.non-production-background
-  background-image: image-url('not-production-background.png')
+table.no-horizontal-dividers
+  border: 1px solid $tableBorder
+  th, td
+    border-left-width: 0px
 
 .customer-badge
   display: inline-block
