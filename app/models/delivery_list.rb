@@ -87,20 +87,14 @@ class DeliveryList < ActiveRecord::Base
 
     Delivery.transaction do
       deliveries = delivery_order.collect{|d| Delivery.find(d)}
-      all_addresses = deliveries.collect(&:address)
-      unique_addresses = []
-      unique_address_hashes = {}
-      # Find all unique addresses and keep them in order!
-      all_addresses.each do |address|
-        if !unique_address_hashes.key?(address.address_hash)
-          unique_addresses << address
-          unique_address_hashes.merge!(address.address_hash => true)
-        end
-      end
+      unique_address_hashes = deliveries.collect(&:address).collect(&:address_hash).uniq
 
-      unique_addresses.each_with_index do |address, index|
-        dso = DeliverySequenceOrder.find_by_address_hash_and_route_id_and_day(address.address_hash, route_id, day)
-        dso ||= DeliverySequenceOrder.new(address_hash: address.address_hash, route_id: route_id, day: day)
+      master = DeliverySequenceOrder.where(route_id: route_id, day: day).collect(&:address_hash)
+      new_master_list = Bucky::Dso::List.merge(master, unique_address_hashes)
+
+      new_master_list.to_a.each do |address_hash, index|
+        dso = DeliverySequenceOrder.find_by_address_hash_and_route_id_and_day(address_hash, route_id, day)
+        dso ||= DeliverySequenceOrder.new(address_hash: address_hash, route_id: route_id, day: day)
         dso.position = index+1 #start at 1, not 0
         all_saved &= dso.save
       end
