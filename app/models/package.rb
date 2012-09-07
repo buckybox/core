@@ -30,7 +30,7 @@ class Package < ActiveRecord::Base
   before_validation :default_status, if: 'status.nil?'
   before_validation :default_packing_method, if: 'status == "packed" && packing_method.nil?'
 
-  before_save :archive_data # TODO maybe this should be before_create?
+  before_save :archive_data
 
   scope :originals, where(original_package_id: nil)
 
@@ -179,19 +179,20 @@ class Package < ActiveRecord::Base
 
   private
 
-  # TODO: Need to revisit this find best solutoin, whether it is Papertrail or in it's own model.
   def archive_data
-    self.archived_address           = address.join(', ')
+    unless status == 'packed' && !status_changed?
+      self.archived_address           = address.join(', ')
 
-    self.archived_box_name          = box.name
-    self.archived_customer_name     = customer.name
+      self.archived_box_name          = box.name
+      self.archived_customer_name     = customer.name
 
-    self.archived_box_price         = box.price
-    self.archived_route_fee         = route.fee
-    self.archived_customer_discount = customer.discount
-    self.archived_order_quantity    = order.quantity
+      self.archived_box_price         = box.price
+      self.archived_route_fee         = route.fee
+      self.archived_customer_discount = customer.discount
+      self.archived_order_quantity    = order.quantity
+    end
 
-    return archive_extras
+      return archive_extras
   end
 
   def archive_extras
