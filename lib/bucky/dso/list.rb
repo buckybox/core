@@ -76,6 +76,12 @@ module Bucky::Dso
       return !match.blank? && match == sortable
     end
 
+    def update_positions
+      list.each_with_index do |sortable, index|
+        sortable.position = index
+      end
+    end
+
     def sortables
       list.collect(&:sortable)
     end

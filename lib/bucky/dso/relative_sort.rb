@@ -14,6 +14,7 @@ module Bucky::Dso
         test_index = highest_index(working_list, ordered_list[0..o_index])
         working_list.move(w_index, test_index) if w_index < test_index
       end
+      working_list.update_positions
       working_list
     end
 
