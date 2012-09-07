@@ -89,8 +89,8 @@ class DeliveryList < ActiveRecord::Base
       deliveries = delivery_order.collect{|d| Delivery.find(d)}
       unique_address_hashes = deliveries.collect(&:address).collect(&:address_hash).uniq
 
-      master = DeliverySequenceOrder.where(route_id: route_id, day: day).collect(&:address_hash)
-      new_master_list = Bucky::Dso::List.merge(master, unique_address_hashes)
+      master = DeliverySequenceOrder.where(route_id: route_id, day: day).ordered.collect(&:address_hash).uniq
+      new_master_list = Bucky::Dso::List.sort(master, unique_address_hashes)
 
       new_master_list.to_a.each do |address_hash, index|
         dso = DeliverySequenceOrder.find_by_address_hash_and_route_id_and_day(address_hash, route_id, day)

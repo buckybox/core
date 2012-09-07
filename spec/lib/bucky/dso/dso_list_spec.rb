@@ -3,7 +3,7 @@ require 'spec_helper'
 include Bucky::Dso
 
 describe Bucky::Dso::List do
-  describe 'List#merge' do
+  describe 'List#sort' do
     context :list do
       let(:list){ List.new([[:a, 1], [:b, 2], [:c, 3], [:d, 4]]) }
 
@@ -86,33 +86,33 @@ describe Bucky::Dso::List do
       end
     end
 
-    context :merge do
-      it "should merge the ordering into the master list" do
+    context :sort do
+      it "should sort the ordering into the master list" do
         master_list = List.new([[:a, 1], [:d, 2], [:c, 3], [:b, 4]])
         ordered_list = List.ordered_list([:b, :c, :d])
 
-        List.merge(master_list, ordered_list).to_a.should eq([[:a, 1], [:b, 2], [:c, 3], [:d, 4]])
+        List.sort(master_list, ordered_list).to_a.should eq([[:a, 1], [:b, 2], [:c, 3], [:d, 4]])
       end
 
-      it "should merge a different ordering into the master list" do
+      it "should sort a different ordering into the master list" do
         master_list = List.new([[:e, 1], [:f, 2], [:h, 3], [:g, 4]])
         ordered_list = List.ordered_list([:e, :h, :g])
 
-        List.merge(master_list, ordered_list).to_a.should eq([[:e, 1], [:f, 2], [:h, 3], [:g, 4]])
+        List.sort(master_list, ordered_list).to_a.should eq([[:e, 1], [:f, 2], [:h, 3], [:g, 4]])
       end
 
-      it "should merge a complex case" do
+      it "should sort a complex case" do
         master_list = List.new([[:a, 1], [:b, 2], [:c, 3], [:d, 4], [:f, 5], [:e, 6], [:h, 7], [:g, 8], [:i, 9], [:j, 10], [:k, 11]])
         ordered_list = List.ordered_list([:d, :e, :f, :g, :j, :k])
 
-        List.merge(master_list, ordered_list).to_a.should eq([[:a, 1], [:b, 2], [:c, 3], [:d, 4], [:e, 5], [:f, 6], [:g, 7], [:j, 8], [:k, 9], [:h, 10], [:i, 11]])
+        List.sort(master_list, ordered_list).to_a.should eq([[:a, 1], [:b, 2], [:c, 3], [:d, 4], [:e, 5], [:f, 6], [:g, 7], [:j, 8], [:k, 9], [:h, 10], [:i, 11]])
       end
 
-      it "should merge a complex case" do
+      it "should sort a complex case" do
         master = [:a, :b, :c, :d, :f, :e, :h, :g, :i, :j, :k]
         ordered = [:d, :e, :f, :g, :j, :k]
 
-        List.merge(master, ordered).to_a.should eq([[:a, 1], [:b, 2], [:c, 3], [:d, 4], [:e, 5], [:f, 6], [:g, 7], [:j, 8], [:k, 9], [:h, 10], [:i, 11]])
+        List.sort(master, ordered).to_a.should eq([[:a, 1], [:b, 2], [:c, 3], [:d, 4], [:e, 5], [:f, 6], [:g, 7], [:j, 8], [:k, 9], [:h, 10], [:i, 11]])
       end
 
     end

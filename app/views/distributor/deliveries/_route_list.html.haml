@@ -29,7 +29,7 @@
           .twelve.columns
             %ul
               - deliveries.each do |delivery|
-                %li.row.data-listings{id: "delivery_#{delivery.id}", class: delivery.status }
+                %li.row.data-listings{id: "delivery_#{delivery.id}", class: delivery.status, style: (delivery.order.schedule.frequency.single? ? 'color: red' : '') }
                   .three.columns
                     .row
                       .four.columns

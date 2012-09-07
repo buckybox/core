@@ -6,6 +6,8 @@ class DeliverySequenceOrder < ActiveRecord::Base
   after_save :update_dso # cache results on delivery model
   default_value_for :position, -1
 
+  scope :ordered, order('position ASC')
+
   private
 
   # DSO stands for DeliverySequenceOrder

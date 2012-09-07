@@ -2,6 +2,8 @@ module Bucky::Dso
   class List
     attr_accessor :list, :pointer
 
+    delegate :each, :each_with_index, :collect, :insert, :delete_at, :[], to: :list
+
     def initialize(list=[])
       self.pointer = 0
       if list.first.is_a?(Array) || list.blank?
@@ -29,6 +31,14 @@ module Bucky::Dso
       list[pointer]
     end
 
+    def peek_behind
+      if position == 0
+        nil
+      else
+        list[position - 1]
+      end
+    end
+
     def empty?
       list.empty?
     end
@@ -40,6 +50,15 @@ module Bucky::Dso
     def -(list)
       hash = list.sortables.inject({}){|hash, key| hash.merge(key => true)}
       List.new(to_a.reject{|s| hash.key?(s.first)})
+    end
+
+    def index(key)
+      key = key.sortable if key.is_a?(Sortable)
+      sortables.index(key)
+    end
+
+    def move(from, to)
+      insert(to, delete_at(from))
     end
 
     def before(sortable)
@@ -61,35 +80,14 @@ module Bucky::Dso
       list.collect(&:sortable)
     end
 
+    def self.sort(master, ordered, sorter=Bucky::Dso::RelativeSort)
+      sorter.sort(master, ordered)
+    end
+
     def self.ordered_list(list)
       List.new(list.each_with_index.collect{|i, index| [i, index+1.5]})
     end
 
-    def self.merge(master, ordered)
-      master_list = master.is_a?(List) ? master : List.new(master)
-      ordered_list = ordered.is_a?(List) ? ordered : List.ordered_list(ordered)
-      merge_list(master_list, ordered_list)
-    end
-
-    def self.merge_list(master_list, ordered_list)
-      last_insert = nil
-      
-      absent_list = master_list - ordered_list
-      new_master_list = []
-      
-      until absent_list.finished? && ordered_list.finished?
-        if !absent_list.finished? && (ordered_list.finished? || (master_list.match_before(last_insert, absent_list.peek) || absent_list.peek.position < ordered_list.peek.position))
-          insert = absent_list.next.to_a
-          last_insert = insert.blank? ? nil : insert.first
-        else
-          insert = ordered_list.next.to_a
-          last_insert = nil
-        end
-        new_master_list << insert
-      end
-
-      List.new(new_master_list.each_with_index.collect{|s, index| [s.first, index+1]})
-    end
 
     def merged_uniques(list)
       (self.sortables + list.sortables).uniq
