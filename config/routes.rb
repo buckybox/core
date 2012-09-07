@@ -166,6 +166,7 @@ BuckyBox::Application.routes.draw do
         get 'customer_import'
         put 'validate_customer_import'
         post 'customer_import_upload'
+        get 'invoice'
       end
 
       collection do
