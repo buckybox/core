@@ -311,13 +311,6 @@ class Distributor < ActiveRecord::Base
     end
   end
 
-  def check(start_date, end_date)
-    start = Date.parse(start_date)
-    finish = Date.parse(end_date)
-
-    delivery_lists.where(["date >= ? AND date <= ?", start.to_date, finish.to_date]).collect{|dl| dl.deliveries}
-  end
-
   private
 
   def parameterize_name
