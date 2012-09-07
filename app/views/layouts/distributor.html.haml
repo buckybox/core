@@ -2,14 +2,14 @@
 - javascript 'distributor'
 
 - content_for :body do
+  .row
+    .span12= render 'layouts/distributor/user_nav'
+
   - unless flash.empty?
     .row
       .span12
         - flash.each do |kind, message|
           = flash_bar(message, kind: kind)
-
-  .row
-    .span12= render 'layouts/distributor/user_nav'
 
   .row
     .span1
@@ -19,10 +19,9 @@
     .span11
       #content
         .containter-fluid
-          .row-fluid
-            .span12
-              - if yield(:sub_nav)
-                = yield(:sub_nav)
+          - unless yield(:sub_nav).blank?
+            .row-fluid
+              .span12= yield(:sub_nav)
 
           - if show_title?
             .row-fluid
