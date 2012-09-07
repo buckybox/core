@@ -1,31 +1,30 @@
-.row
-  %table.span12
-    %thead
-      %tr
-        %th Name
-        %th Email
-        %th Sign In On
-        %th Sign In IP
-        %th Sign In Count
-        %th Actions
-        %th Orders
-        %th Packages
-        %th Deliveries
+%table#distributors.table.table-striped
+  %thead
+    %tr
+      %th Name
+      %th Email
+      %th Sign In On
+      %th Sign In IP
+      %th Sign In Count
+      %th Actions
+      %th Orders
+      %th Packages
+      %th Deliveries
 
-    %tbody
-      - @distributors.each do |distributor|
-        %tr
-          %td= distributor.name
-          %td= distributor.email
-          %td= distributor.current_sign_in_at.to_s(:pretty) unless distributor.current_sign_in_at.nil?
-          %td= link_to distributor.current_sign_in_ip, "http://www.infosniper.net/index.php?ip_address=#{distributor.current_sign_in_ip}", target: "_blank" unless distributor.current_sign_in_ip.nil?
-          %td= distributor.sign_in_count
-          %td
-            = link_to 'Show', admin_distributor_path(distributor)
-            %br
-            = link_to 'Edit', edit_admin_distributor_path(distributor)
-            %br
-            = link_to 'Impersonate', impersonate_admin_distributor_path(distributor)
-          %td= distributor.orders.size
-          %td= distributor.packages.size
-          %td= distributor.deliveries.size
+  %tbody
+    - @distributors.each do |distributor|
+      %tr
+        %td= distributor.name
+        %td= distributor.email
+        %td= distributor.current_sign_in_at.to_s(:pretty) unless distributor.current_sign_in_at.nil?
+        %td= link_to distributor.current_sign_in_ip, "http://www.infosniper.net/index.php?ip_address=#{distributor.current_sign_in_ip}", target: "_blank" unless distributor.current_sign_in_ip.nil?
+        %td= distributor.sign_in_count
+        %td
+          = link_to 'Show', admin_distributor_path(distributor)
+          %br
+          = link_to 'Edit', edit_admin_distributor_path(distributor)
+          %br
+          = link_to 'Impersonate', impersonate_admin_distributor_path(distributor)
+        %td= distributor.orders.size
+        %td= distributor.packages.size
+        %td= distributor.deliveries.size

@@ -18,18 +18,17 @@
         = render 'distributor/shared/topic_tabs'
     .span11
       #content
-        .containter-fluid
-          - unless yield(:sub_nav).blank?
-            .row-fluid
-              .span12= yield(:sub_nav)
-
-          - if show_title?
-            .row-fluid
-              .span12.text-center
-                %h1= yield(:title)
-
+        - unless yield(:sub_nav).blank?
           .row-fluid
-            .span12= yield
+            .span12= yield(:sub_nav)
+
+        - if show_title?
+          .row-fluid
+            .span12.text-center
+              %h1= yield(:title)
+
+        .row-fluid
+          .span12= yield
 
 = render 'layouts/base'
 

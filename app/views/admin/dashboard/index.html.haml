@@ -1,13 +1,11 @@
 - title('Admin - Dashboard')
 
-.row
+.row-fluid
   .span6
     %p Talk to a dev if you want to delete a distributor account
 
   .span6.text-right
     = link_to 'New Distributor', new_admin_distributor_path, class: 'button radius'
-    %br
-    %br
 
 - unless @distributors.empty?
   = render 'admin/distributors/index'
