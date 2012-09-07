@@ -17,15 +17,15 @@ module LayoutHelper
   end
 
   FLASH_CLASSES = {
-    notice: 'alert-success',
+    notice:  'alert-success',
     warning: 'info-warning',
-    error: 'alert-error',
-    alert: 'alert-error'
+    error:   'alert-error',
+    alert:   'alert-error'
   }
 
   def flash_bar(message, options = {})
     classes = 'alert'
-    classes += FLASH_CLASSES[options[:kind]] if options[:kind]
+    classes += " #{FLASH_CLASSES[options[:kind]]}" if options[:kind]
 
     message = button_tag('&times;'.html_safe, type: 'button', class: 'close', data: { dismiss: 'alert' }) + message
 
