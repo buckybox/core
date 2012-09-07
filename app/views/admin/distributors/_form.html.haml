@@ -1,25 +1,23 @@
-= simple_form_for(@distributor, url: [:admin, @distributor]) do |f|
+= simple_form_for(@distributor, url: [:admin, @distributor], html: { class: 'form-horizontal' }) do |f|
   = f.error_notification
 
-  .inputs
-    = f.input :name
-    = f.input :url
-    = f.input :email
-    = f.input :support_email
-    = f.input :time_zone, as: :time_zone
-    = f.input :currency, collection: select_currencies, include_blank: false if @distributor.new_record?
-    = f.input :bank_deposit
-    = f.input :paypal
-    = f.input :bank_deposit_format, collection: ImportTransactionList::FILE_FORMATS.reject{|name, code| code == 'paypal'}, as: :select
+  = f.input :name
+  = f.input :url
+  = f.input :email
+  = f.input :support_email
+  = f.input :time_zone, as: :time_zone
+  = f.input :currency, collection: select_currencies, include_blank: false if @distributor.new_record?
+  = f.input :bank_deposit
+  = f.input :paypal
+  = f.input :bank_deposit_format, collection: ImportTransactionList::FILE_FORMATS.reject{|name, code| code == 'paypal'}, as: :select
 
-    = f.input :invoice_threshold
-    = f.input :separate_bucky_fee
+  = f.input :invoice_threshold
+  = f.input :separate_bucky_fee
 
   %hr
-  .inputs
-    Only changed if both are set
-    = f.input :password
-    = f.input :password_confirmation
 
-  .actions
+  = f.input :password
+  = f.input :password_confirmation, hint: 'Only changed if both are set'
+
+  .form-actions
     = f.button :submit
