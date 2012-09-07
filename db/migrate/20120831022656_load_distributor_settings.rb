@@ -7,7 +7,7 @@ class LoadDistributorSettings < ActiveRecord::Migration
     Country.reset_column_information
 
     Country.transaction do
-      CSV.foreach(File.join(Rails.root,"config/distributor_settings.csv"), headers: true) do |row|
+      CSV.parse(csv, headers: true) do |row|
         country = Country.find_by_name(row['Country Name']) || Country.new
         country.attributes = {name: row['Country Name'],
                       default_currency: row['Currency'],
@@ -22,5 +22,24 @@ class LoadDistributorSettings < ActiveRecord::Migration
   end
 
   def down
+  end
+
+  def csv
+    <<CSV
+"Country Name","Currency","Default Time Zone","Default Consumer Fee"
+"US","USD","Pacific Time (US & Canada)",0.1
+"AU","AUD","Sydney",0.1
+"NZ","NZD","Auckland",0.1
+"UK","GBP","London",0.1
+"Spain","EUR","Madrid",0.1
+"HK","HKD","Hong Kong",1
+"Europe","EUR","London",0.1
+"Argentina","ARS","Buenos Aires",0.25
+"Turkey","TRY","Istanbul",0.1
+"Thailand","THB","Bangkok",1
+"China","CNY","Beijing",0.1
+"India","INR","New Delhi",1
+"Mexico","MXN","Mexico City",0.5
+CSV
   end
 end
