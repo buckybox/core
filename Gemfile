@@ -8,13 +8,13 @@ gem 'pg', '~> 0.14.0'
 
 gem 'haml-rails', '~> 0.3.4'
 gem 'jquery-rails', '~> 2.1.1'
-gem 'bootstrap-sass', git: 'git://github.com/thomas-mcdonald/bootstrap-sass', branch: '2.1-wip'
+gem 'bootstrap-sass', '~> 2.1.0.0'
 gem 'select2-rails', '~> 3.1.1'
 gem 'ember-rails', '~> 0.7.0'
 
 gem 'devise', '~> 2.1.2'
 gem 'multi_json', '~> 1.3.6'
-gem 'simple_form', '~> 2.0.2' # been monkey patched for now. see config/initializers/simple_form_monkey_patch.rb
+gem 'simple_form', '~> 2.0.2'
 gem 'ice_cube', git: 'git://github.com/ootoovak/ice_cube.git' # patched to persist data (that we use) in UTC timezone
 gem 'inherited_resources', '~> 1.3.1'
 gem 'mini_magick', '~> 3.4'

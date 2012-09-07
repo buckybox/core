@@ -4,7 +4,7 @@ class Distributor::PaymentsController < Distributor::ResourceController
   respond_to :html, :xml, :json
 
   before_filter :load_import_transaction_list, only: [:process_payments, :show]
-  
+
   def index 
     @import_transaction_list = current_distributor.import_transaction_lists.new
     load_index
