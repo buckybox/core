@@ -1,16 +1,26 @@
 - title('Admin - Dashboard')
 
 .row-fluid
-  .span6
+  .span12
     %p Talk to a dev if you want to delete a distributor account
 
-  .span6.text-right
+.row-fluid
+  .span12
+    - unless @distributors.empty?
+      = link_to 'Full Distributor List', admin_distributors_path
+      \|
     = link_to 'New Distributor', new_admin_distributor_path, class: 'button radius'
 
 - unless @distributors.empty?
-  = render 'admin/distributors/index'
-  = link_to 'Full list of distributors', admin_distributors_path
+  .row-fluid
+    .span12
+      = render 'admin/distributors/index'
 
 - unless @cron_logs.empty?
-  = render 'admin/cron_logs/index'
-  = link_to 'See more cron logs.', admin_cron_logs_path
+  .row-fluid
+    .span12
+      = link_to 'Longer Cron Log', admin_cron_logs_path
+
+  .row-fluid
+    .span12
+      = render 'admin/cron_logs/index'
