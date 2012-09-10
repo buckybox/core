@@ -1,5 +1,5 @@
 module Admin::DistributorsHelper
-  ERROR_CLASS = 'error'
+  ERROR_CLASS = 'text-error'
   PASS_CLASS = ''
 
   def delivery_route_status(route)
