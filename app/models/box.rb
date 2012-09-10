@@ -9,16 +9,17 @@ class Box < ActiveRecord::Base
 
   # Setup accessible (or protected) attributes for your model
   attr_accessible :distributor, :name, :description, :likes, :dislikes, :price, :available_single, :available_weekly, 
-    :available_fourtnightly, :box_image, :box_image_cache, :remove_box_image, :extras_limit, :extra_ids
+    :available_fourtnightly, :box_image, :box_image_cache, :remove_box_image, :extras_limit, :extra_ids, :hidden
 
   validates_presence_of :distributor, :name, :description, :price
   validates :extras_limit, numericality: { greater_than: -2 }
 
-  default_scope order(:name)
-
   monetize :price_cents
 
   default_value_for :extras_limit, 0
+
+  default_scope order(:name)
+  scope :not_hidden, where(hidden: false)
 
   # [["disable extras", 0], ["allow any number of extra items", -1],
   # ["allow 1 extra items", 1], ["allow 2 extra items", 2], ... ["allow n extra items, n]]

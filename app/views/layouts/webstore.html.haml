@@ -12,7 +12,8 @@
 
         .nine.columns
           %strong= @distributor.name
-          %p= @distributor.invoice_information.join
+          - if @distributor.invoice_information
+            %p= @distributor.invoice_information.join
 
       .row
         .twelve.columns

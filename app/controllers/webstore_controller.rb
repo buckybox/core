@@ -4,7 +4,7 @@ class WebstoreController < ApplicationController
 
   def store
     @hide_sidebars = true
-    @boxes = @distributor.boxes
+    @boxes = @distributor.boxes.not_hidden
   end
 
   def buy
