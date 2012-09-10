@@ -3,30 +3,11 @@
 
   .row
     .six.columns
-      .inputs
-        = f.input :number
-        = f.input :email
-        = f.input :first_name
-        = f.input :last_name
-        = f.association :route, collection: current_distributor.routes, include_blank: false
-        = f.input :tag_list, label: 'Customer tags', hint: 'Comma separated'
-        = f.input :discount, input_html: { step: 0.0001 }
-        = f.input :notes
-        = f.input :special_order_preference
+      = render partial: 'personal_form_inputs', locals: { f: f }
 
     .six.columns
-      = f.simple_fields_for :address do |g|
-        .inputs
-          = g.input :address_1
-          = g.input :address_2
-          = g.input :suburb
-          = g.input :city
-          = g.input :postcode
-          = g.input :phone_1
-          = g.input :phone_2
-          = g.input :phone_3
-          = g.input :delivery_note
+      = render partial: 'delivery_form_inputs', locals: { f: f }
 
       .actions
         = f.button :submit
-        = link_to 'Cancel', :back, :class => 'blue radius button'
+        = link_to 'Cancel', :back

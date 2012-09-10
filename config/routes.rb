@@ -44,7 +44,6 @@ BuckyBox::Application.routes.draw do
     resources :boxes,               except: :index
     resources :extras,              except: [:index, :show]
     resources :routes,              except: [:index, :show]
-    resources :transactions,        only:   :create
 
     resources :line_items, except: [:index, :show, :update] do
       collection do
@@ -109,8 +108,11 @@ BuckyBox::Application.routes.draw do
           put 'deactivate'
           put 'pause'
           post 'remove_pause'
+          put 'resume'
+          post 'remove_resume'
         end
       end
+
       resources :boxes do
         member do
           get 'extras'
@@ -119,9 +121,7 @@ BuckyBox::Application.routes.draw do
 
       member do
         put 'change_balance', action: :change_balance, as: 'change_balance'
-      end
-
-      member do
+        get 'more_transactions/:position', action: :more_transactions, as: 'more_transactions'
         get 'receive_payment', action: :receive_payment, as: 'receive_payment'
         post 'save_payment',   action: :save_payment, as: 'save_payment'
       end
@@ -149,6 +149,8 @@ BuckyBox::Application.routes.draw do
       member do
         put 'pause'
         post 'remove_pause'
+        put 'resume'
+        post 'remove_resume'
       end
     end
   end
@@ -164,6 +166,7 @@ BuckyBox::Application.routes.draw do
         get 'customer_import'
         put 'validate_customer_import'
         post 'customer_import_upload'
+        get 'invoice'
       end
 
       collection do

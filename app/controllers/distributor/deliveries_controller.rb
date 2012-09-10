@@ -9,9 +9,6 @@ class Distributor::DeliveriesController < Distributor::ResourceController
   respond_to :json, except: [:master_packing_sheet, :export]
   respond_to :csv, only: :export
 
-  NAV_START_DATE = Date.current - 9.week
-  NAV_END_DATE   = Date.current + 3.week
-
   # Should no longer need this when JS and views are looked at again. For now it translates between the old and new status system.
   LEGACY_STATUS_TRANSLATION = {'pending' => 'pend', 'cancelled' => 'cancel', 'delivered' => 'deliver'}
 
@@ -27,30 +24,33 @@ class Distributor::DeliveriesController < Distributor::ResourceController
     end
 
     index! do
+
       @selected_date = Date.parse(params[:date])
       @route_id = params[:view].to_i
+      @delivery_list = current_distributor.delivery_lists.where(date: params[:date]).first
 
-      @delivery_lists = DeliveryList.collect_lists(current_distributor, NAV_START_DATE, NAV_END_DATE)
-      @delivery_list  = @delivery_lists.find { |delivery_list| delivery_list.date == @selected_date }
-      if @delivery_list.is_a? DeliveryList
-        @all_deliveries = @delivery_list.deliveries.ordered
-      else
-        @all_deliveries = @delivery_list.deliveries
-      end
+      @date_navigation = (nav_start_date..nav_end_date).to_a
+      @months = @date_navigation.group_by(&:month)
 
-      @packing_lists = PackingList.collect_lists(current_distributor, NAV_START_DATE, NAV_END_DATE)
-      @packing_list  = @packing_lists.find  { |packing_list| packing_list.date == @selected_date }
-      
-      @all_packages  = @packing_list.packages
-
-      if @route_id != 0
-        @items     = @all_deliveries.select{ |delivery| delivery.route_id == @route_id }
-        @real_list = @items.all? { |i| i.is_a?(Delivery) }
-        @route     = @routes.find(@route_id)
-      else
+      if @route_id.zero?
+        @packing_list  = PackingList.collect_list(current_distributor, @selected_date)
+        
+        @all_packages  = @packing_list.packages
+        
         @items     = @all_packages
         @real_list = @items.all? { |i| i.is_a?(Package) }
         @route     = @routes.first
+      else
+        if @delivery_list
+          @all_deliveries = @delivery_list.deliveries.ordered
+        else
+          @delivery_list = DeliveryList.collect_list(current_distributor, @selected_date)
+          @all_deliveries = @delivery_list.deliveries
+        end
+        
+        @items     = @all_deliveries.select{ |delivery| delivery.route_id == @route_id }
+        @real_list = @items.all? { |i| i.is_a?(Delivery) }
+        @route     = @routes.find(@route_id)
       end
     end
   end
@@ -91,30 +91,9 @@ class Distributor::DeliveriesController < Distributor::ResourceController
 
     export_type = (params[:deliveries] ? :delivery : :packing)
 
-    if export_type == :delivery
-      export_items = current_distributor.deliveries.ordered.where(id: params[:deliveries])
-      export_items = export_items.sort_by { |ei| ei.dso }
-      csv_headers = Delivery.csv_headers
-    else
-      packages = current_distributor.packages.where(id: params[:packages])
+    csv_output = Delivery.build_csv_for_export(export_type, current_distributor, params[:deliveries], params[:packages])
 
-      export_items = []
-
-      packages.group_by(&:box).each do |box, array|
-        array.each do |package|
-          export_items << package
-        end
-      end
-
-      csv_headers = Package.csv_headers
-    end
-
-    csv_output = CSV.generate do |csv|
-      csv << csv_headers
-      export_items.each { |package| csv << package.to_csv }
-    end
-
-    if export_items
+    if csv_output
       filename = "bucky-box-#{export_type}-export-#{Date.current.to_s}.csv"
       type     = 'text/csv; charset=utf-8; header=present'
 
@@ -147,4 +126,13 @@ class Distributor::DeliveriesController < Distributor::ResourceController
       head :bad_request
     end
   end
+
+  def nav_start_date
+    Date.current - 9.week
+  end
+  
+  def nav_end_date
+    Date.current + 3.week
+  end
+
 end

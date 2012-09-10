@@ -13,17 +13,8 @@ class Package < ActiveRecord::Base
 
   has_many :deliveries
 
-  composed_of :archived_box_price,
-    class_name: "Money",
-    mapping: [%w(archived_price_cents cents), %w(archived_price_currency currency_as_string)],
-    constructor: Proc.new { |cents, currency| Money.new(cents || 0, currency || Money.default_currency) },
-    converter: Proc.new { |value| value.respond_to?(:to_money) ? value.to_money : raise(ArgumentError, "Can't convert #{value.class} to Money") }
-
-  composed_of :archived_route_fee,
-    class_name: "Money",
-    mapping: [%w(archived_fee_cents cents), %w(archived_fee_currency currency_as_string)],
-    constructor: Proc.new { |cents, currency| Money.new(cents || 0, currency || Money.default_currency) },
-    converter: Proc.new { |value| value.respond_to?(:to_money) ? value.to_money : raise(ArgumentError, "Can't convert #{value.class} to Money") }
+  monetize :archived_box_price_cents
+  monetize :archived_route_fee_cents
 
   acts_as_list scope: :packing_list_id
 
@@ -39,7 +30,7 @@ class Package < ActiveRecord::Base
   before_validation :default_status, if: 'status.nil?'
   before_validation :default_packing_method, if: 'status == "packed" && packing_method.nil?'
 
-  before_save :archive_data # TODO maybe this should be before_create?
+  before_save :archive_data
 
   scope :originals, where(original_package_id: nil)
 
@@ -84,7 +75,7 @@ class Package < ActiveRecord::Base
     result += individual_extras_price if archived_extras.present?
 
     return result
-  rescue => e
+  rescue
     raise "Error calculating price: #{individual_price.inspect} * #{archived_order_quantity.inspect}"
   end
 
@@ -148,7 +139,7 @@ class Package < ActiveRecord::Base
       'Customer Last Name', 'Customer Phone', 'New Customer', 'Delivery Address Line 1', 'Delivery Address Line 2',
       'Delivery Address Suburb', 'Delivery Address City', 'Delivery Address Postcode', 'Delivery Note',
       'Box Contents Short Description', 'Box Type', 'Box Likes', 'Box Dislikes', 'Box Extra Line Items',
-      'Price', 'Customer Email', 'Customer Special Order Preference'
+      'Price', 'Customer Email', 'Customer Special Preferences'
     ]
   end
 
@@ -188,19 +179,20 @@ class Package < ActiveRecord::Base
 
   private
 
-  # TODO: Need to revisit this find best solutoin, whether it is Papertrail or in it's own model.
   def archive_data
-    self.archived_address           = address.join(', ')
+    unless status == 'packed' && !status_changed?
+      self.archived_address           = address.join(', ')
 
-    self.archived_box_name          = box.name
-    self.archived_customer_name     = customer.name
+      self.archived_box_name          = box.name
+      self.archived_customer_name     = customer.name
 
-    self.archived_box_price         = box.price
-    self.archived_route_fee         = route.fee
-    self.archived_customer_discount = customer.discount
-    self.archived_order_quantity    = order.quantity
+      self.archived_box_price         = box.price
+      self.archived_route_fee         = route.fee
+      self.archived_customer_discount = customer.discount
+      self.archived_order_quantity    = order.quantity
+    end
 
-    return archive_extras
+      return archive_extras
   end
 
   def archive_extras

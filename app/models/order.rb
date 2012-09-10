@@ -18,10 +18,13 @@ class Order < ActiveRecord::Base
 
   has_many :extras, through: :order_extras
 
+  has_one :schedule_rule, autosave: true
+
   scope :completed, where(completed: true)
   scope :active, where(active: true)
 
   schedule_for :schedule
+  before_save :update_schedule_rule
 
   acts_as_taggable
 
@@ -198,22 +201,6 @@ class Order < ActiveRecord::Base
     self.active = false
   end
 
-  def pause(start_date, end_date)
-    # Could not get controller response to render error, so returning false on error instead for now.
-    if start_date.past? || end_date.past?
-      return false
-    elsif end_date <= start_date
-      return false
-    end
-
-    updated_schedule = schedule
-    updated_schedule.exception_times.each { |time| updated_schedule.remove_exception_time(time) }
-    (start_date..end_date).each { |date| updated_schedule.add_exception_time(date.beginning_of_day) }
-    self.schedule = updated_schedule
-
-    return save
-  end
-
   def order_extras=(collection)
     raise "I wasn't expecting you to set these directly" unless collection.is_a?(Hash) || collection.is_a?(Array)
 
@@ -227,7 +214,71 @@ class Order < ActiveRecord::Base
     end
   end
 
-  def extras_description(show_frequency=false)
+  def reoccurs?
+    schedule.frequency.reoccurs?
+  end
+
+  def pause!(start_date, end_date)
+    return false if start_date.past? || end_date.past? || (end_date < start_date)
+
+    new_schedule = self.schedule
+    new_schedule.pause(start_date, end_date)
+    self.schedule = new_schedule
+    self.save
+  end
+
+  def remove_pause!
+    new_schedule = self.schedule
+    new_schedule.remove_pause
+    self.schedule = new_schedule
+    self.save
+  end
+
+  def pause_date
+    schedule.pause_date
+  end
+
+  def resume_date
+    schedule.resume_date
+  end
+
+  def possible_pause_dates(look_ahead = 8.weeks)
+    start_time          = distributor.window_end_at.to_time_in_current_zone + 1.day
+    end_time            = start_time + look_ahead
+    existing_pause_date = pause_date
+
+    no_pause_schedule = self.schedule
+    no_pause_schedule = no_pause_schedule.remove_pause
+    select_array      = no_pause_schedule.occurrences(end_time, start_time).map { |s| [s.to_date.to_s(:pause), s.to_date] }
+
+    if existing_pause_date && !select_array.index([existing_pause_date.to_s(:pause), existing_pause_date])
+      select_array << [existing_pause_date.to_s(:pause), existing_pause_date]
+      select_array.sort! { |a,b| a.second <=> b.second }
+    end
+
+    return select_array
+  end
+
+  def possible_resume_dates(look_ahead = 12.weeks)
+    if pause_date
+      start_time           = (pause_date + 1.day).to_time_in_current_zone
+      end_time             = start_time + look_ahead
+      existing_resume_date = resume_date
+
+      no_pause_schedule = self.schedule
+      no_pause_schedule = no_pause_schedule.remove_pause
+      select_array      = no_pause_schedule.occurrences(end_time, start_time).map { |s| [s.to_date.to_s(:pause), s.to_date] }
+
+      if existing_resume_date && !select_array.index([existing_resume_date.to_s(:pause), existing_resume_date])
+        select_array << [existing_resume_date.to_s(:pause), existing_resume_date]
+        select_array.sort! { |a,b| a.second <=> b.second }
+      end
+    end
+
+    return select_array || []
+  end
+
+  def extras_description(show_frequency = false)
     extras_string = Package.extras_description(order_extras)
 
     if schedule.frequency.single? || !show_frequency
@@ -235,6 +286,18 @@ class Order < ActiveRecord::Base
     else
       extras_string + (extras_one_off? ? ", include in the next delivery only" : ", include with every delivery") if order_extras.count > 0
     end
+  end
+
+  def customisation_description
+    exclusions_string = exclusions.includes(:line_item).map(&:name).join(', ')
+    substitution_string = substitutions.includes(:line_item).map(&:name).join(', ')
+
+    unless exclusions_string.blank?
+      result_string = "Exclude #{exclusions_string}"
+      result_string += "/ Substitute #{substitution_string}" unless substitution_string.blank?
+    end
+
+    return result_string
   end
 
   def pack_and_update_extras
@@ -266,25 +329,34 @@ class Order < ActiveRecord::Base
   end
 
   def import_extras(b_extras)
-    params = b_extras.inject({}) do |params, extra|
+    self.order_extras = b_extras.inject({}) do |params, extra|
       found_extra = distributor.find_extra_from_import(extra, box)
       raise "Didn't find an extra to import" if found_extra.blank?
       params.merge(found_extra.id.to_s => {count: extra.count})
     end
-
-    self.order_extras = params
   end
 
   def dso(wday)
-    dso = DeliverySequenceOrder.where(address_hash: address.address_hash, day: wday, route_id: route.id).first
-    dso && dso.position || -1
+    dso_position = DeliverySequenceOrder.position_for(address.address_hash, wday, route.id)
+    dso_position || -1
   end
 
   def route_id
     account.customer.route_id
   end
 
+  def self.order_count(distributor, date, route_id=nil)
+    distributor.use_local_time_zone do
+      Bucky::Sql.order_count(distributor, date, route_id)
+    end
+  end
+
   protected
+
+  def update_schedule_rule
+      schedule_rule.destroy if schedule_rule
+      self.schedule_rule = ScheduleRule.copy_orders_schedule(self) rescue nil #TODO remove rescue nil
+  end
 
   def record_schedule_change
     order_schedule_transactions.new(order: self, schedule: self.schedule)

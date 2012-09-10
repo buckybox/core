@@ -9,6 +9,7 @@
 class Bucky::Schedule < IceCube::Schedule
 
   DAYS = IceCube::TimeUtil::DAYS.keys
+  PAUSE_UFN = 366.days
 
   ################################################################################################
   #                                                                                              #
@@ -53,6 +54,10 @@ class Bucky::Schedule < IceCube::Schedule
   #  Overriding or helper methods.                                                               #
   #                                                                                              #
   ################################################################################################
+
+  def self.until_further_notice(start_time)
+    start_time + PAUSE_UFN # hack for pause, figuring if it is paused for over a year then likely order will be deleted before then
+  end
 
   def ==(schedule)
     return false unless schedule.is_a?(Bucky::Schedule)
@@ -113,12 +118,12 @@ class Bucky::Schedule < IceCube::Schedule
       recurrence_rule = recurrence_rules.first
       interval        = recurrence_rule.to_hash[:interval]
 
-      type = case recurrence_rule
-             when IceCube::WeeklyRule
-               interval == 1 ? :weekly : :fortnightly
-             when IceCube::MonthlyRule
-               :monthly
-             end
+      case recurrence_rule
+      when IceCube::WeeklyRule
+       interval == 1 ? :weekly : :fortnightly
+      when IceCube::MonthlyRule
+       :monthly
+      end
     else
       :single
     end
@@ -138,6 +143,8 @@ class Bucky::Schedule < IceCube::Schedule
   def frequency
     if recurrence_rules.empty? && recurrence_times.size == 1
       Bucky::Frequency.new(:single)
+    elsif recurrence_rules.nil? || recurrence_rules.empty?
+      raise "Unknown frequency for #{self.inspect}"
     else
       case recurrence_rules.first.to_hash[:rule_type]
       when "IceCube::WeeklyRule"
@@ -147,14 +154,50 @@ class Bucky::Schedule < IceCube::Schedule
         when 2
           Bucky::Frequency.new(:fortnightly)
         else
-          raise "Unknown frequency for #{self.inspect}, #{schedule.inspect}"
+          raise "Unknown frequency for #{self.inspect}"
         end
       when "IceCube::MonthlyRule"
         Bucky::Frequency.new(:monthly)
       else
-        raise "Unknown frequency for #{self.inspect}, #{schedule.inspect}"
+        raise "Unknown frequency for #{self.inspect}"
       end
     end
+  end
+
+  # Unintuitive API but done as not to break backwards compatibility
+  def occurrences(closing_time, other_start_time = start_time)
+    find_occurrences(other_start_time, closing_time)
+  end
+
+  def pause(start_date, end_date)
+    # If there was an old pause remove it first
+    exception_times.each { |time| remove_exception_time(time) }
+
+    # Because we want to iterate by day and not by second
+    start_date = start_date.to_date if start_date.is_a?(Time)
+    end_date   = end_date.to_date   if end_date.is_a?(Time)
+    (start_date..end_date).each { |date| add_exception_time(date.to_time_in_current_zone) }
+  end
+
+  def remove_pause
+    exception_times.each { |time| remove_exception_time(time) }
+    return self
+  end
+
+  def pause_date
+    date = exception_times.first
+    date = date.to_date if date
+    return date
+  end
+
+  def resume_date
+    date = exception_times.last
+    first_date = exception_times.first
+
+    date = nil if date && (date - first_date) >= PAUSE_UFN
+    date = date.to_date + 1.day if date # the +1 day is shown as the resume day so a day after the last exception date
+
+    return date
   end
 
   ################################################################################################
@@ -177,7 +220,7 @@ class Bucky::Schedule < IceCube::Schedule
                IceCube::Rule.weekly(interval).day(*(days - [day]))
              when IceCube::MonthlyRule
                days = recurrence_rule.to_hash[:validations][:day_of_week].keys || []
-               monthly_days_hash = (days - [day]).inject({}) { |hash, day| hash[day] = [1]; hash }
+               monthly_days_hash = (days - [day]).inject({}) { |hash, d| hash[d] = [1]; hash }
                IceCube::Rule.monthly(interval).day_of_week(monthly_days_hash)
              end
 

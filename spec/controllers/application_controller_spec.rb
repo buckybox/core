@@ -28,10 +28,9 @@ describe ApplicationController do
     end
 
     context 'in hong kong' do
-      # TODO: There is likely a better way to do this but I couldn't get it working with the macros for now
       before do
-        @request.env["devise.mapping"] = Devise.mappings[:distributor]
-        sign_in distributor_hk
+        @distributor = distributor_hk
+        self.distributor_sign_in
         get :index
       end
 
@@ -51,10 +50,9 @@ describe ApplicationController do
     end
 
     context 'in hong kong' do
-      # TODO: There is likely a better way to do this but I couldn't get it working with the macros for now
       before do
-        @request.env["devise.mapping"] = Devise.mappings[:customer]
-        sign_in customer_hk
+        @customer = customer_hk
+        self.customer_sign_in
         get :index
       end
 

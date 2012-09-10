@@ -19,23 +19,27 @@ class DeliveryList < ActiveRecord::Base
       future_start_date = start_date
       future_start_date = (result.last.date + 1.day) if result.last
 
-      orders = distributor.orders.active.includes({ account: {customer: {address:{}, deliveries: {delivery_list: {}}}}, order_extras: {}, box: {}})
-
       (future_start_date..end_date).each do |date|
-        date_orders = []
-        wday = date.wday
-
-        orders.each { |order| date_orders << order if order.schedule.occurs_on?(date) }
-
-        # This emulates the ordering when lists are actually created
-        result << FutureDeliveryList.new(date, date_orders.sort { |a,b|
-          comp = a.dso(wday) <=> b.dso(wday)
-          comp.zero? ? (b.created_at <=> a.created_at) : comp
-        })
+        result << collect_list(distributor, date)
       end
     end
 
     return result
+  end
+
+  def self.collect_list(distributor, date)
+    date_orders = []
+    wday = date.wday
+    
+    order_ids = Bucky::Sql.order_ids(distributor, date)
+    date_orders = distributor.orders.active.where(id: order_ids).includes({ account: {customer: {address:{}, deliveries: {delivery_list: {}}}}, order_extras: {}, box: {}})
+
+
+    # This emulates the ordering when lists are actually created
+    FutureDeliveryList.new(date, date_orders.sort { |a,b|
+      comp = a.dso(wday) <=> b.dso(wday)
+      comp.zero? ? (b.created_at <=> a.created_at) : comp
+    })
   end
 
   def self.generate_list(distributor, date)
@@ -55,7 +59,7 @@ class DeliveryList < ActiveRecord::Base
     end
 
     packages = packages.sort.map{ |key, value| value }.flatten
-    
+
     packages.each do |package|
       order = package.order
       route = order.route
@@ -112,19 +116,18 @@ class DeliveryList < ActiveRecord::Base
   end
 
   def has_deliveries?
-    @has_deliveries ||= (deliveries(true).count == 0)
+    deliveries.count.zero?
   end
 
   def all_finished?
-    @all_finished ||= !deliveries(true).any? { |d| d.pending? }
-    return has_deliveries? || @all_finished
+    deliveries.pending.count.zero?
   end
 
   def get_delivery_number(delivery)
     throw "This isn't my delivery" if delivery.delivery_list_id != self.id
-    
+
     delivery_to_same_address = deliveries(true).select{|d| d.address_hash == delivery.address_hash && d.id != delivery.id}.first
-    
+
     if delivery_to_same_address
       delivery_to_same_address.delivery_number
     else
@@ -138,5 +141,13 @@ class DeliveryList < ActiveRecord::Base
 
   def archived?
     date.past?
+  end
+
+  def quantity_for(route_id)
+    if route_id.nil?
+      Package.sum(:archived_order_quantity, joins: :deliveries, conditions: {deliveries: {delivery_list_id: id}})
+    else
+      Package.sum(:archived_order_quantity, joins: :deliveries, conditions: {deliveries: {delivery_list_id: id, route_id: route_id}})
+    end
   end
 end

@@ -62,6 +62,7 @@ policy :myapp, :roles => :app do
   requires :htop
   requires :git
   requires :ruby
+  requires :imagemagick
   requires :bundler
   requires :rubygems
   requires :passenger
@@ -73,5 +74,6 @@ policy :myapp, :roles => :app do
   requires :monit
   requires :munin
   requires :munin_passenger
+  requires :redis
 end
 

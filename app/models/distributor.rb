@@ -31,11 +31,7 @@ class Distributor < ActiveRecord::Base
 
   mount_uploader :company_logo, CompanyLogoUploader
 
-  composed_of :invoice_threshold,
-    class_name: "Money",
-    mapping: [%w(invoice_threshold_cents cents), %w(invoice_threshold_currency currency_as_string)],
-    constructor: Proc.new { |cents, currency| Money.new(cents || 0, currency || Money.default_currency) },
-    converter: Proc.new { |value| value.respond_to?(:to_money) ? value.to_money : raise(ArgumentError, "Can't convert #{value.class} to Money") }
+  monetize :invoice_threshold_cents
 
   # Setup accessible (or protected) attributes for your model
   attr_accessible :email, :password, :password_confirmation, :remember_me, :name, :url, :company_logo, :company_logo_cache, :completed_wizard,
@@ -64,6 +60,8 @@ class Distributor < ActiveRecord::Base
 
   default_value_for :bank_deposit, true
   default_value_for :paypal, false
+  default_value_for :invoice_threshold_cents, -500
+  default_value_for :bucky_box_percentage, 0.0175
   default_value_for :bank_deposit_format, ImportTransactionList::FILE_FORMATS.first.last # Kiwibank
 
   # Devise Override: Avoid validations on update or if now password provided
@@ -234,7 +232,7 @@ class Distributor < ActiveRecord::Base
     match = if matches.size > 1 && matches.first.first == matches[1].first
       # At-least the first two matches have the same fuzzy_match (probably no unit set)
       # So return the first one alphabetically so that it is consistent
-      matches.select{|match| match.first == matches.first.first}. #Select those which have the same fuzzy_match
+      matches.select{ |m| m.first == matches.first.first }. #Select those which have the same fuzzy_match
         collect(&:last). # discard the fuzzy_match number
         sort_by{|extra| "#{extra.name} #{extra.unit}"}.first # Sort alphabeticaly
     else
@@ -290,6 +288,29 @@ class Distributor < ActiveRecord::Base
     show_payments_tab? && import_transaction_lists.draft.count.zero?
   end
 
+  def cache_key
+    @cache_key ||= "#{id}/#{name}/#{updated_at}"
+  end
+
+  def invoice_for_range(start_date, end_date)
+    use_local_time_zone do
+      start = Date.parse(start_date)
+      finish = Date.parse(end_date)
+
+      delivered = delivery_lists.where(["date >= ? AND date <= ?", start.to_date, finish.to_date]).collect{|dl| dl.deliveries.delivered.size}.sum
+
+      cancelled = delivery_lists.where(["date >= ? AND date <= ?", start.to_date, finish.to_date]).collect{|dl| dl.deliveries.cancelled.size}.sum
+
+      value = delivery_lists.where(["date >= ? AND date <= ?", start.to_date, finish.to_date]).collect{|dl| dl.deliveries.delivered.count.zero? ? Money.new(0, currency) : dl.deliveries.delivered.collect{|w| w.package.price}.sum}.sum
+
+      formatted = value == 0 ? Money.new(0, currency).format : value.format
+
+      return {delivered: delivered,
+      cancelled: cancelled,
+      value: formatted}
+    end
+  end
+
   private
 
   def parameterize_name
@@ -312,10 +333,10 @@ class Distributor < ActiveRecord::Base
     #every 1.hour do
     @@original_time ||= Time.current
     @@advanced ||= 0
-    (24*day).times.each do |h|
-      h+=1 # start at 1, not 0
+    (24 * day).times.each do |h|
+      h += 1 # start at 1, not 0
 
-      Delorean.time_travel_to (@@original_time + (@@advanced*day.days) + h.hours)
+      Delorean.time_travel_to(@@original_time + (@@advanced*day.days) + h.hours)
 
       CronLog.log("Checking distributors for automatic daily list creation.")
       Distributor.create_daily_lists

@@ -9,19 +9,23 @@ describe Distributor::DeliveriesController do
       @date = Date.today
       @date_string = @date.to_s
       @box = Fabricate(:box, distributor: @distributor)
-      @deliveries = [3, 1, 2].collect { |position|
-        delivery_for_distributor(@distributor, @route, @box, @date, position)
+      @deliveries = []
+      @packages = []
+      [3, 1, 2].collect { |position|
+        result = delivery_and_package_for_distributor(@distributor, @route, @box, @date, position)
+        @deliveries << result.delivery
+        @packages << result.package
       }
     end
     
     it "should order deliveries based on the DSO" do
-      get :index, {date: @date, view: 'deliveries'}
+      get :index, {date: @date, view: @route.id.to_s}
 
       assigns[:all_deliveries].should eq(@deliveries.sort_by(&:dso))
     end
 
     it "should order future deliveries based on the DSO" do
-      get :index, {date: @date+1.week, view: 'deliveries'}
+      get :index, {date: @date+1.week, view: @route.id.to_s}
       assigns[:all_deliveries].should eq(@deliveries.sort_by(&:dso).collect(&:order))
     end
 
@@ -34,6 +38,12 @@ describe Distributor::DeliveriesController do
       Distributor.any_instance.stub(:delivery_lists).and_return(delivery_lists)
 
       post :reposition, {date: @date_string, delivery: delivery_ids}
+    end
+
+    it "should order csv based on DSO" do
+      Delivery.should_receive(:build_csv_for_export).with(:delivery, @distributor, ["1","2","6"], nil).and_return("")
+
+      post :export, {deliveries: [1,2,6]}
     end
   end
 end
