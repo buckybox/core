@@ -3,13 +3,11 @@
 - @transactions.each do |transaction|
   - td_class = (transaction.manual? ? '' : 'auto')
 
-  %tr.transaction-data
-    %td{ class: td_class }
-      .row-fluid
-        .span2= transaction.created_at.to_s(:transaction)
-        .span2= transaction.display_time.to_s(:transaction)
-        .span4= transaction.description
-        .span2.text-right= transaction.amount.format
-        .span2.text-right= running_balance.format
+  %tr{ class: td_class }
+    %td= transaction.created_at.to_s(:transaction)
+    %td= transaction.display_time.to_s(:transaction)
+    %td= transaction.description
+    %td.text-right= transaction.amount.format
+    %td.text-right= running_balance.format
 
   - running_balance -= transaction.amount
