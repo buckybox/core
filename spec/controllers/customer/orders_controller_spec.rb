@@ -5,7 +5,7 @@ describe Customer::OrdersController do
 
   describe "POST 'create'" do
     before do
-      @box = mock_model(Box, {extras_limit: 3, extras_unlimited?: false})
+      @box = mock_model(Box, { extras_limit: 3, extras_unlimited?: false, dislikes?: true, likes?: true })
       Order.any_instance.stub(:box).and_return(@box)
 
       @order      = { quantity: 1, frequency: 'weekly', completed: true, box_id: 1 }
