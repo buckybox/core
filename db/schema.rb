@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120904052651) do
+ActiveRecord::Schema.define(:version => 20120909041708) do
 
   create_table "accounts", :force => true do |t|
     t.integer  "customer_id"
@@ -418,20 +418,21 @@ ActiveRecord::Schema.define(:version => 20120904052651) do
     t.integer  "packing_list_id"
     t.integer  "position"
     t.string   "status"
-    t.datetime "created_at",                                  :null => false
-    t.datetime "updated_at",                                  :null => false
+    t.datetime "created_at",                                            :null => false
+    t.datetime "updated_at",                                            :null => false
     t.integer  "order_id"
     t.integer  "original_package_id"
     t.string   "packing_method"
     t.text     "archived_address"
     t.integer  "archived_order_quantity"
     t.string   "archived_box_name"
-    t.integer  "archived_box_price_cents",   :default => 0,   :null => false
+    t.integer  "archived_box_price_cents",             :default => 0,   :null => false
     t.string   "currency"
     t.string   "archived_customer_name"
-    t.integer  "archived_route_fee_cents",   :default => 0,   :null => false
-    t.decimal  "archived_customer_discount", :default => 0.0, :null => false
+    t.integer  "archived_route_fee_cents",             :default => 0,   :null => false
+    t.decimal  "archived_customer_discount",           :default => 0.0, :null => false
     t.text     "archived_extras"
+    t.integer  "archived_consumer_delivery_fee_cents"
   end
 
   add_index "packages", ["order_id"], :name => "index_packages_on_order_id"

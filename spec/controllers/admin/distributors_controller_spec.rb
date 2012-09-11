@@ -136,7 +136,7 @@ describe Admin::DistributorsController do
       get :country_setting, id: 32
       country = JSON.parse(response.body)
       country['time_zone'].should eq("Auckland")
-      country['currency'].should eq("nzd")
+      country['currency'].should eq("NZD")
       country['fee'].should eq(0.2)
     end
   end

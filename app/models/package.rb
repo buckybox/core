@@ -190,6 +190,7 @@ class Package < ActiveRecord::Base
     self.archived_route_fee         = route.fee
     self.archived_customer_discount = customer.discount
     self.archived_order_quantity    = order.quantity
+    self.archived_consumer_delivery_fee_cents = distributor.consumer_delivery_fee_cents
 
     return archive_extras
   end

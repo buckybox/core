@@ -60,8 +60,6 @@ describe DeliveryList do
 
   describe '.generate_list' do
     before do
-      time_travel_to Date.current
-
       @distributor = Fabricate(:distributor)
       daily_orders(@distributor)
 
@@ -69,11 +67,14 @@ describe DeliveryList do
       @generate_date = Date.current + @advance_days.days
 
       time_travel_to @generate_date
-
+      @distributor.change_to_local_time_zone
       PackingList.generate_list(@distributor, @generate_date)
     end
 
-    after { back_to_the_present }
+    after do
+      back_to_the_present
+      Time.zone = BuckyBox::Application.config.time_zone
+    end
 
     specify { expect { DeliveryList.generate_list(@distributor, @generate_date) }.should change(@distributor.delivery_lists, :count).from(@advance_days).to(@advance_days + 1) }
     specify { expect { DeliveryList.generate_list(@distributor, @generate_date) }.should change(@distributor.deliveries, :count).from(0).to(3) }
