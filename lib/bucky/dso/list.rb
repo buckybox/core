@@ -78,7 +78,7 @@ module Bucky::Dso
 
     def update_positions
       list.each_with_index do |sortable, index|
-        sortable.position = index
+        sortable.position = index + 1
       end
     end
 
