@@ -316,17 +316,30 @@ describe Order do
         @e1 = Fabricate(:exclusion, order: order)
         @e2 = Fabricate(:exclusion, order: order)
         @e3 = Fabricate(:exclusion, order: order)
-
-        @e1_id = @e1.line_item_id
-        @e2_id = @e2.line_item_id
-        @e3_id = @e3.line_item_id
-        @e4_id = Fabricate(:line_item).id
-
-        order.update_exclusions([@e1_id, @e4_id])
-        order.save
       end
 
-      specify { order.exclusions.map(&:line_item_id).should == [@e1_id, @e4_id] }
+      context 'change exclusions' do
+        before do
+          @e1_id = @e1.line_item_id
+          @e2_id = @e2.line_item_id
+          @e3_id = @e3.line_item_id
+          @e4_id = Fabricate(:line_item).id
+
+          order.update_exclusions([@e1_id, @e4_id])
+          order.save
+        end
+
+        specify { order.exclusions.map(&:line_item_id).should == [@e1_id, @e4_id] }
+      end
+
+      context 'remove exlusions' do
+        before do
+          order.update_exclusions(nil)
+          order.save
+        end
+
+        specify { order.exclusions.map(&:line_item_ids).should == [] }
+      end
     end
 
     describe '#update_substitutions' do
@@ -335,17 +348,30 @@ describe Order do
         @s1 = Fabricate(:substitution, order: order)
         @s2 = Fabricate(:substitution, order: order)
         @s3 = Fabricate(:substitution, order: order)
-
-        @s1_id = @s1.line_item_id
-        @s2_id = @s2.line_item_id
-        @s3_id = @s3.line_item_id
-        @s4_id = Fabricate(:line_item).id
-
-        order.update_substitutions([@s1_id, @s4_id])
-        order.save
       end
 
-      specify { order.substitutions.map(&:line_item_id).should == [@s1_id, @s4_id] }
+      context 'change substitutions' do
+        before do
+          @s1_id = @s1.line_item_id
+          @s2_id = @s2.line_item_id
+          @s3_id = @s3.line_item_id
+          @s4_id = Fabricate(:line_item).id
+
+          order.update_substitutions([@s1_id, @s4_id])
+          order.save
+        end
+
+        specify { order.substitutions.map(&:line_item_id).should == [@s1_id, @s4_id] }
+      end
+
+      context 'remove substitutions' do
+        before do
+          order.update_substitutions(nil)
+          order.save
+        end
+
+        specify { order.substitutions.map(&:line_item_ids).should == [] }
+      end
     end
   end
 

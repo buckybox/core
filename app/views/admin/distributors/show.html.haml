@@ -56,6 +56,36 @@
     %td Deliveries to Date:
     %td= @distributor.deliveries.delivered.count
 
+= simple_form_for(:invoice, url: [:invoice, :admin, @distributor]) do |f|
+  %table
+    %tr
+      %th
+        %strong Invoicing
+      %th
+        #invoice_loader.ajax_loader_gif
+      %th
+    %tr
+      %td Date from
+      %td
+        = f.input :start_date, as: :string, input_html: {value: Date.current.beginning_of_month, class: 'date_picker'}
+      %td
+    %tr
+      %td Date to
+      %td
+        = f.input :end_date, as: :string, input_html: {value: Date.current.end_of_month, class: 'date_picker'}
+      %td
+    %tr
+      %th Deliveries Made
+      %th Deliveries Cancelled
+      %th Value Shipped
+    %tr
+      %td{id: 'deliveries_made', class: 'text-center'}
+        = '?'
+      %td{id: 'deliveries_cancelled', class: 'text-center'}
+        = '?'
+      %td{id: 'value_shipped', class: 'text-center'}
+        = '?'
+
 
 = link_to 'Edit', edit_admin_distributor_path(@distributor)
 \|

@@ -47,6 +47,12 @@ class Admin::DistributorsController < Admin::ResourceController
                   fee: @country.default_consumer_fee_cents / 100.0}
   end
 
+  def invoice
+    @distributor = Distributor.find(params[:id])
+
+    render json: @distributor.invoice_for_range(params[:start_date], params[:end_date])
+  end
+
   private
 
   def parse_csv
