@@ -87,9 +87,9 @@ class Order < ActiveRecord::Base
   end
 
   def update_exclusions(line_item_ids)
-    return if line_item_ids.nil? || !box.dislikes? || !box.likes?
+    return if !box.dislikes? || !box.likes?
 
-    line_item_ids = line_item_ids.map(&:to_i)
+    line_item_ids = line_item_ids.to_a.map(&:to_i)
     exclusion_line_item_ids = exclusions.map { |x| x.line_item_id }
 
     to_delete = exclusion_line_item_ids - line_item_ids
@@ -100,9 +100,9 @@ class Order < ActiveRecord::Base
   end
 
   def update_substitutions(line_item_ids)
-    return if line_item_ids.nil? || !box.dislikes? || !box.likes?
+    return if !box.dislikes? || !box.likes?
 
-    line_item_ids = line_item_ids.map(&:to_i)
+    line_item_ids = line_item_ids.to_a.map(&:to_i)
     substitution_line_item_ids = substitutions.map { |x| x.line_item_id }
 
     to_delete = substitution_line_item_ids - line_item_ids
