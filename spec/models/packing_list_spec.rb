@@ -44,12 +44,13 @@ describe PackingList do
       @advance_days = Distributor::DEFAULT_ADVANCED_DAYS
       @generate_date = Date.current + @advance_days.days
 
-      time_travel_to @generate_date
+      time_travel_to Date.current + 1.day
     end
+
+    after { back_to_the_present }
 
     specify { expect { PackingList.generate_list(@distributor, @generate_date) }.should change(@distributor.packing_lists, :count).from(@advance_days).to(@advance_days + 1) }
     specify { expect { PackingList.generate_list(@distributor, @generate_date) }.should change(@distributor.packages, :count).from(0).to(3) }
 
-    after { back_to_the_present }
   end
 end

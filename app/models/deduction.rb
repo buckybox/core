@@ -84,7 +84,7 @@ class Deduction < ActiveRecord::Base
         self.transactions << account.subtract_from_balance(
           distributor.consumer_delivery_fee,
           transactionable: self,
-          description: "Bucky Box Fee",
+          description: "Bucky Box Transaction Fee",
           display_time: display_time
         )
       end

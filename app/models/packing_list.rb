@@ -46,7 +46,8 @@ class PackingList < ActiveRecord::Base
   end
 
   def self.generate_list(distributor, date)
-    packing_list = PackingList.find_or_create_by_distributor_id_and_date(distributor.id, date)
+    packing_list = PackingList.find_by_distributor_id_and_date(distributor.id, date)
+    packing_list ||= PackingList.create!({distributor: distributor, date: date})
 
     distributor.orders.active.each do |order|
       if order.schedule.occurs_on?(date)

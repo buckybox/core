@@ -7,18 +7,37 @@ describe Package do
 
   context :archive_data do
     before do
-      @address = Fabricate(:address_with_associations)
-      @account = Fabricate(:account, customer: @address.customer)
+      @distributor = Fabricate(:distributor, consumer_delivery_fee_cents: 10)
+      @customer = Fabricate(:customer, distributor: @distributor)
+      @address = @customer.address
+      @account = @customer.account
       @box = Fabricate(:box, distributor: @account.distributor)
       @order = Fabricate(:order, box: @box, account: @account)
       @package = Fabricate(:package, order: @order)
     end
 
     specify { @package.archived_address.should == @address.join(', ') }
-    specify { @package.archived_order_quantity == @order.quantity }
-    specify { @package.archived_box_name == @box.name }
-    specify { @package.archived_box_price == @box.price }
-    specify { @package.archived_customer_name == @address.customer.name }
+    specify { @package.archived_order_quantity.should == @order.quantity }
+    specify { @package.archived_box_name.should == @box.name }
+    specify { @package.archived_box_price.should == @box.price }
+    specify { @package.archived_customer_name.should == @address.customer.name }
+
+    context :seperate_bucky_fee do
+      it 'should archive the fee' do
+        Package.any_instance.stub_chain(:distributor, :separate_bucky_fee?).and_return(true)
+        Package.any_instance.stub_chain(:distributor, :consumer_delivery_fee).and_return(Money.new(10))
+        Package.any_instance.stub_chain(:distributor, :consumer_delivery_fee_cents).and_return(10)
+        @package = Fabricate(:package, order: @order, packing_list: @package.packing_list)
+        @package.archived_consumer_delivery_fee_cents.should == 10
+      end
+
+      it 'should not archive the fee' do
+        Package.any_instance.stub_chain(:distributor, :separate_bucky_fee?).and_return(false)
+        @package = Fabricate(:package, order: @order, packing_list: @package.packing_list)
+        @package.archived_consumer_delivery_fee_cents.should == 0
+        Package.any_instance.unstub(:distributor)
+      end
+    end
   end
 
   context '#self.calculated_price' do
@@ -77,7 +96,7 @@ describe Package do
   end
 
   context '.csv_headers' do
-    specify { Package.csv_headers.size.should == 25 }
+    specify { Package.csv_headers.size.should == 27 }
   end
 
   context '#to_csv' do
@@ -87,6 +106,7 @@ describe Package do
     specify { package.to_csv[5].should == package.date.strftime("%-d %b %Y") }
     specify { package.to_csv[6].should == package.customer.number }
     specify { package.to_csv[7].should == package.customer.first_name }
-    specify { package.to_csv[23].should == package.customer.email }
+    specify { package.to_csv[23].should == package.archived_consumer_delivery_fee }
+    specify { package.to_csv[25].should == package.customer.email }
   end
 end

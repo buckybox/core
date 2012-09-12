@@ -432,7 +432,7 @@ ActiveRecord::Schema.define(:version => 20120909041708) do
     t.integer  "archived_route_fee_cents",             :default => 0,   :null => false
     t.decimal  "archived_customer_discount",           :default => 0.0, :null => false
     t.text     "archived_extras"
-    t.integer  "archived_consumer_delivery_fee_cents"
+    t.integer  "archived_consumer_delivery_fee_cents", :default => 0
   end
 
   add_index "packages", ["order_id"], :name => "index_packages_on_order_id"

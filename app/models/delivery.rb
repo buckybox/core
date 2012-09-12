@@ -149,7 +149,7 @@ class Delivery < ActiveRecord::Base
       'Order Number', 'Delivery Number', 'Delivery Date', 'Customer Number', 'Customer First Name',
       'Customer Last Name', 'Customer Phone', 'New Customer', 'Delivery Address Line 1', 'Delivery Address Line 2',
       'Delivery Address Suburb', 'Delivery Address City', 'Delivery Address Postcode', 'Delivery Note',
-      'Box Contents Short Description', 'Price', 'Bucky Delivery Fee', 'Total', 'Customer Email'
+      'Box Contents Short Description', 'Price', 'Bucky Box Transaction Fee', 'Total Price', 'Customer Email'
     ]
   end
 
@@ -174,8 +174,8 @@ class Delivery < ActiveRecord::Base
       address.delivery_note,
       order.string_sort_code,
       package.price,
-      package.consumer_delivery_fee,
-      payment_amount,
+      package.archived_consumer_delivery_fee,
+      package.total_price,
       customer.email
     ]
   end
@@ -225,11 +225,7 @@ class Delivery < ActiveRecord::Base
   end
 
   def payment_amount
-    if distributor.separate_bucky_fee
-      package.price + distributor.consumer_delivery_fee
-    else
-      package.price
-    end
+    package.total_price
   end
 
   def consumer_delivery_fee_cents
