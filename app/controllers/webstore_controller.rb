@@ -3,8 +3,12 @@ class WebstoreController < ApplicationController
   before_filter :get_box, except: [:store, :success]
 
   def store
-    @hide_sidebars = true
     @boxes = @distributor.boxes.not_hidden
+  end
+
+  def customise
+    @webstore_order = @distributor.webstore_orders.new(box_id: params[:box_id])
+    @stock_list = @distributor.line_items
   end
 
   def buy

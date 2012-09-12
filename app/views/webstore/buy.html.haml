@@ -1,4 +1,4 @@
-- title 'Place Order'
+- title('Place Order', false)
 
 = simple_form_for(:buy, url: webstore_customer_details_path(@distributor.parameter_name)) do |f|
   = f.error_notification

@@ -27,6 +27,10 @@ class Box < ActiveRecord::Base
   COUNT_EXTRA_OPTIONS = 1.upto(10).map{ |i| "allow #{i} extra items" }.zip(1.upto(10).to_a)
   EXTRA_OPTIONS = (SPECIAL_EXTRA_OPTIONS + COUNT_EXTRA_OPTIONS)
 
+  def big_thumb_url
+    box_image.big_thumb.url
+  end
+
   def extras_unlimited?
     extras_limit == -1
   end

@@ -19,6 +19,7 @@ class Distributor < ActiveRecord::Base
   has_many :line_items,               dependent: :destroy
   has_many :import_transaction_lists, dependent: :destroy
   has_many :import_transactions,      dependent: :destroy, through: :import_transaction_lists
+  has_many :webstore_orders,         dependent: :destroy
 
   DEFAULT_TIME_ZONE               = 'Wellington'
   DEFAULT_CURRENCY                = 'nzd'

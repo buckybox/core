@@ -7,4 +7,16 @@ $(function() {
       $('#webstore_extras').hide();
     }
   });
+
+  if($('.webstore-customise').length > 0) {
+    dislikes = $('.webstore-customise .dislikes_input');
+    likes = $('.webstore-customise .likes_input');
+
+    dislikes.show();
+    dislikes.find('select').chosen();
+
+    likes.show();
+    likes.find('select').chosen();
+    likes.hide();
+  }
 });
