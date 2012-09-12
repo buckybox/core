@@ -7,6 +7,8 @@ class WebstoreOrder < ActiveRecord::Base
   belongs_to :route
   belongs_to :account
 
+  attr_accessible :distributor, :box
+
   def thumb_url
     box.big_thumb_url
   end

@@ -1,18 +1,33 @@
+//----- Common in ordering process
+$light-devider: #eee
+
+.webstore-section
+  border-top: 1px solid $light-devider
+  padding-top: 1em
+  padding-bottom: 1em
+
+.important
+  font-size: 120%
+  font-weight: bold
+
+.webstore-step-button
+  margin-top: 1em
+
 //----- Store
 
 #store-items
   position: relative
   .box
-    border: 1px solid #eee
+    border: 1px solid $light-devider
     height: 500px
     .box-name
       padding: 5px
       margin-bottom: 8px
-      background-color: #eee
+      background-color: $light-devider
     li
       margin: 0px 8px
     .box-description
-      border-top: 1px solid #eee
+      border-top: 1px solid $light-devider
       margin-top: 8px
       padding: 8px
   form
@@ -21,16 +36,33 @@
     bottom: 41px
     left: 8px
 
-//----- Current Order
+//----- Customise
 
-#current-order
+#webstore-customise
+  .dislikes_input, .likes_input
+    select
+      width: 100%
+
+#webstore-extras
   table
     border-width: 0px
-    tbody tr:nth-child(even)
-      background-color: inherit
-    .important
-      font-size: 120%
-      font-weight: bold
-    td:last-child
-      padding-left: 50px
+    tbody
+      tr
+        &:last-child
+          td
+            padding-left: 0px
+            padding-right: 0px
+          select
+            width: 100%
+        &.extras-row
+          td
+            padding: 0px 5px 0px 0px
+            vertical-align: inherit
+            &:last-child
+              width: 50px
+              padding-right: 5px
+              input
+                width: 50px
+        &:nth-child(even)
+          background-color: #fff
 

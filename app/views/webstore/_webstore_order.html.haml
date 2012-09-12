@@ -1,28 +1,25 @@
-#current-order.row
-  .three.columns= image_tag(webstore_order.thumb_url)
-  %table.nine.columns
-    %tr
-      %td.important= webstore_order.box_name
-      %td.important= webstore_order.box_price.format
+#current-order.row.webstore-section
+  .two.columns= image_tag(webstore_order.thumb_url)
+  .ten.columns
+    .row
+      .ten.columns.important= webstore_order.box_name
+      .two.columns.important.text-right= webstore_order.box_price.format
 
     - if webstore_order.box_description
-      %tr
-        %td= simple_format webstore_order.box_description
-        %td
+      .row
+        .ten.columns= simple_format webstore_order.box_description
     - elsif webstore_order.order
-      %tr
-        %td= order_customisation(webstore_order.order)
-        %td
-      %tr
-        %td= order_extras(webstore_order.order)
-        %td.important= webstore_order.extras_price.format
+      .row
+        .ten.columns= order_customisation(webstore_order.order)
+      .row
+        .ten.columns= order_extras(webstore_order.order)
+        .two.columns.important.text-right= webstore_order.extras_price.format
 
     - if @route
-      %tr
-        %td= webstore_order.route_name
-        %td= webstore_order.route_fee
+      .row
+        .ten.columns= webstore_order.route_name
+        .two.columns.important.text-right= webstore_order.route_fee
 
     - if webstore_order.completed?
-      %tr
-        %td
-        %td.important= webstore_order.price.format
+      .row
+        .two.columns.offset-by-ten.important.text-right= webstore_order.price.format

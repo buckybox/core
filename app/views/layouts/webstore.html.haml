@@ -7,8 +7,7 @@
             = flash_bar(kind, message)
 
       .row
-        .three.columns
-          = image_tag(@distributor.company_logo.url)
+        .three.columns= image_tag(@distributor.company_logo.url)
         .nine.columns
           %strong= @distributor.name
           - if @distributor.invoice_information

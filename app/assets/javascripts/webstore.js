@@ -8,15 +8,18 @@ $(function() {
     }
   });
 
-  if($('.webstore-customise').length > 0) {
-    dislikes = $('.webstore-customise .dislikes_input');
-    likes = $('.webstore-customise .likes_input');
+  if($('#webstore-customise').length > 0) {
+    dislikes = $('#webstore-customise .dislikes_input');
+    likes = $('#webstore-customise .likes_input');
 
     dislikes.show();
     dislikes.find('select').chosen();
 
     likes.show();
     likes.find('select').chosen();
-    likes.hide();
+  }
+
+  if($('#webstore-extras').length > 0) {
+    $('#webstore-extras select').chosen();
   }
 });

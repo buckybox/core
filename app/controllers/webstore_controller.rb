@@ -7,8 +7,10 @@ class WebstoreController < ApplicationController
   end
 
   def customise
-    @webstore_order = @distributor.webstore_orders.new(box_id: params[:box_id])
+    @box = Box.find(params[:box_id])
+    @webstore_order = @distributor.webstore_orders.new(box: @box)
     @stock_list = @distributor.line_items
+    @extras = @box.extras.alphabetically
   end
 
   def buy
