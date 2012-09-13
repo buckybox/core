@@ -63,7 +63,7 @@ describe Distributor do
           end
 
           it 'the generated packing lists should start from today' do
-            distributor.save
+            distributor.save!
             distributor.packing_lists.first.date.should == Date.today
           end
 
@@ -79,7 +79,7 @@ describe Distributor do
           end
 
           it 'the generated packing lists should start from today' do
-            distributor.save
+            distributor.save!
             distributor.packing_lists.first.date.should == Date.today
           end
 

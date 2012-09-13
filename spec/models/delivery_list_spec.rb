@@ -66,17 +66,14 @@ describe DeliveryList do
       daily_orders(@distributor)
 
       @advance_days  = Distributor::DEFAULT_ADVANCED_DAYS
-      @generate_date = Date.current + @advance_days.days
-
-      time_travel_to @generate_date
-
-      PackingList.generate_list(@distributor, @generate_date)
+      @generate_date = Date.current + @advance_days
+      time_travel_to Date.current + 1.day
     end
 
     after { back_to_the_present }
 
     specify { expect { DeliveryList.generate_list(@distributor, @generate_date) }.should change(@distributor.delivery_lists, :count).from(@advance_days).to(@advance_days + 1) }
-    specify { expect { DeliveryList.generate_list(@distributor, @generate_date) }.should change(@distributor.deliveries, :count).from(0).to(3) }
+    specify { expect { PackingList.generate_list(@distributor, @generate_date); DeliveryList.generate_list(@distributor, @generate_date) }.should change(@distributor.deliveries, :count).from(0).to(3) }
 
     context 'for the next week' do
       before do
@@ -163,17 +160,17 @@ describe DeliveryList do
       end
 
       it 'should change delivery order' do
-        DeliveryList.any_instance.stub(:archived?).and_return(false)
         expect { delivery_list.reposition(@new_ids)}.should change{delivery_list.deliveries.ordered.collect(&:id)}.to(@new_ids)
         delivery_list.reload.deliveries.ordered.collect(&:delivery_number).should eq([3,1,2])
       end
 
       it 'should update the delivery list for the next week' do
-        DeliveryList.any_instance.stub(:archived?).and_return(false)
+        Distributor.any_instance.stub(:generate_required_daily_lists) #TODO remove this hack to get around the constant after_save callbacks
         delivery_list.reposition(@new_ids)
         addresses = delivery_list.deliveries.ordered.collect(&:address)
-        PackingList.generate_list(distributor, delivery_list.date+1.week)
+        next_packing_list = PackingList.generate_list(distributor, delivery_list.date+1.week)
         next_delivery_list = DeliveryList.generate_list(distributor, delivery_list.date+1.week)
+        Distributor.any_instance.unstub(:generate_required_daily_lists) #TODO remove this hack to get around the constant after_save callbacks
 
         next_delivery_list.deliveries.ordered.collect(&:address).should eq(addresses)
         next_delivery_list.deliveries.ordered.collect(&:delivery_number).should eq([1,2,3])

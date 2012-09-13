@@ -20,6 +20,8 @@ class Distributor < ActiveRecord::Base
   has_many :import_transaction_lists, dependent: :destroy
   has_many :import_transactions,      dependent: :destroy, through: :import_transaction_lists
 
+  belongs_to :country
+
   DEFAULT_TIME_ZONE               = 'Wellington'
   DEFAULT_CURRENCY                = 'nzd'
   DEFAULT_ADVANCED_HOURS          = 18
@@ -32,12 +34,15 @@ class Distributor < ActiveRecord::Base
   mount_uploader :company_logo, CompanyLogoUploader
 
   monetize :invoice_threshold_cents
+  monetize :consumer_delivery_fee_cents
 
   # Setup accessible (or protected) attributes for your model
   attr_accessible :email, :password, :password_confirmation, :remember_me, :name, :url, :company_logo, :company_logo_cache, :completed_wizard,
     :remove_company_logo, :support_email, :invoice_threshold, :separate_bucky_fee, :advance_hour, :advance_days, :automatic_delivery_hour,
-    :time_zone, :currency, :bank_deposit, :paypal, :bank_deposit_format
+    :time_zone, :currency, :bank_deposit, :paypal, :bank_deposit_format,
+    :country_id, :consumer_delivery_fee, :consumer_delivery_fee_cents
 
+  validates_presence_of :country
   validates_presence_of :email
   validates_uniqueness_of :email
   validates_presence_of :name, on: :update
