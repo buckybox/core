@@ -6,8 +6,7 @@ class UpdateDistributorCountry < ActiveRecord::Migration
         distributor = Distributor.find_by_id(id)
         country = Country.find_by_name(c_code)
         if distributor && country
-          distributor.country = country
-          distributor.save!
+          distributor.update_column(:country_id, country.id)
         end
       end
     end
