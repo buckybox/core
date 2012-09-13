@@ -83,5 +83,5 @@ if Rails.env.development?
     puts "#{rm_noise}=> QueryTrace #{QueryTrace.status}"
   end
 
-  #QueryTrace.enable!
+  QueryTrace.enable!
 end

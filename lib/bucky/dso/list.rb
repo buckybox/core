@@ -86,7 +86,7 @@ module Bucky::Dso
       list.collect(&:sortable)
     end
 
-    def self.sort(master, ordered, sorter=Bucky::Dso::RelativeSort)
+    def self.sort(master, ordered, sorter=Bucky::Dso::IRelativeSort)
       sorter.sort(master, ordered)
     end
 
@@ -97,6 +97,25 @@ module Bucky::Dso
 
     def merged_uniques(list)
       (self.sortables + list.sortables).uniq
+    end
+
+    def self.perf_test(n=100, m=10, i=100)
+      n_string = n.times.collect{('a'..'z').to_a.shuffle[0..3].join}
+      m_string = [n,m].min.times.collect{n_string.shuffle.first}
+
+      Benchmark.bm { |x|
+        x.report("Relative: ") {i.times {List.sort(n_string, m_string)}}
+        x.report("IRelative: ") {i.times {List.sort(n_string, m_string, IRelativeSort)}}
+      }.collect(&:total)
+    end
+
+    def self.more_perf_test(n=100, m=10, i=100, r=2)
+      data = r.times.collect{
+        perf_test(n, m, i)
+      }
+      data.collect{|a|
+        a.sum / r.to_f
+      }
     end
   end
 end

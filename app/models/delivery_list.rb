@@ -78,25 +78,29 @@ class DeliveryList < ActiveRecord::Base
     # Assuming all routes are from the same route, if not it will fail on match anyway
     first_delivery = Delivery.find(delivery_order.first)
     route_id = first_delivery.route_id
-    existing_ids = deliveries.ordered.where(route_id:route_id).map(&:id)
     day = first_delivery.delivery_list.date.wday
 
-    raise 'Your delivery ids do not match' if delivery_order.map(&:to_i).sort != existing_ids.sort
+    raise 'Your delivery ids do not match' if delivery_order.map(&:to_i).sort != deliveries.where(route_id:route_id).map(&:id).sort
 
     all_saved = true
 
     Delivery.transaction do
-      deliveries = delivery_order.collect{|d| Delivery.find(d)}
-      unique_address_hashes = deliveries.collect(&:address).collect(&:address_hash).uniq
+      deliveries = Delivery.where(id: delivery_order).includes(:address)
+      unique_address_hashes = deliveries.collect{|delivery| delivery.address.address_hash}.uniq
 
       master = DeliverySequenceOrder.where(route_id: route_id, day: day).ordered.collect(&:address_hash).uniq
       new_master_list = Bucky::Dso::List.sort(master, unique_address_hashes)
+      
+      dso_cache = DeliverySequenceOrder.where(route_id: route_id, day: day).inject({}){|cache, dso| cache.merge!(dso.address_hash => dso); cache}
 
-      new_master_list.to_a.each do |address_hash, index|
-        dso = DeliverySequenceOrder.find_by_address_hash_and_route_id_and_day(address_hash, route_id, day)
-        dso ||= DeliverySequenceOrder.new(address_hash: address_hash, route_id: route_id, day: day)
-        dso.position = index+1 #start at 1, not 0
-        all_saved &= dso.save
+      DeliverySequenceOrder.transaction do
+        new_master_list.to_a.each do |address_hash, index|
+          dso = dso_cache[address_hash]
+          dso ||= DeliverySequenceOrder.new(address_hash: address_hash, route_id: route_id, day: day)
+          dso.position = index+1 #start at 1, not 0
+          all_saved &= dso.save
+          raise ActiveRecord::Rollback unless all_saved
+        end
       end
     end
 
