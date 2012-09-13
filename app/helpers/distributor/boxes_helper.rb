@@ -7,7 +7,7 @@ module Distributor::BoxesHelper
 
       boxes = boxes.map do |box|
         element = []
-        text = "#{box.name} - #{Package.calculated_price(box, route, customer).format}"
+        text = "#{box.name} - #{Package.calculated_individual_price(box, route, customer).format}"
         text << " (#{box.extras_limit})" if options[:with_extras_limit]
         element << text
         element << box.id

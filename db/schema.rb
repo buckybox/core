@@ -553,14 +553,16 @@ ActiveRecord::Schema.define(:version => 20120911033835) do
   add_index "transactions", ["account_id"], :name => "index_transactions_on_account_id"
 
   create_table "webstore_orders", :force => true do |t|
-    t.integer  "distributor_id"
-    t.integer  "box_id"
-    t.integer  "order_id"
-    t.integer  "route_id"
     t.integer  "account_id"
+    t.integer  "box_id"
+    t.integer  "route_id"
+    t.text     "exclusions"
+    t.text     "substitutions"
+    t.text     "extras"
     t.string   "status"
-    t.datetime "created_at",     :null => false
-    t.datetime "updated_at",     :null => false
+    t.string   "remote_ip"
+    t.datetime "created_at",    :null => false
+    t.datetime "updated_at",    :null => false
   end
 
 end

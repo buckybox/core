@@ -1,13 +1,22 @@
 # NOTE: Not sure yet if this should be a DB model, for now making it so. Might be useful to track unfinished orders.
 
 class WebstoreOrder < ActiveRecord::Base
-  belongs_to :distributor
-  belongs_to :box
-  belongs_to :order
-  belongs_to :route
   belongs_to :account
+  belongs_to :box
+  belongs_to :route
 
-  attr_accessible :distributor, :box
+  has_one :distributor, through: :account
+
+  serialize :exclusions, Array
+  serialize :substitutes, Array
+  serialize :extras, Hash
+
+  attr_accessible :box, :remote_ip
+
+  def self.start_order(distributor, box_id, options = {})
+    box = distributor.boxes.find(box_id)
+    WebstoreOrder.create(box: box, remote_ip: options[:remote_ip])
+  end
 
   def thumb_url
     box.big_thumb_url
@@ -34,14 +43,11 @@ class WebstoreOrder < ActiveRecord::Base
   end
 
   def order_extras_price
-    order.extras_price
   end
 
   def order_price
-    order.price
   end
 
   def completed?
-    false
   end
 end

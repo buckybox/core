@@ -6,6 +6,7 @@ class Distributor < ActiveRecord::Base
   has_many :boxes,                    dependent: :destroy
   has_many :routes,                   dependent: :destroy
   has_many :orders,                   dependent: :destroy, through: :boxes
+  has_many :webstore_orders,          dependent: :destroy, through: :boxes
   has_many :deliveries,               dependent: :destroy, through: :orders
   has_many :payments,                 dependent: :destroy
   has_many :customers,                dependent: :destroy, autosave: true # Want to save those customers added via import_customers
@@ -19,7 +20,6 @@ class Distributor < ActiveRecord::Base
   has_many :line_items,               dependent: :destroy
   has_many :import_transaction_lists, dependent: :destroy
   has_many :import_transactions,      dependent: :destroy, through: :import_transaction_lists
-  has_many :webstore_orders,         dependent: :destroy
 
   DEFAULT_TIME_ZONE               = 'Wellington'
   DEFAULT_CURRENCY                = 'nzd'

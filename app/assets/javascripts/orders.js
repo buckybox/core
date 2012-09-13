@@ -91,7 +91,7 @@ function disable_the_others_options(affecting_input, effected_input) {
     counter.removeAttr('selected');
   });
 
-  effected_input.find('select').trigger("liszt:updated");
+  effected_input.find('select').trigger("list:updated");
 }
 
 function order_init() {

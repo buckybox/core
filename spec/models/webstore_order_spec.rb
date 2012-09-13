@@ -1,12 +1,25 @@
 require 'spec_helper'
 
 describe WebstoreOrder do
+  let(:distributor) { mock_model Distributor }
   let(:box) { mock_model Box }
   let(:route) { mock_model Route }
   let(:order) { mock_model Order }
   let(:webstore_order) { Fabricate.build(:webstore_order) }
 
   subject { webstore_order }
+
+  describe '.start_order' do
+    before do
+      distributor.stub_chain(:boxes, :find) { box }
+      @webstore_order = WebstoreOrder.start_order(distributor, 12, remote_ip: '192.168.1.8')
+    end
+
+    subject { @webstore_order }
+
+    its(:box) { should eq(box) }
+    its(:remote_ip) { should eq('192.168.1.8') }
+  end
 
   context 'box information' do
     before do
@@ -17,10 +30,10 @@ describe WebstoreOrder do
       webstore_order.stub(:box) { box }
     end
 
-    its(:thumb_url) { should eq(box.big_thumb_url) }
-    its(:box_name) { should eq(box.name) }
-    its(:box_price) { should eq(box.price) }
-    its(:box_description) { should eq(box.description) }
+    its(:thumb_url) { should eq('box.jpg') }
+    its(:box_name) { should eq('Boxy') }
+    its(:box_price) { should eq(12) }
+    its(:box_description) { should eq('A box.') }
   end
 
   context 'route information' do
@@ -30,19 +43,13 @@ describe WebstoreOrder do
       webstore_order.stub(:route) { route }
     end
 
-    its(:route_name) { should eq(route.name) }
-    its(:route_fee) { should eq(route.fee) }
+    its(:route_name) { should eq('A Route') }
+    its(:route_fee) { should eq(2) }
   end
 
   context 'order information' do
-    before do
-      order.stub(:extras_price) { 2 }
-      order.stub(:price) { 14 }
-      webstore_order.stub(:order) { order }
-    end
-
-    its(:order_extras_price) { should eq(order.extras_price) }
-    its(:order_price) { should eq(order.price) }
+    its(:order_extras_price) { should eq(1) }
+    its(:order_price) { should eq(5) }
   end
 
   context 'state' do

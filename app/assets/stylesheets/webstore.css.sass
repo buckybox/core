@@ -39,12 +39,14 @@ $light-devider: #eee
 //----- Customise
 
 #webstore-customise
-  .dislikes_input, .likes_input
-    select
-      width: 100%
+  #webstore-customisations
+    .dislikes_input, .likes_input
+      select
+        width: 100%
 
 #webstore-extras
   table
+    margin-top: 1em
     border-width: 0px
     tbody
       tr
@@ -55,12 +57,13 @@ $light-devider: #eee
           select
             width: 100%
         &.extras-row
+          display: none
           td
-            padding: 0px 5px 0px 0px
+            padding: 0px 32px 0px 0px
             vertical-align: inherit
             &:last-child
               width: 50px
-              padding-right: 5px
+              padding-right: 0px
               input
                 width: 50px
         &:nth-child(even)

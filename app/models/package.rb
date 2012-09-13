@@ -41,7 +41,7 @@ class Package < ActiveRecord::Base
 
   delegate :date, to: :packing_list, allow_nil: true
 
-  def self.calculated_price(box_price, route_fee, customer_discount)
+  def self.calculated_individual_price(box_price, route_fee, customer_discount)
     box_price = box_price.price if box_price.is_a?(Box)
     route_fee = route_fee.fee   if route_fee.is_a?(Route)
 
@@ -84,7 +84,7 @@ class Package < ActiveRecord::Base
   end
 
   def individual_price
-    Package.calculated_price(archived_box_price, archived_route_fee, archived_customer_discount)
+    Package.calculated_individual_price(archived_box_price, archived_route_fee, archived_customer_discount)
   end
 
   def individual_extras_price

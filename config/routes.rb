@@ -8,11 +8,9 @@ BuckyBox::Application.routes.draw do
   namespace :webstore do
     get ':distributor_parameter_name',                   action: 'store',     as: 'store'
     get ':distributor_parameter_name/customise/:box_id', action: 'customise', as: 'customise'
-
-    get   ':distributor_parameter_name/buy/:box_id',      action: 'buy',              as: 'buy'
-    match ':distributor_parameter_name/customer_details', action: 'customer_details', as: 'customer_details'
-    post  ':distributor_parameter_name/payment',          action: 'payment',          as: 'payment'
-    post  ':distributor_parameter_name/success',          action: 'success',          as: 'success'
+    get ':distributor_parameter_name/login/:box_id',     action: 'login',     as: 'login'
+    get ':distributor_parameter_name/delivery/:box_id',  action: 'delivery',  as: 'delivery'
+    get ':distributor_parameter_name/complete/:box_id',  action: 'complete',  as: 'complete'
   end
 
   namespace :distributor do

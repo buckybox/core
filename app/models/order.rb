@@ -131,7 +131,7 @@ class Order < ActiveRecord::Base
   end
 
   def individual_price
-    Package.calculated_price(box, route, customer)
+    Package.calculated_individual_price(box, route, customer)
   end
 
   def extras_price
