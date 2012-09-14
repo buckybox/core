@@ -85,24 +85,28 @@ class DeliveryList < ActiveRecord::Base
     all_saved = true
 
     Delivery.transaction do
-      deliveries = Delivery.where(id: delivery_order).includes(:address)
+      deliveries_cache = Delivery.where(id: delivery_order).includes(:address).inject({}){|cache, d| cache.merge!(d.id => d)}
+      deliveries = []
+      delivery_order.each do |id|
+        deliveries << deliveries_cache[id]
+      end
+      
       unique_address_hashes = deliveries.collect{|delivery| delivery.address.address_hash}.uniq
 
       master = DeliverySequenceOrder.where(route_id: route_id, day: day).ordered.collect(&:address_hash).uniq
       new_master_list = Bucky::Dso::List.sort(master, unique_address_hashes)
       
       dso_cache = DeliverySequenceOrder.where(route_id: route_id, day: day).inject({}){|cache, dso| cache.merge!(dso.address_hash => dso); cache}
-
-      DeliverySequenceOrder.transaction do
-        new_master_list.to_a.each do |address_hash, index|
-          dso = dso_cache[address_hash]
-          dso ||= DeliverySequenceOrder.new(address_hash: address_hash, route_id: route_id, day: day)
-          dso.position = index+1 #start at 1, not 0
-          all_saved &= dso.save
-          raise ActiveRecord::Rollback unless all_saved
-        end
+      
+      new_master_list.to_a.each do |address_hash, index|
+        dso = dso_cache[address_hash]
+        dso ||= DeliverySequenceOrder.new(address_hash: address_hash, route_id: route_id, day: day)
+        dso.position = index
+        all_saved &= dso.save
+        raise ActiveRecord::Rollback unless all_saved
       end
     end
+
 
     return all_saved
   end

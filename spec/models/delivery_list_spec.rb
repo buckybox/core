@@ -137,7 +137,7 @@ describe DeliveryList do
 
         Delivery.stub_chain(:find, :route_id)
         Delivery.stub_chain(:find, :delivery_list, :date, :wday)
-        delivery_list.stub_chain(:deliveries, :ordered, :where, :map).and_return(@ids)
+        delivery_list.stub_chain(:deliveries, :where, :map).and_return(@ids)
 
         delivery_list.deliveries.stub_chain(:ordered, :find).and_return(delivery)
         delivery.stub(:reposition!).and_return(true)
@@ -232,14 +232,20 @@ end
 
 def fab_delivery(delivery_list, distributor, route=nil, address=nil)
   route ||= Fabricate(:route, distributor: distributor)
-  address ||= Fabricate.build(:address)
-  account = Fabricate.build(:account)
 
   customer = Fabricate(:customer_without_after_create, distributor: distributor, route: route)
-  address.customer = customer
-  address.save!
-  account.customer = customer
-  account.save!
+  account = Fabricate(:account, customer: customer)
+  
+  customer.address.delete
+
+  if address
+    address.customer = customer
+    address.save!
+  else
+    address = Fabricate(:address, customer: customer)
+  end
+
+  customer.address = address
 
   Fabricate(:delivery, delivery_list: delivery_list, order: Fabricate(:recurring_order_everyday, account: account), route: route)
 end

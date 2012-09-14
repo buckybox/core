@@ -181,7 +181,7 @@ class Delivery < ActiveRecord::Base
   end
 
   def self.matching_dso(delivery_sequence_order)
-    delivery_ids = Delivery.joins({delivery_list:{}, account: {customer: {address: {}}}}).where(['deliveries.route_id = ? AND addresses.address_hash = ? AND EXTRACT(DAY FROM delivery_lists.date) = ?', delivery_sequence_order.route_id, delivery_sequence_order.address_hash, delivery_sequence_order.day]).collect(&:id)
+    delivery_ids = Delivery.joins({delivery_list:{}, account: {customer: {address: {}}}}).where(['deliveries.route_id = ? AND addresses.address_hash = ? AND EXTRACT(DOW FROM delivery_lists.date) = ?', delivery_sequence_order.route_id, delivery_sequence_order.address_hash, delivery_sequence_order.day]).collect(&:id)
     Delivery.where(['id in (?)', delivery_ids])
   end
 
