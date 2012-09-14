@@ -3,7 +3,7 @@ module ApplicationHelper
 
   def currency_name(key)
     hash = currency_hash
-    hash[key.to_sym]
+    hash[key.downcase.to_sym]
   end
 
   def currency_hash
@@ -14,5 +14,6 @@ module ApplicationHelper
     hash = currency_hash
     currencies = FEATURED_CURRENCIES.each_with_object([]) { |fc, a| a << [hash.delete(fc), fc] }
     currencies += hash.invert.to_a
+    currencies.collect{|a,b| [a, b.to_s.upcase]}
   end
 end

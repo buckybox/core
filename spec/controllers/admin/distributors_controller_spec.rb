@@ -122,4 +122,22 @@ describe Admin::DistributorsController do
       @controller.distributor_signed_in?.should be_false
     end
   end
+
+  describe 'country_setting' do
+    as_distributor
+    before do
+      c = double(Country, default_time_zone: "Auckland",
+                default_currency: "nzd",
+                default_consumer_fee_cents: 20)
+      Country.should_receive(:find).with("32").and_return(c)
+    end
+
+    it 'should return country settings for distributor form' do
+      get :country_setting, id: 32
+      country = JSON.parse(response.body)
+      country['time_zone'].should eq("Auckland")
+      country['currency'].should eq("NZD")
+      country['fee'].should eq(0.2)
+    end
+  end
 end

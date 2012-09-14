@@ -102,7 +102,7 @@ describe Delivery do
   end
 
   describe '.csv_headers' do
-    specify { Delivery.csv_headers.size.should == 20 }
+    specify { Delivery.csv_headers.size.should == 22 }
   end
 
   describe '#to_csv' do
@@ -112,7 +112,8 @@ describe Delivery do
     specify { delivery.to_csv[5].should == delivery.date.strftime("%-d %b %Y") }
     specify { delivery.to_csv[6].should == delivery.customer.number }
     specify { delivery.to_csv[7].should == delivery.customer.first_name }
-    specify { delivery.to_csv[19].should == delivery.customer.email }
+    specify { delivery.to_csv[19].should == delivery.package.archived_consumer_delivery_fee }
+    specify { delivery.to_csv[21].should == delivery.customer.email }
   end
 
   describe '#reposition!' do
