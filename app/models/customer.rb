@@ -140,8 +140,6 @@ class Customer < ActiveRecord::Base
       order = self.orders.build({
         box: box,
         quantity: 1,
-        #likes: b.likes,
-        #dislikes: b.dislikes,
         account: self.account,
         extras_one_off: b.extras_recurring?
       })
@@ -176,7 +174,7 @@ class Customer < ActiveRecord::Base
   private
 
   def initialize_number
-    self.number = Customer.next_number(self.distributor)
+    self.number = Customer.next_number(self.distributor) unless self.distributor.nil?
   end
 
   def randomize_password_if_not_present

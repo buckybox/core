@@ -30,15 +30,30 @@ class Webstore
 
     if webstore_order
       customise_order(webstore_order[:customise]) if webstore_order[:customise]
+      login_customer(webstore_order[:user]) if webstore_order[:user]
     end
 
     @order.save
+  end
+
+  def login_customer(user_information)
+    email = user_information[:email]
+    customer = Customer.find_by_email(email)
+
+    unless customer
+      route = Route.default_route(distributor)
+      first_name = 'Webstore Temp'
+      Customer.create(distributor: distributor, email: email, route: route, first_name: first_name)
+    end
+
+    @next_step = DELIVERY
   end
 
   def customise_order(customise)
     add_exclusions_to_order(customise[:dislikes]) if customise[:dislikes]
     add_substitutes_to_order(customise[:likes]) if customise[:likes]
     add_extras_to_order(customise[:extras]) if customise[:extras]
+
     @next_step = LOGIN
   end
 
@@ -60,6 +75,7 @@ class Webstore
   def start_order(box_id)
     box = Box.where(id: box_id, distributor_id: @distributor.id).first
     @order = WebstoreOrder.create(box: box, remote_ip: @ip_address)
+
     @next_step = (box.customisable? ? CUSTOMISE : LOGIN)
   end
 end

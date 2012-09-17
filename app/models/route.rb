@@ -33,12 +33,18 @@ class Route < ActiveRecord::Base
     distributor.routes.find { |r| r.delivers_on?(time) }
   end
 
-  def next_run
-    schedule.next_occurrence
+  def self.delivery_day_numbers(delivery_days)
+    delivery_days.collect { |day| Bucky::Schedule::DAYS.index(day)}
   end
 
-  def delivers_on?(time)
-    schedule.occurs_on?(time.to_time)
+  def name_days_and_fee
+    days = delivery_days.map { |d| d.to_s.titleize[0..2] }
+
+    result = name.titleize
+    result += " (#{days.join(', ')}) "
+    result += fee.format
+
+    return result
   end
 
   def delivery_days
@@ -49,8 +55,12 @@ class Route < ActiveRecord::Base
     Route.delivery_day_numbers(days)
   end
 
-  def self.delivery_day_numbers(delivery_days)
-    delivery_days.collect { |day| Bucky::Schedule::DAYS.index(day)}
+  def next_run
+    schedule.next_occurrence
+  end
+
+  def delivers_on?(time)
+    schedule.occurs_on?(time.to_time)
   end
 
   def future_orders

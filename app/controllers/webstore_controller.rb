@@ -30,6 +30,13 @@ class WebstoreController < ApplicationController
     @checked = @registered_options.first.last
   end
 
+  def delivery
+    @routes = @distributor.routes.map { |route| [route.name_days_and_fee, route.id] }
+  end
+
+  def complete
+  end
+
   private
 
   def get_webstore_order
