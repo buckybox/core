@@ -80,46 +80,20 @@ class DeliveryList < ActiveRecord::Base
     route_id = first_delivery.route_id
     day = first_delivery.delivery_list.date.wday
 
-    raise 'Your delivery ids do not match' if delivery_order.map(&:to_i).sort != deliveries.where(route_id:route_id).map(&:id).sort
+    raise 'Your delivery ids do not match' if delivery_order.map(&:to_i).sort != deliveries.where(route_id: route_id).select(:id).map(&:id).sort
 
-    all_saved = true
-
-    Delivery.transaction do
-      deliveries_cache = Delivery.where(id: delivery_order).includes(:address).inject({}){|cache, d| cache.merge!(d.id => d)}
-      deliveries = []
-      delivery_order.each do |id|
-        deliveries << deliveries_cache[id.to_i]
-      end
-      
-      unique_address_hashes = deliveries.collect{|delivery| delivery.address.address_hash}.uniq
-
-      master = DeliverySequenceOrder.where(route_id: route_id, day: day).ordered.collect(&:address_hash).uniq
-      new_master_list = Bucky::Dso::List.sort(master, unique_address_hashes)
-      
-      dso_cache = DeliverySequenceOrder.where(route_id: route_id, day: day).inject({}){|cache, dso| cache.merge!(dso.address_hash => dso); cache}
-      
-      new_address_hashes = new_master_list.to_a.collect{|s| "'#{s.first}'"}.join(',')
-      sql = "UPDATE delivery_sequence_orders SET position = CASE address_hash
-        #{new_master_list.to_a.collect{|address_hash, index| "WHEN '#{address_hash}' THEN #{index}"}.join(' ')} END
-      WHERE route_id = #{route_id}
-      AND day = #{day}
-      AND delivery_sequence_orders.address_hash in (#{new_address_hashes})
-      "
-      sql << ";"
-      sql << "UPDATE deliveries SET dso = delivery_sequence_orders.position
-      FROM orders
-      INNER JOIN accounts on orders.account_id = accounts.id
-      INNER JOIN customers on accounts.customer_id = customers.id
-      INNER JOIN addresses on customers.id = addresses.customer_id
-      INNER JOIN delivery_sequence_orders on delivery_sequence_orders.address_hash = addresses.address_hash
-      WHERE orders.id = deliveries.order_id
-      AND deliveries.route_id = delivery_sequence_orders.route_id
-      AND addresses.address_hash in (#{new_address_hashes})"
-      ActiveRecord::Base.connection.execute(sql)
+    # Don't know an easy way to preload like this in Rails, but load up all deliveries matching on id, PRESERVING the order of the ids thru to the deliveries array, VERY IMPORTANT
+    deliveries_cache = Delivery.where(id: delivery_order).includes(:address).inject({}){|cache, d| cache.merge!(d.id => d)}
+    ordered_address_hashes = []
+    delivery_order.each do |id|
+      ordered_address_hashes << deliveries_cache[id.to_i].address.address_hash if deliveries_cache[id.to_i]
     end
 
+    master = DeliverySequenceOrder.where(route_id: route_id, day: day).ordered.collect(&:address_hash).uniq
+    new_master_list = Bucky::Dso::List.sort(master, ordered_address_hashes.uniq) #Assuming .uniq is stable to the order
+    DeliverySequenceOrder.update_ordering(new_master_list, route_id, day)
 
-    return all_saved
+    return true
   end
 
   def mark_all_as_auto_delivered

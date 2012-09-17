@@ -72,8 +72,8 @@ describe DeliveryList do
 
     after { back_to_the_present }
 
-    specify { expect { DeliveryList.generate_list(@distributor, @generate_date) }.should change(@distributor.delivery_lists, :count).from(@advance_days).to(@advance_days + 1) }
-    specify { expect { PackingList.generate_list(@distributor, @generate_date); DeliveryList.generate_list(@distributor, @generate_date) }.should change(@distributor.deliveries, :count).from(0).to(3) }
+    specify { expect { DeliveryList.generate_list(@distributor, @generate_date) }.to change(@distributor.delivery_lists, :count).from(@advance_days).to(@advance_days + 1) }
+    specify { expect { PackingList.generate_list(@distributor, @generate_date); DeliveryList.generate_list(@distributor, @generate_date) }.to change(@distributor.deliveries, :count).from(0).to(3) }
 
     context 'for the next week' do
       before do
@@ -128,7 +128,7 @@ describe DeliveryList do
         delivery_list.stub(:delivery_ids).and_return([delivery, @diff_route])
       end
 
-      specify { expect { delivery_list.reposition([@diff_route.id, delivery.id]) }.should raise_error(RuntimeError) }
+      specify { expect { delivery_list.reposition([@diff_route.id, delivery.id]) }.to raise_error(RuntimeError) }
     end
 
     context 'delivery ids must match' do
@@ -137,14 +137,14 @@ describe DeliveryList do
 
         Delivery.stub_chain(:find, :route_id)
         Delivery.stub_chain(:find, :delivery_list, :date, :wday)
-        delivery_list.stub_chain(:deliveries, :where, :map).and_return(@ids)
+        delivery_list.stub_chain(:deliveries, :where, :select, :map).and_return(@ids)
 
         delivery_list.deliveries.stub_chain(:ordered, :find).and_return(delivery)
         delivery.stub(:reposition!).and_return(true)
       end
 
-      specify { expect { delivery_list.reposition([2, 1, 3]) }.should_not raise_error(RuntimeError) }
-      specify { expect { delivery_list.reposition([2, 5, 3]) }.should raise_error(RuntimeError) }
+      specify { expect { delivery_list.reposition([2, 1, 3]) }.to_not raise_error(RuntimeError) }
+      specify { expect { delivery_list.reposition([2, 5, 3]) }.to raise_error(RuntimeError) }
     end
 
     context 'should update delivery list positions' do
