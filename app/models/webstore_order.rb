@@ -1,5 +1,3 @@
-# NOTE: Not sure yet if this should be a DB model, for now making it so. Might be useful to track unfinished orders.
-
 class WebstoreOrder < ActiveRecord::Base
   belongs_to :account
   belongs_to :box
@@ -12,11 +10,6 @@ class WebstoreOrder < ActiveRecord::Base
   serialize :extras, Hash
 
   attr_accessible :box, :remote_ip
-
-  def self.start_order(distributor, box_id, options = {})
-    box = distributor.boxes.find(box_id)
-    WebstoreOrder.create(box: box, remote_ip: options[:remote_ip])
-  end
 
   def thumb_url
     box.big_thumb_url

@@ -1,25 +1,12 @@
 require 'spec_helper'
 
 describe WebstoreOrder do
-  let(:distributor) { mock_model Distributor }
   let(:box) { mock_model Box }
   let(:route) { mock_model Route }
   let(:order) { mock_model Order }
   let(:webstore_order) { Fabricate.build(:webstore_order) }
 
   subject { webstore_order }
-
-  describe '.start_order' do
-    before do
-      distributor.stub_chain(:boxes, :find) { box }
-      @webstore_order = WebstoreOrder.start_order(distributor, 12, remote_ip: '192.168.1.8')
-    end
-
-    subject { @webstore_order }
-
-    its(:box) { should eq(box) }
-    its(:remote_ip) { should eq('192.168.1.8') }
-  end
 
   context 'box information' do
     before do

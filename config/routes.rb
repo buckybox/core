@@ -6,11 +6,13 @@ BuckyBox::Application.routes.draw do
   root to: 'distributor/dashboard#index'
 
   namespace :webstore do
-    get ':distributor_parameter_name',                   action: 'store',     as: 'store'
-    get ':distributor_parameter_name/customise/:box_id', action: 'customise', as: 'customise'
-    get ':distributor_parameter_name/login/:box_id',     action: 'login',     as: 'login'
-    get ':distributor_parameter_name/delivery/:box_id',  action: 'delivery',  as: 'delivery'
-    get ':distributor_parameter_name/complete/:box_id',  action: 'complete',  as: 'complete'
+    get ':distributor_parameter_name',           action: 'store',     as: 'store'
+    get ':distributor_parameter_name/customise', action: 'customise', as: 'customise'
+    get ':distributor_parameter_name/login',     action: 'login',     as: 'login'
+    get ':distributor_parameter_name/delivery',  action: 'delivery',  as: 'delivery'
+    get ':distributor_parameter_name/complete',  action: 'complete',  as: 'complete'
+
+    post ':distributor_parameter_name/process_step',  action: 'process_step',  as: 'process_step'
   end
 
   namespace :distributor do

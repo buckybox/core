@@ -79,6 +79,17 @@ $(function() {
       if(total_options == disabled_options) { extras_input.closest('tr').hide(); }
     });
   }
+
+  if($('#login').length > 0) {
+    $('#registered input[type="radio"]').click(function() {
+      if($(this).val() == 'new') {
+        $('#password-field').hide();
+      }
+      else {
+        $('#password-field').show();
+      }
+    });
+  }
 });
 
 function checkbox_toggle(checkbox, div) {

@@ -8,7 +8,7 @@ class Box < ActiveRecord::Base
   mount_uploader :box_image, BoxImageUploader
 
   # Setup accessible (or protected) attributes for your model
-  attr_accessible :distributor, :name, :description, :likes, :dislikes, :price, :available_single, :available_weekly, 
+  attr_accessible :distributor, :name, :description, :likes, :dislikes, :price, :available_single, :available_weekly,
     :available_fourtnightly, :box_image, :box_image_cache, :remove_box_image, :extras_limit, :extra_ids, :hidden
 
   validates_presence_of :distributor, :name, :description, :price
@@ -29,6 +29,10 @@ class Box < ActiveRecord::Base
 
   def big_thumb_url
     box_image.big_thumb.url
+  end
+
+  def customisable?
+    dislikes? || extras_allowed?
   end
 
   def extras_unlimited?
