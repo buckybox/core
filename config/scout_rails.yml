@@ -1,0 +1,11 @@
+common: &defaults
+  name: Bucky Box Production
+  key: 2GXb2uUdfB
+  monitor: true
+
+production:
+  <<: *defaults
+
+staging:
+  <<: *defaults
+  name: Bucky Box Staging
