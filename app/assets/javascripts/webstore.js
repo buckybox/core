@@ -93,7 +93,10 @@ $(function() {
 
   if(('#route').length > 0) {
     var route_select = $('#route_select');
+    var start_date_select = $('.schedule-start-date');
+
     update_route_information(route_select.val());
+    update_day_checkboxes(start_date_select);
 
     route_select.change(function() {
       update_route_information(route_select.val());
@@ -110,8 +113,24 @@ $(function() {
         days_checkboxes.show();
       }
     });
+
+    start_date_select.change(function() {
+      update_day_checkboxes($(this));
+    });
   }
 });
+
+function update_day_checkboxes(start_date) {
+  var date = new Date(start_date.val());
+  var route_schedule_inputs = start_date.closest('.route-schedule-inputs');
+
+  route_schedule_inputs.find('input[type="checkbox"]').attr('checked', false);
+
+  var checkbox_selector = '#day-' + date.getDay() + ' input[type="checkbox"]';
+  selected_checkbox = route_schedule_inputs.find(checkbox_selector);
+
+  selected_checkbox.attr('checked', true);
+}
 
 function update_route_information(route_id) {
   $('.route-info').hide();
