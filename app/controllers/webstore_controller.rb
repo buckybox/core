@@ -31,7 +31,19 @@ class WebstoreController < ApplicationController
   end
 
   def delivery
-    @routes = @distributor.routes.map { |route| [route.name_days_and_fee, route.id] }
+    @routes = @distributor.routes
+    @route_selections = @distributor.routes.map { |route| [route.name_days_and_fee, route.id] }
+    @days = Bucky::Schedule::DAYS.map { |day| [day, Bucky::Schedule::DAYS.index(day)] }
+    @order_frequencies = [
+      ['Delivery weekly on...', :weekly],
+      ['Delivery 2 weeks on...', :fortnightly],
+      ['Delivery monthly on...', :monthly],
+      ['Deliver once', :single]
+    ]
+    @extra_frequencies = [
+      ['Include Extra Items with EVERY delivery', :every],
+      ['Include Extra Items with NEXT delivery only', :next]
+    ]
   end
 
   def complete

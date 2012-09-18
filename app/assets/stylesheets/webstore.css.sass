@@ -1,14 +1,18 @@
 //----- Common in ordering process
 $light-devider: #eee
+$notice-colour: #fde599
 
 .webstore-section
   border-top: 1px solid $light-devider
   padding-top: 1em
   padding-bottom: 1em
+  select
+    width: 100%
 
 .important
   font-size: 120%
   font-weight: bold
+  margin-bottom: 0.5em
 
 .webstore-step-button
   margin-top: 1em
@@ -38,12 +42,6 @@ $light-devider: #eee
 
 //----- Customise
 
-#webstore-customise
-  #webstore-customisations
-    .dislikes_input, .likes_input
-      select
-        width: 100%
-
 #webstore-extras
   table
     margin-top: 1em
@@ -54,8 +52,6 @@ $light-devider: #eee
           td
             padding-left: 0px
             padding-right: 0px
-          select
-            width: 100%
         &.extras-row
           display: none
           td
@@ -82,5 +78,27 @@ $light-devider: #eee
 
 //----- Delivery
 #route
-  select
-    width: 100%
+  .route-info
+    display: none
+    background-color: $notice-colour
+    padding: 1em 1.5em
+    p:last-child
+      margin-bottom: 0px
+
+#schedule
+  margin-top: 6em
+  .order-days
+    margin-left: -1%
+    text-align: center
+    overflow: hidden
+    div.boolean
+      display: block
+      float: left
+      margin-left: 1%
+      margin-bottom: 1%
+      width: 13.25%
+      text-align: center
+      label
+        display: block
+  .route-schedule-inputs
+    display: none

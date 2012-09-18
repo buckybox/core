@@ -12,9 +12,10 @@ class Route < ActiveRecord::Base
 
   schedule_for :schedule
 
-  attr_accessible :distributor, :name, :monday, :tuesday, :wednesday, :thursday, :friday, :saturday, :sunday, :fee
+  attr_accessible :distributor, :name, :monday, :tuesday, :wednesday, :thursday, :friday, :saturday, :sunday,
+    :fee, :area_of_service, :estimated_delivery_time
 
-  validates_presence_of :distributor_id, :name, :schedule, :fee
+  validates_presence_of :distributor_id, :name, :schedule, :fee, :area_of_service, :estimated_delivery_time
   validate :at_least_one_day_is_selected
 
   before_validation :create_schedule
@@ -53,6 +54,12 @@ class Route < ActiveRecord::Base
 
   def delivery_day_numbers(days = delivery_days)
     Route.delivery_day_numbers(days)
+  end
+
+  def runs_on(wday)
+    wday = Bucky::Schedule::DAYS[wday] if wday.is_a?(Integer)
+    wday = wday.downcase.to_sym if wday.is_a?(String)
+    self[wday]
   end
 
   def next_run

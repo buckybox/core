@@ -90,7 +90,47 @@ $(function() {
       }
     });
   }
+
+  if(('#route').length > 0) {
+    var route_select = $('#route_select');
+    update_route_information(route_select.val());
+
+    route_select.change(function() {
+      update_route_information(route_select.val());
+    });
+
+    $('.route-schedule-frequency').change(function() {
+      var frequency_select = $(this);
+      var days_checkboxes = frequency_select.closest('.route-schedule-inputs').find('.order-days');
+
+      if(frequency_select.val() === 'single') {
+        days_checkboxes.hide();
+      }
+      else {
+        days_checkboxes.show();
+      }
+    });
+  }
 });
+
+function update_route_information(route_id) {
+  $('.route-info').hide();
+  $('#route-info-' + route_id).show();
+
+  var all_route_schedule_inputs = $('.route-schedule-inputs');
+  all_route_schedule_inputs.hide();
+  all_route_schedule_inputs.find('select').attr('disabled', true);
+  all_route_schedule_inputs.find('input[type="checkbox"]').attr('disabled', true);
+
+  var route_schedule = $('#route-schedule-inputs-' + route_id);
+  route_schedule.show();
+  route_schedule.find('.order-days').show();
+  route_schedule.find('select').attr('disabled', false);
+  $.each(route_schedule.find('input[type="checkbox"]'), function(index, value) {
+    var day = $(value);
+    if(day.data('enabled')) { day.attr('disabled', false); }
+  });
+}
 
 function checkbox_toggle(checkbox, div) {
   if(checkbox.checked) {

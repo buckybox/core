@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120911033835) do
+ActiveRecord::Schema.define(:version => 20120917054659) do
 
   create_table "accounts", :force => true do |t|
     t.integer  "customer_id"
@@ -472,18 +472,20 @@ ActiveRecord::Schema.define(:version => 20120911033835) do
   create_table "routes", :force => true do |t|
     t.integer  "distributor_id"
     t.string   "name"
-    t.boolean  "monday",         :default => false, :null => false
-    t.boolean  "tuesday",        :default => false, :null => false
-    t.boolean  "wednesday",      :default => false, :null => false
-    t.boolean  "thursday",       :default => false, :null => false
-    t.boolean  "friday",         :default => false, :null => false
-    t.boolean  "saturday",       :default => false, :null => false
-    t.boolean  "sunday",         :default => false, :null => false
+    t.boolean  "monday",                  :default => false, :null => false
+    t.boolean  "tuesday",                 :default => false, :null => false
+    t.boolean  "wednesday",               :default => false, :null => false
+    t.boolean  "thursday",                :default => false, :null => false
+    t.boolean  "friday",                  :default => false, :null => false
+    t.boolean  "saturday",                :default => false, :null => false
+    t.boolean  "sunday",                  :default => false, :null => false
     t.datetime "created_at"
     t.datetime "updated_at"
     t.text     "schedule"
-    t.integer  "fee_cents",      :default => 0,     :null => false
+    t.integer  "fee_cents",               :default => 0,     :null => false
     t.string   "currency"
+    t.text     "area_of_service"
+    t.text     "estimated_delivery_time"
   end
 
   add_index "routes", ["distributor_id"], :name => "index_routes_on_distributor_id"
