@@ -1,0 +1,11 @@
+#Rotate Rails application logs
+/home/buckybox/#{RAILS_ENV}/shared/log/*.log {
+  weekly
+  missingok
+  rotate 52
+  compress
+  delaycompress
+  notifempty
+  copytruncate
+}
+

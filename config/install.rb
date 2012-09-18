@@ -75,5 +75,6 @@ policy :myapp, :roles => :app do
   requires :munin
   requires :munin_passenger
   requires :redis
+  requires :logrotate
 end
 
