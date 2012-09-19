@@ -49,6 +49,7 @@ class WebstoreController < ApplicationController
   def complete
     @order_price = @webstore_order.order_price
     @amount_due = @order_price
+    @default_city = @distributor.invoice_information.billing_city if @distributor.invoice_information
     if current_customer
       @current_balance = current_customer.account.balance
       @closing_balance = @current_balance - @order_price

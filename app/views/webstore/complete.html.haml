@@ -18,8 +18,8 @@
                   = g.input :street_address, input_html: { class: 'expand' }
                   = g.input :street_address_2, label: false, input_html: { class: 'expand' }, required: false
                   = g.input :suburb, input_html: { class: 'expand' }, required: false
-                  = g.input :city, required: false
-                  = g.input :post_code, required: false
+                  = g.input :city, required: false, input_html: { value: @default_city, class: 'expand' }, wrapper_html: { id: 'city' }
+                  = g.input :post_code, required: false, input_html: { class: 'expand' }, wrapper_html: { id: 'postal_code' }
 
   - if customer_signed_in?
     .row.webstore-section
@@ -37,12 +37,13 @@
   .row.webstore-section
     .ten.columns.offset-by-two
       .row
-        .ten.columns.grey-note
-          - if customer_signed_in? && @closing_balance.positive?
-            Your account is in credit
-            %small No payment necessary
-          - else
-            == Total Amount Due #{@amount_due}
+        .ten.columns
+          .webstore-grey-note.important
+            - if customer_signed_in? && @closing_balance.positive?
+              Your account is in credit
+              %small No payment necessary
+            - else
+              == Total Amount Due #{@amount_due}
       .row
         .ten.columns
           %p

@@ -33,7 +33,6 @@ class Webstore
       customise_order(webstore_order[:customise]) if webstore_order[:customise]
       login_customer(webstore_order[:user]) if webstore_order[:user]
       update_delivery_information(webstore_order) if webstore_order[:route]
-      binding.pry
       add_address_information(webstore_order[:address]) if webstore_order[:address]
     end
 
@@ -41,7 +40,7 @@ class Webstore
   end
 
   def add_address_information(address_information)
-    customer = @webstore.customer
+    customer = @order.customer
     customer.first_name = address_information[:name]
 
     address = customer.address
@@ -49,7 +48,7 @@ class Webstore
     address.address_2 = address_information[:street_address_2]
     address.suburb = address_information[:suburb]
     address.city = address_information[:city]
-    address.post_code = address_information[:post_code]
+    address.postcode = address_information[:post_code]
 
     customer.save
     @next_step = PLACED
