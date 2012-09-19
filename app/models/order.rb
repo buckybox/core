@@ -80,6 +80,7 @@ class Order < ActiveRecord::Base
       start_time = start_time.to_time_in_current_zone
     end
 
+    # FIXME: Shouldn't need a special case for single. Fix API. Also, see webstore model version.
     if frequency == 'single'
       create_schedule_for(:schedule, start_time, frequency)
     elsif !days_by_number.nil?

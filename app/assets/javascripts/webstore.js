@@ -93,10 +93,7 @@ $(function() {
 
   if(('#route').length > 0) {
     var route_select = $('#route_select');
-    var start_date_select = $('.schedule-start-date');
-
     update_route_information(route_select.val());
-    update_day_checkboxes(start_date_select);
 
     route_select.change(function() {
       update_route_information(route_select.val());
@@ -114,7 +111,7 @@ $(function() {
       }
     });
 
-    start_date_select.change(function() {
+    $('.schedule-start-date').change(function() {
       update_day_checkboxes($(this));
     });
   }
@@ -149,6 +146,7 @@ function update_route_information(route_id) {
     var day = $(value);
     if(day.data('enabled')) { day.attr('disabled', false); }
   });
+  update_day_checkboxes(route_schedule.find('.schedule-start-date'));
 }
 
 function checkbox_toggle(checkbox, div) {

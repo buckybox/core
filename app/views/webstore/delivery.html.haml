@@ -22,7 +22,7 @@
             .ten.columns
               .row
                 .twelve.columns.important When would you like it?
-              = render partial: 'webstore/route', collection: @routes, locals: { g: g, frequencies: @order_frequencies, days: @days }
+              = render partial: 'route', collection: @routes, locals: { g: g, frequencies: @order_frequencies, days: @days }
 
       = f.simple_fields_for(:extras) do |g|
         #extras.inputs
@@ -42,10 +42,15 @@
           .row
             .twelve.columns
               We're using
-              = link_to 'Bucky Box', 'http://www.buckybox.com/'
+              = link_to 'Bucky Box', 'http://www.buckybox.com/', target: '_blank'
               to take orders, Bucky Box is a social enterprise with a mission to 
               support local food and organic farming worldwide.
 
   .row.webstore-section
+    .ten.columns.offset-by-two
+      .row
+        .ten.columns.important.text-right Total
+
+  .row
     .twelve.columns
       .actions= f.button :submit, 'Next', class: 'float-right'

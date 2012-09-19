@@ -1,13 +1,19 @@
 class WebstoreOrder < ActiveRecord::Base
+  include Bucky
+
   belongs_to :account
   belongs_to :box
   belongs_to :route
+
+  has_one :customer, through: :account
 
   has_one :distributor, through: :account
 
   serialize :exclusions, Array
   serialize :substitutes, Array
   serialize :extras, Hash
+
+  schedule_for :schedule
 
   attr_accessible :box, :remote_ip
 
@@ -36,11 +42,14 @@ class WebstoreOrder < ActiveRecord::Base
   end
 
   def order_extras_price
+    Money.new(250)
   end
 
   def order_price
+    Money.new(5000)
   end
 
   def completed?
+    false
   end
 end

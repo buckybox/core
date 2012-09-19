@@ -1,0 +1,20 @@
+.row.webstore-section
+  .ten.columns.offset-by-two
+    .row
+      .ten.columns.important Deliver To:
+    .row
+      .twelve.columns
+        = @customer.name
+        = @address.join('<br>')
+    .row
+      .ten.columns.important Delivery Date
+    .row
+      .twelve.columns
+        = @schedule.next_occurrence.to_s(:day_month_date_year)
+        %br
+        = @schedule
+.row
+  .twelve.columns
+    .actions.text-centre
+      = link_to 'Webstore', webstore_store_path(@distributor.parameter_name)
+      = link_to 'My Account', customer_root_path

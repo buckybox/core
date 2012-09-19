@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120917054659) do
+ActiveRecord::Schema.define(:version => 20120919000442) do
 
   create_table "accounts", :force => true do |t|
     t.integer  "customer_id"
@@ -68,6 +68,7 @@ ActiveRecord::Schema.define(:version => 20120917054659) do
     t.text     "customer_message"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "bsb_number"
   end
 
   add_index "bank_information", ["distributor_id"], :name => "index_bank_information_on_distributor_id"
@@ -563,8 +564,11 @@ ActiveRecord::Schema.define(:version => 20120917054659) do
     t.text     "extras"
     t.string   "status"
     t.string   "remote_ip"
-    t.datetime "created_at",    :null => false
-    t.datetime "updated_at",    :null => false
+    t.datetime "created_at",     :null => false
+    t.datetime "updated_at",     :null => false
+    t.text     "schedule"
+    t.string   "frequency"
+    t.boolean  "extras_one_off"
   end
 
 end
