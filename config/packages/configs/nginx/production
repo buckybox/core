@@ -1,0 +1,2 @@
+  passenger_max_pool_size 4; # hard limit for max passengers (can be changed if memory available)
+  passenger_max_instances_per_app 4; # should match max_pool_size unless multiple apps running

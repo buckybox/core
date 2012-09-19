@@ -91,11 +91,11 @@ end
 
 namespace :provision do
   task :app, :roles => [:app] do
-    puts "Provisioing app for #{rails_env.upcase}"
+    puts "Provisioing app for #{stage.upcase}"
     puts "#{domain}:#{port}"
     puts "Check that is correct.."
     raise "Bailed out of the provisioning cause I got scared" unless Capistrano::CLI.ui.ask("Super sure? (Y/n)")[0].downcase == 'y'
-    if system("bundle exec sprinkle -v -s config/install.rb #{rails_env}")
+    if system("bundle exec sprinkle -v -s config/install.rb #{stage}")
       deploy.setup
       deploy
     end
@@ -106,7 +106,7 @@ namespace :provision do
     puts "#{domain}:#{port}"
     puts "Check that is correct.."
     raise "Bailed out of the provisioning cause I got scared" unless Capistrano::CLI.ui.ask("Super sure? (Y/n)")[0].downcase == 'y'
-    system("bundle exec sprinkle -v -s config/install.rb #{rails_env}")
+    system("bundle exec sprinkle -v -s config/install.rb #{stage}")
   end
 
   task :copy_old_data, :roles => [:db] do
