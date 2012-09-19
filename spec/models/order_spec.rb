@@ -211,31 +211,7 @@ describe Order do
         order.schedule = schedule
       end
 
-      specify { expect { order.save }.should change(OrderScheduleTransaction, :count).by(1) }
-    end
-
-    context 'scheduled_delivery' do
-      before do
-        @schedule = order.schedule
-        delivery_list = Fabricate(:delivery_list, date: Date.current + 5.days)
-        @delivery = Fabricate(:delivery, delivery_list: delivery_list)
-        order.add_scheduled_delivery(@delivery)
-        order.save
-      end
-
-      describe '#add_scheduled_delivery' do
-        specify { order.schedule.occurs_on?(@delivery.date.to_time_in_current_zone).should be_true }
-        specify { order.schedule.occurs_on?((@delivery.date - 1.day).to_time_in_current_zone).should_not be_true }
-      end
-
-      describe '#remove_scheduled_delivery' do
-        before do
-          order.remove_scheduled_delivery(@delivery)
-          order.save
-        end
-
-        specify { order.schedule.occurs_on?(@delivery.date.to_time_in_current_zone).should_not be_true }
-      end
+      specify { expect { order.save }.to change(OrderScheduleTransaction, :count).by(1) }
     end
 
     describe '#string_pluralize' do
@@ -273,7 +249,7 @@ describe Order do
         @order5 = Fabricate(:order, schedule: time_schedule_past)
       end
 
-      specify { expect { Order.deactivate_finished }.should change(Order.active, :count).by(-2) }
+      specify { expect { Order.deactivate_finished }.to change(Order.active, :count).by(-2) }
 
       describe 'individually' do
         before { Order.deactivate_finished }
@@ -316,17 +292,30 @@ describe Order do
         @e1 = Fabricate(:exclusion, order: order)
         @e2 = Fabricate(:exclusion, order: order)
         @e3 = Fabricate(:exclusion, order: order)
-
-        @e1_id = @e1.line_item_id
-        @e2_id = @e2.line_item_id
-        @e3_id = @e3.line_item_id
-        @e4_id = Fabricate(:line_item).id
-
-        order.update_exclusions([@e1_id, @e4_id])
-        order.save
       end
 
-      specify { order.exclusions.map(&:line_item_id).should == [@e1_id, @e4_id] }
+      context 'change exclusions' do
+        before do
+          @e1_id = @e1.line_item_id
+          @e2_id = @e2.line_item_id
+          @e3_id = @e3.line_item_id
+          @e4_id = Fabricate(:line_item).id
+
+          order.update_exclusions([@e1_id, @e4_id])
+          order.save
+        end
+
+        specify { order.exclusions.map(&:line_item_id).should == [@e1_id, @e4_id] }
+      end
+
+      context 'remove exlusions' do
+        before do
+          order.update_exclusions(nil)
+          order.save
+        end
+
+        specify { order.exclusions.map(&:line_item_ids).should == [] }
+      end
     end
 
     describe '#update_substitutions' do
@@ -335,17 +324,30 @@ describe Order do
         @s1 = Fabricate(:substitution, order: order)
         @s2 = Fabricate(:substitution, order: order)
         @s3 = Fabricate(:substitution, order: order)
-
-        @s1_id = @s1.line_item_id
-        @s2_id = @s2.line_item_id
-        @s3_id = @s3.line_item_id
-        @s4_id = Fabricate(:line_item).id
-
-        order.update_substitutions([@s1_id, @s4_id])
-        order.save
       end
 
-      specify { order.substitutions.map(&:line_item_id).should == [@s1_id, @s4_id] }
+      context 'change substitutions' do
+        before do
+          @s1_id = @s1.line_item_id
+          @s2_id = @s2.line_item_id
+          @s3_id = @s3.line_item_id
+          @s4_id = Fabricate(:line_item).id
+
+          order.update_substitutions([@s1_id, @s4_id])
+          order.save
+        end
+
+        specify { order.substitutions.map(&:line_item_id).should == [@s1_id, @s4_id] }
+      end
+
+      context 'remove substitutions' do
+        before do
+          order.update_substitutions(nil)
+          order.save
+        end
+
+        specify { order.substitutions.map(&:line_item_ids).should == [] }
+      end
     end
   end
 

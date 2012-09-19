@@ -43,6 +43,8 @@ class Customer < ActiveRecord::Base
 
   default_scope order(:first_name)
 
+  delegate :separate_bucky_fee?, :consumer_delivery_fee, to: :distributor
+
   default_value_for :discount, 0
 
   pg_search_scope :search,

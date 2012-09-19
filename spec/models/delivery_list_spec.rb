@@ -66,17 +66,14 @@ describe DeliveryList do
       daily_orders(@distributor)
 
       @advance_days  = Distributor::DEFAULT_ADVANCED_DAYS
-      @generate_date = Date.current + @advance_days.days
-
-      time_travel_to @generate_date
-
-      PackingList.generate_list(@distributor, @generate_date)
+      @generate_date = Date.current + @advance_days
+      time_travel_to Date.current + 1.day
     end
 
     after { back_to_the_present }
 
-    specify { expect { DeliveryList.generate_list(@distributor, @generate_date) }.should change(@distributor.delivery_lists, :count).from(@advance_days).to(@advance_days + 1) }
-    specify { expect { DeliveryList.generate_list(@distributor, @generate_date) }.should change(@distributor.deliveries, :count).from(0).to(3) }
+    specify { expect { DeliveryList.generate_list(@distributor, @generate_date) }.to change(@distributor.delivery_lists, :count).from(@advance_days).to(@advance_days + 1) }
+    specify { expect { PackingList.generate_list(@distributor, @generate_date); DeliveryList.generate_list(@distributor, @generate_date) }.to change(@distributor.deliveries, :count).from(0).to(3) }
 
     context 'for the next week' do
       before do
@@ -131,7 +128,7 @@ describe DeliveryList do
         delivery_list.stub(:delivery_ids).and_return([delivery, @diff_route])
       end
 
-      specify { expect { delivery_list.reposition([@diff_route.id, delivery.id]) }.should raise_error(RuntimeError) }
+      specify { expect { delivery_list.reposition([@diff_route.id, delivery.id]) }.to raise_error(RuntimeError) }
     end
 
     context 'delivery ids must match' do
@@ -140,14 +137,14 @@ describe DeliveryList do
 
         Delivery.stub_chain(:find, :route_id)
         Delivery.stub_chain(:find, :delivery_list, :date, :wday)
-        delivery_list.stub_chain(:deliveries, :ordered, :where, :map).and_return(@ids)
+        delivery_list.stub_chain(:deliveries, :where, :select, :map).and_return(@ids)
 
         delivery_list.deliveries.stub_chain(:ordered, :find).and_return(delivery)
         delivery.stub(:reposition!).and_return(true)
       end
 
-      specify { expect { delivery_list.reposition([2, 1, 3]) }.should_not raise_error(RuntimeError) }
-      specify { expect { delivery_list.reposition([2, 5, 3]) }.should raise_error(RuntimeError) }
+      specify { expect { delivery_list.reposition([2, 1, 3]) }.to_not raise_error(RuntimeError) }
+      specify { expect { delivery_list.reposition([2, 5, 3]) }.to raise_error(RuntimeError) }
     end
 
     context 'should update delivery list positions' do
@@ -163,17 +160,17 @@ describe DeliveryList do
       end
 
       it 'should change delivery order' do
-        DeliveryList.any_instance.stub(:archived?).and_return(false)
         expect { delivery_list.reposition(@new_ids)}.should change{delivery_list.deliveries.ordered.collect(&:id)}.to(@new_ids)
         delivery_list.reload.deliveries.ordered.collect(&:delivery_number).should eq([3,1,2])
       end
 
       it 'should update the delivery list for the next week' do
-        DeliveryList.any_instance.stub(:archived?).and_return(false)
+        Distributor.any_instance.stub(:generate_required_daily_lists) #TODO remove this hack to get around the constant after_save callbacks
         delivery_list.reposition(@new_ids)
         addresses = delivery_list.deliveries.ordered.collect(&:address)
-        PackingList.generate_list(distributor, delivery_list.date+1.week)
+        next_packing_list = PackingList.generate_list(distributor, delivery_list.date+1.week)
         next_delivery_list = DeliveryList.generate_list(distributor, delivery_list.date+1.week)
+        Distributor.any_instance.unstub(:generate_required_daily_lists) #TODO remove this hack to get around the constant after_save callbacks
 
         next_delivery_list.deliveries.ordered.collect(&:address).should eq(addresses)
         next_delivery_list.deliveries.ordered.collect(&:delivery_number).should eq([1,2,3])
@@ -235,14 +232,20 @@ end
 
 def fab_delivery(delivery_list, distributor, route=nil, address=nil)
   route ||= Fabricate(:route, distributor: distributor)
-  address ||= Fabricate.build(:address)
-  account = Fabricate.build(:account)
 
   customer = Fabricate(:customer_without_after_create, distributor: distributor, route: route)
-  address.customer = customer
-  address.save!
-  account.customer = customer
-  account.save!
+  account = Fabricate(:account, customer: customer)
+  
+  customer.address.delete
+
+  if address
+    address.customer = customer
+    address.save!
+  else
+    address = Fabricate(:address, customer: customer)
+  end
+
+  customer.address = address
 
   Fabricate(:delivery, delivery_list: delivery_list, order: Fabricate(:recurring_order_everyday, account: account), route: route)
 end

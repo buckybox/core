@@ -21,8 +21,6 @@ class PackingList < ActiveRecord::Base
       future_start_date = start_date
       future_start_date = (result.last.date + 1.day) if result.last
 
-      orders = distributor.orders.active.includes({ account: {customer: {address:{}, deliveries: {delivery_list: {}}}}, order_extras: {}, box: {}})
-
       (future_start_date..end_date).each do |date|
         result << collect_list(distributor, date, orders)
       end
@@ -31,27 +29,25 @@ class PackingList < ActiveRecord::Base
     return result
   end
 
-  def self.collect_list(distributor, date, orders=nil)
+  def self.collect_list(distributor, date)
     if distributor.packing_lists.where(date: date).count > 0
       distributor.packing_lists.where(date: date).includes({ packages: {}}).first
     else
       date_orders = []
-      
-      orders ||= distributor.orders.active.includes({ account: {customer: {address:{}, deliveries: {delivery_list: {}}}}, order_extras: {}, box: {}})
 
-      orders.each { |order| date_orders << order if order.schedule.occurs_on?(date) }
+      order_ids = Bucky::Sql.order_ids(distributor, date)
+      orders = distributor.orders.active.where(id: order_ids).includes({ account: {customer: {address:{}, deliveries: {delivery_list: {}}}}, order_extras: {}, box: {}})
 
       FuturePackingList.new(date, date_orders, false)
     end
   end
 
   def self.generate_list(distributor, date)
-    packing_list = PackingList.find_or_create_by_distributor_id_and_date(distributor.id, date)
+    packing_list = PackingList.find_by_distributor_id_and_date(distributor.id, date)
+    packing_list ||= PackingList.create!({distributor: distributor, date: date})
 
-    distributor.orders.active.each do |order|
-      if order.schedule.occurs_on?(date)
-        packing_list.packages.originals.find_or_create_by_order_id(order.id)
-      end
+    distributor.orders.active.where(id: Bucky::Sql.order_ids(distributor, date)).each do |order|
+      packing_list.packages.originals.find_or_create_by_order_id(order.id)
     end
 
     return packing_list

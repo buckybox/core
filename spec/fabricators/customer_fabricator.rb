@@ -1,4 +1,4 @@
-Fabricator(:customer_without_after_create, from: :customer) do
+Fabricator(:customer_without_after_create, class_name: :customer) do
   distributor!
   route! { |customer| Fabricate(:route, distributor: customer.distributor) }
   first_name { sequence(:first_name) { |i| "First Name #{i}" } }
@@ -9,6 +9,6 @@ end
 
 Fabricator(:customer, from: :customer_without_after_create) do
   after_create { |customer| Fabricate(:account, customer: customer) }
-  after_create { |customer| Fabricate(:address_with_associations, customer: customer) }
+  after_build { |customer| Fabricate(:address_with_associations, customer: customer) }
 end
 

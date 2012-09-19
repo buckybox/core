@@ -110,6 +110,15 @@ ActiveRecord::Schema.define(:version => 20120919000442) do
 
   add_index "boxes", ["distributor_id"], :name => "index_boxes_on_distributor_id"
 
+  create_table "countries", :force => true do |t|
+    t.string   "name"
+    t.string   "default_currency"
+    t.string   "default_time_zone"
+    t.integer  "default_consumer_fee_cents"
+    t.datetime "created_at",                 :null => false
+    t.datetime "updated_at",                 :null => false
+  end
+
   create_table "cron_logs", :force => true do |t|
     t.text     "log"
     t.datetime "created_at", :null => false
@@ -214,12 +223,12 @@ ActiveRecord::Schema.define(:version => 20120919000442) do
   end
 
   create_table "distributors", :force => true do |t|
-    t.string   "email",                                  :default => "",    :null => false
-    t.string   "encrypted_password",      :limit => 128, :default => "",    :null => false
+    t.string   "email",                                      :default => "",    :null => false
+    t.string   "encrypted_password",          :limit => 128, :default => "",    :null => false
     t.string   "reset_password_token"
     t.datetime "reset_password_sent_at"
     t.datetime "remember_created_at"
-    t.integer  "sign_in_count",                          :default => 0
+    t.integer  "sign_in_count",                              :default => 0
     t.datetime "current_sign_in_at"
     t.datetime "last_sign_in_at"
     t.string   "current_sign_in_ip"
@@ -228,7 +237,7 @@ ActiveRecord::Schema.define(:version => 20120919000442) do
     t.string   "confirmation_token"
     t.datetime "confirmed_at"
     t.datetime "confirmation_sent_at"
-    t.integer  "failed_attempts",                        :default => 0
+    t.integer  "failed_attempts",                            :default => 0
     t.string   "unlock_token"
     t.datetime "locked_at"
     t.string   "authentication_token"
@@ -237,11 +246,11 @@ ActiveRecord::Schema.define(:version => 20120919000442) do
     t.string   "name"
     t.string   "url"
     t.string   "company_logo"
-    t.boolean  "completed_wizard",                       :default => false, :null => false
+    t.boolean  "completed_wizard",                           :default => false, :null => false
     t.string   "parameter_name"
-    t.integer  "invoice_threshold_cents",                :default => 0,     :null => false
-    t.decimal  "bucky_box_percentage",                                      :null => false
-    t.boolean  "separate_bucky_fee",                     :default => true
+    t.integer  "invoice_threshold_cents",                    :default => 0,     :null => false
+    t.decimal  "bucky_box_percentage",                                          :null => false
+    t.boolean  "separate_bucky_fee",                         :default => true
     t.string   "support_email"
     t.string   "time_zone"
     t.integer  "advance_hour"
@@ -251,6 +260,8 @@ ActiveRecord::Schema.define(:version => 20120919000442) do
     t.boolean  "bank_deposit"
     t.boolean  "paypal"
     t.string   "bank_deposit_format"
+    t.integer  "country_id"
+    t.integer  "consumer_delivery_fee_cents"
   end
 
   add_index "distributors", ["authentication_token"], :name => "index_distributors_on_authentication_token", :unique => true
@@ -409,20 +420,21 @@ ActiveRecord::Schema.define(:version => 20120919000442) do
     t.integer  "packing_list_id"
     t.integer  "position"
     t.string   "status"
-    t.datetime "created_at",                                  :null => false
-    t.datetime "updated_at",                                  :null => false
+    t.datetime "created_at",                                            :null => false
+    t.datetime "updated_at",                                            :null => false
     t.integer  "order_id"
     t.integer  "original_package_id"
     t.string   "packing_method"
     t.text     "archived_address"
     t.integer  "archived_order_quantity"
     t.string   "archived_box_name"
-    t.integer  "archived_box_price_cents",   :default => 0,   :null => false
+    t.integer  "archived_box_price_cents",             :default => 0,   :null => false
     t.string   "currency"
     t.string   "archived_customer_name"
-    t.integer  "archived_route_fee_cents",   :default => 0,   :null => false
-    t.decimal  "archived_customer_discount", :default => 0.0, :null => false
+    t.integer  "archived_route_fee_cents",             :default => 0,   :null => false
+    t.decimal  "archived_customer_discount",           :default => 0.0, :null => false
     t.text     "archived_extras"
+    t.integer  "archived_consumer_delivery_fee_cents", :default => 0
   end
 
   add_index "packages", ["order_id"], :name => "index_packages_on_order_id"
@@ -543,7 +555,7 @@ ActiveRecord::Schema.define(:version => 20120919000442) do
 
   create_table "transactions", :force => true do |t|
     t.integer  "account_id"
-    t.integer  "amount_cents",         :default => 0, :null => false
+    t.integer  "amount_cents",                 :default => 0, :null => false
     t.string   "currency"
     t.text     "description"
     t.datetime "created_at"
@@ -551,6 +563,8 @@ ActiveRecord::Schema.define(:version => 20120919000442) do
     t.datetime "display_time"
     t.integer  "transactionable_id"
     t.string   "transactionable_type"
+    t.integer  "reverse_transactionable_id"
+    t.string   "reverse_transactionable_type"
   end
 
   add_index "transactions", ["account_id"], :name => "index_transactions_on_account_id"
