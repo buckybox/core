@@ -35,16 +35,16 @@ class Box < ActiveRecord::Base
     dislikes? || extras_allowed?
   end
 
+  def extras_allowed?
+    !extras_not_allowed?
+  end
+
   def extras_unlimited?
     extras_limit == -1
   end
 
   def extras_not_allowed?
     (extras_limit.blank? || extras_limit.zero?)
-  end
-
-  def extras_allowed?
-    !extras_not_allowed?
   end
 
   def extra_option

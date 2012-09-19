@@ -24,14 +24,15 @@
                 .twelve.columns.important When would you like it?
               = render partial: 'route', collection: @routes, locals: { g: g, frequencies: @order_frequencies, days: @days }
 
-      = f.simple_fields_for(:extras) do |g|
-        #extras.inputs
-          .row
-            .ten.columns
-              .row
-                .twelve.columns.important What about those extra items?
-              .row
-                .twelve.columns= g.input :extra_frequency, label: false, collection: @extra_frequencies, include_blank: false
+      - if @webstore_order.box.extras_allowed?
+        = f.simple_fields_for(:extras) do |g|
+          #extras.inputs
+            .row
+              .ten.columns
+                .row
+                  .twelve.columns.important What about those extra items?
+                .row
+                  .twelve.columns= g.input :extra_frequency, label: false, collection: @extra_frequencies, include_blank: false
 
   .row.webstore-section
     .ten.columns.offset-by-two

@@ -8,21 +8,26 @@ class WebstoreController < ApplicationController
   end
 
   def process_step
-    webstore = Webstore.new(@distributor, session, request.remote_ip)
-    webstore.process_params(params)
+    webstore = Webstore.new(@distributor, session, current_customer, request.remote_ip)
+    webstore.process_params(params[:webstore_order])
 
     session[:webstore] = webstore.to_session
 
+    binding.pry
     redirect_to action: webstore.next_step, distributor_parameter_name: @distributor.parameter_name
   end
 
   def customise
+    redirect_to action: :login and return unless @webstore_order.box.customisable?
+
     @stock_list = @distributor.line_items
     @box = @webstore_order.box
     @extras = @box.extras.alphabetically
   end
 
   def login
+    redirect_to action: :delivery and return if current_customer
+
     @registered_options = [
       ["I'm a new customer", 'new'],
       ["I'm a returning customer", 'returning']
