@@ -61,5 +61,8 @@ module BuckyBox
       g.test_framework      :rspec, fixture: true
       g.fixture_replacement :fabrication
     end
+    
+    # Dump database functions into the schema
+    config.active_record.schema_format = :sql
   end
 end

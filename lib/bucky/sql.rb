@@ -1,7 +1,9 @@
 class Bucky::Sql
+  PATH = File.join(Rails.root,"db/flux_cap")
+
   def self.template(file_name)
       @sql_templates ||= {}
-      @sql_templates[file_name] ||= File.read(File.join(Rails.root,"db/flux_cap/templates/#{file_name}")).gsub(/\s+/, ' ')
+      @sql_templates[file_name] ||= File.read(File.join(PATH,"/templates/#{file_name}")).gsub(/\s+/, ' ')
       @sql_templates[file_name].clone
   end
 
