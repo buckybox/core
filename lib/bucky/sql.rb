@@ -1,7 +1,7 @@
 class Bucky::Sql
   def self.template(file_name)
       @sql_templates ||= {}
-      @sql_templates[file_name] ||= File.read(File.join(Rails.root,"db/templates/#{file_name}")).gsub(/\s+/, ' ')
+      @sql_templates[file_name] ||= File.read(File.join(Rails.root,"db/flux_cap/templates/#{file_name}")).gsub(/\s+/, ' ')
       @sql_templates[file_name].clone
   end
 
@@ -14,7 +14,7 @@ class Bucky::Sql
   end
 
   def self.find_schedules(distributor, date)
-    sql = substitute('find_schedules.sql', {
+    substitute('find_schedules.sql', {
       dow: date.strftime('%a').downcase,
       date: date.to_s(:db),
       distributor_id: distributor.id.to_s
@@ -22,7 +22,7 @@ class Bucky::Sql
   end
 
   def self.find_schedules_route(distributor, date, route_id)
-    sql = substitute('find_schedules_route.sql', {
+    substitute('find_schedules_route.sql', {
       dow: date.strftime('%a').downcase,
       date: date.to_s(:db),
       distributor_id: distributor.id.to_s,
