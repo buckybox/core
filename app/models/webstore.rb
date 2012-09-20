@@ -1,24 +1,25 @@
 class Webstore
-  attr_reader :distributor, :customer, :order, :ip_address, :next_step
+  attr_reader :controller, :distributor, :order, :next_step
 
-  def initialize(distributor, session, customer, ip_address)
-    webstore_session = session[:webstore]
+  def initialize(controller, distributor)
+    @controller  = controller
+    @distributor = distributor
+
+    webstore_session = @controller.session[:webstore]
 
     if webstore_session
       @order     = WebstoreOrder.find(webstore_session[:webstore_order_id])
       @next_step = webstore_session[:next_step]
     end
-
-    @distributor = distributor
-    @customer    = customer
-    @ip_address  = ip_address
   end
 
   def to_session
-    { webstore_order_id: @order.id, next_step: next_step }
+    { webstore_order_id: @order.id }
   end
 
-  def process_params(webstore_params)
+  def process_params
+    webstore_params = @controller.params[:webstore_order]
+
     start_order(webstore_params[:box_id])              if webstore_params[:box_id]
     customise_order(webstore_params[:customise])       if webstore_params[:customise]
     login_customer(webstore_params[:user])             if webstore_params[:user]
@@ -37,6 +38,68 @@ class Webstore
   COMPLETE  = :complete
   PLACED    = :placed
 
+  def start_order(box_id)
+    box = Box.where(id: box_id, distributor_id: @distributor.id).first
+    customer = @controller.current_customer
+
+    @order = WebstoreOrder.create(box: box, remote_ip: @controller.request.remote_ip)
+    @order.account = customer.account if customer
+
+    if box.customisable?
+      @next_step = CUSTOMISE
+    else
+      if @controller.customer_signed_in?
+        @next_step = DELIVERY
+      else
+        @next_step = LOGIN
+      end
+    end
+  end
+
+  def customise_order(customise)
+    add_exclusions_to_order(customise[:dislikes]) if customise[:dislikes]
+    add_substitutes_to_order(customise[:likes])   if customise[:likes]
+    add_extras_to_order(customise[:extras])       if customise[:extras]
+
+    if @controller.customer_signed_in?
+      @next_step = DELIVERY
+    else
+      @next_step = LOGIN
+    end
+  end
+
+  def login_customer(user_information)
+    email    = user_information[:email]
+    customer = @distributor.customers.find_by_email(email)
+
+    if customer.nil?
+      route      = Route.default_route(distributor)
+      first_name = 'Webstore Temp'
+      Customer.create(distributor: distributor, email: email, route: route, first_name: first_name)
+      @controller.sign_in(customer)
+      # send an email
+    elsif customer.valid_password?(user_information[:password])
+      @controller.sign_in(customer)
+    end
+
+    @order.account = customer.account
+
+    if @controller.customer_signed_in?
+      @next_step = DELIVERY
+    else
+      @controller.flash[:error] = 'Login failed, please try again.'
+      @next_step = LOGIN
+    end
+  end
+
+  def update_delivery_information(delivery_information)
+    assign_route(delivery_information[:route])             if delivery_information[:route]
+    set_schedule(delivery_information[:schedule])          if delivery_information[:schedule]
+    assign_extras_frequency(delivery_information[:extras]) if delivery_information[:extras]
+
+    @next_step = COMPLETE
+  end
+
   def add_address_information(address_information)
     customer = @order.customer
     customer.first_name = address_information[:name]
@@ -49,46 +112,9 @@ class Webstore
     address.postcode  = address_information[:post_code]
 
     customer.save
+
+    @controller.flash[:notice] = 'Your order has been placed'
     @next_step = PLACED
-  end
-
-  def update_delivery_information(delivery_information)
-    assign_route(delivery_information[:route])             if delivery_information[:route]
-    set_schedule(delivery_information[:schedule])          if delivery_information[:schedule]
-    assign_extras_frequency(delivery_information[:extras]) if delivery_information[:extras]
-
-    @next_step = COMPLETE
-  end
-
-  def login_customer(user_information)
-    email = user_information[:email]
-    customer = Customer.find_by_email(email)
-
-    unless customer
-      route = Route.default_route(distributor)
-      first_name = 'Webstore Temp'
-      Customer.create(distributor: distributor, email: email, route: route, first_name: first_name)
-    end
-
-    @order.account = customer.account
-
-    @next_step = DELIVERY
-  end
-
-  def customise_order(customise)
-    add_exclusions_to_order(customise[:dislikes]) if customise[:dislikes]
-    add_substitutes_to_order(customise[:likes])   if customise[:likes]
-    add_extras_to_order(customise[:extras])       if customise[:extras]
-
-    @next_step = LOGIN
-  end
-
-  def start_order(box_id)
-    box = Box.where(id: box_id, distributor_id: @distributor.id).first
-    @order = WebstoreOrder.create(box: box, remote_ip: @ip_address)
-    @order.account = @customer.account if @customer
-
-    @next_step = (box.customisable? ? CUSTOMISE : LOGIN)
   end
 
   def assign_extras_frequency(extra_information)

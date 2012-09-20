@@ -19,4 +19,4 @@
 
       .box-description= simple_format box.description
 
-  = button_to 'Order', webstore_process_step_path(distributor.parameter_name, webstore_order: { box_id: box.id }), method: :post, class: 'button radius'
+  = button_to 'Order', webstore_process_step_path(distributor.parameter_name, webstore_order: { box_id: box }), method: :post, class: 'button radius'

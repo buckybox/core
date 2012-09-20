@@ -1,6 +1,6 @@
 class WebstoreController < ApplicationController
   before_filter :get_distributor
-  before_filter :get_webstore_order, except: [:store]
+  before_filter :get_webstore_order, except: [:store, :process_step]
 
   def store
     session[:webstore] = nil
@@ -8,26 +8,21 @@ class WebstoreController < ApplicationController
   end
 
   def process_step
-    webstore = Webstore.new(@distributor, session, current_customer, request.remote_ip)
-    webstore.process_params(params[:webstore_order])
+    webstore = Webstore.new(self, @distributor)
 
+    webstore.process_params
     session[:webstore] = webstore.to_session
 
-    binding.pry
     redirect_to action: webstore.next_step, distributor_parameter_name: @distributor.parameter_name
   end
 
   def customise
-    redirect_to action: :login and return unless @webstore_order.box.customisable?
-
     @stock_list = @distributor.line_items
     @box = @webstore_order.box
     @extras = @box.extras.alphabetically
   end
 
   def login
-    redirect_to action: :delivery and return if current_customer
-
     @registered_options = [
       ["I'm a new customer", 'new'],
       ["I'm a returning customer", 'returning']
@@ -67,15 +62,14 @@ class WebstoreController < ApplicationController
     @customer = @webstore_order.customer
     @address = @customer.address
     @schedule = @webstore_order.schedule
-
-    flash[:notice] = 'Your order has been placed'
   end
 
   private
 
   def get_webstore_order
     webstore_order_id = session[:webstore][:webstore_order_id] if session[:webstore]
-    @webstore_order = WebstoreOrder.find(webstore_order_id) if webstore_order_id
+    @webstore_order = WebstoreOrder.find_by_id(webstore_order_id) if webstore_order_id
+    redirect_to webstore_store_url and return unless @webstore_order
   end
 
   def get_distributor

@@ -7,7 +7,6 @@ class CreateWebstoreOrders < ActiveRecord::Migration
       t.text :exclusions
       t.text :substitutions
       t.text :extras
-      t.string :status
       t.string :remote_ip
 
       t.timestamps
