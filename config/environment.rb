@@ -6,3 +6,6 @@ BuckyBox::Application.initialize!
 
 ActsAsTaggableOn.force_parameterize = true
 ActsAsTaggableOn.remove_unused_tags = true
+
+require 'hodel_3000_compliant_logger'
+config.logger = Hodel3000CompliantLogger.new(config.log_path)
