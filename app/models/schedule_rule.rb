@@ -142,6 +142,19 @@ class ScheduleRule < ActiveRecord::Base
     end
   end
 
+  def self.test_next
+     ScheduleRule.select("id, next_occurrence('#{Date.today.to_s(:db)}', schedule_rules.*)").all.collect{|q|
+      [q.id, q.next_occurrence]
+    }.collect{|q|
+      sr = ScheduleRule.find(q.first)
+      if sr.order && sr.order.distributor
+        sr.order.distributor.use_local_time_zone do
+          q + [sr.order.try(:schedule).try(:next_occurrence).try(:to_date).try(:to_s,:db)]
+        end
+      end
+    }.compact.select{|q| q[1] != q[2] }
+  end
+
   FutureDeliveryList = Struct.new(:date, :deliveries)
 
   # For testing accuracy

@@ -3,6 +3,6 @@
 --FROM schedule_rules
 --limit 15;
 
-SELECT *, next_occurrence('2012-08-17', schedule_rules.*)
+SELECT *, next_occurrence('2012-09-20', schedule_rules.*)
 FROM schedule_rules
-limit 10;
+LIMIT 100

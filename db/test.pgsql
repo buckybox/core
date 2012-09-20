@@ -17,28 +17,48 @@ BEGIN
     from_date := schedule_rule.start;
   END IF;
   
+  -- What is the day of the week? Sunday: 0, Monday: 1, etc...
+  from_wday := EXTRACT(DOW from from_date);
+
   CASE schedule_rule.recur
   WHEN 'weekly' THEN
-    -- RECUR WEEKLY
-    -- What is the day of the week? Sunday: 0, Monday: 1, etc...
-    from_wday := EXTRACT(DOW from from_date);
-
+  -- ==================== WEEKLY ====================
     -- Loop until we find the next occurrence
+    -- The '1' in 1..7 means we consider the next occurrence tomorrow, not today.
     FOR i IN 0..6 LOOP
-      days_from_now := mod(from_wday + i, 6);
-      EXIT WHEN on_day(days_from_now, schedule_rule);
+      days_from_now := i;
+      EXIT WHEN on_day(mod(from_wday + days_from_now, 7), schedule_rule);
     END LOOP;
 
     return from_date + days_from_now;
   WHEN 'fortnightly' THEN
-    -- RECUR FORTNIGHTLY
-    return from_date;
+  -- ==================== FORTNIGHTLY ====================
+    -- Loop until we find the next occurrence
+    -- The '1' in 1..14 means we consider the next occurrence tomorrow, not today and we check a full fortnightly cycle
+    FOR i IN 0..13 LOOP
+      days_from_now := i;
+      EXIT WHEN on_day(mod(from_wday + days_from_now, 7), schedule_rule) AND
+        ((((from_date + days_from_now) - (schedule_rule.start - CAST(EXTRACT(DOW from schedule_rule.start) AS integer))) / 7) % 2) = 0;
+    END LOOP;
+
+    return from_date + days_from_now;
   WHEN 'monthly' THEN
-    -- RECUR MONTHLY
+  -- ==================== MONTHLY ====================
+    -- If we go above the 7th of a month, we skip to the next month
+    FOR i IN 0..6 LOOP
+      -- If we go above the 7th of a month, we skip to the next month
+      IF date_part('day', from_date) > 7 THEN
+        from_date := date(date_part('year', from_date + '1 month'::interval)::text || '-' || date_part('month', from_date + '1 month'::interval)::text || '-01');
+      END IF;
+
+      EXIT WHEN on_day(EXTRACT(DOW FROM from_date)::integer, schedule_rule);
+      from_date := from_date + 1;
+    END LOOP;
+
     return from_date;
   ELSE
     IF schedule_rule.recur IS NULL THEN
-      -- ONE OFF
+  -- ==================== ONE OFF / SINGLE ====================
       IF from_date > schedule_rule.start THEN
         return NULL;
       ELSE
