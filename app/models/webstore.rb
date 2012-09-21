@@ -1,5 +1,5 @@
 class Webstore
-  attr_reader :controller, :distributor, :order, :next_step
+  attr_reader :controller, :distributor, :order
 
   def initialize(controller, distributor)
     @controller  = controller
@@ -8,8 +8,7 @@ class Webstore
     webstore_session = @controller.session[:webstore]
 
     if webstore_session
-      @order     = WebstoreOrder.find(webstore_session[:webstore_order_id])
-      @next_step = webstore_session[:next_step]
+      @order = WebstoreOrder.find(webstore_session[:webstore_order_id])
     end
   end
 
@@ -21,7 +20,7 @@ class Webstore
     webstore_params = @controller.params[:webstore_order]
 
     start_order(webstore_params[:box_id])              if webstore_params[:box_id]
-    customise_order(webstore_params[:customise])       if webstore_params[:customise]
+    customise_order(webstore_params)                   if webstore_params[:customise] || webstore_params[:extras]
     login_customer(webstore_params[:user])             if webstore_params[:user]
     update_delivery_information(webstore_params)       if webstore_params[:route]
     add_address_information(webstore_params[:address]) if webstore_params[:address]
@@ -29,14 +28,11 @@ class Webstore
     @order.save
   end
 
-  private
+  def next_step
+    @order.status
+  end
 
-  STORE     = :store
-  CUSTOMISE = :customise
-  LOGIN     = :login
-  DELIVERY  = :delivery
-  COMPLETE  = :complete
-  PLACED    = :placed
+  private
 
   def start_order(box_id)
     box = Box.where(id: box_id, distributor_id: @distributor.id).first
@@ -46,25 +42,29 @@ class Webstore
     @order.account = customer.account if customer
 
     if box.customisable?
-      @next_step = CUSTOMISE
+      @order.customise_step
     else
       if @controller.customer_signed_in?
-        @next_step = DELIVERY
+        @order.delivery_step
       else
-        @next_step = LOGIN
+        @order.login_step
       end
     end
   end
 
   def customise_order(customise)
-    add_exclusions_to_order(customise[:dislikes]) if customise[:dislikes]
-    add_substitutes_to_order(customise[:likes])   if customise[:likes]
-    add_extras_to_order(customise[:extras])       if customise[:extras]
+    binding.pry
+    customise_params = customise[:customise]
+    add_exclusions_to_order(customise_params[:dislikes_input]) if customise_params
+    add_substitutes_to_order(customise_params[:likes_input])   if customise_params
+
+    extra_params = customise[:extras]
+    add_extras_to_order(extra_params) if customise[:extras]
 
     if @controller.customer_signed_in?
-      @next_step = DELIVERY
+      @order.delivery_step
     else
-      @next_step = LOGIN
+      @order.login_step
     end
   end
 
@@ -75,7 +75,11 @@ class Webstore
     if customer.nil?
       route      = Route.default_route(distributor)
       first_name = 'Webstore Temp'
-      Customer.create(distributor: distributor, email: email, route: route, first_name: first_name)
+
+      address = Address.new
+      address.save(validation: false)
+
+      customer = Customer.create(distributor: distributor, email: email, route: route, first_name: first_name, addresss: address)
       @controller.sign_in(customer)
       # send an email
     elsif customer.valid_password?(user_information[:password])
@@ -85,10 +89,10 @@ class Webstore
     @order.account = customer.account
 
     if @controller.customer_signed_in?
-      @next_step = DELIVERY
+      @order.delivery_step
     else
       @controller.flash[:error] = 'Login failed, please try again.'
-      @next_step = LOGIN
+      @order.login_step
     end
   end
 
@@ -97,7 +101,7 @@ class Webstore
     set_schedule(delivery_information[:schedule])          if delivery_information[:schedule]
     assign_extras_frequency(delivery_information[:extras]) if delivery_information[:extras]
 
-    @next_step = COMPLETE
+    @order.complete_step
   end
 
   def add_address_information(address_information)
@@ -114,12 +118,30 @@ class Webstore
     customer.save
 
     @controller.flash[:notice] = 'Your order has been placed'
-    @next_step = PLACED
+    @order.placed_step
   end
 
-  def assign_extras_frequency(extra_information)
-    extra_frequency = extra_information[:extra_frequency]
-    @order.extras_one_off = (extra_frequency == 'true' ? true : false)
+  def add_exclusions_to_order(exclusions)
+    exclusions.delete('')
+    @order.exclusions = exclusions
+    binding.pry
+  end
+
+  def add_substitutes_to_order(substitutions)
+    substitutions.delete('')
+    @order.substitutions = substitutions
+  end
+
+  def add_extras_to_order(extras)
+    extras.delete('add_extra')
+    @order.extras = extras.select { |k,v| v.to_i > 0 }
+  end
+
+  def assign_route(route_information)
+    route_id       = route_information[:route]
+    customer       = @order.customer
+    customer.route = Route.find(route_id)
+    customer.save
   end
 
   def set_schedule(schedule_information)
@@ -136,25 +158,8 @@ class Webstore
     end
   end
 
-  def assign_route(route_information)
-    route_id       = route_information[:route]
-    customer       = @order.customer
-    customer.route = Route.find(route_id)
-    customer.save
-  end
-
-  def add_extras_to_order(extras)
-    extras.delete('add_extra')
-    @webstore_order.extras = extras.select { |k,v| v.to_i > 0 }
-  end
-
-  def add_substitutes_to_order(substitutes)
-    substitutes.delete('')
-    @order.substitutes = substitutes
-  end
-
-  def add_exclusions_to_order(exclusions)
-    exclusions.delete('')
-    @order.exclusions = exclusions
+  def assign_extras_frequency(extra_information)
+    extra_frequency = extra_information[:extra_frequency]
+    @order.extras_one_off = (extra_frequency == 'true' ? true : false)
   end
 end

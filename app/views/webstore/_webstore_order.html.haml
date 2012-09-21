@@ -5,17 +5,19 @@
       .ten.columns.important= webstore_order.box_name
       .two.columns.important.text-right= webstore_order.box_price.format
 
-    - if webstore_order.box_description
+    - if webstore_order.customised?
       .row
-        .ten.columns= simple_format webstore_order.box_description
-    - elsif webstore_order.order
+        .ten.columns{ title: webstore_order.customisation_description }
+          = truncate(webstore_order.customisation_description, length: 100)
       .row
-        .ten.columns= order_customisation(webstore_order.order)
+        .ten.columns{ title: webstore_order.extras_description }
+          = truncate(webstore_order.extras_description, length: 100)
+        .two.columns.important.text-right= webstore_order.order_extras_price.format
+    - else
       .row
-        .ten.columns= order_extras(webstore_order.order)
-        .two.columns.important.text-right= webstore_order.extras_price.format
+        .ten.columns= simple_format(webstore_order.box_description)
 
-    - if @route
+    - if webstore_order.scheduled?
       .row
         .ten.columns= webstore_order.route_name
         .two.columns.important.text-right= webstore_order.route_fee

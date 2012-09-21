@@ -576,6 +576,7 @@ ActiveRecord::Schema.define(:version => 20120919000442) do
     t.text     "exclusions"
     t.text     "substitutions"
     t.text     "extras"
+    t.string   "status"
     t.string   "remote_ip"
     t.datetime "created_at",     :null => false
     t.datetime "updated_at",     :null => false
