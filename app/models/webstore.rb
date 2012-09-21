@@ -53,7 +53,6 @@ class Webstore
   end
 
   def customise_order(customise)
-    binding.pry
     customise_params = customise[:customise]
     add_exclusions_to_order(customise_params[:dislikes_input]) if customise_params
     add_substitutes_to_order(customise_params[:likes_input])   if customise_params
@@ -73,13 +72,8 @@ class Webstore
     customer = @distributor.customers.find_by_email(email)
 
     if customer.nil?
-      route      = Route.default_route(distributor)
-      first_name = 'Webstore Temp'
-
-      address = Address.new
-      address.save(validation: false)
-
-      customer = Customer.create(distributor: distributor, email: email, route: route, first_name: first_name, addresss: address)
+      customer = Customer.new(distributor: distributor, email: email)
+      customer.save(validations: false)
       @controller.sign_in(customer)
       # send an email
     elsif customer.valid_password?(user_information[:password])
@@ -97,9 +91,9 @@ class Webstore
   end
 
   def update_delivery_information(delivery_information)
-    assign_route(delivery_information[:route])             if delivery_information[:route]
-    set_schedule(delivery_information[:schedule])          if delivery_information[:schedule]
-    assign_extras_frequency(delivery_information[:extras]) if delivery_information[:extras]
+    assign_route(delivery_information[:route])                      if delivery_information[:route]
+    set_schedule(delivery_information[:schedule])                   if delivery_information[:schedule]
+    assign_extras_frequency(delivery_information[:extra_frequency]) if delivery_information[:extra_frequency]
 
     @order.complete_step
   end
@@ -124,7 +118,6 @@ class Webstore
   def add_exclusions_to_order(exclusions)
     exclusions.delete('')
     @order.exclusions = exclusions
-    binding.pry
   end
 
   def add_substitutes_to_order(substitutions)
@@ -141,7 +134,7 @@ class Webstore
     route_id       = route_information[:route]
     customer       = @order.customer
     customer.route = Route.find(route_id)
-    customer.save
+    customer.save(validations: false)
   end
 
   def set_schedule(schedule_information)

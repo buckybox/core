@@ -3,7 +3,6 @@ class WebstoreOrder < ActiveRecord::Base
 
   belongs_to :account
   belongs_to :box
-  belongs_to :route
 
   has_one :customer, through: :account
 
@@ -28,6 +27,10 @@ class WebstoreOrder < ActiveRecord::Base
     box.big_thumb_url
   end
 
+  def route
+    @route_mem ||= account.route
+  end
+
   def box_name
     box.name
   end
@@ -49,11 +52,31 @@ class WebstoreOrder < ActiveRecord::Base
   end
 
   def order_extras_price
-    Money.new(250)
+    unless @order_extras_price_mem
+      order_extra_hash = extras.map do |id, count|
+        extra_object = extra_objects.find{ |extra| extra.id == id.to_i }
+        {
+          name: extra_object.name,
+          unit: extra_object.unit,
+          price_cents: extra_object.price_cents,
+          currency: extra_object.currency,
+          count: count
+        }
+      end
+
+      @order_extras_price_mem = Package.calculated_extras_price(order_extra_hash)
+    end
+
+    return @order_extras_price_mem
   end
 
   def order_price
-    Money.new(5000)
+    unless @order_price_mem
+      @order_price_mem = Package.calculated_individual_price(box, route)
+      @order_price_mem += order_extras_price unless extras.empty?
+    end
+
+    return @order_price_mem
   end
 
   def completed?

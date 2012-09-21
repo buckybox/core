@@ -28,8 +28,8 @@ class Customer < ActiveRecord::Base
   validates_uniqueness_of :number, scope: :distributor_id
   validates_numericality_of :number, greater_than: 0
   validates_numericality_of :discount, greater_than_or_equal_to: 0.0, less_than_or_equal_to: 1.0
-  validates_associated :account
-  validates_associated :address
+  validates_associated :account, unless: 'account.nil?'
+  validates_associated :address, unless: 'address.nil?'
 
   before_validation :initialize_number, if: 'number.nil?'
   before_validation :random_password, unless: 'encrypted_password.present?'

@@ -25,7 +25,7 @@
               = render partial: 'route', collection: @routes, locals: { g: g, frequencies: @order_frequencies, days: @days }
 
       - if @webstore_order.box.extras_allowed?
-        = f.simple_fields_for(:extras) do |g|
+        = f.simple_fields_for(:extra_frequency) do |g|
           #extras.inputs
             .row
               .ten.columns

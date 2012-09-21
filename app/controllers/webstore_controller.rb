@@ -47,6 +47,9 @@ class WebstoreController < ApplicationController
   end
 
   def complete
+    @address = current_customer.address
+    @has_address = !@address.nil?
+
     @order_price = @webstore_order.order_price
     @amount_due = @order_price
     @default_city = @distributor.invoice_information.billing_city if @distributor.invoice_information

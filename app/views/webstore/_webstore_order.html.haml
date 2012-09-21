@@ -20,7 +20,7 @@
     - if webstore_order.scheduled?
       .row
         .ten.columns= webstore_order.route_name
-        .two.columns.important.text-right= webstore_order.route_fee
+        .two.columns.important.text-right= webstore_order.route_fee.format
 
     - if webstore_order.completed?
       .row

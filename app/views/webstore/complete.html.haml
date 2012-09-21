@@ -1,25 +1,33 @@
 = simple_form_for(:webstore_order, url: webstore_process_step_path) do |f|
   .row.webstore-section
     .ten.columns.offset-by-two
-      = f.simple_fields_for(:address) do |g|
-        #address.inputs
-          .row
-            .ten.columns
-              .row
-                .twelve.columns.important Your Name
-              .row
-                .twelve.columns= g.input :name, label: false, input_html: { class: 'expand' }
-          .row
-            .ten.columns
-              .row
-                .twelve.columns.important Deliver To:
-              .row
-                .twelve.columns
-                  = g.input :street_address, input_html: { class: 'expand' }
-                  = g.input :street_address_2, label: false, input_html: { class: 'expand' }, required: false
-                  = g.input :suburb, input_html: { class: 'expand' }, required: false
-                  = g.input :city, required: false, input_html: { value: @default_city, class: 'expand' }, wrapper_html: { id: 'city' }
-                  = g.input :post_code, required: false, input_html: { class: 'expand' }, wrapper_html: { id: 'postal_code' }
+      - if @address
+        .row
+          .ten.columns
+            .row
+              .twelve.columns.important Deliver To:
+            .row
+              .twelve.columns= @address.join('<br>')
+      - else
+        = f.simple_fields_for(:address) do |g|
+          #address.inputs
+            .row
+              .ten.columns
+                .row
+                  .twelve.columns.important Your Name
+                .row
+                  .twelve.columns= g.input :name, label: false, input_html: { value: current_customer.name, class: 'expand' }
+            .row
+              .ten.columns
+                .row
+                  .twelve.columns.important Deliver To:
+                .row
+                  .twelve.columns
+                    = g.input :street_address, input_html: { class: 'expand' }
+                    = g.input :street_address_2, label: false, input_html: { class: 'expand' }, required: false
+                    = g.input :suburb, input_html: { class: 'expand' }, required: false
+                    = g.input :city, required: false, input_html: { value: @default_city, class: 'expand' }, wrapper_html: { id: 'city' }
+                    = g.input :post_code, required: false, input_html: { class: 'expand' }, wrapper_html: { id: 'postal_code' }
 
   - if customer_signed_in?
     .row.webstore-section
@@ -43,7 +51,7 @@
               Your account is in credit
               %small No payment necessary
             - else
-              == Total Amount Due #{@amount_due}
+              == Total Amount Due #{@amount_due.format}
       .row
         .ten.columns
           %p
