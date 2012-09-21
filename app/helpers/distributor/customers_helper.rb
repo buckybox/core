@@ -1,6 +1,6 @@
 module Distributor::CustomersHelper
   def next_customer_delivery_occurrence(customer)
-    next_occurrence = customer.next_delivery_time
+    next_occurrence = Time.parse(customer.next_occurrence)
 
     if next_occurrence && (next_occurrence < (Time.current + 6.days))
       next_occurrence.to_s(:weekday)

@@ -73,22 +73,6 @@ $$;
 
 
 --
--- Name: next_occurrence(date); Type: FUNCTION; Schema: public; Owner: -
---
-
-CREATE FUNCTION next_occurrence(from_date date) RETURNS date
-    LANGUAGE plpgsql IMMUTABLE
-    AS $$
-DECLARE
-  result DATE;
-BEGIN
-  result := from_date;
-  return result;
-END;
-$$;
-
-
---
 -- Name: next_occurrence(date, schedule_rules); Type: FUNCTION; Schema: public; Owner: -
 --
 
@@ -113,21 +97,6 @@ BEGIN
     EXIT WHEN next_date IS NULL;
   END LOOP;
   return next_date;
-END;
-$$;
-
-
---
--- Name: on_day(date); Type: FUNCTION; Schema: public; Owner: -
---
-
-CREATE FUNCTION on_day(day date) RETURNS boolean
-    LANGUAGE plpgsql IMMUTABLE
-    AS $$
-DECLARE
-  result DATE;
-BEGIN
-  return false;
 END;
 $$;
 
