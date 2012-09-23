@@ -33,12 +33,10 @@ class PackingList < ActiveRecord::Base
     if distributor.packing_lists.where(date: date).count > 0
       distributor.packing_lists.where(date: date).includes({ packages: {}}).first
     else
-      date_orders = []
-
       order_ids = Bucky::Sql.order_ids(distributor, date)
       orders = distributor.orders.active.where(id: order_ids).includes({ account: {customer: {address:{}, deliveries: {delivery_list: {}}}}, order_extras: {}, box: {}})
 
-      FuturePackingList.new(date, date_orders, false)
+      FuturePackingList.new(date, orders, false)
     end
   end
 
