@@ -14,6 +14,8 @@ class Customer < ActiveRecord::Base
   has_many :orders,       through: :account
   has_many :deliveries,   through: :orders
 
+  belongs_to :next_order, class_name: 'Order'
+
   devise :database_authenticatable, :recoverable, :rememberable, :trackable, :validatable
 
   acts_as_taggable
@@ -40,6 +42,7 @@ class Customer < ActiveRecord::Base
   before_create :setup_address
 
   after_create :trigger_new_customer
+  after_save :update_next_occurrence # This could be more specific about when it updates
 
   default_scope order(:first_name)
 
@@ -163,14 +166,24 @@ class Customer < ActiveRecord::Base
   end
 
   def order_with_next_delivery
-    has_next_delivery = account.active_orders.select { |o| o.schedule.next_occurrence }
-    order = has_next_delivery.sort{ |a,b| b.schedule.next_occurrence <=> a.schedule.next_occurrence }.first
-    return order
+    return next_order
   end
 
   def next_delivery_time
-    order = order_with_next_delivery
-    order.schedule.next_occurrence if order
+    return next_order_occurrence_date
+  end
+
+  def update_next_occurrence(date = nil)
+    date ||= Date.current.to_s(:db)
+    next_order = orders.active.select("orders.*, next_occurrence('#{date}', schedule_rules.*)").joins(:schedule_rule).sort_by(&:next_occurrence).first
+    if next_order
+      self.next_order_id = next_order.id
+      self.next_order_occurrence_date = next_order.next_occurrence
+    else
+      self.next_order_id = nil
+      self.next_order_occurrence_date = nil
+    end
+    save
   end
 
   private

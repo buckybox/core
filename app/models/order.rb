@@ -341,6 +341,9 @@ class Order < ActiveRecord::Base
   def update_schedule_rule
     schedule_rule.destroy if schedule_rule
     self.schedule_rule = ScheduleRule.copy_orders_schedule(self)
+
+    # Update next_occurrence cache
+    customer.update_next_occurrence
   end
 
   def record_schedule_change

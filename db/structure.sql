@@ -591,7 +591,9 @@ CREATE TABLE customers (
     discount numeric DEFAULT 0 NOT NULL,
     number integer,
     notes text,
-    special_order_preference text
+    special_order_preference text,
+    next_order_id integer,
+    next_order_occurrence_date date
 );
 
 
@@ -2808,3 +2810,5 @@ INSERT INTO schema_migrations (version) VALUES ('20120904052651');
 INSERT INTO schema_migrations (version) VALUES ('20120909041708');
 
 INSERT INTO schema_migrations (version) VALUES ('20120920231722');
+
+INSERT INTO schema_migrations (version) VALUES ('20120923230255');
