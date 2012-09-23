@@ -24,6 +24,7 @@ class Webstore
     login_customer(webstore_params[:user])             if webstore_params[:user]
     update_delivery_information(webstore_params)       if webstore_params[:route]
     add_address_information(webstore_params[:address]) if webstore_params[:address]
+    complete_order                                     if webstore_params[:complete]
 
     @order.save
   end
@@ -33,6 +34,16 @@ class Webstore
   end
 
   private
+
+  def complete_order
+    if @order.create_order
+      @controller.flash[:notice] = 'Your order has been placed'
+      @order.placed_step
+    else
+      @controller.flash[:error] = 'There was a problem completing your order'
+      @order.complete_step
+    end
+  end
 
   def start_order(box_id)
     box = Box.where(id: box_id, distributor_id: @distributor.id).first
@@ -102,7 +113,7 @@ class Webstore
     customer = @order.customer
     customer.first_name = address_information[:name]
 
-    address = customer.address
+    address = customer.address || Address.new(customer: customer)
     address.address_1 = address_information[:street_address]
     address.address_2 = address_information[:street_address_2]
     address.suburb    = address_information[:suburb]
@@ -111,7 +122,6 @@ class Webstore
 
     customer.save
 
-    @controller.flash[:notice] = 'Your order has been placed'
     @order.placed_step
   end
 

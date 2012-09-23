@@ -3,6 +3,7 @@ class WebstoreOrder < ActiveRecord::Base
 
   belongs_to :account
   belongs_to :box
+  belongs_to :order
 
   has_one :customer, through: :account
 
@@ -22,6 +23,24 @@ class WebstoreOrder < ActiveRecord::Base
   DELIVERY  = :delivery
   COMPLETE  = :complete
   PLACED    = :placed
+
+  def create_order
+    extras_hash = {}
+    extras.each { |id, count| extras_hash[id] = { count: count } }
+
+    order = Order.create(
+      box: box,
+      frequency: frequency,
+      completed: true,
+      account: account,
+      schedule: schedule,
+      order_extras: extras_hash,
+      extras_one_off: extras_one_off
+    )
+    order.update_exclusions(exclusions)
+    order.update_substitutions(substitutions)
+    order.save
+  end
 
   def thumb_url
     box.big_thumb_url

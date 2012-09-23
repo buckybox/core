@@ -34,13 +34,13 @@
       .ten.columns.offset-by-two
         .row
           .ten.columns.important Your existing account balance with us
-          .two.columns.important= @current_balance.format
+          .two.columns.important.text-right= @current_balance.format
         .row
           .ten.columns.important This order
-          .two.columns.important== (#{@order_price.format})
+          .two.columns.important.text-right== (#{@order_price.format})
         .row
           .ten.columns.important Closing balance
-          .two.columns.important= @closing_balance.format
+          .two.columns.important.text-right= @closing_balance.format
 
   .row.webstore-section
     .ten.columns.offset-by-two
@@ -69,4 +69,5 @@
 
   .row
     .twelve.columns
+      = f.input :complete, as: :hidden, input_html: { value: true }
       .actions= f.button :submit, 'Complete Order', class: 'float-right'

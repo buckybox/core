@@ -6,10 +6,6 @@ class Customer::OrdersController < Customer::ResourceController
   before_filter :filter_params, only: [:create, :update]
   before_filter :get_order, only: [:pause, :remove_pause, :resume, :remove_resume, :pause_dates, :resume_dates]
 
-  def filter_params
-    params[:order] = params[:order].slice!(:include_extras)
-  end
-
   def new
     new! do
       load_form
@@ -126,6 +122,10 @@ class Customer::OrdersController < Customer::ResourceController
   end
 
   private
+
+  def filter_params
+    params[:order] = params[:order].slice!(:include_extras)
+  end
 
   def get_order
     @order = Order.find(params[:id])

@@ -7,10 +7,6 @@ class Distributor::OrdersController < Distributor::ResourceController
   before_filter :filter_params, only: [:create, :update]
   before_filter :get_order, only: [:pause, :remove_pause, :resume, :remove_resume, :pause_dates, :resume_dates]
 
-  def filter_params
-    params[:order] = params[:order].slice!(:include_extras)
-  end
-
   def new
     new! do
       load_form
@@ -32,7 +28,7 @@ class Distributor::OrdersController < Distributor::ResourceController
       @order.save
 
       success.html { redirect_to [:distributor, @account.customer] }
-      failure.html do 
+      failure.html do
         load_form
         flash[:error] = 'There was a problem creating this order.'
         render 'new'
@@ -144,6 +140,10 @@ class Distributor::OrdersController < Distributor::ResourceController
   end
 
   private
+
+  def filter_params
+    params[:order] = params[:order].slice!(:include_extras)
+  end
 
   def get_order
     @order = Order.find(params[:id])
