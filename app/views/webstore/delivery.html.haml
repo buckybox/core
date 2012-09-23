@@ -2,13 +2,13 @@
   .row.webstore-section
     .ten.columns.offset-by-two
       = f.simple_fields_for(:route) do |g|
-        #route.inputs
+        #webstore-route.inputs{ style: "display: #{@selected_route_id ? 'none' : 'block'};" }
           .row
             .ten.columns
               .row
                 .twelve.columns.important Pick A Delivery Service
               .row
-                .twelve.columns= g.input :route, collection: @route_selections , label: 'Select the one that best services your location', include_blank: false, input_html: { id: 'route_select' }
+                .twelve.columns= g.input :route, collection: @route_selections, selected: @selected_route_id, label: 'Select the one that best services your location', include_blank: false, input_html: { id: 'route_select' }
               .row
                 .twelve.columns
                   - @routes.each do |route|
@@ -17,7 +17,7 @@
                       = simple_format(route.estimated_delivery_time)
 
       = f.simple_fields_for(:schedule) do |g|
-        #schedule.inputs
+        #webstore-schedule.inputs
           .row
             .ten.columns
               .row
@@ -26,7 +26,7 @@
 
       - if @webstore_order.box.extras_allowed?
         = f.simple_fields_for(:extra_frequency) do |g|
-          #extras.inputs
+          #webstore-extras.inputs
             .row
               .ten.columns
                 .row

@@ -35,16 +35,6 @@ class Webstore
 
   private
 
-  def complete_order
-    if @order.create_order
-      @controller.flash[:notice] = 'Your order has been placed'
-      @order.placed_step
-    else
-      @controller.flash[:error] = 'There was a problem completing your order'
-      @order.complete_step
-    end
-  end
-
   def start_order(box_id)
     box = Box.where(id: box_id, distributor_id: @distributor.id).first
     customer = @controller.current_customer
@@ -123,6 +113,16 @@ class Webstore
     customer.save
 
     @order.placed_step
+  end
+
+  def complete_order
+    if @order.create_order
+      @controller.flash[:notice] = 'Your order has been placed'
+      @order.placed_step
+    else
+      @controller.flash[:error] = 'There was a problem completing your order'
+      @order.complete_step
+    end
   end
 
   def add_exclusions_to_order(exclusions)

@@ -80,7 +80,7 @@ $(function() {
     });
   }
 
-  if($('#login').length > 0) {
+  if($('#webstore-login').length > 0) {
     $('#registered input[type="radio"]').click(function() {
       if($(this).val() == 'new') {
         $('#password-field').hide();
@@ -91,7 +91,7 @@ $(function() {
     });
   }
 
-  if(('#route').length > 0) {
+  if(('#webstore-route').length > 0) {
     var route_select = $('#route_select');
     update_route_information(route_select.val());
 
