@@ -6,7 +6,7 @@
       .twelve.columns
         = @customer.name
         = @address.join('<br>')
-    #placed-schedule.row
+    #webstore-placed-schedule.row
       .ten.columns.important Delivery Date
     .row
       .twelve.columns
@@ -17,4 +17,4 @@
   .twelve.columns
     .actions.text-center
       = link_to 'Webstore', webstore_store_path(@distributor.parameter_name), class: 'button radius', id: 'webstore'
-      = link_to 'My Account', customer_root_path, class: 'button radius', id: 'my-account'
+      = link_to 'My Account', customer_root_path, class: 'button radius', id: 'webstore-my-account'

@@ -12,10 +12,6 @@ class Webstore
     end
   end
 
-  def to_session
-    { webstore_order_id: @order.id }
-  end
-
   def process_params
     webstore_params = @controller.params[:webstore_order]
 
@@ -35,6 +31,10 @@ class Webstore
 
   private
 
+  def to_session
+    { webstore_order_id: @order.id }
+  end
+
   def start_order(box_id)
     box = Box.where(id: box_id, distributor_id: @distributor.id).first
     customer = @controller.current_customer
@@ -51,6 +51,8 @@ class Webstore
         @order.login_step
       end
     end
+
+    @controller.session[:webstore] = to_session
   end
 
   def customise_order(customise)

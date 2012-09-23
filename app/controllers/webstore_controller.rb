@@ -3,15 +3,12 @@ class WebstoreController < ApplicationController
   before_filter :get_webstore_order, except: [:store, :process_step]
 
   def store
-    session[:webstore] = nil
     @boxes = @distributor.boxes.not_hidden
   end
 
   def process_step
     webstore = Webstore.new(self, @distributor)
-
     webstore.process_params
-    session[:webstore] = webstore.to_session
 
     redirect_to action: webstore.next_step, distributor_parameter_name: @distributor.parameter_name
   end
@@ -48,12 +45,18 @@ class WebstoreController < ApplicationController
   end
 
   def complete
-    @address = current_customer.address
+    @address = current_customer.address if current_customer
     @has_address = !@address.nil?
-
+    @city = @distributor.invoice_information.billing_city if @distributor.invoice_information
+    if @has_address
+      @street_address = @address.address_1
+      @street_address_2 = @address.address_2
+      @suburb = @address.suburb
+      @city = @address.city
+      @post_code = @address.postcode
+    end
     @order_price = @webstore_order.order_price
     @amount_due = @order_price
-    @default_city = @distributor.invoice_information.billing_city if @distributor.invoice_information
     if current_customer
       @current_balance = current_customer.account.balance
       @closing_balance = @current_balance - @order_price

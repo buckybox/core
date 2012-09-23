@@ -1,16 +1,19 @@
 = simple_form_for(:webstore_order, url: webstore_process_step_path) do |f|
   .row.webstore-section
     .ten.columns.offset-by-two
-      - if @address
-        .row
-          .ten.columns
+      = f.simple_fields_for(:address) do |g|
+        #webstore-address{ data: { 'has-address' => "#{@address.nil? ? 'false' : 'true'}" } }
+          #existing-address
             .row
-              .twelve.columns.important Deliver To:
-            .row
-              .twelve.columns= @address.join('<br>')
-      - else
-        = f.simple_fields_for(:address) do |g|
-          #address.inputs
+              .ten.columns
+                .row
+                  .twelve.columns.important Deliver To:
+                .row
+                  .twelve.columns
+                    = @address.join('<br>')
+                    %br
+                    = link_to 'change my delivery address', '#', id: 'edit-address'
+          #update-address.inputs
             .row
               .ten.columns
                 .row
@@ -23,11 +26,11 @@
                   .twelve.columns.important Deliver To:
                 .row
                   .twelve.columns
-                    = g.input :street_address, input_html: { class: 'expand' }
-                    = g.input :street_address_2, label: false, input_html: { class: 'expand' }, required: false
-                    = g.input :suburb, input_html: { class: 'expand' }, required: false
-                    = g.input :city, required: false, input_html: { value: @default_city, class: 'expand' }, wrapper_html: { id: 'city' }
-                    = g.input :post_code, required: false, input_html: { class: 'expand' }, wrapper_html: { id: 'postal_code' }
+                    = g.input :street_address, input_html: { value: @street_address, class: 'expand' }
+                    = g.input :street_address_2, label: false, input_html: { value: @street_address_2, class: 'expand' }, required: false
+                    = g.input :suburb, input_html: { value: @suburb, class: 'expand' }, required: false
+                    = g.input :city, required: false, input_html: { value: @city, class: 'expand' }, wrapper_html: { id: 'city' }
+                    = g.input :post_code, required: false, input_html: { value: @post_code, class: 'expand' }, wrapper_html: { id: 'postal_code' }
 
   - if customer_signed_in?
     .row.webstore-section
