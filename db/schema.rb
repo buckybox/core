@@ -572,7 +572,7 @@ ActiveRecord::Schema.define(:version => 20120919000442) do
   create_table "webstore_orders", :force => true do |t|
     t.integer  "account_id"
     t.integer  "box_id"
-    t.integer  "route_id"
+    t.integer  "order_id"
     t.text     "exclusions"
     t.text     "substitutions"
     t.text     "extras"

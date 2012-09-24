@@ -8,7 +8,7 @@ class Webstore
     webstore_session = @controller.session[:webstore]
 
     if webstore_session
-      @order = WebstoreOrder.find(webstore_session[:webstore_order_id])
+      @order = WebstoreOrder.find_by_id(webstore_session[:webstore_order_id])
     end
   end
 
