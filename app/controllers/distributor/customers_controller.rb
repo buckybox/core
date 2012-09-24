@@ -61,7 +61,7 @@ class Distributor::CustomersController < Distributor::ResourceController
   protected
 
   def collection
-    @customers = end_of_association_chain.select("customers.*, next_occurrence('#{Date.current.to_s(:db)}', schedule_rules.*)").joins(account: {active_orders: :schedule_rule})
+    @customers = end_of_association_chain
 
     @customers = @customers.tagged_with(params[:tag]) unless params[:tag].blank?
 
@@ -72,11 +72,8 @@ class Distributor::CustomersController < Distributor::ResourceController
         @customers = current_distributor.customers.where(number: params[:query].to_i)
       end
     end
+    
+    @customers = @customers.order("CASE WHEN next_order_occurrence_date IS NULL THEN '1970-01-01' ELSE next_order_occurrence_date END DESC, customers.last_name DESC, customers.first_name DESC").includes(account: {route: {}}, tags: {}, next_order: {box: {}})
 
-    has_upcoming_deliveries = @customers.select { |c| c.next_occurrence }
-    has_no_upcoming_deliveries = @customers.to_a - has_upcoming_deliveries
-    has_upcoming_deliveries = has_upcoming_deliveries.sort { |a,b| Date.parse(a.next_occurrence) <=> Date.parse(b.next_occurrence) }
-
-    @customers = has_upcoming_deliveries + has_no_upcoming_deliveries
   end
 end

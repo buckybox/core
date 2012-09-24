@@ -343,7 +343,7 @@ class Order < ActiveRecord::Base
     self.schedule_rule = ScheduleRule.copy_orders_schedule(self)
 
     # Update next_occurrence cache
-    customer.update_next_occurrence
+    customer.update_next_occurrence.save!
   end
 
   def record_schedule_change

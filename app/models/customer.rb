@@ -44,8 +44,6 @@ class Customer < ActiveRecord::Base
   after_create :trigger_new_customer
   after_save :update_next_occurrence # This could be more specific about when it updates
 
-  default_scope order(:first_name)
-
   delegate :separate_bucky_fee?, :consumer_delivery_fee, to: :distributor
 
   pg_search_scope :search,
@@ -183,7 +181,7 @@ class Customer < ActiveRecord::Base
       self.next_order_id = nil
       self.next_order_occurrence_date = nil
     end
-    save
+    self
   end
 
   private

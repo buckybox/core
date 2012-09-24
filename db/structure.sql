@@ -87,13 +87,13 @@ BEGIN
     -- Get the next possible occurrence
     next_date := unpaused_next_occurrence(next_date, schedule_rule);
 
-    -- Test if it falls in a pause, exit if so
+    -- Test if it falls in a pause, exit if not
     EXIT WHEN NOT is_paused(next_date, schedule_rule);
 
     -- Apparently that one was in a pause, start looking again from the end of a pause
     next_date := pause_finish(next_date, schedule_rule);
 
-    -- If the pause_finish returns NULL we can assume the pause never finishes
+    -- If the pause_finish returns NULL we can assume the pause never finishes, thus there is never a next_occurrence
     EXIT WHEN next_date IS NULL;
   END LOOP;
   return next_date;

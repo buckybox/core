@@ -342,13 +342,7 @@ class Distributor < ActiveRecord::Base
       h += 1 # start at 1, not 0
 
       Delorean.time_travel_to(@@original_time + (@@advanced*day.days) + h.hours)
-
-      CronLog.log("Checking distributors for automatic daily list creation.")
-      Distributor.create_daily_lists
-      CronLog.log("Checking deliveries and packages for automatic completion.")
-      Distributor.automate_completed_status
-      CronLog.log("Checking orders, deactivating those without any more deliveries.")
-      Order.deactivate_finished
+      Job.run_all
     end
     @@advanced += day
   end
