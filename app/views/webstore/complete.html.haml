@@ -2,7 +2,7 @@
   .row.webstore-section
     .ten.columns.offset-by-two
       = f.simple_fields_for(:address) do |g|
-        #webstore-address{ data: { 'has-address' => "#{@address.nil? ? 'false' : 'true'}" } }
+        #webstore-address{ data: { 'has-address' => "#{@has_address ? 'true' : 'false'}" } }
           #existing-address
             .row
               .ten.columns
@@ -10,7 +10,7 @@
                   .twelve.columns.important Deliver To:
                 .row
                   .twelve.columns
-                    = @address.join('<br>')
+                    = @address.join('<br>') if @has_address
                     %br
                     = link_to 'change my delivery address', '#', id: 'edit-address'
           #update-address.inputs
@@ -19,7 +19,7 @@
                 .row
                   .twelve.columns.important Your Name
                 .row
-                  .twelve.columns= g.input :name, label: false, input_html: { value: current_customer.name, class: 'expand' }
+                  .twelve.columns= g.input :name, label: false, input_html: { value: @customer_name, class: 'expand' }
             .row
               .ten.columns
                 .row

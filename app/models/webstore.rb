@@ -76,9 +76,10 @@ class Webstore
 
     if customer.nil?
       customer = Customer.new(distributor: distributor, email: email)
-      customer.save(validations: false)
+      customer.randomize_password
+      customer.save(validate: false)
+      CustomerMailer.login_details(customer).deliver
       @controller.sign_in(customer)
-      # send an email
     elsif customer.valid_password?(user_information[:password])
       @controller.sign_in(customer)
     end
@@ -146,7 +147,7 @@ class Webstore
     route_id       = route_information[:route]
     customer       = @order.customer
     customer.route = Route.find(route_id)
-    customer.save(validations: false)
+    customer.save(validate: false)
   end
 
   def set_schedule(schedule_information)

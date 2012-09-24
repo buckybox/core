@@ -91,7 +91,6 @@ class WebstoreOrder < ActiveRecord::Base
 
   def order_price
     unless @order_price_mem
-      binding.pry
       @order_price_mem = Package.calculated_individual_price(box, route)
       @order_price_mem += order_extras_price unless extras.empty?
     end
