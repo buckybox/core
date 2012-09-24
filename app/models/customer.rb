@@ -46,6 +46,8 @@ class Customer < ActiveRecord::Base
 
   delegate :separate_bucky_fee?, :consumer_delivery_fee, to: :distributor
 
+  scope :ordered_by_next_delivery, order("CASE WHEN next_order_occurrence_date IS NULL THEN '1970-01-01' ELSE next_order_occurrence_date END DESC, customers.last_name DESC, customers.first_name DESC")
+
   pg_search_scope :search,
     against: [ :first_name, :last_name, :email ],
     associated_against: {

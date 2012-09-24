@@ -26,9 +26,9 @@ describe Distributor::CustomersController do
 
   context "performance" do
     before do
-      3.times do
+      30.times do
         c = Fabricate(:customer, distributor: @distributor)
-        Fabricate(:order, account: customer.account)
+        Fabricate(:order, account: c.account)
       end
     end
 

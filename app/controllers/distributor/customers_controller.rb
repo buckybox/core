@@ -73,7 +73,7 @@ class Distributor::CustomersController < Distributor::ResourceController
       end
     end
     
-    @customers = @customers.order("CASE WHEN next_order_occurrence_date IS NULL THEN '1970-01-01' ELSE next_order_occurrence_date END DESC, customers.last_name DESC, customers.first_name DESC").includes(account: {route: {}}, tags: {}, next_order: {box: {}})
+    @customers = @customers.ordered_by_next_delivery.includes(account: {route: {}}, tags: {}, next_order: {box: {}})
 
   end
 end
