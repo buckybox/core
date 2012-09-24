@@ -2,6 +2,7 @@ class Box < ActiveRecord::Base
   belongs_to :distributor
 
   has_many :orders
+  has_many :webstore_orders
   has_many :box_extras
   has_many :extras, through: :box_extras
 
