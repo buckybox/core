@@ -98,4 +98,48 @@ describe ScheduleRule do
       end
     end
   end
+
+  context :db_functions do
+    context :next_occurrence do
+      context :one_off do
+        before do
+          @start_date = Date.parse('2012-09-20')
+          @sr = ScheduleRule.one_off(@start_date)
+          @sr.save!
+        end
+
+        it 'should return the start_date' do
+          @sr.next_occurrence(@start_date - 1.day).should eq(@start_date)
+        end
+
+        it 'should return null' do
+          @sr.next_occurrence(@start_date + 1.day).should eq(nil)
+        end
+
+        it 'should return the start_date' do
+          @sr.next_occurrence(@start_date).should eq(@start_date)
+        end
+      end
+
+      context :weekly do
+        before do
+          @start_date = Date.parse('2012-09-20')
+          @sr = ScheduleRule.weekly(@start_date, [:sun, :wed, :thur, :fri])
+          @sr.save!
+        end
+
+        it 'should return the start_date' do
+          @sr.next_occurrence(@start_date - 1.day).should eq(@start_date - 1.day)
+        end
+
+        it 'should return null' do
+          @sr.next_occurrence(@start_date + 1.day).should eq(@start_date + 1.day)
+        end
+
+        it 'should return the start_date' do
+          @sr.next_occurrence(@start_date).should eq(@start_date)
+        end
+      end
+    end
+  end
 end

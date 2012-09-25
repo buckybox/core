@@ -26,7 +26,7 @@ describe Distributor::CustomersController do
 
   context "performance" do
     before do
-      30.times do
+      3.times do
         c = Fabricate(:customer, distributor: @distributor)
         Fabricate(:order, account: c.account)
       end
@@ -35,7 +35,7 @@ describe Distributor::CustomersController do
     it "should not take long to load customer index" do
       expect {
         get :index
-      }.to take_less_than(0.05).seconds
+      }.to take_less_than(0.3).seconds
     end
   end
 end
