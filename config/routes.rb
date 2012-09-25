@@ -148,7 +148,8 @@ BuckyBox::Application.routes.draw do
         get 'extras'
       end
     end
-    resources :orders, only: [:new, :edit, :create, :update] do
+
+    resources :orders, only: [:edit, :update] do
       member do
         put 'pause'
         post 'remove_pause'

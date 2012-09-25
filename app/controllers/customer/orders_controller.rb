@@ -1,37 +1,10 @@
 class Customer::OrdersController < Customer::ResourceController
-  actions :new, :edit, :create, :update
+  actions :edit, :update
 
   respond_to :html, :xml, :json
 
-  before_filter :filter_params, only: [:create, :update]
+  before_filter :filter_params, only: [:update]
   before_filter :get_order, only: [:pause, :remove_pause, :resume, :remove_resume, :pause_dates, :resume_dates]
-
-  def new
-    new! do
-      load_form
-    end
-  end
-
-  def create
-    @order           = Order.new(params[:order])
-    @order.account   = current_customer.account
-    @order.completed = true
-
-    @order.create_schedule(params[:start_date], params[:order][:frequency], params[:days])
-
-    create! do |success, failure|
-      @order.update_exclusions(params[:dislikes_input])
-      @order.update_substitutions(params[:likes_input])
-      @order.save
-
-      success.html { redirect_to customer_root_url }
-      failure.html do
-        load_form
-        flash[:error] = 'There was a problem creating this order.'
-        render 'new'
-      end
-    end
-  end
 
   def edit
     edit! do
