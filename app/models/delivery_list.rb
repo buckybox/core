@@ -78,35 +78,22 @@ class DeliveryList < ActiveRecord::Base
     # Assuming all routes are from the same route, if not it will fail on match anyway
     first_delivery = Delivery.find(delivery_order.first)
     route_id = first_delivery.route_id
-    existing_ids = deliveries.ordered.where(route_id:route_id).map(&:id)
     day = first_delivery.delivery_list.date.wday
 
-    raise 'Your delivery ids do not match' if delivery_order.map(&:to_i).sort != existing_ids.sort
+    raise 'Your delivery ids do not match' if delivery_order.map(&:to_i).sort != deliveries.where(route_id: route_id).select(:id).map(&:id).sort
 
-    all_saved = true
-
-    Delivery.transaction do
-      deliveries = delivery_order.collect{|d| Delivery.find(d)}
-      all_addresses = deliveries.collect(&:address)
-      unique_addresses = []
-      unique_address_hashes = {}
-      # Find all unique addresses and keep them in order!
-      all_addresses.each do |address|
-        if !unique_address_hashes.key?(address.address_hash)
-          unique_addresses << address
-          unique_address_hashes.merge!(address.address_hash => true)
-        end
-      end
-
-      unique_addresses.each_with_index do |address, index|
-        dso = DeliverySequenceOrder.find_by_address_hash_and_route_id_and_day(address.address_hash, route_id, day)
-        dso ||= DeliverySequenceOrder.new(address_hash: address.address_hash, route_id: route_id, day: day)
-        dso.position = index+1 #start at 1, not 0
-        all_saved &= dso.save
-      end
+    # Don't know an easy way to preload like this in Rails, but load up all deliveries matching on id, PRESERVING the order of the ids thru to the deliveries array, VERY IMPORTANT
+    deliveries_cache = Delivery.where(id: delivery_order).includes(:address).inject({}){|cache, d| cache.merge!(d.id => d)}
+    ordered_address_hashes = []
+    delivery_order.each do |id|
+      ordered_address_hashes << deliveries_cache[id.to_i].address.address_hash if deliveries_cache[id.to_i]
     end
 
-    return all_saved
+    master = DeliverySequenceOrder.where(route_id: route_id, day: day).ordered.collect(&:address_hash).uniq
+    new_master_list = Bucky::Dso::List.sort(master, ordered_address_hashes.uniq) #Assuming .uniq is stable to the order
+    DeliverySequenceOrder.update_ordering(new_master_list, route_id, day)
+
+    return true
   end
 
   def mark_all_as_auto_delivered

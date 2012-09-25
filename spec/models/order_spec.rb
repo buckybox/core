@@ -211,31 +211,7 @@ describe Order do
         order.schedule = schedule
       end
 
-      specify { expect { order.save }.should change(OrderScheduleTransaction, :count).by(1) }
-    end
-
-    context 'scheduled_delivery' do
-      before do
-        @schedule = order.schedule
-        delivery_list = Fabricate(:delivery_list, date: Date.current + 5.days)
-        @delivery = Fabricate(:delivery, delivery_list: delivery_list)
-        order.add_scheduled_delivery(@delivery)
-        order.save
-      end
-
-      describe '#add_scheduled_delivery' do
-        specify { order.schedule.occurs_on?(@delivery.date.to_time_in_current_zone).should be_true }
-        specify { order.schedule.occurs_on?((@delivery.date - 1.day).to_time_in_current_zone).should_not be_true }
-      end
-
-      describe '#remove_scheduled_delivery' do
-        before do
-          order.remove_scheduled_delivery(@delivery)
-          order.save
-        end
-
-        specify { order.schedule.occurs_on?(@delivery.date.to_time_in_current_zone).should_not be_true }
-      end
+      specify { expect { order.save }.to change(OrderScheduleTransaction, :count).by(1) }
     end
 
     describe '#string_pluralize' do
@@ -273,7 +249,7 @@ describe Order do
         @order5 = Fabricate(:order, schedule: time_schedule_past)
       end
 
-      specify { expect { Order.deactivate_finished }.should change(Order.active, :count).by(-2) }
+      specify { expect { Order.deactivate_finished }.to change(Order.active, :count).by(-2) }
 
       describe 'individually' do
         before { Order.deactivate_finished }
