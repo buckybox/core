@@ -8,11 +8,11 @@ describe Distributor::RoutesController do
 
   describe '#create' do
     context 'with valid params' do
-      before(:each) do
+      before do
         post :create, {
           route: {
             name: 'yoda', fee: '34', monday: '1', tuesday: '1', wednesday: '0', thursday: '0',
-            friday: '0', saturday: '0', sunday: '0'
+            friday: '0', saturday: '0', sunday: '0', area_of_service: 'aos', estimated_delivery_time: 'edt'
           }
         }
       end
@@ -23,7 +23,7 @@ describe Distributor::RoutesController do
     end
 
     context 'with invalid params' do
-      before(:each) do
+      before do
         post :create, { route: { name: 'yoda', fee: '34' } }
       end
 
@@ -34,7 +34,7 @@ describe Distributor::RoutesController do
 
   describe '#update' do
     context 'with valid params' do
-      before(:each) do
+      before do
         @route = Fabricate(:route, distributor: @distributor, tuesday: false)
         put :update, { id: @route.id, route: { tuesday: '1' } }
       end
@@ -45,7 +45,7 @@ describe Distributor::RoutesController do
     end
 
     context 'with invalid params' do
-      before(:each) do
+      before do
         @route = Fabricate(:route, distributor: @distributor, tuesday: true)
         put :update, { id: @route.id, route: { monday: '0', tuesday: '0', wednesday: '0', thursday: '0', friday: '0', saturday: '0', sunday: '0' } }
       end

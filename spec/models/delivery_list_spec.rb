@@ -160,7 +160,7 @@ describe DeliveryList do
       end
 
       it 'should change delivery order' do
-        expect { delivery_list.reposition(@new_ids)}.should change{delivery_list.deliveries.ordered.collect(&:id)}.to(@new_ids)
+        expect { delivery_list.reposition(@new_ids)}.to change{delivery_list.deliveries.ordered.collect(&:id)}.to(@new_ids)
         delivery_list.reload.deliveries.ordered.collect(&:delivery_number).should eq([3,1,2])
       end
 

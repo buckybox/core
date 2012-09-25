@@ -17,37 +17,15 @@ class WebstoreOrder < ActiveRecord::Base
 
   attr_accessible :box, :remote_ip
 
-  STORE     = :store
+  # Should really use state_machine here but don't have the time to risk it at the moment
   CUSTOMISE = :customise
   LOGIN     = :login
   DELIVERY  = :delivery
   COMPLETE  = :complete
   PLACED    = :placed
 
-  def create_order
-    extras_hash = {}
-    extras.each { |id, count| extras_hash[id] = { count: count } }
-
-    order = Order.create(
-      box: box,
-      frequency: frequency,
-      completed: true,
-      account: account,
-      schedule: schedule,
-      order_extras: extras_hash,
-      extras_one_off: extras_one_off
-    )
-    order.update_exclusions(exclusions)
-    order.update_substitutions(substitutions)
-    order.save
-  end
-
   def thumb_url
     box.big_thumb_url
-  end
-
-  def route
-    @route_mem ||= account.route
   end
 
   def box_name
@@ -62,12 +40,60 @@ class WebstoreOrder < ActiveRecord::Base
     box.description
   end
 
+  def route
+    @route_mem ||= account.route
+  end
+
   def route_name
     route.name
   end
 
   def route_fee
     route.fee
+  end
+
+  def customise_step
+    self.status = CUSTOMISE
+  end
+
+  def login_step
+    self.status = LOGIN
+  end
+
+  def delivery_step
+    self.status = DELIVERY
+  end
+
+  def complete_step
+    self.status = COMPLETE
+  end
+
+  def placed_step
+    self.status = PLACED
+  end
+
+  def customised?
+    !exclusions.empty? || !extras.empty?
+  end
+
+  def scheduled?
+    !account.nil? && !route.nil?
+  end
+
+  def completed?
+    status == PLACED
+  end
+
+  def extra_objects
+    @extra_objects_mem ||= Extra.find_all_by_id(extras.map(&:first))
+  end
+
+  def exclusion_objects
+    @exclusion_objects_mem ||= LineItem.find_all_by_id(exclusions)
+  end
+
+  def substitution_objects
+    @substitution_objects_mem ||= LineItem.find_all_by_id(substitutions)
   end
 
   def order_extras_price
@@ -98,50 +124,6 @@ class WebstoreOrder < ActiveRecord::Base
     return @order_price_mem
   end
 
-  def completed?
-    status == PLACED
-  end
-
-  def customised?
-    !exclusions.empty? || !extras.empty?
-  end
-
-  def scheduled?
-    !account.nil? && !route.nil?
-  end
-
-  def customise_step
-    self.status = CUSTOMISE
-  end
-
-  def login_step
-    self.status = LOGIN
-  end
-
-  def delivery_step
-    self.status = DELIVERY
-  end
-
-  def complete_step
-    self.status = COMPLETE
-  end
-
-  def placed_step
-    self.status = PLACED
-  end
-
-  def extra_objects
-    @extra_objects_mem ||= Extra.find_all_by_id(extras.map(&:first))
-  end
-
-  def exclusion_objects
-    @exclusion_objects_mem ||= LineItem.find_all_by_id(exclusions)
-  end
-
-  def substitution_objects
-    @substitution_objects_mem ||= LineItem.find_all_by_id(substitutions)
-  end
-
   def customisation_description
     unless @customisation_description_mem
       exclusions_string = exclusion_objects.map(&:name).join(', ')
@@ -169,5 +151,22 @@ class WebstoreOrder < ActiveRecord::Base
     end
 
     return @extras_description_mem
+  end
+
+  def create_order
+    extras_hash = {}
+    extras.each { |id, count| extras_hash[id] = { count: count } }
+    order = Order.create(
+      box: box,
+      frequency: frequency,
+      completed: true,
+      account: account,
+      schedule: schedule,
+      order_extras: extras_hash,
+      extras_one_off: extras_one_off
+    )
+    order.update_exclusions(exclusions)
+    order.update_substitutions(substitutions)
+    order.save
   end
 end

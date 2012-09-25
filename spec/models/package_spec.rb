@@ -40,19 +40,19 @@ describe Package do
     end
   end
 
-  context '#self.calculated_price' do
+  context '#self.calculated_individual_price' do
     # Default box price is $10
     before { @box = Fabricate(:box) }
 
     PRICE_PERMUTATIONS = [
-      { discount: 0.05, fee: 5, quantity: 5, calculated_price: 14.25 },
-      { discount: 0.05, fee: 5, quantity: 1, calculated_price: 14.25 },
-      { discount: 0.05, fee: 0, quantity: 5, calculated_price:  9.50 },
-      { discount: 0.05, fee: 0, quantity: 1, calculated_price:  9.50 },
-      { discount: 0.00, fee: 5, quantity: 5, calculated_price: 15.00 },
-      { discount: 0.00, fee: 5, quantity: 1, calculated_price: 15.00 },
-      { discount: 0.00, fee: 0, quantity: 5, calculated_price: 10.00 },
-      { discount: 0.00, fee: 0, quantity: 1, calculated_price: 10.00 }
+      { discount: 0.05, fee: 5, quantity: 5, calculated_individual_price: 14.25 },
+      { discount: 0.05, fee: 5, quantity: 1, calculated_individual_price: 14.25 },
+      { discount: 0.05, fee: 0, quantity: 5, calculated_individual_price:  9.50 },
+      { discount: 0.05, fee: 0, quantity: 1, calculated_individual_price:  9.50 },
+      { discount: 0.00, fee: 5, quantity: 5, calculated_individual_price: 15.00 },
+      { discount: 0.00, fee: 5, quantity: 1, calculated_individual_price: 15.00 },
+      { discount: 0.00, fee: 0, quantity: 5, calculated_individual_price: 10.00 },
+      { discount: 0.00, fee: 0, quantity: 1, calculated_individual_price: 10.00 }
     ]
 
     PRICE_PERMUTATIONS.each do |pp|
@@ -63,7 +63,7 @@ describe Package do
           @order    = Fabricate(:order, quantity: pp[:quantity], account: @customer.account)
         end
 
-        specify { Package.calculated_price(@box, @route, @customer).should == pp[:calculated_price] }
+        specify { Package.calculated_individual_price(@box, @route, @customer).should == pp[:calculated_individual_price] }
       end
     end
   end
@@ -91,8 +91,8 @@ describe Package do
       @new_discount = customer.discount
     end
 
-    specify { package.individual_price.should == Package.calculated_price(@price, @fee, @discount) }
-    specify { package.individual_price.should_not == Package.calculated_price(@new_price, @new_fee, @new_discount) }
+    specify { package.individual_price.should == Package.calculated_individual_price(@price, @fee, @discount) }
+    specify { package.individual_price.should_not == Package.calculated_individual_price(@new_price, @new_fee, @new_discount) }
   end
 
   context '.csv_headers' do
