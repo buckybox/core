@@ -9,10 +9,11 @@
       .row
         .ten.columns{ title: webstore_order.customisation_description }
           = truncate(webstore_order.customisation_description, length: 100)
-      .row
-        .ten.columns{ title: webstore_order.extras_description }
-          = truncate(webstore_order.extras_description, length: 100)
-        .two.columns.important.text-right= webstore_order.order_extras_price.format
+      - unless webstore_order.extras.empty?
+        .row
+          .ten.columns{ title: webstore_order.extras_description }
+            = truncate(webstore_order.extras_description, length: 100)
+          .two.columns.important.text-right= webstore_order.order_extras_price.format
     - else
       .row
         .ten.columns= simple_format(webstore_order.box_description)
