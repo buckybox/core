@@ -1,10 +1,13 @@
 require 'spec_helper'
 
 describe WebstoreOrder do
-  let(:box)     { mock_model Box }
-  let(:account) { mock_model Account }
-  let(:route)   { mock_model Route }
-  let(:order)   { mock_model Order }
+  let(:box)            { mock_model Box }
+  let(:account)        { mock_model Account }
+  let(:route)          { mock_model Route }
+  let(:order)          { mock_model Order }
+  let(:extra)          { mock_model Extra }
+  let(:exclusion)      { mock_model Exclusion }
+  let(:substitution)   { mock_model Substitution }
   let(:webstore_order) { Fabricate.build(:webstore_order) }
 
   subject { webstore_order }
@@ -45,20 +48,79 @@ describe WebstoreOrder do
     specify { expect { webstore_order.placed_step }.to change(webstore_order, :status).to(:placed) }
 
     describe '#customised?' do
+      before do
+        webstore_order.stub(:exclude) { [] }
+        webstore_order.stub(:extras) { {} }
+      end
 
+      its(:customised?) { should eq(false) }
+
+      context 'where there are excludes' do
+        before { webstore_order.stub(:exclusions) { ['1'] } }
+        its(:customised?) { should eq(true) }
+      end
+
+      context 'when there are extras' do
+        before { webstore_order.stub(:extras) { {'1' => '2'} } }
+        its(:customised?) { should eq(true) }
+      end
     end
 
     describe '#scheduled?' do
+      before do
+        webstore_order.stub(:account) { account }
+        webstore_order.stub(:route) { route }
+      end
 
+      its(:scheduled?) { should eq(true) }
+
+      context 'where there is not an account' do
+        before { webstore_order.stub(:account) { nil } }
+        its(:scheduled?) { should eq(false) }
+      end
+
+      context 'when there is not a route' do
+        before { webstore_order.stub(:route) { nil } }
+        its(:scheduled?) { should eq(false) }
+      end
     end
 
     describe '#completed?' do
+      context 'where the webstore order has been completed' do
+        before { webstore_order.placed_step }
+        its(:completed?) { should eq(true) }
+      end
 
+      context 'where the webstore order has not been completed' do
+        its(:completed?) { should eq(false) }
+      end
     end
   end
 
-  context 'order information' do
-    its(:order_extras_price) { should eq(1) }
-    its(:order_price) { should eq(5) }
+  describe '#extra_objects' do
+    before do
+      webstore_order.stub(:extras) { {1 => 1} }
+      Extra.stub(:find_all_by_id).with([1]) { [extra] }
+    end
+
+    its(:extra_objects) { should eq([extra]) }
+  end
+
+  describe '#exclusion_objects' do
+    before do
+      webstore_order.stub(:exclusions) { [1] }
+      LineItem.stub(:find_all_by_id).with([1]) { [exclusion] }
+    end
+
+    its(:exclusion_objects) { should eq([exclusion]) }
+  end
+
+  describe '#substitution_objects' do
+    before do
+      webstore_order.stub(:substitutions) { [1] }
+      LineItem.stub(:find_all_by_id).with([1]) { [substitution] }
+    end
+
+    its(:substitution_objects) { should eq([substitution]) }
   end
 end
