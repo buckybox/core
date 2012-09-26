@@ -76,9 +76,12 @@ class Webstore
 
     if customer.nil?
       customer = Customer.new(distributor: distributor, email: email)
-      customer.randomize_password
-      customer.save(validate: false)
+      customer.route = Route.default_route(@distributor)
+      customer.first_name = 'Webstore Order Customer'
+      customer.save
+
       CustomerMailer.login_details(customer).deliver
+
       @controller.sign_in(customer)
     elsif customer.valid_password?(user_information[:password])
       @controller.sign_in(customer)

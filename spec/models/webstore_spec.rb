@@ -12,7 +12,4 @@ describe Webstore do
 
     subject { @webstore_order }
   end
-
-  describe '.process_step' do
-  end
 end

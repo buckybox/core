@@ -77,20 +77,13 @@ describe WebstoreOrder do
     end
 
     describe '#scheduled?' do
-      before do
-        webstore_order.stub(:account) { account }
-        webstore_order.stub(:route) { route }
+      context 'when there is a schedule' do
+        before { webstore_order.stub(:schedule) { { start_time: Time.current } } }
+        its(:scheduled?) { should eq(true) }
       end
 
-      its(:scheduled?) { should eq(true) }
-
-      context 'where there is not an account' do
-        before { webstore_order.stub(:account) { nil } }
-        its(:scheduled?) { should eq(false) }
-      end
-
-      context 'when there is not a route' do
-        before { webstore_order.stub(:route) { nil } }
+      context 'when there is not a schedule' do
+        before { webstore_order.stub(:schedule) { nil } }
         its(:scheduled?) { should eq(false) }
       end
     end

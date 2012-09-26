@@ -30,7 +30,7 @@ class WebstoreController < ApplicationController
   def delivery
     @routes = @distributor.routes
     @route_selections = @distributor.routes.map { |route| [route.name_days_and_fee, route.id] }
-    @selected_route_id = current_customer.route_id if current_customer
+    @selected_route_id = current_customer.route_id if existing_customer?
     @days = Bucky::Schedule::DAYS.map { |day| [day[0..2].to_s.titleize, Bucky::Schedule::DAYS.index(day)] }
     @order_frequencies = [
       ['Delivery weekly on...', :weekly],
@@ -45,10 +45,10 @@ class WebstoreController < ApplicationController
   end
 
   def complete
-    @customer_name = current_customer.name
+    @customer_name = (existing_customer? ? current_customer.name : '')
     @address = current_customer.address
     @city = @distributor.invoice_information.billing_city if @distributor.invoice_information
-    @has_address = !@address.address_1.blank?
+    @has_address = existing_customer?
     if @has_address
       @street_address = @address.address_1
       @street_address_2 = @address.address_2
@@ -70,6 +70,10 @@ class WebstoreController < ApplicationController
   end
 
   private
+
+  def existing_customer?
+    current_customer.orders.size > 0
+  end
 
   def get_webstore_order
     webstore_order_id = session[:webstore][:webstore_order_id] if session[:webstore]

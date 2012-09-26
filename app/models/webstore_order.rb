@@ -81,7 +81,7 @@ class WebstoreOrder < ActiveRecord::Base
   end
 
   def scheduled?
-    !account.nil? && !route.nil?
+    !schedule.nil?
   end
 
   def completed?
