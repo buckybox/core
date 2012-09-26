@@ -7,15 +7,6 @@
     %ul
       %li
         %h5= box.price.format
-      %li
-        Exclusions:
-        = checkmark_boolean(box.likes)
-      %li
-        Substitutions:
-        = checkmark_boolean(box.dislikes)
-      %li
-        Extras:
-        = checkmark_boolean(box.extras_allowed?)
 
       .box-description= simple_format box.description
 
