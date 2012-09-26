@@ -1,9 +1,12 @@
 #current-order.row.webstore-section
+  - total = Money.new(0) # logic in the views gross
   .two.columns= image_tag(webstore_order.thumb_url)
   .ten.columns
     .row
       .ten.columns.important= webstore_order.box_name
-      .two.columns.important.text-right= webstore_order.box_price.format
+      .two.columns.important.text-right
+        - total += webstore_order.box_price
+        = webstore_order.box_price.format
 
     - if webstore_order.customised?
       .row
@@ -13,7 +16,9 @@
         .row
           .ten.columns{ title: webstore_order.extras_description }
             = truncate(webstore_order.extras_description, length: 100)
-          .two.columns.important.text-right= webstore_order.order_extras_price.format
+          .two.columns.important.text-right
+            - total += webstore_order.order_extras_price
+            = webstore_order.order_extras_price.format
     - else
       .row
         .ten.columns= simple_format(webstore_order.box_description)
@@ -21,8 +26,16 @@
     - if webstore_order.scheduled?
       .row
         .ten.columns= webstore_order.route_name
-        .two.columns.important.text-right= webstore_order.route_fee.format
-
-    - if webstore_order.completed?
+        .two.columns.important.text-right
+          - total += webstore_order.route_fee
+          = webstore_order.route_fee.format
       .row
-        .two.columns.offset-by-ten.important.text-right= webstore_order.price.format
+        .ten.columns Bucky Box Fee
+        .two.columns.important.text-right
+          - total += webstore_order.bucky_fee
+          = webstore_order.bucky_fee.format
+
+    .row
+      .ten.columns.important Total
+      .two.columns.important.text-right= total.format
+

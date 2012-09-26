@@ -57,7 +57,6 @@ class WebstoreController < ApplicationController
       @post_code = @address.postcode
     end
     @order_price = @webstore_order.order_price
-    @amount_due = @order_price
     @current_balance = current_customer.account.balance
     @closing_balance = @current_balance - @order_price
     @amount_due = @closing_balance * -1

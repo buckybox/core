@@ -52,6 +52,10 @@ class WebstoreOrder < ActiveRecord::Base
     route.fee
   end
 
+  def bucky_fee
+    distributor.consumer_delivery_fee
+  end
+
   def customise_step
     self.status = CUSTOMISE
   end
@@ -119,6 +123,7 @@ class WebstoreOrder < ActiveRecord::Base
     unless @order_price_mem
       @order_price_mem = Package.calculated_individual_price(box, route)
       @order_price_mem += order_extras_price unless extras.empty?
+      @order_price_mem += bucky_fee
     end
 
     return @order_price_mem

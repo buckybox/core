@@ -8,6 +8,7 @@ describe WebstoreOrder do
   let(:extra)          { mock_model Extra }
   let(:exclusion)      { mock_model Exclusion }
   let(:substitution)   { mock_model Substitution }
+  let(:distributor)    { mock_model Distributor }
   let(:webstore_order) { Fabricate.build(:webstore_order) }
 
   subject { webstore_order }
@@ -38,6 +39,15 @@ describe WebstoreOrder do
     its(:route) { should eq(account.route) }
     its(:route_name) { should eq('A Route') }
     its(:route_fee) { should eq(2) }
+  end
+
+  context 'distributor information' do
+    before do
+      distributor.stub(:consumer_delivery_fee) { 0.25 }
+      webstore_order.stub(:distributor) { distributor }
+    end
+
+    its(:bucky_fee) { should eq(0.25) }
   end
 
   context 'status' do
