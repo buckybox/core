@@ -25,6 +25,7 @@ class Order < ActiveRecord::Base
 
   schedule_for :schedule
   before_save :update_schedule_rule
+  after_save :update_next_occurrence
 
   acts_as_taggable
 
@@ -341,8 +342,9 @@ class Order < ActiveRecord::Base
   def update_schedule_rule
     schedule_rule.destroy if schedule_rule
     self.schedule_rule = ScheduleRule.copy_orders_schedule(self)
+  end
 
-    # Update next_occurrence cache
+  def update_next_occurrence
     customer.update_next_occurrence.save!
   end
 

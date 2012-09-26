@@ -177,9 +177,11 @@ class Customer < ActiveRecord::Base
     date ||= Date.current.to_s(:db)
     next_order = orders.active.select("orders.*, next_occurrence('#{date}', schedule_rules.*)").joins(:schedule_rule).sort_by(&:next_occurrence).first
     if next_order
+      self.next_order = next_order
       self.next_order_id = next_order.id
       self.next_order_occurrence_date = next_order.next_occurrence
     else
+      self.next_order = nil
       self.next_order_id = nil
       self.next_order_occurrence_date = nil
     end

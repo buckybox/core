@@ -77,12 +77,12 @@ class ScheduleRule < ActiveRecord::Base
 
   def next_occurrence(date=nil)
     date ||= Date.current
-    write_attribute("next_occurrence", ScheduleRule.where(id:self.id).with_next_occurrence(date).first.attributes["next_occurrence"]) unless attributes["next_occurrence"] || new_record?
+    occurrence = ScheduleRule.where(id:self.id).with_next_occurrence(date).first.attributes["next_occurrence"] unless new_record?
     
-    if attributes["next_occurrence"].nil?
+    if occurrence.nil?
       nil
     else
-      Date.parse attributes["next_occurrence"]
+      Date.parse occurrence
     end
   end
 

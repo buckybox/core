@@ -1,4 +1,7 @@
 -- -h localhost -U jordan -d bucky_box_development
+
+SELECT schedule_rules.*, next_occurrence('2012-09-20', schedule_rules.*) as next_occurrence FROM "schedule_rules"  WHERE "schedule_rules"."id" = 2897
+
 --`SELECT c.id, c.number, c.first_name, c.last_name, orders.id, b.next_occurrence
 --`FROM customers c
 --`  JOIN accounts ON accounts.id = c.id
