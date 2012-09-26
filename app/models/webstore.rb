@@ -72,10 +72,10 @@ class Webstore
 
   def login_customer(user_information)
     email    = user_information[:email]
-    customer = @distributor.customers.find_by_email(email)
+    customer = Customer.find_by_email(email)
 
     if customer.nil?
-      customer = Customer.new(distributor: distributor, email: email)
+      customer = distributor.customers.new(email: email)
       customer.route = Route.default_route(@distributor)
       customer.first_name = 'Webstore Order Customer'
       customer.save
@@ -83,7 +83,7 @@ class Webstore
       CustomerMailer.login_details(customer).deliver
 
       @controller.sign_in(customer)
-    elsif customer.valid_password?(user_information[:password])
+    elsif customer.valid_password?(user_information[:password]) && customer.distributor == @distributor
       @controller.sign_in(customer)
     end
 

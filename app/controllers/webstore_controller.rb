@@ -14,7 +14,6 @@ class WebstoreController < ApplicationController
   end
 
   def customise
-    @total = Money.new(0)
     @stock_list = @distributor.line_items
     @box = @webstore_order.box
     @extras = @box.extras.alphabetically
@@ -84,5 +83,10 @@ class WebstoreController < ApplicationController
 
   def get_distributor
     @distributor = Distributor.find_by_parameter_name(params[:distributor_parameter_name])
+
+    if @distributor
+      Time.zone = @distributor.time_zone
+      Money.default_currency = Money::Currency.new(@distributor.currency)
+    end
   end
 end
