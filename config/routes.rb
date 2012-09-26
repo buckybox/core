@@ -38,6 +38,10 @@ BuckyBox::Application.routes.draw do
       get 'reporting'
     end
 
+    namespace :reports do
+      get 'transaction_history/:start/:to', action: 'transaction_history', as: 'transaction_history'
+    end
+
     resources :distributors,        only: :update
     resource  :bank_information,    only: [:create, :update]
     resource  :invoice_information, only: [:create, :update]
@@ -166,10 +170,12 @@ BuckyBox::Application.routes.draw do
         get 'customer_import'
         put 'validate_customer_import'
         post 'customer_import_upload'
+        get 'invoice'
       end
 
       collection do
         get 'unimpersonate'
+        get 'country_setting/:id', controller: 'distributors', action: 'country_setting'
       end
     end
   end

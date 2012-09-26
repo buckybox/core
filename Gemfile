@@ -48,6 +48,8 @@ group :development do
   gem 'puma', '~> 1.6.1', require: false
   gem 'bullet', '~> 4.1.6', require: false
 
+  gem 'brakeman', '~> 1.7.1', require: false
+
   gem 'nifty-generators', '~> 0.4.6', require: false
 
   gem 'ruby-prof', '~> 0.11.2' # profiling with /newrelic
@@ -90,7 +92,8 @@ group :staging do
 end
 
 group :development, :test do
-  gem 'rspec-rails', '~> 2.10.0'
+  gem 'rspec-mocks', '~> 2.11.2'
+  gem 'rspec-rails', '~> 2.11.0'
   gem 'guard', '~> 1.3.0'
 
   gem 'rb-inotify', '~> 0.8.8',  require: false

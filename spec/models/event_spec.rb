@@ -24,12 +24,12 @@ describe Event do
     end
 
     context '.new_customer' do
-      specify { expect { Event.new_customer(@customer) }.should change(Event, :count).by(1) }
+      specify { expect { Event.new_customer(@customer) }.to change(Event, :count).by(1) }
       specify { Event.new_customer(@customer).event_type.should == Event::EVENT_TYPES[:customer_new] }
     end
 
     context '.create_call_reminder' do
-      specify { expect { Event.create_call_reminder(@customer) }.should change(Event, :count).by(1) }
+      specify { expect { Event.create_call_reminder(@customer) }.to change(Event, :count).by(1) }
       specify { Event.create_call_reminder(@customer).event_type.should == Event::EVENT_TYPES[:customer_call_reminder] }
     end
   end

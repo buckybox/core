@@ -50,8 +50,8 @@ describe Distributor do
           distributor.packing_lists.first.date.should == Date.current
         end
 
-        specify { expect { distributor.save }.should change(PackingList, :count).from(0).to(@default_days) }
-        specify { expect { distributor.save }.should change(DeliveryList, :count).from(0).to(@default_days) }
+        specify { expect { distributor.save }.to change(PackingList, :count).from(0).to(@default_days) }
+        specify { expect { distributor.save }.to change(DeliveryList, :count).from(0).to(@default_days) }
       end
 
       context 'distributor changes advance days' do
@@ -63,12 +63,12 @@ describe Distributor do
           end
 
           it 'the generated packing lists should start from today' do
-            distributor.save
+            distributor.save!
             distributor.packing_lists.first.date.should == Date.today
           end
 
-          specify { expect { distributor.save }.should change(PackingList, :count).from(@default_days).to(@custom_days) }
-          specify { expect { distributor.save }.should change(DeliveryList, :count).from(@default_days).to(@custom_days) }
+          specify { expect { distributor.save }.to change(PackingList, :count).from(@default_days).to(@custom_days) }
+          specify { expect { distributor.save }.to change(DeliveryList, :count).from(@default_days).to(@custom_days) }
         end
 
         context 'make a smaller window' do
@@ -79,12 +79,12 @@ describe Distributor do
           end
 
           it 'the generated packing lists should start from today' do
-            distributor.save
+            distributor.save!
             distributor.packing_lists.first.date.should == Date.today
           end
 
-          specify { expect { distributor.save }.should change(PackingList, :count).from(@default_days).to(@custom_days) }
-          specify { expect { distributor.save }.should change(DeliveryList, :count).from(@default_days).to(@custom_days) }
+          specify { expect { distributor.save }.to change(PackingList, :count).from(@default_days).to(@custom_days) }
+          specify { expect { distributor.save }.to change(DeliveryList, :count).from(@default_days).to(@custom_days) }
         end
       end
     end
@@ -102,8 +102,8 @@ describe Distributor do
           distributor.packing_lists.first.date.should == Date.tomorrow
         end
 
-        specify { expect { distributor.save }.should change(PackingList, :count).from(0).to(@default_days) }
-        specify { expect { distributor.save }.should change(DeliveryList, :count).from(0).to(@default_days) }
+        specify { expect { distributor.save }.to change(PackingList, :count).from(0).to(@default_days) }
+        specify { expect { distributor.save }.to change(DeliveryList, :count).from(0).to(@default_days) }
       end
 
       context 'distributor changes advance days' do
@@ -119,8 +119,8 @@ describe Distributor do
             distributor.packing_lists.first.date.should == Date.tomorrow
           end
 
-          specify { expect { distributor.save }.should change(PackingList, :count).from(@default_days).to(@custom_days) }
-          specify { expect { distributor.save }.should change(DeliveryList, :count).from(@default_days).to(@custom_days) }
+          specify { expect { distributor.save }.to change(PackingList, :count).from(@default_days).to(@custom_days) }
+          specify { expect { distributor.save }.to change(DeliveryList, :count).from(@default_days).to(@custom_days) }
         end
 
         context 'make a smaller window' do
@@ -135,8 +135,8 @@ describe Distributor do
             distributor.packing_lists.first.date.should == Date.tomorrow
           end
 
-          specify { expect { distributor.save }.should change(PackingList, :count).from(@default_days).to(@custom_days) }
-          specify { expect { distributor.save }.should change(DeliveryList, :count).from(@default_days).to(@custom_days) }
+          specify { expect { distributor.save }.to change(PackingList, :count).from(@default_days).to(@custom_days) }
+          specify { expect { distributor.save }.to change(DeliveryList, :count).from(@default_days).to(@custom_days) }
         end
       end
     end
@@ -163,8 +163,8 @@ describe Distributor do
     after { Delorean.back_to_the_present }
 
     context '@distributor1 should generate daily lists' do
-      specify { expect { Distributor.create_daily_lists }.should change(PackingList, :count).by(1) }
-      specify { expect { Distributor.create_daily_lists }.should change(DeliveryList, :count).by(1) }
+      specify { expect { Distributor.create_daily_lists }.to change(PackingList, :count).by(1) }
+      specify { expect { Distributor.create_daily_lists }.to change(DeliveryList, :count).by(1) }
     end
   end
 

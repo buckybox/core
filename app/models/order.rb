@@ -87,9 +87,9 @@ class Order < ActiveRecord::Base
   end
 
   def update_exclusions(line_item_ids)
-    return if line_item_ids.nil? || !box.dislikes? || !box.likes?
+    return if !box.dislikes? || !box.likes?
 
-    line_item_ids = line_item_ids.map(&:to_i)
+    line_item_ids = line_item_ids.to_a.map(&:to_i)
     exclusion_line_item_ids = exclusions.map { |x| x.line_item_id }
 
     to_delete = exclusion_line_item_ids - line_item_ids
@@ -100,9 +100,9 @@ class Order < ActiveRecord::Base
   end
 
   def update_substitutions(line_item_ids)
-    return if line_item_ids.nil? || !box.dislikes? || !box.likes?
+    return if !box.dislikes? || !box.likes?
 
-    line_item_ids = line_item_ids.map(&:to_i)
+    line_item_ids = line_item_ids.to_a.map(&:to_i)
     substitution_line_item_ids = substitutions.map { |x| x.line_item_id }
 
     to_delete = substitution_line_item_ids - line_item_ids
@@ -142,19 +142,6 @@ class Order < ActiveRecord::Base
 
   def just_completed?
     completed_changed? && completed?
-  end
-
-  def add_scheduled_delivery(delivery)
-    s = self.schedule
-    s.add_recurrence_time(delivery.date.to_time_in_current_zone)
-    self.schedule = s
-  end
-
-  def remove_scheduled_delivery(delivery)
-    s = schedule
-    time = schedule.recurrence_times.find{ |t| t.to_date == delivery.date }
-    s.remove_recurrence_time(time)
-    self.schedule = s
   end
 
   def future_deliveries(end_date)
@@ -352,8 +339,8 @@ class Order < ActiveRecord::Base
   protected
 
   def update_schedule_rule
-      schedule_rule.destroy if schedule_rule
-      self.schedule_rule = ScheduleRule.copy_orders_schedule(self) rescue nil #TODO remove rescue nil
+    schedule_rule.destroy if schedule_rule
+    self.schedule_rule = ScheduleRule.copy_orders_schedule(self)
   end
 
   def record_schedule_change

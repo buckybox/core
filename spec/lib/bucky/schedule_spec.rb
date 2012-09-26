@@ -63,10 +63,10 @@ describe Bucky::Schedule do
     end
 
     context 'bad parameters' do
-      specify { expect { Bucky::Schedule.build(start_time, 'all_the_days', [0, 3, 7]) }.should raise_error  }
-      specify { expect { Bucky::Schedule.build(start_time, 'monthly') }.should raise_error  }
-      specify { expect { Bucky::Schedule.build(start_time, 'monthly', [0, 3, 7]) }.should raise_error  }
-      specify { expect { Bucky::Schedule.build(start_time, 'monthly', [-1, 3, 6]) }.should raise_error }
+      specify { expect { Bucky::Schedule.build(start_time, 'all_the_days', [0, 3, 7]) }.to raise_error  }
+      specify { expect { Bucky::Schedule.build(start_time, 'monthly') }.to raise_error  }
+      specify { expect { Bucky::Schedule.build(start_time, 'monthly', [0, 3, 7]) }.to raise_error  }
+      specify { expect { Bucky::Schedule.build(start_time, 'monthly', [-1, 3, 6]) }.to raise_error }
     end
   end
 
