@@ -11,9 +11,6 @@ describe Webstore do
     end
 
     subject { @webstore_order }
-
-    its(:box) { should eq(box) }
-    its(:remote_ip) { should eq('192.168.1.8') }
   end
 
   describe '.process_step' do
