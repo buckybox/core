@@ -28,6 +28,10 @@ class WebstoreOrder < ActiveRecord::Base
     box.big_thumb_url
   end
 
+  def currency
+    box.currency
+  end
+
   def box_name
     box.name
   end

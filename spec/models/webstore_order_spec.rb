@@ -16,6 +16,7 @@ describe WebstoreOrder do
   context 'box information' do
     before do
       box.stub(:big_thumb_url) { 'box.jpg' }
+      box.stub(:currency) { 'CDN' }
       box.stub(:name) { 'Boxy' }
       box.stub(:price) { 12 }
       box.stub(:description) { 'A box.' }
@@ -23,6 +24,7 @@ describe WebstoreOrder do
     end
 
     its(:thumb_url) { should eq('box.jpg') }
+    its(:currency) { should eq('CDN') }
     its(:box_name) { should eq('Boxy') }
     its(:box_price) { should eq(12) }
     its(:box_description) { should eq('A box.') }

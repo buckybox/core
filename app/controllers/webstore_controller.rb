@@ -14,6 +14,7 @@ class WebstoreController < ApplicationController
   end
 
   def customise
+    @total = Money.new(0)
     @stock_list = @distributor.line_items
     @box = @webstore_order.box
     @extras = @box.extras.alphabetically

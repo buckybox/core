@@ -1,5 +1,5 @@
 #current-order.row.webstore-section
-  - total = Money.new(0) # logic in the views gross
+  - total = Money.new(0, webstore_order.currency) # logic in the views gross
   .two.columns= image_tag(webstore_order.thumb_url)
   .ten.columns
     .row
