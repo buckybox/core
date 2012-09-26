@@ -15,6 +15,7 @@ class Package < ActiveRecord::Base
 
   monetize :archived_box_price_cents
   monetize :archived_route_fee_cents
+  monetize :archived_consumer_delivery_fee_cents
 
   acts_as_list scope: :packing_list_id
 
@@ -30,7 +31,7 @@ class Package < ActiveRecord::Base
   before_validation :default_status, if: 'status.nil?'
   before_validation :default_packing_method, if: 'status == "packed" && packing_method.nil?'
 
-  before_save :archive_data # TODO maybe this should be before_create?
+  before_save :archive_data
 
   scope :originals, where(original_package_id: nil)
 
@@ -38,6 +39,7 @@ class Package < ActiveRecord::Base
 
   default_value_for :status, 'unpacked'
   default_value_for :packing_method, 'auto'
+  default_value_for :archived_consumer_delivery_fee_cents, 0
 
   delegate :date, to: :packing_list, allow_nil: true
 
@@ -76,6 +78,14 @@ class Package < ActiveRecord::Base
     return result
   rescue
     raise "Error calculating price: #{individual_price.inspect} * #{archived_order_quantity.inspect}"
+  end
+
+  def total_price
+    if archived_consumer_delivery_fee_cents > 0
+      price + archived_consumer_delivery_fee
+    else
+      price
+    end
   end
 
   def quantity
@@ -139,7 +149,7 @@ class Package < ActiveRecord::Base
       'Customer Last Name', 'Customer Phone', 'New Customer', 'Delivery Address Line 1', 'Delivery Address Line 2',
       'Delivery Address Suburb', 'Delivery Address City', 'Delivery Address Postcode', 'Delivery Note',
       'Box Contents Short Description', 'Box Type', 'Box Likes', 'Box Dislikes', 'Box Extra Line Items',
-      'Price', 'Customer Email', 'Customer Special Preferences'
+      'Price', 'Bucky Box Transaction Fee', 'Total Price', 'Customer Email', 'Customer Special Preferences'
     ]
   end
 
@@ -172,6 +182,8 @@ class Package < ActiveRecord::Base
       order.exclusions.map(&:name).join(', '),
       extras_description,
       price,
+      archived_consumer_delivery_fee,
+      total_price,
       customer.email,
       customer.special_order_preference
     ]
@@ -179,19 +191,21 @@ class Package < ActiveRecord::Base
 
   private
 
-  # TODO: Need to revisit this find best solutoin, whether it is Papertrail or in it's own model.
   def archive_data
-    self.archived_address           = address.join(', ')
+    unless status == 'packed' && !status_changed?
+      self.archived_address               = address.join(', ')
 
-    self.archived_box_name          = box.name
-    self.archived_customer_name     = customer.name
+      self.archived_box_name              = box.name
+      self.archived_customer_name         = customer.name
 
-    self.archived_box_price         = box.price
-    self.archived_route_fee         = route.fee
-    self.archived_customer_discount = customer.discount
-    self.archived_order_quantity    = order.quantity
+      self.archived_box_price             = box.price
+      self.archived_route_fee             = route.fee
+      self.archived_customer_discount     = customer.discount
+      self.archived_order_quantity        = order.quantity
+      self.archived_consumer_delivery_fee = distributor.consumer_delivery_fee if distributor && distributor.separate_bucky_fee?
 
-    return archive_extras
+      return archive_extras
+    end
   end
 
   def archive_extras

@@ -25,7 +25,7 @@ describe Route do
       route.sunday = false
     end
 
-    specify { expect { route.save }.should change(RouteScheduleTransaction, :count).by(1) }
+    specify { expect { route.save }.to change(RouteScheduleTransaction, :count).by(1) }
   end
 
   describe '#best_route' do

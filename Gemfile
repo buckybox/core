@@ -75,7 +75,8 @@ group :development do
 end
 
 group :development, :test do
-  gem 'rspec-rails', '~> 2.10.0'
+  gem 'rspec-mocks', '~> 2.11.2'
+  gem 'rspec-rails', '~> 2.11.0'
   gem 'guard', '~> 1.3.0'
 
   gem 'rb-inotify', '~> 0.8.8',  require: false

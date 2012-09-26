@@ -39,6 +39,20 @@ class Admin::DistributorsController < Admin::ResourceController
     end
   end
 
+  def country_setting
+    @country = Country.find(params[:id])
+    
+    render json: {time_zone: ActiveSupport::TimeZone.new(@country.default_time_zone).name,
+                  currency: Money.parse(@country.default_currency).currency.id.upcase,
+                  fee: @country.default_consumer_fee_cents / 100.0}
+  end
+
+  def invoice
+    @distributor = Distributor.find(params[:id])
+
+    render json: @distributor.invoice_for_range(params[:start_date], params[:end_date])
+  end
+
   private
 
   def parse_csv

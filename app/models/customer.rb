@@ -43,6 +43,8 @@ class Customer < ActiveRecord::Base
 
   default_scope order(:first_name)
 
+  delegate :separate_bucky_fee?, :consumer_delivery_fee, to: :distributor
+
   pg_search_scope :search,
     against: [ :first_name, :last_name, :email ],
     associated_against: {

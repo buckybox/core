@@ -83,7 +83,7 @@ class Delivery < ActiveRecord::Base
         delivery.payments.create(
           distributor: delivery.distributor,
           account: delivery.account,
-          amount: delivery.package.price,
+          amount: delivery.payment_amount,
           kind: 'delivery',
           source: 'manual',
           description: 'Payment made on delivery',
@@ -149,7 +149,7 @@ class Delivery < ActiveRecord::Base
       'Order Number', 'Delivery Number', 'Delivery Date', 'Customer Number', 'Customer First Name',
       'Customer Last Name', 'Customer Phone', 'New Customer', 'Delivery Address Line 1', 'Delivery Address Line 2',
       'Delivery Address Suburb', 'Delivery Address City', 'Delivery Address Postcode', 'Delivery Note',
-      'Box Contents Short Description', 'Price', 'Customer Email'
+      'Box Contents Short Description', 'Price', 'Bucky Box Transaction Fee', 'Total Price', 'Customer Email'
     ]
   end
 
@@ -174,14 +174,14 @@ class Delivery < ActiveRecord::Base
       address.delivery_note,
       order.string_sort_code,
       package.price,
+      package.archived_consumer_delivery_fee,
+      package.total_price,
       customer.email
     ]
   end
 
   def self.matching_dso(delivery_sequence_order)
-    delivery_ids = Delivery.joins(account: {customer: {address: {}}}).where(['deliveries.route_id = ? AND addresses.address_hash = ?', delivery_sequence_order.route_id, delivery_sequence_order.address_hash]).select{|delivery|
-      delivery.delivery_list.date.wday == delivery_sequence_order.day
-    }.collect(&:id)
+    delivery_ids = Delivery.joins({delivery_list:{}, account: {customer: {address: {}}}}).where(['deliveries.route_id = ? AND addresses.address_hash = ? AND EXTRACT(DOW FROM delivery_lists.date) = ?', delivery_sequence_order.route_id, delivery_sequence_order.address_hash, delivery_sequence_order.day]).collect(&:id)
     Delivery.where(['id in (?)', delivery_ids])
   end
 
@@ -220,6 +220,14 @@ class Delivery < ActiveRecord::Base
     end
 
     export_items ? csv_output : nil
+  end
+
+  def payment_amount
+    package.total_price
+  end
+
+  def consumer_delivery_fee_cents
+    package.archived_consumer_delivery_fee_cents
   end
 
   private

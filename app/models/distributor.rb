@@ -20,6 +20,8 @@ class Distributor < ActiveRecord::Base
   has_many :import_transaction_lists, dependent: :destroy
   has_many :import_transactions,      dependent: :destroy, through: :import_transaction_lists
 
+  belongs_to :country
+
   DEFAULT_TIME_ZONE               = 'Wellington'
   DEFAULT_CURRENCY                = 'nzd'
   DEFAULT_ADVANCED_HOURS          = 18
@@ -32,12 +34,15 @@ class Distributor < ActiveRecord::Base
   mount_uploader :company_logo, CompanyLogoUploader
 
   monetize :invoice_threshold_cents
+  monetize :consumer_delivery_fee_cents
 
   # Setup accessible (or protected) attributes for your model
   attr_accessible :email, :password, :password_confirmation, :remember_me, :name, :url, :company_logo, :company_logo_cache, :completed_wizard,
     :remove_company_logo, :support_email, :invoice_threshold, :separate_bucky_fee, :advance_hour, :advance_days, :automatic_delivery_hour,
-    :time_zone, :currency, :bank_deposit, :paypal, :bank_deposit_format
+    :time_zone, :currency, :bank_deposit, :paypal, :bank_deposit_format,
+    :country_id, :consumer_delivery_fee, :consumer_delivery_fee_cents
 
+  validates_presence_of :country
   validates_presence_of :email
   validates_uniqueness_of :email
   validates_presence_of :name, on: :update
@@ -290,6 +295,51 @@ class Distributor < ActiveRecord::Base
 
   def cache_key
     @cache_key ||= "#{id}/#{name}/#{updated_at}"
+  end
+
+  def invoice_for_range(start_date, end_date)
+    use_local_time_zone do
+      start = Date.parse(start_date)
+      finish = Date.parse(end_date)
+
+      delivered = delivery_lists.where(["date >= ? AND date <= ?", start.to_date, finish.to_date]).collect{|dl| dl.deliveries.delivered.size}.sum
+
+      cancelled = delivery_lists.where(["date >= ? AND date <= ?", start.to_date, finish.to_date]).collect{|dl| dl.deliveries.cancelled.size}.sum
+
+      value = delivery_lists.where(["date >= ? AND date <= ?", start.to_date, finish.to_date]).collect{|dl| dl.deliveries.delivered.count.zero? ? Money.new(0, currency) : dl.deliveries.delivered.collect{|w| w.package.price}.sum}.sum
+
+      formatted = value == 0 ? Money.new(0, currency).format : value.format
+
+      return {delivered: delivered,
+      cancelled: cancelled,
+      value: formatted}
+    end
+  end
+
+  require 'csv'
+  def transaction_history_report(from, to)
+    csv_string = CSV.generate do |csv|
+      csv << ["Date Transaction Occurred", "Date Transaction Processed", "Amount", "Description", "Customer Name", "Customer Number", "Customer Email", "Customer City", "Customer Suburb", "Customer Tags", "Discount"]
+
+      transactions.where(["? <= display_time AND display_time < ?", from, to]).order('display_time DESC, created_at DESC').includes(account: {customer: {address: {}}}).each do |transaction|
+        row = []
+        row << transaction.created_at.to_s(:csv_output)
+        row << transaction.display_time.to_s(:csv_output)
+        row << transaction.amount
+        row << transaction.description
+        row << transaction.customer.name
+        row << transaction.customer.number
+        row << transaction.customer.email
+        row << transaction.customer.address.city
+        row << transaction.customer.address.suburb
+        row << transaction.customer.tags.collect{|t| "\"#{t.name}\""}.join(", ")
+        row << transaction.customer.discount
+
+        csv << row
+      end
+    end
+
+    return csv_string
   end
 
   private
