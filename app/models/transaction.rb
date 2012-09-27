@@ -22,4 +22,8 @@ class Transaction < ActiveRecord::Base
   def manual?
     transactionable_type == 'Account' || transactionable.manual? if transactionable
   end
+
+  def customer
+    account.customer
+  end
 end
