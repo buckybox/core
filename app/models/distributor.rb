@@ -338,6 +338,32 @@ class Distributor < ActiveRecord::Base
     end
   end
 
+  require 'csv'
+  def transaction_history_report(from, to)
+    csv_string = CSV.generate do |csv|
+      csv << ["Date Transaction Occurred", "Date Transaction Processed", "Amount", "Description", "Customer Name", "Customer Number", "Customer Email", "Customer City", "Customer Suburb", "Customer Tags", "Discount"]
+
+      transactions.where(["? <= display_time AND display_time < ?", from, to]).order('display_time DESC, created_at DESC').includes(account: {customer: {address: {}}}).each do |transaction|
+        row = []
+        row << transaction.created_at.to_s(:csv_output)
+        row << transaction.display_time.to_s(:csv_output)
+        row << transaction.amount
+        row << transaction.description
+        row << transaction.customer.name
+        row << transaction.customer.number
+        row << transaction.customer.email
+        row << transaction.customer.address.city
+        row << transaction.customer.address.suburb
+        row << transaction.customer.tags.collect{|t| "\"#{t.name}\""}.join(", ")
+        row << transaction.customer.discount
+
+        csv << row
+      end
+    end
+
+    return csv_string
+  end
+
   private
 
   def parameterize_name
