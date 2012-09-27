@@ -76,6 +76,7 @@ class Webstore
       customer.route = Route.default_route(@distributor)
       customer.first_name = 'Webstore Order Customer'
       customer.save
+      Event.new_customer_webstore(customer)
 
       CustomerMailer.login_details(customer).deliver
 

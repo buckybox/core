@@ -39,8 +39,6 @@ class Customer < ActiveRecord::Base
   before_create :setup_account
   before_create :setup_address
 
-  after_create :trigger_new_customer
-
   default_scope order(:first_name)
 
   delegate :separate_bucky_fee?, :consumer_delivery_fee, to: :distributor
@@ -192,10 +190,6 @@ class Customer < ActiveRecord::Base
 
   def setup_address
     self.build_address if self.address.nil?
-  end
-
-  def trigger_new_customer
-    Event.new_customer(self)
   end
 
   def format_email

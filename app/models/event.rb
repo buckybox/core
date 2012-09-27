@@ -14,6 +14,7 @@ class Event < ActiveRecord::Base
   EVENT_CATEGORIES = %w(customer billing delivery)
   EVENT_TYPES = {
     customer_new:             'customer_new',
+    customer_webstore_new:    'customer_webstore_new',
     customer_call_reminder:   'customer_call_reminder',
     delivery_scheduler_issue: 'delivery_scheduler_issue',
     delivery_pending:         'delivery_pending',
@@ -55,6 +56,14 @@ class Event < ActiveRecord::Base
     trigger(
       customer.distributor_id,
       Event::EVENT_TYPES[:customer_new],
+      { event_category: 'customer', customer_id: customer.id }
+    )
+  end
+
+  def self.new_customer_webstore(customer)
+    trigger(
+      customer.distributor_id,
+      Event::EVENT_TYPES[:customer_webstore_new],
       { event_category: 'customer', customer_id: customer.id }
     )
   end

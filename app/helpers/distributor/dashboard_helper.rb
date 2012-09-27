@@ -1,10 +1,14 @@
 module Distributor::DashboardHelper
+  #NOTE: Events will be cleaned up eventually likely moving this case statement into a more OO design.
   def notification_message_for notification
     case notification.event_type
       when Event::EVENT_TYPES[:customer_new]
-        # TODO Show address and Add dropdown to assign delivery address
         customer = notification.customer
         "New customer #{link_to_customer customer}".html_safe
+
+      when Event::EVENT_TYPES[:customer_webstore_new]
+        customer = notification.customer
+        "New webstore customer #{link_to_customer customer}".html_safe
 
       when Event::EVENT_TYPES[:customer_call_reminder]
         customer = notification.customer
@@ -17,7 +21,6 @@ module Distributor::DashboardHelper
         "A #{link_to_delivery notification.delivery_id} is still marked as pending".html_safe
 
       when Event::EVENT_TYPES[:credit_limit_reached]
-        # TODO This is the message that should appear when the limit is reached. If limit continues to be exceded next days display "Credit Limit continues to be exceeded for [CUSTOMER NAME/ID]" instead
         customer = notification.customer
         "Credit Limit reached for #{link_to_customer customer}, deliveries will be halted".html_safe
 
@@ -42,7 +45,7 @@ module Distributor::DashboardHelper
   end
 
   def link_to_customer customer
-      link_to "#{customer.name} (ID:#{customer.id})", distributor_customer_path(customer.id)
+    link_to "#{customer.name} (ID:#{customer.id})", distributor_customer_path(customer.id)
   end
 
   def link_to_delivery delivery_id
@@ -50,8 +53,6 @@ module Distributor::DashboardHelper
   end
 
   def link_to_invoice invoice_id
-    #TODO change the path to match the correct route when invoice page created
-    #link_to  "Invoice ##{invoice_id}", distributor_invoice_path(invoice_id)
     "An invoice"
   end
 
@@ -60,11 +61,8 @@ module Distributor::DashboardHelper
   end
 
   def link_to_reconciliation reconciliation_id
-    #TODO change the path to match the correct route when invoice page created
-    #link_to  "reconcile bank deposits", distributor_reconciliation_path(reconciliation_id)
     "reconcile bank deposits"
   end
-
 
   def date_for notification
     notification.created_at.to_s(:date_month)
