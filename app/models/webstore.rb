@@ -6,10 +6,7 @@ class Webstore
     @distributor = distributor
 
     webstore_session = @controller.session[:webstore]
-
-    if webstore_session
-      @order = WebstoreOrder.find_by_id(webstore_session[:webstore_order_id])
-    end
+    @order = WebstoreOrder.find_by_id(webstore_session[:webstore_order_id]) if webstore_session
   end
 
   def process_params
@@ -63,7 +60,7 @@ class Webstore
     extra_params = customise[:extras]
     add_extras_to_order(extra_params) if customise[:extras]
 
-    if @controller.customer_signed_in?
+    if @controller.customer_signed_in? && @controller.current_customer.distributor == @distributor
       @order.delivery_step
     else
       @order.login_step

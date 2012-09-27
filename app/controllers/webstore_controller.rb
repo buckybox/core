@@ -58,7 +58,6 @@ class WebstoreController < ApplicationController
     end
     @order_price = @webstore_order.order_price
     @current_balance = current_customer.account.balance
-    binding.pry
     @closing_balance = @current_balance - @order_price
     @amount_due = @closing_balance * -1
     @bank = @distributor.bank_information
