@@ -113,6 +113,28 @@ class Distributor < ActiveRecord::Base
     end
   end
 
+  def self.update_next_occurrence_caches
+    all.each do |distributor|
+      distributor.use_local_time_zone do
+        if Time.current.hour == distributor.automatic_delivery_hour
+          CronLog.log("Updated next order caches for #{distributor.id} at local time #{Time.current.to_s(:pretty)}.")
+          distributor.update_next_occurrence_caches 
+        end
+      end
+    end
+  end
+
+  def update_next_occurrence_caches(date=nil)
+    use_local_time_zone do
+      if Time.current.hour >= automatic_delivery_hour
+        date ||= Date.current.tomorrow
+      else
+        date ||= Date.current
+      end
+      Bucky::Sql.update_next_occurrence_caches(self, date)
+    end
+  end
+
   def window_start_from
     # If we have missed the cutoff point add a day so we start generation from tomorrow
     Date.current + ( advance_hour < Time.current.hour ? 1 : 0 ).days

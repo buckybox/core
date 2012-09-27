@@ -1,5 +1,3 @@
---h localhost -U jordan -d bucky_box_development
-
 CREATE OR REPLACE FUNCTION next_occurrence(
   from_date DATE, schedule_rule schedule_rules
 )

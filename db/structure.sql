@@ -184,7 +184,7 @@ BEGIN
   WHEN 'weekly' THEN
   -- ==================== WEEKLY ====================
     -- Loop until we find the next occurrence
-    -- The '1' in 1..7 means we consider the next occurrence tomorrow, not today.
+    -- The '0' in 0..6 means we consider the next occurrence today, not tomorrow.
     FOR i IN 0..6 LOOP
       days_from_now := i;
       EXIT WHEN on_day(mod(from_wday + days_from_now, 7), schedule_rule);

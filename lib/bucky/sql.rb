@@ -3,7 +3,7 @@ class Bucky::Sql
 
   def self.template(file_name)
       @sql_templates ||= {}
-      @sql_templates[file_name] ||= File.read(File.join(PATH,"/templates/#{file_name}")).gsub(/\s+/, ' ')
+      @sql_templates[file_name] ||= File.read(File.join(PATH,"/templates/#{file_name}" + ".sql")).gsub(/\s+/, ' ')
       @sql_templates[file_name].clone
   end
 
@@ -16,7 +16,7 @@ class Bucky::Sql
   end
 
   def self.find_schedules(distributor, date)
-    substitute('find_schedules.sql', {
+    substitute('find_schedules', {
       dow: date.strftime('%a').downcase,
       date: date.to_s(:db),
       distributor_id: distributor.id.to_s
@@ -24,7 +24,7 @@ class Bucky::Sql
   end
 
   def self.find_schedules_route(distributor, date, route_id)
-    substitute('find_schedules_route.sql', {
+    substitute('find_schedules_route', {
       dow: date.strftime('%a').downcase,
       date: date.to_s(:db),
       distributor_id: distributor.id.to_s,
@@ -34,18 +34,27 @@ class Bucky::Sql
 
   def self.order_count(distributor, date, route_id=nil)
     if route_id
-      execute('sum(orders.quantity) as count', find_schedules_route(distributor, date, route_id))[0]['count'].to_i
+      select_execute('sum(orders.quantity) as count', find_schedules_route(distributor, date, route_id))[0]['count'].to_i
     else
-      execute('sum(orders.quantity) as count', find_schedules(distributor, date))[0]['count'].to_i
+      select_execute('sum(orders.quantity) as count', find_schedules(distributor, date))[0]['count'].to_i
     end
   end
 
   def self.order_ids(distributor, date)
-    execute('orders.id as id', find_schedules(distributor, date)).collect{|row| row['id'].to_i}
+    select_execute('orders.id as id', find_schedules(distributor, date)).collect{|row| row['id'].to_i}
   end
 
-  def self.execute(select_statement, sql)
+  def self.update_next_occurrence_caches(distributor, date=nil)
+    date ||= Time.current.to_date
+    execute(substitute('update_next_occurrence_caches', {id: distributor.id, date: date.to_s(:db)}))
+  end
+
+  def self.select_execute(select_statement, sql)
     sql.gsub!(':select', select_statement)
+    execute(sql)
+  end
+
+  def self.execute(sql)
     ActiveRecord::Base.connection.execute(sql)
   end
 end

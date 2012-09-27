@@ -18,7 +18,7 @@ class Order < ActiveRecord::Base
 
   has_many :extras, through: :order_extras
 
-  has_one :schedule_rule, autosave: true
+  has_one :schedule_rule, autosave: true, dependent: :destroy
 
   scope :completed, where(completed: true)
   scope :active, where(active: true)

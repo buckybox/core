@@ -1,8 +1,11 @@
 module Distributor::CustomersHelper
   def next_customer_delivery_occurrence(customer)
     next_occurrence = customer.next_order_occurrence_date
-
-    if next_occurrence && (next_occurrence < (Date.current + 6.days))
+    if next_occurrence == Date.current
+      'Today'
+    elsif next_occurrence == Date.current.tomorrow
+      'Tomorrow'
+    elsif next_occurrence && (next_occurrence < (Date.current + 6.days))
       next_occurrence.to_s(:weekday)
     elsif next_occurrence
       next_occurrence.to_s(:day_month_and_year)

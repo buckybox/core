@@ -1,4 +1,3 @@
--- -h localhost -U jordan -d bucky_box_development
 UPDATE customers SET next_order_id = d.order_id, next_order_occurrence_date = d.next_occurrence
 FROM (
   SELECT c.id, c.number, c.first_name, c.last_name, a.order_id, a.next_occurrence
@@ -7,12 +6,12 @@ FROM (
       WITH occurrences AS (
         SELECT customer_id, order_id, min(occurrence) as next_occurrence
         FROM (
-          SELECT customers.id as customer_id, orders.id as order_id, next_occurrence('2012-10-04', schedule_rules.*) as occurrence
+          SELECT customers.id as customer_id, orders.id as order_id, next_occurrence(':date', schedule_rules.*) as occurrence
             FROM customers
             JOIN accounts ON accounts.id = customers.id
             JOIN orders ON accounts.id = orders.account_id AND orders.active = 't'
             JOIN schedule_rules ON orders.id = schedule_rules.order_id
-            WHERE distributor_id = 14
+            WHERE distributor_id = :id
           ) occurrences
         GROUP BY customer_id, order_id
       )
@@ -26,5 +25,5 @@ FROM (
       order by customer_id
   ) a ON c.id = a.customer_id
 ) d
-WHERE customers.distributor_id = 14
+WHERE customers.distributor_id = :id
 AND customers.id = d.id

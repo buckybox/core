@@ -9,9 +9,7 @@ class Jobs
     CronLog.log("Checking orders, deactivating those without any more deliveries.")
     Order.deactivate_finished
 
-    CronLog.log("Updating customers next_order cache")
-    Customer.find_each do |c|
-      CronLog.log("Customer(#{c.id}) next_order cache failed to update") unless c.update_next_occurrence
-    end
+    CronLog.log("Updating customers next order cache")
+    Distributor.update_next_occurrence_caches
   end
 end
