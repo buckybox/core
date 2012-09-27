@@ -34,8 +34,8 @@ class WebstoreController < ApplicationController
     @days = Bucky::Schedule::DAYS.map { |day| [day[0..2].to_s.titleize, Bucky::Schedule::DAYS.index(day)] }
     @order_frequencies = [
       ['Delivery weekly on...', :weekly],
-      ['Delivery 2 weeks on...', :fortnightly],
-      ['Delivery monthly on...', :monthly],
+      ['Deliver every 2 weeks on...', :fortnightly],
+      ['Delivery monthly', :monthly],
       ['Deliver once', :single]
     ]
     @extra_frequencies = [
@@ -58,6 +58,7 @@ class WebstoreController < ApplicationController
     end
     @order_price = @webstore_order.order_price
     @current_balance = current_customer.account.balance
+    binding.pry
     @closing_balance = @current_balance - @order_price
     @amount_due = @closing_balance * -1
     @bank = @distributor.bank_information

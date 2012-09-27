@@ -29,11 +29,12 @@
         .two.columns.important.text-right
           - total += webstore_order.route_fee
           = webstore_order.route_fee.format
-      .row
-        .ten.columns Bucky Box Fee
-        .two.columns.important.text-right
-          - total += webstore_order.bucky_fee
-          = webstore_order.bucky_fee.format
+      - if webstore_order.has_bucky_fee?
+        .row
+          .ten.columns Bucky Box Fee
+          .two.columns.important.text-right
+            - total += webstore_order.bucky_fee
+            = webstore_order.bucky_fee.format
 
     .row
       .ten.columns.important Total

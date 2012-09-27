@@ -46,10 +46,12 @@ describe WebstoreOrder do
   context 'distributor information' do
     before do
       distributor.stub(:consumer_delivery_fee) { 0.25 }
+      distributor.stub(:separate_bucky_fee?) { true }
       webstore_order.stub(:distributor) { distributor }
     end
 
     its(:bucky_fee) { should eq(0.25) }
+    its(:has_bucky_fee?) { should be_true }
   end
 
   context 'status' do
@@ -65,39 +67,39 @@ describe WebstoreOrder do
         webstore_order.stub(:extras) { {} }
       end
 
-      its(:customised?) { should eq(false) }
+      its(:customised?) { should be_false }
 
       context 'where there are excludes' do
         before { webstore_order.stub(:exclusions) { ['1'] } }
-        its(:customised?) { should eq(true) }
+        its(:customised?) { should be_true }
       end
 
       context 'when there are extras' do
         before { webstore_order.stub(:extras) { {'1' => '2'} } }
-        its(:customised?) { should eq(true) }
+        its(:customised?) { should be_true }
       end
     end
 
     describe '#scheduled?' do
       context 'when there is a schedule' do
         before { webstore_order.stub(:schedule) { { start_time: Time.current } } }
-        its(:scheduled?) { should eq(true) }
+        its(:scheduled?) { should be_true }
       end
 
       context 'when there is not a schedule' do
         before { webstore_order.stub(:schedule) { nil } }
-        its(:scheduled?) { should eq(false) }
+        its(:scheduled?) { should be_false }
       end
     end
 
     describe '#completed?' do
       context 'where the webstore order has been completed' do
         before { webstore_order.placed_step }
-        its(:completed?) { should eq(true) }
+        its(:completed?) { should be_true }
       end
 
       context 'where the webstore order has not been completed' do
-        its(:completed?) { should eq(false) }
+        its(:completed?) { should be_false }
       end
     end
   end
