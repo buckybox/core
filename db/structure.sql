@@ -362,7 +362,8 @@ CREATE TABLE bank_information (
     account_number character varying(255),
     customer_message text,
     created_at timestamp without time zone,
-    updated_at timestamp without time zone
+    updated_at timestamp without time zone,
+    bsb_number character varying(255)
 );
 
 
@@ -469,7 +470,8 @@ CREATE TABLE boxes (
     updated_at timestamp without time zone,
     box_image character varying(255),
     available_monthly boolean DEFAULT false NOT NULL,
-    extras_limit integer DEFAULT 0
+    extras_limit integer DEFAULT 0,
+    hidden boolean DEFAULT false NOT NULL
 );
 
 
@@ -1405,7 +1407,9 @@ CREATE TABLE routes (
     updated_at timestamp without time zone,
     schedule text,
     fee_cents integer DEFAULT 0 NOT NULL,
-    currency character varying(255)
+    currency character varying(255),
+    area_of_service text,
+    estimated_delivery_time text
 );
 
 
@@ -1621,6 +1625,47 @@ CREATE SEQUENCE transactions_id_seq
 --
 
 ALTER SEQUENCE transactions_id_seq OWNED BY transactions.id;
+
+
+--
+-- Name: webstore_orders; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE webstore_orders (
+    id integer NOT NULL,
+    account_id integer,
+    box_id integer,
+    order_id integer,
+    exclusions text,
+    substitutions text,
+    extras text,
+    status character varying(255),
+    remote_ip character varying(255),
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL,
+    schedule text,
+    frequency character varying(255),
+    extras_one_off boolean
+);
+
+
+--
+-- Name: webstore_orders_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE webstore_orders_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: webstore_orders_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE webstore_orders_id_seq OWNED BY webstore_orders.id;
 
 
 --
@@ -1880,6 +1925,13 @@ ALTER TABLE ONLY tags ALTER COLUMN id SET DEFAULT nextval('tags_id_seq'::regclas
 --
 
 ALTER TABLE ONLY transactions ALTER COLUMN id SET DEFAULT nextval('transactions_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY webstore_orders ALTER COLUMN id SET DEFAULT nextval('webstore_orders_id_seq'::regclass);
 
 
 --
@@ -2176,6 +2228,14 @@ ALTER TABLE ONLY tags
 
 ALTER TABLE ONLY transactions
     ADD CONSTRAINT transactions_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: webstore_orders_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY webstore_orders
+    ADD CONSTRAINT webstore_orders_pkey PRIMARY KEY (id);
 
 
 --
@@ -2809,6 +2869,18 @@ INSERT INTO schema_migrations (version) VALUES ('20120904052651');
 
 INSERT INTO schema_migrations (version) VALUES ('20120909041708');
 
+INSERT INTO schema_migrations (version) VALUES ('20120910034809');
+
+INSERT INTO schema_migrations (version) VALUES ('20120911033835');
+
+INSERT INTO schema_migrations (version) VALUES ('20120917054659');
+
+INSERT INTO schema_migrations (version) VALUES ('20120918113919');
+
+INSERT INTO schema_migrations (version) VALUES ('20120919000442');
+
 INSERT INTO schema_migrations (version) VALUES ('20120920231722');
 
 INSERT INTO schema_migrations (version) VALUES ('20120923230255');
+
+INSERT INTO schema_migrations (version) VALUES ('20120927040432');
