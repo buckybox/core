@@ -4,6 +4,7 @@ Date::DATE_FORMATS[:date_short_month] = "%d %b"
 Date::DATE_FORMATS[:pause] = "%a %-d %b"
 Date::DATE_FORMATS[:weekday] = "%A"
 Date::DATE_FORMATS[:month_and_year] = "%B %Y"
+Date::DATE_FORMATS[:day_month_and_year] = "%-d %B %Y"
 
 Time::DATE_FORMATS[:weekday] = "%A"
 Time::DATE_FORMATS[:month_and_year] = "%B %Y"
