@@ -45,8 +45,10 @@ group :install do
 end
 
 group :development do
-  #gem 'bullet'
-  gem 'puma', require: false
+  gem 'puma', '~> 1.6.1', require: false
+  gem 'bullet', '~> 4.1.6', require: false
+
+  gem 'brakeman', '~> 1.7.1', require: false
 
   gem 'nifty-generators', '~> 0.4.6', require: false
 
@@ -72,25 +74,9 @@ group :development do
   gem 'pry-coolline', '~> 0.1.5'
 end
 
-group :development, :test do
-  gem 'rspec-rails', '~> 2.10.0'
-  gem 'guard', '~> 1.3.0'
-
-  gem 'rb-inotify', '~> 0.8.8',  require: false
-  gem 'rb-fsevent', '~> 0.9.1',  require: false
-  gem 'rb-fchange', '~> 0.0.5',  require: false
-
-  gem 'mailcatcher', '~> 0.5.8', require: false
-
-  gem 'simplecov', '~> 0.6.4',   require: false
-  gem 'delorean', '~> 2.0.0'
-end
-
 group :test do
   gem 'fabrication', '~> 1.4.1'
   gem 'database_cleaner', '~> 0.8.0'
-
-  gem 'delorean', '~> 2.0.0'
 
   gem 'capybara', '~> 1.1.2'
   gem 'launchy', '~> 2.1.2'
@@ -103,5 +89,26 @@ end
 
 group :staging do
   gem 'mail_safe', '~> 0.3.1'
+end
+
+group :development, :test do
+  gem 'rspec-mocks', '~> 2.11.2'
+  gem 'rspec-rails', '~> 2.11.0'
+  gem 'guard', '~> 1.3.0'
+
+  gem 'rb-inotify', '~> 0.8.8',  require: false
+  gem 'rb-fsevent', '~> 0.9.1',  require: false
+  gem 'rb-fchange', '~> 0.0.5',  require: false
+
+  gem 'mailcatcher', '~> 0.5.8', require: false
+
+  gem 'simplecov', '~> 0.6.4',   require: false
+end
+
+group :development, :staging do
+  gem 'oink', require: 'oink'
+end
+
+group :development, :test, :staging do
   gem 'delorean', '~> 2.0.0'
 end

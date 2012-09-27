@@ -144,19 +144,6 @@ class Order < ActiveRecord::Base
     completed_changed? && completed?
   end
 
-  def add_scheduled_delivery(delivery)
-    s = self.schedule
-    s.add_recurrence_time(delivery.date.to_time_in_current_zone)
-    self.schedule = s
-  end
-
-  def remove_scheduled_delivery(delivery)
-    s = schedule
-    time = schedule.recurrence_times.find{ |t| t.to_date == delivery.date }
-    s.remove_recurrence_time(time)
-    self.schedule = s
-  end
-
   def future_deliveries(end_date)
     results = []
 
@@ -352,8 +339,8 @@ class Order < ActiveRecord::Base
   protected
 
   def update_schedule_rule
-      schedule_rule.destroy if schedule_rule
-      self.schedule_rule = ScheduleRule.copy_orders_schedule(self) rescue nil #TODO remove rescue nil
+    schedule_rule.destroy if schedule_rule
+    self.schedule_rule = ScheduleRule.copy_orders_schedule(self)
   end
 
   def record_schedule_change

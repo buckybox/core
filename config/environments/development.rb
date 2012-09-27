@@ -40,5 +40,7 @@ BuckyBox::Application.configure do
 
   # No more asset logging
   config.assets.logger = false
+
+  config.middleware.use(Oink::Middleware)
 end
 

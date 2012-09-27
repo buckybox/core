@@ -38,6 +38,10 @@ BuckyBox::Application.routes.draw do
       get 'reporting'
     end
 
+    namespace :reports do
+      get 'transaction_history/:start/:to', action: 'transaction_history', as: 'transaction_history'
+    end
+
     resources :distributors,        only: :update
     resource  :bank_information,    only: [:create, :update]
     resource  :invoice_information, only: [:create, :update]
