@@ -1,5 +1,5 @@
 class WebstoreController < ApplicationController
-  before_filter :get_distributor
+  before_filter :check_distributor
   before_filter :get_webstore_order, except: [:store, :process_step]
 
   def store
@@ -81,12 +81,14 @@ class WebstoreController < ApplicationController
     redirect_to webstore_store_url and return unless @webstore_order
   end
 
-  def get_distributor
+  def check_distributor
     @distributor = Distributor.find_by_parameter_name(params[:distributor_parameter_name])
 
     if @distributor
       Time.zone = @distributor.time_zone
       Money.default_currency = Money::Currency.new(@distributor.currency)
     end
+
+    redirect_to 'http://www.buckybox.com/' and return if @distributor.nil? || !@distributor.active_webstore
   end
 end

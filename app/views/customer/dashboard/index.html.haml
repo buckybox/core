@@ -11,7 +11,8 @@
         .nine.columns
           %h3 My Orders
         .three.columns.text-right
-          = link_to 'New Order', webstore_store_path(@distributor.parameter_name), class: 'radius button'
+          - if @distributor.active_webstore
+            = link_to 'New Order', webstore_store_path(@distributor.parameter_name), class: 'radius button'
       .row
         #customer-orders.twelve.columns
           = render 'customer/orders/index' unless @orders.empty?

@@ -47,6 +47,9 @@
   %tr
     %td Created On
     %td= @distributor.created_at.to_s(:pretty)
+  %tr
+    %td Active Webstore
+    %td= checkmark_boolean(@distributor.active_webstore)
 
 %table
   %tr
