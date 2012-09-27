@@ -122,6 +122,9 @@ class Webstore
     if @order.create_order
       @controller.flash[:notice] = 'Your order has been placed'
       @order.placed_step
+    elsif @order.order
+      @controller.flash[:error] = 'You have already created this order'
+      @order.placed_step
     else
       @controller.flash[:error] = 'There was a problem completing your order'
       @order.complete_step

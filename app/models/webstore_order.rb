@@ -167,19 +167,22 @@ class WebstoreOrder < ActiveRecord::Base
   end
 
   def create_order
-    extras_hash = {}
-    extras.each { |id, count| extras_hash[id] = { count: count } }
-    order = Order.create(
-      box: box,
-      frequency: frequency,
-      completed: true,
-      account: account,
-      schedule: schedule,
-      order_extras: extras_hash,
-      extras_one_off: extras_one_off
-    )
-    order.update_exclusions(exclusions)
-    order.update_substitutions(substitutions)
-    order.save
+    if order.nil?
+      extras_hash = {}
+      extras.each { |id, count| extras_hash[id] = { count: count } }
+      order = Order.create(
+        box: box,
+        frequency: frequency,
+        completed: true,
+        account: account,
+        schedule: schedule,
+        order_extras: extras_hash,
+        extras_one_off: extras_one_off
+      )
+      order.update_exclusions(exclusions)
+      order.update_substitutions(substitutions)
+      order.save
+      self.order = order
+    end
   end
 end
