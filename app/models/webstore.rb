@@ -100,7 +100,11 @@ class Webstore
     set_schedule(delivery_information[:schedule])                   if delivery_information[:schedule]
     assign_extras_frequency(delivery_information[:extra_frequency]) if delivery_information[:extra_frequency]
 
-    @order.complete_step
+    if @controller.flash[:error].blank?
+      @order.complete_step
+    else
+      @order.delivery_step
+    end
   end
 
   def add_address_information(address_information)
@@ -133,18 +137,24 @@ class Webstore
   end
 
   def add_exclusions_to_order(exclusions)
-    exclusions.delete('')
-    @order.exclusions = exclusions
+    unless exclusions.nil?
+      exclusions.delete('')
+      @order.exclusions = exclusions
+    end
   end
 
   def add_substitutes_to_order(substitutions)
-    substitutions.delete('')
-    @order.substitutions = substitutions
+    unless substitutions.nil?
+      substitutions.delete('')
+      @order.substitutions = substitutions
+    end
   end
 
   def add_extras_to_order(extras)
-    extras.delete('add_extra')
-    @order.extras = extras.select { |k,v| v.to_i > 0 }
+    unless extras.nil?
+      extras.delete('add_extra')
+      @order.extras = extras.select { |k,v| v.to_i > 0 }
+    end
   end
 
   def assign_route(route_information)
@@ -163,8 +173,12 @@ class Webstore
     if frequency == 'single'
       @order.create_schedule_for(:schedule, start_time, frequency)
     else
-      days_by_number = schedule_information[:days].map { |d| d.first.to_i }
-      @order.create_schedule_for(:schedule, start_time, frequency, days_by_number)
+      if schedule_information[:days].nil?
+        @controller.flash[:error] = 'The schedule requires you select a day of the week.'
+      else
+        days_by_number = schedule_information[:days].map { |d| d.first.to_i }
+        @order.create_schedule_for(:schedule, start_time, frequency, days_by_number)
+      end
     end
   end
 
