@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120909041708) do
+ActiveRecord::Schema.define(:version => 20120927224520) do
 
   create_table "accounts", :force => true do |t|
     t.integer  "customer_id"
@@ -68,6 +68,7 @@ ActiveRecord::Schema.define(:version => 20120909041708) do
     t.text     "customer_message"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "bsb_number"
   end
 
   add_index "bank_information", ["distributor_id"], :name => "index_bank_information_on_distributor_id"
@@ -104,6 +105,7 @@ ActiveRecord::Schema.define(:version => 20120909041708) do
     t.string   "box_image"
     t.boolean  "available_monthly",      :default => false, :null => false
     t.integer  "extras_limit",           :default => 0
+    t.boolean  "hidden",                 :default => false, :null => false
   end
 
   add_index "boxes", ["distributor_id"], :name => "index_boxes_on_distributor_id"
@@ -260,6 +262,7 @@ ActiveRecord::Schema.define(:version => 20120909041708) do
     t.string   "bank_deposit_format"
     t.integer  "country_id"
     t.integer  "consumer_delivery_fee_cents"
+    t.boolean  "active_webstore",                            :default => false, :null => false
   end
 
   add_index "distributors", ["authentication_token"], :name => "index_distributors_on_authentication_token", :unique => true
@@ -483,18 +486,20 @@ ActiveRecord::Schema.define(:version => 20120909041708) do
   create_table "routes", :force => true do |t|
     t.integer  "distributor_id"
     t.string   "name"
-    t.boolean  "monday",         :default => false, :null => false
-    t.boolean  "tuesday",        :default => false, :null => false
-    t.boolean  "wednesday",      :default => false, :null => false
-    t.boolean  "thursday",       :default => false, :null => false
-    t.boolean  "friday",         :default => false, :null => false
-    t.boolean  "saturday",       :default => false, :null => false
-    t.boolean  "sunday",         :default => false, :null => false
+    t.boolean  "monday",                  :default => false, :null => false
+    t.boolean  "tuesday",                 :default => false, :null => false
+    t.boolean  "wednesday",               :default => false, :null => false
+    t.boolean  "thursday",                :default => false, :null => false
+    t.boolean  "friday",                  :default => false, :null => false
+    t.boolean  "saturday",                :default => false, :null => false
+    t.boolean  "sunday",                  :default => false, :null => false
     t.datetime "created_at"
     t.datetime "updated_at"
     t.text     "schedule"
-    t.integer  "fee_cents",      :default => 0,     :null => false
+    t.integer  "fee_cents",               :default => 0,     :null => false
     t.string   "currency"
+    t.text     "area_of_service"
+    t.text     "estimated_delivery_time"
   end
 
   add_index "routes", ["distributor_id"], :name => "index_routes_on_distributor_id"
@@ -564,5 +569,21 @@ ActiveRecord::Schema.define(:version => 20120909041708) do
   end
 
   add_index "transactions", ["account_id"], :name => "index_transactions_on_account_id"
+
+  create_table "webstore_orders", :force => true do |t|
+    t.integer  "account_id"
+    t.integer  "box_id"
+    t.integer  "order_id"
+    t.text     "exclusions"
+    t.text     "substitutions"
+    t.text     "extras"
+    t.string   "status"
+    t.string   "remote_ip"
+    t.datetime "created_at",     :null => false
+    t.datetime "updated_at",     :null => false
+    t.text     "schedule"
+    t.string   "frequency"
+    t.boolean  "extras_one_off"
+  end
 
 end

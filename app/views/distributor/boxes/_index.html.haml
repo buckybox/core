@@ -5,20 +5,22 @@
         %th Image
         %th Name
         %th Price
+        %th Hidden
+        %th Exclusions
+        %th Substitutions
         %th Extras
-        %th Likes
-        %th Dislikes
         %th Description
         %th Actions
 
     %tbody
       - @boxes.each do |box|
         %tr
-          %td= image_tag(box.box_image.thumb.url) if box.box_image?
+          %td= image_tag(box.box_image.small_thumb.url)
           %td= box.name
           %td= box.price.format
-          %td= box.extra_option
-          %td= checkmark_boolean(box.likes)
+          %td= checkmark_boolean(box.hidden)
           %td= checkmark_boolean(box.dislikes)
-          %td= box.description
+          %td= checkmark_boolean(box.likes)
+          %td= box.extra_option
+          %td= simple_format box.description
           %td= link_to 'Edit', edit_distributor_box_path(box)

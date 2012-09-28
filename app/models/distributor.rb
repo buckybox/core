@@ -6,6 +6,7 @@ class Distributor < ActiveRecord::Base
   has_many :boxes,                    dependent: :destroy
   has_many :routes,                   dependent: :destroy
   has_many :orders,                   dependent: :destroy, through: :boxes
+  has_many :webstore_orders,          dependent: :destroy, through: :boxes
   has_many :deliveries,               dependent: :destroy, through: :orders
   has_many :payments,                 dependent: :destroy
   has_many :customers,                dependent: :destroy, autosave: true # Want to save those customers added via import_customers
@@ -37,10 +38,11 @@ class Distributor < ActiveRecord::Base
   monetize :consumer_delivery_fee_cents
 
   # Setup accessible (or protected) attributes for your model
-  attr_accessible :email, :password, :password_confirmation, :remember_me, :name, :url, :company_logo, :company_logo_cache, :completed_wizard,
-    :remove_company_logo, :support_email, :invoice_threshold, :separate_bucky_fee, :advance_hour, :advance_days, :automatic_delivery_hour,
-    :time_zone, :currency, :bank_deposit, :paypal, :bank_deposit_format,
-    :country_id, :consumer_delivery_fee, :consumer_delivery_fee_cents
+  attr_accessible :email, :password, :password_confirmation, :remember_me, :name, :url, :company_logo,
+    :company_logo_cache, :completed_wizard, :remove_company_logo, :support_email, :invoice_threshold,
+    :separate_bucky_fee, :advance_hour, :advance_days, :automatic_delivery_hour, :time_zone, :currency,
+    :bank_deposit, :paypal, :bank_deposit_format, :country_id, :consumer_delivery_fee,
+    :consumer_delivery_fee_cents, :active_webstore
 
   validates_presence_of :country
   validates_presence_of :email

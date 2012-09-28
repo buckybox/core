@@ -1,0 +1,54 @@
+= simple_form_for(:webstore_order, url: webstore_process_step_path) do |f|
+  .row.webstore-section
+    .ten.columns.offset-by-two
+      = f.simple_fields_for(:route) do |g|
+        #webstore-route.inputs{ style: "display: #{@selected_route_id ? 'none' : 'block'};" }
+          .row
+            .ten.columns
+              .row
+                .twelve.columns.important Pick A Delivery Service
+              .row
+                .twelve.columns= g.input :route, collection: @route_selections, selected: @selected_route_id, label: 'Select the one that best services your location', include_blank: false, input_html: { id: 'route_select' }
+              .row
+                .twelve.columns
+                  - @routes.each do |route|
+                    .route-info{ id: "route-info-#{route.id}" }
+                      = simple_format(route.area_of_service)
+                      = simple_format(route.estimated_delivery_time)
+
+      = f.simple_fields_for(:schedule) do |g|
+        #webstore-schedule.inputs
+          .row
+            .ten.columns
+              .row
+                .twelve.columns.important When would you like it?
+              = render partial: 'route', collection: @routes, locals: { g: g, frequencies: @order_frequencies, days: @days }
+
+      - if @webstore_order.box.extras_allowed?
+        = f.simple_fields_for(:extra_frequency) do |g|
+          #webstore-extras-frequency.inputs
+            .row
+              .ten.columns
+                .row
+                  .twelve.columns.important What about those extra items?
+                .row
+                  .twelve.columns= g.input :extra_frequency, label: false, collection: @extra_frequencies, include_blank: false
+
+  - if @webstore_order.has_bucky_fee?
+    .row.webstore-section
+      .ten.columns.offset-by-two
+        .row
+          .ten.columns
+            .row
+              .twelve.columns.important Bucky Box fee
+            .row
+              .twelve.columns
+                We're using
+                = link_to 'Bucky Box', 'http://www.buckybox.com/', target: '_blank'
+                to take orders, Bucky Box is a social enterprise with a mission to 
+                support local food and organic farming worldwide.
+          .two.columns.important.text-right= @webstore_order.bucky_fee.format
+
+  .row
+    .twelve.columns
+      .actions= f.button :submit, 'Next', class: 'float-right'

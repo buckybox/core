@@ -8,10 +8,10 @@ describe Distributor::BankInformationController do
 
   describe '#create' do
     context 'with valid params' do
-      before(:each) do
+      before do
         post :create, {
           bank_information: {
-            name: 'bnz', account_name: 'company account', account_number: '1', customer_message: 'pay'
+            name: 'bnz', account_name: 'company account', account_number: '1', customer_message: 'pay', bsb_number: '1'
           }
         }
       end
@@ -31,7 +31,7 @@ describe Distributor::BankInformationController do
 
   describe '#update' do
     context 'with valid params' do
-      before(:each) do
+      before do
         Fabricate(:bank_information, distributor: @distributor, account_name: 'companies accounts')
         put :update, { bank_information: { account_name: 'company account' } }
       end
@@ -42,7 +42,7 @@ describe Distributor::BankInformationController do
     end
 
     context 'with invalid params' do
-      before(:each) do
+      before do
         Fabricate(:bank_information, distributor: @distributor, account_name: 'companies accounts')
         put :update, { bank_information: { account_name: '' } }
       end
