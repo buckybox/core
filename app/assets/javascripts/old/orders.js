@@ -113,8 +113,6 @@ function day_display(frequency_selector) {
 }
 
 function order_check_box(box_id, current_order) {
-  var is_distributor = current_order.find('#is_distributor').val();
-  var uri_root = (is_distributor ? 'distributor' : 'customer');
   var path_root = $(location).attr('pathname').split('/')[1];
 
   $.ajax({
@@ -155,7 +153,7 @@ function update_customer_box_extras(current_order) {
   var path_root = $(location).attr('pathname').split('/')[1];
 
   var url = '/' + path_root;
-  if(typeof current_account_id != 'undefined') { url += '/accounts/' + current_account_id; }
+  if(path_root == 'distributor') { url += '/accounts/' + current_account_id; }
   url += '/boxes/' + box_id + '/extras';
 
   $.get(url, function(data) {

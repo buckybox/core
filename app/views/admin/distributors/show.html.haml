@@ -19,8 +19,14 @@
       %dd= @distributor.url
       %dt Timezone
       %dd= @distributor.time_zone
+      %dt Country
+      %dd= @distributor.country.name
       %dt Currency
       %dd= currency_name(@distributor.currency)
+      %dt Consumer Delivery Fee
+      %dd= @distributor.consumer_delivery_fee.format
+      %dt Separate Bucky Fee
+      %dd= checkmark_boolean(@distributor.separate_bucky_fee)
       %dt Bank Deposit
       %dd= checkmark_boolean(@distributor.bank_deposit?)
       %dt Paypal
@@ -35,6 +41,8 @@
       %dd= checkmark_boolean(@distributor.separate_bucky_fee)
       %dt Created On
       %dd= @distributor.created_at.to_s(:pretty)
+      %dt Active Webstore
+      %dd= checkmark_boolean(@distributor.active_webstore)
 
   .span6
     %dl

@@ -74,6 +74,9 @@ BuckyBox::Application.configure do
 
   # Ember
   config.ember.variant = :production
+
+  # Oink
+  config.middleware.use(Oink::Middleware)
 end
 
 

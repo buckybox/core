@@ -1,7 +1,8 @@
 Fabricator(:bank_information) do
   distributor!
-  name { sequence(:name) { |i| "Bank #{i}" } }
-  account_name { sequence(:account_name) { |i| "Account Name #{i}" } }
-  account_number { sequence(:account_number) }
-  customer_message { sequence(:customer_message) { |i| "Message #{i}" } }
+  name 'Bank Name'
+  account_name 'Account Name'
+  account_number 1
+  customer_message 'Message'
+  bsb_number 1
 end

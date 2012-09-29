@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120822031706) do
+ActiveRecord::Schema.define(:version => 20120927224520) do
 
   create_table "accounts", :force => true do |t|
     t.integer  "customer_id"
@@ -68,6 +68,7 @@ ActiveRecord::Schema.define(:version => 20120822031706) do
     t.text     "customer_message"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "bsb_number"
   end
 
   add_index "bank_information", ["distributor_id"], :name => "index_bank_information_on_distributor_id"
@@ -104,9 +105,19 @@ ActiveRecord::Schema.define(:version => 20120822031706) do
     t.string   "box_image"
     t.boolean  "available_monthly",      :default => false, :null => false
     t.integer  "extras_limit",           :default => 0
+    t.boolean  "hidden",                 :default => false, :null => false
   end
 
   add_index "boxes", ["distributor_id"], :name => "index_boxes_on_distributor_id"
+
+  create_table "countries", :force => true do |t|
+    t.string   "name"
+    t.string   "default_currency"
+    t.string   "default_time_zone"
+    t.integer  "default_consumer_fee_cents"
+    t.datetime "created_at",                 :null => false
+    t.datetime "updated_at",                 :null => false
+  end
 
   create_table "cron_logs", :force => true do |t|
     t.text     "log"
@@ -212,12 +223,12 @@ ActiveRecord::Schema.define(:version => 20120822031706) do
   end
 
   create_table "distributors", :force => true do |t|
-    t.string   "email",                                  :default => "",    :null => false
-    t.string   "encrypted_password",      :limit => 128, :default => "",    :null => false
+    t.string   "email",                                      :default => "",    :null => false
+    t.string   "encrypted_password",          :limit => 128, :default => "",    :null => false
     t.string   "reset_password_token"
     t.datetime "reset_password_sent_at"
     t.datetime "remember_created_at"
-    t.integer  "sign_in_count",                          :default => 0
+    t.integer  "sign_in_count",                              :default => 0
     t.datetime "current_sign_in_at"
     t.datetime "last_sign_in_at"
     t.string   "current_sign_in_ip"
@@ -226,7 +237,7 @@ ActiveRecord::Schema.define(:version => 20120822031706) do
     t.string   "confirmation_token"
     t.datetime "confirmed_at"
     t.datetime "confirmation_sent_at"
-    t.integer  "failed_attempts",                        :default => 0
+    t.integer  "failed_attempts",                            :default => 0
     t.string   "unlock_token"
     t.datetime "locked_at"
     t.string   "authentication_token"
@@ -235,11 +246,11 @@ ActiveRecord::Schema.define(:version => 20120822031706) do
     t.string   "name"
     t.string   "url"
     t.string   "company_logo"
-    t.boolean  "completed_wizard",                       :default => false, :null => false
+    t.boolean  "completed_wizard",                           :default => false, :null => false
     t.string   "parameter_name"
-    t.integer  "invoice_threshold_cents",                :default => 0,     :null => false
-    t.decimal  "bucky_box_percentage",                                      :null => false
-    t.boolean  "separate_bucky_fee",                     :default => true
+    t.integer  "invoice_threshold_cents",                    :default => 0,     :null => false
+    t.decimal  "bucky_box_percentage",                                          :null => false
+    t.boolean  "separate_bucky_fee",                         :default => true
     t.string   "support_email"
     t.string   "time_zone"
     t.integer  "advance_hour"
@@ -249,6 +260,9 @@ ActiveRecord::Schema.define(:version => 20120822031706) do
     t.boolean  "bank_deposit"
     t.boolean  "paypal"
     t.string   "bank_deposit_format"
+    t.integer  "country_id"
+    t.integer  "consumer_delivery_fee_cents"
+    t.boolean  "active_webstore",                            :default => false, :null => false
   end
 
   add_index "distributors", ["authentication_token"], :name => "index_distributors_on_authentication_token", :unique => true
@@ -407,20 +421,21 @@ ActiveRecord::Schema.define(:version => 20120822031706) do
     t.integer  "packing_list_id"
     t.integer  "position"
     t.string   "status"
-    t.datetime "created_at",                                  :null => false
-    t.datetime "updated_at",                                  :null => false
+    t.datetime "created_at",                                            :null => false
+    t.datetime "updated_at",                                            :null => false
     t.integer  "order_id"
     t.integer  "original_package_id"
     t.string   "packing_method"
     t.text     "archived_address"
     t.integer  "archived_order_quantity"
     t.string   "archived_box_name"
-    t.integer  "archived_box_price_cents",   :default => 0,   :null => false
+    t.integer  "archived_box_price_cents",             :default => 0,   :null => false
     t.string   "currency"
     t.string   "archived_customer_name"
-    t.integer  "archived_route_fee_cents",   :default => 0,   :null => false
-    t.decimal  "archived_customer_discount", :default => 0.0, :null => false
+    t.integer  "archived_route_fee_cents",             :default => 0,   :null => false
+    t.decimal  "archived_customer_discount",           :default => 0.0, :null => false
     t.text     "archived_extras"
+    t.integer  "archived_consumer_delivery_fee_cents", :default => 0
   end
 
   add_index "packages", ["order_id"], :name => "index_packages_on_order_id"
@@ -471,18 +486,20 @@ ActiveRecord::Schema.define(:version => 20120822031706) do
   create_table "routes", :force => true do |t|
     t.integer  "distributor_id"
     t.string   "name"
-    t.boolean  "monday",         :default => false, :null => false
-    t.boolean  "tuesday",        :default => false, :null => false
-    t.boolean  "wednesday",      :default => false, :null => false
-    t.boolean  "thursday",       :default => false, :null => false
-    t.boolean  "friday",         :default => false, :null => false
-    t.boolean  "saturday",       :default => false, :null => false
-    t.boolean  "sunday",         :default => false, :null => false
+    t.boolean  "monday",                  :default => false, :null => false
+    t.boolean  "tuesday",                 :default => false, :null => false
+    t.boolean  "wednesday",               :default => false, :null => false
+    t.boolean  "thursday",                :default => false, :null => false
+    t.boolean  "friday",                  :default => false, :null => false
+    t.boolean  "saturday",                :default => false, :null => false
+    t.boolean  "sunday",                  :default => false, :null => false
     t.datetime "created_at"
     t.datetime "updated_at"
     t.text     "schedule"
-    t.integer  "fee_cents",      :default => 0,     :null => false
+    t.integer  "fee_cents",               :default => 0,     :null => false
     t.string   "currency"
+    t.text     "area_of_service"
+    t.text     "estimated_delivery_time"
   end
 
   add_index "routes", ["distributor_id"], :name => "index_routes_on_distributor_id"
@@ -539,7 +556,7 @@ ActiveRecord::Schema.define(:version => 20120822031706) do
 
   create_table "transactions", :force => true do |t|
     t.integer  "account_id"
-    t.integer  "amount_cents",         :default => 0, :null => false
+    t.integer  "amount_cents",                 :default => 0, :null => false
     t.string   "currency"
     t.text     "description"
     t.datetime "created_at"
@@ -547,8 +564,26 @@ ActiveRecord::Schema.define(:version => 20120822031706) do
     t.datetime "display_time"
     t.integer  "transactionable_id"
     t.string   "transactionable_type"
+    t.integer  "reverse_transactionable_id"
+    t.string   "reverse_transactionable_type"
   end
 
   add_index "transactions", ["account_id"], :name => "index_transactions_on_account_id"
+
+  create_table "webstore_orders", :force => true do |t|
+    t.integer  "account_id"
+    t.integer  "box_id"
+    t.integer  "order_id"
+    t.text     "exclusions"
+    t.text     "substitutions"
+    t.text     "extras"
+    t.string   "status"
+    t.string   "remote_ip"
+    t.datetime "created_at",     :null => false
+    t.datetime "updated_at",     :null => false
+    t.text     "schedule"
+    t.string   "frequency"
+    t.boolean  "extras_one_off"
+  end
 
 end

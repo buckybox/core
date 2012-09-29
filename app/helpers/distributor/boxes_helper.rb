@@ -7,7 +7,13 @@ module Distributor::BoxesHelper
 
       boxes = boxes.map do |box|
         element = []
-        text = "#{box.name} - #{Package.calculated_price(box, route, customer).format}"
+
+        if customer.separate_bucky_fee?
+          text = "#{box.name} - (#{Package.calculated_individual_price(box, route, customer).format} + #{customer.consumer_delivery_fee.format} Fee)"
+        else
+          text = "#{box.name} - (#{Package.calculated_individual_price(box, route, customer).format})"
+        end
+
         text << " (#{box.extras_limit})" if options[:with_extras_limit]
         element << text
         element << box.id

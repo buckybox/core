@@ -7,10 +7,6 @@ class Distributor::OrdersController < Distributor::ResourceController
   before_filter :filter_params, only: [:create, :update]
   before_filter :get_order, only: [:pause, :remove_pause, :resume, :remove_resume, :pause_dates, :resume_dates]
 
-  def filter_params
-    params[:order] = params[:order].slice!(:include_extras)
-  end
-
   def new
     new! do
       load_form
@@ -21,7 +17,7 @@ class Distributor::OrdersController < Distributor::ResourceController
     @account = current_distributor.accounts.find(params[:account_id])
 
     order_hash = params[:order]
-    order_hash.merge!({account_id: @account.id, completed: true})
+    order_hash.merge!({ account_id: @account.id, completed: true })
 
     @order = Order.new(order_hash)
     @order.create_schedule(params[:start_date], params[:order][:frequency], params[:days])
@@ -32,7 +28,7 @@ class Distributor::OrdersController < Distributor::ResourceController
       @order.save
 
       success.html { redirect_to [:distributor, @account.customer] }
-      failure.html do 
+      failure.html do
         load_form
         flash[:error] = 'There was a problem creating this order.'
         render 'new'
@@ -145,13 +141,17 @@ class Distributor::OrdersController < Distributor::ResourceController
 
   private
 
+  def filter_params
+    params[:order] = params[:order].slice!(:include_extras)
+  end
+
   def get_order
     @order = Order.find(params[:id])
   end
 
   def load_form
-    @customer = @account.customer
-    @route    = @customer.route
+    @customer      = @account.customer
+    @route         = @customer.route
     @stock_list    = current_distributor.line_items
     @form_params   = [:distributor, @account, @order]
     @dislikes_list = @order.exclusions.map { |e| e.line_item_id.to_s }

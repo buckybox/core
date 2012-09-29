@@ -1,6 +1,8 @@
 class Distributor::CustomersController < Distributor::ResourceController
   respond_to :html, :xml, :json
 
+  before_filter :get_form_type, only: [:edit, :update]
+
   def index
     if current_distributor.routes.empty?
       redirect_to distributor_settings_routes_url, alert: 'You must create a route before you can create users.' and return
@@ -23,8 +25,6 @@ class Distributor::CustomersController < Distributor::ResourceController
   end
 
   def edit
-    @form_type = (params[:form_type].to_s == 'delivery' ? 'delivery_form' : 'personal_form')
-
     edit!
   end
 
@@ -59,6 +59,10 @@ class Distributor::CustomersController < Distributor::ResourceController
   end
 
   protected
+
+  def get_form_type
+    @form_type = (params[:form_type].to_s == 'delivery' ? 'delivery_form' : 'personal_form')
+  end
 
   def collection
     @customers = end_of_association_chain.includes(:tags, :address, :route, account: {active_orders: {box: {}}})

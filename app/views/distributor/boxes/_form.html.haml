@@ -6,13 +6,15 @@
       .row-fluid
         .span4
           .inputs
-            = f.input :name, label: false, placeholder: 'Name', size: 20
-            = f.input :price, as: :currency, label: false, input_html: { class: 'input-text' }, hint: 'per box'
+            = f.input :name
+            = f.input :price
+            = f.input :hidden, label: 'Hidden from customers?'
 
             %fieldset
               %h4 Custom boxes
-              = f.input :likes, label: 'Enable likes'
-              = f.input :dislikes, label: 'Enable dislikes'
+              = f.input :dislikes, label: 'Enable Exclusions'
+              = f.input :likes, label: 'Enable Substitutes'
+
             %fieldset
               %h4 Extras
               %p Extras are additional sale items that can be included for delivery with this box.

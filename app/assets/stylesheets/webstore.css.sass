@@ -1,0 +1,141 @@
+//----- Common in ordering process
+
+$light-devider: #eee
+$notice-colour: #fde599
+
+.webstore-section
+  border-top: 1px solid $light-devider
+  padding-top: 1em
+  padding-bottom: 1em
+  select
+    width: 100%
+
+.important
+  font-size: 120%
+  font-weight: bold
+  margin-bottom: 0.5em
+
+.webstore-step-button
+  margin-top: 1em
+
+.webstore-grey-note
+  background-color: $light-devider
+  padding: 1em 1.5em
+  text-align: center
+  margin-bottom: 1.5em
+  -webkit-border-radius: 1em
+  border-radius: 1em
+
+//----- Current Order
+
+#current-order
+  .row
+    margin-bottom: 1em
+    &:first-child
+      margin-bottom: 0.5em
+
+//----- Store
+
+#webstore-items
+  position: relative
+  .box
+    border: 1px solid $light-devider
+    height: 500px
+    .box-name
+      padding: 5px
+      margin-bottom: 8px
+      background-color: $light-devider
+    li
+      margin: 0px 8px
+    .box-description
+      border-top: 1px solid $light-devider
+      margin-top: 8px
+      padding: 8px
+  form
+    margin-bottom: 0px
+    position: relative
+    bottom: 41px
+    left: 8px
+
+//----- Customise
+
+#webstore-extras
+  table
+    margin-top: 1em
+    border-width: 0px
+    tbody
+      tr
+        &:last-child
+          td
+            padding-left: 0px
+            padding-right: 0px
+        &.extras-row
+          display: none
+          td
+            padding: 0px 32px 0px 0px
+            vertical-align: inherit
+            &:last-child
+              width: 50px
+              padding-right: 0px
+              input
+                width: 50px
+        &:nth-child(even)
+          background-color: #fff
+
+//----- Login
+
+#webstore-login
+  div.radio
+    margin-top: 1em
+    input[type='radio']
+      float: left
+    .collection_radio
+      margin-left: 2em
+  #password-field
+    display: none
+
+//----- Delivery
+
+#webstore-route
+  margin-bottom: 6em
+  .route-info
+    display: none
+    background-color: $notice-colour
+    padding: 1em 1.5em
+    p:last-child
+      margin-bottom: 0px
+
+#webstore-schedule
+  .order-days
+    margin-left: -1%
+    text-align: center
+    overflow: hidden
+    div.boolean
+      display: block
+      float: left
+      margin-left: 1%
+      margin-bottom: 1%
+      width: 13.25%
+      text-align: center
+      label
+        display: block
+  .route-schedule-inputs
+    display: none
+
+//----- Complete
+
+#webstore-address
+  #city
+    float: left
+    width: 60%
+  #postal_code
+    float: left
+    width: 37.5%
+    margin-left: 2.5%
+
+//----- Placed
+
+#webstore-placed-schedule
+  margin-top: 2em
+#webstore-my-account
+  margin-left: 1em

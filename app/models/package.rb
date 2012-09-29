@@ -15,6 +15,7 @@ class Package < ActiveRecord::Base
 
   monetize :archived_box_price_cents
   monetize :archived_route_fee_cents
+  monetize :archived_consumer_delivery_fee_cents
 
   acts_as_list scope: :packing_list_id
 
@@ -38,28 +39,31 @@ class Package < ActiveRecord::Base
 
   default_value_for :status, 'unpacked'
   default_value_for :packing_method, 'auto'
+  default_value_for :archived_consumer_delivery_fee_cents, 0
 
   delegate :date, to: :packing_list, allow_nil: true
 
-  def self.calculated_price(box_price, route_fee, customer_discount)
+  def self.calculated_individual_price(box_price, route_fee, customer_discount = nil)
     box_price = box_price.price if box_price.is_a?(Box)
     route_fee = route_fee.fee   if route_fee.is_a?(Route)
-
-    total_price = box_price + route_fee
-    discounted(total_price, customer_discount)
-  end
-
-  def self.calculated_extras_price(order_extras, customer_discount)
-    order_extras = order_extras.collect(&:to_hash) unless order_extras.is_a? Hash
     customer_discount = customer_discount.discount if customer_discount.is_a?(Customer)
 
-    total_price = order_extras.collect do |order_extra|
+    total_price = box_price + route_fee
+
+    customer_discount ? discounted(total_price, customer_discount) : total_price
+  end
+
+  def self.calculated_extras_price(order_extras, customer_discount = nil)
+    order_extras = order_extras.map(&:to_hash) unless order_extras.is_a?(Hash)
+    customer_discount = customer_discount.discount if customer_discount.is_a?(Customer)
+
+    total_price = order_extras.map do |order_extra|
       money = Money.new(order_extra[:price_cents], order_extra[:currency])
-      count = (order_extra[:count] || 0)
+      count = (order_extra[:count].to_i || 0)
       money * count
     end.sum
 
-    discounted(total_price, customer_discount)
+    customer_discount ? discounted(total_price, customer_discount) : total_price
   end
 
   def self.discounted(price, customer_discount)
@@ -78,12 +82,20 @@ class Package < ActiveRecord::Base
     raise "Error calculating price: #{individual_price.inspect} * #{archived_order_quantity.inspect}"
   end
 
+  def total_price
+    if archived_consumer_delivery_fee_cents > 0
+      price + archived_consumer_delivery_fee
+    else
+      price
+    end
+  end
+
   def quantity
     archived_order_quantity
   end
 
   def individual_price
-    Package.calculated_price(archived_box_price, archived_route_fee, archived_customer_discount)
+    Package.calculated_individual_price(archived_box_price, archived_route_fee, archived_customer_discount)
   end
 
   def individual_extras_price
@@ -105,8 +117,7 @@ class Package < ActiveRecord::Base
   end
 
   def self.extras_summary(archived_extras)
-    archived_extras = archived_extras.collect(&:to_hash) unless archived_extras.is_a? Hash
-    archived_extras
+    archived_extras.is_a?(Hash) ? archived_extras : archived_extras.map(&:to_hash)
   end
 
   def self.contents_description(box_name, order_extras)
@@ -123,8 +134,8 @@ class Package < ActiveRecord::Base
   end
 
   def self.extras_description(order_extras)
-    order_extras = order_extras.collect(&:to_hash) unless order_extras.is_a? Hash
-    order_extras.collect{|e| "#{e[:count]}x #{e[:name]} #{e[:unit]}"}.join(', ')
+    order_extras = order_extras.map(&:to_hash) unless order_extras.is_a? Hash
+    order_extras.map{ |e| "#{e[:count]}x #{e[:name]} #{e[:unit]}" }.join(', ')
   end
 
   def archived_extras
@@ -139,7 +150,7 @@ class Package < ActiveRecord::Base
       'Customer Last Name', 'Customer Phone', 'New Customer', 'Delivery Address Line 1', 'Delivery Address Line 2',
       'Delivery Address Suburb', 'Delivery Address City', 'Delivery Address Postcode', 'Delivery Note',
       'Box Contents Short Description', 'Box Type', 'Box Likes', 'Box Dislikes', 'Box Extra Line Items',
-      'Price', 'Customer Email', 'Customer Special Preferences'
+      'Price', 'Bucky Box Transaction Fee', 'Total Price', 'Customer Email', 'Customer Special Preferences'
     ]
   end
 
@@ -172,6 +183,8 @@ class Package < ActiveRecord::Base
       order.exclusions.map(&:name).join(', '),
       extras_description,
       price,
+      archived_consumer_delivery_fee,
+      total_price,
       customer.email,
       customer.special_order_preference
     ]
@@ -181,18 +194,19 @@ class Package < ActiveRecord::Base
 
   def archive_data
     unless status == 'packed' && !status_changed?
-      self.archived_address           = address.join(', ')
+      self.archived_address               = address.join(', ')
 
-      self.archived_box_name          = box.name
-      self.archived_customer_name     = customer.name
+      self.archived_box_name              = box.name
+      self.archived_customer_name         = customer.name
 
-      self.archived_box_price         = box.price
-      self.archived_route_fee         = route.fee
-      self.archived_customer_discount = customer.discount
-      self.archived_order_quantity    = order.quantity
-    end
+      self.archived_box_price             = box.price
+      self.archived_route_fee             = route.fee
+      self.archived_customer_discount     = customer.discount
+      self.archived_order_quantity        = order.quantity
+      self.archived_consumer_delivery_fee = distributor.consumer_delivery_fee if distributor && distributor.separate_bucky_fee?
 
       return archive_extras
+    end
   end
 
   def archive_extras

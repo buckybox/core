@@ -32,6 +32,8 @@ class Order < ActiveRecord::Base
     :order_extras, :extras_one_off
 
   FREQUENCIES = %w(single weekly fortnightly monthly)
+  IS_ONE_OFF  = false
+  QUANTITY    = 1
 
   validates_presence_of :account_id, :box_id, :quantity, :frequency
   validates_numericality_of :quantity, greater_than: 0
@@ -50,8 +52,8 @@ class Order < ActiveRecord::Base
 
   delegate :local_time_zone, to: :distributor, allow_nil: true
 
-  default_value_for :extras_one_off, false
-  default_value_for :quantity, 1
+  default_value_for :extras_one_off, IS_ONE_OFF
+  default_value_for :quantity, QUANTITY
 
   def self.deactivate_finished
     active.each do |order|
@@ -78,6 +80,7 @@ class Order < ActiveRecord::Base
       start_time = start_time.to_time_in_current_zone
     end
 
+    # FIXME: Shouldn't need a special case for single. Fix API. Also, see webstore model version.
     if frequency == 'single'
       create_schedule_for(:schedule, start_time, frequency)
     elsif !days_by_number.nil?
@@ -87,9 +90,9 @@ class Order < ActiveRecord::Base
   end
 
   def update_exclusions(line_item_ids)
-    return if line_item_ids.nil? || !box.dislikes? || !box.likes?
+    return if !box.dislikes? || !box.likes?
 
-    line_item_ids = line_item_ids.map(&:to_i)
+    line_item_ids = line_item_ids.to_a.map(&:to_i)
     exclusion_line_item_ids = exclusions.map { |x| x.line_item_id }
 
     to_delete = exclusion_line_item_ids - line_item_ids
@@ -100,9 +103,9 @@ class Order < ActiveRecord::Base
   end
 
   def update_substitutions(line_item_ids)
-    return if line_item_ids.nil? || !box.dislikes? || !box.likes?
+    return if !box.dislikes? || !box.likes?
 
-    line_item_ids = line_item_ids.map(&:to_i)
+    line_item_ids = line_item_ids.to_a.map(&:to_i)
     substitution_line_item_ids = substitutions.map { |x| x.line_item_id }
 
     to_delete = substitution_line_item_ids - line_item_ids
@@ -125,11 +128,11 @@ class Order < ActiveRecord::Base
   def price
     result = individual_price * quantity
     result += extras_price if extras.present?
-    result
+    return result
   end
 
   def individual_price
-    Package.calculated_price(box, route, customer)
+    Package.calculated_individual_price(box, route, customer)
   end
 
   def extras_price
@@ -142,19 +145,6 @@ class Order < ActiveRecord::Base
 
   def just_completed?
     completed_changed? && completed?
-  end
-
-  def add_scheduled_delivery(delivery)
-    s = self.schedule
-    s.add_recurrence_time(delivery.date.to_time_in_current_zone)
-    self.schedule = s
-  end
-
-  def remove_scheduled_delivery(delivery)
-    s = schedule
-    time = schedule.recurrence_times.find{ |t| t.to_date == delivery.date }
-    s.remove_recurrence_time(time)
-    self.schedule = s
   end
 
   def future_deliveries(end_date)
@@ -302,7 +292,7 @@ class Order < ActiveRecord::Base
     packed_extras = order_extras.collect(&:to_hash)
     clear_extras if extras_one_off # Now that the extras are in a package, we don't need them on the order anymore, unless it reoccurs
 
-    packed_extras
+    return packed_extras
   end
 
   def clear_extras
@@ -352,8 +342,8 @@ class Order < ActiveRecord::Base
   protected
 
   def update_schedule_rule
-      schedule_rule.destroy if schedule_rule
-      self.schedule_rule = ScheduleRule.copy_orders_schedule(self) rescue nil #TODO remove rescue nil
+    schedule_rule.destroy if schedule_rule
+    self.schedule_rule = ScheduleRule.copy_orders_schedule(self)
   end
 
   def record_schedule_change
