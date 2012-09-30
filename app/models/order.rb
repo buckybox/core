@@ -25,7 +25,7 @@ class Order < ActiveRecord::Base
 
   schedule_for :schedule
   before_save :update_schedule_rule
-  after_save :update_next_occurrence
+  after_save :update_next_occurrence #This is an after call because it works at the database level and requires the information to be commited
 
   acts_as_taggable
 
