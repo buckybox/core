@@ -1,7 +1,7 @@
 package :nginx, :provides => :webserver do
     
   config_file = "/usr/local/nginx/conf/nginx.conf"
-  config_text = File.read(File.join(File.dirname(__FILE__), 'configs', 'nginx', 'nginx.conf')).gsub('#{RAILS_ENV}', Package.stage)
+  config_text = Sprinkle::PreProcess.process_stage(File.read(File.join(File.dirname(__FILE__), 'configs', 'nginx', 'nginx.conf')), Package.stage)
   init_file = "/etc/init.d/nginx"
   tmp_file = "/tmp/nginx"
 

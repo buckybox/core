@@ -42,6 +42,20 @@ db_config = YAML::load(IO.read(File.expand_path("../deploy/database.yml", __FILE
 Sprinkle::Package::Package.add_db(stage, db_config)
 Sprinkle::Package::Package.stage = stage
 
+module Sprinkle
+  class PreProcess
+    STAGES = ['production', 'staging']
+    def self.process_stage(text, stage)
+      STAGES.each do |s|
+        next if stage == s #Remove all stages from config except this stage
+        marker = s.upcase
+        text = text.gsub(/##{marker}.*##{marker}/m,'')
+      end
+      return text
+    end
+  end
+end
+
 deployment do
   delivery :capistrano do
     recipes 'Capfile'
