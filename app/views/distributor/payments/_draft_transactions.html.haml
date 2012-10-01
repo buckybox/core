@@ -3,6 +3,13 @@
     = import_transaction_list.errors.full_messages.join(", ")
 
   %table.table.table-bordered.table-striped.no-horizontal-dividers
+    %thead
+      %tr
+        %th Date
+        %th Description
+        %th Amount
+        %th Payment Type
+        %th Customer
     %tbody
       - import_transaction_list.import_transactions.not_removed.ordered.each do |import_transaction|
         = f.simple_fields_for(:import_transactions, import_transaction) do |tf|
@@ -11,7 +18,7 @@
             = tf.input :draft, as: :hidden, input_html: { value: false }
             %td= import_transaction.transaction_date.to_s(:transaction)
             %td= truncate(import_transaction.description, length: 70)
-            %td import_transaction.amount.format
+            %td= import_transaction.amount.format
             %td= import_transaction.payment_type
             %td{ title: "#{import_transaction.confidence*100}% Match" }
               .chosen-background{ class: payment_color(import_transaction) }
