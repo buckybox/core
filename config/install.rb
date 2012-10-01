@@ -73,6 +73,7 @@ policy :myapp, :roles => :app do
   requires :htop
   requires :git
   requires :ruby
+  requires :ruby_tuned
   requires :imagemagick
   requires :bundler
   requires :rubygems

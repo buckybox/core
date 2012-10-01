@@ -12,6 +12,23 @@ package :ruby do
   end
 end
 
+package :ruby_tuned do
+  requires :ruby
+
+  ruby_file = "/usr/local/bin/ruby_tuned"
+  ruby_text = File.read(File.join(File.dirname(__FILE__), 'configs', 'ruby', 'ruby_tuned'))
+  tmp_file = "/tmp/ruby_tuned"
+
+  push_text(ruby_text, tmp_file) do
+    post :install, "mv #{tmp_file} #{ruby_file}"
+    post :install, "chmod +x #{ruby_file}"
+  end
+
+  verify do
+    matches_text(ruby_text, ruby_file) #Not sure why this needs to be called twice, but it does..
+  end
+end
+
 package :ruby_dependencies do
   description 'Ruby Virtual Machine Build Dependencies'
   apt %w(bison zlib1g-dev libssl-dev libreadline6-dev libncurses5-dev file libyaml-dev)
