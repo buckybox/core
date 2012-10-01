@@ -1,15 +1,3 @@
-module Sprinkle
-  module Verifiers
-    module File
-      def matches_text(text, remotefile, mode=nil)
-        require 'digest/md5'
-        local = Digest::MD5.hexdigest(text)
-        @commands << %{[ "X$(md5sum #{remotefile}|cut -d\\  -f 1)" = "X#{local}" ]}
-      end
-    end
-  end
-end
-
 package :logrotate do
   description 'Setup log rotation for rails'
 
@@ -23,5 +11,6 @@ package :logrotate do
 
   verify do
     matches_text(config_text, remote_file)
+    matches_text(config_text, remote_file) #Not sure why this needs to be called twice but it does.
   end
 end

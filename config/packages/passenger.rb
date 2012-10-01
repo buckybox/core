@@ -1,34 +1,3 @@
-package :nginx, :provides => :webserver do
-    
-  config_file = "/usr/local/nginx/conf/nginx.conf"
-  config_text = Sprinkle::PreProcess.process_stage(File.read(File.join(File.dirname(__FILE__), 'configs', 'nginx', 'nginx.conf')), Package.stage)
-  init_file = "/etc/init.d/nginx"
-  tmp_file = "/tmp/nginx"
-
-  push_text(config_text, tmp_file) do
-    post :install, "mv #{tmp_file} #{config_file}"
-    post :install, "mkdir -p /usr/local/nginx/sites-available"
-    post :install, "mkdir -p /usr/local/nginx/sites-enabled"
-    post :install, "mkdir -p /var/log/nginx"
-  end
-
-  push_text File.read(File.join(File.dirname(__FILE__), 'configs', 'nginx', 'init.d')), tmp_file do
-    post :install, "mv #{tmp_file} #{init_file}"
-    post :install, "chmod +x #{init_file}"
-    post :install, "/usr/sbin/update-rc.d -f nginx defaults"
-    post :install, "#{init_file} start"
-  end
-  
-  verify do
-    has_executable "/usr/local/nginx/sbin/nginx"
-    has_file init_file
-    has_file config_file
-    has_directory "/usr/local/nginx/sites-enabled"
-    has_directory "/usr/local/nginx/sites-available"
-    has_directory "/var/log/nginx"
-  end
-end
-
 package :passenger, :provides => :appserver do
   description 'Phusion Passenger (mod_rails)'
   version '3.0.13'

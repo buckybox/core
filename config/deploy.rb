@@ -16,7 +16,7 @@ set :application, 'buckybox'
 # HAX for Tinder until this is fixed: https://github.com/capistrano/capistrano/issues/168#issuecomment-4144687
 Capistrano::Configuration::Namespaces::Namespace.class_eval do
   def capture(*args)
-    parent.capture *args
+    parent.capture(*args)
   end
 end
 
@@ -102,7 +102,7 @@ namespace :provision do
   end
 
   task :server, :roles => [:app] do
-    puts "Provisioing system for #{rails_env.upcase}"
+    puts "Provisioing system for #{stage.upcase}"
     puts "#{domain}:#{port}"
     puts "Check that is correct.."
     raise "Bailed out of the provisioning cause I got scared" unless Capistrano::CLI.ui.ask("Super sure? (Y/n)")[0].downcase == 'y'

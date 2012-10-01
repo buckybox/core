@@ -32,6 +32,17 @@ module Sprinkle::Package
     def self.stage
       @@stage
     end
+    
+    STAGES = ['production', 'staging']
+    def self.preprocess_stage(text)
+      STAGES.each do |s|
+        next if stage == s #Remove all stages from config except this stage
+        marker = s.upcase
+        text = text.gsub(/##{marker}.*?##{marker}/m,'')
+      end
+      return text.gsub(/#\{RAILS_ENV\}/, stage)
+    end
+
   end
 end
 
@@ -41,20 +52,6 @@ stage = ARGV.first || 'local'
 db_config = YAML::load(IO.read(File.expand_path("../deploy/database.yml", __FILE__)))
 Sprinkle::Package::Package.add_db(stage, db_config)
 Sprinkle::Package::Package.stage = stage
-
-module Sprinkle
-  class PreProcess
-    STAGES = ['production', 'staging']
-    def self.process_stage(text, stage)
-      STAGES.each do |s|
-        next if stage == s #Remove all stages from config except this stage
-        marker = s.upcase
-        text = text.gsub(/##{marker}.*##{marker}/m,'')
-      end
-      return text
-    end
-  end
-end
 
 deployment do
   delivery :capistrano do
@@ -80,8 +77,8 @@ policy :myapp, :roles => :app do
   requires :bundler
   requires :rubygems
   requires :passenger
-  requires :nginx
   requires :postgres_and_gem
+  requires :nginx
   requires :setup_db
   requires :nodejs
   requires :postfix
