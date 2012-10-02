@@ -14,6 +14,8 @@ class Customer < ActiveRecord::Base
   has_many :orders,       through: :account
   has_many :deliveries,   through: :orders
 
+  belongs_to :next_order, class_name: 'Order'
+
   devise :database_authenticatable, :recoverable, :rememberable, :trackable, :validatable
 
   acts_as_taggable
@@ -39,9 +41,11 @@ class Customer < ActiveRecord::Base
   before_create :setup_account
   before_create :setup_address
 
-  default_scope order(:first_name)
+  after_save :update_next_occurrence # This could be more specific about when it updates
 
   delegate :separate_bucky_fee?, :consumer_delivery_fee, to: :distributor
+
+  scope :ordered_by_next_delivery, order("CASE WHEN next_order_occurrence_date IS NULL THEN '9999-01-01' ELSE next_order_occurrence_date END ASC, lower(customers.first_name) ASC, lower(customers.last_name) ASC")
 
   default_value_for :discount, 0
 
@@ -160,14 +164,26 @@ class Customer < ActiveRecord::Base
   end
 
   def order_with_next_delivery
-    has_next_delivery = account.active_orders.select { |o| o.schedule.next_occurrence }
-    order = has_next_delivery.sort{ |a,b| b.schedule.next_occurrence <=> a.schedule.next_occurrence }.first
-    return order
+    return next_order
   end
 
   def next_delivery_time
-    order = order_with_next_delivery
-    order.schedule.next_occurrence if order
+    return next_order_occurrence_date
+  end
+
+  def update_next_occurrence(date = nil)
+    date ||= Date.current.to_s(:db)
+    next_order = orders.active.select("orders.*, next_occurrence('#{date}', schedule_rules.*)").joins(:schedule_rule).reject{|sr| sr.next_occurrence.blank?}.sort_by(&:next_occurrence).first
+    if next_order
+      self.next_order = next_order
+      self.next_order_id = next_order.id
+      self.next_order_occurrence_date = next_order.next_occurrence
+    else
+      self.next_order = nil
+      self.next_order_id = nil
+      self.next_order_occurrence_date = nil
+    end
+    self
   end
 
   private

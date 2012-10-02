@@ -115,6 +115,28 @@ class Distributor < ActiveRecord::Base
     end
   end
 
+  def self.update_next_occurrence_caches
+    all.each do |distributor|
+      distributor.use_local_time_zone do
+        if Time.current.hour == distributor.automatic_delivery_hour
+          CronLog.log("Updated next order caches for #{distributor.id} at local time #{Time.current.to_s(:pretty)}.")
+          distributor.update_next_occurrence_caches 
+        end
+      end
+    end
+  end
+
+  def update_next_occurrence_caches(date=nil)
+    use_local_time_zone do
+      if Time.current.hour >= automatic_delivery_hour
+        date ||= Date.current.tomorrow
+      else
+        date ||= Date.current
+      end
+      Bucky::Sql.update_next_occurrence_caches(self, date)
+    end
+  end
+
   def window_start_from
     # If we have missed the cutoff point add a day so we start generation from tomorrow
     Date.current + ( advance_hour < Time.current.hour ? 1 : 0 ).days
@@ -370,13 +392,7 @@ class Distributor < ActiveRecord::Base
       h += 1 # start at 1, not 0
 
       Delorean.time_travel_to(@@original_time + (@@advanced*day.days) + h.hours)
-
-      CronLog.log("Checking distributors for automatic daily list creation.")
-      Distributor.create_daily_lists
-      CronLog.log("Checking deliveries and packages for automatic completion.")
-      Distributor.automate_completed_status
-      CronLog.log("Checking orders, deactivating those without any more deliveries.")
-      Order.deactivate_finished
+      Job.run_all
     end
     @@advanced += day
   end

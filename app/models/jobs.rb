@@ -8,5 +8,8 @@ class Jobs
 
     CronLog.log("Checking orders, deactivating those without any more deliveries.")
     Order.deactivate_finished
+
+    CronLog.log("Checking distributors if next order cache needs updating.")
+    Distributor.update_next_occurrence_caches
   end
 end
