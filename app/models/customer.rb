@@ -41,7 +41,6 @@ class Customer < ActiveRecord::Base
   before_create :setup_account
   before_create :setup_address
 
-  after_create :trigger_new_customer
   after_save :update_next_occurrence # This could be more specific about when it updates
 
   delegate :separate_bucky_fee?, :consumer_delivery_fee, to: :distributor
