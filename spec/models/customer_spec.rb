@@ -36,7 +36,7 @@ describe Customer do
 
       specify { @customer.password.should_not be_nil }
       specify { @customer.randomize_password.length == 12 }
-      specify { Customer.random_string.should_not == Customer.random_string }
+      specify { Customer.generate_random_password.should_not == Customer.generate_random_password }
     end
 
     context 'full name' do

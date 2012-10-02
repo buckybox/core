@@ -6,11 +6,12 @@ class Extra < ActiveRecord::Base
   validates_presence_of :distributor, :name, :unit, :price
 
   attr_accessible :distributor, :name, :unit, :price
-  scope :alphabetically, order('name ASC, unit ASC')
 
   monetize :price_cents
 
   after_create :update_distributors_boxes # This ensures that new extras are added to boxes which "include the entire catalog".  Currently the system doesn't understand the concept of "include the entire catalog" but only infers it from seeing that all extras for a given distributor are set on a given box.  This was an oversight and should be fixed in refactoring. #TODO
+
+  scope :alphabetically, order('name ASC, unit ASC')
 
   def to_hash
     { name: name, unit: unit, price_cents: price_cents, currency: currency }
@@ -20,8 +21,12 @@ class Extra < ActiveRecord::Base
     "#{name} (#{unit})"
   end
 
-  def name_with_price(customer_discount)
-    "#{name} - #{price_with_discount(customer_discount).format} (#{unit})"
+  def name_with_price(customer_discount = nil)
+    if customer_discount
+      "#{name} - #{price_with_discount(customer_discount).format} (#{unit})"
+    else
+      "#{name} - #{price.format} (#{unit})"
+    end
   end
 
   def price_with_discount(customer_discount)
@@ -35,6 +40,7 @@ class Extra < ActiveRecord::Base
 
   def fuzzy_match(extra)
     return 0 if extra.blank?
+
     match = 1.0
     name_match = Bucky::Util.fuzzy_match(name, extra.name)
     match *= name_match

@@ -30,11 +30,11 @@ class Customer < ActiveRecord::Base
   validates_uniqueness_of :number, scope: :distributor_id
   validates_numericality_of :number, greater_than: 0
   validates_numericality_of :discount, greater_than_or_equal_to: 0.0, less_than_or_equal_to: 1.0
-  validates_associated :account
-  validates_associated :address
+  validates_associated :account, unless: 'account.nil?'
+  validates_associated :address, unless: 'address.nil?'
 
   before_validation :initialize_number, if: 'number.nil?'
-  before_validation :randomize_password_if_not_present
+  before_validation :random_password, unless: 'encrypted_password.present?'
   before_validation :discount_percentage
   before_validation :format_email
 
@@ -48,6 +48,8 @@ class Customer < ActiveRecord::Base
 
   scope :ordered_by_next_delivery, order("CASE WHEN next_order_occurrence_date IS NULL THEN '9999-01-01' ELSE next_order_occurrence_date END ASC, lower(customers.first_name) ASC, lower(customers.last_name) ASC")
 
+  default_value_for :discount, 0
+
   pg_search_scope :search,
     against: [ :first_name, :last_name, :email ],
     associated_against: {
@@ -55,11 +57,10 @@ class Customer < ActiveRecord::Base
     },
     using: { tsearch: { prefix: true } }
 
-  def self.random_string(len = 10)
-    # generate a random password consisting of strings and digits
+  def self.generate_random_password(length = 12)
     chars = ("a".."z").to_a + ("A".."Z").to_a + ("0".."9").to_a
     newpass = ""
-    1.upto(len) { |i| newpass << chars[rand(chars.size - 1)] }
+    1.upto(length) { |i| newpass << chars[rand(chars.size - 1)] }
     return newpass
   end
 
@@ -96,8 +97,8 @@ class Customer < ActiveRecord::Base
   end
 
   def randomize_password
-    self.password = Customer.random_string(12)
-    self.password_confirmation = password
+    self.password = Customer.generate_random_password
+    self.password_confirmation = self.password
   end
 
   def import(c, c_route)
@@ -143,8 +144,6 @@ class Customer < ActiveRecord::Base
       order = self.orders.build({
         box: box,
         quantity: 1,
-        #likes: b.likes,
-        #dislikes: b.dislikes,
         account: self.account,
         extras_one_off: b.extras_recurring?
       })
@@ -191,11 +190,11 @@ class Customer < ActiveRecord::Base
   private
 
   def initialize_number
-    self.number = Customer.next_number(self.distributor)
+    self.number = Customer.next_number(self.distributor) unless self.distributor.nil?
   end
 
-  def randomize_password_if_not_present
-    randomize_password unless encrypted_password.present?
+  def random_password
+    randomize_password
   end
 
   def discount_percentage
@@ -208,10 +207,6 @@ class Customer < ActiveRecord::Base
 
   def setup_address
     self.build_address if self.address.nil?
-  end
-
-  def trigger_new_customer
-    Event.new_customer(self)
   end
 
   def format_email

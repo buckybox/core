@@ -12,9 +12,10 @@ class Route < ActiveRecord::Base
 
   schedule_for :schedule
 
-  attr_accessible :distributor, :name, :monday, :tuesday, :wednesday, :thursday, :friday, :saturday, :sunday, :fee
+  attr_accessible :distributor, :name, :monday, :tuesday, :wednesday, :thursday, :friday, :saturday, :sunday,
+    :fee, :area_of_service, :estimated_delivery_time
 
-  validates_presence_of :distributor_id, :name, :schedule, :fee
+  validates_presence_of :distributor_id, :name, :schedule, :fee, :area_of_service, :estimated_delivery_time
   validate :at_least_one_day_is_selected
 
   before_validation :create_schedule
@@ -29,8 +30,22 @@ class Route < ActiveRecord::Base
     distributor.routes.first # For now the first one is the default
   end
 
-  def next_run
-    schedule.next_occurrence
+  def self.default_route_on(distributor, time)
+    distributor.routes.find { |r| r.delivers_on?(time) }
+  end
+
+  def self.delivery_day_numbers(delivery_days)
+    delivery_days.collect { |day| Bucky::Schedule::DAYS.index(day)}
+  end
+
+  def name_days_and_fee
+    days = delivery_days.map { |d| d.to_s.titleize[0..2] }
+
+    result = name.titleize
+    result += " (#{days.join(', ')}) "
+    result += fee.format
+
+    return result
   end
 
   def delivery_days
@@ -41,8 +56,18 @@ class Route < ActiveRecord::Base
     Route.delivery_day_numbers(days)
   end
 
-  def self.delivery_day_numbers(delivery_days)
-    delivery_days.collect { |day| Bucky::Schedule::DAYS.index(day)}
+  def runs_on(wday)
+    wday = Bucky::Schedule::DAYS[wday] if wday.is_a?(Integer)
+    wday = wday.downcase.to_sym if wday.is_a?(String)
+    self[wday]
+  end
+
+  def next_run
+    schedule.next_occurrence
+  end
+
+  def delivers_on?(time)
+    schedule.occurs_on?(time.to_time)
   end
 
   def future_orders

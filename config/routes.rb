@@ -1,16 +1,19 @@
 BuckyBox::Application.routes.draw do
-  devise_for :admins, controllers: { sessions: 'admin/sessions' }
+  devise_for :admins,       controllers: { sessions: 'admin/sessions' }
   devise_for :distributors, controllers: { sessions: 'distributor/sessions' }
   devise_for :customers,    controllers: { sessions: 'customer/sessions' }
 
   root to: 'distributor/dashboard#index'
 
-  namespace :market do
-    get ':distributor_parameter_name',                  action: 'store',            as: 'store'
-    get ':distributor_parameter_name/buy/:box_id',      action: 'buy',              as: 'buy'
-    get ':distributor_parameter_name/customer_details', action: 'customer_details', as: 'customer_details'
-    get ':distributor_parameter_name/payment',          action: 'payment',          as: 'payment'
-    get ':distributor_parameter_name/success',          action: 'success',          as: 'success'
+  namespace :webstore do
+    get ':distributor_parameter_name',           action: 'store',     as: 'store'
+    get ':distributor_parameter_name/customise', action: 'customise', as: 'customise'
+    get ':distributor_parameter_name/login',     action: 'login',     as: 'login'
+    get ':distributor_parameter_name/delivery',  action: 'delivery',  as: 'delivery'
+    get ':distributor_parameter_name/complete',  action: 'complete',  as: 'complete'
+    get ':distributor_parameter_name/placed',    action: 'placed',    as: 'complete'
+
+    post ':distributor_parameter_name/process_step',  action: 'process_step',  as: 'process_step'
   end
 
   namespace :distributor do
@@ -68,7 +71,7 @@ BuckyBox::Application.routes.draw do
 
     resources :invoices do
       collection do
-        get 'to_send', action: 'to_send', as: 'to_send'
+        get 'to_send',  action: 'to_send', as: 'to_send'
         post 'do_send', action: 'do_send', as: 'do_send'
       end
     end
@@ -127,7 +130,7 @@ BuckyBox::Application.routes.draw do
         put 'change_balance', action: :change_balance, as: 'change_balance'
         get 'more_transactions/:position', action: :more_transactions, as: 'more_transactions'
         get 'receive_payment', action: :receive_payment, as: 'receive_payment'
-        post 'save_payment', action: :save_payment, as: 'save_payment'
+        post 'save_payment',   action: :save_payment, as: 'save_payment'
       end
     end
   end
@@ -149,7 +152,8 @@ BuckyBox::Application.routes.draw do
         get 'extras'
       end
     end
-    resources :orders, only: [ :new, :edit, :create, :update] do
+
+    resources :orders, only: [:edit, :update] do
       member do
         put 'pause'
         post 'remove_pause'
