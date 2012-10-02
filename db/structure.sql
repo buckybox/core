@@ -811,7 +811,8 @@ CREATE TABLE distributors (
     paypal boolean,
     bank_deposit_format character varying(255),
     country_id integer,
-    consumer_delivery_fee_cents integer
+    consumer_delivery_fee_cents integer,
+    active_webstore boolean DEFAULT false NOT NULL
 );
 
 
@@ -2884,3 +2885,9 @@ INSERT INTO schema_migrations (version) VALUES ('20120920231722');
 INSERT INTO schema_migrations (version) VALUES ('20120923230255');
 
 INSERT INTO schema_migrations (version) VALUES ('20120927040432');
+
+INSERT INTO schema_migrations (version) VALUES ('20120927042204');
+
+INSERT INTO schema_migrations (version) VALUES ('20120927055104');
+
+INSERT INTO schema_migrations (version) VALUES ('20120927224520');
