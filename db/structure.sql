@@ -505,7 +505,8 @@ CREATE TABLE countries (
     default_time_zone character varying(255),
     default_consumer_fee_cents integer,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    updated_at timestamp without time zone NOT NULL,
+    full_name character varying(255)
 );
 
 
@@ -2891,3 +2892,5 @@ INSERT INTO schema_migrations (version) VALUES ('20120927042204');
 INSERT INTO schema_migrations (version) VALUES ('20120927055104');
 
 INSERT INTO schema_migrations (version) VALUES ('20120927224520');
+
+INSERT INTO schema_migrations (version) VALUES ('20121002212248');

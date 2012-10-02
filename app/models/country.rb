@@ -4,6 +4,10 @@ class Country < ActiveRecord::Base
   has_many :distributors
 
   validate :currency_and_time_zone
+
+  def full_name
+   read_attribute(:full_name) || name
+  end
   
   private
   def currency_and_time_zone

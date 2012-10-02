@@ -48,7 +48,7 @@ module Distributor::DeliveriesHelper
     data = calendar_array.select{|cdate, cdata| cdate == date}[0][1]
 
     if route
-      orders = Order.find(data[:order_ids]).select{|o| o.route(date) == route}.size
+      Order.find(data[:order_ids]).select{|o| o.route(date) == route}.size
     else
       data[:order_ids].size
     end
@@ -60,11 +60,16 @@ module Distributor::DeliveriesHelper
 
   def display_address(item)
     if item.is_a?(Order)
-      item.account.customer.address.address_1
+      link_to_google_maps item.account.customer.address.address_1
     else
       item = item.package if item.is_a?(Delivery)
-      item.archived_address.split(', ').first
+      link_to_google_maps item.archived_address.split(', ').first
     end
+  end
+
+  def link_to_google_maps(address)
+    address_link = address + ", #{current_distributor.country.full_name}"
+    link_to address, "http://maps.google.com/maps?q=#{CGI.escape(address_link)}", target: '_blank'
   end
 
   def contents_description(item)
