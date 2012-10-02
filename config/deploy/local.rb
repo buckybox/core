@@ -1,4 +1,4 @@
-set :port, 20159
+set :port, 29759
 set :domain, '192.168.1.6'
 set :rails_env, :staging
 set :stage, :local

@@ -11,6 +11,5 @@ package :logrotate do
 
   verify do
     matches_text(config_text, remote_file)
-    matches_text(config_text, remote_file) #Not sure why this needs to be called twice but it does.
   end
 end
