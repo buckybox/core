@@ -1,5 +1,5 @@
 module Distributor::DeliveriesHelper
-  CALENDAR_DATE_SIZE = 59
+  CALENDAR_DATE_SIZE = 60
 
   def calendar_nav_length(dates, months)
     nav_length = dates.size + months.size

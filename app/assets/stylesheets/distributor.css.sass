@@ -1,7 +1,8 @@
-//= require_tree ./vendor
+//= require_tree ./distributor/vendor
 
 @import 'base'
 @import 'distributor/customers'
+@import 'distributor/deliveries'
 @import 'distributor/payments'
 
 p.note-field
@@ -125,6 +126,8 @@ body
               border-bottom-color: $linkColorHover
 
   #content
+    min-height: 750px
+    margin-bottom: 49px
     background-color: $content-background
     padding: 1em
     border-style: solid
