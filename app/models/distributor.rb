@@ -6,6 +6,7 @@ class Distributor < ActiveRecord::Base
   has_many :boxes,                    dependent: :destroy
   has_many :routes,                   dependent: :destroy
   has_many :orders,                   dependent: :destroy, through: :boxes
+  has_many :webstore_orders,          dependent: :destroy, through: :boxes
   has_many :deliveries,               dependent: :destroy, through: :orders
   has_many :payments,                 dependent: :destroy
   has_many :customers,                dependent: :destroy, autosave: true # Want to save those customers added via import_customers
@@ -37,10 +38,11 @@ class Distributor < ActiveRecord::Base
   monetize :consumer_delivery_fee_cents
 
   # Setup accessible (or protected) attributes for your model
-  attr_accessible :email, :password, :password_confirmation, :remember_me, :name, :url, :company_logo, :company_logo_cache, :completed_wizard,
-    :remove_company_logo, :support_email, :invoice_threshold, :separate_bucky_fee, :advance_hour, :advance_days, :automatic_delivery_hour,
-    :time_zone, :currency, :bank_deposit, :paypal, :bank_deposit_format,
-    :country_id, :consumer_delivery_fee, :consumer_delivery_fee_cents
+  attr_accessible :email, :password, :password_confirmation, :remember_me, :name, :url, :company_logo,
+    :company_logo_cache, :completed_wizard, :remove_company_logo, :support_email, :invoice_threshold,
+    :separate_bucky_fee, :advance_hour, :advance_days, :automatic_delivery_hour, :time_zone, :currency,
+    :bank_deposit, :paypal, :bank_deposit_format, :country_id, :consumer_delivery_fee,
+    :consumer_delivery_fee_cents, :active_webstore
 
   validates_presence_of :country
   validates_presence_of :email
@@ -110,6 +112,28 @@ class Distributor < ActiveRecord::Base
           end
         end
       end
+    end
+  end
+
+  def self.update_next_occurrence_caches
+    all.each do |distributor|
+      distributor.use_local_time_zone do
+        if Time.current.hour == distributor.automatic_delivery_hour
+          CronLog.log("Updated next order caches for #{distributor.id} at local time #{Time.current.to_s(:pretty)}.")
+          distributor.update_next_occurrence_caches 
+        end
+      end
+    end
+  end
+
+  def update_next_occurrence_caches(date=nil)
+    use_local_time_zone do
+      if Time.current.hour >= automatic_delivery_hour
+        date ||= Date.current.tomorrow
+      else
+        date ||= Date.current
+      end
+      Bucky::Sql.update_next_occurrence_caches(self, date)
     end
   end
 
@@ -368,13 +392,7 @@ class Distributor < ActiveRecord::Base
       h += 1 # start at 1, not 0
 
       Delorean.time_travel_to(@@original_time + (@@advanced*day.days) + h.hours)
-
-      CronLog.log("Checking distributors for automatic daily list creation.")
-      Distributor.create_daily_lists
-      CronLog.log("Checking deliveries and packages for automatic completion.")
-      Distributor.automate_completed_status
-      CronLog.log("Checking orders, deactivating those without any more deliveries.")
-      Order.deactivate_finished
+      Job.run_all
     end
     @@advanced += day
   end

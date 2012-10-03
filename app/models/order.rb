@@ -18,13 +18,14 @@ class Order < ActiveRecord::Base
 
   has_many :extras, through: :order_extras
 
-  has_one :schedule_rule, autosave: true
+  has_one :schedule_rule, autosave: true, dependent: :destroy
 
   scope :completed, where(completed: true)
   scope :active, where(active: true)
 
   schedule_for :schedule
   before_save :update_schedule_rule
+  after_save :update_next_occurrence #This is an after call because it works at the database level and requires the information to be commited
 
   acts_as_taggable
 
@@ -32,6 +33,8 @@ class Order < ActiveRecord::Base
     :order_extras, :extras_one_off
 
   FREQUENCIES = %w(single weekly fortnightly monthly)
+  IS_ONE_OFF  = false
+  QUANTITY    = 1
 
   validates_presence_of :account_id, :box_id, :quantity, :frequency
   validates_numericality_of :quantity, greater_than: 0
@@ -50,8 +53,8 @@ class Order < ActiveRecord::Base
 
   delegate :local_time_zone, to: :distributor, allow_nil: true
 
-  default_value_for :extras_one_off, false
-  default_value_for :quantity, 1
+  default_value_for :extras_one_off, IS_ONE_OFF
+  default_value_for :quantity, QUANTITY
 
   def self.deactivate_finished
     active.each do |order|
@@ -78,6 +81,7 @@ class Order < ActiveRecord::Base
       start_time = start_time.to_time_in_current_zone
     end
 
+    # FIXME: Shouldn't need a special case for single. Fix API. Also, see webstore model version.
     if frequency == 'single'
       create_schedule_for(:schedule, start_time, frequency)
     elsif !days_by_number.nil?
@@ -125,11 +129,11 @@ class Order < ActiveRecord::Base
   def price
     result = individual_price * quantity
     result += extras_price if extras.present?
-    result
+    return result
   end
 
   def individual_price
-    Package.calculated_price(box, route, customer)
+    Package.calculated_individual_price(box, route, customer)
   end
 
   def extras_price
@@ -289,7 +293,7 @@ class Order < ActiveRecord::Base
     packed_extras = order_extras.collect(&:to_hash)
     clear_extras if extras_one_off # Now that the extras are in a package, we don't need them on the order anymore, unless it reoccurs
 
-    packed_extras
+    return packed_extras
   end
 
   def clear_extras
@@ -341,6 +345,10 @@ class Order < ActiveRecord::Base
   def update_schedule_rule
     schedule_rule.destroy if schedule_rule
     self.schedule_rule = ScheduleRule.copy_orders_schedule(self)
+  end
+
+  def update_next_occurrence
+    customer.update_next_occurrence.save!
   end
 
   def record_schedule_change
