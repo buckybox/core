@@ -10,6 +10,6 @@ package :logrotate do
   end
 
   verify do
-    matches_text(config_text, remote_file)
+    matches_local(config_text, remote_file)
   end
 end

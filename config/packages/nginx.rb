@@ -28,7 +28,7 @@ package :nginx_initd do
     post :install, "mv #{tmp_file} #{init_file}"
     post :install, "chmod +x #{init_file}"
     post :install, "/usr/sbin/update-rc.d -f nginx defaults"
-    post :install, "#{init_file} restart"
+    post :install, "#{init_file} start"
   end
   
   verify do

@@ -26,7 +26,7 @@ package :certs do
 
   verify do
     has_file "#{certs_remote}ssl-bundle.crt"
-    has_file "/etc/ssl/private/#{key_name}"
+    has_file "/etc/ssl/private/#{key_name}.key"
   end
 
 end

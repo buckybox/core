@@ -25,7 +25,7 @@ package :ruby_tuned do
   end
 
   verify do
-    matches_text(ruby_text, ruby_file) #Not sure why this needs to be called twice, but it does..
+    matches_local(ruby_text, ruby_file)
   end
 end
 
