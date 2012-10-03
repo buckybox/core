@@ -19,15 +19,6 @@ package :postgres do
   end
 end
 
-
-# Custom verify which takes a command and checks it exit status
-module RunnerVerify
- def runner(cmd)
-   @commands << cmd
- end
-end
-Sprinkle::Verify.register(RunnerVerify)
-
 package :create_db_user do
   description "Create a user named #{Package.fetch(:application)}"
 
@@ -52,21 +43,21 @@ package :create_db do
   end
 end
 
-POSTGRESQL_CONF = File.expand_path(File.join(File.dirname(__FILE__), 'configs', 'postgres', 'postgresql.conf'))
 package :configure_db do
   describe 'Configure postgresql to our needs via postgresql.conf'
   requires :postgres
+  postgres_text = File.read(File.expand_path(File.join(File.dirname(__FILE__), 'configs', 'postgres', 'postgresql.conf')))
   tmp_file = '/tmp/postgresql.conf'
   remote_file = '/etc/postgresql/9.1/main/postgresql.conf'
   
-  push_text File.read(POSTGRESQL_CONF), tmp_file do
+  push_text postgres_text, tmp_file do
     post :install, "mv #{tmp_file} #{remote_file}"
     post :install, "chown postgres:postgres #{remote_file}"
     post :install, '/etc/init.d/postgresql restart'
   end
 
   verify do
-    matches_local(POSTGRESQL_CONF, remote_file)
+    matches_local(postgres_text, remote_file)
   end
 end
 

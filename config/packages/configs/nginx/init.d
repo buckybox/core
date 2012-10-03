@@ -44,15 +44,17 @@ case "$1" in
         echo "$NAME."
         ;;
   reload)
-          echo -n "Reloading $DESC configuration: "
-          start-stop-daemon --stop --signal HUP --quiet --pidfile /var/run/$NAME.pid --exec $DAEMON 
-          echo "$NAME."
-          ;;
-      *)
-            N=/etc/init.d/$NAME
-            echo "Usage: $N {start|stop|restart|reload|force-reload}" >&2
-            exit 1   
-            ;;
-    esac
+        echo -n "Reloading $DESC configuration: "
+        start-stop-daemon --stop --signal HUP --quiet --pidfile /var/run/$NAME.pid --exec $DAEMON 
+        echo "$NAME."
+        ;;
+  *)
+        N=/etc/init.d/$NAME
+        echo "Usage: $N {start|stop|restart|reload|force-reload}" >&2
+        exit 1   
+        ;;
+esac
 
-    exit 0
+exit 0
+
+
