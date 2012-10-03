@@ -3,6 +3,7 @@
 
 $(function() {
   var element = $('#calendar-navigation').jScrollPane();
+  $('#delivery-listings').equalHeights();
 
   if(element) {
     var api = element.data('jsp');

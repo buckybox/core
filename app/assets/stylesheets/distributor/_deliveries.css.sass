@@ -3,7 +3,7 @@
 $navigation-base: #efefef
 $navigation-header: #8b8c85
 $navigation-month: #4d4d4d
-$navigation-selected: #08c
+$navigation-selected: #0088cc
 $navigation-month: #5c5c5c
 
 #calendar-navigation
@@ -67,3 +67,23 @@ $navigation-month: #5c5c5c
             background-color: $action-colour
           &.out_of_range
             background-color: $forcasting-colour
+
+#delivery-listings
+  #side-navigation
+    border-right: 1px solid #ddd
+    .label
+      background-color: $navigation-base
+      color: $black
+      margin-bottom: 1em
+    ul.nav-tabs
+      width: 100%
+      margin-top: 8px
+      li
+        a
+          line-height: 17px
+        span
+          float: right
+          background-color: $action-colour
+          color: $black
+  #delivery-list
+    min-height: 750px
