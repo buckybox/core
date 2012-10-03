@@ -6,7 +6,7 @@ GIT
 
 GIT
   remote: git@github.com:jordandcarter/sprinkle.git
-  revision: a0b8be239afc9a05ccd370b9da61fd1b682a0648
+  revision: 408a82c764f07f96b49df805b3356197123dbfc4
   specs:
     sprinkle (0.4.2)
       activesupport (>= 2.0.2)

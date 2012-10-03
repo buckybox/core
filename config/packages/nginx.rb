@@ -10,7 +10,7 @@ package :nginx_config do
     post :install, "mkdir -p /usr/local/nginx/sites-available"
     post :install, "mkdir -p /usr/local/nginx/sites-enabled"
     post :install, "mkdir -p /var/log/nginx"
-    post :install, "#{init_file} reload"
+    post :install, "#{init_file} restart"
   end
 
   verify do

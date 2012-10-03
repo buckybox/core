@@ -21,25 +21,25 @@ end
 require File.expand_path('../helper', __FILE__)
 
 policy :myapp, :roles => :app do
-  #requires :build_essential
-  #requires :htop
-  #requires :git
-  #requires :ruby
-  #requires :ruby_tuned
-  #requires :imagemagick
-  #requires :bundler
-  #requires :rubygems
-  #requires :passenger
-  #requires :postgres_and_gem
+  requires :build_essential
+  requires :htop
+  requires :git
+  requires :ruby
+  requires :ruby_tuned
+  requires :imagemagick
+  requires :bundler
+  requires :rubygems
+  requires :passenger
+  requires :postgres_and_gem
   requires :certs
   requires :nginx
-  #requires :setup_db
-  #requires :nodejs
-  #requires :postfix
-  #requires :monit
-  #requires :munin
-  #requires :munin_passenger
-  #requires :logrotate
-  #requires :redis
+  requires :setup_db
+  requires :nodejs
+  requires :postfix
+  requires :monit
+  requires :munin
+  requires :munin_passenger
+  requires :logrotate
+  requires :redis
 end
 
