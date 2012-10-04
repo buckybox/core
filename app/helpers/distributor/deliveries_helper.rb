@@ -60,16 +60,16 @@ module Distributor::DeliveriesHelper
 
   def display_address(item)
     if item.is_a?(Order)
-      link_to_google_maps item.account.customer.address.address_1
+      link_to_google_maps(item.account.customer.address.address_1, item.account.customer.address.join)
     else
       item = item.package if item.is_a?(Delivery)
-      link_to_google_maps item.archived_address.split(', ').first
+      link_to_google_maps(item.archived_address.split(', ').first, item.archived_address)
     end
   end
 
-  def link_to_google_maps(address)
-    address_link = address + ", #{current_distributor.country.full_name}"
-    link_to address, "http://maps.google.com/maps?q=#{CGI.escape(address_link)}", target: '_blank'
+  def link_to_google_maps(address_shown, address_linked)
+    address_linked = address_linked + ", #{[current_distributor.city, current_distributor.country.full_name].reject(&:blank?).join(", ")}"
+    link_to address_shown, "http://maps.google.com/maps?q=#{CGI.escape(address_linked)}", target: '_blank'
   end
 
   def contents_description(item)
