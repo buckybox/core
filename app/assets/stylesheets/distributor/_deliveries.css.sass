@@ -101,7 +101,15 @@ $navigation-month: #5c5c5c
     .data-listings
       border-top: 1px solid $black
       padding-top: 7px
+      input[type='checkbox']
+        margin-top: 0px
+      .state-label
+        display: inline-block
+        width: 30px
+        text-align: center
       &.pending, &.unpacked
-        background-color: lighten($action-colour, 10%)
+        .state-label
+          background-color: $action-colour
       &.delivered, &.cancelled, &.rescheduled, &.repacked, &.packed
-        background-color: $navigation-base
+        .state-label
+          background-color: $navigation-base
