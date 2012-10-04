@@ -23,7 +23,8 @@
               .span4
                 = check_box_tag package.order_id, '1', false, data: { package: package.id }
                 = render partial: 'status_icons', locals: { status: package.status }
-              .span8= package.id
+              .span8
+                %strong= package.id
           .span9
             .row-fluid
               .span4= display_address(package)

@@ -38,7 +38,8 @@
                     .span4
                       = check_box_tag delivery.order_id, '1', false, data: { delivery: delivery.id }
                       = render partial: 'status_icons', locals: { status: delivery.status }
-                    .span4= delivery.delivery_number
+                    .span4
+                      %strong= delivery.delivery_number
                     .span4
                       %span.paid-label.label.label-success PAID
                 .span9

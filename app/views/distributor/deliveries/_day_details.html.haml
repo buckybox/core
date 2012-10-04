@@ -20,17 +20,24 @@
 
       - if params[:view] == 'packing' && !@items.blank?
         %span.label SUMMARY
-        %dl
-          %dt Boxes
-          - @items.group_by(&:box).each do |box, array|
-            %dd
-              %strong= array.map(&:quantity).sum
-              = box.name
-          %dt Extras
-          - @items.collect(&:extras_summary).flatten.group_by{|g| "#{g[:name]} #{g[:unit]}"}.each do |extra, array|
-            %dd
-              %strong= array.collect{ |a| a[:count].to_i }.sum
-              = "#{extra}"
+        - boxes = @items.group_by(&:box)
+        - extras = @items.collect(&:extras_summary).flatten
+
+        - unless boxes.blank?
+          %dl
+            %dt Boxes
+            - boxes.each do |box, array|
+              %dd
+                %strong= array.map(&:quantity).sum
+                = box.name
+
+        - unless extras.blank?
+          %dl
+            %dt Extras
+            - extras.group_by{ |g| "#{g[:name]} #{g[:unit]}" }.each do |extra, array|
+              %dd
+                %strong= array.collect{ |a| a[:count].to_i }.sum
+                = "#{extra}"
 
     #delivery-list.span9
       - if @items.blank?
