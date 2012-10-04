@@ -70,7 +70,7 @@ $navigation-month: #5c5c5c
 
 #delivery-listings
   #side-navigation
-    border-right: 1px solid #ddd
+    border-right: 1px solid $tableBorder
     .label
       background-color: $navigation-base
       color: $black
@@ -87,3 +87,21 @@ $navigation-month: #5c5c5c
           color: $black
   #delivery-list
     min-height: 750px
+    .data-headings
+      margin-bottom: 1em
+      form
+        margin: 0px
+      .packing-actions, .delivery-actions
+        input[type='checkbox']
+          margin-top: 0px
+        form
+          display: inline-block
+        .btn-group
+          display: inline-block
+    .data-listings
+      border-top: 1px solid $black
+      padding-top: 7px
+      &.pending, &.unpacked
+        background-color: lighten($action-colour, 10%)
+      &.delivered, &.cancelled, &.rescheduled, &.repacked, &.packed
+        background-color: $navigation-base

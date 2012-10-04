@@ -1,20 +1,21 @@
 .row-fluid.data-headings
-  .span1= check_box_tag 'all'
-  .span6.packing_actions
+  .span6.packing-actions
+    = check_box_tag 'all'
     = button_to('Print - Master List',
       master_packing_sheet_distributor_deliveries_path,
-      { id: 'master-print', class: 'small radius button', disabled: !@real_list, form: { target: '_blank' } })
-  .span5.export.text-right
+      { id: 'master-print', class: 'btn btn-primary', disabled: !@real_list, form: { target: '_blank' } })
+  .span6.export.text-right
     = button_to('Export',
       export_distributor_deliveries_path,
-      { id: 'packing-export', class: 'small radius button', disabled: !@real_list })
+      { id: 'packing-export', class: 'btn', disabled: !@real_list })
 
 - if @real_list
   - @items.group_by(&:box).sort{ |a,b| a.first.name <=> b.first.name }.each do |box, array|
     .row-fluid.data-headings
-      %h5.span12= box.name
+      .span12
+        %strong= box.name
 
-    %ul
+    %ul.unstyled
       - array.each do |package|
         %li.row-fluid.data-listings{ class: package.status }
           .span3
@@ -31,9 +32,10 @@
 - else
   - @items.group_by(&:box).sort{ |a,b| a.first.name <=> b.first.name }.each do |box, array|
     .row-fluid.data-headings
-      %h5.span12= box.name
+      .span12
+        %strong= box.name
 
-    %ul
+    %ul.unstyled
       - array.each do |order|
         %li.row-fluid.data-listings.pending
           .span3

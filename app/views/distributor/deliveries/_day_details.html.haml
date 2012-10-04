@@ -18,21 +18,19 @@
                 = route.name
                 %span.badge= delivery_quantity(current_distributor, @selected_date, route.id)
 
-      - unless @items.blank?
+      - if params[:view] == 'packing' && !@items.blank?
         %span.label SUMMARY
         %dl
-          - if params[:view] == "packing"
-            %dt Boxes
+          %dt Boxes
           - @items.group_by(&:box).each do |box, array|
             %dd
               %strong= array.map(&:quantity).sum
               = box.name
-          - if params[:view] == "packing"
-            %dt Extras
-            - @items.collect(&:extras_summary).flatten.group_by{|g| "#{g[:name]} #{g[:unit]}"}.each do |extra, array|
-              %dd
-                %strong= array.collect{ |a| a[:count].to_i }.sum
-                = "#{extra}"
+          %dt Extras
+          - @items.collect(&:extras_summary).flatten.group_by{|g| "#{g[:name]} #{g[:unit]}"}.each do |extra, array|
+            %dd
+              %strong= array.collect{ |a| a[:count].to_i }.sum
+              = "#{extra}"
 
     #delivery-list.span9
       - if @items.blank?
