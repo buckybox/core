@@ -65,6 +65,7 @@ module BuckyBox
       g.fixture_replacement :fabrication
     end
 
-    config.middleware.use(Oink::Middleware)
+    # Dump database functions into the schema
+    config.active_record.schema_format = :sql
   end
 end

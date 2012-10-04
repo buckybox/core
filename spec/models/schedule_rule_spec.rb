@@ -98,4 +98,157 @@ describe ScheduleRule do
       end
     end
   end
+
+  context :db_functions do
+    context :next_occurrence do
+      context :one_off do
+        before do
+          @start_date = Date.parse('2012-09-20')
+          @sr = ScheduleRule.one_off(@start_date)
+          @sr.save!
+        end
+
+        it 'should return the start_date' do
+          @sr.next_occurrence(@start_date - 1.day).should eq(@start_date)
+        end
+
+        it 'should return null' do
+          @sr.next_occurrence(@start_date + 1.day).should eq(nil)
+        end
+
+        it 'should return the start_date' do
+          @sr.next_occurrence(@start_date).should eq(@start_date)
+        end
+      end
+
+      context :weekly do
+        before do
+          @start_date = Date.parse('2012-09-20') #Thursday
+          @sr = ScheduleRule.weekly(@start_date, [:sun, :wed, :thu, :fri])
+          @sr.save!
+        end
+
+        specify{@sr.next_occurrence(@start_date - 1.day).should eq(@start_date)}
+        specify{@sr.next_occurrence(@start_date).should eq(@start_date)}
+        specify{@sr.next_occurrence(@start_date + 1.day).should eq(@start_date + 1.day)}
+
+        context :with_pause do
+          before do
+            @pause_start = Date.parse('2012-09-20')
+            @pause_end = Date.parse('2012-10-03')
+            @sp = SchedulePause.new(start: @pause_start, finish: @pause_end)
+            @sr.schedule_pause = @sp
+            @sr.save!
+          end
+          
+          specify {@sr.next_occurrence(@start_date).should eq(@pause_end)}
+          specify {@sr.next_occurrence(@pause_end).should eq(@pause_end)}
+        end
+      end
+      
+      context :fortnightly do
+        before do
+          @start_date = Date.parse('2012-09-20') #Thursday
+          @sr = ScheduleRule.fortnightly(@start_date, [:sun, :wed, :thu, :fri])
+          @sr.save!
+        end
+
+        specify{@sr.next_occurrence(@start_date - 1.day).should eq(@start_date)}
+        specify{@sr.next_occurrence(@start_date).should eq(@start_date)}
+        specify{@sr.next_occurrence(@start_date + 1.day).should eq(@start_date + 1.day)}
+        
+        specify{@sr.next_occurrence(Date.parse('2012-09-23')).should eq(Date.parse('2012-09-30'))}
+        specify{@sr.next_occurrence(Date.parse('2012-09-24')).should eq(Date.parse('2012-09-30'))}
+        specify{@sr.next_occurrence(Date.parse('2012-09-25')).should eq(Date.parse('2012-09-30'))}
+        specify{@sr.next_occurrence(Date.parse('2012-09-26')).should eq(Date.parse('2012-09-30'))}
+        specify{@sr.next_occurrence(Date.parse('2012-09-27')).should eq(Date.parse('2012-09-30'))}
+        specify{@sr.next_occurrence(Date.parse('2012-09-28')).should eq(Date.parse('2012-09-30'))}
+        specify{@sr.next_occurrence(Date.parse('2012-09-29')).should eq(Date.parse('2012-09-30'))}
+        specify{@sr.next_occurrence(Date.parse('2012-09-30')).should eq(Date.parse('2012-09-30'))}
+        
+        specify{@sr.next_occurrence(Date.parse('2012-10-01')).should eq(Date.parse('2012-10-03'))}
+        specify{@sr.next_occurrence(Date.parse('2012-10-02')).should eq(Date.parse('2012-10-03'))}
+        specify{@sr.next_occurrence(Date.parse('2012-10-03')).should eq(Date.parse('2012-10-03'))}
+        specify{@sr.next_occurrence(Date.parse('2012-10-04')).should eq(Date.parse('2012-10-04'))}
+        specify{@sr.next_occurrence(Date.parse('2012-10-05')).should eq(Date.parse('2012-10-05'))}
+        specify{@sr.next_occurrence(Date.parse('2012-10-06')).should eq(Date.parse('2012-10-14'))}
+        specify{@sr.next_occurrence(Date.parse('2012-10-07')).should eq(Date.parse('2012-10-14'))}
+        specify{@sr.next_occurrence(Date.parse('2012-10-08')).should eq(Date.parse('2012-10-14'))}
+        
+        specify{@sr.next_occurrence(Date.parse('2012-10-09')).should eq(Date.parse('2012-10-14'))}
+        specify{@sr.next_occurrence(Date.parse('2012-10-10')).should eq(Date.parse('2012-10-14'))}
+        specify{@sr.next_occurrence(Date.parse('2012-10-11')).should eq(Date.parse('2012-10-14'))}
+        specify{@sr.next_occurrence(Date.parse('2012-10-12')).should eq(Date.parse('2012-10-14'))}
+        specify{@sr.next_occurrence(Date.parse('2012-10-13')).should eq(Date.parse('2012-10-14'))}
+        specify{@sr.next_occurrence(Date.parse('2012-10-14')).should eq(Date.parse('2012-10-14'))}
+        specify{@sr.next_occurrence(Date.parse('2012-10-15')).should eq(Date.parse('2012-10-17'))}
+        specify{@sr.next_occurrence(Date.parse('2012-10-16')).should eq(Date.parse('2012-10-17'))}
+        
+        specify{@sr.next_occurrence(Date.parse('2022-04-17')).should eq(Date.parse('2022-04-17'))}
+        specify{@sr.next_occurrence(Date.parse('2022-04-18')).should eq(Date.parse('2022-04-20'))}
+        specify{@sr.next_occurrence(Date.parse('2022-04-19')).should eq(Date.parse('2022-04-20'))}
+        specify{@sr.next_occurrence(Date.parse('2022-04-20')).should eq(Date.parse('2022-04-20'))}
+        specify{@sr.next_occurrence(Date.parse('2022-04-21')).should eq(Date.parse('2022-04-21'))}
+        specify{@sr.next_occurrence(Date.parse('2022-04-22')).should eq(Date.parse('2022-04-22'))}
+        specify{@sr.next_occurrence(Date.parse('2022-04-23')).should eq(Date.parse('2022-05-01'))}
+        specify{@sr.next_occurrence(Date.parse('2022-04-24')).should eq(Date.parse('2022-05-01'))}
+
+        context :with_pause do
+          before do
+            @pause_start = Date.parse('2012-09-20')
+            @pause_end = Date.parse('2012-10-03')
+            @sp = SchedulePause.new(start: @pause_start, finish: @pause_end)
+            @sr.schedule_pause = @sp
+            @sr.save!
+          end
+          
+          specify {@sr.next_occurrence(@start_date).should eq(@pause_end)}
+          specify {@sr.next_occurrence(@pause_end).should eq(@pause_end)}
+        end
+      end
+
+      context :monthly do
+        before do
+          @start_date = Date.parse('2012-09-20') #Thursday
+          @sr = ScheduleRule.monthly(@start_date, [:sun, :wed, :thu, :fri])
+          @sr.save!
+        end
+
+        specify {@sr.next_occurrence(@start_date).should eq(Date.parse('2012-10-03'))}
+        specify {@sr.next_occurrence(Date.parse('2012-09-29')).should eq(Date.parse('2012-10-03'))}
+        specify {@sr.next_occurrence(Date.parse('2012-09-30')).should eq(Date.parse('2012-10-03'))}
+        specify {@sr.next_occurrence(Date.parse('2012-10-01')).should eq(Date.parse('2012-10-03'))}
+        specify {@sr.next_occurrence(Date.parse('2012-10-02')).should eq(Date.parse('2012-10-03'))}
+        specify {@sr.next_occurrence(Date.parse('2012-10-03')).should eq(Date.parse('2012-10-03'))}
+        specify {@sr.next_occurrence(Date.parse('2012-10-04')).should eq(Date.parse('2012-10-04'))}
+        specify {@sr.next_occurrence(Date.parse('2012-10-05')).should eq(Date.parse('2012-10-05'))}
+        specify {@sr.next_occurrence(Date.parse('2012-10-06')).should eq(Date.parse('2012-10-07'))}
+        specify {@sr.next_occurrence(Date.parse('2012-10-07')).should eq(Date.parse('2012-10-07'))}
+        specify {@sr.next_occurrence(Date.parse('2012-10-08')).should eq(Date.parse('2012-11-01'))}
+
+        context :with_pause do
+          before do
+            @pause_start = Date.parse('2012-09-20')
+            @pause_end = Date.parse('2012-10-07')
+            @sp = SchedulePause.new(start: @pause_start, finish: @pause_end)
+            @sr.schedule_pause = @sp
+            @sr.save!
+          end
+
+          specify {@sr.next_occurrence(@start_date).should eq(Date.parse('2012-10-07'))}
+          specify {@sr.next_occurrence(Date.parse('2012-09-29')).should eq(Date.parse('2012-10-07'))}
+          specify {@sr.next_occurrence(Date.parse('2012-09-30')).should eq(Date.parse('2012-10-07'))}
+          specify {@sr.next_occurrence(Date.parse('2012-10-01')).should eq(Date.parse('2012-10-07'))}
+          specify {@sr.next_occurrence(Date.parse('2012-10-02')).should eq(Date.parse('2012-10-07'))}
+          specify {@sr.next_occurrence(Date.parse('2012-10-03')).should eq(Date.parse('2012-10-07'))}
+          specify {@sr.next_occurrence(Date.parse('2012-10-04')).should eq(Date.parse('2012-10-07'))}
+          specify {@sr.next_occurrence(Date.parse('2012-10-05')).should eq(Date.parse('2012-10-07'))}
+          specify {@sr.next_occurrence(Date.parse('2012-10-06')).should eq(Date.parse('2012-10-07'))}
+          specify {@sr.next_occurrence(Date.parse('2012-10-07')).should eq(Date.parse('2012-10-07'))}
+          specify {@sr.next_occurrence(Date.parse('2012-10-08')).should eq(Date.parse('2012-11-01'))}
+        end
+      end
+
+    end
+  end
 end

@@ -43,7 +43,7 @@ group :assets do
 end
 
 group :install do
-  gem 'sprinkle_packages', '~> 0.0.1'
+  gem 'sprinkle', git: 'git@github.com:jordandcarter/sprinkle.git' # patched to be awesome.. added more verifiers and updated some installers
 end
 
 group :development do
@@ -103,7 +103,7 @@ group :development, :test do
 end
 
 group :development, :staging do
-  gem 'oink', require: 'oink'
+  gem 'oink', '~> 0.9.3', require: 'oink'
 end
 
 group :development, :test, :staging do

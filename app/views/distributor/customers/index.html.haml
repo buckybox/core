@@ -25,6 +25,6 @@
                   %span.label.label-info= tag.name
           %td= next_customer_delivery_occurrence(customer)
           %td= next_customer_delivery_box_name(customer)
-          %td= customer.route.name
+          %td= customer.account.route.name
           %td.balance{ class: "#{'negative' if customer.account.balance.negative?}" }= customer.account.balance
 

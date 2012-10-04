@@ -65,7 +65,7 @@ class Distributor::CustomersController < Distributor::ResourceController
   end
 
   def collection
-    @customers = end_of_association_chain.includes(:tags, :address, :route, account: {active_orders: {box: {}}})
+    @customers = end_of_association_chain
 
     @customers = @customers.tagged_with(params[:tag]) unless params[:tag].blank?
 
@@ -76,11 +76,8 @@ class Distributor::CustomersController < Distributor::ResourceController
         @customers = current_distributor.customers.where(number: params[:query].to_i)
       end
     end
+    
+    @customers = @customers.ordered_by_next_delivery.includes(account: {route: {}}, tags: {}, next_order: {box: {}})
 
-    has_upcoming_deliveries = @customers.select { |c| c.next_delivery_time }
-    has_no_upcoming_deliveries = @customers.to_a - has_upcoming_deliveries
-    has_upcoming_deliveries = has_upcoming_deliveries.sort { |a,b| a.next_delivery_time <=> b.next_delivery_time }
-
-    @customers = has_upcoming_deliveries + has_no_upcoming_deliveries
   end
 end

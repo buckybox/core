@@ -18,13 +18,14 @@ class Order < ActiveRecord::Base
 
   has_many :extras, through: :order_extras
 
-  has_one :schedule_rule, autosave: true
+  has_one :schedule_rule, autosave: true, dependent: :destroy
 
   scope :completed, where(completed: true)
   scope :active, where(active: true)
 
   schedule_for :schedule
   before_save :update_schedule_rule
+  after_save :update_next_occurrence #This is an after call because it works at the database level and requires the information to be commited
 
   acts_as_taggable
 
@@ -344,6 +345,10 @@ class Order < ActiveRecord::Base
   def update_schedule_rule
     schedule_rule.destroy if schedule_rule
     self.schedule_rule = ScheduleRule.copy_orders_schedule(self)
+  end
+
+  def update_next_occurrence
+    customer.update_next_occurrence.save!
   end
 
   def record_schedule_change

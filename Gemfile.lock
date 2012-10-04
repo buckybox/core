@@ -4,6 +4,15 @@ GIT
   specs:
     ice_cube (0.8.0)
 
+GIT
+  remote: git@github.com:jordandcarter/sprinkle.git
+  revision: 408a82c764f07f96b49df805b3356197123dbfc4
+  specs:
+    sprinkle (0.4.2)
+      activesupport (>= 2.0.2)
+      capistrano (>= 2.5.5)
+      highline (>= 1.4.0)
+
 GEM
   remote: http://rubygems.org/
   specs:
@@ -186,22 +195,22 @@ GEM
       addressable (~> 2.3)
     libwebsocket (0.1.5)
       addressable
-    listen (0.5.2)
+    listen (0.5.3)
     mail (2.4.4)
       i18n (>= 0.4.0)
       mime-types (~> 1.16)
       treetop (~> 1.4.8)
     mail_safe (0.3.1)
       actionmailer (>= 1.3.6)
-    mailcatcher (0.5.9)
+    mailcatcher (0.5.10)
       activesupport (~> 3.0)
-      eventmachine (~> 1.0)
+      eventmachine (~> 1.0.0)
       haml (~> 3.1)
       mail (~> 2.3)
       sinatra (~> 1.2)
-      skinny
+      skinny (~> 0.2.3)
       sqlite3 (~> 1.3)
-      thin
+      thin (~> 1.5.0)
     method_source (0.8)
     mime-types (1.19)
     mini_magick (3.4)
@@ -230,11 +239,11 @@ GEM
       hodel_3000_compliant_logger
     orm_adapter (0.4.0)
     pg (0.14.1)
-    pg_search (0.5.5)
+    pg_search (0.5.6)
       activerecord (>= 3)
       activesupport (>= 3)
     polyglot (0.3.3)
-    postmark (0.9.12)
+    postmark (0.9.13)
       json
       rake
     postmark-rails (0.4.1)
@@ -336,21 +345,14 @@ GEM
       rack (~> 1.3, >= 1.3.6)
       rack-protection (~> 1.2)
       tilt (~> 1.3, >= 1.3.3)
-    skinny (0.2.2)
-      eventmachine (~> 1.0)
-      thin
+    skinny (0.2.3)
+      eventmachine (~> 1.0.0)
+      thin (~> 1.5.0)
     slop (3.3.3)
     spork (1.0.0rc3)
     spork-rails (3.2.0)
       rails (>= 3.0.0, < 3.3.0)
       spork (>= 1.0rc0)
-    sprinkle (0.4.2)
-      activesupport (>= 2.0.2)
-      capistrano (>= 2.5.5)
-      highline (>= 1.4.0)
-    sprinkle_packages (0.0.1)
-      i18n
-      sprinkle (>= 0.3.5)
     sprockets (2.1.3)
       hike (~> 1.2)
       rack (~> 1.0)
@@ -438,7 +440,7 @@ DEPENDENCIES
   money-rails (~> 0.5.0)
   multi_json (~> 1.3.6)
   newrelic_rpm (~> 3.4.1)
-  oink
+  oink (~> 0.9.3)
   pg (~> 0.14.0)
   pg_search (~> 0.5.1)
   postmark-rails (~> 0.4.1)
@@ -458,7 +460,7 @@ DEPENDENCIES
   simple_form (~> 2.0.2)
   simplecov (~> 0.6.4)
   spork-rails (~> 3.2.0)
-  sprinkle_packages (~> 0.0.1)
+  sprinkle!
   state_machine (~> 1.1.2)
   term-ansicolor (~> 1.0.7)
   tinder (~> 1.9.0)

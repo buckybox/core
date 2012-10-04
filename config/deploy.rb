@@ -16,7 +16,7 @@ set :application, 'buckybox'
 # HAX for Tinder until this is fixed: https://github.com/capistrano/capistrano/issues/168#issuecomment-4144687
 Capistrano::Configuration::Namespaces::Namespace.class_eval do
   def capture(*args)
-    parent.capture *args
+    parent.capture(*args)
   end
 end
 
@@ -91,14 +91,22 @@ end
 
 namespace :provision do
   task :app, :roles => [:app] do
-    puts "Provisioing system for #{rails_env.upcase}"
+    puts "Provisioing app for #{stage.upcase}"
     puts "#{domain}:#{port}"
     puts "Check that is correct.."
     raise "Bailed out of the provisioning cause I got scared" unless Capistrano::CLI.ui.ask("Super sure? (Y/n)")[0].downcase == 'y'
-    if system("bundle exec sprinkle -v -s config/install.rb #{rails_env}")
+    if system("bundle exec sprinkle -v -s config/install.rb #{stage}")
       deploy.setup
       deploy
     end
+  end
+
+  task :server, :roles => [:app] do
+    puts "Provisioing system for #{stage.upcase}"
+    puts "#{domain}:#{port}"
+    puts "Check that is correct.."
+    raise "Bailed out of the provisioning cause I got scared" unless Capistrano::CLI.ui.ask("Super sure? (Y/n)")[0].downcase == 'y'
+    system("bundle exec sprinkle -v -s config/install.rb #{stage}")
   end
 
   task :copy_old_data, :roles => [:db] do

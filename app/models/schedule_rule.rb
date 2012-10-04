@@ -1,11 +1,16 @@
 class ScheduleRule < ActiveRecord::Base
   attr_accessible :fri, :mon, :month_day, :recur, :sat, :start, :sun, :thu, :tue, :wed, :order_id
+  attr_accessor :next_occurrence
 
   DAYS = [:mon, :tue, :wed, :thu, :fri, :sat, :sun]
   RECUR = [:one_off, :weekly, :fortnightly, :monthly]
 
   belongs_to :order
   belongs_to :schedule_pause, dependent: :destroy
+
+  scope :with_next_occurrence, (lambda do |date|
+    select("schedule_rules.*, next_occurrence('#{date.to_s(:db)}', schedule_rules.*) as next_occurrence")
+  end)
 
   def self.one_off(datetime)
     ScheduleRule.new(start: datetime)
@@ -68,6 +73,17 @@ class ScheduleRule < ActiveRecord::Base
 
   def monthly_occurs_on?(datetime)
     weekly_occurs_on?(datetime) && datetime.day < 8
+  end
+
+  def next_occurrence(date=nil)
+    date ||= Date.current
+    occurrence = ScheduleRule.where(id:self.id).with_next_occurrence(date).first.attributes["next_occurrence"] unless new_record?
+    
+    if occurrence.nil?
+      nil
+    else
+      Date.parse occurrence
+    end
   end
 
   def self.generate_data(count)
@@ -140,6 +156,19 @@ class ScheduleRule < ActiveRecord::Base
         end
       end
     end
+  end
+
+  def self.test_next
+     ScheduleRule.select("id, next_occurrence('#{Date.today.to_s(:db)}', schedule_rules.*)").all.collect{|q|
+      [q.id, q.next_occurrence]
+    }.collect{|q|
+      sr = ScheduleRule.find(q.first)
+      if sr.order && sr.order.distributor
+        sr.order.distributor.use_local_time_zone do
+          q + [sr.order.try(:schedule).try(:next_occurrence).try(:to_date).try(:to_s,:db)]
+        end
+      end
+    }.compact.select{|q| q[1] != q[2] }
   end
 
   FutureDeliveryList = Struct.new(:date, :deliveries)
