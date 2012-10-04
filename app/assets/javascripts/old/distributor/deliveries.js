@@ -45,13 +45,13 @@ $(function() {
     var ckbx_ids = $.map(checked_packages, function(ckbx) { return $(ckbx).data('package'); });
 
     $.each(checked_packages, function(i, ckbx) {
-      var holder = $(ckbx).parent().parent();
+      var holder = $(ckbx).closest('.data-listings');
 
       holder.addClass('packed');
       holder.removeClass('unpacked');
 
-      holder.find('.icon-packed').show();
-      holder.find('.icon-unpacked').hide();
+      holder.find('.status-packed').show();
+      holder.find('.status-unpacked').hide();
     });
 
     var form = $(this).parent().parent('form');
@@ -106,9 +106,6 @@ $(function() {
 
     checked_deliveries.prop('checked', false);
     $('#delivery-listings #all').prop('checked', false);
-    $('#delivery-listings .flyout').hide();
-
-    return false;
   });
 
   $('#delivery-listings #more-delivery-options').click(function() {
@@ -138,9 +135,9 @@ function updateDeliveryStatus(status, checked_deliveries, date) {
     holder.addClass(status);
     holder.removeClass(statuses.join(' '));
 
-    holder.find('.icon-' + status).show();
+    holder.find('.status-' + status).show();
     $.each(statuses, function(j, hide_status) {
-      holder.find('.icon-' + hide_status).hide();
+      holder.find('.status-' + hide_status).hide();
     });
   });
 }
