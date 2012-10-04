@@ -11,8 +11,8 @@ $(function() {
   }
 
   $('.sortable').sortable({
-    delay:250,
-    placeholder:'ui-state-highlight',
+    delay: 250,
+    placeholder: 'ui-state-highlight',
     curser: 'move',
     opacity: 0.8,
     start: function(e, ui){
@@ -21,7 +21,7 @@ $(function() {
     update: function() {
       $.ajax({
         type: 'post',
-        data: $.map($('#delivery_list li li.row.data-listings'), function(val){return "delivery[]=" + $(val).attr('id').match(/\d+/)}).join("&"),
+        data: $.map($('#delivery_list li.data-listings'), function(val){return "delivery[]=" + $(val).data('delivery_id')}).join("&"),
         dataType: 'json',
         url: '/distributor/deliveries/date/' +
           $('#delivery-listings').data('date') +

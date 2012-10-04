@@ -32,7 +32,7 @@
         .span12
           %ul.unstyled
             - deliveries.each do |delivery|
-              %li.row-fluid.data-listings{id: "delivery_#{delivery.id}", class: delivery.status }
+              %li.row-fluid.data-listings{ class: delivery.status, data: { delivery_id: delivery.id } }
                 .span3
                   .row-fluid
                     .span4
