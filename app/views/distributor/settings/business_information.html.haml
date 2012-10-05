@@ -1,39 +1,39 @@
 - title 'Your Business Information'
 - show_settings_sub_nav(:contact_info)
 
-.row-fluid
-  .span4.centered
-    = simple_form_for([:distributor, current_distributor]) do |f|
-      = f.error_notification
+= simple_form_for([:distributor, current_distributor]) do |f|
+  = f.error_notification
 
-      .inputs
-        = f.input :name, label: "Business name"
-        = f.input :support_email, label: "Support Email"
-        = f.input :url, label: "Website"
-        = f.input :time_zone, as: :time_zone, label: "Local Timezone"
-        = f.input :company_logo
-        = f.input :company_logo_cache, as: :hidden
+  .row-fluid
+    .span12
+      = f.input :name, label: "Business name"
+      = f.input :support_email, label: "Support Email"
+      = f.input :url, label: "Website"
+      = f.input :time_zone, as: :time_zone, label: "Local Timezone"
+      = f.input :company_logo
+      = f.input :company_logo_cache, as: :hidden
 
-        .uploaded_image
-          - if current_distributor.company_logo?
-            = image_tag(current_distributor.company_logo.url)
-            = f.input :remove_company_logo, as: :boolean, label: 'Remove image'
+      .uploaded_image
+        - if current_distributor.company_logo?
+          = image_tag(current_distributor.company_logo.url)
+          = f.input :remove_company_logo, as: :boolean, label: 'Remove image'
 
-        %fieldset.inline-inputs
-          %legend Delivery Window
-          %p
-            Customers must place orders by
-            = select_hour @default_delivery_time, { ampm: true }, { id: :distributor_advance_hour, name: 'distributor[advance_hour]' }
-            = select_tag 'distributor_advance_days', options_for_select(days_in_advance, selected: @default_delivery_days), name: 'distributor[advance_days]'
-            before delivery.
+      %fieldset
+        %legend Delivery Window
+        %p
+          Customers must place orders by
+          = select_hour @default_delivery_time, { ampm: true }, { id: :distributor_advance_hour, name: 'distributor[advance_hour]' }
+          = select_tag 'distributor_advance_days', options_for_select(days_in_advance, selected: @default_delivery_days), name: 'distributor[advance_days]'
+          before delivery.
 
-        %fieldset.inline-inputs
-          %legend Automatic Delivery
-          %p
-            Automatically assume all deliveries are successfully delivered by
-            = select_hour @default_automatic_time, { ampm: true }, { id: :distributor_automatic_delivery_hour, name: 'distributor[automatic_delivery_hour]' }
-            on the day of delivery.
+      %fieldset
+        %legend Automatic Delivery
+        %p
+          Automatically assume all deliveries are successfully delivered by
+          = select_hour @default_automatic_time, { ampm: true }, { id: :distributor_automatic_delivery_hour, name: 'distributor[automatic_delivery_hour]' }
+          on the day of delivery.
 
-      .actions
-        = f.button :submit, 'Update'
+  .row-fluid
+    .span12.form-actions
+      = f.button :submit, 'Update'
 
