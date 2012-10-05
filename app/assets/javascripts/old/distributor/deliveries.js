@@ -5,7 +5,7 @@ $(function() {
   var element = $('#calendar-navigation').jScrollPane();
   $('#delivery-listings').equalHeights();
 
-  if(element) {
+  if(element.length > 0) {
     var api = element.data('jsp');
     api.scrollToElement($('#scroll-to'), true);
   }
