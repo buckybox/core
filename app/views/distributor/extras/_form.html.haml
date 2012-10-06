@@ -1,13 +1,7 @@
-.row-fluid.extra-form
-  = simple_form_for([:distributor, @extra]) do |f|
-    = f.error_notification
-    .inputs
-      .span4
-        = f.input :name, label: false, placeholder: 'Eggs', input_html:{class: 'expand'}
-      .span3
-        = f.input :unit, label: false, placeholder: '1/2 Doz', input_html: {class: 'expand'}
-      .span2
-        = f.input :price, as: :currency, label: false, input_html: { class: 'input-text expand' }
-      .span2.offset1
-        .actions
-          = f.button :submit, "Add Extra"
+.row-fluid
+  .span12
+    = form_for([:distributor, @extra], html: { class: 'form-inline' }) do |f|
+      = f.text_field :name, label: false, placeholder: 'Eggs'
+      = f.text_field :unit, label: false, placeholder: '1/2 Doz'
+      = f.text_field :price, label: false
+      = f.submit 'Add Extra', class: 'btn btn-primary'
