@@ -1,5 +1,5 @@
 development:
-  domain: buckybox.local:3000
+  domain: buckybox.dev
 
 test:
   domain: test.host
