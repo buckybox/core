@@ -1,16 +1,18 @@
 - title 'Reporting'
 - show_settings_sub_nav(:reporting)
 
-.row-fluid.data-headings
-  %h4.span3 Metric
-  %h4.span9 Value
+%table.table.table-bordered.table-striped
+  %thead
+    %tr
+      %th Metric
+      %th Value
+  %tbody
+    = show_settings_metric('Distributor Since', current_distributor.created_at.to_s(:month_and_year))
+    = show_settings_metric('Total Customers', current_distributor.customers.count)
+    = show_settings_metric('Deliveries to Date', current_distributor.deliveries.delivered.count)
 
-= show_settings_metric('Distributor Since', current_distributor.created_at.to_s(:month_and_year))
-= show_settings_metric('Total Customers', current_distributor.customers.count)
-= show_settings_metric('Deliveries to Date', current_distributor.deliveries.delivered.count)
-
-.row.reporting_calendar_select
-  .tweleve.columns
+.row-fluid.reporting_calendar_select
+  .span12
     .title Export Transaction List
     = text_field_tag :start_date, '', placeholder: 'Date from', data: {value: (Date.current.beginning_of_month - 3.months).to_s(:date_picker)}, class: 'date_picker start'
     = text_field_tag :end_date, '', placeholder: 'Date to', data: {value: Date.current.yesterday.to_s(:date_picker)}, class: 'date_picker end'

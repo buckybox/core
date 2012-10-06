@@ -1,17 +1,17 @@
 - title "Your Bank Information"
 - show_settings_sub_nav(:bank_info)
 
-.row-fluid
-  .span4.centered
-    = simple_form_for(@bank_information, :url => distributor_bank_information_path) do |f|
-      = f.error_notification
+= simple_form_for(@bank_information, :url => distributor_bank_information_path, html: { class: 'form-horizontal' }) do |f|
+  = f.error_notification
 
-      .inputs
-        = f.input :name
-        = f.input :account_name
-        = f.input :bsb_number
-        = f.input :account_number
-        = f.input :customer_message
+  .row-fluid
+    .span12
+      = f.input :name, input_html: { class: 'span6' }
+      = f.input :account_name, input_html: { class: 'span6' }
+      = f.input :bsb_number, input_html: { class: 'span6' }
+      = f.input :account_number, input_html: { class: 'span6' }
+      = f.input :customer_message, input_html: { class: 'span6' }
 
-      .actions
-        = f.button :submit, 'Save'
+  .row-fluid
+    .span12.form-actions
+      = f.button :submit, 'Save', class: 'btn btn-primary'

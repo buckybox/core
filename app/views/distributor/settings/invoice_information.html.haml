@@ -1,19 +1,19 @@
 - title "Your Invoicing Information"
 - show_settings_sub_nav(:invoicing_info)
 
-.row-fluid
-  .span4.centered
-    = simple_form_for(@invoice_information, :url => distributor_invoice_information_path) do |f|
-      = f.error_notification
+= simple_form_for(@invoice_information, :url => distributor_invoice_information_path, html: { class: 'form-horizontal' }) do |f|
+  = f.error_notification
 
-      .inputs
-        = f.input :gst_number
-        = f.input :billing_address_1
-        = f.input :billing_address_2
-        = f.input :billing_suburb
-        = f.input :billing_city
-        = f.input :billing_postcode
-        = f.input :phone
+  .row-fluid
+    .span12
+      = f.input :gst_number, input_html: { class: 'span6' }
+      = f.input :billing_address_1, input_html: { class: 'span6' }
+      = f.input :billing_address_2, input_html: { class: 'span6' }
+      = f.input :billing_suburb, input_html: { class: 'span6' }
+      = f.input :billing_city, input_html: { class: 'span6' }
+      = f.input :billing_postcode, input_html: { class: 'span6' }
+      = f.input :phone, input_html: { class: 'span6' }
 
-      .actions
-        = f.button :submit, 'Save'
+  .row-fluid
+    .span12.form-actions
+      = f.button :submit, 'Save', class: 'btn btn-primary'

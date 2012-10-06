@@ -1,22 +1,23 @@
 - title 'Your Business Information'
 - show_settings_sub_nav(:contact_info)
 
-= simple_form_for([:distributor, current_distributor]) do |f|
+= simple_form_for([:distributor, current_distributor], html: { class: 'form-horizontal' }) do |f|
   = f.error_notification
 
   .row-fluid
     .span12
-      = f.input :name, label: "Business name"
-      = f.input :support_email, label: "Support Email"
-      = f.input :url, label: "Website"
-      = f.input :time_zone, as: :time_zone, label: "Local Timezone"
-      = f.input :company_logo
+      = f.input :name, label: 'Business name', input_html: { class: 'span6' }
+      = f.input :support_email, label: 'Support Email', input_html: { class: 'span6' }
+      = f.input :url, label: 'Website', input_html: { class: 'span6' }
+      = f.input :time_zone, as: :time_zone, label: 'Local Timezone', input_html: { class: 'span6' }
+      = f.input :company_logo, input_html: { class: 'input-xlarge' }
       = f.input :company_logo_cache, as: :hidden
 
-      .uploaded_image
-        - if current_distributor.company_logo?
-          = image_tag(current_distributor.company_logo.url)
-          = f.input :remove_company_logo, as: :boolean, label: 'Remove image'
+      - if current_distributor.company_logo?
+        .uploaded_image
+          = f.input :remove_company_logo, as: :boolean, label: 'Remove image', input_html: { class: 'span6' }
+          .row-fluid
+            = image_tag(current_distributor.company_logo.url, class: 'span6 offset1')
 
       %fieldset
         %legend Delivery Window
@@ -35,5 +36,4 @@
 
   .row-fluid
     .span12.form-actions
-      = f.button :submit, 'Update'
-
+      = f.button :submit, 'Update', class: 'btn btn-primary'
