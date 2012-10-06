@@ -1,24 +1,24 @@
-.row-fluid
-  .span12
-    = simple_form_for([:distributor, @route]) do |f|
-      = f.error_notification
+= simple_form_for([:distributor, @route], html: { class: 'form-horizontal' }) do |f|
+  = f.error_notification
 
-      .inputs
-        = f.input :name
-        = f.input :fee
-        #weekdays
-          = f.input :monday
-          = f.input :tuesday
-          = f.input :wednesday
-          = f.input :thursday
-          = f.input :friday
-          = f.input :saturday
-          = f.input :sunday
-        = f.input :area_of_service
-        = f.input :estimated_delivery_time
+  .row-fluid
+    .span6
+      = f.input :name, input_html: { class: 'span12' }
+      = f.input :fee, input_html: { class: 'span12' }
+      = f.input :area_of_service, input_html: { class: 'span12', rows: 5 }
+      = f.input :estimated_delivery_time, input_html: { class: 'span12', rows: 5 }
+    #weekdays.span6
+      = f.input :monday, input_html: { class: 'span12' }
+      = f.input :tuesday, input_html: { class: 'span12' }
+      = f.input :wednesday, input_html: { class: 'span12' }
+      = f.input :thursday, input_html: { class: 'span12' }
+      = f.input :friday, input_html: { class: 'span12' }
+      = f.input :saturday, input_html: { class: 'span12' }
+      = f.input :sunday, input_html: { class: 'span12' }
 
-      .actions
-        - if @route.new_record?
-          = f.button :submit
-        - else
-          = f.button :submit, 'data-conditional-confirm' => "A day has been unchecked, this might affect customer orders, are you sure?", 'data-conditional-on' => 'route_deleted'
+  .row-fluid
+    .span12.form-actions
+      - if @route.new_record?
+        = f.button :submit, class: 'btn btn-primary'
+      - else
+        = f.button :submit, class: 'btn btn-primary', data: { 'conditional-confirm' => "A day has been unchecked, this might affect customer orders, are you sure?", 'conditional-on' => 'route_deleted' }
