@@ -2,39 +2,43 @@
 - show_settings_sub_nav
 
 - if @edit_mode
-  .row-fluid
-    #stock-list-controls.span12
-      = link_to 'Done', '#', class: 'button radius red float-right', id: 'submit-button'
-      = link_to 'cancel', distributor_settings_stock_list_path, class: 'float-right', id: 'cancel-link'
+  #stock-list-controls.row-fluid
+    .span12.text-right
+      = link_to 'cancel', distributor_settings_stock_list_path, id: 'cancel-link'
+      = link_to 'Done', '#', class: 'btn btn-primary', id: 'submit-button'
 
-  .row-fluid.data-headings
-    %h4.span6 Item
-    %h4.span6.text-right Customer Preferences
-
-  .row-fluid.data-listings
-    .span12
-      = render partial: 'distributor/line_items/form'
+  = render partial: 'distributor/line_items/form'
 
   = simple_form_for(:edited, url: bulk_update_distributor_line_items_path, method: :put, html: { id: 'bulk-update' }) do |f|
     = simple_fields_for :line do |g|
-      - @line_items.each do |line_item|
-        .line-item.row-fluid.data-listings
-          .span5
-            = g.input "items[#{line_item.id}]", as: :string, label: false, required: false, placeholder: "remove item #{line_item.name}", input_html: { value: line_item.name, class: 'expand', data: { original_value: line_item.name } }
-            .block.remove &times;
-          .span4= line_item_total(line_item)
-          .span3= line_item_use(line_item)
+      %table.table.table-bordered.table-striped.no-horizontal-dividers
+        %thead
+          %tr
+            %th{ colspan: 2 } Item
+            %th.text-right Customer Preferences
+
+        %tbody
+          - @line_items.each do |line_item|
+            %tr
+              %td
+                = g.input "items[#{line_item.id}]", as: :string, label: false, required: false, placeholder: "remove item #{line_item.name}", wrapper_html: { class: 'pull-left' }, input_html: { value: line_item.name, data: { original_value: line_item.name } }
+                %button.remove.pull-left &times;
+              %td= line_item_total(line_item)
+              %td.text-right= line_item_use(line_item)
 
 - else
-  .row-fluid
-    #stock-list-controls.span12
-      = link_to 'Edit', distributor_settings_stock_list_path(edit: true), class: 'button radius float-right'
+  #stock-list-controls.row-fluid
+    .span12.text-right
+      = link_to 'Edit', distributor_settings_stock_list_path(edit: true), class: 'btn btn-danger'
 
-  .row-fluid.data-headings
-    %h4.span6 Item
-    %h4.span6.text-right Customer Preferences
+  %table.table.table-bordered.table-striped.no-horizontal-dividers
+    %thead
+      %tr
+        %th Item
+        %th.text-right Customer Preferences
 
-  - @line_items.each do |line_item|
-    .line-item.row-fluid.data-listings
-      .span6= line_item.name
-      .span6= line_item_use(line_item)
+    %tbody
+      - @line_items.each do |line_item|
+        %tr.line-item
+          %td= line_item.name
+          %td.text-right= line_item_use(line_item)

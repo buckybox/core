@@ -8,10 +8,10 @@
 
     .form-selection
       = simple_form_for(order, url: pause_customer_order_path(order)) do |f|
-        .inputs.float-left
+        .inputs.pull-left
           = f.simple_fields_for(:pause) do |p|
-            = p.input :pause_date, collection: order.possible_pause_dates, selected: pause_date, include_blank: false, label: false, input_html: { class: 'float-left' }
-        .action.float-left
+            = p.input :pause_date, collection: order.possible_pause_dates, selected: pause_date, include_blank: false, label: false, input_html: { class: 'pull-left' }
+        .action.pull-left
           = f.button :submit, 'Pause', class: 'tiny'
       .remove-link= link_to 'remove', remove_pause_distributor_account_order_path(order.account, order)
       .cancel-link= link_to 'cancel', '#'
@@ -26,10 +26,10 @@
 
     .form-selection
       = simple_form_for(order, url: resume_customer_order_path(order)) do |f|
-        .inputs.float-left
+        .inputs.pull-left
           = f.simple_fields_for(:pause) do |p|
-            = p.input :pause_date, collection: order.possible_resume_dates, selected: resume_date, include_blank: false, label: false, input_html: { class: 'float-left' }
-        .action.float-left
+            = p.input :pause_date, collection: order.possible_resume_dates, selected: resume_date, include_blank: false, label: false, input_html: { class: 'pull-left' }
+        .action.pull-left
           = f.button :submit, 'Resume', class: 'tiny'
       .remove-link= link_to 'remove', remove_resume_distributor_account_order_path(order.account, order), class: 'links'
       .cancel-link= link_to 'cancel', '#', class: 'links'
