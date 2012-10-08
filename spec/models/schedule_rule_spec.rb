@@ -1,8 +1,9 @@
 require 'spec_helper'
 
 describe ScheduleRule do
+  let(:all_days){ScheduleRule::DAYS}
   context :one_off do
-    let(:date){ Date.parse('2012-08-20') }
+    let(:date){ Date.parse('2012-08-20') } #monday
     let(:schedule){ ScheduleRule.one_off(date) }
 
     specify { schedule.occurs_on?(date).should be_true }
@@ -250,5 +251,65 @@ describe ScheduleRule do
       end
 
     end
+  end
+
+  context :includes do
+    let(:date){Date.parse('2012-10-03')} #wednesday
+
+    it 'should return whether or not one schedule_rule occurs on the same days as another' do
+      ScheduleRule.one_off(date).includes?(ScheduleRule.one_off(date)).should be_true
+    end
+
+    it 'should return whether or not one schedule_rule occurs on the same days as another' do
+      test_date = Date.parse('2012-10-05') #friday
+      ScheduleRule.weekly(date, ScheduleRule::DAYS).includes?(ScheduleRule.one_off(test_date)).should be_true
+    end
+    
+    it 'should return false for schedules which start too soon' do
+      test_date = Date.parse('2012-10-01') #monday
+      ScheduleRule.weekly(date, ScheduleRule::DAYS).includes?(ScheduleRule.one_off(test_date)).should be_false
+    end
+
+    it 'should return whether or not one schedule_rule occurs on the same days as another' do
+      test_date = Date.parse('2012-10-05') #friday
+      ScheduleRule.weekly(date, ScheduleRule::DAYS - [:fri]).includes?(ScheduleRule.one_off(test_date)).should be_false
+    end
+
+    it 'should return false if a pause makes it not occur on the required date of given schedule_rule' do
+      test_date = Date.parse('2012-10-05') #friday
+      sr = ScheduleRule.weekly(date, ScheduleRule::DAYS)
+      sr.pause('2012-10-01', '2012-11-01')
+      sr.includes?(ScheduleRule.one_off(test_date)).should be_false
+    end
+    
+    it 'should return true if a pause doesnt occur within the given schedule_rule' do
+      test_date = Date.parse('2012-10-05') #friday
+      sr = ScheduleRule.weekly(date, ScheduleRule::DAYS)
+      sr.pause('2012-11-01', '2012-12-01')
+      sr.includes?(ScheduleRule.one_off(test_date)).should be_true
+    end
+
+    specify {ScheduleRule.one_off(date).includes?(ScheduleRule.weekly(date, [:wed])).should be_false}
+    specify {ScheduleRule.one_off(date).includes?(ScheduleRule.fortnightly(date, all_days)).should be_false}
+    specify {ScheduleRule.one_off(date).includes?(ScheduleRule.monthly(date, all_days)).should be_false}
+    
+    specify {ScheduleRule.weekly(date, all_days).includes?(ScheduleRule.fortnightly(date, all_days)).should be_true}
+    specify {ScheduleRule.weekly(date, all_days).includes?(ScheduleRule.monthly(date, all_days)).should be_true}
+
+    specify {ScheduleRule.fortnightly(date, all_days).includes?(ScheduleRule.weekly(date, all_days)).should be_false}
+    specify {ScheduleRule.fortnightly(date, all_days).includes?(ScheduleRule.weekly(date+3.days, all_days)).should be_false}
+    specify {ScheduleRule.fortnightly(date, all_days).includes?(ScheduleRule.weekly(date+4.days, all_days)).should be_false}
+    specify {ScheduleRule.fortnightly(date, all_days).includes?(ScheduleRule.weekly(date+7.days, all_days)).should be_false}
+    specify {ScheduleRule.fortnightly(date, all_days).includes?(ScheduleRule.weekly(date+11.days, all_days)).should be_false}
+
+    specify {ScheduleRule.fortnightly(date, all_days).includes?(ScheduleRule.fortnightly(date, all_days)).should be_true}
+    specify {ScheduleRule.fortnightly(date, all_days).includes?(ScheduleRule.fortnightly(date+3.days, all_days)).should be_true}
+    specify {ScheduleRule.fortnightly(date, all_days).includes?(ScheduleRule.fortnightly(date+4.days, all_days)).should be_false}
+    specify {ScheduleRule.fortnightly(date, all_days).includes?(ScheduleRule.fortnightly(date+7.days, all_days)).should be_false}
+    specify {ScheduleRule.fortnightly(date, all_days).includes?(ScheduleRule.fortnightly(date+11.days, all_days)).should be_true}
+    specify {ScheduleRule.fortnightly(date, all_days).includes?(ScheduleRule.fortnightly(date + 14.days, all_days)).should be_true}
+
+    specify {ScheduleRule.monthly(date, all_days).includes?(ScheduleRule.one_off(date)).should be_true}
+    specify {ScheduleRule.monthly(date, all_days).includes?(ScheduleRule.one_off(Date.parse('2012-10-08'))).should be_false}
   end
 end

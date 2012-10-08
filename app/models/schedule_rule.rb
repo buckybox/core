@@ -2,7 +2,7 @@ class ScheduleRule < ActiveRecord::Base
   attr_accessible :fri, :mon, :month_day, :recur, :sat, :start, :sun, :thu, :tue, :wed, :order_id
   attr_accessor :next_occurrence
 
-  DAYS = [:mon, :tue, :wed, :thu, :fri, :sat, :sun]
+  DAYS = [:sun, :mon, :tue, :wed, :thu, :fri, :sat] #Order of this is important, it matches sunday: 0, monday: 1 as is standard
   RECUR = [:one_off, :weekly, :fortnightly, :monthly]
 
   belongs_to :order
@@ -38,6 +38,19 @@ class ScheduleRule < ActiveRecord::Base
     recur_on(start, days, :monthly)
   end
 
+  def pause(start, finish)
+    unless schedule_pause.blank?
+      raise "Please unpause before calling pause"
+    else
+      pause!(start, finish)
+    end
+  end
+  
+  def pause!(start, finish)
+    self.schedule_pause = SchedulePause.create(start: start, finish: finish)
+    save!
+  end
+
   def recur
     r = read_attribute(:recur)
     if r.nil?
@@ -66,7 +79,7 @@ class ScheduleRule < ActiveRecord::Base
   end
 
   def fortnightly_occurs_on?(datetime)
-    # So, theory is, the difference between the start and the date in question as days, devided by 7 should give the number of weeks since the start.  If the number is even, we are on a fortnightly.
+    # So, theory is, the difference between the start and the date in question as days, divided by 7 should give the number of weeks since the start.  If the number is even, we are on a fortnightly.
     first_occurence = start - start.wday
     weekly_occurs_on?(datetime) && ((datetime - first_occurence) / 7).to_i.even? # 7 days in a week
   end
@@ -84,6 +97,55 @@ class ScheduleRule < ActiveRecord::Base
     else
       Date.parse occurrence
     end
+  end
+
+  def on_day?(day)
+    raise "#{day} is not a valid day" unless DAYS.include?(day)
+    if one_off?
+      day == DAYS[start.wday]
+    else
+      self.send(day)
+    end
+  end
+
+  def one_off?; recur == :one_off;end
+  def weekly?; recur == :weekly;end
+  def fortnightly?; recur == :fortnightly;end
+  def monthly?; recur == :monthly;end
+
+  def days
+    DAYS.select{|d| on_day?(d)}
+  end
+
+  # returns true if the given schedule_rule occurs on a subset of this schedule_rule's occurrences
+  # Only tests pauses in a basic manner, so might return false negatives
+  def includes?(schedule_rule)
+    case recur
+    when :one_off
+      return false if !schedule_rule.one_off?
+    when :fortnightly
+      return false if schedule_rule.weekly? || schedule_rule.monthly?
+      if schedule_rule.fortnightly?
+        return false if !((schedule_rule.start - (start - start.wday)) / 7).to_i.even?
+      end
+    when :monthly
+      return false unless schedule_rule.monthly? || (schedule_rule.one_off? && schedule_rule.start.day < 8)
+    else
+      true
+    end
+
+    too_soon = start > schedule_rule.start
+    return false if too_soon
+
+    if schedule_pause
+      return false unless ((schedule_rule.one_off? && 
+          schedule_rule.start < schedule_pause.start) || 
+        schedule_pause.finish <= schedule_rule.start) ||
+      schedule_pause.finish <= schedule_rule.start
+    else
+    end
+    
+    schedule_rule.days.all?{|day| on_day?(day)}
   end
 
   def self.generate_data(count)
@@ -146,47 +208,4 @@ class ScheduleRule < ActiveRecord::Base
       end
     end
   end
-
-  def self.test(d_id=nil, days=100)
-    Distributor.all.each do |d|
-      next if d_id && d_id != d.id
-      d.use_local_time_zone do
-        ((Date.tomorrow)..(Date.tomorrow+days.days)).each do |date|
-          throw "FUCK #{d.id} - #{date.to_s}" unless collect_list(d, date).deliveries.collect(&:id).sort == Bucky::Sql.order_ids(d, date).sort
-        end
-      end
-    end
-  end
-
-  def self.test_next
-     ScheduleRule.select("id, next_occurrence('#{Date.today.to_s(:db)}', schedule_rules.*)").all.collect{|q|
-      [q.id, q.next_occurrence]
-    }.collect{|q|
-      sr = ScheduleRule.find(q.first)
-      if sr.order && sr.order.distributor
-        sr.order.distributor.use_local_time_zone do
-          q + [sr.order.try(:schedule).try(:next_occurrence).try(:to_date).try(:to_s,:db)]
-        end
-      end
-    }.compact.select{|q| q[1] != q[2] }
-  end
-
-  FutureDeliveryList = Struct.new(:date, :deliveries)
-
-  # For testing accuracy
-  def self.collect_list(distributor, date, orders=nil)
-    date_orders = []
-    wday = date.wday
-    
-    orders ||= distributor.orders.active.includes({ account: {customer: {address:{}, deliveries: {delivery_list: {}}}}, order_extras: {}, box: {}})
-
-    orders.each { |order| date_orders << order if order.schedule.occurs_on?(date) }
-
-    # This emulates the ordering when lists are actually created
-    FutureDeliveryList.new(date, date_orders.sort { |a,b|
-      comp = a.dso(wday) <=> b.dso(wday)
-      comp.zero? ? (b.created_at <=> a.created_at) : comp
-    })
-  end  
-  
 end

@@ -23,13 +23,12 @@ class Order < ActiveRecord::Base
   scope :completed, where(completed: true)
   scope :active, where(active: true)
 
-  schedule_for :schedule
   before_save :update_schedule_rule
   after_save :update_next_occurrence #This is an after call because it works at the database level and requires the information to be commited
 
   acts_as_taggable
 
-  attr_accessible :box, :box_id, :account, :account_id, :quantity, :completed, :frequency, :schedule, 
+  attr_accessible :box, :box_id, :account, :account_id, :quantity, :completed, :frequency, 
     :order_extras, :extras_one_off
 
   FREQUENCIES = %w(single weekly fortnightly monthly)
@@ -43,7 +42,6 @@ class Order < ActiveRecord::Base
   validate :extras_within_box_limit
 
   before_validation :activate, if: :just_completed?
-  before_validation :record_schedule_change, if: :schedule_changed?
 
   default_scope order('created_at DESC')
 
@@ -59,7 +57,7 @@ class Order < ActiveRecord::Base
   def self.deactivate_finished
     active.each do |order|
       order.use_local_time_zone do
-        if order.schedule.next_occurrence.nil?
+        if order.schedule_rule.next_occurrence.nil?
           order.update_attribute(:active, false)
           CronLog.log("Deactivated order #{order.id}")
         end
@@ -151,7 +149,7 @@ class Order < ActiveRecord::Base
   def future_deliveries(end_date)
     results = []
 
-    schedule.occurrences_between(Time.current, end_date).each do |occurence|
+    schedule_rule.occurrences_between(Time.current, end_date).each do |occurence|
       results << { date: occurence.to_date, price: self.price, description: "Delivery for order ##{id}"}
     end
 
@@ -170,7 +168,7 @@ class Order < ActiveRecord::Base
   end
 
   def schedule_empty?
-    schedule.nil? || schedule.next_occurrence.blank? || schedule.empty?
+    schedule_rule.blank? || schedule_rule.next_occurrence.blank?
   end
 
   def string_pluralize
@@ -204,31 +202,25 @@ class Order < ActiveRecord::Base
   end
 
   def reoccurs?
-    schedule.frequency.reoccurs?
+    schedule_rule.frequency.reoccurs?
   end
 
   def pause!(start_date, end_date)
     return false if start_date.past? || end_date.past? || (end_date < start_date)
 
-    new_schedule = self.schedule
-    new_schedule.pause(start_date, end_date)
-    self.schedule = new_schedule
-    self.save
+    schedule_rule.pause!(start_date, end_date)
   end
 
   def remove_pause!
-    new_schedule = self.schedule
-    new_schedule.remove_pause
-    self.schedule = new_schedule
-    self.save
+    schedule_rule.remove_pause!
   end
 
   def pause_date
-    schedule.pause_date
+    schedule_rule.pause_date
   end
 
   def resume_date
-    schedule.resume_date
+    schedule_rule.resume_date
   end
 
   def possible_pause_dates(look_ahead = 8.weeks)
@@ -356,7 +348,7 @@ class Order < ActiveRecord::Base
   end
 
   def schedule_includes_route
-    unless account.route.schedule.include?(schedule)
+    unless account.route.schedule_rule.include?(schedule)
       errors.add(:schedule, "Route #{account.route.name}'s schedule '#{account.route.schedule} doesn't include this order's schedule of '#{schedule}'")
     end
   end

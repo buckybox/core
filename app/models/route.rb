@@ -7,6 +7,7 @@ class Route < ActiveRecord::Base
   has_many :orders, through: :deliveries
   has_many :customers
   has_many :route_schedule_transactions, autosave: true
+  belongs_to :schedule_rule
 
   monetize :fee_cents
 
@@ -101,12 +102,14 @@ class Route < ActiveRecord::Base
   end
 
   def create_schedule
-    new_schedule = Bucky::Schedule.new(self.start_time)
+    day_booleans = [sunday, monday, tuesday, wednesday, thursday, friday, saturday]
+    days = day_booleans.each_with_index { |bool, index|
+      bool ? ScheduleRule::DAYS[index] : nil
+    }.compact
 
-    recurrence_rule = IceCube::Rule.weekly.day(*delivery_days)
-    new_schedule.add_recurrence_rule(recurrence_rule)
-
-    self.schedule = new_schedule
+    distributor.use_local_time_zone do
+      self.schedule_rule = ScheduleRule.weekly(start_time.to_date, days)
+    end
   end
 
   def record_schedule_change
