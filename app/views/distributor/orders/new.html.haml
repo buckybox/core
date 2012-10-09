@@ -1,5 +1,5 @@
 = customer_title(@account.customer, title: "New Order for #{customer_and_number(@account.customer)}")
 
-= render 'shared/orders/form'
+= render 'form'
 
 = link_to 'Back', distributor_customer_path(@account.customer)
