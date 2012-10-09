@@ -1,45 +1,47 @@
 $(function() {
-  if($('.order').length > 0) {
+  if($('#order-form').length > 0) {
     order_init();
 
-    $('.order .dislikes_input').show();
-    $('.order .dislikes_input select').select2();
-    $('.order .dislikes_input').hide();
+    $('#order-form #dislikes-input').show();
+    $('#order-form #dislikes-input select').select2();
+    $('#order-form #dislikes-input').hide();
 
-    $('.order .likes_input').show();
-    $('.order .likes_input select').select2();
-    $('.order .likes_input').hide();
+    $('#order-form #likes-input').show();
+    $('#order-form #likes-input select').select2();
+    $('#order-form #likes-input').hide();
   }
 
   if($('.pause').length > 0) {
-    $('.order .date_picker').dateinput({ format: 'yyyy-mm-dd' });
+    $('#order-form .date_picker').dateinput({ format: 'yyyy-mm-dd' });
   }
 
-  $('.order select.box').change(function() {
+  $('#order-form select.box').change(function() {
     var box_id = $(this).val();
-    var current_order = $(this).closest('.order');
+    var current_order = $(this).closest('#order-form');
 
     if(box_id) {
       order_check_box(box_id, current_order);
       update_customer_box_extras(current_order);
     }
     else {
-      current_order.find('.dislikes_input').hide();
-      current_order.find('.likes_input').hide();
+      current_order.find('#dislikes-input').hide();
+      current_order.find('#likes-input').hide();
     }
   });
 
-  $('.order select.frequency').change(function() {
+  $('#order-form select.frequency').change(function() {
     day_display($(this));
   });
 
-  $('.order .dislikes_input').change(function() {
-    var current_order  = $(this).closest('.order');
-    var likes_input    = current_order.find('.likes_input');
-    var dislikes_input = current_order.find('.dislikes_input');
+  $('#order-form #dislikes-input').change(function() {
+    var current_order  = $(this).closest('#order-form');
+    var likes_input    = current_order.find('#likes-input');
+    var dislikes_input = current_order.find('#dislikes-input');
 
     disable_the_others_options(dislikes_input, likes_input);
 
+    console.info(dislikes_input.is(':hidden'));
+    console.info(dislikes_input.find('option:selected').length);
     if(!dislikes_input.is(':hidden') && dislikes_input.find('option:selected').length > 0) {
       likes_input.show();
     }
@@ -50,10 +52,10 @@ $(function() {
     }
   });
 
-  $('.order .likes_input').change(function() {
-    var current_order  = $(this).closest('.order');
-    var likes_input    = current_order.find('.likes_input');
-    var dislikes_input = current_order.find('.dislikes_input');
+  $('#order-form #likes-input').change(function() {
+    var current_order  = $(this).closest('#order-form');
+    var likes_input    = current_order.find('#likes-input');
+    var dislikes_input = current_order.find('#dislikes-input');
 
     disable_the_others_options(likes_input, dislikes_input);
 
@@ -67,13 +69,13 @@ $(function() {
     }
   });
 
-  $(".order .include_extras").change(function() {
-    var current_order = $(this).closest('.order');
+  $("#order-form .include_extras").change(function() {
+    var current_order = $(this).closest('#order-form');
     update_order_extras_collection(current_order);
   });
 
-  $(".order input[type=submit]").click(function() {
-    var current_order = $(this).closest('.order');
+  $("#order-form input[type=submit]").click(function() {
+    var current_order = $(this).closest('#order-form');
     var include_extras = current_order.find('#order_include_extras').prop('checked');
 
     if (!include_extras) {
@@ -95,7 +97,7 @@ function disable_the_others_options(affecting_input, effected_input) {
 }
 
 function order_init() {
-  $('.order').each( function() {
+  $('#order-form').each( function() {
     var box_id = $(this).find('select.box').val();
 
     day_display($(this).find('select.frequency'));
@@ -106,7 +108,7 @@ function order_init() {
 }
 
 function day_display(frequency_selector) {
-  var days = frequency_selector.closest('.order').find('.days');
+  var days = frequency_selector.closest('#order-form').find('#days');
   var frequency = frequency_selector.val();
 
   (frequency === 'single' ? days.hide() : days.show() );
@@ -121,17 +123,17 @@ function order_check_box(box_id, current_order) {
     url: '/' + path_root + '/boxes/' + box_id + '.json',
     success: function(data) {
       if(data['dislikes']) {
-        current_order.find('.dislikes_input').show();
+        current_order.find('#dislikes-input').show();
       }
       else {
-        current_order.find('.dislikes_input').hide();
+        current_order.find('#dislikes-input').hide();
       }
 
-      if(data['likes'] && current_order.find('.dislikes_input').find('option:selected').length > 0) {
-        current_order.find('.likes_input').show();
+      if(data['likes'] && current_order.find('#dislikes-input').find('option:selected').length > 0) {
+        current_order.find('#likes-input').show();
       }
       else {
-        current_order.find('.likes_input').hide();
+        current_order.find('#likes-input').hide();
       }
     }
   });
