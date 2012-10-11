@@ -12,11 +12,7 @@
       - else
         = link_to 'login', new_admin_session_path
 
-  - unless flash.empty?
-    .row
-      .span12
-        - flash.each do |kind, message|
-          = flash_bar(message, kind: kind)
+  = render_site_messages(flash)
 
   - if show_title?
     .row

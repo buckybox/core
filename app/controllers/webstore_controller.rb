@@ -1,4 +1,6 @@
 class WebstoreController < ApplicationController
+  layout 'customer'
+
   before_filter :check_distributor
   before_filter :get_webstore_order, except: [:store, :process_step]
 

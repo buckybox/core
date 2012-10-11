@@ -23,6 +23,14 @@ module LayoutHelper
     alert:   'alert-error'
   }
 
+  def render_site_messages(flash)
+    unless flash.empty?
+      content = flash.map { |kind, message| flash_bar(message, kind: kind) }
+      content = content.join
+      content_tag(:div, content_tag(:div, content.html_safe, class: 'span12'), class: 'row')
+    end
+  end
+
   def flash_bar(message, options = {})
     classes = 'alert'
     classes += " #{FLASH_CLASSES[options[:kind]]}" if options[:kind]

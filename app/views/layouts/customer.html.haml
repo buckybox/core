@@ -1,29 +1,23 @@
+- stylesheet 'customer'
+- javascript 'customer'
+
 - content_for :body do
-  %body
-    .container
-      .row
-        .span12
-          - flash.each do |kind, message|
-            = flash_bar(message, kind: kind)
+  .row
+    .span12= render partial: 'layouts/customer/banner', locals: { distributor: @distributor }
 
-      .row
-        .span6== #{current_customer.distributor.name}: My Account
-        .span6.text-right
-          - if customer_signed_in?
-            Signed in as
-            %strong= customer_badge(current_customer, link: customer_root_path)
-            \|
-            = link_to 'logout', destroy_customer_session_path, method: :delete
-          - else
-            = link_to 'login', new_customer_session_path
+  = render_site_messages(flash)
 
-      - if show_title?
-        .row
-          .span12
-            %h1.text-center= yield(:title)
+  .row
+    .span3= yield(:sidebar)
+    .span9
+      #content
+        - if show_title?
+          .row-fluid
+            .span12.text-center
+              %h2= yield(:title)
 
-      .row
-        .span12= yield
+        .row-fluid
+          .span12= yield
 
 = render 'layouts/base'
 

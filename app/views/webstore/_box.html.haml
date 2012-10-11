@@ -1,13 +1,10 @@
-%li
+.webstore-item
   .box
-    = image_tag(box.box_image.big_thumb.url)
+    = image_tag(box.box_image.webstore_thumb.url)
 
-    %h4.box-name= box.name
+    %h4.name= box.name
+    .description= simple_format box.description
 
-    %ul
-      %li
-        %h5= box.price.format
-
-      .box-description= simple_format box.description
-
-  = button_to 'Order', webstore_process_step_path(distributor.parameter_name, webstore_order: { box_id: box }), method: :post, class: 'button radius'
+    .price.clearfix
+      %span= box.price.format
+      = button_to 'Order', webstore_process_step_path(distributor.parameter_name, webstore_order: { box_id: box }), method: :post, class: 'btn btn-process'
