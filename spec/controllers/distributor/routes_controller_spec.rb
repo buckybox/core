@@ -11,8 +11,8 @@ describe Distributor::RoutesController do
       before do
         post :create, {
           route: {
-            name: 'yoda', fee: '34', monday: '1', tuesday: '1', wednesday: '0', thursday: '0',
-            friday: '0', saturday: '0', sunday: '0', area_of_service: 'aos', estimated_delivery_time: 'edt'
+            name: 'yoda', fee: '34', schedule_attributes: {mon: '1', tue: '1', wed: '0', thu: '0',
+            fri: '0', sat: '0', sun: '0'}, area_of_service: 'aos', estimated_delivery_time: 'edt'
           }
         }
       end
@@ -36,21 +36,21 @@ describe Distributor::RoutesController do
     context 'with valid params' do
       before do
         @route = Fabricate(:route, distributor: @distributor, tuesday: false)
-        put :update, { id: @route.id, route: { tuesday: '1' } }
+        put :update, { id: @route.id, route: { schedule_attributes: {tue: '1' } } }
       end
 
       specify { flash[:notice].should eq('Route was successfully updated.') }
-      specify { assigns(:route).tuesday.should eq(true) }
+      specify { assigns(:route).schedule.tue.should eq(true) }
       specify { response.should redirect_to(distributor_settings_routes_url) }
     end
 
     context 'with invalid params' do
       before do
         @route = Fabricate(:route, distributor: @distributor, tuesday: true)
-        put :update, { id: @route.id, route: { monday: '0', tuesday: '0', wednesday: '0', thursday: '0', friday: '0', saturday: '0', sunday: '0' } }
+        put :update, { id: @route.id, route: { schedule_attributes: {mon: '0', tue: '0', wed: '0', thu: '0', fri: '0', sat: '0', sun: '0' } } }
       end
 
-      specify { assigns(:route).tuesday.should eq(false) }
+      specify { assigns(:route).schedule.tue.should eq(false) }
       specify { response.should render_template('routes/edit') }
     end
   end

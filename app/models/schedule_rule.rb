@@ -5,12 +5,22 @@ class ScheduleRule < ActiveRecord::Base
   DAYS = [:sun, :mon, :tue, :wed, :thu, :fri, :sat] #Order of this is important, it matches sunday: 0, monday: 1 as is standard
   RECUR = [:one_off, :weekly, :fortnightly, :monthly]
 
-  belongs_to :order
+  belongs_to :scheduleable, polymorphic: true, inverse_of: :schedule_rule
   belongs_to :schedule_pause, dependent: :destroy
 
   scope :with_next_occurrence, (lambda do |date|
     select("schedule_rules.*, next_occurrence('#{date.to_s(:db)}', schedule_rules.*) as next_occurrence")
   end)
+
+  before_save :notify_associations
+  after_save :record_schedule_transaction, if: :changed?
+  
+  DAYS.each do |day|
+    default_value_for day, false
+  end
+  default_value_for :start do
+    Date.current
+  end
 
   def self.one_off(datetime)
     ScheduleRule.new(start: datetime)
@@ -22,11 +32,15 @@ class ScheduleRule < ActiveRecord::Base
     days = DAYS.inject({}){|h, i| h.merge(i => false)}.merge(days) # Fill out the rest with false
 
     throw "recur '#{recur}' is :weekly or :fortnightly" unless [:weekly, :fortnightly, :monthly].include?(recur)
-
-    ScheduleRule.new(days.merge(recur: recur, start: start))
+    
+    if start
+      ScheduleRule.new(days.merge(recur: recur, start: start))
+    else
+      ScheduleRule.new(days.merge(recur: recur))
+    end
   end
 
-  def self.weekly(start, days)
+  def self.weekly(start=nil, days=[])
     recur_on(start, days, :weekly)
   end
 
@@ -120,6 +134,7 @@ class ScheduleRule < ActiveRecord::Base
   # returns true if the given schedule_rule occurs on a subset of this schedule_rule's occurrences
   # Only tests pauses in a basic manner, so might return false negatives
   def includes?(schedule_rule)
+    raise "Expecting a ScheduleRule, not #{schedule_rule.class}" unless schedule_rule.is_a?(ScheduleRule)
     case recur
     when :one_off
       return false if !schedule_rule.one_off?
@@ -146,6 +161,36 @@ class ScheduleRule < ActiveRecord::Base
     end
     
     schedule_rule.days.all?{|day| on_day?(day)}
+  end
+
+  def has_at_least_one_day?
+    DAYS.collect{|day| self.send(day)}.any?
+  end
+
+  def json
+    to_json(include: :schedule_pause)
+  end
+
+  def notify_associations
+    scheduleable.schedule_changed(self) if changed? && scheduleable.present?
+  end
+
+  def record_schedule_transaction
+    ScheduleTransaction.create!(schedule_rule: json, schedule_rule_id: self.id)
+  end
+
+  def deleted_days
+    DAYS.select{|day| self.send("#{day.to_s}_changed?".to_sym) && self.send(day) == false}
+  end
+
+  def deleted_day_numbers
+    DAYS.each_with_index.collect{|day, index| (self.send("#{day.to_s}_changed?".to_sym) && self.send(day) == false) ? index : nil}.compact
+  end
+
+  def pause(start, finish=nil)
+    return false if start_date.past? || end_date.past? || (end_date < start_date)
+
+    self.schedule_pause = SchedulePause.create!(start: start, finish: finish)
   end
 
   def self.generate_data(count)

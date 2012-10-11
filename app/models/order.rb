@@ -18,7 +18,7 @@ class Order < ActiveRecord::Base
 
   has_many :extras, through: :order_extras
 
-  has_one :schedule_rule, autosave: true, dependent: :destroy
+  has_one :schedule_rule, as: :scheduleable, inverse_of: :scheduleable, autosave: true, dependent: :destroy
 
   scope :completed, where(completed: true)
   scope :active, where(active: true)
@@ -206,8 +206,6 @@ class Order < ActiveRecord::Base
   end
 
   def pause!(start_date, end_date)
-    return false if start_date.past? || end_date.past? || (end_date < start_date)
-
     schedule_rule.pause!(start_date, end_date)
   end
 
@@ -332,6 +330,10 @@ class Order < ActiveRecord::Base
     end
   end
 
+  def schedule_changed(schedule_rule)
+    #TODO
+  end
+
   protected
 
   def update_schedule_rule
@@ -348,8 +350,8 @@ class Order < ActiveRecord::Base
   end
 
   def schedule_includes_route
-    unless account.route.schedule_rule.include?(schedule)
-      errors.add(:schedule, "Route #{account.route.name}'s schedule '#{account.route.schedule} doesn't include this order's schedule of '#{schedule}'")
+    unless account.route.includes?(schedule_rule)
+      errors.add(:schedule_rule, "Route #{account.route.name}'s schedule '#{account.route.schedule_rule} doesn't include this order's schedule of '#{schedule_rule.inspect}'")
     end
   end
 

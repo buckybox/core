@@ -312,4 +312,51 @@ describe ScheduleRule do
     specify {ScheduleRule.monthly(date, all_days).includes?(ScheduleRule.one_off(date)).should be_true}
     specify {ScheduleRule.monthly(date, all_days).includes?(ScheduleRule.one_off(Date.parse('2012-10-08'))).should be_false}
   end
+
+  context :schedule_transaction do
+    it "should create a schedule_transaction when saved if changed" do
+      schedule_rule = ScheduleRule.weekly
+      schedule_rule.sun = !schedule_rule.sun
+      expect{schedule_rule.save!}.to change{ScheduleTransaction.count}.by(1)
+    end
+  end
+  
+  describe '.deleted_days' do
+    let(:schedule_rule){ScheduleRule.weekly}
+
+    before do
+      schedule_rule.update_attributes(mon: true, tue: true, wed: true, thu: true, fri: true, sat: true, sun: true)
+      schedule_rule.attributes = {mon: false, tue: false, wed: false, thu: false, fri: false, sat: false, sun: false}
+    end
+    specify { schedule_rule.deleted_days.should eq(ScheduleRule::DAYS) }
+    specify { 
+      schedule_rule.attributes = {tue: true}
+      schedule_rule.deleted_days.should eq(ScheduleRule::DAYS - [:tue])
+    }
+  end
+
+  describe '.deleted_day_numbers' do
+    let(:schedule_rule){ScheduleRule.weekly}
+
+    before do
+      schedule_rule.update_attributes(mon: true, tue: true, wed: true, thu: true, fri: true, sat: true, sun: true)
+      schedule_rule.attributes = {mon: false, tue: false, wed: false, thu: false, fri: false, sat: false, sun: false}
+    end
+    specify { schedule_rule.deleted_day_numbers.should eq([0, 1, 2, 3, 4, 5, 6]) }
+    specify { 
+      schedule_rule.attributes = {tue: true}
+      schedule_rule.deleted_day_numbers.should eq([0, 1, 3, 4, 5, 6])
+    }
+  end
+
+  describe ".pause" do
+    let(:schedule_rule){ScheduleRule.weekly}
+
+    it "should create a matching schedule_pause" do
+      schedule_rule.pause(Date.current, Date.current + 3.days)
+      schedule_rule.schedule_pause.start.should eq(Date.current)
+      schedule_rule.schedule_pause.finish.should eq(Date.current + 3.days)
+    end
+  end
+
 end

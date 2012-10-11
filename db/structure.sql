@@ -43,10 +43,11 @@ CREATE TABLE schedule_rules (
     fri boolean,
     sat boolean,
     sun boolean,
-    order_id integer,
     schedule_pause_id integer,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    updated_at timestamp without time zone NOT NULL,
+    scheduleable_id integer,
+    scheduleable_type character varying(255)
 );
 
 
@@ -506,8 +507,7 @@ CREATE TABLE countries (
     default_consumer_fee_cents integer,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
-    full_name character varying(255),
-    iso_code character varying(255)
+    full_name character varying(255)
 );
 
 
@@ -1409,12 +1409,10 @@ CREATE TABLE routes (
     sunday boolean DEFAULT false NOT NULL,
     created_at timestamp without time zone,
     updated_at timestamp without time zone,
-    schedule text,
     fee_cents integer DEFAULT 0 NOT NULL,
     currency character varying(255),
     area_of_service text,
-    estimated_delivery_time text,
-    schedule_rule_id integer
+    estimated_delivery_time text
 );
 
 
@@ -1486,6 +1484,38 @@ CREATE SEQUENCE schedule_rules_id_seq
 --
 
 ALTER SEQUENCE schedule_rules_id_seq OWNED BY schedule_rules.id;
+
+
+--
+-- Name: schedule_transactions; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE schedule_transactions (
+    id integer NOT NULL,
+    schedule_rule text,
+    schedule_rule_id integer,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: schedule_transactions_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE schedule_transactions_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: schedule_transactions_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE schedule_transactions_id_seq OWNED BY schedule_transactions.id;
 
 
 --
@@ -1908,6 +1938,13 @@ ALTER TABLE ONLY schedule_rules ALTER COLUMN id SET DEFAULT nextval('schedule_ru
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
+ALTER TABLE ONLY schedule_transactions ALTER COLUMN id SET DEFAULT nextval('schedule_transactions_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
 ALTER TABLE ONLY substitutions ALTER COLUMN id SET DEFAULT nextval('substitutions_id_seq'::regclass);
 
 
@@ -2201,6 +2238,14 @@ ALTER TABLE ONLY schedule_pauses
 
 ALTER TABLE ONLY schedule_rules
     ADD CONSTRAINT schedule_rules_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: schedule_transactions_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY schedule_transactions
+    ADD CONSTRAINT schedule_transactions_pkey PRIMARY KEY (id);
 
 
 --
@@ -2900,6 +2945,8 @@ INSERT INTO schema_migrations (version) VALUES ('20121002212248');
 
 INSERT INTO schema_migrations (version) VALUES ('20121003205726');
 
-INSERT INTO schema_migrations (version) VALUES ('20121005013630');
-
 INSERT INTO schema_migrations (version) VALUES ('20121008003717');
+
+INSERT INTO schema_migrations (version) VALUES ('20121010232812');
+
+INSERT INTO schema_migrations (version) VALUES ('20121010235051');

@@ -138,7 +138,9 @@ class Customer < ActiveRecord::Base
       delivery_date = Time.zone.parse(b.next_delivery_date)
       raise "Date couldn't be parsed from '#{b.delivery_date}'" if delivery_date.blank?
 
-      delivery_day_numbers = Route.delivery_day_numbers(b.delivery_days.split(',').collect{|d| d.strip.downcase.to_sym})
+      #TODO
+      raise "This method needs to be updated"
+      #delivery_day_numbers = Route.delivery_day_numbers(b.delivery_days.split(',').collect{|d| d.strip.downcase.to_sym})
 
       order = self.orders.build({
         box: box,

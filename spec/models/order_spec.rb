@@ -3,36 +3,28 @@ include Bucky
 
 describe Order do
   let(:order) { Fabricate.build(:order) }
-  let(:order_schedule) { Fabricate.build(:recurring_order_everyday) }
 
-  context 'pausing' do
+  context 'pausing', :focus do
     describe '#pause!' do
-      context 'invalid dates' do
-        specify { order_schedule.pause!(Date.current - 1.day, Date.current + 1.day).should be_false }
-        specify { order_schedule.pause!(Date.current + 1.day, Date.current - 1.day).should be_false }
-        specify { order_schedule.pause!(Date.current + 3.days, Date.current + 1.day).should be_false }
-      end
-
       context 'should create a pause' do
         before do
           @start_date = Date.current + 1.day
           @end_date = Date.current + 3.days
-          order_schedule.pause!(@start_date, @end_date)
         end
-
-        specify { order_schedule.schedule.exception_times.should_not be_empty }
-        specify { order_schedule.schedule.exception_times.first.should == @start_date.to_time_in_current_zone }
-        specify { order_schedule.schedule.exception_times.last.should == @end_date.to_time_in_current_zone }
+        
+        it "should call pause on the schedule_rule" do
+          order.schedule_rule.should_receive(:pause!).with(@start_date, @end_date)
+          order.pause!(@start_date, @end_date)
+        end
       end
     end
 
     describe '#remove_pause!' do
-      before do
-        order_schedule.pause!(Date.current + 1.day, Date.current + 3.days)
-        order_schedule.remove_pause!
+      it "should delegate to schedule_rule" do
+        order.pause!(Date.current + 1.day, Date.current + 3.days)
+        order.schedule_rule.should_receive(:remove_pause!)
+        order.remove_pause!
       end
-
-      specify { order_schedule.schedule.exception_times.should be_empty }
     end
 
     describe '#pause_date' do

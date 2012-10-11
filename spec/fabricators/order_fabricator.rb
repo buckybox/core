@@ -1,9 +1,9 @@
 Fabricator(:order) do
   account!
   box! { |order| Fabricate(:box, distributor: order.account.distributor) }
+  schedule_rule!
   quantity 1
   frequency 'single'
-  schedule { new_single_schedule }
   completed true
 end
 

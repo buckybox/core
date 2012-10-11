@@ -10,7 +10,7 @@ FROM (
             FROM customers
             JOIN accounts ON accounts.id = customers.id
             JOIN orders ON accounts.id = orders.account_id AND orders.active = 't'
-            JOIN schedule_rules ON orders.id = schedule_rules.order_id
+            JOIN schedule_rules on schedule_rules.scheduleable_id = orders.id AND schedule_rules.scheduleable_type = 'Order'
             WHERE distributor_id = :id
           ) occurrences
         GROUP BY customer_id, order_id
