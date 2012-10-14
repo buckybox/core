@@ -2,25 +2,26 @@
 - javascript 'admin'
 
 - content_for :body do
-  .row
-    .span12.text-right
-      - if admin_signed_in?
-        Signed in as 
-        %strong= current_admin.email
-        \|
-        = link_to 'logout', destroy_admin_session_path, method: :delete
-      - else
-        = link_to 'login', new_admin_session_path
-
-  = render_site_messages(flash)
-
-  - if show_title?
+  .container
     .row
-      .span12
-        %h1.text-center= yield(:title)
+      .span12.text-right
+        - if admin_signed_in?
+          Signed in as 
+          %strong= current_admin.email
+          \|
+          = link_to 'logout', destroy_admin_session_path, method: :delete
+        - else
+          = link_to 'login', new_admin_session_path
 
-  .row
-    .span12= yield
+    = render_site_messages(flash)
+
+    - if show_title?
+      .row
+        .span12
+          %h1.text-center= yield(:title)
+
+    .row
+      .span12= yield
 
 = render 'layouts/base'
 

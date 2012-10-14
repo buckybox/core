@@ -1,13 +1,15 @@
-#bucky-box-controls.row
-  .span6= link_to 'Bucky Box powered', 'http://www.buckybox.com/', target: '_blank'
-  .span6.text-right
-    - if customer_signed_in?
-      == Signed in as #{current_customer.name}
-      \|
-      = link_to 'Logout', destroy_customer_session_path, method: :delete
-    - else
-      = link_to 'Login', new_customer_session_path
+.container
+  #bucky-box-controls.row
+    .span6
+      = link_to image_tag('bucky-box-powered.png', alt: 'Bucky Box powered'), 'http://www.buckybox.com/', target: '_blank'
+    .span6.text-right
+      - if customer_signed_in?
+        == Signed in as #{current_customer.name}
+        \|
+        = link_to 'Logout', destroy_customer_session_path, method: :delete
+      - else
+        = link_to 'Login', new_customer_session_path
 
-#public-banner.row
-  .span12.text-center
-    %h1= distributor.name
+  #public-banner.row
+    .span12.text-center
+      %h1= distributor.name

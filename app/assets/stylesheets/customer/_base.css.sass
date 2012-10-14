@@ -7,3 +7,31 @@ $btnProcessBackgroundHighlight: darken($btnProcessBackground, 10%) !default
 .btn-process
   +buttonBackground($btnProcessBackground, $btnProcessBackgroundHighlight)
 
+aside
+  background-color: $section-info
+
+body
+  background: $white url('webstore-background.png') repeat
+  >.container-fluid
+    background-color: $black
+    margin-bottom: 2em
+
+#bucky-box-controls
+  a
+    color: $white
+    font-weight: bold
+
+#public-banner
+  color: $white
+
+#content-information
+  background-color: rgba(128, 128, 128, 0.3)
+  padding: 1.5em 1em 1em 1em
+  img
+    +rotate(-5deg)
+  h3
+    margin-top: 1em
+  .text-box
+    background-color: $white
+    padding: 0.5em
+    margin-bottom: 2em

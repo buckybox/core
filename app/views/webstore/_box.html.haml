@@ -1,10 +1,11 @@
 .webstore-item
   .box
-    = image_tag(box.box_image.webstore_thumb.url)
+    = image_tag(box.box_image.webstore.url)
 
-    %h4.name= box.name
-    .description= simple_format box.description
+    %section
+      %h4.name= box.name
+      .description= simple_format box.description
 
-    .price.clearfix
-      %span= box.price.format
+    %aside.clearfix
+      .price= box.price.format
       = button_to 'Order', webstore_process_step_path(distributor.parameter_name, webstore_order: { box_id: box }), method: :post, class: 'btn btn-process'

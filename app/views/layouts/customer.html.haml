@@ -2,22 +2,24 @@
 - javascript 'customer'
 
 - content_for :body do
-  .row
-    .span12= render partial: 'layouts/customer/banner', locals: { distributor: @distributor }
+  .container-fluid
+    .row-fluid
+      .span12= render partial: 'layouts/customer/banner', locals: { distributor: @distributor }
 
-  = render_site_messages(flash)
+  .container
+    = render_site_messages(flash)
 
-  .row
-    .span3= yield(:sidebar)
-    .span9
-      #content
-        - if show_title?
+    .row
+      .span3
+        #content-information= yield(:sidebar)
+      .span9
+        #content-body
+          - if show_title?
+            .row-fluid
+              .span12.text-center
+                %h2= yield(:title)
+
           .row-fluid
-            .span12.text-center
-              %h2= yield(:title)
-
-        .row-fluid
-          .span12= yield
+            .span12= yield
 
 = render 'layouts/base'
-
