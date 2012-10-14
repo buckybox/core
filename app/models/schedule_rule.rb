@@ -100,7 +100,7 @@ class ScheduleRule < ActiveRecord::Base
     end
   end
 
-  def occurrences(num, start)
+  def next_occurrences(num, start)
     result = []
     current = start.to_date
 
@@ -116,6 +116,7 @@ class ScheduleRule < ActiveRecord::Base
     end
     result
   end
+  alias :occurrences :next_occurrences
 
   def occurrences_between(start, finish, max=200)
     start, finish = [start, finish].reverse if start > finish

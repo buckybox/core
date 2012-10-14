@@ -28,7 +28,9 @@ class Order < ActiveRecord::Base
   acts_as_taggable
 
   attr_accessible :box, :box_id, :account, :account_id, :quantity, :completed, :frequency, 
-    :order_extras, :extras_one_off
+    :order_extras, :extras_one_off, :schedule_rule_attributes
+
+  accepts_nested_attributes_for :schedule_rule
 
   FREQUENCIES = %w(single weekly fortnightly monthly)
   IS_ONE_OFF  = false
