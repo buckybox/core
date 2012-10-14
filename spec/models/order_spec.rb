@@ -4,7 +4,7 @@ include Bucky
 describe Order do
   let(:order) { Fabricate.build(:order) }
 
-  context 'pausing', :focus do
+  context 'pausing' do
     describe '#pause!' do
       context 'should create a pause' do
         before do
@@ -28,13 +28,19 @@ describe Order do
     end
 
     describe '#pause_date' do
-      before { order_schedule.pause!(Date.current + 1.day, Date.current + 3.days) }
-      specify { order_schedule.pause_date.should == order_schedule.schedule.pause_date }
+      it "should delegate to schedule_rule" do
+        order.pause!(Date.current + 1.day, Date.current + 3.days)
+        order.schedule_rule.should_receive(:pause_date)
+        order.pause_date
+      end
     end
 
     describe '#resume_date' do
-      before { order_schedule.pause!(Date.current + 1.day, Date.current + 3.days) }
-      specify { order_schedule.resume_date.should == order_schedule.schedule.resume_date }
+      it "should delegate to schedule_rule" do
+        order.pause!(Date.current + 1.day, Date.current + 3.days)
+        order.schedule_rule.should_receive(:resume_date)
+        order.resume_date
+      end
     end
   end
 
@@ -119,45 +125,21 @@ describe Order do
         order.active = true
       end
 
-      describe 'new schedule' do
-        before do
-          @schedule = Bucky::Schedule.new
-          @schedule.add_recurrence_rule(IceCube::Rule.weekly.day(:monday, :friday))
-          order.schedule = @schedule
-          order.save
-        end
-
-        specify { order.schedule.to_hash.should == @schedule.to_hash }
-      end
-
-      describe 'change schedule' do
-        before do
-          @schedule = order.schedule
-          @schedule.add_recurrence_time(Time.current + 5.days)
-          @schedule.add_recurrence_rule(IceCube::Rule.weekly(2).day(:monday, :tuesday))
-          order.schedule = @schedule
-          order.save
-        end
-
-        specify { order.schedule.to_hash.should == @schedule.to_hash }
-      end
-
       context :single do
         before do
-          order.frequency = 'single'
           order.completed = true
 
-          @schedule = new_single_schedule
-          order.schedule = @schedule
+          @schedule_rule = new_single_schedule
+          order.schedule_rule = @schedule_rule
 
           order.save
         end
 
-        specify { order.schedule.should_not be_nil }
-        specify { order.schedule.next_occurrence.should_not be_nil }
-        specify { order.schedule.next_occurrences(28, Time.current).should eq([order.schedule.next_occurrence]) }
-        specify { order.schedule.to_s.should == @schedule.to_s }
-        specify { order.schedule.next_occurrence == @schedule.next_occurrence }
+        specify { order.schedule_rule.should_not be_nil }
+        specify { order.schedule_rule.next_occurrence.should_not be_nil }
+        specify { order.schedule_rule.next_occurrences(28, Date.current).should eq([order.schedule_rule.next_occurrence]) }
+        specify { order.schedule_rule.to_s.should == @schedule_rule.to_s }
+        specify { order.schedule_rule.next_occurrence == @schedule_rule.next_occurrence }
       end
 
       context :weekly do
@@ -165,17 +147,17 @@ describe Order do
           order.frequency = 'weekly'
           order.completed = true
 
-          @schedule = new_recurring_schedule
-          order.schedule = @schedule
+          @schedule_rule = new_recurring_schedule
+          order.schedule_rule = @schedule_rule
 
           order.save
         end
 
-        specify { order.schedule.should_not be_nil }
-        specify { order.schedule.next_occurrence.should_not be_nil }
-        specify { order.schedule.next_occurrences(28, Time.current).size.should eq(28) }
-        specify { order.schedule.to_s.should == @schedule.to_s }
-        specify { order.schedule.next_occurrence == @schedule.next_occurrence }
+        specify { order.schedule_rule.should_not be_nil }
+        specify { order.schedule_rule.next_occurrence.should_not be_nil }
+        specify { order.schedule_rule.next_occurrences(28, Time.current).size.should eq(28) }
+        specify { order.schedule_rule.to_s.should == @schedule_rule.to_s }
+        specify { order.schedule_rule.next_occurrence == @schedule_rule.next_occurrence }
       end
 
       context :fortnightly do
@@ -183,27 +165,17 @@ describe Order do
           order.frequency = 'fortnightly'
           order.completed = true
 
-          @schedule = new_recurring_schedule
-          order.schedule = @schedule
+          @schedule_rule = new_recurring_schedule
+          order.schedule_rule = @schedule_rule
 
           order.save
         end
 
-        specify { order.schedule.should_not be_nil }
-        specify { order.schedule.next_occurrence.should_not be_nil }
-        specify { order.schedule.to_s.should == @schedule.to_s }
-        specify { order.schedule.next_occurrence == @schedule.next_occurrence }
+        specify { order.schedule_rule.should_not be_nil }
+        specify { order.schedule_rule.next_occurrence.should_not be_nil }
+        specify { order.schedule_rule.to_s.should == @schedule_rule.to_s }
+        specify { order.schedule_rule.next_occurrence == @schedule_rule.next_occurrence }
       end
-    end
-
-    context :schedule_transaction do
-      before do
-        schedule = Bucky::Schedule.new
-        schedule.add_recurrence_rule(IceCube::Rule.weekly.day(:monday, :friday))
-        order.schedule = schedule
-      end
-
-      specify { expect { order.save }.to change(OrderScheduleTransaction, :count).by(1) }
     end
 
     describe '#string_pluralize' do
@@ -222,26 +194,27 @@ describe Order do
 
     describe '#deactivate_finished' do
       before do
-        rule_schedule = new_recurring_schedule(Time.current - 2.months)
+        Order.any_instance.stub(:schedule_includes_route).and_return(true)
 
-        @order1 = Fabricate(:order, schedule: rule_schedule)
+        rule_schedule = Fabricate(:schedule_rule, start: Date.current - 2.months)
+        @order1 = Fabricate(:order, schedule_rule: rule_schedule)
 
-        rule_schedule.end_time = (Time.current + 1.month)
-        @order2 = Fabricate(:order, schedule: rule_schedule)
+        rule_schedule = Fabricate(:schedule_rule, start: Date.current - 2.months)
+        rule_schedule.pause!(Time.current + 1.month)
+        @order2 = Fabricate(:order, schedule_rule: rule_schedule)
 
-        rule_schedule.end_time = (Time.current - 1.month)
-        @order3 = Fabricate(:order, schedule: rule_schedule)
+        rule_schedule = Fabricate(:schedule_rule, start: Date.current - 2.months)
+        rule_schedule.pause!(Time.current - 1.month, nil, false)
+        @order3 = Fabricate(:order, schedule_rule: rule_schedule)
 
-        time_schedule_future = Bucky::Schedule.new(Time.current - 2.months)
-        time_schedule_future.add_recurrence_time(Time.current + 5.days)
-        @order4 = Fabricate(:order, schedule: time_schedule_future)
+        rule_schedule = Fabricate(:schedule_rule, start: Date.current + 5.days, recur: nil)
+        @order4 = Fabricate(:order, schedule_rule: rule_schedule)
 
-        time_schedule_past = Bucky::Schedule.new(Time.current - 2.months)
-        time_schedule_past.add_recurrence_time(Time.current - 5.days)
-        @order5 = Fabricate(:order, schedule: time_schedule_past)
+        rule_schedule = Fabricate(:schedule_rule, start: Date.current - 5.days, recur: nil)
+        @order5 = Fabricate(:order, schedule_rule: rule_schedule)
       end
 
-      specify { expect { Order.deactivate_finished }.to change(Order.active, :count).by(-2) }
+      specify { expect { Order.deactivate_finished}.to change(Order.active, :count).by(-2) }
 
       describe 'individually' do
         before { Order.deactivate_finished }

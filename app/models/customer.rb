@@ -138,10 +138,6 @@ class Customer < ActiveRecord::Base
       delivery_date = Time.zone.parse(b.next_delivery_date)
       raise "Date couldn't be parsed from '#{b.delivery_date}'" if delivery_date.blank?
 
-      #TODO
-      raise "This method needs to be updated"
-      #delivery_day_numbers = Route.delivery_day_numbers(b.delivery_days.split(',').collect{|d| d.strip.downcase.to_sym})
-
       order = self.orders.build({
         box: box,
         quantity: 1,
@@ -149,7 +145,12 @@ class Customer < ActiveRecord::Base
         extras_one_off: b.extras_recurring?
       })
       account.route = self.route
-      order.create_schedule(delivery_date, b.delivery_frequency, delivery_day_numbers)
+      order.schedule_rule = if b.delivery_frequency == 'single'
+                              ScheduleRule.one_off(delivery_date, ScheduleRule::DAYS.select{|day| b.delivery_days =~ /#{day.to_s}/i})
+                            else
+                              ScheduleRule.recur_on(delivery_date, ScheduleRule::DAYS.select{|day| b.delivery_days =~ /#{day.to_s}/i}, b.delivery_frequency.to_sym)
+                            end
+                              
       order.activate
 
       order.import_extras(b.extras) unless b.extras.blank?

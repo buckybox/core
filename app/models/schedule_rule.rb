@@ -14,7 +14,7 @@ class ScheduleRule < ActiveRecord::Base
 
   before_save :notify_associations
   after_save :record_schedule_transaction, if: :changed?
-  
+
   DAYS.each do |day|
     default_value_for day, false
   end
@@ -50,19 +50,6 @@ class ScheduleRule < ActiveRecord::Base
 
   def self.monthly(start, days)
     recur_on(start, days, :monthly)
-  end
-
-  def pause(start, finish)
-    unless schedule_pause.blank?
-      raise "Please unpause before calling pause"
-    else
-      pause!(start, finish)
-    end
-  end
-  
-  def pause!(start, finish)
-    self.schedule_pause = SchedulePause.create(start: start, finish: finish)
-    save!
   end
 
   def recur
@@ -111,6 +98,46 @@ class ScheduleRule < ActiveRecord::Base
     else
       Date.parse occurrence
     end
+  end
+
+  def occurrences(num, start)
+    result = []
+    current = start.to_date
+
+    0.upto(num-1).each do
+      current = next_occurrence(current)
+
+      if current.present?
+        result << current
+        current += 1.day #otherwise it will get stuck in a loop
+      else
+        return result
+      end
+    end
+    result
+  end
+
+  def occurrences_between(start, finish, max=200)
+    start, finish = [start, finish].reverse if start > finish
+
+    result = []
+    current = start.to_date
+    finish = finish.to_date
+    0.upto(max).each do
+      current = next_occurrence(current)
+
+      if current.present? && current <= finish
+        result << current
+        current += 1.day #otherwise it will get stuck in a loop
+      else
+        return result
+      end
+    end
+    result
+  end
+
+  def frequency
+    Bucky::Frequency.new(recur)
   end
 
   def on_day?(day)
@@ -186,11 +213,26 @@ class ScheduleRule < ActiveRecord::Base
   def deleted_day_numbers
     DAYS.each_with_index.collect{|day, index| (self.send("#{day.to_s}_changed?".to_sym) && self.send(day) == false) ? index : nil}.compact
   end
+  
+  def pause!(start, finish=nil, check=true)
+    pause(start, finish, check)
+    save!
+  end
 
-  def pause(start, finish=nil)
-    return false if start_date.past? || end_date.past? || (end_date < start_date)
+  def pause(start, finish=nil, check = true)
+    start = Date.parse(start.to_s) unless start.is_a?(Date)
+    finish = Date.parse(finish.to_s) unless finish.blank? || finish.is_a?(Date)
 
+    return false if check && (start.past? || (finish.present? && finish.past?) || (finish.present? && finish < start))
     self.schedule_pause = SchedulePause.create!(start: start, finish: finish)
+  end
+
+  def pause_date
+    schedule_pause && schedule_pause.start
+  end
+
+  def resume_date
+    schedule_pause && schedule_pause.finish
   end
 
   def self.generate_data(count)

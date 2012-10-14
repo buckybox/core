@@ -6,12 +6,18 @@ class Bucky::Frequency
     @frequency = f
   end
 
-  [:single, :weekly, :fortnightly, :monthly].each do |f|
+  [:weekly, :fortnightly, :monthly].each do |f|
     # define single?, weekly?, fortnightly? & monthly?
     define_method "#{f.to_s}?" do
       @frequency == f
     end
   end
+
+  def one_off?
+    @frequency == :single || @frequency == :one_off
+  end
+
+  alias :single? :one_off?
 
   def to_s
     @frequency.to_s

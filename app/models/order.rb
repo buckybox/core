@@ -23,7 +23,6 @@ class Order < ActiveRecord::Base
   scope :completed, where(completed: true)
   scope :active, where(active: true)
 
-  before_save :update_schedule_rule
   after_save :update_next_occurrence #This is an after call because it works at the database level and requires the information to be commited
 
   acts_as_taggable
@@ -50,6 +49,7 @@ class Order < ActiveRecord::Base
   scope :inactive,  where(active: false)
 
   delegate :local_time_zone, to: :distributor, allow_nil: true
+  delegate :reoccurs?, :pause!, :remove_pause!, :pause_date, :resume_date, to: :schedule_rule
 
   default_value_for :extras_one_off, IS_ONE_OFF
   default_value_for :quantity, QUANTITY
@@ -201,25 +201,6 @@ class Order < ActiveRecord::Base
     end
   end
 
-  def reoccurs?
-    schedule_rule.frequency.reoccurs?
-  end
-
-  def pause!(start_date, end_date)
-    schedule_rule.pause!(start_date, end_date)
-  end
-
-  def remove_pause!
-    schedule_rule.remove_pause!
-  end
-
-  def pause_date
-    schedule_rule.pause_date
-  end
-
-  def resume_date
-    schedule_rule.resume_date
-  end
 
   def possible_pause_dates(look_ahead = 8.weeks)
     start_time          = distributor.window_end_at.to_time_in_current_zone + 1.day
@@ -260,7 +241,7 @@ class Order < ActiveRecord::Base
   def extras_description(show_frequency = false)
     extras_string = Package.extras_description(order_extras)
 
-    if schedule.frequency.single? || !show_frequency
+    if schedule_rule.frequency.single? || !show_frequency
       extras_string
     else
       extras_string + (extras_one_off? ? ", include in the next delivery only" : ", include with every delivery") if order_extras.count > 0
@@ -336,11 +317,6 @@ class Order < ActiveRecord::Base
 
   protected
 
-  def update_schedule_rule
-    schedule_rule.destroy if schedule_rule
-    self.schedule_rule = ScheduleRule.copy_orders_schedule(self)
-  end
-
   def update_next_occurrence
     customer.update_next_occurrence.save!
   end
@@ -351,7 +327,7 @@ class Order < ActiveRecord::Base
 
   def schedule_includes_route
     unless account.route.includes?(schedule_rule)
-      errors.add(:schedule_rule, "Route #{account.route.name}'s schedule '#{account.route.schedule_rule} doesn't include this order's schedule of '#{schedule_rule.inspect}'")
+      errors.add(:schedule_rule, "Route #{account.route.name}'s schedule '#{account.route.schedule_rule.inspect} doesn't include this order's schedule of '#{schedule_rule.inspect}'")
     end
   end
 

@@ -256,6 +256,8 @@ describe ScheduleRule do
   context :includes do
     let(:date){Date.parse('2012-10-03')} #wednesday
 
+    specify{Fabricate(:schedule_rule).includes?(Fabricate(:schedule_rule)).should be_true}
+
     it 'should return whether or not one schedule_rule occurs on the same days as another' do
       ScheduleRule.one_off(date).includes?(ScheduleRule.one_off(date)).should be_true
     end
@@ -278,14 +280,14 @@ describe ScheduleRule do
     it 'should return false if a pause makes it not occur on the required date of given schedule_rule' do
       test_date = Date.parse('2012-10-05') #friday
       sr = ScheduleRule.weekly(date, ScheduleRule::DAYS)
-      sr.pause('2012-10-01', '2012-11-01')
+      sr.pause('2012-10-01', '2012-11-01', false)
       sr.includes?(ScheduleRule.one_off(test_date)).should be_false
     end
     
     it 'should return true if a pause doesnt occur within the given schedule_rule' do
       test_date = Date.parse('2012-10-05') #friday
       sr = ScheduleRule.weekly(date, ScheduleRule::DAYS)
-      sr.pause('2012-11-01', '2012-12-01')
+      sr.pause('2012-11-01', '2012-12-01', false)
       sr.includes?(ScheduleRule.one_off(test_date)).should be_true
     end
 
@@ -359,4 +361,47 @@ describe ScheduleRule do
     end
   end
 
+  describe ".pause_date" do
+    let(:schedule_rule){ScheduleRule.weekly}
+
+    it "should return the start of the pause" do
+      schedule_rule.pause(Date.current, Date.current + 4.days)
+      schedule_rule.pause_date.should eq(Date.current)
+    end
+  end
+
+  describe ".resume_date" do
+    let(:schedule_rule){ScheduleRule.weekly}
+
+    it "should return the start of the pause" do
+      schedule_rule.pause(Date.current, Date.current + 4.days)
+      schedule_rule.resume_date.should eq(Date.current + 4.days)
+    end
+  end
+
+  describe ".occurrences" do
+    let(:schedule_rule){Fabricate(:schedule_rule_weekly)}
+
+    it "should return the next N occurrences" do
+      today = Date.current
+      schedule_rule.save!
+      schedule_rule.occurrences(14, today).should eq(0.upto(13).collect{|i| today+i.days})
+    end
+  end
+
+  describe ".occurrences_between" do
+    let(:schedule_rule){Fabricate(:schedule_rule_weekly)}
+    it "should return all occurrences between two given dates" do
+      today = Date.current
+      schedule_rule.save!
+      schedule_rule.occurrences_between(today, today+4.days).should eq([today, today+1.day, today+2.days, today+3.days, today+4.days])
+    end
+
+    it "should skip pauses" do
+      today = Date.current
+      schedule_rule.save!
+      schedule_rule.pause!(today+2, today+3)
+      schedule_rule.occurrences_between(today, today+5.days).should eq([today, today+1.day, today+3.days, today+4.days, today+5.days])
+    end
+  end
 end

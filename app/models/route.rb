@@ -20,12 +20,12 @@ class Route < ActiveRecord::Base
 
   delegate :local_time_zone, to: :distributor, allow_nil: true
   
-  after_initialize :setup_new_schedule_rule
+  delegate :includes?, :delivery_day_numbers, to: :schedule_rule, allow_nil: true
 
-  delegate :includes?, to: :schedule_rule, allow_nil: true
-
-  def setup_new_schedule_rule
-    self.schedule_rule ||= ScheduleRule.weekly
+  after_initialize :set_default_schedule_rule
+  
+  def set_default_schedule_rule
+    self.schedule_rule ||= ScheduleRule.weekly if new_record?
   end
 
   def self.default_route(distributor)

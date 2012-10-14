@@ -7,7 +7,7 @@
         = f.input :name
         = f.input :fee
         #weekdays
-          = f.simple_fields_for(:schedule) do |schedule_rule_form|
+          = f.simple_fields_for(:schedule_rule) do |schedule_rule_form|
             = schedule_rule_form.input :mon
             = schedule_rule_form.input :tue
             = schedule_rule_form.input :wed
