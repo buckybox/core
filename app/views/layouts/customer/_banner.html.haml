@@ -1,5 +1,5 @@
 .container
-  #bucky-box-controls.row
+  #bucky-box-controls.row-fluid
     .span6
       = link_to image_tag('bucky-box-powered.png', alt: 'Bucky Box powered'), 'http://www.buckybox.com/', target: '_blank'
     .span6.text-right
@@ -10,6 +10,6 @@
       - else
         = link_to 'Login', new_customer_session_path
 
-  #public-banner.row
+  #public-banner.row-fluid
     .span12.text-center
       %h1= distributor.name
