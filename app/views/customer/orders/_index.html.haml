@@ -18,8 +18,8 @@
           %td= order.price.format
           %td
             %ul
-              %li= order_schedule(order, exception_rules: false, exception_times: false)
-              - if order.reoccurs?
+              %li= order_schedule(order)
+              - if order.recurs?
                 %li= render partial: 'customer/orders/pausing', locals: { order: order }
           %td= link_to 'change order', edit_customer_order_path(order) 
 

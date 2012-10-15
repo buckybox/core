@@ -1,4 +1,4 @@
-# Helper class for schedule.frequency
+# Helper class for schedule_rule.frequency
 class Bucky::Frequency
   attr_accessor :frequency
 
@@ -14,7 +14,7 @@ class Bucky::Frequency
   end
 
   def one_off?
-    @frequency == :single || @frequency == :one_off
+    @frequency.nil? || @frequency == :single || @frequency == :one_off
   end
 
   alias :single? :one_off?
@@ -23,7 +23,7 @@ class Bucky::Frequency
     @frequency.to_s
   end
 
-  def reoccurs?
-    @frequency != :single
+  def recurs?
+    !one_off?
   end
 end

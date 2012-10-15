@@ -403,5 +403,24 @@ describe ScheduleRule do
       schedule_rule.pause!(today+2, today+3)
       schedule_rule.occurrences_between(today, today+5.days).should eq([today, today+1.day, today+3.days, today+4.days, today+5.days])
     end
+
+    it "should allow pauses to be ignored" do
+      today = Date.current
+      schedule_rule.save!
+      schedule_rule.pause!(today+2, today+4)
+      schedule_rule.occurrences_between(today, today+5.days, {ignore_pauses: true}).should eq([today, today+1.day, today+2.days, today+3.days, today+4.days, today+5.days])
+    end
+  end
+
+  describe ".to_s" do
+    it "should return a natural language string representing the schedule" do
+      ScheduleRule.one_off(Date.parse("2012-10-15")).to_s.should eq("15 Oct")
+    end
+
+    specify {ScheduleRule.weekly(Date.parse("2012-10-16"), [:mon]).to_s.should eq("Weekly on Mon")}
+    specify {ScheduleRule.fortnightly(Date.parse("2012-10-16"), [:mon]).to_s.should eq("Fortnightly on Mon")}
+    specify {ScheduleRule.monthly(Date.parse("2012-10-16"), [:mon]).to_s.should eq("Monthly on the first Mon")}
+
+    specify {ScheduleRule.weekly(Date.parse("2012-10-17"), ScheduleRule::DAYS).to_s.should eq("Weekly on Sun, Mon, Tue, Wed, Thu, Fri, Sat")}
   end
 end

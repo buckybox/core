@@ -103,6 +103,35 @@ $$;
 
 
 --
+-- Name: next_occurrence(date, boolean, schedule_rules); Type: FUNCTION; Schema: public; Owner: -
+--
+
+CREATE FUNCTION next_occurrence(from_date date, ignore_pauses boolean, schedule_rule schedule_rules) RETURNS date
+    LANGUAGE plpgsql STABLE
+    AS $$
+DECLARE
+  next_date DATE;
+BEGIN
+  next_date := from_date;
+  LOOP
+    -- Get the next possible occurrence
+    next_date := unpaused_next_occurrence(next_date, schedule_rule);
+
+    -- Test if it falls in a pause, exit if not
+    EXIT WHEN ignore_pauses OR NOT is_paused(next_date, schedule_rule);
+
+    -- Apparently that one was in a pause, start looking again from the end of a pause
+    next_date := pause_finish(next_date, schedule_rule);
+
+    -- If the pause_finish returns NULL we can assume the pause never finishes, thus there is never a next_occurrence
+    EXIT WHEN next_date IS NULL;
+  END LOOP;
+  return next_date;
+END;
+$$;
+
+
+--
 -- Name: on_day(integer, schedule_rules); Type: FUNCTION; Schema: public; Owner: -
 --
 
@@ -2950,3 +2979,5 @@ INSERT INTO schema_migrations (version) VALUES ('20121008003717');
 INSERT INTO schema_migrations (version) VALUES ('20121010232812');
 
 INSERT INTO schema_migrations (version) VALUES ('20121010235051');
+
+INSERT INTO schema_migrations (version) VALUES ('20121015040236');

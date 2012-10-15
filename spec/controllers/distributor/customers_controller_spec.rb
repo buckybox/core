@@ -33,6 +33,17 @@ describe Distributor::CustomersController do
         assigns(:form_type).should eq('personal_form')
       end
     end
+
+    describe "#show" do
+      before do
+        Fabricate(:order, account: @customer.account(true))
+        @customer.reload
+      end
+
+      it "should show the customer and their orders" do
+        get :show, id: @customer.id
+      end
+    end
   end
 
   

@@ -18,8 +18,8 @@
                   %li= link_to 'edit', edit_distributor_account_order_path(@account, order)
               .six.columns
                 %ul
-                  %li.larger-font= order_schedule(order, exception_rules: false, exception_times: false)
-                  - if order.reoccurs?
+                  %li.larger-font= order_schedule(order)
+                  - if order.recurs?
                     %li= render partial: 'distributor/orders/pausing', locals: { order: order }
               .two.columns
                 %ul.text-right

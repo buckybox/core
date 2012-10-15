@@ -8,8 +8,8 @@ class ScheduleRule < ActiveRecord::Base
   belongs_to :scheduleable, polymorphic: true, inverse_of: :schedule_rule
   belongs_to :schedule_pause, dependent: :destroy
 
-  scope :with_next_occurrence, (lambda do |date|
-    select("schedule_rules.*, next_occurrence('#{date.to_s(:db)}', schedule_rules.*) as next_occurrence")
+  scope :with_next_occurrence, (lambda do |date, ignore_pauses|
+    select("schedule_rules.*, next_occurrence('#{date.to_s(:db)}', #{ignore_pauses}, schedule_rules.*) as next_occurrence")
   end)
 
   before_save :notify_associations
@@ -89,9 +89,11 @@ class ScheduleRule < ActiveRecord::Base
     weekly_occurs_on?(datetime) && datetime.day < 8
   end
 
-  def next_occurrence(date=nil)
+  def next_occurrence(date=nil, opts={})
+    opts = {ignore_pauses: false}.merge(opts)
+
     date ||= Date.current
-    occurrence = ScheduleRule.where(id:self.id).with_next_occurrence(date).first.attributes["next_occurrence"] unless new_record?
+    occurrence = ScheduleRule.where(id:self.id).with_next_occurrence(date, opts[:ignore_pauses]).first.attributes["next_occurrence"] unless new_record?
     
     if occurrence.nil?
       nil
@@ -100,12 +102,13 @@ class ScheduleRule < ActiveRecord::Base
     end
   end
 
-  def next_occurrences(num, start)
+  def next_occurrences(num, start, opts={})
+    opts = {ignore_pauses: false}.merge(opts)
     result = []
     current = start.to_date
 
     0.upto(num-1).each do
-      current = next_occurrence(current)
+      current = next_occurrence(current, {ignore_pauses: opts[:ignore_pauses]})
 
       if current.present?
         result << current
@@ -118,14 +121,15 @@ class ScheduleRule < ActiveRecord::Base
   end
   alias :occurrences :next_occurrences
 
-  def occurrences_between(start, finish, max=200)
+  def occurrences_between(start, finish, opts={})
+    opts = {max: 200, ignore_pauses: false}.merge(opts)
     start, finish = [start, finish].reverse if start > finish
 
     result = []
     current = start.to_date
     finish = finish.to_date
-    0.upto(max).each do
-      current = next_occurrence(current)
+    0.upto(opts[:max]).each do
+      current = next_occurrence(current, {ignore_pauses: opts[:ignore_pauses]})
 
       if current.present? && current <= finish
         result << current
@@ -234,6 +238,32 @@ class ScheduleRule < ActiveRecord::Base
 
   def resume_date
     schedule_pause && schedule_pause.finish
+  end
+
+  def remove_pause
+    self.schedule_pause = nil
+  end
+
+  def remove_pause!
+    remove_pause
+    save!
+  end
+
+  def to_s
+    case recur
+    when :one_off
+      start.to_s(:flux_cap)
+    when :weekly
+      "Weekly on #{days.collect{|d| d.to_s.capitalize}.join(', ')}"
+    when :fortnightly
+      "Fortnightly on #{days.collect{|d| d.to_s.capitalize}.join(', ')}"
+    when :monthly
+      "Monthly on the first #{days.collect{|d| d.to_s.capitalize}.join(', ')}"
+    end
+  end
+
+  def recurs?
+    frequency.recurs?
   end
 
   def self.generate_data(count)
