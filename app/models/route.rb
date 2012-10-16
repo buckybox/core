@@ -73,16 +73,4 @@ class Route < ActiveRecord::Base
       errors[:base] << "You must select at least one day for the route."
     end
   end
-
-  # To support the ice_cube -> flux_cap migration
-  def create_schedule_rule
-    day_booleans = [sunday, monday, tuesday, wednesday, thursday, friday, saturday]
-    days = day_booleans.each_with_index.collect { |bool, index|
-      bool ? ScheduleRule::DAYS[index] : nil
-    }.compact
-
-    distributor.use_local_time_zone do
-      self.schedule_rule = ScheduleRule.weekly(created_at.to_date, days)
-    end
-  end
 end

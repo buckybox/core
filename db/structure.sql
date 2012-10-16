@@ -535,8 +535,7 @@ CREATE TABLE countries (
     default_time_zone character varying(255),
     default_consumer_fee_cents integer,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL,
-    full_name character varying(255)
+    updated_at timestamp without time zone NOT NULL
 );
 
 
@@ -843,8 +842,7 @@ CREATE TABLE distributors (
     bank_deposit_format character varying(255),
     country_id integer,
     consumer_delivery_fee_cents integer,
-    active_webstore boolean DEFAULT false NOT NULL,
-    city character varying(255)
+    active_webstore boolean DEFAULT false NOT NULL
 );
 
 
@@ -2970,14 +2968,10 @@ INSERT INTO schema_migrations (version) VALUES ('20120927055104');
 
 INSERT INTO schema_migrations (version) VALUES ('20120927224520');
 
-INSERT INTO schema_migrations (version) VALUES ('20121002212248');
+INSERT INTO schema_migrations (version) VALUES ('20120929040236');
 
-INSERT INTO schema_migrations (version) VALUES ('20121003205726');
-
-INSERT INTO schema_migrations (version) VALUES ('20121008003717');
+INSERT INTO schema_migrations (version) VALUES ('20121010231051');
 
 INSERT INTO schema_migrations (version) VALUES ('20121010232812');
 
-INSERT INTO schema_migrations (version) VALUES ('20121010235051');
-
-INSERT INTO schema_migrations (version) VALUES ('20121015040236');
+INSERT INTO schema_migrations (version) VALUES ('20121010236717');

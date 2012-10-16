@@ -1,6 +1,5 @@
 -- -h localhost -U jordan -d bucky_box_development
 UPDATE customers SET next_order_id = d.order_id, next_order_occurrence_date = d.next_occurrence
-FROM (
   SELECT c.id, c.number, c.first_name, c.last_name, a.order_id, a.next_occurrence
   FROM customers c
   LEFT OUTER JOIN (
