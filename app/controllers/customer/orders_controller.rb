@@ -57,7 +57,7 @@ class Customer::OrdersController < Customer::ResourceController
   end
 
   def resume
-    start_date = @order.schedule.exception_times.first.to_date
+    start_date = @order.pause_date
     end_date   = Date.parse(params[:date]) - 1.day
 
     respond_to do |format|
@@ -72,20 +72,15 @@ class Customer::OrdersController < Customer::ResourceController
   end
 
   def remove_resume
-    start_date = @order.schedule.exception_times.first.to_date
-    end_date   = Bucky::Schedule.until_further_notice(start_date)
+    start_date = @order.pause_date
 
     respond_to do |format|
-      if @order.pause!(start_date, end_date)
+      if @order.pause!(start_date)
         format.json { head :ok }
       else
         format.json { head :bad_request }
       end
     end
-  end
-
-  def resume_dates
-    render json: @order.possible_resume_dates
   end
 
   protected

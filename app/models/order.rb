@@ -51,7 +51,7 @@ class Order < ActiveRecord::Base
   scope :inactive,  where(active: false)
 
   delegate :local_time_zone, to: :distributor, allow_nil: true
-  delegate :recurs?, :pause!, :remove_pause!, :pause_date, :resume_date, to: :schedule_rule
+  delegate :recurs?, :pause!, :remove_pause!, :pause_date, :resume_date, :next_occurrences, to: :schedule_rule
 
   default_value_for :extras_one_off, IS_ONE_OFF
   default_value_for :quantity, QUANTITY
@@ -224,9 +224,7 @@ class Order < ActiveRecord::Base
       end_time             = start_time + look_ahead
       existing_resume_date = resume_date
 
-      no_pause_schedule = self.schedule
-      no_pause_schedule = no_pause_schedule.remove_pause
-      select_array      = no_pause_schedule.occurrences(end_time, start_time).map { |s| [s.to_date.to_s(:pause), s.to_date] }
+      select_array      = self.schedule_rule.occurrences_between(start_time, end_time, {ignore_pauses: true}).map { |s| [s.to_date.to_s(:pause), s.to_date] }
 
       if existing_resume_date && !select_array.index([existing_resume_date.to_s(:pause), existing_resume_date])
         select_array << [existing_resume_date.to_s(:pause), existing_resume_date]

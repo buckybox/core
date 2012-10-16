@@ -122,12 +122,13 @@ class ScheduleRule < ActiveRecord::Base
   alias :occurrences :next_occurrences
 
   def occurrences_between(start, finish, opts={})
+    start = start.to_date
+    finish = finish.to_date
     opts = {max: 200, ignore_pauses: false}.merge(opts)
     start, finish = [start, finish].reverse if start > finish
 
     result = []
-    current = start.to_date
-    finish = finish.to_date
+    current = start
     0.upto(opts[:max]).each do
       current = next_occurrence(current, {ignore_pauses: opts[:ignore_pauses]})
 
@@ -219,16 +220,16 @@ class ScheduleRule < ActiveRecord::Base
     DAYS.each_with_index.collect{|day, index| (self.send("#{day.to_s}_changed?".to_sym) && self.send(day) == false) ? index : nil}.compact
   end
   
-  def pause!(start, finish=nil, check=true)
-    pause(start, finish, check)
+  def pause!(start, finish=nil)
+    pause(start, finish)
     save!
   end
 
-  def pause(start, finish=nil, check = true)
+  def pause(start, finish=nil)
     start = Date.parse(start.to_s) unless start.is_a?(Date)
     finish = Date.parse(finish.to_s) unless finish.blank? || finish.is_a?(Date)
+    start, finish = finish, start if finish && start > finish
 
-    return false if check && (start.past? || (finish.present? && finish.past?) || (finish.present? && finish < start))
     self.schedule_pause = SchedulePause.create!(start: start, finish: finish)
   end
 
