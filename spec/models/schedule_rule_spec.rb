@@ -144,6 +144,12 @@ describe ScheduleRule do
           
           specify {@sr.next_occurrence(@start_date).should eq(@pause_end)}
           specify {@sr.next_occurrence(@pause_end).should eq(@pause_end)}
+
+          it "should show the next occurrence, ignoring dates that are paused" do
+            sr = ScheduleRule.weekly('2012-10-15', [:mon, :tue, :wed, :thu])
+            sr.pause!('2012-10-15', '2012-10-16')
+            sr.next_occurrence(Date.parse('2012-10-14')).should eq(Date.parse('2012-10-16'))
+          end
         end
       end
       
@@ -280,14 +286,14 @@ describe ScheduleRule do
     it 'should return false if a pause makes it not occur on the required date of given schedule_rule' do
       test_date = Date.parse('2012-10-05') #friday
       sr = ScheduleRule.weekly(date, ScheduleRule::DAYS)
-      sr.pause('2012-10-01', '2012-11-01', false)
+      sr.pause('2012-10-01', '2012-11-01')
       sr.includes?(ScheduleRule.one_off(test_date)).should be_false
     end
     
     it 'should return true if a pause doesnt occur within the given schedule_rule' do
       test_date = Date.parse('2012-10-05') #friday
       sr = ScheduleRule.weekly(date, ScheduleRule::DAYS)
-      sr.pause('2012-11-01', '2012-12-01', false)
+      sr.pause('2012-11-01', '2012-12-01')
       sr.includes?(ScheduleRule.one_off(test_date)).should be_true
     end
 
@@ -419,7 +425,7 @@ describe ScheduleRule do
 
     specify {ScheduleRule.weekly(Date.parse("2012-10-16"), [:mon]).to_s.should eq("Weekly on Mon")}
     specify {ScheduleRule.fortnightly(Date.parse("2012-10-16"), [:mon]).to_s.should eq("Fortnightly on Mon")}
-    specify {ScheduleRule.monthly(Date.parse("2012-10-16"), [:mon]).to_s.should eq("Monthly on the first Mon")}
+    specify {ScheduleRule.monthly(Date.parse("2012-10-16"), [:mon]).to_s.should eq("Monthly on the 1st Mon")}
 
     specify {ScheduleRule.weekly(Date.parse("2012-10-17"), ScheduleRule::DAYS).to_s.should eq("Weekly on Sun, Mon, Tue, Wed, Thu, Fri, Sat")}
   end

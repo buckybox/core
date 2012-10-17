@@ -22,8 +22,16 @@ module OrdersHelper
 
   def order_schedule(order)
     schedule_rule = order.schedule_rule
+    if !order.recurs?
+      "Single delivery order"
+    else
+      schedule_rule.to_s
+    end
+  end
 
-    return schedule_rule.to_s
+  # Show the orders next delivery dates, link to the delivery screen if it is within the forcast range
+  def orders_next_deliveries(order)
+    order.next_occurrences(5, Date.current).collect{|d| d <= Order::FORCAST_RANGE_FORWARD.from_now.to_date ? link_to(d.to_s(:flux_cap), date_distributor_deliveries_path(d, order.route)) : d.to_s(:flux_cap)}.join(', ').html_safe
   end
 
   def order_pause_date_formatted(order)

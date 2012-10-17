@@ -35,11 +35,13 @@ class Order < ActiveRecord::Base
   FREQUENCIES = %w(single weekly fortnightly monthly)
   IS_ONE_OFF  = false
   QUANTITY    = 1
+  FORCAST_RANGE_BACK = 9.weeks
+  FORCAST_RANGE_FORWARD = 6.weeks
 
   validates_presence_of :account_id, :box_id, :quantity, :frequency
   validates_numericality_of :quantity, greater_than: 0
   validates_inclusion_of :frequency, in: FREQUENCIES, message: "%{value} is not a valid frequency"
-  validate :schedule_includes_route
+  validate :route_includes_schedule_rule
   validate :extras_within_box_limit
 
   before_validation :activate, if: :just_completed?
@@ -51,10 +53,16 @@ class Order < ActiveRecord::Base
   scope :inactive,  where(active: false)
 
   delegate :local_time_zone, to: :distributor, allow_nil: true
-  delegate :recurs?, :pause!, :remove_pause!, :pause_date, :resume_date, :next_occurrences, to: :schedule_rule
+  delegate :start, :recurs?, :pause!, :remove_pause!, :pause_date, :resume_date, :next_occurrences, to: :schedule_rule
 
   default_value_for :extras_one_off, IS_ONE_OFF
   default_value_for :quantity, QUANTITY
+  
+  after_initialize :set_default_schedule_rule
+
+  def set_default_schedule_rule
+    self.schedule_rule ||= ScheduleRule.one_off(Date.current) if new_record?
+  end
 
   def self.deactivate_finished
     active.each do |order|
@@ -204,7 +212,7 @@ class Order < ActiveRecord::Base
   end
 
   def possible_pause_dates(look_ahead = 8.weeks)
-    start_time          = distributor.window_end_at.to_time_in_current_zone + 1.day
+    start_time          = [distributor.window_end_at.to_time_in_current_zone.to_date + 1.day, start].compact.max
     end_time            = start_time + look_ahead
     existing_pause_date = pause_date
 
@@ -322,7 +330,7 @@ class Order < ActiveRecord::Base
     order_schedule_transactions.new(order: self, schedule: self.schedule)
   end
 
-  def schedule_includes_route
+  def route_includes_schedule_rule
     unless account.route.includes?(schedule_rule)
       errors.add(:schedule_rule, "Route #{account.route.name}'s schedule '#{account.route.schedule_rule.inspect} doesn't include this order's schedule of '#{schedule_rule.inspect}'")
     end

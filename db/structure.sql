@@ -250,7 +250,7 @@ BEGIN
 
     return from_date;
   ELSE
-    IF schedule_rule.recur IS NULL THEN
+    IF schedule_rule.recur IS NULL OR schedule_rule.recur = 'single' THEN
   -- ==================== ONE OFF / SINGLE ====================
       IF from_date > schedule_rule.start THEN
         return NULL;

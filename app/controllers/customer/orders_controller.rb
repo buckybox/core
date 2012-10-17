@@ -58,7 +58,7 @@ class Customer::OrdersController < Customer::ResourceController
 
   def resume
     start_date = @order.pause_date
-    end_date   = Date.parse(params[:date]) - 1.day
+    end_date   = Date.parse(params[:date])
 
     respond_to do |format|
       if @order.pause!(start_date, end_date)

@@ -128,11 +128,11 @@ class Distributor::DeliveriesController < Distributor::ResourceController
   end
 
   def nav_start_date
-    Date.current - 9.week
+    Date.current - Order::FORCAST_RANGE_BACK
   end
   
   def nav_end_date
-    Date.current + 3.week
+    Date.current + Order::FORCAST_RANGE_FORWARD
   end
 
 end

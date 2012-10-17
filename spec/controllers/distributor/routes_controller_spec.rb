@@ -20,6 +20,7 @@ describe Distributor::RoutesController do
       specify { flash[:notice].should eq('Route was successfully created.') }
       specify { assigns(:route).name.should eq('yoda') }
       specify { response.should redirect_to(distributor_settings_routes_url) }
+      specify { assigns(:route).schedule_rule.recur.should eq(:weekly)}
     end
 
     context 'with invalid params' do

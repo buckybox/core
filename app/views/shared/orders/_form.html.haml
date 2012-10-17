@@ -1,4 +1,4 @@
-= simple_form_for(@form_params) do |f|
+= simple_form_for(@order, url: distributor_account_orders_path(@account)) do |f|
   = f.error_notification
 
   .row
@@ -7,7 +7,8 @@
         = f.association :box, collection: box_collection(@customer, with_price: true), include_blank: false, input_html: { class: 'box' }
 
         - unless @order.persisted?
-          = f.input :frequency, collection: order_frequencies, include_blank: false, input_html: { class: 'frequency' }
+          = f.simple_fields_for(:schedule_rule) do |sf|
+            = sf.input :recur, label: 'Frequency', collection: order_frequencies, include_blank: false, input_html: { class: 'frequency' }
 
         .row.order_extras
           - if current_customer
@@ -34,31 +35,31 @@
       - unless @order.persisted?
         %h3= @route.name
         .inputs
-          = label_tag :start_date, 'Start Date'
-          = select_tag :start_date, options_for_select(route_delivery_dates(@route))
+          = f.simple_fields_for(:schedule_rule) do |sf|
+            = sf.input :start, collection: route_delivery_dates(@route), include_blank: false
 
           %table.days
             %tr
-              %td= check_box_tag 'days[monday]', '1', false, disabled: !@route.monday
-              %td= label_tag :days_monday, 'Monday'
+              %td= check_box_tag 'order[schedule_rule_attributes][mon]', '1', false, disabled: !@route.mon
+              %td= label_tag :order_schedule_rule_attributes_mon, 'Monday'
             %tr
-              %td= check_box_tag 'days[tuesday]', '2', false, disabled: !@route.tuesday
-              %td= label_tag :days_tuesday, 'Tuesday'
+              %td= check_box_tag 'order[schedule_rule_attributes][tue]', '1', false, disabled: !@route.tue
+              %td= label_tag :order_schedule_rule_attributes_tue, 'Tuesday'
             %tr
-              %td= check_box_tag 'days[wednesday]', '3', false, disabled: !@route.wednesday
-              %td= label_tag :days_wednesday, 'Wednesday'
+              %td= check_box_tag 'order[schedule_rule_attributes][wed]', '1', false, disabled: !@route.wed
+              %td= label_tag :order_schedule_rule_attributes_wed, 'Wednesday'
             %tr
-              %td= check_box_tag 'days[thursday]', '4', false, disabled: !@route.thursday
-              %td= label_tag :days_thursday, 'Thursday'
+              %td= check_box_tag 'order[schedule_rule_attributes][thu]', '1', false, disabled: !@route.thu
+              %td= label_tag :order_schedule_rule_attributes_thu, 'Thursday'
             %tr
-              %td= check_box_tag 'days[friday]', '5', false, disabled: !@route.friday
-              %td= label_tag :days_friday, 'Friday'
+              %td= check_box_tag 'order[schedule_rule_attributes][fri]', '1', false, disabled: !@route.fri
+              %td= label_tag :order_schedule_rule_attributes_fri, 'Friday'
             %tr
-              %td= check_box_tag 'days[saturday]', '6', false, disabled: !@route.saturday
-              %td= label_tag :days_saturday, 'Saturday'
+              %td= check_box_tag 'order[schedule_rule_attributes][sat]', '1', false, disabled: !@route.sat
+              %td= label_tag :order_schedule_rule_attributes_sat, 'Saturday'
             %tr
-              %td= check_box_tag 'days[sunday]', '0', false, disabled: !@route.sunday
-              %td= label_tag :days_sunday, 'Sunday'
+              %td= check_box_tag 'order[schedule_rule_attributes][sun]', '1', false, disabled: !@route.sun
+              %td= label_tag :order_schedule_rule_attributes_sun, 'Sunday'
 
   .row
     .twelve.columns

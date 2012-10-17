@@ -194,7 +194,7 @@ describe Order do
 
     describe '#deactivate_finished' do
       before do
-        Order.any_instance.stub(:schedule_includes_route).and_return(true)
+        Order.any_instance.stub(:route_includes_schedule_rule).and_return(true)
 
         rule_schedule = Fabricate(:schedule_rule, start: Date.current - 2.months)
         @order1 = Fabricate(:order, schedule_rule: rule_schedule)
@@ -204,7 +204,7 @@ describe Order do
         @order2 = Fabricate(:order, schedule_rule: rule_schedule)
 
         rule_schedule = Fabricate(:schedule_rule, start: Date.current - 2.months)
-        rule_schedule.pause!(Time.current - 1.month, nil, false)
+        rule_schedule.pause!(Time.current - 1.month)
         @order3 = Fabricate(:order, schedule_rule: rule_schedule)
 
         rule_schedule = Fabricate(:schedule_rule, start: Date.current + 5.days, recur: nil)

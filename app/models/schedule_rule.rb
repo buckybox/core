@@ -259,7 +259,7 @@ class ScheduleRule < ActiveRecord::Base
     when :fortnightly
       "Fortnightly on #{days.collect{|d| d.to_s.capitalize}.join(', ')}"
     when :monthly
-      "Monthly on the first #{days.collect{|d| d.to_s.capitalize}.join(', ')}"
+      "Monthly on the 1st #{days.collect{|d| d.to_s.capitalize}.join(', ')}"
     end
   end
 

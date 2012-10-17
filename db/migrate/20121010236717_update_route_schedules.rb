@@ -16,7 +16,7 @@ class UpdateRouteSchedules < ActiveRecord::Migration
       route.distributor.use_local_time_zone do
         sr = ScheduleRule.weekly(route.created_at.to_date, days)
         sr.save!
-        sr.update_column(:scheduleable_id, sr.id)
+        sr.update_column(:scheduleable_id, route.id)
         sr.update_column(:scheduleable_type, 'Route')
       end
     end
@@ -39,7 +39,7 @@ class UpdateRouteSchedules < ActiveRecord::Migration
       route.sunday = schedule_rule.sun
 
       route.schedule_rule = nil
-      route.save!
+      route.save(validate: false)
       schedule_rule.destroy
     end
   end

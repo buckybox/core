@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Customer::OrdersController, :focus do
+describe Customer::OrdersController do
   render_views
   as_customer
 
@@ -50,8 +50,11 @@ describe Customer::OrdersController, :focus do
     describe "#resume" do
       it "should resume the order" do
         dates = order.next_occurrences(5, Date.current)
-        order.pause!(dates[4])
-        put :resume, {id: order.id, account_id: order.account_id, date: dates[3]}
+        order.pause!(dates[2])
+        put :resume, {id: order.id, account_id: order.account_id, date: dates[4]}
+        order.reload
+        order.pause_date.should eq(dates[2])
+        order.resume_date.should eq(dates[4])
       end
     end
 

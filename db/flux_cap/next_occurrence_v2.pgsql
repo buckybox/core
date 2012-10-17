@@ -124,7 +124,7 @@ BEGIN
 
     return from_date;
   ELSE
-    IF schedule_rule.recur IS NULL THEN
+    IF schedule_rule.recur IS NULL OR schedule_rule.recur = 'single' THEN
   -- ==================== ONE OFF / SINGLE ====================
       IF from_date > schedule_rule.start THEN
         return NULL;
@@ -132,7 +132,7 @@ BEGIN
         RETURN from_date;
       END IF;
     ELSE
-      RAISE EXCEPTION 'schedule_rules.recur should be NULL, weekly, fortnightly or monthly';
+      RAISE EXCEPTION 'schedule_rules.recur should be NULL, single, weekly, fortnightly or monthly';
   END IF;
   END CASE;
 
