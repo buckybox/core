@@ -1,5 +1,8 @@
-$process-info: #c2c0c3
 $section-info: #f1efe6
+$section-border-color: #ddd
+$section-padding: 10px
+$section-spacing: 25px
+$process-info: #c2c0c3
 
 $btnProcessBackground: #ab8a81 !default
 $btnProcessBackgroundHighlight: darken($btnProcessBackground, 10%) !default
@@ -25,6 +28,7 @@ body
   #information
     background-color: rgba(128, 128, 128, 0.3)
     padding: 1.5em 1em 1em 1em
+    margin-bottom: $section-spacing
     img
       +rotate(-5deg)
     h3
@@ -36,5 +40,5 @@ body
 
 .webstore-section
   border-top: 1px dashed $black
-  padding-top: 25px
-  margin-top: 25px
+  padding-top: $section-spacing
+  margin-top: $section-spacing

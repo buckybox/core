@@ -1,76 +1,81 @@
+- title('Webstore - Complete', false)
+= render 'webstore_sidebar'
+= render partial: 'webstore_order', object: @webstore_order
+
 = simple_form_for(:webstore_order, url: webstore_process_step_path) do |f|
-  .row.webstore-section
-    .ten.columns.offset-by-two
+  #webstore-address.row-fluid.webstore-section{ data: { 'has-address' => "#{@has_address ? 'true' : 'false'}" } }
+    .span10
       = f.simple_fields_for(:address) do |g|
-        #webstore-address{ data: { 'has-address' => "#{@has_address ? 'true' : 'false'}" } }
-          #existing-address
-            .row
-              .ten.columns
-                .row
-                  .twelve.columns.important Deliver To:
-                .row
-                  .twelve.columns
-                    = @address.join('<br>') if @has_address
-                    %br
-                    = link_to 'change my delivery address', '#', id: 'edit-address'
-          #update-address.inputs
-            .row
-              .ten.columns
-                .row
-                  .twelve.columns.important Your Name
-                .row
-                  .twelve.columns= g.input :name, label: false, input_html: { value: @customer_name, class: 'expand' }
-            .row
-              .ten.columns
-                .row
-                  .twelve.columns.important Deliver To:
-                .row
-                  .twelve.columns
-                    = g.input :street_address, input_html: { value: @street_address, class: 'expand' }
-                    = g.input :street_address_2, label: false, input_html: { value: @street_address_2, class: 'expand' }, required: false
-                    = g.input :suburb, input_html: { value: @suburb, class: 'expand' }, required: false
-                    = g.input :city, required: false, input_html: { value: @city, class: 'expand' }, wrapper_html: { id: 'city' }
-                    = g.input :post_code, required: false, input_html: { value: @post_code, class: 'expand' }, wrapper_html: { id: 'postal_code' }
+        #existing-address.row-fluid
+          .span12
+            .row-fluid
+              .span12
+                %h4 Deliver To:
+            .row-fluid
+              .span12
+                = @address.join('<br>') if @has_address
+                %br
+                = link_to 'change my delivery address', '#', id: 'edit-address'
+        #update-address.row-fluid
+          .span12
+            .row-fluid
+              .span12
+                %h4 Your Name
+            .row-fluid
+              .span12= g.input :name, label: false, placeholder: 'Enter your name', input_html: { value: @customer_name, class: 'span12' }
+            .row-fluid
+              .span12
+                %h4 Deliver To
+            .row-fluid
+              .span12
+                = g.input :street_address, label: false, placeholder: 'Street', input_html: { value: @street_address, class: 'span12' }
+                = g.input :street_address_2, label: false, placeholder: 'Street', label: false, input_html: { value: @street_address_2, class: 'span12' }, required: false
+                = g.input :suburb, label: false, placeholder: 'Suburb', input_html: { value: @suburb, class: 'span12' }, required: false
+            .row-fluid
+              .span9= g.input :city, label: false, placeholder: 'City', required: false, input_html: { value: @city, class: 'span12' }, wrapper_html: { id: 'city' }
+              .span3= g.input :post_code, label: false, placeholder: 'Post code', required: false, input_html: { value: @post_code, class: 'span12' }, wrapper_html: { id: 'postal_code' }
 
   - if customer_signed_in?
-    .row.webstore-section
-      .ten.columns.offset-by-two
-        .row
-          .ten.columns.important Your existing account balance with us
-          .two.columns.important.text-right= @current_balance.format
-        .row
-          .ten.columns.important This order
-          .two.columns.important.text-right== (#{@order_price.format})
-        .row
-          .ten.columns.important Closing balance
-          .two.columns.important.text-right= @closing_balance.format
+    #webstore-balance.row-fluid.webstore-section.important
+      .span10
+        %div Your existing account balance with us
+        %div This order
+        %div Balance owing
+      .span2
+        .text-right= @current_balance.format
+        .text-right= (@order_price * -1).format
+        .text-right.total= @closing_balance.format
 
-  .row.webstore-section
-    .ten.columns.offset-by-two
-      .row
-        .ten.columns
-          .webstore-grey-note.important
+  .row-fluid.webstore-section
+    #webstore-payment.span12
+      .row-fluid
+        #amount-due.span12
+          .row-fluid.important
             - if customer_signed_in? && @closing_balance.positive?
-              Your account is in credit
-              %small No payment necessary
+              .span10 Your account is in credit
+              .span2.text-right No payment necessary
             - else
-              == Total Amount Due #{@amount_due.format}
-      .row
-        .ten.columns
-          %p
-            %strong== Please deposit funds into #{@bank.name}
-            %br
-            == Account Name: #{@bank.account_name}
-            %br
-            == BSB Number: #{@bank.bsb_number}
-            %br
-            == Account Number: #{@bank.account_number}
-            - if customer_signed_in?
+              .span10 Total Amount Due
+              .span2.text-right= @amount_due.format
+      .row-fluid
+        #payment.span12
+          .row-fluid
+            .span12
+              %strong== Please deposit funds into #{@bank.name}
+          .row-fluid
+            .span6
+              == Account Name: #{@bank.account_name}
               %br
-              == Reference: #{current_customer.number}
-          %p= simple_format(@bank.customer_message)
+              == BSB Number: #{@bank.bsb_number}
+              %br
+              == Account Number: #{@bank.account_number}
+              - if customer_signed_in?
+                %br
+                == Reference: #{current_customer.number}
+            .span6.alert
+              = simple_format("<strong>Note:</strong> #{@bank.customer_message}", {}, sanitize: false)
 
-  .row
-    .twelve.columns
+  .row-fluid
+    .span12
       = f.input :complete, as: :hidden, input_html: { value: true }
-      .actions= f.button :submit, 'Complete Order', class: 'float-right'
+      = f.button :submit, 'Complete Order', class: 'pull-right btn btn-process'
