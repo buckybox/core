@@ -7,6 +7,18 @@ $process-info: #c2c0c3
 $btnProcessBackground: #ab8a81 !default
 $btnProcessBackgroundHighlight: darken($btnProcessBackground, 10%) !default
 
+=webstore-divider($top: true, $right: true, $bottom: true, $left: true)
+  border-color: $grayLight
+  border-style: dashed
+  @if $top
+    border-top-width: 1px
+  @if $right
+    border-right-width: 1px
+  @if $bottom
+    border-bottom-width: 1px
+  @if $left
+    border-left-width: 1px
+
 .btn-process
   +buttonBackground($btnProcessBackground, $btnProcessBackgroundHighlight)
 
@@ -39,6 +51,6 @@ body
       margin-bottom: 2em
 
 .webstore-section
-  border-top: 1px dashed $black
+  +webstore-divider(true)
   padding-top: $section-spacing
   margin-top: $section-spacing
