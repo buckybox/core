@@ -13,7 +13,6 @@ class Order < ActiveRecord::Base
   has_many :deliveries
   has_many :exclusions,                  autosave: true
   has_many :substitutions,               autosave: true
-  has_many :order_schedule_transactions, autosave: true
   has_many :order_extras,                autosave: true
 
   has_many :extras, through: :order_extras
@@ -27,7 +26,7 @@ class Order < ActiveRecord::Base
 
   acts_as_taggable
 
-  attr_accessible :box, :box_id, :account, :account_id, :quantity, :completed, :frequency, 
+  attr_accessible :box, :box_id, :account, :account_id, :quantity, :completed, 
     :order_extras, :extras_one_off, :schedule_rule_attributes
 
   accepts_nested_attributes_for :schedule_rule
@@ -38,9 +37,8 @@ class Order < ActiveRecord::Base
   FORCAST_RANGE_BACK = 9.weeks
   FORCAST_RANGE_FORWARD = 6.weeks
 
-  validates_presence_of :account_id, :box_id, :quantity, :frequency
+  validates_presence_of :account_id, :box_id, :quantity
   validates_numericality_of :quantity, greater_than: 0
-  validates_inclusion_of :frequency, in: FREQUENCIES, message: "%{value} is not a valid frequency"
   validate :route_includes_schedule_rule
   validate :extras_within_box_limit
 
@@ -80,22 +78,6 @@ class Order < ActiveRecord::Base
     order_ids = Order.where(customers: { route_id: route.id }).joins(:customer).map(&:id)
     # The join causes the returned models to be read-only. Thus, must to another search to get updateable models returned.
     Order.where(id: order_ids)
-  end
-
-  def create_schedule(start_time, frequency, days_by_number = nil)
-    if start_time.is_a?(String)
-      start_time = Time.zone.parse(start_time)
-    elsif start_time.is_a?(Date)
-      start_time = start_time.to_time_in_current_zone
-    end
-
-    # FIXME: Shouldn't need a special case for single. Fix API. Also, see webstore model version.
-    if frequency == 'single'
-      create_schedule_for(:schedule, start_time, frequency)
-    elsif !days_by_number.nil?
-      days_by_number = days_by_number.values.map(&:to_i) if days_by_number.is_a?(Hash)
-      create_schedule_for(:schedule, start_time, frequency, days_by_number)
-    end
   end
 
   def update_exclusions(line_item_ids)
@@ -324,10 +306,6 @@ class Order < ActiveRecord::Base
 
   def update_next_occurrence
     customer.update_next_occurrence.save!
-  end
-
-  def record_schedule_change
-    order_schedule_transactions.new(order: self, schedule: self.schedule)
   end
 
   def route_includes_schedule_rule

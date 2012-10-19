@@ -82,12 +82,12 @@ describe WebstoreOrder do
 
     describe '#scheduled?' do
       context 'when there is a schedule' do
-        before { webstore_order.stub(:schedule) { { start_time: Time.current } } }
+        before { webstore_order.stub(:schedule_rule) { { start: Date.current } } }
         its(:scheduled?) { should be_true }
       end
 
       context 'when there is not a schedule' do
-        before { webstore_order.stub(:schedule) { nil } }
+        before { webstore_order.stub(:schedule_rule) { nil } }
         its(:scheduled?) { should be_false }
       end
     end

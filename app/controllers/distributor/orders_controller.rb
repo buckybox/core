@@ -20,7 +20,6 @@ class Distributor::OrdersController < Distributor::ResourceController
     order_hash.merge!({ account_id: @account.id, completed: true })
 
     @order = Order.new(order_hash)
-    @order.create_schedule(params[:start_date], params[:order][:frequency], params[:days])
 
     create!  do |success, failure|
       @order.update_exclusions(params[:dislikes_input])

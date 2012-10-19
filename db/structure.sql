@@ -258,7 +258,7 @@ BEGIN
         RETURN from_date;
       END IF;
     ELSE
-      RAISE EXCEPTION 'schedule_rules.recur should be NULL, weekly, fortnightly or monthly';
+      RAISE EXCEPTION 'schedule_rules.recur should be NULL, single, weekly, fortnightly or monthly';
   END IF;
   END CASE;
 
@@ -1234,12 +1234,10 @@ CREATE TABLE orders (
     id integer NOT NULL,
     box_id integer,
     quantity integer DEFAULT 1 NOT NULL,
-    frequency character varying(255) DEFAULT 'single'::character varying NOT NULL,
     completed boolean DEFAULT false NOT NULL,
     created_at timestamp without time zone,
     updated_at timestamp without time zone,
     account_id integer,
-    schedule text,
     active boolean DEFAULT false NOT NULL,
     extras_one_off boolean DEFAULT true
 );
@@ -1427,13 +1425,6 @@ CREATE TABLE routes (
     id integer NOT NULL,
     distributor_id integer,
     name character varying(255),
-    monday boolean DEFAULT false NOT NULL,
-    tuesday boolean DEFAULT false NOT NULL,
-    wednesday boolean DEFAULT false NOT NULL,
-    thursday boolean DEFAULT false NOT NULL,
-    friday boolean DEFAULT false NOT NULL,
-    saturday boolean DEFAULT false NOT NULL,
-    sunday boolean DEFAULT false NOT NULL,
     created_at timestamp without time zone,
     updated_at timestamp without time zone,
     fee_cents integer DEFAULT 0 NOT NULL,
@@ -2975,3 +2966,5 @@ INSERT INTO schema_migrations (version) VALUES ('20121010231051');
 INSERT INTO schema_migrations (version) VALUES ('20121010232812');
 
 INSERT INTO schema_migrations (version) VALUES ('20121010236717');
+
+INSERT INTO schema_migrations (version) VALUES ('20121018021812');

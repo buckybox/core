@@ -29,10 +29,9 @@ class Customer::OrdersController < Customer::ResourceController
 
   def pause
     start_date = Date.parse(params[:date])
-    end_date   = Bucky::Schedule.until_further_notice(start_date)
 
     respond_to do |format|
-      if @order.pause!(start_date, end_date)
+      if @order.pause!(start_date)
         date = @order.pause_date
         json = { id: @order.id, date: date, formatted_date: date.to_s(:pause), resume_dates: @order.possible_resume_dates }
         format.json { render json: json }

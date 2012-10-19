@@ -100,24 +100,7 @@ describe Order do
       end
     end
 
-    context '#create_schedule' do
-      Delorean.time_travel_to(Date.parse('2013-02-02')) do
-        before { order.save }
-
-        context 'exceptions' do
-          %w(weekly fortnightly monthly).each do |frequency|
-            specify { order.create_schedule(Time.current, frequency).should be_nil }
-          end
-        end
-
-        specify { order.create_schedule(Time.current, 'single').to_s.should == Time.current.strftime("%B %e, %Y") }
-        specify { order.create_schedule(Time.current, 'weekly', [1, 3]).to_s.should == 'Weekly on Mondays and Wednesdays' }
-        specify { order.create_schedule(Time.current, 'fortnightly', [1, 3]).to_s.should == 'Every 2 weeks on Mondays and Wednesdays' }
-        specify { order.create_schedule(Time.current, 'monthly', [1, 3]).to_s.should == 'Monthly on the 1st Monday when it is the 1st Wednesday' }
-      end
-    end
-
-    context :schedule do
+    context :schedule_rule do
       before do
         order.save
         @route = Fabricate(:route, distributor: order.distributor)
