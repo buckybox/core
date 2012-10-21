@@ -9,41 +9,43 @@
         - total = Money.new(0, webstore_order.currency) # logic in the views, gross
 
         %tr#description
-          %td
-            %h3= webstore_order.box_name
-            %p= simple_format(webstore_order.box_description)
+          %td.description
+            %h1= webstore_order.box_name
+            = simple_format(webstore_order.box_description)
           %td.price
             - total += webstore_order.box_price
             = webstore_order.box_price.format
         - if webstore_order.customised?
           %tr#customisation
-            %td
-              %h4== Exclude & substitute
+            %td.description
+              %h2== Exclude & substitute
               %div{ title: webstore_order.customisation_description }= truncate(webstore_order.customisation_description, length: 100)
-            %td
+            %td.price
           - unless webstore_order.extras.empty?
             %tr#extras
-              %td
-                %h4 Extra items
+              %td.description
+                %h2 Extra items
                 %div{ title: webstore_order.extras_description }
               %td.price
                 - total += webstore_order.order_extras_price
                 = webstore_order.order_extras_price.format
         - if webstore_order.scheduled?
           %tr#route
-            %td
-              %h4 Delivery service
+            %td.description
+              %h2 Delivery service
             %td.price
               - total += webstore_order.route_fee
               = webstore_order.route_fee.format
           - if webstore_order.has_bucky_fee?
             %tr#bucky-fee
-              %td 
-                %h4 Bucky Box transaction fee
+              %td.description
+                %h2 Bucky Box transaction fee
               %td.price
                 - total += webstore_order.bucky_fee
                 = webstore_order.bucky_fee.format
+        - if webstore_order.customised? || webstore_order.scheduled?
           %tr#total
-            %td
-              %h3 Total:
-            %td.total.price= total.format
+            %td.description
+              %h1 Total:
+            %td.price
+              %span= total.format
