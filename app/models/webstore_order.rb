@@ -137,11 +137,16 @@ class WebstoreOrder < ActiveRecord::Base
     return @order_price_mem
   end
 
+  def exclusions_string
+    exclusion_objects.map(&:name).join(', ')
+  end
+
+  def substitutions_string
+    substitution_objects.map(&:name).join(', ')
+  end
+
   def customisation_description
     unless @customisation_description_mem
-      exclusions_string = exclusion_objects.map(&:name).join(', ')
-      substitution_string = substitution_objects.map(&:name).join(', ')
-
       unless exclusions_string.blank?
         @customisation_description_mem = "Exclude #{exclusions_string}"
         @customisation_description_mem += "/ Substitute #{substitution_string}" unless substitution_string.blank?
@@ -151,10 +156,18 @@ class WebstoreOrder < ActiveRecord::Base
     return @customisation_description_mem
   end
 
+  def extra_string(extra_object)
+    "#{extra_object.name} (#{extra_object.unit})"
+  end
+
+  def extra_count(extra_object)
+    extras[extra_object.id.to_s]
+  end
+
   def extras_description
     unless @extras_description_mem
       @extras_description_mem = extras.map do |id, count|
-        extra_object = extra_objects.find{ |extra| extra.id == id.to_i }
+        extra_object = extra_objects.find { |extra| extra.id == id.to_i }
         "#{count}x #{extra_object.name} #{extra_object.unit}"
       end.join(', ')
 
