@@ -23,6 +23,7 @@ class Order < ActiveRecord::Base
   scope :active, where(active: true)
 
   after_save :update_next_occurrence #This is an after call because it works at the database level and requires the information to be commited
+  after_destroy :update_next_occurrence
 
   acts_as_taggable
 
@@ -293,7 +294,7 @@ class Order < ActiveRecord::Base
   end
 
   def schedule_changed(schedule_rule)
-    #TODO
+    update_next_occurrence
   end
 
   protected

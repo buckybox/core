@@ -176,7 +176,7 @@ class Customer < ActiveRecord::Base
 
   def update_next_occurrence(date = nil)
     date ||= Date.current.to_s(:db)
-    next_order = orders.active.select("orders.*, next_occurrence('#{date}', schedule_rules.*)").joins(:schedule_rule).reject{|sr| sr.next_occurrence.blank?}.sort_by(&:next_occurrence).first
+    next_order = orders.active.select("orders.*, next_occurrence('#{date}', false, schedule_rules.*)").joins(:schedule_rule).reject{|sr| sr.next_occurrence.blank?}.sort_by(&:next_occurrence).first
     if next_order
       self.next_order = next_order
       self.next_order_id = next_order.id

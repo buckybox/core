@@ -3,7 +3,7 @@ class ScheduleRule < ActiveRecord::Base
   attr_accessor :next_occurrence
 
   DAYS = [:sun, :mon, :tue, :wed, :thu, :fri, :sat] #Order of this is important, it matches sunday: 0, monday: 1 as is standard
-  RECUR = [:one_off, :weekly, :fortnightly, :monthly]
+  RECUR = [:single, :weekly, :fortnightly, :monthly]
 
   belongs_to :scheduleable, polymorphic: true, inverse_of: :schedule_rule
   belongs_to :schedule_pause, dependent: :destroy
@@ -12,7 +12,7 @@ class ScheduleRule < ActiveRecord::Base
     select("schedule_rules.*, next_occurrence('#{date.to_s(:db)}', #{ignore_pauses}, schedule_rules.*) as next_occurrence")
   end)
 
-  before_save :notify_associations
+  after_save :notify_associations
   after_save :record_schedule_transaction, if: :changed?
 
   DAYS.each do |day|

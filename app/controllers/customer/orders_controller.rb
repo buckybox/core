@@ -31,7 +31,7 @@ class Customer::OrdersController < Customer::ResourceController
     start_date = Date.parse(params[:date])
 
     respond_to do |format|
-      if @order.pause!(start_date)
+      if @order.pause!(start_date, @order.resume_date)
         date = @order.pause_date
         json = { id: @order.id, date: date, formatted_date: date.to_s(:pause), resume_dates: @order.possible_resume_dates }
         format.json { render json: json }
