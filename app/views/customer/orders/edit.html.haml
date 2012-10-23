@@ -1,6 +1,7 @@
-= customer_title(current_customer, link: customer_root_path, title: "Update Order for #{customer_and_number(current_customer)}")
+- title(customer_and_number(current_customer), false)
 
-= render partial: 'form'
+- content_for :sidebar do
+  %strong Existing Order
 
-= link_to 'Cancel', customer_root_path
+= render 'form'
 
