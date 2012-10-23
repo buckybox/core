@@ -21,6 +21,38 @@ $btnProcessBackgroundHighlight: darken($btnProcessBackground, 10%) !default
     margin: $section-spacing 0px
     padding: $section-padding
 
+=order-frame
+  background-color: $white
+  border: 1px solid $section-border-color
+  padding: $section-padding
+  overflow: hidden
+  position: relative
+  +single-box-shadow(rgba(0, 0, 0, .25), 0px, 15px, 20px, -6px)
+  .section-info-background
+    background-color: $section-info
+    position: absolute
+    top: 0
+    right: 0
+    z-index: 0
+    height: 100%
+    width: 14%
+  .section-info
+    position: relative
+    h1, h2, .price
+      margin: 0px
+      font-weight: bold
+    h1
+      font-size: 20px
+      line-height: 22px
+    h2, .price
+      font-size: 16px
+      line-height: 18px
+    #total .price
+      font-size: 24px
+      line-height: 26px
+    .price
+      text-align: right
+
 body
   background: $white url('webstore-background.png') repeat
   >.container-fluid
@@ -30,7 +62,6 @@ body
 $tableBackground: $white
 
 table
-  background-color: $white
   &.no-rounded-corners
     +border-radius(0px)
     thead:first-child

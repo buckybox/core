@@ -1,0 +1,25 @@
+.row-fluid
+  .span12.customer-order
+    .section-info-background
+
+    %table.section-info
+      %tbody
+        %tr
+          %td#description
+            %h2= order.box.name
+            - unless order.extras.empty?
+              %br
+              == Extras: #{order.extras_description(true)}
+            %br
+            = link_to 'edit order', edit_customer_order_path(order)
+          %td#thumb{ rowspan: 2 }= image_tag(order.box.box_image.thumb.url)
+          %td#total
+            .price= order.price.format
+        %tr.bottom-section
+          %td
+            - if order.reoccurs?
+              %h2= order_schedule(order, exception_rules: false, exception_times: false)
+              = render partial: 'customer/orders/pausing', locals: { order: order }
+            - else
+              %h2 Single order delivery
+          %td

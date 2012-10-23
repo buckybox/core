@@ -6,12 +6,8 @@
     #new-customer-order.span12= link_to 'create new order from webstore', webstore_store_path(@distributor.parameter_name)
 
 - unless @orders.empty?
-  .row-fluid
-    .span12= render 'customer/orders/index'
+  = render partial: 'customer/orders/order', collection: @orders
 
 - unless @transactions.empty?
-  .row-fluid
-    .span12
-      %h3 Account Statement
-      = render 'customer/transactions/index'
+  = render 'customer/transactions/index'
 
