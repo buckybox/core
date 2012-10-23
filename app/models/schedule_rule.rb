@@ -234,11 +234,15 @@ class ScheduleRule < ActiveRecord::Base
   end
 
   def pause_date
-    schedule_pause && schedule_pause.start
+    !pause_expired? && schedule_pause.start
   end
 
   def resume_date
-    schedule_pause && schedule_pause.finish
+    !pause_expired? && schedule_pause.finish
+  end
+
+  def pause_expired?(date = Date.current)
+    schedule_pause.nil? || (!schedule_pause.finish.nil? && schedule_pause.finish < date)
   end
 
   def remove_pause

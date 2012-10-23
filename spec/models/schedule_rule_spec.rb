@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe ScheduleRule do
+describe ScheduleRule, :focus do
   let(:all_days){ScheduleRule::DAYS}
   context :one_off do
     let(:date){ Date.parse('2012-08-20') } #monday
@@ -374,6 +374,12 @@ describe ScheduleRule do
       schedule_rule.pause(Date.current, Date.current + 4.days)
       schedule_rule.pause_date.should eq(Date.current)
     end
+
+    it "should be blank if pause has expired" do
+      sr = ScheduleRule.weekly("2012-10-01")
+      sr.pause!("2012-09-01", "2012-09-29")
+      sr.pause_date.should be_blank
+    end
   end
 
   describe ".resume_date" do
@@ -428,5 +434,13 @@ describe ScheduleRule do
     specify {ScheduleRule.monthly(Date.parse("2012-10-16"), [:mon]).to_s.should eq("Monthly on the 1st Mon")}
 
     specify {ScheduleRule.weekly(Date.parse("2012-10-17"), ScheduleRule::DAYS).to_s.should eq("Weekly on Sun, Mon, Tue, Wed, Thu, Fri, Sat")}
+  end
+
+  describe ".pause_expired?" do
+    it "should return true if a pause has expired" do
+      sr = ScheduleRule.weekly("2012-10-01")
+      sr.pause!("2012-09-01", "2012-09-29")
+      sr.pause_expired?.should be_true
+    end
   end
 end

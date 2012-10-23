@@ -36,12 +36,12 @@ module OrdersHelper
 
   def order_pause_date_formatted(order)
     date = order.pause_date
-    return date.nil? ? '' : date.to_s(:pause)
+    return date ? date.to_s(:pause) : ''
   end
 
   def order_resume_date_formatted(order)
     date = order.resume_date
-    return date.nil? ? '' : date.to_s(:pause)
+    return date ? date.to_s(:pause) : ''
   end
 
   def all_order_start_dates(distributor, count = 14)
