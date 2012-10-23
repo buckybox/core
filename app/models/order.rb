@@ -267,6 +267,15 @@ class Order < ActiveRecord::Base
     return select_array || []
   end
 
+  def extra_string(extra)
+    "#{extra.name} (#{extra.unit})"
+  end
+
+  def extra_count(extra)
+    order_extra = order_extras.where(extra_id: extra.id)
+    order_extra.count if order_extra
+  end
+
   def extras_description(show_frequency = false)
     extras_string = Package.extras_description(order_extras)
 
@@ -277,10 +286,15 @@ class Order < ActiveRecord::Base
     end
   end
 
-  def customisation_description
-    exclusions_string = exclusions.includes(:line_item).map(&:name).join(', ')
-    substitution_string = substitutions.includes(:line_item).map(&:name).join(', ')
+  def exclusions_string
+    exclusions.includes(:line_item).map(&:name).join(', ')
+  end
 
+  def substitutions_string
+    substitutions.includes(:line_item).map(&:name).join(', ')
+  end
+
+  def customisation_description
     unless exclusions_string.blank?
       result_string = "Exclude #{exclusions_string}"
       result_string += "/ Substitute #{substitution_string}" unless substitution_string.blank?

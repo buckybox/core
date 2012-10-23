@@ -20,30 +20,33 @@
             %td.description
               %h2== Exclude & substitute
               %table.sub-section-info
-                %tr
-                  %td.icon
-                    %i.icon-minus-sign
-                  %td{ title: webstore_order.exclusions_string }
-                    = webstore_order.exclusions_string
-                %tr
-                  %td
-                    %i.icon-plus-sign
-                  %td{ title: webstore_order.substitutions_string }
-                    = webstore_order.substitutions_string
+                - unless webstore_order.exclusions.empty?
+                  %tr
+                    %td.icon
+                      %i.icon-minus-sign
+                    %td{ title: webstore_order.exclusions_string }
+                      = webstore_order.exclusions_string
+                - unless webstore_order.substitutions.empty?
+                  %tr
+                    %td
+                      %i.icon-plus-sign
+                    %td{ title: webstore_order.substitutions_string }
+                      = webstore_order.substitutions_string
             %td.price
           - unless webstore_order.extras.empty?
             %tr#extras
               %td.description
                 %h2 Extra items
                 %table.sub-section-info
-                  - webstore_order.extra_objects.each do |extra_object|
-                    %tr
-                      %td.icon
-                        %i.icon-plus
-                      %td
-                        = webstore_order.extra_string(extra_object)
-                      %td.quantity
-                        %span.badge= webstore_order.extra_count(extra_object)
+                  - unless webstore_order.extras.empty?
+                    - webstore_order.extra_objects.each do |extra_object|
+                      %tr
+                        %td.icon
+                          %i.icon-plus
+                        %td
+                          = webstore_order.extra_string(extra_object)
+                        %td.quantity
+                          %span.badge= webstore_order.extra_count(extra_object)
                 %div{ title: webstore_order.extras_description }
               %td.price
                 - total += webstore_order.order_extras_price
