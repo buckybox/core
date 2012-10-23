@@ -31,7 +31,6 @@ class Order < ActiveRecord::Base
 
   accepts_nested_attributes_for :schedule_rule
 
-  FREQUENCIES = %w(single weekly fortnightly monthly)
   IS_ONE_OFF  = false
   QUANTITY    = 1
   FORCAST_RANGE_BACK = 9.weeks
@@ -51,7 +50,7 @@ class Order < ActiveRecord::Base
   scope :inactive,  where(active: false)
 
   delegate :local_time_zone, to: :distributor, allow_nil: true
-  delegate :start, :recurs?, :pause!, :remove_pause!, :pause_date, :resume_date, :next_occurrences, to: :schedule_rule
+  delegate :start, :recurs?, :pause!, :remove_pause!, :pause_date, :resume_date, :next_occurrences, :remove_day, to: :schedule_rule
 
   default_value_for :extras_one_off, IS_ONE_OFF
   default_value_for :quantity, QUANTITY
@@ -146,11 +145,6 @@ class Order < ActiveRecord::Base
     end
 
     return results
-  end
-
-  def remove_day(day)
-    remove_recurrence_rule_day(day)
-    remove_recurrence_times_on_day(day)
   end
 
   def deactivate_for_day!(day)

@@ -3,7 +3,7 @@ DeliveryForDistributor = Struct.new(:delivery, :package)
 def delivery_and_package_for_distributor(distributor, route, box, date, position)
   customer = Fabricate(:customer, distributor: distributor, route: route)
   account  = Fabricate(:account, customer: customer)
-  order    = Fabricate(:active_order, account: account, box: box, schedule: new_everyday_schedule, frequency: 'weekly')
+  order    = Fabricate(:active_order, account: account, box: box, schedule_rule: new_everyday_schedule)
 
   delivery_list = distributor.delivery_lists.where(date: date).first
   delivery_list ||= Fabricate(:delivery_list, distributor: distributor, date: date)

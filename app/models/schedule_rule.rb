@@ -234,11 +234,13 @@ class ScheduleRule < ActiveRecord::Base
   end
 
   def pause_date
-    !pause_expired? && schedule_pause.start
+    result = !pause_expired? && schedule_pause.start
+    result ? result : nil
   end
 
   def resume_date
-    !pause_expired? && schedule_pause.finish
+    result = !pause_expired? && schedule_pause.finish
+    result ? result : nil
   end
 
   def pause_expired?(date = Date.current)
@@ -252,6 +254,41 @@ class ScheduleRule < ActiveRecord::Base
   def remove_pause!
     remove_pause
     save!
+  end
+
+  def remove_day(day)
+    self.send("#{to_day(day).to_s}=", false)
+  end
+
+  def remove_day!(day)
+    remove_day(day)
+    save!
+  end
+
+  def to_day(something)
+    translate = {sunday: 0,
+    monday: 1,
+    tuesday: 2,
+    wednesday: 3,
+    thursday: 4,
+    friday: 5,
+    saturday: 6,
+    sun:0,
+    mon: 1,
+    tue: 2,
+    wed: 3,
+    thu: 4,
+    fri: 5,
+    sat: 6}
+
+    if something.is_a?(Symbol)
+      raise "#{something} is not understood as a day of the week" unless translate.include?(something)
+      return DAYS[translate[something]]
+    elsif something.is_a?(Fixnum) and (0..6).include?(something)
+      return DAYS[something]
+    else
+      raise "Couldn't turn #{something} into a day, sorry! ;)"
+    end
   end
 
   def to_s

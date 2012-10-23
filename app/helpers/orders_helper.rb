@@ -10,7 +10,7 @@ module OrdersHelper
   end
 
   def order_frequencies
-    Order::FREQUENCIES.map { |frequencies| [frequencies.titleize, frequencies] }
+    ScheduleRule::RECUR.map { |frequencies| [frequencies.to_s.titleize, frequencies.to_s] }
   end
 
   def order_delete_warning(order)

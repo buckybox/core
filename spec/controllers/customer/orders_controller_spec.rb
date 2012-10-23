@@ -20,7 +20,7 @@ describe Customer::OrdersController do
 
     describe 'with invalid params' do
       before do
-        @order[:frequency] = 'all of the times!'
+        @order[:quantity] = 'all of the times!'
         put :update, { id: @id, order: @order }
       end
 

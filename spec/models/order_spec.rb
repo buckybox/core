@@ -46,13 +46,12 @@ describe Order do
 
   context 'when removing a day' do
     let(:order_scheduling) { order }
-    let(:schedule)         { double("schedule", to_hash: { a: 'b' }) }
+    let(:schedule_rule)         { double("schedule_rule", to_hash: { a: 'b' }) }
 
-    before { order_scheduling.stub(schedule: schedule) }
+    before { order_scheduling.stub(schedule_rule: schedule_rule) }
 
     it "should ask the schedule to remove rules and times for that day" do
-      schedule.should_receive(:remove_recurrence_rule_day).with(:tuesday)
-      schedule.should_receive(:remove_recurrence_times_on_day).with(:tuesday)
+      schedule_rule.should_receive(:remove_day).with(:tuesday)
       order.remove_day(:tuesday)
     end
   end
@@ -63,14 +62,6 @@ describe Order do
     context :quantity do
       specify { Fabricate.build(:order, quantity: 0).should_not be_valid }
       specify { Fabricate.build(:order, quantity: -1).should_not be_valid }
-    end
-
-    context :frequency do
-      Order::FREQUENCIES.each do |f|
-        specify { Fabricate.build(:order, frequency: f).should be_valid }
-      end
-
-      specify { Fabricate.build(:order, frequency: 'yearly').should_not be_valid }
     end
 
     context :price do
@@ -127,7 +118,6 @@ describe Order do
 
       context :weekly do
         before do
-          order.frequency = 'weekly'
           order.completed = true
 
           @schedule_rule = new_recurring_schedule
@@ -145,7 +135,6 @@ describe Order do
 
       context :fortnightly do
         before do
-          order.frequency = 'fortnightly'
           order.completed = true
 
           @schedule_rule = new_recurring_schedule

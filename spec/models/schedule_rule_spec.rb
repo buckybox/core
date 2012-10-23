@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe ScheduleRule, :focus do
+describe ScheduleRule do
   let(:all_days){ScheduleRule::DAYS}
   context :one_off do
     let(:date){ Date.parse('2012-08-20') } #monday
@@ -441,6 +441,15 @@ describe ScheduleRule, :focus do
       sr = ScheduleRule.weekly("2012-10-01")
       sr.pause!("2012-09-01", "2012-09-29")
       sr.pause_expired?.should be_true
+    end
+  end
+  
+  describe ".remove_day" do
+    it "should remove that day from the schedule" do
+      sr = ScheduleRule.weekly(Date.current, ScheduleRule::DAYS)
+      sr.mon.should be_true
+      sr.remove_day!(:monday)
+      sr.mon.should be_false
     end
   end
 end
