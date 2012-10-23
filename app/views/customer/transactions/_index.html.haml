@@ -1,31 +1,22 @@
-.row
-  %table.span12#transactions
-    %thead
+%table#customer-transactions.table.table-bordered.no-rounded-corners.no-horizontal-dividers.table-striped
+  %thead
+    %tr
+      %th Processed Date
+      %th Transaction Date
+      %th Details
+      %th.text-right Amount
+      %th.text-right Balance
+
+  %tbody
+    - transaction_total = Money.new(0, @distributor.currency) # manual calculation until we start storing historical balance
+
+    - @transactions.each do |transaction|
       %tr
-        %th
-          Transaction
-          %br
-          Processed
-        %th
-          Transaction
-          %br
-          Date
-        %th Description
-        %th Transaction
-        %th Balance
+        %td.date= transaction.created_at.to_s(:transaction)
+        %td.date= transaction.display_time.to_s(:transaction)
+        %td.details= transaction.description
+        %td.price.text-right= transaction.amount.format
+        %td.price.text-right= (@balance - transaction_total).format
 
-    %tbody
-      - transaction_total = Money.new(0, @distributor.currency) # manual calculation until we start storing historical balance
-
-      - @transactions.each do |transaction|
-        - td_class = (transaction.manual? ? '' : 'auto')
-
-        %tr
-          %td{ class: td_class }= transaction.created_at.to_s(:transaction)
-          %td{ class: td_class }= transaction.display_time.to_s(:transaction)
-          %td{ class: td_class }= transaction.description
-          %td{ class: td_class }= transaction.amount.format
-          %td{ class: td_class }= (@balance - transaction_total).format
-
-        - transaction_total += transaction.amount
+      - transaction_total += transaction.amount
 

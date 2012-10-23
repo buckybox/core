@@ -3,6 +3,7 @@ $section-border-color: #ddd
 $section-padding: 10px
 $section-spacing: 25px
 $process-info: #c2c0c3
+$secondary-background: rgba(128, 128, 128, 0.3)
 
 $btnProcessBackground: #ab8a81 !default
 $btnProcessBackgroundHighlight: darken($btnProcessBackground, 10%) !default
@@ -20,14 +21,34 @@ $btnProcessBackgroundHighlight: darken($btnProcessBackground, 10%) !default
     margin: $section-spacing 0px
     padding: $section-padding
 
-.btn-process
-  +buttonBackground($btnProcessBackground, $btnProcessBackgroundHighlight)
-
 body
   background: $white url('webstore-background.png') repeat
   >.container-fluid
     background-color: $black
     margin-bottom: 2em
+
+$tableBackground: $white
+
+table
+  background-color: $white
+  &.no-rounded-corners
+    +border-radius(0px)
+    thead:first-child
+      tr:first-child
+        th:first-child, th:last-child
+          +border-radius(0px)
+    thead:last-child
+      tr:last-child
+        th:first-child, th:last-child
+          +border-radius(0px)
+    tbody:first-child
+      tr:first-child
+        td:first-child, td:last-child
+          +border-radius(0px)
+    tbody:last-child
+      tr:last-child
+        td:first-child, td:last-child
+          +border-radius(0px)
 
 #bucky-box-controls
   a
@@ -39,7 +60,7 @@ body
 
 #content-information
   #information
-    background-color: rgba(128, 128, 128, 0.3)
+    background-color: $secondary-background
     padding: 1.5em 1em 1em 1em
     margin-bottom: $section-spacing
     img
@@ -50,6 +71,9 @@ body
       background-color: $white
       padding: 0.5em
       margin-bottom: 2em
+
+.btn-process
+  +buttonBackground($btnProcessBackground, $btnProcessBackgroundHighlight)
 
 .webstore-section
   +webstore-divider('line')

@@ -1,7 +1,7 @@
 = simple_form_for(@address, url: customer_address_path, html: { method: :put }) do |f|
-  = f.error_notification
+  .modal-body
+    = f.error_notification
 
-  .inputs
     = f.input :address_1
     = f.input :address_2
     = f.input :suburb
@@ -12,5 +12,5 @@
     = f.input :phone_3
     = f.input :delivery_note
 
-  .actions
-    = f.button :submit
+  .modal-footer
+    = f.button :submit, class: 'btn btn-primary'

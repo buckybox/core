@@ -1,0 +1,21 @@
+//----- Dashboard
+
+#new-customer-order
+  a
+    display: block
+    +webstore-divider('box')
+    margin-top: 0px
+    background-color: $secondary-background
+    color: $gray
+    text-align: center
+    text-decoration: underline
+    &:hover
+      background-color: darken($secondary-background, 10%)
+      color: $grayDark
+      border-color: $grayDark
+
+#customer-transactions
+  .date
+    width: 12%
+  .price
+    width: 12%
