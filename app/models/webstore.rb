@@ -168,17 +168,14 @@ class Webstore
     frequency = schedule_information[:frequency]
     start = Date.parse(schedule_information[:start_date])
 
-    @order.frequency = frequency
-
     if frequency == 'single'
       @order.schedule_rule = ScheduleRule.one_off(start)
     else
       if schedule_information[:days].nil?
         @controller.flash[:error] = 'The schedule requires you select a day of the week.'
       else
-        binding.pry
-        days_by_number = schedule_information[:days].map { |d| d.first.to_i }
-        @order.schedule_rule = ScheduleRule.recur_on(start, days_by_number, frequency)
+        days_by_number = schedule_information[:days].map { |d| ScheduleRule::DAYS[d.first.to_i] }
+        @order.schedule_rule = ScheduleRule.recur_on(start, days_by_number, frequency.to_sym)
       end
     end
   end

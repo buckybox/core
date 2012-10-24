@@ -20,7 +20,7 @@ class Route < ActiveRecord::Base
 
   delegate :local_time_zone, to: :distributor, allow_nil: true
   
-  delegate :includes?, :delivery_day_numbers, :next_occurrences, to: :schedule_rule, allow_nil: true
+  delegate :includes?, :delivery_day_numbers, :next_occurrences, :runs_on, to: :schedule_rule, allow_nil: true
   delegate :sun, :mon, :tue, :wed, :thu, :fri, :sat, to: :schedule_rule, allow_nil: true
 
   after_initialize :set_default_schedule_rule
@@ -44,7 +44,7 @@ class Route < ActiveRecord::Base
   end
 
   def name_days_and_fee
-    days = delivery_days.map { |d| d.to_s.titleize[0..2] }
+    days = schedule_rule.days.map { |d| d.to_s.titleize[0..2] }
 
     result = name.titleize
     result += " (#{days.join(', ')}) "

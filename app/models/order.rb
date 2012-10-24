@@ -28,7 +28,7 @@ class Order < ActiveRecord::Base
   acts_as_taggable
 
   attr_accessible :box, :box_id, :account, :account_id, :quantity, :completed, 
-    :order_extras, :extras_one_off, :schedule_rule_attributes
+    :order_extras, :extras_one_off, :schedule_rule_attributes, :schedule_rule
 
   accepts_nested_attributes_for :schedule_rule
 

@@ -16,7 +16,7 @@
                       = simple_format(route.area_of_service)
                       = simple_format(route.estimated_delivery_time)
 
-      = f.simple_fields_for(:schedule) do |g|
+      = f.simple_fields_for(:schedule_rule) do |g|
         #webstore-schedule.inputs
           .row
             .ten.columns

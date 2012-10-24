@@ -164,6 +164,10 @@ class ScheduleRule < ActiveRecord::Base
     DAYS.select{|d| on_day?(d)}
   end
 
+  def runs_on(number)
+    on_day?(DAYS[number])
+  end
+
   # returns true if the given schedule_rule occurs on a subset of this schedule_rule's occurrences
   # Only tests pauses in a basic manner, so might return false negatives
   def includes?(schedule_rule)
@@ -306,6 +310,10 @@ class ScheduleRule < ActiveRecord::Base
 
   def recurs?
     frequency.recurs?
+  end
+
+  def clone_attributes
+    attributes.slice('start', 'recur', 'sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat')
   end
 
   def self.generate_data(count)
