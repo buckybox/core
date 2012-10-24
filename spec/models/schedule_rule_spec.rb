@@ -97,6 +97,14 @@ describe ScheduleRule do
         
         schedule.occurs_on?(first_occurrence).should be_false
       end
+
+      it 'should correctly predict the next 20 occurrences' do
+        sr = ScheduleRule.monthly(Date.current, [:thu])
+        sr.save!
+        sr.next_occurrences(20, Date.current).each do |d|
+          d.wday.should eq(4)
+        end
+      end
     end
   end
 

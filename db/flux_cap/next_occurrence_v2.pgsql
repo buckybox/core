@@ -108,11 +108,7 @@ BEGIN
     return from_date + days_from_now;
   WHEN 'monthly' THEN
   -- ==================== MONTHLY ====================
-    -- If we go above the 7th of a month, we skip to the next month
-    IF date_part('day', from_date) > 7 THEN
-      from_date := date(date_part('year', from_date + '1 month'::interval)::text || '-' || date_part('month', from_date + '1 month'::interval)::text || '-01');
-    END IF;
-    FOR i IN 0..6 LOOP
+    FOR i IN 0..11 LOOP
       -- If we go above the 7th of a month, we skip to the next month
       IF date_part('day', from_date) > 7 THEN
         from_date := date(date_part('year', from_date + '1 month'::interval)::text || '-' || date_part('month', from_date + '1 month'::interval)::text || '-01');
