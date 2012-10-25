@@ -45,7 +45,7 @@ class Customer < ActiveRecord::Base
 
   delegate :separate_bucky_fee?, :consumer_delivery_fee, to: :distributor
 
-  scope :ordered_by_next_delivery, order("CASE WHEN next_order_occurrence_date IS NULL THEN '9999-01-01' ELSE next_order_occurrence_date END ASC, lower(customers.first_name) ASC, lower(customers.last_name) ASC")
+  scope :ordered_by_next_delivery, lambda { order("CASE WHEN next_order_occurrence_date IS NULL THEN '9999-01-01' WHEN next_order_occurrence_date < '#{Date.current.to_s(:db)}' THEN '9999-01-01' ELSE next_order_occurrence_date END ASC, lower(customers.first_name) ASC, lower(customers.last_name) ASC") }
 
   default_value_for :discount, 0
 
