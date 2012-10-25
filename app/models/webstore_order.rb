@@ -25,7 +25,7 @@ class WebstoreOrder < ActiveRecord::Base
   PLACED    = :placed
 
   def thumb_url
-    box.big_thumb_url
+    box.thumb_url
   end
 
   def currency

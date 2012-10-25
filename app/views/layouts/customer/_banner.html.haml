@@ -12,4 +12,7 @@
 
   #public-banner.row-fluid
     .span12.text-center
-      %h1= distributor.name
+      - if distributor.company_logo?
+        = image_tag(distributor.company_logo.banner.url)
+      - else
+        %h1= distributor.name

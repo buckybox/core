@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120927224520) do
+ActiveRecord::Schema.define(:version => 20121024025935) do
 
   create_table "accounts", :force => true do |t|
     t.integer  "customer_id"
@@ -265,6 +265,10 @@ ActiveRecord::Schema.define(:version => 20120927224520) do
     t.integer  "country_id"
     t.integer  "consumer_delivery_fee_cents"
     t.boolean  "active_webstore",                            :default => false, :null => false
+    t.string   "company_team_image"
+    t.text     "about"
+    t.text     "details"
+    t.string   "facebook_url"
   end
 
   add_index "distributors", ["authentication_token"], :name => "index_distributors_on_authentication_token", :unique => true

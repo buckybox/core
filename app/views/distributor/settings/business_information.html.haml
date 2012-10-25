@@ -10,14 +10,28 @@
       = f.input :support_email, label: 'Support Email', input_html: { class: 'span6' }
       = f.input :url, label: 'Website', input_html: { class: 'span6' }
       = f.input :time_zone, as: :time_zone, label: 'Local Timezone', input_html: { class: 'span6' }
-      = f.input :company_logo, input_html: { class: 'input-xlarge' }
+  #webstore-information.row-fluid
+    .span12
+      %h2.text-center Webstore Information
+      = f.input :company_logo, input_html: { class: 'span6' }
       = f.input :company_logo_cache, as: :hidden
 
       - if current_distributor.company_logo?
-        .uploaded_image
-          = f.input :remove_company_logo, as: :boolean, label: 'Remove image', input_html: { class: 'span6' }
-          .row-fluid
-            = image_tag(current_distributor.company_logo.url, class: 'span6 offset1')
+        = f.input :remove_company_logo, as: :boolean, label: 'Remove image', input_html: { class: 'span6' }
+        .row-fluid
+          = image_tag(current_distributor.company_logo.half_size_banner.url, class: 'span6 offset2 image-upload')
+
+      = f.input :company_team_image, input_html: { class: 'span6' }
+      = f.input :company_team_image_cache, as: :hidden
+
+      - if current_distributor.company_team_image?
+        = f.input :remove_company_team_image, as: :boolean, label: 'Remove image', input_html: { class: 'span6' }
+        .row-fluid
+          = image_tag(current_distributor.company_team_image.half_size_photo.url, class: 'span6 offset2 image-upload')
+
+      = f.input :about, input_html: { class: 'span6' }
+      = f.input :details, input_html: { class: 'span6' }
+      = f.input :facebook_url, as: :url, input_html: { class: 'span6' }
 
       %fieldset
         %legend Delivery Window

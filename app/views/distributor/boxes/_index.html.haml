@@ -16,7 +16,7 @@
       %tbody
         - @boxes.each do |box|
           %tr
-            %td= image_tag(box.box_image.small_thumb.url)
+            %td= image_tag(box.box_image.tiny_thumb.url)
             %td= box.name
             %td= box.price.format
             %td= checkmark_boolean(box.hidden)

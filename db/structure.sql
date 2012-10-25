@@ -812,7 +812,11 @@ CREATE TABLE distributors (
     bank_deposit_format character varying(255),
     country_id integer,
     consumer_delivery_fee_cents integer,
-    active_webstore boolean DEFAULT false NOT NULL
+    active_webstore boolean DEFAULT false NOT NULL,
+    company_team_image character varying(255),
+    about text,
+    details text,
+    facebook_url character varying(255)
 );
 
 
@@ -2891,3 +2895,5 @@ INSERT INTO schema_migrations (version) VALUES ('20120927042204');
 INSERT INTO schema_migrations (version) VALUES ('20120927055104');
 
 INSERT INTO schema_migrations (version) VALUES ('20120927224520');
+
+INSERT INTO schema_migrations (version) VALUES ('20121024025935');

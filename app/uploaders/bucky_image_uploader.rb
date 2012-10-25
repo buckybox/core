@@ -21,19 +21,22 @@ class BuckyImageUploader < CarrierWave::Uploader::Base
     asset_path("fallbacks/#{model.class.to_s.underscore}/#{mounted_as}/" + [version_name, "default.jpg"].compact.join('_'))
   end
 
-  # Process files as they are uploaded:
-  process resize_to_fit: [800, 800]
+  def default?
+    default_url && default_url == url
+  end
 
-  # Create different versions of your uploaded files:
-  version :big_thumb do
+  # Process files as they are uploaded:
+  process resize_to_fit: [1280, 800]
+
+  version :thumb do
     process resize_to_fill: [300, 300]
   end
 
-  version :thumb, from_version: :big_thumb do
+  version :small_thumb, from_version: :thumb do
     process resize_to_fill: [100, 100]
   end
 
-  version :small_thumb, from_version: :big_thumb do
+  version :tiny_thumb, from_version: :thumb do
     process resize_to_fill: [50, 50]
   end
 

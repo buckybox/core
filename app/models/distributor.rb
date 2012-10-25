@@ -33,16 +33,17 @@ class Distributor < ActiveRecord::Base
   devise :database_authenticatable, :recoverable, :rememberable, :trackable, :validatable
 
   mount_uploader :company_logo, CompanyLogoUploader
+  mount_uploader :company_team_image, CompanyTeamImageUploader
 
   monetize :invoice_threshold_cents
   monetize :consumer_delivery_fee_cents
 
   # Setup accessible (or protected) attributes for your model
-  attr_accessible :email, :password, :password_confirmation, :remember_me, :name, :url, :company_logo,
-    :company_logo_cache, :completed_wizard, :remove_company_logo, :support_email, :invoice_threshold,
-    :separate_bucky_fee, :advance_hour, :advance_days, :automatic_delivery_hour, :time_zone, :currency,
-    :bank_deposit, :paypal, :bank_deposit_format, :country_id, :consumer_delivery_fee,
-    :consumer_delivery_fee_cents, :active_webstore
+  attr_accessible :email, :password, :password_confirmation, :remember_me, :name, :url, :company_logo, :company_logo_cache,
+    :remove_company_logo, :company_team_image, :company_team_image_cache, :remove_company_team_image, :completed_wizard,
+    :support_email, :invoice_threshold, :separate_bucky_fee, :advance_hour, :advance_days, :automatic_delivery_hour,
+    :time_zone, :currency, :bank_deposit, :paypal, :bank_deposit_format, :country_id, :consumer_delivery_fee,
+    :consumer_delivery_fee_cents, :active_webstore, :about, :details, :facebook_url
 
   validates_presence_of :country
   validates_presence_of :email
