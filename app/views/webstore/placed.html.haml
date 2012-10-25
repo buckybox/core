@@ -12,9 +12,9 @@
         = @address.join('<br>')
       .span6
         .important Delivery Date
-        = @schedule.next_occurrence.to_s(:day_month_date_year)
+        = @schedule_rule.next_occurrence.to_s(:day_month_date_year)
         %br
-        = @schedule
+        = @schedule_rule
 
 .row-fluid
   .span12.text-center

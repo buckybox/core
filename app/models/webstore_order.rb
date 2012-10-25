@@ -13,7 +13,7 @@ class WebstoreOrder < ActiveRecord::Base
   serialize :substitutions, Array
   serialize :extras, Hash
 
-  schedule_for :schedule
+  has_one :schedule_rule, as: :scheduleable, inverse_of: :scheduleable, autosave: true, dependent: :destroy
 
   attr_accessible :box, :remote_ip
 
@@ -23,6 +23,10 @@ class WebstoreOrder < ActiveRecord::Base
   DELIVERY  = :delivery
   COMPLETE  = :complete
   PLACED    = :placed
+
+  def set_default_schedule_rule
+    self.schedule_rule ||= ScheduleRule.one_off(Date.current) if new_record?
+  end
 
   def thumb_url
     box.thumb_url
@@ -89,7 +93,7 @@ class WebstoreOrder < ActiveRecord::Base
   end
 
   def scheduled?
-    !schedule.nil?
+    !schedule_rule.nil?
   end
 
   def completed?
@@ -171,7 +175,7 @@ class WebstoreOrder < ActiveRecord::Base
         "#{count}x #{extra_object.name} #{extra_object.unit}"
       end.join(', ')
 
-      if schedule && !schedule.frequency.single?
+      if schedule_rule && !schedule_rule.frequency.single?
         @extras_description_mem += (extras_one_off? ? ', include in the next delivery only' : ', include with every delivery')
       end
     end
@@ -183,12 +187,11 @@ class WebstoreOrder < ActiveRecord::Base
     if order.nil?
       extras_hash = {}
       extras.each { |id, count| extras_hash[id] = { count: count } }
-      order = Order.create(
+      order = Order.create!(
         box: box,
-        frequency: frequency,
         completed: true,
         account: account,
-        schedule: schedule,
+        schedule_rule_attributes: schedule_rule.clone_attributes,
         order_extras: extras_hash,
         extras_one_off: extras_one_off
       )
@@ -197,5 +200,9 @@ class WebstoreOrder < ActiveRecord::Base
       order.save
       self.order = order
     end
+  end
+
+  def schedule_changed(schedule_rule)
+    
   end
 end

@@ -20,7 +20,6 @@ class Distributor::OrdersController < Distributor::ResourceController
     order_hash.merge!({ account_id: @account.id, completed: true })
 
     @order = Order.new(order_hash)
-    @order.create_schedule(params[:start_date], params[:order][:frequency], params[:days])
 
     create!  do |success, failure|
       @order.update_exclusions(params[:dislikes_input])
@@ -80,10 +79,9 @@ class Distributor::OrdersController < Distributor::ResourceController
 
   def pause
     start_date = Date.parse(params[:date])
-    end_date   = Bucky::Schedule.until_further_notice(start_date)
 
     respond_to do |format|
-      if @order.pause!(start_date, end_date)
+      if @order.pause!(start_date, @order.resume_date)
         date = @order.pause_date
         json = { id: @order.id, date: date, formatted_date: date.to_s(:pause), resume_dates: @order.possible_resume_dates }
         format.json { render json: json }
@@ -108,8 +106,8 @@ class Distributor::OrdersController < Distributor::ResourceController
   end
 
   def resume
-    start_date = @order.schedule.exception_times.first.to_date
-    end_date   = Date.parse(params[:date]) - 1.day #Because we want to pause a day before the resume day
+    start_date = @order.pause_date
+    end_date   = Date.parse(params[:date])
 
     respond_to do |format|
       if @order.pause!(start_date, end_date)
@@ -123,22 +121,17 @@ class Distributor::OrdersController < Distributor::ResourceController
   end
 
   def remove_resume
-    start_date = @order.schedule.exception_times.first.to_date
-    end_date   = Bucky::Schedule.until_further_notice(start_date)
+    start_date = @order.pause_date
 
     respond_to do |format|
-      if @order.pause!(start_date, end_date)
+      if @order.pause!(start_date)
         format.json { head :ok }
       else
         format.json { head :bad_request }
       end
     end
   end
-
-  def resume_dates
-    render json: @order.possible_resume_dates
-  end
-
+  
   private
 
   def filter_params

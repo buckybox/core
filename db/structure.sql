@@ -43,10 +43,11 @@ CREATE TABLE schedule_rules (
     fri boolean,
     sat boolean,
     sun boolean,
-    order_id integer,
     schedule_pause_id integer,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    updated_at timestamp without time zone NOT NULL,
+    scheduleable_id integer,
+    scheduleable_type character varying(255)
 );
 
 
@@ -89,6 +90,35 @@ BEGIN
 
     -- Test if it falls in a pause, exit if not
     EXIT WHEN NOT is_paused(next_date, schedule_rule);
+
+    -- Apparently that one was in a pause, start looking again from the end of a pause
+    next_date := pause_finish(next_date, schedule_rule);
+
+    -- If the pause_finish returns NULL we can assume the pause never finishes, thus there is never a next_occurrence
+    EXIT WHEN next_date IS NULL;
+  END LOOP;
+  return next_date;
+END;
+$$;
+
+
+--
+-- Name: next_occurrence(date, boolean, schedule_rules); Type: FUNCTION; Schema: public; Owner: -
+--
+
+CREATE FUNCTION next_occurrence(from_date date, ignore_pauses boolean, schedule_rule schedule_rules) RETURNS date
+    LANGUAGE plpgsql STABLE
+    AS $$
+DECLARE
+  next_date DATE;
+BEGIN
+  next_date := from_date;
+  LOOP
+    -- Get the next possible occurrence
+    next_date := unpaused_next_occurrence(next_date, schedule_rule);
+
+    -- Test if it falls in a pause, exit if not
+    EXIT WHEN ignore_pauses OR NOT is_paused(next_date, schedule_rule);
 
     -- Apparently that one was in a pause, start looking again from the end of a pause
     next_date := pause_finish(next_date, schedule_rule);
@@ -204,11 +234,7 @@ BEGIN
     return from_date + days_from_now;
   WHEN 'monthly' THEN
   -- ==================== MONTHLY ====================
-    -- If we go above the 7th of a month, we skip to the next month
-    IF date_part('day', from_date) > 7 THEN
-      from_date := date(date_part('year', from_date + '1 month'::interval)::text || '-' || date_part('month', from_date + '1 month'::interval)::text || '-01');
-    END IF;
-    FOR i IN 0..6 LOOP
+    FOR i IN 0..11 LOOP
       -- If we go above the 7th of a month, we skip to the next month
       IF date_part('day', from_date) > 7 THEN
         from_date := date(date_part('year', from_date + '1 month'::interval)::text || '-' || date_part('month', from_date + '1 month'::interval)::text || '-01');
@@ -220,7 +246,7 @@ BEGIN
 
     return from_date;
   ELSE
-    IF schedule_rule.recur IS NULL THEN
+    IF schedule_rule.recur IS NULL OR schedule_rule.recur = 'single' THEN
   -- ==================== ONE OFF / SINGLE ====================
       IF from_date > schedule_rule.start THEN
         return NULL;
@@ -228,7 +254,7 @@ BEGIN
         RETURN from_date;
       END IF;
     ELSE
-      RAISE EXCEPTION 'schedule_rules.recur should be NULL, weekly, fortnightly or monthly';
+      RAISE EXCEPTION 'schedule_rules.recur should be NULL, single, weekly, fortnightly or monthly';
   END IF;
   END CASE;
 
@@ -1208,12 +1234,10 @@ CREATE TABLE orders (
     id integer NOT NULL,
     box_id integer,
     quantity integer DEFAULT 1 NOT NULL,
-    frequency character varying(255) DEFAULT 'single'::character varying NOT NULL,
     completed boolean DEFAULT false NOT NULL,
     created_at timestamp without time zone,
     updated_at timestamp without time zone,
     account_id integer,
-    schedule text,
     active boolean DEFAULT false NOT NULL,
     extras_one_off boolean DEFAULT true
 );
@@ -1401,16 +1425,8 @@ CREATE TABLE routes (
     id integer NOT NULL,
     distributor_id integer,
     name character varying(255),
-    monday boolean DEFAULT false NOT NULL,
-    tuesday boolean DEFAULT false NOT NULL,
-    wednesday boolean DEFAULT false NOT NULL,
-    thursday boolean DEFAULT false NOT NULL,
-    friday boolean DEFAULT false NOT NULL,
-    saturday boolean DEFAULT false NOT NULL,
-    sunday boolean DEFAULT false NOT NULL,
     created_at timestamp without time zone,
     updated_at timestamp without time zone,
-    schedule text,
     fee_cents integer DEFAULT 0 NOT NULL,
     currency character varying(255),
     area_of_service text,
@@ -1486,6 +1502,38 @@ CREATE SEQUENCE schedule_rules_id_seq
 --
 
 ALTER SEQUENCE schedule_rules_id_seq OWNED BY schedule_rules.id;
+
+
+--
+-- Name: schedule_transactions; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE schedule_transactions (
+    id integer NOT NULL,
+    schedule_rule text,
+    schedule_rule_id integer,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: schedule_transactions_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE schedule_transactions_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: schedule_transactions_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE schedule_transactions_id_seq OWNED BY schedule_transactions.id;
 
 
 --
@@ -1908,6 +1956,13 @@ ALTER TABLE ONLY schedule_rules ALTER COLUMN id SET DEFAULT nextval('schedule_ru
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
+ALTER TABLE ONLY schedule_transactions ALTER COLUMN id SET DEFAULT nextval('schedule_transactions_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
 ALTER TABLE ONLY substitutions ALTER COLUMN id SET DEFAULT nextval('substitutions_id_seq'::regclass);
 
 
@@ -2201,6 +2256,14 @@ ALTER TABLE ONLY schedule_pauses
 
 ALTER TABLE ONLY schedule_rules
     ADD CONSTRAINT schedule_rules_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: schedule_transactions_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY schedule_transactions
+    ADD CONSTRAINT schedule_transactions_pkey PRIMARY KEY (id);
 
 
 --
@@ -2895,5 +2958,15 @@ INSERT INTO schema_migrations (version) VALUES ('20120927042204');
 INSERT INTO schema_migrations (version) VALUES ('20120927055104');
 
 INSERT INTO schema_migrations (version) VALUES ('20120927224520');
+
+INSERT INTO schema_migrations (version) VALUES ('20120929040236');
+
+INSERT INTO schema_migrations (version) VALUES ('20121010231051');
+
+INSERT INTO schema_migrations (version) VALUES ('20121010232812');
+
+INSERT INTO schema_migrations (version) VALUES ('20121010236717');
+
+INSERT INTO schema_migrations (version) VALUES ('20121018021812');
 
 INSERT INTO schema_migrations (version) VALUES ('20121024025935');

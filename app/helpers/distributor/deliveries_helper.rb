@@ -84,21 +84,4 @@ module Distributor::DeliveriesHelper
       Order.order_count(distributor, date, route_id)
     end
   end
-
-  def customer_delivery_links(order)
-    deliveries = order.deliveries.includes(:delivery_list).where('delivery_lists.date > ?', Date.current)
-
-    delivery_links = deliveries[0..3].map do |d|
-      date = d.date
-      date_str = date.to_s(:date_short_month)
-      link_to date_str, date_distributor_deliveries_path(date, d.route_id)
-    end
-
-    delivery_links << '...' if deliveries.size > 4
-
-    result = delivery_links.join(', ').html_safe
-    result = image_tag('icon-route.png', class: 'delivery-icon') + result unless delivery_links.blank?
-
-    return result
-  end
 end

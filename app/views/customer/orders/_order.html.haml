@@ -36,8 +36,8 @@
             .price= order.price.format
         %tr.bottom-section
           %td
-            - if order.reoccurs?
-              %h2= order_schedule(order, exception_rules: false, exception_times: false)
+            - if order.recurs?
+              %h2= order_schedule(order)
               = render partial: 'customer/orders/pausing', locals: { order: order }
             - else
               %h2 Single order delivery

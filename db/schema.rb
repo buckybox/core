@@ -409,14 +409,12 @@ ActiveRecord::Schema.define(:version => 20121024025935) do
 
   create_table "orders", :force => true do |t|
     t.integer  "box_id"
-    t.integer  "quantity",       :default => 1,        :null => false
-    t.string   "frequency",      :default => "single", :null => false
-    t.boolean  "completed",      :default => false,    :null => false
+    t.integer  "quantity",       :default => 1,     :null => false
+    t.boolean  "completed",      :default => false, :null => false
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "account_id"
-    t.text     "schedule"
-    t.boolean  "active",         :default => false,    :null => false
+    t.boolean  "active",         :default => false, :null => false
     t.boolean  "extras_one_off", :default => true
   end
 
@@ -492,17 +490,9 @@ ActiveRecord::Schema.define(:version => 20121024025935) do
   create_table "routes", :force => true do |t|
     t.integer  "distributor_id"
     t.string   "name"
-    t.boolean  "monday",                  :default => false, :null => false
-    t.boolean  "tuesday",                 :default => false, :null => false
-    t.boolean  "wednesday",               :default => false, :null => false
-    t.boolean  "thursday",                :default => false, :null => false
-    t.boolean  "friday",                  :default => false, :null => false
-    t.boolean  "saturday",                :default => false, :null => false
-    t.boolean  "sunday",                  :default => false, :null => false
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.text     "schedule"
-    t.integer  "fee_cents",               :default => 0,     :null => false
+    t.integer  "fee_cents",               :default => 0, :null => false
     t.string   "currency"
     t.text     "area_of_service"
     t.text     "estimated_delivery_time"
@@ -527,10 +517,18 @@ ActiveRecord::Schema.define(:version => 20121024025935) do
     t.boolean  "fri"
     t.boolean  "sat"
     t.boolean  "sun"
-    t.integer  "order_id"
     t.integer  "schedule_pause_id"
     t.datetime "created_at",        :null => false
     t.datetime "updated_at",        :null => false
+    t.integer  "scheduleable_id"
+    t.string   "scheduleable_type"
+  end
+
+  create_table "schedule_transactions", :force => true do |t|
+    t.text     "schedule_rule"
+    t.integer  "schedule_rule_id"
+    t.datetime "created_at",       :null => false
+    t.datetime "updated_at",       :null => false
   end
 
   create_table "substitutions", :force => true do |t|

@@ -185,8 +185,8 @@ describe DeliveryList do
         box = Fabricate(:box, distributor: distributor)
         account = Fabricate(:account, customer: Fabricate(:customer, distributor: distributor, route: @route))
         account2 = Fabricate(:account, customer: Fabricate(:customer, distributor: distributor, route: @route))
-        order = Fabricate(:active_order, account: account, schedule: new_single_schedule(date.to_time), box: box)
-        order2 = Fabricate(:active_order, account: account2, schedule: new_single_schedule(date.to_time), box: box)
+        order = Fabricate(:active_order, account: account, schedule_rule: new_single_schedule(date), box: box)
+        order2 = Fabricate(:active_order, account: account2, schedule_rule: new_single_schedule(date), box: box)
 
         PackingList.generate_list(distributor, date)
         next_delivery_list = DeliveryList.generate_list(distributor, date)
@@ -231,7 +231,7 @@ describe DeliveryList do
 end
 
 def fab_delivery(delivery_list, distributor, route=nil, address=nil)
-  route ||= Fabricate(:route, distributor: distributor)
+  route ||= Fabricate(:route, distributor: distributor, schedule_rule: Fabricate(:schedule_rule, start: Date.current.yesterday))
 
   customer = Fabricate(:customer_without_after_create, distributor: distributor, route: route)
   account = Fabricate(:account, customer: customer)

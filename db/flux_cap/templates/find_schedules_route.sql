@@ -2,7 +2,7 @@ select :select
 from orders
 inner join accounts on accounts.id = orders.account_id
 inner join customers on customers.id = accounts.customer_id
-inner join schedule_rules on schedule_rules.order_id = orders.id
+inner join schedule_rules on schedule_rules.scheduleable_id = orders.id AND schedule_rules.scheduleable_type = 'Order'
 full outer join schedule_pauses on schedule_pauses.id = schedule_rules.schedule_pause_id
 where customers.distributor_id = :distributor_id
 AND customers.route_id = :route_id

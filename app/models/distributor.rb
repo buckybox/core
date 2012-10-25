@@ -393,7 +393,7 @@ class Distributor < ActiveRecord::Base
       h += 1 # start at 1, not 0
 
       Delorean.time_travel_to(@@original_time + (@@advanced*day.days) + h.hours)
-      Job.run_all
+      Jobs.run_all
     end
     @@advanced += day
   end

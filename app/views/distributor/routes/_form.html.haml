@@ -8,13 +8,14 @@
       = f.input :area_of_service, input_html: { class: 'span12', rows: 5 }
       = f.input :estimated_delivery_time, input_html: { class: 'span12', rows: 5 }
     #weekdays.span6
-      = f.input :monday, input_html: { class: 'span12' }
-      = f.input :tuesday, input_html: { class: 'span12' }
-      = f.input :wednesday, input_html: { class: 'span12' }
-      = f.input :thursday, input_html: { class: 'span12' }
-      = f.input :friday, input_html: { class: 'span12' }
-      = f.input :saturday, input_html: { class: 'span12' }
-      = f.input :sunday, input_html: { class: 'span12' }
+      = f.simple_fields_for(:schedule_rule) do |schedule_rule_form|
+        = schedule_rule_form.input :mon, input_html: { class: 'span12' }
+        = schedule_rule_form.input :tue, input_html: { class: 'span12' }
+        = schedule_rule_form.input :wed, input_html: { class: 'span12' }
+        = schedule_rule_form.input :thu, input_html: { class: 'span12' }
+        = schedule_rule_form.input :fri, input_html: { class: 'span12' }
+        = schedule_rule_form.input :sat, input_html: { class: 'span12' }
+        = schedule_rule_form.input :sun, input_html: { class: 'span12' }
 
   .row-fluid
     .span12.form-actions

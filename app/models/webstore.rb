@@ -97,7 +97,7 @@ class Webstore
 
   def update_delivery_information(delivery_information)
     assign_route(delivery_information[:route])                      if delivery_information[:route]
-    set_schedule(delivery_information[:schedule])                   if delivery_information[:schedule]
+    set_schedule(delivery_information[:schedule_rule])                   if delivery_information[:schedule_rule]
     assign_extras_frequency(delivery_information[:extra_frequency]) if delivery_information[:extra_frequency]
 
     if @controller.flash[:error].blank?
@@ -166,18 +166,16 @@ class Webstore
 
   def set_schedule(schedule_information)
     frequency = schedule_information[:frequency]
-    start_time = Time.zone.parse(schedule_information[:start_date])
-
-    @order.frequency = frequency
+    start = Date.parse(schedule_information[:start_date])
 
     if frequency == 'single'
-      @order.create_schedule_for(:schedule, start_time, frequency)
+      @order.schedule_rule = ScheduleRule.one_off(start)
     else
       if schedule_information[:days].nil?
         @controller.flash[:error] = 'The schedule requires you select a day of the week.'
       else
-        days_by_number = schedule_information[:days].map { |d| d.first.to_i }
-        @order.create_schedule_for(:schedule, start_time, frequency, days_by_number)
+        days_by_number = schedule_information[:days].map { |d| ScheduleRule::DAYS[d.first.to_i] }
+        @order.schedule_rule = ScheduleRule.recur_on(start, days_by_number, frequency.to_sym)
       end
     end
   end

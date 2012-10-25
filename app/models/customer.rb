@@ -138,8 +138,6 @@ class Customer < ActiveRecord::Base
       delivery_date = Time.zone.parse(b.next_delivery_date)
       raise "Date couldn't be parsed from '#{b.delivery_date}'" if delivery_date.blank?
 
-      delivery_day_numbers = Route.delivery_day_numbers(b.delivery_days.split(',').collect{|d| d.strip.downcase.to_sym})
-
       order = self.orders.build({
         box: box,
         quantity: 1,
@@ -147,7 +145,12 @@ class Customer < ActiveRecord::Base
         extras_one_off: b.extras_recurring?
       })
       account.route = self.route
-      order.create_schedule(delivery_date, b.delivery_frequency, delivery_day_numbers)
+      order.schedule_rule = if b.delivery_frequency == 'single'
+                              ScheduleRule.one_off(delivery_date, ScheduleRule::DAYS.select{|day| b.delivery_days =~ /#{day.to_s}/i})
+                            else
+                              ScheduleRule.recur_on(delivery_date, ScheduleRule::DAYS.select{|day| b.delivery_days =~ /#{day.to_s}/i}, b.delivery_frequency.to_sym)
+                            end
+                              
       order.activate
 
       order.import_extras(b.extras) unless b.extras.blank?
@@ -173,7 +176,7 @@ class Customer < ActiveRecord::Base
 
   def update_next_occurrence(date = nil)
     date ||= Date.current.to_s(:db)
-    next_order = orders.active.select("orders.*, next_occurrence('#{date}', schedule_rules.*)").joins(:schedule_rule).reject{|sr| sr.next_occurrence.blank?}.sort_by(&:next_occurrence).first
+    next_order = orders.active.select("orders.*, next_occurrence('#{date}', false, schedule_rules.*)").joins(:schedule_rule).reject{|sr| sr.next_occurrence.blank?}.sort_by(&:next_occurrence).first
     if next_order
       self.next_order = next_order
       self.next_order_id = next_order.id

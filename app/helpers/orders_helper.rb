@@ -10,7 +10,7 @@ module OrdersHelper
   end
 
   def order_frequencies
-    Order::FREQUENCIES.map { |frequencies| [frequencies.titleize, frequencies] }
+    ScheduleRule::RECUR.map { |frequencies| [frequencies.to_s.titleize, frequencies.to_s] }
   end
 
   def order_delete_warning(order)
@@ -20,42 +20,28 @@ module OrdersHelper
     order.deliveries.size > 0 ? deliveries_confirm : no_deliveries_confirm
   end
 
-  def order_schedule(order, options = {})
-    joiner = (options[:join_with].nil? ? '<br/>' : options[:join_with])
-    schedule = order.schedule
-    string_schedule = []
-
-    unless options[:recurrence_rules] == false || schedule.recurrence_rules.empty?
-      string_schedule << schedule.recurrence_rules.join(', ')
+  def order_schedule(order)
+    schedule_rule = order.schedule_rule
+    if !order.recurs?
+      "Single delivery order"
+    else
+      schedule_rule.to_s
     end
+  end
 
-    unless options[:recurrence_times] == false || schedule.recurrence_times.empty?
-      string_schedule << 'Single delivery order'
-    end
-
-    unless options[:exception_rules] == false || schedule.exception_rules.empty?
-      string_schedule << schedule.exception_rules.join(', ')
-    end
-
-    unless options[:exception_times] == false || schedule.exception_times.empty?
-      et = schedule.exception_times
-      first_et = et.first
-      last_et = (et.last + 1.day) # this is shown as the resume day so a day after the last exception date
-      exception_times = "pausing on #{first_et.to_s(:month_date_year)}#{joiner}resuming on #{last_et.to_s(:month_date_year)}".html_safe
-      string_schedule << "#{link_to exception_times, '#', data: {'reveal-id' => "pause-modal-#{order.id}"}}"
-    end
-
-    return string_schedule.join(joiner).html_safe
+  # Show the orders next delivery dates, link to the delivery screen if it is within the forcast range
+  def orders_next_deliveries(order)
+    order.next_occurrences(5, Date.current).collect{|d| d <= Order::FORCAST_RANGE_FORWARD.from_now.to_date ? link_to(d.to_s(:flux_cap), date_distributor_deliveries_path(d, order.route)) : d.to_s(:flux_cap)}.join(', ').html_safe
   end
 
   def order_pause_date_formatted(order)
     date = order.pause_date
-    return date.nil? ? '' : date.to_s(:pause)
+    return date ? date.to_s(:pause) : ''
   end
 
   def order_resume_date_formatted(order)
     date = order.resume_date
-    return date.nil? ? '' : date.to_s(:pause)
+    return date ? date.to_s(:pause) : ''
   end
 
   def all_order_start_dates(distributor, count = 14)

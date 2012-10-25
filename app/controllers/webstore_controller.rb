@@ -33,7 +33,7 @@ class WebstoreController < ApplicationController
     @routes = @distributor.routes
     @route_selections = @distributor.routes.map { |route| [route.name_days_and_fee, route.id] }
     @selected_route_id = current_customer.route_id if existing_customer?
-    @days = Bucky::Schedule::DAYS.map { |day| [day[0..2].to_s.titleize, Bucky::Schedule::DAYS.index(day)] }
+    @days = ScheduleRule::DAYS.map { |day| [day.to_s.titleize, ScheduleRule::DAYS.index(day)] }
     @order_frequencies = [
       ['Delivery weekly on...', :weekly],
       ['Deliver every 2 weeks on...', :fortnightly],
@@ -68,7 +68,7 @@ class WebstoreController < ApplicationController
   def placed
     @customer = @webstore_order.customer
     @address = @customer.address
-    @schedule = @webstore_order.schedule
+    @schedule_rule = @webstore_order.schedule_rule
   end
 
   private
