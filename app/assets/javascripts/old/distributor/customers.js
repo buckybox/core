@@ -26,33 +26,34 @@ $(function() {
     return false;
   });
 
-  $('.initial-link a').click(function() {
-    fromPausingElementFind(this, '.initial-link').hide();
-    fromPausingElementFind(this, '.form-selection').show();
-    return false;
-  });
+  var order_pause_init = function(){
+    $('.initial-link a').click(function() {
+      fromPausingElementFind(this, '.initial-link').hide();
+      fromPausingElementFind(this, '.form-selection').show();
+      return false;
+    });
 
-  $('.cancel-link a').click(function() {
-    fromPausingElementFind(this, '.form-selection').hide();
+    $('.cancel-link a').click(function() {
+      fromPausingElementFind(this, '.form-selection').hide();
 
-    var resulting_link = fromPausingElementFind(this, '.resulting-link');
+      var resulting_link = fromPausingElementFind(this, '.resulting-link');
 
-    if(resulting_link.data('date')) {
-      resulting_link.show();
-    }
-    else {
+      if(resulting_link.data('date')) {
+        resulting_link.show();
+      }
+      else {
+        fromPausingElementFind(this, '.initial-link').show();
+      }
+
+      return false;
+    });
+
+    $('.remove-link a').click(function() {
+      fromPausingElementFind(this, '.form-selection').hide();
+      fromPausingElementFind(this, '.remove-link').hide();
       fromPausingElementFind(this, '.initial-link').show();
-    }
-
-    return false;
-  });
-
-  $('.remove-link a').click(function() {
-    fromPausingElementFind(this, '.form-selection').hide();
-    fromPausingElementFind(this, '.remove-link').hide();
-    fromPausingElementFind(this, '.initial-link').show();
-    return false;
-  });
+      return false;
+    });
 
   $('.pause .remove-link a').click(function() {
     var resume = $(this).closest('.pausing').find('.resume');
@@ -63,96 +64,69 @@ $(function() {
     resume.find('.resulting-link').hide();
 
     var url = $(this).attr('href');
-
-    $.ajax({ type: 'POST', dataType: 'json', url: url });
-
+    $.ajax({ type: 'POST',
+             dataType: 'html',
+             url: url,
+             success: reload_pause_details});
     return false;
   });
 
   $('.resume .remove-link a').click(function() {
     var url = $(this).attr('href');
-
-    $.ajax({ type: 'POST', dataType: 'json', url: url });
-
+    $.ajax({ type: 'POST',
+             dataType: 'html',
+             url: url,
+             success: reload_pause_details});
     return false;
   });
 
-  $('.pause .form-selection :submit').click(function() {
-    var form = fromPausingElementFind(this, '.form-selection form');
-    var url  = form.attr('action');
-    var date = form.find('select :selected').val();
+    $('.pause .form-selection :submit').click(function() {
+      var form = fromPausingElementFind(this, '.form-selection form');
+      var url  = form.attr('action');
+      var date = form.find('select :selected').val();
 
-    $(this).attr('disabled', true);
+      $(this).attr('disabled', true);
 
-    $.ajax({
-      type: 'PUT',
-      dataType: 'json',
-      url: url,
-      data: $.param({ date: date }),
-      success: function(data) {
-        var pausing_order = $('#pausing_order_' + data['id']);
+      $.ajax({
+        type: 'PUT',
+        dataType: 'html',
+        url: url,
+        data: $.param({ date: date }),
+        success: reload_pause_details});
 
-        var resulting_link = pausing_order.find('.pause .resulting-link');
-        resulting_link.data('date', date['date']);
-        resulting_link.find('span').text('on ' + data['formatted_date']);
-
-        var select_options = '';
-
-        $.each(data['resume_dates'], function(index, value) {
-          select_options += '<option value="' + value[1] + '">' + value[0] + '</option>';
-        });
-
-        pausing_order.find('.resume .form-selection select').html(select_options);
-
-        pausing_order.find('.pause .form-selection :submit').attr('disabled', false);
-        pausing_order.find('.pause .form-selection').hide();
-        resulting_link.show();
-
-        pausing_order.find('.resume .form-selection').hide();
-        pausing_order.find('.resume .remove-link').hide();
-        pausing_order.find('.resume .resulting-link').hide();
-        pausing_order.find('.resume .initial-link').show();
-        pausing_order.find('.resume').show();
-      }
+      return false;
     });
 
-    return false;
-  });
+    $('.resume .form-selection :submit').click(function() {
+      var form = fromPausingElementFind(this, '.form-selection form');
+      var url  = form.attr('action');
+      var date = form.find('select :selected').val();
 
-  $('.resume .form-selection :submit').click(function() {
-    var form = fromPausingElementFind(this, '.form-selection form');
-    var url  = form.attr('action');
-    var date = form.find('select :selected').val();
+      $(this).attr('disabled', true);
 
-    $(this).attr('disabled', true);
+      $.ajax({
+        type: 'PUT',
+        dataType: 'html',
+        url: url,
+        data: $.param({ date: date }),
+        success: reload_pause_details });
 
-    $.ajax({
-      type: 'PUT',
-      dataType: 'json',
-      url: url,
-      data: $.param({ date: date }),
-      success: function(data) {
-        var pausing_order = $('#pausing_order_' + data['id']);
-
-        var resulting_link = pausing_order.find('.resume .resulting-link');
-        resulting_link.data('date', date['date']);
-        resulting_link.find('span').text('on ' + data['formatted_date']);
-
-        pausing_order.find('.resume .form-selection :submit').attr('disabled', false);
-        pausing_order.find('.resume .form-selection').hide();
-        resulting_link.show();
-      }
+      return false;
     });
 
-    return false;
-  });
-
-  $('.resulting-link a').click(function() {
-    fromPausingElementFind(this, '.resulting-link').hide();
-    fromPausingElementFind(this, '.form-selection').show();
-    fromPausingElementFind(this, '.remove-link').show();
-    return false;
-  });
+    $('.resulting-link a').click(function() {
+      fromPausingElementFind(this, '.resulting-link').hide();
+      fromPausingElementFind(this, '.form-selection').show();
+      fromPausingElementFind(this, '.remove-link').show();
+      return false;
+    });
+  }
+  order_pause_init();
+  
+  function reload_pause_details(data) {
+    $("#order_details").html(data);
+    order_pause_init();
+  }
 });
 
 function fromPausingElementFind(startElement, findName) {

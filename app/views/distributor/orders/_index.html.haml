@@ -18,10 +18,7 @@
                   %small= link_to 'edit order', edit_distributor_account_order_path(@account, order)
             %td.schedule
               %ul.unstyled
-                %li= order_schedule(order)
-                - if order.recurs?
-                  %li= render partial: 'distributor/orders/pausing', locals: { order: order }
-                %li= orders_next_deliveries(order)
+                #order_details= render partial: 'distributor/orders/details', locals: { order: order}
             %td
               %ul.unstyled.text-right
                 %li.important= order.price
