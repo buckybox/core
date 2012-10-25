@@ -63,20 +63,28 @@ $(function() {
     resume.find('.remove-link').hide();
     resume.find('.resulting-link').hide();
 
+    var form = fromPausingElementFind(this, '.form-selection form');
     var url = $(this).attr('href');
+    var order_id = form.closest("tr[data-order-id]").attr('data-order-id');
     $.ajax({ type: 'POST',
              dataType: 'html',
              url: url,
-             success: reload_pause_details});
+             success: function(data){
+               reload_pause_details(order_id, data);
+             }});
     return false;
   });
 
   $('.resume .remove-link a').click(function() {
+    var form = fromPausingElementFind(this, '.form-selection form');
     var url = $(this).attr('href');
+    var order_id = form.closest("tr[data-order-id]").attr('data-order-id');
     $.ajax({ type: 'POST',
              dataType: 'html',
              url: url,
-             success: reload_pause_details});
+             success: function(data){
+               reload_pause_details(order_id, data);
+             }});
     return false;
   });
 
@@ -84,6 +92,7 @@ $(function() {
       var form = fromPausingElementFind(this, '.form-selection form');
       var url  = form.attr('action');
       var date = form.find('select :selected').val();
+      var order_id = form.closest("tr[data-order-id]").attr('data-order-id');
 
       $(this).attr('disabled', true);
 
@@ -92,7 +101,9 @@ $(function() {
         dataType: 'html',
         url: url,
         data: $.param({ date: date }),
-        success: reload_pause_details});
+        success: function(data){
+          reload_pause_details(order_id, data);
+        }});
 
       return false;
     });
@@ -101,6 +112,7 @@ $(function() {
       var form = fromPausingElementFind(this, '.form-selection form');
       var url  = form.attr('action');
       var date = form.find('select :selected').val();
+      var order_id = form.closest("tr[data-order-id]").attr('data-order-id');
 
       $(this).attr('disabled', true);
 
@@ -109,7 +121,9 @@ $(function() {
         dataType: 'html',
         url: url,
         data: $.param({ date: date }),
-        success: reload_pause_details });
+        success: function(data){
+          reload_pause_details(order_id, data);
+        }});
 
       return false;
     });
@@ -123,8 +137,8 @@ $(function() {
   }
   order_pause_init();
   
-  function reload_pause_details(data) {
-    $("#order_details").html(data);
+  function reload_pause_details(order_id, data) {
+    $("#order_" + order_id + "_details").html(data);
     order_pause_init();
   }
 });

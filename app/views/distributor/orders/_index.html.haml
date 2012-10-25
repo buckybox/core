@@ -5,7 +5,7 @@
         %tr.new-row
           %td{ colspan: 3 }= link_to 'Create a new order', new_distributor_account_order_path(@account)
         - @orders.each do |order|
-          %tr
+          %tr{ 'data-order-id' => order.id}
             %td.name
               %ul.unstyled
                 %li
@@ -17,8 +17,7 @@
                 %li
                   %small= link_to 'edit order', edit_distributor_account_order_path(@account, order)
             %td.schedule
-              %ul.unstyled
-                #order_details= render partial: 'distributor/orders/details', locals: { order: order}
+              %ul.unstyled{id: "order_#{order.id}_details"}= render partial: 'distributor/orders/details', locals: { order: order}
             %td
               %ul.unstyled.text-right
                 %li.important= order.price
