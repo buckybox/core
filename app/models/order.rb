@@ -250,7 +250,7 @@ class Order < ActiveRecord::Base
   def customisation_description
     unless exclusions_string.blank?
       result_string = "Exclude #{exclusions_string}"
-      result_string += "/ Substitute #{substitution_string}" unless substitution_string.blank?
+      result_string += "/ Substitute #{substitutions_string}" unless substitutions_string.blank?
     end
 
     return result_string
