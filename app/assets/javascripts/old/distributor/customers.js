@@ -18,8 +18,10 @@ $(function() {
 
         more_link.appendTo(transaction_table);
         $('#more-transactions #ajax-loader').hide();
-        $('#more-transactions a').show();
-        more_link.show();
+        if ($('#transactions .transaction-data').length != offset){
+          $('#more-transactions a').show();
+          more_link.show();
+        }
       }
     });
 
