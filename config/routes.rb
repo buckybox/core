@@ -1,6 +1,6 @@
 BuckyBox::Application.routes.draw do
   devise_for :admins,       controllers: { sessions: 'admin/sessions' }
-  devise_for :distributors, controllers: { sessions: 'distributor/sessions', passwords: 'customer/passwords' }
+  devise_for :distributors, controllers: { sessions: 'distributor/sessions', passwords: 'distributor/passwords' }
   devise_for :customers,    controllers: { sessions: 'customer/sessions', passwords: 'customer/passwords' }
 
   root to: 'distributor/customers#index'

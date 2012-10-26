@@ -1,0 +1,57 @@
+//----- Layout
+
+#logo-holder
+  margin-top: 93px
+  #buckybox-logo
+    img
+      display: block
+      margin: 0px auto
+
+#devise-frame
+  margin-top: 25px
+  border: 1px solid $gray
+  background-color: $white
+  +single-box-shadow(rgba(0, 0, 0, .25), 0px, 15px, 20px, -6px)
+  h2
+    margin-top: 0px
+    font-size: 18px
+    line-height: 20px
+  form
+    margin-bottom: 0px
+  #distributor-logo
+    img
+      width: 100%
+  #devise-form
+    padding: 50px
+    input.boolean
+      margin: 2px 8px 0px 0px
+    label.boolean
+      margin-bottom: 0px
+  #up-arrow
+    position: relative
+    &:before
+      content: ' '
+      border-color: transparent transparent $gray transparent
+      border-style: solid
+      border-width: 13px
+      position: absolute
+      top: -26px
+      left: 272px
+    &:after
+      content: ' '
+      border-color: transparent transparent $white transparent
+      border-style: solid
+      border-width: 13px
+      position: absolute
+      top: -25px
+      left: 272px
+
+//----- Common Styles
+
+#devise-form
+  #controls-left
+    margin-top: 4px
+  #controls-right
+    a
+      margin-right: 15px
+

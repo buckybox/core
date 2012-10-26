@@ -1,8 +1,13 @@
-%h2 Forgot your password?
-= simple_form_for(resource, :as => resource_name, :url => password_path(resource_name), :html => { :method => :post }) do |f|
+%h2 Send me my password
+
+= simple_form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :post }) do |f|
   = f.error_notification
-  .form-inputs
-    = f.input :email, :required => true
-  .form-actions
-    = f.button :submit, "Send me reset password instructions"
-= render "devise/shared/links"
+  = f.input :email, required: true, label: false, placeholder: 'enter your email', input_html: { class: 'span12' }
+
+  #form-controls.clearfix
+    #controls-left.pull-left
+
+    #controls-right.pull-right
+      = link_to 'cancel', new_session_path(resource_name)
+      = f.button :submit, 'Send password', class: 'btn btn-primary'
+
