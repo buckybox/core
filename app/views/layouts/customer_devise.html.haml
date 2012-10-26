@@ -10,7 +10,10 @@
         - if @distributor
           .row
             #distributor-logo.span6
-              = image_tag @distributor.company_logo.banner.url
+              - if @distributor.company_logo?
+                = image_tag @distributor.company_logo.frame_banner.url
+              - else
+                %h1= @distributor.name
         .row
           .span6
             .row-fluid

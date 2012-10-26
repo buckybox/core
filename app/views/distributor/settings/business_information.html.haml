@@ -19,7 +19,7 @@
       - if current_distributor.company_logo?
         = f.input :remove_company_logo, as: :boolean, label: 'Remove image', input_html: { class: 'span6' }
         .row-fluid
-          = image_tag(current_distributor.company_logo.half_size_banner.url, class: 'span6 offset2 image-upload')
+          = image_tag(current_distributor.company_logo.frame_banner.url, class: 'span6 offset2 image-upload')
 
       = f.input :company_team_image, input_html: { class: 'span6' }
       = f.input :company_team_image_cache, as: :hidden
