@@ -5,7 +5,7 @@
   = f.input :url
   = f.input :email
   = f.input :support_email
-  = f.input :country, collection: Country.all, include_blank: false, input_html: { disabled: !@distributor.new_record? }
+  = f.input :country_id, collection: Country.all, include_blank: false, input_html: { disabled: !@distributor.new_record? }
   = f.input :time_zone, as: :time_zone, input_html: { disabled: !@distributor.new_record? }
   = f.input :currency, collection: select_currencies, include_blank: false, input_html: { disabled: !@distributor.new_record? }
 
