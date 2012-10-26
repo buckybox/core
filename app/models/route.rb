@@ -20,7 +20,7 @@ class Route < ActiveRecord::Base
 
   delegate :local_time_zone, to: :distributor, allow_nil: true
   
-  delegate :includes?, :delivery_day_numbers, :next_occurrences, :runs_on, to: :schedule_rule, allow_nil: true
+  delegate :includes?, :delivery_day_numbers, :next_occurrences, :runs_on, :occurrences_between, to: :schedule_rule, allow_nil: true
   delegate :sun, :mon, :tue, :wed, :thu, :fri, :sat, to: :schedule_rule, allow_nil: true
 
   after_initialize :set_default_schedule_rule
