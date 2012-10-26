@@ -33,7 +33,7 @@
       - unless @order.persisted?
         %h3= @route.name
         = f.simple_fields_for(:schedule_rule) do |sf|
-          = sf.input :start, collection: route_delivery_dates(@route)
+          = sf.input :start, collection: route_delivery_dates(@route), include_blank: false
 
         %table#days
           %tr
