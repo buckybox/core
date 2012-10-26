@@ -1,7 +1,7 @@
 - running_balance = @transactions_sum
 
 - @transactions.each do |transaction|
-  - td_class = (transaction.manual? ? '' : 'auto')
+  - td_class = (transaction.manual? ? '' : 'auto') + ' transaction-data'
 
   %tr{ class: td_class }
     %td= transaction.created_at.to_s(:transaction)

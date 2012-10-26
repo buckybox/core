@@ -23,20 +23,7 @@
             %td
               .new-form-input=submit_tag 'Add', class: 'btn btn-primary'
 
-          - running_balance = @transactions_sum
-
-          - @transactions.each do |transaction|
-            - td_class = (transaction.manual? ? '' : 'auto')
-
-            %tr{ class: td_class }
-              %td= transaction.created_at.to_s(:transaction)
-              %td= transaction.display_time.to_s(:transaction)
-              %td= transaction.description
-              %td.text-right= transaction.amount
-              %td.text-right
-                %strong= running_balance
-
-            - running_balance -= transaction.amount
+          = render partial: 'distributor/accounts/more_transactions'
 
           %tr
             %td#more-transactions{ colspan: 5 }
