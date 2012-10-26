@@ -8,7 +8,7 @@
         \|
         = link_to 'Logout', destroy_customer_session_path, method: :delete
       - else
-        = link_to 'Login', new_customer_session_path
+        = link_to 'Login', new_customer_session_path(distributor: @distributor.parameter_name)
 
   #public-banner.row-fluid
     .span12.text-center

@@ -1,0 +1,11 @@
+- stylesheet 'distributor'
+- javascript 'distributor'
+
+- content_for :body do
+  .container
+    = render_site_messages(flash)
+
+    .row
+      .span12= yield
+
+= render 'layouts/base'
