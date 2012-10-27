@@ -1,6 +1,16 @@
 #user-nav.tabbable.tabs-below
-  %ul.nav.nav-tabs.pull-right
-    %li.active.dropdown.pull-right
+  %ul.nav.nav-pills.pull-right
+    %li.dropdown.pull-left
+      = link_to '#', class: 'dropdown-toggle', data: { toggle: 'dropdown' } do
+        %i.icon-bell
+      %ul#notification-dropdown.dropdown-menu.pull-right
+        %li= link_to 'Customer', '#'
+        %li= link_to 'Customer', '#'
+        %li= link_to 'Customer', '#'
+        %li= link_to 'Customer', '#'
+        %li= link_to 'Customer', '#'
+        %li= link_to 'Customer', '#'
+    %li.dropdown.pull-right
       = link_to '#', class: 'dropdown-toggle', data: { toggle: 'dropdown' } do
         = current_distributor.name
         %b.caret
@@ -11,3 +21,4 @@
             = link_to 'logout', unimpersonate_admin_distributors_path
           - else
             = link_to 'logout', destroy_distributor_session_path, method: :delete
+

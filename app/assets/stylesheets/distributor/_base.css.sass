@@ -100,23 +100,39 @@ body
       +site-nav-link('#nav-payments', 'nav-payments')
 
   #user-nav
-    .nav-tabs
-      border-top-width: 0px
-      li.active
-        a.dropdown-toggle
-          padding: 4px 12px
-          color: $linkColor
-          margin-right: 0px
-          background-color: inherit
-          .caret
-            border-top-color: $linkColor
-            border-bottom-color: $linkColor
-        &.open
-          a.dropdown-toggle
-            color: $linkColorHover
-            .caret
-              border-top-color: $linkColorHover
-              border-bottom-color: $linkColorHover
+    .nav-pills
+      .open
+        .dropdown-toggle
+          background-color: $action-colour
+          color: $black
+      li
+        a:hover
+          background-color: $action-color-hover
+        .dropdown-menu
+          &:before
+            content: ''
+            display: inline-block
+            border-left:   7px solid transparent
+            border-right:  7px solid transparent
+            border-bottom: 7px solid #ccc
+            border-bottom-color: $dropdownBorder
+            position: absolute
+            top: -7px
+            right: 9px
+          &:after
+            content: ''
+            display: inline-block
+            border-left:   6px solid transparent
+            border-right:  6px solid transparent
+            border-bottom: 6px solid $dropdownBackground
+            position: absolute
+            top: -6px
+            right: 10px
+          &#notification-dropdown
+            &:before
+              right: 13px
+            &:after
+              right: 14px
 
   #content
     min-height: 750px
