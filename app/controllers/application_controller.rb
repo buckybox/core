@@ -11,6 +11,18 @@ class ApplicationController < ActionController::Base
   before_filter :set_user_time_zone
   before_filter :set_user_currency
 
+  layout :layout_by_resource
+
+  protected
+
+  def layout_by_resource
+    if devise_controller?
+      "#{resource_name}_devise"
+    else
+      super
+    end
+  end
+
   private
 
   def hack_time

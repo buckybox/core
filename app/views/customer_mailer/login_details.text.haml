@@ -1,7 +1,7 @@
 :plain
   Here's your new login details for your account with us at #{@distributor.name}
 
-  #{new_customer_session_url}
+  #{new_customer_session_url(distributor: @distributor.parameter_name)}
 
   Email: #{@customer.email}
   Password: #{@customer.password}
