@@ -109,6 +109,9 @@ body
         a:hover
           background-color: $action-color-hover
         .dropdown-menu
+          strong
+            display: block
+            padding: 3px 20px
           &:before
             content: ''
             display: inline-block
@@ -129,6 +132,7 @@ body
             top: -6px
             right: 10px
           &#notification-dropdown
+            min-width: 200px
             &:before
               right: 13px
             &:after

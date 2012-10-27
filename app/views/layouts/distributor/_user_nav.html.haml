@@ -2,14 +2,21 @@
   %ul.nav.nav-pills.pull-right
     %li.dropdown.pull-left
       = link_to '#', class: 'dropdown-toggle', data: { toggle: 'dropdown' } do
+        - unless @notifications.empty?
+          %span.badge.badge-important== #{@notifications.size}
         %i.icon-bell
       %ul#notification-dropdown.dropdown-menu.pull-right
-        %li= link_to 'Customer', '#'
-        %li= link_to 'Customer', '#'
-        %li= link_to 'Customer', '#'
-        %li= link_to 'Customer', '#'
-        %li= link_to 'Customer', '#'
-        %li= link_to 'Customer', '#'
+        - if @notifications.empty?
+          %li
+            %strong No new notifications
+        - else
+          - @notifications.each do |notification|
+            - if notification.event_type == Event::EVENT_TYPES[:customer_webstore_new]
+              - customer = notification.customer
+              %li
+                = link_to distributor_customer_path(customer) do
+                  = "#{date_for(notification)} - "
+                  = customer_badge(customer, link: false)
     %li.dropdown.pull-right
       = link_to '#', class: 'dropdown-toggle', data: { toggle: 'dropdown' } do
         = current_distributor.name
