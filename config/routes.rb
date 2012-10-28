@@ -39,6 +39,10 @@ BuckyBox::Application.routes.draw do
       get 'reporting'
     end
 
+    namespace :notifications do
+      post 'dismiss_all', actions: 'dismiss_all', as: 'dismiss_all'
+    end
+
     namespace :reports do
       get 'transaction_history/:start/:to', action: 'transaction_history', as: 'transaction_history'
     end
