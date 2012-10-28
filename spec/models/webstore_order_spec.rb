@@ -15,7 +15,7 @@ describe WebstoreOrder do
 
   context 'box information' do
     before do
-      box.stub(:big_thumb_url) { 'box.jpg' }
+      box.stub(:thumb_url) { 'box.jpg' }
       box.stub(:currency) { 'CDN' }
       box.stub(:name) { 'Boxy' }
       box.stub(:price) { 12 }
