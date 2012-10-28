@@ -109,7 +109,6 @@ body
         a:hover
           background-color: $action-color-hover
         .dropdown-menu
-          min-width: 270px
           &:before
             content: ''
             display: inline-block
@@ -119,7 +118,7 @@ body
             border-bottom-color: $dropdownBorder
             position: absolute
             top: -7px
-            right: 13px
+            right: 9px
           &:after
             content: ''
             display: inline-block
@@ -128,25 +127,24 @@ body
             border-bottom: 6px solid $dropdownBackground
             position: absolute
             top: -6px
-            right: 14px
-          li
-            background-color: $white
-            &#notification-dropdown
-              min-width: 200px
-              &:before
-                right: 13px
-              &:after
-                right: 14px
-        li
-          strong
-            display: block
-            padding: 3px 20px
-            text-align: center
-          #dismiss-notifications
-            margin: 5px 0px 0px 0px
-            padding: 5px 20px
-            text-align: center
-            background-color: $grayLighter
+            right: 10px
+          &#notification-dropdown
+            min-width: 270px
+            &:before
+              right: 13px
+            &:after
+              right: 14px
+            li
+              strong
+                display: block
+                padding: 3px 20px
+                text-align: center
+                background-color: $white
+              #dismiss-notifications
+                margin: 5px 0px 0px 0px
+                padding: 5px 20px
+                text-align: center
+                background-color: $grayLighter
 
   #content
     min-height: 750px
