@@ -15,7 +15,7 @@
           - @routes.each do |route|
             %li{ class: "#{'active' if @route_id == route.id}" }
               = link_to date_distributor_deliveries_path(@selected_date, route.id) do
-                = route.name
+                = truncate(route.name, length: 20)
                 %span.badge= delivery_quantity(current_distributor, @selected_date, route.id)
 
       - if params[:view] == 'packing' && !@items.blank?
