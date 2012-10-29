@@ -38,9 +38,9 @@ $(function() {
 
   $('.sortable').sortable({
     delay: 250,
-    placeholder: 'ui-state-highlight',
+    placeholder: 'sortable-highlight',
     curser: 'move',
-    opacity: 0.8,
+    opacity: 0.90,
     start: function(e, ui){
        ui.placeholder.height(ui.item.height());
     },
