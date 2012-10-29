@@ -70,10 +70,11 @@ class Distributor::CustomersController < Distributor::ResourceController
     @customers = @customers.tagged_with(params[:tag]) unless params[:tag].blank?
 
     unless params[:query].blank?
+      query = params[:query].gsub(/\./, '')
       if params[:query].to_i == 0
-        @customers = current_distributor.customers.search(params[:query])
+        @customers = current_distributor.customers.search(query)
       else
-        @customers = current_distributor.customers.where(number: params[:query].to_i)
+        @customers = current_distributor.customers.where(number: query.to_i)
       end
     end
     
