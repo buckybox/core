@@ -1,6 +1,7 @@
 $(function() {
   if($('#order-form').length > 0) {
     order_init();
+    init_extras();
 
     $('#order-form #dislikes-input').show();
     $('#order-form #dislikes-input select').select2();
@@ -69,11 +70,6 @@ $(function() {
     }
   });
 
-  $("#order-form .include_extras").change(function() {
-    var current_order = $(this).closest('#order-form');
-    update_order_extras_collection(current_order);
-  });
-
   $("#order-form input[type=submit]").click(function() {
     var current_order = $(this).closest('#order-form');
     var include_extras = current_order.find('#order_include_extras').prop('checked');
@@ -85,6 +81,14 @@ $(function() {
     return true;
   });
 });
+
+function init_extras(){
+  $("#order-form .include_extras").change(function() {
+    var current_order = $(this).closest('#order-form');
+    update_order_extras_collection(current_order);
+  });
+  update_order_extras_collection($("#order-form .include_extras").closest('#order-form'));
+}
 
 function disable_the_others_options(affecting_input, effected_input) {
   affecting_input.find('option:selected').each(function() {
@@ -160,5 +164,6 @@ function update_customer_box_extras(current_order) {
 
   $.get(url, function(data) {
     current_order.find(".order_extras").html(data);
+    init_extras();
   });
 };
