@@ -20,10 +20,10 @@
         %li.row-fluid.data-listings{ class: package.status }
           .span3
             .row-fluid
-              .span4
+              .span5
                 = check_box_tag package.order_id, '1', false, data: { package: package.id }
                 = render partial: 'status_icons', locals: { status: package.status }
-              .span8
+              .span7
                 %strong= package.id
           .span9
             .row-fluid
@@ -41,10 +41,10 @@
         %li.row-fluid.data-listings.pending
           .span3
             .row-fluid
-              .span4
+              .span5
                 = check_box_tag order.id, '1', false
                 = image_tag 'icon-status-pending.png', title: 'UNPACKED package', class: 'icon-pending'
-              .span8
+              .span7
           .span9
             .row-fluid
               .span4= display_address(order)
