@@ -41,7 +41,7 @@
                     .span4
                       %strong= delivery.delivery_number
                     .span3
-                      %span.paid-label.label.label-success PAID
+                      %span.paid-label.label.label-success{ style: "#{'display: inline;' if delivery.paid?}" } PAID
                 .span9
                   .row-fluid
                     .span4= display_address(delivery)
