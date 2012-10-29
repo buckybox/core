@@ -14,7 +14,7 @@
         #content
           - unless yield(:sub_nav).blank?
             .row-fluid
-              .span12= yield(:sub_nav)
+              #sub-nav.span12= yield(:sub_nav)
 
           - if show_title?
             .row-fluid
