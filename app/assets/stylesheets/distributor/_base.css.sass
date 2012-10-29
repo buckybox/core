@@ -72,10 +72,11 @@ body
 
   #site-nav
     #logo
-      margin-top: 0.5em
-      margin-bottom: 4em
+      margin-top: 7px
+      margin-bottom: 56px
+      min-width: 70px
     li
-      margin-bottom: 2.5em
+      margin-bottom: 35px
       &.active
         .nav-arrow
           position: relative
@@ -86,7 +87,7 @@ body
             border-width: 11px
             position: absolute
             top: 17px
-            left: 79px
+            left: 59px
           &:after
             content: ' '
             border-color: transparent $content-background transparent transparent
@@ -94,7 +95,12 @@ body
             border-width: 10px
             position: absolute
             top: 18px
-            left: 81px
+            left: 61px
+          @media (min-width: 1200px)
+            &:before
+              left: 79px
+            &:after
+              left: 81px
       +site-nav-link('#nav-customers', 'nav-customers')
       +site-nav-link('#nav-deliveries', 'nav-deliveries')
       +site-nav-link('#nav-payments', 'nav-payments')
