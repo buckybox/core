@@ -1,17 +1,18 @@
 - title 'Customers', false
 = render 'controls'
 
-- if @customers.blank?
-  %h3 There are no customers to display
-- else
-  %table#customers.table
-    %thead
-      %tr.muted
-        %th{ colspan: 2 } Customer
-        %th{ colspan: 3 } Next Delivery
-        %th.balance Balance
+%table#customers.table.table-striped
+  %thead
+    %tr.muted
+      %th{ colspan: 2 } Customer
+      %th{ colspan: 3 } Next Delivery
+      %th.balance Balance
 
-    %tbody
+  %tbody
+    - if @customers.blank?
+      %tr.new-row
+        %td{ colspan: 6 }= link_to 'Create a new customer', new_distributor_customer_path
+    - else
       %tr.new-row
         %td{ colspan: 6 }= link_to 'Create a new customer', new_distributor_customer_path
 
