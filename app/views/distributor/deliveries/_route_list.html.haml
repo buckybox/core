@@ -55,7 +55,8 @@
           .row-fluid
             .span5
               = check_box_tag order.id, '1', false
-              = image_tag 'icon-status-pending.png', title: 'PENDING delivery', class: 'icon-pending'
+              .label.state-label.status-pending{ title: 'PENDING delivery' }
+                %i.icon-time
             .span7
         .span9
           .row-fluid
