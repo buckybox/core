@@ -1,0 +1,21 @@
+- stylesheet 'distributor'
+- javascript 'distributor'
+
+- content_for :body do
+  .container
+    = render_site_messages(flash)
+
+    .row
+      #logo-holder.span6.offset3
+        .row
+          #buckybox-logo.span6
+            = link_to image_tag('logo-grey.png', title: 'Bucky Box, simple to use software for your CSA, Vegetable Box Scheme, or Food Hub to automate orders, billing and delivery logistics'), 'http://www.buckybox.com/'
+
+      #devise-frame.span6.offset3
+        #up-arrow
+        .row
+          .span6
+            .row-fluid
+              #devise-form.span12= yield
+
+= render 'layouts/base'

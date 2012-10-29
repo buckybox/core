@@ -7,7 +7,7 @@ table.table
   tr.new-row
     td
       background-color: $tableBackground
-      padding: 5px 8px
+      padding: 5px 0px
       a
         display: block
         padding: 5px 0px
@@ -72,10 +72,11 @@ body
 
   #site-nav
     #logo
-      margin-top: 0.5em
-      margin-bottom: 4em
+      margin-top: 7px
+      margin-bottom: 56px
+      min-width: 70px
     li
-      margin-bottom: 2.5em
+      margin-bottom: 35px
       &.active
         .nav-arrow
           position: relative
@@ -86,7 +87,7 @@ body
             border-width: 11px
             position: absolute
             top: 17px
-            left: 79px
+            left: 59px
           &:after
             content: ' '
             border-color: transparent $content-background transparent transparent
@@ -94,35 +95,73 @@ body
             border-width: 10px
             position: absolute
             top: 18px
-            left: 81px
+            left: 61px
+          @media (min-width: 1200px)
+            &:before
+              left: 79px
+            &:after
+              left: 81px
       +site-nav-link('#nav-customers', 'nav-customers')
       +site-nav-link('#nav-deliveries', 'nav-deliveries')
       +site-nav-link('#nav-payments', 'nav-payments')
 
   #user-nav
-    .nav-tabs
-      border-top-width: 0px
-      li.active
-        a.dropdown-toggle
-          padding: 4px 12px
-          color: $linkColor
-          margin-right: 0px
-          background-color: inherit
-          .caret
-            border-top-color: $linkColor
-            border-bottom-color: $linkColor
-        &.open
-          a.dropdown-toggle
-            color: $linkColorHover
-            .caret
-              border-top-color: $linkColorHover
-              border-bottom-color: $linkColorHover
+    .nav-pills
+      .open
+        .dropdown-toggle
+          background-color: $action-colour
+          color: $black
+      li
+        a:hover
+          background-color: $action-color-hover
+        .dropdown-menu
+          &:before
+            content: ''
+            display: inline-block
+            border-left:   7px solid transparent
+            border-right:  7px solid transparent
+            border-bottom: 7px solid #ccc
+            border-bottom-color: $dropdownBorder
+            position: absolute
+            top: -7px
+            right: 9px
+          &:after
+            content: ''
+            display: inline-block
+            border-left:   6px solid transparent
+            border-right:  6px solid transparent
+            border-bottom: 6px solid $dropdownBackground
+            position: absolute
+            top: -6px
+            right: 10px
+          &#notification-dropdown
+            min-width: 270px
+            &:before
+              right: 13px
+            &:after
+              right: 14px
+            li
+              strong
+                display: block
+                padding: 3px 20px
+                text-align: center
+                background-color: $white
+              #dismiss-notifications
+                margin: 5px 0px 0px 0px
+                padding: 5px 20px
+                text-align: center
+                background-color: $grayLighter
+
+  #sub-nav
+    border-bottom: 1px solid $grayLight
+    padding-bottom: 14px
+    margin-bottom: 14px
 
   #content
     min-height: 750px
     margin-bottom: 49px
     background-color: $content-background
-    padding: 1em
+    padding: 14px
     border-style: solid
     border-width: 1px
     border-color: $content-border

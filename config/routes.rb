@@ -1,7 +1,7 @@
 BuckyBox::Application.routes.draw do
   devise_for :admins,       controllers: { sessions: 'admin/sessions' }
-  devise_for :distributors, controllers: { sessions: 'distributor/sessions' }
-  devise_for :customers,    controllers: { sessions: 'customer/sessions' }
+  devise_for :distributors, controllers: { sessions: 'distributor/sessions', passwords: 'distributor/passwords' }
+  devise_for :customers,    controllers: { sessions: 'customer/sessions', passwords: 'customer/passwords' }
 
   root to: 'distributor/customers#index'
 
@@ -37,6 +37,10 @@ BuckyBox::Application.routes.draw do
       get 'invoice_information'
       get 'stock_list'
       get 'reporting'
+    end
+
+    namespace :notifications do
+      post 'dismiss_all', actions: 'dismiss_all', as: 'dismiss_all'
     end
 
     namespace :reports do
