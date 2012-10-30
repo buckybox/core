@@ -1,30 +1,63 @@
 //----- Payments index
 
-$payments-green: #C8F1BA
-$payments-yellow: #FDE498
-$payments-red: #FFB1B1
-$payments-grey: #EEEEEE
+$payments-green: $forcasting-colour
+$payments-yellow: $action-colour
+$payments-red: $error-colour
+$payments-grey: $grayLighter
 
 #upload_more_transactions
   .ajax_loader_gif
     display: none
 
-.payments
-  .draft_import_transaction_list
-    background-color: $action-colour
-    .chosen-background
-      background-color: $forcasting-colour
-      overflow: hidden
-      padding: 3px
-      +border-radius(6px)
+#payment-tables
+  table
+    background-color: $white
+    thead
+      tr
+        th.date, td.date
+          width: 10%
+        th.description, td.description
+          width: 35%
+        th.amount, td.amount
+          width: 10%
+          text-align: right
+        th.account, td.account
+          width: 13%
+        th.customer, td.customer
+          width: 32%
+    form
+      margin: 0px
       .control-group
         margin-bottom: 0px
-      &.yellow
-        background-color: $payments-yellow
-      &.red
-        background-color: $payments-red
-      &.grey
-        background-color: $payments-grey
-      &.green
-        background-color: $payments-green
-
+    .draft_import_transaction_list
+      background-color: $action-colour
+      .chosen-background
+        background-color: $forcasting-colour
+        overflow: hidden
+        padding: 3px
+        +border-radius(6px)
+        .control-group
+          margin-bottom: 0px
+        &.yellow
+          background-color: $payments-yellow
+        &.red
+          background-color: $payments-red
+        &.grey
+          background-color: $payments-grey
+        &.green
+          background-color: $payments-green
+    .edit_row_match
+      +clearfix
+      .control-group
+        float: left
+        width: 75%
+        .not-draft-payment
+          width: 100%
+      .btn
+        float: left
+        margin-left: 5px
+        height: 28px
+    .chosen-background
+      width: 100%
+      .draft-payment
+        width: 100%

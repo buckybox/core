@@ -1,6 +1,6 @@
 = simple_form_for(import_transaction_list, url: process_payments_distributor_payment_path(import_transaction_list), method: :put) do |f|
   - if import_transaction_list.errors.present?
-    = import_transaction_list.errors.full_messages.join(", ")
+    = import_transaction_list.errors.full_messages.join(', ')
 
   %table.table.table-bordered.table-striped.no-horizontal-dividers
     %thead
@@ -22,7 +22,7 @@
             %td= import_transaction.payment_type
             %td{ title: "#{import_transaction.confidence*100}% Match" }
               .chosen-background{ class: payment_color(import_transaction) }
-                = tf.input :customer_id, as: :select, collection: import_transaction.possible_customers, selected: import_transaction.match_id, label: false, input_html: { class: 'chosen-payee-select draft-payment', style: 'width: 100%' }
+                = tf.input :customer_id, as: :select, collection: import_transaction.possible_customers, selected: import_transaction.match_id, label: false, input_html: { class: 'chosen-payee-select draft-payment' }
           %tr.row_details.hidden
             %td
             %td

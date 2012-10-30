@@ -3,17 +3,17 @@
 = simple_form_for(@import_transaction_list, url: process_payments_distributor_payment_path(@import_transaction_list), :method => :put) do |f|
   - if @import_transaction_list.errors.present?
     .row-fluid.errors
-      = @import_transaction_list.errors.full_messages.join(", ")
+      = @import_transaction_list.errors.full_messages.join(', ')
   .row-fluid
     .span12
-      %table.payments
+      %table.payments.table.table-bordered.table-striped.no-horizonatal-dividers
         %thead
           %tr
-            %th Date
-            %th{width: '400px'} Description
-            %th Amount
-            %th Account
-            %th Customer
+            %th.date Date
+            %th.description Description
+            %th.amount Amount
+            %th.account Account
+            %th.customer Customer
         %tbody
           - @import_transaction_list.import_transactions.not_removed.ordered.each do |import_transaction|
             = f.simple_fields_for(:import_transactions, import_transaction) do |tf|

@@ -26,15 +26,15 @@
         .ajax_loader_gif
 
 .row-fluid
-  .span12
+  #payment-tables.span12
     %table.payments.table.table-bordered.table-striped.no-horizontal-dividers
       %thead
         %tr
-          %th Date
-          %th Description
-          %th.text-right Amount
-          %th Payment Type
-          %th Customer
+          %th.date Date
+          %th.description Description
+          %th.amount Amount
+          %th.account Payment Type
+          %th.customer Customer
       %tbody
         - if current_distributor.can_upload_payments?
           %tr.new-row
@@ -44,8 +44,7 @@
 
         - @import_transaction_lists.each do |import_transaction_list|
           %tr.draft_import_transaction_list
-            %td{ colspan: 5 }
-              = render partial: 'draft_transactions', locals: {import_transaction_list: import_transaction_list}
+            %td{ colspan: 5 }= render partial: 'draft_transactions', locals: { import_transaction_list: import_transaction_list }
           %tr.hidden
 
         = render partial: 'distributor/import_transactions/rows'
