@@ -69,7 +69,7 @@ module Distributor::DeliveriesHelper
 
   def link_to_google_maps(address_shown, address_linked)
     address_linked = address_linked + ", #{[current_distributor.city, current_distributor.country.full_name].reject(&:blank?).join(", ")}"
-    link_to address_shown, "http://maps.google.com/maps?q=#{Rack::Utils.escape(address_linked)}", target: '_blank'
+    link_to('<i class="icon-map-marker"></i>'.html_safe, "http://maps.google.com/maps?q=#{Rack::Utils.escape(address_linked)}", target: '_blank') + " #{address_shown}"
   end
 
   def contents_description(item)
