@@ -3,7 +3,7 @@
     = check_box_tag 'all'
     = button_to('Print - Master List',
       master_packing_sheet_distributor_deliveries_path,
-      { id: 'master-print', class: 'btn btn-primary', disabled: !@real_list, form: { target: '_blank' } })
+      { id: 'master-print', class: !@real_list ? 'btn' : 'btn btn-primary', disabled: !@real_list, form: { target: '_blank' } })
   .span6.export.text-right
     = button_to('Export',
       export_distributor_deliveries_path,

@@ -2,10 +2,10 @@
   #route-controls.span7.delivery-actions
     = check_box_tag 'all'
     .btn-group
-      = button_tag class: 'btn btn-primary', id: 'delivered', disabled: !@real_list do
+      = button_tag class: !@real_list ? 'btn' : 'btn btn-primary', id: 'delivered', disabled: !@real_list do
         %i.icon-ok-sign.icon-white
         Delivered
-      = button_tag class: 'btn btn-primary dropdown-toggle', data: { toggle: 'dropdown' }, disabled: !@real_list do
+      = button_tag class: "btn#{' btn-primary' if @real_list} dropdown-toggle", data: { toggle: 'dropdown' }, disabled: !@real_list do
         %span.caret
       %ul#missed-options.dropdown-menu{ role: 'menu' }
         %li
