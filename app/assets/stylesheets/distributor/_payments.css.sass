@@ -10,21 +10,55 @@ $payments-grey: $grayLighter
     display: none
 
 #payment-tables
-  table
-    background-color: $white
-    thead
+  table#main-payment-table
+    > thead
       tr
-        th.date, td.date
-          width: 10%
-        th.description, td.description
-          width: 35%
-        th.amount, td.amount
-          width: 10%
+        th.date
+          width: 12%
+          padding-left: 16px
+        th.description
+          width: 28%
+        th.amount
+          width: 2%
           text-align: right
-        th.account, td.account
+        th.account
           width: 13%
-        th.customer, td.customer
-          width: 32%
+        th.customer
+          width: 29%
+    @media (min-width: 1200px)
+      > thead
+        tr
+          th.date
+            width: 12%
+          th.description
+            width: 32%
+          th.amount
+            width: 10%
+            text-align: right
+          th.account
+            width: 13%
+          th.customer
+            width: 31%
+  table.table
+    background-color: $white
+    #draft-transactions-controls
+      margin-left: 20px
+    tr
+      &.new-row
+        td
+          padding-left: 0px
+          padding-right: 0px
+      th.date, td.date
+        width: 12%
+      th.description, td.description
+        width: 33%
+      th.amount, td.amount
+        width: 10%
+        text-align: right
+      th.account, td.account
+        width: 13%
+      th.customer, td.customer
+        width: 32%
     form
       margin: 0px
       .control-group
@@ -51,6 +85,8 @@ $payments-grey: $grayLighter
       .control-group
         float: left
         width: 75%
+        @media (min-width: 1200px)
+          width: 78%
         .not-draft-payment
           width: 100%
       .btn

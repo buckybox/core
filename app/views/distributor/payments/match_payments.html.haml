@@ -6,35 +6,28 @@
       = @import_transaction_list.errors.full_messages.join(', ')
   .row-fluid
     .span12
-      %table.payments.table.table-bordered.table-striped.no-horizonatal-dividers
-        %thead
-          %tr
-            %th.date Date
-            %th.description Description
-            %th.amount Amount
-            %th.account Account
-            %th.customer Customer
+      %table.payments.table.table-striped
         %tbody
           - @import_transaction_list.import_transactions.not_removed.ordered.each do |import_transaction|
             = f.simple_fields_for(:import_transactions, import_transaction) do |tf|
               %tr.row-fluid_description{id: "import_transaction_#{import_transaction.id}"}
                 = tf.input :id, as: :hidden
                 = tf.input :draft, as: :hidden, input_html: {value: false}
-                %td= import_transaction.transaction_date.to_s(:transaction)
-                %td= import_transaction.description
-                %td= import_transaction.amount.format
-                %td= @import_transaction_list.account
-                %td
+                %td.date= import_transaction.transaction_date.to_s(:transaction)
+                %td.description= import_transaction.description
+                %td.amount= import_transaction.amount.format
+                %td.account= @import_transaction_list.account
+                %td.customer
                   %span{style: "display: inline-block"}= tf.input :customer_id, as: :select, collection: import_transaction.possible_customers, selected: import_transaction.match_id, label: false, input_html: { class: 'chosen-payee-select' }
                   %span= "*" + "*" * (4 * tf.object.confidence)
               %tr.row-fluid_details{style: "display: none;"}
-                %td
-                %td
+                %td.date
+                %td.description
                   - import_transaction.raw_data.each do |key, value|
                     %div= "#{key.to_s.humanize}: #{value}"
-                %td
-                %td
-                %td
+                %td.amount
+                %td.account
+                %td.customer
 
 
   .row-fluid
