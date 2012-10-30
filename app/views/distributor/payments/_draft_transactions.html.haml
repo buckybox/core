@@ -7,7 +7,7 @@
       %tr
         %th Date
         %th Description
-        %th Amount
+        %th.text-right Amount
         %th Payment Type
         %th Customer
     %tbody
@@ -18,7 +18,7 @@
             = tf.input :draft, as: :hidden, input_html: { value: false }
             %td= import_transaction.transaction_date.to_s(:transaction)
             %td= truncate(import_transaction.description, length: 70)
-            %td= import_transaction.amount.format
+            %td.text-right= import_transaction.amount.format
             %td= import_transaction.payment_type
             %td{ title: "#{import_transaction.confidence*100}% Match" }
               .chosen-background{ class: payment_color(import_transaction) }
@@ -35,4 +35,4 @@
       %tr
         %td.text-center{ colspan: 5 }
           = link_to "Cancel", distributor_import_transaction_list_path(import_transaction_list), method: :delete, id: 'payment_upload_cancel'
-          = f.submit "Import & Assign Transactions", class: 'btn btn-primary'
+          = f.submit "Import & Assign", class: 'btn btn-primary'

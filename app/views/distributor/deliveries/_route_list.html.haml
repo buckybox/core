@@ -27,7 +27,7 @@
 
 - if @real_list
   %ul#delivery_list.unstyled{ class: (@delivery_list.date.past? ? '' : 'sortable') }
-    - @items.group_by{|delivery| delivery.order.address.address_hash}.each do |addressh_hash, deliveries|
+    - @items.group_by{ |delivery| delivery.order.address.address_hash }.each do |addressh_hash, deliveries|
       %li.row-fluid
         .span12
           %ul.unstyled
@@ -35,13 +35,13 @@
               %li.row-fluid.data-listings{ class: delivery.status, data: { delivery_id: delivery.id } }
                 .span3
                   .row-fluid
-                    .span4
+                    .span5
                       = check_box_tag delivery.order_id, '1', false, data: { delivery: delivery.id }
                       = render partial: 'status_icons', locals: { status: delivery.status }
                     .span4
                       %strong= delivery.delivery_number
-                    .span4
-                      %span.paid-label.label.label-success PAID
+                    .span3
+                      %span.paid-label.label.label-success{ style: "#{'display: inline;' if delivery.paid?}" } PAID
                 .span9
                   .row-fluid
                     .span4= display_address(delivery)
@@ -53,10 +53,11 @@
       %li.row-fluid.data-listings.pending
         .span3
           .row-fluid
-            .span4
+            .span5
               = check_box_tag order.id, '1', false
-              = image_tag 'icon-status-pending.png', title: 'PENDING delivery', class: 'icon-pending'
-            .span8
+              .label.state-label.status-pending{ title: 'PENDING delivery' }
+                %i.icon-time
+            .span7
         .span9
           .row-fluid
             .span4= display_address(order)

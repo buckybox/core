@@ -1,4 +1,4 @@
-- title('Customer Payments')
+- title('Customer Payments', false)
 
 - if current_distributor.can_upload_payments?
   #upload_more_transactions.modal.hide.fade
@@ -32,7 +32,7 @@
         %tr
           %th Date
           %th Description
-          %th Amount
+          %th.text-right Amount
           %th Payment Type
           %th Customer
       %tbody

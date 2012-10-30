@@ -12,15 +12,15 @@
 
         %tbody
           %tr#new-transaction.new-form
-            %td
+            %td.date-column
               .new-form-input
-            %td
-              .new-form-input= text_field_tag 'date', Time.zone.today.to_s(:date_picker), id: 'transaction_date', class: 'input-small'
-            %td
-              .new-form-input= text_area_tag 'note', '', rows: 1, placeholder: 'e.g. Discount Credit Applied', class: 'input-xlarge'
-            %td
-              .new-form-input= text_field_tag 'delta', '0.00', required: 'required', class: 'input-mini'
-            %td
+            %td.date-column
+              .new-form-input= text_field_tag 'date', Time.zone.today.to_s(:date_picker), id: 'transaction_date', class: 'span11 offest1'
+            %td.details-column
+              .new-form-input= text_area_tag 'note', '', rows: 1, placeholder: 'e.g. Discount Credit Applied', class: 'span12'
+            %td.money-column.text-right
+              .new-form-input= text_field_tag 'delta', '0.00', required: 'required', class: 'span12'
+            %td.button-column
               .new-form-input=submit_tag 'Add', class: 'btn btn-primary'
 
           = render partial: 'distributor/accounts/more_transactions'

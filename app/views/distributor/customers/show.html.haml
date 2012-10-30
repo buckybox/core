@@ -20,8 +20,16 @@
           %strong= @customer.email
         - unless @address.phone_1.blank?
           %li
-            phone 1:
+            mobile:
             %strong= @address.phone_1
+        - unless @address.phone_2.blank?
+          %li
+            home:
+            %strong= @address.phone_2
+        - unless @address.phone_3.blank?
+          %li
+            work:
+            %strong= @address.phone_3
 
       - unless @customer.special_order_preference.blank?
         %p.note-field= @customer.special_order_preference
@@ -33,14 +41,7 @@
     #section-two
       %span.label.label-important= @customer.route.name.upcase
       - if @address
-        %address
-          = @address.address_1
-          %br
-          = @address.address_2 if @address.address_2
-          %br
-          = @address.suburb
-          %br
-          = @address.city
+        %address= @address.join('<br>')
 
       - unless @address.delivery_note.blank?
         %p.note-field= @address.delivery_note

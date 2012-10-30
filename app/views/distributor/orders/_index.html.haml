@@ -17,12 +17,12 @@
                 %li
                   %small= link_to 'edit order', edit_distributor_account_order_path(@account, order)
             %td.schedule
-              %ul.unstyled{id: "order_#{order.id}_details"}= render partial: 'distributor/orders/details', locals: { order: order}
+              = render partial: 'distributor/orders/details', locals: { order: order }
             %td
               %ul.unstyled.text-right
                 %li.important= order.price
                 %li
-                  %small= link_to('remove a order',
+                  %small= link_to('remove order',
                     deactivate_distributor_account_order_path(@account, order),
                     confirm: order_delete_warning(order), method: :put)
 
