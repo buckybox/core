@@ -1,0 +1,13 @@
+element = $("#edit_row_match_<%= @import_transaction.id %>");
+element.html('<%= j(render partial: "distributor/payments/processed_row_detail", locals: {import_transaction: @import_transaction}) %>');
+window.payments.reload()
+element_row = element.closest("tr");
+element_row.effect('highlight');
+element_row.next().addClass("hidden")
+<% if @import_transaction.matched? %>
+element_row.removeClass("not_a_customer")
+element_row.addClass("matched")
+<% else %>
+element_row.addClass("not_a_customer")
+element_row.removeClass("matched")
+<% end %>

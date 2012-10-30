@@ -3,8 +3,8 @@
     = f.input :id, as: :hidden
     = f.input :draft, as: :hidden, input_html: { value: false }
     .row-fluid
-      = f.input :customer_id, as: :select, collection: import_transaction.possible_customers, selected: import_transaction.match_id, label: false, input_html: { id: "import_transaction_customer_id_#{import_transaction.id}", class: 'span12 chosen-payee-select not-draft-payment' }
-    = f.submit "update", class: "btn btn-primary btn-mini"
+      .span8= f.input :customer_id, as: :select, collection: import_transaction.possible_customers, selected: import_transaction.match_id, label: false, input_html: { id: "import_transaction_customer_id_#{import_transaction.id}", class: 'span12 chosen-payee-select not-draft-payment' }
+      .span4= f.submit "update", class: "btn btn-primary btn-mini"
 %div.show_row_match
   - if import_transaction.matched?
     = customer_badge(import_transaction.customer)
