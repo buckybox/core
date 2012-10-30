@@ -9,8 +9,8 @@ $(document).ready ->
   fileInput.change ->
     arr = $(this).val().split("\\")
     filename = arr[arr.length-1]||$(this).val()
-    $('.file-input span.description').text(filename)
+    $(this).closest("div.controls").find("span.description").text(filename)
 
   $('.file-input').click ->
-    fileInput.click()
+    $(this).closest("div.controls").find("input.file").click()
   .show()
