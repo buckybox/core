@@ -24,8 +24,11 @@
               - customer.tags.each do |tag|
                 = link_to tag_distributor_customers_path(tag.name), class: 'link-label' do
                   %span.label.label-info= tag.name
-          %td= next_customer_delivery_occurrence(customer)
-          %td= next_customer_delivery_box_name(customer)
-          %td= customer.account.route.name
+          %td
+            %small= next_customer_delivery_occurrence(customer)
+          %td
+            %small= next_customer_delivery_box_name(customer)
+          %td
+            %small= customer.account.route.name
           %td.balance{ class: "#{'negative' if customer.account.balance.negative?}" }= customer.account.balance
 
