@@ -193,7 +193,7 @@ class WebstoreOrder < ActiveRecord::Base
     if order.nil?
       extras_hash = {}
       extras.each { |id, count| extras_hash[id] = { count: count } }
-      order = Order.create!(
+      order = Order.create(
         box: box,
         completed: true,
         account: account,
@@ -203,8 +203,8 @@ class WebstoreOrder < ActiveRecord::Base
       )
       order.update_exclusions(exclusions)
       order.update_substitutions(substitutions)
-      order.save
       self.order = order
+      order.save
     end
   end
 
