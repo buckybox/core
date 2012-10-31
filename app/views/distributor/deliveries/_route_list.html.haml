@@ -35,16 +35,16 @@
           %ul.unstyled
             - deliveries.each do |delivery|
               %li.row-fluid.data-listings{ class: delivery.status, data: { delivery_id: delivery.id } }
-                .span3
+                .span2
                   .row-fluid
-                    .span5
+                    .span8
                       = check_box_tag delivery.order_id, '1', false, data: { delivery: delivery.id }
                       = render partial: 'status_icons', locals: { status: delivery.status }
-                    .span4
+                    .span2
                       %strong= delivery.delivery_number
-                    .span3
+                    .span2
                       %span.paid-label.label.label-success{ style: "#{'display: inline;' if delivery.paid?}" } PAID
-                .span9
+                .span10
                   .row-fluid
                     .span4= display_address(delivery)
                     .span4= contents_description(delivery)
@@ -53,15 +53,14 @@
   %ul.unstyled
     - @items.each do |order|
       %li.row-fluid.data-listings.pending
-        .span3
+        .span2
           .row-fluid
-            .span5
+            .span12
               = check_box_tag order.id, '1', false
               .label.state-label.status-pending{ title: 'PENDING delivery' }
                 %i.icon-time
-            .span7
-        .span9
+        .span10
           .row-fluid
-            .span4= display_address(order)
+            .span3= display_address(order)
             .span4= contents_description(order)
-            .span4= customer_badge(order.customer)
+            .span5= customer_badge(order.customer)

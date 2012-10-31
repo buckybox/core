@@ -37,15 +37,14 @@
     %ul.unstyled
       - array.each do |order|
         %li.row-fluid.data-listings.pending
-          .span3
+          .span2
             .row-fluid
-              .span5
+              .span12
                 = check_box_tag order.id, '1', false
                 .label.state-label.status-unpacked{ title: 'UNPACKED package' }
                   %i.icon-time
-              .span7
-          .span9
+          .span10
             .row-fluid
-              .span4= display_address(order)
+              .span3= display_address(order)
               .span4= contents_description(order)
-              .span4= customer_badge(order.account.customer)
+              .span5= customer_badge(order.account.customer)
