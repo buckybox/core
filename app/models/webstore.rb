@@ -69,23 +69,26 @@ class Webstore
 
   def login_customer(user_information)
     email    = user_information[:email]
-    customer = Customer.find_by_email(email)
 
-    if customer.nil?
-      customer = distributor.customers.new(email: email)
-      customer.route = Route.default_route(@distributor)
-      customer.first_name = 'Webstore Order Customer'
-      customer.save
-      Event.new_customer_webstore(customer)
+    unless email.blank?
+      customer = Customer.find_by_email(email)
 
-      CustomerMailer.login_details(customer).deliver
+      if customer.nil?
+        customer = distributor.customers.new(email: email)
+        customer.route = Route.default_route(@distributor)
+        customer.first_name = 'Webstore Order Customer'
+        customer.save
+        Event.new_customer_webstore(customer)
 
-      @controller.sign_in(customer)
-    elsif customer.valid_password?(user_information[:password]) && customer.distributor == @distributor
-      @controller.sign_in(customer)
+        CustomerMailer.login_details(customer).deliver
+
+        @controller.sign_in(customer)
+      elsif customer.valid_password?(user_information[:password]) && customer.distributor == @distributor
+        @controller.sign_in(customer)
+      end
+
+      @order.account = customer.account
     end
-
-    @order.account = customer.account
 
     if @controller.customer_signed_in?
       @order.delivery_step
