@@ -25,6 +25,8 @@
       export_distributor_deliveries_path,
       { id: 'delivery-export', class: 'btn', disabled: !@real_list })
 
+.row-fluid.data-headings
+
 - if @real_list
   %ul#delivery_list.unstyled{ class: (@delivery_list.date.past? ? '' : 'sortable') }
     - @items.group_by{ |delivery| delivery.order.address.address_hash }.each do |addressh_hash, deliveries|

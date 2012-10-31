@@ -91,7 +91,9 @@ $navigation-month: #5c5c5c
     .sortable-highlight
       background-color: $grayLighter
     .data-headings
-      margin-bottom: 1em
+      margin-top: 30px
+      &:first-child
+        margin-top: 10px
       form
         margin: 0px
       .packing-actions, .delivery-actions
@@ -102,9 +104,10 @@ $navigation-month: #5c5c5c
         .btn-group
           display: inline-block
     .data-listings
-      height: 26px
-      border-top: 1px solid $navigation-header
-      border-bottom: 1px solid $navigation-header
+      &.tighter-height
+        height: 26px
+      border-top: 1px solid #CCC
+      border-bottom: 1px solid #CCC
       padding-top: 7px
       margin-bottom: -1px
       background-color: $white

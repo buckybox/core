@@ -17,15 +17,13 @@
 
     %ul.unstyled
       - array.each do |package|
-        %li.row-fluid.data-listings{ class: package.status }
-          .span3
+        %li.row-fluid.data-listings{ class: package.status+" tighter-height" }
+          .span2
             .row-fluid
-              .span5
+              .span12
                 = check_box_tag package.order_id, '1', false, data: { package: package.id }
                 = render partial: 'status_icons', locals: { status: package.status }
-              .span7
-                %strong= package.id
-          .span9
+          .span10
             .row-fluid
               .span4= display_address(package)
               .span4= contents_description(package)
