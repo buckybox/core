@@ -117,6 +117,7 @@ ActiveRecord::Schema.define(:version => 20121024025935) do
     t.integer  "default_consumer_fee_cents"
     t.datetime "created_at",                 :null => false
     t.datetime "updated_at",                 :null => false
+    t.string   "full_name"
   end
 
   create_table "cron_logs", :force => true do |t|
@@ -269,6 +270,7 @@ ActiveRecord::Schema.define(:version => 20121024025935) do
     t.text     "about"
     t.text     "details"
     t.string   "facebook_url"
+    t.string   "city"
   end
 
   add_index "distributors", ["authentication_token"], :name => "index_distributors_on_authentication_token", :unique => true
