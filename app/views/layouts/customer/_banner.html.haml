@@ -1,10 +1,11 @@
 .container
   #bucky-box-controls.row-fluid
     .span6
-      = link_to image_tag('bucky-box-powered.png', alt: 'Bucky Box powered'), 'http://www.buckybox.com/', target: '_blank'
-    .span6.text-right
+      = link_to image_tag('bucky-box-powered.png', alt: 'Bucky Box powered', id: 'bucky-box-powered'), 'http://www.buckybox.com/', target: '_blank'
+    #auth-controls.span6.text-right
       - if customer_signed_in?
-        == Signed in as #{current_customer.name}
+        Hi 
+        = link_to current_customer.name, customer_root_path
         \|
         = link_to 'Logout', destroy_customer_session_path, method: :delete
       - else
