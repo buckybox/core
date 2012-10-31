@@ -6,6 +6,7 @@ Date::DATE_FORMATS[:weekday] = "%A"
 Date::DATE_FORMATS[:month_and_year] = "%B %Y"
 Date::DATE_FORMATS[:day_month_and_year] = "%-d %B %Y"
 Date::DATE_FORMATS[:flux_cap] = "%d %b"
+Date::DATE_FORMATS[:route_delivery_dates] = "%a - %b %-d, %Y"
 
 Time::DATE_FORMATS[:weekday] = "%A"
 Time::DATE_FORMATS[:month_and_year] = "%B %Y"
