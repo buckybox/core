@@ -10,15 +10,22 @@ class WebstoreController < ApplicationController
 
   def process_step
     webstore = Webstore.new(self, @distributor)
-    webstore.process_params
+    @webstore_order = webstore.order
 
-    redirect_to action: webstore.next_step, distributor_parameter_name: @distributor.parameter_name
+    if webstore.process_params
+      redirect_to action: webstore.next_step, distributor_parameter_name: @distributor.parameter_name
+    end
   end
 
   def customise
     @stock_list = @distributor.line_items
     @box = @webstore_order.box
     @extras = @box.extras.alphabetically
+  end
+
+  def customise_error
+    customise
+    render :customise
   end
 
   def login

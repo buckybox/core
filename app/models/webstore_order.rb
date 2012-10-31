@@ -17,6 +17,8 @@ class WebstoreOrder < ActiveRecord::Base
 
   attr_accessible :box, :remote_ip
 
+  validate :extras_within_box_limit
+
   # Should really use state_machine here but don't have the time to risk it at the moment
   CUSTOMISE = :customise
   LOGIN     = :login
@@ -66,6 +68,10 @@ class WebstoreOrder < ActiveRecord::Base
 
   def has_bucky_fee?
     distributor.separate_bucky_fee?
+  end
+
+  def current_step
+    
   end
 
   def customise_step
@@ -202,7 +208,17 @@ class WebstoreOrder < ActiveRecord::Base
     end
   end
 
+  # required callback from the schedule, doesn't need to do anything tho.
   def schedule_changed(schedule_rule)
-    
+  end
+
+  def extras_count
+    extra_objects.size
+  end
+
+  def extras_within_box_limit
+    if box.present? && !box.extras_unlimited? && extras_count > box.extras_limit
+      errors.add(:base, "The #{box.extras_limit} was exceeded for this box")
+    end
   end
 end

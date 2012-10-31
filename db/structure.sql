@@ -840,11 +840,11 @@ CREATE TABLE distributors (
     country_id integer,
     consumer_delivery_fee_cents integer,
     active_webstore boolean DEFAULT false NOT NULL,
+    city character varying(255),
     company_team_image character varying(255),
     about text,
     details text,
-    facebook_url character varying(255),
-    city character varying(255)
+    facebook_url character varying(255)
 );
 
 
