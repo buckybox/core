@@ -3,7 +3,7 @@
 = render partial: 'webstore_order', object: @webstore_order
 
 = simple_form_for(:webstore_order, url: webstore_process_step_path) do |f|
-  #webstore-route.row-fluid.webstore-section{ style: "display: #{@selected_route_id ? 'none' : 'block'};" }
+  #webstore-route.row-fluid.webstore-section{ style: "display: #{@selected_route_id ? 'none' : 'block'}" }
     .span10
       = f.simple_fields_for(:route) do |g|
         .row-fluid
@@ -19,7 +19,7 @@
                 = simple_format(route.area_of_service)
                 = simple_format(route.estimated_delivery_time)
 
-  #webstore-schedule.row-fluid
+  #webstore-schedule.row-fluid{ class: "#{@selected_route_id ? 'webstore-section' : ''}" }
     .span10
       = f.simple_fields_for(:schedule_rule) do |g|
         .row-fluid
