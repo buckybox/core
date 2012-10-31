@@ -531,7 +531,8 @@ CREATE TABLE countries (
     default_time_zone character varying(255),
     default_consumer_fee_cents integer,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    updated_at timestamp without time zone NOT NULL,
+    full_name character varying(255)
 );
 
 
@@ -842,7 +843,8 @@ CREATE TABLE distributors (
     company_team_image character varying(255),
     about text,
     details text,
-    facebook_url character varying(255)
+    facebook_url character varying(255),
+    city character varying(255)
 );
 
 
@@ -2960,6 +2962,10 @@ INSERT INTO schema_migrations (version) VALUES ('20120927055104');
 INSERT INTO schema_migrations (version) VALUES ('20120927224520');
 
 INSERT INTO schema_migrations (version) VALUES ('20120929040236');
+
+INSERT INTO schema_migrations (version) VALUES ('20121002212248');
+
+INSERT INTO schema_migrations (version) VALUES ('20121003205726');
 
 INSERT INTO schema_migrations (version) VALUES ('20121010231051');
 
