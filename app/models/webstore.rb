@@ -17,7 +17,7 @@ class Webstore
     login_customer(webstore_params[:user])             if webstore_params[:user]
     update_delivery_information(webstore_params)       if webstore_params[:route]
     add_address_information(webstore_params[:address]) if webstore_params[:address]
-    complete_order                                     if webstore_params[:complete]
+    complete_order(webstore_params[:address])          if webstore_params[:complete]
 
     @order.save
   end
@@ -126,8 +126,11 @@ class Webstore
     @order.placed_step
   end
 
-  def complete_order
-    if @order.create_order
+  def complete_order(address_information)
+    if address_information[:name].blank? || address_information[:street_address].blank?
+      @controller.flash[:error] = 'Please include a name and street address'
+      @order.complete_step
+    elsif @order.create_order
       @controller.flash[:notice] = 'Your order has been placed'
       @order.placed_step
     elsif @order.order

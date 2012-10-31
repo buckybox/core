@@ -35,9 +35,9 @@ class WebstoreController < ApplicationController
     @selected_route_id = current_customer.route_id if existing_customer?
     @days = ScheduleRule::DAYS.map { |day| [day.to_s.titleize, ScheduleRule::DAYS.index(day)] }
     @order_frequencies = [
-      ['Delivery weekly on...', :weekly],
+      ['Deliver weekly on...', :weekly],
       ['Deliver every 2 weeks on...', :fortnightly],
-      ['Delivery monthly', :monthly],
+      ['Deliver monthly', :monthly],
       ['Deliver once', :single]
     ]
     @extra_frequencies = [

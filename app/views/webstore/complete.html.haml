@@ -22,13 +22,13 @@
               .span12
                 %h4 Your Name
             .row-fluid
-              .span12= g.input :name, label: false, placeholder: 'Enter your name', input_html: { value: @customer_name, class: 'span12' }
+              .span12= g.input :name, label: false, placeholder: 'Enter your name', input_html: { value: @customer_name, class: 'span12' }, required: true
             .row-fluid
               .span12
                 %h4 Deliver To
             .row-fluid
               .span12
-                = g.input :street_address, label: false, placeholder: 'Street', input_html: { value: @street_address, class: 'span12' }
+                = g.input :street_address, label: false, placeholder: 'Street', input_html: { value: @street_address, class: 'span12' }, required: true
                 = g.input :street_address_2, label: false, placeholder: 'Street', label: false, input_html: { value: @street_address_2, class: 'span12' }, required: false
                 = g.input :suburb, label: false, placeholder: 'Suburb', input_html: { value: @suburb, class: 'span12' }, required: false
             .row-fluid
@@ -38,9 +38,9 @@
   - if customer_signed_in?
     #webstore-balance.row-fluid.webstore-section.important
       .span10
-        %div Your existing account balance with us
-        %div This order
-        %div Balance owing
+        .totals-text Your existing account balance with us
+        .totals-text This order
+        .totals-text Balance owing
       .span2
         .text-right= @current_balance.format
         .text-right= (@order_price * -1).format

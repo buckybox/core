@@ -20,22 +20,26 @@
                 = simple_format(route.estimated_delivery_time)
 
   #webstore-schedule.row-fluid
-    .span12
+    .span10
       = f.simple_fields_for(:schedule_rule) do |g|
         .row-fluid
           .span12
-            %h4 When would you like it?
-        = render partial: 'route', collection: @routes, locals: { g: g, frequencies: @order_frequencies, days: @days }
+            .row-fluid
+              .span12
+                %h4 When would you like it?
+            = render partial: 'route', collection: @routes, locals: { g: g, frequencies: @order_frequencies, days: @days }
 
   - if @webstore_order.box.extras_allowed?
     #webstore-extras-frequency.row-fluid
-      .span12
+      .span10
         = f.simple_fields_for(:extra_frequency) do |g|
           .row-fluid
             .span12
-              %h4 What about those extra items?
-          .row-fluid
-            .span12= g.input :extra_frequency, label: false, collection: @extra_frequencies, include_blank: false, input_html: { class: 'span12' }
+              .row-fluid
+                .span12
+                  %h4 What about those extra items?
+              .row-fluid
+                .span12= g.input :extra_frequency, label: false, collection: @extra_frequencies, include_blank: false, input_html: { class: 'span12' }
 
   - if @webstore_order.has_bucky_fee?
     #webstore-bucky-fee.row-fluid.webstore-section
@@ -52,5 +56,5 @@
       .span2
         .important.text-right= @webstore_order.bucky_fee.format
 
-  .row-fluid
+  .row-fluid.webstore-section
     .span12= f.button :submit, 'Next', class: 'pull-right btn btn-process'
