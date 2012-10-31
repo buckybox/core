@@ -26,4 +26,14 @@ class Transaction < ActiveRecord::Base
   def customer
     account.customer
   end
+
+  def self.dummy(amount, description, date)
+    OpenStruct.new(
+      description: description,
+      amount: Money.new(0),
+      created_at: date,
+      display_time: date,
+      id: 999999999
+    )
+  end
 end
