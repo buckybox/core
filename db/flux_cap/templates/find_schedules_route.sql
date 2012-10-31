@@ -31,5 +31,5 @@ AND (	(
 	OR
 	schedule_pauses.start > (date ':date')
 	OR
-	schedule_pauses.finish < (date ':date')
+	schedule_pauses.finish <= (date ':date')
 )
