@@ -60,8 +60,10 @@ class Webstore
     extra_params = customise[:extras]
     add_extras_to_order(extra_params) if customise[:extras]
 
-    if @controller.customer_signed_in? && @controller.current_customer.distributor == @distributor
-      @order.delivery_step
+    if !@order.valid?
+      @controller.customise_error
+    elsif @controller.customer_signed_in? && @controller.current_customer.distributor == @distributor
+        @order.delivery_step
     else
       @order.login_step
     end
