@@ -1,0 +1,7 @@
+#site-nav
+  = image_tag 'logo-grey.png', alt: 'Bucky Box', id: 'logo'
+
+  %ul.unstyled
+    = distributor_nav_li('Customers', distributor_customers_path, link_id: 'nav-customers')
+    = distributor_nav_li('Deliveries', distributor_deliveries_path, link_id: 'nav-deliveries')
+    = distributor_nav_li('Payments', distributor_payments_path, link_id: 'nav-payments')

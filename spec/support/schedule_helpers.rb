@@ -8,45 +8,25 @@ RSpec::Matchers.define :include_schedule do |expected, strict_start_time|
 end
 
 #===== Creation
-def new_single_schedule(time = (Time.current + 1.day))
-  schedule = Schedule.new(time)
-  schedule.add_recurrence_time(time)
-
-  return schedule
+def new_single_schedule(date = (Date.current + 1.day))
+  schedule_rule = ScheduleRule.one_off(date)
+  return schedule_rule
 end
 
-def new_recurring_schedule(time = (Time.current + 1.day), days = [:monday, :tuesday, :wednesday, :thursday, :friday], interval = 1)
-  schedule = Schedule.new(time)
+def new_recurring_schedule(date = (Date.current + 1.day), days = [:mon, :tue, :wed, :thu, :fri], interval = 1)
+  schedule_rule = interval == 1 ? ScheduleRule.weekly(date, days) : ScheduleRule.fortnightly(date, days)
 
-  recurrence_rule = IceCube::Rule.weekly(interval).day(*days)
-  schedule.add_recurrence_rule(recurrence_rule)
-
-  return schedule
+  return schedule_rule
 end
 
-def new_everyday_schedule(time = (Time.current + 1.day))
-  new_recurring_schedule(time , [:sunday, :monday, :tuesday, :wednesday, :thursday, :friday, :saturday])
+def new_everyday_schedule(date = (Date.current + 1.day))
+  new_recurring_schedule(date, [:sun, :mon, :tue, :wed, :thu, :fri, :sat])
 end
 
-def new_monthly_schedule(time = (Time.current + 1.day), days = [0], interval = 1)
-  schedule = Schedule.new(time)
+def new_monthly_schedule(date = (Date.current + 1.day), days = [:sun])
+  schedule_rule = ScheduleRule.monthly(date, days)
 
-  monthly_days_hash = days.to_a.inject({}) { |hash, day| hash[day] = [1]; hash }
-  recurrence_rule = IceCube::Rule.monthly(interval).day_of_week(monthly_days_hash)
-  schedule.add_recurrence_rule(recurrence_rule)
-
-  return schedule
-end
-
-def new_full_schedule(time, single_time, weekly_rule, monthly_rule, exception_time)
-  schedule = Bucky::Schedule.new(time)
-
-  schedule.add_recurrence_time(single_time)
-  schedule.add_exception_time(exception_time)
-  schedule.add_recurrence_rule(weekly_rule)
-  schedule.add_recurrence_rule(monthly_rule)
-
-  return schedule
+  return schedule_rule
 end
 
 # Day needs to be an integer 0-6 representing the weekday

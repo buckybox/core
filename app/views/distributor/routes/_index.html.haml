@@ -1,29 +1,30 @@
-.row
-  %table.twelve.columns
-    %thead
-      %tr
-        %th Name
-        %th Mon
-        %th Tue
-        %th Wed
-        %th Thu
-        %th Fri
-        %th Sat
-        %th Sun
-        %th Fee
-        %th Actions
-
-    %tbody
-      - @routes.each do |route|
+.row-fluid
+  .span12
+    %table.table.table-bordered.table-striped.no-horizontal-dividers
+      %thead
         %tr
-          %td= route.name
-          %td= checkmark_boolean(route.monday)
-          %td= checkmark_boolean(route.tuesday)
-          %td= checkmark_boolean(route.wednesday)
-          %td= checkmark_boolean(route.thursday)
-          %td= checkmark_boolean(route.friday)
-          %td= checkmark_boolean(route.saturday)
-          %td= checkmark_boolean(route.sunday)
-          %td= route.fee.format
-          %td
-            = link_to 'Edit', edit_distributor_route_path(route)
+          %th Name
+          %th Mon
+          %th Tue
+          %th Wed
+          %th Thu
+          %th Fri
+          %th Sat
+          %th Sun
+          %th Fee
+          %th Actions
+
+      %tbody
+        - @routes.each do |route|
+          %tr
+            %td= route.name
+            %td= checkmark_boolean(route.mon)
+            %td= checkmark_boolean(route.tue)
+            %td= checkmark_boolean(route.wed)
+            %td= checkmark_boolean(route.thu)
+            %td= checkmark_boolean(route.fri)
+            %td= checkmark_boolean(route.sat)
+            %td= checkmark_boolean(route.sun)
+            %td= route.fee.format
+            %td
+              = link_to 'Edit', edit_distributor_route_path(route)

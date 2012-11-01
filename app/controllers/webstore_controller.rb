@@ -1,4 +1,6 @@
 class WebstoreController < ApplicationController
+  layout 'customer'
+
   before_filter :check_distributor
   before_filter :get_webstore_order, except: [:store, :process_step]
 
@@ -8,15 +10,22 @@ class WebstoreController < ApplicationController
 
   def process_step
     webstore = Webstore.new(self, @distributor)
-    webstore.process_params
+    @webstore_order = webstore.order
 
-    redirect_to action: webstore.next_step, distributor_parameter_name: @distributor.parameter_name
+    if webstore.process_params
+      redirect_to action: webstore.next_step, distributor_parameter_name: @distributor.parameter_name
+    end
   end
 
   def customise
     @stock_list = @distributor.line_items
     @box = @webstore_order.box
     @extras = @box.extras.alphabetically
+  end
+
+  def customise_error
+    customise
+    render :customise
   end
 
   def login
@@ -31,11 +40,11 @@ class WebstoreController < ApplicationController
     @routes = @distributor.routes
     @route_selections = @distributor.routes.map { |route| [route.name_days_and_fee, route.id] }
     @selected_route_id = current_customer.route_id if existing_customer?
-    @days = Bucky::Schedule::DAYS.map { |day| [day[0..2].to_s.titleize, Bucky::Schedule::DAYS.index(day)] }
+    @days = ScheduleRule::DAYS.map { |day| [day.to_s.titleize, ScheduleRule::DAYS.index(day)] }
     @order_frequencies = [
-      ['Delivery weekly on...', :weekly],
+      ['Deliver weekly on...', :weekly],
       ['Deliver every 2 weeks on...', :fortnightly],
-      ['Delivery monthly', :monthly],
+      ['Deliver monthly', :monthly],
       ['Deliver once', :single]
     ]
     @extra_frequencies = [
@@ -56,7 +65,7 @@ class WebstoreController < ApplicationController
       @city = @address.city
       @post_code = @address.postcode
     end
-    @order_price = @webstore_order.order_price
+    @order_price = @webstore_order.order_price(current_customer)
     @current_balance = current_customer.account.balance
     @closing_balance = @current_balance - @order_price
     @amount_due = @closing_balance * -1
@@ -66,7 +75,7 @@ class WebstoreController < ApplicationController
   def placed
     @customer = @webstore_order.customer
     @address = @customer.address
-    @schedule = @webstore_order.schedule
+    @schedule_rule = @webstore_order.schedule_rule
   end
 
   private

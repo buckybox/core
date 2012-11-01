@@ -1,0 +1,66 @@
+= simple_form_for(@form_params, html: { id: 'order-form' }) do |f|
+  = f.error_notification
+
+  .row-fluid
+    .span4
+      = f.association :box, collection: box_collection(@customer, with_price: true), include_blank: false, input_html: { class: 'box' }
+
+      - unless @order.persisted?
+        = f.input :frequency, collection: order_frequencies, include_blank: false, input_html: { class: 'frequency' }
+
+      .row-fluid.order_extras
+        - if current_customer
+          :javascript
+            var current_account_id = #{@account.id};
+        = render partial: 'extras', locals: { account: @account, order: @order, box: @order.box || box_collection(@customer).first }
+
+    .span4
+      #dislikes-input
+        .row-fluid
+          .span12
+            = f.label :dislikes, 'Exclusions'
+            .row-fluid
+              = select_tag :dislikes_input, options_from_collection_for_select(@stock_list, :id, :name, @dislikes_list), multiple: true, class: 'span12', data: { placeholder: "Exclude these items..." }
+      #likes-input
+        .row-fluid
+          .span12
+            = f.label :likes, 'Substitutes'
+            .row-fluid
+              = select_tag :likes_input, options_from_collection_for_select(@stock_list, :id, :name, @likes_list), multiple: true, class: 'span12', data: { placeholder: "Substitute for these items..." }
+
+    .span4
+      - unless @order.persisted?
+        %h3= @route.name
+        = label_tag :start_date, 'Start Date'
+        = select_tag :start_date, options_for_select(route_delivery_dates(@route))
+
+        %table#days
+          %tr
+            %td= check_box_tag 'days[monday]', '1', false, disabled: !@route.monday
+            %td= label_tag :days_monday, 'Monday'
+          %tr
+            %td= check_box_tag 'days[tuesday]', '2', false, disabled: !@route.tuesday
+            %td= label_tag :days_tuesday, 'Tuesday'
+          %tr
+            %td= check_box_tag 'days[wednesday]', '3', false, disabled: !@route.wednesday
+            %td= label_tag :days_wednesday, 'Wednesday'
+          %tr
+            %td= check_box_tag 'days[thursday]', '4', false, disabled: !@route.thursday
+            %td= label_tag :days_thursday, 'Thursday'
+          %tr
+            %td= check_box_tag 'days[friday]', '5', false, disabled: !@route.friday
+            %td= label_tag :days_friday, 'Friday'
+          %tr
+            %td= check_box_tag 'days[saturday]', '6', false, disabled: !@route.saturday
+            %td= label_tag :days_saturday, 'Saturday'
+          %tr
+            %td= check_box_tag 'days[sunday]', '0', false, disabled: !@route.sunday
+            %td= label_tag :days_sunday, 'Sunday'
+
+  .row-fluid
+    .span12.form-actions
+      = f.button :submit, class: 'btn btn-primary'
+      or
+      = link_to 'cancel', distributor_customer_path(@account.customer)
+
+

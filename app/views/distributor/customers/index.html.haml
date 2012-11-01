@@ -1,42 +1,34 @@
 - title 'Customers', false
 = render 'controls'
 
-- if @customers.blank?
-  .row.data-headings
-    %h4.twelve.columns No Customers To Display
-- else
-  .row.data-headings
-    .five.columns
-      .row
-        %h4.tweleve.columns Customer Name
-    .four.columns
-      .row
-        %h4.tweleve.columns Next Delivery
-    .three.columns
-      .row
-        %h4.six.columns Route
-        %h4.six.columns Balance
+%table#customers.table.table-striped
+  %thead
+    %tr.muted
+      %th{ colspan: 2 } Customer
+      %th{ colspan: 3 } Next Delivery
+      %th.balance Balance
 
-  #customers
-    .row
-      .twelve.columns.add-colour.data-list-new-link
-        = link_to 'Create a new customer', new_distributor_customer_path
+  %tbody
+    - if @customers.blank?
+      %tr.new-row
+        %td{ colspan: 6 }= link_to 'Create a new customer', new_distributor_customer_path
+    - else
+      %tr.new-row
+        %td{ colspan: 6 }= link_to 'Create a new customer', new_distributor_customer_path
 
-    - @customers.each do |customer|
-      .row.data-listings
-        .five.columns
-          .row
-            .seven.columns= customer_badge(customer)
-            .five.columns
-              - unless customer.tags.empty?
-                - customer.tags.each do |tag|
-                  %span.radius.label= link_to tag.name, tag_distributor_customers_path(tag.name)
-        .four.columns
-          .row
-            .four.columns= next_customer_delivery_occurrence(customer)
-            .eight.columns= next_customer_delivery_box_name(customer)
-        .three.columns
-          .row
-            .six.columns= customer.account.route.name
-            .six.columns= customer.account.balance.format
+      - @customers.each do |customer|
+        %tr
+          %td= customer_badge(customer)
+          %td
+            - unless customer.tags.empty?
+              - customer.tags.each do |tag|
+                = link_to tag_distributor_customers_path(tag.name), class: 'link-label' do
+                  %span.label.label-info= tag.name
+          %td
+            %small= next_customer_delivery_occurrence(customer)
+          %td
+            %small= next_customer_delivery_box_name(customer)
+          %td
+            %small= customer.account.route.name
+          %td.balance{ class: "#{'negative' if customer.account.balance.negative?}" }= customer.account.balance
 

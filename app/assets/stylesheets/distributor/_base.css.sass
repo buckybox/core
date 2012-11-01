@@ -1,0 +1,167 @@
+p.note-field
+  background-color: $note-colour
+  padding: 0.25em 0.5em
+  +border-radius(0.2em)
+
+table.table
+  tr.new-row
+    td
+      background-color: $tableBackground
+      padding: 5px 0px
+      a
+        display: block
+        padding: 5px 0px
+        text-align: center
+        background-color: $action-colour
+        +border-radius(0.4em)
+        &:hover
+          text-decoration: none
+          background-color: $action-color-hover
+  &.table-bordered
+    tr.new-row
+      td
+        padding: 5px
+
+table.table
+  tr.new-form
+    td
+      background-color: $tableBackground
+      padding: 5px 0px
+      .new-form-input
+        display: block
+        padding: 5px 0px
+        text-align: center
+        background-color: $action-colour
+      &:first-child
+        .new-form-input
+          margin-left: 5px
+          +border-left-radius(0.4em)
+      &:last-child
+        .new-form-input
+          margin-right: 5px
+          +border-right-radius(0.4em)
+
+=site-nav-link($selector, $image)
+  a#{$selector}
+    width: 70px
+    text-align: center
+    color: $grayLight
+    +single-transition(color, 0.5s, ease-in-out)
+    .nav-image
+      margin-left: auto
+      margin-right: auto
+      height: 52px
+      width: 52px
+      background-image: image-url($image + '-grey.png')
+      +single-transition(background-image, 0.5s, ease-in-out)
+    &:hover
+      text-decoration: none
+      color: #000000
+      +single-transition(color, 0.5s, ease-in-out)
+      .nav-image
+        background-image: image-url($image + '.png')
+        +single-transition(backbround-image, 0.5s, ease-in-out)
+  &.active
+    a#{$selector}
+      color: #000000
+      .nav-image
+        background-image: image-url($image + '.png')
+
+body
+  background-image: image-url('background.png')
+
+  #site-nav
+    #logo
+      margin-top: 7px
+      margin-bottom: 56px
+      min-width: 70px
+    li
+      margin-bottom: 35px
+      &.active
+        .nav-arrow
+          position: relative
+          &:before
+            content: ' '
+            border-color: transparent $content-border transparent transparent
+            border-style: solid
+            border-width: 11px
+            position: absolute
+            top: 17px
+            left: 59px
+          &:after
+            content: ' '
+            border-color: transparent $content-background transparent transparent
+            border-style: solid
+            border-width: 10px
+            position: absolute
+            top: 18px
+            left: 61px
+          @media (min-width: 1200px)
+            &:before
+              left: 79px
+            &:after
+              left: 81px
+      +site-nav-link('#nav-customers', 'nav-customers')
+      +site-nav-link('#nav-deliveries', 'nav-deliveries')
+      +site-nav-link('#nav-payments', 'nav-payments')
+
+  #user-nav
+    .nav-pills
+      .open
+        .dropdown-toggle
+          background-color: $action-colour
+          color: $black
+      li
+        a:hover
+          background-color: $action-color-hover
+        .dropdown-menu
+          &:before
+            content: ''
+            display: inline-block
+            border-left:   7px solid transparent
+            border-right:  7px solid transparent
+            border-bottom: 7px solid #ccc
+            border-bottom-color: $dropdownBorder
+            position: absolute
+            top: -7px
+            right: 9px
+          &:after
+            content: ''
+            display: inline-block
+            border-left:   6px solid transparent
+            border-right:  6px solid transparent
+            border-bottom: 6px solid $dropdownBackground
+            position: absolute
+            top: -6px
+            right: 10px
+          &#notification-dropdown
+            min-width: 270px
+            &:before
+              right: 13px
+            &:after
+              right: 14px
+            li
+              strong
+                display: block
+                padding: 3px 20px
+                text-align: center
+                background-color: $white
+              #dismiss-notifications
+                margin: 5px 0px 0px 0px
+                padding: 5px 20px
+                text-align: center
+                background-color: $grayLighter
+
+  #sub-nav
+    border-bottom: 1px solid $grayLight
+    padding-bottom: 14px
+    margin-bottom: 14px
+
+  #content
+    min-height: 750px
+    margin-bottom: 49px
+    background-color: $content-background
+    padding: 14px
+    border-style: solid
+    border-width: 1px
+    border-color: $content-border

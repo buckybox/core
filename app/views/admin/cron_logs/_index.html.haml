@@ -1,18 +1,16 @@
-.row
-  %table.twelve.columns
-    %thead
-      %tr
-        %th Log
-        %th Occurred At
+%table#cron_log.table.table-striped
+  %thead
+    %tr
+      %th Log
+      %th Occurred At
 
-    %tbody
-      - @cron_logs.each do |cron_log|
-        %tr
-          %td
-            .row.cron-details
-              .ten.columns= simple_format cron_log.log
-              .two.columns= link_to_function("details", "", class: "show-hide-details") if cron_log.details.present?
-            .row
-              .twelve.columns.cron-log-details.hide= simple_format cron_log.details
-          %td= cron_log.created_at.to_s(:pretty)
+  %tbody
+    - @cron_logs.each do |cron_log|
+      %tr
+        %td
+          .cron-details
+            = cron_log.log
+            = link_to_function('details', '', class: 'show-hide-details') if cron_log.details.present?
+          .cron-log-details.hide= simple_format cron_log.details
+        %td= cron_log.created_at.to_s(:pretty)
 

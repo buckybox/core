@@ -1,26 +1,27 @@
-.row
-  %table.twelve.columns
-    %thead
-      %tr
-        %th Image
-        %th Name
-        %th Price
-        %th Hidden
-        %th Exclusions
-        %th Substitutions
-        %th Extras
-        %th Description
-        %th Actions
-
-    %tbody
-      - @boxes.each do |box|
+.row-fluid
+  .span12
+    %table.table.table-bordered.table-striped.no-horizontal-dividers
+      %thead
         %tr
-          %td= image_tag(box.box_image.small_thumb.url)
-          %td= box.name
-          %td= box.price.format
-          %td= checkmark_boolean(box.hidden)
-          %td= checkmark_boolean(box.dislikes)
-          %td= checkmark_boolean(box.likes)
-          %td= box.extra_option
-          %td= simple_format box.description
-          %td= link_to 'Edit', edit_distributor_box_path(box)
+          %th Image
+          %th Name
+          %th Price
+          %th Hidden
+          %th Exclusions
+          %th Substitutions
+          %th Extras
+          %th Description
+          %th Actions
+
+      %tbody
+        - @boxes.each do |box|
+          %tr
+            %td= image_tag(box.box_image.tiny_thumb.url)
+            %td= box.name
+            %td= box.price.format
+            %td= checkmark_boolean(box.hidden)
+            %td= checkmark_boolean(box.dislikes)
+            %td= checkmark_boolean(box.likes)
+            %td= box.extra_option
+            %td= simple_format box.description
+            %td= link_to 'Edit', edit_distributor_box_path(box)

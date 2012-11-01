@@ -1,8 +1,8 @@
 = simple_form_for(current_customer, url: customer_customer_path(current_customer), html: { method: :put }) do |f|
-  = f.error_notification
+  .modal-body
+    = f.error_notification
 
-  .inputs
     = f.input :email, hint: 'Please double check this email as it is also used as your login.'
 
-  .actions
-    = f.button :submit, 'Update Email'
+  .modal-footer
+    = f.button :submit, 'Update Email', class: 'btn btn-primary'

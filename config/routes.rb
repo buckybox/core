@@ -1,9 +1,9 @@
 BuckyBox::Application.routes.draw do
   devise_for :admins,       controllers: { sessions: 'admin/sessions' }
-  devise_for :distributors, controllers: { sessions: 'distributor/sessions' }
-  devise_for :customers,    controllers: { sessions: 'customer/sessions' }
+  devise_for :distributors, controllers: { sessions: 'distributor/sessions', passwords: 'distributor/passwords' }
+  devise_for :customers,    controllers: { sessions: 'customer/sessions', passwords: 'customer/passwords' }
 
-  root to: 'distributor/dashboard#index'
+  root to: 'distributor/customers#index'
 
   namespace :webstore do
     get ':distributor_parameter_name',           action: 'store',     as: 'store'
@@ -17,9 +17,7 @@ BuckyBox::Application.routes.draw do
   end
 
   namespace :distributor do
-    root to: 'dashboard#index'
-    get 'dashboard', controller: 'dashboard', action: 'index'
-    post 'events/:id/dismiss', controller: 'dashboard', action: 'dismiss_event', as: 'dismiss_event'
+    root to: 'customers#index'
 
     namespace :wizard do
       get 'business'
@@ -39,6 +37,10 @@ BuckyBox::Application.routes.draw do
       get 'invoice_information'
       get 'stock_list'
       get 'reporting'
+    end
+
+    namespace :notifications do
+      post 'dismiss_all', actions: 'dismiss_all', as: 'dismiss_all'
     end
 
     namespace :reports do

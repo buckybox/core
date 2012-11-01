@@ -1,6 +1,0 @@
-%ul.nav-bar
-  %li#bucky-box-logo= image_tag 'buckylogo.png', alt: 'Logo'
-  = topic_tab 'Dashboard', distributor_root_path
-  = topic_tab 'Customers', distributor_customers_path
-  = topic_tab 'Deliveries', distributor_deliveries_path
-  = topic_tab 'Payments', distributor_payments_path if current_distributor.show_payments_tab?

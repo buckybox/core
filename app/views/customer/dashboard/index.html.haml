@@ -1,60 +1,13 @@
-= customer_title(current_customer, link: customer_root_path)
+- title(customer_and_number(current_customer), false)
+= render partial: 'customer/customers/sidebar', locals: { customer: current_customer }
 
-.row
-  .twelve.columns.text-center
-    %h2== Account Balance #{current_customer.account.balance.format}
+- if @distributor.active_webstore
+  .row-fluid
+    #new-customer-order.span12= link_to 'create new order from webstore', webstore_store_path(@distributor.parameter_name)
 
-.row
-  .nine.columns
-    .panel
-      .row
-        .nine.columns
-          %h3 My Orders
-        .three.columns.text-right
-          - if @distributor.active_webstore
-            = link_to 'New Order', webstore_store_path(@distributor.parameter_name), class: 'radius button'
-      .row
-        #customer-orders.twelve.columns
-          = render 'customer/orders/index' unless @orders.empty?
+- unless @orders.empty?
+  = render partial: 'customer/orders/order', collection: @orders
 
-    .panel
-      .row
-        .twelve.columns
-          %h3 Account Statement
-      .row
-        .twelve.columns
-          = render 'customer/transactions/index' unless @transactions.empty?
+- unless @transactions.empty?
+  = render 'customer/transactions/index'
 
-  .three.columns
-    .panel
-      %strong Deliver To:
-      .row
-        .twelve.columns
-          = current_customer.address.join('<br/>', with_phone:true)
-          %br
-          = link_to 'change my delivery address', '#', data: {'reveal-id' => 'address-modal'}
-
-      .row
-        #customer-controls.twelve.columns
-          = customer_badge(current_customer, link: customer_root_path)
-          %br
-          = current_customer.email
-          %br
-          = link_to 'change my email', '#', data: {'reveal-id' => 'email-modal'}
-          %br
-          = link_to 'change my password', '#', data: {'reveal-id' => 'password-modal'}
-
-#address-modal.reveal-modal
-  %h2 Change Your Address
-  = link_to '&#215;'.html_safe, '#', class: 'close-reveal-modal'
-  = render 'customer/addresses/form'
-
-#email-modal.reveal-modal
-  %h2 Change Your Email Address
-  = link_to '&#215;'.html_safe, '#', class: 'close-reveal-modal'
-  = render 'customer/customers/form'
-
-#password-modal.reveal-modal
-  %h2 Change Your Password
-  = link_to '&#215;'.html_safe, '#', class: 'close-reveal-modal'
-  = render 'customer/customers/password_form'

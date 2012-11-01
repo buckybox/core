@@ -7,14 +7,14 @@ gem 'rails', '~> 3.2.8'
 gem 'pg', '~> 0.14.0'
 
 gem 'haml-rails', '~> 0.3.4'
-gem 'sass-rails', '~> 3.2.5'
 gem 'jquery-rails', '~> 2.1.1'
-gem 'chosen-rails', '~> 0.9.8.1'
+gem 'bootstrap-sass', '~> 2.1.0.0'
+gem 'select2-rails', '~> 3.1.1'
+gem 'ember-rails', '~> 0.7.0'
 
 gem 'devise', '~> 2.1.2'
 gem 'multi_json', '~> 1.3.6'
-gem 'simple_form', '~> 1.5.2'
-gem 'ice_cube', git: 'git://github.com/ootoovak/ice_cube.git' # patched to persist data (that we use) in UTC timezone
+gem 'simple_form', '~> 2.0.2'
 gem 'inherited_resources', '~> 1.3.1'
 gem 'mini_magick', '~> 3.4'
 gem 'carrierwave', '~> 0.6.2'
@@ -37,7 +37,8 @@ gem 'airbrake', '~> 3.1.2'
 group :assets do
   gem 'coffee-rails', '~> 3.2.2'
   gem 'uglifier', '~> 1.2.7'
-  gem 'zurb-foundation', '~> 2.2.1.2'
+  gem 'sass-rails', '~> 3.2.5'
+  gem 'compass-rails', '~> 1.0.3'
 end
 
 group :install do
@@ -45,12 +46,8 @@ group :install do
 end
 
 group :development do
-  gem 'puma', '~> 1.6.1', require: false
   gem 'bullet', '~> 4.1.6', require: false
-
   gem 'brakeman', '~> 1.7.1', require: false
-
-  gem 'nifty-generators', '~> 0.4.6', require: false
 
   gem 'ruby-prof', '~> 0.11.2' # profiling with /newrelic
 
@@ -60,7 +57,6 @@ group :development do
   gem 'term-ansicolor', '~> 1.0.7'
   gem 'hirb', '~> 0.7.0'
   gem 'wirble', '~> 0.1.3'
-  gem 'rb-fsevent', '~> 0.9.1', require: false if RUBY_PLATFORM =~ /darwin/i
 
   gem 'guard-rspec', '~> 1.2.1'
   gem 'guard-spork', '~> 1.1.0'
@@ -106,7 +102,7 @@ group :development, :test do
 end
 
 group :development, :staging do
-  gem 'oink', require: 'oink'
+  gem 'oink', '~> 0.9.3', require: 'oink'
 end
 
 group :development, :test, :staging do

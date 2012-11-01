@@ -29,27 +29,14 @@ class Customer::OrdersController < Customer::ResourceController
 
   def pause
     start_date = Date.parse(params[:date])
-    end_date   = Bucky::Schedule.until_further_notice(start_date)
 
-    respond_to do |format|
-      if @order.pause!(start_date, end_date)
-        date = @order.pause_date
-        json = { id: @order.id, date: date, formatted_date: date.to_s(:pause), resume_dates: @order.possible_resume_dates }
-        format.json { render json: json }
-      else
-        format.json { head :bad_request }
-      end
-    end
+    @order.pause!(start_date, @order.resume_date)
+    render partial: 'customer/orders/details', locals: { order: @order }
   end
 
   def remove_pause
-    respond_to do |format|
-      if @order.remove_pause!
-        format.json { head :ok }
-      else
-        format.json { head :bad_request }
-      end
-    end
+    @order.remove_pause!
+    render partial: 'customer/orders/details', locals: { order: @order }
   end
 
   def pause_dates
@@ -57,35 +44,18 @@ class Customer::OrdersController < Customer::ResourceController
   end
 
   def resume
-    start_date = @order.schedule.exception_times.first.to_date
-    end_date   = Date.parse(params[:date]) - 1.day
+    start_date = @order.pause_date
+    end_date   = Date.parse(params[:date])
 
-    respond_to do |format|
-      if @order.pause!(start_date, end_date)
-        date = @order.resume_date
-        json = { id: @order.id, date: date, formatted_date: date.to_s(:pause) }
-        format.json { render json: json }
-      else
-        format.json { head :bad_request }
-      end
-    end
+    @order.pause!(start_date, end_date)
+    render partial: 'customer/orders/details', locals: { order: @order }
   end
 
   def remove_resume
-    start_date = @order.schedule.exception_times.first.to_date
-    end_date   = Bucky::Schedule.until_further_notice(start_date)
+    start_date = @order.pause_date
 
-    respond_to do |format|
-      if @order.pause!(start_date, end_date)
-        format.json { head :ok }
-      else
-        format.json { head :bad_request }
-      end
-    end
-  end
-
-  def resume_dates
-    render json: @order.possible_resume_dates
+    @order.pause!(start_date)
+    render partial: 'customer/orders/details', locals: { order: @order }
   end
 
   protected
@@ -105,10 +75,11 @@ class Customer::OrdersController < Customer::ResourceController
   end
 
   def load_form
-    @customer = current_customer
-    @account  = @customer.account
-    @route    = @customer.route
-    @stock_list    = current_customer.distributor.line_items
+    @customer      = current_customer
+    @distributor   = current_customer.distributor
+    @account       = @customer.account
+    @route         = @customer.route
+    @stock_list    = @distributor.line_items
     @form_params   = [:customer, @order]
     @dislikes_list = @order.exclusions.map { |e| e.line_item_id.to_s }
     @likes_list    = @order.substitutions.map { |s| s.line_item_id.to_s }

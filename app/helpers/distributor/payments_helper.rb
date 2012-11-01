@@ -32,4 +32,9 @@ module Distributor::PaymentsHelper
       'yellow'
     end
   end
+
+  def import_modal_link(import_transactions, modal_id)
+    name = import_transactions.blank? ? 'Import transactions' : 'Import more transactions'
+    link_to(name, modal_id, data: { toggle: 'modal' })
+  end
 end

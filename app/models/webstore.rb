@@ -60,8 +60,10 @@ class Webstore
     extra_params = customise[:extras]
     add_extras_to_order(extra_params) if customise[:extras]
 
-    if @controller.customer_signed_in? && @controller.current_customer.distributor == @distributor
-      @order.delivery_step
+    if !@order.valid?
+      @controller.customise_error
+    elsif @controller.customer_signed_in? && @controller.current_customer.distributor == @distributor
+        @order.delivery_step
     else
       @order.login_step
     end
@@ -69,23 +71,26 @@ class Webstore
 
   def login_customer(user_information)
     email    = user_information[:email]
-    customer = Customer.find_by_email(email)
 
-    if customer.nil?
-      customer = distributor.customers.new(email: email)
-      customer.route = Route.default_route(@distributor)
-      customer.first_name = 'Webstore Order Customer'
-      customer.save
-      Event.new_customer_webstore(customer)
+    unless email.blank?
+      customer = Customer.find_by_email(email)
 
-      CustomerMailer.login_details(customer).deliver
+      if customer.nil?
+        customer = distributor.customers.new(email: email)
+        customer.route = Route.default_route(@distributor)
+        customer.first_name = 'Webstore Customer'
+        customer.save
+        Event.new_customer_webstore(customer)
 
-      @controller.sign_in(customer)
-    elsif customer.valid_password?(user_information[:password]) && customer.distributor == @distributor
-      @controller.sign_in(customer)
+        CustomerMailer.login_details(customer).deliver
+
+        @controller.sign_in(customer)
+      elsif customer.valid_password?(user_information[:password]) && customer.distributor == @distributor
+        @controller.sign_in(customer)
+      end
+
+      @order.account = customer.account
     end
-
-    @order.account = customer.account
 
     if @controller.customer_signed_in?
       @order.delivery_step
@@ -97,7 +102,7 @@ class Webstore
 
   def update_delivery_information(delivery_information)
     assign_route(delivery_information[:route])                      if delivery_information[:route]
-    set_schedule(delivery_information[:schedule])                   if delivery_information[:schedule]
+    set_schedule(delivery_information[:schedule_rule])                   if delivery_information[:schedule_rule]
     assign_extras_frequency(delivery_information[:extra_frequency]) if delivery_information[:extra_frequency]
 
     if @controller.flash[:error].blank?
@@ -124,7 +129,18 @@ class Webstore
   end
 
   def complete_order
-    if @order.create_order
+    #FIXME: Hack for private launch, crap code, fml
+    customer = @order.customer
+    if customer
+      address = customer.address
+      customer_name = customer.first_name
+      street_address = address.address_1 if address
+    end
+
+    if customer_name.blank? || street_address.blank?
+      @controller.flash[:error] = 'Please include a name and street address'
+      @order.complete_step
+    elsif @order.create_order
       @controller.flash[:notice] = 'Your order has been placed'
       @order.placed_step
     elsif @order.order
@@ -166,18 +182,16 @@ class Webstore
 
   def set_schedule(schedule_information)
     frequency = schedule_information[:frequency]
-    start_time = Time.zone.parse(schedule_information[:start_date])
-
-    @order.frequency = frequency
+    start = Date.parse(schedule_information[:start_date])
 
     if frequency == 'single'
-      @order.create_schedule_for(:schedule, start_time, frequency)
+      @order.schedule_rule = ScheduleRule.one_off(start)
     else
       if schedule_information[:days].nil?
         @controller.flash[:error] = 'The schedule requires you select a day of the week.'
       else
-        days_by_number = schedule_information[:days].map { |d| d.first.to_i }
-        @order.create_schedule_for(:schedule, start_time, frequency, days_by_number)
+        days_by_number = schedule_information[:days].map { |d| ScheduleRule::DAYS[d.first.to_i] }
+        @order.schedule_rule = ScheduleRule.recur_on(start, days_by_number, frequency.to_sym)
       end
     end
   end

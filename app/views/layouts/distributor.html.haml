@@ -1,39 +1,27 @@
+- stylesheet 'distributor'
+- javascript 'distributor'
+
 - content_for :body do
-  %body
-    .container
-      .row
-        .twelve.columns
-          - flash.each do |kind, message|
-            = flash_bar(kind, message)
+  .container
+    .row
+      .span12= render 'layouts/distributor/user_nav'
 
-      .row
-        .twelve.columns.text-right
-          - if distributor_signed_in?
-            Signed in as 
-            %strong= current_distributor.name
-            \|
-            = link_to 'settings', distributor_settings_business_information_path
-            \|
-            - if admin_signed_in? 
-              = link_to 'logout', unimpersonate_admin_distributors_path
-            - else
-              = link_to 'logout', destroy_distributor_session_path, method: :delete
-          - else
-            = link_to 'login', new_distributor_session_path
+    = render_site_messages(flash)
 
-      .row
-        .twelve.columns= render 'distributor/shared/topic_tabs'
+    .row
+      .span1= render 'layouts/distributor/topic_tabs'
+      .span11
+        #content
+          - unless yield(:sub_nav).blank?
+            .row-fluid
+              #sub-nav.span12= yield(:sub_nav)
 
-      .row
-        .twelve.columns= yield(:sub_nav)
+          - if show_title?
+            .row-fluid
+              .span12.text-center
+                %h1= yield(:title)
 
-      - if show_title?
-        .row
-          .twelve.columns.text-center
-            %h1= yield(:title)
-
-      .row
-        .twelve.columns= yield
+          .row-fluid
+            .span12= yield
 
 = render 'layouts/base'
-

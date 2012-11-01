@@ -1,0 +1,125 @@
+//----- Deliveries index
+
+$navigation-base: #efefef
+$navigation-header: #8b8c85
+$navigation-month: #4d4d4d
+$navigation-selected: #0088cc
+$navigation-month: #5c5c5c
+
+#calendar-navigation
+  overflow: auto
+  height: 66px
+  margin-bottom: 1em
+  .jspHorizontalBar
+    +border-radius(4px)
+    height: 8px
+    .jspTrack
+      +border-radius(4px)
+      background-color: lighten($navigation-header, 25%)
+      .jspDrag
+        +border-radius(4px)
+        background-color: $navigation-header
+  ul
+    margin: 0px
+    li
+      display: inline-block
+      text-align: center
+      padding: 2px
+      width: 50px
+      margin-left: 0px
+      margin-right: -2px
+      border: 2px solid $white
+      +border-radius(10px)
+      +single-transition(border-color, 0.25s, ease-in-out)
+      &#selected, &:hover
+        +border-radius(10px)
+        +single-transition(border-color, 0.25s, ease-in-out)
+        border: 2px solid $navigation-selected
+      &.month
+        +border-radius(6px)
+        border: 2px solid $navigation-month
+        color: $navigation-month
+        vertical-align: text-bottom
+        font-weight: bold
+        font-size: 12px
+        margin: 0 2px -8px 2px
+        line-height: 42px
+        height: 40px
+        width: 43px
+      a
+        &:hover
+          text-decoration: none
+        .date, .count
+          padding: 4px
+        .date
+          +border-top-radius(6px)
+          background-color: $navigation-header
+          color: $white
+          font-size: 11px
+          line-height: 8px
+        .count
+          +border-bottom-radius(6px)
+          background-color: $navigation-base
+          color: $navigation-header
+          font-weight: bold
+          line-height: 24px
+          &.has_pending
+            background-color: $action-colour
+          &.out_of_range
+            background-color: $forcasting-colour
+
+#delivery-listings
+  #side-navigation
+    border-right: 1px solid $tableBorder
+    .label
+      background-color: $navigation-base
+      color: $black
+      margin-bottom: 1em
+    ul.nav-tabs
+      width: 100%
+      margin-top: 8px
+      li
+        a
+          line-height: 17px
+          overflow: hidden
+        span
+          float: right
+          background-color: $action-colour
+          color: $black
+  #delivery-list
+    min-height: 750px
+    .sortable-highlight
+      background-color: $grayLighter
+    .data-headings
+      margin-top: 30px
+      &:first-child
+        margin-top: 10px
+      form
+        margin: 0px
+      .packing-actions, .delivery-actions
+        input[type='checkbox']
+          margin-top: 0px
+        form
+          display: inline-block
+        .btn-group
+          display: inline-block
+    .data-listings
+      border-top: 1px solid #CCC
+      border-bottom: 1px solid #CCC
+      padding-top: 7px
+      margin-bottom: -1px
+      background-color: $white
+      input[type='checkbox']
+        margin-top: 0px
+      .state-label
+        display: inline-block
+        width: 30px
+        text-align: center
+      .paid-label
+        display: none
+      &.pending, &.unpacked
+        .state-label
+          background-color: $action-colour
+      &.delivered, &.cancelled, &.rescheduled, &.repacked, &.packed
+        .state-label
+          background-color: $navigation-base

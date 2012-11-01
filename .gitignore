@@ -7,6 +7,9 @@
 # Ignore RVM config
 .rvmrc
 
+# Ignore POW config
+.powrc
+
 # Ignore bundler config
 /.bundle
 

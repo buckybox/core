@@ -1,57 +1,61 @@
-%h2 Customer Payments
+- title('Customer Payments', false)
 
 - if current_distributor.can_upload_payments?
-  #upload_more_transactions.reveal-modal
-    = simple_form_for(@import_transaction_list, url: match_payments_distributor_payments_path, html: { multipart: true } ) do |f|
-      %fieldset
-        %legend Select the transaction data you wish to import:
-        %p= "Login to #{current_distributor.supported_csv_formats} to download/export your bank transactions in CSV format"
+  #upload_more_transactions.modal.hide.fade
+    .modal-header
+      = button_tag '×', class: 'close', data: { dismiss: 'modal' }, aria: { hidden: 'true' }
+      %h3 Import Transactions
+
+    .modal-body
+      %p Select the transaction data you wish to import.
+      %p= "Login to #{current_distributor.supported_csv_formats} to download/export your bank transactions in CSV format"
+
+      = simple_form_for(@import_transaction_list, url: match_payments_distributor_payments_path, html: { multipart: true }, html: { class: 'form-horizontal' }) do |f|
         .form_fields.ajax_loader_hide
           = f.error_notification
+
           - if @import_transaction_list.csv_parser.present? && !@import_transaction_list.csv_parser.rows.reject(&:valid?).size.zero?
             %span.error= @import_transaction_list.csv_parser.rows.find(&:invalid?).errors.full_messages.join(', ')
+
           - if current_distributor.available_csv_formats_select.size == 1
-            = f.input :file_format, as: :hidden, input_html: {value: current_distributor.available_csv_formats_select.first.last}
+            = f.input :file_format, as: :hidden, input_html: { value: current_distributor.available_csv_formats_select.first.last }
           - else
             = f.input :file_format, as: :select, collection: current_distributor.available_csv_formats_select, include_blank: false
-          = f.input :csv_file, label: false, input_html: {class: "auto_submit", label: "Import transactions"}
-        .ajax_loader_gif{style: 'display:none;'}
 
-.row
-  .twelve.columns
-    %table.payments
+          = f.input :csv_file, label: 'Import transactions', input_html: { class: 'auto_submit' }
+        .ajax_loader_gif
+
+.row-fluid
+  #payment-tables.span12
+    %table#main-payment-table.payments.table.table-striped
       %thead
-        %tr
-          %th Date
-          %th{ width: '350px' } Description
-          %th.amount
-            %span Amount
-          %th Payment Type
-          %th{ width: '240px' } Customer
-          %th
+        %tr.muted
+          %th.date Date
+          %th.description Description
+          %th.amount Amount
+          %th.account Payment Type
+          %th.customer Customer
       %tbody
         - if current_distributor.can_upload_payments?
-          %tr.row_action.import_more_transactions
-            %td{ colspan: 6 }
-              = link_to((@import_transactions.blank? ? "Import transactions" : "Import more transactions"), "", {id: 'upload_more_transactions_link'})
+          %tr.new-row
+            %td{ colspan: 5 }= import_modal_link(@import_transactions, '#upload_more_transactions')
         - else
-          %tr.row_action.import_more_transactions.hidden
-        - @import_transaction_lists.each do |import_transaction_list|
-          %tr.draft_import_transaction_list
-            %td{ colspan: 6 }
-              = render partial: 'draft_transactions', locals: {import_transaction_list: import_transaction_list}
           %tr.hidden
 
+        - @import_transaction_lists.each do |import_transaction_list|
+          %tr.draft_import_transaction_list
+            %td{ colspan: 5 }= render partial: 'draft_transactions', locals: { import_transaction_list: import_transaction_list }
+          %tr.hidden
 
         = render partial: 'distributor/import_transactions/rows'
 
-        %tr.row_action
-          %td{ colspan: 6 }
+        %tr
+          %td.text-center{ colspan: 5 }
             .ajax_loader_hide= link_to_function "more...", "window.payments.load_more_rows_on_bottom()" unless @import_transactions.blank?
-            .ajax_loader_gif{style:'display: none;'}
+            .ajax_loader_gif.hidden
 
 - if @import_transaction_list.csv_parser.present? && !@import_transaction_list.csv_parser.rows.reject(&:valid?).size.zero?
   :javascript
     $(function() {
-      $("#upload_more_transactions").reveal();
+      $('#upload_more_transactions').modal();
     })

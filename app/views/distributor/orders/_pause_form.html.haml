@@ -19,8 +19,8 @@
   .pause
     = hidden_field_tag 'order_id', order.id
 
-    - pause_date  = order.schedule.exception_times.first
-    - resume_date = (order.schedule.exception_times.empty? ? nil : order.schedule.exception_times.last + 1.day)
+    - pause_date  = order.pause_date
+    - resume_date = (order.resume_date ? nil : order.pause_date + 1.day)
 
     .inputs
       = label_tag 'start_date', class: 'string required' do

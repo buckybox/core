@@ -139,7 +139,7 @@ describe Customer do
       customer.reload
     end
 
-    specify { customer.next_delivery_time.should == @order.schedule.next_occurrence.to_date }
+    specify { customer.next_delivery_time.should == @order.schedule_rule.next_occurrence.to_date }
   end
 
   describe '.import' do
@@ -147,7 +147,7 @@ describe Customer do
 
     it "should import customer with all fields" do
       route = mock_model(Route)
-      route.stub_chain(:schedule, :include?).and_return(true)
+      route.stub(:includes?).and_return(true)
 
       boxes = []
       box = box_mock({box_type: "Rural Van", extras_unlimited?: true})

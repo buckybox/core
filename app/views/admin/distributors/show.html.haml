@@ -1,95 +1,71 @@
 - title("Admin - #{@distributor.name}")
 
 .row
-  .nine.columns
-  .three.columns= link_to "Upload Customer Data", customer_import_admin_distributor_path(@distributor)
+  .span12.text-right
+    = link_to 'back', admin_distributors_path
+    \|
+    = link_to 'edit', edit_admin_distributor_path(@distributor)
+    \|
+    = link_to "import data", customer_import_admin_distributor_path(@distributor)
 
-%table
-  %tr
-    %td Name:
-    %td= @distributor.name
-  %tr
-    %td Email:
-    %td= @distributor.email
-  %tr
-    %td Url:
-    %td= @distributor.url
-  %tr
-    %td Timezone:
-    %td= @distributor.time_zone
-  %tr
-    %td Country:
-    %td= @distributor.country.name
-  %tr
-    %td Currency:
-    %td= currency_name(@distributor.currency)
-  %tr
-    %td Consumer Delivery Fee:
-    %td= @distributor.consumer_delivery_fee.format
-  %tr
-    %td Separate Bucky Fee:
-    %td= checkmark_boolean(@distributor.separate_bucky_fee)
-  %tr
-    %td Bank Deposit:
-    %td= checkmark_boolean(@distributor.bank_deposit?)
-  %tr
-    %td Paypal:
-    %td= checkmark_boolean(@distributor.paypal?)
-  %tr
-    %td Bank File Format:
-    %td= @distributor.bank_deposit_format
-  %tr
-    %td Parameter Name:
-    %td= @distributor.parameter_name
-  %tr
-    %td Invoice Threshold:
-    %td= @distributor.invoice_threshold.format
-  %tr
-    %td Created On
-    %td= @distributor.created_at.to_s(:pretty)
-  %tr
-    %td Active Webstore
-    %td= checkmark_boolean(@distributor.active_webstore)
+.row
+  .span6
+    %dl
+      %dt Name
+      %dd= @distributor.name
+      %dt Email
+      %dd= @distributor.email
+      %dt Url
+      %dd= @distributor.url
+      %dt Timezone
+      %dd= @distributor.time_zone
+      %dt Country
+      %dd= @distributor.country.name
+      %dt Currency
+      %dd= currency_name(@distributor.currency)
+      %dt Consumer Delivery Fee
+      %dd= @distributor.consumer_delivery_fee.format
+      %dt Separate Bucky Fee
+      %dd= checkmark_boolean(@distributor.separate_bucky_fee)
+      %dt Bank Deposit
+      %dd= checkmark_boolean(@distributor.bank_deposit?)
+      %dt Paypal
+      %dd= checkmark_boolean(@distributor.paypal?)
+      %dt Bank File Format
+      %dd= @distributor.bank_deposit_format
+      %dt Parameter Name
+      %dd= @distributor.parameter_name
+      %dt Invoice Threshold
+      %dd= @distributor.invoice_threshold.format
+      %dt Separate Bucky Fee
+      %dd= checkmark_boolean(@distributor.separate_bucky_fee)
+      %dt Created On
+      %dd= @distributor.created_at.to_s(:pretty)
+      %dt Active Webstore
+      %dd= checkmark_boolean(@distributor.active_webstore)
 
-%table
-  %tr
-    %td Total Customers:
-    %td= @distributor.customers.count
-  %tr
-    %td Deliveries to Date:
-    %td= @distributor.deliveries.delivered.count
+  .span6
+    %dl
+      %dt Total Customers
+      %dd= @distributor.customers.count
+      %dt Deliveries to Date
+      %dd= @distributor.deliveries.delivered.count
 
-= simple_form_for(:invoice, url: [:invoice, :admin, @distributor]) do |f|
-  %table
-    %tr
-      %th
-        %strong Invoicing
-      %th
-        #invoice_loader.ajax_loader_gif
-      %th
-    %tr
-      %td Date from
-      %td
-        = f.input :start_date, as: :string, input_html: {value: Date.current.beginning_of_month, class: 'date_picker'}
-      %td
-    %tr
-      %td Date to
-      %td
-        = f.input :end_date, as: :string, input_html: {value: Date.current.end_of_month, class: 'date_picker'}
-      %td
-    %tr
-      %th Deliveries Made
-      %th Deliveries Cancelled
-      %th Value Shipped
-    %tr
-      %td{id: 'deliveries_made', class: 'text-center'}
-        = '?'
-      %td{id: 'deliveries_cancelled', class: 'text-center'}
-        = '?'
-      %td{id: 'value_shipped', class: 'text-center'}
-        = '?'
+= simple_form_for(:invoice, url: [:invoice, :admin, @distributor], html: { class: 'form-horizontal' }) do |f|
+  %fieldset
+    %legend Invoicing
+    #invoice_loader.ajax_loader_gif
+    = f.input :start_date, as: :string, input_html: { value: Date.current.beginning_of_month, class: 'date_picker' }
+    = f.input :end_date, as: :string, input_html: { value: Date.current.end_of_month, class: 'date_picker' }
 
+    %table.table.table-striped
+      %tr
+        %td Deliveries Made
+        %td#deliveries_made.text-center= '?'
+      %tr
+        %td Deliveries Cancelled
+        %td#deliveries_cancelled.text-center= '?'
+      %tr
+        %td Value Shipped
+        %td#value_shipped.text-center= '?'
 
-= link_to 'Edit', edit_admin_distributor_path(@distributor)
-\|
-= link_to 'Back', admin_distributors_path

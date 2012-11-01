@@ -1,0 +1,203 @@
+//----- Webstore Sidebar
+
+#content-information
+  img
+    +rotate(-5deg)
+    margin: 3px 0px
+  a#facebook-link
+    display: block
+    color: $black
+    opacity: 0.5
+    +clearfix
+    div
+      float: left
+      padding: 14px 0px 0px 17px
+      font-weight: bold
+      font-size: 110%
+    i
+      display: block
+      float: left
+      background: transparent url('facebook-icon.png') no-repeat right top
+      width: 48px
+      height: 48px
+    &:hover
+      opacity: 1
+
+//----- Store
+
+$webstore-item-padding: 8px
+
+#webstore-items
+  .webstore-item
+    width: 222px
+    margin-bottom: 15px
+    @media (min-width: 1200px)
+      width: 275px
+      margin-bottom: 22px
+    @media (min-width: 768px) and (max-width: 979px)
+      width: 261px
+    @media (max-width: 767px)
+      width: 100%
+    @media (max-width: 739px)
+      width: 100%
+    @media (max-width: 480px)
+      width: 100%
+    margin-bottom: 16px
+    float: left
+    +single-box-shadow(rgba(0, 0, 0, .25), 0px, 15px, 20px, -6px)
+    .box
+      background-color: $white
+      padding: $webstore-item-padding
+      border-left: 1px solid $section-border-color
+      border-top: 1px solid $section-border-color
+      border-right: 1px solid $section-border-color
+      img
+        width: 100%
+    aside
+      background-color: $section-info
+      padding: $webstore-item-padding
+      border-left: 1px solid $section-border-color
+      border-bottom: 1px solid $section-border-color
+      border-right: 1px solid $section-border-color
+      .price
+        float: left
+        font-weight: bold
+        font-size: 21px
+        line-height: 31px
+      form
+        float: right
+        margin: 0px
+
+//----- Webstore Order
+
+#current-order
+  +order-frame
+  img
+    float: left
+    width: 28%
+    padding-right: 2%
+  table.section-info
+    float: right
+    width: 70%
+    border-collapse: separate
+    tr
+      td
+        vertical-align: top
+        padding: 16px 5px
+        &.description
+          border-bottom: 1px solid $grayLighter
+          width: 79%
+          p
+            margin-top: 10px
+            margin-bottom: 0px
+      &#description
+        td
+          padding-top: 0px
+      &#total
+        td
+          padding-bottom: 6px
+          border-bottom-width: 0px
+          &.price
+            span
+              border-top: 1px solid $black
+              padding-top: 15px
+              padding-left: 6%
+  table.sub-section-info
+    margin-top: 3px
+    width: 100%
+    tr
+      td
+        padding: 4px 4px 0px 0px
+        &.icon
+          width: 16px
+        &.quantity
+          width: 36px
+          text-align: right
+
+//----- Webstore Customise
+
+#webstore-customise
+  .checkbox-header
+    label
+      font-weight: bold
+      font-size: 18px
+      line-height: 20px
+      margin: 0px
+      input
+        margin-bottom: 10px
+        margin-right: 5px
+  .dislikes_input, .likes_input
+    margin-bottom: 10px
+    .select
+      margin-left: 0px
+
+#webstore-extras
+  .table
+    background-color: $white
+    .control-group
+      margin-bottom: 0px
+    tr.extras-row
+      display: none
+      td
+        vertical-align: middle
+        &.information
+          width: 76%
+        &.quantity
+          width: 12%
+
+//----- Webstore Login
+
+#webstore-login
+  #password-field
+    display: none
+
+//----- Webstore Delivery
+
+#webstore-route
+  .route-info
+    p
+      background-color: $tableBackgroundAccent
+      padding: 5px 10px
+
+#webstore-schedule
+  .order-days
+    td
+      &:first-child
+        +border-top-left-radius(4px)
+      width: 14.28571%
+      background-color: $tableBackgroundAccent
+      text-align: center
+      .checkbox
+        margin-left: 42%
+
+//----- Webstore Complete
+
+#webstore-address
+  #update-address
+    input
+      margin-bottom: 0px
+
+#webstore-balance
+  .totals-text
+    font-size: 18px
+  .total
+    border-top: 1px solid $black
+
+#webstore-payment
+  +single-box-shadow(rgba(0, 0, 0, .25), 0px, 15px, 20px, -6px)
+  margin-bottom: $section-spacing
+  #amount-due
+    background-color: $section-info
+    padding: $section-padding
+    border: 1px solid $section-border-color
+    border-bottom-width: 0px
+  #payment
+    background-color: $white
+    padding: $section-padding
+    border: 1px solid $section-border-color
+    border-top-width: 0px
+
+//----- Webstore Placed
+
+#webstore-placed
+  +webstore-divider('box')

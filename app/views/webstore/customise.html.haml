@@ -1,41 +1,48 @@
-= simple_form_for(:webstore_order, url: webstore_process_step_path) do |f|
+- title('Webstore - Customise', false)
+= render 'webstore_sidebar'
+= render partial: 'webstore_order', object: @webstore_order
+
+= simple_form_for(:webstore_order, url: webstore_process_step_path, html: { class: 'form-inline' }) do |f|
   - if @box.customisable?
-    .row.webstore-section
-      .ten.columns.offset-by-two
+    #webstore-customise.row-fluid.webstore-section
+      .span10
         = f.simple_fields_for(:customise) do |g|
-          #webstore-customise.inputs
-            .row
-              .ten.columns= g.input :costomise, as: :boolean, label: 'customise my box'
-            #webstore-customisations.row
-              .ten.columns
-                .dislikes_input
-                  = g.input :dislikes_input, label: 'Exclude these items', collection: @stock_list, input_html: { multiple: true, data: { placeholder: 'Exclude these items...' } }, required: false
-                - if @box.likes?
-                  .likes_input
-                    = g.input :likes_input, label: 'Substitute for these items', collection: @stock_list, input_html: { multiple: true, data: { placeholder: 'Substitute for these items...' } }, required: false
+          .row-fluid
+            .span12= g.input :costomise, as: :boolean, label: 'Customise my box', wrapper: :inline_checkbox, wrapper_html: { class: 'checkbox-header' }
+          #webstore-customisations.row-fluid
+            .span12
+              .dislikes_input.clearfix
+                = g.input :dislikes_input, label: false, collection: @stock_list, input_html: { multiple: true, data: { placeholder: 'Exclude these items...' }, class: 'span12' }, required: false
+              - if @box.likes?
+                .likes_input.clearfix
+                  = g.input :likes_input, label: false, collection: @stock_list, input_html: { multiple: true, data: { placeholder: 'Substitute for these items...' }, class: 'span12' }, required: false
 
   - if @box.extras_allowed?
-    .row.webstore-section
-      .ten.columns.offset-by-two
+    #webstore-extras.row-fluid.webstore-section
+      .span10
         = f.simple_fields_for(:extras) do |g|
-          #webstore-extras.inputs
-            .row
-              .ten.columns
-                .row
-                  .twelve.columns.important
-                    - if @box.extras_unlimited?
-                      Add any amount of extra items
-                    - else
-                      Add up to #{@box.extras_limit} extra items
+          .row-fluid
+            .span12
+              - if @box.extras_unlimited?
+                %h4 
+                  %i.icon-plus 
+                  Add any amount of extra items
+              - else
+                %h4
+                  %i.icon-plus 
+                  Add up to #{@box.extras_limit} extra items
+          - if @webstore_order.errors.any?
+            .row-fluid
+              .span12
+                .alert.alert-error
+                  = @webstore_order.errors[:base].join(', ')
 
-                .row
-                  %table.twelve.columns
-                    %tbody
-                      - @extras.each do |extra|
-                        = render partial: 'extra', object: extra, locals: { g: g }
-                      %tr
-                        %td{ colspan: 3 }= g.input :add_extra, label: false, collection: @extras, label_method: :name_with_unit, input_html: { data: { placeholder: 'Add an extra item' } }, required: false
+          .row-fluid
+            .span12
+              %table.table.table-bordered
+                %tbody
+                  = render partial: 'extra', collection: @extras, locals: { g: g }
+              = g.input :add_extra, label: false, collection: @extras, label_method: :name_with_unit, input_html: { data: { placeholder: 'Add an extra item' }, class: 'span12' }, required: false
 
-  .row
-    .twelve.columns
-      .actions= f.button :submit, 'Next', class: 'float-right'
+  .row-fluid.webstore-section
+    .span12= f.button :submit, 'Next', class: 'pull-right btn btn-process'

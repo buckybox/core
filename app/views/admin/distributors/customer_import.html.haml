@@ -1,12 +1,11 @@
 - title('Admin - Customer Import')
 
 .row
-  .twelve.columns
-    = simple_form_for(:customer_import, url: validate_customer_import_admin_distributor_path, method: :put) do |f|
-      .inputs
-        = f.input :csv, as: :file, label: "CSV File"
+  .span12
+    = simple_form_for(:customer_import, url: validate_customer_import_admin_distributor_path, method: :put, html: { class: 'form-horizontal' }) do |f|
+      = f.input :csv, as: :file, label: "CSV File"
 
-      .actions
+      .form-actions
         = f.button :submit, "Validate"
-
-
+        or
+        = link_to 'Cancel', :back

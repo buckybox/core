@@ -1,18 +1,25 @@
 - content_for :sub_nav do
-  .row.page-controls.customer-controls
-    #information.seven.columns
-      - unless request.fullpath =~ /\/distributor\/customers\/\d+.*/
+  .row-fluid
+    #nav-info.span4
+      - unless /\/distributor\/customers\/\d+.*/ =~ request.fullpath
         - if params[:query]
-          %h3== Searching "#{params[:query]}"
+          .brand
+            Searching
+            %strong= params[:query]
+            %small= link_to 'clear', distributor_customers_path
         - elsif params[:tag]
-          %h3== Tag "#{params[:tag]}"
-
-        - if params[:query] || params[:tag]
-          = link_to 'Clear', distributor_customers_path
+          .brand
+            Tag
+            %strong= params[:tag]
+            %small= link_to 'clear', distributor_customers_path
       - else
-        = link_to '« Back to Customer List', distributor_customers_path, class: 'small radius button'
+        = link_to '« Back to Customer List', distributor_customers_path
 
-    #search.five.columns.text-right
-      = form_tag search_distributor_customers_path, method: :get, class: 'nice' do
-        = submit_tag 'Search', class: 'small radius button float-right'
-        = text_field_tag :query, '', placeholder: 'Customer Number, Name, Address', class: 'input-text float-right'
+    #search-form.span8
+      = form_tag search_distributor_customers_path, method: :get do
+        .input-append
+          = text_field_tag :query, '', placeholder: 'Customer Number, name, address...', class: 'span6'
+          = button_tag type: 'submit', class: 'btn btn-primary' do
+            %i.icon-search.icon-white 
+            Search
+

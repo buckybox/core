@@ -205,7 +205,7 @@ class Delivery < ActiveRecord::Base
 
       export_items = []
 
-      packages.group_by(&:box).each do |box, array|
+      packages.group_by(&:box).sort{|a,b| a.first.name <=> b.first.name}.each do |box, array|
         array.each do |package|
           export_items << package
         end

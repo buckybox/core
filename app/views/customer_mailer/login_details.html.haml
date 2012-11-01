@@ -1,6 +1,6 @@
 %p== Here's your new login details for your account with us at #{@distributor.name}
 
-%p== #{new_customer_session_url}
+%p== #{new_customer_session_url(distributor: @distributor.parameter_name)}
 
 %p
   == Email: #{@customer.email}

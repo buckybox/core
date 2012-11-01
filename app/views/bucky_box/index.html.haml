@@ -1,0 +1,26 @@
+- title 'Login'
+
+.row
+  .span12
+    %p Are you an existing distributor or customer? If so please log in with one of the following forms.
+
+.row
+  .span6
+    %h2 Distributor
+    = simple_form_for(Distributor.new, :as => :distributor, :url => session_path(:distributor)) do |f|
+      .inputs
+        = f.input :email, :required => true, :label => false, :placeholder => "Email", :autofocus => true
+        = f.input :password, :required => true, :label => false, :placeholder => "Password"
+        = f.input :remember_me, :as => :boolean if Devise.mappings[:distributor].rememberable?
+      .actions
+        = f.button :submit, "Distributor Login"
+
+  .span6
+    %h2 Customer
+    = simple_form_for(Customer.new, :as => :customer, :url => session_path(:customer)) do |f|
+      .inputs
+        = f.input :email, :required => true, :label => false, :placeholder => "Email", :autofocus => true
+        = f.input :password, :required => true, :label => false, :placeholder => "Password"
+        = f.input :remember_me, :as => :boolean if Devise.mappings[:customer].rememberable?
+      .actions
+        = f.button :submit, "Customer Login"

@@ -18,7 +18,7 @@ class Distributor::BoxesController < Distributor::ResourceController
     order = Order.new
     box = current_distributor.boxes.find_by_id(params[:id]) || Box.new
 
-    render partial: 'shared/orders/extras', locals: { account: account, order: order, box: box }
+    render partial: 'distributor/orders/extras', locals: { account: account, order: order, box: box }
   end
 
   private

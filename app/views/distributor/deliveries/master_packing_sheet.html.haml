@@ -1,23 +1,18 @@
 - title("Master Packing Sheet - #{Date.current.strftime("%A %d %B")}")
 
-:javascript
-  // attempt to print as soon as the screen loads
-  $(function() { print(); });
-
-.row
-  .twelve.columns
+.row-fluid
+  .span12
     - @packages.group_by(&:box).sort{ |a,b| a.first.name <=> b.first.name }.each do |box, array|
-      %table{:style => 'width:100%; border-collapse:collapse; margin-bottom:20px;'}
+      %table#master-packing-sheet.table.table-bordered
         %thead
           %tr
-            %th{:colspan => 5, :style => 'border:1px solid black;'}
-              = box.name
+            %th{ colspan: 5 }= box.name
 
         %tbody
           - array.reverse.each do |package|
             %tr
-              %td{:style => 'width:5%; border:1px solid black;'}
-              %td{:style => 'width:5%; border:1px solid black;'}= package.id
-              %td{:style => 'width:25%; border:1px solid black;'}= customer_badge(package.customer, customer_name: package.archived_customer_name)
-              %td{:style => 'width:40%; border:1px solid black;'}= package.archived_address
-              %td{:style => 'width:25%; border:1px solid black;'}== #{package.contents_description}
+              %td.check-space
+              %td= package.id
+              %td= customer_badge(package.customer, customer_name: package.archived_customer_name)
+              %td= package.archived_address
+              %td== #{package.contents_description}

@@ -18,22 +18,25 @@ class BuckyImageUploader < CarrierWave::Uploader::Base
   # # Provide a default URL as a default if there hasn't been a file uploaded:
   def default_url
     # For Rails 3.1+ asset pipeline compatibility:
-    asset_path("fallbacks/#{model.class.to_s.underscore}/#{mounted_as}/" + [version_name, "default.jpg"].compact.join('_'))
+    asset_path("fallbacks/#{model.class.to_s.underscore}/#{mounted_as}/" + [version_name, "default.png"].compact.join('_'))
+  end
+
+  def default?
+    default_url && default_url == url
   end
 
   # Process files as they are uploaded:
-  process resize_to_fit: [800, 800]
+  process resize_to_fit: [1280, 800]
 
-  # Create different versions of your uploaded files:
-  version :big_thumb do
+  version :thumb do
     process resize_to_fill: [300, 300]
   end
 
-  version :thumb, from_version: :big_thumb do
+  version :small_thumb, from_version: :thumb do
     process resize_to_fill: [100, 100]
   end
 
-  version :small_thumb, from_version: :big_thumb do
+  version :tiny_thumb, from_version: :thumb do
     process resize_to_fill: [50, 50]
   end
 

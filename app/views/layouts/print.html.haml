@@ -1,16 +1,18 @@
+- stylesheet 'print', media: 'print'
+- stylesheet 'print'
+- javascript 'print'
+
 - content_for :body do
-  %body
-    .container
-      .row
-        .twelve.columns
-          - if show_title?
-            %h1{:style => 'text-align:center;'}= yield(:title)
+  - if show_title?
+    .row-fluid
+      .span12.text-center
+        %h1= yield(:title)
 
-          = yield
+      = yield
 
-      #footer.row
-        .tweleve.columns
-          Powered by 
-          %strong Bucky Box
+  .row-fluid
+    .span12
+      Powered by 
+      %strong Bucky Box
 
 = render 'layouts/base'

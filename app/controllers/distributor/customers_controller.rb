@@ -41,6 +41,7 @@ class Distributor::CustomersController < Distributor::ResourceController
       @orders           = @account.orders.active
       @deliveries       = @account.deliveries.ordered
       @transactions     = @account.transactions.limit(6)
+      @transactions     = [Transaction.dummy(0, "Opening Balance", @account.created_at)] if @transactions.empty?
       @transactions_sum = @account.calculate_balance
     end
   end
@@ -70,10 +71,11 @@ class Distributor::CustomersController < Distributor::ResourceController
     @customers = @customers.tagged_with(params[:tag]) unless params[:tag].blank?
 
     unless params[:query].blank?
+      query = params[:query].gsub(/\./, '')
       if params[:query].to_i == 0
-        @customers = current_distributor.customers.search(params[:query])
+        @customers = current_distributor.customers.search(query)
       else
-        @customers = current_distributor.customers.where(number: params[:query].to_i)
+        @customers = current_distributor.customers.where(number: query.to_i)
       end
     end
     

@@ -1,7 +1,9 @@
 module Distributor::CustomersHelper
   def next_customer_delivery_occurrence(customer)
     next_occurrence = customer.next_order_occurrence_date
-    if next_occurrence == Date.current
+    if next_occurrence.blank? || next_occurrence < Date.current
+      nil
+    elsif next_occurrence == Date.current
       'Today'
     elsif next_occurrence == Date.current.tomorrow
       'Tomorrow'

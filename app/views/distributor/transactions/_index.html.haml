@@ -1,56 +1,31 @@
-.row
-  .twelve.columns
-    = form_tag(change_balance_distributor_account_path(@account, anchor: 'transactions'), method: :put, class: 'nice') do
-      .row
-        %table#transactions.twelve.columns{ data: { account: @account.id } }
-          %thead
-            %tr
-              %th
-                .row
-                  .two.columns Transaction Processed
-                  .two.columns Transaction Date
-                  .four.columns Description
-                  .two.columns.text-right Transaction
-                  .two.columns.text-right Balance
+.row-fluid
+  .span12
+    = form_tag(change_balance_distributor_account_path(@account, anchor: 'transactions'), method: :put, class: 'form-inline') do
+      %table#transactions.table.table-bordered.table-striped.no-horizontal-dividers{ data: { account: @account.id } }
+        %thead
+          %tr
+            %th Processed
+            %th Date
+            %th Details
+            %th.text-right Transaction
+            %th.text-right Balance
 
-          %tbody
-            %tr#transaction-form.add-colour
-              %td
-                .row
-                  .two.columns.offset-by-two
-                    .inputs
-                      .input.string.required.input-text
-                        = text_field_tag 'date', Time.zone.today.to_s(:date_picker), id: 'transaction_date', class: 'string input-text expand'
-                  .four.columns
-                    .inputs
-                      .input.input-text
-                        = text_area_tag 'note', '', rows: 1, placeholder: 'e.g. Discount Credit Applied', class: 'text expand'
-                  .two.columns
-                    .inputs
-                      .input.string.required.input-text
-                        = text_field_tag 'delta', '0.00', required: 'required', class: 'string input-text expand required text-right'
-                  .two.columns.text-right
-                    .actions= submit_tag 'Add', class: 'button radius small'
+        %tbody
+          %tr#new-transaction.new-form
+            %td.date-column
+              .new-form-input
+            %td.date-column
+              .new-form-input= text_field_tag 'date', Time.zone.today.to_s(:date_picker), id: 'transaction_date', class: 'span11 offest1'
+            %td.details-column
+              .new-form-input= text_area_tag 'note', '', rows: 1, placeholder: 'e.g. Discount Credit Applied', class: 'span12'
+            %td.money-column.text-right
+              .new-form-input= text_field_tag 'delta', '0.00', required: 'required', class: 'span12'
+            %td.button-column
+              .new-form-input=submit_tag 'Add', class: 'btn btn-primary'
 
-            - running_balance = @transactions_sum
+          = render partial: 'distributor/accounts/more_transactions'
 
-            - @transactions.each do |transaction|
-              - td_class = (transaction.manual? ? '' : 'auto')
-
-              %tr.transaction-data
-                %td{ class: td_class }
-                  .row
-                    .two.columns= transaction.created_at.to_s(:transaction)
-                    .two.columns= transaction.display_time.to_s(:transaction)
-                    .four.columns= transaction.description
-                    .two.columns.text-right= transaction.amount.format
-                    .two.columns.text-right= running_balance.format
-
-              - running_balance -= transaction.amount
-
-            %tr
-              %td
-                .row
-                  #more-transactions.twelve.columns.text-center
-                    = link_to 'more...', '#'
-                    #ajax-loader
+          %tr
+            %td#more-transactions{ colspan: 5 }
+              = link_to 'more...', '#'
+              #ajax-loader

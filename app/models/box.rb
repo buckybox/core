@@ -29,7 +29,7 @@ class Box < ActiveRecord::Base
   EXTRA_OPTIONS = (SPECIAL_EXTRA_OPTIONS + COUNT_EXTRA_OPTIONS)
 
   def big_thumb_url
-    box_image.big_thumb.url
+    box_image.thumb.url
   end
 
   def customisable?
