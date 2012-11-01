@@ -38,7 +38,7 @@
           %td
             - if order.recurs?
               %h2= order_schedule(order)
-              = render partial: 'customer/orders/pausing', locals: { order: order }
+              = render partial: 'customer/orders/details', locals: { order: order }
             - else
               %h2 Single order delivery
           %td
