@@ -53,11 +53,11 @@ module OrdersHelper
     return next_occurrences.uniq.sort{ |a,b| a[1] <=> b[1] }
   end
 
-  def order_start_dates(route, count = 28)
-    from_time = route.distributor.window_end_at.to_time_in_current_zone
-    next_occurrences = route.schedule.next_occurrences(count, from_time)
-
-    return next_occurrences.map { |time| [time.strftime("%A, %B %d, %Y"), time.to_date] }
+  def order_start_dates(route, time_from_now = nil)
+    time_from_now ||= 12.weeks.from_now
+    from_time = route.distributor.window_end_at + 1.day #next_occurrence includes the start date, so choose the next day
+    next_occurrences = route.occurrences_between(from_time, time_from_now)
+    return next_occurrences.map { |time| [time.to_s(:route_delivery_dates), time.to_date] }
   end
 
   def order_delete_warning(order)
