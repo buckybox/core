@@ -7,5 +7,5 @@
       .description= simple_format box.description
 
   %aside.clearfix
-    .price= box.price.format
+    .price= WebstoreOrder.box_price(box, current_customer).format
     = button_to 'Order', webstore_process_step_path(distributor.parameter_name, webstore_order: { box_id: box }), method: :post, class: 'btn btn-process'

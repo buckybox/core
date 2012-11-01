@@ -13,8 +13,8 @@
             %h1= webstore_order.box_name
             = simple_format(webstore_order.box_description)
           %td.price
-            - total += webstore_order.box_price
-            = webstore_order.box_price.format
+            - total += webstore_order.box_price(current_customer)
+            = webstore_order.box_price(current_customer).format
         - if webstore_order.customised?
           %tr#customisation
             %td.description
@@ -49,15 +49,15 @@
                           %span.badge= webstore_order.extra_count(extra_object)
                 %div{ title: webstore_order.extras_description }
               %td.price
-                - total += webstore_order.order_extras_price
-                = webstore_order.order_extras_price.format
+                - total += webstore_order.order_extras_price(current_customer)
+                = webstore_order.order_extras_price(current_customer).format
         - if webstore_order.scheduled?
           %tr#route
             %td.description
               %h2 Delivery service
             %td.price
-              - total += webstore_order.route_fee
-              = webstore_order.route_fee.format
+              - total += webstore_order.route_fee(current_customer)
+              = webstore_order.route_fee(current_customer).format
           - if webstore_order.has_bucky_fee?
             %tr#bucky-fee
               %td.description

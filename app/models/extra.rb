@@ -29,7 +29,7 @@ class Extra < ActiveRecord::Base
     end
   end
 
-  def price_with_discount(customer_discount)
+  def price_with_discount(customer_discount = nil)
     Package.calculated_extras_price([self.to_hash.merge(count: 1)], customer_discount)
   end
 

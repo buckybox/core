@@ -26,6 +26,10 @@ class WebstoreOrder < ActiveRecord::Base
   COMPLETE  = :complete
   PLACED    = :placed
 
+  def self.box_price(box, customer = nil)
+    Package.discounted(box.price, customer)
+  end
+
   def set_default_schedule_rule
     self.schedule_rule ||= ScheduleRule.one_off(Date.current) if new_record?
   end
@@ -42,8 +46,8 @@ class WebstoreOrder < ActiveRecord::Base
     box.name
   end
 
-  def box_price
-    box.price
+  def box_price(customer = nil)
+    Package.discounted(box.price, customer)
   end
 
   def box_description
@@ -58,8 +62,8 @@ class WebstoreOrder < ActiveRecord::Base
     route.name
   end
 
-  def route_fee
-    route.fee
+  def route_fee(customer = nil)
+    Package.discounted(route.fee, customer)
   end
 
   def bucky_fee
@@ -118,31 +122,27 @@ class WebstoreOrder < ActiveRecord::Base
     @substitution_objects_mem ||= LineItem.find_all_by_id(substitutions)
   end
 
-  def order_extras_price
-    unless @order_extras_price_mem
-      order_extra_hash = extras.map do |id, count|
-        extra_object = extra_objects.find{ |extra| extra.id == id.to_i }
-        {
-          name: extra_object.name,
-          unit: extra_object.unit,
-          price_cents: extra_object.price_cents,
-          currency: extra_object.currency,
-          count: count
-        }
-      end
-
-      @order_extras_price_mem = Package.calculated_extras_price(order_extra_hash)
+  def order_extras_price(customer = nil)
+    order_extra_hash = extras.map do |id, count|
+      extra_object = extra_objects.find{ |extra| extra.id == id.to_i }
+      {
+        name: extra_object.name,
+        unit: extra_object.unit,
+        price_cents: extra_object.price_cents,
+        currency: extra_object.currency,
+        count: count
+      }
     end
+
+    @order_extras_price_mem = Package.calculated_extras_price(order_extra_hash, customer)
 
     return @order_extras_price_mem
   end
 
-  def order_price
-    unless @order_price_mem
-      @order_price_mem = Package.calculated_individual_price(box, route)
-      @order_price_mem += order_extras_price unless extras.empty?
-      @order_price_mem += bucky_fee if has_bucky_fee?
-    end
+  def order_price(customer = nil)
+    @order_price_mem = Package.calculated_individual_price(box, route, customer)
+    @order_price_mem += order_extras_price(customer) unless extras.empty?
+    @order_price_mem += bucky_fee if has_bucky_fee?
 
     return @order_price_mem
   end
