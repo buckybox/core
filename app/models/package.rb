@@ -56,7 +56,7 @@ class Package < ActiveRecord::Base
   def self.calculated_extras_price(order_extras, customer_discount = nil)
     order_extras = order_extras.map(&:to_hash) unless order_extras.is_a?(Hash)
     customer_discount = customer_discount.discount if customer_discount.is_a?(Customer)
-
+    
     total_price = order_extras.map do |order_extra|
       money = Money.new(order_extra[:price_cents], order_extra[:currency])
       count = (order_extra[:count].to_i || 0)
@@ -66,7 +66,9 @@ class Package < ActiveRecord::Base
     customer_discount ? discounted(total_price, customer_discount) : total_price
   end
 
-  def self.discounted(price, customer_discount)
+  def self.discounted(price, customer_discount = nil)
+    return price if customer_discount.nil? # Convenience so we don't have to check all over app for nil
+
     customer_discount = customer_discount.discount if customer_discount.is_a?(Customer)
 
     price * (1 - customer_discount)

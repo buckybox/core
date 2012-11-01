@@ -5,7 +5,7 @@
         %tr.new-row
           %td{ colspan: 3 }= link_to 'Create a new order', new_distributor_account_order_path(@account)
         - @orders.each do |order|
-          %tr{ 'data-order-id' => order.id}
+          %tr{ 'data-order-id' => order.id }
             %td.name
               %ul.unstyled
                 %li

@@ -7,7 +7,7 @@
         Hi 
         = link_to current_customer.name, customer_root_path
         \|
-        = link_to 'Logout', destroy_customer_session_path, method: :delete
+        = link_to 'Logout', destroy_customer_session_path(distributor: @distributor.parameter_name), method: :delete
       - else
         = link_to 'Login', new_customer_session_path(distributor: @distributor.parameter_name)
 

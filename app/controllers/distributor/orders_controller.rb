@@ -81,12 +81,12 @@ class Distributor::OrdersController < Distributor::ResourceController
     start_date = Date.parse(params[:date])
 
     @order.pause!(start_date, @order.resume_date)
-    render partial: 'distributor/orders/details', locals: {order: @order}
+    render partial: 'distributor/orders/details', locals: { order: @order }
   end
 
   def remove_pause
     @order.remove_pause!
-    render partial: 'distributor/orders/details', locals: {order: @order}
+    render partial: 'distributor/orders/details', locals: { order: @order }
   end
 
   def pause_dates
@@ -98,14 +98,14 @@ class Distributor::OrdersController < Distributor::ResourceController
     end_date   = Date.parse(params[:date])
 
     @order.pause!(start_date, end_date)
-    render partial: 'distributor/orders/details', locals: {order: @order}
+    render partial: 'distributor/orders/details', locals: { order: @order }
   end
 
   def remove_resume
     start_date = @order.pause_date
 
     @order.pause!(start_date)
-    render partial: 'distributor/orders/details', locals: {order: @order}
+    render partial: 'distributor/orders/details', locals: { order: @order }
   end
   
   private

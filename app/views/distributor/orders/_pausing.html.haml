@@ -1,7 +1,7 @@
 - pause_date = order.pause_date
 - resume_date = order.resume_date
 
-.row-fluid.pausing{ id: "pausing_order_#{order.id}" }
+.row-fluid.pausing{ id: "pausing_order_#{order.id}", 'data-order-id' => order.id }
   .pause.info-controller
     .initial-link{ style: "display: #{pause_date ? 'none' : 'block'};" }
       = link_to 'pause', '#'

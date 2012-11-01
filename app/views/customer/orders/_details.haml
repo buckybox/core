@@ -1,0 +1,6 @@
+%ul.unstyled{ id: "order_#{order.id}_details" }
+  %li= order_schedule(order)
+
+  - if order.recurs?
+    %li= render partial: 'customer/orders/pausing', locals: { order: order }
+
