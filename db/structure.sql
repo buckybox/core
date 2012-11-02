@@ -142,7 +142,7 @@ DECLARE
   result DATE;
 BEGIN
   -- If it is a one off, then it doesn't have a mon -> sun schedule, check the day it starts on
-  IF schedule_rule.recur IS NULL THEN
+  IF schedule_rule.recur IS NULL OR schedule_rule.recur = 'single' THEN
     return EXTRACT(DOW FROM schedule_rule.start) = day;
   ELSE
     CASE day
@@ -2976,3 +2976,5 @@ INSERT INTO schema_migrations (version) VALUES ('20121010236717');
 INSERT INTO schema_migrations (version) VALUES ('20121018021812');
 
 INSERT INTO schema_migrations (version) VALUES ('20121024025935');
+
+INSERT INTO schema_migrations (version) VALUES ('20121102225050');
