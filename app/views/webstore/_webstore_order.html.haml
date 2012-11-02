@@ -46,7 +46,7 @@
                         %td
                           = webstore_order.extra_string(extra_object)
                         %td.quantity
-                          %span.badge= webstore_order.extra_count(extra_object)
+                          %span.label= webstore_order.extra_count(extra_object)
                 %div{ title: webstore_order.extras_description }
               %td.price
                 - total += webstore_order.order_extras_price(current_customer)
