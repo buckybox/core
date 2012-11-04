@@ -5,7 +5,7 @@
     %table.section-info
       %tbody
         %tr
-          %td#description
+          %td.description
             %h2= order.box.name
             %table.sub-section-info
               - unless order.exclusions.empty?
@@ -16,7 +16,7 @@
                     = order.exclusions_string
               - unless order.substitutions.empty?
                 %tr
-                  %td
+                  %td.icon
                     %i.icon-plus-sign
                   %td{ title: order.substitutions_string }
                     = order.substitutions_string
@@ -28,16 +28,15 @@
                     %td
                       = order.extra_string(extra_object)
                     %td.quantity
-                      %span.badge= order.extra_count(extra_object)
+                      %span.label= order.extra_count(extra_object)
             %br
-            = link_to 'edit order', edit_customer_order_path(order)
-          %td#thumb{ rowspan: 2 }= image_tag(order.box.box_image.small_thumb.url)
-          %td#total
+            %small= link_to 'edit order', edit_customer_order_path(order)
+          %td.thumb{ rowspan: 2 }= image_tag(order.box.box_image.small_thumb.url)
+          %td.total
             .price= order.price.format
         %tr.bottom-section
           %td
             - if order.recurs?
-              %h2= order_schedule(order)
               = render partial: 'customer/orders/details', locals: { order: order }
             - else
               %h2 Single order delivery

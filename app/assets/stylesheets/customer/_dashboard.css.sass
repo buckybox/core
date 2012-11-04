@@ -1,3 +1,11 @@
+//----- Sidebar
+
+#content-information
+  .customer-information-section
+    margin-bottom: 28px
+    &:last-child
+      margin-bottom: 0px
+
 //----- Dashboard
 
 #new-customer-order
@@ -17,7 +25,7 @@
 .customer-order
   +order-frame
   margin-bottom: 25px
-  table
+  table.section-info
     width: 100%
     tbody
       tr.bottom-section
@@ -25,15 +33,26 @@
           padding-top: 25px
       td
         vertical-align: top
-        &#description
+        &.description
           padding-right: 25px
-        &#thumb
+          .label
+            padding-left: 8px
+            padding-right: 8px
+        &.thumb
           width: 120px
           img
             display: block
             margin: 0 auto
-        &#total
+        &.total
           width: 14%
+  table.sub-section-info
+    margin-top: 3px
+    width: 100%
+    tr
+      td
+        padding: 4px 4px 0px 0px
+        &.icon
+          width: 16px
   .pausing
     a, span
       font-size: 12px
