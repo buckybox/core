@@ -1,20 +1,20 @@
 - content_for :sidebar do
   .row-fluid
     .span12
-      %h1= customer.name
-      == ID: #{customer.number}
-      %br
-      = customer.email
-      %br
-      = link_to 'change my name/email', '#email-modal', data: { toggle: 'modal' }
-      %br
-      = link_to 'change my password', '#password-modal', data: { toggle: 'modal' }
+      .customer-information-section
+        %h1= customer.name
+        == ID: #{customer.number}
+        %br
+        = customer.email
+        %br
+        %small= link_to 'change my name/email', '#email-modal', data: { toggle: 'modal' }
+        %br
+        %small= link_to 'change my password', '#password-modal', data: { toggle: 'modal' }
 
-  .row-fluid
-    .span12
-      = current_customer.address.join('<br/>', with_phone: true)
-      %br
-      = link_to 'change my delivery address', '#address-modal', data: { toggle: 'modal' }
+      .customer-information-section
+        = current_customer.address.join('<br/>', with_phone: true)
+        %br
+        %small= link_to 'change my delivery address', '#address-modal', data: { toggle: 'modal' }
 
 #address-modal.modal.hide.fade
   .modal-header
