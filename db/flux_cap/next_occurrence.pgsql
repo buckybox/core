@@ -1,5 +1,5 @@
 CREATE OR REPLACE FUNCTION next_occurrence(
-  from_date DATE, schedule_rule schedule_rules
+  from_date DATE, ignore_pauses BOOLEAN, schedule_rule schedule_rules
 )
   RETURNS DATE
   LANGUAGE plpgsql STABLE
@@ -13,7 +13,7 @@ BEGIN
     next_date := unpaused_next_occurrence(next_date, schedule_rule);
 
     -- Test if it falls in a pause, exit if not
-    EXIT WHEN NOT is_paused(next_date, schedule_rule);
+    EXIT WHEN ignore_pauses OR NOT is_paused(next_date, schedule_rule);
 
     -- Apparently that one was in a pause, start looking again from the end of a pause
     next_date := pause_finish(next_date, schedule_rule);
@@ -108,11 +108,7 @@ BEGIN
     return from_date + days_from_now;
   WHEN 'monthly' THEN
   -- ==================== MONTHLY ====================
-    -- If we go above the 7th of a month, we skip to the next month
-    IF date_part('day', from_date) > 7 THEN
-      from_date := date(date_part('year', from_date + '1 month'::interval)::text || '-' || date_part('month', from_date + '1 month'::interval)::text || '-01');
-    END IF;
-    FOR i IN 0..6 LOOP
+    FOR i IN 0..11 LOOP
       -- If we go above the 7th of a month, we skip to the next month
       IF date_part('day', from_date) > 7 THEN
         from_date := date(date_part('year', from_date + '1 month'::interval)::text || '-' || date_part('month', from_date + '1 month'::interval)::text || '-01');
@@ -124,7 +120,7 @@ BEGIN
 
     return from_date;
   ELSE
-    IF schedule_rule.recur IS NULL THEN
+    IF schedule_rule.recur IS NULL OR schedule_rule.recur = 'single' THEN
   -- ==================== ONE OFF / SINGLE ====================
       IF from_date > schedule_rule.start THEN
         return NULL;
@@ -132,7 +128,7 @@ BEGIN
         RETURN from_date;
       END IF;
     ELSE
-      RAISE EXCEPTION 'schedule_rules.recur should be NULL, weekly, fortnightly or monthly';
+      RAISE EXCEPTION 'schedule_rules.recur should be NULL, single, weekly, fortnightly or monthly';
   END IF;
   END CASE;
 
@@ -149,7 +145,7 @@ DECLARE
   result DATE;
 BEGIN
   -- If it is a one off, then it doesn't have a mon -> sun schedule, check the day it starts on
-  IF schedule_rule.recur IS NULL THEN
+  IF schedule_rule.recur IS NULL OR schedule_rule.recur = 'single' THEN
     return EXTRACT(DOW FROM schedule_rule.start) = day;
   ELSE
     CASE day

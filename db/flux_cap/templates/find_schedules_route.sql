@@ -8,7 +8,7 @@ where customers.distributor_id = :distributor_id
 AND customers.route_id = :route_id
 AND orders.active = 't'
 AND (	(
-		recur is NULL AND schedule_rules.start = ':date'
+		(recur is NULL OR recur = 'single') AND schedule_rules.start = ':date'
 	)
 	OR 
 	(

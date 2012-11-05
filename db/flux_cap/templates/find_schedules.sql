@@ -6,7 +6,7 @@ full outer join schedule_pauses on schedule_pauses.id = schedule_rules.schedule_
 where boxes.distributor_id = :distributor_id
 AND orders.active = 't'
 AND (	(
-		recur is NULL AND schedule_rules.start = ':date'
+		(recur is NULL OR recur = 'single') AND schedule_rules.start = ':date'
 	)
 	OR 
 	(

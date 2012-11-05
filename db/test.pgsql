@@ -1,31 +1,34 @@
 -- -h localhost -U jordan -d bucky_box_development
-SELECT schedule_rules.*, next_occurrence('2013-01-04', false, schedule_rules.*) as next_occurrence FROM "schedule_rules" WHERE "schedule_rules"."id" = 6296 LIMIT 1
-
---UPDATE customers SET next_order_id = d.order_id, next_order_occurrence_date = d.next_occurrence
---  SELECT c.id, c.number, c.first_name, c.last_name, a.order_id, a.next_occurrence
---  FROM customers c
---  LEFT OUTER JOIN (
---      WITH occurrences AS (
---        SELECT customer_id, order_id, min(occurrence) as next_occurrence
---        FROM (
---          SELECT customers.id as customer_id, orders.id as order_id, next_occurrence('2012-10-04', schedule_rules.*) as occurrence
---            FROM customers
---            JOIN accounts ON accounts.id = customers.id
---            JOIN orders ON accounts.id = orders.account_id AND orders.active = 't'
---            JOIN schedule_rules ON orders.id = schedule_rules.order_id
---            WHERE distributor_id = 14
---          ) occurrences
---        GROUP BY customer_id, order_id
---      )
---      SELECT a.customer_id, min(b.order_id) as order_id, a.next_occurrence
---      FROM (
---        SELECT a.customer_id, min(a.next_occurrence) as next_occurrence
---        FROM occurrences a
---        GROUP BY a.customer_id
---      ) a JOIN occurrences b ON a.customer_id = b.customer_id AND a.next_occurrence = b.next_occurrence
---      GROUP BY a.customer_id, a.next_occurrence
---      order by customer_id
---  ) a ON c.id = a.customer_id
---) d
---WHERE customers.distributor_id = 14
---AND customers.id = d.id
+select sum(orders.quantity) as count
+from orders
+inner join boxes on boxes.id = orders.box_id
+inner join schedule_rules on schedule_rules.scheduleable_id = orders.id AND schedule_rules.scheduleable_type = 'Order'
+full outer join schedule_pauses on schedule_pauses.id = schedule_rules.schedule_pause_id
+where boxes.distributor_id = 7
+AND orders.active = 't'
+AND (	(
+		recur is NULL AND schedule_rules.start = '2012-11-07'
+	)
+	OR 
+	(
+		recur = 'weekly' AND schedule_rules.start <= '2012-11-07'
+		AND wed = 't'
+	)
+	OR 
+	(
+		recur = 'fortnightly' AND schedule_rules.start <= '2012-11-07'
+		AND wed = 't'
+		AND (((date('2012-11-07') - (schedule_rules.start - CAST(EXTRACT(DOW from schedule_rules.start) AS integer))) / 7) % 2) = 0
+	)
+	OR
+	(
+		recur = 'monthly' AND schedule_rules.start <= '2012-11-07'
+		AND wed = 't' AND EXTRACT(DAY from date('2012-11-07')) < 8
+	)
+) AND (
+	schedule_pauses.start is NULL
+	OR
+	schedule_pauses.start > (date '2012-11-07')
+	OR
+	schedule_pauses.finish <= (date '2012-11-07')
+)
