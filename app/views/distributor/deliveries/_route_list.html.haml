@@ -41,7 +41,7 @@
                       = check_box_tag delivery.order_id, '1', false, data: { delivery: delivery.id }
                       = render partial: 'status_icons', locals: { status: delivery.status }
                     .span2
-                      %strong= delivery.delivery_number
+                      %strong= delivery.formated_delivery_number
                     .span2
                       %span.paid-label.label.label-success{ style: "#{'display: inline;' if delivery.paid?}" } PAID
                 .span10

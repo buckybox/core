@@ -99,6 +99,10 @@ class Delivery < ActiveRecord::Base
     end
   end
 
+  def formated_delivery_number
+    "%04d" % delivery_number
+  end
+
   def payment
     @payment ||= payments.order(:created_at).last
   end
