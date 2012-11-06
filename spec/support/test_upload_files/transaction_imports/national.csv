@@ -1,60 +1,60 @@
-"Automatic Payment","Willows Farm","Willows Farm","Eggs",,-102.64,07/06/12
-"Automatic Payment","Fergus Nelson-Moores","Fergus",,"Salary",-322.55,06/06/12
-"Automatic Payment","Aotearoa Rentals","Aotearoarntl",,70627,-7.5,06/06/12
-"Direct Debit","Fresh Direct Limited","Fresh Direct","Remit Advice","Arr376861",-1865.94,06/06/12
-"Visa Purchase","4835610400888102  Df",,"Styrobeck Pl",16950,-95.91,06/06/12
-"Eft-Pos","Ministry Of Food",483561040088,8102,"Eftpos/28475",-36.4,06/06/12
-"Eft-Pos","Ministry Of Food",483561040088,8102,"Eftpos/28426",-11.8,06/06/12
-"Direct Credit","Paypal  Inc","Nzd Transfer","Q","4D8J25Xawmcx",500,06/06/12
-"Direct Credit","Templar M R","Mtemplar","62Coromandel","Box+Eggs",294.4,06/06/12
-"Direct Credit","Ms H M Chapman","Chapman",,"20B Mahoe St",80,06/06/12
-"Automatic Payment","Reddin Associates","Reddin Assoc",,,-149.5,05/06/12
-"Bill Payment","Dan Gillard","D Gillard",,850635,-105,05/06/12
-"Bill Payment","Dan Gillard","D Gillard",,850634,-84,05/06/12
-"Direct Credit","Chepnz",1900098991,,"Chep",328.9,05/06/12
-"Deposit","Jackson","Jackson Koro","Miko 26B",,320,05/06/12
-"Deposit","Elsworth Sm","Elsworth",,"Winsley",256,05/06/12
-"Direct Credit","Mr Richard Dennis Ba","Organics X 5","Rick Baer","Marine Pde",240,05/06/12
-"Deposit","Bonnie Slater","Slater Cocka","Yne Rd",,147.2,05/06/12
-"Bill Payment","W Maclennan","Willie Mac","5 Hart Ave",,100,05/06/12
-"Deposit","Phillips&Weir","Sphillips","46 Waru","Fruitfourtnt",64,05/06/12
-"Direct Credit","Jefferson Famil","Linda Mcnabb",1449,,160,01/06/12
-"Deposit","Zero C","Penn Way Bro",,"Christina O",128,01/06/12
-"Deposit","Baker K D","Karl","Baker","2Freemans",64,01/06/12
-"Bank Fee","Manual Txn Fee",,,,-1.1,31/05/12
-"Bank Fee","Auto Txn Fee",,,,-8.55,31/05/12
-"Bank Fee","Overdraft Management Fee",,,,-6,31/05/12
-"Bank Fee","Monthly A/C Fee",,,,-10,31/05/12
-"Debit Interest",,,,,-43.83,31/05/12
-"Automatic Payment","Willows Farm","Willows Farm","Eggs",,-102.64,31/05/12
-"Bank Fee","Clearance Fee",,,,-0.25,31/05/12
-"Bill Payment","42 Collective Inc","Consciouscon","Sumers","Inv-0597",-34.5,31/05/12
-"Bill Payment","Bn  Gratton","Barrygratton","Mitsubishi","Porirua",320,31/05/12
-"Direct Credit","Co-Operative Bank",,,"Gay P-A",60,31/05/12
-"Automatic Payment","Fergus Nelson-Moores","Fergus",,"Salary",-322.55,30/05/12
-"Automatic Payment","Aotearoa Rentals","Aotearoarntl",,70627,-7.5,30/05/12
-"Direct Debit","Fresh Direct Limited","Fresh Direct","Remit Advice","Arr376424",-1043.4,30/05/12
-"Direct Credit","Paypal  Inc","Nzd Transfer","Y","4D8J25Wq3Usf",300,30/05/12
-"Deposit","Cr Banks","S Banks","Family Box","Fortnightly",192,30/05/12
-"Deposit","Angela Henson","A Henson 132"," Washington",,80,30/05/12
-"Automatic Payment","Reddin Associates","Reddin Assoc",,,-149.5,29/05/12
-"Bill Payment","Soil & Health Assoc","Soil&Health",,,-225,29/05/12
-"Bill Payment","Martyn Ellison","Martyn Ellis","On",25/05/12,-224,29/05/12
-"Bill Payment","Dan Gillard","D Gillard",,850633,-91,29/05/12
-"Bill Payment","Dan Gillard","D Gillard",,850632,-91,29/05/12
-"Bill Payment","The Digital Lab 2007","Kiwilink",,20120409,-88.7,29/05/12
-"Bill Payment","Primepac Industrial","Primepac",,67805,-46.86,29/05/12
-"Bill Payment","Primepac Industrial","Primepac",,68018,-46.86,29/05/12
-"Direct Credit","Paypal  Inc","Nzd Transfer","L","4D8J25Wmkavv",300,29/05/12
-"Direct Credit","Ranasinghe S C","Channa","47 Waverton","Vege And Fru",60,29/05/12
-"Cheque","Cheque 100021",631480278,,100021,-50,28/05/12
-"Bill Payment","Stationery 2 You","Stationery2U",,4582,-228.71,28/05/12
-"Credit Transfer","06-0507-0162906-00","monthly fund","s intro",,1135,28/05/12
-"Direct Credit","Hutton J L","J L Hutton",,,320,28/05/12
-"Direct Credit","Mr P A & Mrs A L Tho","Thomson","38Mcdougall","5Wks",320,28/05/12
-"Deposit","Margaret Batty","M Batty - 4","Ariki Rd",,128,28/05/12
-"Deposit","Rowan White","Rowan White",,,80,28/05/12
-"Deposit","Mr C J Pigott & Miss","Genna Flanag","Armour Ave",,64,28/05/12
-"Automatic Payment","24/7 Hosting","24/7Hosting",,,-5.69,25/05/12
-"Direct Credit","Tuatea Limited","Briargrace","14 Paneta St","Paekakariki",100,25/05/12
-"Deposit","Baker K D","Karl","Baker","2Freemans",50,25/05/12
+Automatic Payment,Willows Farm,Willows Farm,Eggs,,-102.64,07/06/2012
+Automatic Payment,Fergus Nelson-Moores,Fergus,,Salary,-322.55,06/06/2012
+Automatic Payment,Aotearoa Rentals,Aotearoarntl,,70627,-7.5,06/06/2012
+Direct Debit,Fresh Direct Limited,Fresh Direct,Remit Advice,Arr376861,-1865.94,06/06/2012
+Visa Purchase,4835610400888102  Df,,Styrobeck Pl,16950,-95.91,06/06/2012
+Eft-Pos,Ministry Of Food,483561040088,8102,Eftpos/28475,-36.4,06/06/2012
+Eft-Pos,Ministry Of Food,483561040088,8102,Eftpos/28426,-11.8,06/06/2012
+Direct Credit,Paypal  Inc,Nzd Transfer,Q,4D8J25Xawmcx,500,06/06/2012
+Direct Credit,Templar M R,Mtemplar,62Coromandel,Box+Eggs,294.4,06/06/2012
+Direct Credit,Ms H M Chapman,Chapman,,20B Mahoe St,80,06/06/2012
+Automatic Payment,Reddin Associates,Reddin Assoc,,,-149.5,05/06/2012
+Bill Payment,Dan Gillard,D Gillard,,850635,-105,05/06/2012
+Bill Payment,Dan Gillard,D Gillard,,850634,-84,05/06/2012
+Direct Credit,Chepnz,1900098991,,Chep,328.9,05/06/2012
+Deposit,Jackson,Jackson Koro,Miko 26B,,320,05/06/2012
+Deposit,Elsworth Sm,Elsworth,,Winsley,256,05/06/2012
+Direct Credit,Mr Richard Dennis Ba,Organics X 5,Rick Baer,Marine Pde,240,05/06/2012
+Deposit,Bonnie Slater,Slater Cocka,Yne Rd,,147.2,05/06/2012
+Bill Payment,W Maclennan,Willie Mac,5 Hart Ave,,100,05/06/2012
+Deposit,Phillips&Weir,Sphillips,46 Waru,Fruitfourtnt,64,05/06/2012
+Direct Credit,Jefferson Famil,Linda Mcnabb,1449,,160,01/06/2012
+Deposit,Zero C,Penn Way Bro,,Christina O,128,01/06/2012
+Deposit,Baker K D,Karl,Baker,2Freemans,64,01/06/2012
+Bank Fee,Manual Txn Fee,,,,-1.1,31/05/2012
+Bank Fee,Auto Txn Fee,,,,-8.55,31/05/2012
+Bank Fee,Overdraft Management Fee,,,,-6,31/05/2012
+Bank Fee,Monthly A/C Fee,,,,-10,31/05/2012
+Debit Interest,,,,,-43.83,31/05/2012
+Automatic Payment,Willows Farm,Willows Farm,Eggs,,-102.64,31/05/2012
+Bank Fee,Clearance Fee,,,,-0.25,31/05/2012
+Bill Payment,42 Collective Inc,Consciouscon,Sumers,Inv-0597,-34.5,31/05/2012
+Bill Payment,Bn  Gratton,Barrygratton,Mitsubishi,Porirua,320,31/05/2012
+Direct Credit,Co-Operative Bank,,,Gay P-A,60,31/05/2012
+Automatic Payment,Fergus Nelson-Moores,Fergus,,Salary,-322.55,30/05/2012
+Automatic Payment,Aotearoa Rentals,Aotearoarntl,,70627,-7.5,30/05/2012
+Direct Debit,Fresh Direct Limited,Fresh Direct,Remit Advice,Arr376424,-1043.4,30/05/2012
+Direct Credit,Paypal  Inc,Nzd Transfer,Y,4D8J25Wq3Usf,300,30/05/2012
+Deposit,Cr Banks,S Banks,Family Box,Fortnightly,192,30/05/2012
+Deposit,Angela Henson,A Henson 132, Washington,,80,30/05/2012
+Automatic Payment,Reddin Associates,Reddin Assoc,,,-149.5,29/05/2012
+Bill Payment,Soil & Health Assoc,Soil&Health,,,-225,29/05/2012
+Bill Payment,Martyn Ellison,Martyn Ellis,On,25/05/12,-224,29/05/2012
+Bill Payment,Dan Gillard,D Gillard,,850633,-91,29/05/2012
+Bill Payment,Dan Gillard,D Gillard,,850632,-91,29/05/2012
+Bill Payment,The Digital Lab 2007,Kiwilink,,20120409,-88.7,29/05/2012
+Bill Payment,Primepac Industrial,Primepac,,67805,-46.86,29/05/2012
+Bill Payment,Primepac Industrial,Primepac,,68018,-46.86,29/05/2012
+Direct Credit,Paypal  Inc,Nzd Transfer,L,4D8J25Wmkavv,300,29/05/2012
+Direct Credit,Ranasinghe S C,Channa,47 Waverton,Vege And Fru,60,29/05/2012
+Cheque,Cheque 100021,631480278,,100021,-50,28/05/2012
+Bill Payment,Stationery 2 You,Stationery2U,,4582,-228.71,28/05/2012
+Credit Transfer,06-0507-0162906-00,monthly fund,s intro,,1135,28/05/2012
+Direct Credit,Hutton J L,J L Hutton,,,320,28/05/2012
+Direct Credit,Mr P A & Mrs A L Tho,Thomson,38Mcdougall,5Wks,320,28/05/2012
+Deposit,Margaret Batty,M Batty - 4,Ariki Rd,,128,28/05/2012
+Deposit,Rowan White,Rowan White,,,80,28/05/2012
+Deposit,Mr C J Pigott & Miss,Genna Flanag,Armour Ave,,64,28/05/2012
+Automatic Payment,24/7 Hosting,24/7Hosting,,,-5.69,25/05/2012
+Direct Credit,Tuatea Limited,Briargrace,14 Paneta St,Paekakariki,100,25/05/2012
+Deposit,Baker K D,Karl,Baker,2Freemans,50,25/05/2012
