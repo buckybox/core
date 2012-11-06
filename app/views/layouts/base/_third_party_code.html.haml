@@ -1,0 +1,17 @@
+/ Analytics
+- analytical.identify(current_distributor.id, email: current_distributor.email) if current_distributor
+= raw analytical.head_append_javascript
+
+/ Uservoice
+:javascript
+  var uvOptions = {};
+
+  (function() {
+    var uv = document.createElement('script'); uv.type = 'text/javascript'; uv.async = true;
+    uv.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'widget.uservoice.com/4xkwSiFb9azD98H3pgmA.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(uv, s);
+  })();
+
+/ Walkme
+= javascript_include_tag 'https://d3b3ehuo35wzeh.cloudfront.net/users/7319/walkme_7319_https.js', async: true
+

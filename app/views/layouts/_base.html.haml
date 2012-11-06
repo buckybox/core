@@ -18,8 +18,7 @@
     - else
       = favicon_link_tag '/favicon-red.ico'
 
-    - analytical.identify(current_distributor.id, email: current_distributor.email) if current_distributor
-    = raw analytical.head_append_javascript
+    = render 'layouts/base/third_party_code'
 
   %body
     = raw analytical.body_prepend_javascript
