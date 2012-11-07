@@ -3,7 +3,6 @@ require 'capistrano_colors'
 require 'bundler/capistrano'
 require 'whenever/capistrano'
 require 'airbrake/capistrano'
-require 'tinder'
 
 # Multistage deploy
 require 'capistrano/ext/multistage'
@@ -12,13 +11,6 @@ set :default_stage, "local"
 require File.expand_path('../capistrano_database.rb', __FILE__)
 
 set :application, 'buckybox'
-
-# HAX for Tinder until this is fixed: https://github.com/capistrano/capistrano/issues/168#issuecomment-4144687
-Capistrano::Configuration::Namespaces::Namespace.class_eval do
-  def capture(*args)
-    parent.capture(*args)
-  end
-end
 
 set :user, application
 set :repository,  "git@github.com:enspiral/bucky_box.git"
@@ -48,30 +40,6 @@ namespace :deploy do
       ln -nfs #{shared_path}/config/database.yml #{release_path}/config/database.yml &&
       ln -nfs #{shared_path}/log/ #{release_path}/log/
     )
-  end
-
-  task :pre_announce do
-    config = YAML.load_file("config/campfire.yml")
-    campfire = Tinder::Campfire.new config['account'], token: config['token'], ssl: config['ssl']
-    room = campfire.find_room_by_name config['room']
-    announce_user = ENV['CAMPFIRE_NAME'] || `whoami`.strip
-
-    room.speak "#{announce_user} is preparing to deploy #{application} to #{stage}"
-  end
-
-  task :post_announce do
-    config = YAML.load_file("config/campfire.yml")
-    campfire = Tinder::Campfire.new config['account'], token: config['token'], ssl: config['ssl']
-    room = campfire.find_room_by_name config['room']
-    announce_user = ENV['CAMPFIRE_NAME'] || `whoami`.strip
-
-    room.speak "#{announce_user} finished deploying #{application} to #{stage}"
-
-    if stage == :production
-      room.speak 'http://i3.kym-cdn.com/photos/images/original/000/011/296/success_baby.jpg'
-    elsif stage == :staging
-      room.speak 'http://i2.kym-cdn.com/photos/images/original/000/012/960/wikiimage-1.png'
-    end
   end
 end
 
