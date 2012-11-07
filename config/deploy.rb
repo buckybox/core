@@ -9,8 +9,8 @@ require 'capistrano/ext/multistage'
 set :stages, %w(production staging local)
 set :default_stage, "local"
 
-require File.expand_path('../lib/capistrano_recipes/capistrano_database.rb', __FILE__) 
-require File.expand_path('../lib/capistrano_recipes/performance.rb', __FILE__) 
+require File.expand_path('../../lib/capistrano_recipes/capistrano_database.rb', __FILE__) 
+require File.expand_path('../../lib/capistrano_recipes/performance.rb', __FILE__) 
 
 set :application, 'buckybox'
 
@@ -49,9 +49,8 @@ after 'deploy:assets:symlink' do
   deploy.symlink_configs
 end
 
-before "deploy", "deploy:pre_announce"
 after "deploy:update_code", "deploy:migrate"
-after "deploy:restart", "deploy:cleanup", "deploy:post_announce"
+after "deploy:restart", "deploy:cleanup"
 
 # This is here to provide support of capistrano variables in sprinkle
 begin
