@@ -53,7 +53,6 @@ group :development do
 
   gem 'capistrano', '~> 2.12.0'
   gem 'capistrano_colors', '~> 0.5.5'
-  gem 'tinder', '~> 1.9.0'
   gem 'term-ansicolor', '~> 1.0.7'
   gem 'hirb', '~> 0.7.0'
   gem 'wirble', '~> 0.1.3'
