@@ -1,3 +1,6 @@
+# Code from
+# http://blog.pagerduty.com/2012/10/growing-a-rails-application-how-we-made-deploy-fast-again/
+
 Capistrano::Configuration.instance(:must_exist).load do |config|
   start_times = {}
   end_times = {}
