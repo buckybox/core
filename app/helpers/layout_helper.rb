@@ -81,4 +81,22 @@ module LayoutHelper
 
     return [ options[:before], badge, options[:after] ].join.html_safe
   end
+
+  def intro_tour
+    if controller_path =~ /^distributor/
+      if controller_name == 'customers' && action_name == 'show'
+        file_name = 'customers_show'
+      elsif controller_name == 'deliveries' && action_name == 'index'
+        if params[:view] == 'packing'
+          file_name = 'deliveries_index_packing'
+        else
+          file_name = 'deliveries_index_deliveries'
+        end
+      elsif controller_name == 'payments' && action_name == 'index'
+        file_name = 'payments_index_packing'
+      end
+
+      render partial: 'distributor/shared/intro_tour', object: "intro_tour/#{file_name}.png"
+    end
+  end
 end
