@@ -82,7 +82,7 @@ module LayoutHelper
     return [ options[:before], badge, options[:after] ].join.html_safe
   end
 
-  def intro_tour
+  def intro_tour(show_tour)
     if controller_path =~ /^distributor/
       if controller_name == 'customers' && action_name == 'show'
         file_name = 'customers_show'
@@ -96,7 +96,7 @@ module LayoutHelper
         file_name = 'payments_index_packing'
       end
 
-      render partial: 'distributor/shared/intro_tour', object: "intro_tour/#{file_name}.png"
+      render partial: 'distributor/shared/intro_tour', object: "intro_tour/#{file_name}.png", locals: { show_tour: show_tour }
     end
   end
 end

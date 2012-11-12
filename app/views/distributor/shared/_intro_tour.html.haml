@@ -1,7 +1,5 @@
-#intro-tour.modal.intro-tour-modal.hide.fade
+#intro-tour.modal.intro-tour-modal.hide.fade{ data: { 'show-tour' => "#{show_tour}" } }
   .modal-body
     %button.close{ data: { dismiss: 'modal' }, type: 'button'} ×
     = image_tag intro_tour
 
-:javascript
-  $('#intro-tour').modal();
