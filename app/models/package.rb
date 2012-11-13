@@ -56,7 +56,7 @@ class Package < ActiveRecord::Base
   def self.calculated_extras_price(order_extras, customer_discount = nil)
     order_extras = order_extras.map(&:to_hash) unless order_extras.is_a?(Hash)
     customer_discount = customer_discount.discount if customer_discount.is_a?(Customer)
-    
+
     total_price = order_extras.map do |order_extra|
       money = Money.new(order_extra[:price_cents], order_extra[:currency])
       count = (order_extra[:count].to_i || 0)
@@ -205,7 +205,13 @@ class Package < ActiveRecord::Base
       self.archived_route_fee             = route.fee
       self.archived_customer_discount     = customer.discount
       self.archived_order_quantity        = order.quantity
-      self.archived_consumer_delivery_fee = distributor.consumer_delivery_fee if distributor && distributor.separate_bucky_fee?
+
+      # The association chain to get a distributor was causing a callback loop so have to do this instead.
+      found_distributor = Distributor.find_by_id(packing_list.distributor_id)
+
+      if found_distributor && found_distributor.separate_bucky_fee?
+        self.archived_consumer_delivery_fee = found_distributor.consumer_delivery_fee
+      end
 
       return archive_extras
     end
