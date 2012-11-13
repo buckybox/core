@@ -7,7 +7,7 @@ class ImportTransactionList < ActiveRecord::Base
 
   mount_uploader :csv_file, ImportTransactionListUploader
 
-  FILE_FORMATS = [["Kiwibank", "kiwibank"], ["St George Australia", "st_george_au"], ["Paypal", "paypal"], ["BNZ", "bnz"], ["National Bank", "national"]]
+  FILE_FORMATS = [["Kiwibank", "kiwibank"], ["St George Australia", "st_george_au"], ["Paypal", "paypal"], ["BNZ", "bnz"], ["National Bank", "national"], ["ANZ", "anz"]]
   ACCOUNTS = [:kiwibank, :paypal, :st_george_au, :bnz, :national]
 
   validates_presence_of :csv_file
