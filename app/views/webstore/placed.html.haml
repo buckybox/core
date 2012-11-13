@@ -1,0 +1,22 @@
+- title('Webstore - Placed', false)
+= render 'webstore_sidebar'
+= render partial: 'webstore_order', object: @webstore_order
+
+.row-fluid
+  #webstore-placed.span12
+    .row-fluid
+      .span6
+        .important Deliver To:
+        = @customer.name
+        %br
+        = @address.join('<br>')
+      .span6
+        .important Delivery Date
+        = @schedule_rule.next_occurrence.to_s(:day_month_date_year)
+        %br
+        = @schedule_rule
+
+.row-fluid
+  .span12.text-center
+    = link_to 'Back to webstore', webstore_store_path(@distributor.parameter_name), class: 'btn btn-process', id: 'webstore'
+    = link_to 'My account', customer_root_path, class: 'btn btn-process', id: 'webstore-my-account'

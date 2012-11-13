@@ -1,11 +1,11 @@
 - title 'Login'
 
 .row
-  .twelve.columns
+  .span12
     %p Are you an existing distributor or customer? If so please log in with one of the following forms.
 
 .row
-  .six.columns
+  .span6
     %h2 Distributor
     = simple_form_for(Distributor.new, :as => :distributor, :url => session_path(:distributor)) do |f|
       .inputs
@@ -15,7 +15,7 @@
       .actions
         = f.button :submit, "Distributor Login"
 
-  .six.columns
+  .span6
     %h2 Customer
     = simple_form_for(Customer.new, :as => :customer, :url => session_path(:customer)) do |f|
       .inputs

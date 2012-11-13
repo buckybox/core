@@ -1,40 +1,3 @@
-#Monkey patch to allow capistrano vars to be fetch within sprinkle
-module Sprinkle::Package
-  class Package
-    @@capistrano = {}
-    @@db_config = {}
-    @@stage = 'staging'
-
-    def self.set_variables=(set)
-      @@capistrano = set
-    end
-
-    def self.fetch(name)
-      @@capistrano[name]
-    end
-
-    def self.exists?(name)
-      @@capistrano.key?(name)
-    end
-
-    def self.add_db(stage, db)
-      @@db_config = db[stage]
-    end
-
-    def self.database_name
-      @@db_config["database"]
-    end
-
-    def self.stage=(s)
-      @@stage = s
-    end
-
-    def self.stage
-      @@stage
-    end
-  end
-end
-
 stage = ARGV.first || 'local'
 
 # Load DB config
@@ -62,18 +25,21 @@ policy :myapp, :roles => :app do
   requires :htop
   requires :git
   requires :ruby
+  requires :ruby_tuned
   requires :imagemagick
   requires :bundler
   requires :rubygems
   requires :passenger
-  requires :nginx
   requires :postgres_and_gem
+  requires :certs
+  requires :nginx
   requires :setup_db
   requires :nodejs
   requires :postfix
   requires :monit
   requires :munin
   requires :munin_passenger
+  requires :logrotate
   requires :redis
   requires :scoutapp
 end

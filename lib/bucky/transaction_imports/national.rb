@@ -11,7 +11,6 @@ module Bucky::TransactionImports
       index = 1
       CSV.parse(csv, headers: false, skip_blanks: true) do |row|
         date = row[i(:date)]
-        date = Date.strptime(date, "%d/%m/%y").strftime("%d/%m/%Y") rescue nil # Fails to recognise "03/23/12" correctly as 2012
         description = concat(row, :name, :ref1, :ref2, :ref3)
         if description.blank?
           description = row[i(:tran_type)]

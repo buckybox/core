@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120909041708) do
+ActiveRecord::Schema.define(:version => 20121024025935) do
 
   create_table "accounts", :force => true do |t|
     t.integer  "customer_id"
@@ -68,6 +68,7 @@ ActiveRecord::Schema.define(:version => 20120909041708) do
     t.text     "customer_message"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "bsb_number"
   end
 
   add_index "bank_information", ["distributor_id"], :name => "index_bank_information_on_distributor_id"
@@ -104,6 +105,7 @@ ActiveRecord::Schema.define(:version => 20120909041708) do
     t.string   "box_image"
     t.boolean  "available_monthly",      :default => false, :null => false
     t.integer  "extras_limit",           :default => 0
+    t.boolean  "hidden",                 :default => false, :null => false
   end
 
   add_index "boxes", ["distributor_id"], :name => "index_boxes_on_distributor_id"
@@ -115,6 +117,7 @@ ActiveRecord::Schema.define(:version => 20120909041708) do
     t.integer  "default_consumer_fee_cents"
     t.datetime "created_at",                 :null => false
     t.datetime "updated_at",                 :null => false
+    t.string   "full_name"
   end
 
   create_table "cron_logs", :force => true do |t|
@@ -132,11 +135,11 @@ ActiveRecord::Schema.define(:version => 20120909041708) do
     t.string   "last_name"
     t.integer  "distributor_id"
     t.integer  "route_id"
-    t.string   "encrypted_password",       :limit => 128, :default => "",  :null => false
+    t.string   "encrypted_password",         :limit => 128, :default => "",  :null => false
     t.string   "reset_password_token"
     t.datetime "reset_password_sent_at"
     t.datetime "remember_created_at"
-    t.integer  "sign_in_count",                           :default => 0
+    t.integer  "sign_in_count",                             :default => 0
     t.datetime "current_sign_in_at"
     t.datetime "last_sign_in_at"
     t.string   "current_sign_in_ip"
@@ -145,14 +148,16 @@ ActiveRecord::Schema.define(:version => 20120909041708) do
     t.string   "confirmation_token"
     t.datetime "confirmed_at"
     t.datetime "confirmation_sent_at"
-    t.integer  "failed_attempts",                         :default => 0
+    t.integer  "failed_attempts",                           :default => 0
     t.string   "unlock_token"
     t.datetime "locked_at"
     t.string   "authentication_token"
-    t.decimal  "discount",                                :default => 0.0, :null => false
+    t.decimal  "discount",                                  :default => 0.0, :null => false
     t.integer  "number"
     t.text     "notes"
     t.text     "special_order_preference"
+    t.integer  "next_order_id"
+    t.date     "next_order_occurrence_date"
   end
 
   add_index "customers", ["authentication_token"], :name => "index_customers_on_authentication_token", :unique => true
@@ -260,6 +265,12 @@ ActiveRecord::Schema.define(:version => 20120909041708) do
     t.string   "bank_deposit_format"
     t.integer  "country_id"
     t.integer  "consumer_delivery_fee_cents"
+    t.boolean  "active_webstore",                            :default => false, :null => false
+    t.string   "city"
+    t.string   "company_team_image"
+    t.text     "about"
+    t.text     "details"
+    t.string   "facebook_url"
   end
 
   add_index "distributors", ["authentication_token"], :name => "index_distributors_on_authentication_token", :unique => true
@@ -400,14 +411,12 @@ ActiveRecord::Schema.define(:version => 20120909041708) do
 
   create_table "orders", :force => true do |t|
     t.integer  "box_id"
-    t.integer  "quantity",       :default => 1,        :null => false
-    t.string   "frequency",      :default => "single", :null => false
-    t.boolean  "completed",      :default => false,    :null => false
+    t.integer  "quantity",       :default => 1,     :null => false
+    t.boolean  "completed",      :default => false, :null => false
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "account_id"
-    t.text     "schedule"
-    t.boolean  "active",         :default => false,    :null => false
+    t.boolean  "active",         :default => false, :null => false
     t.boolean  "extras_one_off", :default => true
   end
 
@@ -483,18 +492,12 @@ ActiveRecord::Schema.define(:version => 20120909041708) do
   create_table "routes", :force => true do |t|
     t.integer  "distributor_id"
     t.string   "name"
-    t.boolean  "monday",         :default => false, :null => false
-    t.boolean  "tuesday",        :default => false, :null => false
-    t.boolean  "wednesday",      :default => false, :null => false
-    t.boolean  "thursday",       :default => false, :null => false
-    t.boolean  "friday",         :default => false, :null => false
-    t.boolean  "saturday",       :default => false, :null => false
-    t.boolean  "sunday",         :default => false, :null => false
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.text     "schedule"
-    t.integer  "fee_cents",      :default => 0,     :null => false
+    t.integer  "fee_cents",               :default => 0, :null => false
     t.string   "currency"
+    t.text     "area_of_service"
+    t.text     "estimated_delivery_time"
   end
 
   add_index "routes", ["distributor_id"], :name => "index_routes_on_distributor_id"
@@ -516,10 +519,18 @@ ActiveRecord::Schema.define(:version => 20120909041708) do
     t.boolean  "fri"
     t.boolean  "sat"
     t.boolean  "sun"
-    t.integer  "order_id"
     t.integer  "schedule_pause_id"
     t.datetime "created_at",        :null => false
     t.datetime "updated_at",        :null => false
+    t.integer  "scheduleable_id"
+    t.string   "scheduleable_type"
+  end
+
+  create_table "schedule_transactions", :force => true do |t|
+    t.text     "schedule_rule"
+    t.integer  "schedule_rule_id"
+    t.datetime "created_at",       :null => false
+    t.datetime "updated_at",       :null => false
   end
 
   create_table "substitutions", :force => true do |t|
@@ -564,5 +575,21 @@ ActiveRecord::Schema.define(:version => 20120909041708) do
   end
 
   add_index "transactions", ["account_id"], :name => "index_transactions_on_account_id"
+
+  create_table "webstore_orders", :force => true do |t|
+    t.integer  "account_id"
+    t.integer  "box_id"
+    t.integer  "order_id"
+    t.text     "exclusions"
+    t.text     "substitutions"
+    t.text     "extras"
+    t.string   "status"
+    t.string   "remote_ip"
+    t.datetime "created_at",     :null => false
+    t.datetime "updated_at",     :null => false
+    t.text     "schedule"
+    t.string   "frequency"
+    t.boolean  "extras_one_off"
+  end
 
 end

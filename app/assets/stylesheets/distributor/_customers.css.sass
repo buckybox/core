@@ -1,0 +1,119 @@
+//----- Controls
+
+#sub-nav
+  #nav-info
+    padding-top: 6px
+  #search-form
+    form
+      margin-bottom: 0px
+      .input-append
+        margin: 0px
+
+//----- Customer index
+
+#customers
+  th.balance
+    text-align: right
+
+  td.balance
+    text-align: right
+    font-size: large
+    font-weight: bold
+
+//----- Customer show
+
+#customer-details
+  h1
+    margin-top: 0px
+  #account-information
+    margin-top: 0.5em
+    small
+      margin-left: 1em
+  ul
+    margin-top: 0.5em
+
+  #section-two
+    margin-top: 3em
+
+    address
+      font-weight: bold
+      margin-bottom: 1em
+
+#customer-associations
+  span.label
+    margin-bottom: 0.5em
+    display: inline-block
+  #note-section
+    .control-group
+      margin-bottom: 5px
+      textarea
+        background-color: $note-colour
+        margin-bottom: 0px
+  #orders
+    td.name
+      width: 30%
+    td.schedule
+      width: 50%
+      .order-next-deliveries
+        height: 21px
+        overflow: hidden
+    .pausing
+      a, span
+        font-size: 12px
+      .pause
+        .form-selection
+          input[type='submit']
+            width: 55px
+      .form-selection
+        display: none
+        overflow: hidden
+        padding: 4px 6px 1px 5px
+        width: 196px
+        height: 26px
+        margin-bottom: 2px
+        +background-image(linear-gradient(#999999, #7B7B7B))
+        +border-radius(0.3em)
+        form
+          float: left
+          margin-bottom: 0px
+          .control-group
+            float: left
+            margin-bottom: 0px
+            select
+              font-size: 11px
+              height: 23px
+              margin-right: 3px
+        .remove-link
+          display: none
+        .remove-link, .cancel-link
+          float: left
+          padding: 2px
+          a
+            color: #ffffff
+            display: block
+            line-height: 18px
+            margin-left: 5px
+      .resulting-link
+        display: none
+  #transactions
+    #new-transaction
+      .date-column
+        width: 17%
+      .details-column
+        .new-form-input
+          padding-left: 5px
+      .money-column
+        width: 14%
+        .new-form-input
+          padding-left: 5px
+        input
+          text-align: right
+      .button-column
+        .new-form-input
+          padding-right: 5px
+      td
+        .new-form-input
+          height: 30px
+          text-align: right
+    #more-transactions
+      text-align: center

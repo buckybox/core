@@ -2,30 +2,21 @@ require 'spec_helper'
 include Bucky
 
 describe Route do
-  let (:route) { Fabricate.build(:route) }
+  let(:route) { Fabricate.build(:route) }
 
   specify { route.should be_valid }
 
-  context :schedule do
-    before do
-      route.tuesday  = false
-      route.thursday = false
-      route.saturday = false
-      route.sunday   = false
-      route.save
-    end
-
-    specify { route.schedule.should_not be_nil }
-    specify { route.schedule.to_s.should == "Weekly on Mondays, Wednesdays, and Fridays" }
-  end
-
   context :schedule_transaction do
     before do
-      route.save
-      route.sunday = false
+      route.save!
     end
 
-    specify { expect { route.save }.should change(RouteScheduleTransaction, :count).by(1) }
+    specify { 
+      schedule_rule = route.schedule_rule
+      schedule_rule.should_receive(:record_schedule_transaction)
+      route.schedule_rule.sun = !route.schedule_rule.sun
+      route.save!
+    }
   end
 
   describe '#best_route' do
@@ -39,30 +30,6 @@ describe Route do
     end
   end
 
-  describe '#delivery_days' do
-    before { route.friday = false }
-
-    it 'should return any array of all the selected days' do
-      route.delivery_days.should == [:sunday, :monday, :tuesday, :wednesday, :thursday, :saturday]
-    end
-  end
-
-  describe '.deleted_days' do
-    before do
-      route.update_attributes(monday: true, tuesday: true, wednesday: true, thursday: true, friday: true, saturday: true, sunday: true)
-      route.attributes = {monday: false, tuesday: false, wednesday: false, thursday: false, friday: false, saturday: false, sunday: false}
-    end
-    specify { route.send(:deleted_days).should eq(Bucky::Schedule::DAYS) }
-  end
-
-  describe '.deleted_day_numbers' do
-    before do
-      route.update_attributes(monday: true, tuesday: true, wednesday: true, thursday: true, friday: true, saturday: true, sunday: true)
-      route.attributes = {monday: false, tuesday: false, wednesday: false, thursday: false, friday: false, saturday: false, sunday: false}
-    end
-    specify { route.send(:deleted_day_numbers).should eq([0,1,2,3,4,5,6]) }
-  end
-
   describe '.update_schedule' do
     before do
       @schedule_start_time = Time.now
@@ -71,8 +38,8 @@ describe Route do
       @account = @customer.account
       @box = Fabricate(:box, distributor: route.distributor)
       @order = Fabricate(:recurring_order, schedule: new_recurring_schedule(@schedule_start_time, Route::DAYS), account: @account, box: @box)
-      route.schedule.to_s.should match /Weekly on Sundays, Mondays, Tuesdays, Wednesdays, Thursdays, Fridays, and Saturdays/ 
-      @order.schedule.to_s.should match /Weekly on Sundays, Mondays, Tuesdays, Wednesdays, Thursdays, Fridays, and Saturdays/ 
+      route.schedule.to_s.should match(/Weekly on Sundays, Mondays, Tuesdays, Wednesdays, Thursdays, Fridays, and Saturdays/)
+      @order.schedule.to_s.should match(/Weekly on Sundays, Mondays, Tuesdays, Wednesdays, Thursdays, Fridays, and Saturdays/)
       route.future_orders.should include(@order)
 
       # [0, 1, ...] === [:sunday, :monday, ..], kinda
@@ -108,9 +75,9 @@ describe Route do
 
     context "when removing a day" do
       it "should deactivate the specified day on active orders" do
-        route.wednesday = true
+        route.schedule_rule.wed = true
         route.save!
-        route.wednesday = false
+        route.schedule_rule.wed = false
         stub_future_active_orders(route, [order])
         order.should_receive(:deactivate_for_day!).with(3)
 
@@ -118,5 +85,12 @@ describe Route do
       end
     end
   end
-end
 
+  context :schedule_rule do
+    it "should create a schedule_rule" do
+      route = Route.new
+      route.schedule_rule.should_not == nil
+    end
+  end
+
+end

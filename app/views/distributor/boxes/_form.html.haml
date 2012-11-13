@@ -1,42 +1,38 @@
-.row.box-form
-  .twelve.columns
-    = simple_form_for([:distributor, @box]) do |f|
-      = f.error_notification
+= simple_form_for([:distributor, @box], html: { class: 'form-horizontal' }) do |f|
+  = f.error_notification
 
-      .row
-        .four.columns
-          .inputs
-            = f.input :name, label: false, placeholder: 'Name', size: 20
-            = f.input :price, as: :currency, label: false, input_html: { class: 'input-text' }, hint: 'per box'
+  .row-fluid
+    .span6
+      = f.input :name, input_html: { class: 'span12' }
+      = f.input :price, input_html: { class: 'span12' }
+      = f.input :description, input_html: { class: 'span12', rows: 5 }
+      = f.input :hidden, label: 'Hidden from customers?', input_html: { class: 'span12' }
 
-            %fieldset
-              %h4 Custom boxes
-              = f.input :likes, label: 'Enable likes'
-              = f.input :dislikes, label: 'Enable dislikes'
-            %fieldset
-              %h4 Extras
-              %p Extras are additional sale items that can be included for delivery with this box.
-              = f.input :extras_limit, label: false, collection: Box::EXTRA_OPTIONS, include_blank: false
-              #box_extras
-                = f.input :all_extras, label: false, collection: [['from the entire extras catalog', true], ['selected from the items below', false]], include_blank: false
-                #box_extras_collection
-                  =# JS updates prop 'min' in distributor/boxes.js
-                  .input.check_boxes.optional
-                    =# Simple form forgets to wrap it :\
-                    = f.collection_check_boxes :extra_ids, current_distributor.extras.alphabetically, :id, :name_with_unit
+    .span6
+      %fieldset
+        %h4 Custom boxes
+        = f.input :dislikes, label: 'Enable Exclusions', input_html: { class: 'span12' }
+        = f.input :likes, label: 'Enable Substitutes', input_html: { class: 'span12' }
 
-        .four.columns
-          = f.input :description
+      %fieldset
+        %h4 Extras
+        %p Extras are additional sale items that can be included for delivery with this box.
+        = f.input :extras_limit, label: false, collection: Box::EXTRA_OPTIONS, include_blank: false, input_html: { class: 'span12' }
+        #box_extras
+          = f.input :all_extras, label: false, collection: [['from the entire extras catalog', true], ['selected from the items below', false]], include_blank: false, input_html: { class: 'span12' }
+          #box_extras_collection
+            =# JS updates prop 'min' in distributor/boxes.js
+            .input.check_boxes.optional
+              =# Simple form forgets to wrap it :\
+              = f.collection_check_boxes :extra_ids, current_distributor.extras.alphabetically, :id, :name_with_unit
 
-        .four.columns
-          .inputs
-            %h4 Choose your logo
-            = f.input :box_image, label: false, hint: 'Any jpeg, gif or png image file'
-            = f.input :box_image_cache, as: :hidden
+      %h4 Choose your logo
+      = f.input :box_image, label: false, hint: 'Any jpeg, gif or png image file', input_html: { class: 'span12' }
+      = f.input :box_image_cache, as: :hidden, input_html: { class: 'span12' }
 
-            .uploaded_image= image_tag(@box.box_image.url) if @box.box_image?
-            .image-thumbnail
+      .uploaded_image= image_tag(@box.box_image.url) if @box.box_image?
+      .image-thumbnail
 
-      .row
-        .twelve.columns.text-right
-          .actions= f.button :submit, id: "box_submit"
+  .row-fluid
+    .span12.form-actions
+      = f.button :submit, id: 'box_submit', class: 'btn btn-primary'

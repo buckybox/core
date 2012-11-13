@@ -1,16 +1,17 @@
-.row
-  %table.twelve.columns
-    %thead
-      %tr
-        %th Name
-        %th Unit
-        %th Price
-        %th Actions
-
-    %tbody
-      - @extras.each do |extra|
+.row-fluid
+  .span12
+    %table.table.table-bordered.table-striped.no-horizontal-dividers
+      %thead
         %tr
-          %td= extra.name
-          %td= extra.unit
-          %td= extra.price.format
-          %td= link_to 'Edit', edit_distributor_extra_path(extra)
+          %th Name
+          %th Unit
+          %th Price
+          %th Actions
+
+      %tbody
+        - @extras.each do |extra|
+          %tr
+            %td= extra.name
+            %td= extra.unit
+            %td= extra.price.format
+            %td= link_to 'Edit', edit_distributor_extra_path(extra)

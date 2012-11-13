@@ -57,9 +57,15 @@ module BuckyBox
     # Version of your assets, change this if you want to expire all your assets
     config.assets.version = '1.0'
 
+    # Ember config
+    config.handlebars.templates_root = 'templates'
+
     config.generators do |g|
       g.test_framework      :rspec, fixture: true
       g.fixture_replacement :fabrication
     end
+
+    # Dump database functions into the schema
+    config.active_record.schema_format = :sql
   end
 end

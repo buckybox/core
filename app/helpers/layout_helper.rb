@@ -1,7 +1,3 @@
-# These helper methods can be called in your template to set variables to be used in the layout
-# This module should be included in all views globally,
-# to do so you may need to add this line to your ApplicationController
-#   helper :layout
 module LayoutHelper
   def title(page_title, show_title = true)
     content_for(:title) { h(page_title.to_s) }
@@ -20,11 +16,27 @@ module LayoutHelper
     content_for(:head) { javascript_include_tag(*args) }
   end
 
-  FLASH_CLASSES = { notice: 'success', warning: 'warning', error: 'error', alert: 'error' }
+  FLASH_CLASSES = {
+    notice:  'alert-success',
+    warning: 'info-warning',
+    error:   'alert-error',
+    alert:   'alert-error'
+  }
 
-  def flash_bar(kind, message)
-    classes = "alert-box #{FLASH_CLASSES[kind]}"
-    message = message + link_to('&times;'.html_safe, '', class: 'close')
+  def render_site_messages(flash)
+    unless flash.empty?
+      content = flash.map { |kind, message| flash_bar(message, kind: kind) }
+      content = content.join
+      content_tag(:div, content_tag(:div, content.html_safe, class: 'span12'), class: 'row')
+    end
+  end
+
+  def flash_bar(message, options = {})
+    classes = 'alert'
+    classes += " #{FLASH_CLASSES[options[:kind]]}" if options[:kind]
+
+    message = button_tag('&times;'.html_safe, type: 'button', class: 'close', data: { dismiss: 'alert' }) + message
+
     content_tag(:div, message.html_safe, class: classes)
   end
 
@@ -35,13 +47,15 @@ module LayoutHelper
   def customer_title(customer, options = {})
     html_tag = options.delete(:html_tag) || :h1
 
-    text_alignment = {}
-    text_alignment[:class] = 'text-center' if options.delete(:center)
+    html_options = { class: '', id: '' }
+    html_options[:class] += 'text-center' if options.delete(:center)
+    html_options[:class] += options.delete(:class).to_s
+    html_options[:id] = options.delete(:id) if options[:id]
 
     title_text = options.delete(:title) || customer_and_number(customer)
     title(title_text, false)
 
-    return content_tag(html_tag, customer_badge(customer, options), text_alignment)
+    return content_tag(html_tag, customer_badge(customer, options), html_options)
   end
 
   def customer_and_number(customer)

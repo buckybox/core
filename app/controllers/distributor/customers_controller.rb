@@ -1,6 +1,8 @@
 class Distributor::CustomersController < Distributor::ResourceController
   respond_to :html, :xml, :json
 
+  before_filter :get_form_type, only: [:edit, :update]
+
   def index
     if current_distributor.routes.empty?
       redirect_to distributor_settings_routes_url, alert: 'You must create a route before you can create users.' and return
@@ -23,8 +25,6 @@ class Distributor::CustomersController < Distributor::ResourceController
   end
 
   def edit
-    @form_type = (params[:form_type].to_s == 'delivery' ? 'delivery_form' : 'personal_form')
-
     edit!
   end
 
@@ -41,6 +41,7 @@ class Distributor::CustomersController < Distributor::ResourceController
       @orders           = @account.orders.active
       @deliveries       = @account.deliveries.ordered
       @transactions     = @account.transactions.limit(6)
+      @transactions     = [Transaction.dummy(0, "Opening Balance", @account.created_at)] if @transactions.empty?
       @transactions_sum = @account.calculate_balance
     end
   end
@@ -60,23 +61,25 @@ class Distributor::CustomersController < Distributor::ResourceController
 
   protected
 
+  def get_form_type
+    @form_type = (params[:form_type].to_s == 'delivery' ? 'delivery_form' : 'personal_form')
+  end
+
   def collection
-    @customers = end_of_association_chain.includes(:tags, :address, :route, account: {active_orders: {box: {}}})
+    @customers = end_of_association_chain
 
     @customers = @customers.tagged_with(params[:tag]) unless params[:tag].blank?
 
     unless params[:query].blank?
+      query = params[:query].gsub(/\./, '')
       if params[:query].to_i == 0
-        @customers = current_distributor.customers.search(params[:query])
+        @customers = current_distributor.customers.search(query)
       else
-        @customers = current_distributor.customers.where(number: params[:query].to_i)
+        @customers = current_distributor.customers.where(number: query.to_i)
       end
     end
+    
+    @customers = @customers.ordered_by_next_delivery.includes(account: {route: {}}, tags: {}, next_order: {box: {}})
 
-    has_upcoming_deliveries = @customers.select { |c| c.next_delivery_time }
-    has_no_upcoming_deliveries = @customers.to_a - has_upcoming_deliveries
-    has_upcoming_deliveries = has_upcoming_deliveries.sort { |a,b| a.next_delivery_time <=> b.next_delivery_time }
-
-    @customers = has_upcoming_deliveries + has_no_upcoming_deliveries
   end
 end

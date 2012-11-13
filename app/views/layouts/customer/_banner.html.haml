@@ -1,0 +1,23 @@
+#bucky-box-controls.containter-fluid
+  .container
+    .row
+      .span6
+        = link_to image_tag('bucky-box-powered.png', alt: 'Bucky Box powered', id: 'bucky-box-powered'), 'http://www.buckybox.com/', target: '_blank'
+      #auth-controls.span6.text-right
+        - if customer_signed_in?
+          Hi 
+          = link_to current_customer.name, customer_root_path
+          \|
+          = link_to 'Logout', destroy_customer_session_path(distributor: @distributor.parameter_name), method: :delete
+        - else
+          = link_to 'Login', new_customer_session_path(distributor: @distributor.parameter_name)
+
+#public-banner.containter-fluid
+  .container
+    .row
+      = link_to webstore_store_path(@distributor.parameter_name) do
+        #company-logo.span12.text-center
+          - if distributor.company_logo?
+            = image_tag(distributor.company_logo.banner.url)
+          - else
+            %h1= distributor.name

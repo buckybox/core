@@ -1,60 +1,66 @@
-.nine.columns
-  .row.data-headings
-    #route-controls.seven.columns.delivery_actions
-      = check_box_tag 'all'
-      = button_tag 'Delivered', class: 'small radius button', id: 'delivered', disabled: !@real_list
-      = button_tag '&#9660; More'.html_safe, class: 'small radius button', id: 'more-delivery-options', disabled: !@real_list
-      #missed-options.has-flyout
-        .flyout
-          %ul
-            = link_to '#', id: 'pending' do
-              %li Delivery Pending
-            = link_to '#', id: 'cancelled' do
-              %li Delivery Cancelled
-          %hr
-          %ul
-            = link_to '#', id: 'payment-on-delivery' do
-              %li Apply Payment On Delivery
-            = link_to '#', id: 'undo-payment' do
-              %li Undo Payment
-    .five.columns.export.text-right
-      = button_to('Export',
-        export_distributor_deliveries_path,
-        { id: 'delivery-export', class: 'small radius button', disabled: !@real_list })
+.row-fluid.data-headings
+  #route-controls.span7.delivery-actions
+    = check_box_tag 'all'
+    .btn-group
+      = button_tag class: !@real_list ? 'btn' : 'btn btn-primary', id: 'delivered', disabled: !@real_list do
+        %i.icon-ok-sign.icon-white
+        Delivered
+      = button_tag class: "btn#{' btn-primary' if @real_list} dropdown-toggle", data: { toggle: 'dropdown' }, disabled: !@real_list do
+        %span.caret
+      %ul#missed-options.dropdown-menu{ role: 'menu' }
+        %li
+          = link_to '#', id: 'pending', tabindex: -1 do
+            %i.icon-time
+            Delivery Pending
+        %li
+          = link_to '#', id: 'cancelled', tabindex: -1 do
+            %i.icon-remove-sign
+            Delivery Cancelled
+        %li.divider
+        %li= link_to 'Apply Payment On Delivery', '#', id: 'payment-on-delivery', tabindex: -1
+        %li= link_to 'Undo Payment', '#', id: 'undo-payment', tabindex: -1
 
-  - if @real_list
-    %ul#delivery_list{class: (@delivery_list.date.past? ? '' : 'sortable')}
-      - @items.group_by{|delivery| delivery.order.address.address_hash}.each do |addressh_hash, deliveries|
-        %li.row
-          .twelve.columns
-            %ul
-              - deliveries.each do |delivery|
-                %li.row.data-listings{id: "delivery_#{delivery.id}", class: delivery.status }
-                  .three.columns
-                    .row
-                      .four.columns
-                        = check_box_tag delivery.order_id, '1', false, data: { delivery: delivery.id }
-                        = render partial: 'status_icons', locals: { status: delivery.status }
-                      .four.columns= delivery.delivery_number
-                      .four.columns
-                        %span.paid-label.green.radius.label{ style: "#{'display: inline;' if delivery.paid?}" } PAID
-                  .nine.columns
-                    .row
-                      .four.columns= display_address(delivery)
-                      .four.columns= contents_description(delivery)
-                      .four.columns= customer_badge(delivery.customer, customer_name: delivery.package.archived_customer_name, short: true)
-  - else
-    %ul
-      - @items.each do |order|
-        %li.row.data-listings.pending
-          .three.columns
-            .row
-              .four.columns
-                = check_box_tag order.id, '1', false
-                = image_tag 'icon-status-pending.png', title: 'PENDING delivery', class: 'icon-pending'
-              .eight.columns
-          .nine.columns
-            .row
-              .four.columns= display_address(order)
-              .four.columns= contents_description(order)
-              .four.columns= customer_badge(order.customer)
+  .span5.export.text-right
+    = button_to('Export',
+      export_distributor_deliveries_path,
+      { id: 'delivery-export', class: 'btn', disabled: !@real_list })
+
+.row-fluid.data-headings
+
+- if @real_list
+  %ul#delivery_list.unstyled{ class: (@delivery_list.date.past? ? '' : 'sortable') }
+    - @items.group_by{ |delivery| delivery.order.address.address_hash }.each do |addressh_hash, deliveries|
+      %li.row-fluid
+        .span12
+          %ul.unstyled
+            - deliveries.each do |delivery|
+              %li.row-fluid.data-listings{ class: delivery.status, data: { delivery_id: delivery.id } }
+                .span2
+                  .row-fluid
+                    .span8
+                      = check_box_tag delivery.order_id, '1', false, data: { delivery: delivery.id }
+                      = render partial: 'status_icons', locals: { status: delivery.status }
+                    .span2
+                      %strong= delivery.formated_delivery_number
+                    .span2
+                      %span.paid-label.label.label-success{ style: "#{'display: inline;' if delivery.paid?}" } PAID
+                .span10
+                  .row-fluid
+                    .span4= display_address(delivery)
+                    .span4= contents_description(delivery)
+                    .span4= customer_badge(delivery.customer, customer_name: delivery.package.archived_customer_name, short: true)
+- else
+  %ul.unstyled
+    - @items.each do |order|
+      %li.row-fluid.data-listings.pending
+        .span2
+          .row-fluid
+            .span12
+              = check_box_tag order.id, '1', false
+              .label.state-label.status-pending{ title: 'PENDING delivery' }
+                %i.icon-time
+        .span10
+          .row-fluid
+            .span3= display_address(order)
+            .span4= contents_description(order)
+            .span5= customer_badge(order.customer)

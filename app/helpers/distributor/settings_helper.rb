@@ -13,7 +13,7 @@ module Distributor::SettingsHelper
     count = line_item.exclusions_count_by_customer + line_item.substitution_count_by_customer
     label_text += pluralize(count, 'customer')
 
-    content_tag(:div, label_text, class: 'block warning') if count > 0
+    content_tag(:span, label_text, class: 'label label-warning') if count > 0
   end
 
   def line_item_use(line_item)
@@ -23,10 +23,23 @@ module Distributor::SettingsHelper
     has_exclusions = (exclusion_count > 0)
     has_substitutions = (substitution_count > 0)
 
-    content = image_tag('icon-customer.png', class: 'float-left') if has_exclusions || has_substitutions
-    content += content_tag(:div, "-#{exclusion_count}", title: "exclude for #{pluralize(exclusion_count, 'customer')}", class: 'float-left') if has_exclusions
-    content += content_tag(:div, "+#{substitution_count}", title: "substitute for #{pluralize(substitution_count, 'customer')}", class: 'float-left') if has_substitutions
+    if has_exclusions || has_substitutions
+      content = [content_tag(:i, nil, class: 'icon-user icon-white')]
+      title = []
 
-    content_tag(:div, content.html_safe, class: 'block count float-right') if content
+      if has_exclusions
+        content << content_tag(:span, "-#{exclusion_count}")
+        title << "exclude for #{pluralize(exclusion_count, 'customer')}"
+      end
+
+      if has_substitutions
+        content << content_tag(:span, "+#{substitution_count}")
+        title << "substitute for #{pluralize(substitution_count, 'customer')}"
+      end
+
+      content = content.join(' ')
+      title = title.join(' and ')
+      content_tag(:span, content.html_safe, title: title, class: 'badge badge-info')
+    end
   end
 end

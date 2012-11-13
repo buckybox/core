@@ -1,5 +1,5 @@
 module Distributor::DeliveriesHelper
-  CALENDAR_DATE_SIZE = 59
+  CALENDAR_DATE_SIZE = 60
 
   def calendar_nav_length(dates, months)
     nav_length = dates.size + months.size
@@ -48,7 +48,7 @@ module Distributor::DeliveriesHelper
     data = calendar_array.select{|cdate, cdata| cdate == date}[0][1]
 
     if route
-      orders = Order.find(data[:order_ids]).select{|o| o.route(date) == route}.size
+      Order.find(data[:order_ids]).select{|o| o.route(date) == route}.size
     else
       data[:order_ids].size
     end
@@ -60,11 +60,16 @@ module Distributor::DeliveriesHelper
 
   def display_address(item)
     if item.is_a?(Order)
-      item.account.customer.address.address_1
+      link_to_google_maps(item.account.customer.address.address_1, item.account.customer.address.join)
     else
       item = item.package if item.is_a?(Delivery)
-      item.archived_address.split(', ').first
+      link_to_google_maps(item.archived_address.split(', ').first, item.archived_address)
     end
+  end
+
+  def link_to_google_maps(address_shown, address_linked)
+    address_linked = address_linked + ", #{[current_distributor.city, current_distributor.country.full_name].reject(&:blank?).join(", ")}"
+    link_to('<i class="icon-map-marker"></i>'.html_safe, "http://maps.google.com/maps?q=#{Rack::Utils.escape(address_linked)}", target: '_blank') + " #{address_shown}"
   end
 
   def contents_description(item)
@@ -83,22 +88,5 @@ module Distributor::DeliveriesHelper
     else
       Order.order_count(distributor, date, route_id)
     end
-  end
-
-  def customer_delivery_links(order)
-    deliveries = order.deliveries.includes(:delivery_list).where('delivery_lists.date > ?', Date.current)
-
-    delivery_links = deliveries[0..3].map do |d|
-      date = d.date
-      date_str = date.to_s(:date_short_month)
-      link_to date_str, date_distributor_deliveries_path(date, d.route_id)
-    end
-
-    delivery_links << '...' if deliveries.size > 4
-
-    result = delivery_links.join(', ').html_safe
-    result = image_tag('icon-route.png', class: 'delivery-icon') + result unless delivery_links.blank?
-
-    return result
   end
 end

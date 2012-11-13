@@ -6,93 +6,78 @@ class Route < ActiveRecord::Base
   has_many :deliveries, dependent: :destroy
   has_many :orders, through: :deliveries
   has_many :customers
-  has_many :route_schedule_transactions, autosave: true
+  has_one :schedule_rule, as: :scheduleable, inverse_of: :scheduleable, autosave: true
 
   monetize :fee_cents
 
-  schedule_for :schedule
+  attr_accessible :distributor, :name, :fee, :area_of_service, :estimated_delivery_time, :schedule_rule_attributes
+  accepts_nested_attributes_for :schedule_rule
 
-  attr_accessible :distributor, :name, :monday, :tuesday, :wednesday, :thursday, :friday, :saturday, :sunday, :fee
-
-  validates_presence_of :distributor_id, :name, :schedule, :fee
-  validate :at_least_one_day_is_selected
-
-  before_validation :create_schedule
-  before_save :update_order_schedules, if: :schedule_changed?
-  before_save :record_schedule_change, if: :schedule_changed?
+  validates_presence_of :distributor_id, :name, :fee, :area_of_service, :estimated_delivery_time, :schedule_rule
+  validate :schedule_rule_has_at_least_one_day
 
   default_scope order(:name)
 
   delegate :local_time_zone, to: :distributor, allow_nil: true
+  
+  delegate :includes?, :delivery_day_numbers, :next_occurrences, :runs_on, :occurrences_between, to: :schedule_rule, allow_nil: true
+  delegate :sun, :mon, :tue, :wed, :thu, :fri, :sat, to: :schedule_rule, allow_nil: true
+
+  after_initialize :set_default_schedule_rule
+
+  def schedule_rule_attributes_with_recur=(attrs)
+    self.schedule_rule_attributes_without_recur = attrs.merge(recur: :weekly)
+  end
+  alias_method :schedule_rule_attributes_without_recur=, :schedule_rule_attributes=
+  alias_method :schedule_rule_attributes=, :schedule_rule_attributes_with_recur=
+  
+  def set_default_schedule_rule
+    self.schedule_rule ||= ScheduleRule.weekly if new_record?
+  end
 
   def self.default_route(distributor)
     distributor.routes.first # For now the first one is the default
   end
 
+  def self.default_route_on(distributor, time)
+    distributor.routes.find { |r| r.delivers_on?(time) }
+  end
+
+  def name_days_and_fee
+    days = schedule_rule.days.map { |d| d.to_s.titleize[0..2] }
+
+    result = name.titleize
+    result += " (#{days.join(', ')}) "
+    result += fee.format
+
+    return result
+  end
+
   def next_run
-    schedule.next_occurrence
+    schedule_rule.next_occurrence
   end
 
-  def delivery_days
-    Bucky::Schedule::DAYS.select { |day| self[day] }
-  end
-
-  def delivery_day_numbers(days = delivery_days)
-    Route.delivery_day_numbers(days)
-  end
-
-  def self.delivery_day_numbers(delivery_days)
-    delivery_days.collect { |day| Bucky::Schedule::DAYS.index(day)}
+  def delivers_on?(time)
+    schedule_rule.occurs_on?(time.to_time)
   end
 
   def future_orders
     Order.for_route_read_only(self)
   end
-
-  protected
-
-  def start_time=(time)
-    @start_time = time
-  end
-
-  def start_time
-    @start_time || Time.current.beginning_of_day
-  end
-
-  def deleted_days
-    Bucky::Schedule::DAYS.select{|day| self.send("#{day.to_s}_was") && !self.send(day)}
-  end
-
-  def deleted_day_numbers(days = deleted_days)
-    delivery_day_numbers(days)
+  
+  def schedule_changed(schedule_rule)
+    schedule_rule.deleted_day_numbers.each do |day|
+      future_orders.active.each do |order|
+        order.deactivate_for_day!(day)
+      end
+    end
   end
 
   private
 
-  def at_least_one_day_is_selected
-    unless [monday, tuesday, wednesday, thursday, friday, saturday, sunday].any?
+  def schedule_rule_has_at_least_one_day
+    unless schedule_rule.has_at_least_one_day?
       errors[:base] << "You must select at least one day for the route."
-    end
-  end
-
-  def create_schedule
-    new_schedule = Bucky::Schedule.new(self.start_time)
-
-    recurrence_rule = IceCube::Rule.weekly.day(*delivery_days)
-    new_schedule.add_recurrence_rule(recurrence_rule)
-
-    self.schedule = new_schedule
-  end
-
-  def record_schedule_change
-    route_schedule_transactions.build(route: self, schedule: self.schedule)
-  end
-
-  def update_order_schedules
-    deleted_day_numbers.each do |day|
-      future_orders.active.each do |order|
-        order.deactivate_for_day!(day)
-      end
     end
   end
 end

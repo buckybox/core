@@ -1,0 +1,72 @@
+//= require_tree ./vendor
+
+//------ Site wide colours
+
+$note-colour: #FEF7DF
+$action-colour: #FAE1A3
+$action-color-hover: darken($action-colour, 15%)
+$archived-colour: #F0F0F0
+$forcasting-colour: #D4E2C5
+$error-colour: #F69585
+
+$content-background: #FFFFFF
+$content-border: #D3D3D3
+
+$negative-colour: #D0381B
+
+$badge-name: $grayLighter
+$badge-id: darken($badge-name, 15%)
+$badge-text: $black
+
+//----- Site wide styles
+
+.non-production-background
+  background-image: image-url('not-production-background.png')
+
+.text-right, td.text-right, th.text-right
+  text-align: right
+
+.text-center, td.text-center, th.text-center
+  text-align: center
+
+.hidden
+  display: none
+
+.important
+  font-size: 150%
+  line-height: 150%
+  font-weight: bold
+
+a.link-label:hover
+  text-decoration: none
+
+table.no-horizontal-dividers
+  border: 1px solid $tableBorder
+  th, td
+    border-left-width: 0px
+
+.customer-badge
+  display: inline-block
+  color: $badge-text
+  background-color: $badge-name
+  +border-radius(0.2em)
+  .customer-id
+    font-weight: bold
+    display: inline-block
+    color: $badge-text
+    background-color: $badge-id
+    padding: 0 0.2em
+    +border-radius(0.2em)
+    &:hover
+      color: $badge-id
+      background-color: $badge-text
+      text-decoration: none
+  .customer-name
+    font-weight: normal
+    padding: 0 0.2em
+
+.ajax_loader_gif
+  background: image-url('ajax-loader.gif')
+  width: 16px
+  height: 16px
+  margin: 0px auto

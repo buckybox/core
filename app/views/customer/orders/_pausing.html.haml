@@ -1,19 +1,17 @@
 - pause_date = order.pause_date
 - resume_date = order.resume_date
 
-.pausing{ id: "pausing_order_#{order.id}" }
+.row-fluid.pausing{ id: "pausing_order_#{order.id}", 'data-order-id' => order.id }
   .pause.info-controller
     .initial-link{ style: "display: #{pause_date ? 'none' : 'block'};" }
       = link_to 'pause', '#'
 
     .form-selection
-      = simple_form_for(order, url: pause_customer_order_path(order)) do |f|
-        .inputs.float-left
-          = f.simple_fields_for(:pause) do |p|
-            = p.input :pause_date, collection: order.possible_pause_dates, selected: pause_date, include_blank: false, label: false, input_html: { class: 'float-left' }
-        .action.float-left
-          = f.button :submit, 'Pause', class: 'tiny'
-      .remove-link= link_to 'remove', remove_pause_distributor_account_order_path(order.account, order)
+      = simple_form_for(order, url: pause_customer_order_path(order), html: { class: 'form-inline' }) do |f|
+        = f.simple_fields_for(:pause) do |p|
+          = p.input :pause_date, collection: order.possible_pause_dates, selected: pause_date, include_blank: false, label: false, input_html: { class: 'input-small' }
+        = f.button :submit, 'Pause', class: 'btn-mini btn-primary'
+      .remove-link= link_to 'remove', remove_pause_customer_order_path(order)
       .cancel-link= link_to 'cancel', '#'
 
     .resulting-link{ style: "display: #{pause_date ? 'block' : 'none'};", data: { date: pause_date } }
@@ -25,15 +23,14 @@
       = link_to 'until further notice', '#'
 
     .form-selection
-      = simple_form_for(order, url: resume_customer_order_path(order)) do |f|
-        .inputs.float-left
-          = f.simple_fields_for(:pause) do |p|
-            = p.input :pause_date, collection: order.possible_resume_dates, selected: resume_date, include_blank: false, label: false, input_html: { class: 'float-left' }
-        .action.float-left
-          = f.button :submit, 'Resume', class: 'tiny'
-      .remove-link= link_to 'remove', remove_resume_distributor_account_order_path(order.account, order), class: 'links'
+      = simple_form_for(order, url: resume_customer_order_path(order), html: { class: 'form-inline' }) do |f|
+        = f.simple_fields_for(:pause) do |p|
+          = p.input :pause_date, collection: order.possible_resume_dates, selected: resume_date, include_blank: false, label: false, input_html: { class: 'input-small' }
+        = f.button :submit, 'Resume', class: 'btn-mini btn-primary'
+      .remove-link= link_to 'remove', remove_resume_customer_order_path(order), class: 'links'
       .cancel-link= link_to 'cancel', '#', class: 'links'
 
     .resulting-link{ style: "display: #{resume_date ? 'block' : 'none'};", data: { date: resume_date } }
       = link_to 'resuming', '#'
       %span== on #{order_resume_date_formatted(order)}
+

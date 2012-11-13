@@ -14,6 +14,8 @@ class Customer < ActiveRecord::Base
   has_many :orders,       through: :account
   has_many :deliveries,   through: :orders
 
+  belongs_to :next_order, class_name: 'Order'
+
   devise :database_authenticatable, :recoverable, :rememberable, :trackable, :validatable
 
   acts_as_taggable
@@ -28,22 +30,24 @@ class Customer < ActiveRecord::Base
   validates_uniqueness_of :number, scope: :distributor_id
   validates_numericality_of :number, greater_than: 0
   validates_numericality_of :discount, greater_than_or_equal_to: 0.0, less_than_or_equal_to: 1.0
-  validates_associated :account
-  validates_associated :address
+  validates_associated :account, unless: 'account.nil?'
+  validates_associated :address, unless: 'address.nil?'
 
   before_validation :initialize_number, if: 'number.nil?'
-  before_validation :randomize_password_if_not_present
+  before_validation :random_password, unless: 'encrypted_password.present?'
   before_validation :discount_percentage
   before_validation :format_email
 
   before_create :setup_account
   before_create :setup_address
 
-  after_create :trigger_new_customer
-
-  default_scope order(:first_name)
+  after_save :update_next_occurrence # This could be more specific about when it updates
 
   delegate :separate_bucky_fee?, :consumer_delivery_fee, to: :distributor
+
+  scope :ordered_by_next_delivery, lambda { order("CASE WHEN next_order_occurrence_date IS NULL THEN '9999-01-01' WHEN next_order_occurrence_date < '#{Date.current.to_s(:db)}' THEN '9999-01-01' ELSE next_order_occurrence_date END ASC, lower(customers.first_name) ASC, lower(customers.last_name) ASC") }
+
+  default_value_for :discount, 0
 
   pg_search_scope :search,
     against: [ :first_name, :last_name, :email ],
@@ -52,11 +56,10 @@ class Customer < ActiveRecord::Base
     },
     using: { tsearch: { prefix: true } }
 
-  def self.random_string(len = 10)
-    # generate a random password consisting of strings and digits
+  def self.generate_random_password(length = 12)
     chars = ("a".."z").to_a + ("A".."Z").to_a + ("0".."9").to_a
     newpass = ""
-    1.upto(len) { |i| newpass << chars[rand(chars.size - 1)] }
+    1.upto(length) { |i| newpass << chars[rand(chars.size - 1)] }
     return newpass
   end
 
@@ -93,8 +96,8 @@ class Customer < ActiveRecord::Base
   end
 
   def randomize_password
-    self.password = Customer.random_string(12)
-    self.password_confirmation = password
+    self.password = Customer.generate_random_password
+    self.password_confirmation = self.password
   end
 
   def import(c, c_route)
@@ -135,18 +138,19 @@ class Customer < ActiveRecord::Base
       delivery_date = Time.zone.parse(b.next_delivery_date)
       raise "Date couldn't be parsed from '#{b.delivery_date}'" if delivery_date.blank?
 
-      delivery_day_numbers = Route.delivery_day_numbers(b.delivery_days.split(',').collect{|d| d.strip.downcase.to_sym})
-
       order = self.orders.build({
         box: box,
         quantity: 1,
-        #likes: b.likes,
-        #dislikes: b.dislikes,
         account: self.account,
         extras_one_off: b.extras_recurring?
       })
       account.route = self.route
-      order.create_schedule(delivery_date, b.delivery_frequency, delivery_day_numbers)
+      order.schedule_rule = if b.delivery_frequency == 'single'
+                              ScheduleRule.one_off(delivery_date, ScheduleRule::DAYS.select{|day| b.delivery_days =~ /#{day.to_s}/i})
+                            else
+                              ScheduleRule.recur_on(delivery_date, ScheduleRule::DAYS.select{|day| b.delivery_days =~ /#{day.to_s}/i}, b.delivery_frequency.to_sym)
+                            end
+                              
       order.activate
 
       order.import_extras(b.extras) unless b.extras.blank?
@@ -163,24 +167,36 @@ class Customer < ActiveRecord::Base
   end
 
   def order_with_next_delivery
-    has_next_delivery = account.active_orders.select { |o| o.schedule.next_occurrence }
-    order = has_next_delivery.sort{ |a,b| b.schedule.next_occurrence <=> a.schedule.next_occurrence }.first
-    return order
+    return next_order
   end
 
   def next_delivery_time
-    order = order_with_next_delivery
-    order.schedule.next_occurrence if order
+    return next_order_occurrence_date
+  end
+
+  def update_next_occurrence(date = nil)
+    date ||= Date.current.to_s(:db)
+    next_order = orders.active.select("orders.*, next_occurrence('#{date}', false, schedule_rules.*)").joins(:schedule_rule).reject{|sr| sr.next_occurrence.blank?}.sort_by(&:next_occurrence).first
+    if next_order
+      self.next_order = next_order
+      self.next_order_id = next_order.id
+      self.next_order_occurrence_date = next_order.next_occurrence
+    else
+      self.next_order = nil
+      self.next_order_id = nil
+      self.next_order_occurrence_date = nil
+    end
+    self
   end
 
   private
 
   def initialize_number
-    self.number = Customer.next_number(self.distributor)
+    self.number = Customer.next_number(self.distributor) unless self.distributor.nil?
   end
 
-  def randomize_password_if_not_present
-    randomize_password unless encrypted_password.present?
+  def random_password
+    randomize_password
   end
 
   def discount_percentage
@@ -193,10 +209,6 @@ class Customer < ActiveRecord::Base
 
   def setup_address
     self.build_address if self.address.nil?
-  end
-
-  def trigger_new_customer
-    Event.new_customer(self)
   end
 
   def format_email

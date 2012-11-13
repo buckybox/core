@@ -1,0 +1,43 @@
+.row-fluid
+  .span12.customer-order
+    .section-info-background
+
+    %table.section-info
+      %tbody
+        %tr
+          %td.description
+            %h2= order.box.name
+            %table.sub-section-info
+              - unless order.exclusions.empty?
+                %tr
+                  %td.icon
+                    %i.icon-minus-sign
+                  %td{ title: order.exclusions_string }
+                    = order.exclusions_string
+              - unless order.substitutions.empty?
+                %tr
+                  %td.icon
+                    %i.icon-plus-sign
+                  %td{ title: order.substitutions_string }
+                    = order.substitutions_string
+              - unless order.extras.empty?
+                - order.extras.each do |extra_object|
+                  %tr
+                    %td.icon
+                      %i.icon-plus
+                    %td
+                      = order.extra_string(extra_object)
+                    %td.quantity
+                      %span.label= order.extra_count(extra_object)
+            %br
+            %small= link_to 'edit order', edit_customer_order_path(order)
+          %td.thumb{ rowspan: 2 }= image_tag(order.box.box_image.small_thumb.url)
+          %td.total
+            .price= order.price.format
+        %tr.bottom-section
+          %td
+            - if order.recurs?
+              = render partial: 'customer/orders/details', locals: { order: order }
+            - else
+              %h2 Single order delivery
+          %td

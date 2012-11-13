@@ -99,6 +99,10 @@ class Delivery < ActiveRecord::Base
     end
   end
 
+  def formated_delivery_number
+    "%04d" % delivery_number
+  end
+
   def payment
     @payment ||= payments.order(:created_at).last
   end
@@ -181,9 +185,7 @@ class Delivery < ActiveRecord::Base
   end
 
   def self.matching_dso(delivery_sequence_order)
-    delivery_ids = Delivery.joins(account: {customer: {address: {}}}).where(['deliveries.route_id = ? AND addresses.address_hash = ?', delivery_sequence_order.route_id, delivery_sequence_order.address_hash]).select{|delivery|
-      delivery.delivery_list.date.wday == delivery_sequence_order.day
-    }.collect(&:id)
+    delivery_ids = Delivery.joins({delivery_list:{}, account: {customer: {address: {}}}}).where(['deliveries.route_id = ? AND addresses.address_hash = ? AND EXTRACT(DOW FROM delivery_lists.date) = ?', delivery_sequence_order.route_id, delivery_sequence_order.address_hash, delivery_sequence_order.day]).collect(&:id)
     Delivery.where(['id in (?)', delivery_ids])
   end
 
@@ -207,7 +209,7 @@ class Delivery < ActiveRecord::Base
 
       export_items = []
 
-      packages.group_by(&:box).each do |box, array|
+      packages.group_by(&:box).sort{|a,b| a.first.name <=> b.first.name}.each do |box, array|
         array.each do |package|
           export_items << package
         end

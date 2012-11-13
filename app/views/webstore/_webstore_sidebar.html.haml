@@ -1,0 +1,22 @@
+- content_for :sidebar do
+  - if @distributor.company_team_image?
+    .row-fluid
+      = image_tag(@distributor.company_team_image.photo.url, class: 'img-polaroid span12')
+
+  .row-fluid
+    .span12
+      %h1#distributor-name= @distributor.name
+
+      - unless @distributor.about.blank?
+        .webstore-information-section= simple_format(@distributor.about)
+
+      - unless @distributor.details.blank?
+        .webstore-information-section
+          %h4 Details
+          = simple_format(@distributor.details)
+
+      - unless @distributor.facebook_url.blank?
+        .webstore-information-section
+          = link_to @distributor.facebook_url, id: 'facebook-link' do
+            %i.facebook-icon
+            %div Find us on Facebook

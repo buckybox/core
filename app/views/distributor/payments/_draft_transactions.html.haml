@@ -1,43 +1,31 @@
-= simple_form_for(import_transaction_list, url: process_payments_distributor_payment_path(import_transaction_list), :method => :put) do |f|
+= simple_form_for(import_transaction_list, url: process_payments_distributor_payment_path(import_transaction_list), method: :put) do |f|
   - if import_transaction_list.errors.present?
-    .row.errors
-      = import_transaction_list.errors.full_messages.join(", ")
-  .row
-    .twelve.columns
-      %table.payments
-        %thead
-          %tr
-            %th Date
-            %th{width: '350px'} Description
-            %th.amount
-              %span Amount
-            %th Payment Type
-            %th Customer
-        %tbody
-          - import_transaction_list.import_transactions.not_removed.ordered.each do |import_transaction|
-            = f.simple_fields_for(:import_transactions, import_transaction) do |tf|
-              %tr.row_description{id: "import_transaction_#{import_transaction.id}"}
-                = tf.input :id, as: :hidden
-                = tf.input :draft, as: :hidden, input_html: {value: false}
-                %td= import_transaction.transaction_date.to_s(:transaction)
-                %td= truncate(import_transaction.description, length: 70)
-                %td.amount
-                  %span= import_transaction.amount.format
-                %td= import_transaction.payment_type
-                %td{title: "#{import_transaction.confidence*100}% Match"}
-                  .chosen-background{class: payment_color(import_transaction)}
-                    = tf.input :customer_id, as: :select, collection: import_transaction.possible_customers, selected: import_transaction.match_id, label: false, input_html: { class: 'chosen-payee-select draft-payment', style: 'width: 100%' }
-              %tr.row_details{style: "display: none;"}
-                %td
-                %td
-                  - import_transaction.raw_data.each do |key, value|
-                    %div= "#{key.to_s.humanize}: #{value}"
-                %td
-                %td
-                %td
+    = import_transaction_list.errors.full_messages.join(', ')
 
+  %table.table.table-striped
+    %tbody
+      - import_transaction_list.import_transactions.not_removed.ordered.each do |import_transaction|
+        = f.simple_fields_for(:import_transactions, import_transaction) do |tf|
+          %tr.row_description{id: "import_transaction_#{import_transaction.id}"}
+            = tf.input :id, as: :hidden
+            = tf.input :draft, as: :hidden, input_html: { value: false }
+            %td.date= import_transaction.transaction_date.to_s(:transaction)
+            %td.description= truncate(import_transaction.description, length: 70)
+            %td.amount.text-right= import_transaction.amount.format
+            %td.account= import_transaction.payment_type
+            %td.customer{ title: "#{import_transaction.confidence*100}% Match" }
+              .chosen-background{ class: payment_color(import_transaction) }
+                = tf.input :customer_id, as: :select, collection: import_transaction.possible_customers, selected: import_transaction.match_id, label: false, input_html: { class: 'chosen-payee-select draft-payment' }
+          %tr.row_details.hidden
+            %td.date
+            %td.description
+              - import_transaction.raw_data.each do |key, value|
+                %div= "#{key.to_s.humanize}: #{value}"
+            %td.amount
+            %td.account
+            %td.customer
 
-  .row
-    .five.columns.centered
-      = link_to "Cancel", distributor_import_transaction_list_path(import_transaction_list), method: :delete, style: 'margin-right: 5px;', id: 'payment_upload_cancel'
-      = f.submit "Import & Assign Transactions", class: 'button radius'
+      %tr
+        %td.text-center{ colspan: 5 }
+          = link_to 'Cancel', distributor_import_transaction_list_path(import_transaction_list), method: :delete, id: 'payment_upload_cancel'
+          = f.submit "Import transactions", class: 'btn btn-primary', id: 'draft-transactions-controls'

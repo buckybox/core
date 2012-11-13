@@ -5,10 +5,6 @@ class Distributor::BoxesController < Distributor::ResourceController
 
   before_filter :filter_params, only: [:create, :update]
 
-  def filter_params
-    params[:box] = params[:box].slice!(:all_extras)
-  end
-
   def create
     create! { distributor_settings_boxes_url }
   end
@@ -22,6 +18,12 @@ class Distributor::BoxesController < Distributor::ResourceController
     order = Order.new
     box = current_distributor.boxes.find_by_id(params[:id]) || Box.new
 
-    render partial: 'shared/orders/extras', locals: { account: account, order: order, box: box }
+    render partial: 'distributor/orders/extras', locals: { account: account, order: order, box: box }
+  end
+
+  private
+
+  def filter_params
+    params[:box] = params[:box].slice!(:all_extras)
   end
 end

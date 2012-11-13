@@ -1,28 +1,26 @@
+- stylesheet 'admin'
+- javascript 'admin'
+
 - content_for :body do
-  %body
-    .container
-      .row
-        .twelve.columns
-          - flash.each do |kind, message|
-            = flash_bar(kind, message)
+  .container
+    .row
+      .span12.text-right
+        - if admin_signed_in?
+          Signed in as 
+          %strong= current_admin.email
+          \|
+          = link_to 'logout', destroy_admin_session_path, method: :delete
+        - else
+          = link_to 'login', new_admin_session_path
 
-      .row
-        .twelve.columns.text-right
-          - if admin_signed_in?
-            Signed in as 
-            %strong= current_admin.email
-            \|
-            = link_to 'logout', destroy_admin_session_path, method: :delete
-          - else
-            = link_to 'login', new_admin_session_path
+    = render_site_messages(flash)
 
-      - if show_title?
-        .row
-          .twelve.columns
-            %h1.text-center= yield(:title)
-
+    - if show_title?
       .row
-        .twelve.columns= yield
+        .span12
+          %h1.text-center= yield(:title)
+
+    .row
+      .span12= yield
 
 = render 'layouts/base'
-

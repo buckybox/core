@@ -1,0 +1,122 @@
+$section-info: #eceae3
+$section-border-color: #ddd
+$section-padding: 10px
+$section-spacing: 25px
+$process-info: #c2c0c3
+$secondary-background: rgba(128, 128, 128, 0.3)
+
+$btnProcessBackground: #ab8a81 !default
+$btnProcessBackgroundHighlight: darken($btnProcessBackground, 10%) !default
+
+$tableBackground: $white
+
+=webstore-divider($type: 'line')
+  border-color: $grayLight
+  border-style: dashed
+  border-image: image-url('customer-dashed-border.png') 8% repeat
+  border-width: 0px
+  @if $type == 'line'
+    border-top-width: 1px
+    padding-top: $section-spacing
+    margin-top: $section-spacing
+  @else if $type == 'box'
+    border-width: 1px
+    margin: $section-spacing 0px
+    padding: $section-padding
+
+=order-frame
+  background-color: $white
+  border: 1px solid $section-border-color
+  padding: $section-padding
+  overflow: hidden
+  position: relative
+  +single-box-shadow(rgba(0, 0, 0, .25), 0px, 15px, 20px, -6px)
+  .section-info-background
+    background-color: $section-info
+    position: absolute
+    top: 0
+    right: 0
+    z-index: 0
+    height: 100%
+    width: 17%
+    @media (min-width: 1200px)
+      width: 14%
+  .section-info
+    position: relative
+    h1, h2, .price
+      margin: 0px
+      font-weight: bold
+    h1
+      font-size: 20px
+      line-height: 22px
+    h2, .price
+      font-size: 16px
+      line-height: 18px
+    #total .price
+      font-size: 24px
+      line-height: 26px
+    .price
+      text-align: right
+
+body
+  background: $white url('webstore-background.png') repeat
+  >.container-fluid
+    background-color: $black
+    margin-bottom: 28px
+
+h1, h2, h3, h4, h5, h6
+  color: $grayDark
+
+table
+  &.no-rounded-corners
+    +border-radius(0px)
+    thead:first-child
+      tr:first-child
+        th:first-child, th:last-child
+          +border-radius(0px)
+    thead:last-child
+      tr:last-child
+        th:first-child, th:last-child
+          +border-radius(0px)
+    tbody:first-child
+      tr:first-child
+        td:first-child, td:last-child
+          +border-radius(0px)
+    tbody:last-child
+      tr:last-child
+        td:first-child, td:last-child
+          +border-radius(0px)
+
+#bucky-box-controls
+  background-color: $black
+  color: $grayLighter
+  a
+    color: $white
+    font-weight: bold
+  #bucky-box-powered
+    display: block
+    height: 37px
+    width: 130px
+    margin: 5px 0px
+  #auth-controls
+    margin-top: 11px
+
+#public-banner
+  background-color: $grayDarker
+  color: $grayLighter
+  padding: 10px 0px
+  margin-bottom: 28px
+  #company-logo
+    background: $white
+
+#content-information
+  #information
+    background-color: $secondary-background
+    padding: 14px
+    margin-bottom: $section-spacing
+
+.btn-process
+  +buttonBackground($btnProcessBackground, $btnProcessBackgroundHighlight)
+
+.webstore-section
+  +webstore-divider('line')

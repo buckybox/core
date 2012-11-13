@@ -13,34 +13,36 @@ class Order < ActiveRecord::Base
   has_many :deliveries
   has_many :exclusions,                  autosave: true
   has_many :substitutions,               autosave: true
-  has_many :order_schedule_transactions, autosave: true
   has_many :order_extras,                autosave: true
 
   has_many :extras, through: :order_extras
 
-  has_one :schedule_rule, autosave: true
+  has_one :schedule_rule, as: :scheduleable, inverse_of: :scheduleable, autosave: true, dependent: :destroy
 
   scope :completed, where(completed: true)
   scope :active, where(active: true)
 
-  schedule_for :schedule
-  before_save :update_schedule_rule
+  after_save :update_next_occurrence #This is an after call because it works at the database level and requires the information to be commited
+  after_destroy :update_next_occurrence
 
   acts_as_taggable
 
-  attr_accessible :box, :box_id, :account, :account_id, :quantity, :completed, :frequency, :schedule, 
-    :order_extras, :extras_one_off
+  attr_accessible :box, :box_id, :account, :account_id, :quantity, :completed, 
+    :order_extras, :extras_one_off, :schedule_rule_attributes, :schedule_rule
 
-  FREQUENCIES = %w(single weekly fortnightly monthly)
+  accepts_nested_attributes_for :schedule_rule
 
-  validates_presence_of :account_id, :box_id, :quantity, :frequency
+  IS_ONE_OFF  = false
+  QUANTITY    = 1
+  FORCAST_RANGE_BACK = 9.weeks
+  FORCAST_RANGE_FORWARD = 6.weeks
+
+  validates_presence_of :account_id, :box_id, :quantity
   validates_numericality_of :quantity, greater_than: 0
-  validates_inclusion_of :frequency, in: FREQUENCIES, message: "%{value} is not a valid frequency"
-  validate :schedule_includes_route
+  validate :route_includes_schedule_rule
   validate :extras_within_box_limit
 
   before_validation :activate, if: :just_completed?
-  before_validation :record_schedule_change, if: :schedule_changed?
 
   default_scope order('created_at DESC')
 
@@ -49,14 +51,21 @@ class Order < ActiveRecord::Base
   scope :inactive,  where(active: false)
 
   delegate :local_time_zone, to: :distributor, allow_nil: true
+  delegate :start, :recurs?, :pause!, :remove_pause!, :pause_date, :resume_date, :next_occurrences, :remove_day, :occurrences_between, to: :schedule_rule
 
-  default_value_for :extras_one_off, false
-  default_value_for :quantity, 1
+  default_value_for :extras_one_off, IS_ONE_OFF
+  default_value_for :quantity, QUANTITY
+  
+  after_initialize :set_default_schedule_rule
+
+  def set_default_schedule_rule
+    self.schedule_rule ||= ScheduleRule.one_off(Date.current) if new_record?
+  end
 
   def self.deactivate_finished
     active.each do |order|
       order.use_local_time_zone do
-        if order.schedule.next_occurrence.nil?
+        if order.schedule_rule.next_occurrence.nil?
           order.update_attribute(:active, false)
           CronLog.log("Deactivated order #{order.id}")
         end
@@ -69,21 +78,6 @@ class Order < ActiveRecord::Base
     order_ids = Order.where(customers: { route_id: route.id }).joins(:customer).map(&:id)
     # The join causes the returned models to be read-only. Thus, must to another search to get updateable models returned.
     Order.where(id: order_ids)
-  end
-
-  def create_schedule(start_time, frequency, days_by_number = nil)
-    if start_time.is_a?(String)
-      start_time = Time.zone.parse(start_time)
-    elsif start_time.is_a?(Date)
-      start_time = start_time.to_time_in_current_zone
-    end
-
-    if frequency == 'single'
-      create_schedule_for(:schedule, start_time, frequency)
-    elsif !days_by_number.nil?
-      days_by_number = days_by_number.values.map(&:to_i) if days_by_number.is_a?(Hash)
-      create_schedule_for(:schedule, start_time, frequency, days_by_number)
-    end
   end
 
   def update_exclusions(line_item_ids)
@@ -125,11 +119,11 @@ class Order < ActiveRecord::Base
   def price
     result = individual_price * quantity
     result += extras_price if extras.present?
-    result
+    return result
   end
 
   def individual_price
-    Package.calculated_price(box, route, customer)
+    Package.calculated_individual_price(box, route, customer)
   end
 
   def extras_price
@@ -144,32 +138,14 @@ class Order < ActiveRecord::Base
     completed_changed? && completed?
   end
 
-  def add_scheduled_delivery(delivery)
-    s = self.schedule
-    s.add_recurrence_time(delivery.date.to_time_in_current_zone)
-    self.schedule = s
-  end
-
-  def remove_scheduled_delivery(delivery)
-    s = schedule
-    time = schedule.recurrence_times.find{ |t| t.to_date == delivery.date }
-    s.remove_recurrence_time(time)
-    self.schedule = s
-  end
-
   def future_deliveries(end_date)
     results = []
 
-    schedule.occurrences_between(Time.current, end_date).each do |occurence|
+    schedule_rule.occurrences_between(Time.current, end_date).each do |occurence|
       results << { date: occurence.to_date, price: self.price, description: "Delivery for order ##{id}"}
     end
 
     return results
-  end
-
-  def remove_day(day)
-    remove_recurrence_rule_day(day)
-    remove_recurrence_times_on_day(day)
   end
 
   def deactivate_for_day!(day)
@@ -179,7 +155,7 @@ class Order < ActiveRecord::Base
   end
 
   def schedule_empty?
-    schedule.nil? || schedule.next_occurrence.blank? || schedule.empty?
+    schedule_rule.blank? || schedule_rule.next_occurrence.blank?
   end
 
   def string_pluralize
@@ -212,42 +188,12 @@ class Order < ActiveRecord::Base
     end
   end
 
-  def reoccurs?
-    schedule.frequency.reoccurs?
-  end
-
-  def pause!(start_date, end_date)
-    return false if start_date.past? || end_date.past? || (end_date < start_date)
-
-    new_schedule = self.schedule
-    new_schedule.pause(start_date, end_date)
-    self.schedule = new_schedule
-    self.save
-  end
-
-  def remove_pause!
-    new_schedule = self.schedule
-    new_schedule.remove_pause
-    self.schedule = new_schedule
-    self.save
-  end
-
-  def pause_date
-    schedule.pause_date
-  end
-
-  def resume_date
-    schedule.resume_date
-  end
-
   def possible_pause_dates(look_ahead = 8.weeks)
-    start_time          = distributor.window_end_at.to_time_in_current_zone + 1.day
+    start_time          = [distributor.window_end_at.to_time_in_current_zone.to_date + 1.day, start].compact.max
     end_time            = start_time + look_ahead
     existing_pause_date = pause_date
 
-    no_pause_schedule = self.schedule
-    no_pause_schedule = no_pause_schedule.remove_pause
-    select_array      = no_pause_schedule.occurrences(end_time, start_time).map { |s| [s.to_date.to_s(:pause), s.to_date] }
+    select_array = self.schedule_rule.occurrences_between(start_time, end_time, {ignore_pauses: true}).map { |s| [s.to_date.to_s(:pause), s.to_date] }
 
     if existing_pause_date && !select_array.index([existing_pause_date.to_s(:pause), existing_pause_date])
       select_array << [existing_pause_date.to_s(:pause), existing_pause_date]
@@ -263,9 +209,7 @@ class Order < ActiveRecord::Base
       end_time             = start_time + look_ahead
       existing_resume_date = resume_date
 
-      no_pause_schedule = self.schedule
-      no_pause_schedule = no_pause_schedule.remove_pause
-      select_array      = no_pause_schedule.occurrences(end_time, start_time).map { |s| [s.to_date.to_s(:pause), s.to_date] }
+      select_array      = self.schedule_rule.occurrences_between(start_time, end_time, {ignore_pauses: true}).map { |s| [s.to_date.to_s(:pause), s.to_date] }
 
       if existing_resume_date && !select_array.index([existing_resume_date.to_s(:pause), existing_resume_date])
         select_array << [existing_resume_date.to_s(:pause), existing_resume_date]
@@ -276,23 +220,37 @@ class Order < ActiveRecord::Base
     return select_array || []
   end
 
+  def extra_string(extra)
+    "#{extra.name} (#{extra.unit})"
+  end
+
+  def extra_count(extra)
+    order_extra = order_extras.where(extra_id: extra.id)
+    order_extra.count if order_extra
+  end
+
   def extras_description(show_frequency = false)
     extras_string = Package.extras_description(order_extras)
 
-    if schedule.frequency.single? || !show_frequency
+    if schedule_rule.frequency.single? || !show_frequency
       extras_string
     else
       extras_string + (extras_one_off? ? ", include in the next delivery only" : ", include with every delivery") if order_extras.count > 0
     end
   end
 
-  def customisation_description
-    exclusions_string = exclusions.includes(:line_item).map(&:name).join(', ')
-    substitution_string = substitutions.includes(:line_item).map(&:name).join(', ')
+  def exclusions_string
+    exclusions.includes(:line_item).map(&:name).join(', ')
+  end
 
+  def substitutions_string
+    substitutions.includes(:line_item).map(&:name).join(', ')
+  end
+
+  def customisation_description
     unless exclusions_string.blank?
       result_string = "Exclude #{exclusions_string}"
-      result_string += "/ Substitute #{substitution_string}" unless substitution_string.blank?
+      result_string += "/ Substitute #{substitutions_string}" unless substitutions_string.blank?
     end
 
     return result_string
@@ -300,9 +258,9 @@ class Order < ActiveRecord::Base
 
   def pack_and_update_extras
     packed_extras = order_extras.collect(&:to_hash)
-    clear_extras if extras_one_off # Now that the extras are in a package, we don't need them on the order anymore, unless it reoccurs
+    clear_extras if extras_one_off # Now that the extras are in a package, we don't need them on the order anymore, unless it recurs
 
-    packed_extras
+    return packed_extras
   end
 
   def clear_extras
@@ -349,20 +307,19 @@ class Order < ActiveRecord::Base
     end
   end
 
+  def schedule_changed(schedule_rule)
+    update_next_occurrence
+  end
+
   protected
 
-  def update_schedule_rule
-      schedule_rule.destroy if schedule_rule
-      self.schedule_rule = ScheduleRule.copy_orders_schedule(self) rescue nil #TODO remove rescue nil
+  def update_next_occurrence
+    customer.update_next_occurrence.save!
   end
 
-  def record_schedule_change
-    order_schedule_transactions.new(order: self, schedule: self.schedule)
-  end
-
-  def schedule_includes_route
-    unless account.route.schedule.include?(schedule)
-      errors.add(:schedule, "Route #{account.route.name}'s schedule '#{account.route.schedule} doesn't include this order's schedule of '#{schedule}'")
+  def route_includes_schedule_rule
+    unless account.route.includes?(schedule_rule)
+      errors.add(:schedule_rule, "Route #{account.route.name}'s schedule '#{account.route.schedule_rule.inspect} doesn't include this order's schedule of '#{schedule_rule.inspect}'")
     end
   end
 

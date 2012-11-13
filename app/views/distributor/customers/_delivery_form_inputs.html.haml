@@ -1,10 +1,9 @@
-.inputs
-  = f.association :route, collection: current_distributor.routes, include_blank: false
+= f.association :route, collection: current_distributor.routes, include_blank: false
 
-  = f.simple_fields_for :address do |g|
-    = g.input :address_1, label: 'Address'
-    = g.input :address_2, label: 'Address'
-    = g.input :suburb
-    = g.input :city
-    = g.input :postcode
-    = g.input :delivery_note, placeholder: 'E.g. Place on back porch'
+= f.simple_fields_for :address do |g|
+  = g.input :address_1, label: 'Address'
+  = g.input :address_2, label: 'Address'
+  = g.input :suburb
+  = g.input :city
+  = g.input :postcode
+  = g.input :delivery_note, placeholder: 'E.g. Place on back porch'

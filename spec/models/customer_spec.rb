@@ -36,7 +36,7 @@ describe Customer do
 
       specify { @customer.password.should_not be_nil }
       specify { @customer.randomize_password.length == 12 }
-      specify { Customer.random_string.should_not == Customer.random_string }
+      specify { Customer.generate_random_password.should_not == Customer.generate_random_password }
     end
 
     context 'full name' do
@@ -108,11 +108,10 @@ describe Customer do
   describe '#order_with_next_delivery' do
     context 'with orders' do
       before do
-        @o1 = Fabricate.build(:active_recurring_order)
-        @o2 = Fabricate.build(:active_recurring_order)
-        @o3 = Fabricate.build(:active_recurring_order)
-
-        customer.stub_chain(:account, :active_orders).and_return([@o1, @o2, @o3])
+        @o1 = Fabricate(:active_recurring_order, account: customer.account)
+        @o2 = Fabricate(:active_recurring_order, account: customer.account)
+        @o3 = Fabricate(:active_recurring_order, account: customer.account)
+        customer.reload
       end
 
       specify { customer.order_with_next_delivery.should == @o3 }
@@ -136,11 +135,11 @@ describe Customer do
 
   describe '#next_delivery_time' do
     before do
-      @order = Fabricate.build(:active_recurring_order)
-      customer.stub(:order_with_next_delivery).and_return(@order)
+      @order = Fabricate(:active_recurring_order, account: customer.account)
+      customer.reload
     end
 
-    specify { customer.next_delivery_time.should == @order.schedule.next_occurrence }
+    specify { customer.next_delivery_time.should == @order.schedule_rule.next_occurrence.to_date }
   end
 
   describe '.import' do
@@ -148,7 +147,7 @@ describe Customer do
 
     it "should import customer with all fields" do
       route = mock_model(Route)
-      route.stub_chain(:schedule, :include?).and_return(true)
+      route.stub(:includes?).and_return(true)
 
       boxes = []
       box = box_mock({box_type: "Rural Van", extras_unlimited?: true})

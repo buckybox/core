@@ -4,13 +4,13 @@
   = link_to 'Next »', distributor_wizard_routes_path, :class => 'button radius'
   .clear
 
-.row
+.row-fluid
   = simple_form_for([:distributor, @box]) do |f|
     %fieldset
       %legend Add Box
       = f.error_notification
 
-      .three.columns
+      .span3
         = f.input :name, :label => false, :placeholder => "Name"
         = f.input :price, :as => :currency, :label => false, :input_html => { :class => "input-text" }, :hint => "per box"
         %fieldset
@@ -23,10 +23,10 @@
           = f.input :available_weekly, :label => "Weekly"
           = f.input :available_fourtnightly, :label => "Fortnightly"
 
-      .four.columns
+      .span4
         = f.input :description, :label => false, :placeholder => "Description", :input_html => { :rows => 15 }
 
-      .four.columns
+      .span4
         %p Chose your logo
         = f.input :box_image, :label => false, :hint => "Any jpeg, gif or png image file"
         = f.input :box_image_cache, :as => :hidden

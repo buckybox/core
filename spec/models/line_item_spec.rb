@@ -24,7 +24,7 @@ describe LineItem do
         @text = "oranges\nKiwi fruit\napples\npears\nApples"
       end
 
-      specify { expect{ LineItem.from_list(distributor, @text) }.should change(distributor.line_items(true), :count).from(1).to(5) }
+      specify { expect{ LineItem.from_list(distributor, @text) }.to change(distributor.line_items(true), :count).from(1).to(5) }
 
       specify { LineItem.from_list(distributor, @text).map(&:name).include?(@old_item_name).should be_true }
       specify { LineItem.from_list(distributor, @text).map(&:name).include?('Apples').should be_true }

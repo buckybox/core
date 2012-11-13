@@ -1,14 +1,13 @@
-.inputs
-  = f.input :number
-  = f.input :first_name
-  = f.input :last_name
-  = f.input :tag_list, label: 'Tags', placeholder: 'E.g. west-end, coupon, discount'
-  = f.input :email
+= f.input :number
+= f.input :first_name
+= f.input :last_name
+= f.input :tag_list, label: 'Tags', placeholder: 'E.g. west-end, coupon, discount'
+= f.input :email
 
-  = f.simple_fields_for :address do |g|
-    = g.input :phone_1, label: 'Mobile'
-    = g.input :phone_2, label: 'Home'
-    = g.input :phone_3, label: 'Work'
+= f.simple_fields_for :address do |g|
+  = g.input :phone_1, label: 'Mobile'
+  = g.input :phone_2, label: 'Home'
+  = g.input :phone_3, label: 'Work'
 
-  = f.input :discount, input_html: { step: 0.0001 }
-  = f.input :special_order_preference, placeholder: 'E.g. More leafy greens'
+= f.input :discount, input_html: { step: 0.0001 }
+= f.input :special_order_preference, placeholder: 'E.g. More leafy greens'

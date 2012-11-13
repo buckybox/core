@@ -1,60 +1,68 @@
 = render 'controls'
 
-.row
-  #customer-details.four.columns
+.row-fluid
+  #customer-details.span4
     #section-one
-      = customer_title(@customer)
-      - @customer.tags.each do |t|
-        = content_tag(:span, link_to(t.name, tag_distributor_customers_path(t.name)), class: 'radius label') unless @customer.tags.empty?
+      = customer_title(@customer, class: 'important')
+
+      - unless @customer.tags.empty?
+        - @customer.tags.each do |tag|
+          = link_to tag_distributor_customers_path(tag.name), class: 'link-label' do
+            %span.label.label-info= tag.name
 
       #account-information
-        %span.important= @account.balance.format
-        = link_to "Discount #{@customer.discount * 100}%", edit_distributor_customer_path(@customer) if @customer.discount > 0
+        %span.important{ class: "#{'negative' if @account.balance.negative?}" }= @account.balance
+        %small= link_to "Discount #{@customer.discount * 100}%", edit_distributor_customer_path(@customer) if @customer.discount > 0
 
-      %ul
-        %li== Email: #{@customer.email}
+      %ul.unstyled
+        %li
+          email:
+          %strong= @customer.email
         - unless @address.phone_1.blank?
-          %li== Phone 1: #{@address.phone_1}
+          %li
+            mobile:
+            %strong= @address.phone_1
+        - unless @address.phone_2.blank?
+          %li
+            home:
+            %strong= @address.phone_2
+        - unless @address.phone_3.blank?
+          %li
+            work:
+            %strong= @address.phone_3
 
       - unless @customer.special_order_preference.blank?
-        %p.highlight-colour= @customer.special_order_preference
+        %p.note-field= @customer.special_order_preference
 
-      = link_to 'edit customer profile', edit_distributor_customer_path(@customer)
+      %small= link_to 'edit profile', edit_distributor_customer_path(@customer)
+      \|
+      %small= link_to 'send logins', send_login_details_distributor_customer_path(@customer), confirm: 'Are you sure? This will reset the users password.'
 
     #section-two
-      .important== Delivery Service: #{@customer.route.name}
-      %ul
-        - if @address
-          %li= @address.address_1
-          %li= @address.address_2 if @address.address_2
-          %li= @address.suburb
-          %li= @address.city
+      %span.label.label-important= @customer.route.name.upcase
+      - if @address
+        %address= @address.join('<br>')
 
       - unless @address.delivery_note.blank?
-        %p.highlight-colour= @address.delivery_note
+        %p.note-field= @address.delivery_note
 
-      = link_to 'edit delivery details', edit_distributor_customer_path(@customer, form_type: :delivery)
-      %br
-      %br
-      = link_to 'send login details', send_login_details_distributor_customer_path(@customer), confirm: 'Are you sure? This will reset the users password.'
+      %small= link_to 'edit delivery details', edit_distributor_customer_path(@customer, form_type: :delivery)
 
-  #customer-associations.eight.columns
-    .row.section
-      .twelve.columns
-        %h3 Notes
+  #customer-associations.span8
+    .row-fluid
+      #note-section.span12
+        %span.label.label-success NOTES
         = simple_form_for([:distributor, @customer]) do |f|
-          .inputs
-            = f.input :notes, placeholder: 'E.g. Credit card bounced 23 July, to follow up', label: false, input_html: { class: 'expand' }
-          .actions
-            = f.button :submit, 'Update', class: 'float-right'
+          = f.input :notes, placeholder: 'E.g. Credit card bounced 23 July, to follow up', label: false, input_html: { class: 'span12', rows: 4 }
+          = f.button :submit, 'Update', class: 'btn btn-primary pull-right'
 
-    .row.section
-      .twelve.columns
-        %h3 Orders
+    .row-fluid
+      #order-section.span12
+        %span.label.label-success ORDERS
         = render 'distributor/orders/index'
 
-    .row.section
-      .twelve.columns
-        %h3 Transactions
+    .row-fluid
+      #transaction-section.span12
+        %span.label.label-success TRANSACTIONS
         = render 'distributor/transactions/index'
 

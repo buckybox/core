@@ -1,20 +1,20 @@
 - title('Admin - Customer Import Check')
 
-.row
-  .twelve.columns
+.row-fluid
+  .span12
     - if @customers.blank?
       %h3 No Customers Found
     - else
       - @customers.each do |customer|
         - route = @distributor.routes.find_by_name(customer.delivery_route)
 
-        .row
-          %h3.twelve.columns{style: 'border-bottom:1px solid grey;'}== Customer ##{customer.number}
-        .row
+        .row-fluid
+          %h3.span12== Customer ##{customer.number}
+        .row-fluid
           - group_count = (@customer_data_fields.size / 3.0).ceil
 
           - @customer_data_fields.in_groups_of(group_count, false).each do |field_group|
-            %dl.four.columns.import-list
+            %dl.dl-horizontal.span4
               - field_group.each do |field|
                 %dt
                   = field.to_s.titleize
@@ -26,8 +26,8 @@
                   - else
                     %dd= customer.send(field)
 
-        .row
-          %table.twelve.columns
+        .row-fluid
+          %table.span12
             %thead
               %tr
                 - @order_data_fields.each do |field|
@@ -48,12 +48,17 @@
                         %td
                     - else
                       %td= box.send(field)
+%hr
 
-.row
-  .twelve.columns
-    = simple_form_for(:customer_import, url: customer_import_upload_admin_distributor_path, method: :post) do |f|
-      .inputs
+.row-fluid
+  .span12
+    = simple_form_for(:customer_import, url: customer_import_upload_admin_distributor_path, method: :post, html: { class: 'form-horizontal' }) do |f|
+      %fieldset
+        %legend Try upload file again
+
         = f.input :csv, as: :file, label: "CSV File"
 
-      .actions
-        = f.button :submit, "Upload & Commit"
+        .form-actions
+          = f.button :submit, "Upload & Commit"
+          or
+          = link_to 'Cancel', admin_distributor_path(@distributor)

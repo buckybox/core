@@ -1,0 +1,35 @@
+- content_for :sidebar do
+  .row-fluid
+    .span12
+      .customer-information-section
+        %h1= customer.name
+        == ID: #{customer.number}
+        %br
+        = customer.email
+        %br
+        %small= link_to 'change my name/email', '#email-modal', data: { toggle: 'modal' }
+        %br
+        %small= link_to 'change my password', '#password-modal', data: { toggle: 'modal' }
+
+      .customer-information-section
+        = current_customer.address.join('<br/>', with_phone: true)
+        %br
+        %small= link_to 'change my delivery address', '#address-modal', data: { toggle: 'modal' }
+
+#address-modal.modal.hide.fade
+  .modal-header
+    %button.close{ data: { dismiss: 'modal'} } &times;
+    %h3 Change Your Address
+  = render 'customer/addresses/form'
+
+#email-modal.modal.hide.fade
+  .modal-header
+    %button.close{ data: { dismiss: 'modal'} } &times;
+    %h3 Change Your Email Address
+  = render 'customer/customers/form'
+
+#password-modal.modal.hide.fade
+  .modal-header
+    %button.close{ data: { dismiss: 'modal'} } &times;
+    %h3 Change Your Password
+  = render 'customer/customers/password_form'

@@ -1,45 +1,29 @@
 !!! 5
-/ paulirish.com/2008/conditional-stylesheets-vs-css-hacks-answer-neither/
-/[if lt IE 7 ] <html class=\"ie6\" lang=\"en\">
-/[if IE 7 ]    <html class=\"ie7\" lang=\"en\">
-/[if IE 8 ]    <html class=\"ie8\" lang=\"en\">
-/[if IE 9 ]    <html class=\"ie9\" lang=\"en\">
-/[if (gt IE 9)|!(IE)] <!--> <html lang=\"en\">
 
-%head
-  = raw analytical.head_prepend_javascript
-  %meta{ charset: "utf-8" }
+%html
+  %head
+    = raw analytical.head_prepend_javascript
+    %meta{ charset: 'utf-8' }
 
-  -# Uncomment to make IE8 render like IE7
-  -# meta http-equiv="X-UA-Compatible" content="IE=7"
+    %title= content_for?(:title) ? "Bucky Box - #{yield(:title)}" : 'Bucky Box'
 
-  -# Set the viewport width to device width for mobile
-  %meta{ name: "viewport", content: "width=device-width, initial-scale=1.0" }
+    = csrf_meta_tag
 
-  %title= content_for?(:title) ? "Bucky Box - #{yield(:title)}" : "Bucky Box"
+    = yield(:head)
 
-  -# Included CSS Files
-  = stylesheet_link_tag "application"
+    - if Rails.env.production?
+      = favicon_link_tag
+    - elsif Rails.env.staging?
+      = favicon_link_tag '/favicon-gray.ico'
+    - else
+      = favicon_link_tag '/favicon-red.ico'
 
-  -# Included JS Files
-  = javascript_include_tag "application"
+    / Analytics
+    - analytical.identify(current_distributor.id, email: current_distributor.email) if current_distributor
+    = raw analytical.head_append_javascript
 
-  = csrf_meta_tag
-
-  - if Rails.env.production?
-    = favicon_link_tag
-  - else
-    = favicon_link_tag '/favicon-grayscale.ico'
-
-  = yield(:head)
-
-  - analytical.identify(current_distributor.id, email: current_distributor.email) if current_distributor
-  = raw analytical.head_append_javascript
-
-%body{ class: "#{'not-production-background' unless Rails.env.production?}" }
-  = raw analytical.body_prepend_javascript
-
-  = render 'layouts/server_warnings'
-  = yield(:body)
-
-  = raw analytical.body_append_javascript
+    = yield(:thrid_party_code)
+  %body
+    = raw analytical.body_prepend_javascript
+    = yield(:body)
+    = raw analytical.body_append_javascript

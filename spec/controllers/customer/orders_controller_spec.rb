@@ -1,56 +1,8 @@
 require 'spec_helper'
 
 describe Customer::OrdersController do
+  render_views
   as_customer
-
-  describe "POST 'create'" do
-    before do
-      @box = mock_model(Box, { extras_limit: 3, extras_unlimited?: false, dislikes?: true, likes?: true })
-      Order.any_instance.stub(:box).and_return(@box)
-
-      @order      = { quantity: 1, frequency: 'weekly', completed: true, box_id: 1 }
-      @start_date = Date.current
-      @days       = { tuesday: 2, wednesday: 3 }
-    end
-
-    describe 'with valid params' do
-      context 'for a one off order' do
-        before do
-          @order[:frequency] = 'single'
-          post :create, { order: @order, start_date: @start_date }
-        end
-
-        specify { assigns(:order).should be_a(Order) }
-        specify { assigns(:order).should be_persisted }
-      end
-
-      context 'for a reccuring order' do
-        before { post :create, { order: @order, start_date: @start_date, days: @days } }
-
-        specify { assigns(:order).should be_a(Order) }
-        specify { assigns(:order).should be_persisted }
-      end
-    end
-
-    describe 'with invalid params' do
-      before { @order.delete(:box_id) }
-
-      context 'for a one off order' do
-        before do
-          @order[:frequency] = 'single'
-          post :create, { order: @order, start_date: @start_date }
-        end
-
-        specify { response.should render_template('new') }
-      end
-
-      context 'for a reccuring order' do
-        before { post :create, { order: @order, start_date: @start_date } }
-
-        specify { response.should render_template('new') }
-      end
-    end
-  end
 
   describe "PUT 'update'" do
     before do
@@ -68,12 +20,50 @@ describe Customer::OrdersController do
 
     describe 'with invalid params' do
       before do
-        @order[:frequency] = 'all of the times!'
+        @order[:quantity] = 'all of the times!'
         put :update, { id: @id, order: @order }
       end
 
       specify { Order.last.quantity.should == 1 }
       specify { response.should render_template('edit') }
+    end
+  end
+
+  context :pausing do
+    let(:order){Fabricate(:order)}
+    describe "#pause" do
+      it "should pause the order" do
+        date = order.next_occurrences(2, Date.current).last
+        put :pause, {id: order.id, account_id: order.account_id, date: date}
+        assigns(:order).pause_date.should eq(date)
+      end
+    end
+
+    describe "#remove_pause" do
+      it "should remove the pause from an order" do
+        order.pause!(Date.tomorrow)
+        put :remove_pause, {id: order.id, account_id: order.account_id}
+        order.reload.pause_date.should be_nil
+      end
+    end
+    
+    describe "#resume" do
+      it "should resume the order" do
+        dates = order.next_occurrences(5, Date.current)
+        order.pause!(dates[2])
+        put :resume, {id: order.id, account_id: order.account_id, date: dates[4]}
+        order.reload
+        order.pause_date.should eq(dates[2])
+        order.resume_date.should eq(dates[4])
+      end
+    end
+
+    describe "#remove_resume" do
+      it "should resume the order" do
+        dates = order.next_occurrences(5, Date.current)
+        order.pause!(dates[4], dates[5])
+        post :remove_resume, {id: order.id, account_id: order.account_id}
+      end
     end
   end
 end

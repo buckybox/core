@@ -1,13 +1,15 @@
-= simple_form_for([:distributor, @customer]) do |f|
+= simple_form_for([:distributor, @customer], html: { class: 'form-horizontal' }) do |f|
   = f.error_notification
 
-  .row
-    .six.columns
+  .row-fluid
+    .span6
       = render partial: 'personal_form_inputs', locals: { f: f }
 
-    .six.columns
+    .span6
       = render partial: 'delivery_form_inputs', locals: { f: f }
 
-      .actions
-        = f.button :submit
-        = link_to 'Cancel', :back
+  .row-fluid
+    .span12.form-actions
+      = f.button :submit
+      or
+      = link_to 'Cancel', :back
