@@ -47,7 +47,7 @@
                 .span10
                   .row-fluid
                     .span4= display_address(delivery)
-                    .span4= contents_description(delivery)
+                    .span4= contents_description(delivery, @selected_date)
                     .span4= customer_badge(delivery.customer, customer_name: delivery.package.archived_customer_name, short: true)
 - else
   %ul.unstyled
@@ -62,5 +62,5 @@
         .span10
           .row-fluid
             .span3= display_address(order)
-            .span4= contents_description(order)
+            .span4= contents_description(order, @selected_date)
             .span5= customer_badge(order.customer)

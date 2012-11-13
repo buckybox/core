@@ -34,9 +34,9 @@ class Distributor::DeliveriesController < Distributor::ResourceController
 
       if @route_id.zero?
         @packing_list  = PackingList.collect_list(current_distributor, @selected_date)
-        
+
         @all_packages  = @packing_list.packages
-        
+
         @items     = @all_packages
         @real_list = @items.all? { |i| i.is_a?(Package) }
         @route     = @routes.first
@@ -47,7 +47,7 @@ class Distributor::DeliveriesController < Distributor::ResourceController
           @delivery_list = DeliveryList.collect_list(current_distributor, @selected_date)
           @all_deliveries = @delivery_list.deliveries
         end
-        
+
         @items     = @all_deliveries.select{ |delivery| delivery.route_id == @route_id }
         @real_list = @items.all? { |i| i.is_a?(Delivery) }
         @route     = @routes.find(@route_id)
@@ -130,7 +130,7 @@ class Distributor::DeliveriesController < Distributor::ResourceController
   def nav_start_date
     Date.current - Order::FORCAST_RANGE_BACK
   end
-  
+
   def nav_end_date
     Date.current + Order::FORCAST_RANGE_FORWARD
   end

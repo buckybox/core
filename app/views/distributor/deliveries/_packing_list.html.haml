@@ -26,7 +26,7 @@
           .span10
             .row-fluid
               .span4= display_address(package)
-              .span4= contents_description(package)
+              .span4= contents_description(package, @selected_date)
               .span4= customer_badge(package.customer, customer_name: package.archived_customer_name, short: true)
 - else
   - @items.group_by(&:box).sort{ |a,b| a.first.name <=> b.first.name }.each do |box, array|
@@ -46,5 +46,5 @@
           .span10
             .row-fluid
               .span3= display_address(order)
-              .span4= contents_description(order)
+              .span4= contents_description(order, @selected_date)
               .span5= customer_badge(order.account.customer)

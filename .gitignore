@@ -37,3 +37,6 @@ public/system/
 public/uploads/
 public/assets/
 public/stylesheets/
+
+# Ignore Ctags
+.tags*

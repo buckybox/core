@@ -354,5 +354,25 @@ describe Order do
       order.order_extras.collect(&:extra_id).should_not include(@extra_ids.first)
       order.extras_count.should eq(3)
     end
+
+    context "predicted_order_extras" do
+      it "should not return extras if they don't recur and an order occurs before this one" do
+        order = Order.create(@params.merge(extras_one_off: true))
+        order.predicted_order_extras.size.should eq(2)
+        order.predicted_order_extras(order.next_occurrences(2, Date.current)[1]).size.should eq(0)
+      end
+
+      it "should return extras if they don't recur and an order doesn't occur before this one" do
+        order = Order.create(@params.merge(extras_one_off: true, "schedule_rule_attributes" => {"start" => Date.current + 1.week}))
+        order.predicted_order_extras.size.should eq(2)
+        order.predicted_order_extras(order.next_occurrence - 1.day).size.should eq(2)
+      end
+
+      it "should return extras if extras recur" do
+        order = Order.create(@params)
+        order.predicted_order_extras.size.should eq(2)
+        order.predicted_order_extras(order.next_occurrences(2, Date.current)[1]).size.should eq(2)
+      end
+    end
   end
 end
