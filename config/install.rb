@@ -41,6 +41,5 @@ policy :myapp, :roles => :app do
   requires :munin_passenger
   requires :logrotate
   requires :redis
-  requires :scoutapp
 end
 

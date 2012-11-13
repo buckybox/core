@@ -31,7 +31,6 @@ gem 'postmark-rails', '~> 0.4.1'
 gem 'analytical', '~> 3.0.12'
 gem 'newrelic_rpm', '~> 3.4.1'
 gem 'airbrake', '~> 3.1.2'
-gem 'scout_rails'
 
 ########## THE GEMS ABOVE ARE THE ONLY ONES THAT RUN ON PRODUCTION ##########
 
