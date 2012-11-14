@@ -72,9 +72,9 @@ module Distributor::DeliveriesHelper
     link_to('<i class="icon-map-marker"></i>'.html_safe, "http://maps.google.com/maps?q=#{Rack::Utils.escape(address_linked)}", target: '_blank') + " #{address_shown}"
   end
 
-  def contents_description(item)
+  def contents_description(item, date=nil)
     if item.is_a?(Order)
-      Package.contents_description(item.box, item.order_extras)
+      Package.contents_description(item.box, item.predicted_order_extras(date))
     else
       item = item.package if item.is_a?(Delivery)
       item.contents_description

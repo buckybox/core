@@ -22,7 +22,7 @@ class PackingList < ActiveRecord::Base
       future_start_date = (result.last.date + 1.day) if result.last
 
       (future_start_date..end_date).each do |date|
-        result << collect_list(distributor, date, orders)
+        result << collect_list(distributor, date)
       end
     end
 

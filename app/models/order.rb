@@ -51,7 +51,7 @@ class Order < ActiveRecord::Base
   scope :inactive,  where(active: false)
 
   delegate :local_time_zone, to: :distributor, allow_nil: true
-  delegate :start, :recurs?, :pause!, :remove_pause!, :pause_date, :resume_date, :next_occurrences, :remove_day, :occurrences_between, to: :schedule_rule
+  delegate :start, :recurs?, :pause!, :remove_pause!, :pause_date, :resume_date, :next_occurrence, :next_occurrences, :remove_day, :occurrences_between, to: :schedule_rule
 
   default_value_for :extras_one_off, IS_ONE_OFF
   default_value_for :quantity, QUANTITY
@@ -185,6 +185,19 @@ class Order < ActiveRecord::Base
       next if count.to_i.zero?
       order_extra = order_extras.build(extra_id: id)
       order_extra.count = count.to_i
+    end
+  end
+
+  def predicted_order_extras(date = nil)
+    date = Date.current unless date.is_a?(Date)
+    if date == Date.current || !extras_one_off?
+      order_extras
+    else
+      if next_occurrence < date
+        order_extras.none
+      else
+        order_extras
+      end
     end
   end
 

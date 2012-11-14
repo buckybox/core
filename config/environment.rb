@@ -6,3 +6,4 @@ BuckyBox::Application.initialize!
 
 ActsAsTaggableOn.force_parameterize = true
 ActsAsTaggableOn.remove_unused_tags = true
+
