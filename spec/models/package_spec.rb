@@ -24,9 +24,10 @@ describe Package do
 
     context :seperate_bucky_fee do
       it 'should archive the fee' do
-        Package.any_instance.stub_chain(:distributor, :separate_bucky_fee?).and_return(true)
-        Package.any_instance.stub_chain(:distributor, :consumer_delivery_fee).and_return(Money.new(10))
-        Package.any_instance.stub_chain(:distributor, :consumer_delivery_fee_cents).and_return(10)
+        distributor = double('found_distributor')
+        distributor.stub(:separate_bucky_fee?) { true }
+        distributor.stub(:consumer_delivery_fee) { Money.new(10) }
+        Distributor.stub(:find_by_id).and_return(distributor)
         @package = Fabricate(:package, order: @order, packing_list: @package.packing_list)
         @package.archived_consumer_delivery_fee_cents.should == 10
       end

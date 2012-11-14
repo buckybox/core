@@ -205,9 +205,8 @@ class Package < ActiveRecord::Base
       self.archived_route_fee             = route.fee
       self.archived_customer_discount     = customer.discount
       self.archived_order_quantity        = order.quantity
-
       # The association chain to get a distributor was causing a callback loop so have to do this instead.
-      found_distributor = Distributor.find_by_id(packing_list.distributor_id)
+      found_distributor = Distributor.find_by_id(packing_list.distributor_id) if packing_list
 
       if found_distributor && found_distributor.separate_bucky_fee?
         self.archived_consumer_delivery_fee = found_distributor.consumer_delivery_fee
