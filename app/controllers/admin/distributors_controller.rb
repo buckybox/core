@@ -62,7 +62,7 @@ class Admin::DistributorsController < Admin::ResourceController
     if @distributor.update_attributes(intro_tour_columns)
       flash[:notice] = "The intro tours have been reset for #{@distributor.name}"
     else
-      flash[:error] = "There was some weird error in resetting the intro tours for #{@distributor.name}. Blame Jordan."
+      flash[:error] = "There was some weird error in resetting the intro tours for #{@distributor.name}."
     end
 
     redirect_to :back
