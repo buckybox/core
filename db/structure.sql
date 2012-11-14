@@ -844,7 +844,11 @@ CREATE TABLE distributors (
     company_team_image character varying(255),
     about text,
     details text,
-    facebook_url character varying(255)
+    facebook_url character varying(255),
+    customers_show_intro boolean DEFAULT true NOT NULL,
+    deliveries_index_packing_intro boolean DEFAULT true NOT NULL,
+    deliveries_index_deliveries_intro boolean DEFAULT true NOT NULL,
+    payments_index_packing_intro boolean DEFAULT true NOT NULL
 );
 
 
@@ -2978,3 +2982,5 @@ INSERT INTO schema_migrations (version) VALUES ('20121018021812');
 INSERT INTO schema_migrations (version) VALUES ('20121024025935');
 
 INSERT INTO schema_migrations (version) VALUES ('20121102225050');
+
+INSERT INTO schema_migrations (version) VALUES ('20121112232854');

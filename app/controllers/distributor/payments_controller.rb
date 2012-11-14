@@ -7,7 +7,7 @@ class Distributor::PaymentsController < Distributor::ResourceController
 
   def index 
     @import_transaction_list = current_distributor.import_transaction_lists.new
-    @show_tour = false
+    @show_tour = current_distributor.payments_index_packing_intro
     load_index
   end
 

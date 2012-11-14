@@ -85,18 +85,19 @@ module LayoutHelper
   def intro_tour(show_tour)
     if controller_path =~ /^distributor/
       if controller_name == 'customers' && action_name == 'show'
-        file_name = 'customers_show'
+        tour_type = 'customers_show'
       elsif controller_name == 'deliveries' && action_name == 'index'
         if params[:view] == 'packing'
-          file_name = 'deliveries_index_packing'
+          tour_type = 'deliveries_index_packing'
         else
-          file_name = 'deliveries_index_deliveries'
+          tour_type = 'deliveries_index_deliveries'
         end
       elsif controller_name == 'payments' && action_name == 'index'
-        file_name = 'payments_index_packing'
+        tour_type = 'payments_index_packing'
       end
 
-      render partial: 'distributor/shared/intro_tour', object: "intro_tour/#{file_name}.png", locals: { show_tour: show_tour }
+      locals = { show_tour: show_tour, tour_type: tour_type }
+      render partial: 'distributor/shared/intro_tour', object: "intro_tour/#{tour_type}.png", locals: locals
     end
   end
 end

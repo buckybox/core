@@ -39,7 +39,7 @@ class Distributor::DeliveriesController < Distributor::ResourceController
         @items     = @all_packages
         @real_list = @items.all? { |i| i.is_a?(Package) }
         @route     = @routes.first
-        @show_tour = false
+        @show_tour = current_distributor.deliveries_index_packing_intro
       else
         if @delivery_list
           @all_deliveries = @delivery_list.deliveries.ordered
@@ -51,7 +51,7 @@ class Distributor::DeliveriesController < Distributor::ResourceController
         @items     = @all_deliveries.select{ |delivery| delivery.route_id == @route_id }
         @real_list = @items.all? { |i| i.is_a?(Delivery) }
         @route     = @routes.find(@route_id)
-        @show_tour = false
+        @show_tour = current_distributor.deliveries_index_deliveries_intro
       end
     end
   end

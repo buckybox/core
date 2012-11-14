@@ -43,7 +43,7 @@ class Distributor::CustomersController < Distributor::ResourceController
       @transactions     = @account.transactions.limit(6)
       @transactions     = [Transaction.dummy(0, "Opening Balance", @account.created_at)] if @transactions.empty?
       @transactions_sum = @account.calculate_balance
-      @show_tour        = true
+      @show_tour        = current_distributor.customers_show_intro
     end
   end
 
