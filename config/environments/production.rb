@@ -32,13 +32,14 @@ BuckyBox::Application.configure do
 
   # See everything in the log (default is :info)
   # config.log_level = :debug
-  config.logger.level = Logger::INFO
 
   # Prepend all log lines with the following tags
   # config.log_tags = [ :subdomain, :uuid ]
 
   # Use a different logger for distributed setups
   # config.logger = ActiveSupport::TaggedLogging.new(SyslogLogger.new)
+  require 'hodel_3000_compliant_logger'
+  config.logger = Hodel3000CompliantLogger.new(config.paths['log'].first)
 
   # Use a different cache store in production
   # config.cache_store = :mem_cache_store
