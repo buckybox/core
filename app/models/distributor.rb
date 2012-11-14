@@ -43,7 +43,8 @@ class Distributor < ActiveRecord::Base
     :remove_company_logo, :company_team_image, :company_team_image_cache, :remove_company_team_image, :completed_wizard,
     :support_email, :invoice_threshold, :separate_bucky_fee, :advance_hour, :advance_days, :automatic_delivery_hour,
     :time_zone, :currency, :bank_deposit, :paypal, :bank_deposit_format, :country_id, :consumer_delivery_fee,
-    :consumer_delivery_fee_cents, :active_webstore, :about, :details, :facebook_url, :city
+    :consumer_delivery_fee_cents, :active_webstore, :about, :details, :facebook_url, :city, :customers_show_intro,
+    :deliveries_index_packing_intro, :deliveries_index_deliveries_intro, :payments_index_packing_intro
 
   validates_presence_of :country
   validates_presence_of :email
