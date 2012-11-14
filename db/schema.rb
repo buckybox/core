@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121112232854) do
+ActiveRecord::Schema.define(:version => 20121114225113) do
 
   create_table "accounts", :force => true do |t|
     t.integer  "customer_id"
@@ -274,7 +274,8 @@ ActiveRecord::Schema.define(:version => 20121112232854) do
     t.boolean  "customers_show_intro",                             :default => true,  :null => false
     t.boolean  "deliveries_index_packing_intro",                   :default => true,  :null => false
     t.boolean  "deliveries_index_deliveries_intro",                :default => true,  :null => false
-    t.boolean  "payments_index_packing_intro",                     :default => true,  :null => false
+    t.boolean  "payments_index_intro",                             :default => true,  :null => false
+    t.boolean  "customers_index_intro",                            :default => true,  :null => false
   end
 
   add_index "distributors", ["authentication_token"], :name => "index_distributors_on_authentication_token", :unique => true

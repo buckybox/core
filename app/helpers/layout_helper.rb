@@ -86,6 +86,8 @@ module LayoutHelper
     if controller_path =~ /^distributor/
       if controller_name == 'customers' && action_name == 'show'
         tour_type = 'customers_show'
+      elsif controller_name == 'customers' && action_name == 'index'
+        tour_type = 'customers_index'
       elsif controller_name == 'deliveries' && action_name == 'index'
         if params[:view] == 'packing'
           tour_type = 'deliveries_index_packing'
@@ -93,7 +95,7 @@ module LayoutHelper
           tour_type = 'deliveries_index_deliveries'
         end
       elsif controller_name == 'payments' && action_name == 'index'
-        tour_type = 'payments_index_packing'
+        tour_type = 'payments_index'
       end
 
       locals = { show_tour: show_tour, tour_type: tour_type }
