@@ -77,6 +77,7 @@ describe DeliveryList do
 
     context 'for the next week' do
       before do
+        PackingList.generate_list(@distributor, @generate_date)
         @dl1 = DeliveryList.generate_list(@distributor, @generate_date)
         PackingList.generate_list(@distributor, @generate_date + 1.week)
         @dl2 = DeliveryList.generate_list(@distributor, @generate_date + 1.week)
