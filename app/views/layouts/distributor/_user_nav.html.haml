@@ -35,7 +35,3 @@
             = form_tag(distributor_notifications_dismiss_all_path, id: 'dismiss-notifications') do
               = hidden_field_tag 'notification_ids[]', @notifications.map(&:id)
               = submit_tag 'Clear Notifications', class: 'btn btn-warning'
-    - unless @show_tour.nil?
-      %li.pull-right
-        = link_to '#', id: 'show-intro-tour' do
-          %i.icon-info-sign
