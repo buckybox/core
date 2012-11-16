@@ -11,7 +11,7 @@ $(function() {
       introTour.modal();
     });
 
-    $('#close-intro-tour').click(function() {
+    introTour.on('hide', function () {
       var tourType = introTour.data('tour-type');
 
       $.ajax({
