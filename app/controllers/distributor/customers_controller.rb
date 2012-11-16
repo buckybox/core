@@ -8,7 +8,9 @@ class Distributor::CustomersController < Distributor::ResourceController
       redirect_to distributor_settings_routes_url, alert: 'You must create a route before you can create users.' and return
     end
 
-    index!
+    index! do
+      @show_tour = current_distributor.customers_index_intro
+    end
   end
 
   def new
@@ -43,6 +45,7 @@ class Distributor::CustomersController < Distributor::ResourceController
       @transactions     = @account.transactions.limit(6)
       @transactions     = [Transaction.dummy(0, "Opening Balance", @account.created_at)] if @transactions.empty?
       @transactions_sum = @account.calculate_balance
+      @show_tour        = current_distributor.customers_show_intro
     end
   end
 

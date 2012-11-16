@@ -1,6 +1,20 @@
 #user-nav.tabbable.tabs-below
   %ul.nav.nav-pills.pull-right
-    %li.dropdown.pull-left
+    %li.dropdown.pull-right
+      = link_to '#', class: 'dropdown-toggle', data: { toggle: 'dropdown' } do
+        = current_distributor.name
+        %b.caret
+      %ul.dropdown-menu
+        %li= link_to 'settings', distributor_settings_business_information_path
+        %li
+          - if current_distributor.active_webstore?
+            = link_to 'view webstore', webstore_store_path(current_distributor.parameter_name), target: '_blank'
+        %li
+          - if admin_signed_in? 
+            = link_to 'logout', unimpersonate_admin_distributors_path
+          - else
+            = link_to 'logout', destroy_distributor_session_path, method: :delete
+    %li.dropdown.pull-right
       = link_to '#', class: 'dropdown-toggle', data: { toggle: 'dropdown' } do
         - unless @notifications.empty?
           %span.badge.badge-important== #{@notifications.size}
@@ -21,18 +35,3 @@
             = form_tag(distributor_notifications_dismiss_all_path, id: 'dismiss-notifications') do
               = hidden_field_tag 'notification_ids[]', @notifications.map(&:id)
               = submit_tag 'Clear Notifications', class: 'btn btn-warning'
-    %li.dropdown.pull-right
-      = link_to '#', class: 'dropdown-toggle', data: { toggle: 'dropdown' } do
-        = current_distributor.name
-        %b.caret
-      %ul.dropdown-menu
-        %li= link_to 'settings', distributor_settings_business_information_path
-        %li
-          - if current_distributor.active_webstore?
-            = link_to 'view webstore', webstore_store_path(current_distributor.parameter_name), target: '_blank'
-        %li
-          - if admin_signed_in? 
-            = link_to 'logout', unimpersonate_admin_distributors_path
-          - else
-            = link_to 'logout', destroy_distributor_session_path, method: :delete
-

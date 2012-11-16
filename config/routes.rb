@@ -43,6 +43,10 @@ BuckyBox::Application.routes.draw do
       post 'dismiss_all', actions: 'dismiss_all', as: 'dismiss_all'
     end
 
+    namespace :intro_tour do
+      post 'dismiss', actions: 'dismiss', as: 'dismiss'
+    end
+
     namespace :reports do
       get 'transaction_history/:start/:to', action: 'transaction_history', as: 'transaction_history'
     end
@@ -177,6 +181,7 @@ BuckyBox::Application.routes.draw do
         put 'validate_customer_import'
         post 'customer_import_upload'
         get 'invoice'
+        get 'reset_intros'
       end
 
       collection do
