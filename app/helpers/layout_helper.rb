@@ -98,8 +98,10 @@ module LayoutHelper
         tour_type = 'payments_index'
       end
 
-      locals = { show_tour: show_tour, tour_type: tour_type }
-      render partial: 'distributor/shared/intro_tour', object: "intro_tour/#{tour_type}.png", locals: locals
+      if tour_type
+        locals = { show_tour: show_tour, tour_type: tour_type }
+        render partial: 'distributor/shared/intro_tour', object: "intro_tour/#{tour_type}.png", locals: locals
+      end
     end
   end
 end
