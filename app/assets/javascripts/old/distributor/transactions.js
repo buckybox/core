@@ -11,4 +11,20 @@ $(function(){
     $('th.sort_header.transaction_date').removeClass('disabled');
     $('th.sort_header.date_processed').addClass('disabled');
   }
+
+  $('th.sort_header.date_processed').click(function(){
+    var clicked = $(this);
+    if(clicked.hasClass('disabled')){
+      alert("clicked");
+    }
+  });
+
+  $('th.sort_header.transaction_date').click(function(){
+    var clicked = $(this);
+    if(clicked.hasClass('disabled')){
+      alert("clicked");
+    }
+  });
+
+
 });
