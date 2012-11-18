@@ -4,8 +4,18 @@
       %table#transactions.table.table-bordered.table-striped.no-horizontal-dividers{ data: { account: @account.id } }
         %thead
           %tr
-            %th Processed
-            %th Date
+            %th.sort_header.date_processed
+              .row-fluid
+                .span3
+                  %i.icon-chevron-down
+                .span9
+                  Date Processed
+            %th.sort_header.transaction_date
+              .row-fluid
+                .span3
+                  %i.icon-chevron-down
+                .span9
+                  Transaction Date
             %th Details
             %th.text-right Transaction
             %th.text-right Balance
