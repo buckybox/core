@@ -55,9 +55,14 @@ class WebstoreController < ApplicationController
 
   def complete
     @customer_name = (existing_customer? ? current_customer.name : '')
-    @address = current_customer.address
+    @order_price = @webstore_order.order_price(current_customer)
+
+    @address = (current_customer ? current_customer.address : '')
+    @current_balance = (current_customer ? current_customer.account.balance : Money.new(0))
+
     @city = @distributor.invoice_information.billing_city if @distributor.invoice_information
     @has_address = existing_customer?
+
     if @has_address
       @street_address = @address.address_1
       @street_address_2 = @address.address_2
@@ -65,8 +70,7 @@ class WebstoreController < ApplicationController
       @city = @address.city
       @post_code = @address.postcode
     end
-    @order_price = @webstore_order.order_price(current_customer)
-    @current_balance = current_customer.account.balance
+
     @closing_balance = @current_balance - @order_price
     @amount_due = @closing_balance * -1
     @bank = @distributor.bank_information
@@ -81,7 +85,7 @@ class WebstoreController < ApplicationController
   private
 
   def existing_customer?
-    current_customer.orders.size > 0
+    current_customer && current_customer.orders.size > 0
   end
 
   def get_webstore_order

@@ -5,7 +5,6 @@ class Webstore
     @controller  = controller
     @distributor = distributor
 
-    webstore_session = @controller.session[:webstore]
     @order = WebstoreOrder.find_by_id(webstore_session[:webstore_order_id]) if webstore_session
   end
 
@@ -26,17 +25,33 @@ class Webstore
     @order.status
   end
 
-  private
-
   def to_session
     { webstore_order_id: @order.id }
   end
+
+  def webstore_session=(session_hash)
+    @controller.session[:webstore] = session_hash
+  end
+
+  def webstore_session
+    @controller.session[:webstore]
+  end
+
+  def current_email=(email)
+    webstore_session[:email] = email
+  end
+
+  def current_email
+    webstore_session[:email] if webstore_session
+  end
+
+  private
 
   def start_order(box_id)
     box = Box.where(id: box_id, distributor_id: @distributor.id).first
     customer = @controller.current_customer
 
-    @order = WebstoreOrder.create(box: box, remote_ip: @controller.request.remote_ip)
+    @order = WebstoreOrder.create(box: box, distributor: @distributor, remote_ip: @controller.request.remote_ip)
     @order.account = customer.account if customer
 
     if box.customisable?
@@ -49,7 +64,7 @@ class Webstore
       end
     end
 
-    @controller.session[:webstore] = to_session
+    self.webstore_session = to_session
   end
 
   def customise_order(customise)
@@ -71,38 +86,26 @@ class Webstore
 
   def login_customer(user_information)
     email    = user_information[:email]
+    password = user_information[:password]
+    customer = Customer.find_by_email(email)
 
-    unless email.blank?
-      customer = Customer.find_by_email(email)
-
-      if customer.nil?
-        customer = distributor.customers.new(email: email)
-        customer.route = Route.default_route(@distributor)
-        customer.first_name = 'Webstore Customer'
-        customer.save
-        Event.new_customer_webstore(customer)
-
-        CustomerMailer.login_details(customer).deliver
-
-        @controller.sign_in(customer)
-      elsif customer.valid_password?(user_information[:password]) && customer.distributor == @distributor
-        @controller.sign_in(customer)
-      end
-
-      @order.account = customer.account
-    end
-
-    if @controller.customer_signed_in?
+    if email.blank?
+      @controller.flash[:error] = 'You must provide an email address.'
+      @order.login_step
+    elsif customer.nil?
+      self.current_email = email
       @order.delivery_step
+    elsif customer.valid_password?(password) && customer.distributor == @distributor
+      @controller.sign_in(customer)
     else
-      @controller.flash[:error] = 'Login failed, please try again.'
+      @controller.flash[:error] = 'You have not provided the correct email address or password for this store. Please try again.'
       @order.login_step
     end
   end
 
   def update_delivery_information(delivery_information)
     assign_route(delivery_information[:route])                      if delivery_information[:route]
-    set_schedule(delivery_information[:schedule_rule])                   if delivery_information[:schedule_rule]
+    set_schedule(delivery_information[:schedule_rule])              if delivery_information[:schedule_rule]
     assign_extras_frequency(delivery_information[:extra_frequency]) if delivery_information[:extra_frequency]
 
     if @controller.flash[:error].blank?
@@ -112,9 +115,29 @@ class Webstore
     end
   end
 
+  def get_customer(options = {})
+    return @controller.current_customer if @controller.current_customer
+
+    email = self.current_email
+
+    customer = @order.distributor.customers.new(email: email)
+    customer.route = @order.route
+    customer.name = options[:name]
+    customer.save!
+
+    Event.new_customer_webstore(customer)
+    CustomerMailer.login_details(customer).deliver
+
+    @order.account = customer.account
+    @order.save
+
+    @controller.sign_in(customer)
+
+    customer
+  end
+
   def add_address_information(address_information)
-    customer = @order.customer
-    customer.first_name = address_information[:name]
+    customer = get_customer(name: address_information[:name])
 
     address = customer.address || Address.new(customer: customer)
     address.address_1 = address_information[:street_address]
@@ -125,19 +148,25 @@ class Webstore
 
     customer.save
 
+    @order.account = customer.account
+
     @order.placed_step
   end
 
   def complete_order
     #FIXME: Hack for private launch, crap code, fml
     customer = @order.customer
+
     if customer
       address = customer.address
       customer_name = customer.first_name
       street_address = address.address_1 if address
     end
 
-    if customer_name.blank? || street_address.blank?
+    if customer.distributor != @distributor
+      @controller.flash[:error] = 'This account does not work for this store. Please log in with the correct user account.'
+      @order.login_step
+    elsif customer_name.blank? || street_address.blank?
       @controller.flash[:error] = 'Please include a name and street address'
       @order.complete_step
     elsif @order.create_order
@@ -174,10 +203,8 @@ class Webstore
   end
 
   def assign_route(route_information)
-    route_id       = route_information[:route]
-    customer       = @order.customer
-    customer.route = Route.find(route_id)
-    customer.save(validate: false)
+    route_id     = route_information[:route]
+    @order.route = Route.find(route_id)
   end
 
   def set_schedule(schedule_information)

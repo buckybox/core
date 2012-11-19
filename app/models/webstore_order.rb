@@ -4,10 +4,10 @@ class WebstoreOrder < ActiveRecord::Base
   belongs_to :account
   belongs_to :box
   belongs_to :order
+  belongs_to :distributor
+  belongs_to :route
 
   has_one :customer, through: :account
-
-  has_one :distributor, through: :account
 
   serialize :exclusions, Array
   serialize :substitutions, Array
@@ -15,7 +15,7 @@ class WebstoreOrder < ActiveRecord::Base
 
   has_one :schedule_rule, as: :scheduleable, inverse_of: :scheduleable, autosave: true, dependent: :destroy
 
-  attr_accessible :box, :remote_ip
+  attr_accessible :box, :distributor, :remote_ip
 
   validate :extras_within_box_limit
 
@@ -52,10 +52,6 @@ class WebstoreOrder < ActiveRecord::Base
 
   def box_description
     box.description
-  end
-
-  def route
-    @route_mem ||= account.route
   end
 
   def route_name
