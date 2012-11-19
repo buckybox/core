@@ -100,6 +100,9 @@ class WebstoreController < ApplicationController
     if @distributor
       Time.zone = @distributor.time_zone
       Money.default_currency = Money::Currency.new(@distributor.currency)
+
+      # So we don't have customers from other distributors trying to make orders in this store
+      sign_out(current_customer) if current_customer && current_customer.distributor != @distributor
     end
 
     redirect_to 'http://www.buckybox.com/' and return if @distributor.nil? || !@distributor.active_webstore
