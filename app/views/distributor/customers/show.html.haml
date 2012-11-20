@@ -64,6 +64,6 @@
     .row-fluid
       #transaction-section.span12
         %span.label.label-success TRANSACTIONS
-        #customer_transactions
+        #sortable_transactions{data: {user: 'distributor'}}
           = render 'distributor/transactions/index'
 

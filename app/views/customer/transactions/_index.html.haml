@@ -5,8 +5,12 @@
     %table.table.table-bordered.no-rounded-corners.no-horizontal-dividers.table-striped
       %thead
         %tr
-          %th Processed Date
-          %th Transaction Date
+          %th.sort_header.date_processed
+            Processed Date
+            %i.icon-chevron-down
+          %th.sort_header.transaction_date
+            Transaction Date
+            %i.icon-chevron-down
           %th Details
           %th.text-right Amount
           %th.text-right Balance
@@ -15,7 +19,7 @@
         - transaction_total = Money.new(0, @distributor.currency) # manual calculation until we start storing historical balance
 
         - @transactions.each do |transaction|
-          %tr
+          %tr.transaction-data
             %td.date= transaction.created_at.to_s(:transaction)
             %td.date= transaction.display_time.to_s(:transaction)
             %td.details= transaction.description

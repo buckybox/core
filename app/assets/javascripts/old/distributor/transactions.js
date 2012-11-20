@@ -18,8 +18,8 @@ $(function(){
       var account_id = $('#account-information').data('account_id');
       if(clicked.hasClass('disabled')){
         $.cookie("transaction_order", 'date_processed', {path: '/' });
-        $.get("/distributor/accounts/" + account_id + "/transactions/" + $('#customer_transactions table tr.transaction-data').size(), function(data){
-          $('#customer_transactions').html(data);
+        $.get("/" + $("#sortable_transactions").data("user") + "/accounts/" + account_id + "/transactions/" + $('#sortable_transactions table tr.transaction-data').size(), function(data){
+          $('#sortable_transactions').html(data);
           setup_page();
         }, 'html');
       }
@@ -30,8 +30,8 @@ $(function(){
       var account_id = $('#account-information').data('account_id');
       if(clicked.hasClass('disabled')){
         $.cookie("transaction_order", 'transaction_date', {path: '/' });
-        $.get("/distributor/accounts/" + account_id + "/transactions/" + $('#customer_transactions table tr.transaction-data').size(), function(data){
-          $('#customer_transactions').html(data);
+        $.get("/" + $("#sortable_transactions").data("user") + "/accounts/" + account_id + "/transactions/" + $('#sortable_transactions table tr.transaction-data').size(), function(data){
+          $('#sortable_transactions').html(data);
           setup_page();
         }, 'html');
       }

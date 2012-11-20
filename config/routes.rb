@@ -164,6 +164,10 @@ BuckyBox::Application.routes.draw do
         post 'remove_resume'
       end
     end
+
+    resources :accounts, only:[] do
+      get 'transactions/:limit', action: :transactions, as: 'transactions'
+    end
   end
 
   namespace :admin do

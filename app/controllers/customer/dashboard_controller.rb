@@ -1,10 +1,11 @@
 class Customer::DashboardController < Customer::BaseController
   def index
     @customer     = current_customer
+    @account      = @customer.account
     @address      = @customer.address
     @orders       = @customer.orders.active
     @balance      = @customer.account.balance
-    @transactions = @customer.transactions.limit(5)
+    @transactions = @customer.transactions.limit(6)
     @distributor  = @customer.distributor
 
     @order = @customer.orders.new
