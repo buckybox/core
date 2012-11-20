@@ -40,7 +40,7 @@ class Distributor::CustomersController < Distributor::ResourceController
       @account          = @customer.account
       @orders           = @account.orders.active
       @deliveries       = @account.deliveries.ordered
-      @transactions     = @account.transactions.limit(6)
+      @transactions     = account_transactions(@account)
       @transactions     = [Transaction.dummy(0, "Opening Balance", @account.created_at)] if @transactions.empty?
       @transactions_sum = @account.calculate_balance
     end

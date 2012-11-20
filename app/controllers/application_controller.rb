@@ -22,6 +22,15 @@ class ApplicationController < ActionController::Base
       super
     end
   end
+  
+  def account_transactions(account, offset=0, limit=6)
+    puts cookies["transaction_order"]
+    if cookies["transaction_order"].blank? || cookies["transaction_order"] == 'date_processed'
+      transactions = account.transactions.ordered_by_created_at.limit(limit).offset(offset)
+    else
+      transactions = account.transactions.ordered_by_display_time.limit(limit).offset(offset)
+    end
+  end
 
   private
 
