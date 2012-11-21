@@ -56,8 +56,8 @@ class Distributor < ActiveRecord::Base
   validates_numericality_of :automatic_delivery_hour, greater_than_or_equal_to: 0
   validates_presence_of :bank_deposit_format, if: :bank_deposit?
 
-  before_validation :parameterize_name
   before_validation :check_emails
+  before_create :parameterize_name, if: 'parameter_name.nil?'
 
   after_save :generate_required_daily_lists
 
@@ -368,11 +368,12 @@ class Distributor < ActiveRecord::Base
     return csv_string
   end
 
-  private
-
-  def parameterize_name
-    self.parameter_name = name.parameterize if self.name
+  def parameterize_name(value = nil)
+    value = self.name if value.nil? && self.name
+    self.parameter_name = value.to_s.parameterize
   end
+
+  private
 
   def check_emails
     if self.email

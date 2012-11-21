@@ -18,8 +18,56 @@ describe Distributor do
         distributor.valid?
       end
 
-      specify { distributor.parameter_name.should == 'this-is-a-distributor' }
       specify { distributor.email.should == 'buckybox@example.com' }
+    end
+  end
+
+  context 'parameter name' do
+    context 'when creating a new distributor' do
+      before do
+        distributor.name = 'New Distributor'
+        distributor.save
+      end
+
+      specify { distributor.parameter_name.should == 'new-distributor' }
+    end
+
+    context 'when updating an existing distributor' do
+      before { distributor.name = 'Saved Distributor' }
+
+      context 'and there is no existing parameter name' do
+        describe 'it will default from name' do
+          before { distributor.save }
+          specify { distributor.parameter_name.should == 'saved-distributor' }
+        end
+
+        describe 'it will create from value' do
+          before do
+            distributor.parameterize_name('Great Veggie Box Delivery!')
+            distributor.save
+          end
+
+          specify { distributor.parameter_name.should == 'great-veggie-box-delivery' }
+        end
+      end
+
+      context 'and there is an existing parameter name' do
+        before { distributor.parameter_name = 'fruit-by-the-bucket' }
+
+        describe 'it will not use parameterized name' do
+          before { distributor.save }
+          specify { distributor.parameter_name.should == 'fruit-by-the-bucket' }
+        end
+
+        describe 'it will create from value' do
+          before do
+            distributor.parameterize_name('Great Veggie Box Delivery!')
+            distributor.save
+          end
+
+          specify { distributor.parameter_name.should == 'great-veggie-box-delivery' }
+        end
+      end
     end
   end
 
