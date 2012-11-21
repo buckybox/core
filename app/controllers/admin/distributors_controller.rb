@@ -1,4 +1,7 @@
 class Admin::DistributorsController < Admin::ResourceController
+
+  before_filter :parameterize_name, only: [:create, :update]
+
   def index
     @distributors = Distributor.order('name')
     index!
@@ -69,6 +72,13 @@ class Admin::DistributorsController < Admin::ResourceController
   end
 
   private
+
+  def parameterize_name
+    if params[:distributor]
+      parameterized_name = Distributor.parameterize_name(params[:distributor][:parameter_name])
+      params[:distributor][:parameter_name] = parameterized_name
+    end
+  end
 
   def parse_csv
     @distributor = Distributor.find(params[:id])

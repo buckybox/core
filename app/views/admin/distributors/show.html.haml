@@ -13,10 +13,12 @@
     %dl
       %dt Name
       %dd= @distributor.name
-      %dt Email
-      %dd= @distributor.email
+      %dt Parameter Name
+      %dd= @distributor.parameter_name
       %dt Url
       %dd= @distributor.url
+      %dt Email
+      %dd= @distributor.email
       %dt Timezone
       %dd= @distributor.time_zone
       %dt Country
@@ -33,8 +35,6 @@
       %dd= checkmark_boolean(@distributor.paypal?)
       %dt Bank File Format
       %dd= @distributor.bank_deposit_format
-      %dt Parameter Name
-      %dd= @distributor.parameter_name
       %dt Invoice Threshold
       %dd= @distributor.invoice_threshold.format
       %dt Separate Bucky Fee
