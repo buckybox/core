@@ -24,12 +24,14 @@ class ApplicationController < ActionController::Base
   end
   
   def account_transactions(account, offset=0, limit=6)
-    puts cookies["transaction_order"]
+    transactions = []
     if cookies["transaction_order"].blank? || cookies["transaction_order"] == 'date_processed'
       transactions = account.transactions.ordered_by_created_at.limit(limit).offset(offset)
     else
       transactions = account.transactions.ordered_by_display_time.limit(limit).offset(offset)
     end
+    transactions = [Transaction.dummy(0, "Opening Balance", @account.created_at)] if transactions.empty?
+    transactions
   end
 
   private

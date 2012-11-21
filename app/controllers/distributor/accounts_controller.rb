@@ -46,7 +46,6 @@ class Distributor::AccountsController < Distributor::ResourceController
     limit ||= 6
     @account = current_distributor.accounts.find(params[:id])
     @transactions = account_transactions(@account, offset_size, limit)
-    @transactions     = [Transaction.dummy(0, "Opening Balance", @account.created_at)] if @transactions.empty?
 
     @transactions_sum = @account.calculate_balance(offset_size)
 
