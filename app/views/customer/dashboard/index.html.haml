@@ -1,6 +1,6 @@
 - title(customer_and_number(current_customer), false)
 = render partial: 'customer/customers/sidebar', locals: { customer: current_customer }
-
+#account-information{data: {account_id: @account.id}}
 - if @distributor.active_webstore
   .row-fluid
     #new-customer-order.span12= link_to 'create new order from webstore', webstore_store_path(@distributor.parameter_name)
@@ -9,5 +9,6 @@
   = render partial: 'customer/orders/order', collection: @orders
 
 - unless @transactions.empty?
-  = render 'customer/transactions/index'
+  #sortable_transactions{data: {user: 'customer'}}
+    = render 'customer/transactions/index'
 

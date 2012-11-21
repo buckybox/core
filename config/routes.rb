@@ -135,6 +135,7 @@ BuckyBox::Application.routes.draw do
       member do
         put 'change_balance', action: :change_balance, as: 'change_balance'
         get 'more_transactions/:position', action: :more_transactions, as: 'more_transactions'
+        get 'transactions/:limit', action: :transactions, as: 'transactions'
         get 'receive_payment', action: :receive_payment, as: 'receive_payment'
         post 'save_payment',   action: :save_payment, as: 'save_payment'
       end
@@ -166,6 +167,10 @@ BuckyBox::Application.routes.draw do
         put 'resume'
         post 'remove_resume'
       end
+    end
+
+    resources :accounts, only:[] do
+      get 'transactions/:limit', action: :transactions, as: 'transactions'
     end
   end
 
