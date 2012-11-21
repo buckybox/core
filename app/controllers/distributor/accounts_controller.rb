@@ -34,7 +34,7 @@ class Distributor::AccountsController < Distributor::ResourceController
     offset_size = params[:position].to_i
 
     @account = current_distributor.accounts.find(params[:id])
-    @transactions = account_transactions(@account, offset_size)
+    @transactions = account_transactions(@account, offset_size, 6, false)
     @transactions_sum = @account.calculate_balance(offset_size)
 
     render partial: 'distributor/accounts/more_transactions'
