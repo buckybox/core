@@ -24,7 +24,6 @@ class Distributor::DeliveriesController < Distributor::ResourceController
     end
 
     index! do
-
       @selected_date = Date.parse(params[:date])
       @route_id = params[:view].to_i
       @delivery_list = current_distributor.delivery_lists.where(date: params[:date]).first
@@ -40,6 +39,7 @@ class Distributor::DeliveriesController < Distributor::ResourceController
         @items     = @all_packages
         @real_list = @items.all? { |i| i.is_a?(Package) }
         @route     = @routes.first
+        @show_tour = current_distributor.deliveries_index_packing_intro
       else
         if @delivery_list
           @all_deliveries = @delivery_list.deliveries.ordered
@@ -51,6 +51,7 @@ class Distributor::DeliveriesController < Distributor::ResourceController
         @items     = @all_deliveries.select{ |delivery| delivery.route_id == @route_id }
         @real_list = @items.all? { |i| i.is_a?(Delivery) }
         @route     = @routes.find(@route_id)
+        @show_tour = current_distributor.deliveries_index_deliveries_intro
       end
     end
   end
@@ -134,5 +135,4 @@ class Distributor::DeliveriesController < Distributor::ResourceController
   def nav_end_date
     Date.current + Order::FORCAST_RANGE_FORWARD
   end
-
 end

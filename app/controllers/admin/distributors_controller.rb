@@ -53,6 +53,21 @@ class Admin::DistributorsController < Admin::ResourceController
     render json: @distributor.invoice_for_range(params[:start_date], params[:end_date])
   end
 
+  def reset_intros
+    @distributor = Distributor.find(params[:id])
+
+    intro_tour_columns = Distributor.column_names.select { |name| name =~ /_intro$/ }
+    intro_tour_columns = intro_tour_columns.each_with_object({}) { |column, hash| hash[column] = true }
+
+    if @distributor.update_attributes(intro_tour_columns)
+      flash[:notice] = "The intro tours have been reset for #{@distributor.name}"
+    else
+      flash[:error] = "There was some weird error in resetting the intro tours for #{@distributor.name}."
+    end
+
+    redirect_to :back
+  end
+
   private
 
   def parse_csv

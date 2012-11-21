@@ -10,7 +10,7 @@ module Bucky::TransactionImports
     def initialize(date_string, description, amount_string, index=nil, raw_data=nil, parser=nil)
       self.date_string = date_string
       self.description = description
-      self.amount_string = amount_string.gsub(/,/,'')
+      self.amount_string = amount_string.gsub(/,/,'') unless amount_string.blank?
       self.index = index
       self.parser = parser
       self.raw_data = raw_data

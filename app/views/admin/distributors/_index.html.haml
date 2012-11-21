@@ -20,11 +20,11 @@
         %td= link_to distributor.current_sign_in_ip, "http://www.infosniper.net/index.php?ip_address=#{distributor.current_sign_in_ip}", target: "_blank" unless distributor.current_sign_in_ip.nil?
         %td= distributor.sign_in_count
         %td
-          = link_to 'Show', admin_distributor_path(distributor)
-          %br
-          = link_to 'Edit', edit_admin_distributor_path(distributor)
-          %br
-          = link_to 'Impersonate', impersonate_admin_distributor_path(distributor)
+          %ul.unstyled
+            %li= link_to 'Show', admin_distributor_path(distributor)
+            %li= link_to 'Edit', edit_admin_distributor_path(distributor)
+            %li= link_to 'Impersonate', impersonate_admin_distributor_path(distributor)
+            %li= link_to 'Reset Intros', reset_intros_admin_distributor_path(distributor)
         %td= distributor.orders.size
         %td= distributor.packages.size
         %td= distributor.deliveries.size
