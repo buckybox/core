@@ -44,7 +44,8 @@ class Distributor < ActiveRecord::Base
     :support_email, :invoice_threshold, :separate_bucky_fee, :advance_hour, :advance_days, :automatic_delivery_hour,
     :time_zone, :currency, :bank_deposit, :paypal, :bank_deposit_format, :country_id, :consumer_delivery_fee,
     :consumer_delivery_fee_cents, :active_webstore, :about, :details, :facebook_url, :city, :customers_show_intro,
-    :deliveries_index_packing_intro, :deliveries_index_deliveries_intro, :payments_index_intro, :customers_index_intro
+    :deliveries_index_packing_intro, :deliveries_index_deliveries_intro, :payments_index_intro, :customers_index_intro,
+    :parameter_name
 
   validates_presence_of :country
   validates_presence_of :email
@@ -56,8 +57,8 @@ class Distributor < ActiveRecord::Base
   validates_numericality_of :automatic_delivery_hour, greater_than_or_equal_to: 0
   validates_presence_of :bank_deposit_format, if: :bank_deposit?
 
-  before_validation :parameterize_name
   before_validation :check_emails
+  before_create :parameterize_name, if: 'parameter_name.nil?'
 
   after_save :generate_required_daily_lists
 
@@ -368,11 +369,16 @@ class Distributor < ActiveRecord::Base
     return csv_string
   end
 
-  private
-
-  def parameterize_name
-    self.parameter_name = name.parameterize if self.name
+  def self.parameterize_name(value)
+    value.to_s.parameterize
   end
+
+  def parameterize_name(value = nil)
+    value = self.name if value.nil? && self.name
+    self.parameter_name = Distributor.parameterize_name(value)
+  end
+
+  private
 
   def check_emails
     if self.email
