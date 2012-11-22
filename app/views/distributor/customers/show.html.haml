@@ -11,7 +11,7 @@
           = link_to tag_distributor_customers_path(tag.name), class: 'link-label' do
             %span.label.label-info= tag.name
 
-      #account-information
+      #account-information{data: {account_id: @account.id}}
         %span.important{ class: "#{'negative' if @account.balance.negative?}" }= @account.balance
         %small= link_to "Discount #{@customer.discount * 100}%", edit_distributor_customer_path(@customer) if @customer.discount > 0
 
@@ -65,5 +65,6 @@
     .row-fluid
       #transaction-section.span12
         %span.label.label-success TRANSACTIONS
-        = render 'distributor/transactions/index'
+        #sortable_transactions{data: {user: 'distributor'}}
+          = render 'distributor/transactions/index'
 

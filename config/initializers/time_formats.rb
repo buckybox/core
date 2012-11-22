@@ -7,6 +7,7 @@ Date::DATE_FORMATS[:month_and_year] = "%B %Y"
 Date::DATE_FORMATS[:day_month_and_year] = "%-d %B %Y"
 Date::DATE_FORMATS[:flux_cap] = "%d %b"
 Date::DATE_FORMATS[:route_delivery_dates] = "%a - %b %-d, %Y"
+Date::DATE_FORMATS[:date_picker] = "%d %b '%y"
 
 Time::DATE_FORMATS[:weekday] = "%A"
 Time::DATE_FORMATS[:month_and_year] = "%B %Y"
@@ -19,3 +20,4 @@ Time::DATE_FORMATS[:transaction] = "%d %b '%y"
 Time::DATE_FORMATS[:bank] = "%Y%m%d%H%M%S"
 Time::DATE_FORMATS[:pretty] = lambda { |time| time.strftime("%a, %b %e at %l:%M") + time.strftime("%p").downcase }
 Time::DATE_FORMATS[:csv_output] = '%d/%b/%Y'
+Time::DATE_FORMATS[:date_picker] = "%d %b '%y"
