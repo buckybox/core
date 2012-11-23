@@ -11,12 +11,11 @@ class Webstore
   def process_params
     webstore_params = @controller.params[:webstore_order]
 
-    start_order(webstore_params[:box_id])              if webstore_params[:box_id]
-    customise_order(webstore_params)                   if webstore_params[:customise] || webstore_params[:extras]
-    login_customer(webstore_params[:user])             if webstore_params[:user]
-    update_delivery_information(webstore_params)       if webstore_params[:route]
-    add_address_information(webstore_params[:address]) if webstore_params[:address]
-    complete_order                                     if webstore_params[:complete]
+    start_order(webstore_params[:box_id])        if webstore_params[:box_id]
+    customise_order(webstore_params)             if webstore_params[:customise] || webstore_params[:extras]
+    login_customer(webstore_params[:user])       if webstore_params[:user]
+    update_delivery_information(webstore_params) if webstore_params[:route]
+    add_address_and_complete(webstore_params)    if webstore_params[:complete]
 
     @order.save
   end
@@ -97,6 +96,7 @@ class Webstore
       @order.delivery_step
     elsif customer.valid_password?(password) && customer.distributor == @distributor
       @controller.sign_in(customer)
+      @order.delivery_step
     else
       @controller.flash[:error] = 'You have not provided the correct email address or password for this store. Please try again.'
       @order.login_step
@@ -115,70 +115,56 @@ class Webstore
     end
   end
 
-  def get_customer(options = {})
-    return @controller.current_customer if @controller.current_customer
+  def add_address_and_complete(webstore_params)
+    address_information = webstore_params[:address]
 
-    email = self.current_email
+    if address_information && (address_information[:name].blank? || address_information[:street_address].blank?)
+      @controller.flash[:error] = 'Please include a your name'
+      @order.complete_step
+    else
+      customer = find_or_create_customer(address_information)
+      update_address(customer, address_information) if address_information
 
-    customer = @order.distributor.customers.new(email: email)
+      @order.account = customer.account
+
+      if @order.create_order
+        @controller.flash[:notice] = 'Your order has been placed'
+        @order.placed_step
+      elsif @order.order
+        @controller.flash[:error] = 'You have already created this order'
+        @order.placed_step
+      else
+        @controller.flash[:error] = 'There was a problem completing your order'
+        @order.complete_step
+      end
+    end
+  end
+
+  def find_or_create_customer(address_information)
+    return @controller.current_customer unless @controller.current_customer.nil?
+
+    customer       = @order.distributor.customers.new(email: self.current_email)
     customer.route = @order.route
-    customer.name = options[:name]
-    customer.save!
+    customer.name  = address_information[:name]
 
-    Event.new_customer_webstore(customer)
-    CustomerMailer.login_details(customer).deliver
+    if customer.save
+      Event.new_customer_webstore(customer)
+      CustomerMailer.login_details(customer).deliver
 
-    @order.account = customer.account
-    @order.save
-
-    @controller.sign_in(customer)
+      @controller.sign_in(customer)
+    end
 
     customer
   end
 
-  def add_address_information(address_information)
-    customer = get_customer(name: address_information[:name])
-
-    address = customer.address || Address.new(customer: customer)
+  def update_address(customer, address_information)
+    address           = customer.address
     address.address_1 = address_information[:street_address]
     address.address_2 = address_information[:street_address_2]
     address.suburb    = address_information[:suburb]
     address.city      = address_information[:city]
     address.postcode  = address_information[:post_code]
-
-    customer.save
-
-    @order.account = customer.account
-
-    @order.placed_step
-  end
-
-  def complete_order
-    #FIXME: Hack for private launch, crap code, fml
-    customer = @order.customer
-
-    if customer
-      address = customer.address
-      customer_name = customer.first_name
-      street_address = address.address_1 if address
-    end
-
-    if customer.distributor != @distributor
-      @controller.flash[:error] = 'This account does not work for this store. Please log in with the correct user account.'
-      @order.login_step
-    elsif customer_name.blank? || street_address.blank?
-      @controller.flash[:error] = 'Please include a name and street address'
-      @order.complete_step
-    elsif @order.create_order
-      @controller.flash[:notice] = 'Your order has been placed'
-      @order.placed_step
-    elsif @order.order
-      @controller.flash[:error] = 'You have already created this order'
-      @order.placed_step
-    else
-      @controller.flash[:error] = 'There was a problem completing your order'
-      @order.complete_step
-    end
+    address.save
   end
 
   def add_exclusions_to_order(exclusions)
