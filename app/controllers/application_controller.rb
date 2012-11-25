@@ -21,16 +21,16 @@ class ApplicationController < ActionController::Base
   def postmark_delivery_error(exception)
     if (address = derive_email_from_postmark_exception(exception)).present?
       #link = %Q[<a href="#{ reactivate_email_bounce_path(address)  }">reactivating</a>]
-      msg = "We could not deliver a recent message to '#{ address }'. The email was disabled due to a hard bounce or a spam complaint."# You can try #{ link } it and try again."
+      msg = "We could not deliver a recent message to '#{ address }'. The email was disabled due to a hard bounce or a spam complaint.  Please contact support."# You can try #{ link } it and try again."
     else
-      msg = "We could not deliver a recent message. The email was disabled due to a hard bounce or a spam complaint. Please contact support."
+      msg = "We could not deliver a recent message. The email was disabled due to a hard bounce or a spam complaint.  Please contact support."
     end
     flash[:alert] = msg
     redirect_to :back
   end
 
   def derive_email_from_postmark_exception(exception)
-    exception.scan(/\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b/i).uniq.join(', ').strip
+    exception.message.scan(/\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b/i).uniq.join(', ').strip rescue false
   end
 
   def layout_by_resource
