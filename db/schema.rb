@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121116015952) do
+ActiveRecord::Schema.define(:version => 20121119005042) do
 
   create_table "accounts", :force => true do |t|
     t.integer  "customer_id"
@@ -595,6 +595,8 @@ ActiveRecord::Schema.define(:version => 20121116015952) do
     t.text     "schedule"
     t.string   "frequency"
     t.boolean  "extras_one_off"
+    t.integer  "distributor_id"
+    t.integer  "route_id"
   end
 
 end
