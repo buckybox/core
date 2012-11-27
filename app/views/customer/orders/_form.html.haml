@@ -60,7 +60,6 @@
   .row-fluid
     .span12.form-actions
       = f.button :submit, class: 'btn btn-primary'
-      or
-      = link_to 'cancel', distributor_customer_path(@account.customer)
+      = link_to '&raquo; back'.html_safe, customer_dashboard_path(@account.customer)
 
 
