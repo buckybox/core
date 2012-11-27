@@ -98,7 +98,15 @@ class Webstore
       @controller.sign_in(customer)
       @order.delivery_step
     else
-      @controller.flash[:error] = 'You have not provided the correct email address or password for this store. Please try again.'
+      new_registration = (user_information[:registered] == 'new')
+
+      if new_registration && !customer.nil?
+        error_description = 'This account already exists. Did you forget your password?'
+      else
+        error_description = 'You have not provided the correct email address or password for this store. Please try again.'
+      end
+
+      @controller.flash[:error] = error_description
       @order.login_step
     end
   end
