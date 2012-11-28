@@ -1,26 +1,47 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Bucky Box - 404</title>
+  <title>Oooops!</title>
 
-  <style type="text/css">
-    #error_page { text-align: center; }
-    #error_page img { margin: 10px auto; }
-    #error_page h1 { margin-bottom: 20px; }
+  <style type='text/css'>
+    body {
+      font-family: 'Courier New', Courier, monospace;
+    }
+    #error-image {
+      display: block;
+      width: 400px;
+      height: 410px;
+      margin-left: -200px;
+      margin-top: -205px;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+    }
+    #error-code {
+      position: absolute;
+      bottom: 25px;
+      right: 25px;
+      font-size: 10px;
+      color: #999;
+    }
   </style>
+
+  <script type='text/javascript'>
+  //<![CDATA[
+    var uvOptions = {};
+
+    (function() {
+      var uv = document.createElement('script'); uv.type = 'text/javascript'; uv.async = true;
+      uv.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'widget.uservoice.com/4xkwSiFb9azD98H3pgmA.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(uv, s);
+    })();
+  //]]>
+  </script>
 </head>
 
 <body>
-  <div class='container'>
-    <div class='row'>
-      <div class='ten columns centered' id='error_page'>
-        <img alt="Buckyerrorlogo" src="/buckyerrorlogo.png" />
-        <h1>Error 404</h1>
-        <h4>Sorry, something seems to have gone wrong.</h4>
-        <h4>Please feel free to email <a href="mailto:info@buckybox.com?subject=I%20got%20a%20404%20Error!">info@buckybox.com</a> for help.</h4>
-      </div>
-    </div>
-  </div>
-</body>
+  <img src='/error-image.png' id='error-image' alt='Oooops!' title='Oooops!' />
+  <div id='error-code'>404</div>
 </html>
+
 
