@@ -95,7 +95,7 @@ group :development, :test do
   gem 'rb-fsevent', '~> 0.9.1',  require: false
   gem 'rb-fchange', '~> 0.0.5',  require: false
 
-  gem 'mailcatcher', '~> 0.5.8', require: false
+  gem 'letter_opener', '~> 1.0.0'
 
   gem 'simplecov', '~> 0.6.4',   require: false
 end
