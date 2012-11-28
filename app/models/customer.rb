@@ -200,7 +200,7 @@ class Customer < ActiveRecord::Base
   end
 
   def discount_percentage
-    self.discount = self.discount / 100.0 if self.discount > 1
+    self.discount = self.discount / 100.0 if self.discount.present? && self.discount > 1
   end
 
   def setup_account
