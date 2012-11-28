@@ -849,7 +849,8 @@ CREATE TABLE distributors (
     deliveries_index_packing_intro boolean DEFAULT true NOT NULL,
     deliveries_index_deliveries_intro boolean DEFAULT true NOT NULL,
     payments_index_intro boolean DEFAULT true NOT NULL,
-    customers_index_intro boolean DEFAULT true NOT NULL
+    customers_index_intro boolean DEFAULT true NOT NULL,
+    customer_can_remove_orders boolean DEFAULT false
 );
 
 
@@ -2995,3 +2996,5 @@ INSERT INTO schema_migrations (version) VALUES ('20121116015952');
 INSERT INTO schema_migrations (version) VALUES ('20121119000156');
 
 INSERT INTO schema_migrations (version) VALUES ('20121119005042');
+
+INSERT INTO schema_migrations (version) VALUES ('20121128005022');

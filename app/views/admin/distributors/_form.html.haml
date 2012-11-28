@@ -22,6 +22,7 @@
   = f.input :bank_deposit_format, collection: ImportTransactionList::FILE_FORMATS.reject { |name, code| code == 'paypal' }, as: :select
   = f.input :invoice_threshold
   = f.input :active_webstore
+  = f.input :customer_can_remove_orders
 
   %hr
 
