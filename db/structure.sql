@@ -1705,7 +1705,9 @@ CREATE TABLE webstore_orders (
     updated_at timestamp without time zone NOT NULL,
     schedule text,
     frequency character varying(255),
-    extras_one_off boolean
+    extras_one_off boolean,
+    distributor_id integer,
+    route_id integer
 );
 
 
@@ -2989,3 +2991,7 @@ INSERT INTO schema_migrations (version) VALUES ('20121112232854');
 INSERT INTO schema_migrations (version) VALUES ('20121114225113');
 
 INSERT INTO schema_migrations (version) VALUES ('20121116015952');
+
+INSERT INTO schema_migrations (version) VALUES ('20121119000156');
+
+INSERT INTO schema_migrations (version) VALUES ('20121119005042');
