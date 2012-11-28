@@ -51,7 +51,7 @@ BuckyBox::Application.configure do
   config.assets.precompile += %w( admin.js admin.css distributor.js distributor.css customer.js customer.css print.js print.css )
 
   # Disable delivery errors, bad email addresses will be ignored
-  # config.action_mailer.raise_delivery_errors = false
+  config.action_mailer.raise_delivery_errors = false
   config.action_mailer.default_url_options = { :host => 'my.buckybox.com' }
 
   # postmark settings

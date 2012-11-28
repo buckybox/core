@@ -53,9 +53,11 @@ class Distributor::CustomersController < Distributor::ResourceController
 
     @customer.randomize_password
     @customer.save
-
-    if CustomerMailer.login_details(@customer).deliver
-      flash[:notice] = "Login details successfully sent"
+    
+    CustomerMailer.raise_errors do
+      if CustomerMailer.login_details(@customer).deliver
+        flash[:notice] = "Login details successfully sent"
+      end
     end
 
     redirect_to distributor_customer_url(@customer)
