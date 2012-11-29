@@ -100,7 +100,7 @@ class Delivery < ActiveRecord::Base
   end
 
   def formated_delivery_number
-    "%04d" % delivery_number
+    "%03d" % delivery_number
   end
 
   def payment
