@@ -66,4 +66,29 @@ describe Customer::OrdersController do
       end
     end
   end
+
+  describe "#deactivate" do
+    let(:order){ Fabricate(:order, account: @customer.account)}
+
+    it "should deactivate the order" do
+      d = @customer.distributor
+      d.customer_can_remove_orders = true
+      d.save
+
+      put :deactivate, {id: order.id}
+      order.reload.active.should be_false
+    end
+
+    it "should only allow deactivating your own orders" do
+      other_customer = Fabricate(:customer)
+      other_order = Fabricate(:order, account: other_customer.account)
+      expect{put :deactivate, {id: other_order.id}}.to raise_error(ActiveRecord::RecordNotFound)
+    end
+
+    it "should only deactivate if enabled via admin's distributor settings" do
+      assert !@customer.distributor.customer_can_remove_orders, "This should be false for the test"
+      put :deactivate, {id: order.id}
+      order.reload.active.should be_true
+    end
+  end
 end

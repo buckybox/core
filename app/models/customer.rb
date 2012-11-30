@@ -189,6 +189,10 @@ class Customer < ActiveRecord::Base
     self
   end
 
+  def can_deactivate_orders?
+    distributor.customer_can_remove_orders?
+  end
+
   private
 
   def initialize_number

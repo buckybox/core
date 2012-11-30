@@ -166,6 +166,7 @@ BuckyBox::Application.routes.draw do
         post 'remove_pause'
         put 'resume'
         post 'remove_resume'
+        put 'deactivate'
       end
     end
 

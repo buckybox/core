@@ -58,6 +58,22 @@ class Customer::OrdersController < Customer::ResourceController
     render partial: 'customer/orders/details', locals: { order: @order }
   end
 
+  def deactivate
+    @order = current_customer.orders.find(params[:id])
+
+    respond_to do |format|
+      if !current_customer.can_deactivate_orders?
+        format.html { redirect_to customer_root_path, notice: "You don't have permission to do this. Please contact #{current_customer.distributor.name}." }
+      elsif current_customer.can_deactivate_orders? && @order.update_attribute(:active, false)
+        format.html { redirect_to customer_root_path, notice: 'Order was successfully deactivated.' }
+        #format.json { head :no_content }
+      else
+        format.html { redirect_to customer_root_path, warning: 'Error while trying to deactivate order.' }
+        #format.json { render json: @order.errors, status: :unprocessable_entity }
+      end
+    end
+  end
+
   protected
 
   def collection
