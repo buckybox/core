@@ -61,8 +61,3 @@
     .span12.form-actions
       = f.button :submit, class: 'btn btn-primary'
       = link_to '&raquo; back'.html_safe, customer_dashboard_path(@account.customer)
-      - if current_customer.can_deactivate_orders?
-        .pull-right
-          = link_to 'Delete order', deactivate_customer_order_path(@order), confirm: "Are you sure you want to delete this order?", method: :put
-
-
