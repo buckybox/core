@@ -71,7 +71,7 @@
               == Account Number: #{@bank.account_number}
               - if customer_signed_in?
                 %br
-                == Reference: #{current_customer.number}
+                == Reference: #{current_customer.formated_number}
             .span6.alert
               = simple_format("<strong>Note:</strong> #{@bank.customer_message}", {}, sanitize: false)
 
