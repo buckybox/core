@@ -33,5 +33,6 @@
                   = customer_badge(customer, link: false)
           %li
             = form_tag(distributor_notifications_dismiss_all_path, id: 'dismiss-notifications') do
-              = hidden_field_tag 'notification_ids[]', @notifications.map(&:id)
+              - @notifications.each do |notification|
+                = hidden_field_tag 'notification_ids[]', notification.id
               = submit_tag 'Clear Notifications', class: 'btn btn-warning'
