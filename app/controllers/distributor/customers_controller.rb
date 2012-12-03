@@ -43,6 +43,7 @@ class Distributor::CustomersController < Distributor::ResourceController
       @orders           = @account.orders.active
       @deliveries       = @account.deliveries.ordered
       @transactions     = account_transactions(@account)
+      @show_more_link = @transactions.size != @account.transactions.count
       @transactions_sum = @account.calculate_balance
       @show_tour        = current_distributor.customers_show_intro
     end

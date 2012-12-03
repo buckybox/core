@@ -6,6 +6,7 @@ class Customer::DashboardController < Customer::BaseController
     @orders       = @customer.orders.active
     @balance      = @customer.account.balance
     @transactions = @customer.transactions.limit(6)
+    @show_more_link = @transactions.size != @customer.transactions.count
     @distributor  = @customer.distributor
 
     @order = @customer.orders.new
