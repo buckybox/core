@@ -6,7 +6,12 @@ module Devise::CustomControllerParameters
   private
 
   def setup_custom_variables
-    @distributor = Distributor.find_by_parameter_name(params[:distributor])
+    @distributor = Distributor.find_by_parameter_name(params[:distributor]) if params[:distributor]
+
+    if @distributor.nil? && params[:customer] && params[:customer][:email]
+      customer = Customer.find_by_email(params[:customer][:email])
+      @distributor = customer.distributor
+    end
 
     if @distributor
       @abort_url = webstore_store_path(@distributor.parameter_name)
