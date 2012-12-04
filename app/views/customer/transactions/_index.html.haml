@@ -27,4 +27,7 @@
             %td.price.text-right= (@balance - transaction_total).format
 
           - transaction_total += transaction.amount
-
+        - if @show_more_link
+          %tr
+            %td#more-transactions{ colspan: 5 }
+              = link_to 'more...', '#'
