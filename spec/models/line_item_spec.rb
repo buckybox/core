@@ -64,13 +64,15 @@ describe LineItem do
         specify { @new_line_item.id.should == substitution.reload.line_item_id }
       end
 
-      context 'same namd' do
+      context 'same name' do
         before { LineItem.bulk_update(distributor, { line_item.id => line_item.name }) }
 
         specify { line_item.reload.persisted?.should be_true }
         specify { line_item.id.should == exclusion.line_item_id }
         specify { line_item.id.should == substitution.line_item_id }
       end
+
+      specify { expect{LineItem.bulk_update(distributor, nil)}.to_not raise_error}
     end
 
     describe '.move_exclustions_and_substitutions!' do
