@@ -27,7 +27,7 @@ module LayoutHelper
     unless flash.empty?
       content = flash.map { |kind, message| flash_bar(message, kind: kind) }
       content = content.join
-      content_tag(:div, content_tag(:div, content.html_safe, class: 'span12'), class: 'row')
+      content = content_tag(:div, content_tag(:div, content.html_safe, class: 'span12'), class: 'row-fluid')
     end
   end
 

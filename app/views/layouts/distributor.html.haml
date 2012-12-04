@@ -6,10 +6,10 @@
 
 - content_for :body do
   .container
-    .row
-      .span12= render 'layouts/distributor/user_nav'
+    #user-information.row
+      #flash-messages.span8.offset1= render_site_messages(flash)
+      .span3= render 'layouts/distributor/user_nav'
 
-    = render_site_messages(flash)
 
     .row
       .span1= render 'layouts/distributor/topic_tabs'
