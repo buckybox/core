@@ -26,6 +26,8 @@ class LineItem < ActiveRecord::Base
   end
 
   def self.bulk_update(distributor, line_item_hash)
+    line_item_hash ||= {}
+
     line_item_hash.each do |id, name|
       line_item = LineItem.find(id)
       name = name.titleize
