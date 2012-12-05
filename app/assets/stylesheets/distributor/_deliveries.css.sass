@@ -75,6 +75,10 @@ $navigation-month: #5c5c5c
       background-color: $navigation-base
       color: $black
       margin-bottom: 1em
+    .badge
+      background-color: $action-colour
+      color: $black
+      float: right
     ul.nav-tabs
       width: 100%
       margin-top: 8px
@@ -82,10 +86,9 @@ $navigation-month: #5c5c5c
         a
           line-height: 17px
           overflow: hidden
-        span
-          float: right
-          background-color: $action-colour
-          color: $black
+    dl.packing-summary
+      dd
+        padding: 2px 8px
   #delivery-list
     min-height: 750px
     .row-fluid [class*="span"]
