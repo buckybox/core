@@ -26,4 +26,13 @@ $(function() {
     $("#invoice_start_date").change(update_invoice);
     $("#invoice_end_date").change(update_invoice);
   }
+
+  $("#credit_limit_has_credit_limit").click(function(){
+    if($("#credit_limit").is(":visible")) {
+      $("#distributor_default_credit_limit").val(0);
+      $("#credit_limit").hide('highlight');
+    } else {
+      $("#credit_limit").show('highlight');
+    }
+  });
 });

@@ -43,6 +43,11 @@
       %dd= @distributor.created_at.to_s(:pretty)
       %dt Active Webstore
       %dd= checkmark_boolean(@distributor.active_webstore)
+      %dt Default Credit Limit
+      - if @distributor.has_credit_limit?
+        %dd= Money.new(@distributor.default_credit_limit_cents, @distributor.currency).format
+      - else
+        %dd= "$0.00 - No limit"
 
   .span6
     %dl

@@ -37,6 +37,7 @@ class Distributor < ActiveRecord::Base
 
   monetize :invoice_threshold_cents
   monetize :consumer_delivery_fee_cents
+  monetize :default_credit_limit_cents
 
   # Setup accessible (or protected) attributes for your model
   attr_accessible :email, :password, :password_confirmation, :remember_me, :name, :url, :company_logo, :company_logo_cache,
@@ -45,7 +46,7 @@ class Distributor < ActiveRecord::Base
     :time_zone, :currency, :bank_deposit, :paypal, :bank_deposit_format, :country_id, :consumer_delivery_fee,
     :consumer_delivery_fee_cents, :active_webstore, :about, :details, :facebook_url, :city, :customers_show_intro,
     :deliveries_index_packing_intro, :deliveries_index_deliveries_intro, :payments_index_intro, :customers_index_intro,
-    :parameter_name
+    :parameter_name, :default_credit_limit
 
   validates_presence_of :country
   validates_presence_of :email
@@ -376,6 +377,10 @@ class Distributor < ActiveRecord::Base
   def parameterize_name(value = nil)
     value = self.name if value.nil? && self.name
     self.parameter_name = Distributor.parameterize_name(value)
+  end
+
+  def has_credit_limit?
+    default_credit_limit.present? && default_credit_limit != 0
   end
 
   private
