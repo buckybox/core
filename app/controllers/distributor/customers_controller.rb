@@ -8,6 +8,7 @@ class Distributor::CustomersController < Distributor::ResourceController
       redirect_to distributor_settings_routes_url, alert: 'You must create a route before you can create users.' and return
     end
 
+    flash[:notice] = 'There was a bright green flash! And from the sky apeared a rock that hit the ground. And the earth moved.'
     index! do
       @show_tour = current_distributor.customers_index_intro
     end
