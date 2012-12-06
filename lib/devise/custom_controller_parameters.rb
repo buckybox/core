@@ -10,7 +10,7 @@ module Devise::CustomControllerParameters
 
     if @distributor.nil? && params[:customer] && params[:customer][:email]
       customer = Customer.find_by_email(params[:customer][:email])
-      @distributor = customer.distributor
+      @distributor = customer.distributor unless customer.nil?
     end
 
     if @distributor
