@@ -24,19 +24,19 @@
         - extras = @items.collect(&:extras_summary).flatten
 
         - unless boxes.blank?
-          %dl
+          %dl.packing-summary
             %dt Boxes
             - boxes.each do |box, array|
               %dd
-                %strong= array.map(&:quantity).sum
+                %span.badge= array.map(&:quantity).sum
                 = box.name
 
         - unless extras.blank?
-          %dl
+          %dl.packing-summary
             %dt Extras
             - extras.group_by{ |g| "#{g[:name]} #{g[:unit]}" }.each do |extra, array|
               %dd
-                %strong= array.collect{ |a| a[:count].to_i }.sum
+                %span.badge= array.collect{ |a| a[:count].to_i }.sum
                 = "#{extra}"
 
     #delivery-list.span9
