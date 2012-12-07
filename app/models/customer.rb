@@ -22,6 +22,8 @@ class Customer < ActiveRecord::Base
 
   accepts_nested_attributes_for :address
 
+  monetize :balance_threshold_cents
+
   attr_accessible :address_attributes, :first_name, :last_name, :email, :name, :distributor_id, :distributor,
     :route, :route_id, :password, :password_confirmation, :remember_me, :tag_list, :discount, :number, :notes,
     :special_order_preference

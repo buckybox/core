@@ -623,7 +623,7 @@ CREATE TABLE customers (
     special_order_preference text,
     next_order_id integer,
     next_order_occurrence_date date,
-    credit_limit_cents integer DEFAULT 0,
+    balance_threshold_cents integer DEFAULT 0,
     status_halted boolean DEFAULT false
 );
 
@@ -852,7 +852,7 @@ CREATE TABLE distributors (
     deliveries_index_deliveries_intro boolean DEFAULT true NOT NULL,
     payments_index_intro boolean DEFAULT true NOT NULL,
     customers_index_intro boolean DEFAULT true NOT NULL,
-    default_credit_limit_cents integer DEFAULT 0
+    default_balance_threshold_cents integer DEFAULT 0
 );
 
 
