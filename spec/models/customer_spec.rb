@@ -280,7 +280,7 @@ describe Customer do
     extra
   end
 
-  describe "balance_threshold", :focus do
+  describe "balance_threshold" do
     it 'should override distributors balance threshold' do
       customer = Fabricate(:customer)
       distributor = customer.distributor
@@ -429,6 +429,33 @@ describe Customer do
         @customer.save!
 
         @customer.reload.halted?.should be_true
+      end
+    end
+
+    context :halt_orders do
+      it 'should halt orders' do
+        customer = Fabricate(:customer).reload
+        account = customer.account
+        order = Fabricate(:active_recurring_order, account: account)
+
+        order.next_occurrence.should_not be_blank
+
+        customer.halt!
+
+        order.next_occurrence.should be_blank
+      end
+
+      it 'should unhalt orders' do
+        customer = Fabricate(:customer).reload
+        customer.halt!
+        account = customer.account
+        order = Fabricate(:active_recurring_order, account: account)
+        customer.reload
+
+        order.next_occurrence.should be_blank
+
+        customer.unhalt!
+        order.next_occurrence.should_not be_blank
       end
     end
   end

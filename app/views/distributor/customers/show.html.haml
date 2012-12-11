@@ -50,6 +50,10 @@
       %small= link_to 'edit delivery details', edit_distributor_customer_path(@customer, form_type: :delivery)
 
   #customer-associations.span8
+    - if @customer.halted?
+      .row-fluid
+        .span12
+          HALTED
     .row-fluid
       #note-section.span12
         %span.label.label-success NOTES

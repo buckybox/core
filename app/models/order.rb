@@ -22,6 +22,7 @@ class Order < ActiveRecord::Base
   scope :completed, where(completed: true)
   scope :active, where(active: true)
 
+  after_save :check_halted_status
   after_save :update_next_occurrence #This is an after call because it works at the database level and requires the information to be commited
   after_destroy :update_next_occurrence
 
@@ -339,6 +340,12 @@ class Order < ActiveRecord::Base
   def extras_within_box_limit
     if box.present? && !box.extras_unlimited? && extras_count > box.extras_limit
       errors.add(:base, "There is more than #{box.extras_limit} extras for this box")
+    end
+  end
+
+  def check_halted_status
+    if customer.halted?
+      schedule_rule.halt!
     end
   end
 

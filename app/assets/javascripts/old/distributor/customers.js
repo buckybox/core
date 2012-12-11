@@ -119,4 +119,13 @@ $(function() {
   function fromPausingElementFind(startElement, findName) {
     return $(startElement).closest('.info-controller').find(findName);
   }
+
+  $("#customer_override_default_balance_threshold").click(function(){
+    if($("#balance_threshold").is(":visible")) {
+      $("#customer_override_balance_threshold").val('0.00');
+      $("#balance_threshold").hide('highlight');
+    } else {
+      $("#balance_threshold").show('highlight');
+    }
+  });
 });

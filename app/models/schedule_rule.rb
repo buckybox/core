@@ -312,6 +312,16 @@ class ScheduleRule < ActiveRecord::Base
     frequency.recurs?
   end
 
+  def halt!
+    self.halted = true
+    save!
+  end
+
+  def unhalt!
+    self.halted = false
+    save!
+  end
+
   def clone_attributes
     attributes.slice('start', 'recur', 'sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat')
   end

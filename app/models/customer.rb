@@ -26,7 +26,7 @@ class Customer < ActiveRecord::Base
 
   attr_accessible :address_attributes, :first_name, :last_name, :email, :name, :distributor_id, :distributor,
     :route, :route_id, :password, :password_confirmation, :remember_me, :tag_list, :discount, :number, :notes,
-    :special_order_preference
+    :special_order_preference, :override_default_balance_threshold, :override_balance_threshold
 
   validates_presence_of :distributor_id, :route_id, :first_name, :email, :discount
   validates_uniqueness_of :number, scope: :distributor_id
@@ -214,20 +214,38 @@ class Customer < ActiveRecord::Base
 
   def halt!
     unless halted?
-      self.status_halted = true
-      save!
+      Customer.transaction do
+        self.status_halted = true
+        save!
+        
+        halt_orders!
+      end
     end
   end
 
   def unhalt!
     if halted?
-      self.status_halted = false
-      save!
+      Customer.transaction do
+        self.status_halted = false
+        save!
+
+        unhalt_orders!
+      end
     end
   end
 
   def halted?
     status_halted
+  end
+
+  def halt_orders!
+    ScheduleRule.update_all({halted: true}, ["scheduleable_id IN (?) AND scheduleable_type = 'Order'", orders.collect(&:id)])
+    update_next_occurrence
+  end
+
+  def unhalt_orders!
+    ScheduleRule.update_all({halted: false}, ["scheduleable_id IN (?) AND scheduleable_type = 'Order'", orders.collect(&:id)])
+    update_next_occurrence
   end
 
   private

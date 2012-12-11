@@ -375,4 +375,14 @@ describe Order do
       end
     end
   end
+
+  context :halting do
+    it 'should halt new orders if customer is halted' do
+      customer = Fabricate(:customer).reload
+      customer.halt!
+
+      order = Fabricate(:active_recurring_order, account: customer.account)
+      order.next_occurrence.should be_blank
+    end
+  end
 end

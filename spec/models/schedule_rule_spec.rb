@@ -460,4 +460,29 @@ describe ScheduleRule do
       sr.mon.should be_false
     end
   end
+
+  context :halted do
+    it 'should not return any scheduled days when halted' do
+      sr = ScheduleRule.weekly(Date.current, ScheduleRule::DAYS)
+      sr.save!
+      sr.next_occurrence.should_not be_blank
+
+      sr.halt!
+      sr.next_occurrence.should be_blank
+    end
+
+    it 'should notify associations when halted' do
+      sr = ScheduleRule.weekly(Date.current, ScheduleRule::DAYS)
+      sr.should_receive(:notify_associations)
+
+      sr.halt!
+    end
+
+    it 'should notify associations when unhalted' do
+      sr = ScheduleRule.weekly(Date.current, ScheduleRule::DAYS)
+      sr.should_receive(:notify_associations)
+
+      sr.unhalt!
+    end
+  end
 end
