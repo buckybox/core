@@ -43,11 +43,11 @@
       %dd= @distributor.created_at.to_s(:pretty)
       %dt Active Webstore
       %dd= checkmark_boolean(@distributor.active_webstore)
-      %dt Default Credit Limit
-      - if @distributor.has_credit_limit?
-        %dd= Money.new(@distributor.default_credit_limit_cents, @distributor.currency).format
+      %dt Default Balance Threshold
+      - if @distributor.has_balance_threshold?
+        %dd= Money.new(@distributor.default_balance_threshold_cents, @distributor.currency).format
       - else
-        %dd= "$0.00 - No limit"
+        %dd= "Balance threshold not enabled"
 
   .span6
     %dl

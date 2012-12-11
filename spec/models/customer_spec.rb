@@ -279,4 +279,157 @@ describe Customer do
 
     extra
   end
+
+  describe "balance_threshold", :focus do
+    it 'should override distributors balance threshold' do
+      customer = Fabricate(:customer)
+      distributor = customer.distributor
+      distributor.has_balance_threshold = true
+      distributor.default_balance_threshold_cents = 20000
+      distributor.save!
+
+      customer.balance_threshold.should eq(200)
+
+      customer.override_default_balance_threshold = true
+      customer.balance_threshold.should eq(0)
+    end
+
+    context :changing_balance do
+      before do
+        customer = Fabricate(:customer)
+        customer.reload
+        distributor = customer.distributor
+        distributor.has_balance_threshold = true
+        distributor.default_balance_threshold_cents = -20000
+        distributor.save!
+
+        customer.status_halted.should be_false
+        customer.balance_threshold.should eq(-200)
+
+        account = customer.account
+        @customer = customer
+        @account = account
+      end
+
+      it 'should put customer into a halt state if they exceed balance threshold' do
+        @account.change_balance_to(-200.00)
+        @account.save!
+
+        @customer.reload.halted?.should be_true
+      end
+
+      it 'should take customer out of halt state when balance goes below threshold' do
+        @account.change_balance_to(-200.00)
+        @account.save!
+        @customer.reload.halted?.should be_true
+        @account.reload
+
+        @account.change_balance_to(-199.99)
+        @account.save!
+
+        @customer.reload.halted?.should be_false
+      end
+    end
+    
+    context :changing_threshold do
+      before do
+        customer = Fabricate(:customer)
+        customer.reload
+        account = customer.account
+
+        distributor = customer.distributor
+        distributor.default_balance_threshold_cents = -20000
+        distributor.has_balance_threshold = true
+        distributor.save!
+
+        @account = account
+        @customer = customer
+        @distributor = distributor
+      end
+
+      it 'should put customer into halt state when threshold lowered' do
+        @account.change_balance_to(-100)
+        @account.save!
+        @customer.reload
+        @customer.halted?.should be_false
+        @distributor.default_balance_threshold_cents = -5000
+        @distributor.save!
+
+        @customer.reload.halted?.should be_true
+      end
+
+      it 'should take customer out of halt state when threshold raised' do
+        @account.change_balance_to(-300)
+        @account.save!
+
+        @customer.reload
+        @customer.halted?.should be_true
+        @distributor.reload
+
+        @distributor.default_balance_threshold_cents = -50000
+        @distributor.save!
+
+        @customer.reload.halted?.should be_false
+      end
+
+      it 'should take customer out of halt when threshold turned off' do
+        @account.change_balance_to(-300)
+        @account.save!
+
+        @customer.reload
+        @customer.halted?.should be_true
+        @distributor.reload
+        
+        @distributor.has_balance_threshold = false
+        @distributor.save!
+
+        @customer.reload.halted?.should be_false
+      end
+      
+      it 'should put customer into halt when threshold turned on' do
+        @distributor.has_balance_threshold = false
+        @distributor.save!
+        @account.change_balance_to(-300)
+        @account.save!
+        @customer.reload
+        @customer.halted?.should be_false
+        @distributor.reload
+        
+        @distributor.has_balance_threshold = true
+        @distributor.save!
+        
+        @customer.reload.halted?.should be_true
+      end
+
+      it 'should take customer out of halt state when override threshold raised' do
+        @account.change_balance_to(-300)
+        @account.save!
+
+        @customer.reload
+        @customer.halted?.should be_true
+        @distributor.reload
+
+        @customer.override_balance_threshold_cents = -50000
+        @customer.override_default_balance_threshold = true
+        @customer.save!
+
+        @customer.reload.halted?.should be_false
+      end
+
+      it 'should put customer into halt state when override threshold lowered' do
+        @account.change_balance_to(-100)
+        @account.save!
+
+        @customer.reload
+        @customer.halted?.should be_false
+        @distributor.reload
+
+        @customer.override_balance_threshold_cents = -5000
+        @customer.override_default_balance_threshold = true
+        @customer.save!
+
+        @customer.reload.halted?.should be_true
+      end
+    end
+  end
 end

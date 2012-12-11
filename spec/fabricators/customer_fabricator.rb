@@ -11,4 +11,3 @@ Fabricator(:customer, from: :customer_without_after_create) do
   after_create { |customer| Fabricate(:account, customer: customer) }
   after_build { |customer| Fabricate(:address_with_associations, customer: customer) }
 end
-

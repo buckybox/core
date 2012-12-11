@@ -22,7 +22,7 @@ class Customer < ActiveRecord::Base
 
   accepts_nested_attributes_for :address
 
-  monetize :balance_threshold_cents
+  monetize :override_balance_threshold_cents
 
   attr_accessible :address_attributes, :first_name, :last_name, :email, :name, :distributor_id, :distributor,
     :route, :route_id, :password, :password_confirmation, :remember_me, :tag_list, :discount, :number, :notes,
@@ -44,6 +44,7 @@ class Customer < ActiveRecord::Base
   before_create :setup_address
 
   after_save :update_next_occurrence # This could be more specific about when it updates
+  before_save :update_halted_status_if_changed
 
   delegate :separate_bucky_fee?, :consumer_delivery_fee, to: :distributor
 
@@ -189,6 +190,44 @@ class Customer < ActiveRecord::Base
       self.next_order_occurrence_date = nil
     end
     self
+  end
+
+  def balance_threshold
+    if override_default_balance_threshold
+      override_balance_threshold
+    else
+      distributor(true).default_balance_threshold
+    end
+  end
+
+  def update_halted_status_if_changed
+    update_halted_status! if override_default_balance_threshold_changed? || override_balance_threshold_cents_changed?
+  end
+
+  def update_halted_status!
+    if distributor.has_balance_threshold && account(true).balance <= balance_threshold
+      halt!
+    else
+      unhalt!
+    end
+  end
+
+  def halt!
+    unless halted?
+      self.status_halted = true
+      save!
+    end
+  end
+
+  def unhalt!
+    if halted?
+      self.status_halted = false
+      save!
+    end
+  end
+
+  def halted?
+    status_halted
   end
 
   private

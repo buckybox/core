@@ -22,10 +22,9 @@
   = f.input :bank_deposit_format, collection: ImportTransactionList::FILE_FORMATS.reject { |name, code| code == 'paypal' }, as: :select
   = f.input :invoice_threshold
   = f.input :active_webstore
-  = simple_fields_for(:credit_limit) do |ff|
-    = ff.input :has_credit_limit?, as: :boolean
-    #credit_limit{style: @distributor.has_credit_limit? ? '' : 'display: none'}
-      = f.input :default_credit_limit
+  = f.input :has_balance_threshold
+  #balance_threshold{style: @distributor.has_balance_threshold? ? '' : 'display: none'}
+    = f.input :default_balance_threshold
 
   %hr
 
