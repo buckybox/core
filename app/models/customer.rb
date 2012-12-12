@@ -192,6 +192,11 @@ class Customer < ActiveRecord::Base
     self
   end
 
+  def update_next_occurrence!
+    update_next_occurrence
+    save!
+  end
+
   def balance_threshold
     if override_default_balance_threshold
       override_balance_threshold
@@ -240,12 +245,12 @@ class Customer < ActiveRecord::Base
 
   def halt_orders!
     ScheduleRule.update_all({halted: true}, ["scheduleable_id IN (?) AND scheduleable_type = 'Order'", orders.collect(&:id)])
-    update_next_occurrence
+    update_next_occurrence!
   end
 
   def unhalt_orders!
     ScheduleRule.update_all({halted: false}, ["scheduleable_id IN (?) AND scheduleable_type = 'Order'", orders.collect(&:id)])
-    update_next_occurrence
+    update_next_occurrence!
   end
 
   private

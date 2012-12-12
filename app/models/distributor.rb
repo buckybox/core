@@ -382,7 +382,7 @@ class Distributor < ActiveRecord::Base
 
   def update_halted_statuses
     if has_balance_threshold_changed? || default_balance_threshold_cents_changed?
-      customers.each do |customer|
+      customers.find_each do |customer|
         customer.update_halted_status!
       end
     end
