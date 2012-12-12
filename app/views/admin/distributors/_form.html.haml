@@ -24,7 +24,7 @@
   = f.input :active_webstore
   = f.input :has_balance_threshold
   #balance_threshold{style: @distributor.has_balance_threshold? ? '' : 'display: none'}
-    = f.input :default_balance_threshold, label: "Spend Threshold", hint: "Deliveries will halt after balance falls below the Spend Threshold."
+    = f.input :default_balance_threshold, label: "Spend Threshold", hint: "Deliveries will halt when their balance hits the Spend Threshold"
 
   %hr
 

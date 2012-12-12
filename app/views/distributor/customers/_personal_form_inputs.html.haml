@@ -12,6 +12,6 @@
   = g.input :phone_3, label: 'Work'
 
 - if @customer.distributor.has_balance_threshold?
-  = f.input :balance_threshold, label: "Spend Threshold", hint: "Deliveries will halt after balance falls below the Spend Threshold."
+  = f.input :balance_threshold, label: "Spend Threshold", hint: "Deliveries will halt when their balance hits the Spend Threshold"
 = f.input :discount, input_html: { step: 0.0001 }
 = f.input :special_order_preference, placeholder: 'E.g. More leafy greens'
