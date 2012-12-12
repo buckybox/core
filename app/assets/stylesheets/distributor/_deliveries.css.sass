@@ -6,6 +6,7 @@ $navigation-month: #4d4d4d
 $navigation-selected: #0088cc
 $navigation-month: #5c5c5c
 
+
 #calendar-navigation
   overflow: auto
   height: 66px
@@ -109,26 +110,54 @@ $navigation-month: #5c5c5c
         .btn-group
           display: inline-block
     .data-listings
-      border-top: 1px solid #CCC
-      border-bottom: 1px solid #CCC
+      margin-top: -1px
+      border-top: 1px dashed #ddd
+      border-bottom: 1px solid #ddd
       padding: 2px 0px
-      margin-bottom: -1px
       background-color: $white
-      input[type='checkbox']
-        margin-top: 0px
-      .label
-        padding-top: 3px
-        i
-          margin-top: 0px
-      .state-label
-        display: inline-block
-        width: 30px
-        text-align: center
-      .paid-label
-        display: none
+      &:first-child
+        border-top: 1px solid #ddd
       &.pending, &.unpacked
         .state-label
           background-color: $action-colour
       &.delivered, &.cancelled, &.rescheduled, &.repacked, &.packed
         .state-label
           background-color: $navigation-base
+      input[type='checkbox']
+        margin: 0px 0px 3px 13px
+      .row-grip
+        background-image: image-url('row-grip.png')
+        background-repeat: repeat-y
+        background-position: 2px 0px
+      .customer-holder
+        float: right
+        padding-right: 7%
+        width: 52%
+        @media (min-width: 1200px)
+          width: 60%
+      .paid-label
+        background-image: image-url('watermark-paid.png')
+        background-repeat: no-repeat
+        background-position: right center
+      .state-label
+        display: inline-block
+        text-align: center
+        color: $black
+        margin-left: 1px
+      .dso-number
+        +border-right-radius(0px) 
+        a
+          color: $textColor
+          &:hover
+            text-decoration: none
+      .staus-icon
+        +border-left-radius(0px)
+        margin-left: -1px
+      .delivery-address
+        font-weight: bold
+        color: $textColor
+        &:hover
+          color: $linkColor
+          text-decoration: none
+      .box-description
+        font-size: 13px

@@ -138,6 +138,8 @@ $(function() {
      $('#delivery-listings .flyout').toggle();
      return false;
   });
+
+  $('.dso-tooltip').tooltip();
 });
 
 function updateDeliveryStatus(status, checked_deliveries, date) {
