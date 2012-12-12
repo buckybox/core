@@ -22,11 +22,11 @@ class Customer < ActiveRecord::Base
 
   accepts_nested_attributes_for :address
 
-  monetize :override_balance_threshold_cents
+  monetize :balance_threshold_cents
 
   attr_accessible :address_attributes, :first_name, :last_name, :email, :name, :distributor_id, :distributor,
     :route, :route_id, :password, :password_confirmation, :remember_me, :tag_list, :discount, :number, :notes,
-    :special_order_preference, :override_default_balance_threshold, :override_balance_threshold
+    :special_order_preference, :balance_threshold
 
   validates_presence_of :distributor_id, :route_id, :first_name, :email, :discount
   validates_uniqueness_of :number, scope: :distributor_id
@@ -45,6 +45,7 @@ class Customer < ActiveRecord::Base
 
   after_save :update_next_occurrence # This could be more specific about when it updates
   before_save :update_halted_status_if_changed
+  before_create :set_balance_threshold
 
   delegate :separate_bucky_fee?, :consumer_delivery_fee, to: :distributor
 
@@ -197,16 +198,8 @@ class Customer < ActiveRecord::Base
     save!
   end
 
-  def balance_threshold
-    if override_default_balance_threshold
-      override_balance_threshold
-    else
-      distributor(true).default_balance_threshold
-    end
-  end
-
   def update_halted_status_if_changed
-    update_halted_status! if override_default_balance_threshold_changed? || override_balance_threshold_cents_changed?
+    update_halted_status! if balance_threshold_cents_changed?
   end
 
   def update_halted_status!
@@ -257,6 +250,10 @@ class Customer < ActiveRecord::Base
   def create_halt_notifications
     Event.customer_halted(self)
     CustomerMailer.orders_halted(self).deliver
+  end
+
+  def set_balance_threshold
+    self.balance_threshold_cents = distributor.default_balance_threshold_cents
   end
 
   private

@@ -281,17 +281,12 @@ describe Customer do
   end
 
   describe "balance_threshold" do
-    it 'should override distributors balance threshold' do
-      customer = Fabricate(:customer)
-      distributor = customer.distributor
-      distributor.has_balance_threshold = true
-      distributor.default_balance_threshold_cents = 20000
-      distributor.save!
+    it 'should set balance threshold from distributor' do
+      distributor = Fabricate(:distributor, default_balance_threshold_cents: 20000)
+
+      customer = Fabricate(:customer, distributor: distributor).reload
 
       customer.balance_threshold.should eq(200)
-
-      customer.override_default_balance_threshold = true
-      customer.balance_threshold.should eq(0)
     end
 
     context :changing_balance do
@@ -300,8 +295,10 @@ describe Customer do
         customer.reload
         distributor = customer.distributor
         distributor.has_balance_threshold = true
-        distributor.default_balance_threshold_cents = -20000
         distributor.save!
+
+        customer.balance_threshold_cents = -20000
+        customer.save!
 
         customer.status_halted.should be_false
         customer.balance_threshold.should eq(-200)
@@ -338,9 +335,11 @@ describe Customer do
         account = customer.account
 
         distributor = customer.distributor
-        distributor.default_balance_threshold_cents = -20000
         distributor.has_balance_threshold = true
         distributor.save!
+
+        customer.balance_threshold_cents = -20000
+        customer.save!
 
         @account = account
         @customer = customer
@@ -352,8 +351,9 @@ describe Customer do
         @account.save!
         @customer.reload
         @customer.halted?.should be_false
-        @distributor.default_balance_threshold_cents = -5000
-        @distributor.save!
+
+        @customer.balance_threshold_cents = -5000
+        @customer.save!
 
         @customer.reload.halted?.should be_true
       end
@@ -364,10 +364,9 @@ describe Customer do
 
         @customer.reload
         @customer.halted?.should be_true
-        @distributor.reload
 
-        @distributor.default_balance_threshold_cents = -50000
-        @distributor.save!
+        @customer.balance_threshold_cents = -50000
+        @customer.save!
 
         @customer.reload.halted?.should be_false
       end
@@ -409,8 +408,7 @@ describe Customer do
         @customer.halted?.should be_true
         @distributor.reload
 
-        @customer.override_balance_threshold_cents = -50000
-        @customer.override_default_balance_threshold = true
+        @customer.balance_threshold_cents = -50000
         @customer.save!
 
         @customer.reload.halted?.should be_false
@@ -424,8 +422,7 @@ describe Customer do
         @customer.halted?.should be_false
         @distributor.reload
 
-        @customer.override_balance_threshold_cents = -5000
-        @customer.override_default_balance_threshold = true
+        @customer.balance_threshold_cents = -5000
         @customer.save!
 
         @customer.reload.halted?.should be_true
