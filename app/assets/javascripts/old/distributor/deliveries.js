@@ -184,13 +184,14 @@ function makePayments(checked_deliveries, reverse_payment) {
 
   $.each(checked_deliveries, function(i, ckbx) {
     var holder = $(ckbx).closest('.data-listings');
-    var paidLabel = holder.find('.paid-label');
+    var customerHolder = holder.find('.customer-holder');
+    var paidLabel = 'paid-label';
 
     if(reverse_payment) {
-      paidLabel.hide();
+      customerHolder.removeClass(paidLabel);
     }
     else {
-      paidLabel.show();
+      customerHolder.addClass(paidLabel);
     }
   });
 }
