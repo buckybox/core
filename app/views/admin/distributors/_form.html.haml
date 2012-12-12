@@ -2,7 +2,7 @@
   = f.error_notification
 
   = f.input :name
-  = f.input :parameter_name
+  = f.input :parameter_name, label: "..ckybox.com/webstore/"
   = f.input :url
   = f.input :email
   = f.input :support_email
@@ -24,7 +24,7 @@
   = f.input :active_webstore
   = f.input :has_balance_threshold
   #balance_threshold{style: @distributor.has_balance_threshold? ? '' : 'display: none'}
-    = f.input :default_balance_threshold
+    = f.input :default_balance_threshold, hint: "Account balances below this will put customers into a halted state.  No orders will be fulfilled while halted."
 
   %hr
 

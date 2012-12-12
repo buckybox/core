@@ -11,8 +11,9 @@
   = g.input :phone_2, label: 'Home'
   = g.input :phone_3, label: 'Work'
 
-= f.input :override_default_balance_threshold
-#balance_threshold{style: @customer.override_default_balance_threshold? ? '' : 'display: none'}
-  = f.input :override_balance_threshold
+- if @customer.distributor.has_balance_threshold?
+  = f.input :override_default_balance_threshold
+  #balance_threshold{style: @customer.override_default_balance_threshold? ? '' : 'display: none'}
+    = f.input :override_balance_threshold
 = f.input :discount, input_html: { step: 0.0001 }
 = f.input :special_order_preference, placeholder: 'E.g. More leafy greens'

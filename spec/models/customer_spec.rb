@@ -458,5 +458,13 @@ describe Customer do
         order.next_occurrence.should_not be_blank
       end
     end
+
+    context :halt_notifications do
+      it 'should create a notification for the distributor when halted' do
+        customer = Fabricate(:customer).reload
+        customer.should_receive(:create_halt_notifications)
+        customer.halt!
+      end
+    end
   end
 end

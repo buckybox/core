@@ -224,6 +224,7 @@ class Customer < ActiveRecord::Base
         save!
         
         halt_orders!
+        create_halt_notifications
       end
     end
   end
@@ -251,6 +252,11 @@ class Customer < ActiveRecord::Base
   def unhalt_orders!
     ScheduleRule.update_all({halted: false}, ["scheduleable_id IN (?) AND scheduleable_type = 'Order'", orders.collect(&:id)])
     update_next_occurrence!
+  end
+
+  def create_halt_notifications
+    Event.customer_halted(self)
+    CustomerMailer.orders_halted(self).deliver
   end
 
   private
