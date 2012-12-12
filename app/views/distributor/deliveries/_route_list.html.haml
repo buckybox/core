@@ -44,7 +44,7 @@
                   .customer-holder{ class: "#{'paid-label' if delivery.paid?}" }
                     = customer_badge(delivery.customer, customer_name: delivery.package.archived_customer_name)
                 .span6
-                  .row-fluid
+                  .row-fluid.address-description
                     .span6= display_address(delivery)
                     .span6.box-description= contents_description(delivery, @selected_date)
 
@@ -52,15 +52,14 @@
   %ul.unstyled
     - @items.each do |order|
       %li.row-fluid.data-listings.pending
-        .span2
-          .row-fluid
-            .span12
-              = check_box_tag order.id, '1', false
-              .label.state-label.status-pending{ title: 'PENDING delivery' }
-                %i.icon-time
-        .span10
-          .row-fluid
-            .span3= display_address(order)
-            .span4= contents_description(order, @selected_date)
-            .span5= customer_badge(order.customer)
+        .span6
+          = check_box_tag order.id, '1', false
+          .label.state-label.dso-number= map_pin(order)
+          .label.state-label.staus-icon.status-pending{ title: 'PENDING delivery' }
+            %i.icon-time
+          .customer-holder= customer_badge(order.customer)
+        .span6
+          .row-fluid.address-description
+            .span6= display_address(order)
+            .span6= contents_description(order, @selected_date)
 
