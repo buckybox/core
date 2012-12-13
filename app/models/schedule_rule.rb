@@ -15,6 +15,8 @@ class ScheduleRule < ActiveRecord::Base
   after_save :notify_associations
   after_save :record_schedule_transaction, if: :changed?
 
+  validate :includes_doy_if_not_one_off
+
   DAYS.each do |day|
     default_value_for day, false
   end
@@ -310,6 +312,10 @@ class ScheduleRule < ActiveRecord::Base
 
   def recurs?
     frequency.recurs?
+  end
+
+  def includes_doy_if_not_one_off
+    errors.add(:base, "Must include at least one day of the week") if !one_off? && days.blank?
   end
 
   def clone_attributes

@@ -32,6 +32,8 @@
       - unless @order.persisted?
         %h3= @route.name
         = f.simple_fields_for(:schedule_rule) do |sf|
+          - if @order.schedule_rule.errors.present?
+            .alert.alert-error= @order.schedule_rule.errors.full_messages.join(", ")
           = sf.input :start, collection: order_start_dates(@route), include_blank: false
 
         %table#days
