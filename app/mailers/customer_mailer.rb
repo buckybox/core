@@ -14,11 +14,12 @@ class CustomerMailer < ActionMailer::Base
   def orders_halted(customer)
     @distributor = customer.distributor
     @customer = customer
+    @oops = ['Uh-oh', 'Whoops', 'Oooops'].shuffle.first
 
     mail to: @customer.email,
          from: "#{@distributor.name} <no-reply@buckybox.com>",
          reply_to: @distributor.support_email,
-         subject: "Your account has been halted"
+         subject: "#{@oops}, your #{@distributor.name} deliveries have been put on hold"
   end
 
   # FIXME we are not doing invoicing at the moment

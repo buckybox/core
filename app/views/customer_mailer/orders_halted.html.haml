@@ -1,0 +1,19 @@
+Hi #{@customer.first_name},
+%br
+%br
+%br
+#{@oops}, we've noticed your account has hit your spend limit - your current account balance is
+%strong= @customer.account.balance.format
+(Your account's spend limit is #{@customer.balance_threshold.format})
+%br
+%br
+%center
+  = link_to "Please make a payment", new_customer_session_url(distributor: @distributor.parameter_name)
+  or contact #{@distributor.name}
+%br
+If you've recently made a payment, it may not have shown up yet - take a look at your Account statement in the next few days to check. 
+%br
+%br
+The #{@distributor.name} Team
+%br
+= link_to @distributor.name, webstore_store_url(@distributor.parameter_name)

@@ -259,12 +259,12 @@ class Customer < ActiveRecord::Base
   def set_balance_threshold
     self.balance_threshold_cents = distributor.default_balance_threshold_cents
   end
-
-  private
-
+  
   def currency
     distributor.currency
   end
+
+  private
 
   def initialize_number
     self.number = Customer.next_number(self.distributor) unless self.distributor.nil?
