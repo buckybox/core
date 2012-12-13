@@ -43,11 +43,11 @@
       %dd= @distributor.created_at.to_s(:pretty)
       %dt Active Webstore
       %dd= checkmark_boolean(@distributor.active_webstore)
-      %dt Default Balance Threshold
+      %dt Default Spend Limit
       - if @distributor.has_balance_threshold?
         %dd= Money.new(@distributor.default_balance_threshold_cents, @distributor.currency).format
       - else
-        %dd= "Balance threshold not enabled"
+        %dd= "Spend Limit not enabled"
 
   .span6
     %dl

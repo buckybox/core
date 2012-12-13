@@ -202,12 +202,16 @@ class Customer < ActiveRecord::Base
     update_halted_status! if balance_threshold_cents_changed?
   end
 
-  def update_halted_status!
+  def update_halted_status!(new_balance_threshold_cents = nil)
+    self.balance_threshold_cents = new_balance_threshold_cents unless new_balance_threshold_cents.blank?
+
     if distributor.has_balance_threshold && account(true).balance <= balance_threshold
       halt!
     else
       unhalt!
     end
+
+    save! if changed? && new_balance_threshold_cents.present?
   end
 
   def halt!
@@ -257,6 +261,10 @@ class Customer < ActiveRecord::Base
   end
 
   private
+
+  def currency
+    distributor.currency
+  end
 
   def initialize_number
     self.number = Customer.next_number(self.distributor) unless self.distributor.nil?

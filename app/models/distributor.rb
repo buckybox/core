@@ -46,7 +46,7 @@ class Distributor < ActiveRecord::Base
     :time_zone, :currency, :bank_deposit, :paypal, :bank_deposit_format, :country_id, :consumer_delivery_fee,
     :consumer_delivery_fee_cents, :active_webstore, :about, :details, :facebook_url, :city, :customers_show_intro,
     :deliveries_index_packing_intro, :deliveries_index_deliveries_intro, :payments_index_intro, :customers_index_intro,
-    :parameter_name, :default_balance_threshold, :has_balance_threshold
+    :parameter_name, :default_balance_threshold, :has_balance_threshold, :spend_limit_on_all_customers
 
   validates_presence_of :country
   validates_presence_of :email
@@ -381,13 +381,25 @@ class Distributor < ActiveRecord::Base
   end
 
   def update_halted_statuses
-    if has_balance_threshold_changed? || default_balance_threshold_cents_changed?
+    if has_balance_threshold_changed? || default_balance_threshold_cents_changed? || @spend_limit_on_all_customers
       Customer.transaction do
         customers.find_each do |customer|
-          customer.update_halted_status!
+          if @spend_limit_on_all_customers
+            customer.update_halted_status!(default_balance_threshold_cents)
+          else
+            customer.update_halted_status!
+          end
         end
       end
     end
+  end
+  
+  def spend_limit_on_all_customers
+    false
+  end
+
+  def spend_limit_on_all_customers=(val)
+    @spend_limit_on_all_customers = val
   end
 
   private
