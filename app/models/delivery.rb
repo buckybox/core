@@ -38,6 +38,8 @@ class Delivery < ActiveRecord::Base
   delegate :address_hash, to: :address
   delegate :archived?, to: :delivery_list, allow_nil: true
 
+  STATUS_TO_EVENT = {'pending' => 'pend', 'cancelled' => 'cancel', 'delivered' => 'deliver'}
+
   state_machine :status, initial: :pending do
     before_transition on: :deliver, do: :deduct_account
     before_transition on: [:pend, :cancel], do: :reverse_deduction
@@ -68,13 +70,19 @@ class Delivery < ActiveRecord::Base
     return auto_delivered
   end
 
-  def self.change_statuses(deliveries, new_status, options = {})
-    result = deliveries.all? do |delivery|
-      delivery.status_event = new_status
-      delivery.save
+  def self.change_statuses(deliveries, status_event)
+    final_result = deliveries.all? do |delivery|
+      result = delivery.already_performed_event?(status_event)
+
+      unless result
+        delivery.status_event = status_event
+        result = delivery.save
+      end
+
+      result
     end
 
-    return result
+    return final_result
   end
 
   def self.pay_on_delivery(deliveries)
@@ -97,6 +105,10 @@ class Delivery < ActiveRecord::Base
     deliveries.each do |delivery|
       delivery.payment.reverse_payment! if delivery.paid?
     end
+  end
+
+  def already_performed_event?(status_event)
+    STATUS_TO_EVENT[self.status.to_s] == status_event.to_s
   end
 
   def formated_delivery_number

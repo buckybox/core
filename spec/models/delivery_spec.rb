@@ -92,6 +92,27 @@ describe Delivery do
     specify { Delivery.change_statuses(@deliveries, 'bad_status').should be_false }
     specify { Delivery.change_statuses(@deliveries, 'cancel').should be_true }
     specify { Delivery.change_statuses(@deliveries, 'deliver').should be_true }
+
+    context 'batch change' do
+      before do
+        @delivery1 = Fabricate.build(:delivery)
+        @delivery2 = Fabricate.build(:delivery, status: :delivered)
+
+        @deliveries = [@delivery1, delivery, @delivery2]
+
+        delivery.stub(:save) { true }
+      end
+
+      context 'all save' do
+        before { @delivery1.stub(:save) { true } }
+        specify { Delivery.change_statuses(@deliveries, 'deliver').should be_true }
+      end
+
+      context 'one save fails' do
+        before { @delivery1.stub(:save) { false } }
+        specify { Delivery.change_statuses(@deliveries, 'deliver').should be_false }
+      end
+    end
   end
 
   describe '.auto_deliver' do

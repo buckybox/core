@@ -9,9 +9,6 @@ class Distributor::DeliveriesController < Distributor::ResourceController
   respond_to :json, except: [:master_packing_sheet, :export]
   respond_to :csv, only: :export
 
-  # Should no longer need this when JS and views are looked at again. For now it translates between the old and new status system.
-  LEGACY_STATUS_TRANSLATION = {'pending' => 'pend', 'cancelled' => 'cancel', 'delivered' => 'deliver'}
-
   def index
     @routes = current_distributor.routes
 
@@ -58,12 +55,12 @@ class Distributor::DeliveriesController < Distributor::ResourceController
 
   def update_status
     deliveries = current_distributor.deliveries.ordered.where(id: params[:deliveries])
-    status = LEGACY_STATUS_TRANSLATION[params[:status]]
+    status = Delivery::STATUS_TO_EVENT[params[:status]]
 
     options = {}
     options[:date] = params[:date] if params[:date]
 
-    if Delivery.change_statuses(deliveries, status, options)
+    if Delivery.change_statuses(deliveries, status)
       head :ok
     else
       head :bad_request
