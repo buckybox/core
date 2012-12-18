@@ -87,7 +87,7 @@ class Event < ActiveRecord::Base
 
   def message
     case event_type
-    when EVENT_TYPES[:customer_new]
+    when EVENT_TYPES[:customer_webstore_new]
       "New webstore customer"
     when EVENT_TYPES[:customer_halted]
       "Deliveries halted"

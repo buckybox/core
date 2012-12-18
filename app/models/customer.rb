@@ -48,6 +48,7 @@ class Customer < ActiveRecord::Base
   before_create :set_balance_threshold
 
   delegate :separate_bucky_fee?, :consumer_delivery_fee, to: :distributor
+  delegate :currency, to: :distributor, allow_nil: true
 
   scope :ordered_by_next_delivery, lambda { order("CASE WHEN next_order_occurrence_date IS NULL THEN '9999-01-01' WHEN next_order_occurrence_date < '#{Date.current.to_s(:db)}' THEN '9999-01-01' ELSE next_order_occurrence_date END ASC, lower(customers.first_name) ASC, lower(customers.last_name) ASC") }
 
@@ -258,10 +259,6 @@ class Customer < ActiveRecord::Base
 
   def set_balance_threshold
     self.balance_threshold_cents = distributor.default_balance_threshold_cents
-  end
-  
-  def currency
-    distributor.currency
   end
 
   private

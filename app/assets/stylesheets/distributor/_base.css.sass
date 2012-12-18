@@ -162,12 +162,10 @@ body
                 text-align: center
                 background-color: $white
               #dismiss-notifications
-                margin: 5px 0px 0px 0px
-                padding: 5px 20px
+                margin: 0
                 text-align: center
-                background-color: $action-colour
-                &:hover
-                  background-color: $action-colour-hover
+                a
+                  color: #08C
 
   #sub-nav
     border-bottom: 1px solid $grayLight
@@ -190,8 +188,6 @@ body
   min-height: 39px
   border-bottom: solid #D5D5D5 1px
   padding: 5px 5px 2px 5px
-  &:first-child
-    padding-top: 0
   .message
     font-weight: bold
     font-size: 13px
@@ -201,3 +197,5 @@ body
 #notification-dropdown
   .clear-notifications
     background-color: $action-colour
+    +border-bottom-radius(6px)    
+  padding: 0
