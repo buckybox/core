@@ -128,7 +128,7 @@ $navigation-month: #5c5c5c
       .row-grip
         background-image: image-url('row-grip.png')
         background-repeat: repeat-y
-        background-position: 2px 0px
+        background-position: 2px 1px
       .customer-holder
         float: right
         padding-right: 7%
@@ -152,11 +152,14 @@ $navigation-month: #5c5c5c
           margin-top: 0px
       .dso-number
         font-weight: bold
-        +border-right-radius(0px) 
+        +border-right-radius(0px)
         a
-          color: $textColor
+          color: $black
           &:hover
             text-decoration: none
+          &.dso-tooltip
+            display: inline-block
+            margin: 0px 2px 0px -2px
       .staus-icon
         +border-left-radius(0px)
         margin-left: -1px
@@ -168,5 +171,5 @@ $navigation-month: #5c5c5c
         &:hover
           color: $linkColor
           text-decoration: none
-      .box-description
+      .address-description
         font-size: 13px
