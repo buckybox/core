@@ -8,3 +8,14 @@
     var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(uv, s);
   })();
 
+/ Vero
+:javascript
+  var _veroq = _veroq || [];
+
+  _veroq.push(['init', {
+    api_key: '82b405dc39e8bbbc583b243064bc12225b724cb1',
+    development_mode: "#{Rails.env.production? ? false : true }"
+    // Turn this off when you decide to 'go live'.
+  } ]);
+
+  (function() {var ve = document.createElement('script'); ve.type = 'text/javascript'; ve.async = true; ve.src = '//getvero.com/assets/m.js'; var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ve, s);})();
