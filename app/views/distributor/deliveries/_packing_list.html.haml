@@ -18,16 +18,16 @@
     %ul.unstyled
       - array.each do |package|
         %li.row-fluid.data-listings{ class: package.status }
-          .span2
-            .row-fluid
-              .span12
-                = check_box_tag package.order_id, '1', false, data: { package: package.id }
-                = render partial: 'status_icons', locals: { status: package.status }
-          .span10
-            .row-fluid
-              .span4= display_address(package)
-              .span4= contents_description(package, @selected_date)
-              .span4= customer_badge(package.customer, customer_name: package.archived_customer_name, short: true)
+          .span6
+            = check_box_tag package.order_id, '1', false, data: { package: package.id }
+            .label.state-label.dso-number= map_pin(package)
+            = render partial: 'status_icons', locals: { status: package.status }
+            .customer-holder
+              = customer_badge(package.customer, customer_name: package.archived_customer_name, short: true)
+          .span6
+            .row-fluid.address-description
+              .span6= display_address(package)
+              .span6= contents_description(package, @selected_date)
 - else
   - @items.group_by(&:box).sort{ |a,b| a.first.name <=> b.first.name }.each do |box, array|
     .row-fluid.data-headings
@@ -37,14 +37,13 @@
     %ul.unstyled
       - array.each do |order|
         %li.row-fluid.data-listings.pending
-          .span2
-            .row-fluid
-              .span12
-                = check_box_tag order.id, '1', false
-                .label.state-label.status-unpacked{ title: 'UNPACKED package' }
-                  %i.icon-time
-          .span10
-            .row-fluid
-              .span3= display_address(order)
-              .span4= contents_description(order, @selected_date)
-              .span5= customer_badge(order.account.customer)
+          .span6
+            = check_box_tag order.id, '1', false
+            .label.state-label.dso-number= map_pin(order)
+            .label.state-label.staus-icon.status-unpacked{ title: 'UNPACKED package' }
+              %i.icon-time
+            .customer-holder= customer_badge(order.account.customer)
+          .span6
+            .row-fluid.address-description
+              .span6= display_address(order)
+              .span6= contents_description(order, @selected_date)

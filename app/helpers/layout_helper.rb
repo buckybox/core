@@ -75,7 +75,7 @@ module LayoutHelper
 
     customer_name = options[:customer_name] || customer.name
     customer_name = truncate(customer_name, length: 18) if options[:short]
-    content += content_tag(:span, customer_name, class: 'customer-name')
+    content += content_tag(:span, customer_name, class: 'customer-name', title: customer_name)
 
     badge = content_tag(:span, content.html_safe, class: 'customer-badge')
 
