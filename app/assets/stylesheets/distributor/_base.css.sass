@@ -152,7 +152,9 @@ body
                 margin: 5px 0px 0px 0px
                 padding: 5px 20px
                 text-align: center
-                background-color: $grayLighter
+                background-color: $action-colour
+                &:hover
+                  background-color: $action-colour-hover
 
   #sub-nav
     border-bottom: 1px solid $grayLight
@@ -170,3 +172,19 @@ body
 
 .negative
   color: $negative-colour
+
+.notification
+  min-height: 39px
+  border-bottom: solid #D5D5D5 1px
+  padding: 5px 5px 2px 5px
+  &:first-child
+    padding-top: 0
+  .message
+    font-weight: bold
+    font-size: 13px
+  .date
+    color: #939393
+    font-size: 11px
+#notification-dropdown
+  .clear-notifications
+    background-color: $action-colour

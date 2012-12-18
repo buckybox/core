@@ -85,6 +85,15 @@ class Event < ActiveRecord::Base
     )
   end
 
+  def message
+    case event_type
+    when EVENT_TYPES[:customer_new]
+      "New webstore customer"
+    when EVENT_TYPES[:customer_halted]
+      "Deliveries halted"
+    end
+  end
+
   private
 
   def check_trigger
