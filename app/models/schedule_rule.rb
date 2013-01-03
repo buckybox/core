@@ -67,6 +67,8 @@ class ScheduleRule < ActiveRecord::Base
     case recur
     when :one_off
       start == datetime
+    when :single
+      start == datetime
     when :weekly
       weekly_occurs_on?(datetime)
     when :fortnightly
@@ -157,7 +159,8 @@ class ScheduleRule < ActiveRecord::Base
     end
   end
 
-  def one_off?; recur == :one_off;end
+  def one_off?; recur == :one_off || recur == :single || recur == nil;end
+  def single?; recur == :single;end
   def weekly?; recur == :weekly;end
   def fortnightly?; recur == :fortnightly;end
   def monthly?; recur == :monthly;end
@@ -176,6 +179,8 @@ class ScheduleRule < ActiveRecord::Base
     raise "Expecting a ScheduleRule, not #{schedule_rule.class}" unless schedule_rule.is_a?(ScheduleRule)
     case recur
     when :one_off
+      return false if !schedule_rule.one_off?
+    when :single
       return false if !schedule_rule.one_off?
     when :fortnightly
       return false if schedule_rule.weekly? || schedule_rule.monthly?
@@ -300,6 +305,8 @@ class ScheduleRule < ActiveRecord::Base
   def to_s
     case recur
     when :one_off
+      start.to_s(:flux_cap)
+    when :single
       start.to_s(:flux_cap)
     when :weekly
       "Weekly on #{days.collect{|d| d.to_s.capitalize}.join(', ')}"
