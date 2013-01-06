@@ -1,9 +1,9 @@
 Hi #{@customer.first_name.strip},
 %br
 %br
-#{@oops}, we've noticed your account has hit your spend limit - your current account balance is
+#{@oops}, we've noticed your account has dropped below your spend limit - your existing account balance is
 %strong= @customer.account.balance.format
-(your account's spend limit is #{@customer.balance_threshold.format}).
+(your account should always be above your spend limit of #{@customer.balance_threshold.format} in order to receive deliveries).
 %br
 %br
 %center
