@@ -384,7 +384,7 @@ describe ScheduleRule do
     end
 
     it "should be blank if pause has expired" do
-      sr = ScheduleRule.weekly("2012-10-01")
+      sr = ScheduleRule.weekly("2012-10-01", [:mon])
       sr.pause!("2012-09-01", "2012-09-29")
       sr.pause_date.should be_blank
     end
@@ -446,7 +446,7 @@ describe ScheduleRule do
 
   describe ".pause_expired?" do
     it "should return true if a pause has expired" do
-      sr = ScheduleRule.weekly("2012-10-01")
+      sr = ScheduleRule.weekly("2012-10-01", [:mon])
       sr.pause!("2012-09-01", "2012-09-29")
       sr.pause_expired?.should be_true
     end
@@ -483,6 +483,13 @@ describe ScheduleRule do
       sr.should_receive(:notify_associations)
 
       sr.unhalt!
+    end
+  end
+
+  context :validations do
+    it 'should not be valid without a day of the week' do
+      sr = ScheduleRule.new({"recur" => "weekly", "start" => "2012-12-26"})
+      sr.should_not be_valid
     end
   end
 end
