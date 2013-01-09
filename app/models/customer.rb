@@ -53,6 +53,13 @@ class Customer < ActiveRecord::Base
   scope :ordered_by_next_delivery, lambda { order("CASE WHEN next_order_occurrence_date IS NULL THEN '9999-01-01' WHEN next_order_occurrence_date < '#{Date.current.to_s(:db)}' THEN '9999-01-01' ELSE next_order_occurrence_date END ASC, lower(customers.first_name) ASC, lower(customers.last_name) ASC") }
 
   default_value_for :discount, 0
+  default_value_for :balance_threshold_cents do |c|
+    if c.distributor.present?
+      c.distributor.default_balance_threshold_cents
+    else
+      nil
+    end
+  end
 
   pg_search_scope :search,
     against: [ :first_name, :last_name, :email ],
@@ -205,8 +212,7 @@ class Customer < ActiveRecord::Base
 
   def update_halted_status!(new_balance_threshold_cents = nil)
     self.balance_threshold_cents = new_balance_threshold_cents unless new_balance_threshold_cents.blank?
-
-    if distributor.has_balance_threshold && account(true).balance <= balance_threshold
+    if distributor.has_balance_threshold && account_balance <= balance_threshold
       halt!
     else
       unhalt!
@@ -258,7 +264,15 @@ class Customer < ActiveRecord::Base
   end
 
   def set_balance_threshold
-    self.balance_threshold_cents = distributor.default_balance_threshold_cents
+    self.balance_threshold_cents = distributor.default_balance_threshold_cents if balance_threshold.nil?
+  end
+
+  def account_balance
+    if account.present?
+      account(true).balance
+    else
+      Money.new(0, currency)
+    end
   end
 
   private
