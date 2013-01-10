@@ -628,7 +628,7 @@ CREATE TABLE customers (
     special_order_preference text,
     next_order_id integer,
     next_order_occurrence_date date,
-    balance_threshold_cents integer DEFAULT 0,
+    balance_threshold_cents integer NOT NULL,
     status_halted boolean DEFAULT false
 );
 
@@ -3012,3 +3012,5 @@ INSERT INTO schema_migrations (version) VALUES ('20121211024951');
 INSERT INTO schema_migrations (version) VALUES ('20121211222422');
 
 INSERT INTO schema_migrations (version) VALUES ('20121212212609');
+
+INSERT INTO schema_migrations (version) VALUES ('20130110013104');

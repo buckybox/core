@@ -44,10 +44,10 @@ class Customer < ActiveRecord::Base
   before_create :setup_address
 
   after_save :update_next_occurrence # This could be more specific about when it updates
-  before_save :update_halted_status_if_changed
-  before_create :set_balance_threshold
+  before_save :set_balance_threshold, if: :new_record?
+  before_save :update_halted_status, if: :balance_threshold_cents_changed?
 
-  delegate :separate_bucky_fee?, :consumer_delivery_fee, to: :distributor
+  delegate :separate_bucky_fee?, :consumer_delivery_fee, :default_balance_threshold_cents, :has_balance_threshold, to: :distributor
   delegate :currency, to: :distributor, allow_nil: true
 
   scope :ordered_by_next_delivery, lambda { order("CASE WHEN next_order_occurrence_date IS NULL THEN '9999-01-01' WHEN next_order_occurrence_date < '#{Date.current.to_s(:db)}' THEN '9999-01-01' ELSE next_order_occurrence_date END ASC, lower(customers.first_name) ASC, lower(customers.last_name) ASC") }
@@ -57,7 +57,7 @@ class Customer < ActiveRecord::Base
     if c.distributor.present?
       c.distributor.default_balance_threshold_cents
     else
-      nil
+      0
     end
   end
 
@@ -206,19 +206,18 @@ class Customer < ActiveRecord::Base
     save!
   end
 
-  def update_halted_status_if_changed
-    update_halted_status! if balance_threshold_cents_changed?
-  end
-
   def update_halted_status!(new_balance_threshold_cents = nil)
     self.balance_threshold_cents = new_balance_threshold_cents unless new_balance_threshold_cents.blank?
-    if distributor.has_balance_threshold && account_balance <= balance_threshold
+    update_halted_status
+    save!
+  end
+
+  def update_halted_status
+    if has_balance_threshold && account_balance <= balance_threshold
       halt!
     else
       unhalt!
     end
-
-    save! if changed? && new_balance_threshold_cents.present?
   end
 
   def halt!
@@ -264,7 +263,7 @@ class Customer < ActiveRecord::Base
   end
 
   def set_balance_threshold
-    self.balance_threshold_cents = distributor.default_balance_threshold_cents if balance_threshold.nil?
+    self.balance_threshold_cents = default_balance_threshold_cents unless balance_threshold_cents_changed?
   end
 
   def account_balance

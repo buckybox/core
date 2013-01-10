@@ -168,6 +168,8 @@ describe Customer do
       boxes << box
 
       Distributor.any_instance.stub(:find_extra_from_import).and_return(mock_model('Extra'))
+      customer.stub(:default_balance_threshold_cents).and_return(-100000)
+      customer.stub(:has_balance_threshold).and_return(false)
 
       attrs = {
         first_name: 'Jordan',
@@ -457,7 +459,6 @@ describe Customer do
         account = customer.account
         order = Fabricate(:active_recurring_order, account: account)
         customer.reload
-
         order.next_occurrence.should be_blank
 
         customer.unhalt!
