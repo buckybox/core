@@ -52,7 +52,8 @@ class Order < ActiveRecord::Base
   scope :inactive,  where(active: false)
 
   delegate :local_time_zone, to: :distributor, allow_nil: true
-  delegate :start, :recurs?, :pause!, :remove_pause!, :pause_date, :resume_date, :next_occurrence, :next_occurrences, :remove_day, :occurrences_between, to: :schedule_rule
+  delegate :start, :recurs?, :pause!, :remove_pause!, :paused?, :pause_date, :resume_date, :next_occurrence, :next_occurrences, :remove_day, :occurrences_between, to: :schedule_rule
+  delegate :halted?, to: :customer
 
   default_value_for :extras_one_off, IS_ONE_OFF
   default_value_for :quantity, QUANTITY
@@ -66,7 +67,7 @@ class Order < ActiveRecord::Base
   def self.deactivate_finished
     active.each do |order|
       order.use_local_time_zone do
-        if order.schedule_rule.next_occurrence.nil?
+        if order.should_deactivate?
           order.update_attribute(:active, false)
           CronLog.log("Deactivated order #{order.id}")
         end
@@ -325,6 +326,10 @@ class Order < ActiveRecord::Base
     update_next_occurrence
   end
 
+  def should_deactivate?
+    schedule_rule.no_occurrences? && !paused? && !halted?
+  end
+
   protected
 
   def update_next_occurrence
@@ -344,7 +349,7 @@ class Order < ActiveRecord::Base
   end
 
   def check_halted_status
-    if customer.halted?
+    if halted?
       schedule_rule.halt!
     end
   end

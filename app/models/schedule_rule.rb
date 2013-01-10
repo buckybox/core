@@ -331,6 +331,14 @@ class ScheduleRule < ActiveRecord::Base
     save!
   end
 
+  def paused?
+    schedule_pause.present?
+  end
+
+  def no_occurrences?
+    next_occurrence.nil?
+  end
+
   def includes_dow_if_not_one_off
     errors.add(:base, "Must include at least one day of the week") if !one_off? && days.blank?
   end

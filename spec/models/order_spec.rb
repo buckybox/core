@@ -184,18 +184,22 @@ describe Order do
 
         rule_schedule = Fabricate(:schedule_rule, start: Date.current - 5.days, recur: nil)
         @order5 = Fabricate(:order, schedule_rule: rule_schedule)
+        
+        rule_schedule = Fabricate(:schedule_rule, start: Date.current - 2.months, recur: nil)
+        @order6 = Fabricate(:order, schedule_rule: rule_schedule)
       end
 
       specify { expect { Order.deactivate_finished}.to change(Order.active, :count).by(-2) }
 
-      describe 'individually' do
-        before { Order.deactivate_finished }
+      it 'should deactivate the correct orders' do
+        Order.deactivate_finished 
 
-        specify { @order1.reload.active.should be_true }
-        specify { @order2.reload.active.should be_true }
-        specify { @order3.reload.active.should be_false }
-        specify { @order4.reload.active.should be_true }
-        specify { @order5.reload.active.should be_false }
+        @order1.reload.active.should be_true
+        @order2.reload.active.should be_true
+        @order3.reload.active.should be_true
+        @order4.reload.active.should be_true
+        @order5.reload.active.should be_false
+        @order6.reload.active.should be_false
       end
     end
 
