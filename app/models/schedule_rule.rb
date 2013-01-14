@@ -15,6 +15,8 @@ class ScheduleRule < ActiveRecord::Base
   after_save :notify_associations
   after_save :record_schedule_transaction, if: :changed?
 
+  validate :includes_dow_if_not_one_off
+
   DAYS.each do |day|
     default_value_for day, false
   end
@@ -64,6 +66,8 @@ class ScheduleRule < ActiveRecord::Base
   def occurs_on?(datetime)
     case recur
     when :one_off
+      start == datetime
+    when :single
       start == datetime
     when :weekly
       weekly_occurs_on?(datetime)
@@ -155,7 +159,8 @@ class ScheduleRule < ActiveRecord::Base
     end
   end
 
-  def one_off?; recur == :one_off;end
+  def one_off?; recur == :one_off || recur == :single || recur == nil;end
+  def single?; recur == :single;end
   def weekly?; recur == :weekly;end
   def fortnightly?; recur == :fortnightly;end
   def monthly?; recur == :monthly;end
@@ -174,6 +179,8 @@ class ScheduleRule < ActiveRecord::Base
     raise "Expecting a ScheduleRule, not #{schedule_rule.class}" unless schedule_rule.is_a?(ScheduleRule)
     case recur
     when :one_off
+      return false if !schedule_rule.one_off?
+    when :single
       return false if !schedule_rule.one_off?
     when :fortnightly
       return false if schedule_rule.weekly? || schedule_rule.monthly?
@@ -299,6 +306,8 @@ class ScheduleRule < ActiveRecord::Base
     case recur
     when :one_off
       start.to_s(:flux_cap)
+    when :single
+      start.to_s(:flux_cap)
     when :weekly
       "Weekly on #{days.collect{|d| d.to_s.capitalize}.join(', ')}"
     when :fortnightly
@@ -320,6 +329,10 @@ class ScheduleRule < ActiveRecord::Base
   def unhalt!
     self.halted = false
     save!
+  end
+
+  def includes_dow_if_not_one_off
+    errors.add(:base, "Must include at least one day of the week") if !one_off? && days.blank?
   end
 
   def clone_attributes
