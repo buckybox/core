@@ -19,4 +19,4 @@
       = form_tag(distributor_notifications_dismiss_all_path, id: 'dismiss-notifications') do
         - @notifications.each do |notification|
           = hidden_field_tag 'notification_ids[]', notification.id
-        = link_to 'clear notifications', distributor_notifications_dismiss_all_path, {:remote => true, :class => 'submit_me'}
+        = link_to_function 'clear notifications', "$(this).closest('form').submit();" , {:class => 'submit_me'}
