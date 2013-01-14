@@ -11,7 +11,7 @@
       %li.notification
         %div.message
           %span= notification.message
-          = customer_badge(notification.customer, link: false)
+          = customer_badge(notification.customer)
         %div.date
           = time_since(notification.trigger_on)
 
