@@ -381,10 +381,10 @@ class Distributor < ActiveRecord::Base
   end
 
   def update_halted_statuses
-    if has_balance_threshold_changed? || default_balance_threshold_cents_changed? || @spend_limit_on_all_customers
+    if has_balance_threshold_changed? || default_balance_threshold_cents_changed? || spend_limit_on_all_customers?
       Customer.transaction do
         customers.find_each do |customer|
-          if @spend_limit_on_all_customers
+          if spend_limit_on_all_customers?
             customer.update_halted_status!(default_balance_threshold_cents)
           else
             customer.update_halted_status!
@@ -393,14 +393,15 @@ class Distributor < ActiveRecord::Base
       end
     end
   end
-  
-  def spend_limit_on_all_customers
-    false
-  end
 
   def spend_limit_on_all_customers=(val)
-    @spend_limit_on_all_customers = val
+    @spend_limit_on_all_customers = val == '1'
   end
+
+  def spend_limit_on_all_customers
+    @spend_limit_on_all_customers
+  end
+  alias_method :spend_limit_on_all_customers?, :spend_limit_on_all_customers
 
   private
 

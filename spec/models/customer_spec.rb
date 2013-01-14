@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe Customer do
-  let(:customer) { Fabricate.build(:customer) }
+  let(:customer) { Fabricate(:customer) }
 
   specify { customer.should be_valid }
 
@@ -127,7 +127,7 @@ describe Customer do
 
       context 'and order without next delivery' do
         before do
-          @o4 = Fabricate.build(:order)
+          @o4 = Fabricate(:order)
           @o4.stub_chain(:schedule, :next_occurrence).and_return(nil)
           customer.stub_chain(:account, :active_orders).and_return([@o1, @o2, @o3])
         end
@@ -152,7 +152,7 @@ describe Customer do
   end
 
   describe '.import' do
-    let(:customer){ Fabricate.build(:customer) }
+    let(:customer){ Fabricate(:customer) }
 
     it "should import customer with all fields" do
       route = mock_model(Route)

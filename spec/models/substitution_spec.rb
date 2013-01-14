@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe Substitution do
-  let(:substitution) { Fabricate.build(:substitution) }
+  let(:substitution) { Fabricate(:substitution) }
 
   specify { substitution.should be_valid }
 

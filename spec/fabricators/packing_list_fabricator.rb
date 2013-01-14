@@ -1,4 +1,4 @@
 Fabricator(:packing_list) do
-  distributor!
+  distributor
   date Date.current - 1.day
 end

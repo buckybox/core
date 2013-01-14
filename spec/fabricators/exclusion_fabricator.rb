@@ -1,4 +1,4 @@
 Fabricator(:exclusion) do
-  order!
-  line_item!
+  order
+  line_item
 end

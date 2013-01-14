@@ -2,7 +2,7 @@ require 'spec_helper'
 include Bucky
 
 describe Order do
-  let(:order) { Fabricate.build(:order) }
+  let(:order) { Fabricate(:order) }
 
   context 'pausing' do
     describe '#pause!' do
@@ -60,8 +60,8 @@ describe Order do
     specify { order.should be_valid }
 
     context :quantity do
-      specify { Fabricate.build(:order, quantity: 0).should_not be_valid }
-      specify { Fabricate.build(:order, quantity: -1).should_not be_valid }
+      specify { expect { Fabricate(:order, quantity: 0)}.to raise_error(ActiveRecord::RecordInvalid, /Quantity must be greater than 0/)}
+      specify { expect { Fabricate(:order, quantity: -1)}.to raise_error(ActiveRecord::RecordInvalid, /Quantity must be greater than 0/)}
     end
 
     context :price do
@@ -294,7 +294,7 @@ describe Order do
 
   describe '.pack_and_update_extras' do
     it "removes extras when it is a one off and returns hash" do
-      order = Fabricate.build(:order, extras_one_off: true)
+      order = Fabricate(:order, extras_one_off: true)
       order.stub(:order_extras, :collect).and_return([{count: 3, name: "iPhone 4s", unit: "one", price_cents: 99995, currency: "NZD"}, {count: 1, name: "Apple", unit: "kg", price_cents: 295, currency: "NZD"}])
 
       order.should_receive(:clear_extras)
@@ -302,7 +302,7 @@ describe Order do
     end
 
     it "keeps extras when it is a recurring order and returns hash" do
-      order = Fabricate.build(:order, extras_one_off: false)
+      order = Fabricate(:order, extras_one_off: false)
       order.stub(:order_extras, :collect).and_return([{count: 3, name: "iPhone 4s", unit: "one", price_cents: 99995, currency: "NZD"}, {count: 1, name: "Apple", unit: "kg", price_cents: 295, currency: "NZD"}])
 
       order.should_not_receive(:clear_extras)

@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe Delivery do
-  let(:delivery) { Fabricate.build(:delivery) }
+  let(:delivery) { Fabricate(:delivery) }
   let(:package) { delivery.package }
 
   let(:delivery_pending) { Fabricate(:delivery, status: 'pending') }
@@ -16,18 +16,18 @@ describe Delivery do
     describe 'validity' do
       describe "for new record" do
         (Delivery.state_machines[:status].states.map(&:name) - [:delivered]).each do |s|
-          specify { Fabricate.build(:delivery, status: s).should be_valid }
-          specify { Fabricate.build(:delivery, status: s, status_change_type: 'manual').should be_valid }
+          specify { Fabricate(:delivery, status: s).should be_valid }
+          specify { Fabricate(:delivery, status: s, status_change_type: 'manual').should be_valid }
         end
       end
 
-      specify { Fabricate.build(:delivery, status: 'lame').should_not be_valid }
-      specify { Fabricate.build(:delivery, status_change_type: 'lame').should_not be_valid }
+      specify { expect {Fabricate(:delivery, status: 'lame')}.to raise_error(ActiveRecord::RecordInvalid, /Status is invalid/) }
+      specify { expect {Fabricate(:delivery, status_change_type: 'lame')}.to raise_error(ActiveRecord::RecordInvalid, /Status change type lame is not a valid status change type/)}
     end
 
     describe '#future_status?' do
-      specify { Fabricate.build(:delivery, status: 'pending').future_status?.should be_true }
-      specify { Fabricate.build(:delivery, status: 'cancelled').future_status?.should be_false }
+      specify { Fabricate(:delivery, status: 'pending').future_status?.should be_true }
+      specify { Fabricate(:delivery, status: 'cancelled').future_status?.should be_false }
     end
   end
 
@@ -95,8 +95,8 @@ describe Delivery do
 
     context 'batch change' do
       before do
-        @delivery1 = Fabricate.build(:delivery)
-        @delivery2 = Fabricate.build(:delivery, status: :delivered)
+        @delivery1 = Fabricate(:delivery)
+        @delivery2 = Fabricate(:delivery, status: :delivered)
 
         @deliveries = [@delivery1, delivery, @delivery2]
 
@@ -116,10 +116,10 @@ describe Delivery do
   end
 
   describe '.auto_deliver' do
-    specify { expect { Fabricate.build(:delivery).should change(Delivery.last, :status).to('delivered') } }
-    specify { expect { Fabricate.build(:delivery, status_change_type: 'manual', status: 'delivered').should_not change(Delivery.last, :status_change_type).to('auto') } }
-    specify { expect { Fabricate.build(:delivery, status_change_type: 'manual', status: 'cancelled').should_not change(Delivery.last, :status).to('delivered') } }
-    specify { expect { Fabricate.build(:delivery, status_change_type: 'manual', status: 'pending').should_not change(Delivery.last, :status).to('delivered') } }
+    specify { expect { Fabricate(:delivery).should change(Delivery.last, :status).to('delivered') } }
+    specify { expect { Fabricate(:delivery, status_change_type: 'manual', status: 'delivered').should_not change(Delivery.last, :status_change_type).to('auto') } }
+    specify { expect { Fabricate(:delivery, status_change_type: 'manual', status: 'cancelled').should_not change(Delivery.last, :status).to('delivered') } }
+    specify { expect { Fabricate(:delivery, status_change_type: 'manual', status: 'pending').should_not change(Delivery.last, :status).to('delivered') } }
   end
 
   describe '.csv_headers' do

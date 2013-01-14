@@ -70,7 +70,7 @@ group :development do
 end
 
 group :test do
-  gem 'fabrication', '~> 1.4.1'
+  gem 'fabrication', '~> 2.5.4'
   gem 'database_cleaner', '~> 0.8.0'
 
   gem 'capybara', '~> 1.1.2'
