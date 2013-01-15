@@ -82,7 +82,7 @@ class Order < ActiveRecord::Base
   end
 
   def update_exclusions(line_item_ids)
-    return if !box.dislikes? || !box.likes?
+    return unless box.dislikes?
 
     line_item_ids = line_item_ids.to_a.map(&:to_i)
     exclusion_line_item_ids = exclusions.map { |x| x.line_item_id }
