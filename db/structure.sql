@@ -628,7 +628,7 @@ CREATE TABLE customers (
     special_order_preference text,
     next_order_id integer,
     next_order_occurrence_date date,
-    balance_threshold_cents integer DEFAULT 0,
+    balance_threshold_cents integer NOT NULL,
     status_halted boolean DEFAULT false
 );
 
@@ -858,8 +858,7 @@ CREATE TABLE distributors (
     payments_index_intro boolean DEFAULT true NOT NULL,
     customers_index_intro boolean DEFAULT true NOT NULL,
     has_balance_threshold boolean DEFAULT false,
-    default_balance_threshold_cents integer DEFAULT 0,
-    customer_can_remove_orders boolean DEFAULT false
+    default_balance_threshold_cents integer DEFAULT 0
 );
 
 
@@ -3006,8 +3005,6 @@ INSERT INTO schema_migrations (version) VALUES ('20121119000156');
 
 INSERT INTO schema_migrations (version) VALUES ('20121119005042');
 
-INSERT INTO schema_migrations (version) VALUES ('20121128005022');
-
 INSERT INTO schema_migrations (version) VALUES ('20121204015243');
 
 INSERT INTO schema_migrations (version) VALUES ('20121211024951');
@@ -3015,3 +3012,5 @@ INSERT INTO schema_migrations (version) VALUES ('20121211024951');
 INSERT INTO schema_migrations (version) VALUES ('20121211222422');
 
 INSERT INTO schema_migrations (version) VALUES ('20121212212609');
+
+INSERT INTO schema_migrations (version) VALUES ('20130110013104');

@@ -5,6 +5,7 @@ Fabricator(:customer_without_after_create, class_name: :customer) do
   email { sequence(:email) { |i| "customer#{i}@example.com" } }
   password 'password'
   password_confirmation { |customer| customer.password }
+  balance_threshold_cents(-1000)
 end
 
 Fabricator(:customer, from: :customer_without_after_create) do
