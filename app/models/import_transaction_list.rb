@@ -68,11 +68,6 @@ class ImportTransactionList < ActiveRecord::Base
     #                                                 2, {"id": 65, "customer_id":1}....]
     transactions_attributes = import_transaction_list_attributes[:import_transactions_attributes]
 
-    hash_transactions_attributes = transactions_attributes.clone.inject({}) do |hash, element|
-      element = element.last
-      hash.merge(element["id"] => element)
-    end
-
     # Pull out the non customer_ids (duplicate, not_a_customer, etc..)
     transactions_attributes.each do |id, transaction_attributes|
       ImportTransaction.process_attributes(transaction_attributes)
