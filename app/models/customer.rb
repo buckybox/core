@@ -48,7 +48,7 @@ class Customer < ActiveRecord::Base
   before_save :update_halted_status, if: :balance_threshold_cents_changed?
 
   delegate :separate_bucky_fee?, :consumer_delivery_fee, :default_balance_threshold_cents, :has_balance_threshold, to: :distributor
-  delegate :currency, to: :distributor, allow_nil: true
+  delegate :currency, :send_email?, to: :distributor, allow_nil: true
 
   scope :ordered_by_next_delivery, lambda { order("CASE WHEN next_order_occurrence_date IS NULL THEN '9999-01-01' WHEN next_order_occurrence_date < '#{Date.current.to_s(:db)}' THEN '9999-01-01' ELSE next_order_occurrence_date END ASC, lower(customers.first_name) ASC, lower(customers.last_name) ASC") }
 
@@ -259,7 +259,21 @@ class Customer < ActiveRecord::Base
 
   def create_halt_notifications
     Event.customer_halted(self)
-    CustomerMailer.orders_halted(self).deliver
+    send_halted_email
+  end
+
+  def send_halted_email
+    if distributor.send_email? && distributor.send_halted_email?
+      CustomerMailer.orders_halted(self).deliver
+    end
+  end
+
+  def send_login_details
+    if send_email?
+      CustomerMailer.login_details(self).deliver
+    else
+      false
+    end
   end
 
   def set_balance_threshold

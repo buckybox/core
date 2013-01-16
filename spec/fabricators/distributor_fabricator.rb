@@ -5,6 +5,8 @@ Fabricator(:distributor) do
   password_confirmation { |attrs| attrs[:password] }
   country
   consumer_delivery_fee_cents 0
+  send_email true
+  send_halted_email true
 end
 
 Fabricator(:distributor_with_information, from: :distributor) do

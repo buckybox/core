@@ -48,7 +48,10 @@
         %dd= Money.new(@distributor.default_balance_threshold_cents, @distributor.currency).format
       - else
         %dd= "Spend Limit not enabled"
-
+      %dt Send email to customers informing them their account is halted?
+      %dd= checkmark_boolean(@distributor.send_halted_email?)
+      %dt Send any emails to customers?
+      %dd= checkmark_boolean(@distributor.send_email?)
   .span6
     %dl
       %dt Total Customers

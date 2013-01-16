@@ -26,7 +26,8 @@
   #balance_threshold{style: @distributor.has_balance_threshold? ? '' : 'display: none'}
     = f.input :default_balance_threshold, label: "Spend Limit", hint: "Deliveries will halt when their balance hits the Spend Limit"
     = f.input :spend_limit_on_all_customers, as: :boolean, label: "Apply Spend Limit to all existing customers"
-
+    = f.input :send_halted_email, as: :boolean, label: "Send email to customers informing them their account is halted?"
+  = f.input :send_email, as: :boolean, label: "Send any emails to customers?"
 
   %hr
 
