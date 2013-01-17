@@ -408,6 +408,18 @@ class Distributor < ActiveRecord::Base
     send_email
   end
 
+  def send_halted_email?
+    send_email? && send_halted_email
+  end
+
+  def number_of_customers_halted_after_update(spend_limit, update_existing)
+    if update_existing
+      customers.joins(:account).where(["accounts.balance_cents <= ? and customers.status_halted = 'f'", spend_limit]).count
+    else
+      customers.joins(:account).where("accounts.balance_cents <= customers.balance_threshold_cents and customers.status_halted = 'f'").count
+    end
+  end
+
   private
 
   def check_emails

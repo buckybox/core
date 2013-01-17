@@ -49,6 +49,16 @@
           = select_hour @default_automatic_time, { ampm: true }, { id: :distributor_automatic_delivery_hour, name: 'distributor[automatic_delivery_hour]' }
           on the day of delivery.
 
+      %fieldset#customer_spend_limit
+        %legend Customer Spend Limit
+        %p
+          = f.input :has_balance_threshold, label: "Enable spend limit?"
+          #balance_threshold{style: current_distributor.has_balance_threshold? ? '' : 'display: none'}
+            = f.input :default_balance_threshold, label: "Default Spend Limit", hint: "New customers will have this limit set on their account.  Deliveries will halt when their balance hits the Spend Limit"
+            = f.input :spend_limit_on_all_customers, as: :boolean, label: "Update existing customers"
+            = f.input :send_halted_email, as: :boolean, label: "Send email to customers informing them their account is halted?"
+
+
   .row-fluid
     .span12.form-actions
-      = f.button :submit, 'Update', class: 'btn btn-primary'
+      = f.button :submit, 'Update', class: 'btn btn-primary', id: 'business_information_submit'
