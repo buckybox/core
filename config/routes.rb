@@ -190,6 +190,7 @@ BuckyBox::Application.routes.draw do
       end
 
       collection do
+        post 'spend_limit_confirmation'
         get 'unimpersonate'
         get 'country_setting/:id', controller: 'distributors', action: 'country_setting'
       end

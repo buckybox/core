@@ -35,4 +35,4 @@
   = f.input :password_confirmation, hint: 'Only changed if both are set'
 
   .form-actions
-    = f.button :submit
+    = f.button :submit, id: @distributor.new_record? ? '' : "edit_distributor_submit"
