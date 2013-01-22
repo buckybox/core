@@ -78,7 +78,7 @@ class Admin::DistributorsController < Admin::ResourceController
     send_halt_email = params[:send_halt_email] == '1'
     count = distributor.number_of_customers_halted_after_update(spend_limit, update_existing)
     if count > 0
-      render text: "Updating the spend limit will halt #{count} customers deliveries.  #{"They will be emailed that their account has been halted until payment is made.  " if send_halt_email && current_distributor.send_email? }Are you sure?"
+      render text: "Updating the spend limit will halt #{count} customers deliveries.  #{"They will be emailed that their account has been halted until payment is made.  " if send_halt_email && distributor.send_email? }Are you sure?"
     else
       render text: "safe"
     end
