@@ -22,11 +22,7 @@
   = f.input :bank_deposit_format, collection: ImportTransactionList::FILE_FORMATS.reject { |name, code| code == 'paypal' }, as: :select
   = f.input :invoice_threshold
   = f.input :active_webstore
-  = f.input :has_balance_threshold, label: "Spend limit?"
-  #balance_threshold{style: @distributor.has_balance_threshold? ? '' : 'display: none'}
-    = f.input :default_balance_threshold, label: "Spend limit", hint: "Deliveries will halt when their balance hits the spend limit"
-    = f.input :spend_limit_on_all_customers, as: :boolean, label: "Apply spend limit to all existing customers"
-    = f.input :send_halted_email, as: :boolean, label: "Send email to customers informing them their account is halted?"
+  = f.input :feature_spend_limit, label: 'Enable the spend limit feature?', hint: 'This gives the distributor the option to turn on a spend limit for customers.'
   = f.input :send_email, as: :boolean, label: "Send any emails to customers?"
 
   %hr

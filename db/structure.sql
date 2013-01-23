@@ -860,7 +860,8 @@ CREATE TABLE distributors (
     has_balance_threshold boolean DEFAULT false,
     default_balance_threshold_cents integer DEFAULT 0,
     send_email boolean,
-    send_halted_email boolean
+    send_halted_email boolean,
+    feature_spend_limit boolean
 );
 
 
@@ -3020,3 +3021,5 @@ INSERT INTO schema_migrations (version) VALUES ('20130110013104');
 INSERT INTO schema_migrations (version) VALUES ('20130116031833');
 
 INSERT INTO schema_migrations (version) VALUES ('20130122003352');
+
+INSERT INTO schema_migrations (version) VALUES ('20130123022020');
