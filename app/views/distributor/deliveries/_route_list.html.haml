@@ -29,7 +29,7 @@
 
 - if @real_list
   %ul#delivery_list.unstyled{ class: (@delivery_list.date.past? ? '' : 'sortable') }
-    - @items.group_by{ |delivery| delivery.order.address.address_hash }.each do |addressh_hash, deliveries|
+    - DeliverySort.new(@items).grouped_by_addresses.each do |addressh_hash, deliveries|
       %li.row-fluid
         .span12
           %ul.unstyled

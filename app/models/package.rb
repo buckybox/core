@@ -195,7 +195,7 @@ class Package < ActiveRecord::Base
   private
 
   def archive_data
-    unless status == 'packed' && !status_changed?
+    if status != 'packed'
       self.archived_address               = address.join(', ')
 
       self.archived_box_name              = box.name

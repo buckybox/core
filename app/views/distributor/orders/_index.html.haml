@@ -14,7 +14,7 @@
                   %small= order_customisation(order)
                 %li
                   %small= order_extras(order)
-                -#%li
+                %li
                   %small= link_to 'edit order', edit_distributor_account_order_path(@account, order)
             %td.schedule
               = render partial: 'distributor/orders/details', locals: { order: order }

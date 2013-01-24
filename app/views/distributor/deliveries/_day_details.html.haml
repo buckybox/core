@@ -20,7 +20,7 @@
 
       - if params[:view] == 'packing' && !@items.blank?
         %span.label SUMMARY
-        - boxes = @items.group_by(&:box).sort{|a,b| a.first.name <=> b.first.name}
+        - boxes = DeliverySort.new(@items).grouped_by_boxes
         - extras = @items.collect(&:extras_summary).flatten
 
         - unless boxes.blank?
