@@ -51,14 +51,14 @@
 
       - if current_distributor.feature_spend_limit?
         %fieldset#customer_spend_limit
-          %legend Customer Spend Limit
+          %legend Customer Minimum Balance
           %p
-            = f.input :has_balance_threshold, label: "Enable spend limit?"
+            = f.input :has_balance_threshold, label: "Enable minimum balance?"
             #balance_threshold{style: current_distributor.has_balance_threshold? ? '' : 'display: none'}
-              = f.input :default_balance_threshold, label: "Default spend limit", hint: "New customers will have this limit set on their account.  Deliveries will halt when their balance hits the Spend Limit"
+              = f.input :default_balance_threshold, label: "Default minimum balance", hint: "New customers will have this minimum balance set on their account.  Deliveries will halt when their balance reaches the minimum balance"
               = f.input :spend_limit_on_all_customers, as: :boolean, label: "Update existing customers"
               - if current_distributor.send_email?
-                = f.input :send_halted_email, as: :boolean, label: "Send email to customers informing them their account is halted?" 
+                = f.input :send_halted_email, as: :boolean, label: "Send email to customers informing them their account is halted once they reach the minimum balance?" 
               - else
                 = f.input :send_halted_email, as: :hidden
 
