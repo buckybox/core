@@ -8,6 +8,18 @@
 - unless @orders.empty?
   = render partial: 'customer/orders/order', collection: @orders
 
+.row-fluid
+  .span12
+    %h3 Account Statement
+
+    .row-fluid.dashboard-box
+      .span12
+        #make_a_payment.dash-boxed-link.span12= link_to 'make a payment', '#make_a_payment'
+        #bank_payment_details
+          %button.close
+            %i.icon-remove#close_bank_payment_details
+          = render partial: 'customer/dashboard/payment_details'
+
 - unless @transactions.empty?
   #sortable_transactions{data: {user: 'customer'}}
     = render 'customer/transactions/index'
