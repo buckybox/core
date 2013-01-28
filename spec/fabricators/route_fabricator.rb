@@ -1,6 +1,6 @@
 Fabricator(:route) do
-  distributor!
-  schedule_rule!
+  distributor
+  schedule_rule
   name { sequence(:name) { |i| "Route #{i}" } }
   fee 0
   area_of_service 'Services all of the areas.'

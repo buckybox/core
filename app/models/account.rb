@@ -21,6 +21,7 @@ class Account < ActiveRecord::Base
   validates_presence_of :customer_id, :balance
 
   before_validation :default_balance_and_currency
+  after_save :check_customer_threshold
 
   # A way to double check that the transactions and the balance have not gone out of sync.
   # THIS SHOULD NEVER HAPPEN! If it does fix the root cause don't make this write a new balance.
@@ -139,6 +140,12 @@ class Account < ActiveRecord::Base
 
   def create_invoice
     Invoice.create_for_account(self) if needs_invoicing?
+  end
+
+  def check_customer_threshold
+    if balance_cents_changed?
+      customer.update_halted_status!
+    end
   end
 
   private

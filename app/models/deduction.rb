@@ -95,7 +95,8 @@ class Deduction < ActiveRecord::Base
         display_time: display_time
       )
 
-      self.save
+
+      self.save!
     end
 
     return self.transaction

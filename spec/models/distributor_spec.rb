@@ -427,4 +427,20 @@ describe Distributor do
       distributor.find_duplicate_import_transactions(Date.parse("12 Oct 2011"), "hello kitty here is payment", 234.65)
     end
   end
+
+  describe :balance_thresholds do
+    let(:distributor) { Fabricate(:distributor_a_customer) }
+
+    it 'should save balance threshold to the distributor' do
+      distributor.has_balance_threshold.should be_false
+      distributor.update_attributes({has_balance_threshold: true, default_balance_threshold: 200.00}).should be_true
+      distributor.has_balance_threshold.should be_true
+      distributor.default_balance_threshold_cents.should eq(20000)
+    end
+
+    it 'should update all customers spend limit' do 
+      Customer.any_instance.should_receive(:update_halted_status!)
+      distributor.update_attributes({has_balance_threshold: true, default_balance_threshold: 200.00, spend_limit_on_all_customers: '0'}).should be_true
+    end
+  end
 end

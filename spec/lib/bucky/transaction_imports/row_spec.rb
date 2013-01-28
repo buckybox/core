@@ -147,7 +147,7 @@ def mock_customer(formated_number, balance = 0.0, orders = [0.0], first_name = n
 end
 
 def real_customer(formated_number, balance = 0.0, orders = [0.0], first_name = nil, last_name = nil)
-  c = Fabricate.build(:customer, number: formated_number.to_i)
+  c = Fabricate(:customer, number: formated_number.to_i)
   c.stub_chain(:account, :balance, :to_f).and_return(balance)
   c.stub(:orders).and_return(orders.collect{|o| stub(Order, price: o)})
   c.first_name = first_name unless first_name.blank?

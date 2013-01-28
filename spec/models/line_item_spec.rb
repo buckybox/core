@@ -1,10 +1,10 @@
 require 'spec_helper'
 
 describe LineItem do
-  let(:line_item)    { Fabricate.build(:line_item) }
+  let(:line_item)    { Fabricate(:line_item) }
   let(:distributor)  { line_item.distributor }
-  let(:exclusion)    { Fabricate.build(:exclusion, line_item: line_item) }
-  let(:substitution) { Fabricate.build(:substitution, line_item: line_item) }
+  let(:exclusion)    { Fabricate(:exclusion, line_item: line_item) }
+  let(:substitution) { Fabricate(:substitution, line_item: line_item) }
 
   specify { line_item.should be_valid }
 
@@ -90,11 +90,11 @@ describe LineItem do
   context 'line item customer counts' do
     describe '#exclusions_count_by_customer' do
       before do
-        e1 = Fabricate.build(:exclusion)
+        e1 = Fabricate(:exclusion)
         e1.stub_chain(:customer, :id).and_return(1)
-        e2 = Fabricate.build(:exclusion)
+        e2 = Fabricate(:exclusion)
         e2.stub_chain(:customer, :id).and_return(2)
-        e3 = Fabricate.build(:exclusion)
+        e3 = Fabricate(:exclusion)
         e3.stub_chain(:customer, :id).and_return(1)
 
         line_item.stub_chain(:exclusions, :active).and_return([e1, e2, e3])
@@ -105,11 +105,11 @@ describe LineItem do
 
     describe '#substitution_count_by_customer' do
       before do
-        s1 = Fabricate.build(:substitution)
+        s1 = Fabricate(:substitution)
         s1.stub_chain(:customer, :id).and_return(1)
-        s2 = Fabricate.build(:substitution)
+        s2 = Fabricate(:substitution)
         s2.stub_chain(:customer, :id).and_return(2)
-        s3 = Fabricate.build(:substitution)
+        s3 = Fabricate(:substitution)
         s3.stub_chain(:customer, :id).and_return(1)
 
         line_item.stub_chain(:substitutions, :active).and_return([s1, s2, s3])
