@@ -158,42 +158,12 @@ class Delivery < ActiveRecord::Base
     return desc_str
   end
 
-  # TODO: Not sure if this fits in the model might need to go in Delivery CSV model down the road
   def self.csv_headers
-    [
-      'Delivery Route', 'Delivery Sequence Number', 'Delivery Pickup Point Name',
-      'Order Number', 'Delivery Number', 'Delivery Date', 'Customer Number', 'Customer First Name',
-      'Customer Last Name', 'Customer Phone', 'New Customer', 'Delivery Address Line 1', 'Delivery Address Line 2',
-      'Delivery Address Suburb', 'Delivery Address City', 'Delivery Address Postcode', 'Delivery Note',
-      'Box Contents Short Description', 'Price', 'Bucky Box Transaction Fee', 'Total Price', 'Customer Email'
-    ]
+    Package.csv_headers
   end
 
   def to_csv
-    [
-      route.name,
-      (delivery_number ? ("%03d" % delivery_number) : nil),
-      nil,
-      order.id,
-      id,
-      date.strftime("%-d %b %Y"),
-      customer.number,
-      customer.first_name,
-      customer.last_name,
-      address.phone_1,
-      (customer.new? ? 'NEW' : nil),
-      address.address_1,
-      address.address_2,
-      address.suburb,
-      address.city,
-      address.postcode,
-      address.delivery_note,
-      order.string_sort_code,
-      package.price,
-      package.archived_consumer_delivery_fee,
-      package.total_price,
-      customer.email
-    ]
+    package.to_csv
   end
 
   def self.matching_dso(delivery_sequence_order)
@@ -221,7 +191,7 @@ class Delivery < ActiveRecord::Base
 
       export_items = []
 
-      packages.group_by(&:box).sort{|a,b| a.first.name <=> b.first.name}.each do |box, array|
+      DeliverySort.new(packages).grouped_by_boxes.each do |box, array|
         array.each do |package|
           export_items << package
         end

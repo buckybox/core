@@ -35,7 +35,11 @@ class Package < ActiveRecord::Base
 
   scope :originals, where(original_package_id: nil)
 
+  scope :unpacked, where(status: 'unpacked')
+  scope :packed, where(status: 'packed')
+
   serialize :archived_extras
+  serialize :archived_address_details, Address
 
   default_value_for :status, 'unpacked'
   default_value_for :packing_method, 'auto'
@@ -160,7 +164,6 @@ class Package < ActiveRecord::Base
     # At the moment a package only has one delivery. This will change with recheduling, repacking and the 
     # refactor. Was included because we thought we were going to do rescheduling sooner then we did.
     delivery = deliveries.ordered.first
-
     [
       route.name,
       ((!delivery.nil? && delivery.delivery_number) ? ("%03d" % delivery.delivery_number) : nil),
@@ -173,16 +176,16 @@ class Package < ActiveRecord::Base
       customer.last_name,
       address.phone_1,
       (customer.new? ? 'NEW' : nil),
-      address.address_1,
-      address.address_2,
-      address.suburb,
-      address.city,
-      address.postcode,
-      address.delivery_note,
-      order.string_sort_code,
-      box.name,
-      order.substitutions.map(&:name).join(', '),
-      order.exclusions.map(&:name).join(', '),
+      archived_address_details.address_1,
+      archived_address_details.address_2,
+      archived_address_details.suburb,
+      archived_address_details.city,
+      archived_address_details.postcode,
+      archived_address_details.delivery_note,
+      string_sort_code,
+      archived_box_name,
+      archived_substitutions,
+      archived_exclusions,
       extras_description,
       price,
       archived_consumer_delivery_fee,
@@ -192,11 +195,48 @@ class Package < ActiveRecord::Base
     ]
   end
 
+  def archived_substitutions
+    read_attribute(:archived_substitutions) || order.substitutions.map(&:name).join(', ')
+  end
+
+  def archived_exclusions
+    read_attribute(:archived_exclusions) || order.exclusions.map(&:name).join(', ')
+  end
+
+  def archived_address
+    if has_archived_address_details?
+      read_attribute(:archived_address)
+    else
+      archived_address_details.join(', ')
+    end
+  end
+
+  def address_hash
+    if has_archived_address_details?
+      archived_address
+    else
+      archived_address_details.address_hash
+    end
+  end
+
+  def has_archived_address_details?
+    !archived_address_details.id.nil?
+  end
+  
+  def string_sort_code
+    result = archived_box_name || ''
+    result += '+L' unless archived_exclusions.blank?
+    result += '+D' unless archived_substitutions.blank?
+
+    return result.upcase
+  end
+
   private
 
   def archive_data
-    unless status == 'packed' && !status_changed?
+    if status != 'packed'
       self.archived_address               = address.join(', ')
+      self.archived_address_details       = address
 
       self.archived_box_name              = box.name
       self.archived_customer_name         = customer.name
@@ -205,6 +245,9 @@ class Package < ActiveRecord::Base
       self.archived_route_fee             = route.fee
       self.archived_customer_discount     = customer.discount
       self.archived_order_quantity        = order.quantity
+
+      self.archived_substitutions         = order.substitutions.map(&:name).join(', ')
+      self.archived_exclusions            = order.exclusions.map(&:name).join(', ')
       # The association chain to get a distributor was causing a callback loop so have to do this instead.
       found_distributor = Distributor.find_by_id(packing_list.distributor_id) if packing_list
 

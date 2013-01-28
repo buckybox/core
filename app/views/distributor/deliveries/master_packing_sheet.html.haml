@@ -2,7 +2,7 @@
 
 .row-fluid
   .span12
-    - @packages.group_by(&:box).sort{ |a,b| a.first.name <=> b.first.name }.each do |box, array|
+    - DeliverySort.new(@packages).grouped_by_boxes.each do |box, array|
       %table#master-packing-sheet.table.table-bordered
         %thead
           %tr
