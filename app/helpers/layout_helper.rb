@@ -64,7 +64,7 @@ module LayoutHelper
   end
 
   def customer_and_number(customer)
-    "##{customer.id} #{customer.name}"
+    "##{customer.formated_number.to_s} #{customer.name}"
   end
 
   def customer_badge(customer, options = {})

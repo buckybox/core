@@ -28,7 +28,7 @@ class DeliverySort
   end
 
   def grouped_by_addresses
-    items.group_by{ |delivery| delivery.order.address.address_hash }
+    items.group_by{ |delivery| delivery.package.address_hash }
   end
 
   class Box

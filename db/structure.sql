@@ -1292,7 +1292,10 @@ CREATE TABLE packages (
     archived_route_fee_cents integer DEFAULT 0 NOT NULL,
     archived_customer_discount numeric DEFAULT 0 NOT NULL,
     archived_extras text,
-    archived_consumer_delivery_fee_cents integer DEFAULT 0
+    archived_consumer_delivery_fee_cents integer DEFAULT 0,
+    archived_substitutions character varying(255),
+    archived_exclusions character varying(255),
+    archived_address_details text
 );
 
 
@@ -2995,3 +2998,7 @@ INSERT INTO schema_migrations (version) VALUES ('20121116015952');
 INSERT INTO schema_migrations (version) VALUES ('20121119000156');
 
 INSERT INTO schema_migrations (version) VALUES ('20121119005042');
+
+INSERT INTO schema_migrations (version) VALUES ('20130125004824');
+
+INSERT INTO schema_migrations (version) VALUES ('20130128022723');
