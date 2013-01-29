@@ -122,21 +122,6 @@ describe Delivery do
     specify { expect { Fabricate(:delivery, status_change_type: 'manual', status: 'pending').should_not change(Delivery.last, :status).to('delivered') } }
   end
 
-  describe '.csv_headers' do
-    specify { Delivery.csv_headers.size.should == 22 }
-  end
-
-  describe '#to_csv' do
-    specify { delivery.to_csv[0].should == delivery.route.name }
-    specify { delivery.to_csv[3].should == delivery.order.id }
-    specify { delivery.to_csv[4].should == delivery.id }
-    specify { delivery.to_csv[5].should == delivery.date.strftime("%-d %b %Y") }
-    specify { delivery.to_csv[6].should == delivery.customer.number }
-    specify { delivery.to_csv[7].should == delivery.customer.first_name }
-    specify { delivery.to_csv[19].should == delivery.package.archived_consumer_delivery_fee }
-    specify { delivery.to_csv[21].should == delivery.customer.email }
-  end
-
   describe '#reposition!' do
     specify { expect { delivery.reposition!(101) }.to change(delivery, :position).to(101) }
   end

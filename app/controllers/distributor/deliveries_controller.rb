@@ -109,7 +109,7 @@ class Distributor::DeliveriesController < Distributor::ResourceController
     @packages.each do |package|
       package.status = 'packed'
       package.packing_method = 'manual'
-      package.save
+      package.save!
     end
 
     render layout: 'print'
