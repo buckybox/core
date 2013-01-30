@@ -206,28 +206,28 @@ class Customer < ActiveRecord::Base
     save!
   end
 
-  def update_halted_status!(new_balance_threshold_cents = nil)
+  def update_halted_status!(new_balance_threshold_cents = nil, email_rule = Customer::EmailRule.all)
     self.balance_threshold_cents = new_balance_threshold_cents unless new_balance_threshold_cents.blank?
-    update_halted_status
+    update_halted_status(email_rule)
     save!
   end
 
-  def update_halted_status
+  def update_halted_status(email_rule = Customer::EmailRule.all)
     if has_balance_threshold && account_balance <= balance_threshold
-      halt!
+      halt!(email_rule)
     else
       unhalt!
     end
   end
 
-  def halt!
+  def halt!(email_rule = Customer::EmailRule.all)
     unless halted?
       Customer.transaction do
         self.status_halted = true
         save!
         
+        create_halt_notifications(email_rule)
         halt_orders!
-        create_halt_notifications
       end
     end
   end
@@ -257,14 +257,24 @@ class Customer < ActiveRecord::Base
     update_next_occurrence!
   end
 
-  def create_halt_notifications
+  def create_halt_notifications(email_rule = Customer::EmailRule.all)
     Event.customer_halted(self)
-    send_halted_email
+    send_halted_email if email_rule.send_email?(self)
+  end
+
+  def orders_pending_package_creation?
+    orders.any?{|o| o.pending_package_creation?}
   end
 
   def send_halted_email
     if distributor.send_email? && distributor.send_halted_email?
       CustomerMailer.orders_halted(self).deliver
+    end
+  end
+
+  def remind_customer_is_halted
+    if distributor.send_email? && distributor.send_halted_email?
+      CustomerMailer.remind_orders_halted(self).deliver
     end
   end
 
@@ -318,6 +328,45 @@ class Customer < ActiveRecord::Base
     if self.email
       self.email.strip!
       self.email.downcase!
+    end
+  end
+end
+
+class Customer
+  class EmailRule
+    def self.all
+      @all ||= EmailRule.new(:all)
+    end
+
+    def self.only_pending_orders
+      @only_pending_orders ||= EmailRule.new(:only_pending_orders)
+    end
+
+    def self.no_email
+      @no_email ||= EmailRule.new(:no_email)
+    end
+    
+    attr_writer :type
+
+    def initialize(type)
+      self.type = type
+    end
+
+    def send_email?(customer)
+      case type
+      when :no_email
+        false
+      when :only_pending_orders
+        customer.orders_pending_package_creation?
+      when :all
+        true
+      end
+    end
+
+    private
+
+    def type
+      @type
     end
   end
 end

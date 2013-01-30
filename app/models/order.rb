@@ -21,10 +21,12 @@ class Order < ActiveRecord::Base
 
   scope :completed, where(completed: true)
   scope :active, where(active: true)
+  scope :inactive, where(active: false)
 
   after_save :check_halted_status
   after_save :update_next_occurrence #This is an after call because it works at the database level and requires the information to be commited
   after_destroy :update_next_occurrence
+  after_create :remind_customer_if_halted
 
   acts_as_taggable
 
@@ -175,6 +177,10 @@ class Order < ActiveRecord::Base
 
   def deactivate
     self.active = false
+  end
+
+  def inactive?
+    !active?
   end
 
   def order_extras=(collection)
@@ -330,6 +336,14 @@ class Order < ActiveRecord::Base
     schedule_rule.no_occurrences? && !paused? && !halted?
   end
 
+  def pending_package_creation?
+    return false if inactive?
+
+    use_local_time_zone do
+      return next_occurrence(distributor.window_end_at + 1.day).present?
+    end
+  end
+
   protected
 
   def update_next_occurrence
@@ -351,7 +365,13 @@ class Order < ActiveRecord::Base
   def check_halted_status
     if halted?
       schedule_rule.halt!
+    else
+      schedule_rule.unhalt!
     end
+  end
+
+  def remind_customer_if_halted
+    customer.remind_customer_is_halted if halted?
   end
 
   private

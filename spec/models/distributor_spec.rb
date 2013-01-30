@@ -439,7 +439,7 @@ describe Distributor do
     end
 
     it 'should update all customers spend limit' do 
-      Customer.any_instance.should_receive(:update_halted_status!)
+      Customer.any_instance.should_receive(:update_halted_status!).with(nil, Customer::EmailRule.only_pending_orders)
       distributor.update_attributes({has_balance_threshold: true, default_balance_threshold: 200.00, spend_limit_on_all_customers: '0'}).should be_true
     end
   end
