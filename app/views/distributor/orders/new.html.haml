@@ -1,3 +1,6 @@
 = customer_title(@account.customer, title: "New Order for #{customer_and_number(@account.customer)}")
+- if @customer.halted?
+  .alert.alert-error
+    This account is halted and will not recieve this order unless payment is cleared before the packing date.
 
 = render 'form'

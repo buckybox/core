@@ -206,13 +206,13 @@ class Customer < ActiveRecord::Base
     save!
   end
 
-  def update_halted_status!(new_balance_threshold_cents = nil, email_rule = Customer::EmailRule.all)
+  def update_halted_status!(new_balance_threshold_cents = nil, email_rule = Customer::EmailRule.only_pending_orders)
     self.balance_threshold_cents = new_balance_threshold_cents unless new_balance_threshold_cents.blank?
     update_halted_status(email_rule)
     save!
   end
 
-  def update_halted_status(email_rule = Customer::EmailRule.all)
+  def update_halted_status(email_rule = Customer::EmailRule.only_pending_orders)
     if has_balance_threshold && account_balance <= balance_threshold
       halt!(email_rule)
     else
@@ -220,7 +220,7 @@ class Customer < ActiveRecord::Base
     end
   end
 
-  def halt!(email_rule = Customer::EmailRule.all)
+  def halt!(email_rule = Customer::EmailRule.only_pending_orders)
     unless halted?
       Customer.transaction do
         self.status_halted = true
@@ -257,7 +257,7 @@ class Customer < ActiveRecord::Base
     update_next_occurrence!
   end
 
-  def create_halt_notifications(email_rule = Customer::EmailRule.all)
+  def create_halt_notifications(email_rule = Customer::EmailRule.only_pending_orders)
     Event.customer_halted(self)
     send_halted_email if email_rule.send_email?(self)
   end
