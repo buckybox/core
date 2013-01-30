@@ -144,7 +144,7 @@ class Account < ActiveRecord::Base
 
   def check_customer_threshold
     if balance_cents_changed?
-      customer.update_halted_status!
+      customer.update_halted_status!(nil, Customer::EmailRule.all)
     end
   end
 

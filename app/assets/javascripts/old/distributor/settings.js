@@ -23,4 +23,14 @@ $(function(){
     }
     return false;
   });
+  
+  var update_balance_threshold_display = function(){
+    if($("#distributor_has_balance_threshold:checked").size() === 0) {
+      $("#balance_threshold").hide('highlight');
+    } else {
+      $("#balance_threshold").show('highlight');
+    }
+  }
+  // Show/hide spend limit (balance_threshold) extra fields
+  $("#distributor_has_balance_threshold").click(update_balance_threshold_display);
 });

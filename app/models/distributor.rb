@@ -386,9 +386,9 @@ class Distributor < ActiveRecord::Base
       Customer.transaction do
         customers.find_each do |customer|
           if spend_limit_on_all_customers?
-            customer.update_halted_status!(default_balance_threshold_cents)
+            customer.update_halted_status!(default_balance_threshold_cents, Customer::EmailRule.only_pending_orders)
           else
-            customer.update_halted_status!
+            customer.update_halted_status!(nil, Customer::EmailRule.only_pending_orders)
           end
         end
       end
@@ -396,7 +396,7 @@ class Distributor < ActiveRecord::Base
   end
 
   def spend_limit_on_all_customers=(val)
-    @spend_limit_on_all_customers = val == '1'
+    @spend_limit_on_all_customers = (val == '1')
   end
 
   def spend_limit_on_all_customers
@@ -410,6 +410,14 @@ class Distributor < ActiveRecord::Base
 
   def send_halted_email?
     send_email? && send_halted_email
+  end
+
+  def number_of_customers_emailed_after_update(spend_limit, update_existing)
+    if update_existing
+      customers.joins(:account).where(["accounts.balance_cents <= ? and customers.status_halted = 'f'", spend_limit]).select{|c| c.orders_pending_package_creation?}.size
+    else
+      customers.joins(:account).where("accounts.balance_cents <= customers.balance_threshold_cents and customers.status_halted = 'f'").select{|c| c.orders_pending_package_creation?}.size
+    end
   end
 
   def number_of_customers_halted_after_update(spend_limit, update_existing)
