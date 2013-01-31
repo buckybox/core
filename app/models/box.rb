@@ -10,7 +10,7 @@ class Box < ActiveRecord::Base
 
   # Setup accessible (or protected) attributes for your model
   attr_accessible :distributor, :name, :description, :likes, :dislikes, :price, :available_single, :available_weekly,
-    :available_fourtnightly, :box_image, :box_image_cache, :remove_box_image, :extras_limit, :extra_ids, :hidden
+    :available_fourtnightly, :box_image, :box_image_cache, :remove_box_image, :extras_limit, :extra_ids, :hidden, :exclusions_limit, :substitutions_limit
 
   validates_presence_of :distributor, :name, :description, :price
   validates :extras_limit, numericality: { greater_than: -2 }
@@ -18,6 +18,8 @@ class Box < ActiveRecord::Base
   monetize :price_cents
 
   default_value_for :extras_limit, 0
+  default_value_for :substitutions_limit, 0
+  default_value_for :exclusions_limit, 0
 
   default_scope order(:name)
   scope :not_hidden, where(hidden: false)
@@ -81,4 +83,8 @@ class Box < ActiveRecord::Base
     end
   end
   alias :all_extras :all_extras? # I prefer to have '?' on the end of methods but simple_form won't take it as an attribute
+
+  def limits_data
+    {likes: substitutions_limit, dislikes: exclusions_limit}
+  end
 end

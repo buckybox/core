@@ -15,13 +15,19 @@
         = render partial: 'extras', locals: { account: @account, order: @order, box: @order.box || box_collection(@customer).first }
 
     .span4
+      #likes_dislikes_limits
+      :javascript
+        $("#likes_dislikes_limits").data('limits', #{@order.limits_data});
+
       #dislikes-input
+        = f.full_error :exclusions
         .row-fluid
           .span12
             = f.label :dislikes, 'Exclusions'
             .row-fluid
               = select_tag :dislikes_input, options_from_collection_for_select(@stock_list, :id, :name, @dislikes_list), multiple: true, class: 'span12', data: { placeholder: "Exclude these items..." }
       #likes-input
+        = f.full_error :substitutions
         .row-fluid
           .span12
             = f.label :likes, 'Substitutes'

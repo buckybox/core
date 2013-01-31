@@ -47,7 +47,8 @@ CREATE TABLE schedule_rules (
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
     scheduleable_id integer,
-    scheduleable_type character varying(255)
+    scheduleable_type character varying(255),
+    halted boolean DEFAULT false
 );
 
 
@@ -113,20 +114,24 @@ DECLARE
   next_date DATE;
 BEGIN
   next_date := from_date;
-  LOOP
-    -- Get the next possible occurrence
-    next_date := unpaused_next_occurrence(next_date, schedule_rule);
+  IF schedule_rule.halted THEN
+    return null;
+  ELSE
+    LOOP
+      -- Get the next possible occurrence
+      next_date := unpaused_next_occurrence(next_date, schedule_rule);
 
-    -- Test if it falls in a pause, exit if not
-    EXIT WHEN ignore_pauses OR NOT is_paused(next_date, schedule_rule);
+      -- Test if it falls in a pause, exit if not
+      EXIT WHEN ignore_pauses OR NOT is_paused(next_date, schedule_rule);
 
-    -- Apparently that one was in a pause, start looking again from the end of a pause
-    next_date := pause_finish(next_date, schedule_rule);
+      -- Apparently that one was in a pause, start looking again from the end of a pause
+      next_date := pause_finish(next_date, schedule_rule);
 
-    -- If the pause_finish returns NULL we can assume the pause never finishes, thus there is never a next_occurrence
-    EXIT WHEN next_date IS NULL;
-  END LOOP;
-  return next_date;
+      -- If the pause_finish returns NULL we can assume the pause never finishes, thus there is never a next_occurrence
+      EXIT WHEN next_date IS NULL;
+    END LOOP;
+    return next_date;
+  END IF;
 END;
 $$;
 
@@ -497,7 +502,9 @@ CREATE TABLE boxes (
     box_image character varying(255),
     available_monthly boolean DEFAULT false NOT NULL,
     extras_limit integer DEFAULT 0,
-    hidden boolean DEFAULT false NOT NULL
+    hidden boolean DEFAULT false NOT NULL,
+    exclusions_limit integer,
+    substitutions_limit integer
 );
 
 
@@ -622,7 +629,9 @@ CREATE TABLE customers (
     notes text,
     special_order_preference text,
     next_order_id integer,
-    next_order_occurrence_date date
+    next_order_occurrence_date date,
+    balance_threshold_cents integer,
+    status_halted boolean DEFAULT false
 );
 
 
@@ -849,7 +858,12 @@ CREATE TABLE distributors (
     deliveries_index_packing_intro boolean DEFAULT true NOT NULL,
     deliveries_index_deliveries_intro boolean DEFAULT true NOT NULL,
     payments_index_intro boolean DEFAULT true NOT NULL,
-    customers_index_intro boolean DEFAULT true NOT NULL
+    customers_index_intro boolean DEFAULT true NOT NULL,
+    has_balance_threshold boolean DEFAULT false,
+    default_balance_threshold_cents integer DEFAULT 0,
+    send_email boolean,
+    send_halted_email boolean,
+    feature_spend_limit boolean
 );
 
 
@@ -2999,6 +3013,24 @@ INSERT INTO schema_migrations (version) VALUES ('20121119000156');
 
 INSERT INTO schema_migrations (version) VALUES ('20121119005042');
 
+INSERT INTO schema_migrations (version) VALUES ('20121204015243');
+
+INSERT INTO schema_migrations (version) VALUES ('20121211024951');
+
+INSERT INTO schema_migrations (version) VALUES ('20121211222422');
+
+INSERT INTO schema_migrations (version) VALUES ('20121212212609');
+
+INSERT INTO schema_migrations (version) VALUES ('20130110013104');
+
+INSERT INTO schema_migrations (version) VALUES ('20130116031833');
+
+INSERT INTO schema_migrations (version) VALUES ('20130122003352');
+
+INSERT INTO schema_migrations (version) VALUES ('20130123022020');
+
 INSERT INTO schema_migrations (version) VALUES ('20130125004824');
 
 INSERT INTO schema_migrations (version) VALUES ('20130128022723');
+
+INSERT INTO schema_migrations (version) VALUES ('20130130220514');

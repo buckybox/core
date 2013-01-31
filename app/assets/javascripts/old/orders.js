@@ -3,12 +3,11 @@ $(function() {
     order_init();
     init_extras();
 
+    var box_id = $("#order-form select.box").val();
     $('#order-form #dislikes-input').show();
-    $('#order-form #dislikes-input select').select2();
-    $('#order-form #dislikes-input').hide();
-
     $('#order-form #likes-input').show();
-    $('#order-form #likes-input select').select2();
+    update_likes_dislikes_limits(box_id);
+    $('#order-form #dislikes-input').hide();
     $('#order-form #likes-input').hide();
   }
 
@@ -23,6 +22,7 @@ $(function() {
     if(box_id) {
       order_check_box(box_id, current_order);
       update_customer_box_extras(current_order);
+      update_likes_dislikes_limits(box_id);
     }
     else {
       current_order.find('#dislikes-input').hide();
@@ -41,8 +41,6 @@ $(function() {
 
     disable_the_others_options(dislikes_input, likes_input);
 
-    console.info(dislikes_input.is(':hidden'));
-    console.info(dislikes_input.find('option:selected').length);
     if(!dislikes_input.is(':hidden') && dislikes_input.find('option:selected').length > 0) {
       likes_input.show();
     }
@@ -166,4 +164,9 @@ function update_customer_box_extras(current_order) {
     current_order.find(".order_extras").html(data);
     init_extras();
   });
+};
+
+function update_likes_dislikes_limits(box_id){
+  $('#order-form #dislikes-input select').select2({maximumSelectionSize: $("#likes_dislikes_limits").data('limits')[box_id]['dislikes']});
+  $('#order-form #likes-input select').select2({maximumSelectionSize: $("#likes_dislikes_limits").data('limits')[box_id]['likes']});
 };

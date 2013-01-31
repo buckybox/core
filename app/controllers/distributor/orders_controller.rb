@@ -20,12 +20,10 @@ class Distributor::OrdersController < Distributor::ResourceController
     order_hash.merge!({ account_id: @account.id, completed: true })
 
     @order = Order.new(order_hash)
+    @order.update_exclusions(params[:dislikes_input])
+    @order.update_substitutions(params[:likes_input])
 
     create!  do |success, failure|
-      @order.update_exclusions(params[:dislikes_input])
-      @order.update_substitutions(params[:likes_input])
-      @order.save
-
       success.html { redirect_to [:distributor, @account.customer] }
       failure.html do
         load_form
