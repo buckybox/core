@@ -85,6 +85,14 @@ class Order < ActiveRecord::Base
     Order.where(id: order_ids)
   end
 
+  def dislikes
+    exclusions.map { |e| e.line_item_id.to_s }
+  end
+
+  def likes
+    substitutions.map { |s| s.line_item_id.to_s }
+  end
+
   def dislikes_input=(params)
     self.excluded_line_item_ids = params
   end
@@ -345,11 +353,11 @@ class Order < ActiveRecord::Base
     return unless box.present?
     
     if !box.exclusions_limit.zero? && exclusions.size > box.exclusions_limit
-      errors.add(:exclusions, " is limited to #{box.exclusions_limit}")
+      errors.add(:dislikes, " is limited to #{box.exclusions_limit}")
     end
 
     if !box.substitutions_limit.zero? && substitutions.size > box.substitutions_limit
-      errors.add(:substitutions, " is limited to #{box.substitutions_limit}")
+      errors.add(:likes, " is limited to #{box.substitutions_limit}")
     end
   end
 
