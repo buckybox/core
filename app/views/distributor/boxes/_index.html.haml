@@ -21,11 +21,11 @@
             %td= box.price.format
             %td= checkmark_boolean(box.hidden)
             - if box.dislikes
-              %td= box.substitutions_limit.zero? ? "Unlimited" : "Limited to #{box.substitutions_limit}"
+              %td= box.exclusions_limit.zero? ? "Unlimited" : "Limited to #{box.exclusions_limit}"
             -else
               %td= checkmark_boolean(box.dislikes)
             - if box.likes
-              %td= box.exclusions_limit.zero? ? "Unlimited" : "Limited to #{box.exclusions_limit}"
+              %td= box.substitutions_limit.zero? ? "Unlimited" : "Limited to #{box.substitutions_limit}"
             - else
               %td= checkmark_boolean(box.likes)
             %td= box.extra_option
