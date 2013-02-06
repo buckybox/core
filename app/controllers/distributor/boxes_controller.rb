@@ -13,6 +13,11 @@ class Distributor::BoxesController < Distributor::ResourceController
     update! { distributor_settings_boxes_url }
   end
 
+  # No show page, so redirect to edit
+  def show
+    redirect_to edit_distributor_box_path(params[:id])
+  end
+
   def extras
     account = current_distributor.accounts.find_by_id(params[:account_id])
     order = Order.new
