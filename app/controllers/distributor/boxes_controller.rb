@@ -15,7 +15,11 @@ class Distributor::BoxesController < Distributor::ResourceController
 
   # No show page, so redirect to edit
   def show
-    redirect_to edit_distributor_box_path(params[:id])
+    show! do |format|
+      format.html do
+        redirect_to edit_distributor_box_path(params[:id])
+      end
+    end
   end
 
   def extras
