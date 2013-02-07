@@ -43,7 +43,7 @@ class Account < ActiveRecord::Base
   end
 
   def change_balance_to(amount, options = {})
-    amount = amount.to_money
+    amount = amount.to_money(currency)
     amount_difference = amount - balance
 
     transactionable = (options[:transactionable] ? options[:transactionable] : self)
