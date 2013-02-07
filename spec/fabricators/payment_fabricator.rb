@@ -1,7 +1,7 @@
 Fabricator(:payment) do
-  distributor!
-  account!
+  distributor
+  account
   amount 1000
   description 'descriptive text'
-  payable! { Fabricate(:delivery) }
+  payable { Fabricate(:delivery) }
 end

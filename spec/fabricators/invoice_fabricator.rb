@@ -1,4 +1,4 @@
 Fabricator(:invoice) do
-  account!
+  account
   amount_cents { 10000}
 end

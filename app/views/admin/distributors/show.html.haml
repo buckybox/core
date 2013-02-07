@@ -43,7 +43,17 @@
       %dd= @distributor.created_at.to_s(:pretty)
       %dt Active Webstore
       %dd= checkmark_boolean(@distributor.active_webstore)
-
+      %dt Default Spend Limit
+      - if !@distributor.feature_spend_limit?
+        %dd Feature not enabled by admin.
+      - elsif @distributor.has_balance_threshold?
+        %dd= Money.new(@distributor.default_balance_threshold_cents, @distributor.currency).format
+        %dt Send email to customers informing them their account is halted?
+        %dd= checkmark_boolean(@distributor.send_halted_email?)
+      - else
+        %dd Distributor has not enabled the Spend Limit.
+      %dt Send any emails to customers?
+      %dd= checkmark_boolean(@distributor.send_email?)
   .span6
     %dl
       %dt Total Customers

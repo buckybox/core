@@ -23,7 +23,8 @@ class Event < ActiveRecord::Base
     invoice_reminder:         'invoice_reminder',
     invoice_mail_sent:        'invoice_mail_sent',
     transaction_success:      'transaction_success',
-    transaction_failure:      'transaction_failure'
+    transaction_failure:      'transaction_failure',
+    customer_halted:          'customer_halted'
   }
 
   validates_presence_of :distributor_id
@@ -74,6 +75,23 @@ class Event < ActiveRecord::Base
       Event::EVENT_TYPES[:customer_call_reminder],
       { event_category: 'customer', customer_id: customer.id, trigger_on: (Time.current + 1.day) }
     )
+  end
+
+  def self.customer_halted(customer)
+    trigger(
+      customer.distributor_id,
+      Event::EVENT_TYPES[:customer_halted],
+      { event_category: 'customer', customer_id: customer.id }
+    )
+  end
+
+  def message
+    case event_type
+    when EVENT_TYPES[:customer_webstore_new]
+      "New webstore customer"
+    when EVENT_TYPES[:customer_halted]
+      "Deliveries halted"
+    end
   end
 
   private

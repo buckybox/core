@@ -1,12 +1,12 @@
 Fabricator(:address) do
-  customer!
+  customer
   address_1 { sequence(:address_1){|i| "#{i} Address St" }}
   suburb { 'Suburb' }
   city { 'City' }
 end
 
 Fabricator(:address_with_associations, from: :address) do
-  customer!
+  customer
 end
 
 Fabricator(:full_address, from: :address) do

@@ -55,8 +55,12 @@ class Distributor::CustomersController < Distributor::ResourceController
     @customer.save
 
     CustomerMailer.raise_errors do
-      if CustomerMailer.login_details(@customer).deliver
+      if !@customer.send_email?
+        flash[:error] = "Sending emails is disabled, login details not sent"
+      elsif @customer.send_login_details
         flash[:notice] = "Login details successfully sent"
+      else
+        flash[:error] = "Login details failed to send"
       end
     end
 

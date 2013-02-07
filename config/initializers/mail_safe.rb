@@ -3,7 +3,6 @@ if defined?(MailSafe::Config)
     address =~ /.*@buckybox\.com/i ||
     address =~ /.*@enspiral\.com/i ||
     address == 'support@buckybox.com'
-
   }
 
   MailSafe::Config.replacement_address = 'beta@buckybox.com'

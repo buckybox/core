@@ -15,24 +15,4 @@
           - else
             = link_to 'logout', destroy_distributor_session_path, method: :delete
     %li.dropdown.pull-right
-      = link_to '#', class: 'dropdown-toggle', data: { toggle: 'dropdown' } do
-        - unless @notifications.empty?
-          %span.badge.badge-important== #{@notifications.size}
-        %i.icon-bell
-      %ul#notification-dropdown.dropdown-menu.pull-right
-        - if @notifications.empty?
-          %li
-            %strong No new notifications
-        - else
-          - @notifications.each do |notification|
-            - if notification.event_type == Event::EVENT_TYPES[:customer_webstore_new]
-              - customer = notification.customer
-              %li
-                = link_to distributor_customer_path(customer) do
-                  = "#{date_for(notification)} - "
-                  = customer_badge(customer, link: false)
-          %li
-            = form_tag(distributor_notifications_dismiss_all_path, id: 'dismiss-notifications') do
-              - @notifications.each do |notification|
-                = hidden_field_tag 'notification_ids[]', notification.id
-              = submit_tag 'Clear Notifications', class: 'btn btn-warning'
+      = render partial: 'distributor/notifications/index'

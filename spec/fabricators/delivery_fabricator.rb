@@ -1,6 +1,6 @@
 Fabricator(:delivery) do
-  order!
-  delivery_list!
-  route!
-  package!
+  order
+  delivery_list
+  route
+  package
 end

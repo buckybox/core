@@ -1,4 +1,4 @@
 Fabricator(:package) do
-  order!
-  packing_list! {|package| Fabricate(:packing_list, distributor: package.order.distributor)}
+  order
+  packing_list {|attrs| Fabricate(:packing_list, distributor: attrs[:order].distributor)}
 end

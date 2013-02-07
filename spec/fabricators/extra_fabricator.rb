@@ -1,5 +1,5 @@
 Fabricator(:extra) do
-  distributor!
+  distributor
   name { sequence(:name) { |i| "Extra #{i}" } }
   unit 'single'
   price 295

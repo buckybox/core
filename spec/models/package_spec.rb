@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe Package do
-  let(:package) { Fabricate.build(:package) }
+  let(:package) { Fabricate(:package) }
 
   specify { package.should be_valid }
 
