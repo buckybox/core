@@ -24,7 +24,7 @@
         - if @customer.halted? || @customer.balance_threshold_cents != @customer.default_balance_threshold_cents
           %li
             %span.highlightable{class: @customer.halted? ? 'highlighted' : ''}
-              Spend Limit:
+              Minimum balance:
               %strong= @customer.balance_threshold.format
         %li
           Email:
