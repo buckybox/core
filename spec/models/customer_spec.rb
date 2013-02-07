@@ -302,7 +302,7 @@ describe Customer do
 
     context :changing_balance do
       before do
-        customer = Fabricate(:customer)
+        customer = Fabricate(:customer, balance_threshold_cents: -20000)
         customer.reload
         distributor = customer.distributor
         distributor.has_balance_threshold = true

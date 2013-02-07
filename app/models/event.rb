@@ -94,6 +94,23 @@ class Event < ActiveRecord::Base
     end
   end
 
+  def self.remove_duplicates(notifications)
+    seen = {}
+    notifications.select do |notification|
+      if seen.has_key?(notification.key)
+        notification.dismiss!
+        false
+      else
+        seen.merge!(notification.key => true)
+        true
+      end
+    end
+  end
+
+  def key
+    @key ||= "#{event_category}#{event_type}#{customer_id}"
+  end
+
   private
 
   def check_trigger
