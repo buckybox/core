@@ -8,6 +8,7 @@ class Customer::DashboardController < Customer::BaseController
     @transactions = @customer.transactions.limit(6)
     @show_more_link = @transactions.size != @customer.transactions.count
     @distributor  = @customer.distributor
+    @bank = @distributor.bank_information
 
     @order = @customer.orders.new
   end

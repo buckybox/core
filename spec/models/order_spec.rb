@@ -2,7 +2,7 @@ require 'spec_helper'
 include Bucky
 
 describe Order do
-  let(:order) { Fabricate.build(:order) }
+  let(:order) { Fabricate(:order) }
 
   context 'pausing' do
     describe '#pause!' do
@@ -60,8 +60,8 @@ describe Order do
     specify { order.should be_valid }
 
     context :quantity do
-      specify { Fabricate.build(:order, quantity: 0).should_not be_valid }
-      specify { Fabricate.build(:order, quantity: -1).should_not be_valid }
+      specify { expect { Fabricate(:order, quantity: 0)}.to raise_error(ActiveRecord::RecordInvalid, /Quantity must be greater than 0/)}
+      specify { expect { Fabricate(:order, quantity: -1)}.to raise_error(ActiveRecord::RecordInvalid, /Quantity must be greater than 0/)}
     end
 
     context :price do
@@ -184,18 +184,22 @@ describe Order do
 
         rule_schedule = Fabricate(:schedule_rule, start: Date.current - 5.days, recur: nil)
         @order5 = Fabricate(:order, schedule_rule: rule_schedule)
+        
+        rule_schedule = Fabricate(:schedule_rule, start: Date.current - 2.months, recur: nil)
+        @order6 = Fabricate(:order, schedule_rule: rule_schedule)
       end
 
       specify { expect { Order.deactivate_finished}.to change(Order.active, :count).by(-2) }
 
-      describe 'individually' do
-        before { Order.deactivate_finished }
+      it 'should deactivate the correct orders' do
+        Order.deactivate_finished 
 
-        specify { @order1.reload.active.should be_true }
-        specify { @order2.reload.active.should be_true }
-        specify { @order3.reload.active.should be_false }
-        specify { @order4.reload.active.should be_true }
-        specify { @order5.reload.active.should be_false }
+        @order1.reload.active.should be_true
+        @order2.reload.active.should be_true
+        @order3.reload.active.should be_true
+        @order4.reload.active.should be_true
+        @order5.reload.active.should be_false
+        @order6.reload.active.should be_false
       end
     end
 
@@ -290,7 +294,7 @@ describe Order do
 
   describe '.pack_and_update_extras' do
     it "removes extras when it is a one off and returns hash" do
-      order = Fabricate.build(:order, extras_one_off: true)
+      order = Fabricate(:order, extras_one_off: true)
       order.stub(:order_extras, :collect).and_return([{count: 3, name: "iPhone 4s", unit: "one", price_cents: 99995, currency: "NZD"}, {count: 1, name: "Apple", unit: "kg", price_cents: 295, currency: "NZD"}])
 
       order.should_receive(:clear_extras)
@@ -298,7 +302,7 @@ describe Order do
     end
 
     it "keeps extras when it is a recurring order and returns hash" do
-      order = Fabricate.build(:order, extras_one_off: false)
+      order = Fabricate(:order, extras_one_off: false)
       order.stub(:order_extras, :collect).and_return([{count: 3, name: "iPhone 4s", unit: "one", price_cents: 99995, currency: "NZD"}, {count: 1, name: "Apple", unit: "kg", price_cents: 295, currency: "NZD"}])
 
       order.should_not_receive(:clear_extras)
@@ -373,6 +377,16 @@ describe Order do
         order.predicted_order_extras.size.should eq(2)
         order.predicted_order_extras(order.next_occurrences(2, Date.current)[1]).size.should eq(2)
       end
+    end
+  end
+
+  context :halting do
+    it 'should halt new orders if customer is halted' do
+      customer = Fabricate(:customer).reload
+      customer.halt!
+
+      order = Fabricate(:active_recurring_order, account: customer.account)
+      order.next_occurrence.should be_blank
     end
   end
 end

@@ -1,5 +1,5 @@
 Fabricator(:invoice_information) do
-  distributor!
+  distributor
   gst_number 1
   billing_address_1 '1 Invoice Information St'
   billing_suburb 'Suburb'

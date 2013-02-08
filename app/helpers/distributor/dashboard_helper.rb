@@ -67,4 +67,18 @@ module Distributor::DashboardHelper
   def date_for notification
     notification.created_at.to_s(:date_month)
   end
+
+  def time_since(timestamp)
+    if days_between(timestamp.to_date, Date.today) > 4
+      timestamp.to_s(:date_short_month)
+    else
+      distance_of_time_in_words_to_now(timestamp) + " ago"
+    end
+  end
+
+  private
+
+  def days_between(date_a, date_b)
+    (date_a - date_b).to_i.abs
+  end
 end

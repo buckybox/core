@@ -1,9 +1,18 @@
 require 'spec_helper'
 
 describe Customer do
-  let(:customer) { Fabricate.build(:customer) }
+  let(:customer) { Fabricate(:customer) }
 
   specify { customer.should be_valid }
+
+  context :create_with_account_under_limit do
+    let(:distributor) { Fabricate(:distributor, default_balance_threshold_cents: -50000, has_balance_threshold: true) }
+
+    it 'should create a valid customer' do
+      c = distributor.customers.create({"first_name"=>"Jordan", "last_name"=>"Carter", "tag_list"=>"", "email"=>"jordan+3@buckybox.com", "address_attributes"=>{"phone_1"=>"", "phone_2"=>"", "phone_3"=>"", "address_1"=>"43a Warwick St", "address_2"=>"Wilton", "suburb"=>"Wellington", "city"=>"Wellington", "postcode"=>"6012", "delivery_note"=>""}, "balance_threshold"=>"1.00", "discount"=>"0", "special_order_preference"=>"", "route_id"=>"68"})
+      c.should be_valid
+    end
+  end
 
   context 'a customer' do
     before { @customer = Fabricate(:customer) }
@@ -118,7 +127,7 @@ describe Customer do
 
       context 'and order without next delivery' do
         before do
-          @o4 = Fabricate.build(:order)
+          @o4 = Fabricate(:order)
           @o4.stub_chain(:schedule, :next_occurrence).and_return(nil)
           customer.stub_chain(:account, :active_orders).and_return([@o1, @o2, @o3])
         end
@@ -143,7 +152,7 @@ describe Customer do
   end
 
   describe '.import' do
-    let(:customer){ Fabricate.build(:customer) }
+    let(:customer){ Fabricate(:customer) }
 
     it "should import customer with all fields" do
       route = mock_model(Route)
@@ -159,6 +168,8 @@ describe Customer do
       boxes << box
 
       Distributor.any_instance.stub(:find_extra_from_import).and_return(mock_model('Extra'))
+      customer.stub(:default_balance_threshold_cents).and_return(-100000)
+      customer.stub(:has_balance_threshold).and_return(false)
 
       attrs = {
         first_name: 'Jordan',
@@ -278,5 +289,189 @@ describe Customer do
     end
 
     extra
+  end
+
+  describe "balance_threshold" do
+    it 'should set balance threshold from distributor' do
+      distributor = Fabricate(:distributor, default_balance_threshold_cents: 20000)
+
+      customer = Fabricate(:customer, distributor: distributor).reload
+
+      customer.balance_threshold.should eq(200)
+    end
+
+    context :changing_balance do
+      before do
+        customer = Fabricate(:customer, balance_threshold_cents: -20000)
+        customer.reload
+        distributor = customer.distributor
+        distributor.has_balance_threshold = true
+        distributor.save!
+
+        customer.balance_threshold_cents = -20000
+        customer.save!
+
+        customer.status_halted.should be_false
+        customer.balance_threshold.should eq(-200)
+
+        account = customer.account
+        @customer = customer
+        @account = account
+      end
+
+      it 'should put customer into a halt state if they exceed balance threshold' do
+        @account.change_balance_to(-200.00)
+        @account.save!
+
+        @customer.reload.halted?.should be_true
+      end
+
+      it 'should take customer out of halt state when balance goes below threshold' do
+        @account.change_balance_to(-200.00)
+        @account.save!
+        @customer.reload.halted?.should be_true
+        @account.reload
+
+        @account.change_balance_to(-199.99)
+        @account.save!
+
+        @customer.reload.halted?.should be_false
+      end
+    end
+    
+    context :changing_threshold do
+      before do
+        customer = Fabricate(:customer)
+        customer.reload
+        account = customer.account
+
+        distributor = customer.distributor
+        distributor.has_balance_threshold = true
+        distributor.save!
+
+        customer.balance_threshold_cents = -20000
+        customer.save!
+
+        @account = account
+        @customer = customer
+        @distributor = distributor
+      end
+
+      it 'should put customer into halt state when threshold lowered' do
+        @account.change_balance_to(-100)
+        @account.save!
+        @customer.reload
+        @customer.halted?.should be_false
+
+        @customer.balance_threshold_cents = -5000
+        @customer.save!
+
+        @customer.reload.halted?.should be_true
+      end
+
+      it 'should take customer out of halt state when threshold raised' do
+        @account.change_balance_to(-300)
+        @account.save!
+
+        @customer.reload
+        @customer.halted?.should be_true
+
+        @customer.balance_threshold_cents = -50000
+        @customer.save!
+
+        @customer.reload.halted?.should be_false
+      end
+
+      it 'should take customer out of halt when threshold turned off' do
+        @account.change_balance_to(-300)
+        @account.save!
+
+        @customer.reload
+        @customer.halted?.should be_true
+        @distributor.reload
+        
+        @distributor.has_balance_threshold = false
+        @distributor.save!
+
+        @customer.reload.halted?.should be_false
+      end
+      
+      it 'should put customer into halt when threshold turned on' do
+        @distributor.has_balance_threshold = false
+        @distributor.save!
+        @account.change_balance_to(-300)
+        @account.save!
+        @customer.reload
+        @customer.halted?.should be_false
+        @distributor.reload
+        
+        @distributor.has_balance_threshold = true
+        @distributor.save!
+        
+        @customer.reload.halted?.should be_true
+      end
+
+      it 'should take customer out of halt state when override threshold raised' do
+        @account.change_balance_to(-300)
+        @account.save!
+
+        @customer.reload
+        @customer.halted?.should be_true
+        @distributor.reload
+
+        @customer.balance_threshold_cents = -50000
+        @customer.save!
+
+        @customer.reload.halted?.should be_false
+      end
+
+      it 'should put customer into halt state when override threshold lowered' do
+        @account.change_balance_to(-100)
+        @account.save!
+
+        @customer.reload
+        @customer.halted?.should be_false
+        @distributor.reload
+
+        @customer.balance_threshold_cents = -5000
+        @customer.save!
+
+        @customer.reload.halted?.should be_true
+      end
+    end
+
+    context :halt_orders do
+      it 'should halt orders' do
+        customer = Fabricate(:customer).reload
+        account = customer.account
+        order = Fabricate(:active_recurring_order, account: account)
+
+        order.next_occurrence.should_not be_blank
+
+        customer.halt!
+
+        order.next_occurrence.should be_blank
+      end
+
+      it 'should unhalt orders' do
+        customer = Fabricate(:customer).reload
+        customer.halt!
+        account = customer.account
+        order = Fabricate(:active_recurring_order, account: account)
+        customer.reload
+        order.next_occurrence.should be_blank
+
+        customer.unhalt!
+        order.next_occurrence.should_not be_blank
+      end
+    end
+
+    context :halt_notifications do
+      it 'should create a notification for the distributor when halted' do
+        customer = Fabricate(:customer).reload
+        customer.should_receive(:create_halt_notifications)
+        customer.halt!
+      end
+    end
   end
 end

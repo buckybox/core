@@ -1,0 +1,22 @@
+= link_to '#', class: 'dropdown-toggle', data: { toggle: 'dropdown' } do
+  - unless @notifications.empty?
+    %span.badge.badge-important== #{@notifications.size}
+  %i.icon-bell
+%ul#notification-dropdown.dropdown-menu.pull-right
+  - if @notifications.empty?
+    %li
+      %strong No new notifications
+  - else
+    - @notifications.each do |notification|
+      %li.notification
+        %div.message
+          %span= notification.message
+          = customer_badge(notification.customer)
+        %div.date
+          = time_since(notification.trigger_on)
+
+    %li.clear-notifications
+      = form_tag(distributor_notifications_dismiss_all_path, id: 'dismiss-notifications') do
+        - @notifications.each do |notification|
+          = hidden_field_tag 'notification_ids[]', notification.id
+        = link_to_function 'clear notifications', "$(this).closest('form').submit();" , {:class => 'submit_me'}

@@ -321,6 +321,24 @@ class ScheduleRule < ActiveRecord::Base
     frequency.recurs?
   end
 
+  def halt!
+    self.halted = true
+    save!
+  end
+
+  def unhalt!
+    self.halted = false
+    save!
+  end
+
+  def paused?
+    schedule_pause.present?
+  end
+
+  def no_occurrences?
+    next_occurrence.nil?
+  end
+
   def includes_dow_if_not_one_off
     errors.add(:base, "Must include at least one day of the week") if !one_off? && days.blank?
   end

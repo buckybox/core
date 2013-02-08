@@ -1,5 +1,8 @@
 - title('Webstore - Complete', false)
 = render 'webstore_sidebar'
+- if current_customer.present? && current_customer.halted?
+  .alert.alert-error
+    Your account is under the minimum balance and will not recieve new orders unless payment is cleared before the packing date.
 = render partial: 'webstore_order', object: @webstore_order
 
 = simple_form_for(:webstore_order, url: webstore_process_step_path) do |f|
@@ -57,23 +60,7 @@
             - else
               .span10 Total Amount Due
               .span2.text-right= @amount_due.format
-      .row-fluid
-        #payment.span12
-          .row-fluid
-            .span12
-              %strong== Please deposit funds into #{@bank.name}
-          .row-fluid
-            .span6
-              == Account Name: #{@bank.account_name}
-              %br
-              == BSB Number: #{@bank.bsb_number}
-              %br
-              == Account Number: #{@bank.account_number}
-              - if customer_signed_in?
-                %br
-                == Reference: #{current_customer.formated_number}
-            .span6.alert
-              = simple_format("<strong>Note:</strong> #{@bank.customer_message}", {}, sanitize: false)
+      = render partial: 'customer/dashboard/payment_details'
 
   .row-fluid
     .span12

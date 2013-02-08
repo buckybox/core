@@ -6,6 +6,6 @@ class Distributor::BaseController < ApplicationController
   private
 
   def get_notifications
-    @notifications = current_distributor.events.active.current.scoped.includes(:customer, :delivery, :transaction)
+    @notifications = Event.remove_duplicates(current_distributor.events.active.current.scoped.includes(:customer, :delivery, :transaction))
   end
 end

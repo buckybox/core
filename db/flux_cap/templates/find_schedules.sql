@@ -4,6 +4,7 @@ inner join boxes on boxes.id = orders.box_id
 inner join schedule_rules on schedule_rules.scheduleable_id = orders.id AND schedule_rules.scheduleable_type = 'Order'
 full outer join schedule_pauses on schedule_pauses.id = schedule_rules.schedule_pause_id
 where boxes.distributor_id = :distributor_id
+AND schedule_rules.halted = 'f'
 AND orders.active = 't'
 AND (	(
 		(recur is NULL OR recur = 'single') AND schedule_rules.start = ':date'

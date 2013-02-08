@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe PackingList do
-  specify { Fabricate.build(:packing_list).should be_valid }
+  specify { Fabricate(:packing_list).should be_valid }
 
   describe '#mark_all_as_auto_packed' do
     before do
