@@ -2,7 +2,7 @@ require 'spec_helper'
 include Bucky
 
 describe Route do
-  let(:route) { Fabricate.build(:route) }
+  let(:route) { Fabricate(:route) }
 
   specify { route.should be_valid }
 
@@ -21,7 +21,7 @@ describe Route do
 
   describe '#best_route' do
     before do
-      @distributor = Fabricate.build(:distributor)
+      @distributor = Fabricate(:distributor)
       @distributor.routes.stub(:first).and_return(route)
     end
 
@@ -64,7 +64,7 @@ describe Route do
 
   describe 'when saving and triggering an update_schedule' do
     let(:order) { double('order', schedule_empty?: false, save: true) }
-    let(:route) { Fabricate.build(:route) }
+    let(:route) { Fabricate(:route) }
 
     def stub_future_active_orders(route, orders)
       scope = double('scope')

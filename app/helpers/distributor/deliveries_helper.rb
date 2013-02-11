@@ -58,21 +58,7 @@ module Distributor::DeliveriesHelper
     'display:none;' unless status == icon_status
   end
 
-  def display_address(item)
-    if item.is_a?(Order)
-      link_to_google_maps(item.account.customer.address.address_1, item.account.customer.address.join)
-    else
-      item = item.package if item.is_a?(Delivery)
-      link_to_google_maps(item.archived_address.split(', ').first, item.archived_address)
-    end
-  end
-
-  def link_to_google_maps(address_shown, address_linked)
-    address_linked = address_linked + ", #{[current_distributor.city, current_distributor.country.full_name].reject(&:blank?).join(", ")}"
-    link_to('<i class="icon-map-marker"></i>'.html_safe, "http://maps.google.com/maps?q=#{Rack::Utils.escape(address_linked)}", target: '_blank') + " #{address_shown}"
-  end
-
-  def contents_description(item, date=nil)
+  def contents_description(item, date = nil)
     if item.is_a?(Order)
       Package.contents_description(item.box, item.predicted_order_extras(date))
     else
@@ -81,12 +67,57 @@ module Distributor::DeliveriesHelper
     end
   end
 
-  def delivery_quantity(distributor, date, route_id=nil)
+  def delivery_quantity(distributor, date, route_id = nil)
     delivery_list = current_distributor.delivery_lists.where(date: date).first
     if delivery_list
       delivery_list.quantity_for(route_id)
     else
       Order.order_count(distributor, date, route_id)
     end
+  end
+
+  def dso_tooltip(number)
+    tooltip_text = "Delivery Sequence Number<br/>(printed on labels)"
+    link_to number, '#', rel: 'tooltip', class: 'dso-tooltip', data: { placement: 'bottom', 'original-title' => tooltip_text }
+  end
+
+  #TODO: Move the following address methods into a mapping module that is included in orders, deliveries, and packages (or something like that)
+  def item_address(item)
+    if item.is_a?(Order)
+      item.account.customer.address.join
+    else
+      item = item.package if item.is_a?(Delivery)
+      item.archived_address
+    end
+  end
+
+  def item_address_text(item)
+    if item.is_a?(Order)
+      item.account.customer.address.address_1
+    else
+      item = item.package if item.is_a?(Delivery)
+      item.archived_address.split(', ').first
+    end
+  end
+
+  def display_address(item)
+    link_to_google_maps(item_address(item), link_text: item_address_text(item), link_class: 'delivery-address')
+  end
+
+  def map_pin(item)
+    pin = %q(<i class='icon-map-marker'></i>)
+    link_to_google_maps(item_address(item), link_text: pin, link_class: 'map-pin')
+  end
+
+  def link_to_google_maps(address, options = {})
+    link_text = options[:link_text] || ''
+    trailing_text = options[:trailing_text].to_s
+
+    link_to(link_text.html_safe, map_link(address), target: '_blank', class: options[:link_class]) + trailing_text
+  end
+
+  def map_link(address)
+    address = address + ", #{[current_distributor.city, current_distributor.country.full_name].reject(&:blank?).join(", ")}"
+    "http://maps.google.com/maps?q=#{Rack::Utils.escape(address)}"
   end
 end

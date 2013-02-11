@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe Delivery do
-  let(:delivery) { Fabricate.build(:delivery) }
+  let(:delivery) { Fabricate(:delivery) }
   let(:package) { delivery.package }
 
   let(:delivery_pending) { Fabricate(:delivery, status: 'pending') }
@@ -16,18 +16,18 @@ describe Delivery do
     describe 'validity' do
       describe "for new record" do
         (Delivery.state_machines[:status].states.map(&:name) - [:delivered]).each do |s|
-          specify { Fabricate.build(:delivery, status: s).should be_valid }
-          specify { Fabricate.build(:delivery, status: s, status_change_type: 'manual').should be_valid }
+          specify { Fabricate(:delivery, status: s).should be_valid }
+          specify { Fabricate(:delivery, status: s, status_change_type: 'manual').should be_valid }
         end
       end
 
-      specify { Fabricate.build(:delivery, status: 'lame').should_not be_valid }
-      specify { Fabricate.build(:delivery, status_change_type: 'lame').should_not be_valid }
+      specify { expect {Fabricate(:delivery, status: 'lame')}.to raise_error(ActiveRecord::RecordInvalid, /Status is invalid/) }
+      specify { expect {Fabricate(:delivery, status_change_type: 'lame')}.to raise_error(ActiveRecord::RecordInvalid, /Status change type lame is not a valid status change type/)}
     end
 
     describe '#future_status?' do
-      specify { Fabricate.build(:delivery, status: 'pending').future_status?.should be_true }
-      specify { Fabricate.build(:delivery, status: 'cancelled').future_status?.should be_false }
+      specify { Fabricate(:delivery, status: 'pending').future_status?.should be_true }
+      specify { Fabricate(:delivery, status: 'cancelled').future_status?.should be_false }
     end
   end
 
@@ -92,28 +92,34 @@ describe Delivery do
     specify { Delivery.change_statuses(@deliveries, 'bad_status').should be_false }
     specify { Delivery.change_statuses(@deliveries, 'cancel').should be_true }
     specify { Delivery.change_statuses(@deliveries, 'deliver').should be_true }
+
+    context 'batch change' do
+      before do
+        @delivery1 = Fabricate(:delivery)
+        @delivery2 = Fabricate(:delivery, status: :delivered)
+
+        @deliveries = [@delivery1, delivery, @delivery2]
+
+        delivery.stub(:save) { true }
+      end
+
+      context 'all save' do
+        before { @delivery1.stub(:save) { true } }
+        specify { Delivery.change_statuses(@deliveries, 'deliver').should be_true }
+      end
+
+      context 'one save fails' do
+        before { @delivery1.stub(:save) { false } }
+        specify { Delivery.change_statuses(@deliveries, 'deliver').should be_false }
+      end
+    end
   end
 
   describe '.auto_deliver' do
-    specify { expect { Fabricate.build(:delivery).should change(Delivery.last, :status).to('delivered') } }
-    specify { expect { Fabricate.build(:delivery, status_change_type: 'manual', status: 'delivered').should_not change(Delivery.last, :status_change_type).to('auto') } }
-    specify { expect { Fabricate.build(:delivery, status_change_type: 'manual', status: 'cancelled').should_not change(Delivery.last, :status).to('delivered') } }
-    specify { expect { Fabricate.build(:delivery, status_change_type: 'manual', status: 'pending').should_not change(Delivery.last, :status).to('delivered') } }
-  end
-
-  describe '.csv_headers' do
-    specify { Delivery.csv_headers.size.should == 22 }
-  end
-
-  describe '#to_csv' do
-    specify { delivery.to_csv[0].should == delivery.route.name }
-    specify { delivery.to_csv[3].should == delivery.order.id }
-    specify { delivery.to_csv[4].should == delivery.id }
-    specify { delivery.to_csv[5].should == delivery.date.strftime("%-d %b %Y") }
-    specify { delivery.to_csv[6].should == delivery.customer.number }
-    specify { delivery.to_csv[7].should == delivery.customer.first_name }
-    specify { delivery.to_csv[19].should == delivery.package.archived_consumer_delivery_fee }
-    specify { delivery.to_csv[21].should == delivery.customer.email }
+    specify { expect { Fabricate(:delivery).should change(Delivery.last, :status).to('delivered') } }
+    specify { expect { Fabricate(:delivery, status_change_type: 'manual', status: 'delivered').should_not change(Delivery.last, :status_change_type).to('auto') } }
+    specify { expect { Fabricate(:delivery, status_change_type: 'manual', status: 'cancelled').should_not change(Delivery.last, :status).to('delivered') } }
+    specify { expect { Fabricate(:delivery, status_change_type: 'manual', status: 'pending').should_not change(Delivery.last, :status).to('delivered') } }
   end
 
   describe '#reposition!' do

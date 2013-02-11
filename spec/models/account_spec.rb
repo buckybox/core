@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe Account do
-  let(:account) { Fabricate.build(:account) }
+  let(:account) { Fabricate(:account) }
   let(:order) { Fabricate(:active_recurring_order) }
   let(:order_account) { order.account }
 

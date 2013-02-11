@@ -8,7 +8,7 @@
 
 //----- Dashboard
 
-#new-customer-order
+#new-customer-order, .dash-boxed-link
   a
     display: block
     +webstore-divider('box')
@@ -104,9 +104,33 @@
       width: 12%
     .price
       width: 12%
+    margin-bottom: 0
+  +single-box-shadow(rgba(0, 0, 0, .25), 0px, 15px, 20px, -6px)
+#more-transactions
+  text-align: center
 
 .remove-order-link
   position: absolute
   bottom: 0px
   right: 3px
   font-size: 12px
+
+.span12.no-indent
+  margin-left: 0
+
+#bank_payment_details
+  border: 1px solid #ddd
+  background: white
+  >.row-fluid >.span12
+    padding: 10px
+  button.close
+    position: relative
+    right: 10px
+    top: 10px
+  +single-box-shadow(rgba(0, 0, 0, .25), 0px, 15px, 20px, -6px)
+
+#make_a_payment a
+  margin: 0
+
+.dashboard-box
+  margin-bottom: 10px

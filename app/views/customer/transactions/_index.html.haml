@@ -1,7 +1,5 @@
 .row-fluid
   #customer-transactions.span12
-    %h3 Account Statement
-
     %table.table.table-bordered.no-rounded-corners.no-horizontal-dividers.table-striped
       %thead
         %tr
@@ -27,4 +25,7 @@
             %td.price.text-right= (@balance - transaction_total).format
 
           - transaction_total += transaction.amount
-
+        - if @show_more_link
+          %tr
+            %td#more-transactions{ colspan: 5 }
+              = link_to 'more...', '#'

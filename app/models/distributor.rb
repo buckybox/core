@@ -37,6 +37,7 @@ class Distributor < ActiveRecord::Base
 
   monetize :invoice_threshold_cents
   monetize :consumer_delivery_fee_cents
+  monetize :default_balance_threshold_cents
 
   # Setup accessible (or protected) attributes for your model
   attr_accessible :email, :password, :password_confirmation, :remember_me, :name, :url, :company_logo, :company_logo_cache,
@@ -45,7 +46,8 @@ class Distributor < ActiveRecord::Base
     :time_zone, :currency, :bank_deposit, :paypal, :bank_deposit_format, :country_id, :consumer_delivery_fee,
     :consumer_delivery_fee_cents, :active_webstore, :about, :details, :facebook_url, :city, :customers_show_intro,
     :deliveries_index_packing_intro, :deliveries_index_deliveries_intro, :payments_index_intro, :customers_index_intro,
-    :parameter_name, :customer_can_remove_orders
+    :customer_can_remove_orders, :parameter_name, :default_balance_threshold, :has_balance_threshold, :spend_limit_on_all_customers,
+    :send_email, :send_halted_email, :feature_spend_limit
 
   validates_presence_of :country
   validates_presence_of :email
@@ -61,6 +63,7 @@ class Distributor < ActiveRecord::Base
   before_create :parameterize_name, if: 'parameter_name.nil?'
 
   after_save :generate_required_daily_lists
+  after_save :update_halted_statuses
 
   default_value_for :time_zone,               DEFAULT_TIME_ZONE
   default_value_for :currency,                DEFAULT_CURRENCY
@@ -376,6 +379,53 @@ class Distributor < ActiveRecord::Base
   def parameterize_name(value = nil)
     value = self.name if value.nil? && self.name
     self.parameter_name = Distributor.parameterize_name(value)
+  end
+
+  def update_halted_statuses
+    if has_balance_threshold_changed? || default_balance_threshold_cents_changed? || spend_limit_on_all_customers?
+      Customer.transaction do
+        customers.find_each do |customer|
+          if spend_limit_on_all_customers?
+            customer.update_halted_status!(default_balance_threshold_cents, Customer::EmailRule.only_pending_orders)
+          else
+            customer.update_halted_status!(nil, Customer::EmailRule.only_pending_orders)
+          end
+        end
+      end
+    end
+  end
+
+  def spend_limit_on_all_customers=(val)
+    @spend_limit_on_all_customers = (val == '1')
+  end
+
+  def spend_limit_on_all_customers
+    @spend_limit_on_all_customers
+  end
+  alias_method :spend_limit_on_all_customers?, :spend_limit_on_all_customers
+
+  def send_email?
+    send_email
+  end
+
+  def send_halted_email?
+    send_email? && send_halted_email
+  end
+
+  def number_of_customers_emailed_after_update(spend_limit, update_existing)
+    if update_existing
+      customers.joins(:account).where(["accounts.balance_cents <= ? and customers.status_halted = 'f'", spend_limit]).select{|c| c.orders_pending_package_creation?}.size
+    else
+      customers.joins(:account).where("accounts.balance_cents <= customers.balance_threshold_cents and customers.status_halted = 'f'").select{|c| c.orders_pending_package_creation?}.size
+    end
+  end
+
+  def number_of_customers_halted_after_update(spend_limit, update_existing)
+    if update_existing
+      customers.joins(:account).where(["accounts.balance_cents <= ? and customers.status_halted = 'f'", spend_limit]).count
+    else
+      customers.joins(:account).where("accounts.balance_cents <= customers.balance_threshold_cents and customers.status_halted = 'f'").count
+    end
   end
 
   private

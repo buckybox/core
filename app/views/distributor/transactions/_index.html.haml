@@ -35,7 +35,7 @@
 
           = render partial: 'distributor/accounts/more_transactions'
 
-          %tr
-            %td#more-transactions{ colspan: 5 }
-              = link_to 'more...', '#'
-              #ajax-loader
+          - if @show_more_link
+            %tr
+              %td#more-transactions{ colspan: 5 }
+                = link_to 'more...', '#'

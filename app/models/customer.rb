@@ -22,9 +22,11 @@ class Customer < ActiveRecord::Base
 
   accepts_nested_attributes_for :address
 
+  monetize :balance_threshold_cents
+
   attr_accessible :address_attributes, :first_name, :last_name, :email, :name, :distributor_id, :distributor,
     :route, :route_id, :password, :password_confirmation, :remember_me, :tag_list, :discount, :number, :notes,
-    :special_order_preference
+    :special_order_preference, :balance_threshold
 
   validates_presence_of :distributor_id, :route_id, :first_name, :email, :discount
   validates_uniqueness_of :number, scope: :distributor_id
@@ -42,12 +44,22 @@ class Customer < ActiveRecord::Base
   before_create :setup_address
 
   after_save :update_next_occurrence # This could be more specific about when it updates
+  before_save :set_balance_threshold, if: :new_record?
+  before_save :update_halted_status, if: :balance_threshold_cents_changed?
 
-  delegate :separate_bucky_fee?, :consumer_delivery_fee, to: :distributor
+  delegate :separate_bucky_fee?, :consumer_delivery_fee, :default_balance_threshold_cents, :has_balance_threshold, to: :distributor
+  delegate :currency, :send_email?, to: :distributor, allow_nil: true
 
   scope :ordered_by_next_delivery, lambda { order("CASE WHEN next_order_occurrence_date IS NULL THEN '9999-01-01' WHEN next_order_occurrence_date < '#{Date.current.to_s(:db)}' THEN '9999-01-01' ELSE next_order_occurrence_date END ASC, lower(customers.first_name) ASC, lower(customers.last_name) ASC") }
 
   default_value_for :discount, 0
+  default_value_for :balance_threshold_cents do |c|
+    if c.distributor.present?
+      c.distributor.default_balance_threshold_cents
+    else
+      0
+    end
+  end
 
   pg_search_scope :search,
     against: [ :first_name, :last_name, :email ],
@@ -176,7 +188,7 @@ class Customer < ActiveRecord::Base
 
   def update_next_occurrence(date = nil)
     date ||= Date.current.to_s(:db)
-    next_order = orders.active.select("orders.*, next_occurrence('#{date}', false, schedule_rules.*)").joins(:schedule_rule).reject{|sr| sr.next_occurrence.blank?}.sort_by(&:next_occurrence).first
+    next_order = calculate_next_order(date)
     if next_order
       self.next_order = next_order
       self.next_order_id = next_order.id
@@ -193,6 +205,107 @@ class Customer < ActiveRecord::Base
     distributor.customer_can_remove_orders?
   end
 
+  def update_next_occurrence!
+    update_next_occurrence
+    save!
+  end
+
+  def update_halted_status!(new_balance_threshold_cents = nil, email_rule = Customer::EmailRule.only_pending_orders)
+    self.balance_threshold_cents = new_balance_threshold_cents unless new_balance_threshold_cents.blank?
+    update_halted_status(email_rule)
+    save!
+  end
+
+  def update_halted_status(email_rule = Customer::EmailRule.only_pending_orders)
+    if has_balance_threshold && account_balance <= balance_threshold
+      halt!(email_rule)
+    else
+      unhalt!
+    end
+  end
+
+  def halt!(email_rule = Customer::EmailRule.only_pending_orders)
+    unless halted?
+      Customer.transaction do
+        self.status_halted = true
+        save!
+        
+        create_halt_notifications(email_rule)
+        halt_orders!
+      end
+    end
+  end
+
+  def unhalt!
+    if halted?
+      Customer.transaction do
+        self.status_halted = false
+        save!
+
+        unhalt_orders!
+      end
+    end
+  end
+
+  def halted?
+    status_halted
+  end
+
+  def halt_orders!
+    ScheduleRule.update_all({halted: true}, ["scheduleable_id IN (?) AND scheduleable_type = 'Order'", orders.collect(&:id)])
+    update_next_occurrence!
+  end
+
+  def unhalt_orders!
+    ScheduleRule.update_all({halted: false}, ["scheduleable_id IN (?) AND scheduleable_type = 'Order'", orders.collect(&:id)])
+    update_next_occurrence!
+  end
+
+  def create_halt_notifications(email_rule = Customer::EmailRule.only_pending_orders)
+    Event.customer_halted(self)
+    send_halted_email if email_rule.send_email?(self)
+  end
+
+  def orders_pending_package_creation?
+    orders.any?{|o| o.pending_package_creation?}
+  end
+
+  def send_halted_email
+    if distributor.send_email? && distributor.send_halted_email?
+      CustomerMailer.orders_halted(self).deliver
+    end
+  end
+
+  def remind_customer_is_halted
+    if distributor.send_email? && distributor.send_halted_email?
+      CustomerMailer.remind_orders_halted(self).deliver
+    end
+  end
+
+  def send_login_details
+    if send_email?
+      CustomerMailer.login_details(self).deliver
+    else
+      false
+    end
+  end
+
+  def set_balance_threshold
+    self.balance_threshold_cents = default_balance_threshold_cents unless balance_threshold_cents_changed?
+  end
+
+  def account_balance
+    if account.present?
+      account(true).balance
+    else
+      Money.new(0, currency)
+    end
+  end
+
+  def calculate_next_order(date=Date.current.to_s(:db))
+    orders.active.select("orders.*, next_occurrence('#{date}', false, schedule_rules.*)").joins(:schedule_rule).reject{|sr| sr.next_occurrence.blank?}.sort_by(&:next_occurrence).first
+  end
+
   private
 
   def initialize_number
@@ -204,7 +317,7 @@ class Customer < ActiveRecord::Base
   end
 
   def discount_percentage
-    self.discount = self.discount / 100.0 if self.discount > 1
+    self.discount = self.discount / 100.0 if self.discount.present? && self.discount > 1
   end
 
   def setup_account
@@ -219,6 +332,45 @@ class Customer < ActiveRecord::Base
     if self.email
       self.email.strip!
       self.email.downcase!
+    end
+  end
+end
+
+class Customer
+  class EmailRule
+    def self.all
+      @all ||= EmailRule.new(:all)
+    end
+
+    def self.only_pending_orders
+      @only_pending_orders ||= EmailRule.new(:only_pending_orders)
+    end
+
+    def self.no_email
+      @no_email ||= EmailRule.new(:no_email)
+    end
+    
+    attr_writer :type
+
+    def initialize(type)
+      self.type = type
+    end
+
+    def send_email?(customer)
+      case type
+      when :no_email
+        false
+      when :only_pending_orders
+        customer.orders_pending_package_creation?
+      when :all
+        true
+      end
+    end
+
+    private
+
+    def type
+      @type
     end
   end
 end

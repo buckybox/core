@@ -1,5 +1,5 @@
 Fabricator(:bank_information) do
-  distributor!
+  distributor
   name 'Bank Name'
   account_name 'Account Name'
   account_number 1

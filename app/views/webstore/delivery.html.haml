@@ -1,5 +1,8 @@
 - title('Webstore - Delivery', false)
 = render 'webstore_sidebar'
+- if current_customer.present? && current_customer.halted?
+  .alert.alert-error
+    Your account is under the minimum balance and will not recieve new orders unless payment is cleared before the packing date.
 = render partial: 'webstore_order', object: @webstore_order
 
 = simple_form_for(:webstore_order, url: webstore_process_step_path) do |f|
@@ -50,7 +53,7 @@
         .row-fluid
           .span12
             We're using
-            = link_to 'Bucky Box', 'http://www.buckybox.com/', target: '_blank'
+            = link_to 'Bucky Box', 'http://www.buckybox.org/', target: '_blank'
             to take orders, Bucky Box is a social enterprise with a mission to 
             support local food and organic farming worldwide.
       .span2

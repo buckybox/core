@@ -4,7 +4,7 @@
 
 $note-colour: #FEF7DF
 $action-colour: #FAE1A3
-$action-color-hover: darken($action-colour, 15%)
+$action-colour-hover: darken($action-colour, 15%)
 $archived-colour: #F0F0F0
 $forcasting-colour: #D4E2C5
 $error-colour: #F69585
@@ -46,6 +46,10 @@ table.no-horizontal-dividers
     border-left-width: 0px
 
 .customer-badge
+  max-width: 100%
+  white-space: nowrap
+  overflow: hidden
+  text-overflow: ellipsis
   display: inline-block
   color: $badge-text
   background-color: $badge-name

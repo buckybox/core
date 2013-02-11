@@ -157,7 +157,9 @@ class Webstore
 
     if customer.save
       Event.new_customer_webstore(customer)
-      CustomerMailer.login_details(customer).deliver
+      CustomerMailer.raise_errors do
+        customer.send_login_details
+      end
 
       @controller.sign_in(customer)
     end

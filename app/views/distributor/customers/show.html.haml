@@ -5,6 +5,8 @@
   #customer-details.span4
     #section-one
       = customer_title(@customer, class: 'important')
+      - if @customer.halted?
+        %span.label.label-info.halted HALTED
 
       - unless @customer.tags.empty?
         - @customer.tags.each do |tag|
@@ -13,23 +15,31 @@
 
       #account-information{data: {account_id: @account.id}}
         %span.important{ class: "#{'negative' if @account.balance.negative?}" }= @account.balance
-        %small= link_to "Discount #{@customer.discount * 100}%", edit_distributor_customer_path(@customer) if @customer.discount > 0
 
       %ul.unstyled
+        - unless @customer.discount.zero?
+          %li
+            Discount:
+            %strong= number_to_percentage(@customer.discount*100.0, {precision: 1})
+        - if @customer.halted? || @customer.balance_threshold_cents != @customer.default_balance_threshold_cents
+          %li
+            %span.highlightable{class: @customer.halted? ? 'highlighted' : ''}
+              Minimum balance:
+              %strong= @customer.balance_threshold.format
         %li
-          email:
+          Email:
           %strong= @customer.email
         - unless @address.phone_1.blank?
           %li
-            mobile:
+            Mobile:
             %strong= @address.phone_1
         - unless @address.phone_2.blank?
           %li
-            home:
+            Home:
             %strong= @address.phone_2
         - unless @address.phone_3.blank?
           %li
-            work:
+            Work:
             %strong= @address.phone_3
 
       - unless @customer.special_order_preference.blank?

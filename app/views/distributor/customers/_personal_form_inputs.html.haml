@@ -1,4 +1,6 @@
-= f.input :number
+- if @customer.persisted?
+  = f.input :number
+
 = f.input :first_name
 = f.input :last_name
 = f.input :tag_list, label: 'Tags', placeholder: 'E.g. west-end, coupon, discount'
@@ -9,5 +11,7 @@
   = g.input :phone_2, label: 'Home'
   = g.input :phone_3, label: 'Work'
 
+- if @customer.distributor.has_balance_threshold?
+  = f.input :balance_threshold, label: "Minimum balance", hint: "Deliveries will halt when their balance reaches the minimum balance."
 = f.input :discount, input_html: { step: 0.0001 }
 = f.input :special_order_preference, placeholder: 'E.g. More leafy greens'

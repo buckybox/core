@@ -1,4 +1,4 @@
 Fabricator(:line_item) do
-  distributor!
+  distributor
   name 'grapes'
 end

@@ -12,8 +12,15 @@ describe Distributor::BoxesController do
   let(:box) { Fabricate(:box, distributor: @distributor, price: 234) }
 
   describe '#show' do
-    before { get :show, format: :json, id: box.id }
-    specify { response.should be_success }
+    context :json do
+      before { get :show, format: :json, id: box.id }
+      specify { response.should be_success }
+    end
+
+    context :html do
+      before { get :show, format: :html, id: box.id }
+      specify { response.should redirect_to action: :edit, id: box.id }
+    end
   end
 
   describe '#edit' do

@@ -16,7 +16,6 @@ class Distributor::CustomersController < Distributor::ResourceController
   def new
     new! do
       @address = @customer.build_address
-      @customer.number = Customer.next_number(current_distributor)
     end
   end
 
@@ -43,6 +42,7 @@ class Distributor::CustomersController < Distributor::ResourceController
       @orders           = @account.orders.active
       @deliveries       = @account.deliveries.ordered
       @transactions     = account_transactions(@account)
+      @show_more_link = @transactions.size != @account.transactions.count
       @transactions_sum = @account.calculate_balance
       @show_tour        = current_distributor.customers_show_intro
     end
@@ -54,8 +54,14 @@ class Distributor::CustomersController < Distributor::ResourceController
     @customer.randomize_password
     @customer.save
 
-    if CustomerMailer.login_details(@customer).deliver
-      flash[:notice] = "Login details successfully sent"
+    CustomerMailer.raise_errors do
+      if !@customer.send_email?
+        flash[:error] = "Sending emails is disabled, login details not sent"
+      elsif @customer.send_login_details
+        flash[:notice] = "Login details successfully sent"
+      else
+        flash[:error] = "Login details failed to send"
+      end
     end
 
     redirect_to distributor_customer_url(@customer)

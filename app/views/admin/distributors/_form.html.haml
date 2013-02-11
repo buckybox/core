@@ -2,7 +2,7 @@
   = f.error_notification
 
   = f.input :name
-  = f.input :parameter_name
+  = f.input :parameter_name, label: "..ckybox.com/webstore/"
   = f.input :url
   = f.input :email
   = f.input :support_email
@@ -23,6 +23,8 @@
   = f.input :invoice_threshold
   = f.input :active_webstore
   = f.input :customer_can_remove_orders
+  = f.input :feature_spend_limit, label: 'Enable the minimum balance feature?', hint: 'This gives the distributor the option to turn on a minimum balance for customers.'
+  = f.input :send_email, as: :boolean, label: "Send any emails to customers?"
 
   %hr
 
@@ -30,4 +32,4 @@
   = f.input :password_confirmation, hint: 'Only changed if both are set'
 
   .form-actions
-    = f.button :submit
+    = f.button :submit, id: @distributor.new_record? ? '' : "edit_distributor_submit"

@@ -1,3 +1,16 @@
+#flash-messages
+  z-index: 1000
+  position: absolute
+  left: 50%
+  .alert
+    position: relative
+    left: -50%
+    font-weight: bold
+    text-align: center
+    +border-top-radius(0px)
+    border-top-width: 0px
+    margin-bottom: 0px
+
 p.note-field
   background-color: $note-colour
   padding: 0.25em 0.5em
@@ -16,7 +29,7 @@ table.table
         +border-radius(0.4em)
         &:hover
           text-decoration: none
-          background-color: $action-color-hover
+          background-color: $action-colour-hover
   tr:last-child
     border-bottom: 1px solid $tableBorder
   &.table-bordered
@@ -115,7 +128,9 @@ body
           color: $black
       li
         a:hover
-          background-color: $action-color-hover
+          background-color: $action-colour-hover
+        .customer-id:hover
+          background-color: black
         .dropdown-menu
           &:before
             content: ''
@@ -149,10 +164,10 @@ body
                 text-align: center
                 background-color: $white
               #dismiss-notifications
-                margin: 5px 0px 0px 0px
-                padding: 5px 20px
+                margin: 0
                 text-align: center
-                background-color: $grayLighter
+                a
+                  color: #08C
 
   #sub-nav
     border-bottom: 1px solid $grayLight
@@ -170,3 +185,20 @@ body
 
 .negative
   color: $negative-colour
+
+.notification
+  min-height: 39px
+  border-bottom: solid #D5D5D5 1px
+  padding: 5px 5px 2px 5px
+  .message
+    font-weight: bold
+    font-size: 13px
+    white-space: nowrap
+  .date
+    color: #CCC
+    font-size: 11px
+#notification-dropdown
+  .clear-notifications
+    background-color: $action-colour
+    +border-bottom-radius(6px)    
+  padding: 0

@@ -1,8 +1,8 @@
 Fabricator(:deduction) do
-  distributor!
-  account!
+  distributor
+  account
   amount 1000
   kind 'delivery'
   description 'descriptive text'
-  deductable! { Fabricate(:delivery) }
+  deductable { Fabricate(:delivery) }
 end

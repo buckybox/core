@@ -1,16 +1,16 @@
 require 'spec_helper'
 
 describe Event do
-  let(:customer_event) { Fabricate.build(:customer_event) }
-  let(:billing_event)  { Fabricate.build(:billing_event)  }
-  let(:delivery_event) { Fabricate.build(:delivery_event) }
+  let(:customer_event) { Fabricate(:customer_event) }
+  let(:billing_event)  { Fabricate(:billing_event)  }
+  let(:delivery_event) { Fabricate(:delivery_event) }
 
   specify { customer_event.should be_valid }
   specify { billing_event.should be_valid }
   specify { delivery_event.should be_valid }
 
-  specify { Fabricate.build(:billing_event, event_category: 'not_a_category').should_not be_valid }
-  specify { Fabricate.build(:billing_event, event_type: 'not_a_type').should_not be_valid }
+  specify { expect{ Fabricate(:billing_event, event_category: 'not_a_category')}.to raise_error(ActiveRecord::RecordInvalid, /Event category is not included in the list/)}
+  specify { expect{ Fabricate(:billing_event, event_type: 'not_a_type')}.to raise_error(ActiveRecord::RecordInvalid, /Event type is not included in the list/)}
 
   context '#dismiss!' do
     before { customer_event.dismiss! }
@@ -19,7 +19,7 @@ describe Event do
 
   context 'customer event methods' do
     before do
-      @customer = Fabricate.build(:customer)
+      @customer = Fabricate(:customer)
       @customer.stub(:id).and_return(1)
     end
 
