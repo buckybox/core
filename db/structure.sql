@@ -502,7 +502,9 @@ CREATE TABLE boxes (
     box_image character varying(255),
     available_monthly boolean DEFAULT false NOT NULL,
     extras_limit integer DEFAULT 0,
-    hidden boolean DEFAULT false NOT NULL
+    hidden boolean DEFAULT false NOT NULL,
+    exclusions_limit integer,
+    substitutions_limit integer
 );
 
 
@@ -3030,3 +3032,5 @@ INSERT INTO schema_migrations (version) VALUES ('20130123022020');
 INSERT INTO schema_migrations (version) VALUES ('20130125004824');
 
 INSERT INTO schema_migrations (version) VALUES ('20130128022723');
+
+INSERT INTO schema_migrations (version) VALUES ('20130130220514');
