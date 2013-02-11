@@ -205,6 +205,10 @@ class Customer < ActiveRecord::Base
     orders.active.select("orders.*, next_occurrence('#{date}', false, schedule_rules.*)").joins(:schedule_rule).reject{|sr| sr.next_occurrence.blank?}.sort_by(&:next_occurrence).first
   end
 
+  def can_deactivate_orders?
+    distributor.customer_can_remove_orders?
+  end
+
   def update_next_occurrence!
     update_next_occurrence
     save!
