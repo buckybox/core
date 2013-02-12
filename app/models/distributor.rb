@@ -58,6 +58,7 @@ class Distributor < ActiveRecord::Base
   validates_numericality_of :advance_days, greater_than_or_equal_to: 0
   validates_numericality_of :automatic_delivery_hour, greater_than_or_equal_to: 0
   validates_presence_of :bank_deposit_format, if: :bank_deposit?
+  validate :required_fields_for_webstore
 
   before_validation :check_emails
   before_create :parameterize_name, if: 'parameter_name.nil?'
@@ -429,6 +430,14 @@ class Distributor < ActiveRecord::Base
   end
 
   private
+
+  def required_fields_for_webstore
+    if active_webstore_changed? && active_webstore?
+      errors.add(:active_webstore, "Need bank information filled in before enabling the webstore") unless bank_information.present? && bank_information.valid?
+      errors.add(:active_webstore, "Need to have a route setup before enabling the webstore") if routes.count.zero?
+      errors.add(:active_webstore, "Need to have a box setup before enabling the webstore") if boxes.count.zero?
+    end
+  end
 
   def check_emails
     if self.email
