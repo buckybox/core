@@ -18,16 +18,12 @@
       #likes_dislikes_limits
       :javascript
         $("#likes_dislikes_limits").data('limits', #{@order.limits_data});
-
       #dislikes-input
-        .row-fluid
-          .span12
-            = f.input :dislikes, label: 'Exclusions', collection: @stock_list, as: :select, :input_html => { :multiple => true }, placeholder: "Exclude these items..."
+        = f.full_error(:exclusions)
+        = f.input :excluded_line_item_ids, label: 'Exclusions', collection: @stock_list, as: :select, :input_html => { :multiple => true }, placeholder: "Exclude these items..."
       #likes-input
-        = f.full_error :substitutions
-        .row-fluid
-          .span12
-            = f.input :likes, label: 'Substitutes', collection: @stock_list, as: :select, :input_html => { :multiple => true }, placeholder: "Substitute for these items..."
+        = f.full_error(:substitutions)
+        = f.input :substituted_line_item_ids, label: 'Substitutes', collection: @stock_list, as: :select, :input_html => { :multiple => true}, placeholder: "Substitute for these items..."
 
     .span4
       - unless @order.persisted?

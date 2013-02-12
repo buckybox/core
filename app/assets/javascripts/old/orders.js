@@ -47,6 +47,7 @@ $(function() {
     else {
       likes_input.find('option:selected').removeAttr('selected');
       likes_input.find('select').trigger('liszt:updated');
+      likes_input.find('select').select2("val", "");
       likes_input.hide();
     }
   });

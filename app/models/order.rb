@@ -11,12 +11,12 @@ class Order < ActiveRecord::Base
 
   has_many :packages
   has_many :deliveries
-  has_many :exclusions,                  autosave: true
-  has_many :substitutions,               autosave: true
-  has_many :order_extras,                autosave: true
+  has_many :exclusions,    autosave: true, after_add: Proc.new {|o, s| s.order = o}
+  has_many :substitutions, autosave: true, after_add: Proc.new {|o, s| s.order = o}
+  has_many :order_extras,  autosave: true
 
   has_many :excluded_line_items, through: :exclusions, source: :line_item
-  has_many :substituted_line_item, through: :substitutions, source: :line_item
+  has_many :substituted_line_items, through: :substitutions, source: :line_item
 
 
   has_many :extras, through: :order_extras
@@ -35,7 +35,8 @@ class Order < ActiveRecord::Base
   acts_as_taggable
 
   attr_accessible :box, :box_id, :account, :account_id, :quantity, :completed, 
-    :order_extras, :extras_one_off, :schedule_rule_attributes, :schedule_rule
+    :order_extras, :extras_one_off, :schedule_rule_attributes, :schedule_rule,
+    :excluded_line_item_ids, :substituted_line_item_ids
 
   accepts_nested_attributes_for :schedule_rule
 
@@ -87,30 +88,6 @@ class Order < ActiveRecord::Base
     order_ids = Order.where(customers: { route_id: route.id }).joins(:customer).map(&:id)
     # The join causes the returned models to be read-only. Thus, must to another search to get updateable models returned.
     Order.where(id: order_ids)
-  end
-
-  def dislikes
-    exclusions.map { |e| e.line_item_id.to_s }
-  end
-
-  def likes
-    substitutions.map { |s| s.line_item_id.to_s }
-  end
-
-  def dislikes_input=(params)
-    self.excluded_line_item_ids = params
-  end
-
-  def likes_input=(params)
-    self.substituted_line_item_ids = params
-  end
-
-  def update_exclusions(exclusions)
-    self.dislikes_input = exclusions.collect(&:to_i)
-  end
-
-  def update_substitutions(substitutions)
-    self.likes_input = substitutions.collect(&:to_i)
   end
 
   def change_to_local_time_zone
@@ -358,6 +335,7 @@ class Order < ActiveRecord::Base
   end
 
   def route_includes_schedule_rule
+    binding.pry
     unless account.route.includes?(schedule_rule)
       errors.add(:schedule_rule, "Route #{account.route.name}'s schedule '#{account.route.schedule_rule.inspect} doesn't include this order's schedule of '#{schedule_rule.inspect}'")
     end
@@ -373,11 +351,11 @@ class Order < ActiveRecord::Base
     return unless box.present?
     
     if !box.exclusions_limit.zero? && exclusions.size > box.exclusions_limit
-      errors.add(:dislikes, " is limited to #{box.exclusions_limit}")
+      errors.add(:exclusions, " is limited to #{box.exclusions_limit}")
     end
 
     if !box.substitutions_limit.zero? && substitutions.size > box.substitutions_limit
-      errors.add(:likes, " is limited to #{box.substitutions_limit}")
+      errors.add(:substitutions, " is limited to #{box.substitutions_limit}")
     end
   end
 

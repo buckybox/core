@@ -73,6 +73,15 @@ describe Distributor::OrdersController do
       assigns(:order).schedule_rule.start.should eq(Date.parse('2012-10-27'))
     end
 
+    it 'should create an order with exclusions and substitutions' do
+      box = Fabricate(:box, distributor: @distributor, likes: true, dislikes: true, substitutions_limit: 2, exclusions_limit: 2)
+      account = Fabricate(:account, customer: Fabricate(:customer, distributor: @distributor))
+      item_ids = 2.times.collect{|i| Fabricate(:line_item, name: "Item #{i}").id}
+      post :create, account_id: account.id, order: {account_id: account.id, box_id: box.id, schedule_rule_attributes: {mon: '1', start: '2012-10-27'},  excluded_line_item_ids: ["", "#{item_ids[0]}"], substituted_line_item_ids: ["", "#{item_ids[1]}"]}
+      ScheduleRule.any_instance.stub(:includes?).and_return(true)
+      response.should redirect_to([:distributor, account.customer]), assigns(:order).errors.full_messages
+    end
+
     it 'should render new' do
       account = Fabricate(:account, customer: Fabricate(:customer, distributor: @distributor))
       get :new, account_id: account.id
