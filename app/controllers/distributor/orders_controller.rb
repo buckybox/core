@@ -7,6 +7,8 @@ class Distributor::OrdersController < Distributor::ResourceController
   before_filter :filter_params, only: [:create, :update]
   before_filter :get_order, only: [:pause, :remove_pause, :resume, :remove_resume, :pause_dates, :resume_dates]
 
+  before_filter :check_for_boxes, only: [:new]
+
   def new
     new! do
       load_form
@@ -109,6 +111,10 @@ class Distributor::OrdersController < Distributor::ResourceController
   end
   
   private
+
+  def check_for_boxes
+    redirect_to distributor_settings_boxes_path, alert: "You must create a box before creating any orders." if current_distributor.boxes.count.zero?
+  end
 
   def filter_params
     params[:order] = params[:order].slice!(:include_extras)
