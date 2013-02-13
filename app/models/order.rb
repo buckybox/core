@@ -335,7 +335,6 @@ class Order < ActiveRecord::Base
   end
 
   def route_includes_schedule_rule
-    binding.pry
     unless account.route.includes?(schedule_rule)
       errors.add(:schedule_rule, "Route #{account.route.name}'s schedule '#{account.route.schedule_rule.inspect} doesn't include this order's schedule of '#{schedule_rule.inspect}'")
     end

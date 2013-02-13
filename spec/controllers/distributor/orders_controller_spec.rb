@@ -35,7 +35,7 @@ describe Distributor::OrdersController do
 
     describe '#update' do
       before do
-        @order = mock_model(Order, { update_exclusions: true, update_substitutions: true, exclusions: [], substitutions: [] })
+        @order = mock_model(Order, {exclusions: [], substitutions: [] })
         Distributor.any_instance.stub_chain(:orders, :find).and_return(@order)
       end
 
