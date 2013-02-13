@@ -836,7 +836,7 @@ CREATE TABLE distributors (
     parameter_name character varying(255),
     invoice_threshold_cents integer DEFAULT 0 NOT NULL,
     bucky_box_percentage numeric NOT NULL,
-    separate_bucky_fee boolean DEFAULT true,
+    separate_bucky_fee boolean DEFAULT false,
     support_email character varying(255),
     time_zone character varying(255),
     advance_hour integer,
@@ -3037,3 +3037,5 @@ INSERT INTO schema_migrations (version) VALUES ('20130125004824');
 INSERT INTO schema_migrations (version) VALUES ('20130128022723');
 
 INSERT INTO schema_migrations (version) VALUES ('20130130220514');
+
+INSERT INTO schema_migrations (version) VALUES ('20130213020709');
