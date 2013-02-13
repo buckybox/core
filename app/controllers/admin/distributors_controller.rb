@@ -3,7 +3,7 @@ class Admin::DistributorsController < Admin::ResourceController
   before_filter :parameterize_name, only: [:create, :update]
 
   def index
-    @distributors = Distributor.order('name')
+    @distributors = Distributor.all.sort { |a,b| b.orders.active.size <=> a.orders.active.size }
     index!
   end
 

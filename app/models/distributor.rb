@@ -429,6 +429,14 @@ class Distributor < ActiveRecord::Base
     end
   end
 
+  def contact_name_for_email
+    contact_name.present? ? contact_name : email
+  end
+
+  def location
+    [country.try(:full_name), city].reject(&:blank?).join(', ')
+  end
+
   private
 
   def required_fields_for_webstore
