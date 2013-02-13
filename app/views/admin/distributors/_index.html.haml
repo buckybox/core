@@ -37,7 +37,12 @@
           %span.label.label-info
             = link_to 'webstore', webstore_store_path(distributor.parameter_name)
       .span4.align-right.small
-        %a show | edit | impersonate |reset intro
-        -# Yeah I'm being lazy not styling the %ul %ol elements here
+        = link_to 'Show', admin_distributor_path(distributor)
+        |
+        = link_to 'Edit', edit_admin_distributor_path(distributor)
+        |
+        = link_to 'Impersonate', impersonate_admin_distributor_path(distributor)
+        |
+        = link_to 'Reset Intros', reset_intros_admin_distributor_path(distributor)
 
 
