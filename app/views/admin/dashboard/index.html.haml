@@ -12,9 +12,7 @@
     = link_to 'New Distributor', new_admin_distributor_path, class: 'button radius'
 
 - unless @distributors.empty?
-  .row-fluid
-    .span12
-      = render 'admin/distributors/index'
+  = render 'admin/dashboard/index'
 
 - unless @cron_logs.empty?
   .row-fluid

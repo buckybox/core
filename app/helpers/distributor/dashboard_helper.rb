@@ -69,6 +69,7 @@ module Distributor::DashboardHelper
   end
 
   def time_since(timestamp)
+    return "Never" if timestamp.blank?
     if days_between(timestamp.to_date, Date.today) > 4
       timestamp.to_s(:date_short_month)
     else

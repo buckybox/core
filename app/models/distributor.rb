@@ -32,6 +32,8 @@ class Distributor < ActiveRecord::Base
 
   devise :database_authenticatable, :recoverable, :rememberable, :trackable, :validatable
 
+  acts_as_taggable
+
   mount_uploader :company_logo, CompanyLogoUploader
   mount_uploader :company_team_image, CompanyTeamImageUploader
 
@@ -47,7 +49,7 @@ class Distributor < ActiveRecord::Base
     :consumer_delivery_fee_cents, :active_webstore, :about, :details, :facebook_url, :city, :customers_show_intro,
     :deliveries_index_packing_intro, :deliveries_index_deliveries_intro, :payments_index_intro, :customers_index_intro,
     :parameter_name, :default_balance_threshold, :has_balance_threshold, :spend_limit_on_all_customers,
-    :send_email, :send_halted_email, :feature_spend_limit
+    :send_email, :send_halted_email, :feature_spend_limit, :contact_name, :tag_list
 
   validates_presence_of :country
   validates_presence_of :email
@@ -427,6 +429,14 @@ class Distributor < ActiveRecord::Base
     else
       customers.joins(:account).where("accounts.balance_cents <= customers.balance_threshold_cents and customers.status_halted = 'f'").count
     end
+  end
+
+  def contact_name_for_email
+    contact_name.present? ? contact_name : email
+  end
+
+  def location
+    [country.try(:full_name), city].reject(&:blank?).join(', ')
   end
 
   private

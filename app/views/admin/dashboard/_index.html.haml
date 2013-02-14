@@ -1,5 +1,4 @@
-- title('Admin - Distributors')
-
+-# main table block
 %table#distributors.table.table-bordered
   - @distributors.each do |distributor|
     = render partial: 'admin/distributors/index', locals: {distributor: distributor}

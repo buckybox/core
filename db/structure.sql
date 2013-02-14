@@ -864,7 +864,8 @@ CREATE TABLE distributors (
     send_email boolean,
     send_halted_email boolean,
     feature_spend_limit boolean,
-    customer_can_remove_orders boolean DEFAULT false
+    customer_can_remove_orders boolean DEFAULT false,
+    contact_name character varying(255)
 );
 
 
@@ -3039,3 +3040,5 @@ INSERT INTO schema_migrations (version) VALUES ('20130128022723');
 INSERT INTO schema_migrations (version) VALUES ('20130130220514');
 
 INSERT INTO schema_migrations (version) VALUES ('20130213020709');
+
+INSERT INTO schema_migrations (version) VALUES ('20130213224528');
