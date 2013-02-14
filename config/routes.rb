@@ -192,6 +192,7 @@ BuckyBox::Application.routes.draw do
       collection do
         get 'unimpersonate'
         get 'country_setting/:id', controller: 'distributors', action: 'country_setting'
+        get 'tag/:tag', action: :index, as: 'tag'
       end
     end
   end
