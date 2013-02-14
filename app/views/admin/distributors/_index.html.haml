@@ -10,9 +10,13 @@
           -# Display main contact name if available, else display email, open in new window
       .span3
         %span.medium= distributor.location
-      .span1.align-right.medium.bold 
+      .span1.align-right.medium.bold
         = distributor.customers.count
         %i.icon-user
+        %br
+        - new_count = distributor.customers.where(["created_at > ?", 1.week.ago]).count
+        - unless new_count.zero?
+          %span(title="Last 7 days")= "+#{new_count}"
       .span1.align-right.medium.bold 
         = distributor.orders.active.count 
         %i.icon-shopping-cart
@@ -36,6 +40,8 @@
         - if distributor.active_webstore?
           %span.label.label-info
             = link_to 'webstore', webstore_store_path(distributor.parameter_name)
+        - distributor.tags.each do |tag|
+          %span.label.label-info= tag.name
       .span4.align-right.small
         = link_to 'Show', admin_distributor_path(distributor)
         |
