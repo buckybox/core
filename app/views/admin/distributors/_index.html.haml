@@ -29,7 +29,7 @@
     .row-fluid
       .span8
         - distributor.tags.each do |tag|
-          %span.label.label-info= tag.name
+          %span.label.label-info= link_to tag.name, tag_admin_distributors_path(tag.name)
         - if distributor.bank_deposit?
           %span.label bank-deposit
         - if distributor.send_email?
