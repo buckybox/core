@@ -3,7 +3,7 @@
     .row-fluid
       .span4
         %span.big.bold
-          = link_to distributor.name, admin_distributor_path(distributor)
+          = link_to_unless !distributor.active_webstore?, distributor.name, webstore_store_path(distributor.parameter_name)
           %br
         %span.medium
           = mail_to(distributor.email, distributor.contact_name_for_email)
@@ -16,7 +16,8 @@
         %br
         - new_count = distributor.customers.where(["created_at > ?", 1.week.ago]).count
         - unless new_count.zero?
-          %span(title="Last 7 days")= "+#{new_count}"
+          = "#{new_count}"
+          %i.icon-plus
       .span1.align-right.medium.bold 
         = distributor.orders.active.count 
         %i.icon-shopping-cart
@@ -27,21 +28,21 @@
           -# open link to iplocator in new window
     .row-fluid
       .span8
-        - if distributor.bank_deposit?
-          %span.label.label-info bank-deposit
-        - if distributor.send_email?
-          %span.label.label-info emails
-        - if distributor.separate_bucky_fee?
-          %span.label.label-info fee
-        - if distributor.feature_spend_limit?
-          %span.label.label-info halt
-        - if distributor.paypal?
-          %span.label.label-info paypal
-        - if distributor.active_webstore?
-          %span.label.label-info
-            = link_to 'webstore', webstore_store_path(distributor.parameter_name)
         - distributor.tags.each do |tag|
           %span.label.label-info= tag.name
+        - if distributor.bank_deposit?
+          %span.label bank-deposit
+        - if distributor.send_email?
+          %span.label emails
+        - if distributor.separate_bucky_fee?
+          %span.label fee
+        - if distributor.feature_spend_limit?
+          %span.label halt
+        - if distributor.paypal?
+          %span.label paypal
+        - if distributor.active_webstore?
+          %span.label webstore
+        
       .span4.align-right.small
         = link_to 'Show', admin_distributor_path(distributor)
         |
@@ -50,5 +51,3 @@
         = link_to 'Impersonate', impersonate_admin_distributor_path(distributor)
         |
         = link_to 'Reset Intros', reset_intros_admin_distributor_path(distributor)
-
-
