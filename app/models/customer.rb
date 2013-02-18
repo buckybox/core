@@ -299,7 +299,7 @@ class Customer < ActiveRecord::Base
   end
 
   def calculate_next_order(date=Date.current.to_s(:db))
-    orders.active.select("orders.*, next_occurrence('#{date}', false, schedule_rules.*)").joins(:schedule_rule).reject{|sr| sr.next_occurrence.blank?}.sort_by(&:next_occurrence).first
+    orders.active.select("orders.*, next_occurrence('#{date}', false, false, schedule_rules.*)").joins(:schedule_rule).reject{|sr| sr.next_occurrence.blank?}.sort_by(&:next_occurrence).first
   end
 
   private
