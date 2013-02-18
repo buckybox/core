@@ -39,7 +39,7 @@ class WebstoreController < ApplicationController
   def delivery
     @routes = @distributor.routes
     @route_selections = @distributor.routes.map { |route| [route.name_days_and_fee, route.id] }
-    @selected_route_id = current_customer.route_id if existing_customer?
+    @selected_route_id = current_customer.route_id if active_orders?
     @days = ScheduleRule::DAYS.map { |day| [day.to_s.titleize, ScheduleRule::DAYS.index(day)] }
     @order_frequencies = [
       ['Deliver weekly on...', :weekly],
@@ -85,7 +85,11 @@ class WebstoreController < ApplicationController
   private
 
   def existing_customer?
-    current_customer && current_customer.orders.size > 0
+    current_customer && current_customer.persisted?
+  end
+
+  def active_orders?
+    current_customer.present? && !current_customer.orders.active.count.zero?
   end
 
   def get_webstore_order

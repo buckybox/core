@@ -201,6 +201,7 @@ class Webstore
 
   def assign_route(route_information)
     route_id     = route_information[:route]
+    @order.update_customers_route(@controller.current_customer, route_id) unless @order.active_orders?
     @order.route = Route.find(route_id)
   end
 
