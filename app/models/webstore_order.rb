@@ -200,7 +200,7 @@ class WebstoreOrder < ActiveRecord::Base
       order.update_exclusions(exclusions)
       order.update_substitutions(substitutions)
       self.order = order
-      order.save
+      order.save!
     end
   end
 
@@ -215,6 +215,17 @@ class WebstoreOrder < ActiveRecord::Base
   def extras_within_box_limit
     if box.present? && !box.extras_unlimited? && extras_count > box.extras_limit
       errors.add(:base, "The #{box.extras_limit} was exceeded for this box")
+    end
+  end
+
+  def active_orders?
+    customer.present? && !customer.orders.active.count.zero?
+  end
+
+  def update_customers_route(customer, route_id)
+    if customer.present?
+      customer.route_id = route_id
+      customer.save!
     end
   end
 end

@@ -502,9 +502,7 @@ CREATE TABLE boxes (
     box_image character varying(255),
     available_monthly boolean DEFAULT false NOT NULL,
     extras_limit integer DEFAULT 0,
-    hidden boolean DEFAULT false NOT NULL,
-    exclusions_limit integer,
-    substitutions_limit integer
+    hidden boolean DEFAULT false NOT NULL
 );
 
 
@@ -864,7 +862,6 @@ CREATE TABLE distributors (
     send_email boolean,
     send_halted_email boolean,
     feature_spend_limit boolean,
-    customer_can_remove_orders boolean DEFAULT false,
     contact_name character varying(255)
 );
 
@@ -3015,8 +3012,6 @@ INSERT INTO schema_migrations (version) VALUES ('20121119000156');
 
 INSERT INTO schema_migrations (version) VALUES ('20121119005042');
 
-INSERT INTO schema_migrations (version) VALUES ('20121128005022');
-
 INSERT INTO schema_migrations (version) VALUES ('20121204015243');
 
 INSERT INTO schema_migrations (version) VALUES ('20121211024951');
@@ -3036,8 +3031,6 @@ INSERT INTO schema_migrations (version) VALUES ('20130123022020');
 INSERT INTO schema_migrations (version) VALUES ('20130125004824');
 
 INSERT INTO schema_migrations (version) VALUES ('20130128022723');
-
-INSERT INTO schema_migrations (version) VALUES ('20130130220514');
 
 INSERT INTO schema_migrations (version) VALUES ('20130213020709');
 
