@@ -104,17 +104,17 @@ $$;
 
 
 --
--- Name: next_occurrence(date, boolean, schedule_rules); Type: FUNCTION; Schema: public; Owner: -
+-- Name: next_occurrence(date, boolean, boolean, schedule_rules); Type: FUNCTION; Schema: public; Owner: -
 --
 
-CREATE FUNCTION next_occurrence(from_date date, ignore_pauses boolean, schedule_rule schedule_rules) RETURNS date
+CREATE FUNCTION next_occurrence(from_date date, ignore_pauses boolean, ignore_halts boolean, schedule_rule schedule_rules) RETURNS date
     LANGUAGE plpgsql STABLE
     AS $$
 DECLARE
   next_date DATE;
 BEGIN
   next_date := from_date;
-  IF schedule_rule.halted THEN
+  IF NOT ignore_halts AND schedule_rule.halted THEN
     return null;
   ELSE
     LOOP
@@ -3035,3 +3035,5 @@ INSERT INTO schema_migrations (version) VALUES ('20130128022723');
 INSERT INTO schema_migrations (version) VALUES ('20130213020709');
 
 INSERT INTO schema_migrations (version) VALUES ('20130213224528');
+
+INSERT INTO schema_migrations (version) VALUES ('20130218060217');
