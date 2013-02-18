@@ -20,14 +20,17 @@
           %i.icon-plus
       .span1.align-right.medium.bold 
         = distributor.orders.active.count 
-        %i.icon-shopping-cart
+        %i.icon-shopping-cart(title="Active orders")
+        %br
+        = distributor.deliveries.delivered.where(["deliveries.updated_at > ?", 7.days.ago]).count
+        %i.icon-road(title="Deliveries completed in last 7 days")
       .span3.align-right.medium
         = time_since(distributor.current_sign_in_at)
         %a(href="http://www.infosniper.net/index.php?ip_address=#{distributor.current_sign_in_ip}" target="_blank")
           %i.icon-map-marker
           -# open link to iplocator in new window
     .row-fluid
-      .span8
+      .span4
         - distributor.tags.each do |tag|
           %span.label.label-info= link_to tag.name, tag_admin_distributors_path(tag.name)
         - if distributor.bank_deposit?
@@ -42,8 +45,12 @@
           %span.label paypal
         - if distributor.active_webstore?
           %span.label webstore
+      .span5
+        %small
+          Next delivery:
+          %strong= distributors_next_delivery_date(distributor)
         
-      .span4.align-right.small
+      .span3.align-right.small
         = link_to 'Show', admin_distributor_path(distributor)
         |
         = link_to 'Edit', edit_admin_distributor_path(distributor)
