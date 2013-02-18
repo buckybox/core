@@ -1,9 +1,9 @@
 module Bucky::TransactionImports
-  class ReoUk < CsvImport
-    TEST_FILE = File.new(File.join(Rails.root, "spec/support/test_upload_files/transaction_imports/reo_uk.csv"))
+  class UkCoopBank < CsvImport
+    TEST_FILE = File.new(File.join(Rails.root, "spec/support/test_upload_files/transaction_imports/uk_coop_bank.csv"))
     
     set_columns :date, :tran_type, :sort_code, :account_number, :description, :debt_amount, :credit_amount
-    set_bank_name "REO UK"
+    set_bank_name "The Co-operative Bank"
     set_header true
 
     def import_csv(csv)
