@@ -60,7 +60,7 @@ describe Bucky::TransactionImports::Anz do
   end
 end
 
-describe Bucky::TransactionImports::ReoUk do
+describe Bucky::TransactionImports::UkCoopBank do
   it_should_behave_like "a csv import" do
     let(:expected_row_count){11}
     let(:expected_date){"2013/02/15"}
