@@ -85,7 +85,7 @@ class Webstore
 
   def login_customer(user_information)
     email    = user_information[:email]
-    password = user_information[:password]
+    password = user_information[:password].strip #Customers copy and paste password from email, sometimes grabbing a bit of whitespace
     customer = Customer.find_by_email(email)
 
     if email.blank?
