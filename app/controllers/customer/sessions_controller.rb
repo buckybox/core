@@ -8,6 +8,7 @@ class Customer::SessionsController < Devise::SessionsController
 
   def create
     analytical.event('customer_signed_in')
+    params[:customer][:password].strip! rescue nil #Customers copy and paste password from email, sometimes grabbing a bit of whitespace
     super
   end
 end
