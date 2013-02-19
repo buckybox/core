@@ -3,7 +3,7 @@
 
   .row-fluid
     .span4
-      = f.association :box, collection: box_collection(@customer, with_price: true), include_blank: false, input_html: { class: 'box' }
+      = f.association :box, collection: customers_box_collection(@customer, @order, with_price: true), include_blank: false, input_html: { class: 'box' }
 
       - unless @order.persisted?
         = f.input :frequency, collection: order_frequencies, include_blank: false, input_html: { class: 'frequency' }
