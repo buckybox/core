@@ -969,7 +969,8 @@ CREATE TABLE extras (
     price_cents integer DEFAULT 0 NOT NULL,
     currency character varying(255),
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    updated_at timestamp without time zone NOT NULL,
+    hidden boolean DEFAULT false
 );
 
 
@@ -3037,3 +3038,5 @@ INSERT INTO schema_migrations (version) VALUES ('20130213020709');
 INSERT INTO schema_migrations (version) VALUES ('20130213224528');
 
 INSERT INTO schema_migrations (version) VALUES ('20130218060217');
+
+INSERT INTO schema_migrations (version) VALUES ('20130219014308');

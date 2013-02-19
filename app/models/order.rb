@@ -246,8 +246,7 @@ class Order < ActiveRecord::Base
   end
 
   def extra_count(extra)
-    order_extra = order_extras.where(extra_id: extra.id)
-    order_extra.count if order_extra
+    order_extras.where(extra_id: extra.id).sum(&:count)
   end
 
   def extras_description(show_frequency = false)
