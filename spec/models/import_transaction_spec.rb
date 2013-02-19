@@ -14,6 +14,7 @@ describe ImportTransaction do
 
     before do
       import_transaction.stub(:account).and_return(account)
+      import_transaction.stub(:distributor_customer_ids).and_return([customer.id])
     end
 
     it "should process negative import transactions" do
@@ -21,6 +22,7 @@ describe ImportTransaction do
 
       import_transaction.match = ImportTransaction::MATCH_MATCHED
       import_transaction.stub(:customer).and_return(customer)
+      import_transaction.stub(:customer_id).and_return(customer.id)
       import_transaction.save
     end
 
@@ -28,6 +30,7 @@ describe ImportTransaction do
       import_transaction.amount_cents = 1423
       import_transaction.match = ImportTransaction::MATCH_MATCHED
       import_transaction.stub(:customer).and_return(customer)
+      import_transaction.stub(:customer_id).and_return(customer.id)
       import_transaction.save
 
       import_transaction.payment.description.should match("Payment")
@@ -36,6 +39,7 @@ describe ImportTransaction do
     it "should create 'payment' labeled payments when positive amount" do
       import_transaction.match = ImportTransaction::MATCH_MATCHED
       import_transaction.stub(:customer).and_return(customer)
+      import_transaction.stub(:customer_id).and_return(customer.id)
       import_transaction.save
 
       import_transaction.payment.description.should match("Refund")
