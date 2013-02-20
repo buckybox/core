@@ -4,7 +4,11 @@ class Customer::AddressesController < Customer::ResourceController
     @address = current_customer.address
 
     if @address.update_attributes(params[:address])
-      flash.now[:notice] = "Address updated successfully"
+      if current_customer.has_yellow_deliveries?
+        flash.now[:notice] = "WARNING: Your delivery address has been updated, but you have an impending delivery that is too late to change. Your address change will take effect on #{current_customer.distributor.beginning_of_green_zone.to_s(:day_date_month)}"
+      else
+        flash.now[:notice] = "Your delivery address has been updated, this will take effect on your next delivery"
+      end
     end
   end
 

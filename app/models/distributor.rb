@@ -151,6 +151,10 @@ class Distributor < ActiveRecord::Base
     Date.current + ( advance_hour < Time.current.hour ? 1 : 0 ).days
   end
 
+  def beginning_of_green_zone
+    window_end_at + 1.day
+  end
+
   def window_end_at
     days_to_generate = (advance_days - 1) # this is because we are including the start date
     window_start_from + days_to_generate.days
