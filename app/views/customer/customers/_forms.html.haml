@@ -1,0 +1,17 @@
+#address-modal.modal.hide.fade
+  .modal-header
+    %button.close{ data: { dismiss: 'modal'} } &times;
+    %h3 Change Your Address
+  = render 'customer/addresses/form'
+
+#email-modal.modal.hide.fade
+  .modal-header
+    %button.close{ data: { dismiss: 'modal'} } &times;
+    %h3 Change Your Email Address
+  = render 'customer/customers/form'
+
+#password-modal.modal.hide.fade
+  .modal-header
+    %button.close{ data: { dismiss: 'modal'} } &times;
+    %h3 Change Your Password
+  = render 'customer/customers/password_form'
