@@ -5,7 +5,7 @@
   = render partial: 'layouts/customer/banner', locals: { distributor: @distributor }
 
   .container
-    = render_site_messages(flash)
+    #customer-messages= render_site_messages(flash)
 
     .row
       #content-information.span3

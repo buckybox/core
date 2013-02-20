@@ -209,6 +209,10 @@ class Order < ActiveRecord::Base
     end
   end
 
+  def has_yellow_deliveries?
+    !deliveries.pending.count.zero?
+  end
+
   def possible_pause_dates(look_ahead = 8.weeks)
     start_time          = [distributor.window_end_at.to_time_in_current_zone.to_date + 1.day, start].compact.max
     end_time            = start_time + look_ahead
