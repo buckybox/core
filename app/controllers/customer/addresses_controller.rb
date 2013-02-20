@@ -1,10 +1,11 @@
 class Customer::AddressesController < Customer::ResourceController
-  actions :update
-
-  respond_to :html, :xml, :json
 
   def update
-    update! { customer_root_url }
+    @address = current_customer.address
+
+    if @address.update_attributes(params[:address])
+      flash.now[:notice] = "Address updated successfully"
+    end
   end
 
   protected

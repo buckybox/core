@@ -302,6 +302,10 @@ class Customer < ActiveRecord::Base
     orders.active.select("orders.*, next_occurrence('#{date}', false, false, schedule_rules.*)").joins(:schedule_rule).reject{|sr| sr.next_occurrence.blank?}.sort_by(&:next_occurrence).first
   end
 
+  def has_yellow_deliveries?
+    orders.active.any?(&:has_yellow_deliveries?)
+  end
+
   private
 
   def initialize_number
