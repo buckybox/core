@@ -859,11 +859,11 @@ CREATE TABLE distributors (
     customers_index_intro boolean DEFAULT true NOT NULL,
     has_balance_threshold boolean DEFAULT false,
     default_balance_threshold_cents integer DEFAULT 0,
-    send_email boolean,
+    send_email boolean DEFAULT true,
     send_halted_email boolean,
     feature_spend_limit boolean,
     contact_name character varying(255),
-    customer_can_remove_orders boolean DEFAULT false
+    customer_can_remove_orders boolean DEFAULT true
 );
 
 
@@ -3043,3 +3043,5 @@ INSERT INTO schema_migrations (version) VALUES ('20130213224528');
 INSERT INTO schema_migrations (version) VALUES ('20130218060217');
 
 INSERT INTO schema_migrations (version) VALUES ('20130219014308');
+
+INSERT INTO schema_migrations (version) VALUES ('20130220234725');
