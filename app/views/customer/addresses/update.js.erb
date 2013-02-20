@@ -6,4 +6,5 @@
   $('#customer-messages').html("<%= escape_javascript(render_site_messages(flash)) %>");
   $("#address-modal").modal('hide');
   $('#customer-messages').delay(500).slideDown();
+  $('#information').html("<%= escape_javascript(render(partial: 'customer/customers/sidebar', locals: { customer: current_customer })) %>");
 <% end %>
