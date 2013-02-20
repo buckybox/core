@@ -6,6 +6,7 @@
           %th Name
           %th Unit
           %th Price
+          %th Hidden
           %th Actions
 
       %tbody
@@ -14,4 +15,5 @@
             %td= extra.name
             %td= extra.unit
             %td= extra.price.format
+            %td= checkmark_boolean(extra.hidden)
             %td= link_to 'Edit', edit_distributor_extra_path(extra)

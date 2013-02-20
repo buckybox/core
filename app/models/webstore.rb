@@ -101,9 +101,10 @@ class Webstore
       new_registration = (user_information[:registered] == 'new')
 
       if new_registration && !customer.nil?
-        error_description = 'This account already exists. Did you forget your password?'
+        error_description = "This account already exists. <span><i style=\"padding-right: 4px\" class=\"icon-lock\"></i><a href=\"#{@controller.new_customer_password_path(distributor: @distributor.parameter_name)}\">Did you lose your password?</a></span>".html_safe
       else
-        error_description = 'You have not provided the correct email address or password for this store. Please try again.'
+        error_description = "You have not provided the correct email address or password for this store. Please try again. <span><i style=\"padding-right: 4px\" class=\"icon-lock\"></i><a href=\"#{@controller.new_customer_password_path(distributor: @distributor.parameter_name)}\">Lost your password?</a></span>".html_safe
+
       end
 
       @controller.flash[:error] = error_description
@@ -200,6 +201,7 @@ class Webstore
 
   def assign_route(route_information)
     route_id     = route_information[:route]
+    @order.update_customers_route(@controller.current_customer, route_id) unless @order.active_orders?
     @order.route = Route.find(route_id)
   end
 

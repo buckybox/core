@@ -214,7 +214,7 @@ class Order < ActiveRecord::Base
     end_time            = start_time + look_ahead
     existing_pause_date = pause_date
 
-    select_array = self.schedule_rule.occurrences_between(start_time, end_time, {ignore_pauses: true}).map { |s| [s.to_date.to_s(:pause), s.to_date] }
+    select_array = self.schedule_rule.occurrences_between(start_time, end_time, {ignore_pauses: true, ignore_halts: true}).map { |s| [s.to_date.to_s(:pause), s.to_date] }
 
     if existing_pause_date && !select_array.index([existing_pause_date.to_s(:pause), existing_pause_date])
       select_array << [existing_pause_date.to_s(:pause), existing_pause_date]
@@ -230,7 +230,7 @@ class Order < ActiveRecord::Base
       end_time             = start_time + look_ahead
       existing_resume_date = resume_date
 
-      select_array      = self.schedule_rule.occurrences_between(start_time, end_time, {ignore_pauses: true}).map { |s| [s.to_date.to_s(:pause), s.to_date] }
+      select_array      = self.schedule_rule.occurrences_between(start_time, end_time, {ignore_pauses: true, ignore_halts: true}).map { |s| [s.to_date.to_s(:pause), s.to_date] }
 
       if existing_resume_date && !select_array.index([existing_resume_date.to_s(:pause), existing_resume_date])
         select_array << [existing_resume_date.to_s(:pause), existing_resume_date]
@@ -246,8 +246,7 @@ class Order < ActiveRecord::Base
   end
 
   def extra_count(extra)
-    order_extra = order_extras.where(extra_id: extra.id)
-    order_extra.count if order_extra
+    order_extras.where(extra_id: extra.id).sum(&:count)
   end
 
   def extras_description(show_frequency = false)

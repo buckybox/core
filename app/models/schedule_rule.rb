@@ -8,8 +8,8 @@ class ScheduleRule < ActiveRecord::Base
   belongs_to :scheduleable, polymorphic: true, inverse_of: :schedule_rule
   belongs_to :schedule_pause, dependent: :destroy
 
-  scope :with_next_occurrence, (lambda do |date, ignore_pauses|
-    select("schedule_rules.*, next_occurrence('#{date.to_s(:db)}', #{ignore_pauses}, schedule_rules.*) as next_occurrence")
+  scope :with_next_occurrence, (lambda do |date, ignore_pauses, ignore_halts|
+    select("schedule_rules.*, next_occurrence('#{date.to_s(:db)}', #{ignore_pauses}, #{ignore_halts}, schedule_rules.*) as next_occurrence")
   end)
 
   after_save :notify_associations
@@ -94,10 +94,11 @@ class ScheduleRule < ActiveRecord::Base
   end
 
   def next_occurrence(date=nil, opts={})
-    opts = {ignore_pauses: false}.merge(opts)
+    opts = {ignore_pauses: false,
+            ignore_halts: false}.merge(opts)
 
     date ||= Date.current
-    occurrence = ScheduleRule.where(id:self.id).with_next_occurrence(date, opts[:ignore_pauses]).first.attributes["next_occurrence"] unless new_record?
+    occurrence = ScheduleRule.where(id:self.id).with_next_occurrence(date, opts[:ignore_pauses], opts[:ignore_halts]).first.attributes["next_occurrence"] unless new_record?
     
     if occurrence.nil?
       nil
@@ -107,12 +108,14 @@ class ScheduleRule < ActiveRecord::Base
   end
 
   def next_occurrences(num, start, opts={})
-    opts = {ignore_pauses: false}.merge(opts)
+    opts = {ignore_pauses: false,
+            ignore_halts: false}.merge(opts)
     result = []
     current = start.to_date
 
     0.upto(num-1).each do
-      current = next_occurrence(current, {ignore_pauses: opts[:ignore_pauses]})
+      current = next_occurrence(current, {ignore_pauses: opts[:ignore_pauses],
+                                          ignore_halts: opts[:ignore_halts]})
 
       if current.present?
         result << current
@@ -128,13 +131,14 @@ class ScheduleRule < ActiveRecord::Base
   def occurrences_between(start, finish, opts={})
     start = start.to_date
     finish = finish.to_date
-    opts = {max: 200, ignore_pauses: false}.merge(opts)
+    opts = {max: 200, ignore_pauses: false, ignore_halts: false}.merge(opts)
     start, finish = [start, finish].reverse if start > finish
 
     result = []
     current = start
     0.upto(opts[:max]).each do
-      current = next_occurrence(current, {ignore_pauses: opts[:ignore_pauses]})
+      current = next_occurrence(current, {ignore_pauses: opts[:ignore_pauses],
+                                          ignore_halts: opts[:ignore_pauses]})
 
       if current.present? && current <= finish
         result << current

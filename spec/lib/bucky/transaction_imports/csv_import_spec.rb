@@ -59,3 +59,10 @@ describe Bucky::TransactionImports::Anz do
     let(:expected_date){"2012/11/13"}
   end
 end
+
+describe Bucky::TransactionImports::UkLloydsTsb do
+  it_should_behave_like "a csv import" do
+    let(:expected_row_count){11}
+    let(:expected_date){"2013/02/15"}
+  end
+end

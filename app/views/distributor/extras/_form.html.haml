@@ -1,7 +1,11 @@
-.row-fluid
-  .span12
-    = form_for([:distributor, @extra], html: { class: 'form-inline' }) do |f|
-      = f.text_field :name, label: false, placeholder: 'Eggs'
-      = f.text_field :unit, label: false, placeholder: '1/2 Doz'
-      = f.text_field :price, label: false
-      = f.submit 'Add Extra', class: 'btn btn-primary'
+= simple_form_for([:distributor, @extra], html: { class: 'form-horizontal' }) do |f|
+  = f.error_notification
+  .row-fluid
+    .span6
+      = f.input :name, placeholder: 'Eggs', input_html: { class: 'span12' }
+      = f.input :unit, placeholder: '1/2 Doz', input_html: { class: 'span12' }
+      = f.input :price, input_html: { class: 'span12' }
+      = f.input :hidden, label: 'Prevent new orders - hidden from webstore, but visible in existing orders', input_html: { class: 'span12' }
+  .row-fluid
+    .span12.form-actions
+      = f.submit @extra.new_record? ? 'Add Extra' : 'Update Extra' , class: 'btn btn-primary'

@@ -104,17 +104,17 @@ $$;
 
 
 --
--- Name: next_occurrence(date, boolean, schedule_rules); Type: FUNCTION; Schema: public; Owner: -
+-- Name: next_occurrence(date, boolean, boolean, schedule_rules); Type: FUNCTION; Schema: public; Owner: -
 --
 
-CREATE FUNCTION next_occurrence(from_date date, ignore_pauses boolean, schedule_rule schedule_rules) RETURNS date
+CREATE FUNCTION next_occurrence(from_date date, ignore_pauses boolean, ignore_halts boolean, schedule_rule schedule_rules) RETURNS date
     LANGUAGE plpgsql STABLE
     AS $$
 DECLARE
   next_date DATE;
 BEGIN
   next_date := from_date;
-  IF schedule_rule.halted THEN
+  IF NOT ignore_halts AND schedule_rule.halted THEN
     return null;
   ELSE
     LOOP
@@ -502,9 +502,7 @@ CREATE TABLE boxes (
     box_image character varying(255),
     available_monthly boolean DEFAULT false NOT NULL,
     extras_limit integer DEFAULT 0,
-    hidden boolean DEFAULT false NOT NULL,
-    exclusions_limit integer,
-    substitutions_limit integer
+    hidden boolean DEFAULT false NOT NULL
 );
 
 
@@ -836,7 +834,7 @@ CREATE TABLE distributors (
     parameter_name character varying(255),
     invoice_threshold_cents integer DEFAULT 0 NOT NULL,
     bucky_box_percentage numeric NOT NULL,
-    separate_bucky_fee boolean DEFAULT true,
+    separate_bucky_fee boolean DEFAULT false,
     support_email character varying(255),
     time_zone character varying(255),
     advance_hour integer,
@@ -864,6 +862,7 @@ CREATE TABLE distributors (
     send_email boolean,
     send_halted_email boolean,
     feature_spend_limit boolean,
+    contact_name character varying(255),
     customer_can_remove_orders boolean DEFAULT false
 );
 
@@ -971,7 +970,8 @@ CREATE TABLE extras (
     price_cents integer DEFAULT 0 NOT NULL,
     currency character varying(255),
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    updated_at timestamp without time zone NOT NULL,
+    hidden boolean DEFAULT false
 );
 
 
@@ -3036,4 +3036,10 @@ INSERT INTO schema_migrations (version) VALUES ('20130125004824');
 
 INSERT INTO schema_migrations (version) VALUES ('20130128022723');
 
-INSERT INTO schema_migrations (version) VALUES ('20130130220514');
+INSERT INTO schema_migrations (version) VALUES ('20130213020709');
+
+INSERT INTO schema_migrations (version) VALUES ('20130213224528');
+
+INSERT INTO schema_migrations (version) VALUES ('20130218060217');
+
+INSERT INTO schema_migrations (version) VALUES ('20130219014308');
