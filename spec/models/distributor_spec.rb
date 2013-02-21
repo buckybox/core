@@ -10,7 +10,7 @@ describe Distributor do
     specify { distributor.advance_hour.should == 18 }
     specify { distributor.advance_days.should == 3 }
     specify { distributor.automatic_delivery_hour.should == 18 }
-    specify { distributor.customer_can_remove_orders.should be_false }
+    specify { distributor.customer_can_remove_orders.should be_true }
 
     context 'after validation' do
       before do

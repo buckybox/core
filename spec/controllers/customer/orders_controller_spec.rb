@@ -86,7 +86,9 @@ describe Customer::OrdersController do
     end
 
     it "should only deactivate if enabled via admin's distributor settings" do
-      assert !@customer.distributor.customer_can_remove_orders, "This should be false for the test"
+      distributor = @customer.distributor
+      distributor.customer_can_remove_orders = false
+      distributor.save!
       put :deactivate, {id: order.id}
       order.reload.active.should be_true
     end
