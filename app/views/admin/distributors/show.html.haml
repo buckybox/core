@@ -47,6 +47,8 @@
       %dd= @distributor.created_at.to_s(:pretty)
       %dt Active Webstore
       %dd= checkmark_boolean(@distributor.active_webstore)
+      %dt Customer Can Delete Orders
+      %dd= checkmark_boolean(@distributor.customer_can_remove_orders?)
       %dt Default Spend Limit
       - if !@distributor.feature_spend_limit?
         %dd Feature not enabled by admin.
