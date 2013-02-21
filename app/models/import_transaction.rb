@@ -42,9 +42,10 @@ class ImportTransaction < ActiveRecord::Base
 
   validate :customer_belongs_to_distributor
 
-  after_validation :update_account, if: :changed?
+  before_save :update_account, if: :changed?
 
   delegate :account, to: :import_transaction_list
+  delegate :currency, to: :distributor
 
   def self.new_from_row(row, import_transaction_list, distributor)
     match_result = row.single_customer_match(distributor)
@@ -171,6 +172,10 @@ class ImportTransaction < ActiveRecord::Base
 
   private
 
+  def distributor_customer_ids
+    distributor.customer_ids
+  end
+
   def update_account
     # Undo payment to the previous matched customer if they are no longer the match
     if customer_id_changed? && customer_was.present? && payment_created?
@@ -193,11 +198,11 @@ class ImportTransaction < ActiveRecord::Base
   end
 
   def customer_belongs_to_distributor
-    errors.add(:base, "Customer isn't known to this distributor") unless customer_id.blank? || distributor.customer_ids.include?(customer_id)
+    errors.add(:base, "Customer isn't known to this distributor") unless customer_id.blank? || distributor_customer_ids.include?(customer_id)
   end
 
   def payment_description(payment_type, amount)
-    if amount > 0
+    if amount > Money.new(0, currency)
       "Payment made by #{payment_type}"
     else
       "Refund made by #{payment_type}"

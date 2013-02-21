@@ -20,7 +20,7 @@ class WebstoreController < ApplicationController
   def customise
     @stock_list = @distributor.line_items
     @box = @webstore_order.box
-    @extras = @box.extras.alphabetically
+    @extras = @box.extras.not_hidden.alphabetically
   end
 
   def customise_error

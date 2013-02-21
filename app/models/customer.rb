@@ -201,6 +201,10 @@ class Customer < ActiveRecord::Base
     self
   end
 
+  def can_deactivate_orders?
+    distributor.customer_can_remove_orders?
+  end
+
   def update_next_occurrence!
     update_next_occurrence
     save!
@@ -300,6 +304,10 @@ class Customer < ActiveRecord::Base
 
   def calculate_next_order(date=Date.current.to_s(:db))
     orders.active.select("orders.*, next_occurrence('#{date}', false, false, schedule_rules.*)").joins(:schedule_rule).reject{|sr| sr.next_occurrence.blank?}.sort_by(&:next_occurrence).first
+  end
+
+  def has_yellow_deliveries?
+    orders.any?(&:has_yellow_deliveries?)
   end
 
   private

@@ -859,10 +859,11 @@ CREATE TABLE distributors (
     customers_index_intro boolean DEFAULT true NOT NULL,
     has_balance_threshold boolean DEFAULT false,
     default_balance_threshold_cents integer DEFAULT 0,
-    send_email boolean,
+    send_email boolean DEFAULT true,
     send_halted_email boolean,
     feature_spend_limit boolean,
-    contact_name character varying(255)
+    contact_name character varying(255),
+    customer_can_remove_orders boolean DEFAULT true
 );
 
 
@@ -969,7 +970,8 @@ CREATE TABLE extras (
     price_cents integer DEFAULT 0 NOT NULL,
     currency character varying(255),
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    updated_at timestamp without time zone NOT NULL,
+    hidden boolean DEFAULT false
 );
 
 
@@ -3012,6 +3014,8 @@ INSERT INTO schema_migrations (version) VALUES ('20121119000156');
 
 INSERT INTO schema_migrations (version) VALUES ('20121119005042');
 
+INSERT INTO schema_migrations (version) VALUES ('20121128005022');
+
 INSERT INTO schema_migrations (version) VALUES ('20121204015243');
 
 INSERT INTO schema_migrations (version) VALUES ('20121211024951');
@@ -3037,3 +3041,7 @@ INSERT INTO schema_migrations (version) VALUES ('20130213020709');
 INSERT INTO schema_migrations (version) VALUES ('20130213224528');
 
 INSERT INTO schema_migrations (version) VALUES ('20130218060217');
+
+INSERT INTO schema_migrations (version) VALUES ('20130219014308');
+
+INSERT INTO schema_migrations (version) VALUES ('20130220234725');
