@@ -48,7 +48,7 @@ class Distributor < ActiveRecord::Base
     :time_zone, :currency, :bank_deposit, :paypal, :bank_deposit_format, :country_id, :consumer_delivery_fee,
     :consumer_delivery_fee_cents, :active_webstore, :about, :details, :facebook_url, :city, :customers_show_intro,
     :deliveries_index_packing_intro, :deliveries_index_deliveries_intro, :payments_index_intro, :customers_index_intro,
-    :parameter_name, :default_balance_threshold, :has_balance_threshold, :spend_limit_on_all_customers,
+    :customer_can_remove_orders, :parameter_name, :default_balance_threshold, :has_balance_threshold, :spend_limit_on_all_customers,
     :send_email, :send_halted_email, :feature_spend_limit, :contact_name, :tag_list
 
   validates_presence_of :country
@@ -149,6 +149,10 @@ class Distributor < ActiveRecord::Base
   def window_start_from
     # If we have missed the cutoff point add a day so we start generation from tomorrow
     Date.current + ( advance_hour < Time.current.hour ? 1 : 0 ).days
+  end
+
+  def beginning_of_green_zone
+    window_end_at + 1.day
   end
 
   def window_end_at
