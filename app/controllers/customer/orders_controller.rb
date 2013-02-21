@@ -65,7 +65,7 @@ class Customer::OrdersController < Customer::ResourceController
       if !current_customer.can_deactivate_orders?
         format.html { redirect_to customer_root_path, notice: "You don't have permission to do this. Please contact #{current_customer.distributor.name}." }
       elsif !@order.recurs? && @order.has_yellow_deliveries?
-          redirect_to customer_root_path, notice: 'We could not remove this order as the impending delivery is too late to cancel.'
+        format.html {redirect_to customer_root_path, notice: 'We could not remove this order as the impending delivery is too late to cancel.'}
       elsif current_customer.can_deactivate_orders? && @order.update_attribute(:active, false)
         format.html do
           if @order.recurs? && @order.has_yellow_deliveries?
