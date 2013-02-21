@@ -64,11 +64,20 @@ class Customer::OrdersController < Customer::ResourceController
     respond_to do |format|
       if !current_customer.can_deactivate_orders?
         format.html { redirect_to customer_root_path, notice: "You don't have permission to do this. Please contact #{current_customer.distributor.name}." }
+      elsif !@order.recurs? && @order.has_yellow_deliveries?
+        format.html {redirect_to customer_root_path, notice: 'We could not remove this order as the impending delivery is too late to cancel.'}
       elsif current_customer.can_deactivate_orders? && @order.update_attribute(:active, false)
-        format.html { redirect_to customer_root_path, notice: 'Order was successfully deactivated.' }
+        format.html do
+          if @order.recurs? && @order.has_yellow_deliveries?
+            flash[:alert] = 'WARNING: there is an impending delivery which is too late to cancel, however we have removed the order for future deliveries.'
+          else
+            flash[:notice] = 'Your order was successfully removed.'
+          end
+          redirect_to customer_root_path
+        end
         #format.json { head :no_content }
       else
-        format.html { redirect_to customer_root_path, warning: 'Error while trying to deactivate order.' }
+        format.html { redirect_to customer_root_path, warning: 'Error while trying to remove your order.' }
         #format.json { render json: @order.errors, status: :unprocessable_entity }
       end
     end

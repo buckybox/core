@@ -311,7 +311,7 @@ class Customer < ActiveRecord::Base
   end
 
   def has_yellow_deliveries?
-    orders.active.any?(&:has_yellow_deliveries?)
+    orders.any?(&:has_yellow_deliveries?)
   end
 
   private
