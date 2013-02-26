@@ -13,6 +13,7 @@ class Extra < ActiveRecord::Base
 
   scope :alphabetically, order('name ASC, unit ASC')
   scope :not_hidden, where(hidden: false)
+  scope :none, where("1 = 0")
 
   def to_hash
     { name: name, unit: unit, price_cents: price_cents, currency: currency }
