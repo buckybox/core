@@ -863,7 +863,8 @@ CREATE TABLE distributors (
     send_halted_email boolean,
     feature_spend_limit boolean,
     contact_name character varying(255),
-    customer_can_remove_orders boolean DEFAULT true
+    customer_can_remove_orders boolean DEFAULT true,
+    collect_phone_in_webstore boolean
 );
 
 
@@ -1261,7 +1262,8 @@ CREATE TABLE orders (
     updated_at timestamp without time zone,
     account_id integer,
     active boolean DEFAULT false NOT NULL,
-    extras_one_off boolean DEFAULT true
+    extras_one_off boolean DEFAULT true,
+    extras_package_id integer
 );
 
 
@@ -3045,3 +3047,7 @@ INSERT INTO schema_migrations (version) VALUES ('20130218060217');
 INSERT INTO schema_migrations (version) VALUES ('20130219014308');
 
 INSERT INTO schema_migrations (version) VALUES ('20130220234725');
+
+INSERT INTO schema_migrations (version) VALUES ('20130222011927');
+
+INSERT INTO schema_migrations (version) VALUES ('20130226231819');
