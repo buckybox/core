@@ -119,6 +119,14 @@ class Package < ActiveRecord::Base
     Package.extras_description(archived_extras)
   end
 
+  def extras_summary
+    Package.extras_summary(archived_extras)
+  end
+
+  def self.extras_summary(archived_extras)
+    archived_extras.is_a?(Hash) ? archived_extras : archived_extras.map(&:to_hash)
+  end
+
   def self.contents_description(box_name, order_extras)
     box_name = box_name.name if box_name.is_a? Box
 

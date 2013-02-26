@@ -316,6 +316,10 @@ class Order < ActiveRecord::Base
   def clear_extras
     self.extras = []
   end
+  
+  def extras_summary
+    Package.extras_summary(order_extras)
+  end
 
   # Manually create the first delivery all following deliveries should be scheduled for creation by the cron job
   def activate
