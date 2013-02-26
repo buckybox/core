@@ -19,6 +19,8 @@ class Order < ActiveRecord::Base
 
   has_one :schedule_rule, as: :scheduleable, inverse_of: :scheduleable, autosave: true, dependent: :destroy
 
+  belongs_to :extras_package, class_name: Package
+
   scope :completed, where(completed: true)
   scope :active, where(active: true)
   scope :inactive, where(active: false)
@@ -48,10 +50,6 @@ class Order < ActiveRecord::Base
   before_validation :activate, if: :just_completed?
 
   default_scope order('created_at DESC')
-
-  scope :completed, where(completed: true)
-  scope :active,    where(active: true)
-  scope :inactive,  where(active: false)
 
   delegate :local_time_zone, to: :distributor, allow_nil: true
   delegate :start, :recurs?, :pause!, :remove_pause!, :paused?, :pause_date, :resume_date, :next_occurrence, :next_occurrences, :remove_day, :occurrences_between, to: :schedule_rule
@@ -186,7 +184,8 @@ class Order < ActiveRecord::Base
   def order_extras=(collection)
     raise "I wasn't expecting you to set these directly" unless collection.is_a?(Hash) || collection.is_a?(Array)
 
-    order_extras.destroy_all
+    original_order_extras.destroy_all
+    self.extras_package = nil
 
     collection.to_a.compact.each do |id, params|
       count = params[:count]
@@ -280,19 +279,42 @@ class Order < ActiveRecord::Base
     return result_string
   end
 
-  def pack_and_update_extras
+  def extras_package
+    Package.unscoped.find_by_id(extras_package_id)
+  end
+
+  alias_method :original_order_extras, :order_extras
+  def order_extras
+    if extras_package.present? && extras_one_off
+      original_order_extras.none
+    else
+      original_order_extras
+    end
+  end
+
+  alias_method :original_extras, :extras
+  def extras
+    if extras_package.present? && extras_one_off
+      original_extras.none
+    else
+      original_extras
+    end
+  end
+
+  def pack_and_update_extras(package)
     packed_extras = order_extras.collect(&:to_hash)
-    clear_extras if extras_one_off # Now that the extras are in a package, we don't need them on the order anymore, unless it recurs
+    package.set_one_off_extra_order(self) if extras_one_off?
 
     return packed_extras
   end
 
-  def clear_extras
-    self.extras = []
+  def set_extras_package!(package)
+    self.extras_package = package
+    save!
   end
 
-  def extras_summary
-    Package.extras_summary(order_extras)
+  def clear_extras
+    self.extras = []
   end
 
   # Manually create the first delivery all following deliveries should be scheduled for creation by the cron job

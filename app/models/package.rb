@@ -32,6 +32,7 @@ class Package < ActiveRecord::Base
   before_validation :default_packing_method, if: 'status == "packed" && packing_method.nil?'
 
   before_save :archive_data
+  after_save :save_one_off_extra_order
 
   scope :originals, where(original_package_id: nil)
 
@@ -116,14 +117,6 @@ class Package < ActiveRecord::Base
 
   def extras_description
     Package.extras_description(archived_extras)
-  end
-
-  def extras_summary
-    Package.extras_summary(archived_extras)
-  end
-
-  def self.extras_summary(archived_extras)
-    archived_extras.is_a?(Hash) ? archived_extras : archived_extras.map(&:to_hash)
   end
 
   def self.contents_description(box_name, order_extras)
@@ -231,6 +224,10 @@ class Package < ActiveRecord::Base
     return result.upcase
   end
 
+  def set_one_off_extra_order(order)
+    @one_off_extra_order = order
+  end
+
   private
 
   def archive_data
@@ -261,7 +258,11 @@ class Package < ActiveRecord::Base
 
   def archive_extras
     if archived_extras.blank?
-      self.archived_extras = order.pack_and_update_extras
+      self.archived_extras = order.pack_and_update_extras(self)
     end
+  end
+
+  def save_one_off_extra_order
+    @one_off_extra_order.set_extras_package!(self) if @one_off_extra_order.present?
   end
 end
