@@ -17,9 +17,10 @@ class Order < ActiveRecord::Base
 
   has_many :extras, through: :order_extras
 
-  has_one :schedule_rule, as: :scheduleable, inverse_of: :scheduleable, autosave: true, dependent: :destroy
+  belongs_to :extras_packing_list, class_name: PackingList
+  belongs_to :extras_delivery_list, class_name: DeliveryList
 
-  belongs_to :extras_package, class_name: Package
+  has_one :schedule_rule, as: :scheduleable, inverse_of: :scheduleable, autosave: true, dependent: :destroy
 
   scope :completed, where(completed: true)
   scope :active, where(active: true)
@@ -185,7 +186,8 @@ class Order < ActiveRecord::Base
     raise "I wasn't expecting you to set these directly" unless collection.is_a?(Hash) || collection.is_a?(Array)
 
     original_order_extras.destroy_all
-    self.extras_package = nil
+    self.extras_packing_list = nil
+    self.extras_delivery_list = nil
 
     collection.to_a.compact.each do |id, params|
       count = params[:count]
@@ -279,13 +281,9 @@ class Order < ActiveRecord::Base
     return result_string
   end
 
-  def extras_package
-    Package.unscoped.find_by_id(extras_package_id)
-  end
-
   alias_method :original_order_extras, :order_extras
   def order_extras
-    if extras_package.present? && extras_one_off
+    if extras_delivered? && extras_one_off?
       original_order_extras.none
     else
       original_order_extras
@@ -294,7 +292,7 @@ class Order < ActiveRecord::Base
 
   alias_method :original_extras, :extras
   def extras
-    if extras_package.present? && extras_one_off
+    if extras_delivered? && extras_one_off?
       original_extras.none
     else
       original_extras
@@ -302,14 +300,24 @@ class Order < ActiveRecord::Base
   end
 
   def pack_and_update_extras(package)
-    packed_extras = order_extras.collect(&:to_hash)
+    return [] if extras_one_off? && extras_processed?
+
+    packed_extras = original_order_extras.collect(&:to_hash)
     package.set_one_off_extra_order(self) if extras_one_off?
 
     return packed_extras
   end
 
+  def extras_processed?
+    extras_packing_list.present?
+  end
+
+  def extras_delivered?
+    extras_packing_list.present? && extras_packing_list.packages.where(order_id:self.id).first.deliveries.any?(&:delivered?)
+  end
+
   def set_extras_package!(package)
-    self.extras_package = package
+    self.extras_packing_list = package.packing_list
     save!
   end
 
@@ -380,7 +388,7 @@ class Order < ActiveRecord::Base
   end
 
   def route_includes_schedule_rule
-    unless account.route.includes?(schedule_rule)
+    unless account.route.includes?(schedule_rule, {ignore_start: true})
       errors.add(:schedule_rule, "Route #{account.route.name}'s schedule '#{account.route.schedule_rule.inspect} doesn't include this order's schedule of '#{schedule_rule.inspect}'")
     end
   end
