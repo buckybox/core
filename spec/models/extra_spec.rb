@@ -17,10 +17,14 @@ describe Extra do
       @date = Date.current
 
       @packing_list = PackingList.get(@distributor, @date)
-      package = @packing_list.packages.originals.find_or_create_by_order_id(@order.id)
+      @package = @packing_list.packages.originals.find_or_create_by_order_id(@order.id)
 
       @packing_list2 = PackingList.get(@distributor, @date + 1.day)
       @package2 = @packing_list2.packages.originals.find_or_create_by_order_id(@order.id)
+    end
+
+    it 'should add extras to the first order' do
+      @package.archived_extras.should_not be_blank
     end
 
     it 'should only add extras to the first order' do

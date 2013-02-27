@@ -238,6 +238,10 @@ class Package < ActiveRecord::Base
 
   private
 
+  def delivery
+    deliveries.order("created_at DESC").first
+  end
+
   def archive_data
     if status != 'packed'
       self.archived_address               = address.join(', ')
