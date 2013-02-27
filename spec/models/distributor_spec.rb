@@ -464,17 +464,17 @@ describe Distributor do
 
     let(:packing_lists) do
       double('packing_lists',
-        last: nil,
-        find_by_date: packing_list,
+        last:          nil,
+        find_by_date:  packing_list,
       )
     end
 
     before do
       distributor.stub(
-        window_start_from: window_start_from,
-        window_end_at: window_end_at,
-        packing_lists: packing_lists,
-        delivery_lists: delivery_lists,
+        window_start_from:  window_start_from,
+        window_end_at:      window_end_at,
+        packing_lists:      packing_lists,
+        delivery_lists:     delivery_lists,
       )
 
       returned_packing_list.stub(:date).and_return(Date.new(2012, 11, 8), Date.new(2012, 11, 9))
