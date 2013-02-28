@@ -1,0 +1,1145 @@
+pick up point,Family Name,Name,Street + nr,zip code,city,VAT nr,bank account nr,name on which the bank account nr is registerd,phone nr 1,phone nr 2,mobile,fax,email,box type,forthnightly,,payment method,amount payed per month,automatic payment,auto payment number,comments/special info,start date trial,start state subscription,stop date subscription
+,,,,,,,,,,,,,,,true=waar - false=onwaar,,Permanente opdr. = monthly by bank,,true=waar - false=onwaar,,,,,
+,,,,,,,,,,,,,,,,,,,we give an order to the bank to take the money from their account,,,,,
+Depot,Achternaam,Voornaam,Straat+nr,postcode,Gemeente,BTW-nr,Rekeningnr,Naam rekeninghouder,Telefoon1,Telefoon2,GSM,Fax,e-mail,Omschrijving,14-daags,even/oneven,Betaalwijze,Bedrag,Domiciliëring,Domnr,info,Start Proef,Start abonnement,Stop abonnement
+,Bohez,Hannah,Engelstraat 52,9040,Gent,,,,0474/319098,,,,hmetteb@yahoo.com,fruitpakket,FALSE,,,127.5,FALSE,,,16-Oct-12,,24-Oct-12
+,Bohez,Hannah,Engelstraat 52,9040,Gent,,,,0474/319098,,,,hmetteb@yahoo.com,broodpakket,FALSE,,,127.5,FALSE,,,16-Oct-12,,24-Oct-12
+,Bohez,Hannah,Engelstraat 52,9040,Gent,,,,0474/319098,,,,hmetteb@yahoo.com,klein pakket (GROENE BAK),FALSE,,,127.5,FALSE,,,16-Oct-12,,24-Oct-12
+,Schietecatte,Eric,Emmerstraat 30,9620,Zottegem,,877-7709101-39,,09/3603595,09/3603595,,,,aardappel pakket,TRUE,oneven,cash,62,FALSE,879009597614,,01-Jan-05,01-Jan-05,02-Nov-12
+,Schietecatte,Eric,Emmerstraat 30,9620,Zottegem,,877-7709101-39,,09/3603595,09/3603595,,,,fruitpakket,FALSE,,cash,62,FALSE,879009597614,,,27-Jan-98,02-Nov-12
+,Schietecatte,Eric,Emmerstraat 30,9620,Zottegem,,877-7709101-39,,09/3603595,09/3603595,,,,broodpakket,FALSE,,cash,62,FALSE,879009597614,,,27-Jan-98,02-Nov-12
+,Schietecatte,Sandra,Steenbergen 48,9620,Zottegem,,,,09/360.35.95,,,,,fruitpakket,FALSE,,cash,43,FALSE,879009597513,,15-Apr-07,15-Apr-07,02-Nov-12
+,Schietecatte,Sandra,Steenbergen 48,9620,Zottegem,,,,09/360.35.95,,,,,klein pakket (GROENE BAK),FALSE,,Permanente opdr.,43,FALSE,879009597513,,09-Apr-10,09-Apr-10,01-Sep-11
+,Schietecatte,Sandra,Steenbergen 48,9620,Zottegem,,,,09/360.35.95,,,,,tussen pakket (GRIJZE BAK),FALSE,,cash,43,FALSE,879009597513,,15-Apr-07,15-Apr-07,09-Apr-10
+,Sweetlove,Piet,Jan Delvinlaan 81,9000,Gent,,001-5649168-61,Sweetlove Peter,09/228 00 83,,,,,aardappel pakket,TRUE,oneven,,75,FALSE,,,17-Oct-12,,24-Oct-12
+,Sweetlove,Piet,Jan Delvinlaan 81,9000,Gent,,001-5649168-61,Sweetlove Peter,09/228 00 83,,,,,tussen pakket (GRIJZE BAK),FALSE,,,75,FALSE,,,16-Oct-12,,24-Oct-12
+,Tiétard,Eva,Cecile Cautermanstraat 13,9040,Gent,,310-1049798-53,Eva Tiétard,472535323,,,,eva@laperodoc.be,broodpakket,FALSE,,,83.5,FALSE,,proef voor 4 weken,16-Oct-12,01-Dec-12,24-Oct-12
+,Tiétard,Eva,Cecile Cautermanstraat 13,9040,Gent,,310-1049798-53,Eva Tiétard,472535323,,,,eva@laperodoc.be,klein pakket (GROENE BAK),FALSE,,,83.5,FALSE,,proef voor 4 weken,16-Oct-12,16-Oct-12,24-Oct-12
+,Tiétard,Eva,Cecile Cautermanstraat 13,9040,Gent,,310-1049798-53,Eva Tiétard,472535323,,,,eva@laperodoc.be,aardappel pakket,TRUE,oneven,,83.5,FALSE,,proef voor 4 weken,16-Oct-12,01-Dec-12,24-Oct-12
+Aalst,Brodeaux-Van Rossem,Floor,Bosstraat 36,1790,Affligem,,,,053/417384,,,,,klein pakket (GROENE BAK),FALSE,,Permanente opdr.,43,FALSE,,"komen van Mechelen, tevreden ,klant!!",17-Nov-04,31-Dec-04,
+Aalst,Broymans - Noens,Zereh,Stationsstraat 6,1861,Wolvertem,,,,0478/716584,,,,,klein pakket (GROENE BAK),FALSE,,Permanente opdr.,,FALSE,,"even week 1 brood
+bij de oneven week 2 broden, waarvan 1 notenbrood",11-Nov-09,30-Dec-09,16-Feb-10
+Aalst,Callebaut,Roger,Langestraat 131,9300,Aalst,,001-2475214-44,,053/704798,053/704798,,,omapia@skynet.be,aardappel pakket,FALSE,,,92,FALSE,,augustus 2011,,28-Oct-10,28-Oct-10
+Aalst,Callebaut,Roger,Langestraat 131,9300,Aalst,,001-2475214-44,,053/704798,053/704798,,,omapia@skynet.be,derde brood,FALSE,,,92,FALSE,,augustus 2011,,28-Oct-10,28-Oct-10
+Aalst,Callebaut,Roger,Langestraat 131,9300,Aalst,,001-2475214-44,,053/704798,053/704798,,,omapia@skynet.be,derde brood,FALSE,,Permanente opdr.,92,FALSE,,augustus 2011,08-Apr-06,08-Apr-06,27-Apr-12
+Aalst,Callebaut,Roger,Langestraat 131,9300,Aalst,,001-2475214-44,,053/704798,053/704798,,,omapia@skynet.be,fruitpakket,FALSE,,,92,FALSE,,augustus 2011,,27-Oct-11,
+Aalst,Callebaut,Roger,Langestraat 131,9300,Aalst,,001-2475214-44,,053/704798,053/704798,,,omapia@skynet.be,aardappel pakket,TRUE,oneven,Permanente opdr.,92,FALSE,,augustus 2011,10-Oct-04,10-Oct-04,
+Aalst,Callebaut,Roger,Langestraat 131,9300,Aalst,,001-2475214-44,,053/704798,053/704798,,,omapia@skynet.be,broodpakket,FALSE,,Permanente opdr.,92,FALSE,,augustus 2011,14-Nov-00,28-Nov-00,06-Nov-12
+Aalst,Callebaut,Roger,Langestraat 131,9300,Aalst,,001-2475214-44,,053/704798,053/704798,,,omapia@skynet.be,fruitpakket,FALSE,,,92,FALSE,,augustus 2011,28-Oct-09,,01-Jul-10
+Aalst,Callebaut,Roger,Langestraat 131,9300,Aalst,,001-2475214-44,,053/704798,053/704798,,,omapia@skynet.be,klein pakket (GROENE BAK),FALSE,,,92,FALSE,,augustus 2011,,29-Dec-10,
+Aalst,Callebaut,Roger,Langestraat 131,9300,Aalst,,001-2475214-44,,053/704798,053/704798,,,omapia@skynet.be,tussen pakket (GRIJZE BAK),FALSE,,Permanente opdr.,92,FALSE,,augustus 2011,01-May-07,01-May-07,29-Dec-10
+Aalst,Callebaut,Roger,Langestraat 131,9300,Aalst,,001-2475214-44,,053/704798,053/704798,,,omapia@skynet.be,tweede brood,FALSE,,Permanente opdr.,92,FALSE,,augustus 2011,14-Nov-00,28-Nov-00,06-Nov-12
+Aalst,Callebaut,Roger,Langestraat 131,9300,Aalst,,001-2475214-44,,053/704798,053/704798,,,omapia@skynet.be,fruitpakket,FALSE,,,92,FALSE,,augustus 2011,,28-Oct-10,18-Aug-11
+Aalst,Coene,Maya,Keppestraat 7 bus22,9320,Erembodegem,,,,0478/96 67 84,,,,mayacoene@yahoo.com,fruitpakket,FALSE,,Permanente opdr.,97,TRUE,148860718479,,29-Aug-08,02-Oct-08,11-Oct-12
+Aalst,Coene,Maya,Keppestraat 7 bus22,9320,Erembodegem,,,,0478/96 67 84,,,,mayacoene@yahoo.com,tussen pakket (GRIJZE BAK),FALSE,,,97,TRUE,148860718479,,,02-Oct-08,11-Oct-12
+Aalst,Coussement - Daem,Jos,Hoezekouterdreef 41,9300,Aalst,,751-0013221-69,,053/785254,,,,,broodpakket,FALSE,,cash,62,TRUE,766151029824,,01-Oct-05,01-Oct-05,
+Aalst,Coussement - Daem,Jos,Hoezekouterdreef 41,9300,Aalst,,751-0013221-69,,053/785254,,,,,tweede brood,FALSE,,cash,62,TRUE,766151029824,,01-Mar-06,01-Mar-06,30-Nov-12
+Aalst,Coussement - Daem,Jos,Hoezekouterdreef 41,9300,Aalst,,751-0013221-69,,053/785254,,,,,aardappel pakket,TRUE,oneven,cash,62,TRUE,766151029824,,30-Aug-06,30-Aug-06,
+Aalst,Coussement - Daem,Jos,Hoezekouterdreef 41,9300,Aalst,,751-0013221-69,,053/785254,,,,,klein pakket (GROENE BAK),FALSE,,cash,62,TRUE,766151029824,,01-Oct-05,01-Oct-05,
+Aalst,De Baere,Wim,Meuleschettestraat  54,9300,Aalst,,780-5414856-38,,53779491,53779491,,,,klein pakket (GROENE BAK),FALSE,,Permanente opdr.,43,FALSE,,",6/01,6/2,6/3,7/4,8/5,6/6 € 32,23,7/7,8/8,9/9,9/10,",10-Sep-99,01-Oct-99,
+Aalst,De Mesmaeker,Els,Rodestraat 59,1742,st Katharina - Lombeek,,443-1701211-34,,02/3065490,02/3065490,,,elsdemesmaeker@telenet.be,klein pakket (GROENE BAK),FALSE,,cash,,FALSE,53345892654,"3/01,4/2,4/3,2/4,2/5,3/6 € 32,23,3/7,3/8,3/9,3/10,
+Fiche van de kelder Patrick",,01-Jan-01,28-Oct-10
+Aalst,DE RIJCKE- Van Molle,Benny,Horing 7,9310,Aalst,,,,053/673722,,0477/772432,,,klein pakket (GROENE BAK),FALSE,,Permanente opdr.,43,FALSE,,"terug opstarten in het voorjaar, april. Vooraf bellen",31-Aug-11,,31-Oct-12
+Aalst,DE RIJCKE- Van Molle,Benny,Horing 7,9310,Aalst,,,,053/673722,,0477/772432,,,klein pakket (GROENE BAK),FALSE,,Permanente opdr.,43,FALSE,,"terug opstarten in het voorjaar, april. Vooraf bellen",03-Dec-08,31-Dec-08,30-Jun-10
+Aalst,DE RIJCKE- Van Molle,Benny,Horing 7,9310,Aalst,,,,053/673722,,0477/772432,,,klein pakket (GROENE BAK),FALSE,,Permanente opdr.,43,FALSE,,"terug opstarten in het voorjaar, april. Vooraf bellen",01-Sep-10,,22-Jul-11
+Aalst,De Wannemaeker,Karine,J.Jordaensweg 11,1861,Wolvertem,,63952978454,,476543186,,,,"caroline-9-dwergen@hotmail,com",tussen pakket (GRIJZE BAK),FALSE,,Permanente opdr.,,FALSE,53580067125,geen desembrood,10-Sep-09,31-Oct-09,01-Jul-10
+Aalst,De Wannemaeker,Karine,J.Jordaensweg 11,1861,Wolvertem,,63952978454,,476543186,,,,"caroline-9-dwergen@hotmail,com",aardappel pakket,TRUE,oneven,Permanente opdr.,,FALSE,53580067125,geen desembrood,29-Sep-09,,01-Jul-10
+Aalst,De Wannemaeker,Karine,J.Jordaensweg 11,1861,Wolvertem,,63952978454,,476543186,,,,"caroline-9-dwergen@hotmail,com",fruitpakket,FALSE,,Permanente opdr.,,FALSE,53580067125,geen desembrood,29-Sep-09,,01-Jul-10
+Aalst,Desmet,Inge,Steenpoelweg 8,1790,Affligem,,,,475276663,,,,inge.desmet1@telenet.be,groot pakket (RODE BAK),TRUE,oneven,,60.5,FALSE,,,10-Nov-11,29-Dec-11,29-Dec-11
+Aalst,Desmet,Inge,Steenpoelweg 8,1790,Affligem,,,,475276663,,,,inge.desmet1@telenet.be,fruitpakket,TRUE,oneven,,60.5,FALSE,,,10-Nov-11,29-Dec-11,29-Dec-11
+Aalst,Diels,Louis,Vogelzang 2,9320,Erembodegem,,,,053/779661,053/779661,,,,klein pakket (GROENE BAK),TRUE,oneven,cash,21.5,FALSE,676213066,"starten opnieuw veertiendaags met opdracht ineens4/4,5/5,4/6 € 16,5,4/7,4/8,4/9,4/10,",01-Apr-03,01-Apr-03,29-Sep-11
+Aalst,Dierick - Remory,René en Marie,Affligemdreef 48,9300,Aalst,,780-5615040-14,,053/212734,053/212734,,,,klein pakket (GROENE BAK),FALSE,,cash,98,FALSE,53341114392,",6/01,6/2,6/3,7/4,5/5,6/6/6 € 33,7/7,8/8,9/9,10/9,10/10,
+fruit 6/6 € 33",01-Jan-01,31-Jan-01,31-Mar-11
+Aalst,Dierick - Remory,René en Marie,Affligemdreef 48,9300,Aalst,,780-5615040-14,,053/212734,053/212734,,,,fruitpakket,FALSE,,cash,98,FALSE,53341114392,",6/01,6/2,6/3,7/4,5/5,6/6/6 € 33,7/7,8/8,9/9,10/9,10/10,
+fruit 6/6 € 33",01-Jan-01,31-Jan-01,31-Mar-11
+Aalst,Dierick - Remory,René en Marie,Affligemdreef 48,9300,Aalst,,780-5615040-14,,053/212734,053/212734,,,,aardappel pakket,TRUE,oneven,cash,98,FALSE,53341114392,",6/01,6/2,6/3,7/4,5/5,6/6/6 € 33,7/7,8/8,9/9,10/9,10/10,
+fruit 6/6 € 33",10-Oct-04,10-Oct-04,31-Mar-11
+Aalst,Dierick - Remory,René en Marie,Affligemdreef 48,9300,Aalst,,780-5615040-14,,053/212734,053/212734,,,,aardappel pakket,TRUE,oneven,cash,98,FALSE,53341114392,",6/01,6/2,6/3,7/4,5/5,6/6/6 € 33,7/7,8/8,9/9,10/9,10/10,
+fruit 6/6 € 33",10-Oct-04,10-Oct-04,31-Mar-11
+Aalst,Evenepoel - Kuykens,Ria,Affligemdreef 36,9300,Aalst,,293-0486868-80,,053/780807,,,,,tussen pakket (GRIJZE BAK),FALSE,,cash,,FALSE,38338791571,,18-Feb-06,31-Mar-06,30-Nov-10
+Aalst,Evenepoel-Branckaert,Kathleen-Yves,Groenstraat 8,1790,Hekelgem,,979-3836939-12,,053/680592,,,,,klein pakket (GROENE BAK),FALSE,,Permanente opdr.,43,TRUE,979235747185,"niet terug betalen krijgt spagehtti in de plaats
+gestopt wegens ziekte langdurig, komen terug als vrouw herstelt is",31-Jul-08,31-Jul-08,
+Aalst,Favere-Commeyne,Suzy-Mario,Kleistraat 59,9320,Erembodegem,,290-0035714-39,,053/707683,,,,,borstvoedingspakket (oker bak),FALSE,,,67,FALSE,,,,19-Jan-11,
+Aalst,Favere-Commeyne,Suzy-Mario,Kleistraat 59,9320,Erembodegem,,290-0035714-39,,053/707683,,,,,fruitpakket,FALSE,,Permanente opdr.,67,FALSE,,,09-May-04,30-May-04,04-Apr-12
+Aalst,Favere-Commeyne,Suzy-Mario,Kleistraat 59,9320,Erembodegem,,290-0035714-39,,053/707683,,,,,broodpakket,FALSE,,,67,FALSE,,,04-Apr-12,04-Apr-12,
+Aalst,Favere-Commeyne,Suzy-Mario,Kleistraat 59,9320,Erembodegem,,290-0035714-39,,053/707683,,,,,tussen pakket (GRIJZE BAK),FALSE,,Permanente opdr.,67,FALSE,,,09-May-04,30-May-04,19-Jan-11
+Aalst,Ghysens - Beulens,Lies-Filip,Pachting 136,6310,Moorsel,,,,0485/73 61 90,,,,lies.beulens@telenet.be,tussen pakket (GRIJZE BAK),FALSE,,,103,FALSE,,filip.ghysens@telenet.be,02-Sep-10,30-Sep-10,
+Aalst,Ghysens - Beulens,Lies-Filip,Pachting 136,6310,Moorsel,,,,0485/73 61 90,,,,lies.beulens@telenet.be,fruitpakket,FALSE,,,103,FALSE,,filip.ghysens@telenet.be,02-Sep-10,30-Sep-10,
+Aalst,Ghysens - Beulens,Lies-Filip,Pachting 136,6310,Moorsel,,,,0485/73 61 90,,,,lies.beulens@telenet.be,aardappel pakket,TRUE,oneven,,103,FALSE,,filip.ghysens@telenet.be,02-Sep-10,30-Sep-10,
+Aalst,Ghysens-Kiekens,kristien,Moorselbaan 315/3,9300,Aalst,,,,0478/63 01 53,,,,,klein pakket (GROENE BAK),FALSE,,,43,FALSE,,,09-Dec-10,27-Jan-11,
+Aalst,Leyman,Peter,Hof ten Berghestraat 59,9300,Aalst,,439-4154221-95,,053/700764,053/700764,,,,groot pakket (RODE BAK),FALSE,,cash,120,TRUE,740828687649,",WEEK 17/8 EN 24/8 GEEN FRUIT? WEEK 36 EN 37 dubbel fruit
+
+brood, ok",,26-Jun-01,
+Aalst,Leyman,Peter,Hof ten Berghestraat 59,9300,Aalst,,439-4154221-95,,053/700764,053/700764,,,,aardappel pakket,TRUE,oneven,Permanente opdr.,120,TRUE,740828687649,",WEEK 17/8 EN 24/8 GEEN FRUIT? WEEK 36 EN 37 dubbel fruit
+
+brood, ok",05-Jan-11,,
+Aalst,Leyman,Peter,Hof ten Berghestraat 59,9300,Aalst,,439-4154221-95,,053/700764,053/700764,,,,fruitpakket,FALSE,,cash,120,TRUE,740828687649,",WEEK 17/8 EN 24/8 GEEN FRUIT? WEEK 36 EN 37 dubbel fruit
+
+brood, ok",,26-Jun-01,
+Aalst,Leyman,Peter,Hof ten Berghestraat 59,9300,Aalst,,439-4154221-95,,053/700764,053/700764,,,,tweede aardappelpakket,TRUE,oneven,Permanente opdr.,120,TRUE,740828687649,",WEEK 17/8 EN 24/8 GEEN FRUIT? WEEK 36 EN 37 dubbel fruit
+
+brood, ok",05-Jan-11,,
+Aalst,Linthaut-Bijl,Elke,Asterste 15,9320,Erembodegem,,,,0485/50 30 05,,,,,klein pakket (GROENE BAK),FALSE,,,43,FALSE,,extra fruit op 04/09/2012,09-Dec-10,27-Jan-11,30-Jun-11
+Aalst,Linthaut-Bijl,Elke,Asterste 15,9320,Erembodegem,,,,0485/50 30 05,,,,,aardappel pakket,TRUE,oneven,,43,FALSE,,extra fruit op 04/09/2012,,30-Jun-11,01-Jun-12
+Aalst,Linthaut-Bijl,Elke,Asterste 15,9320,Erembodegem,,,,0485/50 30 05,,,,,fruitpakket,FALSE,,,43,FALSE,,extra fruit op 04/09/2012,09-Dec-10,27-Jan-11,
+Aalst,Matthyssen,Vanessa,Wijk Pelink 13,1790,Essene,,651-1414324-70,Matthyssen Vanessa,0473/46 73 13,,,,vanessa@nico-vanessa.be,tussen pakket (GRIJZE BAK),FALSE,,,103,FALSE,,,02-Feb-11,30-Mar-11,31-Mar-11
+Aalst,Matthyssen,Vanessa,Wijk Pelink 13,1790,Essene,,651-1414324-70,Matthyssen Vanessa,0473/46 73 13,,,,vanessa@nico-vanessa.be,fruitpakket,FALSE,,,103,FALSE,,,02-Feb-11,30-Mar-11,31-Mar-11
+Aalst,Matthyssen,Vanessa,Wijk Pelink 13,1790,Essene,,651-1414324-70,Matthyssen Vanessa,0473/46 73 13,,,,vanessa@nico-vanessa.be,aardappel pakket,TRUE,oneven,,103,FALSE,,,02-Feb-11,30-Mar-11,31-Mar-11
+Aalst,Mausaray-Sonck,Els,Schevestraat 3,9320,Erembodegem,,,Sonck Els,0497/53 50 71,,,,,klein pakket (GROENE BAK),TRUE,oneven,,49.5,FALSE,38773322572,,09-Dec-10,27-Jan-11,04-Oct-11
+Aalst,Mausaray-Sonck,Els,Schevestraat 3,9320,Erembodegem,,,Sonck Els,0497/53 50 71,,,,,fruitpakket,TRUE,oneven,,49.5,FALSE,38773322572,,09-Dec-10,27-Jan-11,04-Oct-11
+Aalst,Op de Beéck-Daem,,Paemelstraat 363,1770,Liedekerke,,438-5075371-57,,054/322267,054/322267,,,,klein pakket (GROENE BAK),FALSE,,Permanente opdr.,,FALSE,,",5/01,5/2,5/3,5/4,5/5,5/6 € 33,7/7,8/8,9/9,10/9,",,19-Jan-03,08-Jul-10
+Aalst,Roelandt,Veerle,,,,,,,,,,,lunalife1970@hotmail.com,fruitpakket,FALSE,,,54,FALSE,,,20-Nov-12,01-Dec-12,28-Nov-12
+Aalst,Sergeys,Filip,Ouden Aardenweg 48,9300,Aalst,,,,053/700714,053/700714,,,,klein pakket (GROENE BAK),FALSE,,,114,FALSE,,"2/10, 1/11, 1/12 december, 1/01, 1/2,1/3,1/04,1/05,€33 1/06, 1/07,1/08,1/09 € 33, 1/10 € 33,1/11,1/12,1/01,1/2,1/3,1/4,1/5,1/6 € 33,1/7,1/8,1/9,1/10,
+fruit € 33",,02-Feb-12,29-Mar-12
+Aalst,Sergeys,Filip,Ouden Aardenweg 48,9300,Aalst,,,,053/700714,053/700714,,,,groot pakket (RODE BAK),FALSE,,,114,FALSE,,"2/10, 1/11, 1/12 december, 1/01, 1/2,1/3,1/04,1/05,€33 1/06, 1/07,1/08,1/09 € 33, 1/10 € 33,1/11,1/12,1/01,1/2,1/3,1/4,1/5,1/6 € 33,1/7,1/8,1/9,1/10,
+fruit € 33",,29-Mar-12,
+Aalst,Sergeys,Filip,Ouden Aardenweg 48,9300,Aalst,,,,053/700714,053/700714,,,,aardappel pakket,TRUE,oneven,Permanente opdr.,114,FALSE,,"2/10, 1/11, 1/12 december, 1/01, 1/2,1/3,1/04,1/05,€33 1/06, 1/07,1/08,1/09 € 33, 1/10 € 33,1/11,1/12,1/01,1/2,1/3,1/4,1/5,1/6 € 33,1/7,1/8,1/9,1/10,
+fruit € 33",10-Oct-04,10-Oct-04,
+Aalst,Sergeys,Filip,Ouden Aardenweg 48,9300,Aalst,,,,053/700714,053/700714,,,,groot pakket (RODE BAK),FALSE,,,114,FALSE,,"2/10, 1/11, 1/12 december, 1/01, 1/2,1/3,1/04,1/05,€33 1/06, 1/07,1/08,1/09 € 33, 1/10 € 33,1/11,1/12,1/01,1/2,1/3,1/4,1/5,1/6 € 33,1/7,1/8,1/9,1/10,
+fruit € 33",,01-Sep-11,02-Feb-12
+Aalst,Sergeys,Filip,Ouden Aardenweg 48,9300,Aalst,,,,053/700714,053/700714,,,,fruitpakket,FALSE,,Permanente opdr.,114,FALSE,,"2/10, 1/11, 1/12 december, 1/01, 1/2,1/3,1/04,1/05,€33 1/06, 1/07,1/08,1/09 € 33, 1/10 € 33,1/11,1/12,1/01,1/2,1/3,1/4,1/5,1/6 € 33,1/7,1/8,1/9,1/10,
+fruit € 33",,25-Aug-98,
+Aalst,Sergeys,Filip,Ouden Aardenweg 48,9300,Aalst,,,,053/700714,053/700714,,,,klein pakket (GROENE BAK),FALSE,,Permanente opdr.,114,FALSE,,"2/10, 1/11, 1/12 december, 1/01, 1/2,1/3,1/04,1/05,€33 1/06, 1/07,1/08,1/09 € 33, 1/10 € 33,1/11,1/12,1/01,1/2,1/3,1/4,1/5,1/6 € 33,1/7,1/8,1/9,1/10,
+fruit € 33",,25-Aug-98,01-Sep-11
+Aalst,Sonck,Cinderella,Borrekent 69,9450,Denderhoutem,,,,054/518008,,0497/914737,,,fruitpakket,FALSE,,,43,TRUE,740868531108,"? Brood stop op 6 nov?
+
+Stop vanaf juni  tot en met september 2012",,01-Nov-12,
+Aalst,Sonck,Cinderella,Borrekent 69,9450,Denderhoutem,,,,054/518008,,0497/914737,,,fruitpakket,FALSE,,,43,TRUE,740868531108,"? Brood stop op 6 nov?
+
+Stop vanaf juni  tot en met september 2012",,29-Oct-10,26-May-11
+Aalst,Sonck,Cinderella,Borrekent 69,9450,Denderhoutem,,,,054/518008,,0497/914737,,,broodpakket,FALSE,,,43,TRUE,740868531108,"? Brood stop op 6 nov?
+
+Stop vanaf juni  tot en met september 2012",,01-Nov-12,02-Nov-12
+Aalst,Sonck,Cinderella,Borrekent 69,9450,Denderhoutem,,,,054/518008,,0497/914737,,,fruitpakket,FALSE,,,43,TRUE,740868531108,"? Brood stop op 6 nov?
+
+Stop vanaf juni  tot en met september 2012",,27-Oct-11,30-May-12
+Aalst,Sonck,Cinderella,Borrekent 69,9450,Denderhoutem,,,,054/518008,,0497/914737,,,broodpakket,FALSE,,,43,TRUE,740868531108,"? Brood stop op 6 nov?
+
+Stop vanaf juni  tot en met september 2012",,27-Oct-11,30-May-12
+Aalst,Sorgeloos-Pillen,,Beukenlaan 19,1770 Liedekerke,,,,,,,,,pillenastrid@hotmail.com,tussen pakket (GRIJZE BAK),FALSE,,,54,FALSE,979891259748,,27-May-10,01-Jul-10,22-Jul-11
+Aalst,Sorgeloos-Pillen,,Beukenlaan 19,1770 Liedekerke,,,,,,,,,pillenastrid@hotmail.com,borstvoedingspakket (oker bak),FALSE,,Permanente opdr.,54,FALSE,979891259748,,22-Jul-11,27-Oct-11,27-Oct-11
+Aalst,Stoffelen-Poppe,,Koeburgstraat 12,9310,Moorsel,,,,0485/73 67 70,,,,,broodpakket,FALSE,,,52,FALSE,,geen wit,,01-Sep-11,
+Aalst,Stoffelen-Poppe,,Koeburgstraat 12,9310,Moorsel,,,,0485/73 67 70,,,,,tweede brood,FALSE,,,52,FALSE,,geen wit,01-Jun-12,01-Jun-12,
+Aalst,Stoffelen-Poppe,,Koeburgstraat 12,9310,Moorsel,,,,0485/73 67 70,,,,,broodpakket,FALSE,,Permanente opdr.,52,FALSE,,geen wit,14-Dec-10,27-Jan-11,
+Aalst,Stoffelen-Poppe,,Koeburgstraat 12,9310,Moorsel,,,,0485/73 67 70,,,,,tweede brood,FALSE,,Permanente opdr.,52,FALSE,,geen wit,14-Dec-10,27-Jan-11,
+Aalst,Stoffelen-Poppe,,Koeburgstraat 12,9310,Moorsel,,,,0485/73 67 70,,,,,derde brood,FALSE,,Permanente opdr.,52,FALSE,,geen wit,14-Dec-10,27-Jan-10,01-Jun-12
+Aalst,Supply - Orbie,Wim & Anne,Oudegemstraat 6b,9200,Schoonaarde,,891604001529,supply - orbie,052/52.03.68,,,,wim.supply@telenet.be,fruitpakket,FALSE,,,149.5,FALSE,,,31-Oct-12,01-Dec-12,
+Aalst,Supply - Orbie,Wim & Anne,Oudegemstraat 6b,9200,Schoonaarde,,891604001529,supply - orbie,052/52.03.68,,,,wim.supply@telenet.be,groot pakket (RODE BAK),FALSE,,,149.5,FALSE,,,31-Oct-12,01-Dec-12,
+Aalst,Supply - Orbie,Wim & Anne,Oudegemstraat 6b,9200,Schoonaarde,,891604001529,supply - orbie,052/52.03.68,,,,wim.supply@telenet.be,broodpakket,FALSE,,,149.5,FALSE,,,31-Oct-12,01-Dec-12,
+Aalst,Troch-Lissens,André - godelieve,Vakschoolsraat 28,9300,Aalst,,393-0002154-12,,053/773647,053/773647,,,,aardappel pakket,TRUE,oneven,cash,54,TRUE,393000215412,"Tegoed voor verlof 2012: € 12,50",10-Oct-04,10-Oct-04,29-Dec-10
+Aalst,Troch-Lissens,André - godelieve,Vakschoolsraat 28,9300,Aalst,,393-0002154-12,,053/773647,053/773647,,,,tussen pakket (GRIJZE BAK),FALSE,,cash,54,TRUE,393000215412,"Tegoed voor verlof 2012: € 12,50",,25-May-99,
+Aalst,Van de Wiele-Celestri,dirk en simona,Kerkhoflaan 41,9300,Aalst,,,,"053/21,13,72",,,,di.vandewiele@skynet.be,fruitpakket,FALSE,,Permanente opdr.,86,FALSE,,"Tegoed ter compensatie van week 21: € 20,00",17-May-08,31-Aug-08,
+Aalst,Van de Wiele-Celestri,dirk en simona,Kerkhoflaan 41,9300,Aalst,,,,"053/21,13,72",,,,di.vandewiele@skynet.be,klein pakket (GROENE BAK),FALSE,,,86,FALSE,,"Tegoed ter compensatie van week 21: € 20,00",,31-Dec-09,
+Aalst,Van Droogenbroekck - Anckaert,Frank - Sandra,Vogelzangstraat 43,1790,Affligem,,439-0144231-85,,053/673806,,,,,tussen pakket (GRIJZE BAK),FALSE,,Permanente opdr.,54,FALSE,740834910403,,31-Oct-08,31-Oct-08,
+Aalst,Van Roy - Van Lutsenborg,Ludovicus,Stijn Streuvelstraat 25,9320,Erembodegem,,000-0551905-72,,053/410278,053/410278,,,,klein pakket (GROENE BAK),FALSE,,cash,43,FALSE,879031325210,"6/01,6/2,6/3,7/4,8/5,6/6 € 32,23,7/7,8/8,9/9,9/10,vakantie niet terug betalen",,26-May-98,29-Sep-11
+Aalst,Vos - Van Boxtael,Sara,Fosselstraat 33A,1790,Hekelgem,,,,0476/238794,,,,,klein pakket (GROENE BAK),FALSE,,Permanente opdr.,43,FALSE,,"Tegoed voor verlof 2012:  € 40,00 (droogwarenpakket op 21/08",29-Jul-09,,
+Apotheker Vogels,Almeida,Vanessa,Volderstraat 137,9500,Geraardsbergen,,,,476268941,,,,"dujardin,vanessa@hotmail.com",groot pakket (RODE BAK),FALSE,,,130,FALSE,,,03-Nov-12,01-Dec-12,
+Apotheker Vogels,Almeida,Vanessa,Volderstraat 137,9500,Geraardsbergen,,,,476268941,,,,"dujardin,vanessa@hotmail.com",fruitpakket,FALSE,,,130,FALSE,,,03-Nov-12,01-Dec-12,
+Apotheker Vogels,Apotheker Vogels,,,,,,,,,,,,,broodpakket,FALSE,,Permanente opdr.,13,FALSE,,brood ok 2010,05-Oct-07,05-Oct-07,
+Apotheker Vogels,Bakkaus,Nelly,Waaienberg 89,9500,Goufferdinge,,,954-6107121-46,054/419614,,,,,klein pakket (GROENE BAK),TRUE,oneven,Permanente opdr.,21.5,FALSE,,veertiendaagspakket vanaf 29 november 04,29-Mar-04,02-May-04,25-Oct-12
+Apotheker Vogels,Beernaert-Van Damme,Lieven-Geertjen,"Heuvelstraat 68
+68",9500,Moerbeke,,001-1489595-42,Lieven Beernaert,054/423034,054/423034,,,,klein pakket (GROENE BAK),FALSE,,,43,TRUE,38332695325,"Tegoed van € 58,21 voor de verlofperiode van 2012",,29-Sep-11,
+Apotheker Vogels,Beernaert-Van Damme,Lieven-Geertjen,"Heuvelstraat 68
+68",9500,Moerbeke,,001-1489595-42,Lieven Beernaert,054/423034,054/423034,,,,klein pakket (GROENE BAK),FALSE,,Permanente opdr.,43,TRUE,38332695325,"Tegoed van € 58,21 voor de verlofperiode van 2012",05-Oct-10,30-Sep-10,30-Jun-11
+Apotheker Vogels,Beernaert-Van Damme,Lieven-Geertjen,"Heuvelstraat 68
+68",9500,Moerbeke,,001-1489595-42,Lieven Beernaert,054/423034,054/423034,,,,klein pakket (GROENE BAK),FALSE,,,43,TRUE,38332695325,"Tegoed van € 58,21 voor de verlofperiode van 2012",,01-Oct-09,30-Jun-10
+Apotheker Vogels,Bruylandt - De Baerdemaecker,Roel en Katrien,Edingseweg 405,9500,Geraardsbergen,,979-9493377-89,,54423980,54423980,0472/819696,,,fruitpakket,TRUE,oneven,cash,43,TRUE,979235782349,"0477/235998,37,5 € tegoed,maandelijks terug betalen tijdelijk helft van maandbedrag tot weer veranderd
+Tegoed aan droogwaren 2012: € 60,00 Voorkeur voor hazelnootkoeken, geen thee",,31-Dec-05,
+Apotheker Vogels,Bruylandt - De Baerdemaecker,Roel en Katrien,Edingseweg 405,9500,Geraardsbergen,,979-9493377-89,,54423980,54423980,0472/819696,,,klein pakket (GROENE BAK),TRUE,oneven,cash,43,TRUE,979235782349,"0477/235998,37,5 € tegoed,maandelijks terug betalen tijdelijk helft van maandbedrag tot weer veranderd
+Tegoed aan droogwaren 2012: € 60,00 Voorkeur voor hazelnootkoeken, geen thee",27-Dec-07,30-Dec-07,
+Apotheker Vogels,De Backer - Remans,Jan,Vredestraat 17,9550,Geraardsbergen,,,,054/240805,0479/862041,0494/167217,,,groot pakket (RODE BAK),FALSE,,Permanente opdr.,108,TRUE,400852762506,,01-Apr-09,01-Apr-09,
+Apotheker Vogels,De Backer - Remans,Jan,Vredestraat 17,9550,Geraardsbergen,,,,054/240805,0479/862041,0494/167217,,,fruitpakket,FALSE,,cash,108,TRUE,400852762506,,05-Nov-06,30-Nov-06,
+Apotheker Vogels,De Backer - Remans,Jan,Vredestraat 17,9550,Geraardsbergen,,,,054/240805,0479/862041,0494/167217,,,broodpakket,FALSE,,,108,TRUE,400852762506,,,28-Apr-11,25-Apr-12
+Apotheker Vogels,De Doncker - Zwemmer,Charlotte,Noremansberg 8,1570,Galmaarden,,293-0250385-83,De Doncker-Zwemmer,54260148,,,,charlotte@blablabla.eu,fruitpakket,FALSE,,,100,FALSE,,,31-Aug-12,02-Oct-12,29-Sep-12
+Apotheker Vogels,De Doncker - Zwemmer,Charlotte,Noremansberg 8,1570,Galmaarden,,293-0250385-83,De Doncker-Zwemmer,54260148,,,,charlotte@blablabla.eu,groot pakket (RODE BAK),FALSE,,,100,FALSE,,,31-Aug-12,02-Oct-12,28-Sep-12
+Apotheker Vogels,De Graeve,Guido,Grotestraat 35,9500,Geraardsbergen,,068-2125800-72,,054/411154,054/411154,,,,klein pakket (GROENE BAK),FALSE,,cash,43,TRUE,53337229443,"7/01,6/2,6/3,8/4,8/5,6/6 € 32,23, geen pakket gehad op 29 juli, terug betalen,6/7,6/8,8/9,8/10,32,23 €",03-Mar-98,31-Mar-98,
+Apotheker Vogels,De Schuiteneer-Maginet,Gwen,Scikte 26,,Moerbeke,,,,0479/88 11 61,,,,,klein pakket (GROENE BAK),FALSE,,,,FALSE,53573620059,,27-Aug-09,30-Sep-09,02-Sep-10
+Apotheker Vogels,De Schuiteneer-Maginet,Gwen,Scikte 26,,Moerbeke,,,,0479/88 11 61,,,,,fruitpakket,FALSE,,Permanente opdr.,,FALSE,53573620059,,10-Sep-09,30-Sep-09,02-Sep-10
+Apotheker Vogels,De Smet,Priscilla,Stoffelstraat 28,9500,Geraardsbergen - Moerbeke,,001-1881429-93,De Smet Priscilla,0474 57 96 29,,,,priscilla.desmet@telenet.be,klein pakket (GROENE BAK),TRUE,oneven,,21.5,FALSE,,,05-Sep-12,02-Oct-12,
+Apotheker Vogels,De Weerdt,Johan,Reepstraat 68,9500,Geraardsbergen,,,,054/417274,,0473/767296,,,aardappel pakket,TRUE,oneven,Permanente opdr.,49,FALSE,,juli apart betaald via winkelboodschappen,31-Jul-09,31-Jul-09,19-Jan-11
+Apotheker Vogels,De Weerdt,Johan,Reepstraat 68,9500,Geraardsbergen,,,,054/417274,,0473/767296,,,klein pakket (GROENE BAK),FALSE,,Permanente opdr.,49,FALSE,,juli apart betaald via winkelboodschappen,26-Sep-07,31-Oct-07,19-Jan-11
+Apotheker Vogels,Derdelinckx-Van Wijnendaele,Raymonde,Guilleminlaan 14,9500,Geraardsbergen,,067-7240210-81,,054/415024,054/415024,,,,klein pakket (GROENE BAK),FALSE,,cash,68,TRUE,53340885333,"14/01,13/2,13/3,15/04,15/5,13/6 € 33,13/7,13/8,13/9,13/10,",01-Jan-01,31-Jan-01,
+Apotheker Vogels,Derdelinckx-Van Wijnendaele,Raymonde,Guilleminlaan 14,9500,Geraardsbergen,,067-7240210-81,,054/415024,054/415024,,,,aardappel pakket,TRUE,oneven,cash,68,TRUE,53340885333,"14/01,13/2,13/3,15/04,15/5,13/6 € 33,13/7,13/8,13/9,13/10,",06-Oct-04,06-Oct-04,
+Apotheker Vogels,Derdelinckx-Van Wijnendaele,Raymonde,Guilleminlaan 14,9500,Geraardsbergen,,067-7240210-81,,054/415024,054/415024,,,,aardappel pakket,TRUE,oneven,cash,68,TRUE,53340885333,"14/01,13/2,13/3,15/04,15/5,13/6 € 33,13/7,13/8,13/9,13/10,",06-Oct-04,06-Oct-04,
+Apotheker Vogels,Derdelinckx-Van Wijnendaele,Raymonde,Guilleminlaan 14,9500,Geraardsbergen,,067-7240210-81,,054/415024,054/415024,,,,broodpakket,FALSE,,cash,68,TRUE,53340885333,"14/01,13/2,13/3,15/04,15/5,13/6 € 33,13/7,13/8,13/9,13/10,",04-Sep-04,06-Oct-04,
+Apotheker Vogels,Duffeleer - Devuyst,Sarah en Davy,Guilleminlaan 45,9500,Geraardsbergen,,737-0050869-84,,0474/347218,,,,,fruitpakket,FALSE,,cash,43,FALSE,740828688356,"start klein en fruit vanaf 1 maart, ervoor tussen pakket en fruit en brood",16-Feb-05,27-Feb-05,01-Sep-11
+Apotheker Vogels,Opgenhaffen - Fabry,Tommy,Akrenstraat 47,9500,Viane,,320-0664063-71,Opgenhaffen - Fabry,472332796,,,,tjorvenfabry@hotmail.com,fruitpakket,FALSE,,,108,TRUE,320066406371,,21-May-12,03-Jul-12,
+Apotheker Vogels,Opgenhaffen - Fabry,Tommy,Akrenstraat 47,9500,Viane,,320-0664063-71,Opgenhaffen - Fabry,472332796,,,,tjorvenfabry@hotmail.com,groot pakket (RODE BAK),FALSE,,,108,TRUE,320066406371,,21-May-12,03-Jul-12,
+Apotheker Vogels,Paduart,Nadine,Kattestraat 7,9500,Geraardsbergen,,,,0495/627309,,,,,klein pakket (GROENE BAK),FALSE,,Permanente opdr.,,FALSE,,,12-Apr-09,31-May-09,01-Jul-10
+Apotheker Vogels,Peyskens,Paul,Gaffelstraat 45,9500,Geraardsbergen,,,,054 422894,485319241,,,elizabethvanmulders@gmail.com,groot pakket (RODE BAK),FALSE,,,71,TRUE,53842451418,,10-Sep-12,01-Oct-12,
+Apotheker Vogels,Peyskens,Paul,Gaffelstraat 45,9500,Geraardsbergen,,,,054 422894,485319241,,,elizabethvanmulders@gmail.com,aardappel pakket,TRUE,oneven,,71,TRUE,53842451418,,10-Sep-12,01-Oct-12,
+Apotheker Vogels,Schouppe-Beernaert,,Gaffelstraat 10,,Geraardsbergen,,,,054/410085,,,,,klein pakket (GROENE BAK),FALSE,,cash,86,TRUE,861100634124,,19-May-06,30-Jun-06,
+Apotheker Vogels,Schouppe-Beernaert,,Gaffelstraat 10,,Geraardsbergen,,,,054/410085,,,,,fruitpakket,FALSE,,cash,86,TRUE,861100634124,,19-May-06,30-Jun-06,
+Apotheker Vogels,Timmermans,Sofie,pachtersstraat 85,9500,Geraardsbergen,,737012189906,timmermans sofie,486909603,,,,timmermans.sofie@hotmail.com,aardappel pakket,TRUE,oneven,,92,FALSE,,,06-Jun-12,06-Jun-12,01-Aug-12
+Apotheker Vogels,Timmermans,Sofie,pachtersstraat 85,9500,Geraardsbergen,,737012189906,timmermans sofie,486909603,,,,timmermans.sofie@hotmail.com,fruitpakket,FALSE,,,92,FALSE,,,06-Jun-12,06-Jun-12,01-Aug-12
+Apotheker Vogels,Timmermans,Sofie,pachtersstraat 85,9500,Geraardsbergen,,737012189906,timmermans sofie,486909603,,,,timmermans.sofie@hotmail.com,klein pakket (GROENE BAK),FALSE,,,92,FALSE,,,06-Jun-12,06-Jun-12,
+Apotheker Vogels,Van Der Haegen - De Taeye,Leen,Gentsestraat 113,9500,Geraardsbergen,,,,054/416586,,,,,klein pakket (GROENE BAK),FALSE,,Permanente opdr.,43,FALSE,,,28-Jun-07,,
+Apotheker Vogels,Van Schoors,Marcel,Wilgierlaan 43,9500,Viane,,293-0085385-80,,054/415027,,,,"edgard,van,schoors@skynet,be",klein pakket (GROENE BAK),FALSE,,cash,,FALSE,38326333337,",7/01,6/2,6/3,8/4,8/5,6/6 € 33,7/7,8/8,9/9,90jaar,10/10,",,25-Aug-98,23-Sep-10
+Apotheker Vogels,Van Schoors,Marcel,Wilgierlaan 43,9500,Viane,,293-0085385-80,,054/415027,,,,"edgard,van,schoors@skynet,be",aardappel pakket,TRUE,oneven,cash,,FALSE,38326333337,",7/01,6/2,6/3,8/4,8/5,6/6 € 33,7/7,8/8,9/9,90jaar,10/10,",10-Oct-04,10-Oct-04,23-Sep-10
+Apotheker Vogels,Van Vlierberghe,Sarah,Frans Renswijk 35,9500,Geraardsbergen,,320005796125,Sarah Van Vlierberghe,,,479340832,,idefix_rataplan@hotmail.com,fruitpakket,FALSE,,,108,FALSE,,,02-Nov-12,01-Dec-12,
+Apotheker Vogels,Van Vlierberghe,Sarah,Frans Renswijk 35,9500,Geraardsbergen,,320005796125,Sarah Van Vlierberghe,,,479340832,,idefix_rataplan@hotmail.com,klein pakket (GROENE BAK),FALSE,,,108,FALSE,,,02-Nov-12,01-Dec-12,
+Apotheker Vogels,Van Vreckem,Agnes,Ijsbroekstraat 38,9506,Schendelbeke,,853-8366574-65,,054/411863,054/438936,,054/410437,,klein pakket (GROENE BAK),FALSE,,Permanente opdr.,,FALSE,861104927079,"16/01,4/2,6/3,7/4,7/5,6/6 € 43,7/7, 8/8,9/9,10/10,
+ 
+brood:
+Ernel nr 28  Lessestraat",26-Aug-09,,02-Dec-10
+Apotheker Vogels,Vanden Berge - Van Schoors,Elke en Kristof,Gaverstraat 49,9500,Geraardsbergen,,,,0484/144810,,,,,aardappel pakket,TRUE,oneven,Permanente opdr.,,FALSE,861111048890,,07-May-08,29-Jun-08,28-Oct-10
+Apotheker Vogels,Vanden Berge - Van Schoors,Elke en Kristof,Gaverstraat 49,9500,Geraardsbergen,,,,0484/144810,,,,,klein pakket (GROENE BAK),FALSE,,Permanente opdr.,,FALSE,861111048890,,07-May-08,29-Jun-08,28-Oct-10
+Apotheker Vogels,Vanhamme-Antson,Gina Peter,Victor Frisstraat 11,9500,Geraardsbergen,,000-1663863-22,antson-Vanhamme,054/41 85 89,,,,gvanhamme@telenet.be,aardappel pakket,TRUE,oneven,,38.5,TRUE,602274414,,24-Mar-11,26-May-11,
+Apotheker Vogels,Vanhamme-Antson,Gina Peter,Victor Frisstraat 11,9500,Geraardsbergen,,000-1663863-22,antson-Vanhamme,054/41 85 89,,,,gvanhamme@telenet.be,groot pakket (RODE BAK),TRUE,oneven,,38.5,TRUE,602274414,,24-Mar-11,26-May-11,
+Apotheker Vogels,Vlug,Kees,,,,,,,,,,,keesvlug@gmail.com,gemengd pakket,FALSE,,,54,FALSE,,,01-Dec-12,01-Jan-13,
+Apotheker Vogels,Wanner - Focketyn,Sonja,Penitentenstraat 31,9500,geraardsbergen,,001-1497349-36,,054/421325,,0474/710337,,,fruitpakket,FALSE,,Permanente opdr.,,FALSE,38485993923,,02-Apr-08,01-May-08,08-Jul-10
+Apotheker Vogels,Wanner - Focketyn,Sonja,Penitentenstraat 31,9500,geraardsbergen,,001-1497349-36,,054/421325,,0474/710337,,,klein pakket (GROENE BAK),FALSE,,Permanente opdr.,,FALSE,38485993923,,02-Apr-08,02-May-08,08-Jul-10
+Apotheker Vogels,Wanner - Focketyn,Sonja,Penitentenstraat 31,9500,geraardsbergen,,001-1497349-36,,054/421325,,0474/710337,,,aardappel pakket,TRUE,oneven,Permanente opdr.,,FALSE,38485993923,,04-May-09,04-May-09,08-Jul-10
+Asselman,Aerts-Schelfhout,,Kleemputtenstraat 151,,Liedekerke,,,,053/661227,,,,,klein pakket (GROENE BAK),TRUE,oneven,,49.5,FALSE,850187101274,,,02-Sep-10,30-Jun-11
+Asselman,Aerts-Schelfhout,,Kleemputtenstraat 151,,Liedekerke,,,,053/661227,,,,,broodpakket,TRUE,oneven,,49.5,FALSE,850187101274,,,01-Sep-11,13-Jul-12
+Asselman,Aerts-Schelfhout,,Kleemputtenstraat 151,,Liedekerke,,,,053/661227,,,,,klein pakket (GROENE BAK),TRUE,oneven,,49.5,FALSE,850187101274,,,01-Sep-11,13-Jul-12
+Asselman,Aerts-Schelfhout,,Kleemputtenstraat 151,,Liedekerke,,,,053/661227,,,,,fruitpakket,TRUE,oneven,Permanente opdr.,49.5,FALSE,850187101274,,27-Aug-08,,01-Jul-09
+Asselman,Aerts-Schelfhout,,Kleemputtenstraat 151,,Liedekerke,,,,053/661227,,,,,fruitpakket,TRUE,oneven,,49.5,FALSE,850187101274,,,01-Sep-11,13-Jul-12
+Asselman,Aerts-Schelfhout,,Kleemputtenstraat 151,,Liedekerke,,,,053/661227,,,,,fruitpakket,TRUE,oneven,,49.5,FALSE,850187101274,,,02-Sep-10,30-Jun-11
+Asselman,Aerts-Schelfhout,,Kleemputtenstraat 151,,Liedekerke,,,,053/661227,,,,,klein pakket (GROENE BAK),TRUE,oneven,Permanente opdr.,49.5,FALSE,850187101274,,27-Aug-08,,01-Jul-09
+Asselman,Demeester - Michiels,Lina,Onderstraat 27,1750,Gaasbeek,,,,02/5323404,,,02/5323424,,tussen pakket (GRIJZE BAK),FALSE,,cash,103,FALSE,38332692190,,22-Mar-06,30-Apr-06,01-Aug-12
+Asselman,Demeester - Michiels,Lina,Onderstraat 27,1750,Gaasbeek,,,,02/5323404,,,02/5323424,,aardappel pakket,TRUE,oneven,cash,103,FALSE,38332692190,,22-Mar-06,30-Apr-06,01-Aug-12
+Asselman,Demeester - Michiels,Lina,Onderstraat 27,1750,Gaasbeek,,,,02/5323404,,,02/5323424,,fruitpakket,FALSE,,cash,103,FALSE,38332692190,,22-Mar-06,30-Apr-06,01-Aug-12
+Asselman,Loriaux - Thora,Kirsten,Kleemputtenstraat 155,1770,Liedekerke,,,,053/684107,,"0479/43,23,00",,kirsten@josar.be,klein pakket (GROENE BAK),TRUE,oneven,Permanente opdr.,43,FALSE,,,14-Apr-08,02-May-08,
+Asselman,Loriaux - Thora,Kirsten,Kleemputtenstraat 155,1770,Liedekerke,,,,053/684107,,"0479/43,23,00",,kirsten@josar.be,fruitpakket,TRUE,oneven,Permanente opdr.,43,FALSE,,,14-Apr-08,02-May-08,
+Asselman,Sorgeloos - Demeester,,Lozevisserstraat 45,9000,Gent,,001-2560407-71,,0495/632899,,,,,fruitpakket,FALSE,,cash,86,TRUE,38332691685,,02-Feb-06,01-Mar-06,
+Asselman,Sorgeloos - Demeester,,Lozevisserstraat 45,9000,Gent,,001-2560407-71,,0495/632899,,,,,klein pakket (GROENE BAK),FALSE,,cash,86,TRUE,38332691685,,02-Feb-06,01-Mar-06,
+Asselman,Sorgeloos-De Raes,Annita,Wilgenlaan 20,1770,Liedekerke,,001-858165-82,,053/647680,,0474/837137,,,tussen pakket (GRIJZE BAK),FALSE,,,60,TRUE,38595472769,,11-Apr-09,,
+Asselman,Sorgeloos-De Raes,Annita,Wilgenlaan 20,1770,Liedekerke,,001-858165-82,,053/647680,,0474/837137,,,aardappel pakket,TRUE,oneven,cash,60,TRUE,38595472769,,01-Feb-06,01-Mar-06,
+De Boom,Badisco-Schockaert,,Eikboslaan 36,9550,Herzele,,,,053/71 17 22,,,,,aardappel pakket,TRUE,oneven,,43,TRUE,979893422141,,12-Aug-10,02-Sep-10,25-Nov-10
+De Boom,Badisco-Schockaert,,Eikboslaan 36,9550,Herzele,,,,053/71 17 22,,,,,klein pakket (GROENE BAK),FALSE,,,43,TRUE,979893422141,,12-Aug-10,02-Sep-10,24-Feb-11
+De Boom,Badisco-Schockaert,,Eikboslaan 36,9550,Herzele,,,,053/71 17 22,,,,,klein pakket (GROENE BAK),FALSE,,,43,TRUE,979893422141,,,01-Feb-12,
+De Boom,Badisco-Schockaert,,Eikboslaan 36,9550,Herzele,,,,053/71 17 22,,,,,borstvoedingspakket (oker bak),FALSE,,,43,TRUE,979893422141,,,24-Feb-11,01-Feb-12
+De Boom,Badisco-Schockaert,,Eikboslaan 36,9550,Herzele,,,,053/71 17 22,,,,,broodpakket,FALSE,,,43,TRUE,979893422141,,12-Aug-10,02-Sep-10,01-Feb-12
+De Boom,Callebaut,Sonja,Holestraat 45,9552,Borsbeke,,,,053/63 12 70,,,,,klein pakket (GROENE BAK),FALSE,,,86,TRUE,400868457813,via kadobon,,28-Apr-11,02-Jun-11
+De Boom,Callebaut,Sonja,Holestraat 45,9552,Borsbeke,,,,053/63 12 70,,,,,fruitpakket,FALSE,,,86,TRUE,400868457813,via kadobon,,02-Jun-11,
+De Boom,Callebaut,Sonja,Holestraat 45,9552,Borsbeke,,,,053/63 12 70,,,,,klein pakket (GROENE BAK),FALSE,,,86,TRUE,400868457813,via kadobon,,02-Jun-11,
+De Boom,De Durpel,Sabine,Hofstadestraat 13,9550,Herzele,,,De Durpel Sabine,053/62 16 62,,,,sabine.dedurpel@skynet.be,klein pakket (GROENE BAK),FALSE,,,21.5,TRUE,53697497345,,,01-Sep-11,01-Dec-11
+De Boom,De Durpel,Sabine,Hofstadestraat 13,9550,Herzele,,,De Durpel Sabine,053/62 16 62,,,,sabine.dedurpel@skynet.be,klein pakket (GROENE BAK),TRUE,oneven,,21.5,TRUE,53697497345,,09-Dec-10,27-Jan-11,23-Feb-11
+De Boom,De Durpel,Sabine,Hofstadestraat 13,9550,Herzele,,,De Durpel Sabine,053/62 16 62,,,,sabine.dedurpel@skynet.be,klein pakket (GROENE BAK),TRUE,oneven,,21.5,TRUE,53697497345,,,01-Dec-11,
+De Boom,De Durpel,Sabine,Hofstadestraat 13,9550,Herzele,,,De Durpel Sabine,053/62 16 62,,,,sabine.dedurpel@skynet.be,tussen pakket (GRIJZE BAK),TRUE,oneven,,21.5,TRUE,53697497345,,,24-Feb-11,01-Sep-11
+De Boom,De Keyzer,Jan,Tuinwijkstraat 6,9550,Herzele,,BE89776595695285,Jan De Keyzer,53629783,,476972336,,jandekeyzer@telenet.be,tussen pakket (GRIJZE BAK),FALSE,,,129,TRUE,53853735144,,03-Nov-12,01-Dec-12,
+De Boom,De Keyzer,Jan,Tuinwijkstraat 6,9550,Herzele,,BE89776595695285,Jan De Keyzer,53629783,,476972336,,jandekeyzer@telenet.be,fruitpakket,FALSE,,,129,TRUE,53853735144,,03-Nov-12,01-Dec-12,
+De Boom,De Keyzer,Jan,Tuinwijkstraat 6,9550,Herzele,,BE89776595695285,Jan De Keyzer,53629783,,476972336,,jandekeyzer@telenet.be,aardappel pakket,TRUE,oneven,,129,TRUE,53853735144,,03-Nov-12,01-Dec-12,
+De Boom,De Meyst - Wynendaele,Leentje,Tuinwijkstraat 27,9550,Herzele,,001-5173,de Meyer-Wynendaele,0486/60 13 92,,,,lwijnendaele@hotmail.com,borstvoedingspakket (oker bak),FALSE,,,54,TRUE,38635973303,"tegoed van € 25,00 voor verlof 2012.",,27-Oct-11,02-May-12
+De Boom,De Meyst - Wynendaele,Leentje,Tuinwijkstraat 27,9550,Herzele,,001-5173,de Meyer-Wynendaele,0486/60 13 92,,,,lwijnendaele@hotmail.com,klein pakket (GROENE BAK),FALSE,,,54,TRUE,38635973303,"tegoed van € 25,00 voor verlof 2012.",,02-May-12,
+De Boom,De Meyst - Wynendaele,Leentje,Tuinwijkstraat 27,9550,Herzele,,001-5173,de Meyer-Wynendaele,0486/60 13 92,,,,lwijnendaele@hotmail.com,klein pakket (GROENE BAK),FALSE,,Permanente opdr.,54,TRUE,38635973303,"tegoed van € 25,00 voor verlof 2012.",01-Jan-10,27-Oct-11,27-Oct-11
+De Boom,De Winne -Van den Bossche,Karolien & Tim,Provincieweg,,Borsbeke,,,,0473/33 89 50,,,,,klein pakket (GROENE BAK),TRUE,oneven,,21.5,FALSE,,,09-Feb-12,29-Mar-12,05-Jun-12
+De Boom,Deboth,Filip,Evendael 27,9550,Herzele,,001-2472133-67,,,,,,,fruitpakket,TRUE,oneven,Permanente opdr.,49.5,FALSE,,"start broodvanaf 16 september, tebetalen 37,50 groenten en 6 € brood voor september is ok, oktober ook,",14-Mar-05,31-Mar-05,28-Apr-11
+De Boom,Deboth,Filip,Evendael 27,9550,Herzele,,001-2472133-67,,,,,,,klein pakket (GROENE BAK),TRUE,oneven,Permanente opdr.,49.5,FALSE,,"start broodvanaf 16 september, tebetalen 37,50 groenten en 6 € brood voor september is ok, oktober ook,",14-Mar-05,31-Mar-05,28-Apr-11
+De Boom,D'Hoker-Depestel,Liesbeth,Kleine Ruiweg 28,9552,Borsbeke,,777-5921124-29,D'hoker Liesbeth,0474/32 84 32,,,,liesbeth.dhoker@gmail.com,klein pakket (GROENE BAK),FALSE,,,43,FALSE,53722305703,,17-Mar-11,28-Apr-11,29-Sep-11
+De Boom,Holderbeke,Cindy,,,,,,,,,,,,tussen pakket (GRIJZE BAK),FALSE,,,54,TRUE,38937803452,,31-Aug-12,02-Oct-12,
+De Boom,Ibrahim - Geurts,Kathleen,Ressegemstraat 100,9551,Ressegem,,,,0498/181669,,,,"gkathleen@hotmail,com",klein pakket (GROENE BAK),FALSE,,cash,99,TRUE,38332716644,"brood afwisselen, stokbrood, sandwiches, pistolets",30-Jun-09,30-Jun-09,
+De Boom,Ibrahim - Geurts,Kathleen,Ressegemstraat 100,9551,Ressegem,,,,0498/181669,,,,"gkathleen@hotmail,com",fruitpakket,FALSE,,cash,99,TRUE,38332716644,"brood afwisselen, stokbrood, sandwiches, pistolets",13-Sep-06,13-Sep-06,
+De Boom,Ibrahim - Geurts,Kathleen,Ressegemstraat 100,9551,Ressegem,,,,0498/181669,,,,"gkathleen@hotmail,com",broodpakket,FALSE,,cash,99,TRUE,38332716644,"brood afwisselen, stokbrood, sandwiches, pistolets",13-Sep-06,13-Sep-06,
+De Boom,Lievens - Coryn,Karen en Arne,Provincieweg 62,9552,Borsbeke,,,,,053/390143,,,carin1@telenet.be,broodpakket,FALSE,,cash,56,TRUE,38332693204,,06-Jan-07,31-Jan-07,
+De Boom,Lievens - Coryn,Karen en Arne,Provincieweg 62,9552,Borsbeke,,,,,053/390143,,,carin1@telenet.be,klein pakket (GROENE BAK),FALSE,,cash,56,TRUE,38332693204,,06-Jan-07,31-Jan-07,
+De Boom,Nica-De Maere,Martin-Hannelore,Borsbekestraat 10,,Ressegem,,,,0498/46 55 82,,,,martinnica@hotmail.com,klein pakket (GROENE BAK),FALSE,,,43,TRUE,38696020646,,,30-Sep-10,
+De Boom,Nica-De Maere,Martin-Hannelore,Borsbekestraat 10,,Ressegem,,,,0498/46 55 82,,,,martinnica@hotmail.com,borstvoedingspakket (oker bak),FALSE,,,43,TRUE,38696020646,,22-Apr-10,27-May-10,01-Jul-10
+De Boom,Nica-De Maere,Martin-Hannelore,Borsbekestraat 10,,Ressegem,,,,0498/46 55 82,,,,martinnica@hotmail.com,tussen pakket (GRIJZE BAK),FALSE,,,43,TRUE,38696020646,,,01-Jul-10,30-Sep-10
+De Boom,Persoon,Geert,Otterkant 36,Ressegem,,,,,053/630568,,,,,klein pakket (GROENE BAK),FALSE,,Permanente opdr.,69,FALSE,740941252412,,12-Apr-08,30-Apr-08,02-Mar-11
+De Boom,Persoon,Geert,Otterkant 36,Ressegem,,,,,053/630568,,,,,klein pakket (GROENE BAK),FALSE,,,69,FALSE,740941252412,,,28-Jul-11,29-Sep-11
+De Boom,Persoon,Sam,Arestraat 157,9550,Sint-Lievens-Esse,,,,0472/221013,,,,,fruitpakket,FALSE,,Permanente opdr.,86,FALSE,53693778205,,07-Jan-09,07-Jan-09,02-Mar-11
+De Boom,Persoon,Sam,Arestraat 157,9550,Sint-Lievens-Esse,,,,0472/221013,,,,,klein pakket (GROENE BAK),FALSE,,Permanente opdr.,86,FALSE,53693778205,,27-Dec-10,27-Dec-10,02-Mar-11
+De Boom,Pieters - Keymeulen,Erik,kamerstraat 37,9551,Ressegem,,001-1357163-15,,53808033,53808033,,,,tussen pakket (GRIJZE BAK),FALSE,,cash,54,TRUE,148837632984,"fax 053/808016,ok + dec + 20 € tekort ook betaalt jan 04,",,26-Aug-03,
+De Boom,Schollaert,Marnix,Molenstraat 13,9550,Herzele,,,,053/630005,053/630005,,,,klein pakket (GROENE BAK),FALSE,,cash,43,TRUE,935013830034,tegoed voor verlof 2012: € o,,24-Jan-98,
+De Boom,Tirmarche - Abbeloos,Gwen en Bart,Kreupelveldstraat 21,9300,Aalst,,063-9493276-18,,53708695,53708695,,,,borstvoedingspakket (oker bak),FALSE,,,110,TRUE,53341113786,,,31-Mar-11,
+De Boom,Tirmarche - Abbeloos,Gwen en Bart,Kreupelveldstraat 21,9300,Aalst,,063-9493276-18,,53708695,53708695,,,,fruitpakket,FALSE,,,110,TRUE,53341113786,,,08-May-12,
+De Boom,Tirmarche - Abbeloos,Gwen en Bart,Kreupelveldstraat 21,9300,Aalst,,063-9493276-18,,53708695,53708695,,,,broodpakket,FALSE,,,110,TRUE,53341113786,,,01-Feb-09,
+De Boom,Tirmarche - Abbeloos,Gwen en Bart,Kreupelveldstraat 21,9300,Aalst,,063-9493276-18,,53708695,53708695,,,,borstvoedingspakket (oker bak),FALSE,,,110,TRUE,53341113786,,,01-Feb-09,31-Aug-10
+De Boom,Tirmarche - Abbeloos,Gwen en Bart,Kreupelveldstraat 21,9300,Aalst,,063-9493276-18,,53708695,53708695,,,,klein pakket (GROENE BAK),FALSE,,cash,110,TRUE,53341113786,,26-Aug-10,,30-Mar-11
+De Boom,Van den Bossche-Machtelings,Stefan-Gwen,Holestraat 59,9552,Borsbeke,,,,0496/62 80 91,,,,gwenmachtelings@hotmail.com,klein pakket (GROENE BAK),FALSE,,Permanente opdr.,65,TRUE,935057975239,,27-Nov-09,,01-Jul-10
+De Boom,Van den Bossche-Machtelings,Stefan-Gwen,Holestraat 59,9552,Borsbeke,,,,0496/62 80 91,,,,gwenmachtelings@hotmail.com,groot pakket (RODE BAK),FALSE,,,65,TRUE,935057975239,,,16-Apr-12,
+De Boom,Van den Bossche-Machtelings,Stefan-Gwen,Holestraat 59,9552,Borsbeke,,,,0496/62 80 91,,,,gwenmachtelings@hotmail.com,tweede aardappelpakket,TRUE,oneven,,65,TRUE,935057975239,,24-Sep-09,29-Oct-09,01-Jul-10
+De Boom,Van den Bossche-Machtelings,Stefan-Gwen,Holestraat 59,9552,Borsbeke,,,,0496/62 80 91,,,,gwenmachtelings@hotmail.com,aardappel pakket,TRUE,oneven,,65,TRUE,935057975239,,24-Sep-09,29-Oct-09,01-Jul-10
+De Boom,Van Der Fraenen,Jeroen,Peperstraat 46,9550,HERZELE,,063-8868049-53,,053/778225,0485/451515,,,,klein pakket (GROENE BAK),FALSE,,cash,43,TRUE,53345883560,proefpakket Emmy cadeau,06-Apr-05,30-Apr-05,
+De Boom,Van Liedekerke,Martine,Kamerstraat 38,9551,Ressegem,,,,0479/75 50 74,,,,,klein pakket (GROENE BAK),FALSE,,,43,FALSE,400812160326,,12-Aug-10,02-Sep-10,27-Jun-12
+De Boom,Van Rijsselberghe,katrien,Peperstraat 50,9550,Herzele,,,,0475/97 41 02,053/394638,,,,tussen pakket (GRIJZE BAK),FALSE,,Permanente opdr.,,FALSE,,,08-Oct-09,08-Oct-09,02-Sep-10
+De Goede Aarde,Goossens - De Graef,Freya-Roland,Briel 291,9340,Smetlede,,,,09/3697472,,,,roland62@skynet .be,klein pakket (GROENE BAK),FALSE,,Permanente opdr.,43,FALSE,979859211352,,31-Aug-10,,02-Jun-11
+De Goede Aarde,Goossens - De Graef,Freya-Roland,Briel 291,9340,Smetlede,,,,09/3697472,,,,roland62@skynet .be,klein pakket (GROENE BAK),FALSE,,cash,43,FALSE,979859211352,,07-Oct-08,07-Oct-08,30-Jun-10
+De Goede Aarde,Horvath - Desserano,Ilse,Meidoornlaan  51,9230,Wetteren,,BE55 7310 1211,Tom Horvath - Ilse Deserrano,0473/91 71 93,,,,ilsedes@live.be,fruitpakket,FALSE,,,92,FALSE,,,04-Jun-12,03-Jul-12,27-Jun-12
+De Goede Aarde,Horvath - Desserano,Ilse,Meidoornlaan  51,9230,Wetteren,,BE55 7310 1211,Tom Horvath - Ilse Deserrano,0473/91 71 93,,,,ilsedes@live.be,aardappel pakket,TRUE,oneven,,92,FALSE,,,04-Jun-12,03-Jul-12,27-Jun-12
+De Goede Aarde,Horvath - Desserano,Ilse,Meidoornlaan  51,9230,Wetteren,,BE55 7310 1211,Tom Horvath - Ilse Deserrano,0473/91 71 93,,,,ilsedes@live.be,klein pakket (GROENE BAK),FALSE,,,92,FALSE,,,04-Jun-12,03-Jul-12,27-Jun-12
+De Goede Aarde,Van Haelst-Van den Berghe,Audrey,Kapellendries 43,9230,Wetteren,,063-0688168-85,Van Den Berghe Audrey,0476/69 57 74,,,,audrey-vandenberghe@hotmail.com,tussen pakket (GRIJZE BAK),FALSE,,,,FALSE,53626558518,,,29-Jul-10,01-Sep-10
+De Goede Aarde,Van Haelst-Van den Berghe,Audrey,Kapellendries 43,9230,Wetteren,,063-0688168-85,Van Den Berghe Audrey,0476/69 57 74,,,,audrey-vandenberghe@hotmail.com,fruitpakket,FALSE,,,,FALSE,53626558518,,,29-Jul-10,01-Sep-10
+De Zonnebloem,Baeten - Coppieters,Katoo,Stampolenstraat 27,1761,Borchtlombeek,,1105486768,Baeten Katoo,0477/615233,,,,katoo.baeten@procol.be,tussen pakket (GRIJZE BAK),FALSE,,,97,TRUE,38954430363,,28-Sep-12,06-Nov-12,
+De Zonnebloem,Baeten - Coppieters,Katoo,Stampolenstraat 27,1761,Borchtlombeek,,1105486768,Baeten Katoo,0477/615233,,,,katoo.baeten@procol.be,fruitpakket,FALSE,,,97,TRUE,38954430363,,28-Sep-12,06-Nov-12,
+De Zonnebloem,Baeten - Coppieters,Katoo,Stampolenstraat 27,1761,Borchtlombeek,,1105486768,Baeten Katoo,0477/615233,,,,katoo.baeten@procol.be,aardappel pakket,TRUE,oneven,,97,TRUE,38954430363,,28-Sep-12,06-Nov-12,09-Nov-12
+De Zonnebloem,Coppens,Fabienne,Gaston Mertensstraat 19,1770,Liedekerke,,,,053/670732,,,053/666250,,aardappel pakket,TRUE,oneven,Permanente opdr.,60,TRUE,38332695527,,,05-Jan-11,
+De Zonnebloem,Coppens,Fabienne,Gaston Mertensstraat 19,1770,Liedekerke,,,,053/670732,,,053/666250,,tussen pakket (GRIJZE BAK),FALSE,,cash,60,TRUE,38332695527,,02-Feb-06,01-Mar-06,
+De Zonnebloem,Coppens,Fabienne,Gaston Mertensstraat 19,1770,Liedekerke,,,,053/670732,,,053/666250,,fruitpakket,FALSE,,cash,60,TRUE,38332695527,,01-Feb-06,01-Mar-06,28-Jul-10
+De Zonnebloem,De Bosscher -Bosmans,Greet-Frank,Piezelstraat 50a,1760,Roosdaal,,,,054/332831,,,,,tussen pakket (GRIJZE BAK),FALSE,,,54,TRUE,850187243744,,,29-Sep-11,
+De Zonnebloem,De Bosscher -Bosmans,Greet-Frank,Piezelstraat 50a,1760,Roosdaal,,,,054/332831,,,,,groot pakket (RODE BAK),FALSE,,cash,54,TRUE,850187243744,,07-Sep-06,30-Sep-06,29-Sep-11
+De Zonnebloem,De Neef - Montens,,Beysstraat 108,1770,Liedekerke,,,,053/663364,053/ 66 11 68,,,,fruitpakket,TRUE,oneven,Permanente opdr.,21.5,FALSE,,dochter:053/661168 rachel Daeseleer - De Neve,17-May-06,30-Jun-06,
+De Zonnebloem,D'Haeseleer-Deneef,,Paemelstraat 206,,Liedekerke,,,,053/661168,,,,,fruitpakket,TRUE,oneven,Permanente opdr.,21.5,FALSE,,moeder De Neve,30-Mar-06,30-Apr-06,
+De Zonnebloem,Dumortier - Wilken-Keewe,Daniël,Molenstraat 91,1770,Liedekerke,,979-7816598-52,,0484/18 29 89,,,,,tussen pakket (GRIJZE BAK),TRUE,oneven,Permanente opdr.,76,TRUE,979235772346,"wortelen, appels, banaan, ajuin of andere bewaarbare groenten en fruit, gemengde notenpasta, pindakaas, linzen, zonnebloempitten, koolzaadolie, vegetarisch beleg, pasta, rijst, honing, afwasmiddel,…",01-Apr-10,,
+De Zonnebloem,Dumortier - Wilken-Keewe,Daniël,Molenstraat 91,1770,Liedekerke,,979-7816598-52,,0484/18 29 89,,,,,fruitpakket,TRUE,oneven,Permanente opdr.,76,TRUE,979235772346,"wortelen, appels, banaan, ajuin of andere bewaarbare groenten en fruit, gemengde notenpasta, pindakaas, linzen, zonnebloempitten, koolzaadolie, vegetarisch beleg, pasta, rijst, honing, afwasmiddel,…",01-Apr-10,,
+De Zonnebloem,Dumortier - Wilken-Keewe,Daniël,Molenstraat 91,1770,Liedekerke,,979-7816598-52,,0484/18 29 89,,,,,fruitpakket,TRUE,oneven,Permanente opdr.,76,TRUE,979235772346,"wortelen, appels, banaan, ajuin of andere bewaarbare groenten en fruit, gemengde notenpasta, pindakaas, linzen, zonnebloempitten, koolzaadolie, vegetarisch beleg, pasta, rijst, honing, afwasmiddel,…",01-Apr-10,,
+De Zonnebloem,Dumortier - Wilken-Keewe,Daniël,Molenstraat 91,1770,Liedekerke,,979-7816598-52,,0484/18 29 89,,,,,aardappel pakket,TRUE,oneven,cash,76,TRUE,979235772346,"wortelen, appels, banaan, ajuin of andere bewaarbare groenten en fruit, gemengde notenpasta, pindakaas, linzen, zonnebloempitten, koolzaadolie, vegetarisch beleg, pasta, rijst, honing, afwasmiddel,…",06-Feb-05,07-Feb-05,
+De Zonnebloem,Goossens-Op De Beeck,,St. Gabriëlstraat 82,1770,Liedekerke,,,,053/68 11 21,0496/91 02 34,,,,klein pakket (GROENE BAK),TRUE,oneven,,21.5,TRUE,400837266855,"Levering van pakket stopgezet vanaf 30/07
+De domiciliëring mag blijven doorlopen, tegoed op rekening in de winkel.",,03-Oct-12,
+De Zonnebloem,Goossens-Op De Beeck,,St. Gabriëlstraat 82,1770,Liedekerke,,,,053/68 11 21,0496/91 02 34,,,,klein pakket (GROENE BAK),TRUE,oneven,,21.5,TRUE,400837266855,"Levering van pakket stopgezet vanaf 30/07
+De domiciliëring mag blijven doorlopen, tegoed op rekening in de winkel.",,03-Mar-11,30-Jul-12
+De Zonnebloem,Goossens-Op De Beeck,,St. Gabriëlstraat 82,1770,Liedekerke,,,,053/68 11 21,0496/91 02 34,,,,klein pakket (GROENE BAK),FALSE,,,21.5,TRUE,400837266855,"Levering van pakket stopgezet vanaf 30/07
+De domiciliëring mag blijven doorlopen, tegoed op rekening in de winkel.",09-Dec-10,27-Jan-11,24-Feb-11
+De Zonnebloem,Goossens-Op De Beeck,,St. Gabriëlstraat 82,1770,Liedekerke,,,,053/68 11 21,0496/91 02 34,,,,broodpakket,FALSE,,,21.5,TRUE,400837266855,"Levering van pakket stopgezet vanaf 30/07
+De domiciliëring mag blijven doorlopen, tegoed op rekening in de winkel.",09-Dec-10,27-Jan-11,08-Jun-12
+De Zonnebloem,Kerzinger,mevr,Den Haesestraat 1113,1770,liederkerke,,000-0545670-45,,053/648070,,,,,fruitpakket,TRUE,oneven,cash,48.5,FALSE,675054928,vanaf 1 juni veertiendaags pakket tussen,01-Feb-06,01-Mar-06,29-Sep-11
+De Zonnebloem,Kerzinger,mevr,Den Haesestraat 1113,1770,liederkerke,,000-0545670-45,,053/648070,,,,,tussen pakket (GRIJZE BAK),TRUE,oneven,cash,48.5,FALSE,675054928,vanaf 1 juni veertiendaags pakket tussen,01-Jun-06,01-Jun-06,29-Sep-11
+De Zonnebloem,Saerens - Agterberg,Daphne-Wim,Zandplaatstraat 49,9470,Denderleeuw,,979-5459381-32,Saerens-Achterberg,0476/78 19 13,,,,,tussen pakket (GRIJZE BAK),FALSE,,,54,FALSE,979876501806,,17-Sep-09,29-Oct-09,28-Mar-12
+De Zonnebloem,Saerens - Agterberg,Daphne-Wim,Zandplaatstraat 49,9470,Denderleeuw,,979-5459381-32,Saerens-Achterberg,0476/78 19 13,,,,,aardappel pakket,TRUE,oneven,,54,FALSE,979876501806,,17-Sep-09,29-Oct-09,01-Jul-11
+De Zonnebloem,Thaeter - Decoux,Daisy,Kleemputtenstraat 114,1770,Liedekerke,,651-1384206-22,,0476/333 889,,,,,aardappel pakket,TRUE,oneven,Permanente opdr.,60,FALSE,,"Voor verlof 2012: € 100,00 aan sapgroenten leveren, verdeeld op 31 aug. En vanaf september.
+(comcommer, rode bieten, wortelen, spinazie, venkel zijn onze favorieten)",16-Jan-06,31-Jan-06,
+De Zonnebloem,Thaeter - Decoux,Daisy,Kleemputtenstraat 114,1770,Liedekerke,,651-1384206-22,,0476/333 889,,,,,groot pakket (RODE BAK),FALSE,,Permanente opdr.,60,FALSE,,"Voor verlof 2012: € 100,00 aan sapgroenten leveren, verdeeld op 31 aug. En vanaf september.
+(comcommer, rode bieten, wortelen, spinazie, venkel zijn onze favorieten)",30-May-09,,28-Oct-10
+De Zonnebloem,Thaeter - Decoux,Daisy,Kleemputtenstraat 114,1770,Liedekerke,,651-1384206-22,,0476/333 889,,,,,tussen pakket (GRIJZE BAK),FALSE,,,60,FALSE,,"Voor verlof 2012: € 100,00 aan sapgroenten leveren, verdeeld op 31 aug. En vanaf september.
+(comcommer, rode bieten, wortelen, spinazie, venkel zijn onze favorieten)",,28-Oct-10,
+De Zonnebloem,Van den Borre - Leys,Ann,Eikenlaan 51,1770,Liedekerke,,393-0414633-47,Leys-Van den Borre,053/68 33 06,,,,avandenborre@gmail.com,tussen pakket (GRIJZE BAK),FALSE,,,97,FALSE,393041463347,,30-Jun-11,28-Jul-11,13-Oct-11
+De Zonnebloem,Van den Borre - Leys,Ann,Eikenlaan 51,1770,Liedekerke,,393-0414633-47,Leys-Van den Borre,053/68 33 06,,,,avandenborre@gmail.com,fruitpakket,FALSE,,,97,FALSE,393041463347,,30-Jun-11,28-Jul-11,13-Oct-11
+De Zonnebloem,Van Den Borre - Mosselmans,Geert,Portugeesstraat 70,1790,Affligem,,786-5629922-26,,053/665374,,,,,groot pakket (RODE BAK),FALSE,,Permanente opdr.,65,TRUE,53345883459,"Pasta, gierst, rijst
+
+- Appelsap
+
+- Olijfolie/mayonaise
+
+- Honing
+
+- Tomatensaus
+
+- WC reiniger (ecover)
+
+- Zeep",01-Sep-10,,30-Jun-11
+De Zonnebloem,Van Den Borre - Mosselmans,Geert,Portugeesstraat 70,1790,Affligem,,786-5629922-26,,053/665374,,,,,groot pakket (RODE BAK),FALSE,,,65,TRUE,53345883459,"Pasta, gierst, rijst
+
+- Appelsap
+
+- Olijfolie/mayonaise
+
+- Honing
+
+- Tomatensaus
+
+- WC reiniger (ecover)
+
+- Zeep",,06-Sep-11,
+De Zonnebloem,Van Der Biest-Boel,Fred,Molenstraat 38,1770,Liedekerke,,734-1401253-97,,053/660874,053/660874,,,,klein pakket (GROENE BAK),TRUE,oneven,Permanente opdr.,27.5,TRUE,740828685730,"5/01,5/2,5/3,5/4,5/5,5/6 € 33,7/7,8/8,9/9,9/10,
+!!!aardappelpakket loopt door, ook tijdens vakantie!!!",09-Jul-09,,
+De Zonnebloem,Van Der Biest-Boel,Fred,Molenstraat 38,1770,Liedekerke,,734-1401253-97,,053/660874,053/660874,,,,aardappel pakket,TRUE,oneven,,27.5,TRUE,740828685730,"5/01,5/2,5/3,5/4,5/5,5/6 € 33,7/7,8/8,9/9,9/10,
+!!!aardappelpakket loopt door, ook tijdens vakantie!!!",,30-Nov-12,
+De Zonnebloem,Van Der Biest-Boel,Fred,Molenstraat 38,1770,Liedekerke,,734-1401253-97,,053/660874,053/660874,,,,aardappel pakket,TRUE,oneven,cash,27.5,TRUE,740828685730,"5/01,5/2,5/3,5/4,5/5,5/6 € 33,7/7,8/8,9/9,9/10,
+!!!aardappelpakket loopt door, ook tijdens vakantie!!!",21-May-05,21-May-05,29-Aug-12
+De Zonnebloem,Van Gaever-De Metsenaere,Christine,Geraardsbergsestraat 152,1703,Schepdaal,,,,0494/57 64 22,,,,vangaever@me.com,aardappel pakket,TRUE,oneven,,54,TRUE,310126288834,,03-Feb-11,31-Mar-11,28-Apr-11
+De Zonnebloem,Van Gaever-De Metsenaere,Christine,Geraardsbergsestraat 152,1703,Schepdaal,,,,0494/57 64 22,,,,vangaever@me.com,tussen pakket (GRIJZE BAK),FALSE,,,54,TRUE,310126288834,,,28-Apr-11,
+De Zonnebloem,Van Gaever-De Metsenaere,Christine,Geraardsbergsestraat 152,1703,Schepdaal,,,,0494/57 64 22,,,,vangaever@me.com,klein pakket (GROENE BAK),FALSE,,,54,TRUE,310126288834,,03-Feb-11,31-Mar-11,28-Apr-11
+De Zonnebloem,Van Moer,An,Nieuwbaan 110,1742,"St,kat Lombeek ternat",,,,053/669768,,,,,fruitpakket,FALSE,,Permanente opdr.,43,FALSE,38532222103,tijdens vakanties in Zonnebloem leveren,01-Dec-08,31-Dec-08,01-Jun-11
+De Zonnebloem,Van Molle,Marijke,Kleinderbeek 13,9320,Nieuwerkerken Aalst,,,,0475/559732,,,,,groot pakket (RODE BAK),FALSE,,Permanente opdr.,0,FALSE,,,30-Jul-10,31-Aug-10,01-Sep-10
+De Zonnebloem,Vanderschelden - Vandevelde,Guy,Sint Gabriëlstraat 61,1770,Liedekerke,,979-9337575-69,,053/670726,,,,,klein pakket (GROENE BAK),FALSE,,cash,43,TRUE,979838196708,geeft macrobiotische kooklessen,01-Feb-06,01-Mar-06,
+De Zonnebloem,Vanhaecht - Vierendeel,Monique,Linthoutstraat 31,1785,Brussegem,,,,0477/337840,02/4600364,,,,aardappel pakket,TRUE,oneven,Permanente opdr.,44.5,TRUE,310086314629,,03-Dec-08,,
+De Zonnebloem,Vanhaecht - Vierendeel,Monique,Linthoutstraat 31,1785,Brussegem,,,,0477/337840,02/4600364,,,,tweede aardappelpakket,TRUE,oneven,Permanente opdr.,44.5,TRUE,310086314629,,03-Dec-08,,
+De Zonnebloem,Vanhaecht - Vierendeel,Monique,Linthoutstraat 31,1785,Brussegem,,,,0477/337840,02/4600364,,,,groot pakket (RODE BAK),TRUE,oneven,Permanente opdr.,44.5,TRUE,310086314629,,03-Dec-08,,
+Doornstraat,Allaer,David,Patattenstraat 5,9500,Ophasselt,,BE08737018136013,Allaer David,0484 186715,,,,david.allaer@telenet.be,klein pakket (GROENE BAK),FALSE,,,56,TRUE,400950337028,,22-May-12,03-Jul-12,
+Doornstraat,Allaer,David,Patattenstraat 5,9500,Ophasselt,,BE08737018136013,Allaer David,0484 186715,,,,david.allaer@telenet.be,broodpakket,FALSE,,,56,TRUE,400950337028,,30-May-12,03-Jul-12,
+Doornstraat,Boelaert,Lies,Schoonderhage 8,9550,Herzele,,,,0475 762491,,,,lies_boelaert@yahoo.com,klein pakket (GROENE BAK),FALSE,,,54,FALSE,,,11-Oct-12,01-Dec-12,
+Doornstraat,Bosteels-Imbrechts,Sofie,Mutsaardstraat 15,,St. Antelinks,,132-5092071-97,Imbrechts-Bosteels,0478/69 53 03,,,,,klein pakket (GROENE BAK),FALSE,,,86,FALSE,879033667556,,13-May-10,30-Jun-10,27-Oct-11
+Doornstraat,Bosteels-Imbrechts,Sofie,Mutsaardstraat 15,,St. Antelinks,,132-5092071-97,Imbrechts-Bosteels,0478/69 53 03,,,,,fruitpakket,FALSE,,,86,FALSE,879033667556,,13-May-10,30-Jun-10,27-Oct-11
+Doornstraat,Boterdaele- Van Berversluys,Marino,Waesberg 28,,St. Maria Lierde,,,,0472/35 99 19,,,,,groot pakket (RODE BAK),FALSE,,,,FALSE,,,,09-Jun-11,14-Jul-11
+Doornstraat,Boterdaele- Van Berversluys,Marino,Waesberg 28,,St. Maria Lierde,,,,0472/35 99 19,,,,,fruitpakket,FALSE,,,,FALSE,,,,09-Jun-11,14-Jul-11
+Doornstraat,Bulckens,Sarah,Vrijheid 26,9500,Ophasselt,,,,0486/41 20 95,,,,sarah.bulckens@gmail.com,broodpakket,FALSE,,,110,TRUE,979792694109,,06-Feb-12,29-Mar-12,
+Doornstraat,Bulckens,Sarah,Vrijheid 26,9500,Ophasselt,,,,0486/41 20 95,,,,sarah.bulckens@gmail.com,fruitpakket,FALSE,,,110,TRUE,979792694109,,06-Feb-12,29-Mar-12,
+Doornstraat,Bulckens,Sarah,Vrijheid 26,9500,Ophasselt,,,,0486/41 20 95,,,,sarah.bulckens@gmail.com,borstvoedingspakket (oker bak),FALSE,,,110,TRUE,979792694109,,,25-Jun-12,
+Doornstraat,Bulckens,Sarah,Vrijheid 26,9500,Ophasselt,,,,0486/41 20 95,,,,sarah.bulckens@gmail.com,klein pakket (GROENE BAK),FALSE,,,110,TRUE,979792694109,,06-Feb-12,29-Mar-12,25-Jun-12
+Doornstraat,Coessens ellen,,,,,,,,,,,,,tussen pakket (GRIJZE BAK),FALSE,,Permanente opdr.,,FALSE,,,13-Apr-10,30-Mar-10,29-Jun-10
+Doornstraat,Coppens,Benoit,Steenhuizestraat 15A,9550,Sint - Lievens -Esse,,,,054 55 86 64,,,,benoit.coppens@hp.com,groot pakket (RODE BAK),FALSE,,,65,TRUE,400935794607,"tegoed verlof 2012: € 30,00",23-Apr-12,01-Jun-12,
+Doornstraat,Coppens,Benoit,Steenhuizestraat 15A,9550,Sint - Lievens -Esse,,,,054 55 86 64,,,,benoit.coppens@hp.com,fruitpakket,FALSE,,,65,TRUE,400935794607,"tegoed verlof 2012: € 30,00",24-Apr-12,01-Jun-12,27-Jun-12
+Doornstraat,Cromphout,Piet,Voetbalstraat 24,9620,Zottegem,,000-0463025-44,,09/3604524,09/3604524,,,,klein pakket (GROENE BAK),FALSE,,cash,43,TRUE,676212965,"2/01,3/2,3/3,2/4,opleg betaald van 20 €, 2/5,2/6 € 33,7/7,8/8,9/9,10/10,",01-Jan-01,31-Jan-01,
+Doornstraat,De Baere-Daeleman,Margo-Bart,Tolstraat 18,9550,Steenhuize,,,,054/32 23 20,,,,margo.daeleman@skynet.be,klein pakket (GROENE BAK),FALSE,,,49,TRUE,766190910867,"Vanaf augustus: bedrag van € 49,00 wordt gespendeerd in de winkel.
+Aankoop winkel 11/08: - € 13,98
+Aankoop winkel 18/08: -€ 14,64
+Tegoed resterend op 18/08: € 50,38
+Tegoed op 25/08: € 26,80
+Tegoed op 01/09: € 47,80
+Tegoed op 25/09: € 11,39
+Tegoed op 12/10: € 37,57
+Tegoed op 14/10: € 29,10",23-Oct-09,26-Nov-09,04-Aug-12
+Doornstraat,De Baere-Daeleman,Margo-Bart,Tolstraat 18,9550,Steenhuize,,,,054/32 23 20,,,,margo.daeleman@skynet.be,aardappel pakket,TRUE,oneven,,49,TRUE,766190910867,"Vanaf augustus: bedrag van € 49,00 wordt gespendeerd in de winkel.
+Aankoop winkel 11/08: - € 13,98
+Aankoop winkel 18/08: -€ 14,64
+Tegoed resterend op 18/08: € 50,38
+Tegoed op 25/08: € 26,80
+Tegoed op 01/09: € 47,80
+Tegoed op 25/09: € 11,39
+Tegoed op 12/10: € 37,57
+Tegoed op 14/10: € 29,10",23-Oct-09,26-Nov-09,03-Aug-12
+Doornstraat,De Bock,Marc,Mutsaardstraat 52,9550,St. Antelinks,,,,0496/34 00 69,,,,,fruitpakket,FALSE,,,0,FALSE,,,19-Apr-11,,19-May-11
+Doornstraat,De Bock,Marc,Mutsaardstraat 52,9550,St. Antelinks,,,,0496/34 00 69,,,,,klein pakket (GROENE BAK),FALSE,,,0,FALSE,,,19-Apr-11,,19-May-11
+Doornstraat,De Moor - Capoen,Mathieu en Hélène,Guchterstraat 20,9550,"st,Antelincks",,,,0476/327055,,,,,klein pakket (GROENE BAK),FALSE,,Permanente opdr.,86,FALSE,53533820454,,15-Mar-09,30-Apr-09,29-Sep-11
+Doornstraat,De Moor - Capoen,Mathieu en Hélène,Guchterstraat 20,9550,"st,Antelincks",,,,0476/327055,,,,,fruitpakket,FALSE,,Permanente opdr.,86,FALSE,53533820454,,15-Mar-09,30-Apr-09,29-Sep-11
+Doornstraat,De Mulder-Piron,Hans,Krommestraat 43,9550,Steenhuize,,,,054/50 34 83,,,,hans.de.mulder@tetenet.be,klein pakket (GROENE BAK),FALSE,,,43,FALSE,,,,01-Oct-12,01-Dec-12
+Doornstraat,De Mulder-Piron,Hans,Krommestraat 43,9550,Steenhuize,,,,054/50 34 83,,,,hans.de.mulder@tetenet.be,klein pakket (GROENE BAK),FALSE,,,43,FALSE,,,03-Mar-11,28-Apr-11,01-Sep-11
+Doornstraat,De Mulder-Piron,Hans,Krommestraat 43,9550,Steenhuize,,,,054/50 34 83,,,,hans.de.mulder@tetenet.be,klein pakket (GROENE BAK),FALSE,,,43,FALSE,,,,01-Sep-12,03-Sep-12
+Doornstraat,De Mulder-Piron,Hans,Krommestraat 43,9550,Steenhuize,,,,054/50 34 83,,,,hans.de.mulder@tetenet.be,klein pakket (GROENE BAK),FALSE,,,43,FALSE,,,,29-Dec-11,02-Jul-12
+Doornstraat,De Mulder-Piron,Hans,Krommestraat 43,9550,Steenhuize,,,,054/50 34 83,,,,hans.de.mulder@tetenet.be,broodpakket,FALSE,,,43,FALSE,,,,29-Dec-11,05-Mar-12
+Doornstraat,De Mulder-Piron,Hans,Krommestraat 43,9550,Steenhuize,,,,054/50 34 83,,,,hans.de.mulder@tetenet.be,klein pakket (GROENE BAK),FALSE,,,43,FALSE,,,,29-Sep-11,01-Dec-11
+Doornstraat,De Mulder-Piron,Hans,Krommestraat 43,9550,Steenhuize,,,,054/50 34 83,,,,hans.de.mulder@tetenet.be,aardappel pakket,TRUE,oneven,,43,FALSE,,,03-Mar-11,28-Apr-11,12-May-11
+Doornstraat,Dechaumes,lutgart,,,,,,,,,,,,broodpakket,FALSE,,Permanente opdr.,0,FALSE,,,,02-Aug-11,
+Doornstraat,Decreton-Leroy,Wim,St Hubertusplein 27,9620,Zottegem St Maria Oudenhove,,,,09/3662144,,,,,tweede fruit,FALSE,,cash,140,TRUE,740864594827,,31-Jul-07,31-Jul-07,
+Doornstraat,Decreton-Leroy,Wim,St Hubertusplein 27,9620,Zottegem St Maria Oudenhove,,,,09/3662144,,,,,tussen pakket (GRIJZE BAK),FALSE,,cash,140,TRUE,740864594827,,,01-Sep-09,
+Doornstraat,Decreton-Leroy,Wim,St Hubertusplein 27,9620,Zottegem St Maria Oudenhove,,,,09/3662144,,,,,fruitpakket,FALSE,,cash,140,TRUE,740864594827,,26-Jul-07,31-Aug-07,
+Doornstraat,Fleurinck,Veerle,Krekelenberg 1a,9450,Heldergem,,001-3620822-82,Reynaert - Fleurinck,0494/693414,,,,veerle.fleurick@telenet.be,klein pakket (GROENE BAK),FALSE,,,43,TRUE,38928268150,,04-Jun-12,03-Jul-12,
+Doornstraat,Fransen-De Kesel,Tristan-Ruth,Hundelgemsestw. 1164,9820,Merelbeke,,634-9303-1736,Fransen-De kesel,0499/177058,,,,ruthdekesel@hotmail.com,fruitpakket,FALSE,,,43,FALSE,,"Tegoed voor week 15: € 10,00",,14-Jul-11,01-Sep-11
+Doornstraat,Fransen-De Kesel,Tristan-Ruth,Hundelgemsestw. 1164,9820,Merelbeke,,634-9303-1736,Fransen-De kesel,0499/177058,,,,ruthdekesel@hotmail.com,tussen pakket (GRIJZE BAK),FALSE,,,43,FALSE,,"Tegoed voor week 15: € 10,00",01-Jul-10,29-Jul-10,30-Sep-10
+Doornstraat,Fransen-De Kesel,Tristan-Ruth,Hundelgemsestw. 1164,9820,Merelbeke,,634-9303-1736,Fransen-De kesel,0499/177058,,,,ruthdekesel@hotmail.com,klein pakket (GROENE BAK),FALSE,,,43,FALSE,,"Tegoed voor week 15: € 10,00",,30-Sep-10,14-Jul-11
+Doornstraat,Fransen-De Kesel,Tristan-Ruth,Hundelgemsestw. 1164,9820,Merelbeke,,634-9303-1736,Fransen-De kesel,0499/177058,,,,ruthdekesel@hotmail.com,klein pakket (GROENE BAK),FALSE,,,43,FALSE,,"Tegoed voor week 15: € 10,00",,01-Sep-11,
+Doornstraat,Goossens-Pévenage,Sylvia,molenstraat 51,9550,Herzele Woubrechtegem,,,Pévenage-Goossens,0472/82 76 98,,,,,klein pakket (GROENE BAK),FALSE,,,,FALSE,400785325577,,25-Mar-10,29-Apr-10,01-Dec-10
+Doornstraat,Hertegonne,Bart-An,Grotenberghestraat 50,9620,Zottegem,,979-3797394-43,,09/3610676,09/3610676,,,,tussen pakket (GRIJZE BAK),TRUE,oneven,cash,48.5,TRUE,979235805082,",7/01,6/2,6/3,7/4,8/5,6/6 € 43,7/7,8/8,9/9,9/10,
+fruit 32,23
+vanaf 12 maart veertiendaags",,24-Feb-98,
+Doornstraat,Hertegonne,Bart-An,Grotenberghestraat 50,9620,Zottegem,,979-3797394-43,,09/3610676,09/3610676,,,,fruitpakket,TRUE,oneven,cash,48.5,TRUE,979235805082,",7/01,6/2,6/3,7/4,8/5,6/6 € 43,7/7,8/8,9/9,9/10,
+fruit 32,23
+vanaf 12 maart veertiendaags",,24-Feb-98,
+Doornstraat,Huygens,Nikolaas,Tolstraat 13,9550,Steenhuize,,,,0475/81 97 16,,,,nikolaas@selmus.com,klein pakket (GROENE BAK),FALSE,,,99,FALSE,,,,30-Sep-10,01-Jul-11
+Doornstraat,Huygens,Nikolaas,Tolstraat 13,9550,Steenhuize,,,,0475/81 97 16,,,,nikolaas@selmus.com,fruitpakket,FALSE,,,99,FALSE,,,26-Aug-10,30-Sep-10,30-Jun-11
+Doornstraat,Huygens,Nikolaas,Tolstraat 13,9550,Steenhuize,,,,0475/81 97 16,,,,nikolaas@selmus.com,tussen pakket (GRIJZE BAK),FALSE,,,99,FALSE,,,26-Aug-10,30-Sep-10,30-Sep-10
+Doornstraat,Lapage,Inge,Bekenholstrtaat 1,9550,Steenhuize,,,,0497/55 17 75,,,,,klein pakket (GROENE BAK),FALSE,,,43,TRUE,400927548290,,09-Feb-12,29-Mar-12,
+Doornstraat,Machtelinckx,suzy,,,,,,,,,,,,klein pakket (GROENE BAK),FALSE,,Permanente opdr.,86,FALSE,,,10-Aug-10,,17-Mar-11
+Doornstraat,Machtelinckx,suzy,,,,,,,,,,,,fruitpakket,FALSE,,Permanente opdr.,86,FALSE,,,04-May-10,,17-Mar-11
+Doornstraat,Machtelinckx,suzy,,,,,,,,,,,,tussen pakket (GRIJZE BAK),FALSE,,Permanente opdr.,86,FALSE,,,04-May-10,,10-Aug-10
+Doornstraat,Noël,Dirk,Borsbekestraat 90,9551,ressegem,,,,0476/63 22 46,,,,info@ecotuin.be,fruitpakket,FALSE,,Permanente opdr.,65,FALSE,38737711347,"betaling okee van tussenpakket, heeft groot gekregen en is ok!
+Betaling oktober ok met fruit erbij! Contant ontvangen!",05-Oct-10,,01-Sep-11
+Doornstraat,Noël,Dirk,Borsbekestraat 90,9551,ressegem,,,,0476/63 22 46,,,,info@ecotuin.be,groot pakket (RODE BAK),FALSE,,,65,FALSE,38737711347,"betaling okee van tussenpakket, heeft groot gekregen en is ok!
+Betaling oktober ok met fruit erbij! Contant ontvangen!",22-Sep-10,29-Sep-11,29-Sep-11
+Doornstraat,Poelvoorde,Bart,,,,,,,0495/111947,,,,bart.poelvoorde@gmail.com,fruitpakket,FALSE,oneven,,70,FALSE,,"Bart van Avalon
+rekening doorgestuurd tot en met eind oktober",06-Feb-12,29-Mar-12,
+Doornstraat,Poelvoorde,Bart,,,,,,,0495/111947,,,,bart.poelvoorde@gmail.com,tussen pakket (GRIJZE BAK),TRUE,oneven,,70,FALSE,,"Bart van Avalon
+rekening doorgestuurd tot en met eind oktober",06-Feb-12,29-Mar-12,
+Doornstraat,Roelandt - Raes,Nadine & Danny,,,,,,,,,,,nadine.raes1@telenet.be,broodpakket,FALSE,,,56,FALSE,,,04-Jun-12,03-Jul-12,06-Jul-12
+Doornstraat,Roelandt - Raes,Nadine & Danny,,,,,,,,,,,nadine.raes1@telenet.be,klein pakket (GROENE BAK),FALSE,,,56,FALSE,,,04-Jun-12,03-Jul-12,06-Jul-12
+Doornstraat,Smolders,Annelies,Holmanstraat 17,9550,Steenhuize,,,,054/24 03 0,,,,,klein pakket (GROENE BAK),FALSE,,,43,FALSE,,,09-Feb-12,29-Mar-12,
+Doornstraat,Swyngedouw-Maeyaert,Olivier-Greet,,,,,,,0475/871910,,,,greet.maeyaert@gmail.com,fruitpakket,FALSE,,Permanente opdr.,43,FALSE,330067162248,,25-Jul-08,29-Aug-08,29-May-12
+Doornstraat,Tavernier,An,Leverstraat 6,9420,Aaigem,,001-5728333-74,Tavernier-Van de Sompel,0476/75 45 23,,,,an.tavernier@telenet.be,borstvoedingspakket (oker bak),FALSE,,,43,TRUE,38810671616,"Tegoed verlof 2012: € 10,00",,02-Jun-11,01-Dec-11
+Doornstraat,Tavernier,An,Leverstraat 6,9420,Aaigem,,001-5728333-74,Tavernier-Van de Sompel,0476/75 45 23,,,,an.tavernier@telenet.be,klein pakket (GROENE BAK),FALSE,,,43,TRUE,38810671616,"Tegoed verlof 2012: € 10,00",17-Mar-11,28-Apr-11,28-Apr-11
+Doornstraat,Tavernier,An,Leverstraat 6,9420,Aaigem,,001-5728333-74,Tavernier-Van de Sompel,0476/75 45 23,,,,an.tavernier@telenet.be,klein pakket (GROENE BAK),FALSE,,,43,TRUE,38810671616,"Tegoed verlof 2012: € 10,00",,01-Dec-11,
+Doornstraat,Van Boterdael-Borloo,,Winkelstraat 51 D,9550,Steenhuize,,,,0496/88 17 44,,,,v.borloo@tcr-group.com,fruitpakket,FALSE,,,86,FALSE,38803368627,,03-Mar-11,28-Apr-11,01-Feb-12
+Doornstraat,Van Boterdael-Borloo,,Winkelstraat 51 D,9550,Steenhuize,,,,0496/88 17 44,,,,v.borloo@tcr-group.com,tussen pakket (GRIJZE BAK),FALSE,,,86,FALSE,38803368627,,03-Mar-11,28-Apr-11,01-Sep-11
+Doornstraat,Van Boterdael-Borloo,,Winkelstraat 51 D,9550,Steenhuize,,,,0496/88 17 44,,,,v.borloo@tcr-group.com,klein pakket (GROENE BAK),FALSE,,,86,FALSE,38803368627,,,01-Sep-11,01-Feb-12
+Doornstraat,Van Caenegem - Verlinden,,Ressegemstraat 38,9551,Ressegem,,,Van Caenegem - Verlinden,053/624615,0473/562077,,,maloju@skynet.be,broodpakket,FALSE,,Permanente opdr.,99,FALSE,,"Tegoed verlof 2012: € 19,00",01-Mar-12,03-Apr-12,
+Doornstraat,Van Caenegem - Verlinden,,Ressegemstraat 38,9551,Ressegem,,,Van Caenegem - Verlinden,053/624615,0473/562077,,,maloju@skynet.be,klein pakket (GROENE BAK),FALSE,,Permanente opdr.,99,FALSE,,"Tegoed verlof 2012: € 19,00",01-Mar-12,03-Apr-12,
+Doornstraat,Van Caenegem - Verlinden,,Ressegemstraat 38,9551,Ressegem,,,Van Caenegem - Verlinden,053/624615,0473/562077,,,maloju@skynet.be,fruitpakket,FALSE,,Permanente opdr.,99,FALSE,,"Tegoed verlof 2012: € 19,00",01-Mar-12,03-Apr-12,
+Doornstraat,Van Caenegem-Eeckhout,Lieselotte,Pastorijstraat 13,9552,Borsbeke,,,,0496/71 08 97,,,,gert.eeckhout@telenet.be,groot pakket (RODE BAK),FALSE,,Permanente opdr.,108,FALSE,400807680441,"Tegoed voor verlof 2012: € 25,00",01-Sep-12,01-Sep-12,
+Doornstraat,Van Caenegem-Eeckhout,Lieselotte,Pastorijstraat 13,9552,Borsbeke,,,,0496/71 08 97,,,,gert.eeckhout@telenet.be,fruitpakket,FALSE,,Permanente opdr.,108,FALSE,400807680441,"Tegoed voor verlof 2012: € 25,00",01-Sep-12,01-Sep-12,
+Doornstraat,Van Canegem,,Pastorijstraat 49,9552,Borsbeke,,,,053/62 68 50,,,,,tussen pakket (GRIJZE BAK),FALSE,,,97,FALSE,,,09-Dec-10,27-Jan-11,24-Feb-11
+Doornstraat,Van Canegem,,Pastorijstraat 49,9552,Borsbeke,,,,053/62 68 50,,,,,fruitpakket,FALSE,,,97,FALSE,,,09-Dec-10,27-Jan-11,24-Feb-11
+Doornstraat,Van Cleemputte,HUGO,stratendries 65,9572,sint-martens-lierde,,,,055/420783,0485/495678,,,"hugovancleemputte@skynet,be",klein pakket (GROENE BAK),TRUE,oneven,Permanente opdr.,19.5,FALSE,38450711080,"werkt in ploegen, eerte pakket betaalt in winkel 9 €",22-Mar-08,30-Mar-08,29-Sep-11
+Doornstraat,Van den Berghe-De Baets,Sylvie,Bergestraat 23,9550,Steenhuize,,737-0223027-67,De Baets-Van den Berghe,0496/337716,,,,SylvieVDB@hotmail.com,klein pakket (GROENE BAK),FALSE,,,56,FALSE,,,07-Jul-11,,04-Aug-11
+Doornstraat,Van den Bossche,Anneleen,,,,,,,,,,,,fruitpakket,FALSE,,,43,FALSE,,,,05-May-11,08-Sep-11
+Doornstraat,Van Herreweghe-D'Hondt,Ingeborg,Zavelstraat 44,9550,St. Lievens Esse,,979-9742642-64,,053/415696,053/415696,,,,tussen pakket (GRIJZE BAK),TRUE,oneven,,27,TRUE,979236470039,"tegoed voor verlof 2012: € 13,60",,29-Aug-12,
+Doornstraat,Van Herreweghe-D'Hondt,Ingeborg,Zavelstraat 44,9550,St. Lievens Esse,,979-9742642-64,,053/415696,053/415696,,,,tussen pakket (GRIJZE BAK),FALSE,,,27,TRUE,979236470039,"tegoed voor verlof 2012: € 13,60",,03-Feb-11,29-Aug-12
+Doornstraat,Van Herreweghe-D'Hondt,Ingeborg,Zavelstraat 44,9550,St. Lievens Esse,,979-9742642-64,,053/415696,053/415696,,,,klein pakket (GROENE BAK),FALSE,even,cash,27,TRUE,979236470039,"tegoed voor verlof 2012: € 13,60",,27-Jun-00,03-Feb-11
+Doornstraat,Van Izeghem,Marc,Arnstraat 26,9550,Sint-Lievens-Esse,,,,0478/609736,,,,,klein pakket (GROENE BAK),FALSE,,,43,FALSE,,,01-Oct-12,01-Nov-12,
+Doornstraat,Van Keymeulen - Van Damme,Anke,Wagenweg 3,9572,Lierde,,393-007125751,,0495/456387,,,,,aardappel pakket,TRUE,oneven,Permanente opdr.,,FALSE,,,30-Jul-10,31-Aug-10,30-Sep-10
+Doornstraat,Van Keymeulen - Van Damme,Anke,Wagenweg 3,9572,Lierde,,393-007125751,,0495/456387,,,,,tussen pakket (GRIJZE BAK),FALSE,,Permanente opdr.,,FALSE,,,30-Jul-10,31-Aug-10,30-Sep-10
+Doornstraat,Vapper,Leana,Speistraat 3A,9550,Sint-Lievens-Esse,,,,486661157,,,,leanavapper@gmail.com,klein pakket (GROENE BAK),FALSE,,,54,FALSE,,,11-Oct-12,01-Dec-12,
+Doornstraat,Verbeurgt,Rob,Brusselbaan 39,9550,Steenhuize (Herzele),,737-1200906-89,,054/502183,054/502183,,,,klein pakket (GROENE BAK),FALSE,,,43,TRUE,740825726927,",5/01,5/2,5/3,5/4,5/5,5/6 € 33, 7/6,7/7,7/8,8/9,8/10,
+blijven storten omdat ze ons willen sponseren, krijgen groenten als ze langs komen!
+
+Tegoed voor 2012: € 20,00",,19-Aug-09,
+Doornstraat,Verlinden-De Groote,Karine,Beverstraat 6,9550,Herzele,,850-8680418-80,Karine Verlinden,054/50 28 97,0474/94 07 06,,,karineverlinden@hotmail.com,aardappel pakket,TRUE,oneven,,103,FALSE,,"Tegoed voor verlof 2012: € 90,00
+Reeds opgebruikt in de winkel: € 69,25
+Nog tegoed op 02/07: € 20,75
+Nog tegoed op 02/10: € 0,00",17-Mar-11,28-Apr-11,30-Jun-11
+Doornstraat,Verlinden-De Groote,Karine,Beverstraat 6,9550,Herzele,,850-8680418-80,Karine Verlinden,054/50 28 97,0474/94 07 06,,,karineverlinden@hotmail.com,aardappel pakket,TRUE,oneven,,103,FALSE,,"Tegoed voor verlof 2012: € 90,00
+Reeds opgebruikt in de winkel: € 69,25
+Nog tegoed op 02/07: € 20,75
+Nog tegoed op 02/10: € 0,00",04-Apr-12,04-Apr-12,01-Aug-12
+Doornstraat,Verlinden-De Groote,Karine,Beverstraat 6,9550,Herzele,,850-8680418-80,Karine Verlinden,054/50 28 97,0474/94 07 06,,,karineverlinden@hotmail.com,tussen pakket (GRIJZE BAK),FALSE,,,103,FALSE,,"Tegoed voor verlof 2012: € 90,00
+Reeds opgebruikt in de winkel: € 69,25
+Nog tegoed op 02/07: € 20,75
+Nog tegoed op 02/10: € 0,00",04-Apr-12,04-Apr-12,01-Aug-12
+Doornstraat,Verlinden-De Groote,Karine,Beverstraat 6,9550,Herzele,,850-8680418-80,Karine Verlinden,054/50 28 97,0474/94 07 06,,,karineverlinden@hotmail.com,klein pakket (GROENE BAK),FALSE,,,103,FALSE,,"Tegoed voor verlof 2012: € 90,00
+Reeds opgebruikt in de winkel: € 69,25
+Nog tegoed op 02/07: € 20,75
+Nog tegoed op 02/10: € 0,00",,01-Sep-12,
+Doornstraat,Verlinden-De Groote,Karine,Beverstraat 6,9550,Herzele,,850-8680418-80,Karine Verlinden,054/50 28 97,0474/94 07 06,,,karineverlinden@hotmail.com,fruitpakket,FALSE,,,103,FALSE,,"Tegoed voor verlof 2012: € 90,00
+Reeds opgebruikt in de winkel: € 69,25
+Nog tegoed op 02/07: € 20,75
+Nog tegoed op 02/10: € 0,00",04-Apr-12,04-Apr-12,01-Aug-12
+Doornstraat,Verlinden-De Groote,Karine,Beverstraat 6,9550,Herzele,,850-8680418-80,Karine Verlinden,054/50 28 97,0474/94 07 06,,,karineverlinden@hotmail.com,aardappel pakket,TRUE,oneven,,103,FALSE,,"Tegoed voor verlof 2012: € 90,00
+Reeds opgebruikt in de winkel: € 69,25
+Nog tegoed op 02/07: € 20,75
+Nog tegoed op 02/10: € 0,00",,01-Sep-12,
+Doornstraat,Verlinden-De Groote,Karine,Beverstraat 6,9550,Herzele,,850-8680418-80,Karine Verlinden,054/50 28 97,0474/94 07 06,,,karineverlinden@hotmail.com,fruitpakket,FALSE,,,103,FALSE,,"Tegoed voor verlof 2012: € 90,00
+Reeds opgebruikt in de winkel: € 69,25
+Nog tegoed op 02/07: € 20,75
+Nog tegoed op 02/10: € 0,00",17-Mar-11,28-Apr-11,30-Jun-11
+Doornstraat,Verlinden-De Groote,Karine,Beverstraat 6,9550,Herzele,,850-8680418-80,Karine Verlinden,054/50 28 97,0474/94 07 06,,,karineverlinden@hotmail.com,fruitpakket,FALSE,,,103,FALSE,,"Tegoed voor verlof 2012: € 90,00
+Reeds opgebruikt in de winkel: € 69,25
+Nog tegoed op 02/07: € 20,75
+Nog tegoed op 02/10: € 0,00",,01-Sep-12,
+Doornstraat,Verlinden-De Groote,Karine,Beverstraat 6,9550,Herzele,,850-8680418-80,Karine Verlinden,054/50 28 97,0474/94 07 06,,,karineverlinden@hotmail.com,tussen pakket (GRIJZE BAK),FALSE,,,103,FALSE,,"Tegoed voor verlof 2012: € 90,00
+Reeds opgebruikt in de winkel: € 69,25
+Nog tegoed op 02/07: € 20,75
+Nog tegoed op 02/10: € 0,00",01-Mar-11,01-Mar-11,30-Jun-11
+Doornstraat,Vermelle,Nathalie,Terbiest 16,9550,Sint-Lievens-Esse,,,,498137785,,,,nathalie.vermelle@gmail.com,fruitpakket,FALSE,,,65,FALSE,,"Tegoed in de winkel: € 15,00",10-Apr-12,01-May-12,02-Aug-12
+Doornstraat,Vermelle,Nathalie,Terbiest 16,9550,Sint-Lievens-Esse,,,,498137785,,,,nathalie.vermelle@gmail.com,groot pakket (RODE BAK),FALSE,,,65,FALSE,,"Tegoed in de winkel: € 15,00",10-Apr-12,01-May-12,02-Aug-12
+Doornstraat,Vermelle,Nathalie,Terbiest 16,9550,Sint-Lievens-Esse,,,,498137785,,,,nathalie.vermelle@gmail.com,fruitpakket,FALSE,,,65,FALSE,,"Tegoed in de winkel: € 15,00",,01-Sep-12,04-Sep-12
+Doornstraat,Vermelle,Nathalie,Terbiest 16,9550,Sint-Lievens-Esse,,,,498137785,,,,nathalie.vermelle@gmail.com,groot pakket (RODE BAK),FALSE,,,65,FALSE,,"Tegoed in de winkel: € 15,00",,01-Sep-12,
+Duysburg - van der Linden,Bernagie-Ottevaere,Guido,Steenweg op Aalst 129,9620,Zottegem,,,Berangie-Ottevaere,09/3603844,09/3603844,,,guido.bernagie@telenet.be,klein pakket (GROENE BAK),FALSE,,,43,TRUE,38874589663,"Tegoed voor verlof 2012: € 25,55
+Aankoop winkel 21/08: -€ 24,83",14-Dec-11,02-Feb-12,
+Duysburg - van der Linden,De Clercq-Van Herzele,Eric-Hilde,Europaweg 289,9620,Leeuwergem,,6511376458-34,,09/3644010,09/3644010,,,,aardappel pakket,TRUE,oneven,cash,49,FALSE,651300820042,",8/10,6/11,6/12,7/01,6/2,6/3,8/4,8/5,6/6 € 33 7/7,8/8,8/9,9/10,",04-Nov-04,04-Nov-04,30-Nov-12
+Duysburg - van der Linden,De Clercq-Van Herzele,Eric-Hilde,Europaweg 289,9620,Leeuwergem,,6511376458-34,,09/3644010,09/3644010,,,,klein pakket (GROENE BAK),FALSE,,cash,49,FALSE,651300820042,",8/10,6/11,6/12,7/01,6/2,6/3,8/4,8/5,6/6 € 33 7/7,8/8,8/9,9/10,",06-Nov-01,27-Nov-01,30-Nov-12
+Duysburg - van der Linden,De Latte,Philiep,Rue de Soignies 311,7811,Ath,,1176400943,De Latte Philiep,0473/47 42 73,,,,just4u@philiep.net,klein pakket (GROENE BAK),FALSE,,,43,FALSE,,"cfr proef: laatste 2 weken van maart op vakantie, dus stop na 13 maart en 
+start abo 29maart",,29-Mar-12,03-Apr-12
+Duysburg - van der Linden,De Latte,Philiep,Rue de Soignies 311,7811,Ath,,1176400943,De Latte Philiep,0473/47 42 73,,,,just4u@philiep.net,klein pakket (GROENE BAK),FALSE,,,43,FALSE,,"cfr proef: laatste 2 weken van maart op vakantie, dus stop na 13 maart en 
+start abo 29maart",06-Feb-12,06-Feb-12,15-Mar-12
+Duysburg - van der Linden,De Vos,Evy,Steenweg 21,9630,Zwalm,,780-588243-19,De Vos Evy,0473/92 55 71,,,,,klein pakket (GROENE BAK),FALSE,,,43,FALSE,,,06-Feb-12,29-Mar-12,20-Apr-12
+Duysburg - van der Linden,De Wolf- Denaeghel,Lieven,nieuwwegestraat 55,9620,Zottegem,,444-4657081-02,,09/3609135,09/3609135,,,,borstvoedingspakket (oker bak),FALSE,,cash,67,TRUE,740828690477,",10/01,8/2,10/3,10/4,10/5,10/6 € 54,10/7,8/8,9/9,10/10,
+
+brood 11/3  8 €, 1/4 9 €,1/5,1/6",29-Aug-07,29-Aug-07,
+Duysburg - van der Linden,De Wolf- Denaeghel,Lieven,nieuwwegestraat 55,9620,Zottegem,,444-4657081-02,,09/3609135,09/3609135,,,,broodpakket,FALSE,,cash,67,TRUE,740828690477,",10/01,8/2,10/3,10/4,10/5,10/6 € 54,10/7,8/8,9/9,10/10,
+
+brood 11/3  8 €, 1/4 9 €,1/5,1/6",01-Jan-01,31-Jan-01,
+Duysburg - van der Linden,Depotter-Galle,Rita,Saffelstraat 10,9620,Zottegem,,001-0450966-89,,09/3606406,09/3606406,,,,groot pakket (RODE BAK),TRUE,oneven,cash,32.5,TRUE,38338692955,,12-Dec-00,30-Jan-01,
+Duysburg - van der Linden,Duysburgh-Van der Linden,,Gentse Steenweg 309,9620,Zottegem,,001-0769701-82,,09/3606296,09/3606296,,,,fruitpakket,TRUE,even,cash,48.5,TRUE,38332716442,",7/01,6/2,6/3,8/4,8/5,6/6 € 54,7/6,7/7,8/8,9/9,9/10,
+fruit6/6 33 €, niets terug betalen; komt naar de winkel,",,20-Jun-01,
+Duysburg - van der Linden,Duysburgh-Van der Linden,,Gentse Steenweg 309,9620,Zottegem,,001-0769701-82,,09/3606296,09/3606296,,,,tussen pakket (GRIJZE BAK),TRUE,even,cash,48.5,TRUE,38332716442,",7/01,6/2,6/3,8/4,8/5,6/6 € 54,7/6,7/7,8/8,9/9,9/10,
+fruit6/6 33 €, niets terug betalen; komt naar de winkel,",,28-Jul-05,
+Duysburg - van der Linden,Raes,Leen,Doolstraat 8,,Zottegem,,,,0478/57 94 87,,,,,tussen pakket (GRIJZE BAK),FALSE,,,,FALSE,,,13-May-10,,20-May-10
+Duysburg - van der Linden,Van Der Fraenen,Dominique,Gentsestw. 142,9620,Zottegem-Grotenberge,,979-1523512-35,Van Der Fraenen Dominique,0495/701482,,,,domivdf@hotmail.com,aardappel pakket,TRUE,oneven,,52.5,FALSE,,,03-Mar-11,27-Apr-11,30-Jun-11
+Duysburg - van der Linden,Van Der Fraenen,Dominique,Gentsestw. 142,9620,Zottegem-Grotenberge,,979-1523512-35,Van Der Fraenen Dominique,0495/701482,,,,domivdf@hotmail.com,klein pakket (GROENE BAK),TRUE,oneven,,52.5,FALSE,,,03-Feb-11,27-Apr-11,30-Jun-11
+Duysburg - van der Linden,Van Der Fraenen,Dominique,Gentsestw. 142,9620,Zottegem-Grotenberge,,979-1523512-35,Van Der Fraenen Dominique,0495/701482,,,,domivdf@hotmail.com,fruitpakket,TRUE,oneven,,52.5,FALSE,,,03-Mar-11,27-Apr-11,30-Jun-11
+Duysburg - van der Linden,Vlassembrouck-Spitaels,Dominique-An,Allfonslaan 60,9500,Ophasselt,,,,054/50 47 93,0479/79 89 05,,,dominique.vlassembrouck@live.be,tussen pakket (GRIJZE BAK),FALSE,,,54,FALSE,53783744590,,,21-Jun-12,01-Sep-12
+Duysburg - van der Linden,Vlassembrouck-Spitaels,Dominique-An,Allfonslaan 60,9500,Ophasselt,,,,054/50 47 93,0479/79 89 05,,,dominique.vlassembrouck@live.be,groot pakket (RODE BAK),FALSE,,,54,FALSE,53783744590,,,16-May-12,20-Jun-12
+Duysburg - van der Linden,Vlassembrouck-Spitaels,Dominique-An,Allfonslaan 60,9500,Ophasselt,,,,054/50 47 93,0479/79 89 05,,,dominique.vlassembrouck@live.be,fruitpakket,FALSE,,,54,FALSE,53783744590,,03-Nov-11,01-Dec-11,01-Dec-11
+Duysburg - van der Linden,Vlassembrouck-Spitaels,Dominique-An,Allfonslaan 60,9500,Ophasselt,,,,054/50 47 93,0479/79 89 05,,,dominique.vlassembrouck@live.be,tussen pakket (GRIJZE BAK),FALSE,,,54,FALSE,53783744590,,03-Nov-11,01-Dec-11,09-May-12
+Guido en Elga,Bodé - Cloquet,,Beerlegemstraat 54,9630,Zwalm,,,,0475/304560,,,,,klein pakket (GROENE BAK),FALSE,,,43,FALSE,,"proef tot einde ddecember 6 x 9 = 54 € (betaald via bancontact in winkel )
+
+oktober 2011 reeds betaald , 
+cfr juni dubbel betaald!!!!!!!!!!!!!!!!!!!!!!!!",,28-Oct-10,05-Jul-11
+Guido en Elga,Bodé - Cloquet,,Beerlegemstraat 54,9630,Zwalm,,,,0475/304560,,,,,fruitpakket,FALSE,,,43,FALSE,,"proef tot einde ddecember 6 x 9 = 54 € (betaald via bancontact in winkel )
+
+oktober 2011 reeds betaald , 
+cfr juni dubbel betaald!!!!!!!!!!!!!!!!!!!!!!!!",,01-Jul-10,29-Jul-10
+Guido en Elga,Bodé - Cloquet,,Beerlegemstraat 54,9630,Zwalm,,,,0475/304560,,,,,klein pakket (GROENE BAK),FALSE,,Permanente opdr.,43,FALSE,,"proef tot einde ddecember 6 x 9 = 54 € (betaald via bancontact in winkel )
+
+oktober 2011 reeds betaald , 
+cfr juni dubbel betaald!!!!!!!!!!!!!!!!!!!!!!!!",18-Nov-09,30-Dec-09,30-Jun-10
+Guido en Elga,Bodé - Cloquet,,Beerlegemstraat 54,9630,Zwalm,,,,0475/304560,,,,,klein pakket (GROENE BAK),FALSE,,,43,FALSE,,"proef tot einde ddecember 6 x 9 = 54 € (betaald via bancontact in winkel )
+
+oktober 2011 reeds betaald , 
+cfr juni dubbel betaald!!!!!!!!!!!!!!!!!!!!!!!!",,29-Sep-11,27-Jun-12
+Guido en Elga,De Bisschop-Verheyen,Guido en Elga,Paddestraat 3,9620,Zottegem,,,,93618329,93618331,475506913,,,borstvoedingspakket (oker bak),FALSE,,Permanente opdr.,54,FALSE,,"Tegoed verlof 2012: € 37,50",26-Aug-09,26-Aug-09,
+Guido en Elga,De Borle,Chris,Elenestraat 115 bus 3,9620,Zottegem,,,,0472/110 494,,,,chris.deborle@gmail.com,broodpakket,TRUE,oneven,,35.5,TRUE,53845035355,,24-Sep-12,01-Nov-12,
+Guido en Elga,De Borle,Chris,Elenestraat 115 bus 3,9620,Zottegem,,,,0472/110 494,,,,chris.deborle@gmail.com,aardappel pakket,TRUE,oneven,,35.5,TRUE,53845035355,,25-Sep-12,,
+Guido en Elga,De Borle,Chris,Elenestraat 115 bus 3,9620,Zottegem,,,,0472/110 494,,,,chris.deborle@gmail.com,klein pakket (GROENE BAK),TRUE,oneven,,35.5,TRUE,53845035355,,22-Sep-12,31-Oct-12,
+Guido en Elga,De Somviele,Ann,Sonseinde 89,9620,Zottegem,,,,09/3607382,,,,,klein pakket (GROENE BAK),TRUE,oneven,cash,,FALSE,740828689164,,02-Oct-06,31-Oct-06,02-Dec-10
+Guido en Elga,De Sutter,Mario,Opstalstraat 42,9620,Velzeke,,063-9165444-46,,0485/29 54 31,,,,mariodesutter@telenet.be,klein pakket (GROENE BAK),FALSE,,,43,FALSE,53631430746,,11-Mar-10,01-Apr-10,02-Feb-11
+Guido en Elga,De Vos - Romeyns,Kristof en Nancy,Sint - Andriessteenweg 27,9620,Zottegem,,,,09/2170400,,,,,tussen pakket (GRIJZE BAK),FALSE,,Permanente opdr.,54,TRUE,400764544339,"betaling okee tot einde oktober, contant in winkel geregeld",12-Sep-09,31-Oct-09,
+Guido en Elga,De Wilde-Copieters,Noël,Pierkensttaat 34,9620,Zottegem,,063-4220221-77,De Wilde Noël,09/361 32 72,,,,ecoppieters,klein pakket (GROENE BAK),TRUE,oneven,,21.5,FALSE,53735153250,,,27-Oct-11,26-Jan-12
+Guido en Elga,Degelaen - De Clercq,Elke,Urnenstraat 27,9620,Velzeke - Rudderhove,,43979436092201,Degelaen - De Clercq,0496 242319,,,,,klein pakket (GROENE BAK),FALSE,,,54,FALSE,,,12-Nov-12,01-Dec-12,
+Guido en Elga,Hebbelinck - Masco,Liesbeth,Bruggenhoek 14,9630,Zwalm,,390-0807249-70,,0485/455979,,,,,fruitpakket,TRUE,oneven,cash,21.5,FALSE,390080724970,,16-Oct-05,30-Nov-05,29-Mar-11
+Guido en Elga,Hebbelinck - Masco,Liesbeth,Bruggenhoek 14,9630,Zwalm,,390-0807249-70,,0485/455979,,,,,klein pakket (GROENE BAK),TRUE,oneven,cash,21.5,FALSE,390080724970,,16-Oct-05,30-Nov-05,30-Nov-12
+Guido en Elga,Moerman - De Keyzer,Valerie,Savooistraat 84,9600,Ronse,,,,0476/327816,,,,,fruitpakket,FALSE,,cash,,FALSE,740874967460,,14-Sep-07,31-Oct-07,25-Feb-10
+Guido en Elga,Moerman - De Keyzer,Valerie,Savooistraat 84,9600,Ronse,,,,0476/327816,,,,,tussen pakket (GRIJZE BAK),TRUE,oneven,cash,,FALSE,740874967460,,14-Sep-07,31-Oct-07,25-Feb-10
+Guido en Elga,Verriest - Cannie,Koen en Katrien,Steenweg 52,9630,Hundelgem,,001-2269731-07,,0496/916115,,,,,tussen pakket (GRIJZE BAK),FALSE,,cash,54,TRUE,38351427843,vanaf 1 oktober tussen inplaats van groot,18-Sep-05,30-Oct-05,
+Herbatheek Stef Mintiens,De Baere - Van Den Mooter,Piet,hoogstraatje 2b,,Mechelen,,444-4673881-21,,015/63 78 95,53626819,,,,tussen pakket (GRIJZE BAK),FALSE,,Permanente opdr.,,FALSE,,"pp ok op 9/9,10/10,
+wijziging van groot naar tussen vanaf 1 november 05",31-Mar-10,,22-Nov-10
+Herbatheek Stef Mintiens,De Pauw,Dirk,Beekstraat 23B,9030,Mariakerke,,001-3581693-44,De Pauw-Steppe,0486/80 82 50,,,,dirk.depauw@phyto-it.com,klein pakket (GROENE BAK),FALSE,,,43,FALSE,38838981670,,08-Sep-11,29-Sep-11,01-Mar-12
+Herbatheek Stef Mintiens,De Pauw,Dirk,Beekstraat 23B,9030,Mariakerke,,001-3581693-44,De Pauw-Steppe,0486/80 82 50,,,,dirk.depauw@phyto-it.com,fruitpakket,FALSE,,,43,FALSE,38838981670,,08-Sep-11,29-Sep-11,02-Feb-12
+Herbatheek Stef Mintiens,De Schepper-Van Dienderen,Veerle,Pastoor Pennestraat 1 A,9290,Overmere,,143-0770579-15,,0497/229 163,,,,Veerle.DeScepper@Ugent.be,klein pakket (GROENE BAK),FALSE,,,43,FALSE,148864012439,via Tom De Swaef,28-Jul-11,01-Sep-11,26-Sep-12
+Herbatheek Stef Mintiens,De Smedt,Sarah,Kouterlaan 12,9070,Heusden,,,,0499/38 39 86,,,,sara_de_smedt@yahoo.com,klein pakket (GROENE BAK),TRUE,oneven,,21.5,FALSE,,,10-Nov-11,29-Dec-11,29-Dec-11
+Herbatheek Stef Mintiens,De Weirdt,Marjolein,Kouterslag 10,9850,Merendree,,377004603395,Marjolein De Weirdt,0496/47 53 74,,,,marjolein.deweirdt@ugent.be,broodpakket,TRUE,oneven,,71,FALSE,377004613395,mee met Tom (Anneleen),,01-Dec-11,26-Sep-12
+Herbatheek Stef Mintiens,De Weirdt,Marjolein,Kouterslag 10,9850,Merendree,,377004603395,Marjolein De Weirdt,0496/47 53 74,,,,marjolein.deweirdt@ugent.be,klein pakket (GROENE BAK),FALSE,,,71,FALSE,377004613395,mee met Tom (Anneleen),30-Jun-11,28-Jul-11,26-Sep-12
+Herbatheek Stef Mintiens,De Weirdt,Marjolein,Kouterslag 10,9850,Merendree,,377004603395,Marjolein De Weirdt,0496/47 53 74,,,,marjolein.deweirdt@ugent.be,fruitpakket,FALSE,,,71,FALSE,377004613395,mee met Tom (Anneleen),30-Jun-11,28-Jul-11,01-Dec-11
+Herbatheek Stef Mintiens,De Weirdt,Marjolein,Kouterslag 10,9850,Merendree,,377004603395,Marjolein De Weirdt,0496/47 53 74,,,,marjolein.deweirdt@ugent.be,fruitpakket,TRUE,oneven,,71,FALSE,377004613395,mee met Tom (Anneleen),,01-Dec-11,26-Sep-12
+Herbatheek Stef Mintiens,Deridder - Maes,Wouter - Isabelle,Kettingstraat 27,9000,Gent,,979-4298291-32,De Ridder Isabelle,0485/5 89 99,,,,wh.maes@ugent.be,klein pakket (GROENE BAK),FALSE,,,43,FALSE,979792301964,,01-Sep-12,01-Sep-12,31-Oct-12
+Herbatheek Stef Mintiens,Deridder - Maes,Wouter - Isabelle,Kettingstraat 27,9000,Gent,,979-4298291-32,De Ridder Isabelle,0485/5 89 99,,,,wh.maes@ugent.be,klein pakket (GROENE BAK),FALSE,,,43,FALSE,979792301964,,20-Feb-12,29-Mar-12,16-Jul-12
+Herbatheek Stef Mintiens,Dierickx,Christine,Ter Edestraat 59,9810,Nazareth,,,,0473/681907,,,,ingeborgverlodt@telenet.be,gemengd pakket,FALSE,,,54,FALSE,,,26-Nov-12,01-Jan-13,
+Herbatheek Stef Mintiens,Francis,Maud,,,,,,,,,,,antunez_francis@hotmail.com,aardappel pakket,TRUE,oneven,,75,FALSE,,,26-Nov-12,01-Jan-13,
+Herbatheek Stef Mintiens,Francis,Maud,,,,,,,,,,,antunez_francis@hotmail.com,tussen pakket (GRIJZE BAK),FALSE,,,75,FALSE,,,26-Nov-12,01-Jan-13,
+Herbatheek Stef Mintiens,Garré,Eveline,Maaltebruggestraat 194,9000,Gent,,738-0323509-36,F. Bongers - E. Garré,0496 558 558,,,,evelinegarre@gmail.com,klein pakket (GROENE BAK),FALSE,,,54,FALSE,,,,30-Nov-12,
+Herbatheek Stef Mintiens,Garré,Eveline,Maaltebruggestraat 194,9000,Gent,,738-0323509-36,F. Bongers - E. Garré,0496 558 558,,,,evelinegarre@gmail.com,klein pakket (GROENE BAK),FALSE,,,54,FALSE,,,16-Oct-12,,09-Nov-12
+Herbatheek Stef Mintiens,Ghijselings,Steve,Distelstraat 41,9000,Gent,,,,0485/510352,,,,s.ghijselings@hotmail.com,gemengd pakket,FALSE,,,54,FALSE,,,01-Dec-12,01-Jan-13,
+Herbatheek Stef Mintiens,Hebbelynck,Bernard,,,,,,,,,,,bernard@ahoste.com,klein pakket (GROENE BAK),FALSE,,,64,TRUE,38957235077,,09-Nov-12,01-Dec-12,
+Herbatheek Stef Mintiens,Hebbelynck,Bernard,,,,,,,,,,,bernard@ahoste.com,aardappel pakket,TRUE,oneven,,64,TRUE,38957235077,,09-Nov-12,01-Dec-12,
+Herbatheek Stef Mintiens,Lens,Jan,,,,,,,0479/52 42 84,,,,janlens@fastmail.fm,klein pakket (GROENE BAK),TRUE,oneven,,21.5,FALSE,,,15-Dec-11,02-Feb-12,31-Aug-12
+Herbatheek Stef Mintiens,Mintiens,Stef,Koning Albertlaan 75,9000,Gent,,,,0475 491212,,,,stef@herbatheekgent.be,klein pakket (GROENE BAK),FALSE,,,54,FALSE,,,02-Nov-12,01-Dec-12,
+Herbatheek Stef Mintiens,Rousselle,Nicolas,Eedverbondkaai 278,9000,Gent,,1317864834,Nicolas Rousselle,0498/106950,,,,nicrousselle@hotmail.com,borstvoedingspakket (oker bak),TRUE,oneven,,32.5,FALSE,,,01-Dec-12,31-Dec-12,
+Herbatheek Stef Mintiens,Van De Putte,Christine,Offerlaan 120,9000,Gent,,,,92244002,,,,christine.vdp@skynet.be,gemengd pakket,FALSE,,,54,FALSE,,,02-Nov-12,01-Dec-12,
+Herbatheek Stef Mintiens,Van den Bossche,Evelien,Aaigemdorp 10 bus 1,9420,Aaigem,,,,0472/61 41 58,,,,evelien_van_den_bossche@hotmail.com,klein pakket (GROENE BAK),TRUE,oneven,,21.5,TRUE,861147419951,,10-Nov-11,29-Dec-11,20-Nov-12
+Herbatheek Stef Mintiens,Van Elslander,Michèle,Aaigemstraat 132,9000,Gent,,737-4250215-09,,0472/54 53 87,,,,,aardappel pakket,TRUE,oneven,cash,103,TRUE,740824493613,",",10-Oct-04,10-Oct-04,
+Herbatheek Stef Mintiens,Van Elslander,Michèle,Aaigemstraat 132,9000,Gent,,737-4250215-09,,0472/54 53 87,,,,,tussen pakket (GRIJZE BAK),FALSE,,cash,103,TRUE,740824493613,",",,24-Nov-98,
+Herbatheek Stef Mintiens,Van Elslander,Michèle,Aaigemstraat 132,9000,Gent,,737-4250215-09,,0472/54 53 87,,,,,fruitpakket,FALSE,,cash,103,TRUE,740824493613,",",,24-Nov-98,
+Herbatheek Stef Mintiens,Van Keymeulen,Greet,Patijntjesstraat 64,9000,Gent,,,,,,,,greetvk@detafelvanzeven.be>,gemengd pakket,TRUE,oneven,,27,TRUE,38960663322,,12-Nov-12,01-Dec-12,
+Herbatheek Stef Mintiens,Van Rysselberghe-VDB,Tine-Edwin,Jacob Van Arteveldestraat 1,9050,Gent-Brugge,,001-3192579-94,,09/2320476,09/2320476,,,,klein pakket (GROENE BAK),TRUE,oneven,cash,21.5,TRUE,38332693911,",7/01,6/2,6/3,8/4,8/5,6/6, € 21, 7/7,8/8,8/9,9/10,",,25-Dec-01,
+Herbatheek Stef Mintiens,Vandegehuchte,Maurits,,,,,,,,,,,,klein pakket (GROENE BAK),FALSE,,,99,FALSE,979314144003,via Tom,29-Sep-11,27-Oct-11,27-Oct-11
+Herbatheek Stef Mintiens,Vandegehuchte,Maurits,,,,,,,,,,,,fruitpakket,FALSE,,,99,FALSE,979314144003,via Tom,29-Sep-11,27-Oct-11,27-Oct-11
+Herbatheek Stef Mintiens,Wannyn,Johannes,Voetweg 17,9000,Gent,,,,0474/69 98 81,,,,johanneswannyn@hotmail.com,klein pakket (GROENE BAK),FALSE,,,21.5,FALSE,,,03-Nov-11,01-Dec-11,01-Dec-11
+Herbatheek Stef Mintiens,Wannyn,Johannes,Voetweg 17,9000,Gent,,,,0474/69 98 81,,,,johanneswannyn@hotmail.com,klein pakket (GROENE BAK),TRUE,oneven,,21.5,FALSE,,,,01-Dec-11,02-Nov-12
+Iddergem,Arijs - De Troyer,Helga,,,,,,,0477/52 15 01,,,,helga.de.troyer@belgacom.be,aardappel pakket,TRUE,oneven,,49,FALSE,,,,11-Sep-12,
+Iddergem,Arijs - De Troyer,Helga,,,,,,,0477/52 15 01,,,,helga.de.troyer@belgacom.be,klein pakket (GROENE BAK),FALSE,,,49,FALSE,,,29-Dec-11,26-Jan-12,
+Iddergem,Bauche - Verlé,Wendy en Jouri,Maaldreef 52,9320,Nieuwerkerken,,063-2018151-04,Bauche-Verlé,0476 44 10 26,053/84 96 85,,,wendy.verlé@gmail.com,klein pakket (GROENE BAK),FALSE,,,43,TRUE,53587807523,"Tegoed verlof 2012: € 30,00",08-Oct-09,01-Dec-09,
+Iddergem,Brijs - Vermassen- Brijs,Kathleen,Vondelen 4A,9450,Denderhoutem,,427-8061301-73,,0496/020368,,,,brijs-Vermassen@skynet.be,klein pakket (GROENE BAK),FALSE,,Permanente opdr.,,FALSE,400762884427,,02-Sep-09,30-Sep-09,30-Sep-10
+Iddergem,Brijs - Vermassen- Brijs,Kathleen,Vondelen 4A,9450,Denderhoutem,,427-8061301-73,,0496/020368,,,,brijs-Vermassen@skynet.be,fruitpakket,FALSE,,Permanente opdr.,,FALSE,400762884427,,29-Sep-09,,30-Sep-10
+Iddergem,De Man,Darcia,"Dr,A Goffaertstraat 4 bus 2",9300,Aalst,,,,053/670761,,,,,fruitpakket,TRUE,oneven,Permanente opdr.,43,FALSE,651300725466,"w  8/10 nog tegoed193,76-69,22= 124,54",31-Aug-10,,29-Sep-11
+Iddergem,De Man,Darcia,"Dr,A Goffaertstraat 4 bus 2",9300,Aalst,,,,053/670761,,,,,fruitpakket,FALSE,,cash,43,FALSE,651300725466,"w  8/10 nog tegoed193,76-69,22= 124,54",06-Jun-06,30-Jun-06,31-Aug-10
+Iddergem,De Man,Darcia,"Dr,A Goffaertstraat 4 bus 2",9300,Aalst,,,,053/670761,,,,,klein pakket (GROENE BAK),FALSE,,cash,43,FALSE,651300725466,"w  8/10 nog tegoed193,76-69,22= 124,54",20-Apr-06,31-May-06,31-Aug-10
+Iddergem,De Man,Darcia,"Dr,A Goffaertstraat 4 bus 2",9300,Aalst,,,,053/670761,,,,,klein pakket (GROENE BAK),TRUE,oneven,Permanente opdr.,43,FALSE,651300725466,"w  8/10 nog tegoed193,76-69,22= 124,54",31-Aug-10,,29-Sep-11
+Iddergem,De Paepe-Van Rampelberg,,Lindestraat 46,9470,Denderleeuw,,,,053/670200,,,,,tussen pakket (GRIJZE BAK),FALSE,,cash,,FALSE,38350691148,,27-Dec-07,27-Dec-07,29-Jul-10
+Iddergem,De Pelsmaeker - Chaniotis,stylianie,Wellestraat 18,9470,Denderleeuw,,001-5111834-10,,0472/263035,,,,,klein pakket (GROENE BAK),FALSE,,,43,FALSE,,doorwerzijzing van 't Uilebos,,01-Nov-12,
+Iddergem,De Pelsmaeker - Chaniotis,stylianie,Wellestraat 18,9470,Denderleeuw,,001-5111834-10,,0472/263035,,,,,borstvoedingspakket (oker bak),FALSE,,,43,FALSE,,doorwerzijzing van 't Uilebos,,03-Jun-10,08-Jul-10
+Iddergem,De Pelsmaeker - Chaniotis,stylianie,Wellestraat 18,9470,Denderleeuw,,001-5111834-10,,0472/263035,,,,,borstvoedingspakket (oker bak),FALSE,,,43,FALSE,,doorwerzijzing van 't Uilebos,,06-Mar-12,31-Oct-12
+Iddergem,De Pelsmaeker - Chaniotis,stylianie,Wellestraat 18,9470,Denderleeuw,,001-5111834-10,,0472/263035,,,,,klein pakket (GROENE BAK),FALSE,,,43,FALSE,,doorwerzijzing van 't Uilebos,,01-Sep-11,06-Mar-12
+Iddergem,De Pelsmaeker - Chaniotis,stylianie,Wellestraat 18,9470,Denderleeuw,,001-5111834-10,,0472/263035,,,,,klein pakket (GROENE BAK),FALSE,,,43,FALSE,,doorwerzijzing van 't Uilebos,,30-Sep-10,07-Jul-11
+Iddergem,Laridon-Vints,Elfi,Booglaan 7,9473,Welle,,000-1612834-15,Elfi Laridon,0473/78 05 83,,,,elfi.laridon@skynet.be,klein pakket (GROENE BAK),FALSE,,,43,TRUE,400830878595,,28-Oct-10,02-Dec-10,
+Iddergem,Redant,Erna,,,Iddergem,,,,,,,,ernaredant@hotmail.com,klein pakket (GROENE BAK),FALSE,,,43,FALSE,,,09-Mar-12,09-Mar-12,18-Apr-12
+Iddergem,Van Gilwe,Daniëlla,Omlooplaan 19,9470,Denderleeuw,,,,0479/370774,,,,"d,vangilwe@gmail,com",klein pakket (GROENE BAK),FALSE,,Permanente opdr.,43,TRUE,393064551872,,01-Jan-09,01-Jan-09,
+Iddergem,Werbrouck,Lore,Kerkstraat 41,9473,Welle,,103-0105585-20,Verbeken-Werbrouck,0485/62 79 78,,,,lore.werbrouck@gmail.com,fruitpakket,FALSE,,,103,FALSE,,,19-May-11,30-Jun-11,14-Jul-11
+Iddergem,Werbrouck,Lore,Kerkstraat 41,9473,Welle,,103-0105585-20,Verbeken-Werbrouck,0485/62 79 78,,,,lore.werbrouck@gmail.com,aardappel pakket,TRUE,oneven,,103,FALSE,,,19-May-11,30-Jun-11,14-Jul-11
+Iddergem,Werbrouck,Lore,Kerkstraat 41,9473,Welle,,103-0105585-20,Verbeken-Werbrouck,0485/62 79 78,,,,lore.werbrouck@gmail.com,borstvoedingspakket (oker bak),FALSE,,,103,FALSE,,,19-May-11,30-Jun-11,14-Jul-11
+Ineke Docx,Baele - De Decker,Katrien,Engelstraat 50,9620,Zottegem,,,,,,,,katdedecker@hotmail.com,fruitpakket,FALSE,,Permanente opdr.,56,FALSE,393011896434,,07-Mar-08,28-Mar-08,02-Jun-11
+Ineke Docx,De Decker,Lutgart,Engelstraat 20,9620,Erwetegem,,142-0646977-12,,0499/39 34 08,,,,lululut@hotmail.com,fruitpakket,FALSE,even,,43,FALSE,148848587015,,,30-Apr-09,02-Nov-12
+Ineke Docx,Dhondt-Nolf,Peter,Vierwegenstraat 4,9620,Erwetegem,,,,09/361 34 62,,,,dhondt-nolf@skynet.be,fruitpakket,FALSE,,,172.5,FALSE,38818703923,"tegoed voor verlof 2012: € 22,61",,02-Feb-12,31-Oct-12
+Ineke Docx,Dhondt-Nolf,Peter,Vierwegenstraat 4,9620,Erwetegem,,,,09/361 34 62,,,,dhondt-nolf@skynet.be,fruitpakket,TRUE,oneven,,172.5,FALSE,38818703923,"tegoed voor verlof 2012: € 22,61",,01-Dec-11,02-Feb-12
+Ineke Docx,Dhondt-Nolf,Peter,Vierwegenstraat 4,9620,Erwetegem,,,,09/361 34 62,,,,dhondt-nolf@skynet.be,broodpakket,FALSE,,,172.5,FALSE,38818703923,"tegoed voor verlof 2012: € 22,61",,31-Aug-12,31-Oct-12
+Ineke Docx,Dhondt-Nolf,Peter,Vierwegenstraat 4,9620,Erwetegem,,,,09/361 34 62,,,,dhondt-nolf@skynet.be,groot pakket (RODE BAK),FALSE,,,172.5,FALSE,38818703923,"tegoed voor verlof 2012: € 22,61",02-Jun-11,30-Jun-11,02-Nov-12
+Ineke Docx,Dhondt-Nolf,Peter,Vierwegenstraat 4,9620,Erwetegem,,,,09/361 34 62,,,,dhondt-nolf@skynet.be,fruitpakket,FALSE,,,172.5,FALSE,38818703923,"tegoed voor verlof 2012: € 22,61",02-Jun-11,30-Jun-11,02-Nov-12
+Ineke Docx,Dhondt-Nolf,Peter,Vierwegenstraat 4,9620,Erwetegem,,,,09/361 34 62,,,,dhondt-nolf@skynet.be,fruitpakket,FALSE,,,172.5,FALSE,38818703923,"tegoed voor verlof 2012: € 22,61",,30-Jun-11,02-Nov-12
+Ineke Docx,Dhondt-Nolf,Peter,Vierwegenstraat 4,9620,Erwetegem,,,,09/361 34 62,,,,dhondt-nolf@skynet.be,aardappel pakket,TRUE,oneven,,172.5,FALSE,38818703923,"tegoed voor verlof 2012: € 22,61",,31-Aug-12,31-Oct-12
+Ineke Docx,Dhondt-Nolf,Peter,Vierwegenstraat 4,9620,Erwetegem,,,,09/361 34 62,,,,dhondt-nolf@skynet.be,tweede fruit,TRUE,oneven,,172.5,FALSE,38818703923,"tegoed voor verlof 2012: € 22,61",,01-Dec-11,02-Feb-12
+Ineke Docx,Dhondt-Nolf,Peter,Vierwegenstraat 4,9620,Erwetegem,,,,09/361 34 62,,,,dhondt-nolf@skynet.be,groot pakket (RODE BAK),FALSE,,,172.5,FALSE,38818703923,"tegoed voor verlof 2012: € 22,61",,29-Mar-12,31-Oct-12
+Ineke Docx,Dhondt-Nolf,Peter,Vierwegenstraat 4,9620,Erwetegem,,,,09/361 34 62,,,,dhondt-nolf@skynet.be,groot pakket (RODE BAK),TRUE,oneven,,172.5,FALSE,38818703923,"tegoed voor verlof 2012: € 22,61",,01-Dec-11,29-Mar-12
+Ineke Docx,Dhondt-Nolf,Peter,Vierwegenstraat 4,9620,Erwetegem,,,,09/361 34 62,,,,dhondt-nolf@skynet.be,fruitpakket,FALSE,,,172.5,FALSE,38818703923,"tegoed voor verlof 2012: € 22,61",,02-Feb-12,31-Oct-12
+Ineke Docx,Docx,Ineke,,,,,,,0484/237 831,,,,,fruitpakket,FALSE,,,43,FALSE,,ok nov 2011,,14-Apr-11,01-Nov-12
+Ineke Docx,Galle-Van Melkebeke,Marleen-Danny,Hoevestraat  43,9620,Zottegem,,103-2067236-40,,09/3607558,09/3607558,,,,klein pakket (GROENE BAK),FALSE,,cash,43,FALSE,103143931601,,,28-Mar-00,31-Oct-12
+Ineke Docx,Guns - Martens,Veerle,Provincieweg 505,9550,Hillegem,,BE08 0639 3966 5913,Frank Guns,0472/690297,,,,veerle.m@hotmail.com,borstvoedingspakket (oker bak),FALSE,,,97,FALSE,400948874752,"Tegoed verlof 2012: € 45,00",04-Jun-12,03-Jul-12,26-Sep-12
+Ineke Docx,Guns - Martens,Veerle,Provincieweg 505,9550,Hillegem,,BE08 0639 3966 5913,Frank Guns,0472/690297,,,,veerle.m@hotmail.com,fruitpakket,FALSE,,,97,FALSE,400948874752,"Tegoed verlof 2012: € 45,00",18-Jun-12,03-Jul-12,26-Sep-12
+Ineke Docx,Nijs - Deman,Katrien-Kim,Engelstraat 33,9620,Erwetegem,,,,,,0497/814829,,katriendeman@yahoo.com,tussen pakket (GRIJZE BAK),FALSE,,,43,FALSE,979846760693,,08-Dec-07,29-Dec-07,25-Apr-12
+Ineke Docx,Nijs - Deman,Katrien-Kim,Engelstraat 33,9620,Erwetegem,,,,,,0497/814829,,katriendeman@yahoo.com,fruitpakket,FALSE,,,43,FALSE,979846760693,,08-Dec-07,29-Dec-07,31-Oct-12
+Ineke Docx,Pede,Katrien,Gaverland 46,9620,Zottegem,,BE58 0634 4144,Pede Katrien,479348401,,,,katrien.pede@hotmail.com,tussen pakket (GRIJZE BAK),FALSE,,,54,FALSE,,,07-May-12,07-May-12,27-Jun-12
+Ineke Docx,Schockaert,Emmy,Houte 123,,Balegem,,870-0463246-37,,0479/330564,0479/330564,0485/103206,,,tussen pakket (GRIJZE BAK),TRUE,oneven,Permanente opdr.,,FALSE,53341114291,"13/01,12/2,12/3,8/4,8/5,11/6,€33,11/7,11/8,11/9,11/10,nieterug betalen voor maart 04, start vanaf augustus tijdelijk fruit",26-Apr-10,27-May-10,23-Sep-10
+Ineke Docx,Sclavons,Jean-Piere,Kloosterstraat 39,9620,Zottegem,,001-0797852-06,,09 3612167,09 3612167,,,,groot pakket (RODE BAK),FALSE,,Permanente opdr.,,FALSE,38332693507,"7/01,6/2,6/3,8/4,8/5,6/6 € 54,7/7,8/8,9/9,10/10,
+stoppen pakketten tot einde februari, start opnieuw begin maart 05
+met tussenpakket
+tijdelijk tussenpakket leveren voor vakantievergoeding september 07, derde brood stoppen vanaf september",14-Jul-11,,20-Jul-11
+Ineke Docx,Valentine - Eerlingen,John en Annemieke,Engelstraat 4,9620,Zottegem,,,,09/3613139,,,,,aardappel pakket,TRUE,oneven,Permanente opdr.,,FALSE,,via beurs Geraardsbergen,22-Sep-07,31-Oct-07,04-Nov-10
+Ineke Docx,Valentine - Eerlingen,John en Annemieke,Engelstraat 4,9620,Zottegem,,,,09/3613139,,,,,klein pakket (GROENE BAK),FALSE,,Permanente opdr.,,FALSE,,via beurs Geraardsbergen,22-Sep-07,31-Oct-07,04-Nov-10
+Ineke Docx,Valentine - Eerlingen,John en Annemieke,Engelstraat 4,9620,Zottegem,,,,09/3613139,,,,,fruitpakket,FALSE,,Permanente opdr.,,FALSE,,via beurs Geraardsbergen,22-Sep-07,31-Oct-07,04-Nov-10
+Ineke Docx,Van Audenhove,Günther en Katlheen,Klein Holland,,Erwetegem,,,,0494/18 45 33,0477/86 65 99,,,,broodpakket,FALSE,,,13,FALSE,,,,30-Sep-10,31-Oct-12
+Jo en Annelies Verhaevert,Cousy,Katlien,Meerlaan 82,9620,Zottegem,,BE 87444468084,Cousy Katlien,476326037,,,,katlien.cousy@telenet.be,broodpakket,TRUE,oneven,,36.75,TRUE,740000005737,,26-Sep-12,06-Nov-12,
+Jo en Annelies Verhaevert,Cousy,Katlien,Meerlaan 82,9620,Zottegem,,BE 87444468084,Cousy Katlien,476326037,,,,katlien.cousy@telenet.be,klein pakket (GROENE BAK),TRUE,oneven,,36.75,TRUE,740000005737,,26-Sep-12,06-Nov-12,
+Jo en Annelies Verhaevert,Cremers,David,Gieterijstraat 28,9620,Zottegem,,BE83063954943615,Cremers David,495681091,495681025,,,david.cremers1@telenet.be,klein pakket (GROENE BAK),FALSE,,,105,TRUE,53835022733,,13-Jul-12,13-Jul-12,
+Jo en Annelies Verhaevert,Cremers,David,Gieterijstraat 28,9620,Zottegem,,BE83063954943615,Cremers David,495681091,495681025,,,david.cremers1@telenet.be,aardappel pakket,TRUE,oneven,,105,TRUE,53835022733,,13-Jul-12,07-Aug-12,
+Jo en Annelies Verhaevert,Cremers,David,Gieterijstraat 28,9620,Zottegem,,BE83063954943615,Cremers David,495681091,495681025,,,david.cremers1@telenet.be,broodpakket,FALSE,,,105,TRUE,53835022733,,13-Jul-12,07-Aug-12,
+Jo en Annelies Verhaevert,Cremers,David,Gieterijstraat 28,9620,Zottegem,,BE83063954943615,Cremers David,495681091,495681025,,,david.cremers1@telenet.be,fruitpakket,FALSE,,,105,TRUE,53835022733,,13-Jul-12,07-Aug-12,
+Jo en Annelies Verhaevert,De Meersman - De Potter,Sofie,Gieterijstraat 38,9620,Zottegem,,BE77 001515027842,Sofie De Meersman,0477/602700,,,,sofie.demeersman@gmail.com,broodpakket,FALSE,,,56,TRUE,38927445367,,13-Jul-12,07-Aug-12,
+Jo en Annelies Verhaevert,De Meersman - De Potter,Sofie,Gieterijstraat 38,9620,Zottegem,,BE77 001515027842,Sofie De Meersman,0477/602700,,,,sofie.demeersman@gmail.com,klein pakket (GROENE BAK),FALSE,,,56,TRUE,38927445367,,13-Jul-12,07-Aug-12,
+Jo en Annelies Verhaevert,Lievens,Sandra,Wurmendries 22,9620,Zottegem,,BE7073701016,Lievens Sandra,478367153,,,,sandra.lievens@skynet.be,klein pakket (GROENE BAK),FALSE,,,108,FALSE,,,03-Nov-12,04-Dec-12,
+Jo en Annelies Verhaevert,Lievens,Sandra,Wurmendries 22,9620,Zottegem,,BE7073701016,Lievens Sandra,478367153,,,,sandra.lievens@skynet.be,fruitpakket,FALSE,,,108,FALSE,,,03-Nov-12,04-Dec-12,
+Jo en Annelies Verhaevert,Osselaer - De Keyser,,Waesberg 27,9570,St maria - Lierde,,,,0486/404252,,,,merel.dekeyzer@telenet.be,fruitpakket,FALSE,,,110,TRUE,38582138202,,,01-Jul-09,
+Jo en Annelies Verhaevert,Osselaer - De Keyser,,Waesberg 27,9570,St maria - Lierde,,,,0486/404252,,,,merel.dekeyzer@telenet.be,broodpakket,FALSE,,,110,TRUE,38582138202,,,01-Jul-09,
+Jo en Annelies Verhaevert,Osselaer - De Keyser,,Waesberg 27,9570,St maria - Lierde,,,,0486/404252,,,,merel.dekeyzer@telenet.be,borstvoedingspakket (oker bak),FALSE,,,110,TRUE,38582138202,,,31-Dec-09,02-Feb-11
+Jo en Annelies Verhaevert,Osselaer - De Keyser,,Waesberg 27,9570,St maria - Lierde,,,,0486/404252,,,,merel.dekeyzer@telenet.be,tussen pakket (GRIJZE BAK),FALSE,,,110,TRUE,38582138202,,,02-Feb-11,
+Jo en Annelies Verhaevert,Van Caenegem,Ilse,Gieterijstraat 33,9620,Zottegem,,BE22 0639 2815 5447,Van Caenegem Ilse,09/3248238,0478/480285,,,ilse@paca.be,fruitpakket,FALSE,,,43,FALSE,,,13-Jul-12,07-Aug-12,01-Aug-12
+Jo en Annelies Verhaevert,Van der Spiegel-De Rijck,Jan,Bosveldstraat 11,9620,Strijpen,,144-0501226-10,,09/3605712,09/3605712,,,,klein pakket (GROENE BAK),FALSE,,cash,43,TRUE,148837366337,"14/01,13/2,13/3,15/4,15/5,13/6 € 33,7/7,8/8,9/9,10/10",,30-Mar-99,08-Jul-10
+Jo en Annelies Verhaevert,Van der Spiegel-De Rijck,Jan,Bosveldstraat 11,9620,Strijpen,,144-0501226-10,,09/3605712,09/3605712,,,,klein pakket (GROENE BAK),FALSE,,,43,TRUE,148837366337,"14/01,13/2,13/3,15/4,15/5,13/6 € 33,7/7,8/8,9/9,10/10",,02-Sep-10,
+Jo en Annelies Verhaevert,Vergracht,Etienne,Kouterveldlaan 50,9550,Herzele,,293-0528593-95,Mimi Robeys,053/626707,0498/669392,,,vergracht@telenet.be,broodpakket,FALSE,,,77.5,TRUE,53833713940,,13-Jul-12,07-Aug-12,
+Jo en Annelies Verhaevert,Vergracht,Etienne,Kouterveldlaan 50,9550,Herzele,,293-0528593-95,Mimi Robeys,053/626707,0498/669392,,,vergracht@telenet.be,fruitpakket,FALSE,,,77.5,TRUE,53833713940,,13-Jul-12,07-Aug-12,
+Jo en Annelies Verhaevert,Vergracht,Etienne,Kouterveldlaan 50,9550,Herzele,,293-0528593-95,Mimi Robeys,053/626707,0498/669392,,,vergracht@telenet.be,klein pakket (GROENE BAK),TRUE,oneven,,77.5,TRUE,53833713940,,13-Jul-12,07-Aug-12,
+Jo en Annelies Verhaevert,Vergracht,Griet,Stationsstraat 151,9550,Herzele,,,,,,,,,klein pakket (GROENE BAK),TRUE,oneven,overschrijving,21.5,TRUE,377013517086,,20-Jul-12,31-Aug-12,16-Nov-12
+Jo en Annelies Verhaevert,Vergracht,Griet,Stationsstraat 151,9550,Herzele,,,,,,,,,fruitpakket,FALSE,,,21.5,TRUE,377013517086,,16-Nov-12,16-Nov-12,
+Jo en Annelies Verhaevert,Verhaevert-Vergracht,Jo,Gieterijstraat 36,9620,Zottegem,,,,09/233 80 31,,,,,derde brood,FALSE,,,109.5,TRUE,400798077946,"69 voorheen
+Vanaf april: 2  zonnepit &  1 sesambrood zuurdesem
+Geen brood van De Trog!!!!!!!!!!",17-Jun-10,29-Jul-10,14-Sep-12
+Jo en Annelies Verhaevert,Verhaevert-Vergracht,Jo,Gieterijstraat 36,9620,Zottegem,,,,09/233 80 31,,,,,fruitpakket,FALSE,,,109.5,TRUE,400798077946,"69 voorheen
+Vanaf april: 2  zonnepit &  1 sesambrood zuurdesem
+Geen brood van De Trog!!!!!!!!!!",17-Jun-10,29-Jul-10,
+Jo en Annelies Verhaevert,Verhaevert-Vergracht,Jo,Gieterijstraat 36,9620,Zottegem,,,,09/233 80 31,,,,,klein pakket (GROENE BAK),TRUE,oneven,,109.5,TRUE,400798077946,"69 voorheen
+Vanaf april: 2  zonnepit &  1 sesambrood zuurdesem
+Geen brood van De Trog!!!!!!!!!!",,13-Jul-12,
+Jo en Annelies Verhaevert,Verhaevert-Vergracht,Jo,Gieterijstraat 36,9620,Zottegem,,,,09/233 80 31,,,,,aardappel pakket,TRUE,oneven,,109.5,TRUE,400798077946,"69 voorheen
+Vanaf april: 2  zonnepit &  1 sesambrood zuurdesem
+Geen brood van De Trog!!!!!!!!!!",,30-Jun-11,
+Jo en Annelies Verhaevert,Verhaevert-Vergracht,Jo,Gieterijstraat 36,9620,Zottegem,,,,09/233 80 31,,,,,broodpakket,FALSE,,,109.5,TRUE,400798077946,"69 voorheen
+Vanaf april: 2  zonnepit &  1 sesambrood zuurdesem
+Geen brood van De Trog!!!!!!!!!!",17-Jun-10,29-Jul-10,
+Jo en Annelies Verhaevert,Verhaevert-Vergracht,Jo,Gieterijstraat 36,9620,Zottegem,,,,09/233 80 31,,,,,tweede brood,FALSE,,,109.5,TRUE,400798077946,"69 voorheen
+Vanaf april: 2  zonnepit &  1 sesambrood zuurdesem
+Geen brood van De Trog!!!!!!!!!!",17-Jun-10,29-Jul-10,
+Jo en Annelies Verhaevert,Verhaevert-Vergracht,Jo,Gieterijstraat 36,9620,Zottegem,,,,09/233 80 31,,,,,broodpakket,FALSE,,,109.5,TRUE,400798077946,"69 voorheen
+Vanaf april: 2  zonnepit &  1 sesambrood zuurdesem
+Geen brood van De Trog!!!!!!!!!!",,14-Sep-12,
+Linda - Joost,Barremaerke-Cobbaert,Pieter-Jolien,Hofkensweg 39,9420,Erpe-Mere,,063-1701076-22,,0477/80 39 82,,,,mail@jolien.be,fruitpakket,FALSE,,,92,FALSE,400773909889,,21-Jan-10,25-Feb-10,31-Mar-11
+Linda - Joost,Barremaerke-Cobbaert,Pieter-Jolien,Hofkensweg 39,9420,Erpe-Mere,,063-1701076-22,,0477/80 39 82,,,,mail@jolien.be,klein pakket (GROENE BAK),FALSE,,,92,FALSE,400773909889,,21-Jan-10,25-Feb-10,31-Mar-11
+Linda - Joost,Barremaerke-Cobbaert,Pieter-Jolien,Hofkensweg 39,9420,Erpe-Mere,,063-1701076-22,,0477/80 39 82,,,,mail@jolien.be,aardappel pakket,TRUE,oneven,,92,FALSE,400773909889,,21-Jan-10,25-Feb-10,31-Mar-11
+Linda - Joost,Colin-D'Hont,,Stationsstraat 125,,Haaltert,,439-5120291-45,,,,,,,klein pakket (GROENE BAK),FALSE,,,56,FALSE,,"tel nr:053 83 53 43 of 0475 49 06 49 , vakantie juli,aug, sept  niet terug betalen",,09-Feb-12,31-Mar-12
+Linda - Joost,Colin-D'Hont,,Stationsstraat 125,,Haaltert,,439-5120291-45,,,,,,,klein pakket (GROENE BAK),FALSE,,,56,FALSE,,"tel nr:053 83 53 43 of 0475 49 06 49 , vakantie juli,aug, sept  niet terug betalen",,27-Oct-11,01-Dec-11
+Linda - Joost,Colin-D'Hont,,Stationsstraat 125,,Haaltert,,439-5120291-45,,,,,,,klein pakket (GROENE BAK),FALSE,,Permanente opdr.,56,FALSE,,"tel nr:053 83 53 43 of 0475 49 06 49 , vakantie juli,aug, sept  niet terug betalen",29-Sep-10,,31-Mar-11
+Linda - Joost,Colin-D'Hont,,Stationsstraat 125,,Haaltert,,439-5120291-45,,,,,,,broodpakket,FALSE,,,56,FALSE,,"tel nr:053 83 53 43 of 0475 49 06 49 , vakantie juli,aug, sept  niet terug betalen",,09-Feb-12,31-Mar-12
+Linda - Joost,Coppens-De Koker,Koenraad en Saskia,Bakkerstraat 41,,Haaltert,,001-2474721-36,,053/841223,0486/417602,,,,fruitpakket,FALSE,,cash,49,TRUE,38332717048,"Tegoed in de winkel voor verlof 2012: € 20,00",24-Jan-07,28-Feb-07,
+Linda - Joost,Coppens-De Koker,Koenraad en Saskia,Bakkerstraat 41,,Haaltert,,001-2474721-36,,053/841223,0486/417602,,,,aardappel pakket,TRUE,oneven,cash,49,TRUE,38332717048,"Tegoed in de winkel voor verlof 2012: € 20,00",11-Feb-07,11-Feb-07,
+Linda - Joost,De Cnop-De Troyer,Nancy,Kraaiwinkelstraat 12,9320,Nieuwerkerken,,393-0034570-30,De Cnop-De Troyer,0476/70 70 75,,,,nancy.detroyer@skynet.be,groot pakket (RODE BAK),FALSE,,,65,FALSE,,,12-Jan-12,01-Mar-12,20-Mar-12
+Linda - Joost,De Kegel-De Neve,Linda,Edestraat 93,9450,Haaltert,,439-5131471-70,,053/835855,053/835855,,,,tussen pakket (GRIJZE BAK),FALSE,,Permanente opdr.,54,FALSE,,"8/01,8/2,8/3,8/4,8/5,8/6 € 54,7/7,8/8,9/9,9/10,
+fruit
+
+brood:",03-Mar-98,31-Mar-98,
+Linda - Joost,De Looze - Smets,Hilde-Ludwig,Bosstraat 101,9450,Haaltert,,,,053/410741,0478/397171,,,ludilla@ekit.com,fruitpakket,FALSE,,cash,43,TRUE,390096462919,"108 euro tegoed van annulatie:
+27/11/2009: 19,47euro al verbruikt
+Voor 2012: tegoed van € 43,00",08-Mar-07,31-Mar-07,
+Linda - Joost,De Looze - Smets,Hilde-Ludwig,Bosstraat 101,9450,Haaltert,,,,053/410741,0478/397171,,,ludilla@ekit.com,klein pakket (GROENE BAK),FALSE,,cash,43,TRUE,390096462919,"108 euro tegoed van annulatie:
+27/11/2009: 19,47euro al verbruikt
+Voor 2012: tegoed van € 43,00",12-Mar-07,31-Mar-07,31-Mar-10
+Linda - Joost,De Looze - Smets,Hilde-Ludwig,Bosstraat 101,9450,Haaltert,,,,053/410741,0478/397171,,,ludilla@ekit.com,klein pakket (GROENE BAK),FALSE,,,43,TRUE,390096462919,"108 euro tegoed van annulatie:
+27/11/2009: 19,47euro al verbruikt
+Voor 2012: tegoed van € 43,00",,08-Sep-11,06-Oct-11
+Linda - Joost,De Meyer,Kris,Donkerstraat 3,9450,Haaltert,,001-1483464-22,De Meyer Kristien,053/83 70 83,,,,krisdemeyer@hotmail.com,klein pakket (GROENE BAK),FALSE,,,86,FALSE,,,01-Dec-11,29-Dec-11,02-Feb-12
+Linda - Joost,De Meyer,Kris,Donkerstraat 3,9450,Haaltert,,001-1483464-22,De Meyer Kristien,053/83 70 83,,,,krisdemeyer@hotmail.com,fruitpakket,FALSE,,,86,FALSE,,,01-Dec-11,29-Dec-11,02-Feb-12
+Linda - Joost,Dero-Haegeman,Danny-Marleen,Krekelenberg 23 a,9450,Heldergem,,067-7241460-70,,053/622473,053/622473,,,,klein pakket (GROENE BAK),FALSE,,cash,43,FALSE,53340885434,"7/01,6/2,6/3,8/4,8/5,6/6 € 33,6/7,8/8,9/9,10/10,
+fruit",21-Nov-00,28-Nov-00,28-Jul-11
+Linda - Joost,Dhoore-Van Londerzeel,Johan-Danielle,Borrekent 153,9450,Denderhoutem,,979-3747127-22,,054/325986,054/325986,,,,klein pakket (GROENE BAK),FALSE,,cash,49,TRUE,979235602291,",7/01,6/2,6/3,7/4,8/5,6/6 € 33,6/7,8/8,9/9,10/10,",25-May-99,25-May-99,
+Linda - Joost,Dhoore-Van Londerzeel,Johan-Danielle,Borrekent 153,9450,Denderhoutem,,979-3747127-22,,054/325986,054/325986,,,,aardappel pakket,TRUE,oneven,cash,49,TRUE,979235602291,",7/01,6/2,6/3,7/4,8/5,6/6 € 33,6/7,8/8,9/9,10/10,",21-May-08,21-May-08,
+Linda - Joost,Dierickx-Puttemans,Krista,Knipperhoek 54,9450,Denderhoutem,,,,054/24 42 35,0486/561 530,,,puttemansdierickx@yahoo.com,groot pakket (RODE BAK),FALSE,,,92,TRUE,400900589061,,06-Oct-11,27-Oct-11,27-Oct-11
+Linda - Joost,Dierickx-Puttemans,Krista,Knipperhoek 54,9450,Denderhoutem,,,,054/24 42 35,0486/561 530,,,puttemansdierickx@yahoo.com,klein pakket (GROENE BAK),FALSE,,,92,TRUE,400900589061,,,27-Oct-11,
+Linda - Joost,Dierickx-Puttemans,Krista,Knipperhoek 54,9450,Denderhoutem,,,,054/24 42 35,0486/561 530,,,puttemansdierickx@yahoo.com,fruitpakket,FALSE,,,92,TRUE,400900589061,,06-Oct-11,27-Oct-11,
+Linda - Joost,Dierickx-Puttemans,Krista,Knipperhoek 54,9450,Denderhoutem,,,,054/24 42 35,0486/561 530,,,puttemansdierickx@yahoo.com,aardappel pakket,TRUE,oneven,,92,TRUE,400900589061,,06-Oct-11,27-Oct-11,
+Linda - Joost,Dumeez-Ghijsels,Johan en Maja,Herenthoutdreef 6,9450,Haaltert,,001-3565957-22,,053/849332,,,,maja_ghijsels@yahoo.com,klein pakket (GROENE BAK),FALSE,,cash,43,FALSE,38338906961,vervanging van Paul Ghijsels,03-Nov-04,03-Nov-04,14-Jul-12
+Linda - Joost,Fermon,Geert,Rosthoutweg 46,9450,Haaltert,,800-267231-31,,0486/62 15 69,,,,geert.fermon@telenet.be,klein pakket (GROENE BAK),FALSE,,Permanente opdr.,43,FALSE,,vroeger Leemans,29-Aug-07,29-Aug-07,31-Aug-12
+Linda - Joost,Ferny - Van Daele,Leen-Lieven,Achterstraat 45,9450,Haaltert,,,,0478/269548,,,,,borstvoedingspakket (oker bak),TRUE,oneven,Permanente opdr.,,FALSE,53340885232,tijdelijke stop wegens ongeluk!,17-Dec-09,,30-Apr-10
+Linda - Joost,Ferny - Van Daele,Leen-Lieven,Achterstraat 45,9450,Haaltert,,,,0478/269548,,,,,fruitpakket,TRUE,oneven,cash,,FALSE,53340885232,tijdelijke stop wegens ongeluk!,20-Aug-06,30-Sep-06,30-Apr-10
+Linda - Joost,Ferny - Van Daele,Leen-Lieven,Achterstraat 45,9450,Haaltert,,,,0478/269548,,,,,borstvoedingspakket (oker bak),TRUE,oneven,Permanente opdr.,,FALSE,53340885232,tijdelijke stop wegens ongeluk!,17-Dec-09,,11-May-10
+Linda - Joost,Hennen-Van Der Biest,Wim-Anja,Stevensveld 20,9420,Mere,,737-1250882-13,,053/841960,053/841960,,,,klein pakket (GROENE BAK),FALSE,,cash,49,TRUE,740832195716,"5/01,5/2,5/3,5/4,5/5,5/6 € 33,7/7,8/8,9/9,
+start aardappelpakket sinds 7 juni voor terugbetaling 6 x klein pakket vorig jaar + 3 x vakantie dit jaar = 9 pakketten aan   9 € = 81  €, 
+start aardappelpakket juni 2009 loopt tot 16 maanden verder tot en met september 2010",,01-Jan-01,
+Linda - Joost,Hennen-Van Der Biest,Wim-Anja,Stevensveld 20,9420,Mere,,737-1250882-13,,053/841960,053/841960,,,,aardappel pakket,TRUE,oneven,Permanente opdr.,49,TRUE,740832195716,"5/01,5/2,5/3,5/4,5/5,5/6 € 33,7/7,8/8,9/9,
+start aardappelpakket sinds 7 juni voor terugbetaling 6 x klein pakket vorig jaar + 3 x vakantie dit jaar = 9 pakketten aan   9 € = 81  €, 
+start aardappelpakket juni 2009 loopt tot 16 maanden verder tot en met september 2010",07-Jun-09,,
+Linda - Joost,Houvenaghel - Veldeman,Regine,Duinaartweg 12,9420,Erpe,,142-0660894-58,,0494/877 308,,,,,klein pakket (GROENE BAK),FALSE,,,54,TRUE,148854385187,geen zuurdesembrood!!,11-Mar-10,01-Apr-10,02-Jun-11
+Linda - Joost,Houvenaghel - Veldeman,Regine,Duinaartweg 12,9420,Erpe,,142-0660894-58,,0494/877 308,,,,,tussen pakket (GRIJZE BAK),FALSE,,,54,TRUE,148854385187,geen zuurdesembrood!!,,02-Jun-11,
+Linda - Joost,Mattens-Lievens,,Landlede 25,9451,Haaltert,,293-0084686-60,,053/848495,053/848495,,,,tussen pakket (GRIJZE BAK),FALSE,,cash,54,TRUE,53341114493,",6/01,6/2,6/3,7/4,8/5,, 
+6/6 € 33,6/7,8/8,9/9,10/10
+brood:",29-Apr-07,29-Apr-07,
+Linda - Joost,Merckx,Nancy,Langemunt 60,9420,Aaigem,,001-0956494-53,,53626294,53626294,,,,broodpakket,TRUE,oneven,cash,29.5,TRUE,38332692392,"vrienden van Ellen van Mullem, willen graag daar hun pakket nemen in de toekomst, tel werk van 053/781332, vriendin is Marleen Hobbels, Rapenstraat 10 9300 Aalst, delen pakket, 45 € ontvangen oktober 03,",,15-Aug-04,
+Linda - Joost,Merckx,Nancy,Langemunt 60,9420,Aaigem,,001-0956494-53,,53626294,53626294,,,,fruitpakket,TRUE,oneven,Permanente opdr.,29.5,TRUE,38332692392,"vrienden van Ellen van Mullem, willen graag daar hun pakket nemen in de toekomst, tel werk van 053/781332, vriendin is Marleen Hobbels, Rapenstraat 10 9300 Aalst, delen pakket, 45 € ontvangen oktober 03,",26-Aug-09,26-Aug-09,30-Jun-11
+Linda - Joost,Merckx,Nancy,Langemunt 60,9420,Aaigem,,001-0956494-53,,53626294,53626294,,,,klein pakket (GROENE BAK),TRUE,oneven,cash,29.5,TRUE,38332692392,"vrienden van Ellen van Mullem, willen graag daar hun pakket nemen in de toekomst, tel werk van 053/781332, vriendin is Marleen Hobbels, Rapenstraat 10 9300 Aalst, delen pakket, 45 € ontvangen oktober 03,",,28-Nov-03,
+Linda - Joost,Mertens,Katharina,Eiland 35,9450,Haaltert,,001-4452369-48,,053/840027,,0496/511516,,,fruitpakket,TRUE,oneven,Permanente opdr.,48.5,TRUE,740935199208,,24-Sep-08,24-Sep-08,
+Linda - Joost,Mertens,Katharina,Eiland 35,9450,Haaltert,,001-4452369-48,,053/840027,,0496/511516,,,borstvoedingspakket (oker bak),TRUE,oneven,,48.5,TRUE,740935199208,,,27-Jan-11,
+Linda - Joost,Mertens,Katharina,Eiland 35,9450,Haaltert,,001-4452369-48,,053/840027,,0496/511516,,,klein pakket (GROENE BAK),TRUE,oneven,Permanente opdr.,48.5,TRUE,740935199208,,24-Sep-08,24-Sep-08,27-Jan-11
+Linda - Joost,Reynaert-Mariën,Ignace-Han,Deeskensveld 2,9451,Kerksken,,001-0379714-35,,053/837689,053/837689,0476/560535,,,aardappel pakket,TRUE,oneven,cash,108,TRUE,38324886421,"7/01,6/2,6/3,8/4,8/5,6/6 € 43,7/7,8/8,9/9,5/10,
+fruit",10-Oct-04,10-Oct-04,
+Linda - Joost,Reynaert-Mariën,Ignace-Han,Deeskensveld 2,9451,Kerksken,,001-0379714-35,,053/837689,053/837689,0476/560535,,,fruitpakket,FALSE,,cash,108,TRUE,38324886421,"7/01,6/2,6/3,8/4,8/5,6/6 € 43,7/7,8/8,9/9,5/10,
+fruit",,29-Jun-99,
+Linda - Joost,Reynaert-Mariën,Ignace-Han,Deeskensveld 2,9451,Kerksken,,001-0379714-35,,053/837689,053/837689,0476/560535,,,tussen pakket (GRIJZE BAK),FALSE,,cash,108,TRUE,38324886421,"7/01,6/2,6/3,8/4,8/5,6/6 € 43,7/7,8/8,9/9,5/10,
+fruit",,29-Jun-99,29-Dec-10
+Linda - Joost,Reynaert-Mariën,Ignace-Han,Deeskensveld 2,9451,Kerksken,,001-0379714-35,,053/837689,053/837689,0476/560535,,,klein pakket (GROENE BAK),FALSE,,,108,TRUE,38324886421,"7/01,6/2,6/3,8/4,8/5,6/6 € 43,7/7,8/8,9/9,5/10,
+fruit",,29-Dec-10,
+Linda - Joost,Reynaert-Mariën,Ignace-Han,Deeskensveld 2,9451,Kerksken,,001-0379714-35,,053/837689,053/837689,0476/560535,,,broodpakket,FALSE,,cash,108,TRUE,38324886421,"7/01,6/2,6/3,8/4,8/5,6/6 € 43,7/7,8/8,9/9,5/10,
+fruit",,29-Jun-99,
+Linda - Joost,Scheiris-Lievens,Nathalie,Mosveldstraat 39,9451,Kerksken,,,,0485/72 33 20,,,,kristoflievens@hotmail.com,fruitpakket,FALSE,,,,FALSE,,fruit geregeld in winkel ok tot eind juni,,03-Jun-10,02-Sep-10
+Linda - Joost,Scheiris-Lievens,Nathalie,Mosveldstraat 39,9451,Kerksken,,,,0485/72 33 20,,,,kristoflievens@hotmail.com,groot pakket (RODE BAK),FALSE,,,,FALSE,,fruit geregeld in winkel ok tot eind juni,11-Mar-10,01-Apr-10,02-Sep-10
+Linda - Joost,Van Mulders - Ketels,Isabelle en Kris,Louis D'Haeseleerstraat 47,9300,Aalst,,293-0137867-85,,0485/315909,,,,,fruitpakket,TRUE,oneven,Permanente opdr.,75.5,FALSE,578343096,vanaf 1 september tussenpakket ipv g,29-May-05,30-Jun-05,01-Jun-12
+Linda - Joost,Van Mulders - Ketels,Isabelle en Kris,Louis D'Haeseleerstraat 47,9300,Aalst,,293-0137867-85,,0485/315909,,,,,tussen pakket (GRIJZE BAK),FALSE,,Permanente opdr.,75.5,FALSE,578343096,vanaf 1 september tussenpakket ipv g,18-May-05,30-Jun-05,01-Jun-12
+Linda - Joost,Van Peteghem- De Brabander,Michiel en Elke,Herenthout 87,9450,Haaltert,,735-0070775-50,,053/830585,,,,,borstvoedingspakket (oker bak),FALSE,,Permanente opdr.,54,TRUE,740832523088,,30-Dec-09,30-Dec-09,
+Linda - Joost,Van Sas - De Brabander,karleen,Hoogkouterbaan 82,9450,Haaltert,,439-5137951-51,,053/831113,,,,,borstvoedingspakket (oker bak),FALSE,,Permanente opdr.,,FALSE,740873638156,"verblijven in november in het buitenland, regelen de betaling vanaf december 04",06-Nov-09,06-Nov-09,08-Jul-10
+Linda - Joost,Verleyen,Beatrijs,Hofstraat 48,9451,Kerksken,,001-1399777-46,,053/833223,053/833223,,,,klein pakket (GROENE BAK),FALSE,,cash,43,TRUE,38339638505,"14/01,13/2,13/3,15/4,15/5,13/6 32,23 €,13/7,13/8,13/9,13/10,",,27-Oct-98,
+Meerbeke,Adam,Joachim,Langemuren 25,9400,Ninove,,779-5999217-92,,0477/70 10 57,,,054/34 22 20,"joo@publiburo,be",borstvoedingspakket (oker bak),FALSE,,,97,FALSE,,,,13-Apr-12,
+Meerbeke,Adam,Joachim,Langemuren 25,9400,Ninove,,779-5999217-92,,0477/70 10 57,,,054/34 22 20,"joo@publiburo,be",borstvoedingspakket (oker bak),FALSE,,,97,FALSE,,,,30-Sep-10,04-Feb-11
+Meerbeke,Adam,Joachim,Langemuren 25,9400,Ninove,,779-5999217-92,,0477/70 10 57,,,054/34 22 20,"joo@publiburo,be",fruitpakket,FALSE,,,97,FALSE,,,19-Aug-09,30-Sep-09,
+Meerbeke,Adam,Joachim,Langemuren 25,9400,Ninove,,779-5999217-92,,0477/70 10 57,,,054/34 22 20,"joo@publiburo,be",klein pakket (GROENE BAK),FALSE,,,97,FALSE,,,08-Feb-11,,12-Apr-12
+Meerbeke,Aerts-Dupont,,Nellekenstraat 17,9402,Meerbeke,,,,02/410 65 12,,,,,groot pakket (RODE BAK),FALSE,,,65,FALSE,,,04-Feb-10,25-Mar-10,
+Meerbeke,Boedts-De Maeseneire,Axel-Evi,Neep 101,9402,Meerbeke,,953-00469-9011,,0478/501 500,,,,evi.de.maeseneire@gmail.com,aardappel pakket,TRUE,oneven,,92,FALSE,,,03-Mar-11,28-Apr-11,
+Meerbeke,Boedts-De Maeseneire,Axel-Evi,Neep 101,9402,Meerbeke,,953-00469-9011,,0478/501 500,,,,evi.de.maeseneire@gmail.com,tussen pakket (GRIJZE BAK),FALSE,,,92,FALSE,,,03-Mar-11,28-Apr-11,29-Sep-11
+Meerbeke,Boedts-De Maeseneire,Axel-Evi,Neep 101,9402,Meerbeke,,953-00469-9011,,0478/501 500,,,,evi.de.maeseneire@gmail.com,fruitpakket,FALSE,,,92,FALSE,,,03-Mar-11,28-Apr-11,
+Meerbeke,Boedts-De Maeseneire,Axel-Evi,Neep 101,9402,Meerbeke,,953-00469-9011,,0478/501 500,,,,evi.de.maeseneire@gmail.com,klein pakket (GROENE BAK),FALSE,,,92,FALSE,,,,29-Sep-11,
+Meerbeke,Geeroms,Nancy,Rozelaarstraat 1C,9400,Ninove,,293-0414032-91,Nancy Geeroms,0479/351222,,,,bert-geeroms@skynet.be,tussen pakket (GRIJZE BAK),FALSE,,,65,FALSE,,,19-Oct-12,01-Dec-12,
+Meerbeke,Le Clair,Sheila,Lange Kamstraat 29,1760,Roosdaal,,,,0473/716861,,,,,broodpakket,FALSE,,Permanente opdr.,62,FALSE,979872272707,,23-Sep-08,31-Oct-08,29-May-12
+Meerbeke,Le Clair,Sheila,Lange Kamstraat 29,1760,Roosdaal,,,,0473/716861,,,,,fruitpakket,FALSE,,Permanente opdr.,62,FALSE,979872272707,,23-Sep-08,31-Oct-08,01-Dec-11
+Meerbeke,Le Clair,Sheila,Lange Kamstraat 29,1760,Roosdaal,,,,0473/716861,,,,,klein pakket (GROENE BAK),FALSE,oneven,Permanente opdr.,62,FALSE,979872272707,,23-Sep-08,31-Oct-08,29-May-12
+Meerbeke,Le Clair,Sheila,Lange Kamstraat 29,1760,Roosdaal,,,,0473/716861,,,,,aardappel pakket,TRUE,oneven,Permanente opdr.,62,FALSE,979872272707,,24-Nov-08,01-Dec-08,29-May-12
+Meerbeke,Matthys-Hautekeete,Karin,Halsesteenweg 153,9402,Meerbeke,,001-1752994-86,,499703161,,,,karin.matthijs@telenet.be,klein pakket (GROENE BAK),FALSE,,,43,FALSE,38780860583,"tegoed voor vakantie 2012: € 20,00",20-Jan-11,24-Feb-11,01-Oct-12
+Meerbeke,Servotte,Daniëlle,Arbeidstraat 16,9400,Ninove,,,,0471/50 24 00,,,,,klein pakket (GROENE BAK),FALSE,,,43,FALSE,,,01-Sep-11,29-Sep-11,27-Oct-11
+Meerbeke,Servotte,Daniëlle,Arbeidstraat 16,9400,Ninove,,,,0471/50 24 00,,,,,klein pakket (GROENE BAK),TRUE,oneven,,43,FALSE,,,,27-Oct-11,27-Oct-11
+Meerbeke,Servotte,Daniëlle,Arbeidstraat 16,9400,Ninove,,,,0471/50 24 00,,,,,fruitpakket,FALSE,,,43,FALSE,,,01-Sep-11,29-Sep-11,27-Oct-11
+Meerbeke,Servotte,Daniëlle,Arbeidstraat 16,9400,Ninove,,,,0471/50 24 00,,,,,fruitpakket,TRUE,oneven,,43,FALSE,,,,27-Oct-11,27-Oct-11
+Meerbeke,Steppe,Kathelene,Ameiveld 70,9400,Ninove,,,,0486/969648,,,,,klein pakket (GROENE BAK),FALSE,,,43,FALSE,,,01-Sep-11,29-Sep-11,29-Sep-11
+Meerbeke,Van der Hoeven,Dieter,Beneden-Hemelrijk 15,9402,Meerbeke,,103-0270000-20,Van der Hoeven De Bock,486070039,,,,dieter.vanderhoeven@gmail.com,tussen pakket (GRIJZE BAK),FALSE,,,54,TRUE,103170280942,,31-Aug-12,02-Oct-12,
+Meerbeke,Van Overstraeten-Boniver,Sylvie,Berchemstraat 46,1760,Roosdaal,,611-5239150-56,,0497/99 59 78,,,,sylvie.vanoverstraeten@hotmail.com,tussen pakket (GRIJZE BAK),FALSE,,,64,FALSE,610825596797,"cfr mail juli stop dom.
+Tegoed verlof 2012: geschonken aan papaver",,29-Apr-10,31-Dec-12
+Meerbeke,Van Overstraeten-Boniver,Sylvie,Berchemstraat 46,1760,Roosdaal,,611-5239150-56,,0497/99 59 78,,,,sylvie.vanoverstraeten@hotmail.com,klein pakket (GROENE BAK),FALSE,,,64,FALSE,610825596797,"cfr mail juli stop dom.
+Tegoed verlof 2012: geschonken aan papaver",,01-Jan-12,
+Meerbeke,Van Overstraeten-Boniver,Sylvie,Berchemstraat 46,1760,Roosdaal,,611-5239150-56,,0497/99 59 78,,,,sylvie.vanoverstraeten@hotmail.com,aardappel pakket,TRUE,oneven,,64,FALSE,610825596797,"cfr mail juli stop dom.
+Tegoed verlof 2012: geschonken aan papaver",,29-Apr-10,
+Meerbeke,Van Royen,Georges,Modderstraat 12,9402,Meerbeke,,,,054/25 00 82,,,,,fruitpakket,FALSE,,,43,TRUE,979871297047,,,18-Jun-09,02-Feb-12
+Meerbeke,Van Royen,Georges,Modderstraat 12,9402,Meerbeke,,,,054/25 00 82,,,,,klein pakket (GROENE BAK),FALSE,,,43,TRUE,979871297047,,,18-Jun-09,
+Moortsele,De Vlieger,Peggy,Vijverhoek 9,9860,Moortsele,,,,09/3245741,,0497/762008,,,klein pakket (GROENE BAK),TRUE,oneven,cash,43,FALSE,676213470,"mandelijks 45 € alles inbegrepen
+aardappelen decem - februari- april - juni - aug - oktober - dec 06",01-Dec-05,31-Dec-05,06-Jul-11
+Moortsele,De Vlieger,Peggy,Vijverhoek 9,9860,Moortsele,,,,09/3245741,,0497/762008,,,fruitpakket,TRUE,oneven,cash,43,FALSE,676213470,"mandelijks 45 € alles inbegrepen
+aardappelen decem - februari- april - juni - aug - oktober - dec 06",07-Dec-05,31-Dec-05,06-Jul-11
+Moortsele,Francois-Van Vlaenderen,Filip-Leen,Kloosterstraat  70,9090,Melle,,737-4370729-49,,09/2523925,09/3622676,,,adv.vanvlaenderen@skynet.be,klein pakket (GROENE BAK),FALSE,,cash,,FALSE,740864295440,",5/01,5/2,5/3,5/4,5/5,5/6 € 32,23, 7/7,8/8,8/9,september nog betalen, komt in orde, oktober nog niet in orde denk ik, kijken alles na en laten iets weten",,25-Jan-00,30-Jun-10
+Moortsele,Francois-Van Vlaenderen,Filip-Leen,Kloosterstraat  70,9090,Melle,,737-4370729-49,,09/2523925,09/3622676,,,adv.vanvlaenderen@skynet.be,aardappel pakket,TRUE,oneven,cash,,FALSE,740864295440,",5/01,5/2,5/3,5/4,5/5,5/6 € 32,23, 7/7,8/8,8/9,september nog betalen, komt in orde, oktober nog niet in orde denk ik, kijken alles na en laten iets weten",10-Oct-04,10-Oct-04,30-Jun-10
+Moortsele,Seynnaeve,Kries,,,,,001-0771304-36,,09/2525624,,,,,klein pakket (GROENE BAK),TRUE,oneven,Permanente opdr.,,FALSE,38338907365,,15-Dec-09,,02-Dec-10
+Moortsele,Seynnaeve,Kries,,,,,001-0771304-36,,09/2525624,,,,,fruitpakket,TRUE,oneven,cash,,FALSE,38338907365,,29-Apr-07,29-Apr-07,02-Dec-10
+Naturelle,Afschrift,Maaike,Schoolstraat 5,9860,Gijzenzele,,,,09/330 96 04,,,,,klein pakket (GROENE BAK),FALSE,,,43,FALSE,38739405413,,,02-Dec-10,28-Jul-11
+Naturelle,Afschrift,Maaike,Schoolstraat 5,9860,Gijzenzele,,,,09/330 96 04,,,,,borstvoedingspakket (oker bak),FALSE,,,43,FALSE,38739405413,,12-Aug-10,02-Sep-10,02-Dec-10
+Naturelle,Braet,Christine,Krabbenijkstraat 34,9520,St. Lievens Houtem,,,,053/63 19 06,,,,camille.monsieur@hotmail.com,klein pakket (GROENE BAK),FALSE,,,43,TRUE,400890021923,,08-Sep-11,29-Sep-11,
+Naturelle,Cornelis,Vanessa,Sonseindestraat 115,9620,Zottegem,,285-0373574-56,,09/3610530,09/3610530,,,,aardappel pakket,TRUE,oneven,,92,TRUE,38332691281,",7/01,6/2,6/3,8/4,8/5,6/6 € 33,6/7, 7/8,9/9,10/9,",,24-Feb-10,
+Naturelle,Cornelis,Vanessa,Sonseindestraat 115,9620,Zottegem,,285-0373574-56,,09/3610530,09/3610530,,,,klein pakket (GROENE BAK),FALSE,,cash,92,TRUE,38332691281,",7/01,6/2,6/3,8/4,8/5,6/6 € 33,6/7, 7/8,9/9,10/9,",26-Jun-01,31-Jul-01,
+Naturelle,Cornelis,Vanessa,Sonseindestraat 115,9620,Zottegem,,285-0373574-56,,09/3610530,09/3610530,,,,fruitpakket,FALSE,,cash,92,TRUE,38332691281,",7/01,6/2,6/3,8/4,8/5,6/6 € 33,6/7, 7/8,9/9,10/9,",26-Jun-01,31-Jul-01,
+Naturelle,De Jaegher - Laga,,Kwaadbeek 75,9860,Oosterzele,,001-4112400-64,,0494/14 59 92,,,,,fruitpakket,TRUE,oneven,,64.5,TRUE,38627201570,,,31-Mar-10,
+Naturelle,De Jaegher - Laga,,Kwaadbeek 75,9860,Oosterzele,,001-4112400-64,,0494/14 59 92,,,,,klein pakket (GROENE BAK),FALSE,,,64.5,TRUE,38627201570,,,30-Sep-10,
+Naturelle,De Jaegher - Laga,,Kwaadbeek 75,9860,Oosterzele,,001-4112400-64,,0494/14 59 92,,,,,borstvoedingspakket (oker bak),FALSE,,Permanente opdr.,64.5,TRUE,38627201570,,28-Oct-09,,31-Mar-10
+Naturelle,De Jaegher - Laga,,Kwaadbeek 75,9860,Oosterzele,,001-4112400-64,,0494/14 59 92,,,,,klein pakket (GROENE BAK),FALSE,,,64.5,TRUE,38627201570,,31-Mar-10,,30-Jun-10
+Naturelle,De Meulemeester-Struyf,Katelijne,Gaversesteenweg 114 d,9860,Scheldewindeke,,290-0312651-41,,93624576,93624576,,,,fruitpakket,FALSE,,cash,86,TRUE,38358316863,,12-Oct-99,26-Oct-99,
+Naturelle,De Meulemeester-Struyf,Katelijne,Gaversesteenweg 114 d,9860,Scheldewindeke,,290-0312651-41,,93624576,93624576,,,,klein pakket (GROENE BAK),FALSE,,cash,86,TRUE,38358316863,,12-Oct-99,26-Oct-99,
+Naturelle,De Thaye-Beekman,Annick,Rooberg 14,9860,Landskouter,,,,09/3630534,,,,,tussen pakket (GRIJZE BAK),FALSE,,Permanente opdr.,54,FALSE,,,02-Sep-07,30-Sep-07,
+Naturelle,Deberlanger-Van Nieuwenhove,Els-dirk,Groenweg 2b,9860,Oosterzele,,,,0484/15 61 40,,,,,aardappel pakket,TRUE,oneven,,60,FALSE,53631400535,,11-Mar-10,01-Apr-10,06-Oct-11
+Naturelle,Deberlanger-Van Nieuwenhove,Els-dirk,Groenweg 2b,9860,Oosterzele,,,,0484/15 61 40,,,,,tussen pakket (GRIJZE BAK),FALSE,,,60,FALSE,53631400535,,11-Mar-10,01-Apr-10,06-Oct-11
+Naturelle,Declercq - Van Lysebeth,Sarah-Ann,Heistraat 2A,9860,Oosterzele,,377-0176647-47,jan declercq-sarah-ann van lysebeth,0496/53 21 71,,,,svanlysebeth@me.com,groot pakket (RODE BAK),FALSE,,,177,FALSE,377017664747,,,01-Aug-12,29-Aug-12
+Naturelle,Declercq - Van Lysebeth,Sarah-Ann,Heistraat 2A,9860,Oosterzele,,377-0176647-47,jan declercq-sarah-ann van lysebeth,0496/53 21 71,,,,svanlysebeth@me.com,klein pakket (GROENE BAK),FALSE,,,177,FALSE,377017664747,,27-Apr-12,05-Jun-12,01-Aug-12
+Naturelle,Declercq - Van Lysebeth,Sarah-Ann,Heistraat 2A,9860,Oosterzele,,377-0176647-47,jan declercq-sarah-ann van lysebeth,0496/53 21 71,,,,svanlysebeth@me.com,broodpakket,FALSE,,,177,FALSE,377017664747,,,01-Aug-12,29-Aug-12
+Naturelle,Declercq - Van Lysebeth,Sarah-Ann,Heistraat 2A,9860,Oosterzele,,377-0176647-47,jan declercq-sarah-ann van lysebeth,0496/53 21 71,,,,svanlysebeth@me.com,fruitpakket,FALSE,,,177,FALSE,377017664747,,27-Apr-12,05-Jun-12,29-Aug-12
+Naturelle,Declercq - Van Lysebeth,Sarah-Ann,Heistraat 2A,9860,Oosterzele,,377-0176647-47,jan declercq-sarah-ann van lysebeth,0496/53 21 71,,,,svanlysebeth@me.com,broodpakket,FALSE,,,177,FALSE,377017664747,,27-Apr-12,05-Jun-12,29-Aug-12
+Naturelle,Declercq - Van Lysebeth,Sarah-Ann,Heistraat 2A,9860,Oosterzele,,377-0176647-47,jan declercq-sarah-ann van lysebeth,0496/53 21 71,,,,svanlysebeth@me.com,fruitpakket,FALSE,,,177,FALSE,377017664747,,,01-Aug-12,29-Aug-12
+Naturelle,Degruytere,Bart en Elsje,ISSEGEM 16,9860,Balegem,,979-6282708-23,,09/3627651,09/3627651,0473/765047,,,aardappel pakket,TRUE,oneven,cash,114,TRUE,979235792352,,01-Nov-04,01-Nov-04,
+Naturelle,Degruytere,Bart en Elsje,ISSEGEM 16,9860,Balegem,,979-6282708-23,,09/3627651,09/3627651,0473/765047,,,fruitpakket,FALSE,,cash,114,TRUE,979235792352,,,01-Aug-04,
+Naturelle,Degruytere,Bart en Elsje,ISSEGEM 16,9860,Balegem,,979-6282708-23,,09/3627651,09/3627651,0473/765047,,,groot pakket (RODE BAK),FALSE,,cash,114,TRUE,979235792352,,,01-Aug-04,
+Naturelle,Gerbosch-Haesaert,Roswitha-Koen,Geraardsbergse stw. 23,9860,Landskouter,,,,09/362 14 17,0499/42 29 34,,,,klein pakket (GROENE BAK),FALSE,,Permanente opdr.,43,TRUE,400846539550,,27-Oct-10,,30-Jun-11
+Naturelle,Gerbosch-Haesaert,Roswitha-Koen,Geraardsbergse stw. 23,9860,Landskouter,,,,09/362 14 17,0499/42 29 34,,,,klein pakket (GROENE BAK),FALSE,,,43,TRUE,400846539550,,,01-Oct-12,
+Naturelle,Gerbosch-Haesaert,Roswitha-Koen,Geraardsbergse stw. 23,9860,Landskouter,,,,09/362 14 17,0499/42 29 34,,,,tussen pakket (GRIJZE BAK),FALSE,,,43,TRUE,400846539550,,15-Apr-10,27-May-10,01-Jul-10
+Naturelle,Gerbosch-Haesaert,Roswitha-Koen,Geraardsbergse stw. 23,9860,Landskouter,,,,09/362 14 17,0499/42 29 34,,,,tussen pakket (GRIJZE BAK),FALSE,,,43,TRUE,400846539550,,,02-Sep-10,27-Oct-10
+Naturelle,Gerbosch-Haesaert,Roswitha-Koen,Geraardsbergse stw. 23,9860,Landskouter,,,,09/362 14 17,0499/42 29 34,,,,klein pakket (GROENE BAK),FALSE,,,43,TRUE,400846539550,,,29-Sep-11,30-Jun-12
+Naturelle,Goossenaerts,Evert,Kasteelstraat 18,9860,Moortsele,,,,09/3297870,09/3297870,,,,klein pakket (GROENE BAK),TRUE,oneven,cash,21.5,TRUE,979863364366,"7/01,6/2,6/3,8/4,8/5,6/6,32,23 €,7/7,8/8,9/9,9/10,
+vanaf 1 november  05 veertiendaags pakket",,27-Mar-01,
+Naturelle,Innegraeve,Véronique,Wijkschoolstraat 9,9860,Scheldewindeke,,001-2797160-47,Innegraeve-Cordonnier,0494/56 18 11,,,,vifco@hotmail.com,fruitpakket,TRUE,even,,86,TRUE,38810938364,"Volgende soorten niet door allergie!!!!!!!
+Groenten: prei, paksoi, pastinaak, groene selder, warmoes, rode biet
+Fruit: citrusfruit (sinaasappels, citroenen, pompelmoes, mandarijnen, etc.), gedroogd fruit",12-Nov-12,12-Nov-12,
+Naturelle,Innegraeve,Véronique,Wijkschoolstraat 9,9860,Scheldewindeke,,001-2797160-47,Innegraeve-Cordonnier,0494/56 18 11,,,,vifco@hotmail.com,fruitpakket,FALSE,,,86,TRUE,38810938364,"Volgende soorten niet door allergie!!!!!!!
+Groenten: prei, paksoi, pastinaak, groene selder, warmoes, rode biet
+Fruit: citrusfruit (sinaasappels, citroenen, pompelmoes, mandarijnen, etc.), gedroogd fruit",07-Apr-11,02-Jun-11,
+Naturelle,Innegraeve,Véronique,Wijkschoolstraat 9,9860,Scheldewindeke,,001-2797160-47,Innegraeve-Cordonnier,0494/56 18 11,,,,vifco@hotmail.com,klein pakket (GROENE BAK),TRUE,oneven,,86,TRUE,38810938364,"Volgende soorten niet door allergie!!!!!!!
+Groenten: prei, paksoi, pastinaak, groene selder, warmoes, rode biet
+Fruit: citrusfruit (sinaasappels, citroenen, pompelmoes, mandarijnen, etc.), gedroogd fruit",07-Apr-11,02-Jun-11,
+Naturelle,Kongs-Lippens,Marie-Louise Wies,Drooghout  2,9860,Scheldewindeke,,,,09/3629180,09/3629180,,,,klein pakket (GROENE BAK),TRUE,oneven,cash,21.5,TRUE,38332714018,"3/01,4/2,4/3,3/4,5/5,3/6 € 16,5,3/7,3/8,3/9,3/10,",,25-Jan-00,
+Naturelle,Lemaitre,Febe,Pastoor De Vosstraat 25,9860,Scheldewindeke,,,,0495 90 12 93,,,,febelemaitre@gmail.com,gemengd pakket,TRUE,oneven,,27,FALSE,,,23-Nov-12,01-Jan-13,
+Naturelle,Makelberge-Meersschaut,Ilse,Aalmoezenijestraat 8,9860,Oosterzele,,001-6306826-59,Makelberge-Meersschaut,0494/34 77 90,,,,ilsemuzzy@hotmail.com,klein pakket (GROENE BAK),FALSE,,,43,TRUE,38896988276,,20-Feb-12,29-Mar-12,
+Naturelle,Monbaliu,Anik,Keiberg 42,9860,Oosterzele,,BE340010560674,Monbaliu Annik,0497/369 822,,,,anik.monbaliu@telenet.be,fruitpakket,FALSE,,,86,FALSE,,,03-Aug-12,04-Sep-12,03-Oct-12
+Naturelle,Monbaliu,Anik,Keiberg 42,9860,Oosterzele,,BE340010560674,Monbaliu Annik,0497/369 822,,,,anik.monbaliu@telenet.be,klein pakket (GROENE BAK),FALSE,,,86,FALSE,,,03-Aug-12,04-Sep-12,03-Oct-12
+Naturelle,Nerinckx,Jo,Brielstraat 15,9860,Gijzenzele,,433-4173421-05,,475860107,,,,jo.nerinckx@pandora.be,tussen pakket (GRIJZE BAK),FALSE,,,,FALSE,,,12-Aug-10,02-Sep-10,02-Sep-10
+Naturelle,schotte,magalie,Keiberg 44,9860,oosterzele,,,,0476/621150,,,,,aardappel pakket,TRUE,oneven,Permanente opdr.,43,TRUE,38706123194,"om de  twee maanden aardappelen april juni, aug…2010",15-Apr-10,31-May-10,06-Jul-12
+Naturelle,schotte,magalie,Keiberg 44,9860,oosterzele,,,,0476/621150,,,,,fruitpakket,TRUE,oneven,Permanente opdr.,43,TRUE,38706123194,"om de  twee maanden aardappelen april juni, aug…2010",15-Apr-10,31-May-10,
+Naturelle,schotte,magalie,Keiberg 44,9860,oosterzele,,,,0476/621150,,,,,klein pakket (GROENE BAK),TRUE,oneven,Permanente opdr.,43,TRUE,38706123194,"om de  twee maanden aardappelen april juni, aug…2010",15-Apr-10,31-May-10,
+Naturelle,Slosse - Leonard,Lore - Hilde,Windekekouter 59,9860,Scheldewindeke,,001-3811931-04,,09/324 63 31,,,,"lore,slosse@pandora,be",tussen pakket (GRIJZE BAK),TRUE,oneven,Permanente opdr.,27,FALSE,,,,26-Apr-12,
+Naturelle,Slosse - Leonard,Lore - Hilde,Windekekouter 59,9860,Scheldewindeke,,001-3811931-04,,09/324 63 31,,,,"lore,slosse@pandora,be",tussen pakket (GRIJZE BAK),FALSE,,Permanente opdr.,27,FALSE,,,15-Jun-05,31-Jul-05,28-Apr-11
+Naturelle,Slosse - Leonard,Lore - Hilde,Windekekouter 59,9860,Scheldewindeke,,001-3811931-04,,09/324 63 31,,,,"lore,slosse@pandora,be",fruitpakket,FALSE,,Permanente opdr.,27,FALSE,,,15-Jun-05,31-Jul-05,28-Apr-11
+Naturelle,Timmerman-Vanhellemont,Hilde,Geraardsbergsestwg 31 bus 3,9860,Landskouter,,001-3513803-54,,09/2366357,,,,,fruitpakket,FALSE,,cash,86,FALSE,38357909867,"groot pakket vanaf 9 mei (16 mei nog oplossen)
+klein pakket vanaf 14 november 2006",27-Jan-05,30-Jan-05,29-Dec-11
+Naturelle,Timmerman-Vanhellemont,Hilde,Geraardsbergsestwg 31 bus 3,9860,Landskouter,,001-3513803-54,,09/2366357,,,,,klein pakket (GROENE BAK),FALSE,,cash,86,FALSE,38357909867,"groot pakket vanaf 9 mei (16 mei nog oplossen)
+klein pakket vanaf 14 november 2006",27-Jan-05,30-Jan-05,29-Dec-11
+Naturelle,Van De Casteele,Valérie,Morestraat 38,9860,Scheldewindeke,,,,0485/100 302,,,,prietje@gmail.com,klein pakket (GROENE BAK),FALSE,,,43,FALSE,,,11-Aug-11,29-Sep-11,29-Sep-11
+Naturelle,Van de Sype- Van Renterghem,Marc,Kouterweg 2,9860,Scheldewindeke,,,,09/329 66 40,,,,,klein pakket (GROENE BAK),TRUE,oneven,,21.5,TRUE,790517664,(pianoles),09-Jun-11,28-Jul-11,
+Naturelle,Van de Wiele,Eva,Mottedries 8,9450,Heldergem,,,,0474/24 60 33,,,,hiswordsofwisdom@gmail.com,klein pakket (GROENE BAK),TRUE,oneven,,43,FALSE,,,,02-Feb-12,04-Apr-12
+Naturelle,Van de Wiele,Eva,Mottedries 8,9450,Heldergem,,,,0474/24 60 33,,,,hiswordsofwisdom@gmail.com,klein pakket (GROENE BAK),TRUE,oneven,,43,FALSE,,,,01-Dec-11,29-Dec-11
+Naturelle,Van de Wiele,Eva,Mottedries 8,9450,Heldergem,,,,0474/24 60 33,,,,hiswordsofwisdom@gmail.com,klein pakket (GROENE BAK),FALSE,,,43,FALSE,,,,04-Apr-12,04-Jul-12
+Naturelle,Van de Wiele,Eva,Mottedries 8,9450,Heldergem,,,,0474/24 60 33,,,,hiswordsofwisdom@gmail.com,fruitpakket,FALSE,,,43,FALSE,,,,04-Jul-12,03-Oct-12
+Naturelle,Van de Wiele,Eva,Mottedries 8,9450,Heldergem,,,,0474/24 60 33,,,,hiswordsofwisdom@gmail.com,klein pakket (GROENE BAK),FALSE,,,43,FALSE,,,,29-Dec-11,02-Feb-12
+Naturelle,Van de Wiele,Eva,Mottedries 8,9450,Heldergem,,,,0474/24 60 33,,,,hiswordsofwisdom@gmail.com,klein pakket (GROENE BAK),FALSE,,,43,FALSE,,,,03-Oct-12,
+Naturelle,Van de Wiele,Eva,Mottedries 8,9450,Heldergem,,,,0474/24 60 33,,,,hiswordsofwisdom@gmail.com,klein pakket (GROENE BAK),FALSE,,,43,FALSE,,,03-Nov-11,01-Dec-11,01-Dec-11
+Naturelle,Van Den Berghe-De Groeve,Christine,Terstraeten 6 A,9860,Balegem,,737-1261827-94,,93604028,93604028,,,,tussen pakket (GRIJZE BAK),FALSE,,Permanente opdr.,54,FALSE,,,,28-Oct-03,27-Oct-11
+Naturelle,Van der Eecken-De Praeter,Kris-Katty,Lange Munte 8,9860,Scheldewindeke,,800-2094940-12,,09/3620656,09/3620656,,,,fruitpakket,TRUE,oneven,cash,75.5,TRUE,766150104987,"Voor droogwaren week 30/2012: € 35,00
+olijfolie, gewone bruine spagetti (geen canneloni of van die dingen), provamelchocolade (kleine potjes) provamel drinkchocolade, soort pasta om mijn soepente kruiden (kan niet op het merk komen).",,27-Oct-04,
+Naturelle,Van der Eecken-De Praeter,Kris-Katty,Lange Munte 8,9860,Scheldewindeke,,800-2094940-12,,09/3620656,09/3620656,,,,tussen pakket (GRIJZE BAK),FALSE,,cash,75.5,TRUE,766150104987,"Voor droogwaren week 30/2012: € 35,00
+olijfolie, gewone bruine spagetti (geen canneloni of van die dingen), provamelchocolade (kleine potjes) provamel drinkchocolade, soort pasta om mijn soepente kruiden (kan niet op het merk komen).",,30-Jun-98,
+Naturelle,Van Gaver-Schaarschmidt,Leen en Thomas,Kerkstraat 19,9860,Gijzenzele,,,,0486/31 86 09,,,,,klein pakket (GROENE BAK),FALSE,,Permanente opdr.,43,FALSE,,,07-May-09,,30-Jun-11
+Naturelle,Vandepitte-Dewaele,Mathias en Nathalie,Stationsstraat 125 bus 2,9860,Oosterzele,,,,0478/283297,,,,,klein pakket (GROENE BAK),FALSE,,Permanente opdr.,21.5,FALSE,38598464009,,05-Jun-09,30-Jun-09,01-Mar-11
+Naturelle,Vandepitte-Dewaele,Mathias en Nathalie,Stationsstraat 125 bus 2,9860,Oosterzele,,,,0478/283297,,,,,klein pakket (GROENE BAK),TRUE,oneven,,21.5,FALSE,38598464009,,,01-Mar-11,29-Sep-11
+Naturelle,Vander Veken - Boterdaele,Piet,Marktplein 4,9860,Scheldewindeke,,001-1672265-61,,09/3620775,09/3620775,,,,klein pakket (GROENE BAK),TRUE,oneven,cash,21.5,TRUE,38332689362,",14/01,13/2,13/3,16/4,17/5,13/6 € 16,5,13/7,13/8,13/9,13/10,",,01-Jan-01,
+Naturelle,Vanlanduyt,Luk,Gontrodeheirweg 118,9090,Melle,,448-3638511-42,,0487/52 49 40,,,,sofie@develop-it.be,tussen pakket (GRIJZE BAK),FALSE,,,,FALSE,,,27-May-10,01-Jul-10,02-Jul-10
+Naturelle,Vanlanduyt,Luk,Gontrodeheirweg 118,9090,Melle,,448-3638511-42,,0487/52 49 40,,,,sofie@develop-it.be,fruitpakket,FALSE,,,,FALSE,,,27-May-10,01-Jul-10,01-Jul-10
+Naturelle,Verhelst-Flo,Johan-Greet,Meersstraat 16,9890,Baaigem,,,,0474/88 73 68,,,,johan-verhelst@skynet.be,fruitpakket,TRUE,oneven,,43,FALSE,,,03-Mar-11,28-Apr-11,02-Jun-11
+Naturelle,Verhelst-Flo,Johan-Greet,Meersstraat 16,9890,Baaigem,,,,0474/88 73 68,,,,johan-verhelst@skynet.be,klein pakket (GROENE BAK),FALSE,,,43,FALSE,,,03-Mar-11,28-Apr-11,
+Naturelle,Vervaet - Stevens,Rudy - Francoise,Balegemstraat 9,9860,Balegem,,,,09/3304643,,,,"rudy,vervaet@gmail,com",groot pakket (RODE BAK),FALSE,,cash,65,TRUE,390041200605,,28-Aug-07,30-Sep-07,
+onderweg,Van Melckebeke,Patricia,",",9620,Zottegem,,737-1070879-42,,09/3610259,09/3610259,,,,tussen pakket (GRIJZE BAK),FALSE,,,140,TRUE,740829352097,",5/01,5/2,5/3,5/4,5/5,5/6 € 33,7/7,8/8,9/9,1/10,
+fruit
+
+dubbel fruit",,01-Jul-10,
+onderweg,Van Melckebeke,Patricia,",",9620,Zottegem,,737-1070879-42,,09/3610259,09/3610259,,,,fruitpakket,FALSE,,cash,140,TRUE,740829352097,",5/01,5/2,5/3,5/4,5/5,5/6 € 33,7/7,8/8,9/9,1/10,
+fruit
+
+dubbel fruit",,25-Aug-98,
+onderweg,Van Melckebeke,Patricia,",",9620,Zottegem,,737-1070879-42,,09/3610259,09/3610259,,,,klein pakket (GROENE BAK),FALSE,,cash,140,TRUE,740829352097,",5/01,5/2,5/3,5/4,5/5,5/6 € 33,7/7,8/8,9/9,1/10,
+fruit
+
+dubbel fruit",,25-Aug-98,30-Jun-10
+onderweg,Van Melckebeke,Patricia,",",9620,Zottegem,,737-1070879-42,,09/3610259,09/3610259,,,,fruitpakket,FALSE,,cash,140,TRUE,740829352097,",5/01,5/2,5/3,5/4,5/5,5/6 € 33,7/7,8/8,9/9,1/10,
+fruit
+
+dubbel fruit",,25-Aug-98,
+Onkerzele,Van Besien - Genbrugge,,Onkerzelestraat 92,9500,geraardsbergen,,,,054/417702,,0486/061521,,"genbruggekatrien@ hotmail,com",klein pakket (GROENE BAK),TRUE,oneven,,28,FALSE,400803764873,"altijd speltbrood, passen het bedrag aan omwille van het speltbrood
+19,5 + 8 € per maand voor brood",,30-Dec-10,30-Jun-11
+Onkerzele,Van Besien - Genbrugge,,Onkerzelestraat 92,9500,geraardsbergen,,,,054/417702,,0486/061521,,"genbruggekatrien@ hotmail,com",klein pakket (GROENE BAK),TRUE,oneven,,28,FALSE,400803764873,"altijd speltbrood, passen het bedrag aan omwille van het speltbrood
+19,5 + 8 € per maand voor brood",,02-Sep-10,02-Dec-10
+Onkerzele,Vanderhaegen,David,Onkerzelestraat 56,9500,Geraardsbergen,,001-2375511-36,,054/42 29 66,,,,david.vander.haegen@skynet.be,tussen pakket (GRIJZE BAK),FALSE,,,54,FALSE,,,30-Sep-10,28-Oct-10,20-Jan-11
+Onkerzele,Verleye-Van Acker,Sylvie,Bettenhoek 18,9506,Nieuwenhove,,738-0069948-33,,0474/98 14 76,,,,sylvie@sylvieverleye .be,tussen pakket (GRIJZE BAK),FALSE,,,43,FALSE,,,27-May-10,01-Jul-10,08-Jun-12
+Onkerzele,Verleye-Van Acker,Sylvie,Bettenhoek 18,9506,Nieuwenhove,,738-0069948-33,,0474/98 14 76,,,,sylvie@sylvieverleye .be,fruitpakket,FALSE,,,43,FALSE,,,27-May-10,01-Jul-10,02-Mar-11
+Onkerzele,Verleye-Van Acker,Sylvie,Bettenhoek 18,9506,Nieuwenhove,,738-0069948-33,,0474/98 14 76,,,,sylvie@sylvieverleye .be,klein pakket (GROENE BAK),FALSE,,,43,FALSE,,,08-Jun-12,08-Jun-12,04-Aug-12
+Ruth Brijs,Ackerman - Volckaert,Kathleen,Lamstraat  14,9820,Merelbeke,,800220523316,,485307968,,,,,tussen pakket (GRIJZE BAK),FALSE,,Permanente opdr.,43,FALSE,,,08-Jan-10,28-Feb-10,04-Jul-12
+Ruth Brijs,Ackerman - Volckaert,Kathleen,Lamstraat  14,9820,Merelbeke,,800220523316,,485307968,,,,,klein pakket (GROENE BAK),FALSE,,,43,FALSE,,,03-Sep-12,03-Sep-12,
+Ruth Brijs,Ackerman - Volckaert,Kathleen,Lamstraat  14,9820,Merelbeke,,800220523316,,485307968,,,,,tussen pakket (GRIJZE BAK),FALSE,,,43,FALSE,,,,01-Sep-12,03-Sep-12
+Ruth Brijs,Baeyens-De Moor,Annemie,Scheldeweg 29,9090,Gontrode,,001-1791943-41,,09/2525510,09/2525510,,,,aardappel pakket,TRUE,oneven,,46.5,TRUE,38332691483,"bij droogwaren week 29: Geen thee alstublieft, wel graag toastjes en deegwaren.",,27-Oct-11,
+Ruth Brijs,Baeyens-De Moor,Annemie,Scheldeweg 29,9090,Gontrode,,001-1791943-41,,09/2525510,09/2525510,,,,klein pakket (GROENE BAK),FALSE,,cash,46.5,TRUE,38332691483,"bij droogwaren week 29: Geen thee alstublieft, wel graag toastjes en deegwaren.",02-Apr-02,21-Apr-02,27-Oct-11
+Ruth Brijs,Baeyens-De Moor,Annemie,Scheldeweg 29,9090,Gontrode,,001-1791943-41,,09/2525510,09/2525510,,,,broodpakket,TRUE,oneven,,46.5,TRUE,38332691483,"bij droogwaren week 29: Geen thee alstublieft, wel graag toastjes en deegwaren.",,27-Oct-11,
+Ruth Brijs,Baeyens-De Moor,Annemie,Scheldeweg 29,9090,Gontrode,,001-1791943-41,,09/2525510,09/2525510,,,,aardappel pakket,TRUE,oneven,cash,46.5,TRUE,38332691483,"bij droogwaren week 29: Geen thee alstublieft, wel graag toastjes en deegwaren.",17-Oct-04,17-Oct-04,27-Oct-11
+Ruth Brijs,Baeyens-De Moor,Annemie,Scheldeweg 29,9090,Gontrode,,001-1791943-41,,09/2525510,09/2525510,,,,groot pakket (RODE BAK),TRUE,oneven,,46.5,TRUE,38332691483,"bij droogwaren week 29: Geen thee alstublieft, wel graag toastjes en deegwaren.",,27-Oct-11,
+Ruth Brijs,Brijs,Ruth,Roskamstraat 87,9820,Merelbeke,,393-0070071-29,,0495/386528,0495/386528,,,,klein pakket (GROENE BAK),TRUE,oneven,cash,77.5,TRUE,393007007129,"Tegoed op 31/12/2011 : € 178,00
+Droogwaren week 16 :  - € 40,50
+Nieuw tegoedsaldo: € 119,09
+Droogwaren week 25: € 50,43
+Nieuw tegoedsaldo: € 68,66
+Droogwaren week 32: € 20,50
+Nieuw tegoedsaldo op 06/08/2012: € 48,16
+Nieuw tegoedsaldo op 07/08/2012 (leeggoed ingeleverd): € 51,66
+Nieuw tegoedsaldo op 10/09/2012: € 43,27
+Nieuw tegoedsaldo op 08/10/2012: € 35,77",13-Aug-02,28-Aug-02,
+Ruth Brijs,Brijs,Ruth,Roskamstraat 87,9820,Merelbeke,,393-0070071-29,,0495/386528,0495/386528,,,,fruitpakket,FALSE,,cash,77.5,TRUE,393007007129,"Tegoed op 31/12/2011 : € 178,00
+Droogwaren week 16 :  - € 40,50
+Nieuw tegoedsaldo: € 119,09
+Droogwaren week 25: € 50,43
+Nieuw tegoedsaldo: € 68,66
+Droogwaren week 32: € 20,50
+Nieuw tegoedsaldo op 06/08/2012: € 48,16
+Nieuw tegoedsaldo op 07/08/2012 (leeggoed ingeleverd): € 51,66
+Nieuw tegoedsaldo op 10/09/2012: € 43,27
+Nieuw tegoedsaldo op 08/10/2012: € 35,77",16-Jan-08,16-Jan-08,
+Ruth Brijs,Brijs,Ruth,Roskamstraat 87,9820,Merelbeke,,393-0070071-29,,0495/386528,0495/386528,,,,broodpakket,FALSE,,cash,77.5,TRUE,393007007129,"Tegoed op 31/12/2011 : € 178,00
+Droogwaren week 16 :  - € 40,50
+Nieuw tegoedsaldo: € 119,09
+Droogwaren week 25: € 50,43
+Nieuw tegoedsaldo: € 68,66
+Droogwaren week 32: € 20,50
+Nieuw tegoedsaldo op 06/08/2012: € 48,16
+Nieuw tegoedsaldo op 07/08/2012 (leeggoed ingeleverd): € 51,66
+Nieuw tegoedsaldo op 10/09/2012: € 43,27
+Nieuw tegoedsaldo op 08/10/2012: € 35,77",13-Aug-02,28-Aug-02,
+Ruth Brijs,Brijs,Ruth,Roskamstraat 87,9820,Merelbeke,,393-0070071-29,,0495/386528,0495/386528,,,,aardappel pakket,TRUE,oneven,cash,77.5,TRUE,393007007129,"Tegoed op 31/12/2011 : € 178,00
+Droogwaren week 16 :  - € 40,50
+Nieuw tegoedsaldo: € 119,09
+Droogwaren week 25: € 50,43
+Nieuw tegoedsaldo: € 68,66
+Droogwaren week 32: € 20,50
+Nieuw tegoedsaldo op 06/08/2012: € 48,16
+Nieuw tegoedsaldo op 07/08/2012 (leeggoed ingeleverd): € 51,66
+Nieuw tegoedsaldo op 10/09/2012: € 43,27
+Nieuw tegoedsaldo op 08/10/2012: € 35,77",17-Oct-04,17-Oct-04,12-Sep-12
+Ruth Brijs,Cloquet,Françoise,Neerstraat 2,9820,Merelbeke,,290-0405781-51,,09/362 90 48,,,,,klein pakket (GROENE BAK),FALSE,,cash,49,TRUE,38338907567,"€ 108,00 tegoed voor 2011",30-Sep-06,30-Sep-06,
+Ruth Brijs,Cloquet,Françoise,Neerstraat 2,9820,Merelbeke,,290-0405781-51,,09/362 90 48,,,,,aardappel pakket,TRUE,oneven,cash,49,TRUE,38338907567,"€ 108,00 tegoed voor 2011",30-Sep-06,30-Sep-06,
+Ruth Brijs,Cornelis-Gillis,Philip en Martine,Landskoutersteenweg  6,9820,Merelbeke,,001-1351831-18,,93627647,93627647,,,,fruitpakket,FALSE,,cash,86,TRUE,38332696133,"Tegoed voor verlof 2012: € 60,00",02-Nov-99,30-Nov-99,
+Ruth Brijs,Cornelis-Gillis,Philip en Martine,Landskoutersteenweg  6,9820,Merelbeke,,001-1351831-18,,93627647,93627647,,,,klein pakket (GROENE BAK),FALSE,,cash,86,TRUE,38332696133,"Tegoed voor verlof 2012: € 60,00",30-Jun-08,01-Jul-08,
+Ruth Brijs,De Beir,Rudy,Motsenstraat 37,9820,Merelbeke,,290-0488331-54,,09/232 35 49,,,,Rudy.De.Beir@telenet.be,tussen pakket (GRIJZE BAK),FALSE,,,,FALSE,38695884341,,29-Apr-10,27-May-10,16-Sep-10
+Ruth Brijs,De Groote,Elke,Lembergsesteenweg 78,9820,Merelbeke,,893-9840352-58,De Groote - West,09 3240501,,,,elke.de.groote@hotmail.com,fruitpakket,FALSE,,,43,TRUE,899727576929,vanaf november enkel nog gemengd pakket,09-Mar-12,01-May-12,31-Oct-12
+Ruth Brijs,De Groote,Elke,Lembergsesteenweg 78,9820,Merelbeke,,893-9840352-58,De Groote - West,09 3240501,,,,elke.de.groote@hotmail.com,gemengd pakket,FALSE,,,43,TRUE,899727576929,vanaf november enkel nog gemengd pakket,09-Mar-12,01-May-12,
+Ruth Brijs,Eggermont - De Pooter,Hilde,"B,A,Verhaegenlaan 9",9820,Merelbeke,,,,09/230 67 73,,,,"eggermont,sam@belgacom,net",aardappel pakket,TRUE,oneven,Permanente opdr.,,FALSE,740880230520,desembrood  13 € per maand,17-Nov-07,28-Dec-07,29-Jul-10
+Ruth Brijs,Eggermont - De Pooter,Hilde,"B,A,Verhaegenlaan 9",9820,Merelbeke,,,,09/230 67 73,,,,"eggermont,sam@belgacom,net",fruitpakket,FALSE,,Permanente opdr.,,FALSE,740880230520,desembrood  13 € per maand,17-Nov-07,28-Dec-07,29-Jul-10
+Ruth Brijs,Eggermont - De Pooter,Hilde,"B,A,Verhaegenlaan 9",9820,Merelbeke,,,,09/230 67 73,,,,"eggermont,sam@belgacom,net",tussen pakket (GRIJZE BAK),FALSE,,Permanente opdr.,,FALSE,740880230520,desembrood  13 € per maand,17-Nov-07,28-Dec-07,29-Jul-10
+Ruth Brijs,Lamps,Katrijn,Lembergesteenweg 153,9820,Merelbeke,,,,0479/44 37 15,,,,katrijn.lamps@telenet.be,tussen pakket (GRIJZE BAK),FALSE,,,0,FALSE,,,19-May-11,30-Jun-11,30-Jun-11
+Ruth Brijs,Mattijs-Hertveldt,Katie-Kris,Notelaarstraat 3,9820,Merelbeke,,290-0228757-52,,0497/59 70 71,,,,katie.hertveldt@gmail.com,klein pakket (GROENE BAK),TRUE,oneven,,21.5,TRUE,38811627367,,20-Jan-11,30-Mar-11,27-Oct-11
+Ruth Brijs,Mattijs-Hertveldt,Katie-Kris,Notelaarstraat 3,9820,Merelbeke,,290-0228757-52,,0497/59 70 71,,,,katie.hertveldt@gmail.com,broodpakket,TRUE,even,,21.5,TRUE,38811627367,,,04-Apr-12,31-Oct-12
+Ruth Brijs,Mattijs-Hertveldt,Katie-Kris,Notelaarstraat 3,9820,Merelbeke,,290-0228757-52,,0497/59 70 71,,,,katie.hertveldt@gmail.com,klein pakket (GROENE BAK),TRUE,even,,21.5,TRUE,38811627367,,,04-Apr-12,
+Ruth Brijs,Soenen,Jan,Morestraat 30,9860,oosterzele,,,,0498/161832,,,,,klein pakket (GROENE BAK),FALSE,,Permanente opdr.,56,FALSE,400721329829,via Myriam De Potter klant geworden,12-Jun-08,31-Jul-08,02-Jun-11
+Ruth Brijs,Stas,Sara,Meerstraat 49,9860,Oosterzele,,610-5050760-61,Sara Stas,0494 41 22 04,,,,sara.stas@scarlet.be,aardappel pakket,TRUE,oneven,,105,TRUE,610833274450,"Tegoed voor verlof 2012: € 46,00",23-Mar-12,01-May-12,
+Ruth Brijs,Stas,Sara,Meerstraat 49,9860,Oosterzele,,610-5050760-61,Sara Stas,0494 41 22 04,,,,sara.stas@scarlet.be,broodpakket,FALSE,,,105,TRUE,610833274450,"Tegoed voor verlof 2012: € 46,00",23-Mar-12,01-May-12,
+Ruth Brijs,Stas,Sara,Meerstraat 49,9860,Oosterzele,,610-5050760-61,Sara Stas,0494 41 22 04,,,,sara.stas@scarlet.be,fruitpakket,FALSE,,,105,TRUE,610833274450,"Tegoed voor verlof 2012: € 46,00",23-Mar-12,01-May-12,
+Ruth Brijs,Stas,Sara,Meerstraat 49,9860,Oosterzele,,610-5050760-61,Sara Stas,0494 41 22 04,,,,sara.stas@scarlet.be,klein pakket (GROENE BAK),FALSE,,,105,TRUE,610833274450,"Tegoed voor verlof 2012: € 46,00",23-Mar-12,01-May-12,
+Ruth Brijs,Steenbrugge,Stanny,Bergbosstraat 191,9820,Merelbeke,,063-8907214-30,Stanislas Steenbrugge,0475/90 24 24,,,,stanny.steenbrugge @gmail.com,klein pakket (GROENE BAK),FALSE,,,43,FALSE,53632370333,,25-Mar-10,29-Apr-10,26-Sep-12
+Ruth Brijs,Temmerman,Wouter,Grepstraat 24,9820,Merelbeke,,731-0035747-26,Temmerman-Vandendriessche,0477/375 324,,,,wouter.temmerman@telenet.be,klein pakket (GROENE BAK),FALSE,,,43,FALSE,400862227379,,20-Jan-11,31-Mar-11,28-Nov-12
+Ruth Brijs,Tijtgat-Matthijs,,,,,,,,,,,,,klein pakket (GROENE BAK),FALSE,,,0,FALSE,,,03-Mar-11,03-Mar-11,31-Mar-11
+Ruth Brijs,Van den broecke,Antoine,Motsenstraat 47,9820,Merelbeke,,,,09/230 52 93,,,,,klein pakket (GROENE BAK),FALSE,,,43,FALSE,,,05-Mar-12,03-Apr-12,01-Aug-12
+Ruth Brijs,Van Hove-Gillis,Jan,Burgemeester Maenhoutstraat 55,9820,Merelbeke,,210-0764466-61,,92523001,92523001,,,,tussen pakket (GRIJZE BAK),FALSE,,Permanente opdr.,54,FALSE,,"7/01,6/2,6/3,8/4,8/5,6/6 € 54,7/7,8/8,9/9,10/10,",30-Sep-09,30-Sep-09,01-Dec-11
+Ruth Brijs,Verstraete,Nathalie,meidoornlaan 4,9820,Merelbeke,,,,09/2318795,,,,,aardappel pakket,TRUE,oneven,Permanente opdr.,92,FALSE,,,01-Aug-09,,
+Ruth Brijs,Verstraete,Nathalie,meidoornlaan 4,9820,Merelbeke,,,,09/2318795,,,,,klein pakket (GROENE BAK),FALSE,,Permanente opdr.,92,FALSE,,,28-Oct-09,28-Oct-09,
+Ruth Brijs,Verstraete,Nathalie,meidoornlaan 4,9820,Merelbeke,,,,09/2318795,,,,,fruitpakket,FALSE,,Permanente opdr.,92,FALSE,,,01-Aug-09,,
+Volle Maan,Adams,Els,Hauwerzele 48,9520,Sint.Lievens-Houtem,,063-1144029-46,Adams Els,053/632252,053/632252,,,,broodpakket,FALSE,,Permanente opdr.,56,FALSE,,,03-Oct-07,31-Oct-07,
+Volle Maan,Adams,Els,Hauwerzele 48,9520,Sint.Lievens-Houtem,,063-1144029-46,Adams Els,053/632252,053/632252,,,,klein pakket (GROENE BAK),FALSE,,Permanente opdr.,56,FALSE,,,03-Oct-07,31-Oct-07,
+Volle Maan,Baert-Lamote,Kris,Nieuwstraat  2,9860,Oosterzele,,385-0522038-47,Baert-Lamote,09/3296200,09/3296200,,,,broodpakket,FALSE,,cash,56,TRUE,385052203847,terug inbrengen einde december 2009 cadeau van Sandra de Boeder,05-Jan-03,02-Feb-03,
+Volle Maan,Baert-Lamote,Kris,Nieuwstraat  2,9860,Oosterzele,,385-0522038-47,Baert-Lamote,09/3296200,09/3296200,,,,klein pakket (GROENE BAK),FALSE,,cash,56,TRUE,385052203847,terug inbrengen einde december 2009 cadeau van Sandra de Boeder,21-Nov-99,28-Nov-99,
+Volle Maan,Corthals,Katrijn,Jozef Buyssestraat 55,9230,Wetteren,,063-9800859-14,Corthals Katrijn,0479/49 49 81,,,,katrijncorthals@hotmail.com,klein pakket (GROENE BAK),FALSE,,,21.5,FALSE,,,04-Aug-11,01-Sep-11,01-Sep-11
+Volle Maan,Corthals,Katrijn,Jozef Buyssestraat 55,9230,Wetteren,,063-9800859-14,Corthals Katrijn,0479/49 49 81,,,,katrijncorthals@hotmail.com,klein pakket (GROENE BAK),TRUE,oneven,,21.5,FALSE,,,,01-Sep-11,
+Volle Maan,Criem,Catherine,Oombergenstraat 54,9620,Zottegem,,7340 1339 9446,Marie-Catherine Criem,0486/23.44.90,,,,criemke@hotmail.com,groot pakket (RODE BAK),FALSE,,,65,FALSE,,,01-Jun-12,03-Jul-12,
+Volle Maan,De Lange Marijke,,Bergafstraat 60,9550,Hillegem,,,,0485/64 47 09,,,,,fruitpakket,FALSE,,,43,TRUE,38537498903,,,07-Jul-11,13-Jul-11
+Volle Maan,De Lange Marijke,,Bergafstraat 60,9550,Hillegem,,,,0485/64 47 09,,,,,klein pakket (GROENE BAK),TRUE,oneven,,43,TRUE,38537498903,,,07-Jul-11,13-Jul-11
+Volle Maan,De Lange Marijke,,Bergafstraat 60,9550,Hillegem,,,,0485/64 47 09,,,,,klein pakket (GROENE BAK),FALSE,,,43,TRUE,38537498903,,,01-Sep-11,08-Sep-11
+Volle Maan,De Lange Marijke,,Bergafstraat 60,9550,Hillegem,,,,0485/64 47 09,,,,,klein pakket (GROENE BAK),TRUE,oneven,,43,TRUE,38537498903,,01-Jan-09,,04-Mar-10
+Volle Maan,De Lange Marijke,,Bergafstraat 60,9550,Hillegem,,,,0485/64 47 09,,,,,fruitpakket,FALSE,,,43,TRUE,38537498903,,,01-Sep-11,08-Sep-11
+Volle Maan,De Lange Marijke,,Bergafstraat 60,9550,Hillegem,,,,0485/64 47 09,,,,,fruitpakket,TRUE,oneven,Permanente opdr.,43,TRUE,38537498903,,04-Mar-10,,
+Volle Maan,De Lange Marijke,,Bergafstraat 60,9550,Hillegem,,,,0485/64 47 09,,,,,fruitpakket,TRUE,oneven,Permanente opdr.,43,TRUE,38537498903,,01-Jan-09,,04-Mar-10
+Volle Maan,De Lange Marijke,,Bergafstraat 60,9550,Hillegem,,,,0485/64 47 09,,,,,klein pakket (GROENE BAK),TRUE,oneven,,43,TRUE,38537498903,,04-Mar-10,,
+Volle Maan,De Pauw-Uyttendale,Sarah-Frank,Diepestraat 121,9520,St. Lievens Houtem,,737-0005716-36,,053/780 330,,0472/80 95 85,,,fruitpakket,FALSE,,cash,49,TRUE,740878753894,"Tegoed verlof 2012: € 20,00",14-Nov-07,30-Nov-07,01-Dec-11
+Volle Maan,De Pauw-Uyttendale,Sarah-Frank,Diepestraat 121,9520,St. Lievens Houtem,,737-0005716-36,,053/780 330,,0472/80 95 85,,,klein pakket (GROENE BAK),FALSE,,,49,TRUE,740878753894,"Tegoed verlof 2012: € 20,00",,01-Dec-11,
+Volle Maan,De Pauw-Uyttendale,Sarah-Frank,Diepestraat 121,9520,St. Lievens Houtem,,737-0005716-36,,053/780 330,,0472/80 95 85,,,aardappel pakket,TRUE,oneven,cash,49,TRUE,740878753894,"Tegoed verlof 2012: € 20,00",14-Nov-07,30-Nov-07,
+Volle Maan,De Pauw-Uyttendale,Sarah-Frank,Diepestraat 121,9520,St. Lievens Houtem,,737-0005716-36,,053/780 330,,0472/80 95 85,,,groot pakket (RODE BAK),FALSE,,cash,49,TRUE,740878753894,"Tegoed verlof 2012: € 20,00",,30-Jan-08,01-Dec-11
+Volle Maan,Dhoore-Jansegers,Koen,Bruisbeke 11,9520,Sint - Lievens - Houtem,,,,053/630049,,,,,klein pakket (GROENE BAK),FALSE,,,43,TRUE,38376800720,,,01-Dec-12,
+Volle Maan,Dhoore-Jansegers,Koen,Bruisbeke 11,9520,Sint - Lievens - Houtem,,,,053/630049,,,,,groot pakket (RODE BAK),FALSE,,cash,43,TRUE,38376800720,,29-Jul-06,31-Aug-06,19-May-11
+Volle Maan,Dhoore-Jansegers,Koen,Bruisbeke 11,9520,Sint - Lievens - Houtem,,,,053/630049,,,,,tussen pakket (GRIJZE BAK),FALSE,,,43,TRUE,38376800720,,,19-May-11,01-Dec-12
+Volle Maan,Hofman,Leen,Veldstraat 11,9520,Bavegem,,,,0494/924719,,,,"leen hofman@hotmail,com",klein pakket (GROENE BAK),FALSE,,,92,FALSE,38738632342,,,01-Sep-11,31-Oct-12
+Volle Maan,Hofman,Leen,Veldstraat 11,9520,Bavegem,,,,0494/924719,,,,"leen hofman@hotmail,com",aardappel pakket,TRUE,oneven,,92,FALSE,38738632342,,,01-Sep-11,31-Oct-12
+Volle Maan,Hofman,Leen,Veldstraat 11,9520,Bavegem,,,,0494/924719,,,,"leen hofman@hotmail,com",klein pakket (GROENE BAK),FALSE,,Permanente opdr.,92,FALSE,38738632342,,18-Aug-10,30-Sep-10,30-Jun-11
+Volle Maan,Hofman,Leen,Veldstraat 11,9520,Bavegem,,,,0494/924719,,,,"leen hofman@hotmail,com",fruitpakket,FALSE,,,92,FALSE,38738632342,,,01-Sep-11,31-Oct-12
+Volle Maan,Hofman,Leen,Veldstraat 11,9520,Bavegem,,,,0494/924719,,,,"leen hofman@hotmail,com",fruitpakket,FALSE,,Permanente opdr.,92,FALSE,38738632342,,18-Aug-10,30-Sep-10,30-Jun-11
+Volle Maan,Hofman,Leen,Veldstraat 11,9520,Bavegem,,,,0494/924719,,,,"leen hofman@hotmail,com",aardappel pakket,TRUE,oneven,Permanente opdr.,92,FALSE,38738632342,,19-Aug-10,30-Sep-10,30-Jun-11
+Volle Maan,Hofman,Lies,Veldstraat 17,9520,Bavegem,,,,0474/492785,,,,lies.hofman@hotmail.com,klein pakket (GROENE BAK),FALSE,,,86,FALSE,,,16-Sep-10,28-Oct-10,02-Jun-11
+Volle Maan,Hofman,Lies,Veldstraat 17,9520,Bavegem,,,,0474/492785,,,,lies.hofman@hotmail.com,fruitpakket,FALSE,,,86,FALSE,,,16-Sep-10,28-Oct-10,02-Jun-11
+Volle Maan,Jonckheere,Lore,Molenstraat 16,9860,Balegem,,,,0497 31 23 77,,,,lorejonckheere@hotmail.com,klein pakket (GROENE BAK),FALSE,,,54,FALSE,,,13-Apr-12,,16-Apr-12
+Volle Maan,Jonckheere,Lore,Molenstraat 16,9860,Balegem,,,,0497 31 23 77,,,,lorejonckheere@hotmail.com,borstvoedingspakket (oker bak),FALSE,,,54,FALSE,,,13-Apr-12,,09-May-12
+Volle Maan,Jonckheere,Lore,Molenstraat 16,9860,Balegem,,,,0497 31 23 77,,,,lorejonckheere@hotmail.com,borstvoedingspakket (oker bak),FALSE,,,54,FALSE,,,,16-May-12,04-Aug-12
+Volle Maan,Laeremans,Jeanine,Ijshoute 3,,St. Lievens Houtem,,,,053/62 43 82,,,,,groot pakket (RODE BAK),FALSE,,,108,FALSE,393031533981,via Joke van Damme,18-Feb-10,02-Apr-10,27-Jun-12
+Volle Maan,Laeremans,Jeanine,Ijshoute 3,,St. Lievens Houtem,,,,053/62 43 82,,,,,fruitpakket,FALSE,,,108,FALSE,393031533981,via Joke van Damme,18-Feb-10,02-Apr-10,27-Jun-12
+Volle Maan,Mogensen,Sofie,Strijmeers 97,,Vlierzele,,,,053/828339,,,,,aardappel pakket,TRUE,oneven,cash,60,TRUE,676225796,"interesse depothouder, wijn & fruitsappen winkeltje natuurlijke fruitsappen en wijnen van Zuid Afrika, heeft 1 tussen pakket gehaden dan 2  grote pakketten tijdens de proef.
+
+109€ vanaf nov 2011:borstv. Fruit aard ajuin",29-Aug-07,,
+Volle Maan,Mogensen,Sofie,Strijmeers 97,,Vlierzele,,,,053/828339,,,,,fruitpakket,FALSE,,cash,60,TRUE,676225796,"interesse depothouder, wijn & fruitsappen winkeltje natuurlijke fruitsappen en wijnen van Zuid Afrika, heeft 1 tussen pakket gehaden dan 2  grote pakketten tijdens de proef.
+
+109€ vanaf nov 2011:borstv. Fruit aard ajuin",29-Aug-07,29-Aug-07,26-Apr-12
+Volle Maan,Mogensen,Sofie,Strijmeers 97,,Vlierzele,,,,053/828339,,,,,tussen pakket (GRIJZE BAK),FALSE,,,60,TRUE,676225796,"interesse depothouder, wijn & fruitsappen winkeltje natuurlijke fruitsappen en wijnen van Zuid Afrika, heeft 1 tussen pakket gehaden dan 2  grote pakketten tijdens de proef.
+
+109€ vanaf nov 2011:borstv. Fruit aard ajuin",,01-Apr-10,09-Dec-10
+Volle Maan,Mogensen,Sofie,Strijmeers 97,,Vlierzele,,,,053/828339,,,,,borstvoedingspakket (oker bak),FALSE,,,60,TRUE,676225796,"interesse depothouder, wijn & fruitsappen winkeltje natuurlijke fruitsappen en wijnen van Zuid Afrika, heeft 1 tussen pakket gehaden dan 2  grote pakketten tijdens de proef.
+
+109€ vanaf nov 2011:borstv. Fruit aard ajuin",,27-Oct-11,26-Apr-12
+Volle Maan,Mogensen,Sofie,Strijmeers 97,,Vlierzele,,,,053/828339,,,,,borstvoedingspakket (oker bak),FALSE,,,60,TRUE,676225796,"interesse depothouder, wijn & fruitsappen winkeltje natuurlijke fruitsappen en wijnen van Zuid Afrika, heeft 1 tussen pakket gehaden dan 2  grote pakketten tijdens de proef.
+
+109€ vanaf nov 2011:borstv. Fruit aard ajuin",,09-Dec-10,28-Apr-11
+Volle Maan,Mogensen,Sofie,Strijmeers 97,,Vlierzele,,,,053/828339,,,,,tweede aardappelpakket,TRUE,oneven,cash,60,TRUE,676225796,"interesse depothouder, wijn & fruitsappen winkeltje natuurlijke fruitsappen en wijnen van Zuid Afrika, heeft 1 tussen pakket gehaden dan 2  grote pakketten tijdens de proef.
+
+109€ vanaf nov 2011:borstv. Fruit aard ajuin",29-Aug-07,,28-Apr-11
+Volle Maan,Mogensen,Sofie,Strijmeers 97,,Vlierzele,,,,053/828339,,,,,groot pakket (RODE BAK),FALSE,,,60,TRUE,676225796,"interesse depothouder, wijn & fruitsappen winkeltje natuurlijke fruitsappen en wijnen van Zuid Afrika, heeft 1 tussen pakket gehaden dan 2  grote pakketten tijdens de proef.
+
+109€ vanaf nov 2011:borstv. Fruit aard ajuin",,01-May-12,02-Nov-12
+Volle Maan,Mogensen,Sofie,Strijmeers 97,,Vlierzele,,,,053/828339,,,,,klein pakket (GROENE BAK),FALSE,,,60,TRUE,676225796,"interesse depothouder, wijn & fruitsappen winkeltje natuurlijke fruitsappen en wijnen van Zuid Afrika, heeft 1 tussen pakket gehaden dan 2  grote pakketten tijdens de proef.
+
+109€ vanaf nov 2011:borstv. Fruit aard ajuin",,28-Apr-11,27-Oct-11
+Volle Maan,Mogensen,Sofie,Strijmeers 97,,Vlierzele,,,,053/828339,,,,,borstvoedingspakket (oker bak),FALSE,,,60,TRUE,676225796,"interesse depothouder, wijn & fruitsappen winkeltje natuurlijke fruitsappen en wijnen van Zuid Afrika, heeft 1 tussen pakket gehaden dan 2  grote pakketten tijdens de proef.
+
+109€ vanaf nov 2011:borstv. Fruit aard ajuin",02-Nov-12,,
+Volle Maan,Osselaer,Sabine,Stichelendries 22,9340,Oordegem,,063-0582527-77,De Backer - Osselaer,,,477225404,93664044,sabine.osselaer@gmail.com,fruitpakket,FALSE,,,114,TRUE,53807786749,,23-Mar-12,01-May-12,
+Volle Maan,Osselaer,Sabine,Stichelendries 22,9340,Oordegem,,063-0582527-77,De Backer - Osselaer,,,477225404,93664044,sabine.osselaer@gmail.com,aardappel pakket,TRUE,oneven,,114,TRUE,53807786749,,23-Mar-12,01-May-12,
+Volle Maan,Osselaer,Sabine,Stichelendries 22,9340,Oordegem,,063-0582527-77,De Backer - Osselaer,,,477225404,93664044,sabine.osselaer@gmail.com,groot pakket (RODE BAK),FALSE,,,114,TRUE,53807786749,,23-Mar-12,01-May-12,
+Volle Maan,Page-Duron,Johan - Johanna,Nieuwstraat 4,9860,Oosterzele,,,,09/3298491,,,,,klein pakket (GROENE BAK),FALSE,,Permanente opdr.,43,TRUE,390023108485,,06-Aug-09,03-Sep-09,
+Volle Maan,Page-Muys,Sofie,Potaardestraat 27,9090,Gontrode,,,,09/329 75 11,,,,sofie_page@hotmail.com,broodpakket,FALSE,,,56,TRUE,766222141332,,06-Oct-11,27-Oct-11,
+Volle Maan,Page-Muys,Sofie,Potaardestraat 27,9090,Gontrode,,,,09/329 75 11,,,,sofie_page@hotmail.com,klein pakket (GROENE BAK),FALSE,,,56,TRUE,766222141332,,06-Oct-11,27-Oct-11,
+Volle Maan,Pattyn-Claerhout Lode,,Yshoutestraat 13,9520,St Lievens-Houtem,,293-0238109-29,,053/621749,,,,,klein pakket (GROENE BAK),FALSE,,cash,49,TRUE,740828686639,,03-Oct-04,28-Oct-04,
+Volle Maan,Pattyn-Claerhout Lode,,Yshoutestraat 13,9520,St Lievens-Houtem,,293-0238109-29,,053/621749,,,,,aardappel pakket,TRUE,oneven,cash,49,TRUE,740828686639,,29-Apr-07,29-Apr-07,
+Volle Maan,Van Damme,Joke,EILAND 51,9520,Sint-Lievens-Houtem,,7370006788171,,0497/792851,,,,joke.vandamme @telenet.be,tussen pakket (GRIJZE BAK),FALSE,,,103,TRUE,400965511767,,,12-Sep-12,
+Volle Maan,Van Damme,Joke,EILAND 51,9520,Sint-Lievens-Houtem,,7370006788171,,0497/792851,,,,joke.vandamme @telenet.be,tussen pakket (GRIJZE BAK),FALSE,,,103,TRUE,400965511767,,,02-Sep-10,24-Feb-11
+Volle Maan,Van Damme,Joke,EILAND 51,9520,Sint-Lievens-Houtem,,7370006788171,,0497/792851,,,,joke.vandamme @telenet.be,aardappel pakket,TRUE,oneven,Permanente opdr.,103,TRUE,400965511767,,09-Jan-10,28-Feb-10,24-Feb-11
+Volle Maan,Van Damme,Joke,EILAND 51,9520,Sint-Lievens-Houtem,,7370006788171,,0497/792851,,,,joke.vandamme @telenet.be,tussen pakket (GRIJZE BAK),FALSE,,Permanente opdr.,103,TRUE,400965511767,,07-Apr-10,,02-Sep-10
+Volle Maan,Van Damme,Joke,EILAND 51,9520,Sint-Lievens-Houtem,,7370006788171,,0497/792851,,,,joke.vandamme @telenet.be,fruitpakket,FALSE,,,103,TRUE,400965511767,,,12-Sep-12,
+Volle Maan,Van Damme,Joke,EILAND 51,9520,Sint-Lievens-Houtem,,7370006788171,,0497/792851,,,,joke.vandamme @telenet.be,aardappel pakket,TRUE,oneven,,103,TRUE,400965511767,,,12-Sep-12,
+Volle Maan,Van Damme,Joke,EILAND 51,9520,Sint-Lievens-Houtem,,7370006788171,,0497/792851,,,,joke.vandamme @telenet.be,fruitpakket,FALSE,,Permanente opdr.,103,TRUE,400965511767,,14-Jan-10,,24-Feb-11
+Volle Maan,Van Durpe- Mampaert,Francois-Lea,st Fledericusstraat 11,9520,Vlierzele,,063-0650004-42,,053/621987,053/621987,,,,klein pakket (GROENE BAK),FALSE,,Permanente opdr.,43,FALSE,,"7/01,6/2,6/3,8/4,8/5,6/6 € 42,23,7/7,8/8,9/9,10/9",26-Nov-08,,
+Volle Maan,Van Rumst,Charlotte,Stichelendries 23B,9340,Oordegem,,613-9012530-94,Wittevrongel - Van Rumst,0472 58 69 39,,,,charlottevanrumst@skynet.be,fruitpakket,FALSE,,Permanente opdr.,86,TRUE,610833060747,,01-Mar-12,03-Apr-12,
+Volle Maan,Van Rumst,Charlotte,Stichelendries 23B,9340,Oordegem,,613-9012530-94,Wittevrongel - Van Rumst,0472 58 69 39,,,,charlottevanrumst@skynet.be,aardappel pakket,FALSE,,Permanente opdr.,86,TRUE,610833060747,,01-Mar-12,03-Apr-12,14-Mar-12
+Volle Maan,Van Rumst,Charlotte,Stichelendries 23B,9340,Oordegem,,613-9012530-94,Wittevrongel - Van Rumst,0472 58 69 39,,,,charlottevanrumst@skynet.be,klein pakket (GROENE BAK),FALSE,even,Permanente opdr.,86,TRUE,610833060747,,01-Mar-12,03-Apr-12,
+Volle Maan,Vandenbussche-Verreth,Sigrid-Pascal,Hauwerzele 81,9520,Sint-Lievens-Houtem,,737-1212851-06,,053/629163,053/629163,,,,klein pakket (GROENE BAK),FALSE,,cash,43,FALSE,740828685225,",8/01,8/2,7/3,8/4,8/5,8/6 € 32,23,8/7, stop fruit vanaf september 03,5/8, fruit en brood betaalt 51 €,groenten ok aug,9/9,10/10, geven pakket door tijdens vakantie
+
+brood,
+
+dubbel brood",,26-Jan-99,28-Apr-11
+Volle Maan,Vanheddegem-Bonte,Dirk - Christine,Yshoute 9,9520,Sint-Lievens-Houtem,,001-2368034-49,,053/629792,053/629792,,,,tussen pakket (GRIJZE BAK),TRUE,oneven,cash,27,TRUE,38332719371,"14/01,13/2,13/3,15/4,15/5,13/6 € 54,13/7,13/8,14/9,15/10,stop vanaf 1 juli tussenpakket",30-Jun-06,03-Jul-06,
+Volle Maan,Wullus,Riet,Wittinck 27,9520,Sint-Lievens-Houtem,,,,477500303,,,,riet.indigne@skynet.be,fruitpakket,FALSE,,,159.5,FALSE,,,22-Oct-12,01-Dec-12,01-Dec-12
+Volle Maan,Wullus,Riet,Wittinck 27,9520,Sint-Lievens-Houtem,,,,477500303,,,,riet.indigne@skynet.be,broodpakket,FALSE,,,159.5,FALSE,,,22-Oct-12,01-Dec-12,01-Dec-12
+Volle Maan,Wullus,Riet,Wittinck 27,9520,Sint-Lievens-Houtem,,,,477500303,,,,riet.indigne@skynet.be,aardappel pakket,TRUE,oneven,,159.5,FALSE,,,23-Oct-12,01-Dec-12,01-Dec-12
+Volle Maan,Wullus,Riet,Wittinck 27,9520,Sint-Lievens-Houtem,,,,477500303,,,,riet.indigne@skynet.be,groot pakket (RODE BAK),FALSE,,,159.5,FALSE,,,22-Oct-12,01-Dec-12,01-Dec-12
+Vollezele,Allard,Marie-Ange,Waarbekeplein 25,9506,Waarbeke,,443164447139,Allard,54326442,,,,sintamandus@gmail.com,groot pakket (RODE BAK),FALSE,,,78,FALSE,,,12-Mar-12,01-May-12,11-May-12
+Vollezele,Allard,Marie-Ange,Waarbekeplein 25,9506,Waarbeke,,443164447139,Allard,54326442,,,,sintamandus@gmail.com,fruitpakket,FALSE,,,78,FALSE,,,12-Mar-12,01-May-12,11-May-12
+Vollezele,Baptist -Verbelen,Sven,,,,,,,,,,,sven_verbelen@yahoo.com,klein pakket (GROENE BAK),FALSE,,,43,FALSE,,,09-Mar-12,01-May-12,04-May-12
+Vollezele,De Meyer,Lieve,Esdoornstraat 17,9400,Ninove,,,,054/338248,winkel 054/339147,,,fa910951@skynet.be,aardappel pakket,TRUE,oneven,,49,FALSE,,,04-Apr-12,01-May-12,
+Vollezele,De Meyer,Lieve,Esdoornstraat 17,9400,Ninove,,,,054/338248,winkel 054/339147,,,fa910951@skynet.be,klein pakket (GROENE BAK),FALSE,,,49,FALSE,,,04-Apr-12,01-May-12,
+Vollezele,Dury,Veerle,Huismanstraat 22,1570,Vollezele,,1332040069,Veerle Dury,494447450,,,,laveerle@hotmail.com,borstvoedingspakket (oker bak),FALSE,,,54,TRUE,38902178180,,,17-Apr-12,
+Vollezele,Dury,Veerle,Huismanstraat 22,1570,Vollezele,,1332040069,Veerle Dury,494447450,,,,laveerle@hotmail.com,borstvoedingspakket (oker bak),FALSE,,,54,TRUE,38902178180,,09-Mar-12,01-May-12,13-Apr-12
+Vollezele,Kiekens,Jozefien,Paulusstraat 15,1570,Galmaarden,,429-5078601-81,Kiekens Jozefien,0497/720933,,,,jozefien.kiekens@gmail.com,fruitpakket,FALSE,,,92,TRUE,400949182324,,06-Jul-12,07-Aug-12,
+Vollezele,Kiekens,Jozefien,Paulusstraat 15,1570,Galmaarden,,429-5078601-81,Kiekens Jozefien,0497/720933,,,,jozefien.kiekens@gmail.com,broodpakket,FALSE,,,92,TRUE,400949182324,,06-Jul-12,07-Aug-12,30-Nov-12
+Vollezele,Kiekens,Jozefien,Paulusstraat 15,1570,Galmaarden,,429-5078601-81,Kiekens Jozefien,0497/720933,,,,jozefien.kiekens@gmail.com,aardappel pakket,TRUE,oneven,,92,TRUE,400949182324,,06-Jul-12,07-Aug-12,
+Vollezele,Kiekens,Jozefien,Paulusstraat 15,1570,Galmaarden,,429-5078601-81,Kiekens Jozefien,0497/720933,,,,jozefien.kiekens@gmail.com,klein pakket (GROENE BAK),FALSE,,,92,TRUE,400949182324,,06-Jul-12,07-Aug-12,
+Vollezele,Meerts - De Smet,Patrick & Christel,Repingestraat 85,1570,Vollezele,,76428804398195,Meerts - De Smet,54567800,,474357573,,sales@2btranslated.be,groot pakket (RODE BAK),FALSE,,,71,TRUE,400930216295,,09-Mar-12,01-May-12,
+Vollezele,Meerts - De Smet,Patrick & Christel,Repingestraat 85,1570,Vollezele,,76428804398195,Meerts - De Smet,54567800,,474357573,,sales@2btranslated.be,aardappel pakket,TRUE,oneven,,71,TRUE,400930216295,,09-Mar-12,01-May-12,
+Vollezele,Rozeboom,Greet,Sint Leonardus 34,1570,Tollembeek,,,,0485 792259,,,,greet_rozeboom@hotmail.com,aardappel pakket,TRUE,oneven,,0,FALSE,,,13-Mar-12,01-May-12,14-May-12
+Vollezele,Rozeboom,Greet,Sint Leonardus 34,1570,Tollembeek,,,,0485 792259,,,,greet_rozeboom@hotmail.com,broodpakket,FALSE,,,0,FALSE,,,13-Mar-12,01-May-12,14-May-12
+Vollezele,Rozeboom,Greet,Sint Leonardus 34,1570,Tollembeek,,,,0485 792259,,,,greet_rozeboom@hotmail.com,groot pakket (RODE BAK),FALSE,,,0,FALSE,,,13-Mar-12,01-May-12,14-May-12
+Vollezele,Soetens,Sabine,'t Angereelstraat 73,9400,Ninove,,737013960969,Ottoy - Soetens,499588847,,,,sabine.soetens@skynet.be,klein pakket (GROENE BAK),FALSE,,,43,FALSE,,,09-Mar-12,01-May-12,04-Oct-12
+Vollezele,Toufik,Mina,Congobergstraat 9,1570,Vollezele,,63098769273,Mina Toufik,476709598,,,54558938,mina.toufik@shell.com,klein pakket (GROENE BAK),TRUE,oneven,,21.5,TRUE,53809487481,,09-Mar-12,01-May-12,
+Vollezele,Van de Voorde,Martine,Zeuningenstraat 8d,1570,Galmaarden,,1099196926,Martine Van de Voorde,477551890,,,,martine.van.de.voorde@skynet.be,klein pakket (GROENE BAK),FALSE,,,105,TRUE,38898950306,,09-Mar-12,01-May-12,
+Vollezele,Van de Voorde,Martine,Zeuningenstraat 8d,1570,Galmaarden,,1099196926,Martine Van de Voorde,477551890,,,,martine.van.de.voorde@skynet.be,broodpakket,FALSE,,,105,TRUE,38898950306,,09-Mar-12,01-May-12,
+Vollezele,Van de Voorde,Martine,Zeuningenstraat 8d,1570,Galmaarden,,1099196926,Martine Van de Voorde,477551890,,,,martine.van.de.voorde@skynet.be,aardappel pakket,TRUE,oneven,,105,TRUE,38898950306,,09-Mar-12,01-May-12,
+Vollezele,Van de Voorde,Martine,Zeuningenstraat 8d,1570,Galmaarden,,1099196926,Martine Van de Voorde,477551890,,,,martine.van.de.voorde@skynet.be,fruitpakket,FALSE,,,105,TRUE,38898950306,,09-Mar-12,01-May-12,
+Vollezele,Van de Weghe,Leen,Huismanstraat 4,1570,Vollezele,,63480595124,Leen Van de Weghe - Bart Van de Catsye,486658062,,,,vdwleen@gmail.com,aardappel pakket,TRUE,oneven,,118,FALSE,,,02-Nov-12,01-Dec-12,
+Vollezele,Van de Weghe,Leen,Huismanstraat 4,1570,Vollezele,,63480595124,Leen Van de Weghe - Bart Van de Catsye,486658062,,,,vdwleen@gmail.com,klein pakket (GROENE BAK),FALSE,,,118,FALSE,,,02-Nov-12,01-Dec-12,
+Vollezele,Van de Weghe,Leen,Huismanstraat 4,1570,Vollezele,,63480595124,Leen Van de Weghe - Bart Van de Catsye,486658062,,,,vdwleen@gmail.com,fruitpakket,FALSE,,,118,FALSE,,,02-Nov-12,01-Dec-12,
+Vollezele,Van Den Eynden - Mertens,Jessy,Van Cauwenberghelaan 23,1540,Herne,,734-0229156-51,Van den Eynden Noël - Mertens Jessy,0472 45 58 81,,,,,fruitpakket,FALSE,,,49,TRUE,400936208269,,23-Mar-12,01-May-12,02-May-12
+Vollezele,Van Den Eynden - Mertens,Jessy,Van Cauwenberghelaan 23,1540,Herne,,734-0229156-51,Van den Eynden Noël - Mertens Jessy,0472 45 58 81,,,,,klein pakket (GROENE BAK),FALSE,,,49,TRUE,400936208269,,23-Mar-12,01-May-12,
+Vollezele,Van Den Eynden - Mertens,Jessy,Van Cauwenberghelaan 23,1540,Herne,,734-0229156-51,Van den Eynden Noël - Mertens Jessy,0472 45 58 81,,,,,aardappel pakket,TRUE,oneven,,49,TRUE,400936208269,,,13-Aug-12,
+Vollezele,Van Herreweghe,Lut,,,,,,,26.2833333333,,,,lutvanherreweghe@gmail.com,fruitpakket,FALSE,,,0,FALSE,,"Voor 2 maanden fruit. Stort hiervoor € 80,00",04-May-12,04-May-12,27-Jun-12
+Vollezele,Van Oudenhove,Christine,,,,,,,0486 706 702,,,,,aardappel pakket,TRUE,oneven,,49,TRUE,400932348275,,09-Mar-12,01-May-12,
+Vollezele,Van Oudenhove,Christine,,,,,,,0486 706 702,,,,,klein pakket (GROENE BAK),FALSE,,,49,TRUE,400932348275,,09-Mar-12,01-May-12,
+Vollezele,Verbelen - Verpoorten,Karine,Bruinsbroekstraat 11A,1570,Galmaarden,,,,,,,,karineverpoorten@hotmail.com,tussen pakket (GRIJZE BAK),FALSE,,,54,FALSE,,,09-Mar-12,01-May-12,09-May-12
+Vollezele,Vermeiren,Niki,,,,,,,,,,,,klein pakket (GROENE BAK),FALSE,,,86,FALSE,,,23-Mar-12,01-May-12,23-Apr-12
+Vollezele,Vermeiren,Niki,,,,,,,,,,,,fruitpakket,FALSE,,,86,FALSE,,,23-Mar-12,01-May-12,01-May-12
+wereldwinkel,Baekelandt - Claeys,Mieke,Traveins 97,9620,Zottegem,,,,09/3601700,0477/257651,,,optiek.claeys@skynet.be,tussen pakket (GRIJZE BAK),FALSE,,Permanente opdr.,54,FALSE,,,28-Aug-09,30-Sep-09,
+wereldwinkel,Baele,Saskia,St Annastraat 4 bus 2,9620,Zottegem,,,,0471/69 77 31,09/361 24 61,,,,klein pakket (GROENE BAK),TRUE,oneven,Permanente opdr.,27,TRUE,400857389406,,05-Aug-09,,13-Aug-12
+wereldwinkel,Baele,Saskia,St Annastraat 4 bus 2,9620,Zottegem,,,,0471/69 77 31,09/361 24 61,,,,borstvoedingspakket (oker bak),TRUE,oneven,,27,TRUE,400857389406,,,15-Aug-12,
+wereldwinkel,Boriau-De Meurichy,Chris-Martine,Molenkouter 90,9620,Zottegem,,,,0499/31 54 00,0479/71 79 14,,,incapuma2@hotmail.com,groot pakket (RODE BAK),FALSE,,,65,FALSE,,,07-Jul-11,01-Sep-11,29-Dec-11
+wereldwinkel,Braem - Cordon Bueto,M. Victoria,Kamperstraat 9 bus 1,9630,Zwalm,,380-0108888-28,Victoria Bordon,09/332 58 60,,,,victoria.bordon@uzgent.be,fruitpakket,FALSE,oneven,,43,TRUE,380010888828,,,30-May-12,
+wereldwinkel,Braem - Cordon Bueto,M. Victoria,Kamperstraat 9 bus 1,9630,Zwalm,,380-0108888-28,Victoria Bordon,09/332 58 60,,,,victoria.bordon@uzgent.be,broodpakket,FALSE,,,43,TRUE,380010888828,,06-Feb-12,29-Mar-12,
+wereldwinkel,Braem - Cordon Bueto,M. Victoria,Kamperstraat 9 bus 1,9630,Zwalm,,380-0108888-28,Victoria Bordon,09/332 58 60,,,,victoria.bordon@uzgent.be,klein pakket (GROENE BAK),TRUE,even,,43,TRUE,380010888828,,30-Mar-12,30-Mar-12,22-Aug-12
+wereldwinkel,Braem - Cordon Bueto,M. Victoria,Kamperstraat 9 bus 1,9630,Zwalm,,380-0108888-28,Victoria Bordon,09/332 58 60,,,,victoria.bordon@uzgent.be,tussen pakket (GRIJZE BAK),FALSE,,,43,TRUE,380010888828,,06-Feb-12,29-Mar-12,30-Mar-12
+wereldwinkel,Buyle,Rosanne,Kastanjelaan 45 / 1,9620,Zottegem,,0635 0701 1153,Rosanne Buyle,474452378,,,,,fruitpakket,FALSE,,,108,FALSE,,,20-Mar-12,01-May-12,12-Jun-12
+wereldwinkel,Buyle,Rosanne,Kastanjelaan 45 / 1,9620,Zottegem,,0635 0701 1153,Rosanne Buyle,474452378,,,,,groot pakket (RODE BAK),FALSE,,,108,FALSE,,,20-Mar-12,01-May-12,12-Jun-12
+wereldwinkel,Campens,apotheek,Hoogstraat 9-11,9620,Zottegem,,,,09/360 00 08,,,,,borstvoedingspakket (oker bak),FALSE,,,54,FALSE,,,29-Dec-10,27-Jan-11,
+wereldwinkel,Cloet Lenssens,eveline,Kastanjelaan 17,9620,Zottegem,,063-9987082-94,,0495/67 45 32,,,,,groot pakket (RODE BAK),FALSE,,cash,43,TRUE,610824030855,"fruit, start na opendeur feest, kent ons via tango en Spl, ,7/01,6/2,6/3,8/4,8/5,4/06 € 54,7/7,8/8,9/9,9/10,",,29-Oct-02,01-Jul-10
+wereldwinkel,Cloet Lenssens,eveline,Kastanjelaan 17,9620,Zottegem,,063-9987082-94,,0495/67 45 32,,,,,klein pakket (GROENE BAK),FALSE,,,43,TRUE,610824030855,"fruit, start na opendeur feest, kent ons via tango en Spl, ,7/01,6/2,6/3,8/4,8/5,4/06 € 54,7/7,8/8,9/9,9/10,",,24-Feb-11,
+wereldwinkel,Cloet Lenssens,eveline,Kastanjelaan 17,9620,Zottegem,,063-9987082-94,,0495/67 45 32,,,,,klein pakket (GROENE BAK),FALSE,,,43,TRUE,610824030855,"fruit, start na opendeur feest, kent ons via tango en Spl, ,7/01,6/2,6/3,8/4,8/5,4/06 € 54,7/7,8/8,9/9,9/10,",,01-Jul-10,02-Sep-10
+wereldwinkel,Cloet Lenssens,eveline,Kastanjelaan 17,9620,Zottegem,,063-9987082-94,,0495/67 45 32,,,,,groot pakket (RODE BAK),FALSE,,,43,TRUE,610824030855,"fruit, start na opendeur feest, kent ons via tango en Spl, ,7/01,6/2,6/3,8/4,8/5,4/06 € 54,7/7,8/8,9/9,9/10,",,02-Sep-10,24-Feb-11
+wereldwinkel,De Coninck- Hertegonne,Jan,Provincieweg 525,9550,Hillegem,,979-3992741-32,,09/3604874,,,,"lieve,hertegonne@telenet,be",tussen pakket (GRIJZE BAK),TRUE,oneven,,33.5,FALSE,979838758601,,,28-Nov-08,01-Sep-11
+wereldwinkel,De Croo,Danka,Boerestraat 31,9860,Oosterzele,,063-9746454-26,Danka De Croo,0485/35 21 01,,,,dankadecroo@gmail.com,borstvoedingspakket (oker bak),FALSE,,,27,TRUE,53722309945,,19-Jan-11,24-Feb-11,02-Mar-11
+wereldwinkel,De Croo,Danka,Boerestraat 31,9860,Oosterzele,,063-9746454-26,Danka De Croo,0485/35 21 01,,,,dankadecroo@gmail.com,borstvoedingspakket (oker bak),TRUE,oneven,,27,TRUE,53722309945,,,03-Mar-11,
+wereldwinkel,De Meuleneire-Bauwens,Marc An,Vierwegenstraat 23,9620,Zottegem,,103-2255405-29,De Meuleneire-Bauwens,09/360 48 51,,,,anneke.bauwens@hotmail.com,klein pakket (GROENE BAK),FALSE,,,43,FALSE,,,03-Mar-11,28-Apr-11,
+wereldwinkel,De Meuleneire-Bauwens,Marc An,Vierwegenstraat 23,9620,Zottegem,,103-2255405-29,De Meuleneire-Bauwens,09/360 48 51,,,,anneke.bauwens@hotmail.com,aardappel pakket,TRUE,oneven,,43,FALSE,,,03-Mar-11,28-Apr-11,28-Jul-11
+wereldwinkel,De Paepe-Torrekens,Patrick,Wurmendries 19,9620,Zottegem,,671-3110199-62,,09/3604614,09/3604614,,,,groot pakket (RODE BAK),FALSE,,Permanente opdr.,65,FALSE,671311019962,,28-Aug-99,01-Oct-99,
+wereldwinkel,De Rocker,karen,Grotenbergestraat 30,9620,Zottegem,,390-0422672-01,,09/3605104,09/3605104,,,,groot pakket (RODE BAK),FALSE,,,32.5,FALSE,935045174673,",6/01,5/2,5/3,7/4,brood okéé, 5/6 € 54,7/6 54 €, 7/7, 7/8,8/9,8/10,
+brood: betalen 8 € en dat is te weinig in oktober
+Tegoed voor 2012: € 45,00",28-Apr-11,02-Jun-11,27-Oct-11
+wereldwinkel,De Rocker,karen,Grotenbergestraat 30,9620,Zottegem,,390-0422672-01,,09/3605104,09/3605104,,,,groot pakket (RODE BAK),TRUE,oneven,,32.5,FALSE,935045174673,",6/01,5/2,5/3,7/4,brood okéé, 5/6 € 54,7/6 54 €, 7/7, 7/8,8/9,8/10,
+brood: betalen 8 € en dat is te weinig in oktober
+Tegoed voor 2012: € 45,00",,27-Oct-11,30-Nov-12
+wereldwinkel,De Sutter - De Vuyst,Stefanie,Moortelbosstraat 53,9860,Oosterzele,,613-9956450-10,,477374968,,,,,klein pakket (GROENE BAK),FALSE,,Permanente opdr.,43,FALSE,610828751624,,04-Aug-10,31-Aug-10,26-Jan-11
+wereldwinkel,Demol - Demartelaere,hilde,Wurmendries 56,9620,Zottegem,,001-1856423-16,,0496/95 16 03,,,,,tussen pakket (GRIJZE BAK),TRUE,even,cash,48.5,TRUE,38334432029,"6 x groenten, fruit en brood  = 117 €, ppok op 31/10/3",21-Oct-03,25-Nov-03,
+wereldwinkel,Demol - Demartelaere,hilde,Wurmendries 56,9620,Zottegem,,001-1856423-16,,0496/95 16 03,,,,,fruitpakket,TRUE,even,cash,48.5,TRUE,38334432029,"6 x groenten, fruit en brood  = 117 €, ppok op 31/10/3",21-Oct-03,25-Nov-03,
+wereldwinkel,Dhaene,Caroline,Grotenbergestraat 1,9620,Zottegem,,103017613652,Dhaene,09/349 42 47,,,,floristiek.zottegem,groot pakket (RODE BAK),FALSE,,,114,FALSE,,,14-Apr-11,02-Jun-11,02-Jun-11
+wereldwinkel,Dhaene,Caroline,Grotenbergestraat 1,9620,Zottegem,,103017613652,Dhaene,09/349 42 47,,,,floristiek.zottegem,fruitpakket,FALSE,,,114,FALSE,,,14-Apr-11,02-Jun-11,02-Jun-11
+wereldwinkel,Dhaene,Caroline,Grotenbergestraat 1,9620,Zottegem,,103017613652,Dhaene,09/349 42 47,,,,floristiek.zottegem,aardappel pakket,TRUE,oneven,,114,FALSE,,,14-Apr-11,02-Jun-11,02-Jun-11
+wereldwinkel,Dierckxsens-Rogier,Christophe,Godveerdegemstraat 42,9620,Zottegem,,285-0378538-73,,0476/800574,0476/800574,,,,fruitpakket,FALSE,,Permanente opdr.,103,FALSE,740883517406,,08-Jan-08,31-Jan-08,30-Jun-11
+wereldwinkel,Dierckxsens-Rogier,Christophe,Godveerdegemstraat 42,9620,Zottegem,,285-0378538-73,,0476/800574,0476/800574,,,,aardappel pakket,TRUE,oneven,Permanente opdr.,103,FALSE,740883517406,,08-Jan-08,31-Jan-08,30-Jun-11
+wereldwinkel,Dierckxsens-Rogier,Christophe,Godveerdegemstraat 42,9620,Zottegem,,285-0378538-73,,0476/800574,0476/800574,,,,tussen pakket (GRIJZE BAK),FALSE,,Permanente opdr.,103,FALSE,740883517406,,25-Jun-08,25-Jun-08,30-Jun-11
+wereldwinkel,Douchy-Caprara,Frank,Haagkouter 10,9620,Zottegem,,,,09/3676663,,,,,aardappel pakket,TRUE,oneven,cash,54,TRUE,38332719472,"tegoed voor verlof 2012: € 25,00",07-Mar-07,11-Mar-07,03-Mar-11
+wereldwinkel,Douchy-Caprara,Frank,Haagkouter 10,9620,Zottegem,,,,09/3676663,,,,,borstvoedingspakket (oker bak),FALSE,,cash,54,TRUE,38332719472,"tegoed voor verlof 2012: € 25,00",07-Mar-07,11-Mar-07,
+wereldwinkel,Durieu,Amand,Erwetegemstraat 68,9620,Zottegem,,BE60737504354270,Durieu Amand,475427879,,,,,klein pakket (GROENE BAK),FALSE,,,43,TRUE,400969067425,,28-Sep-12,06-Nov-12,
+wereldwinkel,Elet,Viviane,Burg. Firmin Demeyerstraat 6,9620,Zottegem,,,,09/3612339,,,,,klein pakket (GROENE BAK),FALSE,,,54,FALSE,,,30-Nov-12,01-Jan-13,
+wereldwinkel,Everaert,Dieter,We,,,,,,0484/29 50 96,,,,deeverae@hotmail.com,broodpakket,FALSE,,,99,TRUE,53731055406,,,28-Apr-11,
+wereldwinkel,Everaert,Dieter,We,,,,,,0484/29 50 96,,,,deeverae@hotmail.com,klein pakket (GROENE BAK),FALSE,,,99,TRUE,53731055406,,28-Oct-10,02-Dec-10,28-Apr-11
+wereldwinkel,Everaert,Dieter,We,,,,,,0484/29 50 96,,,,deeverae@hotmail.com,fruitpakket,FALSE,,,99,TRUE,53731055406,,28-Oct-10,02-Dec-10,28-Apr-11
+wereldwinkel,Everaert,Dieter,We,,,,,,0484/29 50 96,,,,deeverae@hotmail.com,fruitpakket,FALSE,,,99,TRUE,53731055406,,,28-Apr-11,
+wereldwinkel,Everaert,Dieter,We,,,,,,0484/29 50 96,,,,deeverae@hotmail.com,klein pakket (GROENE BAK),FALSE,,,99,TRUE,53731055406,,,28-Apr-11,
+wereldwinkel,Goossens-D'Hoker,Nicola-Lia,Ooststraat 16,9620,Zottegem,,,,09/361 15 62,,0474/61 33 42,,,fruitpakket,FALSE,,,97,FALSE,861132549043,7/10/11 cfr tel. Ok betaling,04-Mar-10,01-Apr-10,13-Oct-11
+wereldwinkel,Goossens-D'Hoker,Nicola-Lia,Ooststraat 16,9620,Zottegem,,,,09/361 15 62,,0474/61 33 42,,,tussen pakket (GRIJZE BAK),FALSE,,,97,FALSE,861132549043,7/10/11 cfr tel. Ok betaling,04-Mar-10,01-Apr-10,13-Oct-11
+wereldwinkel,Kneuvels-Goossens,Ienke,Meileveld 22 bus 4,9620,Zottegem,,,,0472/43 62 60,,,,ienke_kneuvels@hotmail.com,broodpakket,FALSE,,,56,FALSE,,,,03-May-11,31-Oct-12
+wereldwinkel,Kneuvels-Goossens,Ienke,Meileveld 22 bus 4,9620,Zottegem,,,,0472/43 62 60,,,,ienke_kneuvels@hotmail.com,klein pakket (GROENE BAK),FALSE,,,56,FALSE,,,03-Mar-11,28-Apr-11,31-Oct-12
+wereldwinkel,Leenaert,Tom,Welzijnstraat 70a 1,9620,Zottegem,,361070987,Leenaert-Van Breusegem,479793702,,,,Tom.Leenaert@bpost.be,klein pakket (GROENE BAK),FALSE,,,43,TRUE,794537811,,06-Mar-12,25-Apr-12,03-Aug-12
+wereldwinkel,Persoon,Hans,,,,,,,0477/41 74 29,,,,,klein pakket (GROENE BAK),TRUE,oneven,,21.5,FALSE,,,24-Jun-10,29-Jul-10,13-Jan-11
+wereldwinkel,Rogier,Marijke,Beislovenstraat 89,9620,Zottegem,,,,09/360 13 77,,,,marijke.rogier@telenet.be,fruitpakket,FALSE,,,103,TRUE,740883517406,,20-Apr-12,05-Jun-12,
+wereldwinkel,Rogier,Marijke,Beislovenstraat 89,9620,Zottegem,,,,09/360 13 77,,,,marijke.rogier@telenet.be,tussen pakket (GRIJZE BAK),FALSE,,,103,TRUE,740883517406,,20-Apr-12,05-Jun-12,
+wereldwinkel,Rogier,Marijke,Beislovenstraat 89,9620,Zottegem,,,,09/360 13 77,,,,marijke.rogier@telenet.be,aardappel pakket,TRUE,oneven,,103,TRUE,740883517406,,20-Apr-12,05-Jun-12,
+wereldwinkel,Scheirlinck-Van Lancker,hilde,Welzijnsstraat 55,9620,Zottegem,,,,0497/616494,,,,,fruitpakket,FALSE,,Permanente opdr.,49,FALSE,,"In augustus 2012 geen betaling verschuldigd.
+In september 2012 zullen ze € 22,80 overschrijven i,p,v, € 49,00
+Dit om het openstaan tegoed met verlof te verrekenen.",20-May-09,26-May-09,
+wereldwinkel,Scheirlinck-Van Lancker,hilde,Welzijnsstraat 55,9620,Zottegem,,,,0497/616494,,,,,aardappel pakket,TRUE,oneven,Permanente opdr.,49,FALSE,,"In augustus 2012 geen betaling verschuldigd.
+In september 2012 zullen ze € 22,80 overschrijven i,p,v, € 49,00
+Dit om het openstaan tegoed met verlof te verrekenen.",13-Nov-09,13-Nov-09,
+wereldwinkel,Vankeirsbilck,Gwendolyn,Welzijnstraat 53 bus 2,9620,Zottegem,,,1412561183,0485/611043,,,,,fruitpakket,FALSE,,Permanente opdr.,86,TRUE,38832691828,,22-Jul-11,31-Aug-11,
+wereldwinkel,Vankeirsbilck,Gwendolyn,Welzijnstraat 53 bus 2,9620,Zottegem,,,1412561183,0485/611043,,,,,klein pakket (GROENE BAK),FALSE,,Permanente opdr.,86,TRUE,38832691828,,22-Jul-11,31-Aug-11,
+wereldwinkel,Vanpachtenbeke,Bart,Hospitaalstraat 15 bus 4,,zottegem,,,,0472/82 78 58,,,,pachtie@gmail.com,klein pakket (GROENE BAK),FALSE,,,43,FALSE,400805136213,,24-Jun-10,29-Jul-10,28-Jul-11
