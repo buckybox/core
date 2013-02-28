@@ -1262,8 +1262,6 @@ CREATE TABLE orders (
     account_id integer,
     active boolean DEFAULT false NOT NULL,
     extras_one_off boolean DEFAULT true,
-    extras_package_id integer,
-    extras_delivery_list_id integer,
     extras_packing_list_id integer
 );
 
@@ -3052,3 +3050,5 @@ INSERT INTO schema_migrations (version) VALUES ('20130220234725');
 INSERT INTO schema_migrations (version) VALUES ('20130222011927');
 
 INSERT INTO schema_migrations (version) VALUES ('20130227051525');
+
+INSERT INTO schema_migrations (version) VALUES ('20130228205052');

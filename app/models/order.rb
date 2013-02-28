@@ -18,7 +18,6 @@ class Order < ActiveRecord::Base
   has_many :extras, through: :order_extras
 
   belongs_to :extras_packing_list, class_name: PackingList
-  belongs_to :extras_delivery_list, class_name: DeliveryList
 
   has_one :schedule_rule, as: :scheduleable, inverse_of: :scheduleable, autosave: true, dependent: :destroy
 
@@ -187,7 +186,6 @@ class Order < ActiveRecord::Base
 
     original_order_extras.destroy_all
     self.extras_packing_list = nil
-    self.extras_delivery_list = nil
 
     collection.to_a.compact.each do |id, params|
       count = params[:count]
@@ -202,7 +200,7 @@ class Order < ActiveRecord::Base
     if date == Date.current || !extras_one_off?
       order_extras
     else
-      if next_occurrence < date
+      if extras_packing_list.present? || next_occurrence(distributor.beginning_of_green_zone) < date
         order_extras.none
       else
         order_extras
