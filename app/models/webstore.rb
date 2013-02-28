@@ -170,6 +170,7 @@ class Webstore
 
   def update_address(customer, address_information)
     address           = customer.address
+    address.phone_1   = address_information[:phone_1]
     address.address_1 = address_information[:street_address]
     address.address_2 = address_information[:street_address_2]
     address.suburb    = address_information[:suburb]
