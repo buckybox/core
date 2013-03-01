@@ -458,6 +458,7 @@ class Distributor < ActiveRecord::Base
       self.email.downcase!
     end
 
+
     self.support_email = self.email if self.support_email.blank?
   end
 
