@@ -17,6 +17,8 @@ class Order < ActiveRecord::Base
 
   has_many :extras, through: :order_extras
 
+  belongs_to :extras_packing_list, class_name: PackingList
+
   has_one :schedule_rule, as: :scheduleable, inverse_of: :scheduleable, autosave: true, dependent: :destroy
 
   scope :completed, where(completed: true)
@@ -48,10 +50,6 @@ class Order < ActiveRecord::Base
   before_validation :activate, if: :just_completed?
 
   default_scope order('created_at DESC')
-
-  scope :completed, where(completed: true)
-  scope :active,    where(active: true)
-  scope :inactive,  where(active: false)
 
   delegate :local_time_zone, to: :distributor, allow_nil: true
   delegate :start, :recurs?, :pause!, :remove_pause!, :paused?, :pause_date, :resume_date, :next_occurrence, :next_occurrences, :remove_day, :occurrences_between, to: :schedule_rule
@@ -186,7 +184,8 @@ class Order < ActiveRecord::Base
   def order_extras=(collection)
     raise "I wasn't expecting you to set these directly" unless collection.is_a?(Hash) || collection.is_a?(Array)
 
-    order_extras.destroy_all
+    original_order_extras.destroy_all
+    self.extras_packing_list = nil
 
     collection.to_a.compact.each do |id, params|
       count = params[:count]
@@ -201,7 +200,7 @@ class Order < ActiveRecord::Base
     if date == Date.current || !extras_one_off?
       order_extras
     else
-      if next_occurrence < date
+      if extras_packing_list.present? || next_occurrence(distributor.beginning_of_green_zone) < date
         order_extras.none
       else
         order_extras
@@ -280,17 +279,50 @@ class Order < ActiveRecord::Base
     return result_string
   end
 
-  def pack_and_update_extras
-    packed_extras = order_extras.collect(&:to_hash)
-    clear_extras if extras_one_off # Now that the extras are in a package, we don't need them on the order anymore, unless it recurs
+  alias_method :original_order_extras, :order_extras
+  def order_extras
+    if extras_delivered? && extras_one_off?
+      original_order_extras.none
+    else
+      original_order_extras
+    end
+  end
+
+  alias_method :original_extras, :extras
+  def extras
+    if extras_delivered? && extras_one_off?
+      original_extras.none
+    else
+      original_extras
+    end
+  end
+
+  def pack_and_update_extras(package)
+    return [] if extras_one_off? && extras_processed?
+
+    packed_extras = original_order_extras.collect(&:to_hash)
+    package.set_one_off_extra_order(self) if extras_one_off?
 
     return packed_extras
+  end
+
+  def extras_processed?
+    extras_packing_list.present?
+  end
+
+  def extras_delivered?
+    extras_packing_list.present? && extras_packing_list.packages.where(order_id:self.id).first.deliveries.any?(&:delivered?)
+  end
+
+  def set_extras_package!(package)
+    self.extras_packing_list = package.packing_list
+    save!
   end
 
   def clear_extras
     self.extras = []
   end
-
+  
   def extras_summary
     Package.extras_summary(order_extras)
   end
@@ -354,7 +386,7 @@ class Order < ActiveRecord::Base
   end
 
   def route_includes_schedule_rule
-    unless account.route.includes?(schedule_rule)
+    unless account.route.includes?(schedule_rule, {ignore_start: true})
       errors.add(:schedule_rule, "Route #{account.route.name}'s schedule '#{account.route.schedule_rule.inspect} doesn't include this order's schedule of '#{schedule_rule.inspect}'")
     end
   end

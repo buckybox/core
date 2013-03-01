@@ -32,6 +32,7 @@ class Package < ActiveRecord::Base
   before_validation :default_packing_method, if: 'status == "packed" && packing_method.nil?'
 
   before_save :archive_data
+  after_save :save_one_off_extra_order
 
   scope :originals, where(original_package_id: nil)
 
@@ -231,7 +232,15 @@ class Package < ActiveRecord::Base
     return result.upcase
   end
 
+  def set_one_off_extra_order(order)
+    @one_off_extra_order = order
+  end
+
   private
+
+  def delivery
+    deliveries.order("created_at DESC").first
+  end
 
   def archive_data
     if status != 'packed'
@@ -261,7 +270,11 @@ class Package < ActiveRecord::Base
 
   def archive_extras
     if archived_extras.blank?
-      self.archived_extras = order.pack_and_update_extras
+      self.archived_extras = order.pack_and_update_extras(self)
     end
+  end
+
+  def save_one_off_extra_order
+    @one_off_extra_order.set_extras_package!(self) if @one_off_extra_order.present?
   end
 end
