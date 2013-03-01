@@ -241,6 +241,10 @@ module Bucky
         [first_name, last_name].join(" ")
       end
 
+      def unique_string
+        [name, email].join(", ")
+      end
+
       def tags
         @tags || []
       end
