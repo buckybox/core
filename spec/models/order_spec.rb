@@ -345,7 +345,7 @@ describe Order do
       it "should not return extras if they don't recur and an order occurs before this one" do
         order = Order.create(@params.merge(extras_one_off: true))
         order.predicted_order_extras.size.should eq(2)
-        order.predicted_order_extras(order.next_occurrences(2, Date.current)[1]).size.should eq(0)
+        order.predicted_order_extras(order.next_occurrences(2, Date.current)[1]).size.should eq(2)
       end
 
       it "should return extras if they don't recur and an order doesn't occur before this one" do

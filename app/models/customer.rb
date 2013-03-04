@@ -136,6 +136,7 @@ class Customer < ActiveRecord::Base
     self.tag_list = c.tags.join(", ")
     self.save! # Blow up on error so transaction is aborted
 
+    self.account.currency = self.currency
     self.account.change_balance_to(c.account_balance, {description: "Inital CSV Import"})
     self.account.save! # Blow up on error so transaction is aborted
 
@@ -146,8 +147,12 @@ class Customer < ActiveRecord::Base
     c_boxes.each do |b|
       box = distributor.boxes.find_by_name(b.box_type)
       raise "Can't find Box '#{b.box_type}' for distributor with id #{id}" if box.blank?
-
-      delivery_date = Time.zone.parse(b.next_delivery_date)
+      
+      begin
+        delivery_date = Time.zone.parse(b.next_delivery_date.to_s)
+      rescue
+        binding.pry
+      end
       raise "Date couldn't be parsed from '#{b.delivery_date}'" if delivery_date.blank?
 
       order = self.orders.build({
@@ -199,6 +204,10 @@ class Customer < ActiveRecord::Base
       self.next_order_occurrence_date = nil
     end
     self
+  end
+
+  def calculate_next_order(date=Date.current.to_s(:db))
+    orders.active.select("orders.*, next_occurrence('#{date}', false, schedule_rules.*)").joins(:schedule_rule).reject{|sr| sr.next_occurrence.blank?}.sort_by(&:next_occurrence).first
   end
 
   def can_deactivate_orders?

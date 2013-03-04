@@ -222,13 +222,16 @@ module Bucky
 
       @@previous_numbers = []
 
+      def initialize(*args)
+        self.boxes ||= []
+      end
+
       def number=(n)
         @@previous_numbers << n
         @number = n
       end
 
       def add_box(box)
-        self.boxes ||= []
         self.boxes << box
       end
 
