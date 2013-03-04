@@ -136,7 +136,7 @@ class Customer < ActiveRecord::Base
     self.tag_list = c.tags.join(", ")
     self.save! # Blow up on error so transaction is aborted
 
-    self.account.currency = currency
+    self.account.currency = self.currency
     self.account.change_balance_to(c.account_balance, {description: "Inital CSV Import"})
     self.account.save! # Blow up on error so transaction is aborted
 
