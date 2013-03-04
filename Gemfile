@@ -64,10 +64,10 @@ group :development do
   gem 'spork-rails', '~> 3.2.0'
 
   # Pry: IRB + ruby debug alternative which is active and easier to install
-  gem 'pry-remote', '~> 0.1.6' # Needed for using pry in spork
-  gem 'pry-rails', '~> 0.2.1'
-  gem 'pry-nav', '~> 0.2.2'
-  gem 'pry-coolline', '~> 0.1.5'
+  gem 'pry-rails', '~> 0.2.2'
+  gem 'pry-coolline', '~> 0.2.1'
+  gem 'pry-debugger', '~> 0.2.1'
+  gem 'pry-remote', '~> 0.1.7' # Needed for using pry in spork
 end
 
 group :test do
