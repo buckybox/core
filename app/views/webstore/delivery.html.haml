@@ -32,7 +32,7 @@
                 %h4 When would you like it?
             = render partial: 'route', collection: @routes, locals: { g: g, frequencies: @order_frequencies, days: @days }
 
-  - if @webstore_order.box.extras_allowed?
+  - if @webstore_order.box.extras_allowed? && @webstore_order.extras.present?
     #webstore-extras-frequency.row-fluid
       .span10
         = f.simple_fields_for(:extra_frequency) do |g|
