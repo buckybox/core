@@ -1184,6 +1184,41 @@ ALTER SEQUENCE line_items_id_seq OWNED BY line_items.id;
 
 
 --
+-- Name: omni_importers; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE omni_importers (
+    id integer NOT NULL,
+    country_id integer,
+    "all" boolean,
+    rules text,
+    import_transaction_list character varying(255),
+    name character varying(255),
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: omni_importers_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE omni_importers_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: omni_importers_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE omni_importers_id_seq OWNED BY omni_importers.id;
+
+
+--
 -- Name: order_extras; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -1915,6 +1950,13 @@ ALTER TABLE ONLY line_items ALTER COLUMN id SET DEFAULT nextval('line_items_id_s
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
+ALTER TABLE ONLY omni_importers ALTER COLUMN id SET DEFAULT nextval('omni_importers_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
 ALTER TABLE ONLY order_extras ALTER COLUMN id SET DEFAULT nextval('order_extras_id_seq'::regclass);
 
 
@@ -2205,6 +2247,14 @@ ALTER TABLE ONLY invoices
 
 ALTER TABLE ONLY line_items
     ADD CONSTRAINT line_items_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: omni_importers_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY omni_importers
+    ADD CONSTRAINT omni_importers_pkey PRIMARY KEY (id);
 
 
 --
@@ -3055,3 +3105,5 @@ INSERT INTO schema_migrations (version) VALUES ('20130226231819');
 INSERT INTO schema_migrations (version) VALUES ('20130227051525');
 
 INSERT INTO schema_migrations (version) VALUES ('20130228205052');
+
+INSERT INTO schema_migrations (version) VALUES ('20130305134300');

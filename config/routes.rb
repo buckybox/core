@@ -196,5 +196,7 @@ BuckyBox::Application.routes.draw do
         get 'tag/:tag', action: :index, as: 'tag'
       end
     end
+
+    resources :omni_importers
   end
 end

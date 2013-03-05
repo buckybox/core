@@ -1,0 +1,14 @@
+= simple_form_for([:admin, @omni_importer], html: {class: 'form-horizontal'}) do |f|
+  = f.error_notification
+
+  .row-fluid
+    .span6
+      = f.input :name
+      = f.input :country_id, collection: Country.all
+      = f.input :rules, input_html: { class: 'span12' }
+      = f.input :import_transaction_list
+
+  .row-fluid
+    .span12.form-actions
+      = f.button :submit
+

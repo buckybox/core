@@ -1,0 +1,5 @@
+= link_to "New", new_admin_omni_importer_path
+
+%table#distributors.table.table-bordered
+  - @omni_importers.each do |omni_importer|
+    = render partial: 'admin/omni_importers/index', locals: {omni_importer: omni_importer}

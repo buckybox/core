@@ -133,8 +133,6 @@ EOY
     end
 
     class Rule
-      TYPES = [:merge, :not_blank, :negative, date_parse: [:format]]
-      
       attr_accessor :rules, :parent
 
       delegate :get, to: :parent
