@@ -95,6 +95,7 @@ class Webstore
       self.current_email = email
       @order.delivery_step
     elsif customer.valid_password?(password) && customer.distributor == @distributor
+      CustomerLogin.track(customer) unless @controller.current_admin.present?
       @controller.sign_in(customer)
       @order.delivery_step
     else
@@ -161,7 +162,8 @@ class Webstore
       CustomerMailer.raise_errors do
         customer.send_login_details
       end
-
+      
+      CustomerLogin.track(customer) unless @controller.current_admin.present?
       @controller.sign_in(customer)
     end
 
