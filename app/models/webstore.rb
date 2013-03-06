@@ -93,7 +93,6 @@ class Webstore
       @order.login_step
     elsif customer.nil?
       self.current_email = email
-      CustomerCheckout.track(customer) unless @controller.current_admin.present?
       @order.delivery_step
     elsif customer.valid_password?(password) && customer.distributor == @distributor
       CustomerLogin.track(customer) unless @controller.current_admin.present?
@@ -165,6 +164,7 @@ class Webstore
         customer.send_login_details
       end
       
+      CustomerCheckout.track(customer) unless @controller.current_admin.present?
       CustomerLogin.track(customer) unless @controller.current_admin.present?
       @controller.sign_in(customer)
     end
