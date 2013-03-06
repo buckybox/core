@@ -21,6 +21,12 @@ class Distributor < ActiveRecord::Base
   has_many :import_transaction_lists, dependent: :destroy
   has_many :import_transactions,      dependent: :destroy, through: :import_transaction_lists
 
+  #Metrics
+  has_many :distributor_metrics
+  has_many :distributor_logins
+  has_many :customer_logins
+  has_many :customer_checkouts
+
   belongs_to :country
 
   DEFAULT_TIME_ZONE               = 'Wellington'
@@ -440,6 +446,10 @@ class Distributor < ActiveRecord::Base
 
   def location
     [country.try(:full_name), city].reject(&:blank?).join(', ')
+  end
+
+  def mark_seen_recently!
+    touch(:last_seen_at) #No validations or callbacks are performed
   end
 
   private

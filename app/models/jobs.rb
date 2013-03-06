@@ -1,5 +1,5 @@
 class Jobs
-  def self.run_all
+  def self.run_hourly
     CronLog.log("Checking distributors for automatic daily list creation.")
     Distributor.create_daily_lists
 
@@ -11,5 +11,11 @@ class Jobs
 
     CronLog.log("Checking distributors if next order cache needs updating.")
     Distributor.update_next_occurrence_caches
+  end
+
+  def self.run_daily
+    CronLog.log("Running metrics.")
+    count = Metrics.calculate_and_store
+    CronLog.log("#{count} metrics calculated and stored.")
   end
 end
