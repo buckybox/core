@@ -96,7 +96,6 @@ class Webstore
       @order.delivery_step
     elsif customer.valid_password?(password) && customer.distributor == @distributor
       CustomerLogin.track(customer) unless @controller.current_admin.present?
-      CustomerCheckout.track(customer) unless @controller.current_admin.present?
       @controller.sign_in(customer)
       @order.delivery_step
     else
@@ -139,6 +138,7 @@ class Webstore
       @order.account = customer.account
 
       if @order.create_order
+        CustomerCheckout.track(customer) unless @controller.current_admin.present?
         @controller.flash[:notice] = 'Your order has been placed'
         @order.placed_step
       elsif @order.order
@@ -164,7 +164,6 @@ class Webstore
         customer.send_login_details
       end
       
-      CustomerCheckout.track(customer) unless @controller.current_admin.present?
       CustomerLogin.track(customer) unless @controller.current_admin.present?
       @controller.sign_in(customer)
     end
