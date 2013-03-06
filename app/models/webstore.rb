@@ -96,6 +96,7 @@ class Webstore
       @order.delivery_step
     elsif customer.valid_password?(password) && customer.distributor == @distributor
       CustomerLogin.track(customer) unless @controller.current_admin.present?
+      CustomerCheckout.track(customer) unless @controller.current_admin.present?
       @controller.sign_in(customer)
       @order.delivery_step
     else
