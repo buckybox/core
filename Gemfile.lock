@@ -13,6 +13,7 @@ GEM
     RubyInline (3.11.3)
       ZenTest (~> 4.3)
     ZenTest (4.8.2)
+    ace-rails-ap (2.0.0)
     actionmailer (3.2.12)
       actionpack (= 3.2.12)
       mail (~> 2.4.4)
@@ -351,6 +352,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  ace-rails-ap (~> 2.0.0)
   acts-as-taggable-on (~> 2.3.3)
   acts_as_list (~> 0.1.8)
   airbrake (~> 3.1.2)

@@ -33,6 +33,8 @@ gem 'analytical', '~> 3.0.12'
 gem 'newrelic_rpm', '~> 3.4.1'
 gem 'airbrake', '~> 3.1.2'
 
+gem 'ace-rails-ap', '~> 2.0.0'
+
 ########## THE GEMS ABOVE ARE THE ONLY ONES THAT RUN ON PRODUCTION ##########
 
 group :assets do

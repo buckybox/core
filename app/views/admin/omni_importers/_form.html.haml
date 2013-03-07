@@ -5,7 +5,6 @@
     .span6
       - if @omni_importer.import_transaction_list.present?
         = f.input :rules, as: :hidden
-        %script{src: "http://d1n0x3qji82z53.cloudfront.net/src-min-noconflict/ace.js"}<
         #aceeditor
 
         :javascript
