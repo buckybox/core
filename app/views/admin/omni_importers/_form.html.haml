@@ -48,9 +48,10 @@
       = f.input :import_transaction_list
       = f.input :remove_import_transaction_list, as: :boolean unless @omni_importer.import_transaction_list.blank?
       = f.input :import_transaction_list_cache, as: :hidden
-  .row-fluid
-    .span6.offset6
-      %i#omni-refresh.icon-refresh
+  - if @omni_importer.import_transaction_list.present?
+    .row-fluid
+      .span6.offset6
+        %i#omni-refresh.icon-refresh
   .row-fluid#test
     = render 'admin/omni_importers/test'
 
