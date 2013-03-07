@@ -64,6 +64,7 @@ class WebstoreController < ApplicationController
     @has_address = existing_customer?
 
     if @has_address
+      @customer_phone_number = @address.phone_1
       @street_address = @address.address_1
       @street_address_2 = @address.address_2
       @suburb = @address.suburb

@@ -8,7 +8,9 @@ class Customer::SessionsController < Devise::SessionsController
 
   def create
     analytical.event('customer_signed_in')
-    super
+    result = super
+    CustomerLogin.track(current_customer)
+    result
   end
 end
 

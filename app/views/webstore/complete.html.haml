@@ -25,7 +25,13 @@
               .span12
                 %h4 Your Name
             .row-fluid
-              .span12= g.input :name, label: false, placeholder: 'Enter your name', input_html: { value: @customer_name, class: 'span12' }, required: true
+              .span12= g.input :name, label: false, placeholder: 'Enter your name', input_html: { value: @customer_name, class: 'span12' }
+            - if @distributor.collect_phone_in_webstore?
+              .row-fluid
+                .span12
+                  %h4 Your Phone Number
+              .row-fluid
+                .span12= g.input :phone_1, label: false, placeholder: 'Enter your phone number', input_html: { value: @customer_phone_number, class: 'span12' }, required: true
             .row-fluid
               .span12
                 %h4 Deliver To

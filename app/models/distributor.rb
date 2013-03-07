@@ -21,6 +21,12 @@ class Distributor < ActiveRecord::Base
   has_many :import_transaction_lists, dependent: :destroy
   has_many :import_transactions,      dependent: :destroy, through: :import_transaction_lists
 
+  #Metrics
+  has_many :distributor_metrics
+  has_many :distributor_logins
+  has_many :customer_logins
+  has_many :customer_checkouts
+
   belongs_to :country
 
   DEFAULT_TIME_ZONE               = 'Wellington'
@@ -48,8 +54,7 @@ class Distributor < ActiveRecord::Base
     :time_zone, :currency, :bank_deposit, :paypal, :bank_deposit_format, :country_id, :consumer_delivery_fee,
     :consumer_delivery_fee_cents, :active_webstore, :about, :details, :facebook_url, :city, :customers_show_intro,
     :deliveries_index_packing_intro, :deliveries_index_deliveries_intro, :payments_index_intro, :customers_index_intro,
-    :customer_can_remove_orders, :parameter_name, :default_balance_threshold, :has_balance_threshold, :spend_limit_on_all_customers,
-    :send_email, :send_halted_email, :feature_spend_limit, :contact_name, :tag_list
+    :customer_can_remove_orders, :parameter_name, :default_balance_threshold, :has_balance_threshold, :spend_limit_on_all_customers, :send_email, :send_halted_email, :feature_spend_limit, :contact_name, :tag_list, :collect_phone_in_webstore
 
   validates_presence_of :country
   validates_presence_of :email
@@ -416,6 +421,10 @@ class Distributor < ActiveRecord::Base
     [country.try(:full_name), city].reject(&:blank?).join(', ')
   end
 
+  def mark_seen_recently!
+    touch(:last_seen_at) #No validations or callbacks are performed
+  end
+
   private
 
   def required_fields_for_webstore
@@ -431,6 +440,7 @@ class Distributor < ActiveRecord::Base
       self.email.strip!
       self.email.downcase!
     end
+
 
     self.support_email = self.email if self.support_email.blank?
   end

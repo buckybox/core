@@ -16,6 +16,7 @@ class ScheduleRule < ActiveRecord::Base
   after_save :record_schedule_transaction, if: :changed?
 
   validate :includes_dow_if_not_one_off
+  delegate :local_time_zone, to: :scheduleable, allow_nil: true
 
   DAYS.each do |day|
     default_value_for day, false
@@ -179,7 +180,9 @@ class ScheduleRule < ActiveRecord::Base
 
   # returns true if the given schedule_rule occurs on a subset of this schedule_rule's occurrences
   # Only tests pauses in a basic manner, so might return false negatives
-  def includes?(schedule_rule)
+  def includes?(schedule_rule, opts={})
+    opts = {ignore_start: false}.merge(opts)
+
     raise "Expecting a ScheduleRule, not #{schedule_rule.class}" unless schedule_rule.is_a?(ScheduleRule)
     case recur
     when :one_off
@@ -196,9 +199,9 @@ class ScheduleRule < ActiveRecord::Base
     else
       true
     end
-
-    too_soon = start > schedule_rule.start
-    return false if too_soon
+    
+    too_soon = (local_time_zone.present? ? start.to_datetime.in_time_zone(local_time_zone) : start) > schedule_rule.start
+    return false if !opts[:ignore_start] && too_soon
 
     if schedule_pause
       return false unless ((schedule_rule.one_off? && 

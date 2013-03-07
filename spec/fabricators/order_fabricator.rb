@@ -27,3 +27,8 @@ Fabricator(:active_recurring_order, from: :recurring_order) do
   completed true
   active true
 end
+
+Fabricator(:active_everyday_order, from: :recurring_order_everyday) do
+  completed true
+  active true
+end

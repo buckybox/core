@@ -1,5 +1,7 @@
 = simple_form_for(@form_params, html: { id: 'order-form' }) do |f|
   = f.error_notification
+  - if @order.has_yellow_deliveries?
+    .alert.alert-error This order has an impending delivery, changes made will only affect the deliveries on or after #{current_distributor.beginning_of_green_zone.to_s(:day_date_month)}.
 
   .row-fluid
     .span4

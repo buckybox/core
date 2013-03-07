@@ -593,6 +593,70 @@ ALTER SEQUENCE cron_logs_id_seq OWNED BY cron_logs.id;
 
 
 --
+-- Name: customer_checkouts; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE customer_checkouts (
+    id integer NOT NULL,
+    distributor_id integer,
+    customer_id integer,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: customer_checkouts_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE customer_checkouts_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: customer_checkouts_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE customer_checkouts_id_seq OWNED BY customer_checkouts.id;
+
+
+--
+-- Name: customer_logins; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE customer_logins (
+    id integer NOT NULL,
+    distributor_id integer,
+    customer_id integer,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: customer_logins_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE customer_logins_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: customer_logins_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE customer_logins_id_seq OWNED BY customer_logins.id;
+
+
+--
 -- Name: customers; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -802,6 +866,74 @@ ALTER SEQUENCE delivery_sequence_orders_id_seq OWNED BY delivery_sequence_orders
 
 
 --
+-- Name: distributor_logins; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE distributor_logins (
+    id integer NOT NULL,
+    distributor_id integer,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: distributor_logins_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE distributor_logins_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: distributor_logins_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE distributor_logins_id_seq OWNED BY distributor_logins.id;
+
+
+--
+-- Name: distributor_metrics; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE distributor_metrics (
+    id integer NOT NULL,
+    distributor_id integer,
+    distributor_logins integer,
+    new_customers integer,
+    deliveries_completed integer,
+    customer_payments integer,
+    webstore_checkouts integer,
+    customer_logins integer,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: distributor_metrics_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE distributor_metrics_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: distributor_metrics_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE distributor_metrics_id_seq OWNED BY distributor_metrics.id;
+
+
+--
 -- Name: distributors; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -863,7 +995,9 @@ CREATE TABLE distributors (
     send_halted_email boolean,
     feature_spend_limit boolean,
     contact_name character varying(255),
-    customer_can_remove_orders boolean DEFAULT true
+    customer_can_remove_orders boolean DEFAULT true,
+    collect_phone_in_webstore boolean,
+    last_seen_at timestamp without time zone
 );
 
 
@@ -1261,7 +1395,8 @@ CREATE TABLE orders (
     updated_at timestamp without time zone,
     account_id integer,
     active boolean DEFAULT false NOT NULL,
-    extras_one_off boolean DEFAULT true
+    extras_one_off boolean DEFAULT true,
+    extras_packing_list_id integer
 );
 
 
@@ -1815,6 +1950,20 @@ ALTER TABLE ONLY cron_logs ALTER COLUMN id SET DEFAULT nextval('cron_logs_id_seq
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
+ALTER TABLE ONLY customer_checkouts ALTER COLUMN id SET DEFAULT nextval('customer_checkouts_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY customer_logins ALTER COLUMN id SET DEFAULT nextval('customer_logins_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
 ALTER TABLE ONLY customers ALTER COLUMN id SET DEFAULT nextval('customers_id_seq'::regclass);
 
 
@@ -1844,6 +1993,20 @@ ALTER TABLE ONLY delivery_lists ALTER COLUMN id SET DEFAULT nextval('delivery_li
 --
 
 ALTER TABLE ONLY delivery_sequence_orders ALTER COLUMN id SET DEFAULT nextval('delivery_sequence_orders_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY distributor_logins ALTER COLUMN id SET DEFAULT nextval('distributor_logins_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY distributor_metrics ALTER COLUMN id SET DEFAULT nextval('distributor_metrics_id_seq'::regclass);
 
 
 --
@@ -2094,6 +2257,22 @@ ALTER TABLE ONLY cron_logs
 
 
 --
+-- Name: customer_checkouts_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY customer_checkouts
+    ADD CONSTRAINT customer_checkouts_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: customer_logins_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY customer_logins
+    ADD CONSTRAINT customer_logins_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: customers_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -2131,6 +2310,22 @@ ALTER TABLE ONLY delivery_lists
 
 ALTER TABLE ONLY delivery_sequence_orders
     ADD CONSTRAINT delivery_sequence_orders_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: distributor_logins_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY distributor_logins
+    ADD CONSTRAINT distributor_logins_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: distributor_metrics_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY distributor_metrics
+    ADD CONSTRAINT distributor_metrics_pkey PRIMARY KEY (id);
 
 
 --
@@ -3045,3 +3240,19 @@ INSERT INTO schema_migrations (version) VALUES ('20130218060217');
 INSERT INTO schema_migrations (version) VALUES ('20130219014308');
 
 INSERT INTO schema_migrations (version) VALUES ('20130220234725');
+
+INSERT INTO schema_migrations (version) VALUES ('20130222011927');
+
+INSERT INTO schema_migrations (version) VALUES ('20130226231819');
+
+INSERT INTO schema_migrations (version) VALUES ('20130227051525');
+
+INSERT INTO schema_migrations (version) VALUES ('20130228205052');
+
+INSERT INTO schema_migrations (version) VALUES ('20130306001542');
+
+INSERT INTO schema_migrations (version) VALUES ('20130306002347');
+
+INSERT INTO schema_migrations (version) VALUES ('20130306003517');
+
+INSERT INTO schema_migrations (version) VALUES ('20130306003632');
