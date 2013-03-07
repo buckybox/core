@@ -115,9 +115,9 @@ EOY
       attr_accessor :responses
 
       def initialize(rhash)
-        self.column_names = OmniImport.convert_to_symbols(rhash[:columns].split(' '))
+        self.column_names = parse_columns(rhash)
         self.bank_name = rhash[:name]
-        self.options = OmniImport.convert_to_symbols(rhash[:options])
+        self.options = parse_options(rhash)
         self.rhash = rhash.except(:columns, :name, :options)
         self.responses = {}
         load_responses
@@ -162,6 +162,28 @@ EOY
 
       def has_option?(name)
         options.include?(name)
+      end
+
+      def parse_columns(rhash)
+        return [] if rhash.blank?
+        if rhash[:columns].present?
+          if rhash[:columns].is_a?(Symbol)
+            [rhash[:columns]]
+          else
+            OmniImport.convert_to_symbols(rhash[:columns].split(' '))
+          end
+        else
+          []
+        end
+      end
+
+      def parse_options(rhash)
+        return {} if rhash.blank?
+        if rhash[:options].present?
+          OmniImport.convert_to_symbols(rhash[:options])
+        else
+          {}
+        end
       end
     end
 

@@ -43,8 +43,11 @@ class Admin::OmniImportersController < Admin::BaseController
     @rules = rules
     begin
       @test_importer = Bucky::TransactionImports::OmniImport.new(@omni_importer.rows, YAML.load(@rules))
-    rescue Psych::SyntaxError, StandardError => ex
+    rescue StandardError => ex
       @error_message = "#{ex.to_s}\n#{ex.backtrace}"
+    rescue Psych::SyntaxError => ex
+      @error_message = "YAML syntax is wrong
+#{ex.message}"
     end
   end
 end
