@@ -53,13 +53,38 @@ EOY
     end
 
     def process
-      start = rules.has_option?(:no_header) ? 0 : 1
-      rows[start..-1].collect do |row|
+      not_header_rows.collect do |row|
         begin
           rules.process(row)
         rescue Exception => e
           raise "Issue on row: (#{row}) | #{e.message}"
         end
+      end
+    end
+
+    def header_row
+      header? ? rows[0] : []
+    end
+
+    def not_header_rows
+      start = header? ? 1 : 0
+      rows[start..-1]
+    end
+
+    def header?
+      !rules.has_option?(:no_header)
+    end
+
+    def process_row(row, keys=[])
+      if keys.blank?
+        rules.process(row)
+      else
+        processed = rules.process(row)
+        returned_row = []
+        keys.each do |key|
+          returned_row << processed[key]
+        end
+        returned_row
       end
     end
 

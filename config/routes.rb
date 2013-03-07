@@ -197,6 +197,10 @@ BuckyBox::Application.routes.draw do
       end
     end
 
-    resources :omni_importers
+    resources :omni_importers do
+      member do
+        post 'test'
+      end
+    end
   end
 end

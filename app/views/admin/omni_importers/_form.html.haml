@@ -3,10 +3,45 @@
 
   .row-fluid
     .span6
+      - if @omni_importer.import_transaction_list.present?
+        = f.input :rules, as: :hidden
+        %script{src: "http://d1n0x3qji82z53.cloudfront.net/src-min-noconflict/ace.js"}
+        #aceeditor= @omni_importer.rules
+        :javascript
+          var editor = ace.edit("aceeditor");
+          editor.setTheme("ace/theme/chrome");
+          editor.getSession().setMode("ace/mode/yaml");
+          editor.getSession().setTabSize(2);
+          editor.getSession().setUseSoftTabs(true);
+          document.getElementById('aceeditor').style.fontSize='12px';
+          var textarea = $('#omni_importer_rules');
+          var updateOmniImportTimeout;
+          editor.getSession().on('change', function(){
+            textarea.val(editor.getSession().getValue());
+            clearTimeout(updateOmniImportTimeout);
+            updateOmniImportTimeout = setTimeout(updateOmniImport, 500);
+          });
+
+          test_url = '#{test_admin_omni_importer_url(@omni_importer)}';
+          function updateOmniImport(){
+            $.post(test_url,
+            {rules: editor.getSession().getValue()},
+            function(data, textStatus, jqXHR){
+              $('#test').html(data);
+              $('#test').show('highlight');
+            });
+          }
+      - else
+        .alert You must have an example file uploaded before adding the definition.
+    .span6
       = f.input :name
       = f.input :country_id, collection: Country.all
-      = f.input :rules, input_html: { class: 'span12' }
       = f.input :import_transaction_list
+      = f.input :remove_import_transaction_list, as: :boolean unless @omni_importer.import_transaction_list.blank?
+      = f.input :import_transaction_list_cache, as: :hidden
+  %br
+  .row-fluid#test
+    = render 'admin/omni_importers/test'
 
   .row-fluid
     .span12.form-actions

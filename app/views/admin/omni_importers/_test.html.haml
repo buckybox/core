@@ -1,0 +1,21 @@
+.span12
+  - if @error_message
+    = simple_format @error_message
+  - else
+    %table.table.table-striped.omni_import
+      - if @test_importer.header?
+        %tr
+          - @test_importer.header_row.each do |column|
+            %th= column
+          %th DATE
+          %th DESC
+          %th AMOUNT
+      - @test_importer.not_header_rows.each do |row|
+        %tr
+          - row.each do |column|
+            %td= column
+          - begin
+            - @test_importer.process_row(row, [:DATE, :DESC, :AMOUNT]).each do |output|
+              %td= output
+          - rescue StandardError => ex
+            %td= ex.message
