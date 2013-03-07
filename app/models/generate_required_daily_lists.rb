@@ -11,43 +11,62 @@ class GenerateRequiredDailyLists
     @window_end_at     = args[:window_end_at]
     @packing_lists     = args[:packing_lists]
     @delivery_lists    = args[:delivery_lists]
+    @successful        = false
   end
 
   def generate
-    start_date = window_start_from
-    end_date   = window_end_at
+    @successful = true
+    (start_date..end_date).each { |date| update_lists(date) }
+    @successful
+  end
 
-    newest_list_date = packing_lists.last.date if packing_lists.last
+  def last_list
+    @last_list ||= packing_lists.last
+  end
 
-    successful = true # assume all is good with the world
+  def last_list_date
+    @last_list_date ||= last_list.date if last_list
+  end
 
-    if newest_list_date && (newest_list_date > end_date)
-      # Only need to delete the difference
-      start_date = end_date + 1.day
-      end_date = newest_list_date
+  def packing_list_is_longer?
+    @packing_list_is_longer ||= last_list_date && (last_list_date > window_end_at)
+  end
 
-      (start_date..end_date).each do |date|
-        # Seek and destroy (http://youtu.be/wLBpLz5ELPI?t=3m10s) the lists that are now out of range
-        packing_list = packing_lists.find_by_date(date)
-        successful &= packing_list.destroy unless packing_list.nil?
-
-        delivery_list = delivery_lists.find_by_date(date)
-        successful &= delivery_list.destroy unless delivery_list.nil?
-      end
-    else
-      # Only generate the lists that don't exist yet
-      start_date = newest_list_date unless newest_list_date.nil?
-
-      unless start_date == end_date # the packing list already exists so don't boher generating
-        (start_date..end_date).each do |date|
-          packing_list  = PackingList.generate_list(distributor, date)
-          delivery_list = DeliveryList.generate_list(distributor, date)
-
-          successful &= packing_list.date == date && delivery_list.date == date
-        end
+  def start_date
+    @start_date ||= begin
+      if packing_list_is_longer?
+        window_end_at + 1.day
+      else
+        last_list_date ? last_list_date : window_start_from
       end
     end
+  end
 
-    return successful
+  def end_date
+    @end_date ||= packing_list_is_longer? ? last_list_date : window_end_at
+  end
+
+  def update_lists(date)
+    packing_list_is_longer? ? destroy_unneeded_lists(date) : create_needed_lists(date)
+  end
+
+  def destroy_unneeded_lists(date)
+    lists_array = [packing_lists, delivery_lists]
+    lists_array.each { |lists| destroy_list_by_date(lists, date) }
+  end
+
+  def destroy_list_by_date(lists, date)
+    list = lists.find_by_date(date)
+    @successful &= list.destroy unless list.nil?
+  end
+
+  def create_needed_lists(date)
+    class_array = [PackingList, DeliveryList]
+    class_array.each { |list_class| create_list_by_date(list_class, date) }
+  end
+
+  def create_list_by_date(list_class, date)
+    list = list_class.generate_list(distributor, date)
+    @successful &= list.date == date
   end
 end
