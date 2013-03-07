@@ -32,6 +32,8 @@ Spork.prefork do
   counter = -1
 
   RSpec.configure do |config|
+    config.order = 'random'
+
     config.mock_with :rspec
     config.use_transactional_fixtures = false
     config.infer_base_class_for_anonymous_controllers = false
