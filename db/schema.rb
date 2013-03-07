@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121119005042) do
+ActiveRecord::Schema.define(:version => 20130220234725) do
 
   create_table "accounts", :force => true do |t|
     t.integer  "customer_id"
@@ -135,7 +135,7 @@ ActiveRecord::Schema.define(:version => 20121119005042) do
     t.string   "last_name"
     t.integer  "distributor_id"
     t.integer  "route_id"
-    t.string   "encrypted_password",         :limit => 128, :default => "",  :null => false
+    t.string   "encrypted_password",         :limit => 128, :default => "",    :null => false
     t.string   "reset_password_token"
     t.datetime "reset_password_sent_at"
     t.datetime "remember_created_at"
@@ -152,12 +152,14 @@ ActiveRecord::Schema.define(:version => 20121119005042) do
     t.string   "unlock_token"
     t.datetime "locked_at"
     t.string   "authentication_token"
-    t.decimal  "discount",                                  :default => 0.0, :null => false
+    t.decimal  "discount",                                  :default => 0.0,   :null => false
     t.integer  "number"
     t.text     "notes"
     t.text     "special_order_preference"
     t.integer  "next_order_id"
     t.date     "next_order_occurrence_date"
+    t.integer  "balance_threshold_cents"
+    t.boolean  "status_halted",                             :default => false
   end
 
   add_index "customers", ["authentication_token"], :name => "index_customers_on_authentication_token", :unique => true
@@ -253,7 +255,7 @@ ActiveRecord::Schema.define(:version => 20121119005042) do
     t.string   "parameter_name"
     t.integer  "invoice_threshold_cents",                          :default => 0,     :null => false
     t.decimal  "bucky_box_percentage",                                                :null => false
-    t.boolean  "separate_bucky_fee",                               :default => true
+    t.boolean  "separate_bucky_fee",                               :default => false
     t.string   "support_email"
     t.string   "time_zone"
     t.integer  "advance_hour"
@@ -276,6 +278,13 @@ ActiveRecord::Schema.define(:version => 20121119005042) do
     t.boolean  "deliveries_index_deliveries_intro",                :default => true,  :null => false
     t.boolean  "payments_index_intro",                             :default => true,  :null => false
     t.boolean  "customers_index_intro",                            :default => true,  :null => false
+    t.boolean  "has_balance_threshold",                            :default => false
+    t.integer  "default_balance_threshold_cents",                  :default => 0
+    t.boolean  "send_email",                                       :default => true
+    t.boolean  "send_halted_email"
+    t.boolean  "feature_spend_limit"
+    t.string   "contact_name"
+    t.boolean  "customer_can_remove_orders",                       :default => true
   end
 
   add_index "distributors", ["authentication_token"], :name => "index_distributors_on_authentication_token", :unique => true
@@ -315,10 +324,11 @@ ActiveRecord::Schema.define(:version => 20121119005042) do
     t.string   "name"
     t.string   "unit"
     t.integer  "distributor_id"
-    t.integer  "price_cents",    :default => 0, :null => false
+    t.integer  "price_cents",    :default => 0,     :null => false
     t.string   "currency"
-    t.datetime "created_at",                    :null => false
-    t.datetime "updated_at",                    :null => false
+    t.datetime "created_at",                        :null => false
+    t.datetime "updated_at",                        :null => false
+    t.boolean  "hidden",         :default => false
   end
 
   create_table "import_transaction_lists", :force => true do |t|
@@ -447,6 +457,9 @@ ActiveRecord::Schema.define(:version => 20121119005042) do
     t.decimal  "archived_customer_discount",           :default => 0.0, :null => false
     t.text     "archived_extras"
     t.integer  "archived_consumer_delivery_fee_cents", :default => 0
+    t.string   "archived_substitutions"
+    t.string   "archived_exclusions"
+    t.text     "archived_address_details"
   end
 
   add_index "packages", ["order_id"], :name => "index_packages_on_order_id"
@@ -525,10 +538,11 @@ ActiveRecord::Schema.define(:version => 20121119005042) do
     t.boolean  "sat"
     t.boolean  "sun"
     t.integer  "schedule_pause_id"
-    t.datetime "created_at",        :null => false
-    t.datetime "updated_at",        :null => false
+    t.datetime "created_at",                           :null => false
+    t.datetime "updated_at",                           :null => false
     t.integer  "scheduleable_id"
     t.string   "scheduleable_type"
+    t.boolean  "halted",            :default => false
   end
 
   create_table "schedule_transactions", :force => true do |t|

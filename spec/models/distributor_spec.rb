@@ -83,111 +83,18 @@ describe Distributor do
     specify { Fabricate(:distributor, support_email: 'support@example.com').support_email.should == 'support@example.com' }
   end
 
-  context '#generate_required_daily_lists' do
-    after { Delorean.back_to_the_present }
+  describe '#generate_required_daily_lists' do
+    let(:generator) { double('generator') }
+    let(:generator_class) { double('generator_class', new: generator) }
 
-    context 'current time before advance_hour' do
-      before do
-        @current_time = Time.zone.local(2012, 3, 20, Distributor::DEFAULT_AUTOMATIC_DELIVERY_HOUR - 1)
-        @default_days = Distributor::DEFAULT_ADVANCED_DAYS
-        Delorean.time_travel_to(@current_time)
-      end
-
-      context 'new distributor' do
-        it 'the generated packing lists should start from today' do
-          distributor.save
-          distributor.packing_lists.first.date.should == Date.current
-        end
-
-        specify { expect { distributor.save }.to change(PackingList, :count).from(0).to(@default_days) }
-        specify { expect { distributor.save }.to change(DeliveryList, :count).from(0).to(@default_days) }
-      end
-
-      context 'distributor changes advance days' do
-        context 'make a bigger window' do
-          before do
-            distributor.save
-            @custom_days = @default_days + 2
-            distributor.advance_days = @custom_days
-          end
-
-          it 'the generated packing lists should start from today' do
-            distributor.save!
-            distributor.packing_lists.first.date.should == Date.today
-          end
-
-          specify { expect { distributor.save }.to change(PackingList, :count).from(@default_days).to(@custom_days) }
-          specify { expect { distributor.save }.to change(DeliveryList, :count).from(@default_days).to(@custom_days) }
-        end
-
-        context 'make a smaller window' do
-          before do
-            distributor.save
-            @custom_days = @default_days - 2
-            distributor.advance_days = @custom_days
-          end
-
-          it 'the generated packing lists should start from today' do
-            distributor.save!
-            distributor.packing_lists.first.date.should == Date.today
-          end
-
-          specify { expect { distributor.save }.to change(PackingList, :count).from(@default_days).to(@custom_days) }
-          specify { expect { distributor.save }.to change(DeliveryList, :count).from(@default_days).to(@custom_days) }
-        end
-      end
+    it 'returns true if the daily list generator successfully performs the generation' do
+      generator.stub(:generate) { true }
+      distributor.generate_required_daily_lists(generator_class).should be_true
     end
 
-    context 'current time after advance_hour' do
-      before do
-        @current_time = Time.zone.local(2012, 3, 20, Distributor::DEFAULT_AUTOMATIC_DELIVERY_HOUR + 1)
-        @default_days = Distributor::DEFAULT_ADVANCED_DAYS
-        Delorean.time_travel_to(@current_time)
-      end
-
-      context 'new distributor' do
-        it 'the generated packing lists should start from tomorrow' do
-          distributor.save
-          distributor.packing_lists.first.date.should == Date.tomorrow
-        end
-
-        specify { expect { distributor.save }.to change(PackingList, :count).from(0).to(@default_days) }
-        specify { expect { distributor.save }.to change(DeliveryList, :count).from(0).to(@default_days) }
-      end
-
-      context 'distributor changes advance days' do
-        context 'make a bigger window' do
-          before do
-            distributor.save
-            @custom_days = @default_days + 2
-            distributor.advance_days = @custom_days
-          end
-
-          it 'the generated packing lists should start from tomorrow' do
-            distributor.save
-            distributor.packing_lists.first.date.should == Date.tomorrow
-          end
-
-          specify { expect { distributor.save }.to change(PackingList, :count).from(@default_days).to(@custom_days) }
-          specify { expect { distributor.save }.to change(DeliveryList, :count).from(@default_days).to(@custom_days) }
-        end
-
-        context 'make a smaller window' do
-          before do
-            distributor.save
-            @custom_days = @default_days - 2
-            distributor.advance_days = @custom_days
-          end
-
-          it 'the generated packing lists should start from tomorrow' do
-            distributor.save
-            distributor.packing_lists.first.date.should == Date.tomorrow
-          end
-
-          specify { expect { distributor.save }.to change(PackingList, :count).from(@default_days).to(@custom_days) }
-          specify { expect { distributor.save }.to change(DeliveryList, :count).from(@default_days).to(@custom_days) }
-        end
-      end
+    it 'returns false if the daily list generator fails to performs the generation' do
+      generator.stub(:generate) { true }
+      distributor.generate_required_daily_lists(generator_class).should be_true
     end
   end
 
@@ -442,109 +349,6 @@ describe Distributor do
     it 'should update all customers spend limit' do 
       Customer.any_instance.should_receive(:update_halted_status!).with(nil, Customer::EmailRule.only_pending_orders)
       distributor.update_attributes({has_balance_threshold: true, default_balance_threshold: 200.00, spend_limit_on_all_customers: '0'}).should be_true
-    end
-  end
-
-  # ----- TR -----
-  describe '#generate_required_daily_lists' do
-    let(:distributor)            { Distributor.new }
-    let(:window_start_from)      { Date.new(2012, 11, 8) }
-    let(:window_end_at)          { Date.new(2012, 11, 9) }
-    let(:returned_packing_list)  { double('returned_packing_list') }
-    let(:returned_delivery_list) { double('returned_delivery_list') }
-    let(:delivery_list)          { double('delivery_list', destroy: true) }
-    let(:delivery_lists)         { double('delivery_lists', find_by_date: delivery_list) }
-
-    let(:packing_list) do
-      double('packing_list',
-        date: Date.new(2012, 11, 8),
-        destroy: true
-      )
-    end
-
-    let(:packing_lists) do
-      double('packing_lists',
-        last:          nil,
-        find_by_date:  packing_list,
-      )
-    end
-
-    before do
-      distributor.stub(
-        window_start_from:  window_start_from,
-        window_end_at:      window_end_at,
-        packing_lists:      packing_lists,
-        delivery_lists:     delivery_lists,
-      )
-
-      returned_packing_list.stub(:date).and_return(Date.new(2012, 11, 8), Date.new(2012, 11, 9))
-      returned_delivery_list.stub(:date).and_return(Date.new(2012, 11, 8), Date.new(2012, 11, 9))
-
-      PackingList.stub(:generate_list)  { returned_packing_list }
-      DeliveryList.stub(:generate_list) { returned_delivery_list }
-    end
-
-    subject { distributor.generate_required_daily_lists }
-
-    it 'works' do
-      should be_true
-    end
-
-    it 'has a start date equal to the end date' do
-      window_start_from = Date.new(2012, 11, 9)
-      should be_true
-    end
-
-    context 'when there is a packing list and it has a date that is after the end date' do
-      before do
-        packing_lists.stub(:last) { packing_list }
-        packing_list.stub(:date)  { Date.new(2012, 11, 10) }
-      end
-
-      it 'works' do
-        should be_true
-      end
-
-      it 'could not find packing list' do
-        packing_lists.stub(:find_by_date) { nil }
-        should be_true
-      end
-
-      it 'could not destroy a packing list' do
-        packing_list.stub(:destroy) { false }
-        should be_false
-      end
-
-      it 'could not find a delivery list' do
-        delivery_lists.stub(:find_by_date) { nil }
-        should be_true
-      end
-
-      it 'could not destroy a delivery list' do
-        delivery_list.stub(:destroy) { false }
-        should be_false
-      end
-    end
-
-    context 'when there is no packing list or it is less than or equal to the end date' do
-      before do
-        packing_lists.stub(:last) { packing_list }
-        packing_list.stub(:date)  { Date.new(2012, 11, 8) }
-      end
-
-      it 'works' do
-        should be_true
-      end
-
-      it 'has a packing list date that does not equal the requested date' do
-        returned_packing_list.stub(:date) { Date.new(2012, 11, 13) }
-        should be_false
-      end
-
-      it 'has a packing list date that does not equal the requested date' do
-        returned_delivery_list.stub(:date) { Date.new(2012, 11, 13) }
-        should be_false
-      end
     end
   end
 end

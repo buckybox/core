@@ -160,8 +160,8 @@ class Distributor < ActiveRecord::Base
     window_start_from + days_to_generate.days
   end
 
-  def generate_required_daily_lists
-    generator = GenerateRequiredDailyLists.new(
+  def generate_required_daily_lists(generator_class = GenerateRequiredDailyLists)
+    generator = generator_class.new(
       distributor:        self,
       window_start_from:  window_start_from,
       window_end_at:      window_end_at,

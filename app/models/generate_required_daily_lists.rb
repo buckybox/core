@@ -20,6 +20,8 @@ class GenerateRequiredDailyLists
     @successful
   end
 
+  private
+
   def last_list
     @last_list ||= packing_lists.last
   end
@@ -35,7 +37,7 @@ class GenerateRequiredDailyLists
   def start_date
     @start_date ||= begin
       if packing_list_is_longer?
-        window_end_at + 1.day
+        window_end_at + 1
       else
         last_list_date ? last_list_date : window_start_from
       end
