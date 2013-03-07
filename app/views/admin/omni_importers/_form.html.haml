@@ -35,6 +35,7 @@
         .alert You must have an example file uploaded before adding the definition.
     .span6
       = f.input :name
+      = f.input :global, hint: "E.g paypal"
       = f.input :country_id, collection: Country.all
       = f.input :import_transaction_list
       = f.input :remove_import_transaction_list, as: :boolean unless @omni_importer.import_transaction_list.blank?
