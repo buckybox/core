@@ -1,16 +1,6 @@
 %tr
-  %td Name
-  %td Global
-  %td Country
-  %td File uploaded
-  %td Actions
-%tr
   %td
     = link_to omni_importer.name, edit_admin_omni_importer_path(omni_importer)
   %td= checkmark_boolean(omni_importer.global?)
   %td= omni_importer.country.full_name unless omni_importer.global?
   %td= checkmark_boolean(omni_importer.import_transaction_list.present?)
-  %td
-    = link_to 'Show', admin_omni_importer_path(omni_importer)
-    |
-    = link_to 'Edit', edit_admin_omni_importer_path(omni_importer)

@@ -1,13 +1,28 @@
-.span12
-  - if @error_message
-    = simple_format @error_message
-  - else
+- if @error_message
+  .span6
     %table.table.table-striped.omni_import
+      - @omni_importer.rows.each do |row|
+        %tr
+          - row.each do |column|
+            %th= column
+  .span6
+    = simple_format @error_message
+- elsif @test_importer.present?
+  .span12
+    %table.table.table-striped.omni_import
+      %tr
+        - @test_importer.column_names.each do |column|
+          %th= column
+        - @test_importer.empty_column_count.times do
+          %th
+        %th.border_left DATE
+        %th DESC
+        %th AMOUNT
       - if @test_importer.header?
         %tr
           - @test_importer.header_row.each do |column|
             %th= column
-          %th DATE
+          %th.border_left DATE
           %th DESC
           %th AMOUNT
       - @test_importer.not_header_rows.each do |row|
@@ -15,7 +30,17 @@
           - row.each do |column|
             %td= column
           - begin
-            - @test_importer.process_row(row, [:DATE, :DESC, :AMOUNT]).each do |output|
-              %td= output
+            - @test_importer.process_row(row, [:DATE, :DESC, :AMOUNT]).each_with_index do |output, index|
+              %td{class: index == 0 ? 'border_left' : ''}= output
           - rescue StandardError => ex
             %td= ex.message
+- elsif @omni_importer.import_transaction_list.present?
+  .span6
+    %table.table.table-striped.omni_import
+      - @omni_importer.rows.each do |row|
+        %tr
+          - if row.is_a?(Array)
+            - row.each do |column|
+              %th= column
+          - else
+            = row

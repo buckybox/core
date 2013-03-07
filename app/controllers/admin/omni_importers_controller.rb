@@ -20,7 +20,7 @@ class Admin::OmniImportersController < Admin::BaseController
 
   def edit
     @omni_importer = OmniImporter.find(params[:id])
-    get_test_importer(@omni_importer.rules)
+    get_test_importer(@omni_importer.rules) unless @omni_importer.rules.blank?
   end
 
   def update

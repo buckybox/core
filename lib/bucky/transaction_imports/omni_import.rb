@@ -75,6 +75,14 @@ EOY
       !rules.has_option?(:no_header)
     end
 
+    def longest_row_length
+      rows.collect{|r| r.size}.max
+    end
+
+    def empty_column_count
+      longest_row_length - column_names.size
+    end
+
     def process_row(row, keys=[])
       if keys.blank?
         rules.process(row)
@@ -164,6 +172,7 @@ EOY
 
       def self.create(rhash, parent)
         return RuleDirect.new(rhash, parent) if rhash.is_a?(Symbol)
+        return RuleBlank.new if rhash.blank?
 
         rhash.each do |key, value|
           case key
@@ -222,8 +231,14 @@ EOY
     class RuleDateParse < Rule
       attr_accessor :format
       def initialize(rhash, parent)
-        self.format = rhash[:format].to_s
-        super(rhash.except(:format), parent)
+        if rhash.is_a?(Symbol)
+          super(rhash, parent)
+        elsif rhash.is_a?(Array)
+          super(rhash.first, parent)
+        else
+          self.format = rhash[:format].to_s
+          super(rhash.except(:format), parent)
+        end
       end
 
       def process(row)
@@ -269,6 +284,15 @@ EOY
         else
           "-#{result}"
         end
+      end
+    end
+
+    class RuleBlank < Rule
+      def initialize
+      end
+
+      def process(row)
+        ""
       end
     end
   end

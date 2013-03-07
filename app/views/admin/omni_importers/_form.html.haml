@@ -5,16 +5,18 @@
     .span6
       - if @omni_importer.import_transaction_list.present?
         = f.input :rules, as: :hidden
-        %script{src: "http://d1n0x3qji82z53.cloudfront.net/src-min-noconflict/ace.js"}
-        #aceeditor= @omni_importer.rules
+        %script{src: "http://d1n0x3qji82z53.cloudfront.net/src-min-noconflict/ace.js"}<
+        #aceeditor
         :javascript
           var editor = ace.edit("aceeditor");
+          var textarea = $('#omni_importer_rules');
+          editor.setValue("#{escape_javascript(@omni_importer.rules)}");
+          textarea.val(editor.getSession().getValue());
           editor.setTheme("ace/theme/chrome");
           editor.getSession().setMode("ace/mode/yaml");
           editor.getSession().setTabSize(2);
           editor.getSession().setUseSoftTabs(true);
           document.getElementById('aceeditor').style.fontSize='12px';
-          var textarea = $('#omni_importer_rules');
           var updateOmniImportTimeout;
           editor.getSession().on('change', function(){
             textarea.val(editor.getSession().getValue());
