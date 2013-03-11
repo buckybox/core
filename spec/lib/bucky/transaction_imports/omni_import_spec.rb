@@ -131,4 +131,11 @@ describe Bucky::TransactionImports::OmniImport do
     :debt_amount=>nil,
     :credit_amount=>"10"}}])
   end
+
+  it 'should skip the correct rows' do
+    Bucky::TransactionImports::OmniImport.test2.process.each do |row|
+      row[:DESC].should_not eq("Opening Balance")
+      row[:DESC].should_not eq("Closing Balance")
+    end
+  end
 end

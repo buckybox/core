@@ -24,8 +24,44 @@ module Bucky::TransactionImports
 EOY
     end
 
+    def self.test_yaml2
+      <<EOF
+        columns: date desc debit credit balance
+        DATE:
+          date
+        DESC:
+          desc
+        AMOUNT:
+          not_blank:
+            - negative: debit
+            - credit
+        options:
+          - header:
+        skip:
+          - when:
+              blank:
+                - date
+                - credit
+                - debit
+              match:
+                - desc: Closing Balance
+          - when:
+              blank:
+                - date
+                - credit
+                - debit
+              match:
+                - desc: Opening Balance
+
+EOF
+    end
+
     def self.test_file
       File.new(File.join(Rails.root, "spec/support/test_upload_files/transaction_imports/uk_lloyds_tsb.csv"))
+    end
+
+    def self.test_file2
+      File.new(File.join(Rails.root, "spec/support/test_upload_files/transaction_imports/st_george_au.csv"))
     end
 
     def self.test_rows
@@ -39,10 +75,13 @@ EOY
     def self.test
       OmniImport.new(test_rows, test_hash)
     end
+
+    def self.test2
+      OmniImport.new(CSV.read(test_file2), YAML.load(test_yaml2))
+    end
     
     attr_accessor :rows, :rules
     attr_accessor :column_names
-    OPTIONS = [:no_header]
 
     def initialize(rows, rules)
       self.rows = rows
@@ -81,7 +120,7 @@ EOY
     def not_header_rows
       start = header? ? 1 : 0
       start += option_value(:skip) if rules.has_option?(:skip)
-      rows[start..-1]
+      rows[start..-1].reject{|row| rules.skip?(row)}
     end
 
     def cleaned_rows
@@ -127,22 +166,35 @@ EOY
     end
 
     class Rules
-      attr_accessor :rhash
       attr_accessor :column_names, :options
-      attr_accessor :responses
+      attr_accessor :rhash, :responses
+      attr_accessor :shash, :skip_rules
 
       def initialize(rhash)
         self.column_names = parse_columns(rhash)
         self.options = parse_options(rhash)
-        self.rhash = rhash.except(:columns, :name, :options)
+        self.rhash = rhash.except(:columns, :name, :options, :skip)
+        self.shash = rhash[:skip]
         self.responses = {}
+        self.skip_rules = []
         load_responses
+        load_skip
       end
 
       def load_responses
         self.rhash.each do |response, rule_hash|
           responses.merge!(response.to_sym => Rule.create(rule_hash, self))
         end
+      end
+
+      def load_skip
+        shash.each do |r|
+          self.skip_rules << SkipRule.new(r[:when], self) unless r[:when].blank?
+        end
+      end
+
+      def skip?(row)
+        skip_rules.present? && skip_rules.any?{|r| r.skip?(row)}
       end
 
       def process(row)
@@ -339,6 +391,43 @@ EOY
 
       def process(row)
         ""
+      end
+    end
+
+    class SkipRule
+      attr_accessor :blanks, :matches, :parent
+
+      delegate :get, to: :parent
+      
+      def initialize(shash, parent)
+        self.blanks = shash[:blank]
+        self.matches = shash[:match].inject({}){|result, element| result.merge(element)}
+        self.parent = parent
+      end
+
+      def get(row, column_name_or_number)
+        parent.get(row, column_name_or_number)
+      end
+      
+      def to_s
+        {blanks: blanks, matches: matches}.inspect
+      end
+
+      def skip?(row)
+        if blanks.blank?
+          if matches.blank?
+            return false
+          else
+            matches.all?{|column, text| get(row, column) == text}
+          end
+        else
+          if matches.blank?
+            blanks.all?{|column| get(row, column).blank?}
+          else
+            matches.all?{|column, text| get(row, column) == text} &&
+              blanks.all?{|column| get(row, column).blank?}
+          end
+        end
       end
     end
   end
