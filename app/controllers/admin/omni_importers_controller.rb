@@ -42,7 +42,7 @@ class Admin::OmniImportersController < Admin::BaseController
   def get_test_importer(rules)
     @rules = rules
     begin
-      @test_importer = Bucky::TransactionImports::OmniImport.new(@omni_importer.rows, YAML.load(@rules))
+      @test_importer = Bucky::TransactionImports::OmniImport.new(@omni_importer.test_rows, YAML.load(@rules))
     rescue StandardError => ex
       @error_message = "#{ex.to_s}\n#{ex.backtrace}"
     rescue Psych::SyntaxError => ex

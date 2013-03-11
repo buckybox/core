@@ -62,13 +62,32 @@ EOY
       end
     end
 
+    def bucky_rows
+      not_header_rows.collect.with_index do |row, index|
+        begin
+          create_bucky_row(rules.process(row), index)
+        rescue Exception => e
+          raise "Issue on row: (#{row}) | #{e.message}"
+        end
+      end
+    end
+
+    def create_bucky_row(row, index)
+      Bucky::TransactionImports::Row.new(row[:DATE], row[:DESC], row[:AMOUNT], index, row[:raw_data], self)
+    end
+
     def header_row
       header? ? rows[0] : []
     end
 
     def not_header_rows
       start = header? ? 1 : 0
+      start += option_value(:skip) if rules.has_option?(:skip)
       rows[start..-1]
+    end
+
+    def cleaned_rows
+      header_row + not_header_rows
     end
 
     def header?
@@ -130,7 +149,11 @@ EOY
       end
 
       def process(row)
-        responses.inject({}){|result, (k,v)| result[k] = v.process(row); result}
+        responses.inject({}){|result, (k,v)| result[k] = v.process(row); result}.merge(raw_data: raw_data(row))
+      end
+
+      def raw_data(row)
+        column_names.inject({}){|result, element| result.merge(element => get(row, element))}
       end
 
       def get(row, column_name_or_number)
@@ -162,6 +185,10 @@ EOY
 
       def has_option?(name)
         options.include?(name)
+      end
+
+      def option_value(name)
+        options[name]
       end
 
       def parse_columns(rhash)

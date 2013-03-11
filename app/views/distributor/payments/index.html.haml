@@ -18,10 +18,17 @@
           - if @import_transaction_list.csv_parser.present? && !@import_transaction_list.csv_parser.rows.reject(&:valid?).size.zero?
             %span.error= @import_transaction_list.csv_parser.rows.find(&:invalid?).errors.full_messages.join(', ')
 
-          - if current_distributor.available_csv_formats_select.size == 1
-            = f.input :file_format, as: :hidden, input_html: { value: current_distributor.available_csv_formats_select.first.last }
+          - if current_distributor.omni_importers.count.zero?
+            - if current_distributor.available_csv_formats_select.size == 1
+              = f.input :file_format, as: :hidden, input_html: { value: current_distributor.available_csv_formats_select.first.last }
+            - else
+              = f.input :file_format, as: :select, collection: current_distributor.available_csv_formats_select, include_blank: false
           - else
-            = f.input :file_format, as: :select, collection: current_distributor.available_csv_formats_select, include_blank: false
+            - if current_distributor.omni_importers.count == 1
+              = f.input :omni_importer_id, as: :hidden, input_html: { value: current_distributor.omni_importers.first.id}
+            - else
+              = f.association :omni_importer, collection: current_distributor.omni_importers, label: "File format", include_blank: false
+
 
           = f.input :csv_file, label: 'Import transactions', input_html: { class: 'auto_submit' }
         .ajax_loader_gif

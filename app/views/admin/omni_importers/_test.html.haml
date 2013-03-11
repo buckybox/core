@@ -1,7 +1,7 @@
 - if @error_message
   .span6
     %table.table.table-striped.omni_import
-      - @omni_importer.rows.each do |row|
+      - @omni_importer.test_rows.each do |row|
         %tr
           - row.each do |column|
             %th= column
@@ -37,7 +37,7 @@
 - elsif @omni_importer.import_transaction_list.present?
   .span6
     %table.table.table-striped.omni_import
-      - @omni_importer.rows.each do |row|
+      - @omni_importer.test_rows.each do |row|
         %tr
           - if row.is_a?(Array)
             - row.each do |column|
