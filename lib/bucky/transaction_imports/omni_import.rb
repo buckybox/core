@@ -188,6 +188,7 @@ EOF
       end
 
       def load_skip
+        return if shash.blank?
         shash.each do |r|
           self.skip_rules << SkipRule.new(r[:when], self) unless r[:when].blank?
         end
