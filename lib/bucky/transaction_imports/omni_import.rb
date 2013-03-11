@@ -2,8 +2,7 @@ module Bucky::TransactionImports
   class OmniImport
     def self.test_yaml
       <<EOY
-        columns: date trans_type sort_code account_number description debt_amount credit_amount
-        name: Lloyds TSB
+        columns: date trans_type sort_code account_number description debt_amount credit_amount empty blank none
         DATE:
           date_parse:
             c0:
@@ -42,14 +41,13 @@ EOY
     end
     
     attr_accessor :rows, :rules
-    attr_accessor :column_names, :bank_name
+    attr_accessor :column_names
     OPTIONS = [:no_header]
 
     def initialize(rows, rules)
       self.rows = rows
       self.rules = Rules.new(OmniImport.convert_to_symbols(rules))
       self.column_names = self.rules.column_names
-      self.bank_name = self.rules.bank_name
     end
 
     def process
@@ -130,12 +128,11 @@ EOY
 
     class Rules
       attr_accessor :rhash
-      attr_accessor :column_names, :bank_name, :options
+      attr_accessor :column_names, :options
       attr_accessor :responses
 
       def initialize(rhash)
         self.column_names = parse_columns(rhash)
-        self.bank_name = rhash[:name]
         self.options = parse_options(rhash)
         self.rhash = rhash.except(:columns, :name, :options)
         self.responses = {}
@@ -153,7 +150,7 @@ EOY
       end
 
       def raw_data(row)
-        column_names.inject({}){|result, element| result.merge(element => get(row, element))}
+        column_names.reject{|cn| [:blank, :empty, :none].include?(cn)}.inject({}){|result, element| result.merge(element => get(row, element))}
       end
 
       def get(row, column_name_or_number)
