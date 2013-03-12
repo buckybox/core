@@ -9,7 +9,7 @@ gem 'pg', '~> 0.14.0'
 gem 'haml-rails', '~> 0.3.4'
 gem 'jquery-rails', '~> 2.1.1'
 gem 'bootstrap-sass', '~> 2.1.0.0'
-gem 'select2-rails', '~> 3.1.1'
+gem 'select2-rails', '~> 3.2.1'
 gem 'ember-rails', '~> 0.7.0'
 
 gem 'json', '~> 1.7.7'
@@ -32,6 +32,8 @@ gem 'postmark-rails', '~> 0.4.1'
 gem 'analytical', '~> 3.0.12'
 gem 'newrelic_rpm', '~> 3.4.1'
 gem 'airbrake', '~> 3.1.2'
+
+gem 'ace-rails-ap', '~> 2.0.0'
 
 ########## THE GEMS ABOVE ARE THE ONLY ONES THAT RUN ON PRODUCTION ##########
 

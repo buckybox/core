@@ -1,0 +1,6 @@
+%tr
+  %td= link_to omni_importer.name, edit_admin_omni_importer_path(omni_importer)
+  %td= omni_importer.payment_type
+  %td= omni_importer.tag_list
+  %td= omni_importer.country.blank? ? '' : omni_importer.country.full_name
+  %td= checkmark_boolean(omni_importer.import_transaction_list.present?)
