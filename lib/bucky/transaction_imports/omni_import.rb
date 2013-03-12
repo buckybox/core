@@ -197,7 +197,7 @@ EOF
       end
 
       def skip?(row)
-        skip_rules.present? && skip_rules.any?{|r| r.skip?(row)}
+        skip_rules.present? && skip_rules.any?{|r| r.skip?(row)} rescue false
       end
 
       def process(row)
@@ -404,7 +404,7 @@ EOF
       delegate :get, to: :parent
       
       def initialize(shash, parent)
-        self.blanks = shash[:blank]
+        self.blanks = shash[:blank] if shash[:blank].is_a?(Array)
         self.matches = shash[:match].inject({}){|result, element| result.merge(element)} unless shash[:match].blank?
         self.parent = parent
       end
