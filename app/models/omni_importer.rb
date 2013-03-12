@@ -19,7 +19,7 @@ class OmniImporter < ActiveRecord::Base
   end
 
   def select_label
-    [[name], [[country.try(:name), country.try(:full_name)].uniq, tags].flatten.compact.join(", ")].join(' - ')
+    [[name], [payment_type, [country.try(:name), country.try(:full_name)].uniq, tags].flatten.compact.join(", ")].join(' - ')
   end
 
   def import(csv_path)
