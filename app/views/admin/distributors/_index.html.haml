@@ -45,6 +45,8 @@
           %span.label paypal
         - if distributor.active_webstore?
           %span.label webstore
+        - distributor.omni_importers.includes(:country).each do |omni_importer|
+          %span.label.label-success{title: omni_importer.payment_type}= omni_importer.tag_name
       .span5
         %small
           Next delivery:

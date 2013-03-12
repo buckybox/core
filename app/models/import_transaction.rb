@@ -47,6 +47,7 @@ class ImportTransaction < ActiveRecord::Base
   delegate :account, to: :import_transaction_list
   delegate :currency, to: :distributor
 
+
   def self.new_from_row(row, import_transaction_list, distributor)
     match_result = row.single_customer_match(distributor)
 
@@ -151,11 +152,15 @@ class ImportTransaction < ActiveRecord::Base
 
   def payment_type
     if matched?
-      case account
-      when 'Paypal'
-        'Paypal'
+      if import_transaction_list.has_payment_type?
+        import_transaction_list.payment_type
       else
-        'Bank Deposit'
+        case account
+        when 'Paypal'
+          'PayPal'
+        else
+          'Bank Deposit'
+        end
       end
     else
       ''

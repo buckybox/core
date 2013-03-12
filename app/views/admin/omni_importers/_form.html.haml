@@ -43,7 +43,8 @@
     .span6
       = f.input :name
       = f.input :country_id, collection: Country.all
-      = f.input :tag_list, as: :string, hint: "bank_deposit, credit_card, paypal, etc.."
+      = f.input :tag_list, as: :string
+      = f.input :payment_type, hint: "Bank Deposit, Credit Card, PayPal, Direct Debit, etc.."
       = f.input :import_transaction_list
       = f.input :remove_import_transaction_list, as: :boolean unless @omni_importer.import_transaction_list.blank?
       = f.input :import_transaction_list_cache, as: :hidden

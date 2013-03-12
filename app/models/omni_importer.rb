@@ -1,5 +1,5 @@
 class OmniImporter < ActiveRecord::Base
-  attr_accessible :global, :country_id, :import_transaction_list, :name, :rules, :remove_import_transaction_list, :import_transaction_list_cache, :tag_list
+  attr_accessible :global, :country_id, :import_transaction_list, :name, :rules, :remove_import_transaction_list, :import_transaction_list_cache, :tag_list, :payment_type
 
   mount_uploader :import_transaction_list, ImportTransactionListUploader
 
@@ -47,12 +47,12 @@ class OmniImporter < ActiveRecord::Base
     name
   end
 
-  def format_type
-    ['bank_deposit', 'credit_card', 'paypal'].each do |format|
-      return format.titleize if tags.any?{|t| t.name == format}
-    end
+  def tag_name
+    [name, country.try(:full_name)].compact.join(' - ')
+  end
 
-    ''
+  def format_type
+    payment_type
   end
 
   def header?

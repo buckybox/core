@@ -1356,12 +1356,12 @@ ALTER SEQUENCE line_items_id_seq OWNED BY line_items.id;
 CREATE TABLE omni_importers (
     id integer NOT NULL,
     country_id integer,
-    global boolean,
     rules text,
     import_transaction_list character varying(255),
     name character varying(255),
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    updated_at timestamp without time zone NOT NULL,
+    payment_type character varying(255)
 );
 
 
@@ -3360,3 +3360,5 @@ INSERT INTO schema_migrations (version) VALUES ('20130306003632');
 INSERT INTO schema_migrations (version) VALUES ('20130307233033');
 
 INSERT INTO schema_migrations (version) VALUES ('20130308022028');
+
+INSERT INTO schema_migrations (version) VALUES ('20130311224428');

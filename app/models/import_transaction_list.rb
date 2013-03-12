@@ -25,13 +25,18 @@ class ImportTransactionList < ActiveRecord::Base
   scope :processed, where(['import_transaction_lists.draft = ?', false])
 
   attr_accessible :csv_file, :file_format, :import_transactions_attributes, :draft, :omni_importer_id
+  delegate :payment_type, to: :omni_importer, allow_nil: true
 
   def account
     if omni_importer.present?
-      omni_importer.format_type
+      omni_importer.name
     else
       ImportTransactionList.label_for_file_format(file_format)
     end
+  end
+
+  def has_payment_type?
+    payment_type.present?
   end
 
   def self.label_for_file_format(file_format)
