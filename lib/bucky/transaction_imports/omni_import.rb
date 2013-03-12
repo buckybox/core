@@ -435,7 +435,8 @@ EOF
       end
 
       def matches_row?(row)
-        matches.all? do |column, text|
+        matches.all? do |column, t|
+          text = t.to_s
           if text[0] == '/' && text[-1] == '/'
             !!get(row, column).match(/#{text[1..-2]}/)
           else
