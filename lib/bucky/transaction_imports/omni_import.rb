@@ -402,7 +402,7 @@ EOF
       
       def initialize(shash, parent)
         self.blanks = shash[:blank]
-        self.matches = shash[:match].inject({}){|result, element| result.merge(element)}
+        self.matches = shash[:match].inject({}){|result, element| result.merge(element)} unless shash[:match].blank?
         self.parent = parent
       end
 
