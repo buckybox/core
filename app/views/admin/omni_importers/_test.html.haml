@@ -33,7 +33,7 @@
             - @test_importer.process_row(row, [:DATE, :DESC, :AMOUNT]).each_with_index do |output, index|
               %td{class: index == 0 ? 'border_left' : ''}= output
           - rescue StandardError => ex
-            %td= ex.message
+            %td= ex.to_s
 - elsif @omni_importer.import_transaction_list.present?
   .span6
     %table.table.table-striped.omni_import

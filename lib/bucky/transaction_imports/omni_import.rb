@@ -333,7 +333,9 @@ EOF
         if rhash.is_a?(Symbol)
           super(rhash, parent)
         elsif rhash.is_a?(Array)
-          super(rhash.first, parent)
+          self.rules = []
+          self.rules << Rule.create(rhash[0], parent)
+          self.format = rhash[1][:format].to_s
         else
           self.format = rhash[:format].to_s
           super(rhash.except(:format), parent)
@@ -345,8 +347,7 @@ EOF
         if format.present?
           Date.strptime(date_string, format).strftime('%d/%m/%Y')
         else
-          Date.parse(date_string) #Throws error if invalid
-          date_string
+          Date.parse(date_string).strftime('%d/%m/%Y') #Throws error if invalid
         end
       end
 
