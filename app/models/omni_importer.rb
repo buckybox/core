@@ -32,7 +32,7 @@ class OmniImporter < ActiveRecord::Base
   end
 
   def rows
-    @rows ||= @omni_import.bucky_rows
+    @rows ||= @omni_import.bucky_rows(name)
   end
 
   def rows_are_valid?
@@ -40,7 +40,7 @@ class OmniImporter < ActiveRecord::Base
   end
 
   def expected_format
-    "expected_format"
+    ""
   end
 
   def bank_name

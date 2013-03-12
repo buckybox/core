@@ -1,7 +1,18 @@
 class Admin::OmniImportersController < Admin::BaseController
   
   def index
-    @omni_importers = OmniImporter.all
+    @omni_importers = OmniImporter.joins("LEFT JOIN countries ON countries.id = omni_importers.country_id").order('countries.name, omni_importers.name').all
+    # Put those with blank countries on top
+    globals = []
+    @omni_importers = @omni_importers.reject do |oi|
+      if oi.country.blank?
+        globals << oi
+        true
+      else
+        false
+      end
+    end
+    @omni_importers = globals + @omni_importers
   end
 
   def new

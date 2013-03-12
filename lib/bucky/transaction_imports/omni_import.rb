@@ -99,18 +99,18 @@ EOF
       end
     end
 
-    def bucky_rows
+    def bucky_rows(bank_name)
       not_header_rows.collect.with_index do |row, index|
         begin
-          create_bucky_row(rules.process(row), index)
+          create_bucky_row(rules.process(row), index, bank_name)
         rescue Exception => e
           raise "Issue on row: (#{row}) | #{e.message}"
         end
       end
     end
 
-    def create_bucky_row(row, index)
-      Bucky::TransactionImports::Row.new(row[:DATE], row[:DESC], row[:AMOUNT], index, row[:raw_data], self)
+    def create_bucky_row(row, index, bank_name)
+      Bucky::TransactionImports::Row.new(row[:DATE], row[:DESC], row[:AMOUNT], index, row[:raw_data], self, bank_name)
     end
 
     def header_row
@@ -419,14 +419,24 @@ EOF
           if matches.blank?
             return false
           else
-            matches.all?{|column, text| get(row, column) == text}
+            matches_row?(row)
           end
         else
           if matches.blank?
             blanks.all?{|column| get(row, column).blank?}
           else
-            matches.all?{|column, text| get(row, column) == text} &&
+            matches_row?(row) &&
               blanks.all?{|column| get(row, column).blank?}
+          end
+        end
+      end
+
+      def matches_row?(row)
+        matches.all? do |column, text|
+          if text[0] == '/' && text[-1] == '/'
+            !!get(row, column).match(/#{text[1..-2]}/)
+          else
+            get(row, column) == text
           end
         end
       end

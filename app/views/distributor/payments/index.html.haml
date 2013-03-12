@@ -16,7 +16,8 @@
           = f.error_notification
 
           - if @import_transaction_list.csv_parser.present? && !@import_transaction_list.csv_parser.rows.reject(&:valid?).size.zero?
-            %span.error= @import_transaction_list.csv_parser.rows.find(&:invalid?).errors.full_messages.join(', ')
+            .error= @import_transaction_list.csv_parser.rows.find(&:invalid?).errors.full_messages.join(', ')
+            %br
 
           - if current_distributor.omni_importers.count.zero?
             - if current_distributor.available_csv_formats_select.size == 1
