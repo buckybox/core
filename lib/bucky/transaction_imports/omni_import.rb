@@ -114,7 +114,9 @@ EOF
     end
 
     def header_row
-      header? ? rows[0] : []
+      result = header? ? rows[0] : []
+      (longest_row_length - result.size).times{ result << ''}
+      result
     end
 
     def not_header_rows
