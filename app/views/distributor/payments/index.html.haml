@@ -33,6 +33,9 @@
 
           = f.input :csv_file, label: 'Import transactions', input_html: { class: 'auto_submit' }
         .ajax_loader_gif
+- else
+  .alert
+    You have no bank feeds setup. Please contact #{mail_to 'support@buckybox.com'} and supply a sample of your Internet Banking Statement in CSV format.
 
 .row-fluid
   #payment-tables.span12
