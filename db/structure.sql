@@ -997,7 +997,8 @@ CREATE TABLE distributors (
     contact_name character varying(255),
     customer_can_remove_orders boolean DEFAULT true,
     collect_phone_in_webstore boolean,
-    last_seen_at timestamp without time zone
+    last_seen_at timestamp without time zone,
+    notes text
 );
 
 
@@ -3362,3 +3363,5 @@ INSERT INTO schema_migrations (version) VALUES ('20130307233033');
 INSERT INTO schema_migrations (version) VALUES ('20130308022028');
 
 INSERT INTO schema_migrations (version) VALUES ('20130311224428');
+
+INSERT INTO schema_migrations (version) VALUES ('20130313051530');

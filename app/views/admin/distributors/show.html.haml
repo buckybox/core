@@ -18,6 +18,8 @@
       %dd= @distributor.contact_name
       %dt Tags
       %dd= @distributor.tag_list
+      %dt Notes
+      %dd= simple_format(@distributor.notes)
       %dt Parameter Name
       %dd= @distributor.parameter_name
       %dt Url
