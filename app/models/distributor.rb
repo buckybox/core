@@ -336,7 +336,7 @@ class Distributor < ActiveRecord::Base
   end
 
   def show_payments_tab?
-    available_csv_formats_select.present?
+    available_csv_formats_select.present? || !omni_importers.count.zero?
   end
 
   def can_upload_payments?
