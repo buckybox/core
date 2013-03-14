@@ -130,7 +130,7 @@ EOF
     end
 
     def header?
-      !rules.has_option?(:no_header)
+      rules.has_option?(:header)
     end
 
     def longest_row_length
