@@ -35,6 +35,18 @@ class ImportTransactionList < ActiveRecord::Base
     end
   end
 
+  def has_failed?
+    errors.size > 0 || (csv_parser.present? && !csv_parser.rows.reject(&:valid?).size.zero?)
+  end
+
+  def error_messages
+    if errors.size > 0
+      errors.full_messages.join(', ')
+    elsif csv_parser.present?
+      csv_parser.rows.find(&:invalid?).errors.full_messages.join(', ')
+    end
+  end
+
   def has_payment_type?
     payment_type.present?
   end
@@ -108,6 +120,12 @@ class ImportTransactionList < ActiveRecord::Base
   end
 
   def csv_valid?
+    begin
+      csv_parser.present? && csv_parser.rows_are_valid?
+    rescue StandardError => ex # Catch a totally crappy file
+      logger.warn(ex.to_s)
+      return false
+    end
     if csv_parser.is_a?(OmniImporter)
       errors.blank? && csv_parser.present? && csv_parser.rows_are_valid?
     else
