@@ -15,8 +15,8 @@
         .form_fields.ajax_loader_hide
           = f.error_notification
 
-          - if @import_transaction_list.csv_parser.present? && !@import_transaction_list.csv_parser.rows.reject(&:valid?).size.zero?
-            .error= @import_transaction_list.csv_parser.rows.find(&:invalid?).errors.full_messages.join(', ')
+          - if @import_transaction_list.has_failed?
+            .error= @import_transaction_list.error_messages
             %br
 
           - if current_distributor.omni_importers.count.zero?
@@ -66,7 +66,7 @@
             .ajax_loader_hide= link_to_function "more...", "window.payments.load_more_rows_on_bottom()" unless @import_transactions.blank?
             .ajax_loader_gif.hidden
 
-- if @import_transaction_list.csv_parser.present? && !@import_transaction_list.csv_parser.rows.reject(&:valid?).size.zero?
+- if @import_transaction_list.has_failed?
   :javascript
     $(function() {
       $('#upload_more_transactions').modal();

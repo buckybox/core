@@ -93,8 +93,8 @@ EOF
       not_header_rows.collect do |row|
         begin
           rules.process(row)
-        rescue Exception => e
-          raise "Issue on row: (#{row}) | #{e.message}"
+        rescue StandardError => e
+          raise OmniError.new("Issue on row: (#{row}) | #{e.message}")
         end
       end
     end
@@ -103,8 +103,8 @@ EOF
       not_header_rows.collect.with_index do |row, index|
         begin
           create_bucky_row(rules.process(row), index, bank_name)
-        rescue Exception => e
-          raise "Issue on row: (#{row}) | #{e.message}"
+        rescue StandardError => e
+          raise OmniError.new("Issue on row: (#{row}) | #{e.message}")
         end
       end
     end
@@ -130,7 +130,7 @@ EOF
     end
 
     def header?
-      !rules.has_option?(:no_header)
+      rules.has_option?(:header)
     end
 
     def longest_row_length
@@ -215,7 +215,7 @@ EOF
         elsif c.is_a?(Fixnum)
           row[column_name_or_number]
         else
-          raise 'Expecting a number or column name as described by column_names:'
+          raise OmniError.new('Expecting a number or column name as described by column_names:')
         end
       end
 
@@ -226,7 +226,7 @@ EOF
         elsif (match_data = c.to_s.match(/^c([01-9]+)$/)).present?# Expecting column numbers to be c0, c1, c999, etc.
           row[match_data[1].to_i] #Get column by integer
         else
-          raise 'Expecting a column name or cX where X is the row number'
+          raise OmniError.new('Expecting a column name or cX where X is the row number')
         end
       end
 
@@ -259,7 +259,12 @@ EOF
       def parse_options(rhash)
         return {} if rhash.blank?
         if rhash[:options].present?
-          OmniImport.convert_to_symbols(rhash[:options])
+          options = rhash[:options]
+          if options.is_a?(Symbol)
+            [options]
+          else
+            OmniImport.convert_to_symbols(rhash[:options])
+          end
         else
           {}
         end
@@ -445,5 +450,8 @@ EOF
         end
       end
     end
+  end
+
+  class OmniError < StandardError
   end
 end
