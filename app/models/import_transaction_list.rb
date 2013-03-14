@@ -121,7 +121,7 @@ class ImportTransactionList < ActiveRecord::Base
 
   def csv_valid?
     begin
-      csv_parser.present? && csv_parser.rows_are_valid?
+      csv_parser.present? && csv_parser.respond_to?(:rows_are_valid?) && csv_parser.rows_are_valid?
     rescue StandardError => ex # Catch a totally crappy file
       logger.warn(ex.to_s)
       return false
