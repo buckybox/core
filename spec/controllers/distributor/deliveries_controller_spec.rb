@@ -41,6 +41,7 @@ describe Distributor::DeliveriesController do
     end
 
     it "should order csv based on DSO" do
+      Delivery.stub(:date_for_packages_or_deliveries).and_return(Date.current)
       Delivery.should_receive(:build_csv_for_export).with(:delivery, @distributor, ["1","2","6"], nil).and_return("")
 
       post :export, {deliveries: [1,2,6]}
