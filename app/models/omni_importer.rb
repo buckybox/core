@@ -8,6 +8,7 @@ class OmniImporter < ActiveRecord::Base
   belongs_to :country
   has_and_belongs_to_many :distributors
 
+  # used to name the uploaded files
   def file_format
     'omni_importer'
   end
