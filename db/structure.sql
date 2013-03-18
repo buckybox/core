@@ -975,6 +975,9 @@ CREATE TABLE distributors (
     advance_days integer,
     automatic_delivery_hour integer,
     currency character varying(255),
+    bank_deposit boolean,
+    paypal boolean,
+    bank_deposit_format character varying(255),
     country_id integer,
     consumer_delivery_fee_cents integer,
     active_webstore boolean DEFAULT false NOT NULL,
@@ -992,7 +995,7 @@ CREATE TABLE distributors (
     default_balance_threshold_cents integer DEFAULT 0,
     send_email boolean DEFAULT true,
     send_halted_email boolean,
-    feature_spend_limit boolean DEFAULT true,
+    feature_spend_limit boolean,
     contact_name character varying(255),
     customer_can_remove_orders boolean DEFAULT true,
     collect_phone_in_webstore boolean,
@@ -1172,6 +1175,7 @@ CREATE TABLE import_transaction_lists (
     csv_file character varying(255),
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
+    file_format character varying(255),
     omni_importer_id integer
 );
 
@@ -3365,5 +3369,3 @@ INSERT INTO schema_migrations (version) VALUES ('20130308022028');
 INSERT INTO schema_migrations (version) VALUES ('20130311224428');
 
 INSERT INTO schema_migrations (version) VALUES ('20130313051530');
-
-INSERT INTO schema_migrations (version) VALUES ('20130315034909');
