@@ -10,11 +10,11 @@
       = link_to 'Full Distributor List', admin_distributors_path
       \|
     = link_to 'New Distributor', new_admin_distributor_path, class: 'button radius'
+    |
+    = link_to 'Omni Importers', admin_omni_importers_path
 
 - unless @distributors.empty?
-  .row-fluid
-    .span12
-      = render 'admin/distributors/index'
+  = render 'admin/dashboard/index'
 
 - unless @cron_logs.empty?
   .row-fluid

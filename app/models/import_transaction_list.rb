@@ -2,16 +2,18 @@ class ImportTransactionList < ActiveRecord::Base
 
   belongs_to :distributor
   has_many :import_transactions, autosave: true, validate: true, dependent: :destroy
+  belongs_to :omni_importer
 
   accepts_nested_attributes_for :import_transactions
 
   mount_uploader :csv_file, ImportTransactionListUploader
 
-  FILE_FORMATS = [["Kiwibank", "kiwibank"], ["St George Australia", "st_george_au"], ["Paypal", "paypal"], ["BNZ", "bnz"], ["National Bank", "national"], ["ANZ", "anz"]]
-  ACCOUNTS = [:kiwibank, :paypal, :st_george_au, :bnz, :national]
+  FILE_FORMATS = [["Kiwibank", "kiwibank"], ["St George Australia", "st_george_au"], ["Paypal", "paypal"], ["BNZ", "bnz"], ["National Bank", "national"], ["ANZ", "anz"], ["UK - Lloyds TSB", "uk_lloyds_tsb"]]
+  ACCOUNTS = [:kiwibank, :paypal, :st_george_au, :bnz, :national] # I think this isn't used anywhere.. ?
 
   validates_presence_of :csv_file
-  validates_inclusion_of :file_format, in: FILE_FORMATS.map(&:last)
+  validates_inclusion_of :file_format, in: FILE_FORMATS.map(&:last), unless: lambda { self.omni_importer_id.blank? }, unless: lambda{self.omni_importer_id.present?}
+
   validate :csv_ready, on: :create
 
   before_create :import_rows
@@ -22,10 +24,31 @@ class ImportTransactionList < ActiveRecord::Base
   scope :draft, where(['import_transaction_lists.draft = ?', true])
   scope :processed, where(['import_transaction_lists.draft = ?', false])
 
-  attr_accessible :csv_file, :file_format, :import_transactions_attributes, :draft
+  attr_accessible :csv_file, :file_format, :import_transactions_attributes, :draft, :omni_importer_id
+  delegate :payment_type, to: :omni_importer, allow_nil: true
 
   def account
-    ImportTransactionList.label_for_file_format(file_format)
+    if omni_importer.present?
+      omni_importer.name
+    else
+      ImportTransactionList.label_for_file_format(file_format)
+    end
+  end
+
+  def has_failed?
+    errors.size > 0 || (csv_parser.present? && !csv_parser.rows.reject(&:valid?).size.zero?)
+  end
+
+  def error_messages
+    if errors.size > 0
+      errors.full_messages.join(', ')
+    elsif csv_parser.present?
+      csv_parser.rows.find(&:invalid?).errors.full_messages.join(', ')
+    end
+  end
+
+  def has_payment_type?
+    payment_type.present?
   end
 
   def self.label_for_file_format(file_format)
@@ -46,7 +69,7 @@ class ImportTransactionList < ActiveRecord::Base
     if in_db.present?
       in_db
     else
-      distributor.present? ? distributor.last_csv_format : FILE_FORMATS.first.last
+      distributor.present? ? distributor.last_csv_format(self) : FILE_FORMATS.first.last
     end
   end
 
@@ -55,9 +78,14 @@ class ImportTransactionList < ActiveRecord::Base
   end
 
   def csv_parser
-    if @parser.blank? && file_format.present?
+    return @parser unless @parser.blank?
+    return nil unless errors.blank? && csv_file.present?
+
+    if omni_importer.present?
+      @parser = omni_importer.import(csv_file.current_path)
+    elsif file_format.present?
       @parser = parser_class.new
-      @parser.import(csv_file.current_path) if errors.blank? && csv_file.present?
+      @parser.import(csv_file.current_path)
     end
 
     return @parser
@@ -92,7 +120,17 @@ class ImportTransactionList < ActiveRecord::Base
   end
 
   def csv_valid?
-    errors.blank? && csv_parser.present? && csv_parser.valid?
+    begin
+      csv_parser.present? && csv_parser.respond_to?(:rows_are_valid?) && csv_parser.rows_are_valid?
+    rescue StandardError => ex # Catch a totally crappy file
+      logger.warn(ex.to_s)
+      return false
+    end
+    if csv_parser.is_a?(OmniImporter)
+      errors.blank? && csv_parser.present? && csv_parser.rows_are_valid?
+    else
+      errors.blank? && csv_parser.present? && csv_parser.valid?
+    end
   end
 
   private

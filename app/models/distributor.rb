@@ -20,6 +20,14 @@ class Distributor < ActiveRecord::Base
   has_many :line_items,               dependent: :destroy
   has_many :import_transaction_lists, dependent: :destroy
   has_many :import_transactions,      dependent: :destroy, through: :import_transaction_lists
+  has_many :distributors_omni_importers, class_name: DistributorsOmniImporters
+  has_many :omni_importers, through: :distributors_omni_importers
+
+  #Metrics
+  has_many :distributor_metrics
+  has_many :distributor_logins
+  has_many :customer_logins
+  has_many :customer_checkouts
 
   belongs_to :country
 
@@ -31,6 +39,8 @@ class Distributor < ActiveRecord::Base
   DEFAULT_AUTOMATIC_DELIVERY_DAYS = 1
 
   devise :database_authenticatable, :recoverable, :rememberable, :trackable, :validatable
+
+  acts_as_taggable
 
   mount_uploader :company_logo, CompanyLogoUploader
   mount_uploader :company_team_image, CompanyTeamImageUploader
@@ -46,8 +56,7 @@ class Distributor < ActiveRecord::Base
     :time_zone, :currency, :bank_deposit, :paypal, :bank_deposit_format, :country_id, :consumer_delivery_fee,
     :consumer_delivery_fee_cents, :active_webstore, :about, :details, :facebook_url, :city, :customers_show_intro,
     :deliveries_index_packing_intro, :deliveries_index_deliveries_intro, :payments_index_intro, :customers_index_intro,
-    :parameter_name, :default_balance_threshold, :has_balance_threshold, :spend_limit_on_all_customers,
-    :send_email, :send_halted_email, :feature_spend_limit
+    :customer_can_remove_orders, :parameter_name, :default_balance_threshold, :has_balance_threshold, :spend_limit_on_all_customers, :send_email, :send_halted_email, :feature_spend_limit, :contact_name, :tag_list, :collect_phone_in_webstore, :omni_importer_ids, :notes
 
   validates_presence_of :country
   validates_presence_of :email
@@ -58,6 +67,7 @@ class Distributor < ActiveRecord::Base
   validates_numericality_of :advance_days, greater_than_or_equal_to: 0
   validates_numericality_of :automatic_delivery_hour, greater_than_or_equal_to: 0
   validates_presence_of :bank_deposit_format, if: :bank_deposit?
+  validate :required_fields_for_webstore
 
   before_validation :check_emails
   before_create :parameterize_name, if: 'parameter_name.nil?'
@@ -146,6 +156,10 @@ class Distributor < ActiveRecord::Base
   def window_start_from
     # If we have missed the cutoff point add a day so we start generation from tomorrow
     Date.current + ( advance_hour < Time.current.hour ? 1 : 0 ).days
+  end
+
+  def beginning_of_green_zone
+    window_end_at + 1.day
   end
 
   def window_end_at
@@ -295,17 +309,23 @@ class Distributor < ActiveRecord::Base
     import_transactions.processed.matched.not_removed.where(description: description).ordered.last
   end
 
-  def last_csv_format
+  def last_csv_format(import_transaction_list)
     last_import = import_transaction_lists.order("created_at DESC").first
+    return nil if last_import == import_transaction_list
+
     last_import.present? ? last_import.file_format : nil
   end
 
   def supported_csv_formats
-    result = ""
-    result << ImportTransactionList::FILE_FORMATS.find{|name, code| code == bank_deposit_format}.first if bank_deposit?
-    result << " or " if bank_deposit? && paypal?
-    result << "Paypal" if paypal?
-    result
+    if omni_importers.count.zero?
+      result = ""
+      result << ImportTransactionList::FILE_FORMATS.find{|name, code| code == bank_deposit_format}.first if bank_deposit?
+      result << " or " if bank_deposit? && paypal?
+      result << "Paypal" if paypal?
+      result
+    else
+      omni_importers.collect{|o| o.name}.to_sentence({two_words_connector: ' or ', last_word_connector: ', or '})
+    end
   end
 
   def available_csv_formats_select
@@ -316,7 +336,7 @@ class Distributor < ActiveRecord::Base
   end
 
   def show_payments_tab?
-    available_csv_formats_select.present?
+    available_csv_formats_select.present? || !omni_importers.count.zero?
   end
 
   def can_upload_payments?
@@ -428,13 +448,34 @@ class Distributor < ActiveRecord::Base
     end
   end
 
+  def contact_name_for_email
+    contact_name.present? ? contact_name : email
+  end
+
+  def location
+    [country.try(:full_name), city].reject(&:blank?).join(', ')
+  end
+
+  def mark_seen_recently!
+    touch(:last_seen_at) #No validations or callbacks are performed
+  end
+
   private
+
+  def required_fields_for_webstore
+    if active_webstore_changed? && active_webstore?
+      errors.add(:active_webstore, "Need bank information filled in before enabling the webstore") unless bank_information.present? && bank_information.valid?
+      errors.add(:active_webstore, "Need to have a route setup before enabling the webstore") if routes.count.zero?
+      errors.add(:active_webstore, "Need to have a box setup before enabling the webstore") if boxes.count.zero?
+    end
+  end
 
   def check_emails
     if self.email
       self.email.strip!
       self.email.downcase!
     end
+
 
     self.support_email = self.email if self.support_email.blank?
   end

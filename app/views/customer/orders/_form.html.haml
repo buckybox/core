@@ -1,9 +1,11 @@
 = simple_form_for(@form_params, html: { id: 'order-form' }) do |f|
   = f.error_notification
+  - if @order.has_yellow_deliveries?
+    .alert.alert-error This order has an impending delivery, changes made will only affect the deliveries on or after #{@distributor.beginning_of_green_zone.to_s(:day_date_month)}.
 
   .row-fluid
     .span4
-      = f.association :box, collection: box_collection(@customer, with_price: true), include_blank: false, input_html: { class: 'box' }
+      = f.association :box, collection: customers_box_collection(@customer, @order, with_price: true), include_blank: false, input_html: { class: 'box' }
 
       - unless @order.persisted?
         = f.input :frequency, collection: order_frequencies, include_blank: false, input_html: { class: 'frequency' }
@@ -58,5 +60,3 @@
     .span12.form-actions
       = f.button :submit, class: 'btn btn-primary'
       = link_to '&raquo; back'.html_safe, customer_dashboard_path(@account.customer)
-
-

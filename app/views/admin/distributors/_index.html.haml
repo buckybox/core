@@ -1,30 +1,65 @@
-%table#distributors.table.table-striped
-  %thead
-    %tr
-      %th Name
-      %th Email
-      %th Sign In On
-      %th Sign In IP
-      %th Sign In Count
-      %th Actions
-      %th Orders
-      %th Packages
-      %th Deliveries
-
-  %tbody
-    - @distributors.each do |distributor|
-      %tr
-        %td= distributor.name
-        %td= distributor.email
-        %td= distributor.current_sign_in_at.to_s(:pretty) unless distributor.current_sign_in_at.nil?
-        %td= link_to distributor.current_sign_in_ip, "http://www.infosniper.net/index.php?ip_address=#{distributor.current_sign_in_ip}", target: "_blank" unless distributor.current_sign_in_ip.nil?
-        %td= distributor.sign_in_count
-        %td
-          %ul.unstyled
-            %li= link_to 'Show', admin_distributor_path(distributor)
-            %li= link_to 'Edit', edit_admin_distributor_path(distributor)
-            %li= link_to 'Impersonate', impersonate_admin_distributor_path(distributor)
-            %li= link_to 'Reset Intros', reset_intros_admin_distributor_path(distributor)
-        %td= distributor.orders.size
-        %td= distributor.packages.size
-        %td= distributor.deliveries.size
+%tr
+  %td
+    .row-fluid
+      .span4
+        %span.big.bold
+          = link_to_unless !distributor.active_webstore?, distributor.name, webstore_store_path(distributor.parameter_name)
+          %br
+        %span.medium
+          = mail_to(distributor.email, distributor.contact_name_for_email)
+          -# Display main contact name if available, else display email, open in new window
+      .span3
+        %span.medium= distributor.location
+      .span1.align-right.medium.bold
+        = distributor.customers.count
+        %i.icon-user
+        %br
+        - new_count = distributor.customers.where(["created_at > ?", 1.week.ago]).count
+        - unless new_count.zero?
+          = "#{new_count}"
+          %i.icon-plus
+      .span1.align-right.medium.bold 
+        = distributor.orders.active.count 
+        %i.icon-shopping-cart(title="Active orders")
+        %br
+        = distributor.deliveries.delivered.where(["deliveries.updated_at > ?", 7.days.ago]).count
+        %i.icon-road(title="Deliveries completed in last 7 days")
+      .span3.align-right.medium
+        = time_since(distributor.current_sign_in_at)
+        %a(href="http://www.infosniper.net/index.php?ip_address=#{distributor.current_sign_in_ip}" target="_blank")
+          %i.icon-map-marker
+          -# open link to iplocator in new window
+    .row-fluid
+      .span4
+        - distributor.tags.each do |tag|
+          %span.label.label-info= link_to tag.name, tag_admin_distributors_path(tag.name)
+        - if distributor.bank_deposit?
+          %span.label bank-deposit
+        - if distributor.send_email?
+          %span.label emails
+        - if distributor.separate_bucky_fee?
+          %span.label fee
+        - if distributor.feature_spend_limit?
+          %span.label halt
+        - if distributor.paypal?
+          %span.label paypal
+        - if distributor.active_webstore?
+          %span.label webstore
+        - distributor.omni_importers.includes(:country).each do |omni_importer|
+          %span.label.label-success{title: omni_importer.payment_type}= omni_importer.tag_name
+      .span5
+        %small
+          Next delivery:
+          %strong= distributors_next_delivery_date(distributor)
+        
+      .span3.align-right.small
+        = link_to 'Show', admin_distributor_path(distributor)
+        |
+        = link_to 'Edit', edit_admin_distributor_path(distributor)
+        |
+        = link_to 'Impersonate', impersonate_admin_distributor_path(distributor)
+        |
+        = link_to 'Reset Intros', reset_intros_admin_distributor_path(distributor)
+    - if distributor.notes.present?
+      .row-fluid
+        .span5= simple_format(distributor.notes)

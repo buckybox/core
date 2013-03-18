@@ -170,6 +170,7 @@ describe Customer do
       Distributor.any_instance.stub(:find_extra_from_import).and_return(mock_model('Extra'))
       customer.stub(:default_balance_threshold_cents).and_return(-100000)
       customer.stub(:has_balance_threshold).and_return(false)
+      customer.stub(:currency).and_return('NZD')
 
       attrs = {
         first_name: 'Jordan',
@@ -231,6 +232,7 @@ describe Customer do
       last_name: 'Carter',
       email: 'jc@example.com',
       discount: 0.1,
+      currency: 'NZD',
       number: 1234,
       notes: 'Good one dave, your a legend Dave',
       account_balance: 80.65,

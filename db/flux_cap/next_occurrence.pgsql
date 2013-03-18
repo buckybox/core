@@ -1,5 +1,8 @@
-CREATE OR REPLACE FUNCTION next_occurrence(
+DROP FUNCTION next_occurrence(
   from_date DATE, ignore_pauses BOOLEAN, schedule_rule schedule_rules
+);
+CREATE OR REPLACE FUNCTION next_occurrence(
+  from_date DATE, ignore_pauses BOOLEAN, ignore_halts BOOLEAN, schedule_rule schedule_rules
 )
   RETURNS DATE
   LANGUAGE plpgsql STABLE
@@ -8,7 +11,7 @@ DECLARE
   next_date DATE;
 BEGIN
   next_date := from_date;
-  IF schedule_rule.halted THEN
+  IF NOT ignore_halts AND schedule_rule.halted THEN
     return null;
   ELSE
     LOOP

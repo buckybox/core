@@ -166,6 +166,7 @@ BuckyBox::Application.routes.draw do
         post 'remove_pause'
         put 'resume'
         post 'remove_resume'
+        put 'deactivate'
       end
     end
 
@@ -192,6 +193,13 @@ BuckyBox::Application.routes.draw do
       collection do
         get 'unimpersonate'
         get 'country_setting/:id', controller: 'distributors', action: 'country_setting'
+        get 'tag/:tag', action: :index, as: 'tag'
+      end
+    end
+
+    resources :omni_importers do
+      member do
+        post 'test'
       end
     end
   end

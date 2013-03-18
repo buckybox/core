@@ -1,0 +1,61 @@
+= simple_form_for([:admin, @omni_importer], html: {class: 'form-horizontal'}) do |f|
+  = f.error_notification
+
+  .row-fluid
+    .span6
+      - if @omni_importer.import_transaction_list.present?
+        = f.input :rules, as: :hidden
+        #aceeditor
+
+        :javascript
+          $(function(){
+            $('#omni-refresh').hide();
+            var editor = ace.edit("aceeditor");
+            var textarea = $('#omni_importer_rules');
+            editor.setValue("#{escape_javascript(@omni_importer.rules)}");
+            textarea.val(editor.getSession().getValue());
+            editor.setTheme("ace/theme/chrome");
+            editor.getSession().setMode("ace/mode/yaml");
+            editor.getSession().setTabSize(2);
+            editor.getSession().setUseSoftTabs(true);
+            document.getElementById('aceeditor').style.fontSize='12px';
+            var updateOmniImportTimeout;
+            editor.getSession().on('change', function(){
+              textarea.val(editor.getSession().getValue());
+              clearTimeout(updateOmniImportTimeout);
+              updateOmniImportTimeout = setTimeout(updateOmniImport, 500);
+            });
+
+            test_url = '#{test_admin_omni_importer_url(@omni_importer)}';
+            function updateOmniImport(){
+              $('#omni-refresh').fadeIn();
+              $.post(test_url,
+              {rules: editor.getSession().getValue()},
+              function(data, textStatus, jqXHR){
+                $('#test').html(data);
+                $('#test').show('highlight');
+                $('#omni-refresh').hide();
+              });
+            }
+          });
+      - else
+        .alert You must have an example file uploaded before adding the definition.
+    .span6
+      = f.input :name
+      = f.input :country_id, collection: Country.all
+      = f.input :tag_list, as: :string
+      = f.input :payment_type, hint: "Bank Deposit, Credit Card, PayPal, Direct Debit, etc.."
+      = f.input :import_transaction_list
+      = f.input :remove_import_transaction_list, as: :boolean unless @omni_importer.import_transaction_list.blank?
+      = f.input :import_transaction_list_cache, as: :hidden
+  - if @omni_importer.import_transaction_list.present?
+    .row-fluid
+      .span6.offset6
+        %i#omni-refresh.icon-refresh
+  .row-fluid#test
+    = render 'admin/omni_importers/test'
+
+  .row-fluid
+    .span12.form-actions
+      = f.button :submit
+

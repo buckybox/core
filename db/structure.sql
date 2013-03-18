@@ -104,17 +104,17 @@ $$;
 
 
 --
--- Name: next_occurrence(date, boolean, schedule_rules); Type: FUNCTION; Schema: public; Owner: -
+-- Name: next_occurrence(date, boolean, boolean, schedule_rules); Type: FUNCTION; Schema: public; Owner: -
 --
 
-CREATE FUNCTION next_occurrence(from_date date, ignore_pauses boolean, schedule_rule schedule_rules) RETURNS date
+CREATE FUNCTION next_occurrence(from_date date, ignore_pauses boolean, ignore_halts boolean, schedule_rule schedule_rules) RETURNS date
     LANGUAGE plpgsql STABLE
     AS $$
 DECLARE
   next_date DATE;
 BEGIN
   next_date := from_date;
-  IF schedule_rule.halted THEN
+  IF NOT ignore_halts AND schedule_rule.halted THEN
     return null;
   ELSE
     LOOP
@@ -595,6 +595,70 @@ ALTER SEQUENCE cron_logs_id_seq OWNED BY cron_logs.id;
 
 
 --
+-- Name: customer_checkouts; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE customer_checkouts (
+    id integer NOT NULL,
+    distributor_id integer,
+    customer_id integer,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: customer_checkouts_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE customer_checkouts_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: customer_checkouts_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE customer_checkouts_id_seq OWNED BY customer_checkouts.id;
+
+
+--
+-- Name: customer_logins; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE customer_logins (
+    id integer NOT NULL,
+    distributor_id integer,
+    customer_id integer,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: customer_logins_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE customer_logins_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: customer_logins_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE customer_logins_id_seq OWNED BY customer_logins.id;
+
+
+--
 -- Name: customers; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -804,6 +868,74 @@ ALTER SEQUENCE delivery_sequence_orders_id_seq OWNED BY delivery_sequence_orders
 
 
 --
+-- Name: distributor_logins; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE distributor_logins (
+    id integer NOT NULL,
+    distributor_id integer,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: distributor_logins_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE distributor_logins_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: distributor_logins_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE distributor_logins_id_seq OWNED BY distributor_logins.id;
+
+
+--
+-- Name: distributor_metrics; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE distributor_metrics (
+    id integer NOT NULL,
+    distributor_id integer,
+    distributor_logins integer,
+    new_customers integer,
+    deliveries_completed integer,
+    customer_payments integer,
+    webstore_checkouts integer,
+    customer_logins integer,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: distributor_metrics_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE distributor_metrics_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: distributor_metrics_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE distributor_metrics_id_seq OWNED BY distributor_metrics.id;
+
+
+--
 -- Name: distributors; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -836,16 +968,13 @@ CREATE TABLE distributors (
     parameter_name character varying(255),
     invoice_threshold_cents integer DEFAULT 0 NOT NULL,
     bucky_box_percentage numeric NOT NULL,
-    separate_bucky_fee boolean DEFAULT true,
+    separate_bucky_fee boolean DEFAULT false,
     support_email character varying(255),
     time_zone character varying(255),
     advance_hour integer,
     advance_days integer,
     automatic_delivery_hour integer,
     currency character varying(255),
-    bank_deposit boolean,
-    paypal boolean,
-    bank_deposit_format character varying(255),
     country_id integer,
     consumer_delivery_fee_cents integer,
     active_webstore boolean DEFAULT false NOT NULL,
@@ -861,10 +990,14 @@ CREATE TABLE distributors (
     customers_index_intro boolean DEFAULT true NOT NULL,
     has_balance_threshold boolean DEFAULT false,
     default_balance_threshold_cents integer DEFAULT 0,
-    send_email boolean,
+    send_email boolean DEFAULT true,
     send_halted_email boolean,
-    feature_spend_limit boolean,
-    customer_can_remove_orders boolean DEFAULT false
+    feature_spend_limit boolean DEFAULT true,
+    contact_name character varying(255),
+    customer_can_remove_orders boolean DEFAULT true,
+    collect_phone_in_webstore boolean,
+    last_seen_at timestamp without time zone,
+    notes text
 );
 
 
@@ -885,6 +1018,38 @@ CREATE SEQUENCE distributors_id_seq
 --
 
 ALTER SEQUENCE distributors_id_seq OWNED BY distributors.id;
+
+
+--
+-- Name: distributors_omni_importers; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE distributors_omni_importers (
+    id integer NOT NULL,
+    distributor_id integer,
+    omni_importer_id integer,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: distributors_omni_importers_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE distributors_omni_importers_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: distributors_omni_importers_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE distributors_omni_importers_id_seq OWNED BY distributors_omni_importers.id;
 
 
 --
@@ -971,7 +1136,8 @@ CREATE TABLE extras (
     price_cents integer DEFAULT 0 NOT NULL,
     currency character varying(255),
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    updated_at timestamp without time zone NOT NULL,
+    hidden boolean DEFAULT false
 );
 
 
@@ -1006,7 +1172,7 @@ CREATE TABLE import_transaction_lists (
     csv_file character varying(255),
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
-    file_format character varying(255)
+    omni_importer_id integer
 );
 
 
@@ -1183,6 +1349,41 @@ ALTER SEQUENCE line_items_id_seq OWNED BY line_items.id;
 
 
 --
+-- Name: omni_importers; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE omni_importers (
+    id integer NOT NULL,
+    country_id integer,
+    rules text,
+    import_transaction_list character varying(255),
+    name character varying(255),
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL,
+    payment_type character varying(255)
+);
+
+
+--
+-- Name: omni_importers_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE omni_importers_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: omni_importers_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE omni_importers_id_seq OWNED BY omni_importers.id;
+
+
+--
 -- Name: order_extras; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -1261,7 +1462,8 @@ CREATE TABLE orders (
     updated_at timestamp without time zone,
     account_id integer,
     active boolean DEFAULT false NOT NULL,
-    extras_one_off boolean DEFAULT true
+    extras_one_off boolean DEFAULT true,
+    extras_packing_list_id integer
 );
 
 
@@ -1815,6 +2017,20 @@ ALTER TABLE ONLY cron_logs ALTER COLUMN id SET DEFAULT nextval('cron_logs_id_seq
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
+ALTER TABLE ONLY customer_checkouts ALTER COLUMN id SET DEFAULT nextval('customer_checkouts_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY customer_logins ALTER COLUMN id SET DEFAULT nextval('customer_logins_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
 ALTER TABLE ONLY customers ALTER COLUMN id SET DEFAULT nextval('customers_id_seq'::regclass);
 
 
@@ -1850,7 +2066,28 @@ ALTER TABLE ONLY delivery_sequence_orders ALTER COLUMN id SET DEFAULT nextval('d
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
+ALTER TABLE ONLY distributor_logins ALTER COLUMN id SET DEFAULT nextval('distributor_logins_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY distributor_metrics ALTER COLUMN id SET DEFAULT nextval('distributor_metrics_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
 ALTER TABLE ONLY distributors ALTER COLUMN id SET DEFAULT nextval('distributors_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY distributors_omni_importers ALTER COLUMN id SET DEFAULT nextval('distributors_omni_importers_id_seq'::regclass);
 
 
 --
@@ -1907,6 +2144,13 @@ ALTER TABLE ONLY invoices ALTER COLUMN id SET DEFAULT nextval('invoices_id_seq':
 --
 
 ALTER TABLE ONLY line_items ALTER COLUMN id SET DEFAULT nextval('line_items_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY omni_importers ALTER COLUMN id SET DEFAULT nextval('omni_importers_id_seq'::regclass);
 
 
 --
@@ -2094,6 +2338,22 @@ ALTER TABLE ONLY cron_logs
 
 
 --
+-- Name: customer_checkouts_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY customer_checkouts
+    ADD CONSTRAINT customer_checkouts_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: customer_logins_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY customer_logins
+    ADD CONSTRAINT customer_logins_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: customers_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -2131,6 +2391,30 @@ ALTER TABLE ONLY delivery_lists
 
 ALTER TABLE ONLY delivery_sequence_orders
     ADD CONSTRAINT delivery_sequence_orders_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: distributor_logins_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY distributor_logins
+    ADD CONSTRAINT distributor_logins_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: distributor_metrics_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY distributor_metrics
+    ADD CONSTRAINT distributor_metrics_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: distributors_omni_importers_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY distributors_omni_importers
+    ADD CONSTRAINT distributors_omni_importers_pkey PRIMARY KEY (id);
 
 
 --
@@ -2203,6 +2487,14 @@ ALTER TABLE ONLY invoices
 
 ALTER TABLE ONLY line_items
     ADD CONSTRAINT line_items_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: omni_importers_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY omni_importers
+    ADD CONSTRAINT omni_importers_pkey PRIMARY KEY (id);
 
 
 --
@@ -3037,3 +3329,41 @@ INSERT INTO schema_migrations (version) VALUES ('20130125004824');
 INSERT INTO schema_migrations (version) VALUES ('20130128022723');
 
 INSERT INTO schema_migrations (version) VALUES ('20130130220514');
+
+INSERT INTO schema_migrations (version) VALUES ('20130213020709');
+
+INSERT INTO schema_migrations (version) VALUES ('20130213224528');
+
+INSERT INTO schema_migrations (version) VALUES ('20130218060217');
+
+INSERT INTO schema_migrations (version) VALUES ('20130219014308');
+
+INSERT INTO schema_migrations (version) VALUES ('20130220234725');
+
+INSERT INTO schema_migrations (version) VALUES ('20130222011927');
+
+INSERT INTO schema_migrations (version) VALUES ('20130226231819');
+
+INSERT INTO schema_migrations (version) VALUES ('20130227051525');
+
+INSERT INTO schema_migrations (version) VALUES ('20130228205052');
+
+INSERT INTO schema_migrations (version) VALUES ('20130305134300');
+
+INSERT INTO schema_migrations (version) VALUES ('20130306001542');
+
+INSERT INTO schema_migrations (version) VALUES ('20130306002347');
+
+INSERT INTO schema_migrations (version) VALUES ('20130306003517');
+
+INSERT INTO schema_migrations (version) VALUES ('20130306003632');
+
+INSERT INTO schema_migrations (version) VALUES ('20130307233033');
+
+INSERT INTO schema_migrations (version) VALUES ('20130308022028');
+
+INSERT INTO schema_migrations (version) VALUES ('20130311224428');
+
+INSERT INTO schema_migrations (version) VALUES ('20130313051530');
+
+INSERT INTO schema_migrations (version) VALUES ('20130315034909');

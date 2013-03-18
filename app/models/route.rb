@@ -10,7 +10,7 @@ class Route < ActiveRecord::Base
 
   monetize :fee_cents
 
-  attr_accessible :distributor, :name, :fee, :area_of_service, :estimated_delivery_time, :schedule_rule_attributes
+  attr_accessible :distributor, :name, :fee, :area_of_service, :estimated_delivery_time, :schedule_rule_attributes, :schedule_rule
   accepts_nested_attributes_for :schedule_rule
 
   validates_presence_of :distributor_id, :name, :fee, :area_of_service, :estimated_delivery_time, :schedule_rule

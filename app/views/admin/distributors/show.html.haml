@@ -1,4 +1,5 @@
 - title("Admin - #{@distributor.name}")
+= render 'admin/distributors/nav'
 
 .row
   .span12.text-right
@@ -11,8 +12,14 @@
 .row
   .span6
     %dl
-      %dt Name
+      %dt Distributor Name
       %dd= @distributor.name
+      %dt Contact Name
+      %dd= @distributor.contact_name
+      %dt Tags
+      %dd= @distributor.tag_list
+      %dt Notes
+      %dd= simple_format(@distributor.notes)
       %dt Parameter Name
       %dd= @distributor.parameter_name
       %dt Url
@@ -35,6 +42,8 @@
       %dd= checkmark_boolean(@distributor.paypal?)
       %dt Bank File Format
       %dd= @distributor.bank_deposit_format
+      %dt Omni Importers
+      %dd= @distributor.omni_importers.collect(&:select_label).join(' | ')
       %dt Invoice Threshold
       %dd= @distributor.invoice_threshold.format
       %dt Separate Bucky Fee
@@ -43,6 +52,8 @@
       %dd= @distributor.created_at.to_s(:pretty)
       %dt Active Webstore
       %dd= checkmark_boolean(@distributor.active_webstore)
+      %dt Customer Can Delete Orders
+      %dd= checkmark_boolean(@distributor.customer_can_remove_orders?)
       %dt Default Spend Limit
       - if !@distributor.feature_spend_limit?
         %dd Feature not enabled by admin.

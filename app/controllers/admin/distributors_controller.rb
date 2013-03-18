@@ -3,7 +3,9 @@ class Admin::DistributorsController < Admin::ResourceController
   before_filter :parameterize_name, only: [:create, :update]
 
   def index
-    @distributors = Distributor.order('name')
+    @distributors = Distributor.scoped
+    @distributors = @distributors.tagged_with(params[:tag]) if params[:tag].present?
+    @distributors = @distributors.sort { |a,b| b.orders.active.size <=> a.orders.active.size }
     index!
   end
 

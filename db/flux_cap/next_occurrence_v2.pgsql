@@ -8,20 +8,24 @@ DECLARE
   next_date DATE;
 BEGIN
   next_date := from_date;
-  LOOP
-    -- Get the next possible occurrence
-    next_date := unpaused_next_occurrence(next_date, schedule_rule);
+  IF schedule_rule.halted THEN
+    return null;
+  ELSE
+    LOOP
+      -- Get the next possible occurrence
+      next_date := unpaused_next_occurrence(next_date, schedule_rule);
 
-    -- Test if it falls in a pause, exit if not
-    EXIT WHEN ignore_pauses OR NOT is_paused(next_date, schedule_rule);
+      -- Test if it falls in a pause, exit if not
+      EXIT WHEN ignore_pauses OR NOT is_paused(next_date, schedule_rule);
 
-    -- Apparently that one was in a pause, start looking again from the end of a pause
-    next_date := pause_finish(next_date, schedule_rule);
+      -- Apparently that one was in a pause, start looking again from the end of a pause
+      next_date := pause_finish(next_date, schedule_rule);
 
-    -- If the pause_finish returns NULL we can assume the pause never finishes, thus there is never a next_occurrence
-    EXIT WHEN next_date IS NULL;
-  END LOOP;
-  return next_date;
+      -- If the pause_finish returns NULL we can assume the pause never finishes, thus there is never a next_occurrence
+      EXIT WHEN next_date IS NULL;
+    END LOOP;
+    return next_date;
+  END IF;
 END;
 $BODY$;
 
@@ -145,7 +149,7 @@ DECLARE
   result DATE;
 BEGIN
   -- If it is a one off, then it doesn't have a mon -> sun schedule, check the day it starts on
-  IF schedule_rule.recur IS NULL THEN
+  IF schedule_rule.recur IS NULL OR schedule_rule.recur = 'single' THEN
     return EXTRACT(DOW FROM schedule_rule.start) = day;
   ELSE
     CASE day

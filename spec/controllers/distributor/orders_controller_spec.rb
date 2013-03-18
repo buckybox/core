@@ -12,8 +12,8 @@ describe Distributor::OrdersController do
           }),
           route: @route,
           id: 675
-        })
-      )
+      }))
+      Distributor.any_instance.stub_chain(:boxes, :count, :zero?).and_return(false)
     end
 
     describe '#new' do
@@ -64,6 +64,10 @@ describe Distributor::OrdersController do
   end
   
   describe '#create' do
+
+    before do
+      Fabricate(:box, distributor: @distributor)
+    end
     
     it 'should create an order' do
       box = Fabricate(:box, distributor: @distributor)

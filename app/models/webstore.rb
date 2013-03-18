@@ -95,15 +95,17 @@ class Webstore
       self.current_email = email
       @order.delivery_step
     elsif customer.valid_password?(password) && customer.distributor == @distributor
+      CustomerLogin.track(customer) unless @controller.current_admin.present?
       @controller.sign_in(customer)
       @order.delivery_step
     else
       new_registration = (user_information[:registered] == 'new')
 
       if new_registration && !customer.nil?
-        error_description = 'This account already exists. Did you forget your password?'
+        error_description = "This account already exists. <span><i style=\"padding-right: 4px\" class=\"icon-lock\"></i><a href=\"#{@controller.new_customer_password_path(distributor: @distributor.parameter_name)}\">Did you lose your password?</a></span>".html_safe
       else
-        error_description = 'You have not provided the correct email address or password for this store. Please try again.'
+        error_description = "You have not provided the correct email address or password for this store. Please try again. <span><i style=\"padding-right: 4px\" class=\"icon-lock\"></i><a href=\"#{@controller.new_customer_password_path(distributor: @distributor.parameter_name)}\">Lost your password?</a></span>".html_safe
+
       end
 
       @controller.flash[:error] = error_description
@@ -136,6 +138,7 @@ class Webstore
       @order.account = customer.account
 
       if @order.create_order
+        CustomerCheckout.track(customer) unless @controller.current_admin.present?
         @controller.flash[:notice] = 'Your order has been placed'
         @order.placed_step
       elsif @order.order
@@ -160,7 +163,8 @@ class Webstore
       CustomerMailer.raise_errors do
         customer.send_login_details
       end
-
+      
+      CustomerLogin.track(customer) unless @controller.current_admin.present?
       @controller.sign_in(customer)
     end
 
@@ -169,6 +173,7 @@ class Webstore
 
   def update_address(customer, address_information)
     address           = customer.address
+    address.phone_1   = address_information[:phone_1]
     address.address_1 = address_information[:street_address]
     address.address_2 = address_information[:street_address_2]
     address.suburb    = address_information[:suburb]
@@ -200,6 +205,7 @@ class Webstore
 
   def assign_route(route_information)
     route_id     = route_information[:route]
+    @order.update_customers_route(@controller.current_customer, route_id) unless @order.active_orders?
     @order.route = Route.find(route_id)
   end
 
