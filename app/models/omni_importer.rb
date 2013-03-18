@@ -8,6 +8,8 @@ class OmniImporter < ActiveRecord::Base
   belongs_to :country
   has_and_belongs_to_many :distributors
 
+  scope :ordered, joins("LEFT JOIN countries ON countries.id = omni_importers.country_id").order('countries.name, omni_importers.name')
+
   # used to name the uploaded files
   def file_format
     'omni_importer'

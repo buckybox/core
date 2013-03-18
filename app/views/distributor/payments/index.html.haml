@@ -2,31 +2,41 @@
 = intro_tour(@show_tour)
 
 - if current_distributor.can_upload_payments?
-  #upload_more_transactions.modal.hide.fade
-    .modal-header
-      = button_tag '×', class: 'close', data: { dismiss: 'modal' }, aria: { hidden: 'true' }
-      %h3 Import Transactions
+  = simple_form_for(@import_transaction_list, url: match_payments_distributor_payments_path, html: { multipart: true }) do |f|
+    #upload_more_transactions.modal.hide.fade
+      .modal-body
+        .row-fluid
+          .span12
+            = button_tag '×', class: 'close', data: { dismiss: 'modal' }, aria: { hidden: 'true' }
+            %span.label IMPORT TRANSACTIONS
 
-    .modal-body
-      %p Select the transaction data you wish to import.
-      %p= "Login to #{current_distributor.supported_csv_formats} to download/export your bank transactions in CSV format"
+        #describe-available-importers.row-fluid
+          .span12
+            %p= "Login to #{supported_csv_formats(current_distributor)} to download your transactions in #{content_tag(:strong, 'CSV format')}".html_safe
 
-      = simple_form_for(@import_transaction_list, url: match_payments_distributor_payments_path, html: { multipart: true }, html: { class: 'form-horizontal' }) do |f|
+        .row-fluid#upload_error_messages
+          .span12
+            .form_fields.ajax_loader_hide
+              - if @import_transaction_list.has_failed?
+                .alert.alert-error
+                  %strong Ooops! That file didn't look right.
+                  %br
+                  %br
+                  Did you upload the right file?
+      .modal-footer
         .form_fields.ajax_loader_hide
-          = f.error_notification
-
-          - if @import_transaction_list.has_failed?
-            .error= @import_transaction_list.error_messages
-            %br
-
           - unless current_distributor.omni_importers.count.zero?
-            - if current_distributor.omni_importers.count == 1
-              = f.input :omni_importer_id, as: :hidden, input_html: { value: current_distributor.omni_importers.first.id}
-            - else
-              = f.association :omni_importer, collection: current_distributor.omni_importers, label: "File format", include_blank: false
+            = f.input :omni_importer_id, as: :hidden, input_html: { value: @selected_omni_importer.id}
+            .btn-group.text-center
+              %button#upload_btn.btn= "Upload #{@selected_omni_importer.name} Transactions"
+              %button.btn.dropdown-toggle{data:{toggle:'dropdown'}}
+                %span.caret
+              %ul#omni_importer_menu.dropdown-menu
+                - current_distributor.omni_importers.ordered.each do |omni_importer|
+                  %li{data:{id: omni_importer.id, label: "Upload #{omni_importer.name} Transactions"}}= link_to omni_importer.name, '#'
+                
+          %input#import_transaction_list_csv_file{name: 'import_transaction_list[csv_file]', type:'file', style: 'display:none', class: 'auto_submit'}
 
-
-          = f.input :csv_file, label: 'Import transactions', input_html: { class: 'auto_submit' }
         .ajax_loader_gif
 - elsif !current_distributor.show_payments_tab?
   .alert
@@ -45,7 +55,7 @@
       %tbody
         - if current_distributor.can_upload_payments?
           %tr.new-row
-            %td{ colspan: 5 }= import_modal_link(@import_transactions, '#upload_more_transactions')
+            %td{ colspan: 5 }= import_modal_link(@import_transactions, '#upload_more_transactions', 'upload_more_transactions_link')
         - else
           %tr.hidden
 

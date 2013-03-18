@@ -8,6 +8,7 @@ class Distributor::PaymentsController < Distributor::ResourceController
   def index 
     @import_transaction_list = current_distributor.import_transaction_lists.new
     @show_tour = current_distributor.payments_index_intro
+    @selected_omni_importer = current_distributor.last_used_omni_importer
     load_index
   end
 
@@ -16,6 +17,9 @@ class Distributor::PaymentsController < Distributor::ResourceController
 
     if @import_transaction_list.save
       @import_transaction_list = current_distributor.import_transaction_lists.new
+      @selected_omni_importer = current_distributor.last_used_omni_importer
+    else
+      @selected_omni_importer = current_distributor.last_used_omni_importer(@import_transaction_list.omni_importer)
     end
 
     load_index
@@ -49,26 +53,6 @@ class Distributor::PaymentsController < Distributor::ResourceController
       flash.now[:alert] = "There was a problem"
       render :match_payments
     end
-  end
-
-  def process_upload
-    @kiwibank = Bucky::TransactionImports::Kiwibank.new
-    @kiwibank.import(params['bank_statement']["statement_file"].path)
-
-    unless @kiwibank.valid?
-      return render :index
-    end
-
-    @transaction_list = @kiwibank.transactions_for_display(current_distributor)
-
-    render :upload_transactions
-  end
-
-  def create_from_csv
-    @statement = BankStatement.find(params['statement_id'])
-    @statement.process_statement!(params['customers'])
-
-    redirect_to distributor_payments_url
   end
 
   def destroy
