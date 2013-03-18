@@ -170,8 +170,8 @@ class Distributor < ActiveRecord::Base
       distributor:        self,
       window_start_from:  window_start_from,
       window_end_at:      window_end_at,
-      packing_lists:      packing_lists,
-      delivery_lists:     delivery_lists,
+      packing_lists:      packing_lists.scoped,
+      delivery_lists:     delivery_lists.scoped,
     )
     generator.generate
   end
