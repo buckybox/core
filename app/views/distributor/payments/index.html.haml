@@ -21,19 +21,19 @@
                 .alert.alert-error
                   %strong Ooops! That file didn't look right.
                   %br
-                  %br
                   Did you upload the right file?
       .modal-footer
         .form_fields.ajax_loader_hide
           - unless current_distributor.omni_importers.count.zero?
             = f.input :omni_importer_id, as: :hidden, input_html: { value: @selected_omni_importer.id}
             .btn-group.text-center
-              %button#upload_btn.btn= "Upload #{@selected_omni_importer.name} Transactions"
-              %button.btn.dropdown-toggle{data:{toggle:'dropdown'}}
-                %span.caret
-              %ul#omni_importer_menu.dropdown-menu
-                - current_distributor.omni_importers.ordered.each do |omni_importer|
-                  %li{data:{id: omni_importer.id, label: "Upload #{omni_importer.name} Transactions"}}= link_to omni_importer.name, '#'
+              %button#upload_btn.btn.btn-primary= "Upload #{@selected_omni_importer.name} Transactions"
+              - if current_distributor.omni_importers.count > 1
+                %button.btn.btn-primary.dropdown-toggle{data:{toggle:'dropdown'}}
+                  %span.caret
+                %ul#omni_importer_menu.dropdown-menu
+                  - current_distributor.omni_importers.ordered.each do |omni_importer|
+                    %li{data:{id: omni_importer.id, label: "Upload #{omni_importer.name} Transactions"}}= link_to omni_importer.name, '#'
                 
           %input#import_transaction_list_csv_file{name: 'import_transaction_list[csv_file]', type:'file', style: 'display:none', class: 'auto_submit'}
 
