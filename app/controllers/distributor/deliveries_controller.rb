@@ -91,8 +91,10 @@ class Distributor::DeliveriesController < Distributor::ResourceController
 
     csv_output = Delivery.build_csv_for_export(export_type, current_distributor, params[:deliveries], params[:packages])
 
+    date = Delivery.date_for_packages_or_deliveries(export_type, current_distributor, params[:deliveries], params[:packages])
+
     if csv_output
-      filename = "bucky-box-#{export_type}-export-#{Date.current.to_s}.csv"
+      filename = "bucky-box-#{export_type}-export-#{date.to_s}.csv"
       type     = 'text/csv; charset=utf-8; header=present'
 
       send_data(csv_output, type: type, filename: filename)
@@ -111,6 +113,8 @@ class Distributor::DeliveriesController < Distributor::ResourceController
       package.packing_method = 'manual'
       package.save!
     end
+
+    @date = @packages.first.packing_list.date
 
     render layout: 'print'
   end

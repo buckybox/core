@@ -20,6 +20,8 @@ class Distributor < ActiveRecord::Base
   has_many :line_items,               dependent: :destroy
   has_many :import_transaction_lists, dependent: :destroy
   has_many :import_transactions,      dependent: :destroy, through: :import_transaction_lists
+  has_many :distributors_omni_importers, class_name: DistributorsOmniImporters
+  has_many :omni_importers, through: :distributors_omni_importers
 
   #Metrics
   has_many :distributor_metrics
@@ -54,7 +56,7 @@ class Distributor < ActiveRecord::Base
     :time_zone, :currency, :bank_deposit, :paypal, :bank_deposit_format, :country_id, :consumer_delivery_fee,
     :consumer_delivery_fee_cents, :active_webstore, :about, :details, :facebook_url, :city, :customers_show_intro,
     :deliveries_index_packing_intro, :deliveries_index_deliveries_intro, :payments_index_intro, :customers_index_intro,
-    :customer_can_remove_orders, :parameter_name, :default_balance_threshold, :has_balance_threshold, :spend_limit_on_all_customers, :send_email, :send_halted_email, :feature_spend_limit, :contact_name, :tag_list, :collect_phone_in_webstore
+    :customer_can_remove_orders, :parameter_name, :default_balance_threshold, :has_balance_threshold, :spend_limit_on_all_customers, :send_email, :send_halted_email, :feature_spend_limit, :contact_name, :tag_list, :collect_phone_in_webstore, :omni_importer_ids, :notes
 
   validates_presence_of :country
   validates_presence_of :email
@@ -280,17 +282,23 @@ class Distributor < ActiveRecord::Base
     import_transactions.processed.matched.not_removed.where(description: description).ordered.last
   end
 
-  def last_csv_format
+  def last_csv_format(import_transaction_list)
     last_import = import_transaction_lists.order("created_at DESC").first
+    return nil if last_import == import_transaction_list
+
     last_import.present? ? last_import.file_format : nil
   end
 
   def supported_csv_formats
-    result = ""
-    result << ImportTransactionList::FILE_FORMATS.find{|name, code| code == bank_deposit_format}.first if bank_deposit?
-    result << " or " if bank_deposit? && paypal?
-    result << "Paypal" if paypal?
-    result
+    if omni_importers.count.zero?
+      result = ""
+      result << ImportTransactionList::FILE_FORMATS.find{|name, code| code == bank_deposit_format}.first if bank_deposit?
+      result << " or " if bank_deposit? && paypal?
+      result << "Paypal" if paypal?
+      result
+    else
+      omni_importers.collect{|o| o.name}.to_sentence({two_words_connector: ' or ', last_word_connector: ', or '})
+    end
   end
 
   def available_csv_formats_select
@@ -301,7 +309,7 @@ class Distributor < ActiveRecord::Base
   end
 
   def show_payments_tab?
-    available_csv_formats_select.present?
+    available_csv_formats_select.present? || !omni_importers.count.zero?
   end
 
   def can_upload_payments?

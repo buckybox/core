@@ -4,6 +4,7 @@
   = f.input :name
   = f.input :contact_name
   = f.input :tag_list, label: 'Tags', placeholder: 'E.g. challenge, delete-me, paying'
+  = f.input :notes
   = f.input :parameter_name, label: "..ckybox.com/webstore/"
   = f.input :url
   = f.input :email
@@ -22,6 +23,9 @@
   = f.input :bank_deposit
   = f.input :paypal
   = f.input :bank_deposit_format, collection: ImportTransactionList::FILE_FORMATS.reject { |name, code| code == 'paypal' }, as: :select
+  = f.association :omni_importers, collection: OmniImporter.all, label_method: :select_label, hint: "Once selected and saved, this will override the old import formats presented to the distributor on the payments screen."
+  :javascript
+    $(function(){$("#distributor_omni_importer_ids").select2({   width: 'resolve'   });});
   = f.input :invoice_threshold
   = f.input :active_webstore
   = f.input :collect_phone_in_webstore

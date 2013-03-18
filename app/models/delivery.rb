@@ -208,6 +208,14 @@ class Delivery < ActiveRecord::Base
     export_items ? csv_output : nil
   end
 
+  def self.date_for_packages_or_deliveries(export_type, distributor, delivery_ids, package_ids)
+    if export_type == :delivery
+      distributor.deliveries.where(id: delivery_ids).first.delivery_list.date
+    else
+      distributor.packages.where(id: package_ids).first.packing_list.date
+    end
+  end
+
   def payment_amount
     package.total_price
   end
