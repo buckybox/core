@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130220234725) do
+ActiveRecord::Schema.define(:version => 20130313051530) do
 
   create_table "accounts", :force => true do |t|
     t.integer  "customer_id"
@@ -127,6 +127,20 @@ ActiveRecord::Schema.define(:version => 20130220234725) do
     t.text     "details"
   end
 
+  create_table "customer_checkouts", :force => true do |t|
+    t.integer  "distributor_id"
+    t.integer  "customer_id"
+    t.datetime "created_at",     :null => false
+    t.datetime "updated_at",     :null => false
+  end
+
+  create_table "customer_logins", :force => true do |t|
+    t.integer  "distributor_id"
+    t.integer  "customer_id"
+    t.datetime "created_at",     :null => false
+    t.datetime "updated_at",     :null => false
+  end
+
   create_table "customers", :force => true do |t|
     t.string   "first_name"
     t.string   "email"
@@ -227,6 +241,24 @@ ActiveRecord::Schema.define(:version => 20130220234725) do
     t.datetime "updated_at",   :null => false
   end
 
+  create_table "distributor_logins", :force => true do |t|
+    t.integer  "distributor_id"
+    t.datetime "created_at",     :null => false
+    t.datetime "updated_at",     :null => false
+  end
+
+  create_table "distributor_metrics", :force => true do |t|
+    t.integer  "distributor_id"
+    t.integer  "distributor_logins"
+    t.integer  "new_customers"
+    t.integer  "deliveries_completed"
+    t.integer  "customer_payments"
+    t.integer  "webstore_checkouts"
+    t.integer  "customer_logins"
+    t.datetime "created_at",           :null => false
+    t.datetime "updated_at",           :null => false
+  end
+
   create_table "distributors", :force => true do |t|
     t.string   "email",                                            :default => "",    :null => false
     t.string   "encrypted_password",                :limit => 128, :default => "",    :null => false
@@ -285,6 +317,9 @@ ActiveRecord::Schema.define(:version => 20130220234725) do
     t.boolean  "feature_spend_limit"
     t.string   "contact_name"
     t.boolean  "customer_can_remove_orders",                       :default => true
+    t.boolean  "collect_phone_in_webstore"
+    t.datetime "last_seen_at"
+    t.text     "notes"
   end
 
   add_index "distributors", ["authentication_token"], :name => "index_distributors_on_authentication_token", :unique => true
@@ -292,6 +327,13 @@ ActiveRecord::Schema.define(:version => 20130220234725) do
   add_index "distributors", ["email"], :name => "index_distributors_on_email", :unique => true
   add_index "distributors", ["reset_password_token"], :name => "index_distributors_on_reset_password_token", :unique => true
   add_index "distributors", ["unlock_token"], :name => "index_distributors_on_unlock_token", :unique => true
+
+  create_table "distributors_omni_importers", :force => true do |t|
+    t.integer  "distributor_id"
+    t.integer  "omni_importer_id"
+    t.datetime "created_at",       :null => false
+    t.datetime "updated_at",       :null => false
+  end
 
   create_table "events", :force => true do |t|
     t.integer  "distributor_id",                       :null => false
@@ -336,9 +378,10 @@ ActiveRecord::Schema.define(:version => 20130220234725) do
     t.boolean  "draft"
     t.integer  "account_type"
     t.string   "csv_file"
-    t.datetime "created_at",     :null => false
-    t.datetime "updated_at",     :null => false
+    t.datetime "created_at",       :null => false
+    t.datetime "updated_at",       :null => false
     t.string   "file_format"
+    t.integer  "omni_importer_id"
   end
 
   add_index "import_transaction_lists", ["distributor_id", "draft"], :name => "index_import_transaction_lists_on_distributor_id_and_draft"
@@ -405,6 +448,16 @@ ActiveRecord::Schema.define(:version => 20130220234725) do
 
   add_index "line_items", ["distributor_id"], :name => "index_line_items_on_distributor_id"
 
+  create_table "omni_importers", :force => true do |t|
+    t.integer  "country_id"
+    t.text     "rules"
+    t.string   "import_transaction_list"
+    t.string   "name"
+    t.datetime "created_at",              :null => false
+    t.datetime "updated_at",              :null => false
+    t.string   "payment_type"
+  end
+
   create_table "order_extras", :force => true do |t|
     t.integer  "order_id"
     t.integer  "extra_id"
@@ -426,13 +479,14 @@ ActiveRecord::Schema.define(:version => 20130220234725) do
 
   create_table "orders", :force => true do |t|
     t.integer  "box_id"
-    t.integer  "quantity",       :default => 1,     :null => false
-    t.boolean  "completed",      :default => false, :null => false
+    t.integer  "quantity",               :default => 1,     :null => false
+    t.boolean  "completed",              :default => false, :null => false
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "account_id"
-    t.boolean  "active",         :default => false, :null => false
-    t.boolean  "extras_one_off", :default => true
+    t.boolean  "active",                 :default => false, :null => false
+    t.boolean  "extras_one_off",         :default => true
+    t.integer  "extras_packing_list_id"
   end
 
   add_index "orders", ["account_id"], :name => "index_orders_on_account_id"
