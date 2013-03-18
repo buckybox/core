@@ -33,7 +33,7 @@
                   %span.caret
                 %ul#omni_importer_menu.dropdown-menu
                   - current_distributor.omni_importers.ordered.each do |omni_importer|
-                    %li{data:{id: omni_importer.id, label: "Upload #{omni_importer.name} Transactions"}}= link_to omni_importer.name, '#'
+                    %li{data:{id: omni_importer.id, label: "Upload #{omni_importer.name} Transactions"}}= link_to omni_importer.name, '#', style: 'text-align:left'
                 
           %input#import_transaction_list_csv_file{name: 'import_transaction_list[csv_file]', type:'file', style: 'display:none', class: 'auto_submit'}
 
