@@ -87,6 +87,7 @@ class Webstore
     email    = user_information[:email]
     password = user_information[:password]
     customer = Customer.find_by_email(email)
+    customer_new = user_information[:registered] != 'returning'
 
     if email.blank?
       @controller.flash[:error] = 'You must provide an email address.'
@@ -94,10 +95,10 @@ class Webstore
     elsif !email_valid?(email)
       @controller.flash[:error] = 'You must provide a valid email address.'
       @order.login_step
-    elsif customer.nil?
+    elsif customer.nil? && customer_new
       self.current_email = email
       @order.delivery_step
-    elsif customer.valid_password?(password) && customer.distributor == @distributor
+    elsif customer.present? && customer.valid_password?(password) && customer.distributor == @distributor
       CustomerLogin.track(customer) unless @controller.current_admin.present?
       @controller.sign_in(customer)
       @order.delivery_step
