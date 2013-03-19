@@ -8,11 +8,8 @@ class ImportTransactionList < ActiveRecord::Base
 
   mount_uploader :csv_file, ImportTransactionListUploader
 
-  FILE_FORMATS = [["Kiwibank", "kiwibank"], ["St George Australia", "st_george_au"], ["Paypal", "paypal"], ["BNZ", "bnz"], ["National Bank", "national"], ["ANZ", "anz"], ["UK - Lloyds TSB", "uk_lloyds_tsb"]]
-  ACCOUNTS = [:kiwibank, :paypal, :st_george_au, :bnz, :national] # I think this isn't used anywhere.. ?
 
   validates_presence_of :csv_file
-  validates_inclusion_of :file_format, in: FILE_FORMATS.map(&:last), unless: lambda { self.omni_importer_id.blank? }, unless: lambda{self.omni_importer_id.present?}
 
   validate :csv_ready, on: :create
 
@@ -24,15 +21,11 @@ class ImportTransactionList < ActiveRecord::Base
   scope :draft, where(['import_transaction_lists.draft = ?', true])
   scope :processed, where(['import_transaction_lists.draft = ?', false])
 
-  attr_accessible :csv_file, :file_format, :import_transactions_attributes, :draft, :omni_importer_id
+  attr_accessible :csv_file, :import_transactions_attributes, :draft, :omni_importer_id
   delegate :payment_type, to: :omni_importer, allow_nil: true
 
   def account
-    if omni_importer.present?
-      omni_importer.name
-    else
-      ImportTransactionList.label_for_file_format(file_format)
-    end
+    omni_importer.name if omni_importer.present?
   end
 
   def has_failed?
@@ -51,10 +44,6 @@ class ImportTransactionList < ActiveRecord::Base
     payment_type.present?
   end
 
-  def self.label_for_file_format(file_format)
-    FILE_FORMATS.find{ |name, code| code == file_format }.first
-  end
-
   def import_rows
     csv_parser.rows.each do |row|
       import_transactions << ImportTransaction.new_from_row(row, self, distributor)
@@ -63,32 +52,17 @@ class ImportTransactionList < ActiveRecord::Base
     return import_transactions
   end
 
-  def file_format
-    in_db = read_attribute(:file_format)
-
-    if in_db.present?
-      in_db
-    else
-      distributor.present? ? distributor.last_csv_format(self) : FILE_FORMATS.first.last
-    end
-  end
-
-  def parser_class
-    "Bucky::TransactionImports::#{file_format.camelize}".constantize
-  end
-
   def csv_parser
     return @parser unless @parser.blank?
     return nil unless errors.blank? && csv_file.present?
 
-    if omni_importer.present?
-      @parser = omni_importer.import(csv_file.current_path)
-    elsif file_format.present?
-      @parser = parser_class.new
-      @parser.import(csv_file.current_path)
-    end
+    @parser = omni_importer.import(csv_file.current_path)
 
     return @parser
+  end
+
+  def file_format
+    "omni_importer"
   end
 
   def process_import_transactions_attributes(import_transaction_list_attributes)

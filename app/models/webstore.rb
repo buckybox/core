@@ -87,14 +87,18 @@ class Webstore
     email    = user_information[:email]
     password = user_information[:password]
     customer = Customer.find_by_email(email)
+    customer_new = user_information[:registered] != 'returning'
 
     if email.blank?
       @controller.flash[:error] = 'You must provide an email address.'
       @order.login_step
-    elsif customer.nil?
+    elsif !email_valid?(email)
+      @controller.flash[:error] = 'You must provide a valid email address.'
+      @order.login_step
+    elsif customer.nil? && customer_new
       self.current_email = email
       @order.delivery_step
-    elsif customer.valid_password?(password) && customer.distributor == @distributor
+    elsif customer.present? && customer.valid_password?(password) && customer.distributor == @distributor
       CustomerLogin.track(customer) unless @controller.current_admin.present?
       @controller.sign_in(customer)
       @order.delivery_step
@@ -111,6 +115,10 @@ class Webstore
       @controller.flash[:error] = error_description
       @order.login_step
     end
+  end
+
+  def email_valid?(email)
+    email.is_a?(String) && !email.match(Devise.email_regexp).nil?
   end
 
   def update_delivery_information(delivery_information)

@@ -20,13 +20,9 @@
       %strong#currency_code= @distributor.currency.upcase
 
   = f.input :separate_bucky_fee
-  = f.input :bank_deposit
-  = f.input :paypal
-  = f.input :bank_deposit_format, collection: ImportTransactionList::FILE_FORMATS.reject { |name, code| code == 'paypal' }, as: :select
   = f.association :omni_importers, collection: OmniImporter.all, label_method: :select_label, hint: "Once selected and saved, this will override the old import formats presented to the distributor on the payments screen."
   :javascript
     $(function(){$("#distributor_omni_importer_ids").select2({   width: 'resolve'   });});
-  = f.input :invoice_threshold
   = f.input :active_webstore
   = f.input :collect_phone_in_webstore
   = f.input :customer_can_remove_orders

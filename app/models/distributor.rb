@@ -53,7 +53,7 @@ class Distributor < ActiveRecord::Base
   attr_accessible :email, :password, :password_confirmation, :remember_me, :name, :url, :company_logo, :company_logo_cache,
     :remove_company_logo, :company_team_image, :company_team_image_cache, :remove_company_team_image, :completed_wizard,
     :support_email, :invoice_threshold, :separate_bucky_fee, :advance_hour, :advance_days, :automatic_delivery_hour,
-    :time_zone, :currency, :bank_deposit, :paypal, :bank_deposit_format, :country_id, :consumer_delivery_fee,
+    :time_zone, :currency, :country_id, :consumer_delivery_fee,
     :consumer_delivery_fee_cents, :active_webstore, :about, :details, :facebook_url, :city, :customers_show_intro,
     :deliveries_index_packing_intro, :deliveries_index_deliveries_intro, :payments_index_intro, :customers_index_intro,
     :customer_can_remove_orders, :parameter_name, :default_balance_threshold, :has_balance_threshold, :spend_limit_on_all_customers, :send_email, :send_halted_email, :feature_spend_limit, :contact_name, :tag_list, :collect_phone_in_webstore, :omni_importer_ids, :notes
@@ -66,7 +66,6 @@ class Distributor < ActiveRecord::Base
   validates_numericality_of :advance_hour, greater_than_or_equal_to: 0
   validates_numericality_of :advance_days, greater_than_or_equal_to: 0
   validates_numericality_of :automatic_delivery_hour, greater_than_or_equal_to: 0
-  validates_presence_of :bank_deposit_format, if: :bank_deposit?
   validate :required_fields_for_webstore
 
   before_validation :check_emails
@@ -81,11 +80,8 @@ class Distributor < ActiveRecord::Base
   default_value_for :advance_days,            DEFAULT_ADVANCED_DAYS
   default_value_for :automatic_delivery_hour, DEFAULT_AUTOMATIC_DELIVERY_HOUR
 
-  default_value_for :bank_deposit, true
-  default_value_for :paypal, false
   default_value_for :invoice_threshold_cents, -500
   default_value_for :bucky_box_percentage, 0.0175
-  default_value_for :bank_deposit_format, ImportTransactionList::FILE_FORMATS.first.last # Kiwibank
 
   # Devise Override: Avoid validations on update or if now password provided
   def password_required?
@@ -167,42 +163,15 @@ class Distributor < ActiveRecord::Base
     window_start_from + days_to_generate.days
   end
 
-  def generate_required_daily_lists
-    start_date = window_start_from
-    end_date   = window_end_at
-
-    newest_list_date = packing_lists.last.date if packing_lists.last
-
-    successful = true # assume all is good with the world
-
-    if newest_list_date && (newest_list_date > end_date)
-      # Only need to delete the difference
-      start_date = end_date + 1.day
-      end_date = newest_list_date
-
-      (start_date..end_date).each do |date|
-        # Seek and destroy (http://youtu.be/wLBpLz5ELPI?t=3m10s) the lists that are now out of range
-        packing_list = packing_lists.find_by_date(date)
-        successful &= packing_list.destroy unless packing_list.nil?
-
-        delivery_list = delivery_lists.find_by_date(date)
-        successful &= delivery_list.destroy unless delivery_list.nil?
-      end
-    else
-      # Only generate the lists that don't exist yet
-      start_date = newest_list_date unless newest_list_date.nil?
-
-      unless start_date == end_date # the packing list already exists so don't boher generating
-        (start_date..end_date).each do |date|
-          packing_list = PackingList.generate_list(self, date)
-          delivery_list = DeliveryList.generate_list(self, date)
-
-          successful &= packing_list.date == date && delivery_list.date == date
-        end
-      end
-    end
-
-    return successful
+  def generate_required_daily_lists(generator_class = GenerateRequiredDailyLists)
+    generator = generator_class.new(
+      distributor:        self,
+      window_start_from:  window_start_from,
+      window_end_at:      window_end_at,
+      packing_lists:      packing_lists.scoped,
+      delivery_lists:     delivery_lists.scoped,
+    )
+    generator.generate
   end
 
   # Date is always in distributors timezone
@@ -309,34 +278,18 @@ class Distributor < ActiveRecord::Base
     import_transactions.processed.matched.not_removed.where(description: description).ordered.last
   end
 
-  def last_csv_format(import_transaction_list)
-    last_import = import_transaction_lists.order("created_at DESC").first
-    return nil if last_import == import_transaction_list
-
-    last_import.present? ? last_import.file_format : nil
-  end
-
   def supported_csv_formats
-    if omni_importers.count.zero?
-      result = ""
-      result << ImportTransactionList::FILE_FORMATS.find{|name, code| code == bank_deposit_format}.first if bank_deposit?
-      result << " or " if bank_deposit? && paypal?
-      result << "Paypal" if paypal?
-      result
-    else
-      omni_importers.collect{|o| o.name}.to_sentence({two_words_connector: ' or ', last_word_connector: ', or '})
-    end
+    omni_importers.collect{|o| o.name}.to_sentence({two_words_connector: ' or ', last_word_connector: ', or '})
   end
 
-  def available_csv_formats_select
-    select_options = []
-    select_options << ImportTransactionList::FILE_FORMATS.find{|name, code| code == bank_deposit_format} if bank_deposit?
-    select_options << ImportTransactionList::FILE_FORMATS.find{|name, code| code == "paypal"} if paypal?
-    select_options
+  def last_used_omni_importer(prefered=nil)
+    prefered ||
+      import_transaction_lists.order('created_at DESC').first.try(:omni_importer) ||
+      omni_importers.ordered.first
   end
 
   def show_payments_tab?
-    available_csv_formats_select.present? || !omni_importers.count.zero?
+    !omni_importers.count.zero?
   end
 
   def can_upload_payments?
