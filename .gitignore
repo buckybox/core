@@ -40,3 +40,6 @@ public/stylesheets/
 
 # Ignore Ctags
 .tags*
+
+#Ignore the schema file as we now use a structure file instead
+/db/schema.rb

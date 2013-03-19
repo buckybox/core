@@ -83,111 +83,18 @@ describe Distributor do
     specify { Fabricate(:distributor, support_email: 'support@example.com').support_email.should == 'support@example.com' }
   end
 
-  context '#generate_required_daily_lists' do
-    after { Delorean.back_to_the_present }
+  describe '#generate_required_daily_lists' do
+    let(:generator) { double('generator') }
+    let(:generator_class) { double('generator_class', new: generator) }
 
-    context 'current time before advance_hour' do
-      before do
-        @current_time = Time.zone.local(2012, 3, 20, Distributor::DEFAULT_AUTOMATIC_DELIVERY_HOUR - 1)
-        @default_days = Distributor::DEFAULT_ADVANCED_DAYS
-        Delorean.time_travel_to(@current_time)
-      end
-
-      context 'new distributor' do
-        it 'the generated packing lists should start from today' do
-          distributor.save
-          distributor.packing_lists.first.date.should == Date.current
-        end
-
-        specify { expect { distributor.save }.to change(PackingList, :count).from(0).to(@default_days) }
-        specify { expect { distributor.save }.to change(DeliveryList, :count).from(0).to(@default_days) }
-      end
-
-      context 'distributor changes advance days' do
-        context 'make a bigger window' do
-          before do
-            distributor.save
-            @custom_days = @default_days + 2
-            distributor.advance_days = @custom_days
-          end
-
-          it 'the generated packing lists should start from today' do
-            distributor.save!
-            distributor.packing_lists.first.date.should == Date.today
-          end
-
-          specify { expect { distributor.save }.to change(PackingList, :count).from(@default_days).to(@custom_days) }
-          specify { expect { distributor.save }.to change(DeliveryList, :count).from(@default_days).to(@custom_days) }
-        end
-
-        context 'make a smaller window' do
-          before do
-            distributor.save
-            @custom_days = @default_days - 2
-            distributor.advance_days = @custom_days
-          end
-
-          it 'the generated packing lists should start from today' do
-            distributor.save!
-            distributor.packing_lists.first.date.should == Date.today
-          end
-
-          specify { expect { distributor.save }.to change(PackingList, :count).from(@default_days).to(@custom_days) }
-          specify { expect { distributor.save }.to change(DeliveryList, :count).from(@default_days).to(@custom_days) }
-        end
-      end
+    it 'returns true if the daily list generator successfully performs the generation' do
+      generator.stub(:generate) { true }
+      distributor.generate_required_daily_lists(generator_class).should be_true
     end
 
-    context 'current time after advance_hour' do
-      before do
-        @current_time = Time.zone.local(2012, 3, 20, Distributor::DEFAULT_AUTOMATIC_DELIVERY_HOUR + 1)
-        @default_days = Distributor::DEFAULT_ADVANCED_DAYS
-        Delorean.time_travel_to(@current_time)
-      end
-
-      context 'new distributor' do
-        it 'the generated packing lists should start from tomorrow' do
-          distributor.save
-          distributor.packing_lists.first.date.should == Date.tomorrow
-        end
-
-        specify { expect { distributor.save }.to change(PackingList, :count).from(0).to(@default_days) }
-        specify { expect { distributor.save }.to change(DeliveryList, :count).from(0).to(@default_days) }
-      end
-
-      context 'distributor changes advance days' do
-        context 'make a bigger window' do
-          before do
-            distributor.save
-            @custom_days = @default_days + 2
-            distributor.advance_days = @custom_days
-          end
-
-          it 'the generated packing lists should start from tomorrow' do
-            distributor.save
-            distributor.packing_lists.first.date.should == Date.tomorrow
-          end
-
-          specify { expect { distributor.save }.to change(PackingList, :count).from(@default_days).to(@custom_days) }
-          specify { expect { distributor.save }.to change(DeliveryList, :count).from(@default_days).to(@custom_days) }
-        end
-
-        context 'make a smaller window' do
-          before do
-            distributor.save
-            @custom_days = @default_days - 2
-            distributor.advance_days = @custom_days
-          end
-
-          it 'the generated packing lists should start from tomorrow' do
-            distributor.save
-            distributor.packing_lists.first.date.should == Date.tomorrow
-          end
-
-          specify { expect { distributor.save }.to change(PackingList, :count).from(@default_days).to(@custom_days) }
-          specify { expect { distributor.save }.to change(DeliveryList, :count).from(@default_days).to(@custom_days) }
-        end
-      end
+    it 'returns false if the daily list generator fails to performs the generation' do
+      generator.stub(:generate) { true }
+      distributor.generate_required_daily_lists(generator_class).should be_true
     end
   end
 
