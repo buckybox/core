@@ -36,16 +36,8 @@
       %dd= @distributor.consumer_delivery_fee.format
       %dt Separate Bucky Fee
       %dd= checkmark_boolean(@distributor.separate_bucky_fee)
-      %dt Bank Deposit
-      %dd= checkmark_boolean(@distributor.bank_deposit?)
-      %dt Paypal
-      %dd= checkmark_boolean(@distributor.paypal?)
-      %dt Bank File Format
-      %dd= @distributor.bank_deposit_format
       %dt Omni Importers
       %dd= @distributor.omni_importers.collect(&:select_label).join(' | ')
-      %dt Invoice Threshold
-      %dd= @distributor.invoice_threshold.format
       %dt Separate Bucky Fee
       %dd= checkmark_boolean(@distributor.separate_bucky_fee)
       %dt Created On

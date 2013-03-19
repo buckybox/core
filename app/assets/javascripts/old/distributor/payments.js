@@ -1,7 +1,12 @@
 $(function() {
   window.payments = {
     load: function() {
-      $(".auto_submit").change(function() {
+      $("#upload_btn").click(function(event){
+        $("#import_transaction_list_csv_file").trigger('click');
+        return false;
+      });
+
+      $("#import_transaction_list_csv_file").change(function() {
         $('.ajax_loader_hide').hide();
         $('.ajax_loader_gif').show();
 
@@ -9,8 +14,7 @@ $(function() {
       });
 
       $("#upload_more_transactions_link").click(function(event) {
-        $('#upload_more_transactions .error_notification').hide();
-        $('#upload_more_transactions .error').hide();
+        $('#upload_error_messages').hide();
         $("#upload_more_transactions").reveal();
 
         return false;
@@ -86,7 +90,15 @@ $(function() {
   };
 
   window.payments.load();
+  window.payments.reload();
 
-  return window.payments.reload();
+  $("#omni_importer_menu li").click(function(){
+    var target = $(this);
+    var id = target.data('id');
+    var label = target.data('label');
+
+    $("#import_transaction_list_omni_importer_id").val(id);
+    $("#upload_btn").html(label);
+  });
 });
 

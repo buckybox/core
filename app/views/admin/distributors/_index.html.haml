@@ -33,16 +33,12 @@
       .span4
         - distributor.tags.each do |tag|
           %span.label.label-info= link_to tag.name, tag_admin_distributors_path(tag.name)
-        - if distributor.bank_deposit?
-          %span.label bank-deposit
         - if distributor.send_email?
           %span.label emails
         - if distributor.separate_bucky_fee?
           %span.label fee
         - if distributor.feature_spend_limit?
           %span.label halt
-        - if distributor.paypal?
-          %span.label paypal
         - if distributor.active_webstore?
           %span.label webstore
         - distributor.omni_importers.includes(:country).each do |omni_importer|
