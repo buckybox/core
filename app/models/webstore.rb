@@ -91,6 +91,9 @@ class Webstore
     if email.blank?
       @controller.flash[:error] = 'You must provide an email address.'
       @order.login_step
+    elsif !email_valid?(email)
+      @controller.flash[:error] = 'You must provide a valid email address.'
+      @order.login_step
     elsif customer.nil?
       self.current_email = email
       @order.delivery_step
@@ -111,6 +114,10 @@ class Webstore
       @controller.flash[:error] = error_description
       @order.login_step
     end
+  end
+
+  def email_valid?(email)
+    email.is_a?(String) && !email.match(Devise.email_regexp).nil?
   end
 
   def update_delivery_information(delivery_information)
