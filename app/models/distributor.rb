@@ -309,6 +309,12 @@ class Distributor < ActiveRecord::Base
     omni_importers.collect{|o| o.name}.to_sentence({two_words_connector: ' or ', last_word_connector: ', or '})
   end
 
+  def last_used_omni_importer(prefered=nil)
+    prefered ||
+      import_transaction_lists.order('created_at DESC').first.try(:omni_importer) ||
+      omni_importers.ordered.first
+  end
+
   def show_payments_tab?
     !omni_importers.count.zero?
   end
