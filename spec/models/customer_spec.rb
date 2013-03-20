@@ -160,11 +160,11 @@ describe Customer do
 
       boxes = []
       box = box_mock({box_type: "Rural Van", extras_unlimited?: true})
-      customer.stub_chain(:distributor, :boxes, :find_by_name).with("Rural Van").and_return(mock_model('Box', extras_unlimited?: true))
+      customer.stub_chain(:distributor, :boxes, :find_by_name).with("Rural Van").and_return(mock_model('Box', extras_unlimited?: true, substitutions_limit: 0, exclusions_limit: 0))
       boxes << box
 
       box = box_mock({box_type: "City Van", extras_unlimited?: true})
-      customer.stub_chain(:distributor, :boxes, :find_by_name).with("City Van").and_return(mock_model('Box', extras_unlimited?: true))
+      customer.stub_chain(:distributor, :boxes, :find_by_name).with("City Van").and_return(mock_model('Box', extras_unlimited?: true, substitutions_limit: 0, exclusions_limit: 0))
       boxes << box
 
       Distributor.any_instance.stub(:find_extra_from_import).and_return(mock_model('Extra'))

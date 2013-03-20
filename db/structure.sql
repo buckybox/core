@@ -503,8 +503,8 @@ CREATE TABLE boxes (
     available_monthly boolean DEFAULT false NOT NULL,
     extras_limit integer DEFAULT 0,
     hidden boolean DEFAULT false NOT NULL,
-    exclusions_limit integer,
-    substitutions_limit integer
+    exclusions_limit integer DEFAULT 0,
+    substitutions_limit integer DEFAULT 0
 );
 
 

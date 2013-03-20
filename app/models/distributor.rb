@@ -441,10 +441,10 @@ class Distributor < ActiveRecord::Base
     @@original_time ||= Time.current
     @@advanced ||= 0
     (24 * day).times.each do |h|
-      h += 1 # start at 1, not 0
+s     h += 1 # start at 1, not 0
 
       Delorean.time_travel_to(@@original_time + (@@advanced*day.days) + h.hours)
-      Jobs.run_all
+      Jobs.run_hourly
     end
     @@advanced += day
   end

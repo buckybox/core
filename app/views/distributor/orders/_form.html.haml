@@ -17,9 +17,7 @@
         = render partial: 'extras', locals: { account: @account, order: @order, box: @order.box || box_collection(@customer).first }
 
     .span4
-      #likes_dislikes_limits
-      :javascript
-        $("#likes_dislikes_limits").data('limits', #{@order.limits_data});
+      #likes_dislikes_limits{data: {limits: @order.limits_data}}
       #dislikes-input
         = f.full_error(:exclusions)
         = f.input :excluded_line_item_ids, label: 'Exclusions', collection: @stock_list, as: :select, :input_html => { :multiple => true }, placeholder: "Exclude these items..."

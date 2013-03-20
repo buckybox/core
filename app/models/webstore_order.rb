@@ -197,8 +197,8 @@ class WebstoreOrder < ActiveRecord::Base
         order_extras: extras_hash,
         extras_one_off: extras_one_off
       )
-      order.update_exclusions(exclusions)
-      order.update_substitutions(substitutions)
+      order.excluded_line_item_ids = exclusions
+      order.substituted_line_item_ids = substitutions
       self.order = order
       order.save!
     end
