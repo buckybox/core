@@ -43,6 +43,18 @@ namespace :deploy do
       ln -nfs #{shared_path}/log/ #{release_path}/log/
     )
   end
+  
+  task :symlink_configs do
+    run %(
+      ln -nfs #{shared_path}/private_uploads/ #{release_path}/
+    )
+  end
+end
+
+task :setup_private_uploads do
+  run %(
+    mkdir -p #{shared_path}/private_uploads
+  )
 end
 
 after 'deploy:assets:symlink' do
@@ -51,6 +63,8 @@ end
 
 after "deploy:update_code", "deploy:migrate"
 after "deploy:restart", "deploy:cleanup"
+
+after "deploy:setup", "setup_private_uploads"
 
 # This is here to provide support of capistrano variables in sprinkle
 begin
