@@ -24,10 +24,6 @@ class Distributor::OrdersController < Distributor::ResourceController
     @order = Order.new(order_hash)
 
     create!  do |success, failure|
-      @order.update_exclusions(params[:dislikes_input])
-      @order.update_substitutions(params[:likes_input])
-      @order.save
-
       success.html { redirect_to [:distributor, @account.customer] }
       failure.html do
         load_form
@@ -46,9 +42,6 @@ class Distributor::OrdersController < Distributor::ResourceController
   def update
     @account = current_distributor.accounts.find(params[:account_id])
     @order   = current_distributor.orders.find(params[:id])
-
-    @order.update_exclusions(params[:dislikes_input])
-    @order.update_substitutions(params[:likes_input])
 
     # Not allowing changes to the schedule at the moment
     # Will revisit when we have time to build a proper UI for it

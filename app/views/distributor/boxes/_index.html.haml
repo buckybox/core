@@ -20,8 +20,14 @@
             %td= box.name
             %td= box.price.format
             %td= checkmark_boolean(box.hidden)
-            %td= checkmark_boolean(box.dislikes)
-            %td= checkmark_boolean(box.likes)
+            - if box.dislikes
+              %td= box.exclusions_limit.zero? ? "Unlimited" : "Limited to #{box.exclusions_limit}"
+            -else
+              %td= checkmark_boolean(box.dislikes)
+            - if box.likes
+              %td= box.substitutions_limit.zero? ? "Unlimited" : "Limited to #{box.substitutions_limit}"
+            - else
+              %td= checkmark_boolean(box.likes)
             %td= box.extra_option
             %td= simple_format box.description
             %td= link_to 'Edit', edit_distributor_box_path(box)

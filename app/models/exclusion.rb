@@ -6,7 +6,7 @@ class Exclusion < ActiveRecord::Base
 
   attr_accessible :order, :line_item, :order_id, :line_item_id
 
-  validates_presence_of :order, :line_item
+  #validates_presence_of :order, :line_item
   validates_uniqueness_of :line_item_id, scope: :order_id
 
   scope :active, includes(:order).where("orders.active = ?", true)

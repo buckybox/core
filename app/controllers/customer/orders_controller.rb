@@ -14,8 +14,6 @@ class Customer::OrdersController < Customer::ResourceController
 
   def update
     @order = current_customer.orders.find(params[:id])
-    @order.update_exclusions(params[:dislikes_input])
-    @order.update_substitutions(params[:likes_input])
 
     update! do |success, failure|
       success.html { redirect_to customer_root_url }

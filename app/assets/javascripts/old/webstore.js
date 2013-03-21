@@ -33,8 +33,8 @@ $(function() {
     var dislikes = $('#webstore-customise .dislikes_input');
     var likes = $('#webstore-customise .likes_input');
 
-    dislikes.find('select').select2();
-    likes.find('select').select2();
+    dislikes.find('select').select2({maximumSelectionSize: dislikes.find('select').data('limits')});
+    likes.find('select').select2({maximumSelectionSize: likes.find('select').data('limits')});
     likes.hide();
     $('#webstore-customisations').hide();
 
@@ -54,6 +54,8 @@ $(function() {
       else {
         likes_input.find('option:selected').removeAttr('selected');
         likes_input.find('select').trigger('liszt:updated');
+        likes_input.find('select').select2("val", "");
+        enable_all_options(dislikes_input);
         likes_input.hide();
       }
     });

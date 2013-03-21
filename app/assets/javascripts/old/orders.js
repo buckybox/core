@@ -3,12 +3,17 @@ $(function() {
     order_init();
     init_extras();
 
+    var box_id = $("#order-form select.box").val();
     $('#order-form #dislikes-input').show();
-    $('#order-form #dislikes-input select').select2();
-    $('#order-form #dislikes-input').hide();
-
     $('#order-form #likes-input').show();
-    $('#order-form #likes-input select').select2();
+    update_likes_dislikes_limits(box_id);
+    var current_order  = $('#order-form');
+    var likes_input    = current_order.find('#likes-input');
+    var dislikes_input = current_order.find('#dislikes-input');
+
+    disable_the_others_options(dislikes_input, likes_input);
+    disable_the_others_options(likes_input, dislikes_input);
+    $('#order-form #dislikes-input').hide();
     $('#order-form #likes-input').hide();
   }
 
@@ -23,6 +28,7 @@ $(function() {
     if(box_id) {
       order_check_box(box_id, current_order);
       update_customer_box_extras(current_order);
+      update_likes_dislikes_limits(box_id);
     }
     else {
       current_order.find('#dislikes-input').hide();
@@ -41,14 +47,14 @@ $(function() {
 
     disable_the_others_options(dislikes_input, likes_input);
 
-    console.info(dislikes_input.is(':hidden'));
-    console.info(dislikes_input.find('option:selected').length);
     if(!dislikes_input.is(':hidden') && dislikes_input.find('option:selected').length > 0) {
       likes_input.show();
     }
     else {
       likes_input.find('option:selected').removeAttr('selected');
       likes_input.find('select').trigger('liszt:updated');
+      likes_input.find('select').select2("val", "");
+      enable_all_options(current_order.find('#dislikes-input'));
       likes_input.hide();
     }
   });
@@ -91,6 +97,8 @@ function init_extras(){
 }
 
 function disable_the_others_options(affecting_input, effected_input) {
+  enable_all_options(effected_input);
+  effected_input.find('select').select2('close');
   affecting_input.find('option:selected').each(function() {
     counter = effected_input.find("option[value='" + $(this).val() + "']");
     counter.attr('disabled', 'disabled');
@@ -98,6 +106,13 @@ function disable_the_others_options(affecting_input, effected_input) {
   });
 
   effected_input.find('select').trigger("liszt:updated");
+}
+
+function enable_all_options(input){
+  input.find('option').each(function() {
+    $(this).removeAttr('disabled');
+  });
+  input.find('select').trigger('liszt:updated');
 }
 
 function order_init() {
@@ -166,4 +181,9 @@ function update_customer_box_extras(current_order) {
     current_order.find(".order_extras").html(data);
     init_extras();
   });
+};
+
+function update_likes_dislikes_limits(box_id){
+  $('#order-form #dislikes-input select').select2({maximumSelectionSize: $("#likes_dislikes_limits").data('limits')[box_id]['dislikes'], width: 'resolve'});
+  $('#order-form #likes-input select').select2({maximumSelectionSize: $("#likes_dislikes_limits").data('limits')[box_id]['likes'], width: 'resolve'});
 };

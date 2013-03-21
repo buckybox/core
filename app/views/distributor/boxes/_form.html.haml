@@ -12,7 +12,11 @@
       %fieldset
         %h4 Custom boxes
         = f.input :dislikes, label: 'Enable Exclusions', input_html: { class: 'span12' }
+        .exclusions_limit
+          = f.input :exclusions_limit, as: :select, collection: (7.times.collect{|i| i+=1; ["Limit to #{i} item#{'s' unless i.zero?}", i]} + [["Unlimited items", 0]]), include_blank: false
         = f.input :likes, label: 'Enable Substitutes', input_html: { class: 'span12' }
+        .substitutions_limit
+          = f.input :substitutions_limit, as: :select, collection: (7.times.collect{|i| i+=1; ["Limit to #{i} item#{'s' unless i.zero?}", i]} + [["Unlimited items", 0]]), include_blank: false
 
       %fieldset
         %h4 Extras

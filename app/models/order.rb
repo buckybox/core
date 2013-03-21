@@ -11,9 +11,13 @@ class Order < ActiveRecord::Base
 
   has_many :packages
   has_many :deliveries
-  has_many :exclusions,                  autosave: true
-  has_many :substitutions,               autosave: true
-  has_many :order_extras,                autosave: true
+  has_many :exclusions,    autosave: true, after_add: Proc.new {|o, s| s.order = o}
+  has_many :substitutions, autosave: true, after_add: Proc.new {|o, s| s.order = o}
+  has_many :order_extras,  autosave: true
+
+  has_many :excluded_line_items, through: :exclusions, source: :line_item
+  has_many :substituted_line_items, through: :substitutions, source: :line_item
+
 
   has_many :extras, through: :order_extras
 
@@ -33,7 +37,8 @@ class Order < ActiveRecord::Base
   acts_as_taggable
 
   attr_accessible :box, :box_id, :account, :account_id, :quantity, :completed, 
-    :order_extras, :extras_one_off, :schedule_rule_attributes, :schedule_rule
+    :order_extras, :extras_one_off, :schedule_rule_attributes, :schedule_rule,
+    :excluded_line_item_ids, :substituted_line_item_ids
 
   accepts_nested_attributes_for :schedule_rule
 
@@ -46,6 +51,7 @@ class Order < ActiveRecord::Base
   validates_numericality_of :quantity, greater_than: 0
   validate :route_includes_schedule_rule
   validate :extras_within_box_limit
+  validate :likes_dislikes_within_limits
 
   before_validation :activate, if: :just_completed?
 
@@ -80,32 +86,6 @@ class Order < ActiveRecord::Base
     order_ids = Order.where(customers: { route_id: route.id }).joins(:customer).map(&:id)
     # The join causes the returned models to be read-only. Thus, must to another search to get updateable models returned.
     Order.where(id: order_ids)
-  end
-
-  def update_exclusions(line_item_ids)
-    return unless box.dislikes?
-
-    line_item_ids = line_item_ids.to_a.map(&:to_i)
-    exclusion_line_item_ids = exclusions.map { |x| x.line_item_id }
-
-    to_delete = exclusion_line_item_ids - line_item_ids
-    to_create = line_item_ids - exclusion_line_item_ids
-
-    exclusions.each { |x| x.mark_for_destruction if to_delete.include?(x.line_item_id) }
-    to_create.each { |liid| exclusions.find_or_initialize_by_line_item_id(liid) }
-  end
-
-  def update_substitutions(line_item_ids)
-    return if !box.dislikes? || !box.likes?
-
-    line_item_ids = line_item_ids.to_a.map(&:to_i)
-    substitution_line_item_ids = substitutions.map { |x| x.line_item_id }
-
-    to_delete = substitution_line_item_ids - line_item_ids
-    to_create = line_item_ids - substitution_line_item_ids
-
-    substitutions.each { |x| x.mark_for_destruction if to_delete.include?(x.line_item_id) }
-    to_create.each { |liid| substitutions.find_or_initialize_by_line_item_id(liid) }
   end
 
   def change_to_local_time_zone
@@ -367,6 +347,10 @@ class Order < ActiveRecord::Base
     update_next_occurrence
   end
 
+  def limits_data
+    distributor.boxes.all.inject({}){|hash, element| hash.merge(element.id => element.limits_data)}.to_json
+  end
+
   def should_deactivate?
     schedule_rule.no_occurrences? && !paused? && !halted?
   end
@@ -394,6 +378,18 @@ class Order < ActiveRecord::Base
   def extras_within_box_limit
     if box.present? && !box.extras_unlimited? && extras_count > box.extras_limit
       errors.add(:base, "There is more than #{box.extras_limit} extras for this box")
+    end
+  end
+
+  def likes_dislikes_within_limits
+    return unless box.present?
+    
+    if !box.exclusions_limit.zero? && exclusions.size > box.exclusions_limit
+      errors.add(:exclusions, " is limited to #{box.exclusions_limit}")
+    end
+
+    if !box.substitutions_limit.zero? && substitutions.size > box.substitutions_limit
+      errors.add(:substitutions, " is limited to #{box.substitutions_limit}")
     end
   end
 
