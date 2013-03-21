@@ -44,7 +44,7 @@ namespace :deploy do
     )
   end
   
-  task :symlink_configs do
+  task :symlink_uploads do
     run %(
       ln -nfs #{shared_path}/private_uploads/ #{release_path}/
     )
@@ -59,6 +59,7 @@ end
 
 after 'deploy:assets:symlink' do
   deploy.symlink_configs
+  deploy.symlink_uploads
 end
 
 after "deploy:update_code", "deploy:migrate"
