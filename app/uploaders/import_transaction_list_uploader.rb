@@ -6,8 +6,6 @@ class ImportTransactionListUploader < CarrierWave::Uploader::Base
 
   def store_dir
     path = "#{Rails.root}/private_uploads/payments/csv/#{model.file_format}"
-    path << "/#{model.omni_importer.name.parameterize}" if model.try(:omni_importer).try(:name).try(:parameterize).present?
-    path << "/#{model.distributor_id}" if model.distributor_id.present?
   end
   
   def extension_white_list
@@ -15,7 +13,15 @@ class ImportTransactionListUploader < CarrierWave::Uploader::Base
   end
 
   def filename
-     "#{secure_token}-#{original_filename_without_format}.#{file.extension}" if original_filename.present?
+    if original_filename.present?
+      path = ""
+      path << "/#{model.omni_importer.name.parameterize}" if model.try(:omni_importer).try(:name).try(:parameterize).present?
+      path << "/#{model.distributor_id}" if model.distributor_id.present?
+      path << "/#{secure_token}-#{original_filename_without_format}.#{file.extension}"
+      path
+    else
+      nil
+    end
   end
 
   def original_filename_without_format
