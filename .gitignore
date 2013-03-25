@@ -46,3 +46,7 @@ private_uploads
 
 #Ignore the schema file as we now use a structure file instead
 /db/schema.rb
+
+#Ignore ctags
+/tags
+/**/*/tags
