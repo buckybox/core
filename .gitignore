@@ -38,6 +38,9 @@ public/uploads/
 public/assets/
 public/stylesheets/
 
+# Ignore uploads
+private_uploads
+
 # Ignore Ctags
 .tags*
 
