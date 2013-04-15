@@ -24,6 +24,7 @@ class WebstoreOrder < ActiveRecord::Base
   LOGIN     = :login
   DELIVERY  = :delivery
   COMPLETE  = :complete
+  PAYMENT   = :payment
   PLACED    = :placed
 
   def self.box_price(box, customer = nil)
@@ -88,6 +89,10 @@ class WebstoreOrder < ActiveRecord::Base
 
   def complete_step
     self.status = COMPLETE
+  end
+
+  def payment_step
+    self.status = PAYMENT
   end
 
   def placed_step

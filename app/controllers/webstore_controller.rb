@@ -77,6 +77,9 @@ class WebstoreController < ApplicationController
     @bank = @distributor.bank_information
   end
 
+  def payment
+  end
+
   def placed
     @customer = @webstore_order.customer
     @address = @customer.address

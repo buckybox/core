@@ -10,14 +10,24 @@ class Webstore
 
   def process_params
     webstore_params = @controller.params[:webstore_order]
+    return process_webstore(webstore_params) if webstore_params.present?
 
+    credit_card = @controller.params[:credit_card]
+    return process_credit_card(credit_card) if credit_card.present?
+  end
+
+  def process_webstore(webstore_params)
     start_order(webstore_params[:box_id])        if webstore_params[:box_id]
     customise_order(webstore_params)             if webstore_params[:customise] || webstore_params[:extras]
     login_customer(webstore_params[:user])       if webstore_params[:user]
     update_delivery_information(webstore_params) if webstore_params[:route]
-    add_address_and_complete(webstore_params)    if webstore_params[:complete]
+    add_address_and_payment_select(webstore_params)    if webstore_params[:complete]
 
     @order.save
+  end
+
+  def process_credit_card(credit_card)
+    process_payment(CreditCard.new(credit_card))
   end
 
   def next_step
@@ -133,29 +143,41 @@ class Webstore
     end
   end
 
-  def add_address_and_complete(webstore_params)
+  def add_address_and_payment_select(webstore_params)
     address_information = webstore_params[:address]
+    payment_option = PaymentOption.new(webstore_params[:payment_method])
 
     if address_information && (address_information[:name].blank? || address_information[:street_address].blank?)
       @controller.flash[:error] = 'Please include a your name'
       @order.complete_step
+    elsif !payment_option.valid?
+      @controller.flash[:error] = 'Please select a payment option'
+      @order.complete_step
     else
       customer = find_or_create_customer(address_information)
       update_address(customer, address_information) if address_information
+      payment_option.apply(@order)
 
       @order.account = customer.account
+      @order.payment_step
+      @order.save!
+    end
+  end
 
+  def process_payment(credit_card)
+    if credit_card.purchase!
       if @order.create_order
         CustomerCheckout.track(customer) unless @controller.current_admin.present?
-        @controller.flash[:notice] = 'Your order has been placed'
-        @order.placed_step
+        @order.payment_step
       elsif @order.order
         @controller.flash[:error] = 'You have already created this order'
-        @order.placed_step
       else
         @controller.flash[:error] = 'There was a problem completing your order'
         @order.complete_step
       end
+    else
+      @controller.flash[:error] = ['There was a problem with your credit card', credit_card.errors.full_messages.join(', ')].join(', ')
+      return true
     end
   end
 
