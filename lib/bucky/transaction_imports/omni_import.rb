@@ -110,7 +110,11 @@ EOF
     end
 
     def create_bucky_row(row, index, bank_name)
-      Bucky::TransactionImports::Row.new(row[:DATE], row[:DESC], row[:AMOUNT], index, row[:raw_data], self, bank_name)
+      date = row[:DATE]
+      desc = row[:DESC]
+      amount = row[:AMOUNT].gsub(/[^\d.]/,'')
+      raw_data = row[:raw_data]
+      Bucky::TransactionImports::Row.new(date, desc, amount, index, raw_data, self, bank_name)
     end
 
     def header_row

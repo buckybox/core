@@ -50,3 +50,5 @@ private_uploads
 #Ignore ctags
 /tags
 /**/*/tags
+
+.rbenv-version
