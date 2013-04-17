@@ -85,7 +85,7 @@ class Distributor::DeliveriesController < Distributor::ResourceController
   end
 
   def export
-    redirect_to :back and return unless params[:deliveries] || params[:packages]
+    redirect_to :back and return unless params[:deliveries] || params[:packages] || params[:orders]
 
     export_type = (params[:deliveries] ? :delivery : :packing)
 

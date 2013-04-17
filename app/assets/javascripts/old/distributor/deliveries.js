@@ -8,7 +8,7 @@ $(function() {
   if(element.length > 0) {
     var api = element.data('jsp');
     var throttleTimeout;
-    
+
     api.scrollToElement($('#scroll-to'), true);
 
     $(window).bind(
@@ -91,31 +91,11 @@ $(function() {
   });
 
   $('#delivery-listings #packing-export').click(function() {
-    var checked_packages = $('#delivery-listings .data-listings input[type=checkbox]:checked');
-    var ckbx_ids = $.map(checked_packages, function(ckbx) { return $(ckbx).data('package'); });
-
-    var form = $(this).parent().parent('form');
-
-    $.each(ckbx_ids, function(index, delivery_id) {
-      $("<input type='hidden'>").attr('name', 'packages[]').attr('value', delivery_id).appendTo(form);
-    });
-
-    checked_packages.prop('checked', false);
-    $('#delivery-listings #all').prop('checked', false);
+    prepare_csv_export();
   });
 
   $('#delivery-listings #delivery-export').click(function() {
-    var checked_deliveries = $('#delivery-listings .data-listings input[type=checkbox]:checked');
-    var ckbx_ids = $.map(checked_deliveries, function(ckbx) { return $(ckbx).data('delivery'); });
-
-    var form = $(this).parent().parent('form');
-
-    $.each(ckbx_ids, function(index, delivery_id) {
-      $("<input type='hidden'>").attr('name', 'deliveries[]').attr('value', delivery_id).appendTo(form);
-    });
-
-    checked_deliveries.prop('checked', false);
-    $('#delivery-listings #all').prop('checked', false);
+    prepare_csv_export();
   });
 
   $('#route-controls #delivered, #missed-options a').click(function() {
@@ -194,4 +174,19 @@ function makePayments(checked_deliveries, reverse_payment) {
       customerHolder.addClass(paidLabel);
     }
   });
+}
+
+function prepare_csv_export() {
+  var data_property = $('#list_type').data('type');
+  var checked_items = $('#delivery-listings .data-listings input[type=checkbox]:checked');
+  var ckbx_ids = $.map(checked_items, function(ckbx) { return $(ckbx).data(data_property); });
+
+  var form = $(this).parent().parent('form');
+
+  $.each(ckbx_ids, function(index, delivery_id) {
+    $("<input type='hidden'>").attr('name', property_array + '[]').attr('value', delivery_id).appendTo(form);
+  });
+
+  checked_packages.prop('checked', false);
+  $('#delivery-listings #all').prop('checked', false);
 }
