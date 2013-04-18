@@ -91,11 +91,11 @@ $(function() {
   });
 
   $('#delivery-listings #packing-export').click(function() {
-    prepare_csv_export();
+    prepare_csv_export(this);
   });
 
   $('#delivery-listings #delivery-export').click(function() {
-    prepare_csv_export();
+    prepare_csv_export(this);
   });
 
   $('#route-controls #delivered, #missed-options a').click(function() {
@@ -176,17 +176,17 @@ function makePayments(checked_deliveries, reverse_payment) {
   });
 }
 
-function prepare_csv_export() {
+function prepare_csv_export(el) {
   var data_property = $('#list_type').data('type');
   var checked_items = $('#delivery-listings .data-listings input[type=checkbox]:checked');
   var ckbx_ids = $.map(checked_items, function(ckbx) { return $(ckbx).data(data_property); });
 
-  var form = $(this).parent().parent('form');
+  var form = $(el).parent().parent('form');
 
   $.each(ckbx_ids, function(index, delivery_id) {
-    $("<input type='hidden'>").attr('name', property_array + '[]').attr('value', delivery_id).appendTo(form);
+    $("<input type='hidden'>").attr('name', data_property + '[]').attr('value', delivery_id).appendTo(form);
   });
 
-  checked_packages.prop('checked', false);
+  checked_items.prop('checked', false);
   $('#delivery-listings #all').prop('checked', false);
 }
