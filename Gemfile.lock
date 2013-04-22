@@ -1,5 +1,5 @@
 GIT
-  remote: git@github.com:jordandcarter/sprinkle.git
+  remote: git://github.com/jordandcarter/sprinkle.git
   revision: 408a82c764f07f96b49df805b3356197123dbfc4
   specs:
     sprinkle (0.4.2)
@@ -8,7 +8,7 @@ GIT
       highline (>= 1.4.0)
 
 GEM
-  remote: http://rubygems.org/
+  remote: https://rubygems.org/
   specs:
     RubyInline (3.12.1)
       ZenTest (~> 4.3)
