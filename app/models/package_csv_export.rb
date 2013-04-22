@@ -9,10 +9,6 @@ class PackageCsvExport < CsvExport
     end
   end
 
-  def calculate_date
-    @calculate_date ||= packages.first.packing_list.date
-  end
-
   def generate_csv_output(csv_data, csv_generator = PackageCsvGenerator)
     super(csv_data, csv_generator)
   end

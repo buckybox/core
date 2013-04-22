@@ -182,10 +182,15 @@ function prepare_csv_export(el) {
   var ckbx_ids = $.map(checked_items, function(ckbx) { return $(ckbx).data(data_property); });
 
   var form = $(el).parent().parent('form');
+  var date =  $('#list_type').data('date');
+  var screen =  $('#list_type').data('screen');
 
   $.each(ckbx_ids, function(index, delivery_id) {
     $("<input type='hidden'>").attr('name', data_property + '[]').attr('value', delivery_id).appendTo(form);
   });
+
+  $("<input type='hidden'>").attr('name', 'date').attr('value', date).appendTo(form);
+  $("<input type='hidden'>").attr('name', 'screen').attr('value', screen).appendTo(form);
 
   checked_items.prop('checked', false);
   $('#delivery-listings #all').prop('checked', false);

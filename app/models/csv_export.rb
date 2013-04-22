@@ -1,7 +1,9 @@
 class CsvExport
-  def initialize(distributor, ids)
-    @distributor = distributor
-    @ids = ids
+  def initialize(args)
+    @distributor = args[:distributor]
+    @ids         = args[:ids]
+    @date        = args[:date]
+    @screen      = args[:screen]
   end
 
   def csv
@@ -12,13 +14,11 @@ protected
 
   attr_reader :distributor
   attr_reader :ids
+  attr_reader :date
+  attr_reader :screen
 
   def data
     build_csv_for_export
-  end
-
-  def date
-    calculate_date
   end
 
   def file_args
@@ -26,7 +26,7 @@ protected
   end
 
   def file_name
-    "bucky-box-export-#{date}.csv"
+    "bucky-box-#{screen}-export-#{date}.csv"
   end
 
   def file_type

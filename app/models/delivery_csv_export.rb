@@ -6,10 +6,6 @@ class DeliveryCsvExport < CsvExport
     end
   end
 
-  def calculate_date
-    @calculate_date ||= deliveries.first.delivery_list.date
-  end
-
   def generate_csv_output(csv_data, csv_generator = DeliveryCsvGenerator)
     super(csv_data, csv_generator)
   end

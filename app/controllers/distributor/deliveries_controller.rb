@@ -135,7 +135,8 @@ private
   def get_export(args)
     found_key = find_key(args)
     csv_exporter, ids = make_sales_args(found_key, args[found_key]) if found_key
-    csv_exporter.new(current_distributor, ids) if csv_exporter
+    export_args = { distributor: current_distributor, ids: ids, date: Date.parse(args[:date]), screen: args[:screen] }
+    csv_exporter.new(export_args) if csv_exporter
   end
 
   def find_key(args)

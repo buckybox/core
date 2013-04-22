@@ -15,7 +15,7 @@
       .span12
         %strong= box.name
 
-    #list_type{ data: { type: 'packages' } }
+    #list_type{ data: { type: 'packages', date: @selected_date, screen: 'packing' } }
       %ul#delivery_list.unstyled
         - array.each do |package|
           %li.row-fluid.data-listings{ class: package.status }
@@ -35,7 +35,7 @@
       .span12
         %strong= box.name
 
-    #list_type{ data: { type: 'orders' } }
+    #list_type{ data: { type: 'orders', date: @selected_date, screen: 'packing' } }
       %ul#delivery_list.unstyled
         - array.each do |order|
           %li.row-fluid.data-listings.pending

@@ -28,7 +28,7 @@
 .row-fluid.data-headings
 
 - if @real_list
-  #list_type{ data: { type: 'deliveries' } }
+  #list_type{ data: { type: 'deliveries', date: @selected_date, screen: 'delivery' } }
     %ul#delivery_list.unstyled{ class: (@delivery_list.date.past? ? '' : 'sortable') }
       - DeliverySort.new(@items).grouped_by_addresses.each do |addressh_hash, deliveries|
         %li.row-fluid
@@ -50,7 +50,7 @@
                       .span6.box-description= contents_description(delivery, @selected_date)
 
 - else
-  #list_type{ data: { type: 'orders' } }
+  #list_type{ data: { type: 'orders', date: @selected_date, screen: 'delivery' } }
     %ul#delivery_list.unstyled
       - @items.each do |order|
         %li.row-fluid.data-listings.pending
