@@ -112,7 +112,7 @@ class Delivery < ActiveRecord::Base
   end
 
   def formated_delivery_number
-    "%03d" % delivery_number
+    "%03d" % delivery_number.to_i
   end
 
   def payment
@@ -146,7 +146,7 @@ class Delivery < ActiveRecord::Base
   def reposition!(position)
     update_attribute(:position, position)
   end
-  
+
   def reposition_dso!(dso)
     update_attribute(:dso, dso)
   end
@@ -156,14 +156,6 @@ class Delivery < ActiveRecord::Base
     desc_str += package.contents_description
 
     return desc_str
-  end
-
-  def self.csv_headers
-    Package.csv_headers
-  end
-
-  def to_csv
-    package.to_csv
   end
 
   def self.matching_dso(delivery_sequence_order)
@@ -178,42 +170,6 @@ class Delivery < ActiveRecord::Base
   def set_delivery_number
     update_dso
     self.delivery_number = delivery_list.get_delivery_number(self)
-  end
-
-  # Pulled directly out of deliveries_controller#export
-  def self.build_csv_for_export(export_type, distributor, delivery_ids, package_ids)
-    if export_type == :delivery
-      export_items = distributor.deliveries.ordered.where(id: delivery_ids)
-      export_items = export_items.sort_by { |ei| ei.dso }
-      csv_headers = Delivery.csv_headers
-    else
-      packages = distributor.packages.where(id: package_ids)
-
-      export_items = []
-
-      DeliverySort.new(packages).grouped_by_boxes.each do |box, array|
-        array.each do |package|
-          export_items << package
-        end
-      end
-
-      csv_headers = Package.csv_headers
-    end
-
-    csv_output = CSV.generate do |csv|
-      csv << csv_headers
-      export_items.each { |export_item| csv << export_item.to_csv }
-    end
-
-    export_items ? csv_output : nil
-  end
-
-  def self.date_for_packages_or_deliveries(export_type, distributor, delivery_ids, package_ids)
-    if export_type == :delivery
-      distributor.deliveries.where(id: delivery_ids).first.delivery_list.date
-    else
-      distributor.packages.where(id: package_ids).first.packing_list.date
-    end
   end
 
   def payment_amount

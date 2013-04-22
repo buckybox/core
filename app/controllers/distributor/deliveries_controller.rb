@@ -85,21 +85,12 @@ class Distributor::DeliveriesController < Distributor::ResourceController
   end
 
   def export
-    redirect_to :back and return unless params[:deliveries] || params[:packages] || params[:orders]
+    export = get_export(params)
 
-    export_type = (params[:deliveries] ? :delivery : :packing)
-
-    csv_output = Delivery.build_csv_for_export(export_type, current_distributor, params[:deliveries], params[:packages])
-
-    date = Delivery.date_for_packages_or_deliveries(export_type, current_distributor, params[:deliveries], params[:packages])
-
-    if csv_output
-      filename = "bucky-box-#{export_type}-export-#{date.to_s}.csv"
-      type     = 'text/csv; charset=utf-8; header=present'
-
-      send_data(csv_output, type: type, filename: filename)
+    if export
+      send_data(*export.csv)
     else
-      respond_to :back
+      redirect_to :back
     end
   end
 
@@ -135,5 +126,27 @@ class Distributor::DeliveriesController < Distributor::ResourceController
 
   def nav_end_date
     Date.current + Order::FORCAST_RANGE_FORWARD
+  end
+
+private
+
+  #NOTE: These methods are used to clean up the export input. When the UI gets better we should be able to remove
+  # most if not all of the code.
+  def get_export(args)
+    found_key = find_key(args)
+    csv_exporter, ids = make_sales_args(found_key, args[found_key]) if found_key
+    csv_exporter.new(current_distributor, ids) if csv_exporter
+  end
+
+  def find_key(args)
+    found_key = nil
+    [:deliveries, :packages, :orders].each { |key| found_key = key if args.has_key?(key) }
+    found_key
+  end
+
+  def make_sales_args(key, value)
+    key = "#{key.to_s.singularize.titleize.constantize}CsvExport"
+    key = key.constantize
+    [ key, value ]
   end
 end
