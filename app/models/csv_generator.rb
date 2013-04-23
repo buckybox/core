@@ -28,6 +28,9 @@ protected
   def generate_row(export_item)
     order, package, delivery, customer = seperate_data_row(export_item)
 
+    address          = get_address(package, order)
+    package_or_order = package ? package : order
+
     [
       delivery_route(order),
       delivery_sequence_number(delivery),
@@ -38,25 +41,29 @@ protected
       customer_number(customer),
       customer_first_name(customer),
       customer_last_name(customer),
-      customer_phone(package),
+      customer_phone(address),
       new_customer(customer),
-      delivery_address_line_1(package),
-      delivery_address_line_2(package),
-      delivery_address_suburb(package),
-      delivery_address_city(package),
-      delivery_address_postcode(package),
-      delivery_note(package),
-      box_contents_short_description(package),
-      box_type(package),
-      box_likes(package),
-      box_dislikes(package),
-      box_extra_line_items(package),
-      price(package),
-      bucky_box_transaction_fee(package),
-      total_price(package),
+      delivery_address_line_1(address),
+      delivery_address_line_2(address),
+      delivery_address_suburb(address),
+      delivery_address_city(address),
+      delivery_address_postcode(address),
+      delivery_note(address),
+      box_contents_short_description(package_or_order),
+      box_type(package_or_order),
+      box_likes(package_or_order),
+      box_dislikes(package_or_order),
+      box_extra_line_items(package_or_order),
+      price(package_or_order),
+      bucky_box_transaction_fee(package_or_order),
+      total_price(package_or_order),
       customer_email(customer),
       customer_special_preferences(customer)
     ]
+  end
+
+  def get_address(package, order)
+    package ? package.archived_address_details : order.address
   end
 
   def seperate_data_row(export_item)
@@ -110,68 +117,68 @@ protected
     customer.last_name
   end
 
-  def customer_phone(package)
-    package.address.phone_1
+  def customer_phone(address)
+    address.phone_1
   end
 
   def new_customer(customer)
     customer.new? ? 'NEW' : nil
   end
 
-  def delivery_address_line_1(package)
-    package.archived_address_details.address_1
+  def delivery_address_line_1(address)
+    address.address_1
   end
 
-  def delivery_address_line_2(package)
-    package.archived_address_details.address_2
+  def delivery_address_line_2(address)
+    address.address_2
   end
 
-  def delivery_address_suburb(package)
-    package.archived_address_details.suburb
+  def delivery_address_suburb(address)
+    address.suburb
   end
 
-  def delivery_address_city(package)
-    package.archived_address_details.city
+  def delivery_address_city(address)
+    address.city
   end
 
-  def delivery_address_postcode(package)
-    package.archived_address_details.postcode
+  def delivery_address_postcode(address)
+    address.postcode
   end
 
-  def delivery_note(package)
-    package.archived_address_details.delivery_note
+  def delivery_note(address)
+    address.delivery_note
   end
 
-  def box_contents_short_description(package)
-    package.string_sort_code
+  def box_contents_short_description(package_or_order)
+    package_or_order.short_code
   end
 
-  def box_type(package)
-    package.archived_box_name
+  def box_type(package_or_order)
+    package_or_order.archived_box_name
   end
 
-  def box_likes(package)
-    package.archived_substitutions
+  def box_likes(package_or_order)
+    package_or_order.archived_substitutions
   end
 
-  def box_dislikes(package)
-    package.archived_exclusions
+  def box_dislikes(package_or_order)
+    package_or_order.archived_exclusions
   end
 
-  def box_extra_line_items(package)
-    package.extras_description
+  def box_extra_line_items(package_or_order)
+    package_or_order.extras_description
   end
 
-  def price(package)
-    package.price
+  def price(package_or_order)
+    package_or_order.price
   end
 
-  def bucky_box_transaction_fee(package)
-    package.archived_consumer_delivery_fee
+  def bucky_box_transaction_fee(package_or_order)
+    package_or_order.archived_consumer_delivery_fee
   end
 
-  def total_price(package)
-    package.total_price
+  def total_price(package_or_order)
+    package_or_order.total_price
   end
 
   def customer_email(customer)

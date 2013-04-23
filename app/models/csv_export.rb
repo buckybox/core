@@ -17,10 +17,6 @@ protected
   attr_reader :date
   attr_reader :screen
 
-  def data
-    build_csv_for_export
-  end
-
   def file_args
     { type: file_type, filename: file_name }
   end
@@ -33,7 +29,7 @@ protected
     'text/csv; charset=utf-8; header=present'
   end
 
-  def build_csv_for_export
+  def data
     generate_csv_output(csv_data) if csv_data
   end
 

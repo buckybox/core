@@ -27,7 +27,7 @@ class WebstoreOrder < ActiveRecord::Base
   PLACED    = :placed
 
   def self.box_price(box, customer = nil)
-    Package.discounted(box.price, customer)
+    OrderPrice.discounted(box.price, customer)
   end
 
   def set_default_schedule_rule
@@ -47,7 +47,7 @@ class WebstoreOrder < ActiveRecord::Base
   end
 
   def box_price(customer = nil)
-    Package.discounted(box.price, customer)
+    OrderPrice.discounted(box.price, customer)
   end
 
   def box_description
@@ -59,7 +59,7 @@ class WebstoreOrder < ActiveRecord::Base
   end
 
   def route_fee(customer = nil)
-    Package.discounted(route.fee, customer)
+    OrderPrice.discounted(route.fee, customer)
   end
 
   def bucky_fee
@@ -130,13 +130,13 @@ class WebstoreOrder < ActiveRecord::Base
       }
     end
 
-    @order_extras_price_mem = Package.calculated_extras_price(order_extra_hash, customer)
+    @order_extras_price_mem = OrderPrice.extras_price(order_extra_hash, customer)
 
     return @order_extras_price_mem
   end
 
   def order_price(customer = nil)
-    @order_price_mem = Package.calculated_individual_price(box, route, customer)
+    @order_price_mem = OrderPrice.individual(box, route, customer)
     @order_price_mem += order_extras_price(customer) unless extras.empty?
     @order_price_mem += bucky_fee if has_bucky_fee?
 

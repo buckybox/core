@@ -17,11 +17,6 @@ protected
     nil
   end
 
-  #NOTE: Keeping this due to legacy CSV convention but nothing in system for it yet
-  def delivery_pickup_point_name(delivery)
-    nil
-  end
-
   def package_number(package)
     nil
   end
@@ -30,63 +25,30 @@ protected
     nil
   end
 
-  def customer_phone(package)
-    nil
+  def box_contents_short_description(package_or_order)
+    box_name          = package_or_order.box.name
+    has_exclusions    = !package_or_order.exclusions.empty?
+    has_substitutions = !package_or_order.substitutions.empty?
+    Order.short_code(box_name, has_exclusions, has_substitutions)
   end
 
-  def delivery_address_line_1(package)
-    nil
+  def box_type(package_or_order)
+    package_or_order.box.name
   end
 
-  def delivery_address_line_2(package)
-    nil
+  def box_likes(package_or_order)
+    package_or_order.substitutions_string
   end
 
-  def delivery_address_suburb(package)
-    nil
+  def box_dislikes(package_or_order)
+    package_or_order.exclusions_string
   end
 
-  def delivery_address_city(package)
-    nil
+  def box_extra_line_items(package_or_order)
+    Order.extras_description(package_or_order.order_extras)
   end
 
-  def delivery_address_postcode(package)
-    nil
-  end
-
-  def delivery_note(package)
-    nil
-  end
-
-  def box_contents_short_description(package)
-    nil
-  end
-
-  def box_type(package)
-    nil
-  end
-
-  def box_likes(package)
-    nil
-  end
-
-  def box_dislikes(package)
-    nil
-  end
-
-  def box_extra_line_items(package)
-    nil
-  end
-
-  def price(package)
-    nil
-  end
-
-  def bucky_box_transaction_fee(package)
-    nil
-  end
-
-  def total_price(package)
-    nil
+  def bucky_box_transaction_fee(package_or_order)
+    package_or_order.consumer_delivery_fee
   end
 end

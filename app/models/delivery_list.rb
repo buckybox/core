@@ -1,5 +1,3 @@
-FutureDeliveryList = Struct.new(:date, :deliveries)
-
 class DeliveryList < ActiveRecord::Base
   belongs_to :distributor
 
@@ -30,7 +28,7 @@ class DeliveryList < ActiveRecord::Base
   def self.collect_list(distributor, date)
     date_orders = []
     wday = date.wday
-    
+
     order_ids = Bucky::Sql.order_ids(distributor, date)
     date_orders = distributor.orders.active.where(id: order_ids).includes({ account: {customer: {address:{}, deliveries: {delivery_list: {}}}}, order_extras: {}, box: {}})
 
