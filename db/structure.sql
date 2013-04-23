@@ -48,7 +48,8 @@ CREATE TABLE schedule_rules (
     updated_at timestamp without time zone NOT NULL,
     scheduleable_id integer,
     scheduleable_type character varying(255),
-    halted boolean DEFAULT false
+    halted boolean DEFAULT false,
+    week integer DEFAULT 0
 );
 
 
@@ -3367,3 +3368,5 @@ INSERT INTO schema_migrations (version) VALUES ('20130311224428');
 INSERT INTO schema_migrations (version) VALUES ('20130313051530');
 
 INSERT INTO schema_migrations (version) VALUES ('20130315034909');
+
+INSERT INTO schema_migrations (version) VALUES ('20130423225325');

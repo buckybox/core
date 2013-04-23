@@ -40,7 +40,12 @@ class WebstoreController < ApplicationController
     @routes = @distributor.routes
     @route_selections = @distributor.routes.map { |route| [route.name_days_and_fee, route.id] }
     @selected_route_id = current_customer.route_id if active_orders?
-    @days = ScheduleRule::DAYS.map { |day| [day.to_s.titleize, ScheduleRule::DAYS.index(day)] }
+    @days = []
+    4.times do |week| # 4 first weeks of the month
+      @days << ScheduleRule::DAYS.map do |day|
+        [day.to_s.titleize, ScheduleRule::DAYS.index(day) + ScheduleRule::DAYS.size * week]
+      end
+    end
     @order_frequencies = [
       ['Deliver weekly on...', :weekly],
       ['Deliver every 2 weeks on...', :fortnightly],

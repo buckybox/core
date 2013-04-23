@@ -217,6 +217,8 @@ class Webstore
     @order.route = Route.find(route_id)
   end
 
+  # @example schedule_information
+  #   {"start_date"=>"2013-05-07", "frequency"=>"monthly", "days"=>{"2"=>"1", "16"=>"1", "23"=>"1"}}
   def set_schedule(schedule_information)
     frequency = schedule_information[:frequency]
     start = Date.parse(schedule_information[:start_date])
@@ -227,8 +229,14 @@ class Webstore
       if schedule_information[:days].nil?
         @controller.flash[:error] = 'The schedule requires you select a day of the week.'
       else
-        days_by_number = schedule_information[:days].map { |d| ScheduleRule::DAYS[d.first.to_i] }
-        @order.schedule_rule = ScheduleRule.recur_on(start, days_by_number, frequency.to_sym)
+        days_of_the_month = schedule_information[:days].keys.map(&:to_i)
+        week = days_of_the_month.first / ScheduleRule::DAYS.size
+
+        days_of_the_week = days_of_the_month.map do |day|
+          ScheduleRule::DAYS[day % ScheduleRule::DAYS.size]
+        end
+
+        @order.schedule_rule = ScheduleRule.recur_on(start, days_of_the_week, frequency.to_sym, week)
       end
     end
   end
