@@ -179,11 +179,11 @@ function makePayments(checked_deliveries, reverse_payment) {
 function prepare_csv_export(el) {
   var data_property = $('#list_type').data('type');
   var checked_items = $('#delivery-listings .data-listings input[type=checkbox]:checked');
-  var ckbx_ids = $.map(checked_items, function(ckbx) { return $(ckbx).data(data_property); });
+  var ckbx_ids      = $.map(checked_items, function(ckbx) { return $(ckbx).data(data_property); });
 
-  var form = $(el).parent().parent('form');
-  var date =  $('#list_type').data('date');
-  var screen =  $('#list_type').data('screen');
+  var form   = $(el).parent().parent('form');
+  var date   = $('#list_type').data('date');
+  var screen = $('#list_type').data('screen');
 
   $.each(ckbx_ids, function(index, delivery_id) {
     $("<input type='hidden'>").attr('name', data_property + '[]').attr('value', delivery_id).appendTo(form);

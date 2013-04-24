@@ -40,7 +40,7 @@
         - array.each do |order|
           %li.row-fluid.data-listings.pending
             .span6
-              = check_box_tag order.id, '1', false, data: { order: order.id }
+              = check_box_tag order.id, '1', false, data: { orders: order.id }
               .label.state-label.dso-number= map_pin(order)
               .label.state-label.staus-icon.status-unpacked{ title: 'UNPACKED package' }
                 %i.icon-time
