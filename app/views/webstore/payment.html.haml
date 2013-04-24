@@ -4,27 +4,32 @@
   .alert.alert-error
     Your account is under the minimum balance and will not recieve new orders unless payment is cleared before the packing date.
 
-= simple_form_for(CreditCard.new, url: webstore_process_step_path, html: {class: 'credit-card'}) do |f|
-  .row-fluid.webstore-section
-    #webstore-payment.span12
+= simple_form_for(WebstorePayment.new, url: webstore_process_step_path, html: {class: 'payments'}) do |f|
+  .row-fluid
+    #webstore-payment.span10
       .row-fluid
         #amount-due.span12
           .row-fluid.important
-            .span10 Total Amount Due
-            .span2.text-right= @webstore_order.order_price(current_customer).format
+            - if customer_signed_in? && @closing_balance.positive?
+              .span10 Your account is in credit
+              .span2.text-right No payment necessary
+            - else
+              .span10 Total amount due
+              .span2.text-right= @amount_due.format
       .row-fluid
-        #payment-options.span12.form-horizontal
-          .span10
-            = f.input :card_type, as: :select, collection: CreditCard::CARD_TYPES, include_blank: false, required: false, input_html: {class: 'credit-card'}, label: 'Card type:'
-            = f.input :card_number, required: false, input_html: {class: 'credit-card'}, label: 'Card number:'
-            = f.input :name_on_card, required: false, input_html: {class: 'credit-card'}, label: 'Name on card:'
-            .control-group
-              = f.label 'Expiry:', required: false
-              .controls.credit-card-expiry
-                = f.input :expiry_month, as: :select, collection: ['month'] + CreditCard.months, label: false, disabled: ['month'], selected: 'month', include_blank: false, required: false
-                = f.input :expiry_year, as: :select, collection: ['year'] + CreditCard.years, label: false, disabled: ['year'], selected: 'year', include_blank: false, required: false
-            = f.input :card_security_code, as: :string, required: false, input_html: {class: 'input-small'}, label: 'Card security code:'
-            = f.input :store_for_future_use, as: :boolean, label: false, inline_label: 'Automatically use this card for future purchases', required: false
+        #payment.span12
+          .row-fluid
+            .span12.text-center.payment-title
+              Pay by
+              = @webstore_order.payment_method_string
+          .row-fluid
+            .span9.center-row
+              - if @webstore_order.payment_method? :credit_card
+                = render partial: 'webstore/payment_credit_card', locals: {form: f}
+              - elsif @webstore_order.payment_method? :cash_on_delivery
+                = render partial: 'webstore/payment_cash_on_delivery'
+              - elsif @webstore_order.payment_method? :bank_deposit
+                = render partial: 'webstore/payment_bank_deposit'
   .row-fluid
-    .span12
+    .span10
       = f.button :submit, 'Complete Order', class: 'pull-right btn btn-process'

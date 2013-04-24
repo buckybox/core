@@ -1,10 +1,6 @@
-class CreditCard
-  CARD_TYPES = ['Mastercard', 'Visa']
+class CreditCard < Form
 
-  extend ActiveModel::Naming
-  include ActiveModel::Conversion
-
-  ATTRS = :card_type, :card_number, :name_on_card, :expiry_month, :expiry_year, :card_security_code, :store_for_future_use
+  ATTRS = :card_brand, :card_number, :name_on_card, :first_name, :last_name, :expiry_month, :expiry_year, :card_security_code, :store_for_future_use
   ATTRS.each do |attr|
     attr_accessor attr
   end
@@ -16,10 +12,36 @@ class CreditCard
     self.store_for_future_use = self.store_for_future_use == 1
   end
 
+  def self.production?
+    begin
+      return Rails.env.production?
+    rescue
+      return false
+    end
+  end
+
+  def self.card_brands
+  ['Mastercard', 'Visa']
+  end
+
+  def authorize!(webstore_order)
+    
+  end
+
   def purchase!(webstore_order)
     return false if !valid?
+    
+    gateway = ActiveMerchant::Billing::BraintreeGateway.new(
+      login: 'demo',
+      password: 'password'
+    )
 
+    response = gateway.purchase(webstore_order.order_price, to_active_merchant_cc)
+    return response
+  end
 
+  def authorize!(webstore_order)
+    
   end
 
   def self.months
@@ -31,12 +53,8 @@ class CreditCard
     0.upto(10).collect{|i| current_year + i}
   end
 
-  def persisted?
-    false
-  end
-
-  def card_type
-    @card_type || 'Visa'
+  def card_brand
+    @card_brand || 'Visa'
   end
 
   def valid?
@@ -51,18 +69,6 @@ class CreditCard
     @name_on_card || ''
   end
   
-  def first_name
-    name_on_card.split(' ')[0..-2].join(' ')
-  end
-
-  def last_name
-    if name_on_card.split(' ').size < 2
-      ''
-    else
-      name_on_card.split(' ').last
-    end
-  end
-
   def active_merchant_cc
     @active_merchant_cc ||= to_active_merchant_cc
   end
@@ -75,7 +81,7 @@ class CreditCard
       month: expiry_month,
       year: expiry_year,
       verification_value: card_security_code,
-      type: card_type
+      brand: card_brand
     })
   end
 

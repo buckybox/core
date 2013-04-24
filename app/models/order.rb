@@ -133,6 +133,7 @@ class Order < ActiveRecord::Base
   def deactivate_for_day!(day)
     remove_day(day) unless schedule_empty?
     deactivate if schedule_empty?
+    binding.pry unless valid?
     save!
   end
 

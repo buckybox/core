@@ -145,7 +145,7 @@ class Webstore
 
   def add_address_and_payment_select(webstore_params)
     address_information = webstore_params[:address]
-    payment_option = PaymentOption.new(webstore_params[:payment_method])
+    payment_option = PaymentOption.new(webstore_params[:payment_method], @distributor)
 
     if address_information && (address_information[:name].blank? || address_information[:street_address].blank?)
       @controller.flash[:error] = 'Please include a your name'
@@ -165,15 +165,16 @@ class Webstore
   end
 
   def process_payment(credit_card)
-    if credit_card.purchase!
+    if credit_card.authorize!(@order)
       if @order.create_order
         CustomerCheckout.track(customer) unless @controller.current_admin.present?
-        @order.payment_step
+        @order.placed_step
+        @controller.flash[:notice] = 'Your order has been placed'
       elsif @order.order
         @controller.flash[:error] = 'You have already created this order'
       else
         @controller.flash[:error] = 'There was a problem completing your order'
-        @order.complete_step
+        @order.payment_step
       end
     else
       @controller.flash[:error] = ['There was a problem with your credit card', credit_card.errors.full_messages.join(', ')].join(', ')

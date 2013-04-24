@@ -11,6 +11,9 @@
   = f.input :support_email
   = f.input :country_id, collection: Country.all, include_blank: false, input_html: { disabled: !@distributor.new_record? }
   = f.input :time_zone, as: :time_zone, input_html: { disabled: !@distributor.new_record? }
+  = f.input :payment_cash_on_delivery, label: 'Allow cash on delivery'
+  = f.input :payment_bank_deposit, label: 'Allow bank deposit payments'
+  = f.input :payment_credit_card, label: 'Allow credit card payments'
   = f.input :currency, collection: select_currencies, include_blank: false, input_html: { disabled: !@distributor.new_record? }
 
   .input.numeric.currency.optional

@@ -394,7 +394,8 @@ CREATE TABLE bank_information (
     customer_message text,
     created_at timestamp without time zone,
     updated_at timestamp without time zone,
-    bsb_number character varying(255)
+    bsb_number character varying(255),
+    cod_payment_message text
 );
 
 
@@ -560,6 +561,45 @@ CREATE SEQUENCE countries_id_seq
 --
 
 ALTER SEQUENCE countries_id_seq OWNED BY countries.id;
+
+
+--
+-- Name: credit_card_transactions; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE credit_card_transactions (
+    id integer NOT NULL,
+    amount integer,
+    success boolean,
+    reference character varying(255),
+    message character varying(255),
+    action character varying(255),
+    params text,
+    test boolean,
+    distributor_id integer,
+    account_id integer,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: credit_card_transactions_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE credit_card_transactions_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: credit_card_transactions_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE credit_card_transactions_id_seq OWNED BY credit_card_transactions.id;
 
 
 --
@@ -997,7 +1037,10 @@ CREATE TABLE distributors (
     customer_can_remove_orders boolean DEFAULT true,
     collect_phone_in_webstore boolean,
     last_seen_at timestamp without time zone,
-    notes text
+    notes text,
+    payment_cash_on_delivery boolean DEFAULT true,
+    payment_bank_deposit boolean DEFAULT true,
+    payment_credit_card boolean DEFAULT false
 );
 
 
@@ -1169,7 +1212,7 @@ CREATE TABLE import_transaction_lists (
     distributor_id integer,
     draft boolean,
     account_type integer,
-    csv_file text,
+    csv_file character varying(255),
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
     omni_importer_id integer
@@ -2011,6 +2054,13 @@ ALTER TABLE ONLY countries ALTER COLUMN id SET DEFAULT nextval('countries_id_seq
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
+ALTER TABLE ONLY credit_card_transactions ALTER COLUMN id SET DEFAULT nextval('credit_card_transactions_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
 ALTER TABLE ONLY cron_logs ALTER COLUMN id SET DEFAULT nextval('cron_logs_id_seq'::regclass);
 
 
@@ -2328,6 +2378,14 @@ ALTER TABLE ONLY boxes
 
 ALTER TABLE ONLY countries
     ADD CONSTRAINT countries_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: credit_card_transactions_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY credit_card_transactions
+    ADD CONSTRAINT credit_card_transactions_pkey PRIMARY KEY (id);
 
 
 --
@@ -3369,6 +3427,10 @@ INSERT INTO schema_migrations (version) VALUES ('20130313051530');
 
 INSERT INTO schema_migrations (version) VALUES ('20130315034909');
 
-INSERT INTO schema_migrations (version) VALUES ('20130321040949');
-
 INSERT INTO schema_migrations (version) VALUES ('20130409022821');
+
+INSERT INTO schema_migrations (version) VALUES ('20130416022347');
+
+INSERT INTO schema_migrations (version) VALUES ('20130417021024');
+
+INSERT INTO schema_migrations (version) VALUES ('20130417025820');

@@ -64,9 +64,11 @@
               .span10 Your account is in credit
               .span2.text-right No payment necessary
             - else
-              .span10 Total Amount Due
+              .span10 Total amount due
               .span2.text-right= @amount_due.format
-      = render partial: 'webstore/payment_options', locals: {payment: PaymentOptionsForm.new(form: f, webstore_order: @webstore_order)}
+      .row-fluid
+        #payment-options.span12
+          = render partial: 'webstore/payment_options', locals: {payment: PaymentOptionsForm.new(form: f, webstore_order: @webstore_order)}
 
   .row-fluid
     .span12

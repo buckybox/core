@@ -78,6 +78,11 @@ class WebstoreController < ApplicationController
   end
 
   def payment
+    @order_price = @webstore_order.order_price(current_customer)
+    @current_balance = (current_customer ? current_customer.account.balance : Money.new(0))
+    @closing_balance = @current_balance - @order_price
+    @amount_due = @closing_balance * -1
+    @bank = @distributor.bank_information
   end
 
   def placed

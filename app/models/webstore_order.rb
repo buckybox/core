@@ -71,10 +71,6 @@ class WebstoreOrder < ActiveRecord::Base
     distributor.separate_bucky_fee?
   end
 
-  def current_step
-    
-  end
-
   def customise_step
     self.status = CUSTOMISE
   end
@@ -109,6 +105,18 @@ class WebstoreOrder < ActiveRecord::Base
 
   def completed?
     status == PLACED
+  end
+
+  def payment_method?(test_symbol)
+    payment_method.to_sym == test_symbol
+  end
+
+  def payment_method_string
+    payment_method.titleize
+  end
+
+  def bank
+    distributor.bank_information
   end
 
   def extra_objects

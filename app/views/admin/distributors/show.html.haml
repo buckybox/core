@@ -30,6 +30,8 @@
       %dd= @distributor.time_zone
       %dt Country
       %dd= @distributor.country.name
+      %dt Payment options
+      %dd= @distributor.payment_options_string
       %dt Currency
       %dd= currency_name(@distributor.currency)
       %dt Consumer Delivery Fee

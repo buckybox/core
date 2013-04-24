@@ -7,6 +7,6 @@ class PaymentOptionsForm
   end
 
   def options
-    PaymentOption.options
+    PaymentOption.options(webstore_order.distributor)
   end
 end

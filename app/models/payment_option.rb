@@ -1,10 +1,10 @@
 class PaymentOption
-  attr_accessor :option
+  attr_accessor :option, :distributor
 
   delegate :valid?, to: :option, allow_nil: true
 
-  def initialize(option)
-    option = Option.new(option)
+  def initialize(option, distributor)
+    option = Option.new(option, distributor)
     if option.valid?
       self.option = option
     end
@@ -15,18 +15,17 @@ class PaymentOption
     webstore_order.save!
   end
 
-  def self.options
-    [["Credit card", :credit_card],
-    ["Bank deposit", :bank_deposit],
-    ["Cash on delivery", :cash_on_delivery]]
+  def self.options(distributor)
+    distributor.payment_options
   end
 
-  class Option < Struct.new(:option)
+  class Option < Struct.new(:option, :distributor)
     def valid?
-      [:credit_card, :bank_deposit, :cash_on_delivery].include?(method)
+      distributor.payment_options_symbols.include?(method)
     end
 
     def method
+      return nil if option.blank?
       option.to_sym
     end
 
