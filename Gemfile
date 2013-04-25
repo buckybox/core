@@ -1,4 +1,4 @@
-source 'http://rubygems.org'
+source 'https://rubygems.org'
 
 # Core
 gem 'rails', '~> 3.2.13'
@@ -45,14 +45,14 @@ group :assets do
 end
 
 group :install do
-  gem 'sprinkle', git: 'git@github.com:jordandcarter/sprinkle.git' # patched to be awesome.. added more verifiers and updated some installers
+  gem 'sprinkle', github: 'jordandcarter/sprinkle' # patched to be awesome.. added more verifiers and updated some installers
 end
 
 group :development do
   gem 'bullet', '~> 4.1.6', require: false
   gem 'brakeman', '~> 1.7.1', require: false
 
-  gem 'ruby-prof', '~> 0.11.2' # profiling with /newrelic
+  gem 'ruby-prof', '~> 0.12.2' # profiling with /newrelic
 
   gem 'capistrano', '~> 2.12.0'
   gem 'capistrano_colors', '~> 0.5.5'
