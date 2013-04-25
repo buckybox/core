@@ -100,7 +100,7 @@ class ScheduleRule < ActiveRecord::Base
 
     date ||= Date.current
     occurrence = ScheduleRule.where(id:self.id).with_next_occurrence(date, opts[:ignore_pauses], opts[:ignore_halts]).first.attributes["next_occurrence"] unless new_record?
-    
+
     if occurrence.nil?
       nil
     else
@@ -199,7 +199,7 @@ class ScheduleRule < ActiveRecord::Base
     else
       true
     end
-    
+
     too_soon = (local_time_zone.present? ? start.to_datetime.in_time_zone(local_time_zone) : start) > schedule_rule.start
     return false if !opts[:ignore_start] && too_soon
 
@@ -210,7 +210,7 @@ class ScheduleRule < ActiveRecord::Base
       schedule_pause.finish <= schedule_rule.start
     else
     end
-    
+
     schedule_rule.days.all?{|day| on_day?(day)}
   end
 
@@ -291,7 +291,7 @@ class ScheduleRule < ActiveRecord::Base
     thursday: 4,
     friday: 5,
     saturday: 6,
-    sun:0,
+    sun: 0,
     mon: 1,
     tue: 2,
     wed: 3,
