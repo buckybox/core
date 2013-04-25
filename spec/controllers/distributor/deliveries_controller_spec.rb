@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe Distributor::DeliveriesController do
   as_distributor
-  
+
   context :delivery_sequence_order do
     before do
       @route = Fabricate(:route, distributor: @distributor)
@@ -17,7 +17,7 @@ describe Distributor::DeliveriesController do
         @packages << result.package
       }
     end
-    
+
     it "should order deliveries based on the DSO" do
       get :index, {date: @date, view: @route.id.to_s}
 
@@ -38,13 +38,6 @@ describe Distributor::DeliveriesController do
       Distributor.any_instance.stub(:delivery_lists).and_return(delivery_lists)
 
       post :reposition, {date: @date_string, delivery: delivery_ids}
-    end
-
-    it "should order csv based on DSO" do
-      Delivery.stub(:date_for_packages_or_deliveries).and_return(Date.current)
-      Delivery.should_receive(:build_csv_for_export).with(:delivery, @distributor, ["1","2","6"], nil).and_return("")
-
-      post :export, {deliveries: [1,2,6]}
     end
   end
 end
