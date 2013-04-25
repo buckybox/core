@@ -90,6 +90,8 @@ group :test do
   gem 'fuubar', '~> 1.0.0'
 
   gem 'cucumber-rails', '~> 1.3.0', require: false
+
+  gem 'therubyracer'
 end
 
 group :staging do
