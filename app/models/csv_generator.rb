@@ -19,7 +19,8 @@ class CsvGenerator
       'Customer Last Name', 'Customer Phone', 'New Customer', 'Delivery Address Line 1', 'Delivery Address Line 2',
       'Delivery Address Suburb', 'Delivery Address City', 'Delivery Address Postcode', 'Delivery Note',
       'Box Contents Short Description', 'Box Type', 'Box Likes', 'Box Dislikes', 'Box Extra Line Items',
-      'Price', 'Bucky Box Transaction Fee', 'Total Price', 'Customer Email', 'Customer Special Preferences'
+      'Price', 'Bucky Box Transaction Fee', 'Total Price', 'Customer Email', 'Customer Special Preferences',
+      'Package Status', 'Delivery Status',
     ]
   end
 
@@ -58,7 +59,9 @@ protected
       bucky_box_transaction_fee(package_or_order),
       total_price(package_or_order),
       customer_email(customer),
-      customer_special_preferences(customer)
+      customer_special_preferences(customer),
+      package_status(package),
+      delivery_status(delivery),
     ]
   end
 
@@ -187,5 +190,13 @@ protected
 
   def customer_special_preferences(customer)
     customer.special_order_preference
+  end
+
+  def package_status(package)
+    package.status
+  end
+
+  def delivery_status(delivery)
+    delivery.status
   end
 end

@@ -51,4 +51,12 @@ protected
   def bucky_box_transaction_fee(package_or_order)
     package_or_order.consumer_delivery_fee
   end
+
+  def package_status(package)
+    nil
+  end
+
+  def delivery_status(delivery)
+    nil
+  end
 end
