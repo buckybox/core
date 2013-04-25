@@ -29,8 +29,6 @@ Spork.prefork do
 
   Dir[Rails.root.join("spec/support/**/*.rb")].each { |f| require f }
 
-  counter = -1
-
   RSpec.configure do |config|
     config.order = 'random'
 
@@ -52,7 +50,6 @@ Spork.prefork do
     config.extend Devise::RequestMacros,    type: :request
 
     config.before(:suite) do
-      GC.disable
       DatabaseCleaner.clean_with(:truncation)
       DatabaseCleaner.strategy = :transaction
     end
@@ -64,20 +61,6 @@ Spork.prefork do
 
     config.after(:each) do
       DatabaseCleaner.clean
-    end
-
-    config.after(:each) do
-      counter += 1
-      if counter > 15
-        GC.enable
-        GC.start
-        GC.disable
-        counter = 0
-      end
-    end
-
-    config.after(:suite) do
-      counter = 0
     end
 
     # Don't need passwords in test DB to be secure, but we would like 'em to be
