@@ -1,8 +1,8 @@
 def login_as(user)
   visit "/distributors/sign_in"
-  fill_in "Email", :with => @distributor.email
-  fill_in "Password", :with => 'password'
-  click_button "Sign in"
+  fill_in "distributor_email", :with => @distributor.email
+  fill_in "distributor_password", :with => 'password'
+  click_button "Login"
 end
 
 Given /^I am a distributor$/ do
