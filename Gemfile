@@ -101,15 +101,15 @@ end
 group :development, :test do
   gem 'rspec-mocks', '~> 2.11.2'
   gem 'rspec-rails', '~> 2.11.0'
-  gem 'guard', '~> 1.3.0'
-
-  gem 'rb-inotify', '~> 0.8.8',  require: false
-  gem 'rb-fsevent', '~> 0.9.1',  require: false
-  gem 'rb-fchange', '~> 0.0.5',  require: false
+  gem 'guard'
+  gem 'listen'
+  gem 'rb-inotify', require: false
+  gem 'rb-fsevent', require: false
+  gem 'rb-fchange', require: false
 
   gem 'letter_opener', '~> 1.0.0'
 
-  gem 'simplecov', '~> 0.6.4',   require: false
+  gem 'simplecov', require: false
 end
 
 group :development, :staging do
