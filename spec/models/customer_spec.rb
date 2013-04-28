@@ -455,7 +455,7 @@ describe Customer do
         order.next_occurrence.should be_blank
       end
 
-      it 'should unhalt orders' do
+      xit 'should unhalt orders' do
         customer = Fabricate(:customer).reload
         customer.halt!
         account = customer.account
