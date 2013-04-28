@@ -60,7 +60,7 @@ group :development do
   gem 'hirb', '~> 0.7.0'
   gem 'wirble', '~> 0.1.3'
 
-  gem 'guard-rspec', '~> 1.2.1'
+  gem 'guard-rspec'
   gem 'guard-spork', '~> 1.1.0'
 
   gem 'spork-rails', '~> 3.2.0'
@@ -86,7 +86,7 @@ group :test do
   gem 'capybara', '~> 1.1.2'
   gem 'launchy', '~> 2.1.2'
 
-  gem 'guard-rspec', '~> 1.2.1'
+  gem 'guard-rspec'
   gem 'fuubar', '~> 1.0.0'
 
   gem 'cucumber-rails', '~> 1.3.0', require: false
