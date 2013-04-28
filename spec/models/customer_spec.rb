@@ -340,7 +340,7 @@ describe Customer do
         @customer.reload.halted?.should be_false
       end
     end
-    
+
     context :changing_threshold do
       before do
         customer = Fabricate(:customer)
@@ -391,13 +391,13 @@ describe Customer do
         @customer.reload
         @customer.halted?.should be_true
         @distributor.reload
-        
+
         @distributor.has_balance_threshold = false
         @distributor.save!
 
         @customer.reload.halted?.should be_false
       end
-      
+
       it 'should put customer into halt when threshold turned on' do
         @distributor.has_balance_threshold = false
         @distributor.save!
@@ -406,10 +406,10 @@ describe Customer do
         @customer.reload
         @customer.halted?.should be_false
         @distributor.reload
-        
+
         @distributor.has_balance_threshold = true
         @distributor.save!
-        
+
         @customer.reload.halted?.should be_true
       end
 

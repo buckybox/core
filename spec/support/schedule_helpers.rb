@@ -9,14 +9,11 @@ end
 
 #===== Creation
 def new_single_schedule(date = (Date.current + 1.day))
-  schedule_rule = ScheduleRule.one_off(date)
-  return schedule_rule
+  ScheduleRule.one_off(date)
 end
 
 def new_recurring_schedule(date = (Date.current + 1.day), days = [:mon, :tue, :wed, :thu, :fri], interval = 1)
-  schedule_rule = interval == 1 ? ScheduleRule.weekly(date, days) : ScheduleRule.fortnightly(date, days)
-
-  return schedule_rule
+  interval == 1 ? ScheduleRule.weekly(date, days) : ScheduleRule.fortnightly(date, days)
 end
 
 def new_everyday_schedule(date = (Date.current + 1.day))
@@ -24,9 +21,7 @@ def new_everyday_schedule(date = (Date.current + 1.day))
 end
 
 def new_monthly_schedule(date = (Date.current + 1.day), days = [:sun])
-  schedule_rule = ScheduleRule.monthly(date, days)
-
-  return schedule_rule
+  ScheduleRule.monthly(date, days)
 end
 
 # Day needs to be an integer 0-6 representing the weekday
@@ -35,7 +30,7 @@ def next_day(day, time = Time.current)
   day = [:sunday, :monday, :tuesday, :wednesday, :thursday, :friday, :saturday].find_index(day) if day.is_a?(Symbol)
   nday = time + ((7 - (time.wday - day)) % 7).days
 
-  return nday == 0 ? 7 : nday
+  nday == 0 ? 7 : nday
 end
 
 # From

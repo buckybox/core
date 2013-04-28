@@ -82,8 +82,6 @@ CREATE OR REPLACE FUNCTION unpaused_next_occurrence(
 DECLARE
   from_wday int;
   days_from_now int;
-  week_days int[7];
-  next_date date;
 BEGIN
   -- From which date should we start looking for the next occurrence?  The schedule_rule's start date or the param's from_date
   IF from_date < schedule_rule.start THEN
@@ -117,32 +115,17 @@ BEGIN
     return from_date + days_from_now;
   WHEN 'monthly' THEN
   -- ==================== MONTHLY ====================
-    -- The first day of the month
-    next_date := DATE_TRUNC('month', from_date);
-
-    -- Number of week days (Mondays, Tuesdays and so on)
-    week_days := array[0,0,0,0,0,0,0];
-
-    LOOP
-      IF next_date >= from_date AND
-        -- Delivery day?
-        on_day(EXTRACT(DOW FROM next_date)::integer, schedule_rule) AND
-        -- Desired nth week day of the month?
-        week_days[EXTRACT(DOW FROM next_date)::integer + 1] = schedule_rule.week THEN
-        RETURN next_date;
+    FOR i IN 0..11 LOOP
+      -- If we go above the 7th of a month, we skip to the next month
+      IF date_part('day', from_date) > 7 THEN
+        from_date := date(date_part('year', from_date + '1 month'::interval)::text || '-' || date_part('month', from_date + '1 month'::interval)::text || '-01');
       END IF;
 
-      -- Count the number of week days
-      week_days[EXTRACT(DOW FROM next_date)::integer + 1] := week_days[EXTRACT(DOW FROM next_date)::integer + 1] + 1;
-
-      -- Next day
-      next_date := next_date + 1;
-
-      -- Reset counters if we hit next month
-      IF EXTRACT(DAY FROM next_date)::integer = 1 THEN
-        week_days := array[0,0,0,0,0,0,0];
-      END IF;
+      EXIT WHEN on_day(EXTRACT(DOW FROM from_date)::integer, schedule_rule);
+      from_date := from_date + 1;
     END LOOP;
+
+    return from_date;
   ELSE
     IF schedule_rule.recur IS NULL OR schedule_rule.recur = 'single' THEN
   -- ==================== ONE OFF / SINGLE ====================
