@@ -40,4 +40,36 @@ describe Distributor::DeliveriesController do
       post :reposition, {date: @date_string, delivery: delivery_ids}
     end
   end
+
+  describe "POST export" do
+    context 'given a list to export' do
+      before do
+        csv = 'this,that,and,the,other'
+        export = double('export', csv: csv)
+        controller.stub(:get_export) { export }
+        controller.should_receive(:send_data).with(csv) { controller.render nothing: true }
+      end
+
+      after { post :export, @params }
+
+      it 'exports csv of packages' do
+        @params = { packages: [3, 5], date: '2013-04-26', screen: 'packing' }
+      end
+
+      it 'exports csv of packages' do
+        @params = { deliveries: [3, 5], date: '2013-04-26', screen: 'packing' }
+      end
+
+      it 'exports csv of packages' do
+        @params = { orders: [3, 5], date: '2013-04-26', screen: 'packing' }
+      end
+    end
+
+    it 'redirects back to the last page if it can not export a CSV file' do
+      request.env['HTTP_REFERER'] = 'where_i_came_from'
+      controller.stub(:get_export) { nil }
+      post :export
+      response.should redirect_to 'where_i_came_from'
+    end
+  end
 end
