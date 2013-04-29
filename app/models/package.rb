@@ -141,11 +141,11 @@ class Package < ActiveRecord::Base
     @one_off_extra_order = order
   end
 
-  private
-
   def delivery
     deliveries.order("created_at DESC").first
   end
+
+  private
 
   def archive_data
     if status != 'packed'
