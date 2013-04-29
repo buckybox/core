@@ -1,21 +1,15 @@
 class PackageCsvExport < CsvExport
+private
+
   def csv_data
-    @csv_data ||= begin
-      export_items = []
-      DeliverySort.new(packages).grouped_by_boxes.each do |box, array|
-        array.each { |package| export_items << package }
-      end
-      export_items
-    end
+    @csv_data ||= sorted_and_grouped(packages)
   end
 
   def generate_csv_output(csv_data, csv_generator = PackageCsvGenerator)
     super(csv_data, csv_generator)
   end
 
-private
-
   def packages
-    @packages ||= distributor.packages.where(id: ids)
+    @packages ||= distributor.packages_with_ids(ids)
   end
 end

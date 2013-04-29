@@ -417,7 +417,19 @@ class Distributor < ActiveRecord::Base
     touch(:last_seen_at) #No validations or callbacks are performed
   end
 
-  private
+  def packages_with_ids(ids)
+    packages.where(id: ids)
+  end
+
+  def deliveries_with_ids(ids)
+    deliveries.where(id: ids)
+  end
+
+  def orders_with_ids(ids)
+    orders.where(id: ids)
+  end
+
+private
 
   def required_fields_for_webstore
     if active_webstore_changed? && active_webstore?

@@ -1,6 +1,38 @@
 class DeliverySort
-  
   attr_accessor :items, :type
+
+  def self.grouped_by_boxes(items)
+    delivery_sort = new(items)
+    delivery_sort.grouped_by_boxes
+  end
+
+  #FIXME: Checking by class is a code smell this can be done better but it is the current standard in this class so using if for now.
+  def self.by_dso(items, date)
+    if items.all? { |i| i.is_a?(Delivery) }
+      by_real_dso(items)
+    elsif items.all?{ |i| i.is_a?(Order) }
+      by_predicted_dso(items, date)
+    end
+  end
+
+  def self.by_real_dso(deliveries)
+    deliveries.ordered.sort_by { |ei| ei.dso }.reverse
+  end
+
+  #FIXME: This method needs to be refactored
+  def self.by_predicted_dso(orders, date)
+    date_orders = []
+    wday = date.wday
+
+    date_orders = orders.includes({ account: { customer: { address:{}, deliveries: { delivery_list: {} } } }, order_extras: {}, box: {} })
+
+    sorted_orders = date_orders.sort do |a,b|
+      comp = a.dso(wday) <=> b.dso(wday)
+      comp.zero? ? (b.created_at <=> a.created_at) : comp
+    end
+
+    FutureDeliveryList.new(date, sorted_orders).deliveries
+  end
 
   def initialize(items)
     if items.all?{|i| i.is_a? Package}
