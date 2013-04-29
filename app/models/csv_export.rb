@@ -1,5 +1,6 @@
 class CsvExport
   def initialize(args)
+    @sorter      = args.fetch(:sorter, DeliverySort)
     @distributor = args[:distributor]
     @ids         = args[:ids]
     @date        = args[:date]
@@ -35,16 +36,24 @@ protected
     generate_csv_output(csv_data) if csv_data
   end
 
-  def generate_csv_output(csv_data, csv_generator)
-    csv = csv_generator.new(csv_data)
+  def generate_csv_output(csv_data)
+    csv = generator.new(csv_data)
     csv.generate
   end
 
-  def sorted_and_grouped(items, sorter = DeliverySort)
+  def csv_data
+    @csv_data ||= ( packing_screen? ? sorted_and_grouped : sorted_by_dso )
+  end
+
+  def sorted_and_grouped
     sorter.grouped_by_boxes(items).flat_map { |box, array| array }
   end
 
-  def sorted_by_dso(items, sorter = DeliverySort)
+  def sorted_by_dso
     sorter.by_dso(items, date)
+  end
+
+  def packing_screen?
+    screen == 'packing'
   end
 end

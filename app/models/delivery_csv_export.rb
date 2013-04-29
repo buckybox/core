@@ -1,15 +1,12 @@
 class DeliveryCsvExport < CsvExport
+  def initialize(args)
+    @generator = args.fetch(:generator, DeliveryCsvGenerator)
+    super(args)
+  end
+
 private
 
-  def csv_data
-    @csv_data ||= sorted_by_dso(deliveries)
-  end
-
-  def generate_csv_output(csv_data, csv_generator = DeliveryCsvGenerator)
-    super(csv_data, csv_generator)
-  end
-
-  def deliveries
+  def items
     @deliveries ||= distributor.deliveries_with_ids(ids)
   end
 end
