@@ -194,6 +194,8 @@ class WebstoreOrder < ActiveRecord::Base
         schedule_rule_attributes: schedule_rule.clone_attributes,
         order_extras: extras_hash,
         extras_one_off: extras_one_off
+        # FIXME Having to forward parameters like that sucks and is error-prone
+        # Consider merging Order and WebstoreOrder together
       )
       order.excluded_line_item_ids = exclusions
       order.substituted_line_item_ids = substitutions

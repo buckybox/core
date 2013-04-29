@@ -351,7 +351,7 @@ class ScheduleRule < ActiveRecord::Base
   end
 
   def clone_attributes
-    attributes.slice('start', 'recur', 'sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat')
+    attributes.slice('start', 'recur', 'week', 'sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat')
   end
 
   def self.generate_data(count)
