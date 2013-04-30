@@ -158,15 +158,30 @@ class Order < ActiveRecord::Base
     schedule_rule.blank? || schedule_rule.next_occurrence.blank?
   end
 
+  def box_name
+    box.name
+  end
+
+  def route_name
+    route.name
+  end
+
+  def has_exclusions?
+    !exclusions.empty?
+  end
+
+  def has_substitutions?
+    !substitutions.empty?
+  end
+
   def string_pluralize
-    box_name = box.name
     "#{quantity || 0} " + ((quantity == 1 || quantity =~ /^1(\.0+)?$/) ? box_name : box_name.pluralize)
   end
 
   def string_sort_code
-    result = box.name
-    result += '+L' unless exclusions.empty?
-    result += '+D' unless substitutions.empty?
+    result = box_name
+    result += '+L' if has_exclusions?
+    result += '+D' if has_substitutions?
 
     return result.upcase
   end
@@ -401,7 +416,7 @@ class Order < ActiveRecord::Base
 
   def likes_dislikes_within_limits
     return unless box.present?
-    
+
     if !box.exclusions_limit.zero? && exclusions.size > box.exclusions_limit
       errors.add(:exclusions, " is limited to #{box.exclusions_limit}")
     end

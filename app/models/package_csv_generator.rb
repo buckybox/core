@@ -1,6 +1,6 @@
 class PackageCsvGenerator < CsvGenerator
-  def initialize(data)
-    @row_generator = PackageCsvRowGenerator
+  def initialize(data, options = {})
+    @row_generator = options.fetch(:row_generator, PackageCsvRowGenerator)
     super(data)
   end
 end

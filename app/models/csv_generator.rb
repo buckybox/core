@@ -1,5 +1,5 @@
 class CsvGenerator
-  def initialize(data)
+  def initialize(data, options = {})
     @data = data
   end
 
@@ -11,6 +11,7 @@ class CsvGenerator
   end
 
 protected
+
   attr_reader :data
   attr_reader :row_generator
 

@@ -46,7 +46,7 @@ protected
   end
 
   def delivery_route
-    order.route.name
+    order.route_name
   end
 
   def delivery_sequence_number
@@ -58,7 +58,7 @@ protected
     nil
   end
 
-  def order_number(order)
+  def order_number
     order.id
   end
 

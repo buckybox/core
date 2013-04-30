@@ -24,14 +24,14 @@ private
   end
 
   def box_contents_short_description
-    box_name          = archived.box.name
-    has_exclusions    = !archived.exclusions.empty?
-    has_substitutions = !archived.substitutions.empty?
+    box_name          = archived.box_name
+    has_exclusions    = archived.has_exclusions?
+    has_substitutions = !archived.has_substitutions?
     Order.short_code(box_name, has_exclusions, has_substitutions)
   end
 
   def box_type
-    archived.box.name
+    archived.box_name
   end
 
   def box_likes
