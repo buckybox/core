@@ -77,8 +77,8 @@ Spork.prefork do
       end
     end
 
-    Devise.setup do |config|
-      config.stretches = 0
+    Devise.setup do |devise|
+      devise.stretches = 0
     end
   end
 end
