@@ -1,6 +1,74 @@
 require 'spec_helper'
 
 describe Customer do
+  def customer_mock(opts={})
+    customer = double("Bucky::Import::Customer")
+    attrs = {
+      first_name: 'Jordan',
+      last_name: 'Carter',
+      email: 'jc@example.com',
+      discount: 0.1,
+      currency: 'NZD',
+      number: 1234,
+      notes: 'Good one dave, your a legend Dave',
+      account_balance: 80.65,
+      delivery_route: "Rural Van",
+      delivery_address_line_1: 'camp site 2c',
+      delivery_address_line_2: 'next to the toilet',
+      delivery_suburb: 'Solway',
+      delivery_city: 'Masterton',
+      delivery_postcode: '1234567',
+      delivery_instructions: 'by the zips please',
+      phone_1: '0800 999 666 333',
+      phone_2: '0800 BOWIES IN SPACE',
+      tags: ["Flight of the concords", "rock"],
+      boxes: 2.times.collect{box_mock},
+    }.merge(opts)
+    extras = { 'class'.to_sym => Bucky::Import::Customer }
+    attrs.merge(extras).each do |key, value|
+      customer.stub(key).and_return(value)
+    end
+
+    customer
+  end
+
+  def box_mock(opts={})
+    box = double("Bucky::Import::Box")
+    attrs = {
+      box_type: "Rural Van",
+      dislikes: "Onions",
+      likes: "Carrots",
+      delivery_frequency: "weekly",
+      delivery_days: "Monday, Tuesday, Friday",
+      next_delivery_date: "23-Mar-2013",
+      extras_limit: 3,
+      extras_unlimited?: false,
+      extras_recurring?: true,
+      extras: 2.times.collect{extra_mock}
+          }.merge(opts)
+    extras = { 'class'.to_sym => Bucky::Import::Box }
+    attrs.merge(extras).each do |key, value|
+      box.stub(key).and_return(value)
+    end
+
+    box
+  end
+
+  def extra_mock(opts={})
+    extra = double("Bucky::Import::Extra")
+    attrs = {
+      count: 1,
+      name: "Bacon",
+      unit: "7 slices"
+          }.merge(opts)
+    extras = { 'class'.to_sym => Bucky::Import::Extra }
+    attrs.merge(extras).each do |key, value|
+      extra.stub(key).and_return(value)
+    end
+
+    extra
+  end
+
   let(:customer) { Fabricate(:customer) }
 
   specify { customer.should be_valid }
@@ -14,7 +82,7 @@ describe Customer do
     end
   end
 
-  context 'a customer' do
+  context 'with a customer' do
     before { @customer = Fabricate(:customer) }
 
     context 'initializing' do
@@ -23,7 +91,7 @@ describe Customer do
       specify { @customer.number.should_not be_nil }
     end
 
-    context 'email' do
+    describe '#email' do
       before do
         @customer.email = ' BuckyBox@Example.com '
         @customer.save
@@ -32,12 +100,12 @@ describe Customer do
       specify { @customer.email.should == 'buckybox@example.com' }
     end
 
-    context 'number' do
+    describe '#number' do
       before { @customer.number = -1 }
       specify { @customer.should_not be_valid }
     end
 
-    context 'random password' do
+    describe 'a random password is generated if empty' do
       before do
         @customer.password = @customer.password_confirmation = ''
         @customer.save
@@ -48,23 +116,21 @@ describe Customer do
       specify { Customer.generate_random_password.should_not == Customer.generate_random_password }
     end
 
-    context 'full name' do
-      describe '#name' do
-        describe 'with only first name' do
-          specify { @customer.name.should == @customer.first_name }
-        end
-
-        describe 'with both first and last name' do
-          before { @customer.last_name = 'Lastname' }
-          specify { @customer.name.should == "#{@customer.first_name} #{@customer.last_name}" }
-        end
+    describe '#name' do
+      describe 'with only first name' do
+        specify { @customer.name.should == @customer.first_name }
       end
 
-      describe '#name=' do
-        before { @customer.name= 'John Smith' }
-        specify { @customer.first_name.should == 'John' }
-        specify { @customer.last_name.should == 'Smith' }
+      describe 'with both first and last name' do
+        before { @customer.last_name = 'Lastname' }
+        specify { @customer.name.should == "#{@customer.first_name} #{@customer.last_name}" }
       end
+    end
+
+    describe '#name=' do
+      before { @customer.name = 'John Smith' }
+      specify { @customer.first_name.should == 'John' }
+      specify { @customer.last_name.should == 'Smith' }
     end
 
     context 'when using tags' do
@@ -78,7 +144,7 @@ describe Customer do
     end
   end
 
-  context 'when searching' do
+  describe '.search' do
     before :each do
       address = Fabricate(:address_with_associations, city: 'Edinburgh')
       customer2 = address.customer
@@ -95,7 +161,7 @@ describe Customer do
     specify { Customer.search('John').size.should == 1 }
   end
 
-  context '#new?' do
+  describe '#new?' do
     before { @customer = Fabricate(:customer) }
 
     context 'customer has 0 deliveries' do
@@ -151,8 +217,8 @@ describe Customer do
     specify { customer.next_delivery_time.should == @order.schedule_rule.next_occurrence.to_date }
   end
 
-  describe '.import' do
-    let(:customer){ Fabricate(:customer) }
+  describe '#import' do
+    let(:customer) { Fabricate(:customer) }
 
     it "should import customer with all fields" do
       route = mock_model(Route)
@@ -223,74 +289,6 @@ describe Customer do
         box = boxes[n]
       end
     end
-  end
-
-  def customer_mock(opts={})
-    customer = double("Bucky::Import::Customer")
-    attrs = {
-      first_name: 'Jordan',
-      last_name: 'Carter',
-      email: 'jc@example.com',
-      discount: 0.1,
-      currency: 'NZD',
-      number: 1234,
-      notes: 'Good one dave, your a legend Dave',
-      account_balance: 80.65,
-      delivery_route: "Rural Van",
-      delivery_address_line_1: 'camp site 2c',
-      delivery_address_line_2: 'next to the toilet',
-      delivery_suburb: 'Solway',
-      delivery_city: 'Masterton',
-      delivery_postcode: '1234567',
-      delivery_instructions: 'by the zips please',
-      phone_1: '0800 999 666 333',
-      phone_2: '0800 BOWIES IN SPACE',
-      tags: ["Flight of the concords", "rock"],
-      boxes: 2.times.collect{box_mock},
-    }.merge(opts)
-    extras = { 'class'.to_sym => Bucky::Import::Customer }
-    attrs.merge(extras).each do |key, value|
-      customer.stub(key).and_return(value)
-    end
-
-    customer
-  end
-
-  def box_mock(opts={})
-    box = double("Bucky::Import::Box")
-    attrs = {
-      box_type: "Rural Van",
-      dislikes: "Onions",
-      likes: "Carrots",
-      delivery_frequency: "weekly",
-      delivery_days: "Monday, Tuesday, Friday",
-      next_delivery_date: "23-Mar-2013",
-      extras_limit: 3,
-      extras_unlimited?: false,
-      extras_recurring?: true,
-      extras: 2.times.collect{extra_mock}
-          }.merge(opts)
-    extras = { 'class'.to_sym => Bucky::Import::Box }
-    attrs.merge(extras).each do |key, value|
-      box.stub(key).and_return(value)
-    end
-
-    box
-  end
-
-  def extra_mock(opts={})
-    extra = double("Bucky::Import::Extra")
-    attrs = {
-      count: 1,
-      name: "Bacon",
-      unit: "7 slices"
-          }.merge(opts)
-    extras = { 'class'.to_sym => Bucky::Import::Extra }
-    attrs.merge(extras).each do |key, value|
-      extra.stub(key).and_return(value)
-    end
-
-    extra
   end
 
   describe "balance_threshold" do
