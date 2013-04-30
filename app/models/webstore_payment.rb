@@ -1,9 +1,10 @@
 class WebstorePayment < Form
 
-  attr_accessor :credit_card
+  attr_accessor :credit_card, :payment_method
   
-  def initialize(args={})
-    self.credit_card = CreditCard.new
+  def initialize(order)
+    self.payment_method = order.payment_method
+    self.credit_card = CreditCard.new if payment_method == 'credit_card'
   end
 
   def self.production?

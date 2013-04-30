@@ -63,6 +63,8 @@ GEM
       girl_friday
     analytical (3.0.12)
     arel (3.0.2)
+    attr_encryptor (1.0.2)
+      encryptor2 (>= 1.0.0)
     bcrypt-ruby (3.0.1)
     bootstrap-sass (2.1.0.1)
     brakeman (1.7.1)
@@ -148,6 +150,7 @@ GEM
       active_model_serializers
       execjs (>= 1.2)
       railties (~> 3.1)
+    encryptor2 (1.0.0)
     erubis (2.7.0)
     execjs (1.4.0)
       multi_json (~> 1.0)
@@ -378,6 +381,7 @@ DEPENDENCIES
   acts_as_list (~> 0.1.8)
   airbrake (~> 3.1.2)
   analytical (~> 3.0.12)
+  attr_encryptor
   bootstrap-sass (~> 2.1.0.0)
   brakeman (~> 1.7.1)
   bullet (~> 4.1.6)

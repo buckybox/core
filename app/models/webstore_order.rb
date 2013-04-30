@@ -241,4 +241,8 @@ class WebstoreOrder < ActiveRecord::Base
       customer.save!
     end
   end
+
+  def no_payment_action?
+    payment_method?(:bank_deposit) || payment_method?(:cash_on_delivery)
+  end
 end

@@ -49,11 +49,11 @@
       .span10
         .totals-text Your existing account balance with us
         .totals-text This order
-        .totals-text Balance owing
+        .totals-text Closing balance
       .span2
-        .text-right= @current_balance.format
-        .text-right= (@order_price * -1).format
-        .text-right.total= @closing_balance.format
+        .text-right= MoneyDisplay.new(@current_balance)
+        .text-right= MoneyDisplay.new(@order_price).negative
+        .text-right.total= MoneyDisplay.new(@closing_balance)
 
   .row-fluid.webstore-section
     #webstore-payment.span12
@@ -62,15 +62,20 @@
           .row-fluid.important
             - if customer_signed_in? && @closing_balance.positive?
               .span10 Your account is in credit
-              .span2.text-right No payment necessary
             - else
               .span10 Total amount due
-              .span2.text-right= @amount_due.format
+              .span2.text-right= MoneyDisplay.new(@amount_due)
       .row-fluid
         #payment-options.span12
-          = render partial: 'webstore/payment_options', locals: {payment: PaymentOptionsForm.new(form: f, webstore_order: @webstore_order)}
-
+          - if @payment_required
+            = render partial: 'webstore/payment_options', locals: {payment: PaymentOptionsForm.new(form: f, webstore_order: @webstore_order)}
+          - else
+            .span12.text-center No payment necessary
+            = f.input :payment_method, as: :hidden, input_html: {value: 'paid'}
   .row-fluid
     .span12
       = f.input :complete, as: :hidden, input_html: { value: true }
-      = f.button :submit, 'Next', class: 'pull-right btn btn-process'
+      - if @payment_required
+        = f.button :submit, 'Next', class: 'pull-right btn btn-process'
+      - else
+        = f.button :submit, 'Complete', class: 'pull-right btn btn-process'

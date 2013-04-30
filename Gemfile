@@ -36,6 +36,7 @@ gem 'airbrake', '~> 3.1.2'
 gem 'ace-rails-ap', '~> 2.0.0'
 
 gem 'activemerchant'
+gem 'attr_encryptor'
 
 ########## THE GEMS ABOVE ARE THE ONLY ONES THAT RUN ON PRODUCTION ##########
 

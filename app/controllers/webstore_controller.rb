@@ -58,7 +58,7 @@ class WebstoreController < ApplicationController
     @order_price = @webstore_order.order_price(current_customer)
 
     @address = (current_customer ? current_customer.address : '')
-    @current_balance = (current_customer ? current_customer.account.balance : Money.new(0))
+    @current_balance = current_customer ? current_customer.account.balance : Money.new(0)
 
     @city = @distributor.invoice_information.billing_city if @distributor.invoice_information
     @has_address = existing_customer?
@@ -73,8 +73,9 @@ class WebstoreController < ApplicationController
     end
 
     @closing_balance = @current_balance - @order_price
-    @amount_due = @closing_balance * -1
+    @amount_due = @closing_balance
     @bank = @distributor.bank_information
+    @payment_required = @closing_balance.negative?
   end
 
   def payment
@@ -83,6 +84,7 @@ class WebstoreController < ApplicationController
     @closing_balance = @current_balance - @order_price
     @amount_due = @closing_balance * -1
     @bank = @distributor.bank_information
+    @payment_required = @closing_balance.negative?
   end
 
   def placed

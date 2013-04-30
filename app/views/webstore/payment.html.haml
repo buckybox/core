@@ -4,7 +4,7 @@
   .alert.alert-error
     Your account is under the minimum balance and will not recieve new orders unless payment is cleared before the packing date.
 
-= simple_form_for(WebstorePayment.new, url: webstore_process_step_path, html: {class: 'payments'}) do |f|
+= simple_form_for(WebstorePayment.new(@webstore_order), url: webstore_process_step_path, html: {class: 'payments'}) do |f|
   .row-fluid
     #webstore-payment.span10
       .row-fluid
@@ -14,7 +14,7 @@
               .span10 Your account is in credit
               .span2.text-right No payment necessary
             - else
-              .span10 Total amount due
+              .span10 Total amount due:
               .span2.text-right= @amount_due.format
       .row-fluid
         #payment.span12
@@ -24,6 +24,7 @@
               = @webstore_order.payment_method_string
           .row-fluid
             .span9.center-row
+              = f.input :payment_method, as: :hidden
               - if @webstore_order.payment_method? :credit_card
                 = render partial: 'webstore/payment_credit_card', locals: {form: f}
               - elsif @webstore_order.payment_method? :cash_on_delivery
