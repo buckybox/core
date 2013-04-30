@@ -36,8 +36,42 @@ $(function() {
     }
   });
 
+  var schedule = $('#order-form .order-days');
+  var weeks = schedule.find('tr');
+
   $('#order-form select.frequency').change(function() {
-    day_display($(this));
+    var frequency_select = $(this);
+
+    if(frequency_select.val() === 'single') {
+      schedule.hide();
+    }
+    else {
+      schedule.show();
+    }
+
+    if(frequency_select.val() === 'monthly') {
+      weeks.show();
+    }
+    else {
+      weeks.slice(1).hide();
+    }
+  });
+
+  $('#order-form .order-days input').click(function(event) {
+    var checkbox = $(event.target)
+    var selected_week = checkbox.closest('tr');
+
+    if (checkbox.is(':checked')) {
+      // disable the other rows
+      var other_weeks = weeks.not(selected_week);
+      other_weeks.find('input').attr('disabled', 'true').removeAttr('checked');
+
+      $('#order_schedule_rule_attributes_week').val(checkbox.data('week'))
+
+    } else if (selected_week.find('input:checked').length == 0) {
+      // enable all rows if this is the only checked day
+      weeks.find('input[data-enabled="true"]').removeAttr('disabled');
+    }
   });
 
   $('#order-form #dislikes-input').change(function() {
@@ -119,18 +153,10 @@ function order_init() {
   $('#order-form').each( function() {
     var box_id = $(this).find('select.box').val();
 
-    day_display($(this).find('select.frequency'));
     update_order_extras_collection($(this));
 
     if(box_id) { order_check_box(box_id, $(this)); }
   });
-}
-
-function day_display(frequency_selector) {
-  var days = frequency_selector.closest('#order-form').find('#days');
-  var frequency = frequency_selector.val();
-
-  (frequency === 'single' ? days.hide() : days.show() );
 }
 
 function order_check_box(box_id, current_order) {
