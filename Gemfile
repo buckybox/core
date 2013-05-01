@@ -1,7 +1,7 @@
-source 'http://rubygems.org'
+source 'https://rubygems.org'
 
 # Core
-gem 'rails', '~> 3.2.12'
+gem 'rails', '~> 3.2.13'
 
 # Database
 gem 'pg', '~> 0.14.0'
@@ -48,14 +48,14 @@ group :assets do
 end
 
 group :install do
-  gem 'sprinkle', git: 'git@github.com:jordandcarter/sprinkle.git' # patched to be awesome.. added more verifiers and updated some installers
+  gem 'sprinkle', github: 'jordandcarter/sprinkle' # patched to be awesome.. added more verifiers and updated some installers
 end
 
 group :development do
   gem 'bullet', '~> 4.1.6', require: false
   gem 'brakeman', '~> 1.7.1', require: false
 
-  gem 'ruby-prof', '~> 0.11.2' # profiling with /newrelic
+  gem 'ruby-prof', '~> 0.12.2' # profiling with /newrelic
 
   gem 'capistrano', '~> 2.12.0'
   gem 'capistrano_colors', '~> 0.5.5'
@@ -69,10 +69,17 @@ group :development do
   gem 'spork-rails', '~> 3.2.0'
 
   # Pry: IRB + ruby debug alternative which is active and easier to install
-  gem 'pry-rails', '~> 0.2.2'
-  gem 'pry-coolline', '~> 0.2.1'
-  gem 'pry-debugger', '~> 0.2.1'
-  gem 'pry-remote', '~> 0.1.7' # Needed for using pry in spork
+  gem 'pry-remote',    '~> 0.1.7' # Needed for using pry in spork
+  gem 'pry-rails',     '~> 0.2.2'
+  gem 'pry-debugger',  '~> 0.2.2'
+  gem 'pry-coolline',  '~> 0.2.2'
+
+  gem 'better_errors',      '~> 0.7.2'
+  gem 'binding_of_caller',  '~> 0.7.1'
+  gem 'quiet_assets',       '~> 1.0.2'
+  gem 'meta_request',       '~> 0.2.3'
+
+  gem 'webrick',  '~> 1.3.1' # Included explicitly so #chunked warnings no longer show up in the dev log
 end
 
 group :test do

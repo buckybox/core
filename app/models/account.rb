@@ -70,7 +70,7 @@ class Account < ActiveRecord::Base
   def self.need_invoicing
     accounts = []
     Account.all.each { |account| accounts << account if account.needs_invoicing? }
-    return accounts
+    accounts
   end
 
   #future occurrences for all orders on account
@@ -83,7 +83,7 @@ class Account < ActiveRecord::Base
       end
     end
 
-    return occurrences.sort { |a,b| a[:date] <=> b[:date] }
+    occurrences.sort { |a,b| a[:date] <=> b[:date] }
   end
 
   # This holds the core logic for when an invoice should be raised
@@ -120,14 +120,14 @@ class Account < ActiveRecord::Base
       invoice_date = Date.current if invoice_date < Date.current
     end
 
-    return invoice_date
+    invoice_date
   end
 
   # Used internally for calculating invoice totals
   # if distributor charges bucky fee in addition to box price return price + bucky fee
   def self.amount_with_bucky_fee(amount, distributor)
     bucky_fee_multiple = distributor.separate_bucky_fee ? (1 + distributor.bucky_box_percentage) : 1
-    return amount * bucky_fee_multiple
+    amount * bucky_fee_multiple
   end
 
   def amount_with_bucky_fee(amount)
