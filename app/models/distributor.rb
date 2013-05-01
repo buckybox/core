@@ -417,7 +417,7 @@ class Distributor < ActiveRecord::Base
 
   def payment_options
     options = []
-    options << ["Credit card", :credit_card] if payment_credit_card?
+    #options << ["Credit card", :credit_card] if payment_credit_card?
     options << ["Bank deposit", :bank_deposit] if payment_bank_deposit?
     options << ["Cash on delivery", :cash_on_delivery] if payment_cash_on_delivery?
     options
