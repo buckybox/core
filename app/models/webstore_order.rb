@@ -131,8 +131,6 @@ class WebstoreOrder < ActiveRecord::Base
     end
 
     @order_extras_price_mem = OrderPrice.extras_price(order_extra_hash, customer)
-
-    return @order_extras_price_mem
   end
 
   def order_price(customer = nil)
@@ -159,7 +157,7 @@ class WebstoreOrder < ActiveRecord::Base
       end
     end
 
-    return @customisation_description_mem
+    @customisation_description_mem
   end
 
   def extra_string(extra_object)
@@ -182,7 +180,7 @@ class WebstoreOrder < ActiveRecord::Base
       end
     end
 
-    return @extras_description_mem
+    @extras_description_mem
   end
 
   def create_order

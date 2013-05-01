@@ -1,4 +1,4 @@
-DROP FUNCTION next_occurrence(
+DROP FUNCTION IF EXISTS next_occurrence(
   from_date DATE, ignore_pauses BOOLEAN, schedule_rule schedule_rules
 );
 CREATE OR REPLACE FUNCTION next_occurrence(
