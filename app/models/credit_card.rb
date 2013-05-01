@@ -58,7 +58,6 @@ class CreditCard < Form
   end
 
   def valid?
-    return true
     active_merchant_cc.valid?
   end
 

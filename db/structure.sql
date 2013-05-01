@@ -579,7 +579,8 @@ CREATE TABLE credit_card_transactions (
     distributor_id integer,
     account_id integer,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    updated_at timestamp without time zone NOT NULL,
+    currency character varying(255)
 );
 
 
@@ -3538,3 +3539,5 @@ INSERT INTO schema_migrations (version) VALUES ('20130417025820');
 INSERT INTO schema_migrations (version) VALUES ('20130430034158');
 
 INSERT INTO schema_migrations (version) VALUES ('20130430034231');
+
+INSERT INTO schema_migrations (version) VALUES ('20130501014814');
