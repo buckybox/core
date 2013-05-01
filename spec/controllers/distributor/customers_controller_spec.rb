@@ -60,10 +60,12 @@ describe Distributor::CustomersController do
       end
     end
 
-    it "should not take long to load customer index" do
+    xit "should not take long to load customer index" do
       expect {
         get :index
       }.to take_less_than(0.3).seconds
+      # FIXME Specs should NOT be machine-dependent since the hardware on CI may
+      # be different than production
     end
   end
 
