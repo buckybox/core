@@ -414,7 +414,7 @@ DEPENDENCIES
   fuubar (~> 1.0.0)
   fuzzy-string-match (~> 0.9.4)
   guard
-  guard-rspec
+  guard-rspec (~> 2.5.4)
   guard-spork (~> 1.1.0)
   haml-rails (~> 0.3.4)
   hirb (~> 0.7.0)
