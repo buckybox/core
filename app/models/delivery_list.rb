@@ -111,7 +111,7 @@ class DeliveryList < ActiveRecord::Base
   end
 
   def get_delivery_number(delivery)
-    throw "This isn't my delivery" if delivery.delivery_list_id != self.id
+    raise "This isn't my delivery" if delivery.delivery_list_id != self.id
 
     delivery_to_same_address = deliveries(true).select{|d| d.address_hash == delivery.address_hash && d.id != delivery.id}.first
 
