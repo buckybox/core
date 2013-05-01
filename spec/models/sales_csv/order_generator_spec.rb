@@ -1,10 +1,10 @@
 require 'fast_spec_helper'
 require 'csv'
-require_model 'csv_generator'
-require_model 'delivery_csv_generator'
-required_constants %w(DeliveryCsvRowGenerator)
+require_model 'generator', sub_dir: 'sales_csv'
+require_model 'order_generator', sub_dir: 'sales_csv'
+required_constants %w(OrderRowGenerator)
 
-describe DeliveryCsvGenerator do
+describe SalesCsv::OrderGenerator do
   let(:empty_data)    { [] }
   let(:some_data)     { (1..10).to_a }
   let(:csv_row)       { double('csv_row') }
@@ -12,8 +12,8 @@ describe DeliveryCsvGenerator do
 
   describe '#generate' do
     after do
-      package_csv_generator = DeliveryCsvGenerator.new(@args, row_generator: row_generator)
-      package_csv_generator.generate.should == @expected_result
+      order_generator = SalesCsv::OrderGenerator.new(@args, row_generator: row_generator)
+      order_generator.generate.should == @expected_result
     end
 
     it 'generates a csv without data' do

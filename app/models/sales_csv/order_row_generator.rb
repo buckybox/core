@@ -1,4 +1,4 @@
-class OrderCsvRowGenerator < CsvRowGenerator
+class SalesCsv::OrderRowGenerator < SalesCsv::RowGenerator
   DOES_NOT_EXIST = nil
 
 private

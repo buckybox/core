@@ -1,4 +1,4 @@
-class PackageCsvRowGenerator < CsvRowGenerator
+class SalesCsv::DeliveryRowGenerator < SalesCsv::RowGenerator
 private
 
   def order
@@ -6,11 +6,11 @@ private
   end
 
   def package
-    @package ||= data
+    @package ||= data.package
   end
 
   def delivery
-    @delivery ||= data.delivery
+    @delivery ||= data
   end
 
   def address

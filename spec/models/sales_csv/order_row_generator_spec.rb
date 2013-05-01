@@ -1,9 +1,9 @@
 require 'fast_spec_helper'
-require_model 'csv_row_generator'
-require_model 'order_csv_row_generator'
+require_model 'row_generator', sub_dir: 'sales_csv'
+require_model 'order_row_generator', sub_dir: 'sales_csv'
 required_constants %w(Order)
 
-describe OrderCsvRowGenerator do
+describe SalesCsv::OrderRowGenerator do
   let(:order) do
     double('order',
       route_name: 'rname',
@@ -42,13 +42,13 @@ describe OrderCsvRowGenerator do
       delivery_note: 'note',
     )
   end
-  let(:csv_row_generator) { OrderCsvRowGenerator.new(order) }
+  let(:row_generator) { SalesCsv::OrderRowGenerator.new(order) }
 
   describe '#generate' do
     it 'generates a array for conversion to csv row' do
       Order.stub(:short_code) { 'sc' }
       Order.stub(:extras_description) { 'exd' }
-      csv_row_generator.generate.should == ["rname", nil, nil, 1, nil, nil, 1, "fname", "lname", 8888, "NEW", "street 1", "apt 1", "sub", "city", 123, "note", "sc", "bname", "sub", "ex", "exd", 10.0, 1.0, 11.0, "em@ex.com", "pref", nil, nil]
+      row_generator.generate.should == ["rname", nil, nil, 1, nil, nil, 1, "fname", "lname", 8888, "NEW", "street 1", "apt 1", "sub", "city", 123, "note", "sc", "bname", "sub", "ex", "exd", 10.0, 1.0, 11.0, "em@ex.com", "pref", nil, nil]
     end
   end
 end

@@ -1,6 +1,6 @@
-class DeliveryCsvExport < CsvExport
+class SalesCsv::DeliveryExporter < SalesCsv::Exporter
   def initialize(args)
-    @generator = args.fetch(:generator, DeliveryCsvGenerator)
+    @generator = args.fetch(:generator, DeliveryGenerator)
     super(args)
   end
 

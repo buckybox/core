@@ -1,8 +1,8 @@
 require 'fast_spec_helper'
-require_model 'csv_row_generator'
-require_model 'package_csv_row_generator'
+require_model 'row_generator', sub_dir: 'sales_csv'
+require_model 'package_row_generator', sub_dir: 'sales_csv'
 
-describe PackageCsvRowGenerator do
+describe SalesCsv::PackageRowGenerator do
   let(:order) do
     double('order',
       route_name: 'rname',
@@ -55,11 +55,11 @@ describe PackageCsvRowGenerator do
       delivery_note: 'note',
     )
   end
-  let(:csv_row_generator) { PackageCsvRowGenerator.new(package) }
+  let(:row_generator) { SalesCsv::PackageRowGenerator.new(package) }
 
   describe '#generate' do
     it 'generates a array for conversion to csv row' do
-      csv_row_generator.generate.should == ["rname", 1, nil, 1, 1, "11 Apr 2013", 1, "fname", "lname", 8888, "NEW", "street 1", "apt 1", "sub", "city", 123, "note", "c", "bname", "sub", "ex", "exd", 10.0, 1.0, 11.0, "em@ex.com", "pref", "del", "pak"]
+      row_generator.generate.should == ["rname", 1, nil, 1, 1, "11 Apr 2013", 1, "fname", "lname", 8888, "NEW", "street 1", "apt 1", "sub", "city", 123, "note", "c", "bname", "sub", "ex", "exd", 10.0, 1.0, 11.0, "em@ex.com", "pref", "del", "pak"]
     end
   end
 end

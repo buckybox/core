@@ -146,7 +146,7 @@ private
   end
 
   def make_sales_args(key, value)
-    key = "#{key.to_s.singularize.titleize.constantize}CsvExport"
+    key = "SalesCsv::#{key.to_s.singularize.titleize.constantize}Exporter"
     key = key.constantize
     [ key, value ]
   end
