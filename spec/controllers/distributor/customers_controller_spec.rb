@@ -8,10 +8,15 @@ describe Distributor::CustomersController do
     before { @customer = Fabricate(:customer, distributor: @distributor) }
 
     context "send_login_details" do
-      before { get :send_login_details, id: @customer.id }
+      before do
+        @send_login_details = lambda { get :send_login_details, id: @customer.id }
+        @send_login_details.call
+      end
 
       it "should send an email" do
-        ActionMailer::Base.deliveries.size.should == 1
+        expect {
+          @send_login_details.call
+        }.to change{ActionMailer::Base.deliveries.size}.by(1)
       end
 
       it "should reset password" do
@@ -55,10 +60,12 @@ describe Distributor::CustomersController do
       end
     end
 
-    it "should not take long to load customer index" do
+    xit "should not take long to load customer index" do
       expect {
         get :index
       }.to take_less_than(0.3).seconds
+      # FIXME Specs should NOT be machine-dependent since the hardware on CI may
+      # be different than production
     end
   end
 

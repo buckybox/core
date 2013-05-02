@@ -184,11 +184,11 @@ class Customer < ActiveRecord::Base
   end
 
   def order_with_next_delivery
-    return next_order
+    next_order
   end
 
   def next_delivery_time
-    return next_order_occurrence_date
+    next_order_occurrence_date
   end
 
   def update_next_occurrence(date = nil)
@@ -204,10 +204,6 @@ class Customer < ActiveRecord::Base
       self.next_order_occurrence_date = nil
     end
     self
-  end
-
-  def calculate_next_order(date=Date.current.to_s(:db))
-    orders.active.select("orders.*, next_occurrence('#{date}', false, schedule_rules.*)").joins(:schedule_rule).reject{|sr| sr.next_occurrence.blank?}.sort_by(&:next_occurrence).first
   end
 
   def can_deactivate_orders?
