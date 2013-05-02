@@ -1,12 +1,14 @@
-class SalesCsv::PackageExporter < SalesCsv::Exporter
-  def initialize(args)
-    @generator = args.fetch(:generator, PackageGenerator)
-    super(args)
-  end
+module SalesCsv
+  class PackageExporter < Exporter
+    def initialize(args)
+      @generator = args.fetch(:generator, PackageGenerator)
+      super(args)
+    end
 
-private
+  private
 
-  def items
-    @packages ||= distributor.packages_with_ids(ids)
+    def items
+      @packages ||= distributor.packages_with_ids(ids)
+    end
   end
 end

@@ -1,6 +1,8 @@
-class SalesCsv::DeliveryGenerator < SalesCsv::Generator
-  def initialize(data, options = {})
-    @row_generator = options.fetch(:row_generator, DeliveryRowGenerator)
-    super(data)
+module SalesCsv
+  class DeliveryGenerator < Generator
+    def initialize(data, options = {})
+      @row_generator = options.fetch(:row_generator, DeliveryRowGenerator)
+      super(data)
+    end
   end
 end
