@@ -91,6 +91,8 @@ group :test do
   gem 'cucumber-rails', '~> 1.3.0', require: false
 
   gem 'therubyracer' # JS runtime for CI server
+
+  gem 'bundler-audit'
 end
 
 group :staging do
