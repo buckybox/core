@@ -16,7 +16,7 @@ class DeliverySort
   end
 
   def self.by_real_dso(deliveries)
-    deliveries.ordered.sort_by { |ei| ei.dso }.reverse
+    deliveries.ordered.sort_by { |ei| ei.dso }
   end
 
   #FIXME: This method needs to be refactored
