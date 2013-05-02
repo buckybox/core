@@ -10,12 +10,8 @@
       .row-fluid
         #amount-due.span12
           .row-fluid.important
-            - if customer_signed_in? && @closing_balance.positive?
-              .span10 Your account is in credit
-              .span2.text-right No payment necessary
-            - else
-              .span10 Total amount due:
-              .span2.text-right= @amount_due.format
+            .span10 Total amount due:
+            .span2.text-right= @amount_due.format
       .row-fluid
         #payment.span12
           .row-fluid
