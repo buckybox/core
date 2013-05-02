@@ -1,9 +1,7 @@
 class CreditCard < Form
 
   ATTRS = :card_brand, :card_number, :name_on_card, :first_name, :last_name, :expiry_month, :expiry_year, :card_security_code, :store_for_future_use
-  ATTRS.each do |attr|
-    attr_accessor attr
-  end
+  attr_accessor *ATTRS
   
   def initialize(args={})
     ATTRS.each do |attr|
