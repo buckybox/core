@@ -1,4 +1,4 @@
-# Display a money object for ( ) to signify negative values.
+# Display a money object with ( ) to signify negative values. e.g $12.87 or ($12.87)
 class MoneyDisplay
   attr_accessor :obj
 
