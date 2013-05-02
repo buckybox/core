@@ -34,6 +34,14 @@ module Distributor::DeliveriesHelper
     end
   end
 
+  def count_title(current_distributor, date)
+    if current_distributor.delivery_lists.where(date: date).count.zero?
+      'open for new orders'
+    elsif !current_distributor.delivery_lists.where(date: date).first.all_finished?
+      'pending deliveries'
+    end
+  end
+
   def reschedule_dates(route)
     dates = route.schedule.next_occurrences(5, Time.current)
     options_from_collection_for_select(dates, 'to_date', 'to_date')
