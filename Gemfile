@@ -90,7 +90,7 @@ group :test do
 
   gem 'cucumber-rails', '~> 1.3.0', require: false
 
-  gem 'therubyracer'
+  gem 'therubyracer' # JS runtime for CI server
 end
 
 group :staging do
@@ -102,9 +102,6 @@ group :development, :test do
   gem 'rspec-rails', '~> 2.11.0'
   gem 'guard'
   gem 'listen'
-  gem 'rb-inotify', require: false
-  gem 'rb-fsevent', require: false
-  gem 'rb-fchange', require: false
 
   gem 'letter_opener', '~> 1.0.0'
 
