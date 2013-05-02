@@ -8,7 +8,7 @@ Given /^I am viewing an existing customer$/ do
 end
 
 When /^I add a new customer$/ do
-  click_link "New Customer"
+  click_link "Create a new customer"
   step "I fill in valid customer details"
   click_button "Create Customer"
   @customer = Customer.find_by_email("bilbo@baggins.com")
@@ -18,7 +18,7 @@ end
 When /^I fill in valid customer details$/ do
   fill_in "Email", :with => "bilbo@baggins.com"
   fill_in "First name", :with => "Bilbo"
-  fill_in "Address 1", :with => "1 Bag End"
+  fill_in "Address", :with => "1 Bag End"
   fill_in "Suburb", :with => "Hobbiton"
   fill_in "City", :with => "The Water"
 end
