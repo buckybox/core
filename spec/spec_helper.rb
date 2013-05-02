@@ -1,4 +1,3 @@
-require 'rubygems'
 require 'spork'
 #uncomment the following line to use spork with the debugger
 #require 'spork/ext/ruby-debug'
@@ -29,8 +28,6 @@ Spork.prefork do
 
   Dir[Rails.root.join("spec/support/**/*.rb")].each { |f| require f }
 
-  counter = -1
-
   RSpec.configure do |config|
     config.order = 'random'
 
@@ -52,7 +49,6 @@ Spork.prefork do
     config.extend Devise::RequestMacros,    type: :request
 
     config.before(:suite) do
-      GC.disable
       DatabaseCleaner.clean_with(:truncation)
       DatabaseCleaner.strategy = :transaction
     end
@@ -64,20 +60,6 @@ Spork.prefork do
 
     config.after(:each) do
       DatabaseCleaner.clean
-    end
-
-    config.after(:each) do
-      counter += 1
-      if counter > 15
-        GC.enable
-        GC.start
-        GC.disable
-        counter = 0
-      end
-    end
-
-    config.after(:suite) do
-      counter = 0
     end
 
     # Don't need passwords in test DB to be secure, but we would like 'em to be
@@ -95,8 +77,8 @@ Spork.prefork do
       end
     end
 
-    Devise.setup do |config|
-      config.stretches = 0
+    Devise.setup do |devise|
+      devise.stretches = 0
     end
   end
 end
@@ -133,7 +115,4 @@ end
 #
 # These instructions should self-destruct in 10 seconds.  If they don't, feel
 # free to delete them.
-
-
-
 

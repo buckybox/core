@@ -6,6 +6,8 @@
 
 # Ignore RVM config
 .rvmrc
+.ruby-version
+.ruby-gemset
 
 # Ignore POW config
 .powrc

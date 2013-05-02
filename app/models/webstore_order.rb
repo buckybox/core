@@ -131,8 +131,6 @@ class WebstoreOrder < ActiveRecord::Base
     end
 
     @order_extras_price_mem = Package.calculated_extras_price(order_extra_hash, customer)
-
-    return @order_extras_price_mem
   end
 
   def order_price(customer = nil)
@@ -159,7 +157,7 @@ class WebstoreOrder < ActiveRecord::Base
       end
     end
 
-    return @customisation_description_mem
+    @customisation_description_mem
   end
 
   def extra_string(extra_object)
@@ -182,7 +180,7 @@ class WebstoreOrder < ActiveRecord::Base
       end
     end
 
-    return @extras_description_mem
+    @extras_description_mem
   end
 
   def create_order
@@ -197,8 +195,8 @@ class WebstoreOrder < ActiveRecord::Base
         order_extras: extras_hash,
         extras_one_off: extras_one_off
       )
-      order.update_exclusions(exclusions)
-      order.update_substitutions(substitutions)
+      order.excluded_line_item_ids = exclusions
+      order.substituted_line_item_ids = substitutions
       self.order = order
       order.save!
     end

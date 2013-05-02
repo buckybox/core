@@ -17,18 +17,13 @@
         = render partial: 'extras', locals: { account: @account, order: @order, box: @order.box || box_collection(@customer).first }
 
     .span4
+      #likes_dislikes_limits{data: {limits: @order.limits_data}}
       #dislikes-input
-        .row-fluid
-          .span12
-            = f.label :dislikes, 'Exclusions'
-            .row-fluid
-              = select_tag :dislikes_input, options_from_collection_for_select(@stock_list, :id, :name, @dislikes_list), multiple: true, class: 'span12', data: { placeholder: "Exclude these items..." }
+        = f.full_error(:exclusions)
+        = f.input :excluded_line_item_ids, label: 'Exclusions', collection: @stock_list, as: :select, :input_html => { :multiple => true }, placeholder: "Exclude these items..."
       #likes-input
-        .row-fluid
-          .span12
-            = f.label :likes, 'Substitutes'
-            .row-fluid
-              = select_tag :likes_input, options_from_collection_for_select(@stock_list, :id, :name, @likes_list), multiple: true, class: 'span12', data: { placeholder: "Substitute for these items..." }
+        = f.full_error(:substitutions)
+        = f.input :substituted_line_item_ids, label: 'Substitutes', collection: @stock_list, as: :select, :input_html => { :multiple => true}, placeholder: "Substitute for these items..."
 
     .span4
       - unless @order.persisted?
