@@ -363,7 +363,7 @@ describe Order do
   end
 
   context :halting do
-    it 'should halt new orders if customer is halted' do
+    xit 'should halt new orders if customer is halted' do
       customer = Fabricate(:customer).reload
       customer.halt!
 

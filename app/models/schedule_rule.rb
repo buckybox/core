@@ -99,12 +99,13 @@ class ScheduleRule < ActiveRecord::Base
             ignore_halts: false}.merge(opts)
 
     date ||= Date.current
-    occurrence = ScheduleRule.where(id:self.id).with_next_occurrence(date, opts[:ignore_pauses], opts[:ignore_halts]).first.attributes["next_occurrence"] unless new_record?
 
-    if occurrence.nil?
-      nil
-    else
-      Date.parse occurrence
+    unless new_record?
+      occurrence = ScheduleRule.where(id: self.id)
+      occurrence = occurrence.with_next_occurrence(date, opts[:ignore_pauses], opts[:ignore_halts])
+      occurrence = occurrence.first.attributes["next_occurrence"]
+
+      Date.parse occurrence unless occurrence.nil?
     end
   end
 
