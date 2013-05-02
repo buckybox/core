@@ -1,3 +1,4 @@
+# Display a money object for ( ) to signify negative values.
 class MoneyDisplay
   attr_accessor :obj
 
@@ -14,11 +15,11 @@ class MoneyDisplay
     if obj >= 0
       obj.format
     else
-      "(#{(obj*-1.0).format})"
+      "(#{(-obj).format})"
     end
   end
 
   def negative
-    MoneyDisplay.new(obj*-1)
+    MoneyDisplay.new(-obj)
   end
 end
