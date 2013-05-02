@@ -1,6 +1,7 @@
 module SalesCsv
   class SalesCsv::OrderRowGenerator < SalesCsv::RowGenerator
     DOES_NOT_EXIST = nil
+    FUTURE_STATUS = 'waiting'
 
   private
 
@@ -64,11 +65,11 @@ module SalesCsv
     end
 
     def package_status
-      DOES_NOT_EXIST
+      FUTURE_STATUS
     end
 
     def delivery_status
-      DOES_NOT_EXIST
+      FUTURE_STATUS
     end
   end
 end
