@@ -68,6 +68,8 @@ class Webstore
   private
 
   def payment_due?(order)
+    return false if order.account.blank? 
+
     (order.account.balance - order.order_price) < 0
   end
 
