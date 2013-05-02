@@ -51,9 +51,9 @@
         .totals-text This order
         .totals-text Closing balance
       .span2
-        .text-right= MoneyDisplay.new(@current_balance)
-        .text-right= MoneyDisplay.new(@order_price).negative
-        .text-right.total= MoneyDisplay.new(@closing_balance)
+        .text-right.total_price= MoneyDisplay.new(@current_balance)
+        .text-right.total_price= MoneyDisplay.new(@order_price).negative
+        .text-right.total.total_price= MoneyDisplay.new(@closing_balance)
 
   .row-fluid.webstore-section
     #webstore-payment.span12
@@ -64,7 +64,7 @@
               .span10 Your account is in credit
             - else
               .span10 Total amount due
-              .span2.text-right= MoneyDisplay.new(@amount_due)
+              .span2.text-right.total_price= MoneyDisplay.new(@amount_due).negative
       .row-fluid
         #payment-options.span12
           - if @payment_required
