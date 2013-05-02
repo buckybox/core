@@ -38,6 +38,7 @@ $(function() {
 
   var schedule = $('#order-form .order-days');
   var weeks = schedule.find('tr');
+  var week_numbers = weeks.find('td:first-child');
 
   $('#order-form select.frequency').change(function() {
     var frequency_select = $(this);
@@ -50,10 +51,12 @@ $(function() {
     }
 
     if(frequency_select.val() === 'monthly') {
+      week_numbers.show();
       weeks.show();
     }
     else {
       weeks.slice(1).hide();
+      week_numbers.hide();
     }
   });
 
