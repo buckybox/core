@@ -30,7 +30,7 @@ gem 'state_machine', '~> 1.1.2'
 
 gem 'postmark-rails', '~> 0.4.1'
 gem 'analytical', '~> 3.0.12'
-gem 'newrelic_rpm', '~> 3.4.1'
+gem 'newrelic_rpm', '~> 3.6.1'
 gem 'airbrake', '~> 3.1.2'
 
 gem 'ace-rails-ap', '~> 2.0.0'
