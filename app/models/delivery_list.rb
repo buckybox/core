@@ -34,7 +34,6 @@ class DeliveryList < ActiveRecord::Base
     order_ids = Bucky::Sql.order_ids(distributor, date)
     date_orders = distributor.orders.active.where(id: order_ids).includes({ account: {customer: {address:{}, deliveries: {delivery_list: {}}}}, order_extras: {}, box: {}})
 
-
     # This emulates the ordering when lists are actually created
     FutureDeliveryList.new(date, date_orders.sort { |a,b|
       comp = a.dso(wday) <=> b.dso(wday)

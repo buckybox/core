@@ -164,10 +164,14 @@ class Distributor < ActiveRecord::Base
   end
 
   def generate_required_daily_lists(generator_class = GenerateRequiredDailyLists)
+    generate_required_daily_lists_between(window_start_from, window_end_at, generator_class)
+  end
+
+  def generate_required_daily_lists_between(start, finish, generator_class = GenerateRequiredDailyLists)
     generator = generator_class.new(
       distributor:        self,
-      window_start_from:  window_start_from,
-      window_end_at:      window_end_at,
+      window_start_from:  start,
+      window_end_at:      finish,
       packing_lists:      packing_lists.scoped,
       delivery_lists:     delivery_lists.scoped,
     )
@@ -441,7 +445,7 @@ class Distributor < ActiveRecord::Base
     @@original_time ||= Time.current
     @@advanced ||= 0
     (24 * day).times.each do |h|
-s     h += 1 # start at 1, not 0
+      h += 1 # start at 1, not 0
 
       Delorean.time_travel_to(@@original_time + (@@advanced*day.days) + h.hours)
       Jobs.run_hourly
