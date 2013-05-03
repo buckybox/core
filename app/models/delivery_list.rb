@@ -34,7 +34,6 @@ class DeliveryList < ActiveRecord::Base
     order_ids = Bucky::Sql.order_ids(distributor, date)
     date_orders = distributor.orders.active.where(id: order_ids).includes({ account: {customer: {address:{}, deliveries: {delivery_list: {}}}}, order_extras: {}, box: {}})
 
-
     # This emulates the ordering when lists are actually created
     FutureDeliveryList.new(date, date_orders.sort { |a,b|
       comp = a.dso(wday) <=> b.dso(wday)
@@ -44,6 +43,7 @@ class DeliveryList < ActiveRecord::Base
 
   def self.generate_list(distributor, date)
     packing_list  = PackingList.find_or_create_by_distributor_id_and_date(distributor.id, date)
+    p "packing_list", packing_list.packages
     delivery_list = DeliveryList.find_or_create_by_distributor_id_and_date(distributor.id, date)
 
     # Collecting via packing list rather than orders so that delivery generation is explicitly

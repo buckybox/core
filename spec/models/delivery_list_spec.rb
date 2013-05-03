@@ -42,18 +42,56 @@ describe DeliveryList do
 
   describe '.collect_lists' do
     before do
-      time_travel_to Date.parse('2012-01-23')
+      time_travel_to Date.parse('2013-05-01')
 
-      @distributor = Fabricate(:distributor)
-      box = Fabricate(:box, distributor: @distributor)
-      3.times { Fabricate(:recurring_order, completed: true, box: box) }
+      @order = Fabricate(:recurring_order, completed: true)
+      @distributor = @order.distributor
+      @order.schedule_rule.recur = "monthly"
+      p @order.schedule_rule
+      @start_date = @order.schedule_rule.start
 
-      time_travel_to Date.parse('2012-01-30')
+      @today = Date.parse('2013-05-08')
+      time_travel_to @today
 
-      ((Date.current - 1.week)..Date.current).each { |date| DeliveryList.generate_list(@distributor, date) }
+      (@start_date..@today).each do |date|
+        DeliveryList.generate_list(@distributor, date)
+        PackingList.generate_list(@distributor, date)
+      end
     end
 
-    specify { DeliveryList.collect_lists(@distributor, (Date.current - 1.week), (Date.current + 1.week)).should be_kind_of(Array) }
+    it "is a delivery day today", :focus do
+      @today.should eq @order.schedule_rule.next_occurrence
+    end
+
+    it "is an array" do
+      delivery_lists = DeliveryList.collect_lists(@distributor, @today, @today)
+      delivery_lists.should be_a Array
+    end
+
+    it "works with the first week day", :focus do
+      end_date = @today + 1.week
+      delivery_lists = DeliveryList.collect_lists(@distributor, @start_date, end_date)
+
+      delivery_lists.count.should eq (end_date - @start_date + 1)
+
+      p "D", @distributor.delivery_lists.map(&:deliveries).map(&:count)
+
+      todays_delivery_list = delivery_lists.detect { |dl| dl.date == @today }
+      todays_delivery_list.should_not be_nil
+      todays_delivery_list.deliveries.count.should eq 1
+    end
+
+    it "works with the nth week day" do
+      @order.schedule_rule.week = 2
+      next_occurrence = @order.schedule_rule.next_occurrence
+      next_occurrence.should < @start_date + 3.weeks
+
+      delivery_lists = DeliveryList.collect_lists(@distributor, @start_date, @start_date + 3.weeks)
+
+      next_delivery_list = delivery_lists.detect { |dl| dl.date == next_occurrence }
+      p next_delivery_list
+      next_delivery_list.deliveries.count.should eq 1
+    end
 
     after { back_to_the_present }
   end

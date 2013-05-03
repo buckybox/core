@@ -1169,7 +1169,7 @@ CREATE TABLE import_transaction_lists (
     distributor_id integer,
     draft boolean,
     account_type integer,
-    csv_file character varying(255),
+    csv_file text,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
     omni_importer_id integer
@@ -3367,3 +3367,5 @@ INSERT INTO schema_migrations (version) VALUES ('20130311224428');
 INSERT INTO schema_migrations (version) VALUES ('20130313051530');
 
 INSERT INTO schema_migrations (version) VALUES ('20130315034909');
+
+INSERT INTO schema_migrations (version) VALUES ('20130321040949');

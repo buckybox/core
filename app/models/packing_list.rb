@@ -14,6 +14,7 @@ class PackingList < ActiveRecord::Base
 
   scope :packed, where(status: 'packed')
 
+  # FIXME duplicated code with DeliveryList
   def self.collect_lists(distributor, start_date, end_date)
     result = PackingList.includes(packages: {customer: {address: {}}}).where(date:start_date..end_date, distributor_id: distributor.id).to_a
 
