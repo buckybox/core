@@ -47,19 +47,15 @@ describe DeliveryList do
       @order = Fabricate(:recurring_order, completed: true)
       @distributor = @order.distributor
       @order.schedule_rule.recur = "monthly"
-      p @order.schedule_rule
       @start_date = @order.schedule_rule.start
 
       @today = Date.parse('2013-05-08')
       time_travel_to @today
-
-      (@start_date..@today).each do |date|
-        DeliveryList.generate_list(@distributor, date)
-        PackingList.generate_list(@distributor, date)
-      end
+      
+      @distributor.generate_required_daily_lists_between(@start_date, @today)
     end
 
-    it "is a delivery day today", :focus do
+    it "is a delivery day today" do
       @today.should eq @order.schedule_rule.next_occurrence
     end
 
@@ -68,13 +64,11 @@ describe DeliveryList do
       delivery_lists.should be_a Array
     end
 
-    it "works with the first week day", :focus do
+    it "works with the first week day" do
       end_date = @today + 1.week
       delivery_lists = DeliveryList.collect_lists(@distributor, @start_date, end_date)
 
-      delivery_lists.count.should eq (end_date - @start_date + 1)
-
-      p "D", @distributor.delivery_lists.map(&:deliveries).map(&:count)
+      delivery_lists.count.should eq(end_date - @start_date + 1)
 
       todays_delivery_list = delivery_lists.detect { |dl| dl.date == @today }
       todays_delivery_list.should_not be_nil
@@ -84,12 +78,11 @@ describe DeliveryList do
     it "works with the nth week day" do
       @order.schedule_rule.week = 2
       next_occurrence = @order.schedule_rule.next_occurrence
-      next_occurrence.should < @start_date + 3.weeks
+      next_occurrence.should be < @start_date + 3.weeks
 
       delivery_lists = DeliveryList.collect_lists(@distributor, @start_date, @start_date + 3.weeks)
 
       next_delivery_list = delivery_lists.detect { |dl| dl.date == next_occurrence }
-      p next_delivery_list
       next_delivery_list.deliveries.count.should eq 1
     end
 

@@ -43,7 +43,6 @@ class DeliveryList < ActiveRecord::Base
 
   def self.generate_list(distributor, date)
     packing_list  = PackingList.find_or_create_by_distributor_id_and_date(distributor.id, date)
-    p "packing_list", packing_list.packages
     delivery_list = DeliveryList.find_or_create_by_distributor_id_and_date(distributor.id, date)
 
     # Collecting via packing list rather than orders so that delivery generation is explicitly
