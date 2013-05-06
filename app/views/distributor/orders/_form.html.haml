@@ -9,6 +9,8 @@
 
       - unless @order.persisted?
         = f.simple_fields_for(:schedule_rule) do |sf|
+          = sf.input :start, label: 'Start date', collection: order_start_dates(@route), include_blank: false
+
           = sf.input :recur, label: 'Frequency', collection: order_frequencies, include_blank: false, input_html: { class: 'frequency' }
 
       #likes_dislikes_limits{data: {limits: @order.limits_data}}
