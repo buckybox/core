@@ -169,7 +169,7 @@ class Package < ActiveRecord::Base
       # The association chain to get a distributor was causing a callback loop so have to do this instead.
       found_distributor = Distributor.find_by_id(packing_list.distributor_id) if packing_list
 
-      self.archived_consumer_delivery_fee = found_distributor.consumer_delivery_fee if found_distributor && found_distributor.consumer_delivery_fee
+      self.archived_consumer_delivery_fee = found_distributor.consumer_delivery_fee if found_distributor
 
       return archive_extras
     end
