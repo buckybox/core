@@ -64,6 +64,10 @@ class Package < ActiveRecord::Base
     OrderPrice.extras_price(archived_extras, archived_customer_discount)
   end
 
+  def status_formatted
+    status == 'unpacked' ? 'pending' : status
+  end
+
   def quantity
     archived_order_quantity
   end

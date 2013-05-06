@@ -107,6 +107,10 @@ class Delivery < ActiveRecord::Base
     end
   end
 
+  def status_formatted
+    status # in future the output may not match our internal status
+  end
+
   def already_performed_event?(status_event)
     STATUS_TO_EVENT[self.status.to_s] == status_event.to_s
   end

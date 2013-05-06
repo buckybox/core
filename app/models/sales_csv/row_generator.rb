@@ -156,11 +156,11 @@ module SalesCsv
     end
 
     def package_status
-      package.status
+      package.status_formatted
     end
 
     def delivery_status
-      delivery.status
+      delivery.status_formatted
     end
   end
 end
