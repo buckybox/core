@@ -51,6 +51,7 @@ end
 group :development do
   gem 'bullet', '~> 4.1.6', require: false
   gem 'brakeman', '~> 1.7.1', require: false
+  gem 'xray-rails', '~> 0.1.4'
 
   gem 'ruby-prof', '~> 0.12.2' # profiling with /newrelic
 
