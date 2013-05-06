@@ -439,6 +439,14 @@ class Distributor < ActiveRecord::Base
     payment_options.map(&:last)
   end
 
+  def only_one_payment_option?
+    payment_options.size == 1
+  end
+
+  def only_payment_option
+    payment_options.first.last
+  end
+
   private
 
   def required_fields_for_webstore

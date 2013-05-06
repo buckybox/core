@@ -65,13 +65,16 @@
             - else
               .span10 Total amount due
               .span2.text-right.total_price= MoneyDisplay.new(@amount_due).negative
-      .row-fluid
-        #payment-options.span12
-          - if @payment_required
-            = render partial: 'webstore/payment_options', locals: {payment: PaymentOptionsForm.new(form: f, webstore_order: @webstore_order)}
-          - else
-            .span12.text-center No payment necessary
-            = f.input :payment_method, as: :hidden, input_html: {value: 'paid'}
+      - if @distributor.only_one_payment_option?
+        = f.input :payment_method, as: :hidden, input_html: {value: @distributor.only_payment_option}
+      - else
+        .row-fluid
+          #payment-options.span12
+            - if @payment_required
+              = render partial: 'webstore/payment_options', locals: {payment: PaymentOptionsForm.new(form: f, webstore_order: @webstore_order)}
+            - else
+              .span12.text-center No payment necessary
+              = f.input :payment_method, as: :hidden, input_html: {value: 'paid'}
   .row-fluid
     .span12
       = f.input :complete, as: :hidden, input_html: { value: true }
