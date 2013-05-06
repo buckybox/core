@@ -40,7 +40,7 @@ describe DeliveryList do
     end
   end
 
-  describe '.collect_lists' do
+  describe '.collect_list' do
     before do
       time_travel_to Date.parse('2013-05-01')
 
@@ -51,7 +51,7 @@ describe DeliveryList do
 
       @today = Date.parse('2013-05-08')
       time_travel_to @today
-      
+
       @distributor.generate_required_daily_lists_between(@start_date, @today)
     end
 
@@ -59,31 +59,21 @@ describe DeliveryList do
       @today.should eq @order.schedule_rule.next_occurrence
     end
 
-    it "is an array" do
-      delivery_lists = DeliveryList.collect_lists(@distributor, @today, @today)
-      delivery_lists.should be_a Array
-    end
-
     it "works with the first week day" do
-      end_date = @today + 1.week
-      delivery_lists = DeliveryList.collect_lists(@distributor, @start_date, end_date)
+      delivery_date = @order.schedule_rule.next_occurrence
+      delivery_list = DeliveryList.collect_list(@distributor, delivery_date)
 
-      delivery_lists.count.should eq(end_date - @start_date + 1)
-
-      todays_delivery_list = delivery_lists.detect { |dl| dl.date == @today }
-      todays_delivery_list.should_not be_nil
-      todays_delivery_list.deliveries.count.should eq 1
+      delivery_list.deliveries.should eq [@order]
     end
 
     it "works with the nth week day" do
       @order.schedule_rule.week = 2
-      next_occurrence = @order.schedule_rule.next_occurrence
-      next_occurrence.should be < @start_date + 3.weeks
+      delivery_date = @order.schedule_rule.next_occurrence
+      delivery_date.should_not be > @today
 
-      delivery_lists = DeliveryList.collect_lists(@distributor, @start_date, @start_date + 3.weeks)
+      delivery_list = DeliveryList.collect_list(@distributor, delivery_date)
 
-      next_delivery_list = delivery_lists.detect { |dl| dl.date == next_occurrence }
-      next_delivery_list.deliveries.count.should eq 1
+      delivery_list.deliveries.should eq [@order]
     end
 
     after { back_to_the_present }
