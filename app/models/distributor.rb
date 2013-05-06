@@ -140,6 +140,14 @@ class Distributor < ActiveRecord::Base
     end
   end
 
+  def consumer_delivery_fee_cents
+    if separate_bucky_fee?
+      read_attribute(:consumer_delivery_fee_cents)
+    else
+      0
+    end
+  end
+
   def update_next_occurrence_caches(date=nil)
     use_local_time_zone do
       if Time.current.hour >= automatic_delivery_hour
