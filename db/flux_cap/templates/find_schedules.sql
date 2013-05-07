@@ -24,6 +24,7 @@ AND (	(
 	(
 		recur = 'monthly' AND schedule_rules.start <= ':date'
 		AND :dow = 't'
+		AND ((date(':date') - (schedule_rules.start - CAST(EXTRACT(DOW from schedule_rules.start) AS integer))) / 7) = schedule_rules.week
 	)
 ) AND (
 	schedule_pauses.start is NULL

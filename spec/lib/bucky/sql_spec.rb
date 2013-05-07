@@ -22,10 +22,17 @@ describe Bucky::Sql do
         @order.schedule_rule.save!
 
         @next_occurrence = @order.schedule_rule.next_occurrence
+        @expected_delivery_date = Date.parse(date)
       end
 
       it "computes the expected next delivery date" do
-        @next_occurrence.should eq Date.parse(date)
+        @next_occurrence.should eq @expected_delivery_date
+      end
+
+      it "computes the expected second next delivery date" do
+        second_next_occurrence = @order.schedule_rule.next_occurrence(@expected_delivery_date + 1.week)
+
+        second_next_occurrence.should be > @expected_delivery_date + 3.weeks
       end
 
       describe "#order_ids" do
