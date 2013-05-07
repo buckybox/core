@@ -49,18 +49,18 @@ group :install do
 end
 
 group :development do
-  gem 'bullet',     '~> 4.1.6', require: false
-  gem 'brakeman',   '~> 1.7.1', require: false
-  gem 'ruby-prof',  '~> 0.12.2' # profiling with /newrelic
+  gem 'bullet',     '~> 4.6.0', require: false
+  gem 'brakeman',   '~> 1.9.5', require: false
+  gem 'ruby-prof',  '~> 0.13.0' # profiling with /newrelic
 
-  gem 'capistrano',         '~> 2.12.0'
+  gem 'capistrano',         '~> 2.15.4'
   gem 'capistrano_colors',  '~> 0.5.5'
-  gem 'term-ansicolor',     '~> 1.0.7'
+  gem 'term-ansicolor',     '~> 1.1.5'
   gem 'hirb',               '~> 0.7.0'
   gem 'wirble',             '~> 0.1.3'
 
-  gem 'guard-rspec',  '~> 2.5.4'
-  gem 'guard-spork',  '~> 1.1.0'
+  gem 'guard-rspec',  '~> 2.6.0'
+  gem 'guard-spork',  '~> 1.5.0'
 
   gem 'spork-rails',  '~> 3.2.0'
 
@@ -70,7 +70,7 @@ group :development do
   gem 'pry-debugger',  '~> 0.2.2'
   gem 'pry-coolline',  '~> 0.2.2'
 
-  gem 'better_errors',      '~> 0.7.2'
+  gem 'better_errors',      '~> 0.8.0'
   gem 'binding_of_caller',  '~> 0.7.1'
   gem 'quiet_assets',       '~> 1.0.2'
   gem 'meta_request',       '~> 0.2.3'
@@ -79,14 +79,14 @@ group :development do
 end
 
 group :test do
-  gem 'fabrication',       '~> 2.5.4'
-  gem 'database_cleaner',  '~> 0.8.0'
+  gem 'fabrication',       '~> 2.7.0'
+  gem 'database_cleaner',  '~> 0.9.1'
   gem 'therubyracer',      '~> 0.11.4' # embeded JS interpreter for our CI server
 
-  gem 'capybara',  '~> 1.1.2'
-  gem 'launchy',   '~> 2.1.2'
+  gem 'capybara',  '~> 2.1.0'
+  gem 'launchy',   '~> 2.2.0'
 
-  gem 'fuubar',  '~> 1.0.0'
+  gem 'fuubar',  '~> 1.1.0'
 
   gem 'cucumber-rails',  '~> 1.3.1',  require: false
 
@@ -102,15 +102,15 @@ group :development, :test do
   gem 'guard',        '~> 1.8.0'
   gem 'listen',       '~> 1.0.3'
 
-  gem 'letter_opener',  '~> 1.0.0'
+  gem 'letter_opener',  '~> 1.1.0'
 
   gem 'simplecov',  require: false
 end
 
 group :development, :staging do
-  gem 'oink',  '~> 0.9.3',  require: 'oink'
+  gem 'oink',  '~> 0.10.1',  require: 'oink'
 end
 
 group :development, :test, :staging do
-  gem 'delorean',  '~> 2.0.0'
+  gem 'delorean',  '~> 2.1.0'
 end
