@@ -16,5 +16,6 @@ bundle exec rake secret # generate secret token
 bundle exec rake db:drop db:create db:structure:load
 bundle exec rake
 
-bundle exec brakeman -qz --no-progress
+bundle exec brakeman -qz --no-progress \
+    --except CheckSessionSettings # secret_token.rb is in the Git history
 
