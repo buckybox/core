@@ -91,8 +91,7 @@ class ScheduleRule < ActiveRecord::Base
   end
 
   def monthly_occurs_on?(datetime)
-    first_occurence = start - start.wday
-    weekly_occurs_on?(datetime) && ((datetime - first_occurence) / 7).to_i == week
+    weekly_occurs_on?(datetime) && ((datetime.day - 1) / 7).to_i == week
   end
 
   def next_occurrence(date=nil, opts={})
