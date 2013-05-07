@@ -88,7 +88,7 @@ group :test do
 
   gem 'fuubar',  '~> 1.0.0'
 
-  gem 'cucumber-rails',  '~> 1.3.0',  require: false
+  gem 'cucumber-rails',  '~> 1.3.1',  require: false
 
   gem 'bundler-audit', '~> 0.1.2'
 end
@@ -98,8 +98,7 @@ group :staging do
 end
 
 group :development, :test do
-  gem 'rspec-mocks',  '~> 2.11.2'
-  gem 'rspec-rails',  '~> 2.11.0'
+  gem 'rspec-rails',  '~> 2.13.1'
   gem 'guard',        '~> 1.8.0'
   gem 'listen',       '~> 1.0.3'
 
@@ -108,10 +107,10 @@ group :development, :test do
   gem 'simplecov',  require: false
 end
 
-group :development,  :staging do
+group :development, :staging do
   gem 'oink',  '~> 0.9.3',  require: 'oink'
 end
 
-group :development,  :test,      :staging do
+group :development, :test, :staging do
   gem 'delorean',  '~> 2.0.0'
 end
