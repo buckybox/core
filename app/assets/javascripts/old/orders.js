@@ -2,6 +2,7 @@ $(function() {
   if($('#order-form').length > 0) {
     order_init();
     init_extras();
+    update_day_checkboxes_style();
 
     var box_id = $("#order-form select.box").val();
     $('#order-form #dislikes-input').show();
@@ -75,6 +76,8 @@ $(function() {
       // enable all rows if this is the only checked day
       weeks.find('input[data-enabled="true"]').removeAttr('disabled');
     }
+
+    update_day_checkboxes_style();
   });
 
   $('#order-form #dislikes-input').change(function() {
@@ -124,6 +127,18 @@ $(function() {
     return true;
   });
 });
+
+function update_day_checkboxes_style() {
+  $('.order-days input').each(function() {
+    var checkbox = $(this);
+    var td = checkbox.closest('td');
+
+    if (checkbox.is(':checked') || checkbox.data('enabled'))
+      td.removeClass('disabled');
+    else
+      td.addClass('disabled');
+  });
+}
 
 function init_extras(){
   $("#order-form .include_extras").change(function() {
