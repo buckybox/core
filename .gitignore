@@ -5,13 +5,13 @@
 #   git config --global core.excludesfile ~/.gitignore_global
 
 # Ignore RVM config
-.ruby-version
-.ruby-gemset
-.rvmrc
-.rbenv-version
+/.ruby-version
+/.ruby-gemset
+/.rvmrc
+/.rbenv-version
 
 # Ignore POW config
-.powrc
+/.powrc
 
 # Ignore bundler config
 /.bundle
@@ -21,6 +21,7 @@
 
 # Iganore the config files
 /config/database.yml
+/config/initializers/secret_token.rb
 
 # Ignore all logfiles and tempfiles.
 /log
@@ -30,29 +31,24 @@
 *.swp
 *.swo
 .~lock*
-
 .DS_Store
 .sass-cache/
-config/database.yml
 Session.vim
 coverage/
 
 # Ignore some public sub-directories
-public/system/
-public/uploads/
-public/assets/
-public/stylesheets/
+/public/system/
+/public/uploads/
+/public/assets/
+/public/stylesheets/
 
 # Ignore uploads
-private_uploads
-
-# Ignore Ctags
-.tags*
+/private_uploads/
 
 #Ignore the schema file as we now use a structure file instead
 /db/schema.rb
 
-#Ignore ctags
+# Ignore ctags
 /tags
 /**/*/tags
 
