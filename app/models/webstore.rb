@@ -31,6 +31,7 @@ class Webstore
       process_credit_card(CreditCard.new(credit_card_params)) if credit_card_params.present?
     end
     if @order.no_payment_action? && @order.create_order
+      customer = @controller.current_customer
       CustomerCheckout.track(customer) unless @controller.current_admin.present?
       @order.placed_step
       @controller.flash[:notice] = 'Your order has been placed'
@@ -162,6 +163,7 @@ class Webstore
 
   def add_address_and_payment_select(webstore_params)
     if !payment_due?(@order) && webstore_params[:payment_method] == 'paid' && @order.create_order
+      customer = @controller.current_customer
       CustomerCheckout.track(customer) unless @controller.current_admin.present?
       @order.placed_step
       @controller.flash[:notice] = 'Your order has been placed'
@@ -191,6 +193,7 @@ class Webstore
   def process_credit_card(credit_card)
     if credit_card.authorize!(@order)
       if @order.create_order
+        customer = @controller.current_customer
         CustomerCheckout.track(customer) unless @controller.current_admin.present?
         @order.placed_step
         @controller.flash[:notice] = 'Your order has been placed'
