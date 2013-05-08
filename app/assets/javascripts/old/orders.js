@@ -48,7 +48,10 @@ $(function() {
     disable_the_others_options(dislikes_input, likes_input);
 
     if(!dislikes_input.is(':hidden') && dislikes_input.find('option:selected').length > 0) {
-      likes_input.show();
+      var box_id = $('#order-form select.box').val();
+      var current_order = $('#order-form');
+
+      order_check_box(box_id, current_order);
     }
     else {
       likes_input.find('option:selected').removeAttr('selected');
