@@ -1,0 +1,2 @@
+Fabricator(:gateway) do
+end

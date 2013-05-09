@@ -412,7 +412,8 @@ CREATE TABLE bank_information (
     customer_message text,
     created_at timestamp without time zone,
     updated_at timestamp without time zone,
-    bsb_number character varying(255)
+    bsb_number character varying(255),
+    cod_payment_message text
 );
 
 
@@ -578,6 +579,45 @@ CREATE SEQUENCE countries_id_seq
 --
 
 ALTER SEQUENCE countries_id_seq OWNED BY countries.id;
+
+
+--
+-- Name: credit_card_transactions; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE credit_card_transactions (
+    id integer NOT NULL,
+    amount integer,
+    success boolean,
+    reference character varying(255),
+    message character varying(255),
+    action character varying(255),
+    params text,
+    test boolean,
+    distributor_id integer,
+    account_id integer,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: credit_card_transactions_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE credit_card_transactions_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: credit_card_transactions_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE credit_card_transactions_id_seq OWNED BY credit_card_transactions.id;
 
 
 --
@@ -886,6 +926,44 @@ ALTER SEQUENCE delivery_sequence_orders_id_seq OWNED BY delivery_sequence_orders
 
 
 --
+-- Name: distributor_gateways; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE distributor_gateways (
+    id integer NOT NULL,
+    distributor_id integer,
+    gateway_id integer,
+    encrypted_login text,
+    encrypted_login_salt text,
+    encrypted_login_iv text,
+    encrypted_password text,
+    encrypted_password_salt text,
+    encrypted_password_iv text,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: distributor_gateways_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE distributor_gateways_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: distributor_gateways_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE distributor_gateways_id_seq OWNED BY distributor_gateways.id;
+
+
+--
 -- Name: distributor_logins; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -1015,7 +1093,10 @@ CREATE TABLE distributors (
     customer_can_remove_orders boolean DEFAULT true,
     collect_phone_in_webstore boolean,
     last_seen_at timestamp without time zone,
-    notes text
+    notes text,
+    payment_cash_on_delivery boolean DEFAULT true,
+    payment_bank_deposit boolean DEFAULT true,
+    payment_credit_card boolean DEFAULT false
 );
 
 
@@ -1176,6 +1257,38 @@ CREATE SEQUENCE extras_id_seq
 --
 
 ALTER SEQUENCE extras_id_seq OWNED BY extras.id;
+
+
+--
+-- Name: gateways; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE gateways (
+    id integer NOT NULL,
+    name character varying(255),
+    klass character varying(255),
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: gateways_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE gateways_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: gateways_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE gateways_id_seq OWNED BY gateways.id;
 
 
 --
@@ -1945,7 +2058,8 @@ CREATE TABLE webstore_orders (
     frequency character varying(255),
     extras_one_off boolean,
     distributor_id integer,
-    route_id integer
+    route_id integer,
+    payment_method character varying(255)
 );
 
 
@@ -2028,6 +2142,13 @@ ALTER TABLE ONLY countries ALTER COLUMN id SET DEFAULT nextval('countries_id_seq
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
+ALTER TABLE ONLY credit_card_transactions ALTER COLUMN id SET DEFAULT nextval('credit_card_transactions_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
 ALTER TABLE ONLY cron_logs ALTER COLUMN id SET DEFAULT nextval('cron_logs_id_seq'::regclass);
 
 
@@ -2084,6 +2205,13 @@ ALTER TABLE ONLY delivery_sequence_orders ALTER COLUMN id SET DEFAULT nextval('d
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
+ALTER TABLE ONLY distributor_gateways ALTER COLUMN id SET DEFAULT nextval('distributor_gateways_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
 ALTER TABLE ONLY distributor_logins ALTER COLUMN id SET DEFAULT nextval('distributor_logins_id_seq'::regclass);
 
 
@@ -2127,6 +2255,13 @@ ALTER TABLE ONLY exclusions ALTER COLUMN id SET DEFAULT nextval('exclusions_id_s
 --
 
 ALTER TABLE ONLY extras ALTER COLUMN id SET DEFAULT nextval('extras_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY gateways ALTER COLUMN id SET DEFAULT nextval('gateways_id_seq'::regclass);
 
 
 --
@@ -2348,6 +2483,14 @@ ALTER TABLE ONLY countries
 
 
 --
+-- Name: credit_card_transactions_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY credit_card_transactions
+    ADD CONSTRAINT credit_card_transactions_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: cron_logs_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -2412,6 +2555,14 @@ ALTER TABLE ONLY delivery_sequence_orders
 
 
 --
+-- Name: distributor_gateways_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY distributor_gateways
+    ADD CONSTRAINT distributor_gateways_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: distributor_logins_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -2465,6 +2616,14 @@ ALTER TABLE ONLY exclusions
 
 ALTER TABLE ONLY extras
     ADD CONSTRAINT extras_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: gateways_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY gateways
+    ADD CONSTRAINT gateways_pkey PRIMARY KEY (id);
 
 
 --
@@ -3386,6 +3545,18 @@ INSERT INTO schema_migrations (version) VALUES ('20130313051530');
 
 INSERT INTO schema_migrations (version) VALUES ('20130315034909');
 
+INSERT INTO schema_migrations (version) VALUES ('20130409022821');
+
+INSERT INTO schema_migrations (version) VALUES ('20130416022347');
+
+INSERT INTO schema_migrations (version) VALUES ('20130417021024');
+
+INSERT INTO schema_migrations (version) VALUES ('20130417025820');
+
 INSERT INTO schema_migrations (version) VALUES ('20130423225325');
 
 INSERT INTO schema_migrations (version) VALUES ('20130429060902');
+
+INSERT INTO schema_migrations (version) VALUES ('20130430034158');
+
+INSERT INTO schema_migrations (version) VALUES ('20130430034231');

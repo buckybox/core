@@ -60,6 +60,11 @@ BuckyBox::Application.configure do
   # postmark settings
   config.action_mailer.delivery_method   = :postmark
   config.action_mailer.postmark_settings = { :api_key => "3c3bf3ae-b9a4-4c9a-b850-bc6528fb12bc" }
+  
+  # ActiveMerchant setup as test only
+  config.after_initialize do
+    ActiveMerchant::Billing::Base.mode = :test
+  end
 
   # Enable threaded mode
   # config.threadsafe!

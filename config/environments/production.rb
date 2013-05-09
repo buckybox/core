@@ -20,6 +20,9 @@ BuckyBox::Application.configure do
   # Generate digests for assets URLs
   config.assets.digest = true
 
+  # Don't store credit card details
+  config.filter_parameters << :credit_card
+
   # Defaults to Rails.root.join("public/assets")
   # config.assets.manifest = YOUR_PATH
 
