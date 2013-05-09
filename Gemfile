@@ -30,7 +30,7 @@ gem 'state_machine', '~> 1.1.2'
 
 gem 'postmark-rails', '~> 0.4.1'
 gem 'analytical', '~> 3.0.12'
-gem 'newrelic_rpm', '~> 3.4.1'
+gem 'newrelic_rpm', '~> 3.6.1'
 gem 'airbrake', '~> 3.1.2'
 
 gem 'ace-rails-ap', '~> 2.0.0'
@@ -54,6 +54,7 @@ end
 group :development do
   gem 'bullet', '~> 4.1.6', require: false
   gem 'brakeman', '~> 1.7.1', require: false
+  gem 'xray-rails', '~> 0.1.4'
 
   gem 'ruby-prof', '~> 0.12.2' # profiling with /newrelic
 
@@ -93,7 +94,9 @@ group :test do
 
   gem 'cucumber-rails', '~> 1.3.0', require: false
 
-  gem 'therubyracer'
+  gem 'therubyracer' # JS runtime for CI server
+
+  gem 'bundler-audit'
 end
 
 group :staging do
@@ -105,9 +108,6 @@ group :development, :test do
   gem 'rspec-rails', '~> 2.11.0'
   gem 'guard'
   gem 'listen'
-  gem 'rb-inotify', require: false
-  gem 'rb-fsevent', require: false
-  gem 'rb-fchange', require: false
 
   gem 'letter_opener', '~> 1.0.0'
 
