@@ -190,14 +190,14 @@ class Webstore
   end
 
   def update_address(customer, address_information)
-    address           = customer.address
-    address.phone_1   = address_information[:phone_1]
-    address.address_1 = address_information[:street_address]
-    address.address_2 = address_information[:street_address_2]
-    address.suburb    = address_information[:suburb]
-    address.city      = address_information[:city]
-    address.postcode  = address_information[:post_code]
-    address.save
+    customer.name              = address_information[:name]
+    customer.address.phone_1   = address_information[:phone_1]
+    customer.address.address_1 = address_information[:street_address]
+    customer.address.address_2 = address_information[:street_address_2]
+    customer.address.suburb    = address_information[:suburb]
+    customer.address.city      = address_information[:city]
+    customer.address.postcode  = address_information[:post_code]
+    customer.save
   end
 
   def add_exclusions_to_order(exclusions)
