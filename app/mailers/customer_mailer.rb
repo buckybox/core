@@ -18,6 +18,7 @@ class CustomerMailer < ActionMailer::Base
 
     mail to: @customer.email,
          from: "#{@distributor.name} <no-reply@buckybox.com>",
+         cc: @distributor.support_email,
          reply_to: @distributor.support_email,
          subject: "#{@oops}, your #{@distributor.name} deliveries have been put on hold"
   end
@@ -29,6 +30,7 @@ class CustomerMailer < ActionMailer::Base
 
     mail to: @customer.email,
          from: "#{@distributor.name} <no-reply@buckybox.com>",
+         cc: @distributor.support_email,
          reply_to: @distributor.support_email,
          subject: "#{@oops}, your #{@distributor.name} deliveries are on hold"
   end

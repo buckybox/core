@@ -1,3 +1,4 @@
+require 'yaml'
 stage = ARGV.first || 'local'
 
 # Load DB config
@@ -41,5 +42,6 @@ policy :myapp, :roles => :app do
   requires :munin_passenger
   requires :logrotate
   requires :redis
+  requires :nokogiri
 end
 

@@ -24,6 +24,7 @@ class WebstoreOrder < ActiveRecord::Base
   LOGIN     = :login
   DELIVERY  = :delivery
   COMPLETE  = :complete
+  PAYMENT   = :payment
   PLACED    = :placed
 
   def self.box_price(box, customer = nil)
@@ -70,10 +71,6 @@ class WebstoreOrder < ActiveRecord::Base
     distributor.separate_bucky_fee?
   end
 
-  def current_step
-    
-  end
-
   def customise_step
     self.status = CUSTOMISE
   end
@@ -90,6 +87,10 @@ class WebstoreOrder < ActiveRecord::Base
     self.status = COMPLETE
   end
 
+  def payment_step
+    self.status = PAYMENT
+  end
+
   def placed_step
     self.status = PLACED
   end
@@ -104,6 +105,18 @@ class WebstoreOrder < ActiveRecord::Base
 
   def completed?
     status == PLACED
+  end
+
+  def payment_method?(test_symbol)
+    payment_method.to_sym == test_symbol
+  end
+
+  def payment_method_string
+    payment_method.titleize
+  end
+
+  def bank
+    distributor.bank_information
   end
 
   def extra_objects
@@ -194,6 +207,8 @@ class WebstoreOrder < ActiveRecord::Base
         schedule_rule_attributes: schedule_rule.clone_attributes,
         order_extras: extras_hash,
         extras_one_off: extras_one_off
+        # FIXME Having to forward parameters like that sucks and is error-prone
+        # Consider merging Order and WebstoreOrder together
       )
       order.excluded_line_item_ids = exclusions
       order.substituted_line_item_ids = substitutions
@@ -225,5 +240,9 @@ class WebstoreOrder < ActiveRecord::Base
       customer.route_id = route_id
       customer.save!
     end
+  end
+
+  def no_payment_action?
+    payment_method?(:bank_deposit) || payment_method?(:cash_on_delivery)
   end
 end

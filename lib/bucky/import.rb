@@ -171,13 +171,13 @@ module Bucky
               pass
             end
 
-            throw "CSV Headers/Titles was expected to have #{problems.collect{|p| "'#{p}'"}.join(', ')} but only found #{row.collect{|p| "'#{p}'"}.join(", ")}." unless match
+            raise "CSV Headers/Titles was expected to have #{problems.collect{|p| "'#{p}'"}.join(', ')} but only found #{row.collect{|p| "'#{p}'"}.join(", ")}." unless match
 
             # Check the number of headers match the expected (don't want there to be more than expected
             expected_header_count = CSV_HEADERS.size
             actual_header_count = row.size
 
-            throw "Expected #{expected_header_count} Headers/Titles but there was #{actual_header_count}" unless expected_header_count == actual_header_count
+            raise "Expected #{expected_header_count} Headers/Titles but there was #{actual_header_count}" unless expected_header_count == actual_header_count
           end
 
           if EXCLUDE_ROWS.include?(row_number)

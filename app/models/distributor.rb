@@ -56,7 +56,8 @@ class Distributor < ActiveRecord::Base
     :time_zone, :currency, :country_id, :consumer_delivery_fee,
     :consumer_delivery_fee_cents, :active_webstore, :about, :details, :facebook_url, :city, :customers_show_intro,
     :deliveries_index_packing_intro, :deliveries_index_deliveries_intro, :payments_index_intro, :customers_index_intro,
-    :customer_can_remove_orders, :parameter_name, :default_balance_threshold, :has_balance_threshold, :spend_limit_on_all_customers, :send_email, :send_halted_email, :feature_spend_limit, :contact_name, :tag_list, :collect_phone_in_webstore, :omni_importer_ids, :notes
+    :customer_can_remove_orders, :parameter_name, :default_balance_threshold, :has_balance_threshold, :spend_limit_on_all_customers, :send_email, :send_halted_email, :feature_spend_limit, :contact_name, :tag_list, :collect_phone_in_webstore, :omni_importer_ids, :notes,
+    :payment_cash_on_delivery, :payment_bank_deposit, :payment_credit_card
 
   validates_presence_of :country
   validates_presence_of :email
@@ -67,6 +68,7 @@ class Distributor < ActiveRecord::Base
   validates_numericality_of :advance_days, greater_than_or_equal_to: 0
   validates_numericality_of :automatic_delivery_hour, greater_than_or_equal_to: 0
   validate :required_fields_for_webstore
+  validate :payment_options_valid
 
   before_validation :check_emails
   before_create :parameterize_name, if: 'parameter_name.nil?'
@@ -138,6 +140,14 @@ class Distributor < ActiveRecord::Base
     end
   end
 
+  def consumer_delivery_fee_cents
+    if separate_bucky_fee?
+      read_attribute(:consumer_delivery_fee_cents)
+    else
+      0
+    end
+  end
+
   def update_next_occurrence_caches(date=nil)
     use_local_time_zone do
       if Time.current.hour >= automatic_delivery_hour
@@ -164,10 +174,14 @@ class Distributor < ActiveRecord::Base
   end
 
   def generate_required_daily_lists(generator_class = GenerateRequiredDailyLists)
+    generate_required_daily_lists_between(window_start_from, window_end_at, generator_class)
+  end
+
+  def generate_required_daily_lists_between(start, finish, generator_class = GenerateRequiredDailyLists)
     generator = generator_class.new(
       distributor:        self,
-      window_start_from:  window_start_from,
-      window_end_at:      window_end_at,
+      window_start_from:  start,
+      window_end_at:      finish,
       packing_lists:      packing_lists.scoped,
       delivery_lists:     delivery_lists.scoped,
     )
@@ -413,6 +427,30 @@ class Distributor < ActiveRecord::Base
     touch(:last_seen_at) #No validations or callbacks are performed
   end
 
+  def payment_options
+    options = []
+    #options << ["Credit card", :credit_card] if payment_credit_card?
+    options << ["Bank deposit", :bank_deposit] if payment_bank_deposit?
+    options << ["Cash on delivery", :cash_on_delivery] if payment_cash_on_delivery?
+    options
+  end
+
+  def payment_options_string
+    payment_options.map(&:first).join(', ')
+  end
+
+  def payment_options_symbols
+    payment_options.map(&:last)
+  end
+
+  def only_one_payment_option?
+    payment_options.size == 1
+  end
+
+  def only_payment_option
+    payment_options.first.last
+  end
+
   private
 
   def required_fields_for_webstore
@@ -421,6 +459,10 @@ class Distributor < ActiveRecord::Base
       errors.add(:active_webstore, "Need to have a route setup before enabling the webstore") if routes.count.zero?
       errors.add(:active_webstore, "Need to have a box setup before enabling the webstore") if boxes.count.zero?
     end
+  end
+
+  def payment_options_valid
+    errors.add(:payment_cash_on_delivery, "Must have at least one payment option selected") if payment_options.empty?
   end
 
   def check_emails
@@ -441,7 +483,7 @@ class Distributor < ActiveRecord::Base
     @@original_time ||= Time.current
     @@advanced ||= 0
     (24 * day).times.each do |h|
-s     h += 1 # start at 1, not 0
+      h += 1 # start at 1, not 0
 
       Delorean.time_travel_to(@@original_time + (@@advanced*day.days) + h.hours)
       Jobs.run_hourly

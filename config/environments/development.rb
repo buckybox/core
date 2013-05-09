@@ -19,6 +19,11 @@ BuckyBox::Application.configure do
   config.action_mailer.delivery_method = :letter_opener
   config.action_mailer.smtp_settings = { :address => 'buckybox.dev', :port => 1025 }
 
+  # ActiveMerchant setup as test only
+  config.after_initialize do
+    ActiveMerchant::Billing::Base.mode = :test
+  end
+
   # Print deprecation notices to the Rails logger
   config.active_support.deprecation = :log
 
@@ -36,7 +41,7 @@ BuckyBox::Application.configure do
   config.assets.compress = false
 
   # Expands the lines which load the assets
-  config.assets.debug = false
+  config.assets.debug = true
 
   # No more asset logging
   config.assets.logger = false
