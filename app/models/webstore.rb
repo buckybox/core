@@ -1,8 +1,10 @@
+# XXX this model is tightly coupled to the controller and full of spaghetti code
+
 class Webstore
   attr_reader :controller, :distributor, :order
 
   def initialize(controller, distributor)
-    @controller  = controller
+    @controller  = controller # FIXME models should not talk to controllers
     @distributor = distributor
 
     @order = WebstoreOrder.find_by_id(webstore_session[:webstore_order_id]) if webstore_session
@@ -136,8 +138,16 @@ class Webstore
   def add_address_and_complete(webstore_params)
     address_information = webstore_params[:address]
 
+    @controller.session[:webstore][:address] ||= {}
+    %w(street_address street_address_2 suburb city post_code).each do |input|
+      @controller.session[:webstore][:address][input] = address_information[input]
+    end
+
     if address_information && (address_information[:name].blank? || address_information[:street_address].blank?)
-      @controller.flash[:error] = 'Please include a your name'
+      @controller.flash[:error] = 'Please fill in your name and your address'
+      @order.complete_step
+    elsif @distributor.require_post_code && address_information[:post_code].blank?
+      @controller.flash[:error] = 'Please fill in your post code'
       @order.complete_step
     else
       customer = find_or_create_customer(address_information)

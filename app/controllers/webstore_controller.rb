@@ -54,13 +54,19 @@ class WebstoreController < ApplicationController
   end
 
   def complete
-    @customer_name = (existing_customer? ? current_customer.name : '')
-    @order_price = @webstore_order.order_price(current_customer)
+    if session[:webstore].has_key? :address
+      session[:webstore][:address].each do |key, value|
+        instance_variable_set("@#{key}", value) if value
+      end
+    end
 
-    @address = (current_customer ? current_customer.address : '')
+    @address ||= current_customer && current_customer.address
+    @customer_name ||= existing_customer? && current_customer.name
+    @city ||= @distributor.invoice_information.billing_city if @distributor.invoice_information
+
+    @order_price = @webstore_order.order_price(current_customer)
     @current_balance = (current_customer ? current_customer.account.balance : Money.new(0))
 
-    @city = @distributor.invoice_information.billing_city if @distributor.invoice_information
     @has_address = existing_customer?
 
     if @has_address
