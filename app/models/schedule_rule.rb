@@ -175,6 +175,12 @@ class ScheduleRule < ActiveRecord::Base
     DAYS.select{|d| on_day?(d)}
   end
 
+  def delivery_days
+    Date::DAYNAMES.select.each_with_index do |day, index|
+      runs_on index
+    end.join(', ')
+  end
+
   def runs_on(number)
     on_day?(DAYS[number % DAYS.size])
   end
@@ -317,11 +323,11 @@ class ScheduleRule < ActiveRecord::Base
     when :single
       start.to_s(:flux_cap)
     when :weekly
-      "Weekly on #{days.collect{|d| d.to_s.capitalize}.join(', ')}"
+      "Deliver weekly on #{delivery_days}"
     when :fortnightly
-      "Fortnightly on #{days.collect{|d| d.to_s.capitalize}.join(', ')}"
+      "Deliver fortnightly on #{delivery_days}"
     when :monthly
-      "Monthly on the #{week.succ.ordinalize} #{days.collect{|d| d.to_s.capitalize}.join(', ')}"
+      "Deliver monthly on the #{week.succ.ordinalize(long: true)} #{delivery_days}"
     end
   end
 
