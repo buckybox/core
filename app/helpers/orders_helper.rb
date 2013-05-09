@@ -14,20 +14,29 @@ module OrdersHelper
   end
 
   def order_schedule(order)
-    schedule_rule = order.schedule_rule
-    if !order.recurs?
-      "Single delivery order"
+    if order.recurs?
+      order.schedule_rule.to_s
     else
-      schedule_rule.to_s
+      "Deliver on #{order.next_occurrence.strftime("%A")}"
     end
   end
 
   # Show the orders next delivery dates, link to the delivery screen if it is within the forcast range
-  def orders_next_deliveries(order)
-    order_occurrences = order.next_occurrences(5, Date.current).collect{ |d| d <= Order::FORCAST_RANGE_FORWARD.from_now.to_date ? link_to(d.to_s(:flux_cap), date_distributor_deliveries_path(d, order.route)) : d.to_s(:flux_cap) }
+  def orders_next_deliveries(order, options = {})
+    options = { with_link: true }.merge(options)
+
+    order_occurrences = order.next_occurrences(5, Date.current).map do |day|
+      formatted_day = day.to_s(:flux_cap)
+
+      if options[:with_link] && day <= Order::FORCAST_RANGE_FORWARD.from_now.to_date
+        link_to(formatted_day, date_distributor_deliveries_path(day, order.route))
+      else
+        formatted_day
+      end
+    end
 
     unless order_occurrences.empty?
-      "Next up: #{order_occurrences.join(', ')}".html_safe
+      order_occurrences.join(', ').html_safe
     end
   end
 
