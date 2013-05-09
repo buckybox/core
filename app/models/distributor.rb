@@ -56,7 +56,7 @@ class Distributor < ActiveRecord::Base
     :time_zone, :currency, :country_id, :consumer_delivery_fee,
     :consumer_delivery_fee_cents, :active_webstore, :about, :details, :facebook_url, :city, :customers_show_intro,
     :deliveries_index_packing_intro, :deliveries_index_deliveries_intro, :payments_index_intro, :customers_index_intro,
-    :customer_can_remove_orders, :parameter_name, :default_balance_threshold, :has_balance_threshold, :spend_limit_on_all_customers, :send_email, :send_halted_email, :feature_spend_limit, :contact_name, :tag_list, :collect_phone_in_webstore, :omni_importer_ids, :notes
+    :customer_can_remove_orders, :parameter_name, :default_balance_threshold, :has_balance_threshold, :spend_limit_on_all_customers, :send_email, :send_halted_email, :feature_spend_limit, :contact_name, :tag_list, :collect_phone_in_webstore, :omni_importer_ids, :notes, :keep_me_updated
 
   validates_presence_of :country
   validates_presence_of :email
@@ -82,6 +82,8 @@ class Distributor < ActiveRecord::Base
 
   default_value_for :invoice_threshold_cents, -500
   default_value_for :bucky_box_percentage, 0.0175
+
+  scope :keep_updated, where(keep_me_updated: true)
 
   # Devise Override: Avoid validations on update or if now password provided
   def password_required?

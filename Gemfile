@@ -85,7 +85,7 @@ group :test do
   gem 'database_cleaner', '~> 0.8.0'
 
   gem 'capybara', '~> 1.1.2'
-  gem 'launchy', '~> 2.1.2'
+  gem 'launchy', '~> 2.2.0'
 
   gem 'fuubar', '~> 1.0.0'
 
@@ -106,7 +106,8 @@ group :development, :test do
   gem 'guard'
   gem 'listen'
 
-  gem 'letter_opener', '~> 1.0.0'
+  #gem 'letter_opener', '~> 1.1.0' #Wait until ryanb pulls in my patch
+  gem 'letter_opener', github: 'jordandcarter/letter_opener' # fixes a problem with cc and bcc
 
   gem 'simplecov', require: false
 end
