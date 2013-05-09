@@ -41,6 +41,12 @@
           %span.label halt
         - if distributor.active_webstore?
           %span.label webstore
+        - if distributor.payment_cash_on_delivery?
+          %span.label.label-inverse{title: 'Cash on delivery'} cod
+        - if distributor.payment_bank_deposit?
+          %span.label.label-inverse bank-deposit
+        - if distributor.payment_credit_card?
+          %span.label.label-important credit-card
         - distributor.omni_importers.includes(:country).each do |omni_importer|
           %span.label.label-success{title: omni_importer.payment_type}= omni_importer.tag_name
       .span5

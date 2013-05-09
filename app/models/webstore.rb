@@ -10,14 +10,36 @@ class Webstore
 
   def process_params
     webstore_params = @controller.params[:webstore_order]
+    return process_webstore(webstore_params) if webstore_params.present?
 
+    payment_params = @controller.params[:webstore_payment]
+    return process_payment(payment_params) if payment_params.present?
+  end
+
+  def process_webstore(webstore_params)
     start_order(webstore_params[:box_id])        if webstore_params[:box_id]
     customise_order(webstore_params)             if webstore_params[:customise] || webstore_params[:extras]
     login_customer(webstore_params[:user])       if webstore_params[:user]
     update_delivery_information(webstore_params) if webstore_params[:route]
-    add_address_and_complete(webstore_params)    if webstore_params[:complete]
+    add_address_and_payment_select(webstore_params)    if webstore_params[:complete]
 
     @order.save
+  end
+
+  def process_payment(payment_params)
+    if (credit_card_params = payment_params[:credit_card])
+      process_credit_card(CreditCard.new(credit_card_params)) if credit_card_params.present?
+    end
+    if @order.no_payment_action? && @order.create_order
+      customer = @controller.current_customer
+      CustomerCheckout.track(customer) unless @controller.current_admin.present?
+      @order.placed_step
+      @controller.flash[:notice] = 'Your order has been placed'
+    else
+      @controller.flash[:error] = 'There was a problem completing your order'
+      @order.payment_step
+    end
+    return true
   end
 
   def next_step
@@ -45,6 +67,12 @@ class Webstore
   end
 
   private
+
+  def payment_due?(order)
+    return false if order.account.blank? 
+
+    (order.account.balance - order.order_price) < 0
+  end
 
   def start_order(box_id)
     box = Box.where(id: box_id, distributor_id: @distributor.id).first
@@ -133,29 +161,50 @@ class Webstore
     end
   end
 
-  def add_address_and_complete(webstore_params)
+  def add_address_and_payment_select(webstore_params)
+    if !payment_due?(@order) && webstore_params[:payment_method] == 'paid' && @order.create_order
+      customer = @controller.current_customer
+      CustomerCheckout.track(customer) unless @controller.current_admin.present?
+      @order.placed_step
+      @controller.flash[:notice] = 'Your order has been placed'
+      return
+    end
+    
     address_information = webstore_params[:address]
+    payment_option = PaymentOption.new(webstore_params[:payment_method], @distributor)
 
     if address_information && (address_information[:name].blank? || address_information[:street_address].blank?)
       @controller.flash[:error] = 'Please include a your name'
       @order.complete_step
+    elsif !payment_option.valid?
+      @controller.flash[:error] = 'Please select a payment option'
+      @order.complete_step
     else
       customer = find_or_create_customer(address_information)
       update_address(customer, address_information) if address_information
+      payment_option.apply(@order)
 
       @order.account = customer.account
+      @order.payment_step
+      @order.save!
+    end
+  end
 
+  def process_credit_card(credit_card)
+    if credit_card.authorize!(@order)
       if @order.create_order
+        customer = @controller.current_customer
         CustomerCheckout.track(customer) unless @controller.current_admin.present?
-        @controller.flash[:notice] = 'Your order has been placed'
         @order.placed_step
+        @controller.flash[:notice] = 'Your order has been placed'
       elsif @order.order
         @controller.flash[:error] = 'You have already created this order'
-        @order.placed_step
       else
         @controller.flash[:error] = 'There was a problem completing your order'
-        @order.complete_step
+        @order.payment_step
       end
+    else
+      @controller.flash[:error] = ['There was a problem with your credit card', credit_card.errors.full_messages.join(', ')].join(', ')
     end
   end
 

@@ -56,7 +56,8 @@ class Distributor < ActiveRecord::Base
     :time_zone, :currency, :country_id, :consumer_delivery_fee,
     :consumer_delivery_fee_cents, :active_webstore, :about, :details, :facebook_url, :city, :customers_show_intro,
     :deliveries_index_packing_intro, :deliveries_index_deliveries_intro, :payments_index_intro, :customers_index_intro,
-    :customer_can_remove_orders, :parameter_name, :default_balance_threshold, :has_balance_threshold, :spend_limit_on_all_customers, :send_email, :send_halted_email, :feature_spend_limit, :contact_name, :tag_list, :collect_phone_in_webstore, :omni_importer_ids, :notes
+    :customer_can_remove_orders, :parameter_name, :default_balance_threshold, :has_balance_threshold, :spend_limit_on_all_customers, :send_email, :send_halted_email, :feature_spend_limit, :contact_name, :tag_list, :collect_phone_in_webstore, :omni_importer_ids, :notes,
+    :payment_cash_on_delivery, :payment_bank_deposit, :payment_credit_card
 
   validates_presence_of :country
   validates_presence_of :email
@@ -67,6 +68,7 @@ class Distributor < ActiveRecord::Base
   validates_numericality_of :advance_days, greater_than_or_equal_to: 0
   validates_numericality_of :automatic_delivery_hour, greater_than_or_equal_to: 0
   validate :required_fields_for_webstore
+  validate :payment_options_valid
 
   before_validation :check_emails
   before_create :parameterize_name, if: 'parameter_name.nil?'
@@ -135,6 +137,14 @@ class Distributor < ActiveRecord::Base
           distributor.update_next_occurrence_caches 
         end
       end
+    end
+  end
+
+  def consumer_delivery_fee_cents
+    if separate_bucky_fee?
+      read_attribute(:consumer_delivery_fee_cents)
+    else
+      0
     end
   end
 
@@ -413,6 +423,30 @@ class Distributor < ActiveRecord::Base
     touch(:last_seen_at) #No validations or callbacks are performed
   end
 
+  def payment_options
+    options = []
+    #options << ["Credit card", :credit_card] if payment_credit_card?
+    options << ["Bank deposit", :bank_deposit] if payment_bank_deposit?
+    options << ["Cash on delivery", :cash_on_delivery] if payment_cash_on_delivery?
+    options
+  end
+
+  def payment_options_string
+    payment_options.map(&:first).join(', ')
+  end
+
+  def payment_options_symbols
+    payment_options.map(&:last)
+  end
+
+  def only_one_payment_option?
+    payment_options.size == 1
+  end
+
+  def only_payment_option
+    payment_options.first.last
+  end
+
   private
 
   def required_fields_for_webstore
@@ -421,6 +455,10 @@ class Distributor < ActiveRecord::Base
       errors.add(:active_webstore, "Need to have a route setup before enabling the webstore") if routes.count.zero?
       errors.add(:active_webstore, "Need to have a box setup before enabling the webstore") if boxes.count.zero?
     end
+  end
+
+  def payment_options_valid
+    errors.add(:payment_cash_on_delivery, "Must have at least one payment option selected") if payment_options.empty?
   end
 
   def check_emails
