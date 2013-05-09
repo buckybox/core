@@ -33,7 +33,7 @@ class DeliveryList < ActiveRecord::Base
     # Collecting via packing list rather than orders so that delivery generation is explicitly
     # linked with packages.
     packages = {}
-    current_wday = delivery_list.date.wday
+    delivery_list.date.wday
 
     # Determine the order of this delivery list based on previous deliveries
     packing_list.packages.each do |package|
