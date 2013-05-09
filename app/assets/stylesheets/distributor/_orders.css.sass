@@ -6,5 +6,22 @@
   div.select2-container.select2-container-multi
     width: 100%
 
-  #days
+  .order-days
     display: none
+    td
+      text-align: center
+      color: #555
+      *
+        font-weight: bold
+      &.disabled
+        color: #ccc
+        background-color: rgba(127, 127, 127, 0.1)
+        *
+          font-weight: normal
+      &:first-child
+        color: #ccc
+        +border-top-left-radius(4px)
+        font-weight: bold
+        vertical-align: middle
+      .checkbox
+        margin-left: 42%

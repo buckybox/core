@@ -24,6 +24,9 @@
   :javascript
     $(function(){$("#distributor_omni_importer_ids").select2({   width: 'resolve'   });});
   = f.input :active_webstore
+  = f.input :payment_cash_on_delivery, label: 'Allow cash on delivery'
+  = f.input :payment_bank_deposit, label: 'Allow bank deposit payments'
+  =# f.input :payment_credit_card, label: 'Allow credit card payments'
   = f.input :collect_phone_in_webstore
   = f.input :customer_can_remove_orders
   = f.input :feature_spend_limit, label: 'Enable the minimum balance feature?', hint: 'This gives the distributor the option to turn on a minimum balance for customers.'

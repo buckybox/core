@@ -1,5 +1,5 @@
 class ScheduleRule < ActiveRecord::Base
-  attr_accessible :fri, :mon, :month_day, :recur, :sat, :start, :sun, :thu, :tue, :wed, :order_id
+  attr_accessible :fri, :mon, :month_day, :recur, :sat, :start, :sun, :thu, :tue, :wed, :order_id, :week
   attr_accessor :next_occurrence
 
   DAYS = [:sun, :mon, :tue, :wed, :thu, :fri, :sat] #Order of this is important, it matches sunday: 0, monday: 1 as is standard
@@ -29,18 +29,18 @@ class ScheduleRule < ActiveRecord::Base
     ScheduleRule.new(start: datetime)
   end
 
-  def self.recur_on(start, days, recur)
-    days &= DAYS #whitelist
-    days = days.inject({}){|h, i| h.merge(i => true)} #Turn array into hash
+  def self.recur_on(start, days, recur, week = 0)
+    days &= DAYS # whitelist
+    days = days.inject({}){|h, i| h.merge(i => true)} # Turn array into hash
     days = DAYS.inject({}){|h, i| h.merge(i => false)}.merge(days) # Fill out the rest with false
 
-    throw "recur '#{recur}' is :weekly or :fortnightly" unless [:weekly, :fortnightly, :monthly].include?(recur)
-    
-    if start
-      ScheduleRule.new(days.merge(recur: recur, start: start))
-    else
-      ScheduleRule.new(days.merge(recur: recur))
-    end
+    valid_recur = RECUR - [:single]
+    raise "recur '#{recur}' is not part of #{valid_recur}" unless recur.in? valid_recur
+
+    params = days.merge(recur: recur, week: week)
+    params.merge!(start: start) if start
+
+    ScheduleRule.new(params)
   end
 
   def self.weekly(start=nil, days=[])
@@ -81,7 +81,7 @@ class ScheduleRule < ActiveRecord::Base
 
   def weekly_occurs_on?(datetime)
     day = datetime.strftime("%a").downcase.to_sym
-    self.send("#{day}?") && start<= datetime
+    self.send("#{day}?") && start <= datetime
   end
 
   def fortnightly_occurs_on?(datetime)
@@ -91,7 +91,7 @@ class ScheduleRule < ActiveRecord::Base
   end
 
   def monthly_occurs_on?(datetime)
-    weekly_occurs_on?(datetime) && datetime.day < 8
+    weekly_occurs_on?(datetime) && ((datetime.day - 1) / 7).to_i == week
   end
 
   def next_occurrence(date=nil, opts={})
@@ -176,7 +176,7 @@ class ScheduleRule < ActiveRecord::Base
   end
 
   def runs_on(number)
-    on_day?(DAYS[number])
+    on_day?(DAYS[number % DAYS.size])
   end
 
   # returns true if the given schedule_rule occurs on a subset of this schedule_rule's occurrences
@@ -321,7 +321,7 @@ class ScheduleRule < ActiveRecord::Base
     when :fortnightly
       "Fortnightly on #{days.collect{|d| d.to_s.capitalize}.join(', ')}"
     when :monthly
-      "Monthly on the 1st #{days.collect{|d| d.to_s.capitalize}.join(', ')}"
+      "Monthly on the #{week.succ.ordinalize} #{days.collect{|d| d.to_s.capitalize}.join(', ')}"
     end
   end
 
@@ -352,7 +352,7 @@ class ScheduleRule < ActiveRecord::Base
   end
 
   def clone_attributes
-    attributes.slice('start', 'recur', 'sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat')
+    attributes.slice('start', 'recur', 'week', 'sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat')
   end
 
   def self.generate_data(count)

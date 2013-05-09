@@ -35,6 +35,9 @@ gem 'airbrake',        '~> 3.1.2'
 
 gem 'ace-rails-ap',  '~> 2.0.0'
 
+gem 'activemerchant'
+gem 'attr_encryptor'
+
 ########## THE GEMS ABOVE ARE THE ONLY ONES THAT RUN ON PRODUCTION ##########
 
 group :assets do
@@ -51,6 +54,7 @@ end
 group :development do
   gem 'bullet',     '~> 4.6.0', require: false
   gem 'brakeman',   '~> 1.9.5', require: false
+  gem 'xray-rails', '~> 0.1.4'
   gem 'ruby-prof',  '~> 0.13.0' # profiling with /newrelic
 
   gem 'capistrano',         '~> 2.15.4'

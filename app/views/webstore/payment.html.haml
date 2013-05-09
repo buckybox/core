@@ -1,0 +1,32 @@
+- title('Webstore - Complete', false)
+= render 'webstore_sidebar'
+- if current_customer.present? && current_customer.halted?
+  .alert.alert-error
+    Your account is under the minimum balance and will not recieve new orders unless payment is cleared before the packing date.
+
+= simple_form_for(WebstorePayment.new(@webstore_order), url: webstore_process_step_path, html: {class: 'payments'}) do |f|
+  .row-fluid
+    #webstore-payment.span10
+      .row-fluid
+        #amount-due.span12
+          .row-fluid.important
+            .span10 Total amount due:
+            .span2.text-right.total_price= @amount_due.format
+      .row-fluid
+        #payment.span12
+          .row-fluid
+            .span12.text-center.payment-title
+              Pay by
+              = @webstore_order.payment_method_string
+          .row-fluid
+            .span9.center-row
+              = f.input :payment_method, as: :hidden
+              - if @webstore_order.payment_method? :credit_card
+                = render partial: 'webstore/payment_credit_card', locals: {form: f}
+              - elsif @webstore_order.payment_method? :cash_on_delivery
+                = render partial: 'webstore/payment_cash_on_delivery'
+              - elsif @webstore_order.payment_method? :bank_deposit
+                = render partial: 'webstore/payment_bank_deposit'
+  .row-fluid
+    .span10
+      = f.button :submit, 'Complete Order', class: 'pull-right btn btn-process'

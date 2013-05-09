@@ -10,28 +10,12 @@ class DeliveryList < ActiveRecord::Base
 
   default_scope order(:date)
 
-  def self.collect_lists(distributor, start_date, end_date)
-    result = DeliveryList.includes(deliveries: {package: {customer: {address: {}}}}).where(date:start_date..end_date, distributor_id: distributor.id).to_a
-
-    if end_date.future?
-      future_start_date = start_date
-      future_start_date = (result.last.date + 1.day) if result.last
-
-      (future_start_date..end_date).each do |date|
-        result << collect_list(distributor, date)
-      end
-    end
-
-    return result
-  end
-
   def self.collect_list(distributor, date)
     date_orders = []
     wday = date.wday
 
     order_ids = Bucky::Sql.order_ids(distributor, date)
     date_orders = distributor.orders.active.where(id: order_ids).includes({ account: {customer: {address:{}, deliveries: {delivery_list: {}}}}, order_extras: {}, box: {}})
-
 
     # This emulates the ordering when lists are actually created
     FutureDeliveryList.new(date, date_orders.sort { |a,b|
@@ -109,7 +93,7 @@ class DeliveryList < ActiveRecord::Base
   end
 
   def get_delivery_number(delivery)
-    throw "This isn't my delivery" if delivery.delivery_list_id != self.id
+    raise "This isn't my delivery" if delivery.delivery_list_id != self.id
 
     delivery_to_same_address = deliveries(true).select{|d| d.address_hash == delivery.address_hash && d.id != delivery.id}.first
 

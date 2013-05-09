@@ -241,6 +241,24 @@ describe ScheduleRule do
         specify {@sr.next_occurrence(Date.parse('2012-10-07')).should eq(Date.parse('2012-10-07'))}
         specify {@sr.next_occurrence(Date.parse('2012-10-08')).should eq(Date.parse('2012-11-01'))}
 
+        context 'with a specified week of the month' do
+          before do
+            @sr.week = 2
+            @sr.save!
+          end
+
+          specify {@sr.next_occurrence(Date.parse('2013-08-01')).should eq Date.parse('2013-08-15')}
+          specify {@sr.next_occurrence(Date.parse('2013-08-02')).should eq Date.parse('2013-08-15')}
+          specify {@sr.next_occurrence(Date.parse('2013-08-03')).should eq Date.parse('2013-08-15')}
+          specify {@sr.next_occurrence(Date.parse('2013-08-15')).should eq Date.parse('2013-08-15')}
+          specify {@sr.next_occurrence(Date.parse('2013-08-16')).should eq Date.parse('2013-08-16')}
+          specify {@sr.next_occurrence(Date.parse('2013-08-17')).should eq Date.parse('2013-08-18')}
+          specify {@sr.next_occurrence(Date.parse('2013-08-18')).should eq Date.parse('2013-08-18')}
+          specify {@sr.next_occurrence(Date.parse('2013-08-19')).should eq Date.parse('2013-08-21')}
+          specify {@sr.next_occurrence(Date.parse('2013-08-22')).should eq Date.parse('2013-09-15')}
+          specify {@sr.next_occurrence(Date.parse('2013-08-31')).should eq Date.parse('2013-09-15')}
+        end
+
         context :with_pause do
           before do
             @pause_start = Date.parse('2012-09-20')

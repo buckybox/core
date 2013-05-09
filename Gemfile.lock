@@ -29,6 +29,17 @@ GEM
       sprockets (~> 2.2.1)
     active_model_serializers (0.8.1)
       activemodel (>= 3.0)
+    active_utils (1.0.5)
+      activesupport (>= 2.3.11)
+      i18n
+    activemerchant (1.32.1)
+      active_utils (>= 1.0.2)
+      activesupport (>= 2.3.14)
+      builder (>= 2.0.0)
+      i18n
+      json (>= 1.5.1)
+      money
+      nokogiri
     activemodel (3.2.13)
       activesupport (= 3.2.13)
       builder (~> 3.0.0)
@@ -53,6 +64,8 @@ GEM
       json
     analytical (3.0.12)
     arel (3.0.2)
+    attr_encryptor (1.0.2)
+      encryptor2 (>= 1.0.0)
     bcrypt-ruby (3.0.1)
     better_errors (0.8.0)
       coderay (>= 1.0.0)
@@ -144,6 +157,7 @@ GEM
       active_model_serializers
       execjs (>= 1.2)
       railties (~> 3.1)
+    encryptor2 (1.0.0)
     erubis (2.7.0)
     execjs (1.4.0)
       multi_json (~> 1.0)
@@ -382,16 +396,21 @@ GEM
     wirble (0.1.3)
     xpath (2.0.0)
       nokogiri (~> 1.3)
+    xray-rails (0.1.5)
+      coffee-rails
+      rails (>= 3.1.0)
 
 PLATFORMS
   ruby
 
 DEPENDENCIES
   ace-rails-ap (~> 2.0.0)
+  activemerchant
   acts-as-taggable-on (~> 2.3.3)
   acts_as_list (~> 0.1.8)
   airbrake (~> 3.1.2)
   analytical (~> 3.0.12)
+  attr_encryptor
   better_errors (~> 0.8.0)
   binding_of_caller (~> 0.7.1)
   bootstrap-sass (~> 2.1.0.0)
@@ -455,3 +474,4 @@ DEPENDENCIES
   webrick (~> 1.3.1)
   whenever (~> 0.7.3)
   wirble (~> 0.1.3)
+  xray-rails (~> 0.1.4)

@@ -40,7 +40,7 @@ class WebstoreController < ApplicationController
     @routes = @distributor.routes
     @route_selections = @distributor.routes.map { |route| [route.name_days_and_fee, route.id] }
     @selected_route_id = current_customer.route_id if active_orders?
-    @days = ScheduleRule::DAYS.map { |day| [day.to_s.titleize, ScheduleRule::DAYS.index(day)] }
+    @days = view_context.order_dates_grid
     @order_frequencies = [
       ['Deliver weekly on...', :weekly],
       ['Deliver every 2 weeks on...', :fortnightly],
@@ -58,7 +58,7 @@ class WebstoreController < ApplicationController
     @order_price = @webstore_order.order_price(current_customer)
 
     @address = (current_customer ? current_customer.address : '')
-    @current_balance = (current_customer ? current_customer.account.balance : Money.new(0))
+    @current_balance = current_customer ? current_customer.account.balance : Money.new(0)
 
     @city = @distributor.invoice_information.billing_city if @distributor.invoice_information
     @has_address = existing_customer?
@@ -73,8 +73,18 @@ class WebstoreController < ApplicationController
     end
 
     @closing_balance = @current_balance - @order_price
+    @amount_due = @closing_balance
+    @bank = @distributor.bank_information
+    @payment_required = @closing_balance.negative?
+  end
+
+  def payment
+    @order_price = @webstore_order.order_price(current_customer)
+    @current_balance = (current_customer ? current_customer.account.balance : Money.new(0))
+    @closing_balance = @current_balance - @order_price
     @amount_due = @closing_balance * -1
     @bank = @distributor.bank_information
+    @payment_required = @closing_balance.negative?
   end
 
   def placed
