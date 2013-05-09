@@ -348,7 +348,9 @@ class Order < ActiveRecord::Base
   end
 
   def limits_data
-    distributor.boxes.all.inject({}){|hash, element| hash.merge(element.id => element.limits_data)}.to_json
+    distributor.boxes.all.inject({}) do |hash, element|
+      hash.merge(element.id => element.limits_data)
+    end.to_json
   end
 
   def should_deactivate?
