@@ -139,7 +139,7 @@ class Webstore
     address_information = webstore_params[:address]
 
     @controller.session[:webstore][:address] ||= {}
-    %w(street_address street_address_2 suburb city post_code).each do |input|
+    %w(name street_address street_address_2 suburb city post_code).each do |input|
       @controller.session[:webstore][:address][input] = address_information[input]
     end
 
