@@ -162,26 +162,33 @@ class Webstore
   end
 
   def add_address_and_payment_select(webstore_params)
-    if !payment_due?(@order) && webstore_params[:payment_method] == 'paid' && @order.create_order
-      customer = @controller.current_customer
-      CustomerCheckout.track(customer) unless @controller.current_admin.present?
-      @order.placed_step
-      @controller.flash[:notice] = 'Your order has been placed'
-      return
-    end
-    
     address_information = webstore_params[:address]
     payment_option = PaymentOption.new(webstore_params[:payment_method], @distributor)
 
     if address_information && (address_information[:name].blank? || address_information[:street_address].blank?)
       @controller.flash[:error] = 'Please include a your name'
       @order.complete_step
+    elsif !payment_due?(@order) && webstore_params[:payment_method] == 'paid'
+      customer = find_or_create_customer(address_information)
+      update_address(customer, address_information) if address_information
+      @order.account = customer.account
+
+      if @order.create_order
+        CustomerCheckout.track(customer) unless @controller.current_admin.present?
+        @order.placed_step
+        @controller.flash[:notice] = 'Your order has been placed'
+      else
+        @controller.flash[:error] = 'There was a problem completing your order'
+        @order.complete_step
+      end
     elsif !payment_option.valid?
       @controller.flash[:error] = 'Please select a payment option'
       @order.complete_step
     else
       customer = find_or_create_customer(address_information)
       update_address(customer, address_information) if address_information
+
+      payment_option = PaymentOption.new(webstore_params[:payment_method], @distributor)
       payment_option.apply(@order)
 
       @order.account = customer.account
