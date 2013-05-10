@@ -25,6 +25,7 @@ class ApplicationController < ActionController::Base
     else
       msg = "We could not deliver a recent message. The email was disabled due to a hard bounce or a spam complaint.  Please contact support."
     end
+    msg = [msg, exception.message].join('.  ') unless Rails.env.production?
     flash[:alert] = msg
     redirect_to :back
   end
