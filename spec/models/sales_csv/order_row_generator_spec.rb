@@ -48,7 +48,7 @@ describe SalesCsv::OrderRowGenerator do
     it 'generates a array for conversion to csv row' do
       Order.stub(:short_code) { 'sc' }
       Order.stub(:extras_description) { 'exd' }
-      row_generator.generate.should == ["rname", nil, nil, 1, nil, nil, 1, "fname", "lname", 8888, "NEW", "street 1", "apt 1", "sub", "city", 123, "note", "sc", "bname", "sub", "ex", "exd", 10.0, 1.0, 11.0, "em@ex.com", "pref", nil, nil]
+      row_generator.generate.should == ["rname", nil, nil, 1, nil, nil, 1, "fname", "lname", 8888, "NEW", "street 1", "apt 1", "sub", "city", 123, "note", "sc", "bname", "sub", "ex", "exd", 10.0, 1.0, 11.0, "em@ex.com", "pref", "waiting", "waiting"]
     end
   end
 end

@@ -16,6 +16,7 @@ describe SalesCsv::DeliveryRowGenerator do
       status: 'pak',
       order: order,
       package: package,
+      status_formatted: 'pending',
     )
   end
   let(:package) do
@@ -32,6 +33,7 @@ describe SalesCsv::DeliveryRowGenerator do
       archived_consumer_delivery_fee: 1.00,
       total_price: 11.00,
       status: 'del',
+      status_formatted: 'pending',
     )
   end
   let(:customer) do
@@ -59,7 +61,7 @@ describe SalesCsv::DeliveryRowGenerator do
 
   describe '#generate' do
     it 'generates a array for conversion to csv row' do
-      row_generator.generate.should == ["rname", 1, nil, 1, 1, "11 Apr 2013", 1, "fname", "lname", 8888, "NEW", "street 1", "apt 1", "sub", "city", 123, "note", "c", "bname", "sub", "ex", "exd", 10.0, 1.0, 11.0, "em@ex.com", "pref", "del", "pak"]
+      row_generator.generate.should == ["rname", 1, nil, 1, 1, "11 Apr 2013", 1, "fname", "lname", 8888, "NEW", "street 1", "apt 1", "sub", "city", 123, "note", "c", "bname", "sub", "ex", "exd", 10.0, 1.0, 11.0, "em@ex.com", "pref", "pending", "pending"]
     end
   end
 end

@@ -10,11 +10,11 @@ class DeliveryList < ActiveRecord::Base
 
   default_scope order(:date)
 
-  def self.collect_list(distributor, date)
+  def self.collect_list(distributor, date, options = {})
     date_orders = []
     wday = date.wday
 
-    order_ids = Bucky::Sql.order_ids(distributor, date)
+    order_ids = options[:order_id] || Bucky::Sql.order_ids(distributor, date)
     date_orders = distributor.orders.active.where(id: order_ids).includes({ account: {customer: {address:{}, deliveries: {delivery_list: {}}}}, order_extras: {}, box: {}})
 
     # This emulates the ordering when lists are actually created
@@ -24,6 +24,12 @@ class DeliveryList < ActiveRecord::Base
     })
   end
 
+  def ordered_deliveries(ids = nil)
+    list_items = deliveries.ordered
+    list_items = list_items.select { |item| ids.include?(item.id) } if ids
+    list_items
+  end
+
   def self.generate_list(distributor, date)
     packing_list  = PackingList.find_or_create_by_distributor_id_and_date(distributor.id, date)
     delivery_list = DeliveryList.find_or_create_by_distributor_id_and_date(distributor.id, date)
@@ -31,7 +37,6 @@ class DeliveryList < ActiveRecord::Base
     # Collecting via packing list rather than orders so that delivery generation is explicitly
     # linked with packages.
     packages = {}
-    current_wday = delivery_list.date.wday
 
     # Determine the order of this delivery list based on previous deliveries
     packing_list.packages.each do |package|

@@ -7,8 +7,12 @@ module SalesCsv
 
   private
 
+    def list
+      @list ||= ( packing_screen? ? distributor.packing_list_by_date(date) : distributor.delivery_list_by_date(date) )
+    end
+
     def items
-      @orders ||= distributor.orders_with_ids(ids)
+      @orders ||= ( packing_screen? ? list.ordered_packages(ids) : list.ordered_deliveries(ids) )
     end
   end
 end

@@ -7,31 +7,25 @@ class DeliverySort
   end
 
   #FIXME: Checking by class is a code smell this can be done better but it is the current standard in this class so using if for now.
-  def self.by_dso(items, date)
+  def self.by_dso(items, distributor, date)
     if items.all? { |i| i.is_a?(Delivery) }
       by_real_dso(items)
     elsif items.all?{ |i| i.is_a?(Order) }
-      by_predicted_dso(items, date)
+      by_predicted_dso(items, distributor, date)
+    else
+      raise 'Was expecting all Deliveries or all Orders.'
     end
   end
 
   def self.by_real_dso(deliveries)
-    deliveries.ordered.sort_by { |ei| ei.dso }
+    delivery_sort = new(deliveries)
+    deliveries_in_hash = delivery_sort.grouped_by_addresses
+    deliveries_in_hash.map(&:second).flatten
   end
 
-  #FIXME: This method needs to be refactored
-  def self.by_predicted_dso(orders, date)
-    date_orders = []
-    wday = date.wday
-
-    date_orders = orders.includes({ account: { customer: { address:{}, deliveries: { delivery_list: {} } } }, order_extras: {}, box: {} })
-
-    sorted_orders = date_orders.sort do |a,b|
-      comp = a.dso(wday) <=> b.dso(wday)
-      comp.zero? ? (b.created_at <=> a.created_at) : comp
-    end
-
-    FutureDeliveryList.new(date, sorted_orders).deliveries
+  def self.by_predicted_dso(orders, distributor, date)
+    list = DeliveryList.collect_list(distributor, date, order_ids: orders)
+    list.deliveries
   end
 
   def initialize(items)
@@ -42,7 +36,7 @@ class DeliverySort
     elsif items.all?{|i| i.is_a? Order}
       self.type = Type.orders
     else
-      raise "Was expecting all Packages, all Deliveries, or all Orders"
+      raise 'Was expecting all Packages, all Deliveries, or all Orders.'
     end
     self.items = items
   end
@@ -90,7 +84,7 @@ class DeliverySort
     def self.deliveries
       Type.new(:deliveries)
     end
-    
+
     def self.packages
       Type.new(:packages)
     end

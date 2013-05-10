@@ -7,8 +7,9 @@ describe SalesCsv::OrderExporter do
   let(:expected_array) { [1, 2, 3] }
   let(:expected_hash)  { { items: expected_array } }
   let(:orders)         { double('orders') }
-  let(:distributor)    { double('distributor', orders_with_ids: orders) }
-  let(:ids)            { double('ids') }
+  let(:list)           { double('list', ordered_packages: orders, ordered_deliveries: orders) }
+  let(:distributor)    { double('distributor', packing_list_by_date: list, delivery_list_by_date: list) }
+  let(:ids)            { double('ids', is_a?: Integer) }
   let(:date)           { double('date', to_s: '2013-04-04') }
   let(:csv_generator)  { double('csv_generator', generate: expected_array) }
   let(:generator)      { double('generator', new: csv_generator) }

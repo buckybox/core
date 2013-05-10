@@ -20,6 +20,11 @@ module SalesCsv
     attr_reader :screen
     attr_reader :sorter
     attr_reader :generator
+    attr_reader :list
+
+    def ids
+      @ids.map(&:to_i) unless @ids.is_a?(Integer)
+    end
 
     def file_args
       { type: file_type, filename: file_name }
@@ -34,10 +39,6 @@ module SalesCsv
     end
 
     def data
-      generate_csv_output(csv_data) if csv_data
-    end
-
-    def generate_csv_output(csv_data)
       csv = generator.new(csv_data)
       csv.generate
     end
@@ -51,7 +52,7 @@ module SalesCsv
     end
 
     def sorted_by_dso
-      sorter.by_dso(items, date)
+      sorter.by_dso(items, distributor, date)
     end
 
     def packing_screen?

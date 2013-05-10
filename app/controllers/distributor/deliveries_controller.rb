@@ -9,6 +9,7 @@ class Distributor::DeliveriesController < Distributor::ResourceController
   respond_to :json, except: [:master_packing_sheet, :export]
   respond_to :csv, only: :export
 
+  # NOTE: When this is refactored also fix the "items" ordering in the sale_csv models.
   def index
     @routes = current_distributor.routes
 
@@ -22,30 +23,24 @@ class Distributor::DeliveriesController < Distributor::ResourceController
 
     index! do
       @selected_date = Date.parse(params[:date])
-      @route_id = params[:view].to_i
-      @delivery_list = current_distributor.delivery_lists.where(date: params[:date]).first
+      @route_id      = params[:view].to_i
 
       @date_navigation = (nav_start_date..nav_end_date).to_a
-      @months = @date_navigation.group_by(&:month)
+      @months          = @date_navigation.group_by(&:month)
 
       if @route_id.zero?
-        @packing_list  = PackingList.collect_list(current_distributor, @selected_date)
-
-        @all_packages  = @packing_list.packages
+        @packing_list = current_distributor.packing_list_by_date(@selected_date)
+        @all_packages = @packing_list.ordered_packages
 
         @items     = @all_packages
         @real_list = @items.all? { |i| i.is_a?(Package) }
         @route     = @routes.first
         @show_tour = current_distributor.deliveries_index_packing_intro
       else
-        if @delivery_list
-          @all_deliveries = @delivery_list.deliveries.ordered
-        else
-          @delivery_list = DeliveryList.collect_list(current_distributor, @selected_date)
-          @all_deliveries = @delivery_list.deliveries
-        end
+        @delivery_list  = current_distributor.delivery_list_by_date(@selected_date)
+        @all_deliveries = @delivery_list.ordered_deliveries
 
-        @items     = @all_deliveries.select{ |delivery| delivery.route_id == @route_id }
+        @items     = @all_deliveries.select{ |delivery| delivery.route_id  == @route_id }
         @real_list = @items.all? { |i| i.is_a?(Delivery) }
         @route     = @routes.find(@route_id)
         @show_tour = current_distributor.deliveries_index_deliveries_intro
