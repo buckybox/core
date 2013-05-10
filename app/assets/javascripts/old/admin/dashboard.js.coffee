@@ -12,9 +12,19 @@ $ ->
         $("#currency_code").html(data.currency)
       , 'json'
       )
+
+  update_require_phone = ->
+    collect = $('#distributor_collect_phone').is(':checked')
+    $('#distributor_require_phone').attr('disabled', !collect).attr('checked', false)
+
   $('#distributor_country_id').change ->
     load_settings()
   $('#distributor_currency').change ->
     $("#currency_code").html($('#distributor_currency').val())
+  $('#distributor_collect_phone').change ->
+    update_require_phone()
+
   if !$('#distributor_country_id').attr('disabled') && $(".error_notification").size() == 0
     load_settings()
+
+  update_require_phone()

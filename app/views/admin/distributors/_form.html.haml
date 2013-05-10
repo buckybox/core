@@ -1,39 +1,78 @@
 = simple_form_for(@distributor, url: [:admin, @distributor], html: { class: 'form-horizontal' }) do |f|
   = f.error_notification
 
-  = f.input :name
-  = f.input :contact_name
-  = f.input :tag_list, label: 'Tags', placeholder: 'E.g. challenge, delete-me, paying'
-  = f.input :notes
-  = f.input :parameter_name, label: "..ckybox.com/webstore/"
-  = f.input :url
-  = f.input :email
-  = f.input :support_email
-  = f.input :country_id, collection: Country.all, include_blank: false, input_html: { disabled: !@distributor.new_record? }
-  = f.input :time_zone, as: :time_zone, input_html: { disabled: !@distributor.new_record? }
-  = f.input :currency, collection: select_currencies, include_blank: false, input_html: { disabled: !@distributor.new_record? }
+  %fieldset
+    %legend Profile
+    = f.input :name
+    = f.input :contact_name
+    = f.input :tag_list, label: 'Tags', placeholder: 'E.g. challenge, delete-me, paying'
+    = f.input :notes, row: 2
+    = f.input :parameter_name, label: "BB.com/webstore/"
+    = f.input :url
+    = f.input :email
+    = f.input :support_email
+    = f.input :country_id, collection: Country.all, include_blank: false, input_html: { disabled: !@distributor.new_record? }
+    = f.input :time_zone, as: :time_zone, input_html: { disabled: !@distributor.new_record? }
+    = f.input :currency, collection: select_currencies, include_blank: false, input_html: { disabled: !@distributor.new_record? }
 
-  .input.numeric.currency.optional
-    %label.currency.optional{ for: 'distributor_consumer_delivery_fee' } Consumer delivery fee
-    %input#distributor_consumer_delivery_fee.numeric.currency.optional{ name: 'distributor[consumer_delivery_fee]', step: 'any', type: 'number', value: @distributor.consumer_delivery_fee }
-    %span
-      %strong#currency_code= @distributor.currency.upcase
+  %fieldset
+    %legend Preferences
+    .input.numeric.currency.optional
+      %label.currency.optional{ for: 'distributor_consumer_delivery_fee' } Consumer delivery fee
+      %input#distributor_consumer_delivery_fee.numeric.currency.optional{ name: 'distributor[consumer_delivery_fee]', step: 'any', type: 'number', value: @distributor.consumer_delivery_fee }
+      %span
+        %strong#currency_code= @distributor.currency.upcase
 
-  = f.input :separate_bucky_fee
-  = f.association :omni_importers, collection: OmniImporter.all, label_method: :select_label, hint: "Once selected and saved, this will override the old import formats presented to the distributor on the payments screen."
-  :javascript
-    $(function(){$("#distributor_omni_importer_ids").select2({   width: 'resolve'   });});
-  = f.input :active_webstore
-  = f.input :collect_phone_in_webstore
-  = f.input :require_post_code
-  = f.input :customer_can_remove_orders
-  = f.input :feature_spend_limit, label: 'Enable the minimum balance feature?', hint: 'This gives the distributor the option to turn on a minimum balance for customers.'
-  = f.input :send_email, as: :boolean, label: "Send any emails to customers?"
+    = f.input :separate_bucky_fee
+    = f.association :omni_importers, collection: OmniImporter.all, label_method: :select_label, hint: "Once selected and saved, this will override the old import formats presented to the distributor on the payments screen."
+    :javascript
+      $(function(){$("#distributor_omni_importer_ids").select2({ width: 'resolve' });});
 
-  %hr
+    = f.input :customer_can_remove_orders
+    = f.input :feature_spend_limit, label: 'Enable the minimum balance feature?', hint: 'This gives the distributor the option to turn on a minimum balance for customers.'
+    = f.input :send_email, as: :boolean, label: "Send any emails to customers?"
 
-  = f.input :password
-  = f.input :password_confirmation, hint: 'Only changed if both are set'
+
+  %fieldset
+    %legend Webstore
+    = f.input :active_webstore
+
+    %hr{style: 'border-style: dashed'}
+    .row
+      .span3
+        = f.input :collect_phone
+      .span3
+        = f.input :require_phone, disabled: true
+    .row
+      .span3
+        = f.input :collect_address_1, as: :fake_boolean, disabled: true, input_html: { checked: true }
+      .span3
+        = f.input :require_address_1
+    .row
+      .span3
+        = f.input :collect_address_2, as: :fake_boolean, disabled: true, input_html: { checked: true }
+      .span3
+        = f.input :require_address_2
+    .row
+      .span3
+        = f.input :collect_suburb, as: :fake_boolean, disabled: true, input_html: { checked: true }
+      .span3
+        = f.input :require_suburb
+    .row
+      .span3
+        = f.input :collect_city, as: :fake_boolean, disabled: true, input_html: { checked: true }
+      .span3
+        = f.input :require_city
+    .row
+      .span3
+        = f.input :collect_post_code, as: :fake_boolean, disabled: true, input_html: { checked: true }
+      .span3
+        = f.input :require_post_code
+
+  %fieldset
+    %legend Change Password
+    = f.input :password
+    = f.input :password_confirmation, hint: 'Only changed if both are set'
 
   .form-actions
     = f.button :submit, id: @distributor.new_record? ? '' : "edit_distributor_submit"

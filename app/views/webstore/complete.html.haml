@@ -26,22 +26,22 @@
                 %h4 Your Name
             .row-fluid
               .span12= g.input :name, label: false, placeholder: 'Enter your name', input_html: { value: @customer_name, class: 'span12' }
-            - if @distributor.collect_phone_in_webstore?
+            - if @distributor.collect_phone?
               .row-fluid
                 .span12
                   %h4 Your Phone Number
               .row-fluid
-                .span12= g.input :phone_1, label: false, placeholder: 'Enter your phone number', input_html: { value: @customer_phone_number, class: 'span12' }, required: true
+                .span12= g.input :phone_1, label: false, placeholder: 'Enter your phone number', input_html: { value: @customer_phone_number, class: 'span12' }, required: @distributor.require_phone
             .row-fluid
               .span12
                 %h4 Deliver To
             .row-fluid
               .span12
-                = g.input :street_address, label: false, placeholder: 'Street', input_html: { value: @street_address, class: 'span12' }, required: true
-                = g.input :street_address_2, label: false, placeholder: 'Street', label: false, input_html: { value: @street_address_2, class: 'span12' }, required: false
-                = g.input :suburb, label: false, placeholder: 'Suburb', input_html: { value: @suburb, class: 'span12' }, required: false
+                = g.input :street_address, label: false, placeholder: 'Street', input_html: { value: @street_address, class: 'span12' }, required: @distributor.require_address_1
+                = g.input :street_address_2, label: false, placeholder: 'Street', label: false, input_html: { value: @street_address_2, class: 'span12' }, required: @distributor.require_address_2
+                = g.input :suburb, label: false, placeholder: 'Suburb', input_html: { value: @suburb, class: 'span12' }, required: @distributor.require_suburb
             .row-fluid
-              .span9= g.input :city, label: false, placeholder: 'City', required: false, input_html: { value: @city, class: 'span12' }, wrapper_html: { id: 'city' }
+              .span9= g.input :city, label: false, placeholder: 'City', required: @distributor.require_city, input_html: { value: @city, class: 'span12' }, wrapper_html: { id: 'city' }
               .span3= g.input :post_code, label: false, placeholder: 'Post code', required: @distributor.require_post_code?, input_html: { value: @post_code, class: 'span12' }, wrapper_html: { id: 'postal_code' }
 
   - if customer_signed_in?
