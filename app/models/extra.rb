@@ -4,6 +4,7 @@ class Extra < ActiveRecord::Base
   FUZZY_MATCH_THRESHOLD = 0.8
 
   validates_presence_of :distributor, :name, :unit, :price
+  validates :unit, :name, length: {maximum: 80}
 
   attr_accessible :distributor, :name, :unit, :price, :hidden
 
