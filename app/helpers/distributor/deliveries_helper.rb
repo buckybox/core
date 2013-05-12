@@ -27,9 +27,10 @@ module Distributor::DeliveriesHelper
   end
 
   def count_class(current_distributor, date)
-    if current_distributor.delivery_lists.where(date: date).count.zero?
+    delivery_list = current_distributor.delivery_lists.where(date: date).first
+    if delivery_list.blank?
       'out_of_range'
-    elsif !current_distributor.delivery_lists.where(date: date).first.all_finished?
+    elsif !delivery_list.all_finished?
       'has_pending'
     end
   end
