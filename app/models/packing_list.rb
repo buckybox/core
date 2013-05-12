@@ -1,5 +1,3 @@
-FuturePackingList = Struct.new(:date, :packages, :all_finished, :quantity)
-
 class PackingList < ActiveRecord::Base
   belongs_to :distributor
 
@@ -33,6 +31,12 @@ class PackingList < ActiveRecord::Base
     end
 
     return packing_list
+  end
+
+  def ordered_packages(ids = nil)
+    list_items = packages
+    list_items = list_items.select { |item| ids.include?(item.id) } if ids
+    list_items
   end
 
   def self.get(distributor, date)

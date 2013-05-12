@@ -427,9 +427,20 @@ class Distributor < ActiveRecord::Base
     touch(:last_seen_at) #No validations or callbacks are performed
   end
 
+  def packing_list_by_date(date)
+    PackingList.collect_list(self, date)
+  end
+
+  def delivery_list_by_date(date)
+    list = delivery_lists.where(date: date).first
+    list = DeliveryList.collect_list(self, date) if list.nil?
+    list
+  end
+
+private
+
   def payment_options
     options = []
-    #options << ["Credit card", :credit_card] if payment_credit_card?
     options << ["Bank deposit", :bank_deposit] if payment_bank_deposit?
     options << ["Cash on delivery", :cash_on_delivery] if payment_cash_on_delivery?
     options
@@ -450,8 +461,6 @@ class Distributor < ActiveRecord::Base
   def only_payment_option
     payment_options.first.last
   end
-
-  private
 
   def required_fields_for_webstore
     if active_webstore_changed? && active_webstore?

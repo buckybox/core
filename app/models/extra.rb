@@ -33,7 +33,7 @@ class Extra < ActiveRecord::Base
   end
 
   def price_with_discount(customer_discount = nil)
-    Package.calculated_extras_price([self.to_hash.merge(count: 1)], customer_discount)
+    OrderPrice.extras_price([self.to_hash.merge(count: 1)], customer_discount)
   end
 
   def match_import_extra?(extra)

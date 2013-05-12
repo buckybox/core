@@ -4,7 +4,7 @@ module Distributor::BoxesHelper
 
     if options[:with_price]
       route = customer.route
-      
+
       boxes = boxes.not_hidden if options[:no_hidden_boxes]
       boxes << options[:ensure_box] if options[:ensure_box] && !boxes.include?(options[:ensure_box])
       boxes = boxes.sort_by(&:name)
@@ -12,9 +12,9 @@ module Distributor::BoxesHelper
         element = []
 
         if customer.separate_bucky_fee?
-          text = "#{box.name} - (#{Package.calculated_individual_price(box, route, customer).format} + #{customer.consumer_delivery_fee.format} Fee)"
+          text = "#{box.name} - (#{OrderPrice.individual(box, route, customer).format} + #{customer.consumer_delivery_fee.format} Fee)"
         else
-          text = "#{box.name} - (#{Package.calculated_individual_price(box, route, customer).format})"
+          text = "#{box.name} - (#{OrderPrice.individual(box, route, customer).format})"
         end
 
         text << " (#{box.extras_limit})" if options[:with_extras_limit]

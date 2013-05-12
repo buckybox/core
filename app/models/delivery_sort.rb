@@ -1,6 +1,32 @@
 class DeliverySort
-  
   attr_accessor :items, :type
+
+  def self.grouped_by_boxes(items)
+    delivery_sort = new(items)
+    delivery_sort.grouped_by_boxes
+  end
+
+  #FIXME: Checking by class is a code smell this can be done better but it is the current standard in this class so using if for now.
+  def self.by_dso(items, distributor, date)
+    if items.all? { |i| i.is_a?(Delivery) }
+      by_real_dso(items)
+    elsif items.all?{ |i| i.is_a?(Order) }
+      by_predicted_dso(items, distributor, date)
+    else
+      raise 'Was expecting all Deliveries or all Orders.'
+    end
+  end
+
+  def self.by_real_dso(deliveries)
+    delivery_sort = new(deliveries)
+    deliveries_in_hash = delivery_sort.grouped_by_addresses
+    deliveries_in_hash.map(&:second).flatten
+  end
+
+  def self.by_predicted_dso(orders, distributor, date)
+    list = DeliveryList.collect_list(distributor, date, order_ids: orders)
+    list.deliveries
+  end
 
   def initialize(items)
     if items.all?{|i| i.is_a? Package}
@@ -10,7 +36,7 @@ class DeliverySort
     elsif items.all?{|i| i.is_a? Order}
       self.type = Type.orders
     else
-      raise "Was expecting all Packages, all Deliveries, or all Orders"
+      raise 'Was expecting all Packages, all Deliveries, or all Orders.'
     end
     self.items = items
   end
@@ -58,7 +84,7 @@ class DeliverySort
     def self.deliveries
       Type.new(:deliveries)
     end
-    
+
     def self.packages
       Type.new(:packages)
     end
