@@ -1,5 +1,4 @@
 require './config/boot'
-require 'capistrano_colors'
 require 'bundler/capistrano'
 require 'whenever/capistrano'
 require 'airbrake/capistrano'
