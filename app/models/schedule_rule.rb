@@ -327,7 +327,7 @@ class ScheduleRule < ActiveRecord::Base
     when :fortnightly
       "Deliver fortnightly on #{delivery_days}"
     when :monthly
-      "Deliver monthly on the #{week.succ.ordinalize(long: true)} #{delivery_days}"
+      "Deliver monthly on the #{HumanNumber.ordinalise(week.succ)} #{delivery_days}"
     end
   end
 
