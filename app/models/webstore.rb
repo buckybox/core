@@ -46,7 +46,7 @@ class Webstore
     webstore_session[:email] if webstore_session
   end
 
-  private
+private
 
   def start_order(box_id)
     box = Box.where(id: box_id, distributor_id: @distributor.id).first
@@ -143,15 +143,12 @@ class Webstore
       @controller.session[:webstore][:address][input] = address_information[input]
     end
 
-    if address_information && (address_information[:name].blank? || address_information[:street_address].blank?)
-      @controller.flash[:error] = 'Please fill in your name and your address'
-      @order.complete_step
-    elsif @distributor.require_post_code && address_information[:post_code].blank?
-      @controller.flash[:error] = 'Please fill in your post code'
+    if (errors = validate_address_information(address_information))
+      @controller.flash[:error] = errors
       @order.complete_step
     else
       customer = find_or_create_customer(address_information)
-      update_address(customer, address_information) if address_information
+      update_address(customer, address_information)
 
       @order.account = customer.account
 
@@ -167,6 +164,21 @@ class Webstore
         @order.complete_step
       end
     end
+  end
+
+  def validate_address_information address_information
+    errors = []
+
+    errors << 'name' if address_information[:name].blank?
+    errors << 'address' if address_information[:street_address].blank?
+
+    if @distributor.require_post_code && address_information[:post_code].blank?
+      errors << 'post code'
+    end
+
+    return if errors.empty?
+
+    "Please fill in your #{errors.join(', ')}."
   end
 
   def find_or_create_customer(address_information)

@@ -18,14 +18,14 @@
               .span12
                 = @address.join('<br>') if @has_address
                 %br
-                = link_to 'change my delivery address', '#', id: 'edit-address'
+                = link_to 'Change my delivery address', '#', id: 'edit-address'
         #update-address.row-fluid
           .span12
             .row-fluid
               .span12
                 %h4 Your Name
             .row-fluid
-              .span12= g.input :name, label: false, placeholder: 'Enter your name', input_html: { value: @customer_name, class: 'span12' }
+              .span12= g.input :name, label: false, placeholder: 'Enter your name', input_html: { value: @customer_name, class: 'span12' }, required: true
             - if @distributor.collect_phone?
               .row-fluid
                 .span12
@@ -42,7 +42,7 @@
                 = g.input :suburb, label: false, placeholder: 'Suburb', input_html: { value: @suburb, class: 'span12' }, required: @distributor.require_suburb
             .row-fluid
               .span9= g.input :city, label: false, placeholder: 'City', required: @distributor.require_city, input_html: { value: @city, class: 'span12' }, wrapper_html: { id: 'city' }
-              .span3= g.input :post_code, label: false, placeholder: 'Post code', required: @distributor.require_post_code?, input_html: { value: @post_code, class: 'span12' }, wrapper_html: { id: 'postal_code' }
+              .span3= g.input :post_code, label: false, placeholder: 'Post code', required: @distributor.require_post_code, input_html: { value: @post_code, class: 'span12' }, wrapper_html: { id: 'postal_code' }
 
   - if customer_signed_in?
     #webstore-balance.row-fluid.webstore-section.important
