@@ -437,8 +437,6 @@ class Distributor < ActiveRecord::Base
     list
   end
 
-private
-
   def payment_options
     options = []
     options << ["Bank deposit", :bank_deposit] if payment_bank_deposit?
@@ -461,6 +459,8 @@ private
   def only_payment_option
     payment_options.first.last
   end
+
+private
 
   def required_fields_for_webstore
     if active_webstore_changed? && active_webstore?
