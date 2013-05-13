@@ -35,8 +35,8 @@ gem 'airbrake',        '~> 3.1.2'
 
 gem 'ace-rails-ap',  '~> 2.0.0'
 
-gem 'activemerchant'
-gem 'attr_encryptor'
+gem 'activemerchant',  '~> 1.32.1'
+gem 'attr_encryptor',  '~> 1.0.2'
 
 ########## THE GEMS ABOVE ARE THE ONLY ONES THAT RUN ON PRODUCTION ##########
 
@@ -52,69 +52,65 @@ group :install do
 end
 
 group :development do
-  gem 'bullet',     '~> 4.6.0', require: false
-  gem 'brakeman',   '~> 1.9.5', require: false
-  gem 'xray-rails', '~> 0.1.4'
-  gem 'ruby-prof',  '~> 0.13.0' # profiling with /newrelic
+  gem 'bullet',    require: false
+  gem 'brakeman',  require: false
+  gem 'xray-rails'
+  gem 'ruby-prof' # profiling with /newrelic
 
-  gem 'capistrano',         '~> 2.15.4'
-  gem 'capistrano_colors',  '~> 0.5.5'
-  gem 'term-ansicolor',     '~> 1.1.5'
-  gem 'hirb',               '~> 0.7.0'
-  gem 'wirble',             '~> 0.1.3'
+  gem 'capistrano'
+  gem 'term-ansicolor'
 
-  gem 'guard-rspec',  '~> 2.6.0'
-  gem 'guard-spork',  '~> 1.5.0'
-
-  gem 'spork-rails',  '~> 3.2.0'
+  gem 'guard-rspec'
+  gem 'guard-spork'
+  gem 'spork-rails'
 
   # Pry: IRB + ruby debug alternative which is active and easier to install
-  gem 'pry-remote',    '~> 0.1.7' # Needed for using pry in spork
-  gem 'pry-rails',     '~> 0.2.2'
-  gem 'pry-debugger',  '~> 0.2.2'
-  gem 'pry-coolline',  '~> 0.2.2'
+  gem 'pry-rails'
+  gem 'pry-debugger'
+  gem 'pry-coolline'
+  gem 'pry-remote' # Needed for using pry in spork
 
-  gem 'better_errors',      '~> 0.8.0'
-  gem 'binding_of_caller',  '~> 0.7.1'
-  gem 'quiet_assets',       '~> 1.0.2'
-  gem 'meta_request',       '~> 0.2.3'
+  gem 'better_errors'
+  gem 'binding_of_caller'
+  gem 'quiet_assets'
+  gem 'meta_request'
 
-  gem 'webrick',  '~> 1.3.1' # Included explicitly so #chunked warnings no longer show up in the dev log
+  gem 'webrick' # Included explicitly so #chunked warnings no longer show up in the dev log
 end
 
 group :test do
-  gem 'fabrication',       '~> 2.7.0'
-  gem 'database_cleaner',  '~> 0.9.1'
-  gem 'therubyracer',      '~> 0.11.4' # embeded JS interpreter for our CI server
+  gem 'fabrication'
+  gem 'database_cleaner'
+  gem 'therubyracer' # embeded JS interpreter for our CI server
 
-  gem 'capybara',  '~> 2.1.0'
-  gem 'launchy',   '~> 2.2.0'
+  gem 'capybara'
+  gem 'launchy'
 
-  gem 'fuubar',  '~> 1.1.0'
+  gem 'fuubar'
 
-  gem 'cucumber-rails',  '~> 1.3.1',  require: false
+  gem 'cucumber-rails',  require: false
 
-  gem 'bundler-audit', '~> 0.1.2'
+  gem 'bundler-audit'
 end
 
 group :staging do
-  gem 'mail_safe',  '~> 0.3.1'
+  gem 'mail_safe'
 end
 
 group :development, :test do
-  gem 'rspec-rails',  '~> 2.13.1'
-  gem 'guard',        '~> 1.8.0'
-  gem 'listen',       '~> 1.0.3'
+  gem 'rspec-rails'
+  gem 'guard'
+  gem 'listen'
 
-  gem 'letter_opener',  '~> 1.1.0'
+  gem 'letter_opener'
 
-  gem 'simplecov',  require: false
+  gem 'simplecov'
 end
 
 group :development, :staging do
-  gem 'oink',  '~> 0.10.1',  require: 'oink'
+  gem 'oink',  require: 'oink'
 end
 
 group :development, :test, :staging do
-  gem 'delorean',  '~> 2.1.0'
+  gem 'delorean'
 end
