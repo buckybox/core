@@ -52,11 +52,6 @@ class Address < ActiveRecord::Base
 
 private
 
-  # TODO create a migration to rename postcode
-  def post_code
-    postcode
-  end
-
   def phone
     phone_1
   end

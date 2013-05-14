@@ -998,7 +998,7 @@ CREATE TABLE distributors (
     collect_phone_in_webstore boolean,
     last_seen_at timestamp without time zone,
     notes text,
-    require_post_code boolean DEFAULT false NOT NULL
+    require_postcode boolean DEFAULT false NOT NULL
 );
 
 
@@ -3370,3 +3370,5 @@ INSERT INTO schema_migrations (version) VALUES ('20130313051530');
 INSERT INTO schema_migrations (version) VALUES ('20130315034909');
 
 INSERT INTO schema_migrations (version) VALUES ('20130508035922');
+
+INSERT INTO schema_migrations (version) VALUES ('20130514034901');

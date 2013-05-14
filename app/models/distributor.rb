@@ -63,7 +63,7 @@ class Distributor < ActiveRecord::Base
     :default_balance_threshold, :has_balance_threshold,
     :spend_limit_on_all_customers, :send_email, :send_halted_email,
     :feature_spend_limit, :contact_name, :tag_list, :collect_phone,
-    :require_address_1, :require_address_2, :require_suburb, :require_post_code,
+    :require_address_1, :require_address_2, :require_suburb, :require_postcode,
     :require_phone, :require_city, :omni_importer_ids, :notes
 
   validates_presence_of :country

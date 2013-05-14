@@ -75,7 +75,7 @@ class WebstoreController < ApplicationController
       @street_address_2 = @address.address_2
       @suburb = @address.suburb
       @city = @address.city
-      @post_code = @address.postcode
+      @postcode = @address.postcode
     end
 
     @closing_balance = @current_balance - @order_price

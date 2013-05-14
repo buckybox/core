@@ -139,7 +139,7 @@ private
     address_information = webstore_params[:address]
 
     @controller.session[:webstore][:address] ||= {}
-    %w(name street_address street_address_2 suburb city post_code).each do |input|
+    %w(name street_address street_address_2 suburb city postcode).each do |input|
       @controller.session[:webstore][:address][input] = address_information[input]
     end
 
@@ -175,7 +175,7 @@ private
       "street_address_2" => "address_2",
       "suburb" => "suburb",
       "city" => "city",
-      "post_code" => "postcode"
+      "postcode" => "postcode"
     }.inject({}) do |accu, (from, to)|
       accu.merge(to => address_information[from])
     end
@@ -215,7 +215,7 @@ private
     customer.address.address_2 = address_information[:street_address_2]
     customer.address.suburb    = address_information[:suburb]
     customer.address.city      = address_information[:city]
-    customer.address.postcode  = address_information[:post_code]
+    customer.address.postcode  = address_information[:postcode]
     customer.save
   end
 
