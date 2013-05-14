@@ -39,13 +39,13 @@ Given /^I have an existing customer$/ do
   @customer = Fabricate(:customer, :distributor => @distributor)
 end
 
-When /^I edit the customer's details$/ do
-  click_link "Edit Customer Details"
+When /^I edit the customer's profile$/ do
+  click_link "edit profile"
 end
 
 When /^I change the customer's first name to "(.*?)"$/ do |name|
-  fill_in "First name", :with => name
-  click_button "Update Customer"
+  fill_in "First name", with: name
+  click_button "Update"
 end
 
 Then /^The customer's page should show the name "(.*?)"$/ do |name|

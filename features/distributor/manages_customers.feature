@@ -14,7 +14,7 @@ Scenario: Create new customer
 
 Scenario: Edit existing customer
   Given I am viewing an existing customer
-  When  I edit the customer's details
+  When  I edit the customer's profile
    And  I change the customer's first name to "Frodo"
   Then  The customer's page should show the name "Frodo"
 
