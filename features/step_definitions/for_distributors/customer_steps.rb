@@ -18,7 +18,7 @@ end
 When /^I fill in valid customer details$/ do
   fill_in "Email", :with => "bilbo@baggins.com"
   fill_in "First name", :with => "Bilbo"
-  fill_in "Address", :with => "1 Bag End"
+  fill_in "Address 1", :with => "1 Bag End"
   fill_in "Suburb", :with => "Hobbiton"
   fill_in "City", :with => "The Water"
 end
