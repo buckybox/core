@@ -2,6 +2,7 @@ $(function() {
   if($('#order-form').length > 0) {
     order_init();
     init_extras();
+    update_schedule();
     update_day_checkboxes_style();
 
     var box_id = $("#order-form select.box").val();
@@ -37,33 +38,12 @@ $(function() {
     }
   });
 
-  var schedule = $('#order-form .order-days');
-  var weeks = schedule.find('tr');
-  var week_numbers = weeks.find('td:first-child');
-
-  $('#order-form select.frequency').change(function() {
-    var frequency_select = $(this);
-
-    if(frequency_select.val() === 'single') {
-      schedule.hide();
-    }
-    else {
-      schedule.show();
-    }
-
-    if(frequency_select.val() === 'monthly') {
-      week_numbers.show();
-      weeks.show();
-    }
-    else {
-      weeks.slice(1).hide();
-      week_numbers.hide();
-    }
-  });
+  $('#order-form select.frequency').change(update_schedule);
 
   $('#order-form .order-days input').click(function(event) {
     var checkbox = $(event.target)
     var selected_week = checkbox.closest('tr');
+    var weeks = $('#order-form .order-days tr');
 
     if (checkbox.is(':checked')) {
       // disable the other rows
@@ -130,6 +110,30 @@ $(function() {
     return true;
   });
 });
+
+function update_schedule() {
+  var schedule = $('#order-form .order-days');
+  var weeks = schedule.find('tr');
+  var week_numbers = weeks.find('td:first-child');
+
+  var frequency_select = $('#order-form select.frequency');
+
+  if(frequency_select.val() === 'single') {
+    schedule.hide();
+  }
+  else {
+    schedule.show();
+  }
+
+  if(frequency_select.val() === 'monthly') {
+    week_numbers.show();
+    weeks.show();
+  }
+  else {
+    weeks.slice(1).hide();
+    week_numbers.hide();
+  }
+}
 
 function update_day_checkboxes_style() {
   $('.order-days input').each(function() {
