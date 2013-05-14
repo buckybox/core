@@ -2,8 +2,8 @@ class Address < ActiveRecord::Base
   belongs_to :customer, inverse_of: :address
 
   attr_accessible :customer, :address_1, :address_2, :suburb, :city, :postcode, :delivery_note, :phone_1, :phone_2, :phone_3
-
-  validates_presence_of :customer, :address_1
+  validates_presence_of :customer
+  validate :validate_address
 
   before_save :update_address_hash
 
@@ -42,5 +42,30 @@ class Address < ActiveRecord::Base
 
   def update_address_hash
     self.address_hash = compute_address_hash
+  end
+
+  # Useful for address validation without a customer
+  attr_writer :distributor
+  def distributor
+    customer && customer.distributor || @distributor
+  end
+
+private
+
+  # TODO create a migration to rename postcode
+  def post_code
+    postcode
+  end
+
+  def phone
+    phone_1
+  end
+
+  def validate_address
+    %w(address_1 address_2 suburb city post_code phone).each do |attr|
+      require_method = "require_#{attr}"
+
+      validates_presence_of attr if distributor.send(require_method)
+    end
   end
 end

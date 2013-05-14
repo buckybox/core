@@ -358,7 +358,7 @@ class Customer
     def self.no_email
       @no_email ||= EmailRule.new(:no_email)
     end
-    
+
     attr_writer :type
 
     def initialize(type)
@@ -376,7 +376,7 @@ class Customer
       end
     end
 
-    private
+  private
 
     def type
       @type

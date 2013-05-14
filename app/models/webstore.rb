@@ -144,7 +144,7 @@ private
     end
 
     if (errors = validate_address_information(address_information))
-      @controller.flash[:error] = errors
+      @controller.flash[:error] = errors.join('<br>').html_safe
       @order.complete_step
     else
       customer = find_or_create_customer(address_information)
@@ -168,17 +168,24 @@ private
 
   def validate_address_information address_information
     errors = []
+    errors << "Your name can't be blank" if address_information[:name].blank?
 
-    errors << 'name' if address_information[:name].blank?
-    errors << 'address' if address_information[:street_address].blank?
-
-    if @distributor.require_post_code && address_information[:post_code].blank?
-      errors << 'post code'
+    attrs = {
+      "street_address" => "address_1",
+      "street_address_2" => "address_2",
+      "suburb" => "suburb",
+      "city" => "city",
+      "post_code" => "postcode"
+    }.inject({}) do |accu, (from, to)|
+      accu.merge(to => address_information[from])
     end
 
-    return if errors.empty?
+    address = Address.new attrs
+    address.distributor = @distributor
 
-    "Please fill in your #{errors.join(', ')}."
+    return if address.valid_attributes?(except: [:customer]) && errors.empty?
+
+    errors + address.errors.full_messages
   end
 
   def find_or_create_customer(address_information)
