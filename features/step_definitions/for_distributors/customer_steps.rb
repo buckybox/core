@@ -16,11 +16,11 @@ When /^I add a new customer$/ do
 end
 
 When /^I fill in valid customer details$/ do
-  fill_in "Email", :with => "bilbo@baggins.com"
-  fill_in "First name", :with => "Bilbo"
-  fill_in "Address 1", :with => "1 Bag End"
-  fill_in "Suburb", :with => "Hobbiton"
-  fill_in "City", :with => "The Water"
+  fill_in "Email", with: "bilbo@baggins.com"
+  fill_in "First name", with: "Bilbo"
+  fill_in "Address 1", with: "1 Bag End"
+  fill_in "Suburb", with: "Hobbiton"
+  fill_in "City", with: "The Water"
 end
 
 Then /^I should be viewing the customer$/ do
@@ -36,7 +36,7 @@ end
 
 Given /^I have an existing customer$/ do
   @distributor.should_not be_nil
-  @customer = Fabricate(:customer, :distributor => @distributor)
+  @customer = Fabricate(:customer, distributor: @distributor)
 end
 
 When /^I edit the customer's profile$/ do
@@ -50,5 +50,5 @@ end
 
 Then /^The customer's page should show the name "(.*?)"$/ do |name|
   visit distributor_customer_path(@customer)
-  page.should have_css('.customer-name', :text => name)
+  page.should have_css('.customer-name', text: name)
 end
