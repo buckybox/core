@@ -28,3 +28,26 @@ check process postgres with pidfile /var/lib/postgresql/9.1/main/postmaster.pid
   start program = "/etc/init.d/postgresql start"
   stop program  = "/etc/init.d/postgresql stop"
 #  include /etc/monit.d/*
+
+# an example Monit configuration file for delayed_job
+# See: http://stackoverflow.com/questions/1226302/how-to-monitor-delayedjob-with-monit/1285611
+#
+# To use:
+# 1. copy to /var/www/apps/{app_name}/shared/delayed_job.monitrc
+# 2. replace {app_name} as appropriate
+# 3. add this to your /etc/monit/monitrc
+#
+#   include /var/www/apps/{app_name}/shared/delayed_job.monitrc
+
+#PRODUCTION
+check process delayed_job
+  with pidfile /home/buckybox/production/shared/pids/delayed_job.pid
+  start program = "/usr/bin/env RAILS_ENV=production /home/buckybox/production/current/script/delayed_job start"
+  stop program = "/usr/bin/env RAILS_ENV=production /home/buckybox/production/current/script/delayed_job stop"
+#PRODUCTION
+#STAGING
+check process delayed_job
+  with pidfile /home/buckybox/staging/shared/pids/delayed_job.pid
+  start program = "/usr/bin/env RAILS_ENV=staging /home/buckybox/staging/current/script/delayed_job start"
+  stop program = "/usr/bin/env RAILS_ENV=staging /home/buckybox/staging/current/script/delayed_job stop"
+#STAGING

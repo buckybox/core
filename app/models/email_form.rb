@@ -12,8 +12,8 @@ class EmailForm < Form
 
   def send!
     if valid?
-      DistributorMailer.raise_errors do
-        DistributorMailer.update_email(self).deliver
+      Distributor.keep_updated.each do |distributor|
+        DistributorMailer.delay.update_email(self, distributor)
       end
       true
     else
