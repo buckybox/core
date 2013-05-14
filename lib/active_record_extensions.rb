@@ -19,15 +19,13 @@ module ActiveRecordExtensions
       raise ArgumentError, "Cannot use :except and :only at the same time"
     end
 
-    attributes = errors.messages.dup
-    attributes.each do |key, message|
+    errors.keys.each do |key|
       if (except && except.include?(key)) || (only && !only.include?(key))
-        attributes.delete(key)
         errors.delete(key)
       end
     end
 
-    attributes.empty?
+    errors.empty?
   end
 
   module ClassMethods
