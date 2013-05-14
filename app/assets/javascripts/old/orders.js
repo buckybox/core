@@ -2,6 +2,7 @@ $(function() {
   if($('#order-form').length > 0) {
     order_init();
     init_extras();
+    update_start();
     update_schedule();
     update_day_checkboxes_style();
 
@@ -37,6 +38,8 @@ $(function() {
       current_order.find('#likes-input').hide();
     }
   });
+
+  $('#order_schedule_rule_attributes_start').change(update_start);
 
   $('#order-form select.frequency').change(update_schedule);
 
@@ -110,6 +113,11 @@ $(function() {
     return true;
   });
 });
+
+function update_start() {
+  var weekday = $('#order_schedule_rule_attributes_start').find(':selected').data('weekday');
+  $('#order_schedule_rule_attributes_' + weekday).attr('checked', true);
+}
 
 function update_schedule() {
   var schedule = $('#order-form .order-days');
