@@ -80,7 +80,7 @@ class Admin::DistributorsController < Admin::ResourceController
   def send_email
     @email = EmailForm.new(params[:email_form])
     if params[:commit] == 'Send' && @email.send!
-      flash.now[:notice] = 'Emails sent successfully.'
+      flash.now[:notice] = 'Emails queued for delivery.'
       @sent = true
     elsif @email.send_preview!
       flash.now[:notice] = "Preview email sent to #{@email.preview_email}."

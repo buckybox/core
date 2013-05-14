@@ -1,7 +1,8 @@
 class AdminMailer < ActionMailer::Base
 
-  def preview_email(email)
+  def preview_email(email, admin)
     @email = email
+    @admin = admin
 
     mail to: @email.preview_email,
          from: "Bucky Box <support@buckybox.com>",

@@ -44,10 +44,12 @@ check process delayed_job
   with pidfile /home/buckybox/production/shared/pids/delayed_job.pid
   start program = "/usr/bin/env RAILS_ENV=production /home/buckybox/production/current/script/delayed_job start"
   stop program = "/usr/bin/env RAILS_ENV=production /home/buckybox/production/current/script/delayed_job stop"
+  start program = "/bin/su - buckybox -c 'cd /home/buckybox/production/current/; RAILS_ENV=production script/delayed_job start'"
+  stop program = "/bin/su - buckybox -c 'cd /home/buckybox/production/current/; RAILS_ENV=production script/delayed_job stop'"
 #PRODUCTION
 #STAGING
 check process delayed_job
   with pidfile /home/buckybox/staging/shared/pids/delayed_job.pid
-  start program = "/usr/bin/env RAILS_ENV=staging /home/buckybox/staging/current/script/delayed_job start"
-  stop program = "/usr/bin/env RAILS_ENV=staging /home/buckybox/staging/current/script/delayed_job stop"
+  start program = "/bin/su - buckybox -c 'cd /home/buckybox/staging/current/; RAILS_ENV=staging script/delayed_job start'"
+  stop program = "/bin/su - buckybox -c 'cd /home/buckybox/staging/current/; RAILS_ENV=staging script/delayed_job stop'"
 #STAGING

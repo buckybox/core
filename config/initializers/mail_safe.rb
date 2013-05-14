@@ -4,5 +4,5 @@ if defined?(MailSafe::Config)
     address != 'support@buckybox.com'
   }
 
-  MailSafe::Config.replacement_address = 'beta@buckybox.com'
+  MailSafe::Config.replacement_address = 'crashtestdummy@buckybox.com'
 end

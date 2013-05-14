@@ -11,7 +11,7 @@
             = f.input :subject, as: :string, input_html: {class: 'span6'}, label: false, placeholder: 'Subject'
             .row-fluid
               .span12
-                = f.input :body, as: :text, input_html: {class: 'span12'}, label: false, placeholder: 'Body'
+                = f.input :body, as: :text, input_html: {class: 'span12'}, label: false, placeholder: 'Body', hint: 'You can use [[name]] in the body and it will be replaced with the distributors contact name (test emails will sub in the admins email address).'
                 .input-prepend.pull-left
                   = f.button :submit, 'Send preview to', class: 'btn btn-primary'
                   = f.input_field :preview_email, hint: 'Preview email address'

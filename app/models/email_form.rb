@@ -21,10 +21,16 @@ class EmailForm < Form
     end
   end
 
+  #distributor or admin is passed if, both respond to name
+  def mail_merge(distributor=nil)
+    raise "#{distributor} must respond to :contact_name" unless distributor.respond_to?(:contact_name)
+    self.body.gsub(/\[\[name\]\]/, distributor.contact_name)
+  end
+
   def send_preview!
     if valid? && preview_email_present?
       AdminMailer.raise_errors do
-        AdminMailer.preview_email(self).deliver
+        AdminMailer.preview_email(self, OpenStruct.new(contact_name: preview_email)).deliver
       end
       true
     else
