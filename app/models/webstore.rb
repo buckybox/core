@@ -139,7 +139,7 @@ private
     address_information = webstore_params[:address]
 
     @controller.session[:webstore][:address] ||= {}
-    %w(name street_address street_address_2 suburb city postcode).each do |input|
+    %w(name street_address street_address_2 suburb city postcode phone_number phone_type).each do |input|
       @controller.session[:webstore][:address][input] = address_information[input]
     end
 
@@ -182,6 +182,8 @@ private
 
     address = Address.new attrs
     address.distributor = @distributor
+    address.phone = { type: address_information["phone_type"],
+                      number: address_information["phone_number"] }
 
     return if address.valid_attributes?(except: [:customer]) && errors.empty?
 
@@ -210,12 +212,18 @@ private
 
   def update_address(customer, address_information)
     customer.name              = address_information[:name]
-    customer.address.phone_1   = address_information[:phone_1]
+
+    customer.address.phone     = {
+      number: address_information[:phone_number],
+      type:   address_information[:phone_type]
+    }
+
     customer.address.address_1 = address_information[:street_address]
     customer.address.address_2 = address_information[:street_address_2]
     customer.address.suburb    = address_information[:suburb]
     customer.address.city      = address_information[:city]
     customer.address.postcode  = address_information[:postcode]
+
     customer.save
   end
 

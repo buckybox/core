@@ -175,7 +175,7 @@ class Package < ActiveRecord::Base
       customer.number,
       customer.first_name,
       customer.last_name,
-      address.phone_1,
+      address.phones.default_number,
       (customer.new? ? 'NEW' : nil),
       archived_address_details.address_1,
       archived_address_details.address_2,

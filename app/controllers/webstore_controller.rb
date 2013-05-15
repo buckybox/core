@@ -61,7 +61,7 @@ class WebstoreController < ApplicationController
     end
 
     @address ||= current_customer && current_customer.address
-    @customer_name ||= @name || existing_customer? && current_customer.name
+    @name ||= existing_customer? && current_customer.name
     @city ||= @distributor.invoice_information.billing_city if @distributor.invoice_information
 
     @order_price = @webstore_order.order_price(current_customer)
@@ -70,7 +70,8 @@ class WebstoreController < ApplicationController
     @has_address = existing_customer?
 
     if @has_address
-      @customer_phone_number = @address.phone_1
+      @phone_number = @address.phones.default_number
+      @phone_type = @address.phones.default_type
       @street_address = @address.address_1
       @street_address_2 = @address.address_2
       @suburb = @address.suburb

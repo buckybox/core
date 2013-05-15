@@ -7,9 +7,9 @@
 = f.input :email
 
 = f.simple_fields_for :address do |g|
-  = g.input :phone_1, label: 'Mobile'
-  = g.input :phone_2, label: 'Home'
-  = g.input :phone_3, label: 'Work'
+  = g.input :mobile_phone
+  = g.input :home_phone
+  = g.input :work_phone
 
 - if @customer.distributor.has_balance_threshold?
   = f.input :balance_threshold, label: "Minimum balance", hint: "Deliveries will halt when their balance reaches the minimum balance."

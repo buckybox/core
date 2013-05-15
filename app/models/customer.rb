@@ -128,8 +128,9 @@ class Customer < ActiveRecord::Base
         city: c.delivery_city,
         postcode: c.delivery_postcode,
         delivery_note: c.delivery_instructions,
-        phone_1: c.phone_1,
-        phone_2: c.phone_2
+        mobile_phone: c.mobile_phone,
+        home_phone: c.home_phone,
+        work_phone: c.work_phone
       }
     })
 
@@ -151,7 +152,7 @@ class Customer < ActiveRecord::Base
       begin
         delivery_date = Time.zone.parse(b.next_delivery_date.to_s)
       rescue
-        binding.pry
+        binding.pry # XXX careful with that on production Sir
       end
       raise "Date couldn't be parsed from '#{b.delivery_date}'" if delivery_date.blank?
 

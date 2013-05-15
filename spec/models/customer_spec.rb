@@ -19,8 +19,8 @@ describe Customer do
       delivery_city: 'Masterton',
       delivery_postcode: '1234567',
       delivery_instructions: 'by the zips please',
-      phone_1: '0800 999 666 333',
-      phone_2: '0800 BOWIES IN SPACE',
+      mobile_phone: '0800 999 666 333',
+      home_phone: '0800 BOWIES IN SPACE',
       tags: ["Flight of the concords", "rock"],
       boxes: 2.times.collect{box_mock},
     }.merge(opts)
@@ -77,7 +77,7 @@ describe Customer do
     let(:distributor) { Fabricate(:distributor, default_balance_threshold_cents: -50000, has_balance_threshold: true) }
 
     it 'should create a valid customer' do
-      c = distributor.customers.create({"first_name"=>"Jordan", "last_name"=>"Carter", "tag_list"=>"", "email"=>"jordan+3@buckybox.com", "address_attributes"=>{"phone_1"=>"", "phone_2"=>"", "phone_3"=>"", "address_1"=>"43a Warwick St", "address_2"=>"Wilton", "suburb"=>"Wellington", "city"=>"Wellington", "postcode"=>"6012", "delivery_note"=>""}, "balance_threshold"=>"1.00", "discount"=>"0", "special_order_preference"=>"", "route_id"=>"68"})
+      c = distributor.customers.create({"first_name"=>"Jordan", "last_name"=>"Carter", "tag_list"=>"", "email"=>"jordan+3@buckybox.com", "address_attributes"=>{"mobile_phone"=>"", "home_phone"=>"", "work_phone"=>"", "address_1"=>"43a Warwick St", "address_2"=>"Wilton", "suburb"=>"Wellington", "city"=>"Wellington", "postcode"=>"6012", "delivery_note"=>""}, "balance_threshold"=>"1.00", "discount"=>"0", "special_order_preference"=>"", "route_id"=>"68"})
       c.should be_valid
     end
   end
@@ -253,8 +253,8 @@ describe Customer do
         delivery_city: 'Masterton',
         delivery_postcode: '1234567',
         delivery_instructions: 'by the zips please',
-        phone_1: '0800 999 666 333',
-        phone_2: '0800 BOWIES IN SPACE',
+        mobile_phone: '0800 999 666 333',
+        home_phone: '0800 BOWIES IN SPACE',
         tags: ["Flight of the concords", "rock"],
         boxes: boxes
       }
@@ -272,8 +272,8 @@ describe Customer do
       customer.tag_list.should eq(["flight-of-the-concords", "rock"])
 
       address = customer.address
-      address.phone_1.should eq(attrs[:phone_1])
-      address.phone_2.should eq(attrs[:phone_2])
+      address.mobile_phone.should eq(attrs[:mobile_phone])
+      address.home_phone.should eq(attrs[:home_phone])
       address.address_1.should eq(attrs[:delivery_address_line_1])
       address.address_2.should eq(attrs[:delivery_address_line_2])
       address.suburb.should eq(attrs[:delivery_suburb])
