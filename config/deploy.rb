@@ -43,6 +43,10 @@ namespace :deploy do
       ln -nfs #{shared_path}/log/ #{release_path}/log/
     )
   end
+
+  task :restart_workers do
+    sudo %( monit restart delayed_job )
+  end
 end
 
 after 'deploy:assets:symlink' do
@@ -50,6 +54,7 @@ after 'deploy:assets:symlink' do
 end
 
 after "deploy:update_code", "deploy:migrate"
+after "deploy:restart", "deploy:restart_workers"
 after "deploy:restart", "deploy:cleanup"
 
 # This is here to provide support of capistrano variables in sprinkle
