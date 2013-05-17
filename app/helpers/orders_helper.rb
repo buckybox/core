@@ -59,7 +59,13 @@ module OrdersHelper
     time_from_now ||= 12.weeks.from_now
     from_time = route.distributor.window_end_at + 1.day #next_occurrence includes the start date, so choose the next day
     next_occurrences = route.occurrences_between(from_time, time_from_now)
-    return next_occurrences.map { |time| [time.to_s(:route_delivery_dates), time.to_date] }
+    next_occurrences.map do |time|
+      [
+        time.to_s(:route_delivery_dates),
+        time.to_date,
+        { 'data-weekday' => time.strftime('%a').downcase }
+      ]
+    end
   end
 
   def order_delete_warning(order)
