@@ -5,7 +5,7 @@
 #account-information{data: {account_id: @account.id}}
 - if @distributor.active_webstore
   .row-fluid
-    #new-customer-order.span12= link_to 'create new order from webstore', webstore_store_path(@distributor.parameter_name)
+    #new-customer-order.span12= link_to 'Create new order from webstore', webstore_store_path(@distributor.parameter_name)
 
 - unless @orders.empty?
   = render partial: 'customer/orders/order', collection: @orders
