@@ -6,6 +6,7 @@ $(function(){
       $(".exclusions_limit").show('highlight');
     }
   }
+
   var update_box_substitutions_limits = function(){
     if($('#box_likes:checked').size() == 0){
       $(".substitutions_limit").hide();
@@ -13,8 +14,10 @@ $(function(){
       $(".substitutions_limit").show('highlight');
     }
   }
+
   update_box_exclusion_limits();
   update_box_substitutions_limits();
+
   $("#box_dislikes").click(update_box_exclusion_limits);
   $("#box_likes").click(update_box_substitutions_limits);
 });

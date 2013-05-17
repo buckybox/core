@@ -36,6 +36,9 @@
   %fieldset
     %legend Webstore
     = f.input :active_webstore
+    = f.input :payment_cash_on_delivery, label: 'Allow cash on delivery'
+    = f.input :payment_bank_deposit, label: 'Allow bank deposit payments'
+    =# f.input :payment_credit_card, label: 'Allow credit card payments'
 
     %hr{style: 'border-style: dashed'}
     .row

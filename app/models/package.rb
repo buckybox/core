@@ -48,65 +48,28 @@ class Package < ActiveRecord::Base
 
   delegate :date, to: :packing_list, allow_nil: true
 
-  def self.calculated_individual_price(box_price, route_fee, customer_discount = nil)
-    box_price = box_price.price if box_price.is_a?(Box)
-    route_fee = route_fee.fee   if route_fee.is_a?(Route)
-    customer_discount = customer_discount.discount if customer_discount.is_a?(Customer)
-
-    total_price = box_price + route_fee
-
-    customer_discount ? discounted(total_price, customer_discount) : total_price
-  end
-
-  def self.calculated_extras_price(order_extras, customer_discount = nil)
-    order_extras = order_extras.map(&:to_hash) unless order_extras.is_a?(Hash)
-    customer_discount = customer_discount.discount if customer_discount.is_a?(Customer)
-
-    total_price = order_extras.map do |order_extra|
-      money = Money.new(order_extra[:price_cents], order_extra[:currency])
-      count = (order_extra[:count].to_i || 0)
-      money * count
-    end.sum
-
-    customer_discount ? discounted(total_price, customer_discount) : total_price
-  end
-
-  def self.discounted(price, customer_discount = nil)
-    return price if customer_discount.nil? # Convenience so we don't have to check all over app for nil
-
-    customer_discount = customer_discount.discount if customer_discount.is_a?(Customer)
-
-    price * (1 - customer_discount)
-  end
-
   def price
-    result = individual_price
-    result = result * archived_order_quantity if archived_order_quantity
-    result += individual_extras_price if archived_extras.present?
-
-    return result
-  rescue
-    raise "Error calculating price: #{individual_price.inspect} * #{archived_order_quantity.inspect}"
+    OrderPrice.without_delivery_fee(individual_price, archived_order_quantity, individual_extras_price, archived_extras.present?)
   end
 
   def total_price
-    if archived_consumer_delivery_fee_cents > 0
-      price + archived_consumer_delivery_fee
-    else
-      price
-    end
+    OrderPrice.with_delivery_fee(price, archived_consumer_delivery_fee)
+  end
+
+  def individual_price
+    OrderPrice.individual(archived_box_price, archived_route_fee, archived_customer_discount)
+  end
+
+  def individual_extras_price
+    OrderPrice.extras_price(archived_extras, archived_customer_discount)
+  end
+
+  def status_formatted
+    status == 'unpacked' ? 'pending' : status
   end
 
   def quantity
     archived_order_quantity
-  end
-
-  def individual_price
-    Package.calculated_individual_price(archived_box_price, archived_route_fee, archived_customer_discount)
-  end
-
-  def individual_extras_price
-    Package.calculated_extras_price(archived_extras, archived_customer_discount)
   end
 
   def string_pluralize
@@ -116,7 +79,7 @@ class Package < ActiveRecord::Base
   end
 
   def extras_description
-    Package.extras_description(archived_extras)
+    Order.extras_description(archived_extras)
   end
 
   def extras_summary
@@ -131,18 +94,13 @@ class Package < ActiveRecord::Base
     box_name = box_name.name if box_name.is_a? Box
 
     result = "#{box_name}"
-    result << ", #{extras_description(order_extras)}" if order_extras.present?
+    result << ", #{Order.extras_description(order_extras)}" if order_extras.present?
 
     return result
   end
 
   def contents_description
     Package.contents_description(archived_box_name, archived_extras)
-  end
-
-  def self.extras_description(order_extras)
-    order_extras = order_extras.map(&:to_hash) unless order_extras.is_a? Hash
-    order_extras.map{ |e| "#{e[:count]}x #{e[:name]} #{e[:unit]}" }.join(', ')
   end
 
   def archived_extras
@@ -197,11 +155,11 @@ class Package < ActiveRecord::Base
   end
 
   def archived_substitutions
-    read_attribute(:archived_substitutions) || order.substitutions.map(&:name).join(', ')
+    read_attribute(:archived_substitutions) || order.substitutions_string
   end
 
   def archived_exclusions
-    read_attribute(:archived_exclusions) || order.exclusions.map(&:name).join(', ')
+    read_attribute(:archived_exclusions) || order.exclusions_string
   end
 
   def archived_address
@@ -223,24 +181,22 @@ class Package < ActiveRecord::Base
   def has_archived_address_details?
     !archived_address_details.id.nil?
   end
-  
-  def string_sort_code
-    result = archived_box_name || ''
-    result += '+L' unless archived_exclusions.blank?
-    result += '+D' unless archived_substitutions.blank?
 
-    return result.upcase
+  def short_code
+    has_exclusions    = !archived_exclusions.blank?
+    has_substitutions = !archived_substitutions.blank?
+    Order.short_code(archived_box_name, has_exclusions, has_substitutions)
   end
 
   def set_one_off_extra_order(order)
     @one_off_extra_order = order
   end
 
-  private
-
   def delivery
     deliveries.order("created_at DESC").first
   end
+
+  private
 
   def archive_data
     if status != 'packed'
@@ -255,14 +211,12 @@ class Package < ActiveRecord::Base
       self.archived_customer_discount     = customer.discount
       self.archived_order_quantity        = order.quantity
 
-      self.archived_substitutions         = order.substitutions.map(&:name).join(', ')
-      self.archived_exclusions            = order.exclusions.map(&:name).join(', ')
+      self.archived_substitutions         = order.substitutions_string
+      self.archived_exclusions            = order.exclusions_string
       # The association chain to get a distributor was causing a callback loop so have to do this instead.
       found_distributor = Distributor.find_by_id(packing_list.distributor_id) if packing_list
 
-      if found_distributor && found_distributor.separate_bucky_fee?
-        self.archived_consumer_delivery_fee = found_distributor.consumer_delivery_fee
-      end
+      self.archived_consumer_delivery_fee = found_distributor.consumer_delivery_fee if found_distributor
 
       return archive_extras
     end

@@ -24,10 +24,11 @@ class WebstoreOrder < ActiveRecord::Base
   LOGIN     = :login
   DELIVERY  = :delivery
   COMPLETE  = :complete
+  PAYMENT   = :payment
   PLACED    = :placed
 
   def self.box_price(box, customer = nil)
-    Package.discounted(box.price, customer)
+    OrderPrice.discounted(box.price, customer)
   end
 
   def set_default_schedule_rule
@@ -47,7 +48,7 @@ class WebstoreOrder < ActiveRecord::Base
   end
 
   def box_price(customer = nil)
-    Package.discounted(box.price, customer)
+    OrderPrice.discounted(box.price, customer)
   end
 
   def box_description
@@ -59,7 +60,7 @@ class WebstoreOrder < ActiveRecord::Base
   end
 
   def route_fee(customer = nil)
-    Package.discounted(route.fee, customer)
+    OrderPrice.discounted(route.fee, customer)
   end
 
   def bucky_fee
@@ -68,10 +69,6 @@ class WebstoreOrder < ActiveRecord::Base
 
   def has_bucky_fee?
     distributor.separate_bucky_fee?
-  end
-
-  def current_step
-    
   end
 
   def customise_step
@@ -90,6 +87,10 @@ class WebstoreOrder < ActiveRecord::Base
     self.status = COMPLETE
   end
 
+  def payment_step
+    self.status = PAYMENT
+  end
+
   def placed_step
     self.status = PLACED
   end
@@ -104,6 +105,18 @@ class WebstoreOrder < ActiveRecord::Base
 
   def completed?
     status == PLACED
+  end
+
+  def payment_method?(test_symbol)
+    payment_method.to_sym == test_symbol
+  end
+
+  def payment_method_string
+    payment_method.titleize
+  end
+
+  def bank
+    distributor.bank_information
   end
 
   def extra_objects
@@ -130,11 +143,11 @@ class WebstoreOrder < ActiveRecord::Base
       }
     end
 
-    @order_extras_price_mem = Package.calculated_extras_price(order_extra_hash, customer)
+    @order_extras_price_mem = OrderPrice.extras_price(order_extra_hash, customer)
   end
 
   def order_price(customer = nil)
-    @order_price_mem = Package.calculated_individual_price(box, route, customer)
+    @order_price_mem = OrderPrice.individual(box, route, customer)
     @order_price_mem += order_extras_price(customer) unless extras.empty?
     @order_price_mem += bucky_fee if has_bucky_fee?
 
@@ -194,6 +207,8 @@ class WebstoreOrder < ActiveRecord::Base
         schedule_rule_attributes: schedule_rule.clone_attributes,
         order_extras: extras_hash,
         extras_one_off: extras_one_off
+        # FIXME Having to forward parameters like that sucks and is error-prone
+        # Consider merging Order and WebstoreOrder together
       )
       order.excluded_line_item_ids = exclusions
       order.substituted_line_item_ids = substitutions
@@ -225,5 +240,9 @@ class WebstoreOrder < ActiveRecord::Base
       customer.route_id = route_id
       customer.save!
     end
+  end
+
+  def no_payment_action?
+    payment_method?(:bank_deposit) || payment_method?(:cash_on_delivery)
   end
 end

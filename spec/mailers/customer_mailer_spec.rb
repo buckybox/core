@@ -16,7 +16,7 @@ describe CustomerMailer do
 
   describe "invoice" do
     before(:each) do
-      pending ('Invoicing email generation is turned off for now')
+      pending('Invoicing email generation is turned off for now')
       @invoice = Fabricate(:invoice)
     end
     let(:mail) { CustomerMailer.invoice(@invoice) }
@@ -30,6 +30,15 @@ describe CustomerMailer do
     it "renders the body" do
       mail.body.encoded.should match(@invoice.account.customer.name)
     end
+  end
+
+  describe "halt" do
+    let(:mail){ CustomerMailer.orders_halted(@customer) }
+    
+    it "cc's distributor" do
+      mail.cc.should eq([@customer.distributor.support_email])
+    end
+
   end
 
 end

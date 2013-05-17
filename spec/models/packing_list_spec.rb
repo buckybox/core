@@ -17,7 +17,7 @@ describe PackingList do
     specify { expect { @packing_list.mark_all_as_auto_packed }.to_not change(@packing_list.packages[2], :packing_method) }
   end
 
-  describe '.collect_lists' do
+  describe '.collect_list' do
     before do
       time_travel_to Date.parse('2012-01-23')
 
@@ -29,7 +29,7 @@ describe PackingList do
       ((Date.current - 1.day)..Date.current).each { |date| PackingList.generate_list(@distributor, date) }
     end
 
-    specify { PackingList.collect_lists(@distributor, (Date.current - 1.day), (Date.current + 1.day)).should be_kind_of(Array) }
+    specify { PackingList.collect_list(@distributor, Date.current - 1.day).should_not be_nil }
 
     after { back_to_the_present }
   end

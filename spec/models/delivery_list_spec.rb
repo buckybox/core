@@ -40,20 +40,41 @@ describe DeliveryList do
     end
   end
 
-  describe '.collect_lists' do
+  describe '.collect_list' do
     before do
-      time_travel_to Date.parse('2012-01-23')
+      time_travel_to Date.parse('2013-05-01')
 
-      @distributor = Fabricate(:distributor)
-      box = Fabricate(:box, distributor: @distributor)
-      3.times { Fabricate(:recurring_order, completed: true, box: box) }
+      @order = Fabricate(:recurring_order, completed: true)
+      @distributor = @order.distributor
+      @order.schedule_rule.recur = "monthly"
+      @start_date = @order.schedule_rule.start
 
-      time_travel_to Date.parse('2012-01-30')
+      @today = Date.parse('2013-05-08')
+      time_travel_to @today
 
-      ((Date.current - 1.week)..Date.current).each { |date| DeliveryList.generate_list(@distributor, date) }
+      @distributor.generate_required_daily_lists_between(@start_date, @today)
     end
 
-    specify { DeliveryList.collect_lists(@distributor, (Date.current - 1.week), (Date.current + 1.week)).should be_kind_of(Array) }
+    it "is a delivery day today" do
+      @today.should eq @order.schedule_rule.next_occurrence
+    end
+
+    it "works with the first week day" do
+      delivery_date = @order.schedule_rule.next_occurrence
+      delivery_list = DeliveryList.collect_list(@distributor, delivery_date)
+
+      delivery_list.deliveries.should eq [@order]
+    end
+
+    it "works with the nth week day" do
+      @order.schedule_rule.week = 2
+      delivery_date = @order.schedule_rule.next_occurrence
+      delivery_date.should_not be > @today
+
+      delivery_list = DeliveryList.collect_list(@distributor, delivery_date)
+
+      delivery_list.deliveries.should eq [@order]
+    end
 
     after { back_to_the_present }
   end
