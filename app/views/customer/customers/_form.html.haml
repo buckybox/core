@@ -2,7 +2,8 @@
   .modal-body
     = f.error_notification
 
+    = f.input :name, required: true
     = f.input :email, hint: 'Please double check this email as it is also used as your login.'
 
   .modal-footer
-    = f.button :submit, 'Update Email', class: 'btn btn-primary'
+    = f.button :submit, 'Update', class: 'btn btn-primary'
