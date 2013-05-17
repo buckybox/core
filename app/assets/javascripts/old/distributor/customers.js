@@ -128,4 +128,24 @@ $(function() {
       $("#balance_threshold").show('highlight');
     }
   });
+
+  var phone_inputs = $('form input[type="tel"]');
+  if (phone_inputs.length) {
+    function update_phone_inputs_style() {
+      phone_inputs.addClass('required');
+
+      var input = phone_inputs.map(function() {
+        if ($.trim(this.value).length) {
+          return this;
+        }
+      });
+
+      if (input.length) {
+        phone_inputs.not(input).removeClass('required');
+      }
+    }
+
+    phone_inputs.keyup(update_phone_inputs_style);
+    update_phone_inputs_style();
+  }
 });
