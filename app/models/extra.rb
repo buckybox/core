@@ -4,6 +4,7 @@ class Extra < ActiveRecord::Base
   FUZZY_MATCH_THRESHOLD = 0.8
 
   validates_presence_of :distributor, :name, :unit, :price
+  validates :unit, :name, length: {maximum: 80}
 
   attr_accessible :distributor, :name, :unit, :price, :hidden
 
@@ -32,7 +33,7 @@ class Extra < ActiveRecord::Base
   end
 
   def price_with_discount(customer_discount = nil)
-    Package.calculated_extras_price([self.to_hash.merge(count: 1)], customer_discount)
+    OrderPrice.extras_price([self.to_hash.merge(count: 1)], customer_discount)
   end
 
   def match_import_extra?(extra)

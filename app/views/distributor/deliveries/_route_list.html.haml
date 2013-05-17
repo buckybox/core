@@ -23,43 +23,45 @@
   .span5.export.text-right
     = button_to('Export',
       export_distributor_deliveries_path,
-      { id: 'delivery-export', class: 'btn', disabled: !@real_list })
+      { id: 'delivery-export', class: 'btn' })
 
 .row-fluid.data-headings
 
 - if @real_list
-  %ul#delivery_list.unstyled{ class: (@delivery_list.date.past? ? '' : 'sortable') }
-    - DeliverySort.new(@items).grouped_by_addresses.each do |addressh_hash, deliveries|
-      %li.row-fluid
-        .span12
-          %ul.unstyled
-            - deliveries.each do |delivery|
-              %li.row-fluid.data-listings{ class: delivery.status, data: { delivery_id: delivery.id } }
-                .span6.row-grip
-                  = check_box_tag delivery.order_id, '1', false, data: { delivery: delivery.id }
-                  .label.state-label.dso-number
-                    = map_pin(delivery)
-                    = dso_tooltip(delivery.formated_delivery_number)
-                  = render partial: 'status_icons', locals: { status: delivery.status }
-                  .customer-holder{ class: "#{'paid-label' if delivery.paid?}" }
-                    = customer_badge(delivery.customer, customer_name: delivery.package.archived_customer_name)
-                .span6
-                  .row-fluid.address-description
-                    .span6= display_address(delivery)
-                    .span6.box-description= contents_description(delivery, @selected_date)
+  #list_type{ data: { type: 'deliveries', date: @selected_date, screen: 'delivery' } }
+    %ul#delivery_list.unstyled{ class: (@delivery_list.date.past? ? '' : 'sortable') }
+      - DeliverySort.new(@items).grouped_by_addresses.each do |addressh_hash, deliveries|
+        %li.row-fluid
+          .span12
+            %ul.unstyled
+              - deliveries.each do |delivery|
+                %li.row-fluid.data-listings{ class: delivery.status, data: { delivery_id: delivery.id } }
+                  .span6.row-grip
+                    = check_box_tag delivery.order_id, '1', false, data: { deliveries: delivery.id }
+                    .label.state-label.dso-number
+                      = map_pin(delivery)
+                      = dso_tooltip(delivery.formated_delivery_number)
+                    = render partial: 'status_icons', locals: { status: delivery.status }
+                    .customer-holder{ class: "#{'paid-label' if delivery.paid?}" }
+                      = customer_badge(delivery.customer, customer_name: delivery.package.archived_customer_name)
+                  .span6
+                    .row-fluid.address-description
+                      .span6= display_address(delivery)
+                      .span6.box-description= contents_description(delivery, @selected_date)
 
 - else
-  %ul.unstyled
-    - @items.each do |order|
-      %li.row-fluid.data-listings.pending
-        .span6
-          = check_box_tag order.id, '1', false
-          .label.state-label.dso-number= map_pin(order)
-          .label.state-label.staus-icon.status-pending{ title: 'PENDING delivery' }
-            %i.icon-time
-          .customer-holder= customer_badge(order.customer)
-        .span6
-          .row-fluid.address-description
-            .span6= display_address(order)
-            .span6= contents_description(order, @selected_date)
+  #list_type{ data: { type: 'orders', date: @selected_date, screen: 'delivery' } }
+    %ul#delivery_list.unstyled
+      - @items.each do |order|
+        %li.row-fluid.data-listings.pending
+          .span6
+            = check_box_tag order.id, '1', false, data: { orders: order.id }
+            .label.state-label.dso-number= map_pin(order)
+            .label.state-label.staus-icon.status-pending{ title: 'PENDING delivery' }
+              %i.icon-time
+            .customer-holder= customer_badge(order.customer)
+          .span6
+            .row-fluid.address-description
+              .span6= display_address(order)
+              .span6= contents_description(order, @selected_date)
 

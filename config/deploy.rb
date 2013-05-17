@@ -1,5 +1,4 @@
 require './config/boot'
-require 'capistrano_colors'
 require 'bundler/capistrano'
 require 'whenever/capistrano'
 require 'airbrake/capistrano'
@@ -47,15 +46,30 @@ namespace :deploy do
   task :restart_workers do
     sudo %( monit restart delayed_job )
   end
+  
+  task :symlink_uploads do
+    run %(
+      ln -nfs #{shared_path}/private_uploads/ #{release_path}/
+    )
+  end
+end
+
+task :setup_private_uploads do
+  run %(
+    mkdir -p #{shared_path}/private_uploads
+  )
 end
 
 after 'deploy:assets:symlink' do
   deploy.symlink_configs
+  deploy.symlink_uploads
 end
 
 after "deploy:update_code", "deploy:migrate"
 after "deploy:restart", "deploy:restart_workers"
 after "deploy:restart", "deploy:cleanup"
+
+after "deploy:setup", "setup_private_uploads"
 
 # This is here to provide support of capistrano variables in sprinkle
 begin

@@ -9,6 +9,7 @@ class Distributor::DeliveriesController < Distributor::ResourceController
   respond_to :json, except: [:master_packing_sheet, :export]
   respond_to :csv, only: :export
 
+  # NOTE: When this is refactored also fix the "items" ordering in the sale_csv models.
   def index
     @routes = current_distributor.routes
 
@@ -22,30 +23,24 @@ class Distributor::DeliveriesController < Distributor::ResourceController
 
     index! do
       @selected_date = Date.parse(params[:date])
-      @route_id = params[:view].to_i
-      @delivery_list = current_distributor.delivery_lists.where(date: params[:date]).first
+      @route_id      = params[:view].to_i
 
       @date_navigation = (nav_start_date..nav_end_date).to_a
-      @months = @date_navigation.group_by(&:month)
+      @months          = @date_navigation.group_by(&:month)
 
       if @route_id.zero?
-        @packing_list  = PackingList.collect_list(current_distributor, @selected_date)
-
-        @all_packages  = @packing_list.packages
+        @packing_list = current_distributor.packing_list_by_date(@selected_date)
+        @all_packages = @packing_list.ordered_packages
 
         @items     = @all_packages
         @real_list = @items.all? { |i| i.is_a?(Package) }
         @route     = @routes.first
         @show_tour = current_distributor.deliveries_index_packing_intro
       else
-        if @delivery_list
-          @all_deliveries = @delivery_list.deliveries.ordered
-        else
-          @delivery_list = DeliveryList.collect_list(current_distributor, @selected_date)
-          @all_deliveries = @delivery_list.deliveries
-        end
+        @delivery_list  = current_distributor.delivery_list_by_date(@selected_date)
+        @all_deliveries = @delivery_list.ordered_deliveries
 
-        @items     = @all_deliveries.select{ |delivery| delivery.route_id == @route_id }
+        @items     = @all_deliveries.select{ |delivery| delivery.route_id  == @route_id }
         @real_list = @items.all? { |i| i.is_a?(Delivery) }
         @route     = @routes.find(@route_id)
         @show_tour = current_distributor.deliveries_index_deliveries_intro
@@ -85,21 +80,12 @@ class Distributor::DeliveriesController < Distributor::ResourceController
   end
 
   def export
-    redirect_to :back and return unless params[:deliveries] || params[:packages]
+    export = get_export(params)
 
-    export_type = (params[:deliveries] ? :delivery : :packing)
-
-    csv_output = Delivery.build_csv_for_export(export_type, current_distributor, params[:deliveries], params[:packages])
-
-    date = Delivery.date_for_packages_or_deliveries(export_type, current_distributor, params[:deliveries], params[:packages])
-
-    if csv_output
-      filename = "bucky-box-#{export_type}-export-#{date.to_s}.csv"
-      type     = 'text/csv; charset=utf-8; header=present'
-
-      send_data(csv_output, type: type, filename: filename)
+    if export
+      send_data(*export.csv)
     else
-      respond_to :back
+      redirect_to :back
     end
   end
 
@@ -135,5 +121,28 @@ class Distributor::DeliveriesController < Distributor::ResourceController
 
   def nav_end_date
     Date.current + Order::FORCAST_RANGE_FORWARD
+  end
+
+private
+
+  #NOTE: These methods are used to clean up the export input. When the UI gets better we should be able to remove
+  # most if not all of the code.
+  def get_export(args)
+    found_key = find_key(args)
+    csv_exporter, ids = make_sales_args(found_key, args[found_key]) if found_key
+    export_args = { distributor: current_distributor, ids: ids, date: Date.parse(args[:date]), screen: args[:screen] }
+    csv_exporter.new(export_args) if csv_exporter
+  end
+
+  def find_key(args)
+    found_key = nil
+    [:deliveries, :packages, :orders].each { |key| found_key = key if args.has_key?(key) }
+    found_key
+  end
+
+  def make_sales_args(key, value)
+    key = "SalesCsv::#{key.to_s.singularize.titleize.constantize}Exporter"
+    key = key.constantize
+    [ key, value ]
   end
 end

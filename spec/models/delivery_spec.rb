@@ -125,27 +125,4 @@ describe Delivery do
   describe '#reposition!' do
     specify { expect { delivery.reposition!(101) }.to change(delivery, :position).to(101) }
   end
-
-  describe '#build_csv_for_export' do
-    let(:distributor){ Fabricate(:distributor) }
-    let(:delivery_list){ Fabricate(:delivery_list, distributor: distributor) }
-    let(:deliveries){
-      d = 3.times.collect{ Fabricate(:delivery, delivery_list: delivery_list, order: Fabricate(:order, account: Fabricate(:account, distributor: distributor)))}
-      [d[2], d[0], d[1]].each_with_index do |de, i|
-        dso = DeliverySequenceOrder.for_delivery(de)
-        dso.position = i
-        dso.save
-      end
-      d.map(&:save)
-      d
-    }
-
-    it 'should return csv order by dso' do
-      csv = CSV.parse(Delivery.build_csv_for_export(:delivery, distributor, deliveries.collect(&:id), nil))
-      delivery_number_column = 1
-      csv[1][delivery_number_column].should eq('003')
-      csv[2][delivery_number_column].should eq('001')
-      csv[3][delivery_number_column].should eq('002')
-    end
-  end
 end

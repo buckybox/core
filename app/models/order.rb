@@ -63,7 +63,7 @@ class Order < ActiveRecord::Base
 
   default_value_for :extras_one_off, IS_ONE_OFF
   default_value_for :quantity, QUANTITY
-  
+
   after_initialize :set_default_schedule_rule
 
   def set_default_schedule_rule
@@ -88,6 +88,18 @@ class Order < ActiveRecord::Base
     Order.where(id: order_ids)
   end
 
+  def self.short_code(box_name, has_exclusions, has_substitutions)
+    result = box_name || ''
+    result += '+L' if has_exclusions
+    result += '+D' if has_substitutions
+    result.upcase
+  end
+
+  def self.extras_description(order_extras)
+    order_extras = order_extras.map(&:to_hash) unless order_extras.is_a? Hash
+    order_extras.map{ |e| "#{e[:count]}x #{e[:name]} #{e[:unit]}" }.join(', ')
+  end
+
   def change_to_local_time_zone
     distributor.change_to_local_time_zone
   end
@@ -99,20 +111,26 @@ class Order < ActiveRecord::Base
   end
 
   def price
-    result = individual_price * quantity
-    result += extras_price if extras.present?
-    return result
+    OrderPrice.without_delivery_fee(individual_price, quantity, extras_price, extras.present?)
+  end
+
+  def consumer_delivery_fee
+    distributor.consumer_delivery_fee
+  end
+
+  def total_price
+    OrderPrice.with_delivery_fee(price, consumer_delivery_fee)
   end
 
   def individual_price
-    Package.calculated_individual_price(box, route, customer)
+    OrderPrice.individual(box, route, customer)
   end
 
   def extras_price
-    Package.calculated_extras_price(order_extras, customer)
+    OrderPrice.extras_price(order_extras, customer)
   end
 
-  def customer= cust
+  def customer=(cust)
     self.account = cust.account
   end
 
@@ -140,15 +158,30 @@ class Order < ActiveRecord::Base
     schedule_rule.blank? || schedule_rule.next_occurrence.blank?
   end
 
+  def box_name
+    box.name
+  end
+
+  def route_name
+    route.name
+  end
+
+  def has_exclusions?
+    !exclusions.empty?
+  end
+
+  def has_substitutions?
+    !substitutions.empty?
+  end
+
   def string_pluralize
-    box_name = box.name
     "#{quantity || 0} " + ((quantity == 1 || quantity =~ /^1(\.0+)?$/) ? box_name : box_name.pluralize)
   end
 
   def string_sort_code
-    result = box.name
-    result += '+L' unless exclusions.empty?
-    result += '+D' unless substitutions.empty?
+    result = box_name
+    result += '+L' if has_exclusions?
+    result += '+D' if has_substitutions?
 
     return result.upcase
   end
@@ -233,7 +266,7 @@ class Order < ActiveRecord::Base
   end
 
   def extras_description(show_frequency = false)
-    extras_string = Package.extras_description(order_extras)
+    extras_string = Order.extras_description(order_extras)
 
     if schedule_rule.frequency.single? || !show_frequency
       extras_string
@@ -348,7 +381,9 @@ class Order < ActiveRecord::Base
   end
 
   def limits_data
-    distributor.boxes.all.inject({}){|hash, element| hash.merge(element.id => element.limits_data)}.to_json
+    distributor.boxes.all.inject({}) do |hash, element|
+      hash.merge(element.id => element.limits_data)
+    end.to_json
   end
 
   def should_deactivate?
@@ -383,7 +418,7 @@ class Order < ActiveRecord::Base
 
   def likes_dislikes_within_limits
     return unless box.present?
-    
+
     if !box.exclusions_limit.zero? && exclusions.size > box.exclusions_limit
       errors.add(:exclusions, " is limited to #{box.exclusions_limit}")
     end

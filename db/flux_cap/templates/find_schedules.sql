@@ -1,9 +1,9 @@
-select :select
-from orders
-inner join boxes on boxes.id = orders.box_id
-inner join schedule_rules on schedule_rules.scheduleable_id = orders.id AND schedule_rules.scheduleable_type = 'Order'
-full outer join schedule_pauses on schedule_pauses.id = schedule_rules.schedule_pause_id
-where boxes.distributor_id = :distributor_id
+SELECT :select
+FROM orders
+INNER JOIN boxes ON boxes.id = orders.box_id
+INNER JOIN schedule_rules ON schedule_rules.scheduleable_id = orders.id AND schedule_rules.scheduleable_type = 'Order'
+FULL OUTER JOIN schedule_pauses ON schedule_pauses.id = schedule_rules.schedule_pause_id
+WHERE boxes.distributor_id = :distributor_id
 AND schedule_rules.halted = 'f'
 AND orders.active = 't'
 AND (	(
@@ -23,7 +23,8 @@ AND (	(
 	OR
 	(
 		recur = 'monthly' AND schedule_rules.start <= ':date'
-		AND :dow = 't' AND EXTRACT(DAY from date(':date')) < 8
+		AND :dow = 't'
+		AND (CAST(EXTRACT(DAY from date(':date')) AS integer) - 1) / 7 = schedule_rules.week
 	)
 ) AND (
 	schedule_pauses.start is NULL

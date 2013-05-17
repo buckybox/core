@@ -1,0 +1,15 @@
+= form.simple_fields_for(form.object.credit_card, html: {class: 'credit-card'}) do |f|
+  .row-fluid
+    .span12.form-horizontal
+      = f.input :card_brand, as: :select, collection: CreditCard.card_brands, include_blank: false, required: false, input_html: {class: 'credit-card'}, label: 'Card type:'
+      = f.input :card_number, required: false, input_html: {class: 'credit-card'}, label: 'Card number:'
+      = f.input :first_name, required: false, input_html: {class: 'credit-card'}, label: 'First name:'
+      = f.input :last_name, required: false, input_html: {class: 'credit-card'}, label: 'Last name:'
+      .control-group
+        = f.label 'Expiry:', required: false
+        .controls.credit-card-expiry
+          = f.input :expiry_month, as: :select, collection: ['month'] + CreditCard.months, label: false, disabled: ['month'], selected: 'month', include_blank: false, required: false
+          = f.input :expiry_year, as: :select, collection: ['year'] + CreditCard.years, label: false, disabled: ['year'], selected: 'year', include_blank: false, required: false
+      = f.input :card_security_code, as: :string, required: false, input_html: {class: 'input-small'}, label: 'Card security code:'
+      = f.input :store_for_future_use, as: :boolean, label: false, inline_label: 'Automatically use this card for future purchases', required: false
+

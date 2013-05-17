@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe Distributor::DeliveriesController do
   as_distributor
-  
+
   context :delivery_sequence_order do
     before do
       @route = Fabricate(:route, distributor: @distributor)
@@ -17,7 +17,7 @@ describe Distributor::DeliveriesController do
         @packages << result.package
       }
     end
-    
+
     it "should order deliveries based on the DSO" do
       get :index, {date: @date, view: @route.id.to_s}
 
@@ -39,12 +39,37 @@ describe Distributor::DeliveriesController do
 
       post :reposition, {date: @date_string, delivery: delivery_ids}
     end
+  end
 
-    it "should order csv based on DSO" do
-      Delivery.stub(:date_for_packages_or_deliveries).and_return(Date.current)
-      Delivery.should_receive(:build_csv_for_export).with(:delivery, @distributor, ["1","2","6"], nil).and_return("")
+  describe "POST export" do
+    context 'given a list to export' do
+      before do
+        csv = 'this,that,and,the,other'
+        export = double('export', csv: csv)
+        controller.stub(:get_export) { export }
+        controller.should_receive(:send_data).with(csv) { controller.render nothing: true }
+      end
 
-      post :export, {deliveries: [1,2,6]}
+      after { post :export, @params }
+
+      it 'exports csv of packages' do
+        @params = { packages: [3, 5], date: '2013-04-26', screen: 'packing' }
+      end
+
+      it 'exports csv of packages' do
+        @params = { deliveries: [3, 5], date: '2013-04-26', screen: 'packing' }
+      end
+
+      it 'exports csv of packages' do
+        @params = { orders: [3, 5], date: '2013-04-26', screen: 'packing' }
+      end
+    end
+
+    it 'redirects back to the last page if it can not export a CSV file' do
+      request.env['HTTP_REFERER'] = 'where_i_came_from'
+      controller.stub(:get_export) { nil }
+      post :export
+      response.should redirect_to 'where_i_came_from'
     end
   end
 end

@@ -118,21 +118,52 @@ $(function() {
   if($('#webstore-route').length > 0) {
     var route_select = $('#route_select');
     update_route_information(route_select.val());
+    update_day_checkboxes_style();
 
     route_select.change(function() {
       update_route_information(route_select.val());
+      update_day_checkboxes_style();
     });
+
+    var schedule = $('.route-schedule-inputs .order-days');
+    var weeks = schedule.find('tr');
+    var week_numbers = weeks.find('td:first-child');
 
     $('.route-schedule-frequency').change(function() {
       var frequency_select = $(this);
-      var days_checkboxes = frequency_select.closest('.route-schedule-inputs').find('.order-days');
 
       if(frequency_select.val() === 'single') {
-        days_checkboxes.hide();
+        schedule.hide();
       }
       else {
-        days_checkboxes.show();
+        schedule.show();
       }
+
+      if(frequency_select.val() === 'monthly') {
+        week_numbers.show();
+        weeks.show();
+      }
+      else {
+        weeks.slice(1).hide();
+        week_numbers.hide();
+      }
+    });
+
+    $('.order-days input').click({weeks: weeks}, function(event) {
+      var checkbox = $(event.target)
+      var selected_week = checkbox.closest('tr');
+
+      if (checkbox.is(':checked')) {
+        // disable the other rows
+        var other_weeks = event.data.weeks.not(selected_week);
+        other_weeks.find('input').attr('disabled', 'true').removeAttr('checked');
+
+      } else if (selected_week.find('input:checked').length == 0) {
+        // enable all rows if this is the only checked day
+        weeks.find('input:data(enabled)').removeAttr('disabled');
+      }
+
+      update_day_checkboxes_style();
     });
 
     $('.schedule-start-date').change(function() {
@@ -151,6 +182,18 @@ $(function() {
     });
   }
 });
+
+function update_day_checkboxes_style() {
+  $('.order-days input').each(function() {
+    var checkbox = $(this);
+    var td = checkbox.closest('td');
+
+    if (checkbox.is(':checked') || checkbox.data('enabled'))
+      td.removeClass('disabled');
+    else
+      td.addClass('disabled');
+  });
+}
 
 function update_day_checkboxes(start_date) {
   var date = new Date(start_date.val());

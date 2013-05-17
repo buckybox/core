@@ -11,6 +11,7 @@ BuckyBox::Application.routes.draw do
     get ':distributor_parameter_name/login',     action: 'login',     as: 'login'
     get ':distributor_parameter_name/delivery',  action: 'delivery',  as: 'delivery'
     get ':distributor_parameter_name/complete',  action: 'complete',  as: 'complete'
+    get ':distributor_parameter_name/payment',  action: 'payment',  as: 'payment'
     get ':distributor_parameter_name/placed',    action: 'placed',    as: 'complete'
 
     post ':distributor_parameter_name/process_step',  action: 'process_step',  as: 'process_step'

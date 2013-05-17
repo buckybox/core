@@ -1,5 +1,3 @@
-FutureDeliveryList = Struct.new(:date, :deliveries)
-
 class DeliveryList < ActiveRecord::Base
   belongs_to :distributor
 
@@ -12,34 +10,24 @@ class DeliveryList < ActiveRecord::Base
 
   default_scope order(:date)
 
-  def self.collect_lists(distributor, start_date, end_date)
-    result = DeliveryList.includes(deliveries: {package: {customer: {address: {}}}}).where(date:start_date..end_date, distributor_id: distributor.id).to_a
-
-    if end_date.future?
-      future_start_date = start_date
-      future_start_date = (result.last.date + 1.day) if result.last
-
-      (future_start_date..end_date).each do |date|
-        result << collect_list(distributor, date)
-      end
-    end
-
-    return result
-  end
-
-  def self.collect_list(distributor, date)
+  def self.collect_list(distributor, date, options = {})
     date_orders = []
     wday = date.wday
-    
-    order_ids = Bucky::Sql.order_ids(distributor, date)
-    date_orders = distributor.orders.active.where(id: order_ids).includes({ account: {customer: {address:{}, deliveries: {delivery_list: {}}}}, order_extras: {}, box: {}})
 
+    order_ids = options[:order_id] || Bucky::Sql.order_ids(distributor, date)
+    date_orders = distributor.orders.active.where(id: order_ids).includes({ account: {customer: {address:{}, deliveries: {delivery_list: {}}}}, order_extras: {}, box: {}})
 
     # This emulates the ordering when lists are actually created
     FutureDeliveryList.new(date, date_orders.sort { |a,b|
       comp = a.dso(wday) <=> b.dso(wday)
       comp.zero? ? (b.created_at <=> a.created_at) : comp
     })
+  end
+
+  def ordered_deliveries(ids = nil)
+    list_items = deliveries.ordered
+    list_items = list_items.select { |item| ids.include?(item.id) } if ids
+    list_items
   end
 
   def self.generate_list(distributor, date)
@@ -49,7 +37,6 @@ class DeliveryList < ActiveRecord::Base
     # Collecting via packing list rather than orders so that delivery generation is explicitly
     # linked with packages.
     packages = {}
-    current_wday = delivery_list.date.wday
 
     # Determine the order of this delivery list based on previous deliveries
     packing_list.packages.each do |package|
@@ -111,7 +98,7 @@ class DeliveryList < ActiveRecord::Base
   end
 
   def get_delivery_number(delivery)
-    throw "This isn't my delivery" if delivery.delivery_list_id != self.id
+    raise "This isn't my delivery" if delivery.delivery_list_id != self.id
 
     delivery_to_same_address = deliveries(true).select{|d| d.address_hash == delivery.address_hash && d.id != delivery.id}.first
 

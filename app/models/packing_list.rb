@@ -1,5 +1,3 @@
-FuturePackingList = Struct.new(:date, :packages, :all_finished, :quantity)
-
 class PackingList < ActiveRecord::Base
   belongs_to :distributor
 
@@ -13,21 +11,6 @@ class PackingList < ActiveRecord::Base
   default_scope order(:date)
 
   scope :packed, where(status: 'packed')
-
-  def self.collect_lists(distributor, start_date, end_date)
-    result = PackingList.includes(packages: {customer: {address: {}}}).where(date:start_date..end_date, distributor_id: distributor.id).to_a
-
-    if end_date.future?
-      future_start_date = start_date
-      future_start_date = (result.last.date + 1.day) if result.last
-
-      (future_start_date..end_date).each do |date|
-        result << collect_list(distributor, date)
-      end
-    end
-
-    return result
-  end
 
   def self.collect_list(distributor, date)
     if distributor.packing_lists.where(date: date).count > 0
@@ -48,6 +31,12 @@ class PackingList < ActiveRecord::Base
     end
 
     return packing_list
+  end
+
+  def ordered_packages(ids = nil)
+    list_items = packages
+    list_items = list_items.select { |item| ids.include?(item.id) } if ids
+    list_items
   end
 
   def self.get(distributor, date)

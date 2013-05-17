@@ -4,19 +4,15 @@
     .alert.alert-error This order has an impending delivery, changes made will only affect the deliveries on or after #{current_distributor.beginning_of_green_zone.to_s(:day_date_month)}.
 
   .row-fluid
-    .span4
+    .span6
       = f.association :box, collection: box_collection(@customer, with_price: true), include_blank: false, input_html: { class: 'box' }
 
       - unless @order.persisted?
         = f.simple_fields_for(:schedule_rule) do |sf|
+          = sf.input :start, label: 'Start date', collection: order_start_dates(@route), include_blank: false
+
           = sf.input :recur, label: 'Frequency', collection: order_frequencies, include_blank: false, input_html: { class: 'frequency' }
 
-      .row-fluid.order_extras
-        :javascript
-          var current_account_id = #{@account.id};
-        = render partial: 'extras', locals: { account: @account, order: @order, box: @order.box || box_collection(@customer).first }
-
-    .span4
       #likes_dislikes_limits{data: {limits: @order.limits_data}}
       #dislikes-input
         = f.full_error(:exclusions)
@@ -25,36 +21,29 @@
         = f.full_error(:substitutions)
         = f.input :substituted_line_item_ids, label: 'Substitutes', collection: @stock_list, as: :select, :input_html => { :multiple => true}, placeholder: "Substitute for these items..."
 
-    .span4
+      .order_extras
+        :javascript
+          var current_account_id = #{@account.id};
+        = render partial: 'extras', locals: { account: @account, order: @order, box: @order.box || box_collection(@customer).first }
+
+    .span6
       - unless @order.persisted?
-        %h3= @route.name
         = f.simple_fields_for(:schedule_rule) do |sf|
           - if @order.schedule_rule.errors.present?
             .alert.alert-error= @order.schedule_rule.errors.full_messages.join(", ")
-          = sf.input :start, collection: order_start_dates(@route), include_blank: false
 
-        %table#days
-          %tr
-            %td= check_box_tag 'order[schedule_rule_attributes][mon]', '1', false, disabled: !@route.mon
-            %td= label_tag :order_schedule_rule_attributes_mon, 'Monday'
-          %tr
-            %td= check_box_tag 'order[schedule_rule_attributes][tue]', '1', false, disabled: !@route.tue
-            %td= label_tag :order_schedule_rule_attributes_tue, 'Tuesday'
-          %tr
-            %td= check_box_tag 'order[schedule_rule_attributes][wed]', '1', false, disabled: !@route.wed
-            %td= label_tag :order_schedule_rule_attributes_wed, 'Wednesday'
-          %tr
-            %td= check_box_tag 'order[schedule_rule_attributes][thu]', '1', false, disabled: !@route.thu
-            %td= label_tag :order_schedule_rule_attributes_thu, 'Thursday'
-          %tr
-            %td= check_box_tag 'order[schedule_rule_attributes][fri]', '1', false, disabled: !@route.fri
-            %td= label_tag :order_schedule_rule_attributes_fri, 'Friday'
-          %tr
-            %td= check_box_tag 'order[schedule_rule_attributes][sat]', '1', false, disabled: !@route.sat
-            %td= label_tag :order_schedule_rule_attributes_sat, 'Saturday'
-          %tr
-            %td= check_box_tag 'order[schedule_rule_attributes][sun]', '1', false, disabled: !@route.sun
-            %td= label_tag :order_schedule_rule_attributes_sun, 'Sunday'
+          = sf.hidden_field :week, value: 0
+
+          %table.order-days.table.table-bordered
+            %tbody
+              - order_dates_grid.each_with_index do |week, index|
+                %tr
+                  %td #{index.succ.ordinalize}
+                  - week.each do |day, number|
+                    %td
+                      - input_name = day.downcase
+                      - wrapper_id = "day-#{number}"
+                      = sf.input input_name, label: day, as: :boolean, input_html: { data: { week: number/7, enabled: @route.runs_on(number) } }, wrapper_html: { id: wrapper_id }, disabled: !@route.runs_on(number)
 
   .row-fluid
     .span12.form-actions

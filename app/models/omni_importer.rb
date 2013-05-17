@@ -28,7 +28,7 @@ class OmniImporter < ActiveRecord::Base
   def import(csv_path)
     return @omni_import unless @omni_import.blank?
 
-    rows = CSV.read(csv_path)
+    rows = CSV.parse(remove_crap_utf8(File.read(csv_path)))
     @omni_import = Bucky::TransactionImports::OmniImport.new(rows, YAML.load(rules))
 
     return self
@@ -60,5 +60,11 @@ class OmniImporter < ActiveRecord::Base
 
   def header?
     Bucky::TransactionImports::OmniImport.new([], YAML.load(rules)).header?
+  end
+
+  private
+  
+  def remove_crap_utf8(string)
+    string.chars.select{|i| i.valid_encoding?}.join
   end
 end

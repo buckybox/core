@@ -8,7 +8,7 @@ $(function() {
   if(element.length > 0) {
     var api = element.data('jsp');
     var throttleTimeout;
-    
+
     api.scrollToElement($('#scroll-to'), true);
 
     $(window).bind(
@@ -68,7 +68,7 @@ $(function() {
 
   $('#delivery-listings #master-print').click(function () {
     var checked_packages = $('#delivery-listings .data-listings input[type=checkbox]:checked');
-    var ckbx_ids = $.map(checked_packages, function(ckbx) { return $(ckbx).data('package'); });
+    var ckbx_ids = $.map(checked_packages, function(ckbx) { return $(ckbx).data('packages'); });
 
     $.each(checked_packages, function(i, ckbx) {
       var holder = $(ckbx).closest('.data-listings');
@@ -91,31 +91,11 @@ $(function() {
   });
 
   $('#delivery-listings #packing-export').click(function() {
-    var checked_packages = $('#delivery-listings .data-listings input[type=checkbox]:checked');
-    var ckbx_ids = $.map(checked_packages, function(ckbx) { return $(ckbx).data('package'); });
-
-    var form = $(this).parent().parent('form');
-
-    $.each(ckbx_ids, function(index, delivery_id) {
-      $("<input type='hidden'>").attr('name', 'packages[]').attr('value', delivery_id).appendTo(form);
-    });
-
-    checked_packages.prop('checked', false);
-    $('#delivery-listings #all').prop('checked', false);
+    prepare_csv_export(this);
   });
 
   $('#delivery-listings #delivery-export').click(function() {
-    var checked_deliveries = $('#delivery-listings .data-listings input[type=checkbox]:checked');
-    var ckbx_ids = $.map(checked_deliveries, function(ckbx) { return $(ckbx).data('delivery'); });
-
-    var form = $(this).parent().parent('form');
-
-    $.each(ckbx_ids, function(index, delivery_id) {
-      $("<input type='hidden'>").attr('name', 'deliveries[]').attr('value', delivery_id).appendTo(form);
-    });
-
-    checked_deliveries.prop('checked', false);
-    $('#delivery-listings #all').prop('checked', false);
+    prepare_csv_export(this);
   });
 
   $('#route-controls #delivered, #missed-options a').click(function() {
@@ -143,7 +123,7 @@ $(function() {
 });
 
 function updateDeliveryStatus(status, checked_deliveries, date) {
-  var ckbx_ids = $.map(checked_deliveries, function(ckbx) { return $(ckbx).data('delivery'); });
+  var ckbx_ids = $.map(checked_deliveries, function(ckbx) { return $(ckbx).data('deliveries'); });
   var data_hash = { 'deliveries': ckbx_ids, 'status': status };
   if(date) { data_hash['date'] = date; }
 
@@ -171,7 +151,7 @@ function updateDeliveryStatus(status, checked_deliveries, date) {
 }
 
 function makePayments(checked_deliveries, reverse_payment) {
-  var ckbx_ids = $.map(checked_deliveries, function(ckbx) { return $(ckbx).data('delivery'); });
+  var ckbx_ids = $.map(checked_deliveries, function(ckbx) { return $(ckbx).data('deliveries'); });
   var data_hash = { 'deliveries': ckbx_ids };
   if(reverse_payment) { data_hash['reverse_payment'] = true; }
 
@@ -194,4 +174,24 @@ function makePayments(checked_deliveries, reverse_payment) {
       customerHolder.addClass(paidLabel);
     }
   });
+}
+
+function prepare_csv_export(el) {
+  var data_property = $('#list_type').data('type');
+  var checked_items = $('#delivery-listings .data-listings input[type=checkbox]:checked');
+  var ckbx_ids      = $.map(checked_items, function(ckbx) { return $(ckbx).data(data_property); });
+
+  var form   = $(el).parent().parent('form');
+  var date   = $('#list_type').data('date');
+  var screen = $('#list_type').data('screen');
+
+  $.each(ckbx_ids, function(index, delivery_id) {
+    $("<input type='hidden'>").attr('name', data_property + '[]').attr('value', delivery_id).appendTo(form);
+  });
+
+  $("<input type='hidden'>").attr('name', 'date').attr('value', date).appendTo(form);
+  $("<input type='hidden'>").attr('name', 'screen').attr('value', screen).appendTo(form);
+
+  checked_items.prop('checked', false);
+  $('#delivery-listings #all').prop('checked', false);
 }
