@@ -32,7 +32,7 @@ class Distributor::CustomersController < Distributor::ResourceController
   def update
     update! do |success, failure|
       success.html { redirect_to distributor_customer_url(@customer) }
-      failure.html { redirect_to edit_distributor_customer_path(@customer, form_type: params[:form_type]) }
+      failure.html { render get_form_type }
     end
   end
 
