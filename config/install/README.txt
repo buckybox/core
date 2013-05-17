@@ -13,7 +13,7 @@ chmod +x s.sh
 #3.  Now update config/deploy/#{rails_env} 's domain and port to match the printed values (use the FIRST ip address in the list, the second will be rackspaces internal ip)
 #4.  Run:
 
-cap production provision:app
+cap [rails_env] provision:app
 
 #4b.  This will install everything for the app and deploy the code but WILL NOT MOVE THE DB
 #5.  You now need to somehow get whatever backup of production's DB you have onto the new machine
