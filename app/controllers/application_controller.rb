@@ -7,7 +7,7 @@ class ApplicationController < ActionController::Base
     analytical modules: [], use_session_store: true
   end
 
-  around_filter :hack_time if Rails.env.development?
+  # around_filter :hack_time if Rails.env.development?
   before_filter :set_user_time_zone
   before_filter :set_user_currency
 

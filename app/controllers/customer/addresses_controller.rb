@@ -1,5 +1,4 @@
 class Customer::AddressesController < Customer::ResourceController
-
   def update
     @address = current_customer.address
 
@@ -9,6 +8,8 @@ class Customer::AddressesController < Customer::ResourceController
       else
         flash.now[:notice] = "Your delivery address has been updated, this will take effect on your next delivery."
       end
+    else
+      render nothing: true
     end
   end
 

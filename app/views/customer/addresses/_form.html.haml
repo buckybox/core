@@ -7,9 +7,9 @@
     = f.input :suburb, required: @address.customer.distributor.require_suburb
     = f.input :city, required: @address.customer.distributor.require_city
     = f.input :postcode, required: @address.customer.distributor.require_postcode
-    = f.input :mobile_phone
-    = f.input :home_phone
-    = f.input :work_phone
+    = f.input :mobile_phone, required: @address.customer.distributor.require_phone
+    = f.input :home_phone, required: @address.customer.distributor.require_phone
+    = f.input :work_phone, required: @address.customer.distributor.require_phone
     = f.input :delivery_note
 
   .modal-footer

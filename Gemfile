@@ -8,7 +8,7 @@ gem 'pg', '~> 0.14.0'
 
 gem 'haml-rails', '~> 0.3.4'
 gem 'jquery-rails', '~> 2.1.1'
-gem 'bootstrap-sass', '~> 2.1.0.0'
+gem 'bootstrap-sass', '~> 2.1.0.0' # TODO update me
 gem 'select2-rails', '~> 3.2.1'
 gem 'ember-rails', '~> 0.7.0'
 
