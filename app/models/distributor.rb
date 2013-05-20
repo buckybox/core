@@ -495,8 +495,11 @@ private
   end
 
   def usercycle_tracking
-    if city.present? && details.present? && about.present?
-      Bucky::Usercycle.instance.event(id, "distributor_populated_business_information")
+    attributes = %w(city details about)
+
+    if attributes.any? { |attr| send("#{attr}_changed?") } and \
+      attributes.all? { |attr| send(attr).present? }
+      Bucky::Usercycle.instance.event(self, "distributor_populated_business_information")
     end
   end
 
