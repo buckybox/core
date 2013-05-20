@@ -7,6 +7,13 @@ GIT
       capistrano (>= 2.5.5)
       highline (>= 1.4.0)
 
+GIT
+  remote: git://github.com/usercycle/usercycle-api-ruby.git
+  revision: 3d650aeed09944c608be182bcec3d3619b21f692
+  specs:
+    usercycle (0.1.3)
+      httparty (>= 0.8.1)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -193,6 +200,9 @@ GEM
     highline (1.6.18)
     hike (1.2.2)
     hodel_3000_compliant_logger (0.1.1)
+    httparty (0.11.0)
+      multi_json (~> 1.0)
+      multi_xml (>= 0.5.2)
     i18n (0.6.1)
     inherited_resources (1.3.1)
       has_scope (~> 0.5.0)
@@ -235,6 +245,7 @@ GEM
       money (~> 5.0.0)
       railties (~> 3.0)
     multi_json (1.3.7)
+    multi_xml (0.5.3)
     net-scp (1.1.0)
       net-ssh (>= 2.6.5)
     net-sftp (2.1.2)
@@ -452,6 +463,7 @@ DEPENDENCIES
   term-ansicolor
   therubyracer
   uglifier (~> 1.2.7)
+  usercycle!
   webrick
   whenever (~> 0.7.3)
   xray-rails

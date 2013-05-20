@@ -9,6 +9,7 @@ class ApplicationController < ActionController::Base
 
   before_filter :set_user_time_zone
   before_filter :set_user_currency
+  after_filter :usercycle_track
 
   layout :layout_by_resource
 
@@ -16,6 +17,14 @@ class ApplicationController < ActionController::Base
   # Taken from http://stackoverflow.com/questions/7642648/what-is-the-best-way-to-handle-email-exceptions-in-a-rails-app-using-postmarkapp
 
 protected
+
+  def usercycle
+    @usercycle ||= Bucky::Usercycle.instance
+  end
+
+  def usercycle_track
+    usercycle.track(current_distributor) if current_distributor
+  end
 
   def postmark_delivery_error(exception)
     if (address = derive_email_from_postmark_exception(exception)).present?
