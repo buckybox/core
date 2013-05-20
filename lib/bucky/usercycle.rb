@@ -24,7 +24,7 @@ module Bucky
     end
 
     def track(identity)
-      event identity, 'uid'
+      event identity, 'came_back'
     end
   end
 end
