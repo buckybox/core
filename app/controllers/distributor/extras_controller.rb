@@ -5,6 +5,7 @@ class Distributor::ExtrasController < Distributor::ResourceController
 
   def create
     create! { distributor_settings_extras_url }
+    usercycle.event(current_distributor, "distributor_created_extra")
   end
 
   def update

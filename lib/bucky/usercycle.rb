@@ -13,13 +13,13 @@ module Bucky
       @client = ::Usercycle::Client.new API_KEY, API_URL
     end
 
-    def event(identity, *args)
+    def event(identity, action_name, *args)
       raise "Identity cannot be nil" if identity.nil?
 
       if Rails.env.production? || Rails.env.staging?
-        @client.event.create(identity.id, *args)
+        @client.event.create(identity.id, action_name, *args)
       else
-        warn "Usercycle event not tracked for the current environment"
+        warn "Usercycle event '#{action_name}' not tracked for the current environment"
       end
     end
 

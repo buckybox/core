@@ -84,6 +84,7 @@ class Distributor < ActiveRecord::Base
 
   after_save :generate_required_daily_lists
   after_save :update_halted_statuses
+  after_save :usercycle_tracking
 
   default_value_for :time_zone,               DEFAULT_TIME_ZONE
   default_value_for :currency,                DEFAULT_CURRENCY
@@ -491,6 +492,12 @@ private
 
 
     self.support_email = self.email if self.support_email.blank?
+  end
+
+  def usercycle_tracking
+    if city.present? && details.present? && about.present?
+      Bucky::Usercycle.instance.event(id, "distributor_populated_business_information")
+    end
   end
 
   # This is meant to be run within console for dev work via Distributor.send(:travel_forward_a_day)
