@@ -1,46 +1,106 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <title>Oooops!</title>
+  <head>
+    <title>Oooops!</title>
 
-  <style type='text/css'>
-    body {
-      font-family: 'Courier New', Courier, monospace;
-    }
-    #error-image {
-      display: block;
-      width: 400px;
-      height: 410px;
-      margin-left: -200px;
-      margin-top: -205px;
-      position: fixed;
-      top: 50%;
-      left: 50%;
-    }
-    #error-code {
-      position: absolute;
-      bottom: 25px;
-      right: 25px;
-      font-size: 10px;
-      color: #999;
-    }
-  </style>
+    <style type='text/css'>
+      body {
+        background-color: #F0F1E5;
+        background-image: url("error-bg.png");
+        font-family: 'Myriad Pro', Helvetica, sans-serif;
+      }
 
-  <script type='text/javascript'>
-  //<![CDATA[
-    var uvOptions = {};
+      h1 {
+        font-size: 22px;
+      }
 
-    (function() {
+      h1, h2, h3 {
+        margin-bottom: -.6em;
+        margin-top: .7em;
+      }
+
+      a {
+        color: #08c;
+        text-decoration: none;
+      }
+
+      #error-puppy {
+        width: 590px;
+        margin-left: -295px;
+        height: 594px;
+        margin-top: -320px;
+        position: absolute;
+        left: 45%;
+        top: 50%;
+        background-image: url("error-puppy.png");
+      }
+
+      #error-puppy #error-sorry {
+        position: relative;
+        text-align: center;
+        top: 400px;
+      }
+
+      #error-puppy #error-sorry p {
+        font-size: 1.2em;
+      }
+
+      #error-message {
+        position: absolute;
+        width: 100%;
+        text-align: center;
+        bottom: -90px;
+        color: #b0b0b0;
+        font-family: courier;
+        font-size: 13px;
+        font-variant: small-caps;
+      }
+
+      #error-feedback {
+        width: 311px;
+        height: 366px;
+        margin-top: -50px;
+        position: fixed;
+        right: 0px;
+        top: 50%;
+        background-image: url("error-feedback.png");
+      }
+
+      #error-feedback #error-help-us {
+        position: relative;
+        width: 240px;
+        left: 60px;
+        top: 140px;
+      }
+    </style>
+
+    <!-- Uservoice -->
+    <script>
+      var uvOptions = {};
+
+      (function() {
       var uv = document.createElement('script'); uv.type = 'text/javascript'; uv.async = true;
       uv.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'widget.uservoice.com/4xkwSiFb9azD98H3pgmA.js';
       var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(uv, s);
-    })();
-  //]]>
-  </script>
-</head>
-
-<body>
-  <img src='/error-image.png' id='error-image' alt='Oooops!' title='Oooops!' />
-  <div id='error-code'>500</div>
+      })();
+    </script>
+  </head>
+  <body>
+    <div id='error-puppy'>
+      <div id='error-sorry'>
+        <h1>Oops!</h1>
+        <p>Something went wrong.</p>
+        <div id='error-message'>
+          Error 500
+        </div>
+      </div>
+    </div>
+    <div id='error-feedback'>
+      <div id='error-help-us'>
+        <h3>Help us fix this...</h3>
+        <p>Click the feedback tab and tell us what happened.</p>
+      </div>
+    </div>
+  </body>
 </html>
 
