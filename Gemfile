@@ -31,6 +31,7 @@ gem 'figaro',               '~> 0.6.4'
 
 gem 'postmark-rails',  '~> 0.4.1'
 gem 'analytical',      '~> 3.0.12'
+gem 'usercycle',       github: 'usercycle/usercycle-api-ruby', require: false
 gem 'newrelic_rpm',    '~> 3.6.1'
 gem 'airbrake',        '~> 3.1.2'
 

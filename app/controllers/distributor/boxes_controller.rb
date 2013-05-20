@@ -7,6 +7,7 @@ class Distributor::BoxesController < Distributor::ResourceController
 
   def create
     create! { distributor_settings_boxes_url }
+    usercycle.event(current_distributor, 'distributor_created_box')
   end
 
   def update
