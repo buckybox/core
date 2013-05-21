@@ -81,16 +81,15 @@ end
 group :test do
   gem 'fabrication'
   gem 'database_cleaner'
-  gem 'therubyracer' # embeded JS interpreter for our CI server
+  gem 'therubyracer', require: false # embeded JS interpreter for our CI server
 
-  gem 'capybara'
+  gem 'capybara', require: false
+  gem 'cucumber-rails', require: false
   gem 'launchy'
 
   gem 'fuubar'
 
-  gem 'cucumber-rails',  require: false
-
-  gem 'bundler-audit'
+  gem 'bundler-audit', require: false
 end
 
 group :staging do
@@ -102,9 +101,9 @@ group :development, :test do
   gem 'guard'
   gem 'listen'
 
-  gem 'letter_opener'
+  gem 'letter_opener', require: false
 
-  gem 'simplecov'
+  gem 'simplecov', require: false
 end
 
 group :development, :staging do
