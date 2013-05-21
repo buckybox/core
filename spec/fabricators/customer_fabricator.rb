@@ -1,5 +1,5 @@
 Fabricator(:customer_without_after_create, class_name: :customer) do
-  distributor
+  distributor { Fabricate(:distributor_with_information) }
   route { |attrs| Fabricate(:route, distributor: attrs[:distributor]) }
   first_name { sequence(:first_name) { |i| "First Name #{i}" } }
   email { sequence(:email) { |i| "customer#{i}@example.com" } }
