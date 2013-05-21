@@ -13,7 +13,7 @@ gem 'select2-rails',   '~> 3.2.1'
 gem 'ember-rails',     '~> 0.7.0'
 
 gem 'json',                 '~> 1.7.7'
-gem 'devise',               '~> 2.1.2'
+gem 'devise',               '~> 2.2.4'
 gem 'multi_json',           '~> 1.3.6'
 gem 'simple_form',          '~> 2.0.2'
 gem 'inherited_resources',  '~> 1.3.1'
