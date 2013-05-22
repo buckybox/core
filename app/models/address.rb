@@ -62,7 +62,7 @@ private
     return unless phone
 
     type, number = phone[:type], phone[:number]
-    raise "Must be a hash with :type and :number keys" unless type && number
+    return unless type.present?
 
     self.send("#{type}_phone=", number)
   end
