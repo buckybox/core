@@ -7,7 +7,6 @@
     = f.input :suburb, required: @address.customer.distributor.require_suburb
     = f.input :city, required: @address.customer.distributor.require_city
     = f.input :postcode, required: @address.customer.distributor.require_postcode
-    = address_phone_fields(f, @address.customer.distributor)
     = f.input :delivery_note
 
   .modal-footer

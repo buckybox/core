@@ -4,6 +4,8 @@
 
     = f.input :name, required: true
     = f.input :email, hint: 'Please double check this email as it is also used as your login.'
+    = f.simple_fields_for(:address) do |sf|
+      = address_phone_fields(sf, current_customer.distributor)
 
   .modal-footer
     = f.button :submit, 'Update', class: 'btn btn-primary'
