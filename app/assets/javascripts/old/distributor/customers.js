@@ -129,7 +129,7 @@ $(function() {
     }
   });
 
-  var phone_inputs = $('form input[type="tel"]');
+  var phone_inputs = $('form input[type="tel"]').not('.optional');
   if (phone_inputs.length > 1) {
     function update_phone_inputs_style() {
       phone_inputs.addClass('required');

@@ -6,7 +6,7 @@ $(function() {
     return false;
   });
 
-  var phone_inputs = $('#address-modal input[type="tel"]');
+  var phone_inputs = $('#address-modal input[type="tel"]').not('.optional');
   phone_inputs.keyup(update_phone_inputs_style);
   update_phone_inputs_style();
 
