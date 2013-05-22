@@ -5,7 +5,7 @@ class Customer::CustomersController < Customer::ResourceController
 
   def update
     update! do |success, failure|
-      success.html { redirect_to customer_root_url, notice: 'Your information has successfully been updated.' }
+      success.html { redirect_to customer_root_url, notice: 'Your details have successfully been updated.' }
       failure.html { redirect_to customer_root_url, flash:{ error: current_customer.errors.full_messages.join(', ')} }
     end
   end
@@ -24,7 +24,7 @@ class Customer::CustomersController < Customer::ResourceController
     end
   end
 
-  protected
+protected
 
   def resource
     current_customer
