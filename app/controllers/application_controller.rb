@@ -7,7 +7,6 @@ class ApplicationController < ActionController::Base
     analytical modules: [], use_session_store: true
   end
 
-  # around_filter :hack_time if Rails.env.development?
   before_filter :set_user_time_zone
   before_filter :set_user_currency
 
@@ -16,7 +15,7 @@ class ApplicationController < ActionController::Base
   rescue_from Postmark::InvalidMessageError, with: :postmark_delivery_error
   # Taken from http://stackoverflow.com/questions/7642648/what-is-the-best-way-to-handle-email-exceptions-in-a-rails-app-using-postmarkapp
 
-  protected
+protected
 
   def postmark_delivery_error(exception)
     if (address = derive_email_from_postmark_exception(exception)).present?
@@ -40,7 +39,7 @@ class ApplicationController < ActionController::Base
       super
     end
   end
-  
+
   def account_transactions(account, offset=0, limit=6, dummy=true)
     transactions = []
     if cookies["transaction_order"].blank? || cookies["transaction_order"] == 'date_processed'
@@ -52,23 +51,7 @@ class ApplicationController < ActionController::Base
     transactions
   end
 
-  private
-
-  def hack_time
-    past = params.delete(:time_travel_to)
-
-    @@past ||= nil
-    @@past = past unless past.blank?
-
-    if @@past.blank?
-      yield
-    else
-      Delorean.time_travel_to(@@past) do
-        flash.now[:alert] =  "Time is now #{Time.current}"
-        yield
-      end
-    end
-  end
+private
 
   def set_user_time_zone
     distributor = current_distributor || current_customer.try(:distributor)
