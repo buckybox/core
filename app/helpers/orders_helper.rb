@@ -16,8 +16,10 @@ module OrdersHelper
   def order_schedule(order)
     if order.recurs?
       order.schedule_rule.to_s
-    else
+    elsif order.next_occurrence
       "Deliver on #{order.next_occurrence.strftime("%A")}"
+    else
+      "No future delivery scheduled"
     end
   end
 
