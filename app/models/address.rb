@@ -70,7 +70,9 @@ private
   def validate_address
     if distributor.require_phone?
       if PhoneCollection.attributes.all? { |type| self[type].blank? }
-        errors[:base] << "You must provide at least one phone number"
+        PhoneCollection.attributes.each do |type|
+          errors[type] << "at least one phone number is required"
+        end
       end
     end
 
