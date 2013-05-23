@@ -13,7 +13,7 @@ class Customer::AddressesController < Customer::ResourceController
         redirect_to customer_root_url
       end
 
-      failure.html { redirect_to customer_root_url, flash: { error: resource.errors.join('<br>').html_safe } }
+      failure.html { redirect_to customer_root_url, flash: { error: resource.errors.full_messages.join('<br>').html_safe } }
     end
   end
 
