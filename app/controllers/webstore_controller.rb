@@ -64,6 +64,7 @@ class WebstoreController < ApplicationController
     @name ||= existing_customer? && current_customer.name
     @city ||= @distributor.invoice_information.billing_city if @distributor.invoice_information
 
+    @payment_method = session[:webstore][:payment_method]
     @order_price = @webstore_order.order_price(current_customer)
     @current_balance = (current_customer ? current_customer.account.balance : Money.new(0))
 

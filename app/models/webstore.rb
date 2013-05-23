@@ -166,6 +166,7 @@ private
   def add_address_and_payment_select(webstore_params)
     address_information = webstore_params[:address]
     payment_option = PaymentOption.new(webstore_params[:payment_method], @distributor)
+    @controller.session[:webstore][:payment_method] = webstore_params[:payment_method]
 
     @controller.session[:webstore][:address] ||= {}
     %w(name street_address street_address_2 suburb city postcode phone_number phone_type).each do |input|
