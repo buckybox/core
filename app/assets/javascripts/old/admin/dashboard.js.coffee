@@ -14,8 +14,11 @@ $ ->
       )
 
   update_require_phone = ->
-    collect = $('#distributor_collect_phone').is(':checked')
-    $('#distributor_require_phone').attr('disabled', !collect).attr('checked', false)
+    require = $('#distributor_require_phone')
+    collected = $('#distributor_collect_phone').is(':checked')
+
+    require.attr('disabled', !collected)
+    require.attr('checked', false) unless collected
 
   $('#distributor_country_id').change ->
     load_settings()
