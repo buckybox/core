@@ -92,7 +92,7 @@ private
   class PhoneCollection
     TYPES = %w(mobile home work).inject({}) do |hash, type|
       hash.merge!(type => "#{type}_phone")
-    end
+    end.freeze
 
     def self.attributes
       TYPES.values

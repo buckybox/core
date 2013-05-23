@@ -32,7 +32,18 @@ class Distributor::CustomersController < Distributor::ResourceController
   def update
     update! do |success, failure|
       success.html { redirect_to distributor_customer_url(@customer) }
-      failure.html { render get_form_type }
+      failure.html do
+        if (phone_errors = @customer.address.errors.get(:phone_number))
+          # Highlight all missing phone fields
+          phone_errors.each do |error|
+            Address::PhoneCollection.attributes.each do |type|
+              @customer.address.errors[type] << error
+            end
+          end
+        end
+
+        render get_form_type
+      end
     end
   end
 
