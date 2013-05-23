@@ -68,7 +68,7 @@ class Distributor::CustomersController < Distributor::ResourceController
     redirect_to distributor_customer_url(@customer)
   end
 
-  protected
+protected
 
   def get_form_type
     @form_type = (params[:form_type].to_s == 'delivery' ? 'delivery_form' : 'personal_form')

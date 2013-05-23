@@ -68,13 +68,18 @@ private
   end
 
   def validate_address
-    if distributor.require_phone?
-      if PhoneCollection.attributes.all? { |type| self[type].blank? }
-        errors[:phone_number] << "can't be blank"
-      end
+    changed_attributes = changes.keys
+
+    if distributor.require_phone? and \
+      changed_attributes.any? { |attr| attr.in? PhoneCollection.attributes } and \
+      PhoneCollection.attributes.all? { |type| self[type].blank? }
+
+      errors[:phone_number] << "can't be blank"
     end
 
     %w(address_1 address_2 suburb city postcode).each do |attr|
+      next unless attr.in? changed_attributes
+
       require_method = "require_#{attr}"
 
       validates_presence_of attr if distributor.send(require_method)
