@@ -8,7 +8,7 @@ class Address < ActiveRecord::Base
   before_validation :update_phone
 
   validates_presence_of :customer
-  validate :validate_address
+  validate :validate_address_and_phone
 
   before_save :update_address_hash
 
@@ -57,36 +57,48 @@ class Address < ActiveRecord::Base
     @phones ||= PhoneCollection.new self
   end
 
-private
+  # @params items Array|Symbol
+  #   :address Do not validate address information (street, suburb, ...)
+  #   :phone   Do not validate phone numbers
+  def skip_validations *items
+    items = Array(items)
+    unless (items - [:address, :phone]).empty?
+      raise "Only :address and :phone are allowed" 
+    end
 
-  def update_phone
-    return unless phone
+    @skip_validations = items
 
-    type, number = phone[:type], phone[:number]
-    return unless type.present?
+    yield
 
-    self.send("#{type}_phone=", number)
+  ensure
+    @skip_validations = []
   end
 
-  def validate_address
-    changed_attributes = changes.keys
+private
 
+  def validate_address_and_phone
+    @skip_validations ||= []
+    validate_address unless @skip_validations.include? :address
+    validate_phone unless @skip_validations.include? :phone
+  end
+
+  def validate_phone
     if distributor.require_phone? and \
-      changed_attributes.any? { |attr| attr.in? PhoneCollection.attributes } and \
       PhoneCollection.attributes.all? { |type| self[type].blank? }
 
       errors[:phone_number] << "can't be blank"
     end
+  end
 
+  def validate_address
     %w(address_1 address_2 suburb city postcode).each do |attr|
-      next unless attr.in? changed_attributes
-
-      require_method = "require_#{attr}"
-
-      validates_presence_of attr if distributor.send(require_method)
+      validates_presence_of attr if distributor.public_send("require_#{attr}")
     end
   end
 
+  # Handy helper to update a given number type (used in the webstore)
+  def update_phone
+    return unless phone
 
     type, number = phone[:type], phone[:number]
     return unless type.present?
