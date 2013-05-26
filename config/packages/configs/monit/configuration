@@ -26,4 +26,8 @@ check process nginx with pidfile /var/run/nginx.pid
 check process postgres with pidfile /var/lib/postgresql/9.1/main/postmaster.pid
   start program = "/etc/init.d/postgresql start"
   stop program  = "/etc/init.d/postgresql stop"
-#  include /etc/monit.d/*
+
+check process delayed_job
+  with pidfile /home/buckybox/staging/shared/pids/delayed_job.pid
+  start program = "/bin/su - buckybox -c 'cd /home/buckybox/staging/current/; RAILS_ENV=staging script/delayed_job start'"
+  stop program = "/bin/su - buckybox -c 'cd /home/buckybox/staging/current/; RAILS_ENV=staging script/delayed_job stop'"
