@@ -2,7 +2,7 @@ set daemon 60
 set logfile syslog facility log_daemon
 set mailserver localhost               # primary mailserver
 set mail-format { from: monit@buckybox.com }
-set alert jordan@buckybox.com                       # receive all alerts
+set alert sysalerts@buckybox.com  # receive all alerts
 set eventqueue
     basedir /var/monit  # set the base directory where events will be stored
     slots 100           # optionaly limit the queue size
