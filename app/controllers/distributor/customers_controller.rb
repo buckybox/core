@@ -36,7 +36,7 @@ class Distributor::CustomersController < Distributor::ResourceController
         if (phone_errors = @customer.address.errors.get(:phone_number))
           # Highlight all missing phone fields
           phone_errors.each do |error|
-            Address::PhoneCollection.attributes.each do |type|
+            PhoneCollection.attributes.each do |type|
               @customer.address.errors[type] << error
             end
           end

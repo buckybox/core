@@ -2,6 +2,7 @@ class Address < ActiveRecord::Base
   belongs_to :customer, inverse_of: :address
 
   attr_accessible :customer, :address_1, :address_2, :suburb, :city, :postcode, :delivery_note
+  attr_accessible(*PhoneCollection.attributes)
   attr_accessor :phone
 
   before_validation :update_phone
@@ -87,44 +88,9 @@ private
   end
 
 
-  # Class to store multiple phone numbers
-  # Each number is associated with a type (mobile, home, work)
-  class PhoneCollection
-    TYPES = %w(mobile home work).inject({}) do |hash, type|
-      hash.merge!(type => "#{type}_phone")
-    end.freeze
+    type, number = phone[:type], phone[:number]
+    return unless type.present?
 
-    def self.attributes
-      TYPES.values
-    end
-
-    def initialize address
-      @address = address
-    end
-
-    def all
-      TYPES.each_value.map do |attribute|
-        phone = @address.send(attribute)
-        "#{attribute.humanize}: #{phone}" unless phone.blank?
-      end.compact
-    end
-
-    def default_number
-      @address.send(default[:attribute])
-    end
-
-    def default_type
-      default[:type]
-    end
-
-  private
-
-    # Default number attributes
-    def default
-      default = TYPES.first
-      { type: default.first, attribute: default.last }
-    end
+    self.send("#{type}_phone=", number)
   end
-
-  attr_accessible(*PhoneCollection.attributes)
 end

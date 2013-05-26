@@ -316,7 +316,7 @@ class Customer < ActiveRecord::Base
     orders.any?(&:has_yellow_deliveries?)
   end
 
-  private
+private
 
   def initialize_number
     self.number = Customer.next_number(self.distributor) unless self.distributor.nil?
