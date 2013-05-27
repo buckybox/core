@@ -85,6 +85,7 @@ group :test do
 
   gem 'capybara', require: false
   gem 'cucumber-rails', require: false
+  gem 'poltergeist', require: false
   gem 'launchy'
 
   gem 'fuubar'

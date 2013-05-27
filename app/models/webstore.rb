@@ -32,16 +32,17 @@ class Webstore
     if (credit_card_params = payment_params[:credit_card])
       process_credit_card(CreditCard.new(credit_card_params)) if credit_card_params.present?
     end
+
     if @order.no_payment_action? && @order.create_order
       customer = @controller.current_customer
       CustomerCheckout.track(customer) unless @controller.current_admin.present?
       @order.placed_step
-      @controller.flash[:notice] = 'Your order has been placed'
     else
       @controller.flash[:error] = 'There was a problem completing your order'
-      @order.payment_step
+      @order.complete_step
     end
-    return true
+
+    true
   end
 
   def next_step
@@ -176,8 +177,15 @@ private
     errors = false
 
     if address_information
+      address_attributes = %w(
+        name
+        phone_number phone_type
+        street_address street_address_2 suburb city postcode
+        delivery_note
+      )
+
       @controller.session[:webstore][:address] ||= {}
-      %w(name street_address street_address_2 suburb city postcode phone_number phone_type).each do |input|
+      address_attributes.each do |input|
         @controller.session[:webstore][:address][input] = address_information[input]
       end
 
@@ -211,8 +219,9 @@ private
       payment_option.apply(@order)
 
       @order.account = customer.account
-      @order.payment_step
+      @order.placed_step
       @order.save!
+      @order.create_order
     end
   end
 
@@ -227,7 +236,7 @@ private
         @controller.flash[:error] = 'You have already created this order'
       else
         @controller.flash[:error] = 'There was a problem completing your order'
-        @order.payment_step
+        @order.complete_step
       end
     else
       @controller.flash[:error] = ['There was a problem with your credit card', credit_card.errors.full_messages.join(', ')].join(', ')
@@ -270,9 +279,6 @@ private
       CustomerMailer.raise_errors do
         customer.send_login_details
       end
-      
-      CustomerLogin.track(customer) unless @controller.current_admin.present?
-      @controller.sign_in(customer)
     end
 
     customer
@@ -280,6 +286,8 @@ private
 
   def update_address(customer, address_information)
     customer.name              = address_information[:name]
+
+    customer.address ||= Address.new
 
     customer.address.phone     = {
       number: address_information[:phone_number],
