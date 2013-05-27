@@ -82,6 +82,13 @@ describe Customer do
     end
   end
 
+  it "enforce password minimum length requirement" do
+    new_customer = Fabricate.build(:customer, password: 'a' * 5)
+
+    new_customer.should_not be_valid
+    new_customer.errors.get(:password).should include "is too short (minimum is 6 characters)"
+  end
+
   context 'with a customer' do
     before { @customer = Fabricate(:customer) }
 
