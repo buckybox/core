@@ -92,7 +92,7 @@ private
         webstore_store_url(distributor_param_name)
       end
     else
-      'http://www.buckybox.com/' # Shouldn't happen but better than nothing.
+      Figaro.env.marketing_site_url # Shouldn't happen but better than nothing.
     end
   end
 end
