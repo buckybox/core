@@ -58,3 +58,12 @@ end
 # See https://github.com/cucumber/cucumber-rails/blob/master/features/choose_javascript_database_strategy.feature
 Cucumber::Rails::Database.javascript_strategy = :truncation
 
+# JavaScript driver
+require 'capybara/poltergeist'
+
+Capybara.register_driver :poltergeist_debug do |app|
+  Capybara::Poltergeist::Driver.new(app, debug: false, js_errors: false, timeout: 300) # XXX
+end
+
+# Capybara.javascript_driver = :poltergeist
+Capybara.javascript_driver = :poltergeist_debug
