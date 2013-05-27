@@ -1,3 +1,4 @@
+# Keeps track of distributor logins
 class DistributorLogin < ActiveRecord::Base
   attr_accessible :distributor
 

@@ -1,12 +1,5 @@
-def login_as(user)
-  visit "/distributors/sign_in"
-  fill_in "distributor_email", :with => @distributor.email
-  fill_in "distributor_password", :with => 'password'
-  click_button "Login"
-end
-
 Given /^I am a distributor$/ do
-  @distributor = Fabricate(:distributor, :password => "password", :password_confirmation => 'password')
+  @distributor = Fabricate(:distributor)
   step "I have an existing customer"
   login_as(@distributor)
 end
