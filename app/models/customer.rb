@@ -148,12 +148,8 @@ class Customer < ActiveRecord::Base
     c_boxes.each do |b|
       box = distributor.boxes.find_by_name(b.box_type)
       raise "Can't find Box '#{b.box_type}' for distributor with id #{id}" if box.blank?
-      
-      begin
-        delivery_date = Time.zone.parse(b.next_delivery_date.to_s)
-      rescue
-        binding.pry # XXX careful with that on production Sir
-      end
+
+      delivery_date = Time.zone.parse(b.next_delivery_date.to_s)
       raise "Date couldn't be parsed from '#{b.delivery_date}'" if delivery_date.blank?
 
       order = self.orders.build({
@@ -168,7 +164,7 @@ class Customer < ActiveRecord::Base
                             else
                               ScheduleRule.recur_on(delivery_date, ScheduleRule::DAYS.select{|day| b.delivery_days =~ /#{day.to_s}/i}, b.delivery_frequency.to_sym)
                             end
-                              
+
       order.activate
 
       order.import_extras(b.extras) unless b.extras.blank?
