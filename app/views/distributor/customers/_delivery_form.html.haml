@@ -1,6 +1,8 @@
 = simple_form_for([:distributor, @customer], html: { class: 'form-horizontal' }) do |f|
   = f.error_notification
 
+  = hidden_field_tag :form_type, params[:form_type]
+
   .row-fluid
     .span12
       = render partial: 'delivery_form_inputs', locals: { f: f }

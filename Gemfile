@@ -54,7 +54,7 @@ end
 group :development do
   gem 'bullet',    require: false
   gem 'brakeman',  require: false
-  gem 'xray-rails'
+  gem 'xray-rails', require: false
   gem 'ruby-prof' # profiling with /newrelic
 
   gem 'capistrano'

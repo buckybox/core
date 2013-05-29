@@ -32,6 +32,18 @@ class Distributor::CustomersController < Distributor::ResourceController
   def update
     update! do |success, failure|
       success.html { redirect_to distributor_customer_url(@customer) }
+      failure.html do
+        if (phone_errors = @customer.address.errors.get(:phone_number))
+          # Highlight all missing phone fields
+          phone_errors.each do |error|
+            PhoneCollection.attributes.each do |type|
+              @customer.address.errors[type] << error
+            end
+          end
+        end
+
+        render get_form_type
+      end
     end
   end
 
@@ -42,7 +54,7 @@ class Distributor::CustomersController < Distributor::ResourceController
       @orders           = @account.orders.active
       @deliveries       = @account.deliveries.ordered
       @transactions     = account_transactions(@account)
-      @show_more_link = @transactions.size != @account.transactions.count
+      @show_more_link   = (@transactions.size != @account.transactions.count)
       @transactions_sum = @account.calculate_balance
       @show_tour        = current_distributor.customers_show_intro
     end
@@ -67,7 +79,7 @@ class Distributor::CustomersController < Distributor::ResourceController
     redirect_to distributor_customer_url(@customer)
   end
 
-  protected
+protected
 
   def get_form_type
     @form_type = (params[:form_type].to_s == 'delivery' ? 'delivery_form' : 'personal_form')
@@ -86,8 +98,7 @@ class Distributor::CustomersController < Distributor::ResourceController
         @customers = current_distributor.customers.where(number: query.to_i)
       end
     end
-    
-    @customers = @customers.ordered_by_next_delivery.includes(account: {route: {}}, tags: {}, next_order: {box: {}})
 
+    @customers = @customers.ordered_by_next_delivery.includes(account: {route: {}}, tags: {}, next_order: {box: {}})
   end
 end
