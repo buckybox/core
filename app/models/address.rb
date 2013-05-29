@@ -7,7 +7,7 @@ class Address < ActiveRecord::Base
 
   before_validation :update_phone
 
-  validates_presence_of :customer
+  validates_presence_of :customer, unless: -> { skip_validations.include? :customer }
   validate :validate_address_and_phone
 
   before_save :update_address_hash
@@ -57,33 +57,43 @@ class Address < ActiveRecord::Base
     @phones ||= PhoneCollection.new self
   end
 
+  # Without arguments, returns an array of validations to skip
+  #
+  # With a {Symbol}s or an {Array} of {Symbol}s, run the given block skipping
+  # these validations
+  #
   # @params items Array|Symbol
-  #   :address Do not validate address information (street, suburb, ...)
-  #   :phone   Do not validate phone numbers
+  #   :customer Do not validate the presence of a customer
+  #   :address  Do not validate address information (street, suburb, ...)
+  #   :phone    Do not validate phone numbers
   def skip_validations *items
     items = Array(items)
-    unless (items - [:address, :phone]).empty?
-      raise "Only :address and :phone are allowed" 
+    if items.empty?
+      return @skip_validations ||= []
+    end
+
+    valid_items = [:customer, :address, :phone]
+    unless (items - valid_items).empty?
+      raise "Only #{valid_items} are allowed"
     end
 
     @skip_validations = items
 
-    yield
+    yield self
 
   ensure
-    @skip_validations = []
+    @skip_validations = [] unless items.empty?
   end
 
 private
 
   def validate_address_and_phone
-    @skip_validations ||= []
-    validate_address unless @skip_validations.include? :address
-    validate_phone unless @skip_validations.include? :phone
+    validate_address unless skip_validations.include? :address
+    validate_phone unless skip_validations.include? :phone
   end
 
   def validate_phone
-    if distributor.require_phone? and \
+    if distributor.require_phone and \
       PhoneCollection.attributes.all? { |type| self[type].blank? }
 
       errors[:phone_number] << "can't be blank"
