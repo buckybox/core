@@ -101,7 +101,7 @@ group :development, :test do
   gem 'guard'
   gem 'listen'
 
-  gem 'letter_opener', require: false
+  gem 'letter_opener'
 
   gem 'simplecov', require: false
 end

@@ -165,15 +165,24 @@ private
 
   def add_address_and_payment_select(webstore_params)
     address_information = webstore_params[:address]
+
+    if address_information && address_information.keys == ["phone_type"]
+      address_information = nil
+    end
+
     payment_option = PaymentOption.new(webstore_params[:payment_method], @distributor)
     @controller.session[:webstore][:payment_method] = webstore_params[:payment_method]
 
-    @controller.session[:webstore][:address] ||= {}
-    %w(name street_address street_address_2 suburb city postcode phone_number phone_type).each do |input|
-      @controller.session[:webstore][:address][input] = address_information[input]
-    end
+    errors = false
 
-    errors = validate_address_information(address_information)
+    if address_information
+      @controller.session[:webstore][:address] ||= {}
+      %w(name street_address street_address_2 suburb city postcode phone_number phone_type).each do |input|
+        @controller.session[:webstore][:address][input] = address_information[input]
+      end
+
+      errors = validate_address_information(address_information)
+    end
 
     if errors
       @controller.flash[:error] = errors.join('<br>').html_safe
@@ -196,7 +205,7 @@ private
       @order.complete_step
     else
       customer = find_or_create_customer(address_information)
-      update_address(customer, address_information)
+      update_address(customer, address_information) if address_information
 
       payment_option = PaymentOption.new(webstore_params[:payment_method], @distributor)
       payment_option.apply(@order)
