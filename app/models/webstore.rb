@@ -1,10 +1,10 @@
-# XXX this model is tightly coupled to the controller and full of spaghetti code
+# NOTE: this model is tightly coupled to the controller and full of spaghetti code
 
 class Webstore
   attr_reader :controller, :distributor, :order
 
   def initialize(controller, distributor)
-    @controller  = controller # FIXME models should not talk to controllers
+    @controller  = controller # FIXME: models should not talk to controllers
     @distributor = distributor
 
     @order = WebstoreOrder.find_by_id(webstore_session[:webstore_order_id]) if webstore_session
@@ -173,7 +173,9 @@ private
       @controller.session[:webstore][:address][input] = address_information[input]
     end
 
-    if (errors = validate_address_information(address_information))
+    errors = validate_address_information(address_information)
+
+    if errors
       @controller.flash[:error] = errors.join('<br>').html_safe
       @order.complete_step
     elsif !payment_due?(@order) && webstore_params[:payment_method] == 'paid'
