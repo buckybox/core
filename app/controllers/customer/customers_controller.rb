@@ -4,27 +4,28 @@ class Customer::CustomersController < Customer::ResourceController
   respond_to :html, :xml, :json
 
   def update
-    update! do |success, failure|
-      success.html { redirect_to customer_root_url, notice: 'Your information has successfully been updated.' }
-      failure.html { redirect_to customer_root_url, flash:{ error: current_customer.errors.full_messages.join(', ')} }
-    end
-  end
-
-  def update_password
-    respond_to do |format|
+    current_customer.address.skip_validations(:address) do
       if current_customer.update_attributes(params[:customer])
-        sign_in current_customer, bypass: true
-
-        format.html { redirect_to customer_root_url, notice: 'Password successfully updated.' }
-        format.json { head :no_content }
+        redirect_to customer_root_url, notice: 'Your details have successfully been updated.'
       else
-        format.html { redirect_to customer_root_url, flash: {error: "There was a problem changing your password. #{current_customer.errors.full_messages.join(', ')}"} }
-        format.json { render json: current_customer.errors, status: :unprocessable_entity }
+        redirect_to customer_root_url, flash: { error: current_customer.errors.full_messages.join('<br>').html_safe }
       end
     end
   end
 
-  protected
+  def update_password
+    current_customer.address.skip_validations(:address, :phone) do
+      if current_customer.update_attributes(params[:customer])
+        sign_in current_customer, bypass: true
+
+        redirect_to customer_root_url, notice: 'Password successfully updated.'
+      else
+        redirect_to customer_root_url, flash: {error: "There was a problem changing your password. #{current_customer.errors.full_messages.join(', ')}"}
+      end
+    end
+  end
+
+protected
 
   def resource
     current_customer

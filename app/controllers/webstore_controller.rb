@@ -54,22 +54,30 @@ class WebstoreController < ApplicationController
   end
 
   def complete
-    @customer_name = (existing_customer? ? current_customer.name : '')
+    if session[:webstore].has_key? :address
+      session[:webstore][:address].each do |key, value|
+        instance_variable_set("@#{key}", value) if value
+      end
+    end
+
+    @address ||= current_customer && current_customer.address
+    @name ||= existing_customer? && current_customer.name
+    @city ||= @distributor.invoice_information.billing_city if @distributor.invoice_information
+
+    @payment_method = session[:webstore][:payment_method]
     @order_price = @webstore_order.order_price(current_customer)
+    @current_balance = (current_customer ? current_customer.account.balance : Money.new(0))
 
-    @address = (current_customer ? current_customer.address : '')
-    @current_balance = current_customer ? current_customer.account.balance : Money.new(0)
-
-    @city = @distributor.invoice_information.billing_city if @distributor.invoice_information
     @has_address = existing_customer?
 
     if @has_address
-      @customer_phone_number = @address.phone_1
+      @phone_number = @address.phones.default_number
+      @phone_type = @address.phones.default_type
       @street_address = @address.address_1
       @street_address_2 = @address.address_2
       @suburb = @address.suburb
       @city = @address.city
-      @post_code = @address.postcode
+      @postcode = @address.postcode
     end
 
     @closing_balance = @current_balance - @order_price

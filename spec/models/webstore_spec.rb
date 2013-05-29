@@ -10,6 +10,6 @@ describe Webstore do
       @webstore_order = Webstore.start_order(distributor, 12, remote_ip: '192.168.1.8')
     end
 
-    subject { @webstore_order }
+    subject { @webstore_order } # FIXME you don't assert anything?!
   end
 end
