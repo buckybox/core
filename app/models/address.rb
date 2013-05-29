@@ -4,6 +4,7 @@ class Address < ActiveRecord::Base
   attr_accessible :customer, :address_1, :address_2, :suburb, :city, :postcode, :delivery_note
   attr_accessible(*PhoneCollection.attributes)
   attr_accessor :phone
+  attr_writer :distributor
 
   before_validation :update_phone
 
@@ -48,7 +49,6 @@ class Address < ActiveRecord::Base
   end
 
   # Useful for address validation without a customer
-  attr_writer :distributor
   def distributor
     customer && customer.distributor || @distributor
   end
@@ -66,7 +66,7 @@ class Address < ActiveRecord::Base
   #   :customer Do not validate the presence of a customer
   #   :address  Do not validate address information (street, suburb, ...)
   #   :phone    Do not validate phone numbers
-  def skip_validations *items
+  def skip_validations(*items)
     items = Array(items)
     if items.empty?
       return @skip_validations ||= []
@@ -93,9 +93,7 @@ private
   end
 
   def validate_phone
-    if distributor.require_phone and \
-      PhoneCollection.attributes.all? { |type| self[type].blank? }
-
+    if distributor.require_phone && PhoneCollection.attributes.all? { |type| self[type].blank? }
       errors[:phone_number] << "can't be blank"
     end
   end
