@@ -21,6 +21,17 @@ describe Address do
     end
   end
 
+  describe "#skip_validations" do
+    it "skips the given validations" do
+      address = Address.new
+      address.distributor = mock_model(Distributor)
+      address.valid?.should be_false # requires a customer
+
+      valid = address.skip_validations(:customer) { |address| address.valid? }
+      valid.should be_true
+    end
+  end
+
   describe '#join' do
     let(:address) { Fabricate.build(:address, all_attrs) }
     let(:full_address) { Fabricate.build(:full_address, all_attrs) }

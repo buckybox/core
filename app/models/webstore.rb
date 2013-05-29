@@ -242,7 +242,7 @@ private
     address.phone = { type: address_information["phone_type"],
                       number: address_information["phone_number"] }
 
-    return if address.valid_attributes?(except: [:customer]) && errors.empty?
+    return if address.skip_validations(:customer) { |address| address.valid? } && errors.empty?
 
     errors + address.errors.full_messages
   end
