@@ -4,6 +4,18 @@ describe Address do
   let(:attrs){ {address_1: "1 Address St", address_2: "Apartment 1", suburb: "Suburb", city: "City"} }
   let(:all_attrs){ attrs.merge({postcode: "00000", mobile_phone: "11-111-111-1111", home_phone: "22-222-222-2222", work_phone: "33-333-333-3333"})}
 
+  describe "#phones" do
+    it "returns phone numbers" do
+      address = Fabricate(:address, mobile_phone: '005')
+      address.mobile_phone.should eq '005'
+    end
+
+    it "returns all phone numbers" do
+      address = Fabricate(:address, mobile_phone: '005', work_phone: '123')
+      address.phones.all.should eq ["Mobile phone: 005", "Work phone: 123"]
+    end
+  end
+
   describe "#phone=" do
     it "assigns the number" do
       address = Fabricate.build(:address, phone: {type: 'work', number: '007'})
