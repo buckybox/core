@@ -157,11 +157,17 @@ GEM
       railties (~> 3.1)
     encryptor2 (1.0.0)
     erubis (2.7.0)
+    eventmachine (1.0.3)
     execjs (1.4.0)
       multi_json (~> 1.0)
     fabrication (2.7.0)
     fastercsv (1.5.5)
+    faye-websocket (0.4.7)
+      eventmachine (>= 0.12.0)
     ffi (1.8.1)
+    figaro (0.6.4)
+      bundler (~> 1.0)
+      rails (>= 3, < 5)
     formatador (0.2.4)
     fssm (0.2.10)
     fuubar (1.1.0)
@@ -420,6 +426,7 @@ DEPENDENCIES
   devise (~> 2.2.4)
   ember-rails (~> 0.7.0)
   fabrication
+  figaro (~> 0.6.4)
   fuubar
   fuzzy-string-match (~> 0.9.4)
   guard
@@ -441,6 +448,7 @@ DEPENDENCIES
   oink
   pg (~> 0.14.0)
   pg_search (~> 0.5.1)
+  poltergeist
   postmark-rails (~> 0.4.1)
   pry-coolline
   pry-debugger

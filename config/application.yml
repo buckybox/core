@@ -1,0 +1,26 @@
+# Add application configuration variables here.
+
+# URLs
+MARKETING_SITE_URL: http://www.buckybox.com/
+
+# Emails
+SUPPORT_EMAIL: support@buckybox.com
+NO_REPLY_EMAIL: no-reply@buckybox.com
+
+# Environment-dependant configuration
+development:
+  HOST: buckybox.dev
+  PORT: 3000
+
+test:
+  HOST: buckybox.dev
+  PORT: 3000
+
+staging:
+  HOST: staging.buckybox.com
+  POSTMARK_API_KEY: 3c3bf3ae-b9a4-4c9a-b850-bc6528fb12bc
+
+production:
+  HOST: my.buckybox.com
+  POSTMARK_API_KEY: 63583ad4-c990-4ccb-a7db-afcc85d9070a
+

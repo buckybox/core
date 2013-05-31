@@ -1,12 +1,12 @@
 class CustomerMailer < ActionMailer::Base
-  default from: "no-reply@buckybox.com"
+  default from: Figaro.env.no_reply_email
 
   def login_details(customer)
     @distributor = customer.distributor
     @customer = customer
 
     mail to: @customer.email,
-         from: "#{@distributor.name} <no-reply@buckybox.com>",
+         from: "#{@distributor.name} <#{Figaro.env.no_reply_email}>",
          reply_to: @distributor.support_email,
          subject: "Your Login details for #{@distributor.name}"
   end
@@ -17,7 +17,7 @@ class CustomerMailer < ActionMailer::Base
     @oops = ['Uh-oh', 'Whoops', 'Oooops'].shuffle.first
 
     mail to: @customer.email,
-         from: "#{@distributor.name} <no-reply@buckybox.com>",
+         from: "#{@distributor.name} <#{Figaro.env.no_reply_email}>",
          cc: @distributor.support_email,
          reply_to: @distributor.support_email,
          subject: "#{@oops}, your #{@distributor.name} deliveries have been put on hold"
@@ -29,7 +29,7 @@ class CustomerMailer < ActionMailer::Base
     @oops = ['Uh-oh', 'Whoops', 'Oooops'].shuffle.first
 
     mail to: @customer.email,
-         from: "#{@distributor.name} <no-reply@buckybox.com>",
+         from: "#{@distributor.name} <#{Figaro.env.no_reply_email}>",
          cc: @distributor.support_email,
          reply_to: @distributor.support_email,
          subject: "#{@oops}, your #{@distributor.name} deliveries are on hold"
@@ -43,7 +43,7 @@ class CustomerMailer < ActionMailer::Base
     #@distributor = @account.distributor
 
     #mail to: @customer.email,
-         #from: "#{@distributor.name} <no-reply@buckybox.com>",
+         #from: "#{@distributor.name} <#{Figaro.env.no_reply_email}>",
          #reply_to: @distributor.support_email,
          #subject: "Your #{@distributor.name} Bill/Account Statement ##{@invoice.number}"
   end
