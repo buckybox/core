@@ -9,6 +9,7 @@ class Distributor < ActiveRecord::Base
   has_many :webstore_orders,          dependent: :destroy, through: :boxes
   has_many :deliveries,               dependent: :destroy, through: :orders
   has_many :payments,                 dependent: :destroy
+  has_many :deductions,               dependent: :destroy
   has_many :customers,                dependent: :destroy, autosave: true # Want to save those customers added via import_customers
   has_many :accounts,                 dependent: :destroy, through: :customers
   has_many :invoices,                 dependent: :destroy, through: :accounts
