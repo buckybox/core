@@ -128,6 +128,6 @@ class WebstoreController < ApplicationController
       sign_out(current_customer) if current_customer && current_customer.distributor != @distributor
     end
 
-    redirect_to 'http://www.buckybox.com/' and return if @distributor.nil? || !@distributor.active_webstore
+    redirect_to Figaro.env.marketing_site_url and return if @distributor.nil? || !@distributor.active_webstore
   end
 end

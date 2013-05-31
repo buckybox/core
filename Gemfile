@@ -27,6 +27,7 @@ gem 'acts_as_list',         '~> 0.1.8'
 gem 'default_value_for',    '~> 2.0.1'
 gem 'fuzzy-string-match',   '~> 0.9.4',  require: 'fuzzystringmatch' # This performs fuzzy matching on the import script
 gem 'state_machine',        '~> 1.1.2'
+gem 'figaro',               '~> 0.6.4'
 
 gem 'postmark-rails',  '~> 0.4.1'
 gem 'analytical',      '~> 3.0.12'
