@@ -1,4 +1,4 @@
-# Obviously this code can be DANGEROUS
+# NOTE: Obviously this code can be DANGEROUS
 # Help clear out data distributors no longer need
 
 namespace :bucky_data_reset do
@@ -6,7 +6,7 @@ namespace :bucky_data_reset do
     make_damn_sure
   end
 
-  desc 'Delete all the data you see for on delivery screen (and lots you do not see)'
+  desc 'Delete all the data you see on the delivery screen (and lots you do not see)'
   task clear_delivery_screen: :make_damn_sure do
     clear_delivery_screen(@distributor)
   end
@@ -51,27 +51,27 @@ private
 
   def clear_customer_data(distributor)
     destroy_all_orders(distributor)
-    set_account_balance_to_zero(distributor) # do this before deleteing transactoins because it creates transactions
+    set_account_balance_to_zero(distributor) # do this before deleting transactions because it creates transactions
     destroy_all_transactions(distributor)
   end
 
   def destroy_all_customers(distributor)
     distributor.customers.each do |customer|
-      sout "Deleting customer: #{customer.name}."
+      stdout "Deleting customer: #{customer.name}."
       customer.destroy
     end
   end
 
   def destroy_all_transactions(distributor)
     distributor.transactions.each do |transaction|
-      sout "Deleting transaction #{transaction.description} for #{transaction.customer.name}."
+      stdout "Deleting transaction #{transaction.description} for #{transaction.customer.name}."
       transaction.destroy
     end
   end
 
   def set_account_balance_to_zero(distributor)
     distributor.accounts.each do |account|
-      sout "Reseting customer #{account.customer.name}'s account balance to zero."
+      stdout "Reseting customer #{account.customer.name}'s account balance to zero."
       account.change_balance_to(0)
       account.save
     end
@@ -79,49 +79,49 @@ private
 
   def destroy_all_orders(distributor)
     distributor.orders.each do |order|
-      sout "Deleting #{order.customer.name}'s order for #{order.box}."
+      stdout "Deleting #{order.customer.name}'s order for #{order.box}."
       order.destroy
     end
   end
 
   def destroy_all_deductions(distributor)
     distributor.deductions.each do |deduction|
-      sout "Deleting deduction from: #{deduction.display_time}"
+      stdout "Deleting deduction from: #{deduction.display_time}"
       deduction.destroy
     end
   end
 
   def destroy_all_payments(distributor)
     distributor.payments.each do |payment|
-      sout "Deleting payment from: #{payment.display_time}"
+      stdout "Deleting payment from: #{payment.display_time}"
       payment.destroy
     end
   end
 
   def destroy_all_import_transaction_lists(distributor)
     distributor.import_transaction_lists.each do |import_transaction_list|
-      sout "Deleting import transaction list and import transactions from: #{import_transaction_list.created_at}"
+      stdout "Deleting import transaction list and import transactions from: #{import_transaction_list.created_at}"
       import_transaction_list.destroy
     end
   end
 
   def destroy_all_the_package_lists_and_their_packages(distributor)
     distributor.packing_lists.each do |packing_list|
-      sout "Deleting packing list and packages from: #{packing_list.date}"
+      stdout "Deleting packing list and packages from: #{packing_list.date}"
       packing_list.destroy
     end
   end
 
   def destroy_all_the_delivery_lists_and_their_deliveries(distributor)
     distributor.delivery_lists.each do |delivery_list|
-      sout "Deleting delivery list and deliveries from: #{delivery_list.date}"
+      stdout "Deleting delivery list and deliveries from: #{delivery_list.date}"
       delivery_list.destroy
     end
   end
 
   def double_check_distributor(distributor)
-    sout "You are about to PERMANENTLY DELETE data from '#{distributor.name}'. Type in '#{distributor.parameter_name}' to confirm: "
-    typed_distributor_name = sin.strip
+    stdout "You are about to PERMANENTLY DELETE data from '#{distributor.name}'. Type in '#{distributor.parameter_name}' to confirm: "
+    typed_distributor_name = stdin
     unless typed_distributor_name == distributor.parameter_name
       raise 'DANGER! DANGER! That was not the right Distributor name! ABORT! ABORT!'
     end
@@ -139,16 +139,16 @@ private
   end
 
   def distributor_from_input
-    sout 'What is the distributor ID you want to delete data from? '
-    id = sin.strip.to_i
+    stdout 'What is the distributor ID you want to delete data from? '
+    id = stdin.to_i
     Distributor.find_by_id(id)
   end
 
-  def sout(value)
-    STDOUT.puts(value)
+  def stdout(value)
+    $stdout.puts(value)
   end
 
-  def sin
-    STDIN.gets
+  def stdin
+    $stdin.gets.strip
   end
 end
