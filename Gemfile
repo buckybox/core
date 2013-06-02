@@ -64,6 +64,7 @@ group :development do
   gem 'guard-rspec'
   gem 'guard-spork'
   gem 'spork-rails'
+  gem 'parallel_tests'
 
   # Pry: IRB + ruby debug alternative which is active and easier to install
   gem 'pry-rails'

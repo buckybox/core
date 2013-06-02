@@ -41,7 +41,7 @@ development:
 test:
   adapter: postgresql
   encoding: unicode
-  database: bucky_box_test
+  database: bucky_box_test<%= ENV['TEST_ENV_NUMBER'] %>
   pool: 5
   username: developer
   password:
