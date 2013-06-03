@@ -53,10 +53,12 @@ group :install do
 end
 
 group :development do
-  gem 'bullet',    require: false
-  gem 'brakeman',  require: false
+  gem 'yard',       require: false
+
+  gem 'bullet',     require: false
+  gem 'brakeman',   require: false
   gem 'xray-rails', require: false
-  gem 'ruby-prof' # profiling with /newrelic
+  gem 'ruby-prof',  require: false # profiling with /newrelic
 
   gem 'capistrano'
   gem 'term-ansicolor'
