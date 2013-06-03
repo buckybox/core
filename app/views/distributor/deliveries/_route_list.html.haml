@@ -36,15 +36,22 @@
             %ul.unstyled
               - deliveries.each do |delivery|
                 %li.row-fluid.data-listings{ class: delivery.status, data: { delivery_id: delivery.id } }
-                  .span7.row-grip
-                    = check_box_tag delivery.order_id, '1', false, data: { deliveries: delivery.id }
-                    .label.state-label.dso-number
-                      = map_pin(delivery)
-                      = dso_tooltip(delivery.formated_delivery_number)
-                    = render partial: 'status_icons', locals: { status: delivery.status }
-                    .customer-holder{ class: "#{'paid-label' if delivery.paid?}" }
-                      = customer_badge(delivery.customer, customer_name: delivery.package.archived_customer_name)
-                    = render partial: 'distributor/customers/customer_tags', locals: { customer: delivery.customer }
+                  .span6.customer
+                    .row-grip
+                      = check_box_tag delivery.order_id, '1', false, data: { deliveries: delivery.id }
+                      .label.state-label.dso-number
+                        = map_pin(delivery)
+                        = dso_tooltip(delivery.formated_delivery_number)
+                      = render partial: 'status_icons', locals: { status: delivery.status }
+                      .customer-holder
+                        = customer_badge(delivery.customer, customer_name: delivery.package.archived_customer_name)
+                      = render partial: 'distributor/customers/customer_tags', locals: { customer: delivery.customer }
+
+                  .span1
+                    - if delivery.paid?
+                      = image_tag 'watermark-paid.png'
+                    - else
+                      &nbsp;
 
                   .span5
                     .row-fluid.address-description
@@ -56,7 +63,7 @@
     %ul#delivery_list.unstyled
       - @items.each do |order|
         %li.row-fluid.data-listings.pending
-          .span7
+          .span6
             = check_box_tag order.id, '1', false, data: { orders: order.id }
             .label.state-label.dso-number= map_pin(order)
             .label.state-label.staus-icon.status-pending{ title: 'PENDING delivery' }
@@ -64,7 +71,7 @@
             .customer-holder= customer_badge(order.customer)
             = render partial: 'distributor/customers/customer_tags', locals: { customer: order.customer }
 
-          .span5
+          .span6
             .row-fluid.address-description
               .span6= display_address(order)
               .span6= contents_description(order, @selected_date)

@@ -57,6 +57,13 @@ $(function() {
   });
   $('.sortable').disableSelection();
 
+  $('#delivery-listings .tag-links').each(function() {
+    if (typeof window.chrome === "object") {
+      // Display tooltip for Chrome since it doesn't expand the tags
+      $(this).tooltip();
+    }
+  });
+
   $('#delivery-listings #all').change(function() {
     var checked_deliveries = $('#delivery-listings .data-listings input[type=checkbox]');
 
