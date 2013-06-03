@@ -11,7 +11,7 @@ describe Order do
           @start_date = Date.current + 1.day
           @end_date = Date.current + 3.days
         end
-        
+
         it "should call pause on the schedule_rule" do
           order.schedule_rule.should_receive(:pause!).with(@start_date, @end_date)
           order.pause!(@start_date, @end_date)
@@ -184,7 +184,7 @@ describe Order do
 
         rule_schedule = Fabricate(:schedule_rule, start: Date.current - 5.days, recur: nil)
         @order5 = Fabricate(:order, schedule_rule: rule_schedule)
-        
+
         rule_schedule = Fabricate(:schedule_rule, start: Date.current - 2.months, recur: nil)
         @order6 = Fabricate(:order, schedule_rule: rule_schedule)
       end
@@ -359,16 +359,6 @@ describe Order do
         order.predicted_order_extras.size.should eq(2)
         order.predicted_order_extras(order.next_occurrences(2, Date.current)[1]).size.should eq(2)
       end
-    end
-  end
-
-  context :halting do
-    xit 'should halt new orders if customer is halted' do
-      customer = Fabricate(:customer).reload
-      customer.halt!
-
-      order = Fabricate(:active_recurring_order, account: customer.account)
-      order.next_occurrence.should be_blank
     end
   end
 end

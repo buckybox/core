@@ -62,15 +62,12 @@ group :development do
   gem 'term-ansicolor'
 
   gem 'guard-rspec'
-  gem 'guard-spork'
-  gem 'spork-rails'
   gem 'parallel_tests'
 
   # Pry: IRB + ruby debug alternative which is active and easier to install
   gem 'pry-rails'
   gem 'pry-debugger'
   gem 'pry-coolline'
-  gem 'pry-remote' # Needed for using pry in spork
 
   gem 'better_errors'
   gem 'binding_of_caller'
