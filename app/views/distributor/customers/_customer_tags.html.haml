@@ -1,0 +1,3 @@
+- customer.tags.each do |tag|
+  = link_to tag_distributor_customers_path(tag.name), class: 'link-label' do
+    %span.label.label-info= tag.name
