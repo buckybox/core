@@ -19,13 +19,15 @@
       %ul#delivery_list.unstyled
         - array.each do |package|
           %li.row-fluid.data-listings{ class: package.status }
-            .span6
+            .span7
               = check_box_tag package.order_id, '1', false, data: { packages: package.id }
               .label.state-label.dso-number= map_pin(package)
               = render partial: 'status_icons', locals: { status: package.status }
               .customer-holder
                 = customer_badge(package.customer, customer_name: package.archived_customer_name, short: true)
-            .span6
+              = render partial: 'distributor/customers/customer_tags', locals: { customer: package.customer }
+
+            .span5
               .row-fluid.address-description
                 .span6= display_address(package)
                 .span6= contents_description(package, @selected_date)
@@ -39,13 +41,15 @@
       %ul#delivery_list.unstyled
         - array.each do |order|
           %li.row-fluid.data-listings.pending
-            .span6
+            .span7
               = check_box_tag order.id, '1', false, data: { orders: order.id }
               .label.state-label.dso-number= map_pin(order)
               .label.state-label.staus-icon.status-unpacked{ title: 'UNPACKED package' }
                 %i.icon-time
               .customer-holder= customer_badge(order.account.customer)
-            .span6
+              = render partial: 'distributor/customers/customer_tags', locals: { customer: order.customer }
+
+            .span5
               .row-fluid.address-description
                 .span6= display_address(order)
                 .span6= contents_description(order, @selected_date)
