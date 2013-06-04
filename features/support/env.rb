@@ -62,7 +62,11 @@ Cucumber::Rails::Database.javascript_strategy = :truncation
 require 'capybara/poltergeist'
 
 Capybara.register_driver :poltergeist_debug do |app|
-  Capybara::Poltergeist::Driver.new(app, debug: false, js_errors: false, timeout: 300) # XXX
+  Capybara::Poltergeist::Driver.new(app,
+    debug: false,
+    js_errors: false, # TODO ideally we want JS testing as well
+    timeout: 300
+  )
 end
 
 # Capybara.javascript_driver = :poltergeist
