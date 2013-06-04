@@ -90,6 +90,8 @@ class WebstoreController < ApplicationController
     sign_in(@webstore_order.customer)
 
     raise "Customer should be signed in at this point" unless customer_signed_in?
+    raise "Current customer should be set" if current_customer != @webstore_order.customer
+    raise "Customer should have an account" unless current_customer.account
 
     @payment_method = session[:webstore][:payment_method]
     @order_price = @webstore_order.order_price(current_customer)
