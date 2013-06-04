@@ -81,6 +81,7 @@ private
     box = Box.where(id: box_id, distributor_id: @distributor.id).first
     customer = @controller.current_customer
 
+    raise "Must have a distributor" unless @distributor
     @order = WebstoreOrder.create(box: box, distributor: @distributor, remote_ip: @controller.request.remote_ip)
     @order.account = customer.account if customer
 
