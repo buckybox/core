@@ -7,7 +7,7 @@
 
 = simple_form_for(:webstore_order, url: webstore_process_step_path) do |f|
   #webstore-route.row-fluid.webstore-section{ style: "display: #{@selected_route_id ? 'none' : 'block'}" }
-    .span10
+    .span12
       = f.simple_fields_for(:route) do |g|
         .row-fluid
           .span12
@@ -23,7 +23,7 @@
                 = simple_format(route.estimated_delivery_time)
 
   #webstore-schedule.row-fluid{ class: "#{@selected_route_id ? 'webstore-section' : ''}" }
-    .span10
+    .span12
       = f.simple_fields_for(:schedule_rule) do |g|
         .row-fluid
           .span12
@@ -34,7 +34,7 @@
 
   - if @webstore_order.box.extras_allowed? && @webstore_order.extras.present?
     #webstore-extras-frequency.row-fluid
-      .span10
+      .span12
         = f.simple_fields_for(:extra_frequency) do |g|
           .row-fluid
             .span12
@@ -46,7 +46,7 @@
 
   - if @webstore_order.has_bucky_fee?
     #webstore-bucky-fee.row-fluid.webstore-section
-      .span10
+      .span12
         .row-fluid
           .span12
             %h4 Bucky Box fee
