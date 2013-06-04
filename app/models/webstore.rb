@@ -274,7 +274,7 @@ private
     customer.route = @order.route
     customer.name  = address_information[:name]
 
-    if customer.save
+    if customer.new_record?
       Event.new_customer_webstore(customer)
       CustomerMailer.raise_errors do
         customer.send_login_details
