@@ -9,7 +9,6 @@ Given /^I am viewing an existing customer$/ do
 end
 
 When /^I add a new customer$/ do
-  p page.text
   click_link "Create a new customer"
   step "I fill in valid customer details"
   click_button "Create Customer"

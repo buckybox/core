@@ -101,9 +101,6 @@ private
   def validate_address
     %w(address_1 address_2 suburb city postcode).each do |attr|
       validates_presence_of attr if distributor.public_send("require_#{attr}")
-      # if distributor.public_send("require_#{attr}") && self[attr].blank?
-      #   errors[attr] << "can't be blank"
-      # end
     end
   end
 
