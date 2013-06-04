@@ -40,12 +40,14 @@ class Customer < ActiveRecord::Base
   before_validation :discount_percentage
   before_validation :format_email
 
+  before_save :set_balance_threshold, if: :new_record?
+  before_save :update_halted_status, if: :balance_threshold_cents_changed?
+
   before_create :setup_account
   before_create :setup_address
 
   after_save :update_next_occurrence # This could be more specific about when it updates
-  before_save :set_balance_threshold, if: :new_record?
-  before_save :update_halted_status, if: :balance_threshold_cents_changed?
+  after_commit :notify_distributor, if: :id_changed? # then it's a new record
 
   delegate :separate_bucky_fee?, :consumer_delivery_fee, :default_balance_threshold_cents, :has_balance_threshold, to: :distributor
   delegate :currency, :send_email?, to: :distributor, allow_nil: true
@@ -294,6 +296,13 @@ class Customer < ActiveRecord::Base
 
   def set_balance_threshold
     self.balance_threshold_cents = default_balance_threshold_cents unless balance_threshold_cents_changed?
+  end
+
+  def notify_distributor
+    Event.new_customer_webstore(self)
+    CustomerMailer.raise_errors do
+      self.send_login_details
+    end
   end
 
   def account_balance
