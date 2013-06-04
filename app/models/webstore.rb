@@ -299,6 +299,7 @@ private
     customer.address.suburb    = address_information[:suburb]
     customer.address.city      = address_information[:city]
     customer.address.postcode  = address_information[:postcode]
+    customer.address.delivery_note = address_information[:delivery_note]
 
     customer.save
   end
