@@ -1,3 +1,9 @@
+require 'action_mailer'
+require_relative 'form'
+require 'active_model/validations'
+require 'active_model/translation'
+
+
 class EmailForm < Form
   attr_accessor :body, :subject, :preview_email
   include ActiveModel::Validations
@@ -10,9 +16,9 @@ class EmailForm < Form
     self.preview_email = opts[:preview_email]
   end
 
-  def send!
+  def send!(to=::Distributor.keep_updated)
     if valid?
-      Distributor.keep_updated.each do |distributor|
+      to.each do |distributor|
         DistributorMailer.delay.update_email(self, distributor)
       end
       true
