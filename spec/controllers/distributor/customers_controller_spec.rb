@@ -27,7 +27,7 @@ describe Distributor::CustomersController do
         response.should redirect_to(distributor_customer_path(@customer))
       end
     end
-    
+
     context "#update" do
       before do
         @customer_2 = Fabricate(:customer, distributor: @distributor, email: "duplicate@dups.com")
@@ -51,7 +51,6 @@ describe Distributor::CustomersController do
     end
   end
 
-  
   context "performance" do
     before do
       3.times do
@@ -59,14 +58,5 @@ describe Distributor::CustomersController do
         Fabricate(:order, account: c.account)
       end
     end
-
-    xit "should not take long to load customer index" do
-      expect {
-        get :index
-      }.to take_less_than(0.3).seconds
-      # FIXME Specs should NOT be machine-dependent since the hardware on CI may
-      # be different than production
-    end
   end
-
 end

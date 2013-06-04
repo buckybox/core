@@ -27,6 +27,7 @@ gem 'acts_as_list',         '~> 0.1.8'
 gem 'default_value_for',    '~> 2.0.1'
 gem 'fuzzy-string-match',   '~> 0.9.4',  require: 'fuzzystringmatch' # This performs fuzzy matching on the import script
 gem 'state_machine',        '~> 1.1.2'
+gem 'figaro',               '~> 0.6.4'
 
 gem 'postmark-rails',  '~> 0.4.1'
 gem 'analytical',      '~> 3.0.12'
@@ -61,14 +62,12 @@ group :development do
   gem 'term-ansicolor'
 
   gem 'guard-rspec'
-  gem 'guard-spork'
-  gem 'spork-rails'
+  gem 'parallel_tests'
 
   # Pry: IRB + ruby debug alternative which is active and easier to install
   gem 'pry-rails'
   gem 'pry-debugger'
   gem 'pry-coolline'
-  gem 'pry-remote' # Needed for using pry in spork
 
   gem 'better_errors'
   gem 'binding_of_caller'
