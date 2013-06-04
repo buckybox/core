@@ -74,6 +74,7 @@ class WebstoreController < ApplicationController
       @suburb = @address.suburb
       @city = @address.city
       @postcode = @address.postcode
+      @delivery_note = @address.delivery_note
     end
 
     @payment_method = session[:webstore][:payment_method]
