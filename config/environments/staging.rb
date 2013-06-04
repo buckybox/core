@@ -55,11 +55,11 @@ BuckyBox::Application.configure do
 
   # Disable delivery errors, bad email addresses will be ignored
   config.action_mailer.raise_delivery_errors = false
-  config.action_mailer.default_url_options = { :host => 'staging.buckybox.com' }
+  config.action_mailer.default_url_options = { host: Figaro.env.host }
 
   # postmark settings
   config.action_mailer.delivery_method   = :postmark
-  config.action_mailer.postmark_settings = { :api_key => "3c3bf3ae-b9a4-4c9a-b850-bc6528fb12bc" }
+  config.action_mailer.postmark_settings = { api_key: Figaro.env.postmark_api_key }
   
   # ActiveMerchant setup as test only
   config.after_initialize do

@@ -7,7 +7,7 @@ class Customer < ActiveRecord::Base
   has_one :address, dependent: :destroy, inverse_of: :customer, autosave: true
   has_one :account, dependent: :destroy
 
-  has_many :events
+  has_many :events,       dependent: :destroy
   has_many :transactions, through: :account
   has_many :payments,     through: :account
   has_many :deductions,   through: :account
