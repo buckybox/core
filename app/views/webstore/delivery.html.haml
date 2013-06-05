@@ -44,20 +44,5 @@
               .row-fluid
                 .span12= g.input :extra_frequency, label: false, collection: @extra_frequencies, include_blank: false, input_html: { class: 'span12' }
 
-  - if @webstore_order.has_bucky_fee?
-    #webstore-bucky-fee.row-fluid.webstore-section
-      .span10
-        .row-fluid
-          .span12
-            %h4 Bucky Box fee
-        .row-fluid
-          .span12
-            We're using
-            = link_to 'Bucky Box', 'http://www.buckybox.org/', target: '_blank'
-            to take orders, Bucky Box is a social enterprise with a mission to 
-            support local food and organic farming worldwide.
-      .span2
-        .important.text-right= @webstore_order.bucky_fee.format
-
   .row-fluid.webstore-section
     .span12= f.button :submit, 'Next', class: 'pull-right btn btn-process'
