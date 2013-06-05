@@ -13,7 +13,7 @@ gem 'select2-rails',   '~> 3.2.1'
 gem 'ember-rails',     '~> 0.7.0'
 
 gem 'json',                 '~> 1.7.7'
-gem 'devise',               '~> 2.1.2'
+gem 'devise',               '~> 2.2.4'
 gem 'multi_json',           '~> 1.3.6'
 gem 'simple_form',          '~> 2.0.2'
 gem 'inherited_resources',  '~> 1.3.1'
@@ -27,6 +27,7 @@ gem 'acts_as_list',         '~> 0.1.8'
 gem 'default_value_for',    '~> 2.0.1'
 gem 'fuzzy-string-match',   '~> 0.9.4',  require: 'fuzzystringmatch' # This performs fuzzy matching on the import script
 gem 'state_machine',        '~> 1.1.2'
+gem 'figaro',               '~> 0.6.4'
 
 gem 'postmark-rails',             '~> 0.4.1'
 gem 'delayed_job',                '~> 3.0.5' #send emails offline
@@ -57,21 +58,19 @@ end
 group :development do
   gem 'bullet',    require: false
   gem 'brakeman',  require: false
-  gem 'xray-rails'
+  gem 'xray-rails', require: false
   gem 'ruby-prof' # profiling with /newrelic
 
   gem 'capistrano'
   gem 'term-ansicolor'
 
   gem 'guard-rspec'
-  gem 'guard-spork'
-  gem 'spork-rails'
+  gem 'parallel_tests'
 
   # Pry: IRB + ruby debug alternative which is active and easier to install
   gem 'pry-rails'
   gem 'pry-debugger'
   gem 'pry-coolline'
-  gem 'pry-remote' # Needed for using pry in spork
 
   gem 'better_errors'
   gem 'binding_of_caller'
@@ -84,16 +83,15 @@ end
 group :test do
   gem 'fabrication'
   gem 'database_cleaner'
-  gem 'therubyracer' # embeded JS interpreter for our CI server
+  gem 'therubyracer', require: false # embeded JS interpreter for our CI server
 
-  gem 'capybara'
+  gem 'capybara', require: false
+  gem 'cucumber-rails', require: false
   gem 'launchy'
 
   gem 'fuubar'
 
-  gem 'cucumber-rails',  require: false
-
-  gem 'bundler-audit'
+  gem 'bundler-audit', require: false
 end
 
 group :staging do
@@ -107,7 +105,7 @@ group :development, :test do
 
   gem 'letter_opener'
 
-  gem 'simplecov'
+  gem 'simplecov', require: false
 end
 
 group :development, :staging do

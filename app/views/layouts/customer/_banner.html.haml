@@ -3,13 +3,12 @@
     .row
       .span6
         #bucky-box-powered
-          = link_to '', 'http://www.buckybox.org/', class: 'image-map-links', id: 'org-link', title: 'Bucky Box | The Mission', target: '_blank'
-          = link_to '', 'http://www.buckybox.com/', class: 'image-map-links', id: 'com-link', title: 'Bucky Box, simple to use software for your CSA, Vege Box Scheme, or Food Hub.', target: '_blank'
+          = link_to '', Figaro.env.marketing_site_url, class: 'image-map-links', id: 'org-link', title: 'Bucky Box | The Mission', target: '_blank'
+          = link_to '', Figaro.env.marketing_site_url, class: 'image-map-links', id: 'com-link', title: 'Bucky Box, simple to use software for your CSA, Vege Box Scheme, or Food Hub.', target: '_blank'
 
       #auth-controls.span6.text-right
         - if customer_signed_in?
-          Hi 
-          = link_to current_customer.name, customer_root_path
+          = link_to "My account (#{current_customer.name})", customer_root_path
           \|
           = link_to 'Logout', destroy_customer_session_path(distributor: @distributor.parameter_name), method: :delete
         - else

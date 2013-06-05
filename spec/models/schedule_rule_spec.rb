@@ -455,11 +455,11 @@ describe ScheduleRule do
       ScheduleRule.one_off(Date.parse("2012-10-15")).to_s.should eq("15 Oct")
     end
 
-    specify {ScheduleRule.weekly(Date.parse("2012-10-16"), [:mon]).to_s.should eq("Weekly on Mon")}
-    specify {ScheduleRule.fortnightly(Date.parse("2012-10-16"), [:mon]).to_s.should eq("Fortnightly on Mon")}
-    specify {ScheduleRule.monthly(Date.parse("2012-10-16"), [:mon]).to_s.should eq("Monthly on the 1st Mon")}
+    specify {ScheduleRule.weekly(Date.parse("2012-10-16"), [:mon]).to_s.should eq("Deliver weekly on Monday")}
+    specify {ScheduleRule.fortnightly(Date.parse("2012-10-16"), [:mon]).to_s.should eq("Deliver fortnightly on Monday")}
+    specify {ScheduleRule.monthly(Date.parse("2012-10-16"), [:mon]).to_s.should eq("Deliver monthly on the first Monday")}
 
-    specify {ScheduleRule.weekly(Date.parse("2012-10-17"), ScheduleRule::DAYS).to_s.should eq("Weekly on Sun, Mon, Tue, Wed, Thu, Fri, Sat")}
+    specify {ScheduleRule.weekly(Date.parse("2012-10-17"), ScheduleRule::DAYS).to_s.should eq("Deliver weekly on Sunday, Monday, Tuesday, Wednesday, Thursday, Friday, Saturday")}
   end
 
   describe ".pause_expired?" do

@@ -40,8 +40,5 @@
 
         %tr.bottom-section
           %td
-            - if order.recurs?
-              = render partial: 'customer/orders/details', locals: { order: order }
-            - else
-              %h2 Single order delivery
+            = render partial: 'customer/orders/details', locals: { order: order }
           %td
