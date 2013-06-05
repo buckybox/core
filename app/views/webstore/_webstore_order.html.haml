@@ -55,22 +55,23 @@
           %tr#route
             %td.description
               %h2 Delivery service
+              = webstore_order.schedule_rule
             %td.price
               - total += webstore_order.route_fee
               = webstore_order.route_fee.format
-          - if webstore_order.has_bucky_fee?
-            %tr#bucky-fee
-              %td.description
-                %h2 Bucky Box transaction fee
-              %td.price
-                = webstore_order.bucky_fee.format
+        - if webstore_order.has_bucky_fee?
+          %tr#bucky-fee
+            %td.description
+              %h2 Bucky Box transaction fee
+            %td.price
+              = webstore_order.bucky_fee.format
         - if webstore_order.customised? || webstore_order.scheduled?
           - discount = OrderPrice.discounted(total, current_customer) - total
           - total += discount
           - if !discount.zero?
             %tr#discount
               %td.description
-                %h2 Customer discount
+                %h2 Your discount
               %td.price
                 = discount.format
           %tr#total
