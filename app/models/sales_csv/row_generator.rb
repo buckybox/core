@@ -84,7 +84,7 @@ module SalesCsv
     end
 
     def customer_phone
-      address.phone_1
+      address.phones.default_number
     end
 
     def new_customer

@@ -18,8 +18,8 @@ module Devise::CustomControllerParameters
       @abort_text = 'go to webstore'
       @link_args = { distributor: @distributor.parameter_name }
     else
-      @abort_url = 'http://www.buckybox.com/'
-      @abort_text = 'go to buckybox.com'
+      @abort_url = Figaro.env.marketing_site_url
+      @abort_text = "go to #{Figaro.env.marketing_site_url}"
       @link_args = nil
     end
   end

@@ -77,56 +77,6 @@ describe Account do
     specify { order_account.all_occurrences(4.weeks.from_now).size.should == 20 }
   end
 
-  describe "#next_invoice_date" do
-    context "20 deliveries loaded in the future" do
-      before do
-        pending('Invoicing is truned off. Fix and refactor when we deal with it again.')
-        @total_scheduled = order_account.all_occurrences(4.weeks.from_now).inject(Money.new(0)) { |sum, o| sum += o[:price] }
-      end
-
-      it "is today if balance is currently below threshold" do
-        order_account.stub(:balance).and_return(Money.new(-1000))
-        order_account.stub(:all_occurrences).and_return([])
-        order_account.next_invoice_date.should == Date.current
-      end
-
-      it "is at least 2 days after the first scheduled delivery" do
-        order_account.stub(:deliveries).and_return([])
-        order_account.stub(:balance).and_return(Money.new(1000))
-        order_account.next_invoice_date.should == 2.days.from_now(order_account.all_occurrences(4.weeks.from_now).first[:date]).to_date
-      end
-
-      it "is 12 days before the account goes below the invoice threshold" do
-        order_account.stub(:balance).and_return(@total_scheduled - Money.new(1000))
-        last_occurrence = order_account.all_occurrences(4.weeks.from_now).last
-        last_date = last_occurrence[:date]
-        order_account.next_invoice_date.should == 12.days.ago(last_date).to_date 
-      end
-
-      it "does not need an invoice if balance won't go below threshold" do
-        order_account.stub(:balance).and_return(@total_scheduled)
-        order_account.next_invoice_date.should be_nil
-      end
-
-      it "includes bucky fee in the calculations if distributor.separate_bucky_fee is true" do
-        order_account.stub(:balance).and_return(@total_scheduled - Money.new(499))
-        order_account.next_invoice_date.should_not be_nil
-      end
-
-      it "does not include bucky fee if distributor.separate_bucky_fee is false" do
-        order.distributor.update_attribute(:separate_bucky_fee, false)
-        order_account.stub(:balance).and_return(@total_scheduled - Money.new(499))
-        order_account.next_invoice_date.should be_nil
-      end
-
-      it "does include bucky fee in the calculations if distributor.separate_bucky_fee is true" do
-        order_account.distributor.update_attribute(:separate_bucky_fee, true)
-        order_account.stub(:balance).and_return(@total_scheduled - Money.new(499))
-        order_account.next_invoice_date.should_not be_nil
-      end
-    end
-  end
-
   describe "#amount_with_bucky_fee" do
     it "returns amount if bucky fee is not separate" do
       account.distributor.stub(:separate_bucky_fee).and_return(true)

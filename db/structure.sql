@@ -333,9 +333,9 @@ CREATE TABLE addresses (
     delivery_note text,
     created_at timestamp without time zone,
     updated_at timestamp without time zone,
-    phone_1 character varying(255),
-    phone_2 character varying(255),
-    phone_3 character varying(255),
+    mobile_phone character varying(255),
+    home_phone character varying(255),
+    work_phone character varying(255),
     address_hash character varying(255)
 );
 
@@ -1130,13 +1130,19 @@ CREATE TABLE distributors (
     feature_spend_limit boolean DEFAULT true,
     contact_name character varying(255),
     customer_can_remove_orders boolean DEFAULT true,
-    collect_phone_in_webstore boolean,
+    collect_phone boolean,
     last_seen_at timestamp without time zone,
     notes text,
     payment_cash_on_delivery boolean DEFAULT true,
     payment_bank_deposit boolean DEFAULT true,
     payment_credit_card boolean DEFAULT false,
-    keep_me_updated boolean DEFAULT true
+    keep_me_updated boolean DEFAULT true,
+    require_postcode boolean DEFAULT false NOT NULL,
+    require_phone boolean DEFAULT false NOT NULL,
+    require_address_1 boolean DEFAULT true NOT NULL,
+    require_address_2 boolean DEFAULT false NOT NULL,
+    require_suburb boolean DEFAULT false NOT NULL,
+    require_city boolean DEFAULT false NOT NULL
 );
 
 
@@ -3625,6 +3631,14 @@ INSERT INTO schema_migrations (version) VALUES ('20130430034158');
 
 INSERT INTO schema_migrations (version) VALUES ('20130430034231');
 
+INSERT INTO schema_migrations (version) VALUES ('20130508035922');
+
 INSERT INTO schema_migrations (version) VALUES ('20130509012650');
 
+INSERT INTO schema_migrations (version) VALUES ('20130510023753');
+
 INSERT INTO schema_migrations (version) VALUES ('20130514032841');
+
+INSERT INTO schema_migrations (version) VALUES ('20130514034901');
+
+INSERT INTO schema_migrations (version) VALUES ('20130515012606');

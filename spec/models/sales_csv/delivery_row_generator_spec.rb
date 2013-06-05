@@ -48,7 +48,7 @@ describe SalesCsv::DeliveryRowGenerator do
   end
   let(:address) do
     double('address',
-      phone_1: 8888,
+      phones: double(default_number: 8888),
       address_1: 'street 1',
       address_2: 'apt 1',
       suburb: 'sub',

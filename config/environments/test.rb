@@ -28,8 +28,8 @@ BuckyBox::Application.configure do
   # The :test delivery method accumulates sent emails in the
   # ActionMailer::Base.deliveries array.
   config.action_mailer.delivery_method = :test
-  config.action_mailer.default_url_options = { :host => 'buckybox.dev:3000' }
-  
+  config.action_mailer.default_url_options = { host: "#{Figaro.env.host}:#{Figaro.env.port}" }
+
   # ActiveMerchant setup as test only
   config.after_initialize do
     ActiveMerchant::Billing::Base.mode = :test

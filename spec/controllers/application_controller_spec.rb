@@ -15,10 +15,6 @@ describe ApplicationController do
     before { get :index }
 
     specify { Time.zone.name.should == default_time_zone }
-    specify {
-      pending "fails randomly"
-      Money.default_currency.iso_code.should == default_currency
-    }
   end
 
   context 'as distributor' do

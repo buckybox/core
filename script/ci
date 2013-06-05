@@ -1,0 +1,16 @@
+#!/bin/bash -eu
+
+export RAILS_ENV=test
+export COVERAGE=1
+
+pwd
+git log -1
+
+cp config/database.yml.example config/database.yml
+bundle
+
+bundle exec bundle-audit
+
+bundle exec rake db:drop db:create db:migrate db:seed
+bundle exec rake
+

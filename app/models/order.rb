@@ -213,12 +213,17 @@ class Order < ActiveRecord::Base
     if date == Date.current || !extras_one_off?
       order_extras
     else
-      if extras_packing_list.present? || next_occurrence(distributor.beginning_of_green_zone) < date
+      if extras_packing_list.present? || next_occurrence_before(distributor.beginning_of_green_zone, date)
         order_extras.none
       else
         order_extras
       end
     end
+  end
+
+  def next_occurrence_before(date, test_date)
+    next_date = next_occurrence(date)
+    next_date.present? && next_date < test_date
   end
 
   def has_yellow_deliveries?

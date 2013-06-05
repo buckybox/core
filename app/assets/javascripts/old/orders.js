@@ -2,6 +2,8 @@ $(function() {
   if($('#order-form').length > 0) {
     order_init();
     init_extras();
+    update_start_checkbox();
+    update_schedule();
     update_day_checkboxes_style();
 
     var box_id = $("#order-form select.box").val();
@@ -37,47 +39,12 @@ $(function() {
     }
   });
 
-  var schedule = $('#order-form .order-days');
-  var weeks = schedule.find('tr');
-  var week_numbers = weeks.find('td:first-child');
+  $('#order_schedule_rule_attributes_start').change(update_start_checkbox);
 
-  $('#order-form select.frequency').change(function() {
-    var frequency_select = $(this);
+  $('#order-form select.frequency').change(update_schedule);
 
-    if(frequency_select.val() === 'single') {
-      schedule.hide();
-    }
-    else {
-      schedule.show();
-    }
-
-    if(frequency_select.val() === 'monthly') {
-      week_numbers.show();
-      weeks.show();
-    }
-    else {
-      weeks.slice(1).hide();
-      week_numbers.hide();
-    }
-  });
-
-  $('#order-form .order-days input').click(function(event) {
-    var checkbox = $(event.target)
-    var selected_week = checkbox.closest('tr');
-
-    if (checkbox.is(':checked')) {
-      // disable the other rows
-      var other_weeks = weeks.not(selected_week);
-      other_weeks.find('input').attr('disabled', 'true').removeAttr('checked');
-
-      $('#order_schedule_rule_attributes_week').val(checkbox.data('week'))
-
-    } else if (selected_week.find('input:checked').length == 0) {
-      // enable all rows if this is the only checked day
-      weeks.find('input[data-enabled="true"]').removeAttr('disabled');
-    }
-
-    update_day_checkboxes_style();
+  $('#order-form .order-days input').change(function() {
+    select_day($(this));
   });
 
   $('#order-form #dislikes-input').change(function() {
@@ -130,6 +97,59 @@ $(function() {
     return true;
   });
 });
+
+function update_start_checkbox() {
+  var weekday = $('#order_schedule_rule_attributes_start').find(':selected').data('weekday');
+  var checkbox = $('#order_schedule_rule_attributes_' + weekday);
+
+  checkbox.attr('checked', true);
+  $('#order_schedule_rule_attributes_week').val(checkbox.data('week'))
+  select_day(checkbox);
+}
+
+function update_schedule() {
+  var schedule = $('#order-form .order-days');
+  var weeks = schedule.find('tr');
+  var week_numbers = weeks.find('td:first-child');
+
+  var frequency_select = $('#order-form select.frequency');
+
+  if(frequency_select.val() === 'single') {
+    schedule.hide();
+  }
+  else {
+    update_start_checkbox();
+    schedule.show();
+  }
+
+  if(frequency_select.val() === 'monthly') {
+    week_numbers.show();
+    weeks.show();
+  }
+  else {
+    weeks.slice(1).hide();
+    week_numbers.hide();
+  }
+}
+
+function select_day(checkbox) {
+  var selected_week = checkbox.closest('tr');
+  var weeks = $('#order-form .order-days tr');
+
+  if (checkbox.is(':checked')) {
+    // disable the other rows
+    var other_weeks = weeks.not(selected_week);
+    other_weeks.find('input').attr('disabled', 'true').removeAttr('checked');
+
+    $('#order_schedule_rule_attributes_week').val(checkbox.data('week'))
+
+  } else if (selected_week.find('input:checked').length == 0) {
+    // enable all rows if this is the only checked day
+    weeks.find('input[data-enabled="true"]').removeAttr('disabled');
+  }
+
+  update_day_checkboxes_style();
+}
 
 function update_day_checkboxes_style() {
   $('.order-days input').each(function() {
@@ -234,3 +254,4 @@ function update_likes_dislikes_limits(box_id){
   $('#order-form #dislikes-input select').select2({maximumSelectionSize: $("#likes_dislikes_limits").data('limits')[box_id]['dislikes'], width: 'resolve'});
   $('#order-form #likes-input select').select2({maximumSelectionSize: $("#likes_dislikes_limits").data('limits')[box_id]['likes'], width: 'resolve'});
 };
+

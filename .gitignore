@@ -5,9 +5,10 @@
 #   git config --global core.excludesfile ~/.gitignore_global
 
 # Ignore RVM config
-.rvmrc
 .ruby-version
 .ruby-gemset
+.rvmrc
+.rbenv-version
 
 # Ignore POW config
 .powrc
@@ -53,4 +54,3 @@ private_uploads
 /tags
 /**/*/tags
 
-.rbenv-version

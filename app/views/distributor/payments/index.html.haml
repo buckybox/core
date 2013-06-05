@@ -40,7 +40,7 @@
         .ajax_loader_gif
 - elsif !current_distributor.show_payments_tab?
   .alert
-    You have no bank feeds setup. Please contact #{mail_to 'support@buckybox.com'} and supply a sample of your Internet Banking Statement in CSV format.
+    You have no bank feeds setup. Please contact #{mail_to Figaro.env.support_email} and supply a sample of your Internet Banking Statement in CSV format.
 
 .row-fluid
   #payment-tables.span12

@@ -19,7 +19,6 @@ describe Package do
     specify { @package.archived_address.should == @address.join(', ') }
     specify { @package.archived_order_quantity.should == @order.quantity }
     specify { @package.archived_box_name.should == @box.name }
-    specify { @package.archived_box_price.should == @box.price }
     specify { @package.archived_customer_name.should == @address.customer.name }
 
     context :seperate_bucky_fee do
