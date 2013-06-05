@@ -59,12 +59,12 @@
             %td.price
               - total += webstore_order.route_fee
               = webstore_order.route_fee.format
-        - if webstore_order.has_bucky_fee?
-          %tr#bucky-fee
-            %td.description
-              %h2 Bucky Box transaction fee
-            %td.price
-              = webstore_order.bucky_fee.format
+          - if webstore_order.has_bucky_fee?
+            %tr#bucky-fee
+              %td.description
+                %h2 Bucky Box transaction fee
+              %td.price
+                = webstore_order.bucky_fee.format
         - if webstore_order.customised? || webstore_order.scheduled?
           - discount = OrderPrice.discounted(total, current_customer) - total
           - total += discount
