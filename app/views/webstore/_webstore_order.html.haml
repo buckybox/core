@@ -15,7 +15,7 @@
           %td.price
             - total += webstore_order.box_price
             = webstore_order.box_price.format
-        - if webstore_order.customised?
+        - unless webstore_order.exclusions.empty?
           %tr#customisation
             %td.description
               %h2== Exclude & substitute
