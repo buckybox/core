@@ -168,7 +168,7 @@ private
   def add_address_and_payment_select(webstore_params)
     address_information = webstore_params[:address]
 
-    if address_information && address_information.keys == ["phone_type"]
+    if address_information && (address_information.keys - ["phone_type", "delivery_note"]).empty?
       address_information = nil
     end
 
