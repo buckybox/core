@@ -46,8 +46,9 @@ class Customer < ActiveRecord::Base
   before_create :setup_account
   before_create :setup_address
 
+  after_create :notify_distributor
+
   after_save :update_next_occurrence # This could be more specific about when it updates
-  after_commit :notify_distributor, if: :id_changed? # then it's a new record
 
   delegate :separate_bucky_fee?, :consumer_delivery_fee, :default_balance_threshold_cents, :has_balance_threshold, to: :distributor
   delegate :currency, :send_email?, to: :distributor, allow_nil: true
@@ -286,23 +287,13 @@ class Customer < ActiveRecord::Base
     end
   end
 
-  def send_login_details
-    if send_email?
-      CustomerMailer.login_details(self).deliver
-    else
-      false
-    end
-  end
-
   def set_balance_threshold
     self.balance_threshold_cents = default_balance_threshold_cents unless balance_threshold_cents_changed?
   end
 
   def notify_distributor
     Event.new_customer_webstore(self)
-    CustomerMailer.raise_errors do
-      self.send_login_details
-    end
+    CustomerMailer.login_details(self).deliver if distributor.send_email?
   end
 
   def account_balance

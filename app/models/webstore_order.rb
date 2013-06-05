@@ -195,6 +195,7 @@ class WebstoreOrder < ActiveRecord::Base
     if order.nil?
       extras_hash = {}
       extras.each { |id, count| extras_hash[id] = { count: count } }
+      raise "Account should not be nil" unless account
       order = Order.create(
         box: box,
         completed: true,
