@@ -823,6 +823,45 @@ ALTER SEQUENCE deductions_id_seq OWNED BY deductions.id;
 
 
 --
+-- Name: delayed_jobs; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE delayed_jobs (
+    id integer NOT NULL,
+    priority integer DEFAULT 0,
+    attempts integer DEFAULT 0,
+    handler text,
+    last_error text,
+    run_at timestamp without time zone,
+    locked_at timestamp without time zone,
+    failed_at timestamp without time zone,
+    locked_by character varying(255),
+    queue character varying(255),
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: delayed_jobs_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE delayed_jobs_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: delayed_jobs_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE delayed_jobs_id_seq OWNED BY delayed_jobs.id;
+
+
+--
 -- Name: deliveries; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -1101,7 +1140,8 @@ CREATE TABLE distributors (
     require_address_1 boolean DEFAULT true NOT NULL,
     require_address_2 boolean DEFAULT false NOT NULL,
     require_suburb boolean DEFAULT false NOT NULL,
-    require_city boolean DEFAULT false NOT NULL
+    require_city boolean DEFAULT false NOT NULL,
+    keep_me_updated boolean DEFAULT true
 );
 
 
@@ -2189,6 +2229,13 @@ ALTER TABLE ONLY deductions ALTER COLUMN id SET DEFAULT nextval('deductions_id_s
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
+ALTER TABLE ONLY delayed_jobs ALTER COLUMN id SET DEFAULT nextval('delayed_jobs_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
 ALTER TABLE ONLY deliveries ALTER COLUMN id SET DEFAULT nextval('deliveries_id_seq'::regclass);
 
 
@@ -2536,6 +2583,14 @@ ALTER TABLE ONLY deductions
 
 
 --
+-- Name: delayed_jobs_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY delayed_jobs
+    ADD CONSTRAINT delayed_jobs_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: deliveries_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -2805,6 +2860,13 @@ ALTER TABLE ONLY transactions
 
 ALTER TABLE ONLY webstore_orders
     ADD CONSTRAINT webstore_orders_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: delayed_jobs_priority; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX delayed_jobs_priority ON delayed_jobs USING btree (priority, run_at);
 
 
 --
@@ -3572,7 +3634,11 @@ INSERT INTO schema_migrations (version) VALUES ('20130501014814');
 
 INSERT INTO schema_migrations (version) VALUES ('20130508035922');
 
+INSERT INTO schema_migrations (version) VALUES ('20130509012650');
+
 INSERT INTO schema_migrations (version) VALUES ('20130510023753');
+
+INSERT INTO schema_migrations (version) VALUES ('20130514032841');
 
 INSERT INTO schema_migrations (version) VALUES ('20130514034901');
 
