@@ -90,7 +90,7 @@ group :test do
   gem 'poltergeist', require: false
   gem 'launchy'
 
-  gem 'fuubar'
+  gem 'fuubar', '~> 1.0.0' # 1.1.1 is broken
 
   gem 'bundler-audit', require: false
 end
