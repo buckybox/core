@@ -175,10 +175,10 @@ GEM
       rails (>= 3, < 5)
     formatador (0.2.4)
     fssm (0.2.10)
-    fuubar (1.1.1)
+    fuubar (1.0.0)
       rspec (~> 2.0)
       rspec-instafail (~> 0.2.0)
-      ruby-progressbar (~> 1.0)
+      ruby-progressbar (~> 0.0.10)
     fuzzy-string-match (0.9.5)
       RubyInline (>= 3.8.6)
       RubyInline (>= 3.8.6)
@@ -342,7 +342,7 @@ GEM
       rspec-expectations (~> 2.13.0)
       rspec-mocks (~> 2.13.0)
     ruby-prof (0.13.0)
-    ruby-progressbar (1.1.0)
+    ruby-progressbar (0.0.10)
     ruby2ruby (2.0.5)
       ruby_parser (~> 3.1)
       sexp_processor (~> 4.0)
@@ -437,7 +437,7 @@ DEPENDENCIES
   ember-rails (~> 0.7.0)
   fabrication
   figaro (~> 0.6.4)
-  fuubar
+  fuubar (~> 1.0.0)
   fuzzy-string-match (~> 0.9.4)
   guard
   guard-rspec
