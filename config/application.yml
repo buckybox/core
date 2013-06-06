@@ -7,6 +7,10 @@ MARKETING_SITE_URL: http://www.buckybox.com/
 SUPPORT_EMAIL: support@buckybox.com
 NO_REPLY_EMAIL: no-reply@buckybox.com
 
+# Usercycle
+USERCYCLE_API_KEY: '624a19c076449cb71c750ab7ef5909de7f488dc1'
+USERCYCLE_API_URL: 'https://api.usercycle.com/api/v1'
+
 # Environment-dependant configuration
 development:
   HOST: buckybox.dev
