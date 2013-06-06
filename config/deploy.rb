@@ -42,6 +42,10 @@ namespace :deploy do
       ln -nfs #{shared_path}/log/ #{release_path}/log/
     )
   end
+
+  task :restart_workers do
+    sudo %( monit restart delayed_job )
+  end
   
   task :symlink_uploads do
     run %(
@@ -62,6 +66,7 @@ after 'deploy:assets:symlink' do
 end
 
 after "deploy:update_code", "deploy:migrate"
+after "deploy:restart", "deploy:restart_workers"
 after "deploy:restart", "deploy:cleanup"
 
 after "deploy:setup", "setup_private_uploads"

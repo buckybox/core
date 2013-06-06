@@ -73,6 +73,26 @@ class Admin::DistributorsController < Admin::ResourceController
     redirect_to :back
   end
 
+  def write_email
+    @email = EmailForm.new(preview_email: current_admin.email)
+  end
+
+  def send_email
+    @email = EmailForm.new(params[:email_form])
+    if params[:commit] == 'Send' && @email.send!
+      flash.now[:notice] = 'Emails queued for delivery.'
+      @sent = true
+    elsif @email.send_preview!
+      flash.now[:notice] = "Preview email sent to #{@email.preview_email}."
+      @sent = false
+    else
+      flash.now[:alert] = "Email could not be sent. #{@email.errors.full_messages.join(', ')}"
+      @sent = false
+    end
+
+    render :write_email
+  end
+
   private
 
   def parameterize_name

@@ -32,16 +32,17 @@ class Webstore
     if (credit_card_params = payment_params[:credit_card])
       process_credit_card(CreditCard.new(credit_card_params)) if credit_card_params.present?
     end
+
     if @order.no_payment_action? && @order.create_order
       customer = @controller.current_customer
       CustomerCheckout.track(customer) unless @controller.current_admin.present?
       @order.placed_step
-      @controller.flash[:notice] = 'Your order has been placed'
     else
       @controller.flash[:error] = 'There was a problem completing your order'
-      @order.payment_step
+      @order.complete_step
     end
-    return true
+
+    true
   end
 
   def next_step
@@ -80,6 +81,7 @@ private
     box = Box.where(id: box_id, distributor_id: @distributor.id).first
     customer = @controller.current_customer
 
+    raise "Must have a distributor" unless @distributor
     @order = WebstoreOrder.create(box: box, distributor: @distributor, remote_ip: @controller.request.remote_ip)
     @order.account = customer.account if customer
 
@@ -166,7 +168,7 @@ private
   def add_address_and_payment_select(webstore_params)
     address_information = webstore_params[:address]
 
-    if address_information && address_information.keys == ["phone_type"]
+    if address_information && (address_information.keys - ["phone_type", "delivery_note"]).empty?
       address_information = nil
     end
 
@@ -176,8 +178,15 @@ private
     errors = false
 
     if address_information
+      address_attributes = %w(
+        name
+        phone_number phone_type
+        street_address street_address_2 suburb city postcode
+        delivery_note
+      )
+
       @controller.session[:webstore][:address] ||= {}
-      %w(name street_address street_address_2 suburb city postcode phone_number phone_type).each do |input|
+      address_attributes.each do |input|
         @controller.session[:webstore][:address][input] = address_information[input]
       end
 
@@ -211,8 +220,9 @@ private
       payment_option.apply(@order)
 
       @order.account = customer.account
-      @order.payment_step
+      @order.placed_step
       @order.save!
+      @order.create_order
     end
   end
 
@@ -227,7 +237,7 @@ private
         @controller.flash[:error] = 'You have already created this order'
       else
         @controller.flash[:error] = 'There was a problem completing your order'
-        @order.payment_step
+        @order.complete_step
       end
     else
       @controller.flash[:error] = ['There was a problem with your credit card', credit_card.errors.full_messages.join(', ')].join(', ')
@@ -265,21 +275,13 @@ private
     customer.route = @order.route
     customer.name  = address_information[:name]
 
-    if customer.save
-      Event.new_customer_webstore(customer)
-      CustomerMailer.raise_errors do
-        customer.send_login_details
-      end
-      
-      CustomerLogin.track(customer) unless @controller.current_admin.present?
-      @controller.sign_in(customer)
-    end
-
     customer
   end
 
   def update_address(customer, address_information)
     customer.name              = address_information[:name]
+
+    customer.address ||= Address.new
 
     customer.address.phone     = {
       number: address_information[:phone_number],
@@ -291,6 +293,7 @@ private
     customer.address.suburb    = address_information[:suburb]
     customer.address.city      = address_information[:city]
     customer.address.postcode  = address_information[:postcode]
+    customer.address.delivery_note = address_information[:delivery_note]
 
     customer.save
   end

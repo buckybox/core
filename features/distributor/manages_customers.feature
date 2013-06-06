@@ -5,6 +5,7 @@ Feature: Distributor manages customers
 
 Background:
   Given I am a distributor
+  And I log in
 
 Scenario: Create new customer
   Given I am viewing the customers page

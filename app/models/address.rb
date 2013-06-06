@@ -88,6 +88,7 @@ class Address < ActiveRecord::Base
 private
 
   def validate_address_and_phone
+    return unless distributor
     validate_address unless skip_validations.include? :address
     validate_phone unless skip_validations.include? :phone
   end
