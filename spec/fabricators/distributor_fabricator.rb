@@ -17,3 +17,12 @@ end
 Fabricator(:distributor_a_customer, from: :distributor) do
   after_create {|distributor| distributor.customers << Fabricate(:customer, distributor: distributor)}
 end
+
+Fabricator(:distributor_with_webstore, from: :distributor_with_information) do
+  after_create do |distributor|
+    distributor.boxes << Fabricate(:customisable_box, distributor: distributor)
+    distributor.routes << Fabricate(:route, distributor: distributor)
+    distributor.active_webstore = true
+    distributor.save!
+  end
+end
