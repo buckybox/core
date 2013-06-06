@@ -28,24 +28,27 @@ class Customer < ActiveRecord::Base
     :route, :route_id, :password, :password_confirmation, :remember_me, :tag_list, :discount, :number, :notes,
     :special_order_preference, :balance_threshold
 
-  validates_presence_of :distributor_id, :route_id, :first_name, :email, :discount
+  validates_presence_of :distributor_id, :route_id, :first_name, :email, :discount, :address
   validates_uniqueness_of :number, scope: :distributor_id
   validates_numericality_of :number, greater_than: 0
   validates_numericality_of :discount, greater_than_or_equal_to: 0.0, less_than_or_equal_to: 1.0
-  validates_associated :account, unless: 'account.nil?'
-  validates_associated :address, unless: 'address.nil?'
+  validates_associated :account
+  validates_associated :address
 
   before_validation :initialize_number, if: 'number.nil?'
   before_validation :random_password, unless: 'encrypted_password.present?'
   before_validation :discount_percentage
   before_validation :format_email
 
+  before_save :set_balance_threshold, if: :new_record?
+  before_save :update_halted_status, if: :balance_threshold_cents_changed?
+
   before_create :setup_account
   before_create :setup_address
 
+  after_create :notify_distributor
+
   after_save :update_next_occurrence # This could be more specific about when it updates
-  before_save :set_balance_threshold, if: :new_record?
-  before_save :update_halted_status, if: :balance_threshold_cents_changed?
 
   delegate :separate_bucky_fee?, :consumer_delivery_fee, :default_balance_threshold_cents, :has_balance_threshold, to: :distributor
   delegate :currency, :send_email?, to: :distributor, allow_nil: true
@@ -272,6 +275,21 @@ class Customer < ActiveRecord::Base
     orders.any?{|o| o.pending_package_creation?}
   end
 
+  def send_login_details
+    if send_email?
+      CustomerMailer.login_details(self).deliver
+    else
+      false
+    end
+  end
+
+  def notify_distributor
+    Event.new_customer_webstore(self)
+    CustomerMailer.raise_errors do
+      self.send_login_details
+    end
+  end
+
   def send_halted_email
     if distributor.send_email? && distributor.send_halted_email?
       CustomerMailer.orders_halted(self).deliver
@@ -281,14 +299,6 @@ class Customer < ActiveRecord::Base
   def remind_customer_is_halted
     if distributor.send_email? && distributor.send_halted_email?
       CustomerMailer.remind_orders_halted(self).deliver
-    end
-  end
-
-  def send_login_details
-    if send_email?
-      CustomerMailer.login_details(self).deliver
-    else
-      false
     end
   end
 

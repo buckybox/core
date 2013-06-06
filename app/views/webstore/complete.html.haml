@@ -1,19 +1,17 @@
 - title('Webstore - Complete', false)
 = render 'webstore_sidebar'
-- if current_customer.present? && current_customer.halted?
-  .alert.alert-error
-    Your account is under the minimum balance and will not recieve new orders unless payment is cleared before the packing date.
+
 = render partial: 'webstore_order', object: @webstore_order
 
 = simple_form_for(:webstore_order, url: webstore_process_step_path) do |f|
   #webstore-address.row-fluid.webstore-section{ data: { 'has-address' => "#{@has_address ? 'true' : 'false'}" } }
-    .span10
+    .span12
       = f.simple_fields_for(:address) do |g|
         #existing-address.row-fluid
           .span12
             .row-fluid
               .span12
-                %h4 Deliver To:
+                %h4 Deliver to:
             .row-fluid
               .span12
                 = @address.join('<br>') if @has_address
@@ -23,19 +21,19 @@
           .span12
             .row-fluid
               .span12
-                %h4 Your Name
+                %h4 Your name
             .row-fluid
               .span12= g.input :name, label: false, placeholder: 'Enter your name', input_html: { value: @name, class: 'span12' }, required: true
             - if @distributor.collect_phone?
               .row-fluid
                 .span12
-                  %h4 Your Phone Number
+                  %h4 Your phone number
               .row-fluid
                 .span9= g.input :phone_number, label: false, placeholder: 'Enter your phone number', input_html: { value: @phone_number, class: 'span12' }, required: @distributor.require_phone
                 .span3= g.input :phone_type, collection: phone_types_collection, label: false, selected: @phone_type, input_html: { class: 'span12' }
             .row-fluid
               .span12
-                %h4 Deliver To
+                %h4 Deliver to
             .row-fluid
               .span12
                 = g.input :street_address, label: false, placeholder: 'Street', input_html: { value: @street_address, class: 'span12' }, required: @distributor.require_address_1
@@ -44,17 +42,15 @@
             .row-fluid
               .span9= g.input :city, label: false, placeholder: 'City', required: @distributor.require_city, input_html: { value: @city, class: 'span12' }, wrapper_html: { id: 'city' }
               .span3= g.input :postcode, label: false, placeholder: 'Postcode', required: @distributor.require_postcode, input_html: { value: @postcode, class: 'span12' }, wrapper_html: { id: 'postal_code' }
+            .row-fluid
+              .span12
+                %h4 Delivery note
+            .row-fluid
+              .span12
+                = g.input :delivery_note, as: :text, label: false, required: false, placeholder: 'E.g. Place on back porch', input_html: { class: 'span12', rows: 3, value: @delivery_note }
 
-  - if customer_signed_in?
-    #webstore-balance.row-fluid.webstore-section.important
-      .span10
-        .totals-text Your existing account balance with us
-        .totals-text This order
-        .totals-text Closing balance
-      .span2
-        .text-right.total_price= MoneyDisplay.new(@current_balance)
-        .text-right.total_price= MoneyDisplay.new(@order_price).negative
-        .text-right.total.total_price= MoneyDisplay.new(@closing_balance)
+  .row-fluid.webstore-section
+    = render 'payment_instructions'
 
   .row-fluid.webstore-section
     #webstore-payment.span12
@@ -66,6 +62,7 @@
             - else
               .span10 Total amount due
               .span2.text-right.total_price= MoneyDisplay.new(@amount_due).negative
+
       - if @distributor.only_one_payment_option?
         = f.input :payment_method, as: :hidden, input_html: {value: @distributor.only_payment_option}
       - else
@@ -76,10 +73,8 @@
             - else
               .span12.text-center No payment necessary
               = f.input :payment_method, as: :hidden, input_html: {value: 'paid'}
+
   .row-fluid
-    .span12
+    .span12.text-center
       = f.input :complete, as: :hidden, input_html: { value: true }
-      - if @payment_required
-        = f.button :submit, 'Next', class: 'pull-right btn btn-process'
-      - else
-        = f.button :submit, 'Complete', class: 'pull-right btn btn-process'
+      = f.button :submit, 'Complete Order', class: 'btn btn-process'

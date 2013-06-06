@@ -3,9 +3,9 @@
 = render partial: 'webstore_order', object: @webstore_order
 
 = simple_form_for(:webstore_order, url: webstore_process_step_path, html: { class: 'form-inline' }) do |f|
-  - if @box.customisable?
+  - if @box.dislikes?
     #webstore-customise.row-fluid.webstore-section
-      .span10
+      .span12
         = f.simple_fields_for(:customise) do |g|
           .row-fluid
             .span12= g.input :costomise, as: :boolean, label: 'Customise my box', wrapper: :inline_checkbox, wrapper_html: { class: 'checkbox-header' }
@@ -19,7 +19,7 @@
 
   - if @box.extras_allowed?
     #webstore-extras.row-fluid.webstore-section
-      .span10
+      .span12
         = f.simple_fields_for(:extras) do |g|
           .row-fluid
             .span12
@@ -42,7 +42,7 @@
               %table.table.table-bordered
                 %tbody
                   = render partial: 'extra', collection: @extras, locals: { g: g }
-              = g.input :add_extra, label: false, collection: @extras, label_method: :name_with_unit, input_html: { data: { placeholder: 'Add an extra item' }, class: 'span12' }, required: false
+              = g.input :add_extra, label: false, collection: @extras, label_method: :name_with_price, input_html: { data: { placeholder: 'Add an extra item' }, class: 'span12' }, required: false
 
   .row-fluid.webstore-section
     .span12= f.button :submit, 'Next', class: 'pull-right btn btn-process'
