@@ -83,6 +83,7 @@ class Distributor::DeliveriesController < Distributor::ResourceController
     export = get_export(params)
 
     if export
+      usercycle.event(current_distributor, "distributor_exported_packing_list")
       send_data(*export.csv)
     else
       redirect_to :back
