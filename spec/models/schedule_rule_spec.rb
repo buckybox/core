@@ -452,7 +452,7 @@ describe ScheduleRule do
 
   describe ".to_s" do
     it "should return a natural language string representing the schedule" do
-      ScheduleRule.one_off(Date.parse("2012-10-15")).to_s.should eq("15 Oct")
+      ScheduleRule.one_off(Date.parse("2012-10-15")).to_s.should eq("Deliver on 15 Oct")
     end
 
     specify {ScheduleRule.weekly(Date.parse("2012-10-16"), [:mon]).to_s.should eq("Deliver weekly on Monday")}

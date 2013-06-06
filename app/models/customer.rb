@@ -275,6 +275,21 @@ class Customer < ActiveRecord::Base
     orders.any?{|o| o.pending_package_creation?}
   end
 
+  def send_login_details
+    if send_email?
+      CustomerMailer.login_details(self).deliver
+    else
+      false
+    end
+  end
+
+  def notify_distributor
+    Event.new_customer_webstore(self)
+    CustomerMailer.raise_errors do
+      self.send_login_details
+    end
+  end
+
   def send_halted_email
     if distributor.send_email? && distributor.send_halted_email?
       CustomerMailer.orders_halted(self).deliver
@@ -289,15 +304,6 @@ class Customer < ActiveRecord::Base
 
   def set_balance_threshold
     self.balance_threshold_cents = default_balance_threshold_cents unless balance_threshold_cents_changed?
-  end
-
-  def notify_distributor
-    Event.new_customer_webstore(self)
-    send_login_details
-  end
-
-  def send_login_details
-    CustomerMailer.login_details(self).deliver if distributor.send_email?
   end
 
   def account_balance

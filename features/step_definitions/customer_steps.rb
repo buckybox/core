@@ -25,7 +25,6 @@ Then /^I should be viewing my profile page$/ do
 end
 
 Then /^I should have an order$/ do
-  pending
   page.should have_selector ".customer-order"
 end
 
