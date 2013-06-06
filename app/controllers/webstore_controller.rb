@@ -60,13 +60,9 @@ class WebstoreController < ApplicationController
       end
     end
 
-    @address ||= current_customer && current_customer.address
     @name ||= existing_customer? && current_customer.name
+    @address ||= current_customer && current_customer.address
     @city ||= @distributor.invoice_information.billing_city if @distributor.invoice_information
-
-    @payment_method = session[:webstore][:payment_method]
-    @order_price = @webstore_order.order_price(current_customer)
-    @current_balance = (current_customer ? current_customer.account.balance : Money.new(0))
 
     @has_address = existing_customer?
 
@@ -78,30 +74,41 @@ class WebstoreController < ApplicationController
       @suburb = @address.suburb
       @city = @address.city
       @postcode = @address.postcode
+      @delivery_note = @address.delivery_note
     end
 
-    @closing_balance = @current_balance - @order_price
-    @amount_due = @closing_balance
-    @bank = @distributor.bank_information
-    @payment_required = @closing_balance.negative?
-  end
-
-  def payment
+    @payment_method = session[:webstore][:payment_method]
     @order_price = @webstore_order.order_price(current_customer)
     @current_balance = (current_customer ? current_customer.account.balance : Money.new(0))
     @closing_balance = @current_balance - @order_price
-    @amount_due = @closing_balance * -1
-    @bank = @distributor.bank_information
+    @amount_due = @closing_balance
     @payment_required = @closing_balance.negative?
   end
 
   def placed
+    CustomerLogin.track(@webstore_order.customer) unless current_admin.present?
+    sign_in(@webstore_order.customer)
+
+    raise "Customer should be signed in at this point" unless customer_signed_in?
+    raise "Current customer should be set" if current_customer != @webstore_order.customer
+    raise "Customer should have an account" unless current_customer.account
+
+    @payment_method = session[:webstore][:payment_method]
+    @order_price = @webstore_order.order_price(current_customer)
+    @current_balance = (current_customer ? current_customer.account.balance : Money.new(0))
+    @closing_balance = @current_balance - @order_price
+    @amount_due = -@closing_balance
+    @bank = @distributor.bank_information
+    @payment_required = @closing_balance.negative?
+
     @customer = @webstore_order.customer
     @address = @customer.address
     @schedule_rule = @webstore_order.schedule_rule
+
+    flash[:notice] = 'Your order has been placed'
   end
 
-  private
+private
 
   def existing_customer?
     current_customer && current_customer.persisted?

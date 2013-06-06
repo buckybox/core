@@ -6,3 +6,6 @@ Fabricator(:box) do
   extras_limit 0
 end
 
+Fabricator(:customisable_box, from: :box) do
+  dislikes true
+end
