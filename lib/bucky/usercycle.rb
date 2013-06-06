@@ -5,12 +5,12 @@ module Bucky
   class Usercycle
     include Singleton
 
-    API_KEY = '624a19c076449cb71c750ab7ef5909de7f488dc1'
-    API_URL = 'https://api.usercycle.com/api/v1'
-
     def initialize
       # set up a client to talk to the USERcycle API
-      @client = ::Usercycle::Client.new API_KEY, API_URL
+      @client = ::Usercycle::Client.new(
+        Figaro.env.usercycle_api_key,
+        Figaro.env.usercycle_api_url
+      )
     end
 
     def event(identity, action_name, *args)
