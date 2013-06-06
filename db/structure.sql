@@ -597,7 +597,9 @@ CREATE TABLE credit_card_transactions (
     distributor_id integer,
     account_id integer,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    updated_at timestamp without time zone NOT NULL,
+    currency character varying(255),
+    address text
 );
 
 
@@ -821,45 +823,6 @@ ALTER SEQUENCE deductions_id_seq OWNED BY deductions.id;
 
 
 --
--- Name: delayed_jobs; Type: TABLE; Schema: public; Owner: -; Tablespace: 
---
-
-CREATE TABLE delayed_jobs (
-    id integer NOT NULL,
-    priority integer DEFAULT 0,
-    attempts integer DEFAULT 0,
-    handler text,
-    last_error text,
-    run_at timestamp without time zone,
-    locked_at timestamp without time zone,
-    failed_at timestamp without time zone,
-    locked_by character varying(255),
-    queue character varying(255),
-    created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
-);
-
-
---
--- Name: delayed_jobs_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE delayed_jobs_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: delayed_jobs_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE delayed_jobs_id_seq OWNED BY delayed_jobs.id;
-
-
---
 -- Name: deliveries; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -972,14 +935,11 @@ CREATE TABLE distributor_gateways (
     id integer NOT NULL,
     distributor_id integer,
     gateway_id integer,
-    encrypted_login text,
-    encrypted_login_salt text,
-    encrypted_login_iv text,
-    encrypted_password text,
-    encrypted_password_salt text,
-    encrypted_password_iv text,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    updated_at timestamp without time zone NOT NULL,
+    encrypted_credentials text,
+    encrypted_credentials_salt text,
+    encrypted_credentials_iv text
 );
 
 
@@ -1136,7 +1096,6 @@ CREATE TABLE distributors (
     payment_cash_on_delivery boolean DEFAULT true,
     payment_bank_deposit boolean DEFAULT true,
     payment_credit_card boolean DEFAULT false,
-    keep_me_updated boolean DEFAULT true,
     require_postcode boolean DEFAULT false NOT NULL,
     require_phone boolean DEFAULT false NOT NULL,
     require_address_1 boolean DEFAULT true NOT NULL,
@@ -2230,13 +2189,6 @@ ALTER TABLE ONLY deductions ALTER COLUMN id SET DEFAULT nextval('deductions_id_s
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY delayed_jobs ALTER COLUMN id SET DEFAULT nextval('delayed_jobs_id_seq'::regclass);
-
-
---
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
---
-
 ALTER TABLE ONLY deliveries ALTER COLUMN id SET DEFAULT nextval('deliveries_id_seq'::regclass);
 
 
@@ -2584,14 +2536,6 @@ ALTER TABLE ONLY deductions
 
 
 --
--- Name: delayed_jobs_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
---
-
-ALTER TABLE ONLY delayed_jobs
-    ADD CONSTRAINT delayed_jobs_pkey PRIMARY KEY (id);
-
-
---
 -- Name: deliveries_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -2861,13 +2805,6 @@ ALTER TABLE ONLY transactions
 
 ALTER TABLE ONLY webstore_orders
     ADD CONSTRAINT webstore_orders_pkey PRIMARY KEY (id);
-
-
---
--- Name: delayed_jobs_priority; Type: INDEX; Schema: public; Owner: -; Tablespace: 
---
-
-CREATE INDEX delayed_jobs_priority ON delayed_jobs USING btree (priority, run_at);
 
 
 --
@@ -3631,14 +3568,16 @@ INSERT INTO schema_migrations (version) VALUES ('20130430034158');
 
 INSERT INTO schema_migrations (version) VALUES ('20130430034231');
 
+INSERT INTO schema_migrations (version) VALUES ('20130501014814');
+
 INSERT INTO schema_migrations (version) VALUES ('20130508035922');
 
-INSERT INTO schema_migrations (version) VALUES ('20130509012650');
-
 INSERT INTO schema_migrations (version) VALUES ('20130510023753');
-
-INSERT INTO schema_migrations (version) VALUES ('20130514032841');
 
 INSERT INTO schema_migrations (version) VALUES ('20130514034901');
 
 INSERT INTO schema_migrations (version) VALUES ('20130515012606');
+
+INSERT INTO schema_migrations (version) VALUES ('20130515021934');
+
+INSERT INTO schema_migrations (version) VALUES ('20130516232210');
