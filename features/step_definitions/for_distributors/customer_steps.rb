@@ -3,6 +3,7 @@ Given /^I am viewing the customers page$/ do
 end
 
 Given /^I am viewing an existing customer$/ do
+  step "I have an existing customer"
   @customer.should_not be_nil
   visit distributor_customer_path(@customer)
 end
@@ -24,7 +25,7 @@ When /^I fill in valid customer details$/ do
 end
 
 Then /^I should be viewing the customer$/ do
-  current_path.should == distributor_customer_path(@customer)
+  current_path.should eq distributor_customer_path(@customer)
 end
 
 Then /^The customer should be on the customers index page$/ do
@@ -35,8 +36,8 @@ Then /^The customer should be on the customers index page$/ do
 end
 
 Given /^I have an existing customer$/ do
-  @distributor.should_not be_nil
-  @customer = Fabricate(:customer, distributor: @distributor)
+  @current_user.should_not be_nil
+  @customer = Fabricate(:customer, distributor: @current_user)
 end
 
 When /^I edit the customer's profile$/ do
