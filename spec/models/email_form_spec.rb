@@ -9,7 +9,7 @@ describe EmailForm do
     preview_email: 'admin@buckybox.com'
   }}
 
-  it 'should send email' do
+  it 'fucking well better send email' do
     Distributor.stub(:keep_updated).and_return([])
     EmailForm.new(fields).send!
     ActionMailer::Base.deliveries.last

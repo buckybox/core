@@ -6,8 +6,9 @@ MISSION_SITE_URL: http://www.buckybox.org/
 
 
 # Emails
-SUPPORT_EMAIL: support@buckybox.com
+SUPPORT_EMAIL: Bucky Box <support@buckybox.com>
 NO_REPLY_EMAIL: no-reply@buckybox.com
+MAIL_SAFE: crashtestdummy@buckybox.com
 
 # Environment-dependant configuration
 development:

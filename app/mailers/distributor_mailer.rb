@@ -1,6 +1,6 @@
 class DistributorMailer < ActionMailer::Base
-  default from: "Bucky Box <support@buckybox.com>",
-          reply_to: "Bucky Box <support@buckybox.com>"
+  default from: Figaro.env.support_email,
+          reply_to: Figaro.env.support_email
 
   def update_email(email, distributor)
     @email = email

@@ -5,8 +5,8 @@ class AdminMailer < ActionMailer::Base
     @admin = admin
 
     mail to: @email.preview_email,
-         from: "Bucky Box <support@buckybox.com>",
-         reply_to: "Bucky Box <support@buckybox.com>",
+         from: Figaro.env.support_email,
+         reply_to: Figaro.env.support_email,
          subject: @email.subject
   end
 
