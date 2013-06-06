@@ -293,6 +293,10 @@ class Customer < ActiveRecord::Base
 
   def notify_distributor
     Event.new_customer_webstore(self)
+    send_login_details
+  end
+
+  def send_login_details
     CustomerMailer.login_details(self).deliver if distributor.send_email?
   end
 
