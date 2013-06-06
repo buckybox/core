@@ -255,9 +255,9 @@ end
 def fab_delivery(delivery_list, distributor, route=nil, address=nil)
   route ||= Fabricate(:route, distributor: distributor, schedule_rule: Fabricate(:schedule_rule, start: Date.current.yesterday))
 
-  customer = Fabricate(:customer_without_after_create, distributor: distributor, route: route)
+  customer = Fabricate(:customer, distributor: distributor, route: route)
   account = Fabricate(:account, customer: customer)
-  
+
   customer.address.delete
 
   if address

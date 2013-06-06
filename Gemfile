@@ -29,11 +29,14 @@ gem 'fuzzy-string-match',   '~> 0.9.4',  require: 'fuzzystringmatch' # This perf
 gem 'state_machine',        '~> 1.1.2'
 gem 'figaro',               '~> 0.6.4'
 
-gem 'postmark-rails',  '~> 0.4.1'
-gem 'analytical',      '~> 3.0.12'
-gem 'usercycle',       github: 'usercycle/usercycle-api-ruby', require: false
-gem 'newrelic_rpm',    '~> 3.6.1'
-gem 'airbrake',        '~> 3.1.2'
+gem 'postmark-rails',             '~> 0.4.1'
+gem 'delayed_job',                '~> 3.0.5' #send emails offline
+gem 'delayed_job_active_record',  '~> 0.4.4'
+gem 'daemons',                    '~> 1.1.9' # able to monitor delayed_job via monit
+gem 'analytical',                 '~> 3.0.12'
+gem 'usercycle',                  github: 'usercycle/usercycle-api-ruby', require: false
+gem 'newrelic_rpm',               '~> 3.6.1'
+gem 'airbrake',                   '~> 3.1.2'
 
 gem 'ace-rails-ap',  '~> 2.0.0'
 
@@ -85,9 +88,10 @@ group :test do
 
   gem 'capybara', require: false
   gem 'cucumber-rails', require: false
+  gem 'poltergeist', require: false
   gem 'launchy'
 
-  gem 'fuubar'
+  gem 'fuubar', '~> 1.0.0' # 1.1.1 is broken
 
   gem 'bundler-audit', require: false
 end

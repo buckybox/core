@@ -1,5 +1,8 @@
-Given /^I am a customer$/ do
-  @customer = Fabricate(:customer)
+Given /^I am a (.*)? (.*)$/ do |status, user_type|
+  raise "Invalid status" unless status.in? ["", "logged in"]
+
+  @current_user = Fabricate(user_type)
+  step "I log in" if status == "logged in"
 end
 
 Given /^I am viewing the customers login page$/ do
@@ -7,36 +10,22 @@ Given /^I am viewing the customers login page$/ do
 end
 
 Given /^I am viewing my dashboard$/ do
-  step "I log in"
+  step "I am a logged in customer"
   visit customer_dashboard_path
 end
 
-When /^I log in$/ do
-  step "I am a customer"
-  step "I am viewing the customers login page"
-  step "I fill in my credentials"
-end
-
-When /^I fill in my credentials$/ do
-  login_as @customer
-end
-
 When /^I fill in invalid credentials$/ do
-  fill_in "customer_email", with: @customer.email
-  fill_in "customer_password", with: @customer.password * 2
+  fill_in "customer_email", with: @current_user.email
+  fill_in "customer_password", with: @current_user.password * 2
   click_button "Login"
-end
-
-When /^I click Logout$/ do
-  click_link "Logout"
-end
-
-Then /^I should be logged out$/ do
-  page.should_not have_link "Login"
 end
 
 Then /^I should be viewing my profile page$/ do
   current_path.should eq customer_root_path
+end
+
+Then /^I should have an order$/ do
+  page.should have_selector ".customer-order"
 end
 
 Then /^I should be viewing the home page$/ do

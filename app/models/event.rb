@@ -54,6 +54,7 @@ class Event < ActiveRecord::Base
   end
 
   def self.new_customer(customer)
+    # FIXME never used?
     trigger(
       customer.distributor_id,
       Event::EVENT_TYPES[:customer_new],

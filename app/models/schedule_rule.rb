@@ -319,9 +319,9 @@ class ScheduleRule < ActiveRecord::Base
   def to_s
     case recur
     when :one_off
-      start.to_s(:flux_cap)
+      "Deliver on #{start.to_s(:flux_cap)}"
     when :single
-      start.to_s(:flux_cap)
+      "Deliver on #{start.to_s(:flux_cap)}"
     when :weekly
       "Deliver weekly on #{delivery_days}"
     when :fortnightly

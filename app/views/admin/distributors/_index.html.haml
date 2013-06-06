@@ -49,6 +49,8 @@
           %span.label.label-important credit-card
         - distributor.omni_importers.includes(:country).each do |omni_importer|
           %span.label.label-success{title: omni_importer.payment_type}= omni_importer.tag_name
+        - unless distributor.keep_me_updated?
+          %span.label dont-send-email-updates
       .span5
         %small
           Next delivery:

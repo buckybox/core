@@ -597,7 +597,9 @@ CREATE TABLE credit_card_transactions (
     distributor_id integer,
     account_id integer,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    updated_at timestamp without time zone NOT NULL,
+    currency character varying(255),
+    address text
 );
 
 
@@ -933,14 +935,11 @@ CREATE TABLE distributor_gateways (
     id integer NOT NULL,
     distributor_id integer,
     gateway_id integer,
-    encrypted_login text,
-    encrypted_login_salt text,
-    encrypted_login_iv text,
-    encrypted_password text,
-    encrypted_password_salt text,
-    encrypted_password_iv text,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    updated_at timestamp without time zone NOT NULL,
+    encrypted_credentials text,
+    encrypted_credentials_salt text,
+    encrypted_credentials_iv text
 );
 
 
@@ -3569,6 +3568,8 @@ INSERT INTO schema_migrations (version) VALUES ('20130430034158');
 
 INSERT INTO schema_migrations (version) VALUES ('20130430034231');
 
+INSERT INTO schema_migrations (version) VALUES ('20130501014814');
+
 INSERT INTO schema_migrations (version) VALUES ('20130508035922');
 
 INSERT INTO schema_migrations (version) VALUES ('20130510023753');
@@ -3576,3 +3577,7 @@ INSERT INTO schema_migrations (version) VALUES ('20130510023753');
 INSERT INTO schema_migrations (version) VALUES ('20130514034901');
 
 INSERT INTO schema_migrations (version) VALUES ('20130515012606');
+
+INSERT INTO schema_migrations (version) VALUES ('20130515021934');
+
+INSERT INTO schema_migrations (version) VALUES ('20130516232210');

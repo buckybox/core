@@ -17,6 +17,6 @@ Scenario: Try to log in with invalid credentials
 
 Scenario: Log out
   Given I am viewing my dashboard
-  When I click Logout
+  When I log out
   Then I should be logged out
 

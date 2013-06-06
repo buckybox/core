@@ -2,10 +2,13 @@
 
 # URLs
 MARKETING_SITE_URL: http://www.buckybox.com/
+MISSION_SITE_URL: http://www.buckybox.org/
+
 
 # Emails
-SUPPORT_EMAIL: support@buckybox.com
+SUPPORT_EMAIL: Bucky Box <support@buckybox.com>
 NO_REPLY_EMAIL: no-reply@buckybox.com
+MAIL_SAFE: crashtestdummy@buckybox.com
 
 # Usercycle
 USERCYCLE_API_KEY: '624a19c076449cb71c750ab7ef5909de7f488dc1'

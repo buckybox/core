@@ -66,7 +66,8 @@ class Distributor < ActiveRecord::Base
     :feature_spend_limit, :contact_name, :tag_list, :collect_phone,
     :require_address_1, :require_address_2, :require_suburb, :require_postcode,
     :require_phone, :require_city, :omni_importer_ids, :notes,
-    :payment_cash_on_delivery, :payment_bank_deposit, :payment_credit_card
+    :payment_cash_on_delivery, :payment_bank_deposit, :payment_credit_card,
+    :keep_me_updated
 
   validates_presence_of :country
   validates_presence_of :email
@@ -94,6 +95,8 @@ class Distributor < ActiveRecord::Base
 
   default_value_for :invoice_threshold_cents, -500
   default_value_for :bucky_box_percentage, 0.0175
+
+  scope :keep_updated, where(keep_me_updated: true)
 
   # Devise Override: Avoid validations on update or if now password provided
   def password_required?
