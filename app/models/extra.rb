@@ -28,7 +28,7 @@ class Extra < ActiveRecord::Base
     if customer_discount
       "#{name} - #{price_with_discount(customer_discount).format} (#{unit})"
     else
-      "#{name} - #{price.format} (#{unit})"
+      "#{name} (#{price.format} per #{unit})"
     end
   end
 
