@@ -1,4 +1,4 @@
-# NOTE: this model is tightly coupled to the controller and full of spaghetti code
+# NOTE: Fix this now
 
 class Webstore
   attr_reader :controller, :distributor, :order
