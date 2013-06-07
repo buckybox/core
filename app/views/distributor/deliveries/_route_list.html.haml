@@ -63,7 +63,7 @@
     %ul#delivery_list.unstyled
       - @items.each do |order|
         %li.row-fluid.data-listings.pending
-          .span6
+          .span6.customer
             = check_box_tag order.id, '1', false, data: { orders: order.id }
             .label.state-label.dso-number= map_pin(order)
             .label.state-label.staus-icon.status-pending{ title: 'PENDING delivery' }
