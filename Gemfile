@@ -29,6 +29,7 @@ gem 'fuzzy-string-match',   '~> 0.9.4',  require: 'fuzzystringmatch' # This perf
 gem 'state_machine',        '~> 1.1.2'
 gem 'figaro',               '~> 0.6.4'
 gem 'active_attr',          '~> 0.8.0'
+gem 'draper',               '~> 1.2.1'
 
 gem 'premailer-rails',      '~> 1.4.0'
 gem 'nokogiri',             '~> 1.6.0' # premailer-rails dependency
