@@ -12,13 +12,13 @@ module Bucky
       )
     end
 
-    def event(identity, action_name, *args)
+    def event(identity, action_name, properties = {}, occurred_at = Time.now)
       raise TypeError, "Identity cannot be nil" if identity.nil?
 
       if Rails.env.production? || Rails.env.staging?
         @client.event.delay(
           priority: Figaro.env.delayed_job_priority_low
-        ).create(identity.id, action_name, *args)
+        ).create(identity.id, action_name, properties, occurred_at)
 
       elsif defined?(Rails.logger)
         Rails.logger.debug "Usercycle event '#{action_name}' not being tracked for the current environment (#{Rails.env})"
