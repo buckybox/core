@@ -110,9 +110,9 @@ $navigation-month: #5c5c5c
         .btn-group
           display: inline-block
     .data-listings
-      margin-top: -1px
+      overflow: hidden
+      white-space: nowrap
       border-top: 1px dashed #ddd
-      border-bottom: 1px solid #ddd
       padding: 0px
       background-color: $white
       &:first-child
@@ -125,23 +125,33 @@ $navigation-month: #5c5c5c
           background-color: $navigation-base
       input[type='checkbox']
         margin: 0px 0px 3px 13px
+      .customer
+        overflow: hidden
+        -webkit-mask-image: -webkit-gradient(linear, center top, right top, from(rgba(0,0,0,1)), to(rgba(0,0,0,0)))
       .row-grip
         background-image: image-url('row-grip.png')
         background-repeat: repeat-y
         background-position: 2px 1px
       .customer-holder
-        float: right
-        padding-right: 7%
-        width: 52%
-        height: 26px
-        @media (min-width: 1200px)
-          width: 60%
+        display: inline-block
         .customer-badge
-          margin: 3px 0px
+          margin: 4px 0
+      .tag-links
+        display: inline-block
+        overflow: hidden
+        &:hover
+          background-color: $white
+          position: absolute
+          margin: 1px 4px
+          padding-right: 2px
       .paid-label
+        visibility: hidden
+        height: 24px
         background-image: image-url('watermark-paid.png')
         background-repeat: no-repeat
         background-position: right center
+      .paid
+        visibility: visible
       .state-label
         display: inline-block
         text-align: center
@@ -165,6 +175,7 @@ $navigation-month: #5c5c5c
         margin-left: -1px
       .address-description
         padding-top: 3px
+        white-space: normal
       .delivery-address
         font-weight: bold
         color: $textColor
