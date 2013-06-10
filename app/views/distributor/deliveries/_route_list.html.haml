@@ -47,11 +47,8 @@
                         = customer_badge(delivery.customer, customer_name: delivery.package.archived_customer_name)
                       = render partial: 'distributor/customers/customer_tags', locals: { customer: delivery.customer }
 
-                  .span1
-                    - if delivery.paid?
-                      = image_tag 'watermark-paid.png'
-                    - else
-                      &nbsp;
+                  .span1{class: "paid-label #{'paid' if delivery.paid?}"}
+                    &nbsp;
 
                   .span5
                     .row-fluid.address-description
