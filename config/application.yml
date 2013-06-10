@@ -28,9 +28,10 @@ test:
 
 staging:
   HOST: staging.buckybox.com
-  POSTMARK_API_KEY: 3c3bf3ae-b9a4-4c9a-b850-bc6528fb12bc
+  POSTMARK_API_KEY: '3c3bf3ae-b9a4-4c9a-b850-bc6528fb12bc'
 
 production:
   HOST: my.buckybox.com
-  POSTMARK_API_KEY: 63583ad4-c990-4ccb-a7db-afcc85d9070a
+  POSTMARK_API_KEY: '63583ad4-c990-4ccb-a7db-afcc85d9070a'
+  USERCYCLE_API_KEY: '8c7ad3ac4a5e8fe80258662dd42d961f99f4e703'
 
