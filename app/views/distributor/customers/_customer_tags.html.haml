@@ -1,6 +1,6 @@
 - tags = customer.tags.sort_by { |tag| tag.name.length }
 
-%span.tag-links{data: {"toggle" => "tooltip", "placement" => "left", "title" => tags.join(' ') }}
+.tag-links{data: {"toggle" => "tooltip", "placement" => "left", "title" => tags.join(' ') }}
   - tags.each do |tag|
     = link_to tag_distributor_customers_path(tag.name), class: 'link-label' do
       %span.label.label-info= tag.name

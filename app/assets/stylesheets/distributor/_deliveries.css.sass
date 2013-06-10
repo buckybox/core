@@ -127,6 +127,7 @@ $navigation-month: #5c5c5c
         margin: 0px 0px 3px 13px
       .customer
         overflow: hidden
+        -webkit-mask-image: -webkit-gradient(linear, center top, right top, from(rgba(0,0,0,1)), to(rgba(0,0,0,0)))
       .row-grip
         background-image: image-url('row-grip.png')
         background-repeat: repeat-y
@@ -134,18 +135,23 @@ $navigation-month: #5c5c5c
       .customer-holder
         display: inline-block
         .customer-badge
-          margin: -6px 0
+          margin: 4px 0
       .tag-links
+        display: inline-block
+        overflow: hidden
         &:hover
           background-color: $white
           position: absolute
-          margin: 2px 4px
+          margin: 1px 4px
           padding-right: 2px
-          overflow: visible
       .paid-label
+        visibility: hidden
+        height: 24px
         background-image: image-url('watermark-paid.png')
         background-repeat: no-repeat
         background-position: right center
+      .paid
+        visibility: visible
       .state-label
         display: inline-block
         text-align: center
