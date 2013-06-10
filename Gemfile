@@ -34,7 +34,6 @@ gem 'delayed_job',                '~> 3.0.5' #send emails offline
 gem 'delayed_job_active_record',  '~> 0.4.4'
 gem 'daemons',                    '~> 1.1.9' # able to monitor delayed_job via monit
 gem 'analytical',                 '~> 3.0.12'
-gem 'usercycle',                  '~> 0.1.3'
 gem 'newrelic_rpm',               '~> 3.6.1'
 gem 'airbrake',                   '~> 3.1.2'
 
@@ -42,6 +41,9 @@ gem 'ace-rails-ap',  '~> 2.0.0'
 
 gem 'activemerchant',  '~> 1.32.1'
 gem 'attr_encryptor',  '~> 1.0.2'
+
+# Use this SHA while the latest version is not released to RubyGems
+gem 'usercycle', github: 'usercycle/usercycle-api-ruby', ref: '3d650aeed09944c608be182bcec3d3619b21f692'
 
 ########## THE GEMS ABOVE ARE THE ONLY ONES THAT RUN ON PRODUCTION ##########
 
