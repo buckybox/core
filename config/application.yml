@@ -4,11 +4,14 @@
 MARKETING_SITE_URL: http://www.buckybox.com/
 MISSION_SITE_URL: http://www.buckybox.org/
 
-
 # Emails
 SUPPORT_EMAIL: Bucky Box <support@buckybox.com>
 NO_REPLY_EMAIL: no-reply@buckybox.com
 MAIL_SAFE: crashtestdummy@buckybox.com
+
+# Delayed::Job
+DELAYED_JOB_PRIORITY_HIGH: 0
+DELAYED_JOB_PRIORITY_LOW:  50
 
 # Usercycle
 USERCYCLE_API_KEY: '624a19c076449cb71c750ab7ef5909de7f488dc1'
