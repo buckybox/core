@@ -18,10 +18,7 @@ class Address < ActiveRecord::Base
     result << address_2 unless address_2.blank?
     result << suburb unless suburb.blank?
     result << city unless city.blank?
-
-    if options[:with_postcode]
-      result << postcode unless postcode.blank?
-    end
+    result << postcode unless postcode.blank?
 
     if options[:with_phone]
       result << phones.all.join(join_with)
@@ -31,7 +28,7 @@ class Address < ActiveRecord::Base
   end
 
   def ==(address)
-    address.is_a?(Address) && [:address_1, :address_2, :suburb, :city].all?{ |a|
+    address.is_a?(Address) && [:address_1, :address_2, :suburb, :city, :postcode].all?{ |a|
       send(a) == address.send(a)
     }
   end
@@ -41,7 +38,7 @@ class Address < ActiveRecord::Base
   end
 
   def compute_address_hash
-    Digest::SHA1.hexdigest([:address_1, :address_2, :suburb, :city].collect{|a| send(a).downcase.strip rescue ''}.join(''))
+    Digest::SHA1.hexdigest([:address_1, :address_2, :suburb, :city, :postcode].collect{|a| send(a).downcase.strip rescue ''}.join(''))
   end
 
   def update_address_hash
