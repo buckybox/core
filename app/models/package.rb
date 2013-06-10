@@ -119,7 +119,7 @@ class Package < ActiveRecord::Base
     if has_archived_address_details?
       read_attribute(:archived_address)
     else
-      archived_address_details.join(', ')
+      archived_address_details.join
     end
   end
 
@@ -149,11 +149,11 @@ class Package < ActiveRecord::Base
     deliveries.order("created_at DESC").first
   end
 
-  private
+private
 
   def archive_data
     if status != 'packed'
-      self.archived_address               = address.join(', ')
+      self.archived_address               = address.join
       self.archived_address_details       = address
 
       self.archived_box_name              = box.name
