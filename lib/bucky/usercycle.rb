@@ -1,12 +1,11 @@
 require 'singleton'
-require 'usercycle'
 
 module Bucky
   class Usercycle
     include Singleton
 
     def initialize
-      # set up a client to talk to the USERcycle API
+      # Set up a client to talk to the Usercycle API
       @client = ::Usercycle::Client.new(
         Figaro.env.usercycle_api_key,
         Figaro.env.usercycle_api_url
@@ -17,9 +16,12 @@ module Bucky
       raise TypeError, "Identity cannot be nil" if identity.nil?
 
       if Rails.env.production? || Rails.env.staging?
-        @client.event.create(identity.id, action_name, *args)
-      else
-        warn "Usercycle event '#{action_name}' not tracked for the current environment"
+        @client.event.delay(
+          priority: Figaro.env.delayed_job_priority_low
+        ).create(identity.id, action_name, *args)
+
+      elsif defined?(Rails.logger)
+        Rails.logger.debug "Usercycle event '#{action_name}' not being tracked for the current environment (#{Rails.env})"
       end
     end
 
