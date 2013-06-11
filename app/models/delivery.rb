@@ -26,6 +26,7 @@ class Delivery < ActiveRecord::Base
 
   before_save :update_dso
   before_create :set_delivery_number
+  after_save :usercycle_tracking
 
   scope :pending,   where(status: 'pending')
   scope :delivered, where(status: 'delivered')
@@ -71,7 +72,7 @@ class Delivery < ActiveRecord::Base
   end
 
   def self.change_statuses(deliveries, status_event)
-    final_result = deliveries.all? do |delivery|
+    deliveries.all? do |delivery|
       result = delivery.already_performed_event?(status_event)
 
       unless result
@@ -81,8 +82,6 @@ class Delivery < ActiveRecord::Base
 
       result
     end
-
-    return final_result
   end
 
   def self.pay_on_delivery(deliveries)
@@ -184,7 +183,7 @@ class Delivery < ActiveRecord::Base
     package.archived_consumer_delivery_fee_cents
   end
 
-  private
+private
 
   def default_route
     self.route = order.route if order
@@ -239,6 +238,13 @@ class Delivery < ActiveRecord::Base
 
     unless order.save
       errors.add(:base, 'The order could not be saved.')
+    end
+  end
+
+  def usercycle_tracking
+    if status_changed? && status == 'delivered'
+      Bucky::Usercycle.instance.event(distributor, "distributor_delivered_order")
+      Bucky::Usercycle.instance.event(distributor, "engaged") # macro event
     end
   end
 end

@@ -10,7 +10,7 @@
           - if current_distributor.active_webstore?
             = link_to 'view webstore', webstore_store_path(current_distributor.parameter_name), target: '_blank'
         %li
-          - if admin_signed_in? 
+          - if admin_signed_in?
             = link_to 'logout', unimpersonate_admin_distributors_path
           - else
             = link_to 'logout', destroy_distributor_session_path, method: :delete

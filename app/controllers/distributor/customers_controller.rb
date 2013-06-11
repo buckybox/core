@@ -21,7 +21,10 @@ class Distributor::CustomersController < Distributor::ResourceController
 
   def create
     create! do |success, failure|
-      success.html { redirect_to distributor_customer_url(@customer) }
+      success.html do
+        usercycle.event(current_distributor, "distributor_created_customer")
+        redirect_to distributor_customer_url(@customer)
+      end
     end
   end
 
