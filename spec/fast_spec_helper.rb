@@ -1,6 +1,7 @@
 APP_ROOT       = '../..'
 APP_MODEL_PATH = 'app/models'
 LIB_MODEL_PATH = 'lib/models'
+DECORATOR_PATH = 'app/decorators'
 
 def defaults
   { app_path: APP_MODEL_PATH }
@@ -8,6 +9,11 @@ end
 
 def require_model(name, opts = {})
   opts[:app_path] = LIB_MODEL_PATH if opts.delete(:lib)
+  require_resource(name, opts)
+end
+
+def require_decorator(name, opts = {})
+  opts[:app_path] = DECORATOR_PATH
   require_resource(name, opts)
 end
 
