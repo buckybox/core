@@ -34,6 +34,10 @@ class Box < ActiveRecord::Base
     box_image.thumb.url
   end
 
+  def webstore_image_url
+    box_image.webstore.url
+  end
+
   def customisable?
     dislikes? || extras_allowed?
   end

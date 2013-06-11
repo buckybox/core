@@ -5,7 +5,11 @@ class WebstoreController < ApplicationController
   before_filter :get_webstore_order, except: [:store, :process_step]
 
   def store
-    @boxes = @distributor.boxes.not_hidden
+    webstore_products = Webstore::Product.build_distributors_products(@distributor)
+
+    render 'store', locals: { 
+      webstore_products: Webstore::ProductDecorator.decorate_collection(webstore_products)
+    }
   end
 
   def process_step
