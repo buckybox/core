@@ -14,7 +14,7 @@ class CustomerMailer < ActionMailer::Base
   def orders_halted(customer)
     @distributor = customer.distributor
     @customer = customer
-    @oops = ['Uh-oh', 'Whoops', 'Oooops'].shuffle.first
+    @oops = ['Uh-oh', 'Whoops', 'Oooops'].sample
 
     mail to: @customer.email,
          from: "#{@distributor.name} <#{Figaro.env.no_reply_email}>",
@@ -26,13 +26,22 @@ class CustomerMailer < ActionMailer::Base
   def remind_orders_halted(customer)
     @distributor = customer.distributor
     @customer = customer
-    @oops = ['Uh-oh', 'Whoops', 'Oooops'].shuffle.first
+    @oops = ['Uh-oh', 'Whoops', 'Oooops'].sample
 
     mail to: @customer.email,
          from: "#{@distributor.name} <#{Figaro.env.no_reply_email}>",
          cc: @distributor.support_email,
          reply_to: @distributor.support_email,
          subject: "#{@oops}, your #{@distributor.name} deliveries are on hold"
+  end
+
+  def email_template(customer, email)
+    distributor = customer.distributor
+
+    mail to: customer.email,
+         from: "#{distributor.name} <#{distributor.email}>",
+         subject: email.subject,
+         body: email.body
   end
 
   # FIXME we are not doing invoicing at the moment
