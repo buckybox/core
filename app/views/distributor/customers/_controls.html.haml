@@ -23,7 +23,7 @@
                 None
 
       .btn-group.email-actions{:class => ("list-view" if defined? @customers)}
-        = link_to '#sendEmail', id: 'distributor_customers_email', class: "btn btn-primary", title: "Send an email" do
+        = link_to '#', id: 'distributor_customers_email', class: "btn btn-primary", title: "Send an email" do
           %i.icon-envelope.icon-white
         = button_tag class: "btn btn-primary dropdown-toggle", data: { toggle: 'dropdown' } do
           %span.caret
