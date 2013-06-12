@@ -27,7 +27,7 @@
                       New template
 
                   - unless template == @email_templates.last
-                    = link_to '#', class: "delete-template pull-right #{'hidden' unless index.zero?}", title: "Delete this template" do
+                    = link_to 'javascript:void(0);', class: "delete-template pull-right #{'hidden' unless index.zero?}", title: "Delete this template" do
                       %i.icon-trash
 
               .accordion-body.collapse{:id => "email_template_#{index}", :class => "#{'in' if index.zero?}"}
@@ -46,7 +46,7 @@
           <ul><li>#{EmailTemplate::KEYWORDS.join('<li>')}</ul>
         HELP
 
-      = link_to '#', class: 'pull-left', title: 'Special keywords', 'data-placement' => 'left', 'data-toggle' => 'popover', 'data-content' => help do
+      = link_to 'javascript:void(0);', class: 'pull-left', title: 'Special keywords', 'data-placement' => 'bottom', 'data-toggle' => 'popover', 'data-content' => help do
         %i.icon-info-sign
         Help
 
