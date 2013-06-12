@@ -1,5 +1,22 @@
 $(function() {
 
+  // Allow to hide (and not close aka delete Bootstrap alerts)
+  $("[data-hide]").on("click", function(){
+      $(this).closest("." + $(this).attr("data-hide")).hide();
+  });
+
+  //////////////////////////////////////////////////////////////////////////////
+  // Sticky bar
+  //
+  var $window = $(window),
+      $sticky_bar = $('#sub-nav'),
+      bar_top = $sticky_bar.offset().top; // cached for performence
+
+  $sticky_bar.width($('#customers').outerWidth());
+  $window.scroll(function() {
+     $sticky_bar.toggleClass('sticky', $window.scrollTop() > bar_top);
+  });
+
   //////////////////////////////////////////////////////////////////////////////
   // Checkbox selector
   //
