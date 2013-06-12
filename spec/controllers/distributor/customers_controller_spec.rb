@@ -78,8 +78,16 @@ describe Distributor::CustomersController do
         @post.call
       end
 
+      it "sets the flash message" do
+        @post.call
+
+        flash[:notice].should_not be_nil
+      end
+
       it "sends emails" do
-        CustomerMailer.should_receive(:email_template)
+        mock_delay = double('mock_delay').as_null_object
+        CustomerMailer.stub(:delay).and_return(mock_delay)
+        mock_delay.should_receive(:email_template)
 
         @post.call
       end
