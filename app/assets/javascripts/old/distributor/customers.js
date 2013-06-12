@@ -8,14 +8,17 @@ $(function() {
   //////////////////////////////////////////////////////////////////////////////
   // Sticky bar
   //
-  var $window = $(window),
-      $sticky_bar = $('#sub-nav'),
-      bar_top = $sticky_bar.offset().top; // cached for performence
+  var $sticky_bar = $('#sub-nav');
 
-  $sticky_bar.width($('#customers').outerWidth());
-  $window.scroll(function() {
-     $sticky_bar.toggleClass('sticky', $window.scrollTop() > bar_top);
-  });
+  if ($sticky_bar.length) {
+    var $window = $(window), // cached for performance
+        bar_top = $sticky_bar.offset().top;
+
+    $sticky_bar.width($('#customers').outerWidth());
+    $window.scroll(function() {
+       $sticky_bar.toggleClass('sticky', $window.scrollTop() > bar_top);
+    });
+  }
 
   //////////////////////////////////////////////////////////////////////////////
   // Checkbox selector
