@@ -155,11 +155,11 @@ private
   def send_email recipient_ids, email
     recipient_ids.each do |id|
       customer = Customer.find id
-
       personalised_email = email.personalise(customer)
-      CustomerMailer.raise_errors do
-        CustomerMailer.email_template(customer, personalised_email) # FIXME use DJ
-      end
+
+      CustomerMailer.delay(
+        priority: Figaro.env.delayed_job_priority_high
+      ).email_template(customer, personalised_email)
     end
 
     message = "Your email \"#{email.subject}\" is being sent to "
