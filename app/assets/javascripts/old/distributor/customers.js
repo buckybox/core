@@ -93,8 +93,11 @@ $(function() {
     });
 
     modal.find('.accordion-toggle').click(function() {
-      var is_expanded = $(this).closest('.accordion-group').find('.collapse').hasClass('in');
-      if (is_expanded) return false; // don't collapse it
+      var clicked_template = $(this).closest('.accordion-group').find('.collapse');
+      var other_templates = modal.find('.accordion-group .collapse.in').not(clicked_template);
+      other_templates.collapse('hide');
+
+      if (clicked_template.hasClass('in')) return false; // don't collapse it
     });
 
     modal.find('.collapse').on('show', function() {
