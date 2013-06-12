@@ -2,6 +2,7 @@ class Distributor::CustomersController < Distributor::ResourceController
   respond_to :html, :xml, :json
 
   before_filter :get_form_type, only: [:edit, :update]
+  before_filter :get_email_templates, only: [:index, :show]
 
   def index
     if current_distributor.routes.empty?
@@ -82,6 +83,38 @@ class Distributor::CustomersController < Distributor::ResourceController
     redirect_to distributor_customer_url(@customer)
   end
 
+  def email
+    email_templates = build_email_templates(params[:email_templates])
+    selected_email_template_id = params[:selected_email_template_id].to_i
+
+    email_to_send = email_templates[selected_email_template_id]
+    email_templates = email_templates.values # we don't need original IDs anymore
+
+    unless email_to_send
+      render json: "There is no email to send!", status: :unprocessable_entity and return
+    end
+
+    unless email_to_send.valid?
+      render json: email_to_send.errors.join('<br>'), status: :unprocessable_entity and return
+    end
+
+    # remove new template placeholder
+    email_templates.pop unless email_to_send == email_templates.last
+
+    unless email_templates.all?(&:valid?)
+      errors = email_templates.map(&:errors).flatten.join('<br>')
+      render json: errors, status: :unprocessable_entity and return
+    end
+
+    if current_distributor.update_attributes(email_templates: email_templates)
+      recipient_ids = params[:recipient_ids].split(',').map(&:to_i)
+      flash[:notice] = send_email(recipient_ids, email_to_send)
+      render json: nil
+    else
+      render json: current_distributor.errors.full_messages, status: :unprocessable_entity
+    end
+  end
+
 protected
 
   def get_form_type
@@ -103,5 +136,38 @@ protected
     end
 
     @customers = @customers.ordered_by_next_delivery.includes(account: {route: {}}, tags: {}, next_order: {box: {}})
+  end
+
+private
+
+  def get_email_templates
+    @email_templates = current_distributor.email_templates << EmailTemplate.new
+  end
+
+  def build_email_templates email_templates
+    email_templates.inject({}) do |list, (index, new_template)|
+      list.merge!(index.to_i => EmailTemplate.new(
+        new_template[:subject], new_template[:body]
+      ))
+    end
+  end
+
+  def send_email recipient_ids, email
+    recipient_ids.each do |id|
+      customer = Customer.find id
+
+      personalised_email = email.personalise(customer)
+      CustomerMailer.raise_errors do
+        CustomerMailer.email_template(customer, personalised_email) # FIXME use DJ
+      end
+    end
+
+    message = "Your email \"#{email.subject}\" is being sent to "
+    message << if recipient_ids.size == 1
+      Customer.find(recipient_ids.first).name
+    else
+      "#{recipient_ids.size} customers"
+    end
+    message << "..."
   end
 end

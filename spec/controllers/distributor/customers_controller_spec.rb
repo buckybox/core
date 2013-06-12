@@ -49,13 +49,39 @@ describe Distributor::CustomersController do
         get :show, id: @customer.id
       end
     end
-  end
 
-  context "performance" do
-    before do
-      3.times do
-        c = Fabricate(:customer, distributor: @distributor)
-        Fabricate(:order, account: c.account)
+    describe "#email" do
+      let(:recipient_ids) { [@customer.id] }
+      let(:email_templates) {
+        {"0" => {
+            "subject" => "Hey!",
+            "body" => "Hi [first_name],\r\n\r\nCheers"
+          },
+         "1" => {"subject" => "", "body" => ""}
+        }
+      }
+
+      before do
+        @post = lambda { post :email,
+          recipient_ids: recipient_ids.join(','),
+          selected_email_template_id: "0",
+          email_templates: email_templates
+        }
+      end
+
+      it "calls send_email with the right arguments" do
+        controller.should_receive(:send_email) do |ids, email|
+          ids.should eq recipient_ids
+          email.should be_a EmailTemplate
+        end
+
+        @post.call
+      end
+
+      it "sends emails" do
+        CustomerMailer.should_receive(:email_template)
+
+        @post.call
       end
     end
   end
