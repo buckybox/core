@@ -136,17 +136,30 @@ $(function() {
     });
 
     // form events
-    var submit_button = modal.find('input[type="submit"]');
+    var preview_button = modal.find('input[type="submit"][name="preview"]');
+    var commit_button = modal.find('input[type="submit"][name="commit"]');
+    preview_button.click(function() { $(this).button('loading'); });
+    commit_button.click(function() { $(this).button('loading'); });
+
     modal.find('form')
       .bind("ajax:beforeSend", function() {
-        submit_button.button('loading');
-        $(this).find('.alert-error').hide();
+        $(this).find('.alert').hide();
       })
       .bind("ajax:success", function(xhr, data, status) {
-        location.reload();
+        if (data.preview) {
+          preview_button.button('reset');
+
+          $(this).find('.alert-info .preview').html(data.preview);
+          $(this).find('.alert-info').show();
+
+        } else {
+          location.reload();
+        }
       })
       .bind("ajax:error", function(xhr, data, status) {
-        submit_button.button('reset');
+        preview_button.button('reset');
+        commit_button.button('reset');
+
         $(this).find('.alert-error').html(data.responseText).show();
       });
 

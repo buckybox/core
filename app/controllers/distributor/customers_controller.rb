@@ -86,6 +86,7 @@ class Distributor::CustomersController < Distributor::ResourceController
   def email
     email_templates = build_email_templates(params[:email_templates])
     selected_email_template_id = params[:selected_email_template_id].to_i
+    recipient_ids = params[:recipient_ids].split(',').map(&:to_i)
 
     email_to_send = email_templates[selected_email_template_id]
     email_templates = email_templates.values # we don't need original IDs anymore
@@ -98,6 +99,16 @@ class Distributor::CustomersController < Distributor::ResourceController
       render json: email_to_send.errors.join('<br>'), status: :unprocessable_entity and return
     end
 
+    if params.has_key? 'preview'
+      customer = Customer.find recipient_ids.first
+      personalised_email = email_to_send.personalise(customer)
+
+      CustomerMailer.email_template(customer, personalised_email).deliver
+
+      formatted_body = personalised_email.body.gsub!(/\r?\n/, "<br>")
+      render json: { preview: formatted_body } and return
+    end
+
     # remove new template placeholder
     email_templates.pop unless email_to_send == email_templates.last
 
@@ -107,7 +118,6 @@ class Distributor::CustomersController < Distributor::ResourceController
     end
 
     if current_distributor.update_attributes(email_templates: email_templates)
-      recipient_ids = params[:recipient_ids].split(',').map(&:to_i)
       flash[:notice] = send_email(recipient_ids, email_to_send)
       render json: nil
     else
