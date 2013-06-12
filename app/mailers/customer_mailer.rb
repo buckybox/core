@@ -35,11 +35,15 @@ class CustomerMailer < ActionMailer::Base
          subject: "#{@oops}, your #{@distributor.name} deliveries are on hold"
   end
 
-  def email_template(customer, email)
-    distributor = customer.distributor
+  def email_template(recipient, email)
+    from = if recipient.respond_to? :distributor
+      recipient.distributor
+    else
+      recipient
+    end
 
-    mail to: customer.email,
-         from: "#{distributor.name} <#{distributor.email}>",
+    mail to: recipient.email,
+         from: "#{from.name} <#{from.email}>",
          subject: email.subject,
          body: email.body
   end

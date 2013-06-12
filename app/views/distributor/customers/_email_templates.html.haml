@@ -10,7 +10,13 @@
 
     .modal-body
       .alert.alert-error
-      .alert.alert-success
+      .alert.alert-info
+        = link_to 'javascript:void(0);', class: 'close', 'data-hide' => 'alert-info' do
+          ×
+        .preview
+        %hr
+        %i.icon-info-sign
+        A preview email has been sent to your email address as well.
 
       #templates.accordion
         - @email_templates.each_with_index do |template, index|
@@ -50,5 +56,6 @@
         %i.icon-info-sign
         Help
 
+      = f.button :submit, 'Preview', name: 'preview', class: 'btn', 'data-loading-text' => "generating...", autocomplete: 'off'
       = f.button :submit, 'Save & Send', class: 'btn btn-primary', 'data-loading-text' => "sending...", autocomplete: 'off'
 
