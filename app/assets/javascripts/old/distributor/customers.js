@@ -77,7 +77,6 @@ $(function() {
 
     // set hidden fields
     $('#recipient_ids').val(recipient_ids);
-    $('#selected_email_template_id').val("0"); // reset it on page refresh
 
     // set up event handlers
     modal.find('.delete-template').click(function() {
