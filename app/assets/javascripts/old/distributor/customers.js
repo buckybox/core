@@ -53,6 +53,12 @@ $(function() {
 
   $('#select_all-all').click(function() { select_all(true); });
   $('#select_all-none').click(function() { select_all(false); });
+  $('#select_all-inverse').click(function() {
+    $('.select_one').each(function() {
+      $(this).prop('checked', !$(this).prop('checked'));
+    });
+    select_one();
+  });
 
   //////////////////////////////////////////////////////////////////////////////
   // Email modal
