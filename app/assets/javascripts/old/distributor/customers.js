@@ -149,14 +149,14 @@ $(function() {
         $(this).find('.alert').hide();
       })
       .bind("ajax:success", function(xhr, data, status) {
-        if (data.preview) {
+        if (!data) {
+          location.reload();
+
+        } else if (data.preview) {
           preview_button.button('reset');
 
           $(this).find('.alert-info .preview').html(data.preview);
           $(this).find('.alert-info').show();
-
-        } else {
-          location.reload();
         }
       })
       .bind("ajax:error", function(xhr, data, status) {
