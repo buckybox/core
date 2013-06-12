@@ -1,13 +1,20 @@
 //----- Controls
 
 #sub-nav
-  #nav-info
-    padding-top: 6px
+  #action-buttons
+    .btn-group
+      display: inline-block
+      input
+        margin-top: -3px
+    .email-actions.list-view
+      display: none
+
   #search-form
+    text-align: center
     form
-      margin-bottom: 0px
+      margin-bottom: 0
       .input-append
-        margin: 0px
+        margin: 0
 
 //----- Customer index
 
@@ -19,6 +26,10 @@
     text-align: right
     font-size: large
     font-weight: bold
+
+#sendEmail.modal
+  #templates .accordion-heading a.pull-right
+    padding: 8px 15px
 
 //----- Customer show
 

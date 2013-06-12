@@ -109,6 +109,7 @@ BuckyBox::Application.routes.draw do
       collection do
         get 'search',   action: :index, as: 'search'
         get 'tag/:tag', action: :index, as: 'tag'
+        post 'email'
       end
 
       member do
