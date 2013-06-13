@@ -151,7 +151,8 @@ protected
 private
 
   def get_email_templates
-    @email_templates = current_distributor.email_templates << EmailTemplate.new
+    @email_templates = current_distributor.email_templates
+    @new_email_template = EmailTemplate.new
   end
 
   def build_email_templates email_templates

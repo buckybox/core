@@ -39,8 +39,55 @@
 #sendEmail.modal
   width: 750px
   margin-left: -375px // must be half of the width, minus scrollbar on the left (30px)
+  form
+    margin: 0
+
   #templates .accordion-heading a.pull-right
     padding: 8px 15px
+
+  .composer
+    .selected
+      font-weight: bold
+    .caret
+      position: relative
+      top: 4px
+      left: 4px
+
+    .template-link-action
+      display: none
+    .template-link
+      .subject, .body
+        display: none
+    input, textarea
+      background-color: $white
+      box-shadow: none
+      border: none
+
+    .subject
+      overflow-x: hidden
+      margin: 0
+      input
+        margin: 0 0 0 4px
+
+    .body textarea
+      margin: 0
+      border-top: 1px solid #eee
+      background: -webkit-radial-gradient(50% 0%, 50% 6px, #aaa 0%, white 100%)
+
+  .dropdown-toggle
+    width: 11px
+    height: 23px
+
+  .modal-header, .modal-footer
+    padding: 9px 7px
+    .pull-left
+      margin-top: 4px
+
+  .modal-body
+    padding: 0 4px
+
+  .modal-footer a.action
+    padding-right: 20px
 
 //----- Customer show
 
