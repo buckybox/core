@@ -104,6 +104,16 @@ $(function() {
     // set hidden fields
     $('#recipient_ids').val(recipient_ids);
 
+    modal.find('.template-link').click(function() {
+      $("#email_template_subject").val($(this).find('[name="subject"]').val());
+      $("#email_template_body").val($(this).find('[name="body"]').val());
+
+      modal.find('.template-link-action').show();
+
+      modal.find('.template-link a').removeClass('selected');
+      $(this).find('a').addClass('selected');
+    });
+
     // set up event handlers
     modal.find('.delete-template').click(function() {
       var current_template = $(this).closest('.accordion-group').find('.collapse');
@@ -154,8 +164,6 @@ $(function() {
 
         } else if (data.preview) {
           preview_button.button('reset');
-
-          $(this).find('.alert-info .preview').html(data.preview);
           $(this).find('.alert-info').show();
         }
       })
