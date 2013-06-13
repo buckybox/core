@@ -14,7 +14,13 @@ $(function() {
     var $window = $(window), // cached for performance
         bar_top = $sticky_bar.offset().top;
 
-    $sticky_bar.width($('#customers').outerWidth());
+    var resize_sticky_bar = function() {
+      $sticky_bar.width($sticky_bar.parent().outerWidth());
+    };
+
+    $window.bind('resize', resize_sticky_bar);
+    resize_sticky_bar();
+
     $window.scroll(function() {
        $sticky_bar.toggleClass('sticky', $window.scrollTop() > bar_top);
     });
