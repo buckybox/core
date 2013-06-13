@@ -1,31 +1,55 @@
 class WebstoreController < ApplicationController
   layout 'customer'
 
-  before_filter :check_distributor
-  before_filter :get_webstore_order, except: [:store, :process_step]
+  before_filter :setup_by_distributor
+  before_filter :check_if_webstore_active
 
   def store
-    webstore_products = Webstore::Product.build_distributors_products(@distributor)
-
-    render 'store', locals: { 
-      webstore_products: Webstore::ProductDecorator.decorate_collection(webstore_products)
-    }
+    render 'store', locals: {  webstore_products: webstore_products }
   end
 
-  def process_step
-    webstore = Webstore.new(self, @distributor)
-    @webstore_order = webstore.order
-
-    if webstore.process_params
-      redirect_to action: webstore.next_step, distributor_parameter_name: @distributor.parameter_name
-    end
+  def start_order
+    order = new_order(params)
+    order ? successful_new_order(order) : failed_new_order(order)
   end
 
   def customise
-    @stock_list = @distributor.line_items
-    @box = @webstore_order.box
-    @extras = @box.extras.not_hidden.alphabetically
+    render 'customise', locals: { customise_order: customise_order }
   end
+
+  #--- Private
+
+  def webstore_products
+    wp = Webstore::Product.build_distributors_products(distributor)
+    Webstore::ProductDecorator.decorate_collection(wp)
+  end
+
+  def new_order(params)
+    Webstore::Order.new(params)
+  end
+
+  def successful_new_order(order)
+    save_webstore_session(order: order)
+    redirect_to webstore_customise_path
+  end
+
+  def failed_new_order(order)
+    flash[:error] = 'We\'re sorry there was an error starting your order.'
+    redirect_to webstore_store_path
+  end
+
+  def save_webstore_session(args)
+    session[:webstore] = {} unless session[:webstore]
+    session[:webstore] = Webstore::Session.serialize(args)
+  end
+
+  #-------------------------
+
+  # def customise
+  #   @stock_list = @distributor.line_items
+  #   @box = @webstore_order.box
+  #   @extras = @box.extras.not_hidden.alphabetically
+  # end
 
   def customise_error
     customise
@@ -123,23 +147,31 @@ private
     current_customer.present? && !current_customer.orders.active.count.zero?
   end
 
-  def get_webstore_order
-    webstore_order_id = session[:webstore][:webstore_order_id] if session[:webstore]
-    @webstore_order = WebstoreOrder.find_by_id(webstore_order_id) if webstore_order_id
-    redirect_to webstore_store_url and return unless @webstore_order
+  #-----
+
+  def setup_by_distributor
+    if distributor
+      set_defaults(distributor)
+      check_customer(distributor, current_customer)
+    end
   end
 
-  def check_distributor
-    @distributor = Distributor.find_by_parameter_name(params[:distributor_parameter_name])
-
-    if @distributor
-      Time.zone = @distributor.time_zone
-      Money.default_currency = Money::Currency.new(@distributor.currency)
-
-      # So we don't have customers from other distributors trying to make orders in this store
-      sign_out(current_customer) if current_customer && current_customer.distributor != @distributor
+  def check_if_webstore_active
+    if distributor.nil? || !distributor.active_webstore
+      redirect_to Figaro.env.marketing_site_url and return
     end
+  end
 
-    redirect_to Figaro.env.marketing_site_url and return if @distributor.nil? || !@distributor.active_webstore
+  def distributor
+    @distributor ||= Distributor.find_by_parameter_name(params[:distributor_parameter_name])
+  end
+
+  def set_defaults(distributor)
+    Time.zone = distributor.time_zone
+    Money.default_currency = Money::Currency.new(distributor.currency)
+  end
+
+  def check_customer(distributor, customer)
+    sign_out(customer) if customer && customer.distributor != distributor
   end
 end
