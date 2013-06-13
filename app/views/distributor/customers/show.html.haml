@@ -14,7 +14,7 @@
             %span.label.label-info= tag.name
 
       #account-information{data: {account_id: @account.id}}
-        %span.important{ class: "#{'negative' if @account.balance.negative?}" }= @account.balance
+        %span.important{ class: "#{'negative' if @account.balance.negative?}" }= @account.balance.format
 
       %ul.unstyled
         - unless @customer.discount.zero?

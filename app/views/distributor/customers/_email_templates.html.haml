@@ -19,7 +19,7 @@
       .row-fluid.composer
         .dropdown.pull-left
           -# = button_tag class: "btn dropdown-toggle", data: { toggle: 'dropdown' } do
-          %div.dropdown-toggle{'data-toggle' => 'dropdown'}
+          %div.dropdown-toggle{'data-toggle' => 'dropdown', title: "More"}
             %i.caret
           %ul.dropdown-menu
             %li.template-link-action
@@ -44,7 +44,7 @@
                 = hidden_field_tag 'body', template.body.gsub("\n", "\r")
 
         = f.input 'subject', label: false, placeholder: "Subject", input_html: { class: 'span12 selected' }, wrapper_html: { class: 'subject' }, autofocus: true
-        = f.input 'body', as: :text, label: false, placeholder: "Type in your email template here.", input_html: { class: 'span12', rows: 12 }, wrapper_html: { class: 'body' }
+        = f.input 'body', as: :text, label: false, placeholder: "Message", input_html: { class: 'span12', rows: 12 }, wrapper_html: { class: 'body' }
 
     .modal-footer
       :ruby
