@@ -76,13 +76,20 @@
       margin: 0
       border-top: 1px solid #eee
       background: -webkit-radial-gradient(50% 0%, 50% 6px, #aaa 0%, white 100%)
+      background: radial-gradient(50% 0%, 50% 6px, #aaa 0%, white 100%)
+      resize: none
 
   .dropdown-toggle
     width: 11px
     height: 23px
+    opacity: .7
+    &:hover
+      opacity: 1
 
   .modal-header, .modal-footer
     padding: 9px 7px
+    i
+      margin-top: 3px
     .pull-left
       margin-top: 4px
 
