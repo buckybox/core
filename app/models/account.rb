@@ -148,7 +148,7 @@ class Account < ActiveRecord::Base
     end
   end
 
-  private
+private
 
   def default_balance_and_currency
     write_attribute(:balance_cents, 0) if balance_cents.blank?

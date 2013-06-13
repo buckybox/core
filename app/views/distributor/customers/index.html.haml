@@ -30,5 +30,5 @@
             %small= next_customer_delivery_box_name(customer)
           %td
             %small= customer.account.route.name
-          %td.balance{ class: "#{'negative' if customer.account.balance.negative?}" }= customer.account.balance
+          %td.balance{ class: "#{'negative' if customer.account.balance.negative?}" }= customer.account.balance.format
 

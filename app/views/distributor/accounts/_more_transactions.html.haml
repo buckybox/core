@@ -7,7 +7,7 @@
     %td= transaction.created_at.to_s(:transaction)
     %td= transaction.display_time.to_s(:transaction)
     %td= transaction.description
-    %td.text-right= transaction.amount
-    %td.text-right{ class: "#{'negative' if running_balance.negative?}" }= running_balance
+    %td.text-right= transaction.amount.format
+    %td.text-right{ class: "#{'negative' if running_balance.negative?}" }= running_balance.format
 
   - running_balance -= transaction.amount
