@@ -79,9 +79,9 @@ $(function() {
   $("#distributor_customers_email").click(function() {
     // set modal contents
     if ($("#customer-details #section-one").length) {
-      var customer = $("#customer-details #section-one .customer-name")
-      var recipients = customer.text();
-      var recipient_ids = customer.data('customer-id');
+      var customer = $("#customer-details #section-one .customer-badge").parent();
+      var recipients = customer.html();
+      var recipient_ids = customer.find('.customer-name').data('customer-id');
 
     } else {
       var customers = $('#customers .select_one:checked');
@@ -89,7 +89,7 @@ $(function() {
       var first_customers = customers.slice(0, max_customers);
 
       var recipients = first_customers.map(function() {
-        return $("#" + this.id).closest('tr').find('.customer-name').text();
+        return $("#" + this.id).closest('tr').find('.customer-badge').parent().html();
       }).get().join(', ');
 
       var recipient_ids = customers.map(function() {
@@ -102,7 +102,7 @@ $(function() {
       }
     }
 
-    modal.find('.recipients').text(recipients);
+    modal.find('.recipients').html(recipients);
 
     popovers.popover(); // enable popovers
     modal.find('.alert').hide();
