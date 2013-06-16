@@ -14,7 +14,12 @@ class WebstoreController < ApplicationController
   end
 
   def customise
-    render 'customise', locals: { customise_order: customise_order }
+    webstore_session = load_webstore_session(params)
+    order = webstore_session.order
+    render 'customise', locals: {
+      order: order.decorate,
+      customise_order: customise_order(order)
+    }
   end
 
   #--- Private
@@ -40,16 +45,19 @@ class WebstoreController < ApplicationController
 
   def save_webstore_session(args)
     session[:webstore] = {} unless session[:webstore]
-    session[:webstore] = Webstore::Session.serialize(args)
+    webstore_session = Webstore::Session.new(args)
+    session[:webstore] = webstore_session.serialize
+  end
+
+  def load_webstore_session(args)
+    Webstore::Session.deserialize(args)
+  end
+
+  def customise_order(order)
+    Webstore::Customise.new(order: order)
   end
 
   #-------------------------
-
-  # def customise
-  #   @stock_list = @distributor.line_items
-  #   @box = @webstore_order.box
-  #   @extras = @box.extras.not_hidden.alphabetically
-  # end
 
   def customise_error
     customise
@@ -147,7 +155,7 @@ private
     current_customer.present? && !current_customer.orders.active.count.zero?
   end
 
-  #-----
+  #----- v-- Now using
 
   def setup_by_distributor
     if distributor
