@@ -26,7 +26,7 @@ class Customer < ActiveRecord::Base
 
   attr_accessible :address_attributes, :first_name, :last_name, :email, :name, :distributor_id, :distributor,
     :route, :route_id, :password, :password_confirmation, :remember_me, :tag_list, :discount, :number, :notes,
-    :special_order_preference, :balance_threshold
+    :special_order_preference, :balance_threshold, :via_webstore
 
   validates_presence_of :distributor_id, :route_id, :first_name, :email, :discount, :address
   validates_uniqueness_of :number, scope: :distributor_id
@@ -46,7 +46,7 @@ class Customer < ActiveRecord::Base
   before_create :setup_account
   before_create :setup_address
 
-  after_create :notify_distributor
+  after_create :via_webstore_notifications, if: :via_webstore?
 
   after_save :update_next_occurrence # This could be more specific about when it updates
 
@@ -283,7 +283,7 @@ class Customer < ActiveRecord::Base
     end
   end
 
-  def notify_distributor
+  def via_webstore_notifications
     Event.new_customer_webstore(self)
     CustomerMailer.raise_errors do
       self.send_login_details
