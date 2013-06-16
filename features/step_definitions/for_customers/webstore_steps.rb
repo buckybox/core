@@ -1,4 +1,9 @@
 Given /^I am on the webstore$/ do
+  if @current_user_logged_in # make sure we are still logged in
+    @current_user = @customer
+    step "I log in"
+  end
+
   path = webstore_store_path(distributor_parameter_name: @customer.distributor.parameter_name)
   visit path
 end
@@ -38,12 +43,18 @@ When /^I fill in my email address$/ do
   click_button "Next"
 end
 
+Then /^I should be asked to select my delivery frequency$/ do
+  step "I should be viewing the delivery step"
+  step "I should not see a message"
+end
+
 Given "I am asked to select my delivery frequency" do
   steps %Q{
     Given I am asked to customise the box
     When I customise the box
-    When I fill in my email address
   }
+
+  step "I fill in my email address" unless @current_user_logged_in
 end
 
 When /^I select a (.*) delivery frequency$/ do |frequency|
@@ -65,10 +76,15 @@ Given "I am asked for my delivery address" do
   step "I should be asked for my delivery address"
 end
 
-When /^I fill in my delivery address$/ do
-  fill_in :webstore_order_address_name, with: "Crazy Rabbit"
-  fill_in :webstore_order_address_street_address, with: "Rabbit Hole"
-  click_button "Complete Order"
+When /^I (fill in|confirm) my delivery address$/ do |action|
+  if action == "fill in"
+    fill_in :webstore_order_address_name, with: "Crazy Rabbit"
+    fill_in :webstore_order_address_street_address, with: "Rabbit Hole"
+  end
+
+  expect {
+    click_button "Complete Order"
+  }.to change{Order.count}.by(1)
 end
 
 When /^I select the payment option "(.*)"$/ do |option|
@@ -82,8 +98,10 @@ Then /^My order should be placed$/ do
 end
 
 Then /^I should see the details of my order$/ do
-  page.should have_content "Payment instructions"
-  # TODO more checks
+  page.should have_content "Payment instructions",
+    "Pay by Cash On Delivery",
+    "Order summary",
+    "Deliver to"
 end
 
 Given "I have just ordered a box" do
