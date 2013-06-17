@@ -1,5 +1,6 @@
 Fabricator(:email_template) do
-  subject "Hi!"
-  body "What's up [first_name]?"
+  on_init do
+    init_with "Hi customer!", "What's up [first_name]?"
+  end
 end
 

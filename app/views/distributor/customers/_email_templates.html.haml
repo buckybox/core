@@ -7,41 +7,50 @@
 
   = simple_form_for :email_template, url: email_distributor_customers_path, remote: true do |f|
     = hidden_field_tag :recipient_ids
-    = hidden_field_tag :selected_email_template_id, "0"
+    = hidden_field_tag :selected_email_template_id, "-1"
+    = hidden_field_tag :link_action
 
     .modal-body
       .alert.alert-error
+        = link_to 'javascript:void(0);', class: 'pull-right', 'data-hide' => 'alert' do
+          Okay
+        .message
+      .alert.alert-success
+        = link_to 'javascript:void(0);', class: 'pull-right', 'data-hide' => 'alert' do
+          Okay
+        .message
       .alert.alert-info
-        = link_to 'javascript:void(0);', class: 'close', 'data-hide' => 'alert-info' do
-          %i.icon-remove
-        A preview email has been sent to #{current_distributor.email}.
+        Please wait...
+        %span.ajax_loader_gif
 
       .row-fluid.composer
         .dropdown.pull-left
-          -# = button_tag class: "btn dropdown-toggle", data: { toggle: 'dropdown' } do
           %div.dropdown-toggle{'data-toggle' => 'dropdown', title: "More"}
             %i.caret
           %ul.dropdown-menu
             %li.template-link-action
-              = link_to 'javascript:void(0);' do
-                %i.icon-hdd
+              = link_to_submit 'data-link-action' => 'update' do
                 Update template
             %li.template-link-action
-              = link_to 'javascript:void(0);' do
-                %i.icon-trash
+              = link_to_submit 'data-link-action' => 'delete' do
                 Delete this template
             %li
-              = link_to 'javascript:void(0);' do
-                %i.icon-plus
+              = link_to_submit 'data-link-action' => 'save' do
                 Save as new template
-            %li.divider
-            - @email_templates.each_with_index do |template, index|
+            %li.divider.templates{ :class => ('hide' if @email_templates.empty?) }
+            - @email_templates.each do |template|
               %li.template-link
-                = link_to 'javascript:void(0);' do
+                = link_to 'javascript:void(0);', title: "Load this template" do
                   %i.icon-star
-                  = template.subject
-                = hidden_field_tag 'subject', template.subject
-                = hidden_field_tag 'body', template.body.gsub("\n", "\r")
+                  %span= template.subject
+                .span.hide.subject= template.subject
+                .span.hide.body= template.body
+            %li.new-template-link.hide
+              = link_to 'javascript:void(0);', title: "Load this template" do
+                %i.icon-star
+                %span
+              .hide.subject
+              .hide.body
 
         = f.input 'subject', label: false, placeholder: "Subject", input_html: { class: 'span12 selected' }, wrapper_html: { class: 'subject' }, autofocus: true
         = f.input 'body', as: :text, label: false, placeholder: "Message", input_html: { class: 'span12', rows: 12 }, wrapper_html: { class: 'body' }
@@ -59,7 +68,7 @@
         Special keywords
 
       = link_to 'Cancel', 'javascript:void(0);', class: 'action', 'data-dismiss' => 'modal'
-      = link_to 'Preview', 'javascript:void(0);', class: 'action'
+      = link_to_submit 'Preview', class: 'action', 'data-link-action' => 'preview'
 
       = f.button :submit, 'Send', class: 'btn btn-primary', 'data-loading-text' => "sending...", autocomplete: 'off'
 
