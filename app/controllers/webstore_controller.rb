@@ -30,7 +30,8 @@ class WebstoreController < ApplicationController
   end
 
   def new_order(params)
-    Webstore::Order.new(params)
+    args = { box_id: params['box_id'] }
+    Webstore::Order.new(args)
   end
 
   def successful_new_order(order)
