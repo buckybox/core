@@ -47,7 +47,7 @@ describe CustomerCSV do
     end
 
     it "exports customer data into csv" do
-      @rows[1].should eq ["2013-06-17", "0666", "John", "Doe", "exaaaample@example.com", "0.00", "4.44", "false", "0.34", "65", "Bitch, please.", "", "false", "Route 2", "5 Address St", "Apartment 1", "Suburb", "City", "00000", "", "11-111-111-1111", "22-222-222-2222", "33-333-333-3333", "pimp, vip", "7", "2013-06-24"]
+      @rows[1].should eq [Date.today.iso8601, "0666", "John", "Doe", "exaaaample@example.com", "0.00", "4.44", "false", "0.34", "65", "Bitch, please.", "", "false", "Route 2", "5 Address St", "Apartment 1", "Suburb", "City", "00000", "", "11-111-111-1111", "22-222-222-2222", "33-333-333-3333", "pimp, vip", "7", 1.week.from_now.to_date.iso8601]
     end
   end
 end
