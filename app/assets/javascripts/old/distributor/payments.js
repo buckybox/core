@@ -8,7 +8,7 @@ $(function() {
 
       $("#import_transaction_list_csv_file").change(function() {
         $('.ajax_loader_hide').hide();
-        $('.ajax_loader_gif').show();
+        $('#payment-tables .ajax_loader_gif').show();
 
         return $(this).closest('form').submit();
       });
@@ -75,7 +75,7 @@ $(function() {
 
       $('.ajax_loader_hide').show();
 
-      return $('.ajax_loader_gif').hide();
+      return $('#payment-tables .ajax_loader_gif').hide();
     },
 
     load_more_rows_on_bottom: function() {
@@ -83,7 +83,7 @@ $(function() {
       last_row_id = $("tr.row_description:last").attr("data-row-id");
 
       $('.ajax_loader_hide').hide();
-      $('.ajax_loader_gif').show();
+      $('#payment-tables .ajax_loader_gif').show();
 
       return $.getScript("/distributor/import_transactions/" + last_row_id + "/load_more_rows/bottom");
     }
