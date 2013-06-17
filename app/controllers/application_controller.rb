@@ -17,6 +17,12 @@ class ApplicationController < ActionController::Base
   # Taken from http://stackoverflow.com/questions/7642648/what-is-the-best-way-to-handle-email-exceptions-in-a-rails-app-using-postmarkapp
 
 protected
+  
+  def send_csv(filename, data)
+    type = 'text/csv; charset=utf-8; header=present'
+
+    send_data(data, type: type, filename: filename)
+  end
 
   def usercycle
     @usercycle ||= Bucky::Usercycle.instance

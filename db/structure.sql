@@ -755,7 +755,8 @@ CREATE TABLE customers (
     next_order_id integer,
     next_order_occurrence_date date,
     balance_threshold_cents integer,
-    status_halted boolean DEFAULT false
+    status_halted boolean DEFAULT false,
+    via_webstore boolean DEFAULT false
 );
 
 
@@ -3589,3 +3590,5 @@ INSERT INTO schema_migrations (version) VALUES ('20130610041926');
 INSERT INTO schema_migrations (version) VALUES ('20130610110940');
 
 INSERT INTO schema_migrations (version) VALUES ('20130610121509');
+
+INSERT INTO schema_migrations (version) VALUES ('20130616094641');

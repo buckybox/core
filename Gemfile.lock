@@ -159,6 +159,10 @@ GEM
       railties (~> 3.1)
       warden (~> 1.2.1)
     diff-lcs (1.2.4)
+    draper (1.2.1)
+      actionpack (>= 3.0)
+      activesupport (>= 3.0)
+      request_store (~> 1.0.3)
     ember-rails (0.7.0)
       active_model_serializers
       execjs (>= 1.2)
@@ -332,6 +336,7 @@ GEM
     rdoc (3.12.2)
       json (~> 1.4)
     ref (1.0.5)
+    request_store (1.0.5)
     responders (0.9.3)
       railties (~> 3.1)
     rspec (2.13.0)
@@ -446,6 +451,7 @@ DEPENDENCIES
   delayed_job_active_record (~> 0.4.4)
   delorean
   devise (~> 2.2.4)
+  draper (~> 1.0)
   ember-rails (~> 0.7.0)
   fabrication
   figaro (~> 0.6.4)

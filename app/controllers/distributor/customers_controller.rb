@@ -113,6 +113,13 @@ class Distributor::CustomersController < Distributor::ResourceController
     end
   end
 
+  def export
+    recipient_ids = params[:recipient_ids].split(',').map(&:to_i)
+    csv_string = CustomerCSV.generate(current_distributor, recipient_ids)
+
+    send_csv("customer_export.csv", csv_string)
+  end
+
 protected
 
   def get_form_type
