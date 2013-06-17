@@ -54,6 +54,7 @@ class Customer < ActiveRecord::Base
   delegate :currency, :send_email?, to: :distributor, allow_nil: true
 
   scope :ordered_by_next_delivery, lambda { order("CASE WHEN next_order_occurrence_date IS NULL THEN '9999-01-01' WHEN next_order_occurrence_date < '#{Date.current.to_s(:db)}' THEN '9999-01-01' ELSE next_order_occurrence_date END ASC, lower(customers.first_name) ASC, lower(customers.last_name) ASC") }
+  scope :ordered, order("lower(customers.first_name) ASC, lower(customers.last_name) ASC")
 
   default_value_for :discount, 0
   default_value_for :balance_threshold_cents do |c|

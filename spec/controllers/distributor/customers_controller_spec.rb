@@ -156,5 +156,31 @@ describe Distributor::CustomersController do
         end
       end
     end
+
+    describe "#export" do
+      let(:recipient_ids) { [@customer.id] }
+
+      before do
+        @post = lambda { post :export, recipient_ids: recipient_ids.join(',') }
+      end
+
+      it "downloads a csv" do
+        CustomerCSV.stub(:generate).and_return("")
+        @post.call
+        response.headers['Content-Type'].should eq "text/csv; charset=utf-8; header=present"
+      end
+
+      it "exports customer data into csv" do
+        CustomerCSV.stub(:generate).and_return("I am the kind of csvs")
+        @post.call
+        response.body.should eq "I am the kind of csvs"
+      end
+
+      it "calls CustomerCSV.generate" do
+        CustomerCSV.stub(:generate)
+        CustomerCSV.should_receive(:generate).with(@distributor, [@customer.id])
+        @post.call
+      end
+    end
   end
 end
