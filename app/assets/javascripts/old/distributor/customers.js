@@ -107,77 +107,135 @@ $(function() {
     popovers.popover(); // enable popovers
     modal.find('.alert').hide();
 
-    // set hidden fields
     $('#recipient_ids').val(recipient_ids);
 
-    modal.find('.template-link').click(function() {
-      $("#email_template_subject").val($(this).find('[name="subject"]').val());
-      $("#email_template_body").val($(this).find('[name="body"]').val());
+    var template_link_handler = function() {
+      var current_link = $(this);
+      var id = -1;
+
+      modal.find('.template-link').each(function(index) {
+        if ($(this)[0] == current_link[0]) {
+          id = index;
+          return false;
+        }
+      });
+
+      $('#selected_email_template_id').val(id);
 
       modal.find('.template-link-action').show();
 
       modal.find('.template-link a').removeClass('selected');
       $(this).find('a').addClass('selected');
-    });
 
-    // set up event handlers
-    modal.find('.delete-template').click(function() {
-      var current_template = $(this).closest('.accordion-group').find('.collapse');
+      $("#email_template_subject").val(current_link.find('.subject').html());
+      $("#email_template_body").val(current_link.find('.body').html());
+    };
 
-      current_template.on('hidden', function() {
-        $(this).closest('.accordion-group').remove(); // remove from DOM
-
-        var templates = modal.find('.accordion-group .collapse');
-        templates.first().collapse('show');
-      });
-
-      current_template.collapse('hide');
-    });
-
-    modal.find('.accordion-toggle').click(function() {
-      var clicked_template = $(this).closest('.accordion-group').find('.collapse');
-      var other_templates = modal.find('.accordion-group .collapse.in').not(clicked_template);
-      other_templates.collapse('hide');
-
-      if (clicked_template.hasClass('in')) return false; // don't collapse it
-    });
-
-    modal.find('.collapse').on('show', function() {
-      // hide/show the delete button
-      var old_selected_email_template = $("#email_template_" + $('#selected_email_template_id').val());
-      old_selected_email_template.closest('.accordion-group').find('.delete-template').addClass('hidden');
-      $(this).closest('.accordion-group').find('.delete-template').removeClass('hidden');
-
-      // set the current template ID
-      var selected_email_template = $(this).closest('.accordion-group').find('.accordion-toggle');
-      var selected_email_template_id = selected_email_template.prop('href').split('#email_template_')[1];
-      $('#selected_email_template_id').val(selected_email_template_id);
-    });
+    modal.find('.template-link').click(template_link_handler);
 
     // form events
-    var preview_button = modal.find('input[type="submit"][name="preview"]');
     var commit_button = modal.find('input[type="submit"][name="commit"]');
-    preview_button.click(function() { $(this).button('loading'); });
     commit_button.click(function() { $(this).button('loading'); });
+
+    var show_error = function(message) {
+      modal.find('form .alert-error .message').html(message).parent().show();
+    };
+
+    var show_success = function(message) {
+      modal.find('form .alert-success .message').html(message).parent().show();
+    };
+
+    var update_template_link_attributes = function(template_link) {
+      template_link.find('a span').text($("#email_template_subject").val());
+      template_link.find('.subject').html($("#email_template_subject").val());
+      template_link.find('.body').html($("#email_template_body").val());
+    }
+
+    var selected_email_template_link = function() {
+      var template_link = null;
+      var id = $('#selected_email_template_id').val();
+
+      modal.find('.template-link').each(function(index) {
+        if (index == id) {
+          template_link = $(this);
+          return false;
+        }
+      });
+
+      return template_link;
+    };
 
     modal.find('form')
       .bind("ajax:beforeSend", function() {
+        $("#email_template_subject").prop("disabled", true);
+        $("#email_template_body").prop("disabled", true);
+
         $(this).find('.alert').hide();
+        $(this).find('.alert-info').show();
+      })
+      .bind("ajax:complete", function() {
+        $(this).find('.alert-info').hide();
+
+        $("#link_action").val("");
+
+        $("#email_template_subject").prop("disabled", false);
+        $("#email_template_body").prop("disabled", false);
       })
       .bind("ajax:success", function(xhr, data, status) {
         if (!data) {
+          show_error("Oops!");
+
+        } else if (data.send) {
           location.reload();
 
-        } else if (data.preview) {
-          preview_button.button('reset');
-          $(this).find('.alert-info').show();
+        } else if (data.update) {
+          update_template_link_attributes(selected_email_template_link());
+
+          show_success(data.message);
+        } else if (data.delete) {
+          // hide template contextual actions
+          modal.find('.template-link-action').hide();
+
+          // remove template from list
+          selected_email_template_link().remove();
+
+          // hide divider if no templates remaining
+          if (modal.find('.template-link').length == 0) {
+            modal.find('.divider.templates').hide();
+          }
+
+          // reset selected template ID
+          $('#selected_email_template_id').val("-1");
+
+          // reset text fields
+          $("#email_template_subject").val("");
+          $("#email_template_body").val("");
+
+          show_success(data.message);
+        } else if (data.save) {
+          modal.find('.divider.templates').show();
+
+          // clone the new template link
+          var new_template_link_template = modal.find('.new-template-link');
+          new_template_link_template.before(new_template_link_template[0].outerHTML);
+
+          // update template link attributes and reveal it
+          var new_template_link = modal.find('.new-template-link').first();
+          update_template_link_attributes(new_template_link);
+          new_template_link.removeClass('new-template-link hide').addClass('template-link');
+
+          // set up click handler
+          new_template_link.click(template_link_handler);
+          new_template_link.trigger('click');
+
+          show_success(data.message);
+        } else {
+          show_success(data.message);
         }
       })
       .bind("ajax:error", function(xhr, data, status) {
-        preview_button.button('reset');
         commit_button.button('reset');
-
-        $(this).find('.alert-error').html(data.responseText).show();
+        show_error(JSON.parse(data.responseText).message);
       });
 
     // finally reveal the modal

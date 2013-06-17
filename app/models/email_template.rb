@@ -4,11 +4,15 @@ class EmailTemplate
   # white-list of special keywords to be replaced
   KEYWORDS = %w(first_name last_name account_balance)
 
-  attr_accessor :subject, :body
+  attr_reader :subject, :body
   attr_reader :errors
 
-  def initialize(subject = nil, body = nil)
+  def initialize(subject, body)
     @subject, @body = subject, body
+
+    # preserve new lines in the textarea for silly Javascript/JQuery
+    @body = @body.gsub("\r", "").gsub("\n", "\r")
+
     @errors = []
   end
 
@@ -37,10 +41,7 @@ class EmailTemplate
       personalised_body.gsub! "[#{keyword}]", replace.to_s
     end
 
-    OpenStruct.new({
-      subject: subject,
-      body: personalised_body
-    }).freeze
+    EmailTemplate.new(subject, personalised_body).freeze
   end
 
   def unknown_keywords

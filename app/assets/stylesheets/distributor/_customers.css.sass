@@ -37,10 +37,18 @@
     font-weight: bold
 
 #sendEmail.modal
-  width: 750px
+  width: 620px
   margin-left: -375px // must be half of the width, minus scrollbar on the left (30px)
   form
     margin: 0
+
+  .ajax_loader_gif
+    display: inline-block
+    margin-left: 4px
+
+  .alert
+    margin: 0
+    padding: 4px 8px
 
   .recipients
     margin-left: 3px
@@ -70,7 +78,8 @@
       overflow-x: hidden
       margin: 0
       input
-        margin: 0 0 0 4px
+        margin: 0
+        padding: 0
 
     .body textarea
       margin: 0
@@ -80,8 +89,9 @@
       resize: none
 
   .dropdown-toggle
-    width: 11px
-    height: 23px
+    cursor: pointer
+    width: 22px
+    height: 30px
     opacity: .7
     &:hover
       opacity: 1

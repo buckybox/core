@@ -84,44 +84,29 @@ class Distributor::CustomersController < Distributor::ResourceController
   end
 
   def email
-    email_templates = build_email_templates(params[:email_templates])
-    selected_email_template_id = params[:selected_email_template_id].to_i
-    recipient_ids = params[:recipient_ids].split(',').map(&:to_i)
+    email_template = EmailTemplate.new(
+      params[:email_template][:subject],
+      params[:email_template][:body]
+    )
 
-    email_to_send = email_templates[selected_email_template_id]
-    email_templates = email_templates.values # we don't need original IDs anymore
+    link_action = params[:link_action]
+    link_action = "send" if link_action.empty?
 
-    unless email_to_send
-      render json: "There is no email to send!", status: :unprocessable_entity and return
+    if !email_template.valid? && link_action != "delete"
+      render json: { message: email_template.errors.join('<br>') },
+             status: :unprocessable_entity
+
+      return
     end
 
-    unless email_to_send.valid?
-      render json: email_to_send.errors.join('<br>'), status: :unprocessable_entity and return
-    end
+    message = email_templates_update(link_action, email_template)
 
-    if params.has_key? 'preview'
-      customer = Customer.find recipient_ids.first
-      personalised_email = email_to_send.personalise(customer)
-
-      CustomerMailer.email_template(customer, personalised_email).deliver
-
-      formatted_body = personalised_email.body.gsub!(/\r?\n/, "<br>")
-      render json: { preview: formatted_body } and return
-    end
-
-    # remove new template placeholder
-    email_templates.pop unless email_to_send == email_templates.last
-
-    unless email_templates.all?(&:valid?)
-      errors = email_templates.map(&:errors).flatten.join('<br>')
-      render json: errors, status: :unprocessable_entity and return
-    end
-
-    if current_distributor.update_attributes(email_templates: email_templates)
-      flash[:notice] = send_email(recipient_ids, email_to_send)
-      render json: nil
+    if message && current_distributor.save
+      flash[:notice] = message if link_action == "send"
+      render json: { link_action => true, message: message }
     else
-      render json: current_distributor.errors.full_messages, status: :unprocessable_entity
+      render json: current_distributor.errors.full_messages,
+             status: :unprocessable_entity
     end
   end
 
@@ -152,15 +137,39 @@ private
 
   def get_email_templates
     @email_templates = current_distributor.email_templates
-    @new_email_template = EmailTemplate.new
   end
 
-  def build_email_templates email_templates
-    email_templates.inject({}) do |list, (index, new_template)|
-      list.merge!(index.to_i => EmailTemplate.new(
-        new_template[:subject], new_template[:body]
-      ))
+  def email_templates_update action, email_template
+    selected_email_template_id = params[:selected_email_template_id].to_i
+    recipient_ids = params[:recipient_ids].split(',').map(&:to_i)
+    message = nil
+
+    case action
+    when "update"
+      current_distributor.email_templates[selected_email_template_id] = email_template
+      message = "Your changes have been saved."
+
+    when "delete"
+      deleted = current_distributor.email_templates.delete_at(selected_email_template_id)
+      message = "Email template <em>#{deleted.subject}</em> has been deleted."
+
+    when "save"
+      current_distributor.email_templates << email_template
+      message = "Your new email template <em>#{email_template.subject}</em> has been saved."
+
+    when "preview"
+      customer = Customer.find recipient_ids.first
+      personalised_email = email_template.personalise(customer)
+      CustomerMailer.email_template(current_distributor, personalised_email).deliver
+      message = "A preview email has been sent to #{current_distributor.email}."
+
+    when "send"
+      if params[:commit]
+        message = send_email recipient_ids, email_template
+      end
     end
+
+    message
   end
 
   def send_email recipient_ids, email

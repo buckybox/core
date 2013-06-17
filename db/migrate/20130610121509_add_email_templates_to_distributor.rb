@@ -3,7 +3,7 @@ class AddEmailTemplatesToDistributor < ActiveRecord::Migration
     add_column :distributors, :email_templates, :text
 
     Distributor.all.each do |distributor|
-      templates = [
+      email_templates = [
         {
           subject: "Your account is overdue",
           body: <<-BODY
@@ -49,7 +49,7 @@ Cheers
       # NOTE: I could simply assign `email_templates` for each distributor but it
       # takes more than a minute so I use the following hack:
       coder = ActiveRecord::Coders::YAMLColumn.new Array
-      serialized_templates = coder.dump(templates).freeze
+      serialized_templates = coder.dump(email_templates).freeze
 
       distributor.update_column 'email_templates', serialized_templates
     end

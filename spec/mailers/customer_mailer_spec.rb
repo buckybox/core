@@ -24,9 +24,7 @@ describe CustomerMailer do
 
   describe "email_template" do
     let(:email_template) {
-      Fabricate.build(:email_template,
-        subject: "Hi!", body: "What's up Joe?"
-      )
+      Fabricate.build(:email_template)
     }
     let(:mail) { CustomerMailer.email_template(@customer, email_template) }
 

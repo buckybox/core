@@ -3,7 +3,7 @@ require 'spec_helper'
 describe EmailTemplate do
   describe "#valid?" do
     it "validates presence of attributes" do
-      template = EmailTemplate.new
+      template = EmailTemplate.new "", ""
 
       template.should_not be_valid
       template.errors.join.should include "Subject", "Body", "blank"
@@ -35,7 +35,7 @@ describe EmailTemplate do
 
       personalised_email = template.personalise(customer)
       personalised_email.subject.should eq "subject"
-      personalised_email.body.should eq <<-BODY
+      personalised_email.body.should eq <<-BODY.gsub("\n", "")
         Hey Joe!
 
         Your balance is $0.00.
