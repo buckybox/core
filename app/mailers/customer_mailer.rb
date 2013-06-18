@@ -36,14 +36,15 @@ class CustomerMailer < ActionMailer::Base
   end
 
   def email_template(recipient, email)
-    from = if recipient.respond_to? :distributor
+    distributor = if recipient.respond_to? :distributor
       recipient.distributor
     else
       recipient
     end
 
     mail to: recipient.email,
-         from: "#{from.name} <#{from.email}>",
+         from: "#{distributor.name} <#{Figaro.env.no_reply_email}>",
+         reply_to: distributor.support_email,
          subject: email.subject,
          body: email.body
   end
