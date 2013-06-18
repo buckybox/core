@@ -35,7 +35,7 @@ describe EmailTemplate do
 
       personalised_email = template.personalise(customer)
       personalised_email.subject.should eq "subject"
-      personalised_email.body.should eq <<-BODY.gsub("\n", "")
+      personalised_email.body.should eq <<-BODY
         Hey Joe!
 
         Your balance is $0.00.
