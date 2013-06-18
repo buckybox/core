@@ -9,11 +9,14 @@ class Distributor::SessionsController < Devise::SessionsController
 
     result = super
 
-    if DistributorLogin.first?(current_distributor)
-      usercycle.event(current_distributor, 'signed_up') # macro event (acquisition)
-    end
-
     DistributorLogin.track(current_distributor)
+
+    # macro event (acquisition)
+    usercycle.event(current_distributor, 'signed_up', {
+      company: current_distributor.name,
+      email: current_distributor.email,
+      first_name: current_distributor.contact_name
+    })
 
     result
   end
