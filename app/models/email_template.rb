@@ -30,20 +30,28 @@ class EmailTemplate
   def personalise customer
     raise @errors unless valid?
 
-    personalised_body = body.dup
-
-    KEYWORDS.each do |keyword|
+    replace_map = KEYWORDS.inject({}) do |hash, keyword|
       replace = customer.public_send(keyword)
 
       # NOTE: format money - will need to be less ad-hoc if we add new keywords
       replace = replace.format if replace.respond_to? :format
 
-      personalised_body.gsub!(
-        EmailTemplate.keyword_with_delimiters(keyword), replace.to_s
-      )
+      hash.merge!(keyword => replace.to_s)
+    end.freeze
+
+    personalised = {}
+
+    [:subject, :body].each do |attribute|
+      attribute_value = public_send attribute
+
+      replace_map.each do |key, value|
+        attribute_value.gsub!(EmailTemplate.keyword_with_delimiters(key), value)
+      end
+
+      personalised[attribute] = attribute_value
     end
 
-    EmailTemplate.new(subject, personalised_body).freeze
+    EmailTemplate.new(personalised[:subject], personalised[:body]).freeze
   end
 
   def unknown_keywords
