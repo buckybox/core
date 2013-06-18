@@ -1,4 +1,4 @@
-#sendEmail.modal.hide.fade{'tabindex' => '-1', 'role' => 'dialog'}
+#distributor_customers_send_email.modal.hide.fade{'tabindex' => '-1', 'role' => 'dialog'}
   .modal-header
     %button.close{ data: { dismiss: 'modal'} }
       %i.icon-remove
@@ -72,13 +72,16 @@
 
       = f.button :submit, 'Send', class: 'btn btn-primary', 'data-loading-text' => "sending...", autocomplete: 'off'
 
-#emptyModal.modal.hide.fade{'tabindex' => '-1', 'role' => 'dialog'}
+#distributor_customers_copy_email.modal.hide.fade{'tabindex' => '-1', 'role' => 'dialog'}
   .modal-header
     %button.close{ data: { dismiss: 'modal'} }
       %i.icon-remove
-    %h4.title
+    %h4 Customer email addresses
 
   .modal-body
+    %p Please click on the box below then hit CTRL+C (or Cmd+C on Mac) to copy these email addresses to your clipboard.
+
+    %textarea.span12{"autofocus" => "autofocus"}
 
   .modal-footer
     = link_to 'Close', 'javascript:void(0)', class: 'btn btn-primary', 'data-dismiss' => 'modal'

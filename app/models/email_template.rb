@@ -35,14 +35,27 @@ class EmailTemplate
       # NOTE: format money - will need to be less ad-hoc if we add new keywords
       replace = replace.format if replace.respond_to? :format
 
-      personalised_body.gsub! "[#{keyword}]", replace.to_s
+      personalised_body.gsub!(
+        EmailTemplate.keyword_with_delimiters(keyword), replace.to_s
+      )
     end
 
     EmailTemplate.new(subject, personalised_body).freeze
   end
 
   def unknown_keywords
-    keywords = body.to_s.scan(/\[(.*?)\]/).map(&:first)
+    regexp = /#{Regexp.escape(DELIMITERS.first)}(.*?)#{Regexp.escape(DELIMITERS.last)}/
+    keywords = body.to_s.scan(regexp).map(&:first)
     keywords - KEYWORDS
+  end
+
+  def self.keyword_with_delimiters keyword
+    "#{DELIMITERS.first}#{keyword}#{DELIMITERS.last}"
+  end
+
+  def self.keywords_with_delimiters
+    KEYWORDS.map do |keyword|
+      keyword_with_delimiters keyword
+    end
   end
 end
