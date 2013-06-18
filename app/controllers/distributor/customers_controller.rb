@@ -84,29 +84,32 @@ class Distributor::CustomersController < Distributor::ResourceController
   end
 
   def email
-    email_template = EmailTemplate.new(
-      params[:email_template][:subject],
-      params[:email_template][:body]
-    )
-
     link_action = params[:link_action]
     link_action = "send" if link_action.empty?
 
-    if !email_template.valid? && link_action != "delete"
-      render json: { message: email_template.errors.join('<br>') },
-             status: :unprocessable_entity
+    message = if (link_action == "delete")
+      email_templates_update(link_action)
 
-      return
+    else
+      return error("Oops") unless params[:email_template]
+
+      email_template = EmailTemplate.new(
+        params[:email_template][:subject],
+        params[:email_template][:body]
+      )
+
+      if !email_template.valid?
+        return error(email_template.errors.join('<br>'))
+      end
+
+      email_templates_update(link_action, email_template)
     end
-
-    message = email_templates_update(link_action, email_template)
 
     if message && current_distributor.save
       flash[:notice] = message if link_action == "send"
       render json: { link_action => true, message: message }
     else
-      render json: current_distributor.errors.full_messages,
-             status: :unprocessable_entity
+      return error(current_distributor.errors.full_messages)
     end
   end
 
@@ -135,11 +138,15 @@ protected
 
 private
 
+  def error message
+    render json: { message: message }, status: :unprocessable_entity
+  end
+
   def get_email_templates
     @email_templates = current_distributor.email_templates
   end
 
-  def email_templates_update action, email_template
+  def email_templates_update action, email_template = nil
     selected_email_template_id = params[:selected_email_template_id].to_i
     recipient_ids = params[:recipient_ids].split(',').map(&:to_i)
     message = nil

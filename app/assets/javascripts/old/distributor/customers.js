@@ -73,10 +73,135 @@ $(function() {
   // Email modal
   //
 
-  var modal = $('#sendEmail.modal');
-  var popovers = modal.find('[data-toggle="popover"]');
+  var send_email_modal = $('#distributor_customers_send_email.modal');
 
-  $("#distributor_customers_email").click(function() {
+  var template_link_handler = function() {
+    var current_link = $(this);
+    var id = -1;
+
+    send_email_modal.find('.template-link').each(function(index) {
+      if ($(this)[0] == current_link[0]) {
+        id = index;
+        return false;
+      }
+    });
+
+    $('#selected_email_template_id').val(id);
+
+    send_email_modal.find('.template-link-action').show();
+
+    send_email_modal.find('.template-link a').removeClass('selected');
+    $(this).find('a').addClass('selected');
+
+    $("#email_template_subject").val(current_link.find('.subject').html());
+    $("#email_template_body").val(current_link.find('.body').html());
+  };
+
+  var show_error = function(message) {
+    send_email_modal.find('form .alert-error .message').html(message).parent().show();
+  };
+
+  var show_success = function(message) {
+    send_email_modal.find('form .alert-success .message').html(message).parent().show();
+  };
+
+  var update_template_link_attributes = function(template_link) {
+    template_link.find('a span').text($("#email_template_subject").val());
+    template_link.find('.subject').html($("#email_template_subject").val());
+    template_link.find('.body').html($("#email_template_body").val());
+  }
+
+  var selected_email_template_link = function() {
+    var template_link = null;
+    var id = $('#selected_email_template_id').val();
+
+    send_email_modal.find('.template-link').each(function(index) {
+      if (index == id) {
+        template_link = $(this);
+        return false;
+      }
+    });
+
+    return template_link;
+  };
+
+  var commit_button = send_email_modal.find('input[type="submit"][name="commit"]');
+  commit_button.click(function() { $(this).button('loading'); });
+
+  send_email_modal.find('form')
+    .bind("ajax:beforeSend", function() {
+      $("#email_template_subject").prop("disabled", true);
+      $("#email_template_body").prop("disabled", true);
+
+      $(this).find('.alert').hide();
+      $(this).find('.alert-info').show();
+    })
+    .bind("ajax:complete", function() {
+      $(this).find('.alert-info').hide();
+
+      $("#link_action").val("");
+
+      $("#email_template_subject").prop("disabled", false);
+      $("#email_template_body").prop("disabled", false);
+    })
+    .bind("ajax:success", function(xhr, data, status) {
+      if (!data) {
+        show_error("Oops!");
+
+      } else if (data.send) {
+        location.reload();
+
+      } else if (data.update) {
+        update_template_link_attributes(selected_email_template_link());
+
+        show_success(data.message);
+      } else if (data.delete) {
+        // hide template contextual actions
+        send_email_modal.find('.template-link-action').hide();
+
+        // remove template from list
+        selected_email_template_link().remove();
+
+        // hide divider if no templates remaining
+        if (send_email_modal.find('.template-link').length == 0) {
+          send_email_modal.find('.divider.templates').hide();
+        }
+
+        // reset selected template ID
+        $('#selected_email_template_id').val("-1");
+
+        // reset text fields
+        $("#email_template_subject").val("");
+        $("#email_template_body").val("");
+
+        show_success(data.message);
+      } else if (data.save) {
+        send_email_modal.find('.divider.templates').show();
+
+        // clone the new template link
+        var new_template_link_template = send_email_modal.find('.new-template-link');
+        new_template_link_template.before(new_template_link_template[0].outerHTML);
+
+        // update template link attributes and reveal it
+        var new_template_link = send_email_modal.find('.new-template-link').first();
+        update_template_link_attributes(new_template_link);
+        new_template_link.removeClass('new-template-link hide').addClass('template-link');
+
+        // set up click handler
+        new_template_link.click(template_link_handler);
+        new_template_link.trigger('click');
+
+        show_success(data.message);
+      } else {
+        show_success(data.message);
+      }
+    })
+    .bind("ajax:error", function(xhr, data, status) {
+      commit_button.button('reset');
+      show_error(JSON.parse(data.responseText).message);
+    });
+
+  send_email_modal.on('show', function() {
     // set modal contents
     if ($("#customer-details #section-one").length) {
       var customer = $("#customer-details #section-one .customer-badge").parent();
@@ -102,171 +227,28 @@ $(function() {
       }
     }
 
-    modal.find('.recipients').html(recipients);
-
-    popovers.popover(); // enable popovers
-    modal.find('.alert').hide();
-
     $('#recipient_ids').val(recipient_ids);
-
-    var template_link_handler = function() {
-      var current_link = $(this);
-      var id = -1;
-
-      modal.find('.template-link').each(function(index) {
-        if ($(this)[0] == current_link[0]) {
-          id = index;
-          return false;
-        }
-      });
-
-      $('#selected_email_template_id').val(id);
-
-      modal.find('.template-link-action').show();
-
-      modal.find('.template-link a').removeClass('selected');
-      $(this).find('a').addClass('selected');
-
-      $("#email_template_subject").val(current_link.find('.subject').html());
-      $("#email_template_body").val(current_link.find('.body').html());
-    };
-
-    modal.find('.template-link').click(template_link_handler);
-
-    // form events
-    var commit_button = modal.find('input[type="submit"][name="commit"]');
-    commit_button.click(function() { $(this).button('loading'); });
-
-    var show_error = function(message) {
-      modal.find('form .alert-error .message').html(message).parent().show();
-    };
-
-    var show_success = function(message) {
-      modal.find('form .alert-success .message').html(message).parent().show();
-    };
-
-    var update_template_link_attributes = function(template_link) {
-      template_link.find('a span').text($("#email_template_subject").val());
-      template_link.find('.subject').html($("#email_template_subject").val());
-      template_link.find('.body').html($("#email_template_body").val());
-    }
-
-    var selected_email_template_link = function() {
-      var template_link = null;
-      var id = $('#selected_email_template_id').val();
-
-      modal.find('.template-link').each(function(index) {
-        if (index == id) {
-          template_link = $(this);
-          return false;
-        }
-      });
-
-      return template_link;
-    };
-
-    modal.find('form')
-      .bind("ajax:beforeSend", function() {
-        $("#email_template_subject").prop("disabled", true);
-        $("#email_template_body").prop("disabled", true);
-
-        $(this).find('.alert').hide();
-        $(this).find('.alert-info').show();
-      })
-      .bind("ajax:complete", function() {
-        $(this).find('.alert-info').hide();
-
-        $("#link_action").val("");
-
-        $("#email_template_subject").prop("disabled", false);
-        $("#email_template_body").prop("disabled", false);
-      })
-      .bind("ajax:success", function(xhr, data, status) {
-        if (!data) {
-          show_error("Oops!");
-
-        } else if (data.send) {
-          location.reload();
-
-        } else if (data.update) {
-          update_template_link_attributes(selected_email_template_link());
-
-          show_success(data.message);
-        } else if (data.delete) {
-          // hide template contextual actions
-          modal.find('.template-link-action').hide();
-
-          // remove template from list
-          selected_email_template_link().remove();
-
-          // hide divider if no templates remaining
-          if (modal.find('.template-link').length == 0) {
-            modal.find('.divider.templates').hide();
-          }
-
-          // reset selected template ID
-          $('#selected_email_template_id').val("-1");
-
-          // reset text fields
-          $("#email_template_subject").val("");
-          $("#email_template_body").val("");
-
-          show_success(data.message);
-        } else if (data.save) {
-          modal.find('.divider.templates').show();
-
-          // clone the new template link
-          var new_template_link_template = modal.find('.new-template-link');
-          new_template_link_template.before(new_template_link_template[0].outerHTML);
-
-          // update template link attributes and reveal it
-          var new_template_link = modal.find('.new-template-link').first();
-          update_template_link_attributes(new_template_link);
-          new_template_link.removeClass('new-template-link hide').addClass('template-link');
-
-          // set up click handler
-          new_template_link.click(template_link_handler);
-          new_template_link.trigger('click');
-
-          show_success(data.message);
-        } else {
-          show_success(data.message);
-        }
-      })
-      .bind("ajax:error", function(xhr, data, status) {
-        commit_button.button('reset');
-        show_error(JSON.parse(data.responseText).message);
-      });
-
-    // finally reveal the modal
-    modal.modal('show');
+    send_email_modal.find('.recipients').html(recipients);
+    send_email_modal.find('.template-link').click(template_link_handler);
+    send_email_modal.find('.alert').hide();
+    send_email_modal.find('[data-toggle="popover"]').popover(); // enable popovers
+  }).on('hide', function() {
+    send_email_modal.find('[data-toggle="popover"]').popover('hide');
   });
 
-  modal.on('hide', function() {
-    // cleanup
-    popovers.popover('hide');
-  });
 
-  $("#distributor_customers_copy_email").click(function() {
+  $("#distributor_customers_copy_email.modal").on("show", function() {
     var customers = $('#customers .select_one:checked').closest('tr').find('.customer-name');
 
     var emails = customers.map(function() {
       return $(this).data('customer-email');
     }).get().join(', ');
 
-    var modal = $('#emptyModal.modal');
+    var list = $(this).find('textarea');
+    list.val(emails);
 
-    modal.find('.title').html("Customer email addresses");
-
-    modal.find('.modal-body').html("")
-      .append('<p>Please click on the box below then hit CTRL+C (or Cmd+C on Mac) to copy these ' + customers.length + ' email addresses to your clipboard.</p>')
-      .append('<textarea class="span12" autofocus>' + emails + '</textarea>');
-
-    var list = modal.find('textarea');
     list.focus(function() { $(this).select(); });
     list.click(function() { $(this).select(); });
-
-    modal.modal('show');
   });
 
   //////////////////////////////////////////////////////////////////////////////
