@@ -87,6 +87,7 @@ group :test do
   gem 'therubyracer', require: false # embeded JS interpreter for our CI server
 
   gem 'capybara', require: false
+  gem 'capybara-screenshot'
   gem 'cucumber-rails', require: false
   gem 'poltergeist', require: false
   gem 'launchy'
