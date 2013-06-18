@@ -58,14 +58,13 @@
     .modal-footer
       :ruby
         help = <<-HELP
-          You can include special keywords between [square brackets] in your email template.
-          These keywords will be replaced automatically for each customer:
-          <ul><li>#{EmailTemplate::KEYWORDS.join('<li>')}</ul>
+          These merge tags will be automatically substituted per customer:
+          <ul><li>#{EmailTemplate.keywords_with_delimiters.join('<li>')}</ul>
         HELP
 
-      = link_to 'javascript:void(0)', class: 'pull-left', title: 'List of special keywords', 'data-placement' => 'bottom', 'data-toggle' => 'popover', 'data-content' => help do
+      = link_to 'javascript:void(0)', class: 'pull-left', title: 'List of merge tags', 'data-placement' => 'bottom', 'data-toggle' => 'popover', 'data-content' => help do
         %i.icon-info-sign
-        Special keywords
+        Merge Tags
 
       = link_to 'cancel', 'javascript:void(0)', class: 'action', 'data-dismiss' => 'modal'
       = link_to_submit 'preview', class: 'action', 'data-link-action' => 'preview'
