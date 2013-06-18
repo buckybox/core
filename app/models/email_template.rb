@@ -4,6 +4,9 @@ class EmailTemplate
   # white-list of special keywords to be replaced
   KEYWORDS = %w(first_name last_name account_balance)
 
+  # 2-array with left and right keyword delimiters
+  DELIMITERS = %w({ })
+
   attr_reader :subject, :body
   attr_reader :errors
 
