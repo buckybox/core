@@ -10,9 +10,6 @@ class EmailTemplate
   def initialize(subject, body)
     @subject, @body = subject, body
 
-    # preserve new lines in the textarea for silly Javascript/JQuery
-    @body = @body.gsub("\r", "").gsub("\n", "\r")
-
     @errors = []
   end
 
