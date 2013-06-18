@@ -7,11 +7,11 @@ class AddEmailTemplatesToDistributor < ActiveRecord::Migration
         {
           subject: "Your account is overdue",
           body: <<-BODY
-Hi [first_name],
+Hi {first_name},
 
 Just a reminder that your account balance is overdue.
 
-Your existing balance is: [account_balance]
+Your existing balance is: {account_balance}
 
 You can login to your account to check your account history and make payments here:
 #{Rails.application.routes.url_helpers.new_customer_session_url(host: Figaro.env.host, distributor: distributor.parameter_name)}
@@ -23,7 +23,7 @@ Cheers
         {
           subject: "Using your login for ordering at #{distributor.name}",
           body: <<-BODY
-Hi [first_name],
+Hi {first_name},
 
 you can keep up to date with your orders by logging into your account with us here:
 #{Rails.application.routes.url_helpers.new_customer_session_url(host: Figaro.env.host, distributor: distributor.parameter_name)}
