@@ -17,6 +17,10 @@ DELAYED_JOB_PRIORITY_LOW:  50
 USERCYCLE_API_KEY: '624a19c076449cb71c750ab7ef5909de7f488dc1'
 USERCYCLE_API_URL: 'https://api.usercycle.com/api/v1'
 
+#Mandrillapp
+MANDRILL_PASSWORD: "B44y6SC4tEhaQMLKMfIvdA"
+MANDRILL_EMAIL: "sysadmins@buckybox.com"
+
 # Environment-dependant configuration
 development:
   HOST: buckybox.dev
@@ -28,10 +32,8 @@ test:
 
 staging:
   HOST: staging.buckybox.com
-  POSTMARK_API_KEY: '3c3bf3ae-b9a4-4c9a-b850-bc6528fb12bc'
 
 production:
   HOST: my.buckybox.com
-  POSTMARK_API_KEY: '63583ad4-c990-4ccb-a7db-afcc85d9070a'
   USERCYCLE_API_KEY: '8c7ad3ac4a5e8fe80258662dd42d961f99f4e703'
 
