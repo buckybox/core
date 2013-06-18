@@ -41,13 +41,13 @@
             - @email_templates.each do |template|
               %li.template-link
                 = link_to 'javascript:void(0);', title: "Load this template" do
-                  %i.icon-star
+                  %i.icon-pushpin
                   %span= template.subject
                 .span.hide.subject= template.subject
                 .span.hide.body= template.body
             %li.new-template-link.hide
               = link_to 'javascript:void(0);', title: "Load this template" do
-                %i.icon-star
+                %i.icon-pushpin
                 %span
               .hide.subject
               .hide.body
