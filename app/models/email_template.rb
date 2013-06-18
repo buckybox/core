@@ -7,7 +7,9 @@ class EmailTemplate
   # 2-array with left and right keyword delimiters
   DELIMITERS = %w({ })
 
-  attr_reader :subject, :body
+  ATTRIBUTES = [:subject, :body]
+
+  attr_reader(*ATTRIBUTES)
   attr_reader :errors
 
   def initialize(subject, body)
@@ -17,8 +19,11 @@ class EmailTemplate
   end
 
   def valid?
-    @errors << "Subject can't be blank" if subject.blank?
-    @errors << "Body can't be blank" if body.blank?
+    ATTRIBUTES.each do |attribute|
+      if public_send(attribute).blank?
+        @errors << "#{attribute.to_s.capitalize} can't be blank"
+      end
+    end
 
     unless unknown_keywords.empty?
       @errors << "Unknown keywords found: #{unknown_keywords.join(', ')}"
@@ -41,7 +46,7 @@ class EmailTemplate
 
     personalised = {}
 
-    [:subject, :body].each do |attribute|
+    ATTRIBUTES.each do |attribute|
       attribute_value = public_send attribute
 
       replace_map.each do |key, value|
@@ -56,7 +61,11 @@ class EmailTemplate
 
   def unknown_keywords
     regexp = /#{Regexp.escape(DELIMITERS.first)}(.*?)#{Regexp.escape(DELIMITERS.last)}/
-    keywords = body.to_s.scan(regexp).map(&:first)
+
+    keywords = ATTRIBUTES.map do |attribute|
+      public_send(attribute).to_s.scan(regexp).map(&:first)
+    end.flatten
+
     keywords - KEYWORDS
   end
 
