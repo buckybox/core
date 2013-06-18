@@ -29,7 +29,7 @@ you can keep up to date with your orders by logging into your account with us he
 #{Rails.application.routes.url_helpers.new_customer_session_url(host: Figaro.env.host, distributor: distributor.parameter_name)}
 
 Use this account to:
-- Make of change orders
+- Make or change orders
 - Check your transaction history
 - Pause your deliveries
 - Update your delivery address
