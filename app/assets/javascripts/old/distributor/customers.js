@@ -36,7 +36,7 @@ $(function() {
     if ($('.select_one:checked').length === 0) {
       $('#select_all').prop("indeterminate", false).attr('checked', false);
       if (email_actions.hasClass('list-view'))
-        email_actions.fadeOut();
+        email_actions.hide();
 
     } else if ($('.select_one:not(:checked)').length === 0) {
       $('#select_all').prop("indeterminate", false).attr('checked', true);
