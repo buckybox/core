@@ -72,3 +72,14 @@
 
       = f.button :submit, 'Send', class: 'btn btn-primary', 'data-loading-text' => "sending...", autocomplete: 'off'
 
+#emptyModal.modal.hide.fade{'tabindex' => '-1', 'role' => 'dialog'}
+  .modal-header
+    %button.close{ data: { dismiss: 'modal'} }
+      %i.icon-remove
+    %h4.title
+
+  .modal-body
+
+  .modal-footer
+    = link_to 'Close', 'javascript:void(0);', class: 'btn btn-primary', 'data-dismiss' => 'modal'
+

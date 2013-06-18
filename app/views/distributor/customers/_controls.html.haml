@@ -26,18 +26,14 @@
       .btn-group.email-actions{:class => ("list-view" if defined? @customers)}
         = link_to 'javascript:void(0);', id: 'distributor_customers_email', class: "btn btn-primary", title: "Send an email" do
           %i.icon-envelope.icon-white
-        = button_tag class: "btn btn-primary dropdown-toggle", data: { toggle: 'dropdown' } do
-          %span.caret
-        %ul.dropdown-menu{ role: 'menu' }
-          %li
-            = link_to 'javascript:void(0);', id: 'pending' do
-              %i.icon-envelope
-              Copy email address
-          %li.divider
-          %li
-            = link_to 'javascript:void(0);' do
-              %i.icon-heart
-              Mark as awesome!
+        - if defined? @customers
+          = button_tag class: "btn btn-primary dropdown-toggle", data: { toggle: 'dropdown' } do
+            %span.caret
+          %ul.dropdown-menu{ role: 'menu' }
+            %li
+              = link_to 'javascript:void(0);', id: 'distributor_customers_copy_email' do
+                %i.icon-envelope
+                Copy email address
 
     #search-form.span6
       = form_tag search_distributor_customers_path, method: :get do
