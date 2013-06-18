@@ -13,10 +13,10 @@ describe EmailTemplate do
   describe "#unknown_keywords" do
     it "returns unknown keywords" do
       template = EmailTemplate.new "subject", <<-BODY
-        Hi [first_name],
+        Hi {first_name},
 
-        Your are [age] year old!
-        Your balance is [account_balance].
+        Your are {age} year old!
+        Your balance is {account_balance}.
       BODY
 
       template.unknown_keywords.should eq %w(age)
@@ -27,10 +27,10 @@ describe EmailTemplate do
     it "replaces keywords" do
       customer = Fabricate.build(:customer, first_name: "Joe", last_name: "Dalton")
       template = EmailTemplate.new "subject", <<-BODY
-        Hey [first_name]!
+        Hey {first_name}!
 
-        Your balance is [account_balance].
-        Looking forward to see the [last_name] family!
+        Your balance is {account_balance}.
+        Looking forward to see the {last_name} family!
       BODY
 
       personalised_email = template.personalise(customer)
