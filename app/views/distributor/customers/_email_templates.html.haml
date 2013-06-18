@@ -12,11 +12,11 @@
 
     .modal-body
       .alert.alert-error
-        = link_to 'javascript:void(0);', class: 'pull-right', 'data-hide' => 'alert' do
+        = link_to 'javascript:void(0)', class: 'pull-right', 'data-hide' => 'alert' do
           Okay
         .message
       .alert.alert-success
-        = link_to 'javascript:void(0);', class: 'pull-right', 'data-hide' => 'alert' do
+        = link_to 'javascript:void(0)', class: 'pull-right', 'data-hide' => 'alert' do
           Okay
         .message
       .alert.alert-info
@@ -40,13 +40,13 @@
             %li.divider.templates{ :class => ('hide' if @email_templates.empty?) }
             - @email_templates.each do |template|
               %li.template-link
-                = link_to 'javascript:void(0);', title: "Load this template" do
+                = link_to 'javascript:void(0)', title: "Load this template" do
                   %i.icon-pushpin
                   %span= template.subject
                 .span.hide.subject= template.subject
                 .span.hide.body= template.body
             %li.new-template-link.hide
-              = link_to 'javascript:void(0);', title: "Load this template" do
+              = link_to 'javascript:void(0)', title: "Load this template" do
                 %i.icon-pushpin
                 %span
               .hide.subject
@@ -63,7 +63,7 @@
           <ul><li>#{EmailTemplate::KEYWORDS.join('<li>')}</ul>
         HELP
 
-      = link_to 'javascript:void(0);', class: 'pull-left', title: 'Special keywords', 'data-placement' => 'bottom', 'data-toggle' => 'popover', 'data-content' => help do
+      = link_to 'javascript:void(0)', class: 'pull-left', title: 'List of special keywords', 'data-placement' => 'bottom', 'data-toggle' => 'popover', 'data-content' => help do
         %i.icon-info-sign
         Special keywords
 
@@ -81,5 +81,5 @@
   .modal-body
 
   .modal-footer
-    = link_to 'Close', 'javascript:void(0);', class: 'btn btn-primary', 'data-dismiss' => 'modal'
+    = link_to 'Close', 'javascript:void(0)', class: 'btn btn-primary', 'data-dismiss' => 'modal'
 
