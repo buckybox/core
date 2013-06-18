@@ -171,10 +171,10 @@ $(function() {
         $('#selected_email_template_id').val("-1");
 
         // reset text fields
-        $("#email_template_subject").val(
-          $("#email_template_subject").data("default-value")
+        $("#email_template_subject").val("");
+        $("#email_template_body").val(
+          $("#email_template_body").data("default-value")
         );
-        $("#email_template_body").val("");
 
         show_success(data.message);
       } else if (data.save) {

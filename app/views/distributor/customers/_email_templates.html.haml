@@ -52,8 +52,8 @@
               .hide.subject
               .hide.body
 
-        = f.input 'subject', label: false, placeholder: "Subject", input_html: { class: 'span12 selected', value: "Hi {first_name}", 'data-default-value' => "Hi {first_name}" }, wrapper_html: { class: 'subject' }, autofocus: true
-        = f.input 'body', as: :text, label: false, placeholder: "Message", input_html: { class: 'span12', rows: 12 }, wrapper_html: { class: 'body' }
+        = f.input 'subject', label: false, placeholder: "Subject", input_html: { class: 'span12 selected' }, wrapper_html: { class: 'subject' }, autofocus: true
+        = f.input 'body', as: :text, label: false, placeholder: "Message", input_html: { class: 'span12', rows: 12, value: "Hi {first_name},\n", 'data-default-value' => "Hi {first_name},\n" }, wrapper_html: { class: 'body' }
 
     .modal-footer
       :ruby
