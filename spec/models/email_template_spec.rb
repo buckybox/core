@@ -12,14 +12,14 @@ describe EmailTemplate do
 
   describe "#unknown_keywords" do
     it "returns unknown keywords" do
-      template = EmailTemplate.new "subject", <<-BODY
+      template = EmailTemplate.new "Hey {you}", <<-BODY
         Hi {first_name},
 
         Your are {age} years old!
         Your balance is {account_balance}.
       BODY
 
-      template.unknown_keywords.should eq %w(age)
+      template.unknown_keywords.should eq %w(you age)
     end
   end
 
