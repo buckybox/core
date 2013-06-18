@@ -247,6 +247,28 @@ $(function() {
     popovers.popover('hide');
   });
 
+  $("#distributor_customers_copy_email").click(function() {
+    var customers = $('#customers .select_one:checked').closest('tr').find('.customer-name');
+
+    var emails = customers.map(function() {
+      return $(this).data('customer-email');
+    }).get().join(', ');
+
+    var modal = $('#emptyModal.modal');
+
+    modal.find('.title').html("Customer email addresses");
+
+    modal.find('.modal-body').html("")
+      .append('<p>Please click on the box below then hit CTRL+C (or Cmd+C on Mac) to copy these ' + customers.length + ' email addresses to your clipboard.</p>')
+      .append('<textarea class="span12" autofocus>' + emails + '</textarea>');
+
+    var list = modal.find('textarea');
+    list.focus(function() { $(this).select(); });
+    list.click(function() { $(this).select(); });
+
+    modal.modal('show');
+  });
+
   //////////////////////////////////////////////////////////////////////////////
   // Orders management
   //
