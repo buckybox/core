@@ -344,4 +344,24 @@ describe Distributor do
       distributor.update_attributes({has_balance_threshold: true, default_balance_threshold: 200.00, spend_limit_on_all_customers: '0'}).should be_true
     end
   end
+
+  describe ".update_next_occurrence_caches" do
+    let(:customer){
+      distributor.save!
+      Fabricate(:customer, distributor: distributor)
+    }
+    let(:order){Fabricate(:order, account: customer.account)}
+    it 'updates cached value of next order' do
+      order
+      customer.update_column(:next_order_occurrence_date, nil)
+      customer.update_column(:next_order_id, nil)
+      customer.reload
+      customer.next_order_occurrence_date.should eq nil
+
+      distributor.update_next_occurrence_caches
+
+      customer.reload
+      customer.next_order_occurrence_date.should eq order.next_occurrence
+    end
+  end
 end
