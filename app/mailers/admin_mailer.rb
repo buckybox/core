@@ -4,6 +4,8 @@ class AdminMailer < ActionMailer::Base
     @email = email
     @admin = admin
 
+    headers['X-MC-Tags'] = "admin,preview,#{admin.email.parameterize}"
+
     mail to: @email.preview_email,
          from: Figaro.env.support_email,
          reply_to: Figaro.env.support_email,
