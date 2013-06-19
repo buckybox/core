@@ -2,7 +2,7 @@
 class EmailTemplate
 
   # white-list of special keywords to be replaced
-  KEYWORDS = %w(first_name last_name account_balance)
+  KEYWORDS = %w(first_name last_name account_balance address)
 
   # 2-array with left and right keyword delimiters
   DELIMITERS = %w({ })
