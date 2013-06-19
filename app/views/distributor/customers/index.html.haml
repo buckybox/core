@@ -5,9 +5,16 @@
 %table#customers.table.table-striped
   %thead
     %tr.muted
-      %th{ colspan: 3 } Customer
-      %th{ colspan: 3 } Next Delivery
-      %th.balance Balance
+      %th{ colspan: 3 }
+        %span.badge
+          %i.icon-user
+          = pluralize(@customers.count, "customer")
+      %th{ colspan: 3 }
+        %span.badge Next Delivery
+      %th.text-right
+        %span.badge
+          Total:
+          = @customers.map(&:account).map(&:balance).sum.format
 
   %tbody
     %tr.new-row
