@@ -30,7 +30,6 @@ class CustomerCSV
      :discount            ,
      :sign_in_count       ,
      :notes               ,
-     :delivery_note       ,
      :via_webstore        ,
      :route_name          ,
      :address_1           ,
