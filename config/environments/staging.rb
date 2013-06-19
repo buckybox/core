@@ -68,7 +68,6 @@ BuckyBox::Application.configure do
     :authentication => 'login', # Mandrill supports 'plain' or 'login'
     :domain => 'staging.buckybox.com', # your domain to identify your server when connecting
   }
-  config.action_mailer.postmark_settings = { api_key: Figaro.env.postmark_api_key }
   
   # ActiveMerchant setup as test only
   config.after_initialize do
