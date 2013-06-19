@@ -29,7 +29,9 @@ describe EmailTemplate do
       template = EmailTemplate.new "Hi {first_name}", <<-BODY
         Hey {first_name}!
 
-        Your balance is {account_balance}.
+        Your balance is {account_balance} and your address is:
+        {address}
+
         Looking forward to see the {last_name} family!
       BODY
 
@@ -38,7 +40,9 @@ describe EmailTemplate do
       personalised_email.body.should eq <<-BODY
         Hey Joe!
 
-        Your balance is $0.00.
+        Your balance is $0.00 and your address is:
+        0 Address St, Suburb, City
+
         Looking forward to see the Dalton family!
       BODY
     end
