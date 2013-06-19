@@ -25,7 +25,7 @@
 
       .row-fluid.composer
         .dropdown.pull-left
-          %div.dropdown-toggle{'data-toggle' => 'dropdown', title: "More"}
+          %div.dropdown-toggle{'data-toggle' => 'dropdown', title: "Email templates"}
             %i.caret
           %ul.dropdown-menu
             %li.template-link-action
@@ -57,14 +57,22 @@
 
     .modal-footer
       :ruby
-        help = <<-HELP
-          These merge tags will be automatically substituted per customer:
-          <ul><li>#{EmailTemplate.keywords_with_delimiters.join('<li>')}</ul>
-        HELP
+        merge_tags = <<-TEMPLATE
+          <div class='popover merge-tags'>
+            <div class='arrow'></div>
+            <h3 class='popover-title'>
+            </h3>
+            <div class='popover-content'>
+              #{EmailTemplate.keywords_with_delimiters.join('<br>')}
+            </div
+          </div>
+        TEMPLATE
 
-      = link_to 'javascript:void(0)', class: 'pull-left', title: 'List of merge tags', 'data-placement' => 'bottom', 'data-toggle' => 'popover', 'data-content' => help do
-        %i.icon-info-sign
-        Merge Tags
+        title = <<-TITLE
+          Use <strong>merge tags</strong> to insert customer details
+
+          <button class="close" onclick="$('[data-toggle=\\'popover\\']').popover('hide');">&times;</button>
+        TITLE
 
       = link_to 'cancel', 'javascript:void(0)', class: 'action', 'data-dismiss' => 'modal'
       = link_to_submit 'preview', class: 'action', 'data-link-action' => 'preview'
