@@ -51,7 +51,7 @@ describe CustomerCSV do
     end
 
     it "exports the header into the csv" do
-      @rows.first.should eq ["Created At", "Formated Number", "First Name", "Last Name", "Email", "Account Balance", "Minimum Balance", "Halted?", "Discount", "Sign In Count", "Notes", "Delivery Note", "Via Webstore", "Route Name", "Address 1", "Address 2", "Suburb", "City", "Postcode", "Delivery Note", "Mobile Phone", "Home Phone", "Work Phone", "Labels", "Active Orders Count", "Next Delivery Date"]
+      @rows.first.should eq ["Created At", "Formated Number", "First Name", "Last Name", "Email", "Account Balance", "Minimum Balance", "Halted?", "Discount", "Sign In Count", "Notes", "Via Webstore", "Route Name", "Address 1", "Address 2", "Suburb", "City", "Postcode", "Delivery Note", "Mobile Phone", "Home Phone", "Work Phone", "Labels", "Active Orders Count", "Next Delivery Date"]
     end
 
     it "exports customer data into csv" do

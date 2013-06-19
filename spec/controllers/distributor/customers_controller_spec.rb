@@ -161,7 +161,7 @@ describe Distributor::CustomersController do
       let(:recipient_ids) { [@customer.id] }
 
       before do
-        @post = lambda { post :export, recipient_ids: recipient_ids.join(',') }
+        @post = lambda { post :export, export: {recipient_ids: recipient_ids.join(',') }}
       end
 
       it "downloads a csv" do
