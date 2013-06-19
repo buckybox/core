@@ -45,25 +45,30 @@ table.no-horizontal-dividers
   th, td
     border-left-width: 0px
 
+.badge, .section-title, .modal-title
+  background: #DFDFCF
+  font-weight: bold
+  font-size: 12px
+  color: #000
+  text-transform: uppercase
+
 .customer-badge
   max-width: 100%
   white-space: nowrap
   overflow: hidden
   text-overflow: ellipsis
   display: inline-block
-  color: $badge-text
-  background-color: $badge-name
+  color: #333
+  background-color: #F0EBDE
   +border-radius(0.2em)
   .customer-id
     font-weight: bold
     display: inline-block
-    color: $badge-text
-    background-color: $badge-id
+    color: #FFF
+    background-color: #585652
     padding: 0 0.2em
     +border-radius(0.2em)
     &:hover
-      color: $badge-id
-      background-color: $badge-text
       text-decoration: none
   .customer-name
     font-weight: normal
