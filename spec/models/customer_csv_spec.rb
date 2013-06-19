@@ -16,28 +16,36 @@ describe CustomerCSV do
   describe ".generate" do
     
     before do
-      account = Fabricate(:account, customer: Fabricate(:customer,
-        first_name: "John",
-        last_name: "Doe",
-        number: 666,
-        email: "exaaaample@example.com",
-        balance_threshold_cents: 444,
-        discount: 0.34,
-        sign_in_count: 65,
-        notes: 'Bitch, please.',
-        tag_list: 'vip, pimp'),
-      )
-      customer = account.customer
-      customer.address = Fabricate(:full_address)
-      customer.save
-      account.change_balance_to(666.66)
-      account.reload
-
-      customer = account.customer
+      customer = customer_with({
+        first_name:      "John",
+        last_name:       "Doe",
+        number:          666,
+        email:           "exaaaample@example.com",
+        first_name:      'Johnny'          ,
+        last_name:       'Boy'   ,
+        email:           'jony.boy@example.com'      ,
+        account_balance: 66.34  ,
+        minimum_balance: 23.12   ,
+        halted:          false         ,
+        discount:        0.2      ,
+        sign_in_count:   7   ,
+        notes:           'Likes beer'       ,
+        via_webstore:    false    ,
+        route_name:      'Franklin'     ,
+        address_1:       'Casa Bucky'     ,
+        address_2:       'The Stables'     ,
+        suburb:          'Vic'     ,
+        city:            'Welly'    ,
+        postcode:        '6012'   ,
+        delivery_note:   'round back eh'    ,
+        mobile_phone:    '3423213423'   ,
+        home_phone:      '34543'  ,
+        work_phone:      '21455423' ,
+        labels:          'fisherman, beers, vip'
+      })
       customer.stub_chain(:orders, :active, :count).and_return(7)
       customer.stub(:next_order_occurrence_date).and_return(1.week.from_now)
-      decorated_customer = account.customer.decorate
-      @customers = [decorated_customer]
+      @customers = [customer.decorate]
                              
       @rows = CSV.parse(CustomerCSV.instance.generate(@customers))
     end
@@ -47,7 +55,7 @@ describe CustomerCSV do
     end
 
     it "exports customer data into csv" do
-      @rows[1].should eq [Date.today.iso8601, "0666", "John", "Doe", "exaaaample@example.com", "0.00", "4.44", "false", "0.34", "65", "Bitch, please.", "", "false", "Route 2", "5 Address St", "Apartment 1", "Suburb", "City", "00000", "", "11-111-111-1111", "22-222-222-2222", "33-333-333-3333", "pimp, vip", "7", 1.week.from_now.to_date.iso8601]
+      @rows[1].should eq [Date.today.iso8601, "0666", "Johnny", "Boy", "jony.boy@example.com", "0.00", "0.23", "false", "0.2", "7", "Likes beer", "", "false", "Franklin", "Casa Bucky", "The Stables", "Vic", "Welly", "6012", "", "3423213423", "34543", "21455423", "fisherman, beers, vip", "7", 1.week.from_now.to_date.iso8601]
     end
   end
 end
