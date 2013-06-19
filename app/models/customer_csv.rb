@@ -24,6 +24,7 @@ class CustomerCSV
      :first_name          ,
      :last_name           ,
      :email               ,
+     :last_paid           ,
      :account_balance     ,
      :minimum_balance     ,
      :halted?             ,

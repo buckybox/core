@@ -259,4 +259,18 @@ describe Customer do
       end
     end
   end
+
+  describe ".last_paid" do
+    it "returns the last payment transaction date" do
+      Fabricate(:transaction, display_time: 5.weeks.ago, account: customer.account, amount_cents: -200)
+      Fabricate(:transaction, display_time: 1.weeks.ago, account: customer.account, amount_cents: 100)
+      Fabricate(:transaction, display_time: 1.day.ago, account: customer.account, amount_cents: -100)
+      Fabricate(:transaction, display_time: 2.weeks.ago, account: customer.account, amount_cents: 100)
+      customer.last_paid.to_date.should eq 1.weeks.ago.to_date
+    end
+
+    it "returns nil when no payments" do
+      customer.last_paid.should be_nil
+    end
+  end
 end

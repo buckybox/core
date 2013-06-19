@@ -323,6 +323,11 @@ class Customer < ActiveRecord::Base
     orders.any?(&:has_yellow_deliveries?)
   end
 
+  def last_paid
+    last_payment = transactions.payments.ordered_by_display_time.first
+    last_payment.present? ? last_payment.display_time : nil
+  end
+
 private
 
   def initialize_number
