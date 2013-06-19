@@ -6,6 +6,8 @@ class DistributorMailer < ActionMailer::Base
     @email = email
     @distributor = distributor
 
+    headers['X-MC-Tags'] = "distributor,bucky_update"
+
     mail subject: @email.subject,
          to: @distributor.email
   end
