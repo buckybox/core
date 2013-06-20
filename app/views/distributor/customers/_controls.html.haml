@@ -26,14 +26,16 @@
       .btn-group.email-actions{:class => ("list-view" if defined? @customers)}
         = link_to "#distributor_customers_send_email", class: "btn btn-primary", title: "Send an email", role: "button", "data-toggle" => "modal" do
           %i.icon-envelope.icon-white
-        - if defined? @customers
-          = button_tag class: "btn btn-primary dropdown-toggle", data: { toggle: 'dropdown' } do
-            %span.caret
-          %ul.dropdown-menu{ role: 'menu' }
+        = button_tag class: "btn btn-primary dropdown-toggle", data: { toggle: 'dropdown' } do
+          %span.caret
+        %ul.dropdown-menu{ role: 'menu' }
+          - if defined? @customers
             %li
               = link_to "#distributor_customers_copy_email", "data-toggle" => "modal" do
                 %i.icon-envelope
                 Copy email address
+          %li
+            = link_to "Export customer details", "#distributors_customers_export", id: "export_customer_details"
 
     #search-form.span6
       = form_tag search_distributor_customers_path, method: :get do
