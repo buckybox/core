@@ -180,6 +180,7 @@ BuckyBox::Application.routes.draw do
     root to: 'dashboard#index'
 
     resources :cron_logs, only: :index
+    resources :style_sheet, only: :index
 
     resources :distributors do
       member do

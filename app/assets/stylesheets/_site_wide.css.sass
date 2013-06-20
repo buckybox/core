@@ -23,15 +23,6 @@ $badge-text: $black
 .non-production-background
   background-image: image-url('not-production-background.png')
 
-.text-right, td.text-right, th.text-right
-  text-align: right
-
-.text-center, td.text-center, th.text-center
-  text-align: center
-
-.hidden
-  display: none
-
 .important
   font-size: 150%
   line-height: 150%
@@ -45,12 +36,31 @@ table.no-horizontal-dividers
   th, td
     border-left-width: 0px
 
-.badge, .section-title, .modal-title
+.balance
+  text-align: right
+  font-size: large
+  font-weight: bold
+  &.negative
+    color: $negative-colour
+
+.action
+  display: block
+  padding: 5px 0px
+  text-align: center
+  background-color: $action-colour
+  +border-radius(0.4em)
+  &:hover
+    background-color: $action-colour-hover
+
+.label
   background: #DFDFCF
   font-weight: bold
   font-size: 12px
   color: #000
   text-transform: uppercase
+
+.badge
+  text-transform: capitalize
 
 .customer-badge
   max-width: 100%
@@ -74,7 +84,14 @@ table.no-horizontal-dividers
     font-weight: normal
     padding: 0 0.2em
 
-.ajax_loader_gif
+.alert
+  i
+    margin-top: 4px
+
+.btn
+  text-transform: capitalize
+
+.ajax-spinner
   background: image-url('ajax-loader.gif')
   width: 16px
   height: 16px
