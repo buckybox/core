@@ -6,27 +6,39 @@ class Webstore::Session
   attr_reader :order
   attr_reader :customer
 
-  def initialize(args)
-    args      = defaults.merge(args)
-    @order    = get_object(args[:order_class], args[:order_id])
-    @customer = get_object(args[:customer_class], args[:customer_id])
+  def self.find(id)
+    session_persistance = Webstore::SessionPersistance.find_by_id(id)
+    session_persistance.webstore_session
   end
 
-  def self.deserialize(args = {})
-    new(args)
+  def self.find_or_create(id)
+    id ? find(id) : new
   end
 
-  def serialize
-    { order_id: order.id, customer_id: customer.id }
+  def initialize(args = {})
+    @order    = new_order(args)
+    @customer = new_customer(args)
+  end
+
+  def save
+    return 0 unless valid?
+    session_persistance = Webstore::SessionPersistance.save(self)
+    session_persistance.id
   end
 
 private
 
-  def get_object(object_class, id)
-    object_class.find(id)
+  def valid?
+    !order.nil?
   end
 
-  def defaults
-    { order_class: Webstore::Order,  customer_class: Webstore::Customer }
+  def new_order(args)
+    box_id = args[:box_id]
+    default_hash = box_id ? { box_id: box_id } : {}
+    Webstore::Order.new(args.fetch(:order, default_hash))
+  end
+
+  def new_customer(args)
+    Webstore::Customer.new(args.fetch(:customer, {}))
   end
 end

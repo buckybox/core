@@ -94,6 +94,10 @@ class Customer < ActiveRecord::Base
     return result
   end
 
+  def guest?
+    false
+  end
+
   def formated_number
     "%04d" % number
   end

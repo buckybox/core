@@ -2167,6 +2167,37 @@ ALTER SEQUENCE webstore_orders_id_seq OWNED BY webstore_orders.id;
 
 
 --
+-- Name: webstore_session_persistances; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE webstore_session_persistances (
+    id integer NOT NULL,
+    collected_data text,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: webstore_session_persistances_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE webstore_session_persistances_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: webstore_session_persistances_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE webstore_session_persistances_id_seq OWNED BY webstore_session_persistances.id;
+
+
+--
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -2514,6 +2545,13 @@ ALTER TABLE ONLY transactions ALTER COLUMN id SET DEFAULT nextval('transactions_
 --
 
 ALTER TABLE ONLY webstore_orders ALTER COLUMN id SET DEFAULT nextval('webstore_orders_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY webstore_session_persistances ALTER COLUMN id SET DEFAULT nextval('webstore_session_persistances_id_seq'::regclass);
 
 
 --
@@ -2914,6 +2952,14 @@ ALTER TABLE ONLY transactions
 
 ALTER TABLE ONLY webstore_orders
     ADD CONSTRAINT webstore_orders_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: webstore_session_persistances_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY webstore_session_persistances
+    ADD CONSTRAINT webstore_session_persistances_pkey PRIMARY KEY (id);
 
 
 --
@@ -3719,6 +3765,8 @@ INSERT INTO schema_migrations (version) VALUES ('20130610110940');
 INSERT INTO schema_migrations (version) VALUES ('20130610121509');
 
 INSERT INTO schema_migrations (version) VALUES ('20130616094641');
+
+INSERT INTO schema_migrations (version) VALUES ('20130617051437');
 
 INSERT INTO schema_migrations (version) VALUES ('20130625112501');
 
