@@ -126,7 +126,9 @@ $(function() {
   };
 
   var commit_button = send_email_modal.find('input[type="submit"][name="commit"]');
-  commit_button.click(function() { $(this).button('loading'); });
+  commit_button.click(function() {
+    $(this).data("hide-info", true).button("loading");
+  });
 
   send_email_modal.find('form')
     .bind("ajax:beforeSend", function() {
@@ -134,7 +136,12 @@ $(function() {
       $("#email_template_body").prop("disabled", true);
 
       $(this).find('.alert').hide();
-      $(this).find('.alert-info').show();
+
+      if (commit_button.data("hide-info")) {
+        commit_button.data("hide-info", false);
+      } else {
+        $(this).find('.alert-info').show();
+      }
     })
     .bind("ajax:complete", function() {
       $(this).find('.alert-info').hide();
