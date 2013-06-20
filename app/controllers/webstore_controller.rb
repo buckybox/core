@@ -5,57 +5,82 @@ class WebstoreController < ApplicationController
   before_filter :check_if_webstore_active
 
   def store
+    webstore_session
     render 'store', locals: {  webstore_products: webstore_products }
   end
 
   def start_order
-    order = new_order(params)
-    order ? successful_new_order(order) : failed_new_order(order)
+    ws = Webstore::Session.new(box_id: params['box_id'], customer: current_customer)
+    ws.save ? successful_new_order : failed_new_order
   end
 
   def customise
-    webstore_session = load_webstore_session(params)
     order = webstore_session.order
-    render 'customise', locals: {
-      order: order.decorate,
-      customise_order: customise_order(order)
-    }
+    render 'customise', locals: { order: order.decorate, customise_order: customise_order(order) }
   end
 
   #--- Private
 
   def webstore_products
-    wp = Webstore::Product.build_distributors_products(distributor)
-    Webstore::ProductDecorator.decorate_collection(wp)
+    products = Webstore::Product.build_distributors_products(distributor)
+    Webstore::ProductDecorator.decorate_collection(products)
   end
 
-  def new_order(params)
-    args = { box_id: params['box_id'] }
-    Webstore::Order.new(args)
-  end
-
-  def successful_new_order(order)
-    save_webstore_session(order: order)
+  def successful_new_order
     redirect_to webstore_customise_path
   end
 
-  def failed_new_order(order)
+  def failed_new_order
     flash[:error] = 'We\'re sorry there was an error starting your order.'
     redirect_to webstore_store_path
   end
 
-  def save_webstore_session(args)
-    session[:webstore] = {} unless session[:webstore]
-    webstore_session = Webstore::Session.new(args)
-    session[:webstore] = webstore_session.serialize
-  end
-
-  def load_webstore_session(args)
-    Webstore::Session.deserialize(args)
-  end
-
   def customise_order(order)
     Webstore::Customise.new(order: order)
+  end
+
+  def current_customer
+    @current_customer ||= (super || webstore_session.customer)
+  end
+
+  def webstore_customer_id(args)
+    args['guest_customer_id']
+  end
+
+  def save_webstore_session(webstore_session)
+    session[:webstore_session_id] = webstore_session.save
+  end
+
+  def webstore_session
+    @webstore_session ||= begin
+      Webstore::Session.find_or_create(session[:webstore_session_id])
+    end
+  end
+
+  def setup_by_distributor
+    if distributor
+      set_defaults(distributor)
+      check_customer(distributor, current_customer)
+    end
+  end
+
+  def check_if_webstore_active
+    if distributor.nil? || !distributor.active_webstore
+      redirect_to Figaro.env.marketing_site_url and return
+    end
+  end
+
+  def set_defaults(distributor)
+    Time.zone = distributor.time_zone
+    Money.default_currency = Money::Currency.new(distributor.currency)
+  end
+
+  def check_customer(distributor, customer)
+    sign_out(customer) if !customer.guest? && customer.distributor != distributor
+  end
+
+  def distributor
+    @distributor ||= Distributor.find_by_parameter_name(params[:distributor_parameter_name])
   end
 
   #-------------------------
@@ -154,33 +179,5 @@ private
 
   def active_orders?
     current_customer.present? && !current_customer.orders.active.count.zero?
-  end
-
-  #----- v-- Now using
-
-  def setup_by_distributor
-    if distributor
-      set_defaults(distributor)
-      check_customer(distributor, current_customer)
-    end
-  end
-
-  def check_if_webstore_active
-    if distributor.nil? || !distributor.active_webstore
-      redirect_to Figaro.env.marketing_site_url and return
-    end
-  end
-
-  def distributor
-    @distributor ||= Distributor.find_by_parameter_name(params[:distributor_parameter_name])
-  end
-
-  def set_defaults(distributor)
-    Time.zone = distributor.time_zone
-    Money.default_currency = Money::Currency.new(distributor.currency)
-  end
-
-  def check_customer(distributor, customer)
-    sign_out(customer) if customer && customer.distributor != distributor
   end
 end
