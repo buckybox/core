@@ -9,7 +9,7 @@ class Distributor::SettingsController < Distributor::BaseController
   end
 
   def spend_limit_confirmation
-    spend_limit = params[:spend_limit].to_f * 100.0
+    spend_limit = BigDecimal.new(params[:spend_limit]) * 100.0
     update_existing = params[:update_existing] == '1'
     send_halt_email = params[:send_halt_email] == '1'
     count = current_distributor.number_of_customers_halted_after_update(spend_limit, update_existing)

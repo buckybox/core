@@ -22,7 +22,11 @@ module Bucky::TransactionImports
     end
 
     def amount
-      @amount_string.to_f
+      BigDecimal.new(@amount_string)
+    end
+
+    def amount_cents
+      (amount * 100).to_i
     end
 
     MATCH_STRATEGY = [[:email_match, 1.0],
@@ -82,7 +86,7 @@ module Bucky::TransactionImports
     end
 
     def account_match(customer)
-      if amount == (-1.0 * customer.account.balance.to_f) && # Account matches amount (account must be negative)
+      if amount == (-1.0 * BigDecimal.new(customer.account.balance)) && # Account matches amount (account must be negative)
         customer.distributor.accounts.where(["customers.id != ? AND accounts.balance_cents = ?", customer.id, -100 * amount]).count.zero? # No other accounts match the amount
         1.0
       else
