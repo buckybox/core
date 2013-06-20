@@ -47,7 +47,7 @@ class EmailTemplate
     personalised = {}
 
     ATTRIBUTES.each do |attribute|
-      attribute_value = public_send attribute
+      attribute_value = public_send(attribute).dup
 
       replace_map.each do |key, value|
         attribute_value.gsub!(EmailTemplate.keyword_with_delimiters(key), value)
