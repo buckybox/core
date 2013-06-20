@@ -406,4 +406,18 @@ $(function() {
     phone_inputs.keyup(update_phone_inputs_style);
     update_phone_inputs_style();
   }
+
+  $("#export_customer_details").click(function(){
+    if ($("#customer-details #section-one").length) {
+      var customer = $("#customer-details #section-one .customer-badge").parent();
+      var recipient_ids = customer.find('.customer-name').data('customer-id');
+    } else {
+      var recipient_ids = $('#customers .select_one:checked').map(function() {
+        return this.id;
+      }).get().join(",");
+    }
+
+    $("#export_recipient_ids").val(recipient_ids);
+    $("#export_customer_details_form").submit();
+  });
 });
