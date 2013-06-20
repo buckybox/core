@@ -19,7 +19,7 @@ When /^I fill in the (subject|body) with "(.*)"$/ do |field, content|
 end
 
 Then "I should be able to save it as a new template" do
-  find('#distributor_customers_send_email [data-toggle="dropdown"]').click
+  find('#distributor_customers_send_email .composer [data-toggle="dropdown"]').click
   find('#distributor_customers_send_email a[data-link-action="save"]').click
 end
 
