@@ -22,6 +22,17 @@ describe Bucky::TransactionImports::Row do
     specify { Row.amount_match(100, 100).should eq(0)}
     specify { Row.amount_match(10, 2).should eq(0)}
   end
+
+  describe ".amount_cents" do
+    it "converts string to cents integer" do
+      row = new_row("17.9")
+      row.amount_cents.should eq 1790
+    end
+  end
+end
+
+def new_row(amount_string)
+  Row.new("2013-06-07","test row", amount_string)
 end
 
 def mock_customer(formated_number, balance = 0.0, orders = [0.0], first_name = nil, last_name = nil)
