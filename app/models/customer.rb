@@ -324,11 +324,15 @@ class Customer < ActiveRecord::Base
   end
 
   def last_paid
-    last_payment = transactions.payments.ordered_by_display_time.first
+    last_payment = transactions.payments.where(["transactions.id not in (?)", reversal_transaction_ids]).ordered_by_display_time.first
     last_payment.present? ? last_payment.display_time : nil
   end
 
 private
+  def reversal_transaction_ids
+    reversed = payments.reversed
+    reversed.pluck(:transaction_id) + reversed.pluck(:reversal_transaction_id)
+  end
 
   def initialize_number
     self.number = Customer.next_number(self.distributor) unless self.distributor.nil?
