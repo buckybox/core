@@ -6,13 +6,13 @@
   %thead
     %tr.muted
       %th{ colspan: 3 }
-        %span.badge
+        %span.label
           %i.icon-user
           = pluralize(@customers.count, "customer")
       %th{ colspan: 3 }
-        %span.badge Next Delivery
+        %span.label Next Delivery
       %th.text-right
-        %span.badge
+        %span.label
           Total:
           = @customers.map(&:account).map(&:balance).sum.format
 
