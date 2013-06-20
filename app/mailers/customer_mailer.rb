@@ -48,6 +48,8 @@ class CustomerMailer < ActionMailer::Base
       recipient
     end
 
+    headers['X-MC-Tags'] = "customer,email_template,#{distributor.name.parameterize}"
+
     mail to: recipient.email,
          from: "#{distributor.name} <#{Figaro.env.no_reply_email}>",
          reply_to: distributor.support_email,
