@@ -25,14 +25,12 @@ describe EmailTemplate do
 
   describe "#personalise" do
     it "replaces keywords" do
-      customer = Fabricate(:customer, first_name: "Joe", last_name: "Dalton")
-      Fabricate(:address, customer: customer, address_1: "My Street")
+      customer = Fabricate.build(:customer, first_name: "Joe", last_name: "Dalton")
 
       template = EmailTemplate.new "Hi {first_name}", <<-BODY
         Hey {first_name}!
 
-        Your balance is {account_balance} and your address is:
-        {address}
+        Your balance is {account_balance}.
 
         Looking forward to see the {last_name} family!
       BODY
@@ -42,8 +40,7 @@ describe EmailTemplate do
       personalised_email.body.should eq <<-BODY
         Hey Joe!
 
-        Your balance is $0.00 and your address is:
-        My Street, Suburb, City
+        Your balance is $0.00.
 
         Looking forward to see the Dalton family!
       BODY
