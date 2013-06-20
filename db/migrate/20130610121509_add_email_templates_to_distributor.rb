@@ -42,6 +42,44 @@ Cheers
 -The team at #{distributor.name}
           BODY
         },
+        {
+          subject: "Weekly Newsletter - What's in your box this week",
+          body: <<-BODY
+Hi {first_name},
+
+Thanks for supporting.
+
+WHAT'S IN YOUR BOX THIS WEEK
+
+As you know, we source the best seasonal produce from around the region, so here's some of the delicious fresh items you might find in your box this week;
+- INSERT PRODUCE LIST HERE
+
+TOP RECIPE TIPS
+
+Here's our top 3 recipes which include some of the ingredients you have to cook with:
+- ADD RECIPE LINKS HERE
+
+BITE SIZE KNOWLEDGE
+
+A key part of what drives us is creating a thriving, diverse food system - it's better for people and planet.
+
+As part of that vision we scour the markets, farms and seedbanks for interesting produce which we add to your delivery.
+
+This week's lesser-known food stuff is INSERT FOOD ITEM HERE, AND A LITTLE INFORMATION ABOUT IT.
+
+FEEDBACK
+
+We love to hear your thoughts, good or bad, about how your experience with us is going. We strive to give you the best food delivery service around, so your insights are vital to us improving.
+
+Drop us an email, tweet (@twitterhandle) or call anytime and we'll get back to you.
+
+Thank you for your loyal custom and for supporting a better food system.
+
+OWNER/CUSTOMER SERVICE NAME
+#{distributor.name}
+CONTACT DETAILS
+          BODY
+        },
       ].map do |template|
         EmailTemplate.new template[:subject], template[:body]
       end.freeze
