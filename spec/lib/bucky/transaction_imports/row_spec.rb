@@ -29,6 +29,16 @@ describe Bucky::TransactionImports::Row do
       row.amount_cents.should eq 1790
     end
   end
+
+  describe ".account_match", focus: true do
+    it "matches row to customers account based on account balance and row amount" do
+      row = new_row("20.01")
+      customer = double("customer")
+      customer.stub_chain(:account, :balance_cents).and_return(-2001)
+      row.stub(:no_other_account_matches?).and_return(true)
+      row.account_match(customer).should eq 1.0
+    end
+  end
 end
 
 def new_row(amount_string)
