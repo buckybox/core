@@ -15,15 +15,13 @@ describe Customer::CustomersController do
       end
     end
 
-    context "with an invalid customer" do
+    context "with an incomplete customer" do
       before do
         @customer.address.postcode = ""
         @customer.save!
 
         @customer.distributor.require_postcode = true
         @customer.distributor.save!
-
-        @customer.should_not be_valid
       end
 
       it "still updates the customer" do
