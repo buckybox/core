@@ -361,7 +361,7 @@ describe Distributor do
       distributor.update_next_occurrence_caches
 
       customer.reload
-      customer.next_order_occurrence_date.should eq order.next_occurrence
+      customer.next_order_occurrence_date.should eq order.next_occurrence(Time.current.hour >= distributor.automatic_delivery_hour ? Date.current.tomorrow : Date.current)
     end
   end
 end
