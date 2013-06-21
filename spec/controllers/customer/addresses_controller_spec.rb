@@ -16,7 +16,7 @@ describe Customer::AddressesController do
       end
     end
 
-    context "with an invalid customer" do
+    context "with an incomplete customer" do
       before do
         # reset all phone numbers
         PhoneCollection.attributes.each do |phone_type|
@@ -26,8 +26,6 @@ describe Customer::AddressesController do
 
         @customer.distributor.require_phone = true
         @customer.distributor.save!
-
-        @customer.should_not be_valid
       end
 
       it "still updates the customer address" do
