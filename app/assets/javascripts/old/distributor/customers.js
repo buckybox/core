@@ -240,9 +240,7 @@ $(function() {
     send_email_modal.find('.recipients').html(recipients);
     send_email_modal.find('.template-link').click(template_link_handler);
     send_email_modal.find('.alert').hide();
-    send_email_modal.find('[data-toggle="popover"]').popover(); // enable popovers
-  }).on('hide', function() {
-    send_email_modal.find('[data-toggle="popover"]').popover('hide');
+    $('#distributor_customers_send_email_merge_tags').popover(); // enable popover
   });
 
 
