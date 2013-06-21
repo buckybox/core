@@ -199,7 +199,7 @@ module Bucky::TransactionImports
 
     # No other accounts match the amount
     def no_other_account_matches?(customer)
-      customer.distributor.accounts.where(["customers.id != ? AND accounts.balance_cents = ?", customer.id, -100 * amount]).count.zero? 
+      customer.distributor.accounts.where(["customers.id != ? AND accounts.balance_cents = ?", customer.id, BigDecimal.new(-100) * amount]).count.zero? 
     end
 
 

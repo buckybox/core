@@ -30,7 +30,7 @@ describe Bucky::TransactionImports::Row do
     end
   end
 
-  describe ".account_match", focus: true do
+  describe ".account_match" do
     it "matches row to customers account based on account balance and row amount" do
       row = new_row("20.01")
       customer = double("customer")
