@@ -86,8 +86,8 @@ module Bucky::TransactionImports
     end
 
     def account_match(customer)
-      if amount == (-1.0 * BigDecimal.new(customer.account.balance)) && # Account matches amount (account must be negative)
-        customer.distributor.accounts.where(["customers.id != ? AND accounts.balance_cents = ?", customer.id, -100 * amount]).count.zero? # No other accounts match the amount
+      if amount == (BigDecimal.new(customer.account.balance_cents / BigDecimal.new(-100))) && # Account matches amount (account must be negative)
+          no_other_account_matches?(customer)
         1.0
       else
         0
@@ -196,6 +196,12 @@ module Bucky::TransactionImports
     end
 
     private
+
+    # No other accounts match the amount
+    def no_other_account_matches?(customer)
+      customer.distributor.accounts.where(["customers.id != ? AND accounts.balance_cents = ?", customer.id, -100 * amount]).count.zero? 
+    end
+
 
     def fuzzy_match(a, b)
       Bucky::Util.fuzzy_match(a, b)
