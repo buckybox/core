@@ -13,7 +13,7 @@ class Transaction < ActiveRecord::Base
 
   validates_presence_of :account_id, :transactionable_id, :transactionable_type, :amount, :description, :display_time
 
-  scope :ordered_by_display_time, order('transactions.display_time DESC')
+  scope :ordered_by_display_time, order('transactions.display_time DESC, transactions.created_at DESC')
   scope :ordered_by_created_at, order('transactions.created_at DESC')
 
   default_value_for :display_time do
