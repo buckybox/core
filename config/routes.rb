@@ -14,10 +14,10 @@ BuckyBox::Application.routes.draw do
   end
 
   namespace :webstore do
-    get  ':distributor_parameter_name',                      action: 'store',                as: 'store'
-    post ':distributor_parameter_name/start_order/:box_id',  action: 'start_order',          as: 'start_order'
-    get  ':distributor_parameter_name/customise',            action: 'customise',            as: 'customise'
-    post ':distributor_parameter_name/save_customisations',  action: 'save_customisations',  as: 'customises'
+    get  ':distributor_parameter_name',                          action: 'store',                as: 'store'
+    post ':distributor_parameter_name/start_order/:product_id',  action: 'start_order',          as: 'start_order'
+    get  ':distributor_parameter_name/customise',                action: 'customise',            as: 'customise'
+    post ':distributor_parameter_name/save_customisations',      action: 'save_customisations',  as: 'customises'
 
     get ':distributor_parameter_name/login',     action: 'login',     as: 'login'
     get ':distributor_parameter_name/delivery',  action: 'delivery',  as: 'delivery'

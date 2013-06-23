@@ -5,25 +5,34 @@ class WebstoreController < ApplicationController
   before_filter :check_if_webstore_active
 
   def store
-    webstore_session
+    setup_cart
     render 'store', locals: {  webstore_products: webstore_products }
   end
 
   def start_order
-    ws = Webstore::Session.new(box_id: params['box_id'], customer: current_customer)
-    ws.save ? successful_new_order : failed_new_order
+    current_cart.add_product(product_id: params[:product_id])
+    current_cart.save ? successful_new_order : failed_new_order
   end
 
   def customise
-    order = webstore_session.order
     render 'customise', locals: { order: order.decorate, customise_order: customise_order(order) }
   end
 
   #--- Private
 
+  def setup_cart
+    cart = Webstore::Cart.new(customer: logged_in_customer)
+    cart.save
+    session[:cart_id] = cart.id
+  end
+
   def webstore_products
     products = Webstore::Product.build_distributors_products(distributor)
     Webstore::ProductDecorator.decorate_collection(products)
+  end
+
+  def current_cart
+    @current_cart ||= Webstore::Cart.find(session[:cart_id])
   end
 
   def successful_new_order
@@ -35,26 +44,9 @@ class WebstoreController < ApplicationController
     redirect_to webstore_store_path
   end
 
-  def customise_order(order)
-    Webstore::Customise.new(order: order)
-  end
-
+  alias_method :logged_in_customer, :current_customer
   def current_customer
-    @current_customer ||= (super || webstore_session.customer)
-  end
-
-  def webstore_customer_id(args)
-    args['guest_customer_id']
-  end
-
-  def save_webstore_session(webstore_session)
-    session[:webstore_session_id] = webstore_session.save
-  end
-
-  def webstore_session
-    @webstore_session ||= begin
-      Webstore::Session.find_or_create(session[:webstore_session_id])
-    end
+    @current_customer ||= current_cart.customer
   end
 
   def setup_by_distributor
