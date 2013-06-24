@@ -34,7 +34,7 @@ class Distributor::PaymentsController < Distributor::ResourceController
       failure.html do
         if params[:payment][:account_id].blank?
           flash[:error] = 'Please, select a customer for this payment.'
-        elsif params[:payment][:amount].to_f <= 0
+        elsif BigDecimal.new(params[:payment][:amount]) <= 0
           flash[:error] = 'Please, enter in a positive amount for the payment.'
         elsif params[:payment][:description].blank?
           flash[:error] = 'Please, include a description for this payment.'

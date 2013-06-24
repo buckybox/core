@@ -89,6 +89,20 @@ describe Customer do
     new_customer.errors.get(:password).should include "is too short (minimum is 6 characters)"
   end
 
+  context "when a customer is created" do
+    it "does not send their login details" do
+      CustomerMailer.should_not_receive(:login_details)
+      Fabricate(:customer)
+    end
+  end
+
+  context "when a customer is created via the webstore" do
+    it "does send their login details" do
+      CustomerMailer.should_receive(:login_details).and_call_original
+      Fabricate(:customer, via_webstore: true)
+    end
+  end
+
   context 'with a customer' do
     before { @customer = Fabricate(:customer) }
 

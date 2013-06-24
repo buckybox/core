@@ -57,6 +57,13 @@ $(function() {
   });
   $('.sortable').disableSelection();
 
+  $('#delivery-listings .tag-links').each(function() {
+    if (typeof window.chrome === "object") {
+      // Display tooltip for Chrome since it doesn't expand the tags
+      $(this).tooltip();
+    }
+  });
+
   $('#delivery-listings #all').change(function() {
     var checked_deliveries = $('#delivery-listings .data-listings input[type=checkbox]');
 
@@ -163,15 +170,13 @@ function makePayments(checked_deliveries, reverse_payment) {
   });
 
   $.each(checked_deliveries, function(i, ckbx) {
-    var holder = $(ckbx).closest('.data-listings');
-    var customerHolder = holder.find('.customer-holder');
-    var paidLabel = 'paid-label';
+    var paid_label = $(ckbx).closest('.data-listings').find('.paid-label');
 
     if(reverse_payment) {
-      customerHolder.removeClass(paidLabel);
+      paid_label.removeClass('paid');
     }
     else {
-      customerHolder.addClass(paidLabel);
+      paid_label.addClass('paid');
     }
   });
 }
