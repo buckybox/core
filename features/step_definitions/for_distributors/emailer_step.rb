@@ -1,6 +1,6 @@
 When "I dismiss the intro screen" do
-  click_button "close-intro-tour"
-  sleep 1 # ugly but the modal takes its time to fade out sometimes
+  sleep 1 # ugly but the modal takes its time to show up sometimes
+  find("#close-intro-tour").click if page.has_css? "#close-intro-tour"
 end
 
 When "I select all my customers in the list" do
