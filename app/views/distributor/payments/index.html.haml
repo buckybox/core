@@ -37,7 +37,7 @@
                 
           %input#import_transaction_list_csv_file{name: 'import_transaction_list[csv_file]', type:'file', style: 'display:none', class: 'auto_submit'}
 
-        .ajax_loader_gif
+        .ajax-spinner
 - elsif !current_distributor.show_payments_tab?
   .alert
     You have no bank feeds setup. Please contact #{mail_to Figaro.env.support_email} and supply a sample of your Internet Banking Statement in CSV format.
@@ -69,7 +69,7 @@
         %tr
           %td.text-center{ colspan: 5 }
             .ajax_loader_hide= link_to_function "more...", "window.payments.load_more_rows_on_bottom()" unless @import_transactions.blank?
-            .ajax_loader_gif.hidden
+            .ajax-spinner.hidden
 
 - if @import_transaction_list.has_failed?
   :javascript

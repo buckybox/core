@@ -52,8 +52,10 @@ class Customer < ActiveRecord::Base
 
   delegate :separate_bucky_fee?, :consumer_delivery_fee, :default_balance_threshold_cents, :has_balance_threshold, to: :distributor
   delegate :currency, :send_email?, to: :distributor, allow_nil: true
+  delegate :name, to: :route, prefix: true
 
   scope :ordered_by_next_delivery, lambda { order("CASE WHEN next_order_occurrence_date IS NULL THEN '9999-01-01' WHEN next_order_occurrence_date < '#{Date.current.to_s(:db)}' THEN '9999-01-01' ELSE next_order_occurrence_date END ASC, lower(customers.first_name) ASC, lower(customers.last_name) ASC") }
+  scope :ordered, order("lower(customers.first_name) ASC, lower(customers.last_name) ASC")
 
   default_value_for :discount, 0
   default_value_for :balance_threshold_cents do |c|
@@ -322,7 +324,22 @@ class Customer < ActiveRecord::Base
     orders.any?(&:has_yellow_deliveries?)
   end
 
+  def last_paid
+    r_ids = reversal_transaction_ids
+    last_payment = transactions.payments
+    if r_ids.present?
+      last_payment = last_payment.where(["transactions.id not in (?)", r_ids])
+    end  
+    last_payment = last_payment.ordered_by_display_time.first
+
+    last_payment.present? ? last_payment.display_time : nil
+  end
+
 private
+  def reversal_transaction_ids
+    reversed = payments.reversed
+    reversed.pluck(:transaction_id) + reversed.pluck(:reversal_transaction_id)
+  end
 
   def initialize_number
     self.number = Customer.next_number(self.distributor) unless self.distributor.nil?

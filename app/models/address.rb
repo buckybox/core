@@ -13,7 +13,7 @@ class Address < ActiveRecord::Base
 
   before_save :update_address_hash
 
-  def join(join_with = ', ', options = {})
+  def to_s(join_with = ', ', options = {})
     result = [address_1]
     result << address_2 unless address_2.blank?
     result << suburb unless suburb.blank?
@@ -29,6 +29,8 @@ class Address < ActiveRecord::Base
 
     result.join(join_with).html_safe
   end
+
+  alias_method :join, :to_s
 
   def ==(address)
     address.is_a?(Address) && [:address_1, :address_2, :suburb, :city].all?{ |a|

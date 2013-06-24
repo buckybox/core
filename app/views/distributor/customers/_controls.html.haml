@@ -1,25 +1,61 @@
 - content_for :sub_nav do
-  .row-fluid
-    #nav-info.span4
-      - unless /\/distributor\/customers\/\d+.*/ =~ request.fullpath
-        - if params[:query]
-          .brand
-            Searching
-            %strong= params[:query]
-            %small= link_to 'clear', distributor_customers_path
-        - elsif params[:tag]
-          .brand
-            Tag
-            %strong= params[:tag]
-            %small= link_to 'clear', distributor_customers_path
-      - else
-        = link_to '« Back to Customer List', distributor_customers_path
+  .row-fuild
+    #action-buttons.span3
+      - unless defined? @customers
+        .btn-group
+          = link_to distributor_customers_path, { class: "btn", title: "Back to customer list" } do
+            %i.icon-arrow-left
 
-    #search-form.span8
+      - else
+        .btn-group
+          = button_tag class: 'btn btn-primary' do
+            = check_box_tag 'select_all'
+          = button_tag class: "btn btn-primary dropdown-toggle", data: { toggle: 'dropdown' } do
+            %span.caret
+          %ul.dropdown-menu{ role: 'menu' }
+            %li
+              = link_to 'javascript:void(0)', id: 'select_all-all' do
+                All
+            %li
+              = link_to 'javascript:void(0)', id: 'select_all-none' do
+                None
+            %li
+              = link_to 'javascript:void(0)', id: 'select_all-inverse' do
+                Inverse
+
+      .btn-group.email-actions{:class => ("list-view" if defined? @customers)}
+        = link_to "#distributor_customers_send_email", class: "btn btn-primary", title: "Send an email", role: "button", "data-toggle" => "modal" do
+          %i.icon-envelope.icon-white
+        = button_tag class: "btn btn-primary dropdown-toggle", data: { toggle: 'dropdown' } do
+          %span.caret
+        %ul.dropdown-menu{ role: 'menu' }
+          - if defined? @customers
+            %li
+              = link_to "#distributor_customers_copy_email", "data-toggle" => "modal" do
+                View as email addresses
+          %li
+            = link_to "Export customer details", "#distributors_customers_export", id: "export_customer_details"
+
+    #search-form.span6
       = form_tag search_distributor_customers_path, method: :get do
         .input-append
-          = text_field_tag :query, '', placeholder: 'Customer Number, name, address...', class: 'span6'
+          = text_field_tag :query, params[:query], placeholder: 'Customer Number, name, address...', class: 'span10'
           = button_tag type: 'submit', class: 'btn btn-primary' do
-            %i.icon-search.icon-white 
-            Search
+            %i.icon-search.icon-white
 
+      - if params[:query]
+        .brand
+          Searching
+          %strong= params[:query]
+          %small= link_to 'clear', distributor_customers_path
+      - elsif params[:tag]
+        .brand
+          Tag
+          %strong= params[:tag]
+          %small= link_to 'clear', distributor_customers_path
+
+    .span3
+      / future settings drop-down
+
+= render partial: "email_templates"
+= render partial: "customer_export_form"

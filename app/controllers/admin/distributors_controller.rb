@@ -93,7 +93,7 @@ class Admin::DistributorsController < Admin::ResourceController
     render :write_email
   end
 
-  private
+private
 
   def parameterize_name
     if params[:distributor]

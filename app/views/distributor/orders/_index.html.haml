@@ -20,7 +20,7 @@
               = render partial: 'distributor/orders/details', locals: { order: order }
             %td
               %ul.unstyled.text-right
-                %li.important= order.price
+                %li.balance= order.price.format
                 %li
                   %small= link_to('remove order',
                     deactivate_distributor_account_order_path(@account, order),
