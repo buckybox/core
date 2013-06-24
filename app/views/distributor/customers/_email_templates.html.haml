@@ -69,7 +69,7 @@
       .span6.pull-right
         = link_to 'cancel', 'javascript:void(0)', 'data-dismiss' => 'modal'
         .btn-group
-          = f.button :submit, 'Send', class: 'btn btn-primary', 'data-loading-text' => "sending...", autocomplete: 'off'
+          = button_tag 'Send', class: 'btn btn-primary', 'data-loading-text' => "sending...", autocomplete: 'off', name: "commit"
           = button_tag class: "btn btn-primary dropdown-toggle", data: { toggle: 'dropdown' } do
             %span.caret
           %ul.dropdown-menu.pull-right{ role: 'menu' }
