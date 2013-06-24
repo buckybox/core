@@ -27,10 +27,8 @@
           %td
             - if customer.halted?
               %span.label.label-info.halted HALTED
-            - unless customer.tags.empty?
-              - customer.tags.each do |tag|
-                = link_to tag_distributor_customers_path(tag.name), class: 'link-label' do
-                  %span.label.label-info= tag.name
+
+            = render partial: 'customer_tags', locals: { customer: customer }
           %td
             %small= next_customer_delivery_occurrence(customer)
           %td

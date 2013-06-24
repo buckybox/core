@@ -96,14 +96,25 @@ private
   end
 
   def validate_phone
-    if distributor.require_phone && PhoneCollection.attributes.all? { |type| self[type].blank? }
+    if distributor.require_phone && (
+        customer && customer.new_record? ||
+        PhoneCollection.attributes.any? { |type| send("#{type}_changed?") }
+      ) &&
+      PhoneCollection.attributes.all? { |type| self[type].blank? }
+
       errors[:phone_number] << "can't be blank"
     end
   end
 
   def validate_address
     %w(address_1 address_2 suburb city postcode).each do |attr|
-      validates_presence_of attr if distributor.public_send("require_#{attr}")
+      if distributor.public_send("require_#{attr}") && (
+          customer && customer.new_record? ||
+          send("#{attr}_changed?")
+        )
+
+        validates_presence_of attr
+      end
     end
   end
 

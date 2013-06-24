@@ -1,6 +1,5 @@
 Given "I am unauthenticated" do
   if @current_user_logged_in # FIXME brittle
-    puts "Logging off"
     visit public_send("destroy_#{user_type(@current_user)}_session_path")
     @current_user_logged_in = false
   end
@@ -16,6 +15,9 @@ end
 
 When /^I log out$/ do
   click_link "Logout"
+
+  @current_user = nil
+  @current_user_logged_in = false
 end
 
 Then /^I should be logged out$/ do

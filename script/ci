@@ -11,8 +11,6 @@ bundle
 
 bundle exec bundle-audit
 
-bundle exec rake db:drop db:create db:migrate db:seed
-
-bundle exec rake spec
-bundle exec rake cucumber || true
+bundle exec rake db:drop db:create db:structure:load
+bundle exec rake
 
