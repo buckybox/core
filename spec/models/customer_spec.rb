@@ -275,5 +275,13 @@ describe Customer do
     it "returns nil when no payments" do
       customer.last_paid.should be_nil
     end
+
+    it "includes COD payments" do
+      delivery = Fabricate(:delivery)
+      delivery.stub(:account).and_return(customer.account)
+      delivery.stub(:distributor).and_return(customer.distributor)
+      Delivery.pay_on_delivery([delivery])
+      customer.last_paid.should_not be_nil
+    end
   end
 end

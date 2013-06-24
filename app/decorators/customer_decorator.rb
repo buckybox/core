@@ -8,10 +8,6 @@ class CustomerDecorator < Draper::Decorator
     object.account.balance
   end
 
-  def labels
-    object.tag_list.join(', ')
-  end
-
   def active_orders_count
     object.orders.active.count
   end
@@ -33,17 +29,58 @@ class CustomerDecorator < Draper::Decorator
     end
   end
 
-  def created_at
+  def customer_creation_date
     object.created_at.to_date.iso8601
   end
 
-  def last_paid
+  def last_paid_date
     time = object.last_paid
     if time.present?
       time.to_date.iso8601
     else
       nil
     end
+  end
+
+  def delivery_service
+    object.route_name
+  end
+
+  def customer_packing_notes
+    object.special_order_preference
+  end
+
+  def customer_number
+    object.formated_number
+  end
+
+  def customer_creation_method
+    if object.via_webstore?
+      "Webstore"
+    else
+      "Manual"
+    end
+  end
+
+  def customer_note
+    object.notes
+  end
+
+  def customer_labels
+    object.tag_list.join(', ')
+  end
+
+  def next_delivery
+    order = object.next_order
+    order.present? ? order.box.name : nil
+  end
+
+  def address_line_1
+    address_1
+  end
+
+  def address_line_2
+    address_2
   end
 end
 
