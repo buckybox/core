@@ -58,8 +58,16 @@ BuckyBox::Application.configure do
   config.action_mailer.default_url_options = { host: Figaro.env.host }
 
   # postmark settings
-  config.action_mailer.delivery_method   = :postmark
-  config.action_mailer.postmark_settings = { api_key: Figaro.env.postmark_api_key }
+  config.action_mailer.delivery_method   = :smtp
+  config.action_mailer.smtp_settings = {
+    :address   => "smtp.mandrillapp.com",
+    :port      => 587,
+    :enable_starttls_auto => true, # detects and uses STARTTLS
+    :user_name => Figaro.env.mandrill_email,
+    :password  => Figaro.env.mandrill_password,
+    :authentication => 'login', # Mandrill supports 'plain' or 'login'
+    :domain => 'staging.buckybox.com', # your domain to identify your server when connecting
+  }
   
   # ActiveMerchant setup as test only
   config.after_initialize do
