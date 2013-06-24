@@ -19,7 +19,9 @@ class EmailForm < Form
   def send!(to=::Distributor.keep_updated)
     if valid?
       to.each do |distributor|
-        DistributorMailer.delay.update_email(self, distributor)
+        DistributorMailer.delay(
+          priority: Figaro.env.delayed_job_priority_high
+        ).update_email(self, distributor)
       end
       true
     else

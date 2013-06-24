@@ -243,8 +243,8 @@ private
 
   def usercycle_tracking
     if status_changed? && status == 'delivered'
-      Bucky::Usercycle.instance.event(distributor.id, "distributor_delivered_order")
-      Bucky::Usercycle.instance.event(distributor.id, "engaged") # macro event
+      Bucky::Usercycle.instance.event(distributor, "distributor_delivered_order")
+      Bucky::Usercycle.instance.event(distributor, "engaged") # macro event
     end
   end
 end

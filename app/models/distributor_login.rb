@@ -10,8 +10,4 @@ class DistributorLogin < ActiveRecord::Base
     Airbrake.notify(ex)
     raise ex unless Rails.env.production?
   end
-
-  def self.first?(distributor)
-    where(distributor_id: distributor.id).count.zero?
-  end
 end
