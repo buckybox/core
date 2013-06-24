@@ -87,9 +87,8 @@
     %span.label Customer email addresses
 
   .modal-body
-    %p Please click on the box below then hit CTRL+C (or Cmd+C on Mac) to copy these email addresses to your clipboard.
-
-    %textarea.span12{"autofocus" => "autofocus"}
+    %p <strong>Hint:</strong> you can copy these addresses into any email application.
+    %textarea.span12.preformatted{"autofocus" => "autofocus", "rows" => 6}
 
   .modal-footer
     = link_to 'Close', 'javascript:void(0)', class: 'btn btn-primary', 'data-dismiss' => 'modal'
