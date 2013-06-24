@@ -1,38 +1,47 @@
 class WebstoreController < ApplicationController
   layout 'customer'
 
+  before_filter :check_access
   before_filter :setup_by_distributor
-  before_filter :check_if_webstore_active
+
+  after_filter :save_cart_id
 
   def store
-    setup_cart
+    setup_cart(current_customer)
+    id_logger
     render 'store', locals: {  webstore_products: webstore_products }
   end
 
   def start_order
     current_cart.add_product(product_id: params[:product_id])
+    id_logger
     current_cart.save ? successful_new_order : failed_new_order
   end
 
   def customise
-    render 'customise', locals: { order: order.decorate, customise_order: customise_order(order) }
+    id_logger
+    render 'customise', locals: {
+      order: current_order.decorate,
+      customise_order: Webstore::Customise.new(order: current_order)
+    }
   end
 
   #--- Private
 
-  def setup_cart
-    cart = Webstore::Cart.new(customer: logged_in_customer)
+  def id_logger
+    puts ">"*100
+    puts "Action: #{action_name}   Cart Before ID: #{current_cart.id}   Session ID: #{session[:cart_id]}   Cart After ID: #{Webstore::Cart.find(session[:cart_id]).id}"
+    puts "<"*100
+  end
+
+  def setup_cart(customer)
+    cart = Webstore::Cart.new(customer: customer)
     cart.save
-    session[:cart_id] = cart.id
   end
 
   def webstore_products
-    products = Webstore::Product.build_distributors_products(distributor)
+    products = Webstore::Product.build_distributors_products(current_distributor)
     Webstore::ProductDecorator.decorate_collection(products)
-  end
-
-  def current_cart
-    @current_cart ||= Webstore::Cart.find(session[:cart_id])
   end
 
   def successful_new_order
@@ -44,35 +53,44 @@ class WebstoreController < ApplicationController
     redirect_to webstore_store_path
   end
 
-  alias_method :logged_in_customer, :current_customer
+  def current_cart
+    @current_cart ||= Webstore::Cart.find(session[:cart_id])
+  end
+
+  def current_order
+    @current_order ||= current_cart.order
+  end
+
   def current_customer
-    @current_customer ||= current_cart.customer
+    @current_customer ||= (current_cart ? current_cart.customer : wrap_real_customer(super))
+  end
+
+  def wrap_real_customer(real_customer)
+    Webstore::Customer.new(customer: real_customer)
+  end
+
+  def check_access
+    active_webstore = !current_distributor.nil? && current_distributor.active_webstore
+    redirect_to Figaro.env.marketing_site_url and return unless active_webstore
+    check_customer_access
+  end
+
+  def check_customer_access
+    real_customer = current_cart.real_customer
+    sign_out(real_customer) if current_cart.distributor != current_distributor
+  end
+
+  def current_distributor
+    @distributor ||= Distributor.find_by_parameter_name(params[:distributor_parameter_name])
   end
 
   def setup_by_distributor
-    if distributor
-      set_defaults(distributor)
-      check_customer(distributor, current_customer)
-    end
+    Time.zone = current_distributor.time_zone
+    Money.default_currency = Money::Currency.new(current_distributor.currency)
   end
 
-  def check_if_webstore_active
-    if distributor.nil? || !distributor.active_webstore
-      redirect_to Figaro.env.marketing_site_url and return
-    end
-  end
-
-  def set_defaults(distributor)
-    Time.zone = distributor.time_zone
-    Money.default_currency = Money::Currency.new(distributor.currency)
-  end
-
-  def check_customer(distributor, customer)
-    sign_out(customer) if !customer.guest? && customer.distributor != distributor
-  end
-
-  def distributor
-    @distributor ||= Distributor.find_by_parameter_name(params[:distributor_parameter_name])
+  def save_cart_id
+    session[:cart_id] = current_cart.id
   end
 
   #-------------------------
