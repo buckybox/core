@@ -14,7 +14,7 @@
       %th
         %span.label
           Total:
-          = @customers.map(&:account).map(&:balance).sum.format
+          = @customers.size.zero? ? Money.new(0, current_distributor.currency).format : @customers.map(&:account).map(&:balance).sum.format
 
   %tbody
     %tr.new-row
