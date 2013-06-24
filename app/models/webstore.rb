@@ -271,7 +271,8 @@ private
   def find_or_create_customer(address_information)
     return @controller.current_customer unless @controller.current_customer.nil?
 
-    customer       = @order.distributor.customers.new(email: self.current_email)
+    args           = { email: self.current_email, via_webstore: true }
+    customer       = @order.distributor.customers.new(args)
     customer.route = @order.route
     customer.name  = address_information[:name]
 
