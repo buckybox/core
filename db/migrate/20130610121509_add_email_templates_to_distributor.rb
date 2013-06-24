@@ -5,21 +5,20 @@ class AddEmailTemplatesToDistributor < ActiveRecord::Migration
     templates = [
       {
         subject: "Your account is overdue",
-        body: "Hi [first-name],\n\nJust a reminder that your balance is overdue.\n\nCheers"
+        body: "Hi [first_name],\n\nJust a reminder that your balance is overdue.\n\nCheers"
       },
       {
         subject: "Newsletter",
-        body: "Hi [first-name],\n\nGreat news today!"
+        body: "Hi [first_name],\n\nGreat news today!"
       },
     ].map do |template|
-      t = EmailTemplate.new
-      t.subject = template[:subject]
-      t.body = template[:body]
+      EmailTemplate.new template[:subject], template[:body]
+    end.freeze
 
-      t
-    end
-
-    serialized_templates = EmailTemplate.new.dump(templates).freeze
+    # NOTE: I could simply assign `email_templates` for each distributor but it
+    # takes more than a minute so I use the following hack:
+    coder = ActiveRecord::Coders::YAMLColumn.new Array
+    serialized_templates = coder.dump(templates).freeze
 
     Distributor.update_all(email_templates: serialized_templates)
   end
