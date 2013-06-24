@@ -1,6 +1,6 @@
 def customer_with(args={})
   distributor = Fabricate(:distributor)
-  route = Fabricate(:route, name: args[:route_name], distributor: distributor)
+  route = Fabricate(:route, name: args[:delivery_service], distributor: distributor)
   customer = Fabricate(:customer,
     first_name: args[:first_name],
     last_name: args[:last_name],
@@ -10,6 +10,7 @@ def customer_with(args={})
     discount: args[:discount],
     sign_in_count: args[:sign_in_count],
     notes: args[:notes],
+    special_order_preference: args[:special_order_preference],
     tag_list: args[:labels],
     distributor: distributor,
     route: route,

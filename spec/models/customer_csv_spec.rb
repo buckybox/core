@@ -30,8 +30,9 @@ describe CustomerCSV do
         discount:        0.2      ,
         sign_in_count:   7   ,
         notes:           'Likes beer'       ,
+        special_order_preference: 'dislikes wine eh',
         via_webstore:    false    ,
-        route_name:      'Franklin'     ,
+        delivery_service:      'Franklin'     ,
         address_1:       'Casa Bucky'     ,
         address_2:       'The Stables'     ,
         suburb:          'Vic'     ,
@@ -45,6 +46,7 @@ describe CustomerCSV do
       })
       customer.stub_chain(:orders, :active, :count).and_return(7)
       customer.stub(:next_order_occurrence_date).and_return(1.week.from_now)
+      customer.stub_chain(:next_order, :box, :name).and_return("Apples")
       customer.stub(:last_paid).and_return(3.weeks.ago)
       @customers = [customer.decorate]
                              
@@ -52,11 +54,11 @@ describe CustomerCSV do
     end
 
     it "exports the header into the csv" do
-      @rows.first.should eq ["Created At", "Formated Number", "First Name", "Last Name", "Email", "Last Paid", "Account Balance", "Minimum Balance", "Halted?", "Discount", "Sign In Count", "Notes", "Via Webstore", "Route Name", "Address 1", "Address 2", "Suburb", "City", "Postcode", "Delivery Note", "Mobile Phone", "Home Phone", "Work Phone", "Labels", "Active Orders Count", "Next Delivery Date"]
+      @rows.first.should eq ["Customer Number", "First Name", "Last Name", "Email", "Last Paid Date", "Account Balance", "Minimum Balance", "Halted?", "Discount", "Customer Labels", "Customer Creation Date", "Customer Creation Method", "Sign In Count", "Customer Note", "Customer Packing Notes", "Delivery Service", "Address Line 1", "Address Line 2", "Suburb", "City", "Postcode", "Delivery Note", "Mobile Phone", "Home Phone", "Work Phone", "Active Orders Count", "Next Delivery Date", "Next Delivery"]
     end
 
     it "exports customer data into csv" do
-      @rows[1].should eq [Date.today.iso8601, "0666", "Johnny", "Boy", "jony.boy@example.com", 3.weeks.ago.to_date.iso8601, "0.00", "0.23", "false", "0.2", "7", "Likes beer", "false", "Franklin", "Casa Bucky", "The Stables", "Vic", "Welly", "6012", "", "3423213423", "34543", "21455423", "fisherman, beers, vip", "7", 1.week.from_now.to_date.iso8601]
+      @rows[1].should eq ["0666", "Johnny", "Boy", "jony.boy@example.com", 3.weeks.ago.to_date.iso8601, "0.00", "0.23", "false", "0.2", "fisherman, beers, vip", Date.today.iso8601, "Manual", "7", "Likes beer", "dislikes wine eh", "Franklin", "Casa Bucky", "The Stables", "Vic", "Welly", "6012", "dislikes wine eh", "3423213423", "34543", "21455423", "7", 1.week.from_now.to_date.iso8601, "Apples"]
     end
   end
 end
