@@ -5,6 +5,8 @@ class CustomerMailer < ActionMailer::Base
     @distributor = customer.distributor
     @customer = customer
 
+    headers['X-MC-Tags'] = "customer,login_details,#{@distributor.name.parameterize}"
+
     mail to: @customer.email,
          from: "#{@distributor.name} <#{Figaro.env.no_reply_email}>",
          reply_to: @distributor.support_email,
@@ -15,6 +17,8 @@ class CustomerMailer < ActionMailer::Base
     @distributor = customer.distributor
     @customer = customer
     @oops = ['Uh-oh', 'Whoops', 'Oooops'].sample
+    
+    headers['X-MC-Tags'] = "customer,orders_halted,#{@distributor.name.parameterize}"
 
     mail to: @customer.email,
          from: "#{@distributor.name} <#{Figaro.env.no_reply_email}>",
@@ -27,6 +31,8 @@ class CustomerMailer < ActionMailer::Base
     @distributor = customer.distributor
     @customer = customer
     @oops = ['Uh-oh', 'Whoops', 'Oooops'].sample
+
+    headers['X-MC-Tags'] = "customer,remind_orders_halted,#{@distributor.name.parameterize}"
 
     mail to: @customer.email,
          from: "#{@distributor.name} <#{Figaro.env.no_reply_email}>",
@@ -41,6 +47,8 @@ class CustomerMailer < ActionMailer::Base
     else
       recipient
     end
+
+    headers['X-MC-Tags'] = "customer,email_template,#{distributor.name.parameterize}"
 
     mail to: recipient.email,
          from: "#{distributor.name} <#{Figaro.env.no_reply_email}>",
