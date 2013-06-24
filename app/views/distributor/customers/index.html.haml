@@ -11,7 +11,7 @@
           = pluralize(@customers.count, "customer")
       %th{ colspan: 3 }
         %span.label Next Delivery
-      %th.text-right
+      %th
         %span.label
           Total:
           = @customers.map(&:account).map(&:balance).sum.format
@@ -37,5 +37,6 @@
             %small= next_customer_delivery_box_name(customer)
           %td
             %small= customer.account.route.name
-          %td.balance{ class: "#{'negative' if customer.account.balance.negative?}" }= customer.account.balance.format
+          %td
+            %span.balance{ class: "#{'negative' if customer.account.balance.negative?}" }= customer.account.balance.format
 
