@@ -20,17 +20,72 @@ $badge-text: $black
 
 //----- Site wide styles
 
+small
+  font-size: 90%
+
+$highlight-focus: #fae1a3
+
+textarea,
+select,
+a,
+button,
+input[type="text"],
+input[type="password"],
+input[type="datetime"],
+input[type="datetime-local"],
+input[type="date"],
+input[type="month"],
+input[type="time"],
+input[type="week"],
+input[type="number"],
+input[type="email"],
+input[type="url"],
+input[type="search"],
+input[type="tel"],
+input[type="color"],
+input[type="radio"],
+input[type="checkbox"],
+input[type="file"],
+input[type="image"],
+input[type="submit"],
+input[type="reset"],
+input[type="button"],
+.uneditable-input,
+.btn
+  &:focus
+    border-color: rgba($highlight-focus, 0.8)
+    outline: 0
+    outline: thin dotted \9 // IE6-9
+    @include box-shadow(#{inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba($highlight-focus, 0.6)})
+
+.btn
+  text-transform: capitalize
+
+input.required,
+textarea.required
+  background-color: #FEFAE4
+
+.alert
+  font-weight: bold
+  i
+    margin-top: 4px
+
+.modal
+  outline: none
+  overflow: visible
+
+.modal-header
+  background-color: #F5F5F5
+  +border-radius(6px 6px 0 0)
+
+.modal-footer
+  background-color: #FFF
+
+.modal-backdrop
+  background-color: #EEE
+
 .non-production-background
   background-image: image-url('not-production-background.png')
-
-.text-right, td.text-right, th.text-right
-  text-align: right
-
-.text-center, td.text-center, th.text-center
-  text-align: center
-
-.hidden
-  display: none
 
 .important
   font-size: 150%
@@ -45,32 +100,71 @@ table.no-horizontal-dividers
   th, td
     border-left-width: 0px
 
+.balance
+  text-align: right !important
+  font-size: large
+  font-weight: bold
+  &.negative
+    color: $negative-colour
+
+.action
+  display: block
+  padding: 5px 0px
+  text-align: center
+  background-color: $action-colour
+  +border-radius(0.4em)
+  &:hover
+    background-color: $action-colour-hover
+
+.label, .badge
+  +single-text-shadow(0px, 0px, 0px)
+
+.label
+  font-weight: bold
+  font-size: 12px
+  color: #FFF
+  text-transform: uppercase
+
+[class="label"] // don't match "label-*"
+  background: #DFDFCF
+  color: #000
+
+.badge
+  text-transform: capitalize
+
 .customer-badge
   max-width: 100%
   white-space: nowrap
   overflow: hidden
   text-overflow: ellipsis
   display: inline-block
-  color: $badge-text
-  background-color: $badge-name
+  color: #333
+  background-color: #F0EBDE
   +border-radius(0.2em)
   .customer-id
     font-weight: bold
     display: inline-block
-    color: $badge-text
-    background-color: $badge-id
+    color: #FFF
+    background-color: #585652
     padding: 0 0.2em
     +border-radius(0.2em)
     &:hover
-      color: $badge-id
-      background-color: $badge-text
       text-decoration: none
   .customer-name
     font-weight: normal
     padding: 0 0.2em
 
-.ajax_loader_gif
+.ajax-spinner
   background: image-url('ajax-loader.gif')
   width: 16px
   height: 16px
   margin: 0px auto
+
+.preformatted
+  font-family: monospace
+  white-space: pre
+
+.icon-pushpin
+  background-image: image-url('icon-pushpin.png')
+  background-position: 0
+

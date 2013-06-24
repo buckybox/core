@@ -1143,7 +1143,8 @@ CREATE TABLE distributors (
     require_address_2 boolean DEFAULT false NOT NULL,
     require_suburb boolean DEFAULT false NOT NULL,
     require_city boolean DEFAULT false NOT NULL,
-    keep_me_updated boolean DEFAULT true
+    keep_me_updated boolean DEFAULT true,
+    email_templates text
 );
 
 
@@ -3644,8 +3645,13 @@ INSERT INTO schema_migrations (version) VALUES ('20130514034901');
 
 INSERT INTO schema_migrations (version) VALUES ('20130515012606');
 
+
+INSERT INTO schema_migrations (version) VALUES ('20130516232210');
+
 INSERT INTO schema_migrations (version) VALUES ('20130610041926');
 
 INSERT INTO schema_migrations (version) VALUES ('20130610110940');
+
+INSERT INTO schema_migrations (version) VALUES ('20130610121509');
 
 INSERT INTO schema_migrations (version) VALUES ('20130616094641');

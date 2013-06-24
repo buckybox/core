@@ -67,7 +67,7 @@ class Distributor < ActiveRecord::Base
     :require_address_1, :require_address_2, :require_suburb, :require_postcode,
     :require_phone, :require_city, :omni_importer_ids, :notes,
     :payment_cash_on_delivery, :payment_bank_deposit, :payment_credit_card,
-    :keep_me_updated
+    :keep_me_updated, :email_templates
 
   validates_presence_of :country
   validates_presence_of :email
@@ -86,6 +86,8 @@ class Distributor < ActiveRecord::Base
   after_save :generate_required_daily_lists
   after_save :update_halted_statuses
   after_save :usercycle_tracking
+
+  serialize :email_templates, Array
 
   default_value_for :time_zone,               DEFAULT_TIME_ZONE
   default_value_for :currency,                DEFAULT_CURRENCY

@@ -1,0 +1,95 @@
+#distributor_customers_send_email.modal.hide.fade{'tabindex' => '-1', 'role' => 'dialog'}
+  .modal-header
+    %button.close{ data: { dismiss: 'modal'} }
+      %i.icon-remove
+    %i.icon-envelope
+    %span.recipients
+
+  = simple_form_for :email_template, url: email_distributor_customers_path, remote: true do |f|
+    = hidden_field_tag :recipient_ids
+    = hidden_field_tag :selected_email_template_id, "-1"
+    = hidden_field_tag :link_action
+
+    .modal-body
+      .alert.alert-error
+        = link_to 'javascript:void(0)', class: 'pull-right', 'data-hide' => 'alert' do
+          Okay
+        .message
+      .alert.alert-success
+        = link_to 'javascript:void(0)', class: 'pull-right', 'data-hide' => 'alert' do
+          Okay
+        .message
+      .alert.alert-info
+        Please wait...
+        %span.ajax-spinner
+
+      .row-fluid.composer
+        .dropdown.pull-left
+          %div.dropdown-toggle{'data-toggle' => 'dropdown', title: "Email templates"}
+            %i.caret
+          %ul.dropdown-menu
+            %li.template-link-action
+              = link_to_submit 'data-link-action' => 'update' do
+                Update template
+            %li.template-link-action
+              = link_to_submit 'data-link-action' => 'delete' do
+                Delete this template
+            %li
+              = link_to_submit 'data-link-action' => 'save' do
+                Save as new template
+            %li.divider.templates{ :class => ('hide' if @email_templates.empty?) }
+            - @email_templates.each do |template|
+              %li.template-link
+                = link_to 'javascript:void(0)', title: "Load this template" do
+                  %i.icon-pushpin
+                  %span= template.subject
+                .span.hide.subject= template.subject
+                .span.hide.body= template.body
+            %li.new-template-link.hide
+              = link_to 'javascript:void(0)', title: "Load this template" do
+                %i.icon-pushpin
+                %span
+              .hide.subject
+              .hide.body
+
+        = f.input 'subject', label: false, placeholder: "Subject", input_html: { class: 'span12 selected' }, wrapper_html: { class: 'subject' }, autofocus: true
+        = f.input 'body', as: :text, label: false, placeholder: "Message", input_html: { class: 'span12', rows: 12, value: "Hi {first_name},\n", 'data-default-value' => "Hi {first_name},\n" }, wrapper_html: { class: 'body' }
+
+    .modal-footer
+      :ruby
+        title = <<-TITLE
+          Use <strong>merge tags</strong> to insert customer details
+          <button class="close" onclick="$('#distributor_customers_send_email_merge_tags').popover('hide'); return false">&times;</button>
+        TITLE
+
+      = link_to 'javascript:void(0)', id: "distributor_customers_send_email_merge_tags", class: 'pull-left', title: title, 'data-html' => true, 'data-placement' => 'right', 'data-toggle' => 'popover', 'data-content' => EmailTemplate.keywords_with_delimiters.join('<br>') do
+        %i.icon-info-sign
+        help
+
+      .span6.pull-right
+        = link_to 'cancel', 'javascript:void(0)', 'data-dismiss' => 'modal'
+        .btn-group
+          = button_tag 'Send', class: 'btn btn-primary', 'data-loading-text' => "sending...", autocomplete: 'off', name: "commit"
+          = button_tag class: "btn btn-primary dropdown-toggle", data: { toggle: 'dropdown' } do
+            %span.caret
+          %ul.dropdown-menu.pull-right{ role: 'menu' }
+            %li
+              = link_to_submit 'data-link-action' => 'preview' do
+                Send preview
+            %li
+              = link_to_submit 'data-link-action' => 'save' do
+                Save as new template
+
+#distributor_customers_copy_email.modal.hide.fade{'tabindex' => '-1', 'role' => 'dialog'}
+  .modal-header
+    %button.close{ data: { dismiss: 'modal'} }
+      %i.icon-remove
+    %span.label Customer email addresses
+
+  .modal-body
+    %p <strong>Hint:</strong> you can copy these addresses into any email application.
+    %textarea.span12.preformatted{"autofocus" => "autofocus", "rows" => 6}
+
+  .modal-footer
+    = link_to 'Close', 'javascript:void(0)', class: 'btn btn-primary', 'data-dismiss' => 'modal'
+

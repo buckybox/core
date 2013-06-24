@@ -1,0 +1,177 @@
+%h1 Bucky Box Style Sheet
+
+%blockquote Discipline will set you free.
+
+%ul
+  %li Use these shared styles and #{link_to "Bootstrap", "http://twitter.github.io/bootstrap/"} styles when possible, fallback to custom CSS only if necessary.
+
+  %li
+    Unless stated otherwise, all text in HTML markup should be lowercase and
+    = link_to "text-transform", "https://developer.mozilla.org/en-US/docs/Web/CSS/text-transform"
+    will enforce consistency for each class.
+
+%table.table.table-hover.table-bordered
+  %thead
+    %tr
+      %th Class
+      %th Usage
+      %th Example
+      %th{width: "40%"} Notes
+  %tbody
+    %tr
+      %td (none)
+      %td Regular link
+      %td
+        %a cancel
+      %td
+        %ul
+          %li Different style on hover
+    %tr
+      %td .action
+      %td Action link
+      %td
+        %a.action Create a new customer
+      %td
+        %ul
+          %li Different style on hover
+          %li First letter must be capitalised in markup (#{link_to "text-transform", "https://developer.mozilla.org/en-US/docs/Web/CSS/text-transform"} can't do it)
+    %tr
+      %td .label
+      %td
+        %ul
+          %li Section title
+          %li Table header
+          %li Tag
+      %td
+        %ul
+          %li
+            .label transactions
+          %li
+            .label total
+          %li
+            .label credit card
+      %td
+        %ul
+          %li= link_to "Other types (colors) available", "http://twitter.github.io/bootstrap/components.html#labels-badges"
+    %tr
+      %td .customer-badge
+      %td Customer badge
+      %td
+        = customer_badge(Customer.last)
+      %td
+        %ul
+          %li Includes HTML5 data attributes for JavaScript use:
+          %ul
+            %li <code>data-customer-id</code>
+            %li <code>data-customer-email</code>
+    %tr
+      %td .badge
+      %td ???
+      %td
+        %span.badge badge
+      %td
+        %ul
+          %li.bold Where would we use it?
+          %li= link_to "Other types (colors) available", "http://twitter.github.io/bootstrap/components.html#labels-badges"
+    %tr
+      %td .alert.alert-error
+      %td Error message
+      %td
+        .alert.alert-error
+          = link_to "javascript:void()", class: "close", "data-dismiss" => "alert" do
+            %i.icon-remove
+          Oops!
+      %td
+        %ul
+          %li Close button is optional
+          %li= link_to "More information", "http://twitter.github.io/bootstrap/components.html#alerts"
+    %tr
+      %td .alert.alert-success
+      %td Success message
+      %td
+        .alert.alert-success
+          = link_to "javascript:void()", class: "close", "data-dismiss" => "alert" do
+            %i.icon-remove
+          All good!
+      %td
+        %ul
+          %li Close button is optional
+          %li= link_to "More information", "http://twitter.github.io/bootstrap/components.html#alerts"
+    %tr
+      %td .alert.alert-info
+      %td Informational message
+      %td
+        .alert.alert-info
+          = link_to "javascript:void()", class: "close", "data-dismiss" => "alert" do
+            %i.icon-remove
+          Heads up!
+      %td
+        %ul
+          %li Close button is optional
+          %li= link_to "More information", "http://twitter.github.io/bootstrap/components.html#alerts"
+    %tr
+      %td .important
+      %td Important stuff
+      %td
+        %span.important Watch out!
+      %td
+        %ul
+          %li.bold Should we replace it with <code>.alert.alert-info</code>?
+    %tr
+      %td .balance
+      %td Positive balance
+      %td
+        %span.balance= Money.new(1337).format
+      %td
+        %ul
+          %li.bold Should we rename it to <code>.money</code> for more generic usage?
+    %tr
+      %td .balance.negative
+      %td Negative balance
+      %td
+        %span.balance.negative= Money.new(-1337).format
+      %td
+        %ul
+          %li.bold Should we rename it to <code>.money</code> for more generic usage?
+    %tr
+      %td .btn.btn-primary
+      %td Primary button
+      %td
+        %a.btn.btn-primary send
+      %td
+        %ul
+          %li Different style on hover
+          %li HTML tag can be a <code>&lt;button&gt;</code> or <code>&lt;a&gt;</code> (preferred)
+    %tr
+      %td .btn
+      %td Regular button
+      %td
+        %a.btn
+          %i.icon-arrow-left
+      %td
+        %ul
+          %li Different style on hover
+          %li HTML tag can be a <code>&lt;button&gt;</code> or <code>&lt;a&gt;</code> (preferred)
+    %tr
+      %td (none)
+      %td Input field
+      %td
+        %input
+      %td
+        %ul
+          %li Same style for <code>&lt;textarea&gt;</code>
+    %tr
+      %td .required
+      %td Required input field
+      %td
+        %input.required
+      %td
+        %ul
+          %li Same style for <code>&lt;textarea&gt;</code>
+    %tr
+      %td .ajax-spinner
+      %td AJAX spinner
+      %td
+        .ajax-spinner
+      %td
+

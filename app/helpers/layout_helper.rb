@@ -60,7 +60,7 @@ module LayoutHelper
     title_text = options.delete(:title) || customer_and_number(customer)
     title(title_text, false)
 
-    return content_tag(html_tag, customer_badge(customer, options), html_options)
+    content_tag(html_tag, customer_badge(customer, options), html_options)
   end
 
   def customer_and_number(customer)
@@ -80,11 +80,15 @@ module LayoutHelper
 
     customer_name = options[:customer_name] || customer.name
     customer_name = truncate(customer_name, length: 18) if options[:short]
-    content += content_tag(:span, customer_name, class: 'customer-name', title: customer_name)
+    content += content_tag(:span, customer_name,
+      class: 'customer-name', title: customer_name,
+      'data-customer-id' => customer.id,
+      'data-customer-email' => customer.email
+    )
 
     badge = content_tag(:span, content.html_safe, class: 'customer-badge')
 
-    return [ options[:before], badge, options[:after] ].join.html_safe
+    [ options[:before], badge, options[:after] ].join.html_safe
   end
 
   def intro_tour(show_tour)

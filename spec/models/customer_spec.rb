@@ -273,4 +273,29 @@ describe Customer do
       end
     end
   end
+
+  describe ".last_paid" do
+    it "returns the last payment transaction date" do
+      distributor = customer.distributor
+      Fabricate(:payment, display_time: 1.weeks.ago, account: customer.account, amount_cents: 100, distributor: distributor)
+      p = Fabricate(:payment, display_time: 1.day.ago, account: customer.account, amount_cents: 100, distributor: distributor)
+      Fabricate(:payment, display_time: 3.days.ago, account: customer.account, amount_cents: -100, distributor: distributor)
+      Fabricate(:payment, display_time: 2.weeks.ago, account: customer.account, amount_cents: 100, distributor: distributor)
+      p.reverse_payment!
+
+      customer.last_paid.to_date.should eq 1.weeks.ago.to_date
+    end
+
+    it "returns nil when no payments" do
+      customer.last_paid.should be_nil
+    end
+
+    it "includes COD payments" do
+      delivery = Fabricate(:delivery)
+      delivery.stub(:account).and_return(customer.account)
+      delivery.stub(:distributor).and_return(customer.distributor)
+      Delivery.pay_on_delivery([delivery])
+      customer.last_paid.should_not be_nil
+    end
+  end
 end

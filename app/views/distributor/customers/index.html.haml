@@ -5,20 +5,24 @@
 %table#customers.table.table-striped
   %thead
     %tr.muted
-      %th{ colspan: 2 } Customer
-      %th{ colspan: 3 } Next Delivery
-      %th.balance Balance
+      %th{ colspan: 3 }
+        %span.label
+          %i.icon-user
+          = pluralize(@customers.count, "customer")
+      %th{ colspan: 3 }
+        %span.label Next Delivery
+      %th
+        %span.label
+          Total:
+          = @customers.map(&:account).map(&:balance).sum.format
 
   %tbody
-    - if @customers.blank?
-      %tr.new-row
-        %td{ colspan: 6 }= link_to 'Create a new customer', new_distributor_customer_path
-    - else
-      %tr.new-row
-        %td{ colspan: 6 }= link_to 'Create a new customer', new_distributor_customer_path
+    %tr.new-row
+      %td{ colspan: 7 }= link_to 'Create a new customer', new_distributor_customer_path
 
       - @customers.each do |customer|
         %tr
+          %td= check_box_tag customer.id, 1, false, class: "select_one"
           %td= customer_badge(customer)
           %td
             - if customer.halted?
@@ -31,5 +35,6 @@
             %small= next_customer_delivery_box_name(customer)
           %td
             %small= customer.account.route.name
-          %td.balance{ class: "#{'negative' if customer.account.balance.negative?}" }= customer.account.balance
+          %td
+            %span.balance{ class: "#{'negative' if customer.account.balance.negative?}" }= customer.account.balance.format
 

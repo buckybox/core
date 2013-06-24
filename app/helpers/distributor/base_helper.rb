@@ -39,6 +39,20 @@ module Distributor::BaseHelper
       content_tag(:div, text, class: 'nav-text')
     end
 
-    return content_tag(:li, list_item, class: klass)
+    content_tag(:li, list_item, class: klass)
+  end
+
+  def link_to_submit(*args, &block)
+    options = args.extract_options!.merge!(href: "javascript:void(0)")
+
+    link_action = options["data-link-action"]
+
+    function = ""
+    function << "$('#link_action').val(\"#{link_action}\");" if link_action.present?
+    function << "$(this).closest('form').submit()"
+
+    name = block_given? ? capture(&block) : args[0]
+
+    link_to_function name, function, options
   end
 end
