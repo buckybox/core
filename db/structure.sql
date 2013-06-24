@@ -1143,12 +1143,8 @@ CREATE TABLE distributors (
     require_address_2 boolean DEFAULT false NOT NULL,
     require_suburb boolean DEFAULT false NOT NULL,
     require_city boolean DEFAULT false NOT NULL,
-<<<<<<< HEAD
     keep_me_updated boolean DEFAULT true,
     email_templates text
-=======
-    keep_me_updated boolean DEFAULT true
->>>>>>> origin/master
 );
 
 
