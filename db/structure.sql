@@ -1101,7 +1101,9 @@ CREATE TABLE distributors (
     require_address_1 boolean DEFAULT true NOT NULL,
     require_address_2 boolean DEFAULT false NOT NULL,
     require_suburb boolean DEFAULT false NOT NULL,
-    require_city boolean DEFAULT false NOT NULL
+    require_city boolean DEFAULT false NOT NULL,
+    keep_me_updated boolean DEFAULT true,
+    email_templates text
 );
 
 
@@ -1646,8 +1648,8 @@ CREATE TABLE packages (
     archived_customer_discount numeric DEFAULT 0 NOT NULL,
     archived_extras text,
     archived_consumer_delivery_fee_cents integer DEFAULT 0,
-    archived_substitutions character varying(255),
-    archived_exclusions character varying(255),
+    archived_substitutions text,
+    archived_exclusions text,
     archived_address_details text
 );
 
@@ -3581,3 +3583,7 @@ INSERT INTO schema_migrations (version) VALUES ('20130515012606');
 INSERT INTO schema_migrations (version) VALUES ('20130515021934');
 
 INSERT INTO schema_migrations (version) VALUES ('20130516232210');
+
+INSERT INTO schema_migrations (version) VALUES ('20130610110940');
+
+INSERT INTO schema_migrations (version) VALUES ('20130610121509');
