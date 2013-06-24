@@ -88,6 +88,7 @@ group :development do
   gem 'pry-rails'
   gem 'pry-debugger'
   gem 'pry-coolline'
+  gem 'pry-stack_explorer'
 
   gem 'better_errors'
   gem 'binding_of_caller'
