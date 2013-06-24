@@ -88,7 +88,7 @@ module Distributor::DeliveriesHelper
 
   def dso_tooltip(number)
     tooltip_text = "Delivery Sequence Number<br/>(printed on labels)"
-    link_to number, '#', rel: 'tooltip', class: 'dso-tooltip', data: { placement: 'bottom', 'original-title' => tooltip_text }
+    link_to number, '#', rel: 'tooltip', class: 'dso-tooltip', data: { placement: 'bottom', 'original-title' => tooltip_text, 'html' => true }
   end
 
   #TODO: Move the following address methods into a mapping module that is included in orders, deliveries, and packages (or something like that)
