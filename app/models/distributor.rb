@@ -155,6 +155,10 @@ class Distributor < ActiveRecord::Base
     end
   end
 
+  def email_name
+    name.gsub ":", ""
+  end
+
   def consumer_delivery_fee_cents
     if separate_bucky_fee?
       read_attribute(:consumer_delivery_fee_cents)
