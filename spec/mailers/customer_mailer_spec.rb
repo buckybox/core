@@ -30,6 +30,6 @@ describe CustomerMailer do
 
     specify { mail.to.should eq [@customer.email] }
     specify { mail.subject.should eq email_template.subject }
-    specify { mail.body.encoded.should eq email_template.body }
+    specify { mail.body.parts.find{|p| p.content_type.match(/plain/)}.body.raw_source.should eq(email_template.body)}
   end
 end
