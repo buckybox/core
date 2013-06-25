@@ -124,6 +124,17 @@ describe Customer do
     describe '#number' do
       before { @customer.number = -1 }
       specify { @customer.should_not be_valid }
+
+      it "enforces uniqueness per distributor at the DB level" do
+        customer_1 = Fabricate(:customer)
+        customer_2 = Fabricate(:customer, distributor: customer_1.distributor)
+
+        customer_2.number = customer_1.number
+
+        expect {
+          customer_2.save(validate: false)
+        }.to raise_error ActiveRecord::RecordNotUnique
+      end
     end
 
     describe 'a random password is generated if empty' do
