@@ -27,7 +27,7 @@ describe EmailForm do
     email.to.should eq([distributor.email])
     email[:from].to_s.should eq(Figaro.env.support_email)
     email[:reply_to].to_s.should eq(Figaro.env.support_email)
-    email.body.should match(fields[:body])
+    email.body.parts.find{|p| p.content_type.match(/plain/)}.body.should match(fields[:body])
     email.subject.should match(fields[:subject])
   end
 end
