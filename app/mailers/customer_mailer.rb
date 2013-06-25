@@ -1,4 +1,5 @@
 class CustomerMailer < ActionMailer::Base
+  include ActionView::Helpers::TextHelper
   default from: Figaro.env.no_reply_email
 
   def login_details(customer)
@@ -53,8 +54,10 @@ class CustomerMailer < ActionMailer::Base
     mail to: recipient.email,
          from: "#{distributor.name} <#{Figaro.env.no_reply_email}>",
          reply_to: distributor.support_email,
-         subject: email.subject,
-         body: email.body
+         subject: email.subject do |format|
+          format.text { render text: email.body }
+          format.html { render text: simple_format(email.body) }
+         end
   end
 
   # FIXME we are not doing invoicing at the moment
