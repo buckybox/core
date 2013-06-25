@@ -9,7 +9,7 @@ class CustomerMailer < ActionMailer::Base
     headers['X-MC-Tags'] = "customer,login_details,#{@distributor.name.parameterize}"
 
     mail to: @customer.email,
-         from: "#{@distributor.name} <#{Figaro.env.no_reply_email}>",
+         from: "#{@distributor.email_name} <#{Figaro.env.no_reply_email}>",
          reply_to: @distributor.support_email,
          subject: "Your Login details for #{@distributor.name}"
   end
@@ -22,7 +22,7 @@ class CustomerMailer < ActionMailer::Base
     headers['X-MC-Tags'] = "customer,orders_halted,#{@distributor.name.parameterize}"
 
     mail to: @customer.email,
-         from: "#{@distributor.name} <#{Figaro.env.no_reply_email}>",
+         from: "#{@distributor.email_name} <#{Figaro.env.no_reply_email}>",
          cc: @distributor.support_email,
          reply_to: @distributor.support_email,
          subject: "#{@oops}, your #{@distributor.name} deliveries have been put on hold"
@@ -36,7 +36,7 @@ class CustomerMailer < ActionMailer::Base
     headers['X-MC-Tags'] = "customer,remind_orders_halted,#{@distributor.name.parameterize}"
 
     mail to: @customer.email,
-         from: "#{@distributor.name} <#{Figaro.env.no_reply_email}>",
+         from: "#{@distributor.email_name} <#{Figaro.env.no_reply_email}>",
          cc: @distributor.support_email,
          reply_to: @distributor.support_email,
          subject: "#{@oops}, your #{@distributor.name} deliveries are on hold"
@@ -52,7 +52,7 @@ class CustomerMailer < ActionMailer::Base
     headers['X-MC-Tags'] = "customer,email_template,#{distributor.name.parameterize}"
 
     mail to: recipient.email,
-         from: "#{distributor.name} <#{Figaro.env.no_reply_email}>",
+         from: "#{distributor.email_name} <#{Figaro.env.no_reply_email}>",
          reply_to: distributor.support_email,
          subject: email.subject do |format|
           format.text { render text: email.body }
@@ -68,7 +68,7 @@ class CustomerMailer < ActionMailer::Base
     #@distributor = @account.distributor
 
     #mail to: @customer.email,
-         #from: "#{@distributor.name} <#{Figaro.env.no_reply_email}>",
+         #from: "#{@distributor.email_name} <#{Figaro.env.no_reply_email}>",
          #reply_to: @distributor.support_email,
          #subject: "Your #{@distributor.name} Bill/Account Statement ##{@invoice.number}"
   end
