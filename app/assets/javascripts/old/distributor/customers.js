@@ -425,4 +425,7 @@ $(function() {
     $("#export_recipient_ids").val(recipient_ids);
     $("#export_customer_details_form").submit();
   });
+
+  //transaction customers count tooltip
+  $('#transactional_customer_count').tooltip({placement: "right", html: true})
 });

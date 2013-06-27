@@ -479,6 +479,10 @@ class Distributor < ActiveRecord::Base
     payment_options.first.last
   end
 
+  def transactional_customer_count
+    Bucky::Sql.transactional_customer_count(self)
+  end
+
 private
 
   def required_fields_for_webstore
