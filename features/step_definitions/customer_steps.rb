@@ -1,8 +1,10 @@
-Given /^I am a (.*)? (.*)$/ do |status, user_type|
-  raise "Invalid status" unless status.in? ["", "logged in"]
+Given /^I am a customer/ do
+  distributor = Fabricate(:distributor_with_everything)
+  customer = distributor.customers.last
+  customer.password = "Let me in!"
+  customer.save!
 
-  @current_user = Fabricate(user_type)
-  step "I log in" if status == "logged in"
+  login_as customer
 end
 
 Given /^I am viewing the customers login page$/ do
@@ -10,13 +12,13 @@ Given /^I am viewing the customers login page$/ do
 end
 
 Given /^I am viewing my dashboard$/ do
-  step "I am a logged in customer"
   visit customer_dashboard_path
 end
 
 When /^I fill in invalid credentials$/ do
-  fill_in "customer_email", with: @current_user.email
-  fill_in "customer_password", with: @current_user.password * 2
+  visit new_customer_session_path
+  fill_in "customer_email", with: 'invalid'
+  fill_in "customer_password", with: 'credentials'
   click_button "Login"
 end
 
