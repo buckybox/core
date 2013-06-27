@@ -372,4 +372,22 @@ describe Distributor do
       customer.next_order_occurrence_date.should eq order.next_occurrence(Time.current.hour >= distributor.automatic_delivery_hour ? Date.current.tomorrow : Date.current)
     end
   end
+
+  describe ".transactional_customer_count" do
+
+    let(:distributor) { Fabricate(:distributor) }
+    let(:customer){ customer = Fabricate(:customer, distributor: distributor) }
+
+    it "returns zero when no transactions on any customers" do
+      customer
+      distributor.transactional_customer_count.should eq 0
+    end
+    
+    it "counts the number of customers with transactions" do
+      Fabricate(:transaction, account: customer.account)
+      Fabricate(:customer, distributor: distributor)
+      Fabricate(:transaction, account: Fabricate(:account))
+      distributor.transactional_customer_count.should eq 1
+    end
+  end
 end
