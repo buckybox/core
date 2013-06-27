@@ -1,3 +1,4 @@
+@javascript
 Feature: Distributor manages customers
   In order to sell veggies to customers
   As a distributor
@@ -5,7 +6,6 @@ Feature: Distributor manages customers
 
 Background:
   Given I am a distributor
-  And I log in
 
 Scenario: Create new customer
   Given I am viewing the customers page

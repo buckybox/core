@@ -58,11 +58,18 @@ end
 # See https://github.com/cucumber/cucumber-rails/blob/master/features/choose_javascript_database_strategy.feature
 Cucumber::Rails::Database.javascript_strategy = :truncation
 
+# https://github.com/cucumber/cucumber/wiki/Mocking-and-Stubbing-with-Cucumber
+require 'cucumber/rspec/doubles'
+
 require 'capybara-screenshot/cucumber'
 Capybara.save_and_open_page_path = Rails.root
 
 # JavaScript driver
 require 'capybara/poltergeist'
+
+Capybara.javascript_driver = :poltergeist
+
+# Debug driver
 
 Capybara.register_driver :poltergeist_debug do |app|
   Capybara::Poltergeist::Driver.new(app,
@@ -72,5 +79,5 @@ Capybara.register_driver :poltergeist_debug do |app|
   )
 end
 
-Capybara.javascript_driver = :poltergeist
 # Capybara.javascript_driver = :poltergeist_debug
+

@@ -7,9 +7,6 @@ module UserSessionHelper
     fill_in "#{user_type}_email", with: user.email
     fill_in "#{user_type}_password", with: user.password
     click_button "Login"
-
-    @current_user = user
-    @current_user_logged_in = true
   end
 
   def user_type user
