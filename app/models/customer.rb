@@ -309,8 +309,10 @@ class Customer < ActiveRecord::Base
   end
 
   def account_balance
+    account = account(true) # force reload
+
     if account.present?
-      account(true).balance
+      account.balance
     else
       Money.new(0, currency)
     end
