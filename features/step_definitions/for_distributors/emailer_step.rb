@@ -1,8 +1,3 @@
-When "I dismiss the intro screen" do
-  sleep 1 # ugly but the modal takes its time to show up sometimes
-  find("#close-intro-tour").click if page.has_css? "#close-intro-tour"
-end
-
 When "I select all my customers in the list" do
   find("#select_all").click
 end
@@ -19,6 +14,13 @@ When /^I fill in the (subject|body) with "(.*)"$/ do |field, content|
 end
 
 Then "I should be able to send an email" do
-  click_button "Send"
+    # we need to inhibit the mailer otherwise DJ may try to send it later on
+    # after DatabaseCleaner wiped the recipient customer - will would fail
+    CustomerMailer.should_receive(:email_template).at_least(:once).and_return(double(deliver: nil))
+
+    click_button "Send"
+    sleep 3 # wait for the page reload from JS
+    step "I should be viewing the dashboard"
+    page.should have_content "Your email", "is being sent"
 end
 
