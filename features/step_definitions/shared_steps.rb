@@ -1,27 +1,14 @@
 Given "I am unauthenticated" do
-  if @current_user_logged_in # FIXME brittle
-    visit public_send("destroy_#{user_type(@current_user)}_session_path")
-    @current_user_logged_in = false
-  end
-end
-
-Given /^I am a customer$/ do
-  @current_user = Fabricate(:customer)
-end
-
-When /^I log in$/ do
-  login_as @current_user
+  find("#user-nav .distributor-name").click
+  step "I log out"
+  page.should have_button "Login"
 end
 
 When /^I log out$/ do
-  click_link "Logout"
-
-  @current_user = nil
-  @current_user_logged_in = false
+  click_link "logout" if page.has_link? "logout"
 end
 
 Then /^I should be logged out$/ do
-  # @current_user_logged_in.should be_false
   page.should_not have_link "Login"
 end
 
