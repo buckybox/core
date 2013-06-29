@@ -6,16 +6,15 @@ gem 'rails', '~> 3.2.14'
 # Database
 gem 'pg', '~> 0.14.0'
 
-gem 'haml-rails',      '~> 0.3.4'
-gem 'jquery-rails',    '~> 2.3.0'
-gem 'jquery-ui-rails', '~> 4.0.3'
-gem 'bootstrap-sass',  '~> 2.3.2.0'
-gem 'select2-rails',   '~> 3.4.3'
-
+gem 'haml-rails',           '~> 0.3.4'
+gem 'jquery-rails',         '~> 2.3.0'
+gem 'jquery-ui-rails',      '~> 4.0.3'
+gem 'bootstrap-sass',       '~> 2.3.2.0'
+gem 'select2-rails',        '~> 3.4.3'
 gem 'json',                 '~> 1.7.7'
 gem 'devise',               '~> 2.2.4'
 gem 'multi_json',           '~> 1.3.6'
-gem 'simple_form',          '~> 2.0.2'
+gem 'simple_form',          '~> 2.1.0'
 gem 'inherited_resources',  '~> 1.3.1'
 gem 'mini_magick',          '~> 3.4'
 gem 'carrierwave',          '~> 0.6.2'
@@ -25,7 +24,7 @@ gem 'pg_search',            '~> 0.5.1'
 gem 'whenever',             '~> 0.7.3'
 gem 'acts_as_list',         '~> 0.1.8'
 gem 'default_value_for',    '~> 2.0.1'
-gem 'fuzzy-string-match',   '~> 0.9.4',  require: 'fuzzystringmatch' # This performs fuzzy matching on the import script
+gem 'fuzzy-string-match',   '~> 0.9.4',   require: 'fuzzystringmatch' # This performs fuzzy matching on the import script
 gem 'state_machine',        '~> 1.1.2'
 gem 'figaro',               '~> 0.6.4'
 gem 'active_attr',          '~> 0.8.0'
@@ -46,8 +45,6 @@ gem 'ace-rails-ap',  '~> 2.0.0'
 
 gem 'activemerchant',  '~> 1.32.1'
 gem 'attr_encryptor',  '~> 1.0.2'
-
-gem 'draper', '~> 1.0'
 
 gem 'countries', '~> 0.9.2', require: 'iso3166'
 gem 'country_select', '~> 1.1.3'
