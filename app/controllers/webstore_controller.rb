@@ -8,22 +8,25 @@ class WebstoreController < ApplicationController
 
   def store
     setup_cart(current_customer)
-    id_logger
     render 'store', locals: {  webstore_products: webstore_products }
   end
 
   def start_order
     current_cart.add_product(product_id: params[:product_id])
-    id_logger
     current_cart.save ? successful_new_order : failed_new_order
   end
 
   def customise
-    id_logger
     render 'customise', locals: {
       order: current_order.decorate,
-      customise_order: Webstore::Customise.new(order: current_order)
+      customise_cart: Webstore::Customise.new(cart: current_cart)
     }
+  end
+
+  def save_customisations
+    args = { cart: current_cart }.merge(params[:webstore_customise])
+    customise_cart = Webstore::Customise.new(args)
+    customise_cart.save ? successful_customisation : failed_customisation(customise_cart)
   end
 
   #--- Private
@@ -51,6 +54,18 @@ class WebstoreController < ApplicationController
   def failed_new_order
     flash[:error] = 'We\'re sorry there was an error starting your order.'
     redirect_to webstore_store_path
+  end
+
+  def successful_customisation
+    redirect_to webstore_login_path
+  end
+
+  def failed_customisation(customise_cart)
+    flash[:error] = 'We\'re sorry there was an error starting your order.'
+    render 'customise', locals: {
+      order: current_order.decorate,
+      customise_cart: customise_cart
+    }
   end
 
   def current_cart
