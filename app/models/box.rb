@@ -99,4 +99,8 @@ class Box < ActiveRecord::Base
   def limits_data
     {likes: substitutions_limit, dislikes: exclusions_limit}
   end
+
+  def available_extras
+    extras.not_hidden.alphabetically
+  end
 end
