@@ -1,19 +1,22 @@
 class WebstoreController < ApplicationController
   layout 'customer'
 
-  before_filter :check_access
+  before_filter :distributor_has_webstore?
   before_filter :setup_by_distributor
-
-  after_filter :save_cart_id
+  before_filter :distributors_customer?, except: [:store, :checkout]
 
   def store
-    setup_cart(current_customer)
-    render 'store', locals: {  webstore_products: webstore_products }
+    store = Webstore::Store.new(distributor: current_distributor, logged_in_customer: logged_in_customer)
+    @current_customer = store.customer
+    products = store.products
+    render 'store', locals: {  webstore_products: Webstore::ProductDecorator.decorate_collection(products) }
   end
 
-  def start_order
-    current_cart.add_product(product_id: params[:product_id])
-    current_cart.save ? successful_new_order : failed_new_order
+  def checkout
+    checkout = Webstore::Checkout.new(distributor: current_distributor, logged_in_customer: logged_in_customer)
+    @current_customer = checkout.customer
+    distributors_customer?
+    checkout.add_product!(params[:product_id]) ? successful_new_checkout(checkout) : failed_new_checkout
   end
 
   def customise
@@ -31,28 +34,13 @@ class WebstoreController < ApplicationController
 
   #--- Private
 
-  def id_logger
-    puts ">"*100
-    puts "Action: #{action_name}   Cart Before ID: #{current_cart.id}   Session ID: #{session[:cart_id]}   Cart After ID: #{Webstore::Cart.find(session[:cart_id]).id}"
-    puts "<"*100
-  end
-
-  def setup_cart(customer)
-    cart = Webstore::Cart.new(customer: customer)
-    cart.save
-  end
-
-  def webstore_products
-    products = Webstore::Product.build_distributors_products(current_distributor)
-    Webstore::ProductDecorator.decorate_collection(products)
-  end
-
-  def successful_new_order
+  def successful_new_checkout(checkout)
+    session[:cart_id] = checkout.cart_id
     redirect_to webstore_customise_path
   end
 
-  def failed_new_order
-    flash[:error] = 'We\'re sorry there was an error starting your order.'
+  def failed_new_checkout
+    flash[:alert] = 'We\'re sorry there was an error starting your order.'
     redirect_to webstore_store_path
   end
 
@@ -76,27 +64,20 @@ class WebstoreController < ApplicationController
     @current_order ||= current_cart.order
   end
 
+  alias_method :logged_in_customer, :current_customer
   def current_customer
-    @current_customer ||= (current_cart ? current_cart.customer : wrap_real_customer(super))
+    @current_customer ||= current_cart.customer
   end
 
-  def wrap_real_customer(real_customer)
-    Webstore::Customer.new(customer: real_customer)
+  def distributors_customer?
+    valid_customer = (current_customer.distributor == current_distributor)
+    alert_message = 'This account is not for this webstore. Please logout first then try your purchase again.'
+    redirect_to webstore_store_path, alert: alert_message and return unless valid_customer
   end
 
-  def check_access
+  def distributor_has_webstore?
     active_webstore = !current_distributor.nil? && current_distributor.active_webstore
     redirect_to Figaro.env.marketing_site_url and return unless active_webstore
-    check_customer_access
-  end
-
-  def check_customer_access
-    real_customer = current_cart.real_customer
-    sign_out(real_customer) if current_cart.distributor != current_distributor
-  end
-
-  def current_distributor
-    @distributor ||= Distributor.find_by_parameter_name(params[:distributor_parameter_name])
   end
 
   def setup_by_distributor
@@ -104,8 +85,8 @@ class WebstoreController < ApplicationController
     Money.default_currency = Money::Currency.new(current_distributor.currency)
   end
 
-  def save_cart_id
-    session[:cart_id] = current_cart.id
+  def current_distributor
+    @distributor ||= Distributor.find_by_parameter_name(params[:distributor_parameter_name])
   end
 
   #-------------------------
