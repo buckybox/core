@@ -1,0 +1,137 @@
+*
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif
+  color: #666
+  font-size: 13px
+  -moz-box-sizing: border-box
+  -webkit-box-sizing: border-box
+  box-sizing: border-box
+
+a
+  text-decoration: none
+
+abbr[title="required"]
+  display: none
+
+\:invalid
+  box-shadow: none // FF
+  outline: 0       // IE 10
+
+.invalid
+  box-shadow: 0 0 2px 1px #F00
+
+body
+  max-width: 600px
+  border: 1px solid #595959
+  border-radius: 4px
+  box-shadow: 0 0 4px 4px #AAA
+
+form > *
+  padding: 15px
+
+header
+  text-align: center
+  background: linear-gradient(#8BAB23, #7A9324)
+  height: 75px
+
+#close
+  float: right
+  color: #333
+
+#close:hover
+  color: #000
+
+section
+  box-shadow: 0 -4px 8px rgba(0, 0, 0, 0.2)
+  padding: 20px 100px
+  height: 380px
+  position: relative
+
+#step
+  position: absolute
+  right: 5px
+  top: 5px
+  font-size: 10px
+
+footer
+  text-align: center
+  border-top: 1px solid #CCC
+
+.hide
+  display: none
+
+fieldset
+  margin: 15px 0 0 0
+  padding: 0
+  border: none
+
+fieldset > div
+  clear: both
+  overflow-x: hidden
+  white-space: nowrap
+  padding: 5px 0
+
+legend
+  background: #999
+  color: #FFF
+  text-transform: uppercase
+  border-radius: 4px
+  font-weight: bold
+  font-size: 11px
+  padding: 2px 4px
+  text-shadow: 0 -1px #7B7474
+
+input[type="text"], input[type="email"], input[type="password"]
+  margin: 5px 0
+  padding: 2px 4px
+  width: 100%
+  border-radius: 4px
+  border: 1px solid #CCC
+
+input[type="checkbox"]
+  margin: 5px 0 0 0
+
+input:focus
+  border-color: rgba(250,225,163,0.8)
+
+label
+  font-weight: bold
+  float: left
+
+select
+  width: 50%
+  float: right
+  margin-top: -3px
+
+input[type="button"], input[type="submit"]
+  font-weight: bold
+  border-radius: 4px
+  border-style: groove
+  width: 80px
+  height: 30px
+  background: linear-gradient(#FFF, #EAEAEB)
+  border-color: #CCC
+  color: #333
+
+input.primary
+  background: linear-gradient(#007CC2, #00549A)
+  border-color: #0163B5
+  color: #FFF
+
+.url > label
+  margin-top: 8px
+
+#payment_types legend
+  margin-bottom: 5px
+
+#payment_types label
+  font-weight: inherit
+
+#payment_types input
+  float: left
+  margin: 3px 5px 0 0
+
+#bank_deposit_details
+  display: none
+  margin-left: 18px
+  padding: 2px
+
