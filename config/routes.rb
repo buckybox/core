@@ -5,6 +5,11 @@ BuckyBox::Application.routes.draw do
 
   root to: 'distributor/customers#index'
 
+  namespace :wizard do
+    get 'form'
+    post 'sign_up'
+  end
+
   namespace :webstore do
     get ':distributor_parameter_name',           action: 'store',     as: 'store'
     get ':distributor_parameter_name/customise', action: 'customise', as: 'customise'
