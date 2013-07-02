@@ -14,14 +14,16 @@ BuckyBox::Application.routes.draw do
   end
 
   namespace :webstore do
-    get  ':distributor_parameter_name',                       action: 'store',                as: 'store'
-    post ':distributor_parameter_name/checkout/:product_id',  action: 'checkout',             as: 'checkout'
-    get  ':distributor_parameter_name/customise',             action: 'customise',            as: 'customise'
-    post ':distributor_parameter_name/save_customisations',   action: 'save_customisations',  as: 'customises'
-    get  ':distributor_parameter_name/login',                 action: 'login',                as: 'login'
+    get  ':distributor_parameter_name',                             action: 'store',                     as: 'store'
+    post ':distributor_parameter_name/start_checkout/:product_id',  action: 'start_checkout',            as: 'start_checkout'
+    get  ':distributor_parameter_name/customise_order',             action: 'customise_order',           as: 'customise_order'
+    post ':distributor_parameter_name/customise_order',             action: 'save_order_customisation',  as: 'customises'
+    get  ':distributor_parameter_name/authorisation',               action: 'authorisation',             as: 'authorisation'
+    post ':distributor_parameter_name/authorisation',               action: 'save_authorisation',        as: 'authorisations'
+    get  ':distributor_parameter_name/delivery_options',            action: 'delivery_options',          as: 'delivery_options'
+    post ':distributor_parameter_name/delivery_options',            action: 'save_delivery_options',     as: 'delivery_options'
 
 
-    get ':distributor_parameter_name/delivery',  action: 'delivery',  as: 'delivery'
     get ':distributor_parameter_name/complete',  action: 'complete',  as: 'complete'
     get ':distributor_parameter_name/placed',    action: 'placed',    as: 'placed'
   end

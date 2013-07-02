@@ -12,48 +12,73 @@ class WebstoreController < ApplicationController
     render 'store', locals: {  webstore_products: Webstore::ProductDecorator.decorate_collection(products) }
   end
 
-  def checkout
+  def start_checkout
     checkout = Webstore::Checkout.new(distributor: current_distributor, logged_in_customer: logged_in_customer)
     @current_customer = checkout.customer
     distributors_customer?
     checkout.add_product!(params[:product_id]) ? successful_new_checkout(checkout) : failed_new_checkout
   end
 
-  def customise
-    render 'customise', locals: {
+  def customise_order
+    render 'customise_order', locals: {
       order: current_order.decorate,
       customise_cart: Webstore::Customise.new(cart: current_cart)
     }
   end
 
-  def save_customisations
+  def save_order_customisation
     args = { cart: current_cart }.merge(params[:webstore_customise])
     customise_cart = Webstore::Customise.new(args)
     customise_cart.save ? successful_customisation : failed_customisation(customise_cart)
   end
 
+  def authorisation
+    render 'authorisation', locals: {
+      order: current_order.decorate,
+      customer_authorisation: Webstore::Authorisation.new(cart: current_cart)
+    }
+  end
+
+  def save_authorisation
+    args = { cart: current_cart }.merge(params[:webstore_authorisation])
+    customer_authorisation = Webstore::Authorisation.new(args)
+    customer_authorisation.save ? successful_authorisation : failed_authorisation(customer_authorisation)
+  end
+
   #--- Private
+
+  def successful_authorisation
+    redirect_to webstore_delivery_options_path
+  end
+
+  def failed_authorisation(customer_authorisation)
+    flash[:alert] = 'We\'re sorry there was an error with your credentials.'
+    render 'authorisation', locals: {
+      order: current_order.decorate,
+      customise_cart: customise_cart
+    }
+  end
+
+  def successful_customisation
+    redirect_to webstore_authorisation_path
+  end
+
+  def failed_customisation(customise_cart)
+    flash[:alert] = 'We\'re sorry there was an error customising your order.'
+    render 'customise_order', locals: {
+      order: current_order.decorate,
+      customise_cart: customise_cart
+    }
+  end
 
   def successful_new_checkout(checkout)
     session[:cart_id] = checkout.cart_id
-    redirect_to webstore_customise_path
+    redirect_to webstore_customise_order_path
   end
 
   def failed_new_checkout
     flash[:alert] = 'We\'re sorry there was an error starting your order.'
     redirect_to webstore_store_path
-  end
-
-  def successful_customisation
-    redirect_to webstore_login_path
-  end
-
-  def failed_customisation(customise_cart)
-    flash[:error] = 'We\'re sorry there was an error starting your order.'
-    render 'customise', locals: {
-      order: current_order.decorate,
-      customise_cart: customise_cart
-    }
   end
 
   def current_cart
@@ -90,19 +115,6 @@ class WebstoreController < ApplicationController
   end
 
   #-------------------------
-
-  def customise_error
-    customise
-    render :customise
-  end
-
-  def login
-    @registered_options = [
-      ["I'm a new customer", 'new'],
-      ["I'm a returning customer", 'returning']
-    ]
-    @checked = @registered_options.first.last
-  end
 
   def delivery
     @routes = @distributor.routes
