@@ -169,38 +169,6 @@ private
 
 #=============== OLD ===================
 
-  def xcomplete
-    if session[:webstore].has_key? :address
-      session[:webstore][:address].each do |key, value|
-        instance_variable_set("@#{key}", value) if value
-      end
-    end
-
-    @name ||= existing_customer? && current_customer.name
-    @address ||= current_customer && current_customer.address
-    @city ||= @distributor.invoice_information.billing_city if @distributor.invoice_information
-
-    @has_address = existing_customer?
-
-    if @has_address
-      @phone_number = @address.phones.default_number
-      @phone_type = @address.phones.default_type
-      @street_address = @address.address_1
-      @street_address_2 = @address.address_2
-      @suburb = @address.suburb
-      @city = @address.city
-      @postcode = @address.postcode
-      @delivery_note = @address.delivery_note
-    end
-
-    @payment_method = session[:webstore][:payment_method]
-    @order_price = @webstore_order.order_price(current_customer)
-    @current_balance = (current_customer ? current_customer.account.balance : Money.new(0))
-    @closing_balance = @current_balance - @order_price
-    @amount_due = @closing_balance
-    @payment_required = @closing_balance.negative?
-  end
-
   def xplaced
     CustomerLogin.track(@webstore_order.customer) unless current_admin.present?
     sign_in(@webstore_order.customer)
@@ -222,13 +190,5 @@ private
     @schedule_rule = @webstore_order.schedule_rule
 
     flash[:notice] = 'Your order has been placed'
-  end
-
-  def xexisting_customer?
-    current_customer && current_customer.persisted?
-  end
-
-  def xactive_orders?
-    current_customer.present? && !current_customer.orders.active.count.zero?
   end
 end
