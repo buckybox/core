@@ -83,13 +83,12 @@ describe Address do
 
     specify { address.should be_valid }
 
-    specify { full_address.join.should == '1 Address St, Apartment 1, Suburb, City' }
-    specify { full_address.join('#').should == '1 Address St#Apartment 1#Suburb#City' }
-    specify { full_address.join(', ', with_postcode: true).should == '1 Address St, Apartment 1, Suburb, City, 00000' }
-    specify { full_address.join(', ', with_phone: true).should == '1 Address St, Apartment 1, Suburb, City, Mobile phone: 11-111-111-1111, Home phone: 22-222-222-2222, Work phone: 33-333-333-3333' }
+    specify { full_address.join.should == '1 Address St, Apartment 1, Suburb, City, 00000' }
+    specify { full_address.join('#').should == '1 Address St#Apartment 1#Suburb#City#00000' }
+    specify { full_address.join(', ').should == '1 Address St, Apartment 1, Suburb, City, 00000' }
+    specify { full_address.join(', ', with_phone: true).should == '1 Address St, Apartment 1, Suburb, City, 00000, Mobile phone: 11-111-111-1111, Home phone: 22-222-222-2222, Work phone: 33-333-333-3333' }
 
-    specify { Fabricate.build(:full_address, all_attrs.merge(home_phone: nil)).join(', ', with_phone: true).should == '1 Address St, Apartment 1, Suburb, City, Mobile phone: 11-111-111-1111, Work phone: 33-333-333-3333' }
-    specify { Fabricate.build(:full_address, all_attrs.merge(postcode: nil)).join(', ', with_postcode: true).should == '1 Address St, Apartment 1, Suburb, City' }
+    specify { Fabricate.build(:full_address, all_attrs.merge(home_phone: nil)).join(', ', with_phone: true).should == '1 Address St, Apartment 1, Suburb, City, 00000, Mobile phone: 11-111-111-1111, Work phone: 33-333-333-3333' }
   end
 
   describe '.==' do
