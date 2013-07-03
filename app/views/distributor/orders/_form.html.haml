@@ -9,7 +9,7 @@
 
       - unless @order.persisted?
         = f.simple_fields_for(:schedule_rule) do |sf|
-          = sf.input :start, label: 'Start date', collection: order_start_dates(@route), include_blank: false
+          = sf.input :start, label: 'Start date', collection: Order.start_dates(@route), include_blank: false
 
           = sf.input :recur, label: 'Frequency', collection: order_frequencies, include_blank: false, input_html: { class: 'frequency' }
 
@@ -36,7 +36,7 @@
 
           %table.order-days.table.table-bordered
             %tbody
-              - order_dates_grid.each_with_index do |week, index|
+              - Order.dates_grid.each_with_index do |week, index|
                 %tr
                   %td #{index.succ.ordinalize}
                   - week.each do |day, number|
