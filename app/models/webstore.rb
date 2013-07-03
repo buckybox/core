@@ -199,6 +199,8 @@ private
     elsif !payment_due?(@order) && webstore_params[:payment_method] == 'paid'
       customer = find_or_create_customer(address_information)
       update_address(customer, address_information) if address_information
+
+      @order.payment_method = webstore_params[:payment_method]
       @order.account = customer.account
 
       if @order.create_order
