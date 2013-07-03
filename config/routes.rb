@@ -13,19 +13,18 @@ BuckyBox::Application.routes.draw do
     post 'sign_up'
   end
 
-  namespace :webstore do
-    get  ':distributor_parameter_name',                             action: 'store',                     as: 'store'
-    post ':distributor_parameter_name/start_checkout/:product_id',  action: 'start_checkout',            as: 'start_checkout'
-    get  ':distributor_parameter_name/customise_order',             action: 'customise_order',           as: 'customise_order'
-    post ':distributor_parameter_name/customise_order',             action: 'save_order_customisation',  as: 'customises'
-    get  ':distributor_parameter_name/authorisation',               action: 'authorisation',             as: 'authorisation'
-    post ':distributor_parameter_name/authorisation',               action: 'save_authorisation',        as: 'authorisations'
-    get  ':distributor_parameter_name/delivery_options',            action: 'delivery_options',          as: 'delivery_options'
-    post ':distributor_parameter_name/delivery_options',            action: 'save_delivery_options',     as: 'delivery_options'
-
-
-    get ':distributor_parameter_name/complete',  action: 'complete',  as: 'complete'
-    get ':distributor_parameter_name/placed',    action: 'placed',    as: 'placed'
+  namespace :webstore, path: 'webstore/:distributor_parameter_name' do
+    get  '/',                            action: 'store',                        as: 'store'
+    post '/start_checkout/:product_id',  action: 'start_checkout',               as: 'start_checkout'
+    get  '/customise_order',             action: 'customise_order',              as: 'customise_order'
+    post '/customise_order',             action: 'save_order_customisation',     as: 'customise_orders'
+    get  '/customer_authorisation',      action: 'customer_authorisation',       as: 'customer_authorisation'
+    post '/customer_authorisation',      action: 'save_customer_authorisation',  as: 'customer_authorisations'
+    get  '/delivery_options',            action: 'delivery_options',             as: 'delivery_options'
+    post '/delivery_options',            action: 'save_delivery_options',        as: 'delivery_options_index'
+    get  '/payment_options',             action: 'payment_options',              as: 'payment_options'
+    post '/payment_options',             action: 'save_payment_options',         as: 'payment_options_index'
+    get  '/completed',                   action: 'completed',                    as: 'completed'
   end
 
   namespace :distributor do

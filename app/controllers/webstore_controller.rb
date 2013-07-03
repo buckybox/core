@@ -3,7 +3,7 @@ class WebstoreController < ApplicationController
 
   before_filter :distributor_has_webstore?
   before_filter :setup_by_distributor
-  before_filter :distributors_customer?, except: [:store, :checkout]
+  before_filter :distributors_customer?, except: [:store, :start_checkout]
 
   def store
     store = Webstore::Store.new(distributor: current_distributor, logged_in_customer: logged_in_customer)
@@ -22,52 +22,105 @@ class WebstoreController < ApplicationController
   def customise_order
     render 'customise_order', locals: {
       order: current_order.decorate,
-      customise_cart: Webstore::Customise.new(cart: current_cart)
+      customise_order: Webstore::CustomiseOrder.new(cart: current_cart)
     }
   end
 
   def save_order_customisation
-    args = { cart: current_cart }.merge(params[:webstore_customise])
-    customise_cart = Webstore::Customise.new(args)
-    customise_cart.save ? successful_customisation : failed_customisation(customise_cart)
+    args = { cart: current_cart }.merge(params[:webstore_customise_order])
+    customise_order = Webstore::CustomiseOrder.new(args)
+    customise_order.save ? successful_order_customisation : failed_order_customisation(customise_order)
   end
 
-  def authorisation
-    render 'authorisation', locals: {
+  def customer_authorisation
+    render 'customer_authorisation', locals: {
       order: current_order.decorate,
-      customer_authorisation: Webstore::Authorisation.new(cart: current_cart)
+      customer_authorisation: Webstore::CustomerAuthorisation.new(cart: current_cart)
     }
   end
 
-  def save_authorisation
-    args = { cart: current_cart }.merge(params[:webstore_authorisation])
-    customer_authorisation = Webstore::Authorisation.new(args)
-    customer_authorisation.save ? successful_authorisation : failed_authorisation(customer_authorisation)
+  def save_customer_authorisation
+    args = { cart: current_cart }.merge(params[:webstore_customer_authorisation])
+    customer_authorisation = Webstore::CustomerAuthorisation.new(args)
+    customer_authorisation.save ? successful_customer_authorisation : failed_customer_authorisation(customer_authorisation)
   end
 
-  #--- Private
+  def delivery_options
+    render 'delivery_options', locals: {
+      order: current_order.decorate,
+      delivery_options: Webstore::DeliveryOptions.new(cart: current_cart)
+    }
+  end
 
-  def successful_authorisation
+  def save_delivery_options
+    args = { cart: current_cart }.merge(params[:webstore_delivery_options])
+    delivery_options = Webstore::DeliveryOptions.new(args)
+    delivery_options.save ? successful_delivery_options : failed_delivery_options(delivery_options)
+  end
+
+  def payment_options
+    render 'payment_options', locals: {
+      order: current_order.decorate,
+      payment_options: Webstore::PaymentOptions.new(cart: current_cart)
+    }
+  end
+
+  def save_payment_options
+    args = { cart: current_cart }.merge(params[:webstore_payment_options])
+    payment_options = Webstore::PaymentOptions.new(args)
+    payment_options.save ? successful_payment_options : failed_payment_options(payment_options)
+  end
+
+  def completed
+  end
+
+private
+
+  def successful_payment_options
+    redirect_to webstore_completed_path
+  end
+
+  def failed_payment_options(payment_options)
+    flash[:alert] = 'We\'re sorry there was an error saving your payment options.'
+    render 'payment_options', locals: {
+      order: current_order.decorate,
+      delivery_options: payment_options,
+    }
+  end
+
+  def successful_delivery_options
+    redirect_to webstore_payment_options_path
+  end
+
+  def failed_delivery_options(delivery_options)
+    flash[:alert] = 'We\'re sorry there was an error saving your delivery options.'
+    render 'delivery_options', locals: {
+      order: current_order.decorate,
+      delivery_options: delivery_options,
+    }
+  end
+
+  def successful_customer_authorisation
     redirect_to webstore_delivery_options_path
   end
 
-  def failed_authorisation(customer_authorisation)
+  def failed_customer_authorisation(customer_authorisation)
     flash[:alert] = 'We\'re sorry there was an error with your credentials.'
-    render 'authorisation', locals: {
+    render 'customer_authorisation', locals: {
       order: current_order.decorate,
-      customise_cart: customise_cart
+      customer_authorisation: customer_authorisation,
     }
   end
 
-  def successful_customisation
-    redirect_to webstore_authorisation_path
+  def successful_order_customisation
+    redirect_to webstore_customer_authorisation_path
   end
 
-  def failed_customisation(customise_cart)
+  def failed_order_customisation(customise_order)
     flash[:alert] = 'We\'re sorry there was an error customising your order.'
     render 'customise_order', locals: {
       order: current_order.decorate,
-      customise_cart: customise_cart
+      customise_order: customise_order,
     }
   end
 
@@ -114,27 +167,9 @@ class WebstoreController < ApplicationController
     @distributor ||= Distributor.find_by_parameter_name(params[:distributor_parameter_name])
   end
 
-  #-------------------------
+#=============== OLD ===================
 
-  def delivery
-    @routes = @distributor.routes
-    @route_selections = @distributor.routes.map { |route| [route.name_days_and_fee, route.id] }
-    @selected_route_id = current_customer.route_id if active_orders?
-    @days = view_context.order_dates_grid
-    @order_frequencies = [
-      ['- Select delivery frequency -', nil],
-      ['Deliver weekly on...', :weekly],
-      ['Deliver every 2 weeks on...', :fortnightly],
-      ['Deliver monthly', :monthly],
-      ['Deliver once', :single]
-    ]
-    @extra_frequencies = [
-      ['Include Extra Items with EVERY delivery', false],
-      ['Include Extra Items with NEXT delivery only', true]
-    ]
-  end
-
-  def complete
+  def xcomplete
     if session[:webstore].has_key? :address
       session[:webstore][:address].each do |key, value|
         instance_variable_set("@#{key}", value) if value
@@ -166,7 +201,7 @@ class WebstoreController < ApplicationController
     @payment_required = @closing_balance.negative?
   end
 
-  def placed
+  def xplaced
     CustomerLogin.track(@webstore_order.customer) unless current_admin.present?
     sign_in(@webstore_order.customer)
 
@@ -189,13 +224,11 @@ class WebstoreController < ApplicationController
     flash[:notice] = 'Your order has been placed'
   end
 
-private
-
-  def existing_customer?
+  def xexisting_customer?
     current_customer && current_customer.persisted?
   end
 
-  def active_orders?
+  def xactive_orders?
     current_customer.present? && !current_customer.orders.active.count.zero?
   end
 end
