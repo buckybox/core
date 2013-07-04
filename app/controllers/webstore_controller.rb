@@ -9,7 +9,7 @@ class WebstoreController < ApplicationController
     store = Webstore::Store.new(distributor: current_distributor, logged_in_customer: logged_in_customer)
     @current_customer = store.customer
     products = store.products
-    render 'store', locals: {  webstore_products: Webstore::ProductDecorator.decorate_collection(products) }
+    render 'store', locals: { webstore_products: Webstore::ProductDecorator.decorate_collection(products) }
   end
 
   def start_checkout
@@ -72,12 +72,32 @@ class WebstoreController < ApplicationController
   end
 
   def completed
+    render 'completed', locals: { 
+      order: current_order.decorate,
+      completed: Webstore::Completed.new(cart: current_cart)
+    }
+    # Temp reminder. Do this when it makes sense
+    #CustomerLogin.track(@webstore_order.customer) unless current_admin.present?
+  end
+
+  def xplaced
+    @order_price      = @webstore_order.order_price(current_customer)
+    @current_balance  = (current_customer ? current_customer.account.balance : Money.new(0))
+    @closing_balance  = @current_balance - @order_price
+    @amount_due       = -@closing_balance
+    @bank             = @distributor.bank_information
+    @payment_required = @closing_balance.negative?
+    @customer         = @webstore_order.customer
+    @address          = @customer.address
+    @schedule_rule    = @webstore_order.schedule_rule
+
+    flash[:notice] = 'Your order has been placed'
   end
 
 private
 
   def successful_payment_options
-    redirect_to webstore_completed_path
+    redirect_to webstore_completed_path, notice: 'Your order has been placed.'
   end
 
   def failed_payment_options(payment_options)
@@ -165,30 +185,5 @@ private
 
   def current_distributor
     @distributor ||= Distributor.find_by_parameter_name(params[:distributor_parameter_name])
-  end
-
-#=============== OLD ===================
-
-  def xplaced
-    CustomerLogin.track(@webstore_order.customer) unless current_admin.present?
-    sign_in(@webstore_order.customer)
-
-    raise "Customer should be signed in at this point" unless customer_signed_in?
-    raise "Current customer should be set" if current_customer != @webstore_order.customer
-    raise "Customer should have an account" unless current_customer.account
-
-    @payment_method = session[:webstore][:payment_method]
-    @order_price = @webstore_order.order_price(current_customer)
-    @current_balance = (current_customer ? current_customer.account.balance : Money.new(0))
-    @closing_balance = @current_balance - @order_price
-    @amount_due = -@closing_balance
-    @bank = @distributor.bank_information
-    @payment_required = @closing_balance.negative?
-
-    @customer = @webstore_order.customer
-    @address = @customer.address
-    @schedule_rule = @webstore_order.schedule_rule
-
-    flash[:notice] = 'Your order has been placed'
   end
 end
