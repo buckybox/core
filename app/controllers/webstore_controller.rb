@@ -80,20 +80,6 @@ class WebstoreController < ApplicationController
     #CustomerLogin.track(@webstore_order.customer) unless current_admin.present?
   end
 
-  def xplaced
-    @order_price      = @webstore_order.order_price(current_customer)
-    @current_balance  = (current_customer ? current_customer.account.balance : Money.new(0))
-    @closing_balance  = @current_balance - @order_price
-    @amount_due       = -@closing_balance
-    @bank             = @distributor.bank_information
-    @payment_required = @closing_balance.negative?
-    @customer         = @webstore_order.customer
-    @address          = @customer.address
-    @schedule_rule    = @webstore_order.schedule_rule
-
-    flash[:notice] = 'Your order has been placed'
-  end
-
 private
 
   def successful_payment_options
