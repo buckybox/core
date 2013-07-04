@@ -1,0 +1,18 @@
+.row-fluid
+  .span12.alert.payment-message
+    .row-fluid
+      .span12
+        %strong== Please deposit funds into #{form_object.bank_name} Bank
+    .row-fluid
+      .span12
+        == Account Name: #{form_object.bank_account_name}
+        %br
+        == BSB Number: #{form_object.bank_bsb_number}
+        %br
+        == Account Number: #{form_object.bank_account_number}
+        %br
+        == Reference: #{form_object.customer_number}
+    - if form_object.payment_message
+      .row-fluid
+        .span12
+          = simple_format(form_object.payment_message, {}, sanitize: false)
