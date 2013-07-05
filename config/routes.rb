@@ -15,29 +15,29 @@ BuckyBox::Application.routes.draw do
 
   namespace :webstore, path: 'webstore/:distributor_parameter_name' do
     scope module: :store do
-      get  '/',                            action: 'store',                        as: 'store'
-      post '/start_checkout/:product_id',  action: 'start_checkout',               as: 'start_checkout'
-      get  '/completed',                   action: 'completed',                    as: 'completed'
+      get  '/',                            action: 'store',           as: 'store'
+      post '/start_checkout/:product_id',  action: 'start_checkout',  as: 'start_checkout'
+      get  '/completed',                   action: 'completed',       as: 'completed'
     end
 
     scope module: :customise_order do
-      get  '/customise_order',             action: 'customise_order',              as: 'customise_order'
-      post '/customise_order',             action: 'save_order_customisation',     as: 'customise_orders'
+      get  '/customise_order',  action: 'customise_order',           as: 'customise_order'
+      post '/customise_order',  action: 'save_order_customisation',  as: 'customise_orders'
     end
 
     scope module: :customer_authorisation do
-      get  '/customer_authorisation',      action: 'customer_authorisation',       as: 'customer_authorisation'
-      post '/customer_authorisation',      action: 'save_customer_authorisation',  as: 'customer_authorisations'
+      get  '/customer_authorisation',  action: 'customer_authorisation',       as: 'customer_authorisation'
+      post '/customer_authorisation',  action: 'save_customer_authorisation',  as: 'customer_authorisations'
     end
 
     scope module: :delivery_options do
-      get  '/delivery_options',            action: 'delivery_options',             as: 'delivery_options'
-      post '/delivery_options',            action: 'save_delivery_options',        as: 'delivery_options_index'
+      get  '/delivery_options',  action: 'delivery_options',       as: 'delivery_options'
+      post '/delivery_options',  action: 'save_delivery_options',  as: 'delivery_options_index'
     end
 
     scope module: :payment_options do
-      get  '/payment_options',             action: 'payment_options',              as: 'payment_options'
-      post '/payment_options',             action: 'save_payment_options',         as: 'payment_options_index'
+      get  '/payment_options',  action: 'payment_options',       as: 'payment_options'
+      post '/payment_options',  action: 'save_payment_options',  as: 'payment_options_index'
     end
   end
 
