@@ -34,10 +34,14 @@
         - unless extras.blank?
           %dl.packing-summary
             %dt Extras
-            - extras.group_by{ |g| "#{g[:name]} #{g[:unit]}" }.each do |extra, array|
+            - extras.sort{|a,b| Extra.name_with_unit(a)<=>Extra.name_with_unit(b)}.group_by{ |g| "#{g[:name]} #{g[:unit]}" }.each do |extra, array|
               %dd
                 %span.badge= array.collect{ |a| a[:count].to_i }.sum
                 = "#{extra}"
+            %dt
+              = link_to "download CSV", "#", id: "link_to_download_extras_csv", class: 'pull-right'
+              = simple_form_for(:export_extras, url: export_extras_distributor_deliveries_path, html:{style:'display:none', id: 'export_extras_form'}) do |f|
+                = f.input :date, as: :hidden, input_html: {value: @selected_date.to_s(:db)}
 
     #delivery-list.span9
       - if @items.blank?

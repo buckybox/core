@@ -116,6 +116,13 @@ class Distributor::DeliveriesController < Distributor::ResourceController
     end
   end
 
+  def export_extras
+    date = Date.parse(params[:export_extras][:date])
+    csv_string = ExtrasCsv.generate(current_distributor, date)
+
+    send_csv("extras_export.csv", csv_string)
+  end
+
   def nav_start_date
     Date.current - Order::FORCAST_RANGE_BACK
   end

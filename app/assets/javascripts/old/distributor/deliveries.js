@@ -127,6 +127,11 @@ $(function() {
   });
 
   $('.dso-tooltip').tooltip();
+
+  $('#link_to_download_extras_csv').click(function(){
+    $('#export_extras_form').submit();
+    return false;
+  });
 });
 
 function updateDeliveryStatus(status, checked_deliveries, date) {
