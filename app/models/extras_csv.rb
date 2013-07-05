@@ -12,7 +12,6 @@ class ExtrasCsv
       extras.each do |extra|
         csv << [extra.name, extra.unit, extra.price, extras_count(extra, extras_summary)]
       end
-      binding.pry
     end
   end
 
