@@ -2,11 +2,10 @@ require 'spec_helper'
 
 describe ExtrasCsv do
   describe "#generate" do
-    let(:date){
-      Date.today
-    }
-
+    
     before(:all) do
+      @date = Date.today
+
       distributor = Fabricate(:distributor, advance_days: 1)
       extras = 4.times.collect{|i| Fabricate(:extra, distributor: distributor, price_cents: i*200+50, unit: ['kg','l','each','g'][i])}
       customers = 2.times.collect{|i| Fabricate(:customer, distributor: distributor)}
@@ -18,11 +17,11 @@ describe ExtrasCsv do
       distributor.reload
       distributor.generate_required_daily_lists
 
-      @rows = CSV.parse(ExtrasCsv.generate(distributor, date))
+      @rows = CSV.parse(ExtrasCsv.generate(distributor, @date))
     end
 
     it "exports the header into the csv" do
-      @rows.first[3].should eq date.iso8601
+      @rows.first[3].should eq @date.iso8601
       @rows[1].should eq ["Name", "Unit", "Price", "Count"]
     end
 
