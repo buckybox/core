@@ -27,9 +27,9 @@ describe ExtrasCsv do
     end
 
     it "exports customer data into csv" do
-      @rows[2].should eq ["Extra 0", "kg", "0.50", "2"]
-      @rows[3].should eq ["Extra 1", "l", "2.50", "1"]
-      @rows[4].should eq ["Extra 2", "each", "4.50", "1"]
+      @rows[2].should eq ["Extra 0", "kg", "0.50", "5"]
+      @rows[3].should eq ["Extra 1", "l", "2.50", "2"]
+      @rows[4].should eq ["Extra 2", "each", "4.50", "3"]
       @rows[5].should eq ["Extra 3", "g", "6.50", "0"]
     end
   end

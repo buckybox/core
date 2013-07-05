@@ -7,6 +7,7 @@ class ExtrasCsv
   end
 
   def generate(date, extras, extras_summary)
+    sum_totals(extras_summary)
     CSV.generate do |csv|
       headers(csv, date)
       extras.each do |extra|
@@ -26,14 +27,15 @@ class ExtrasCsv
 
   private
   def extras_count(extra, extras_summary)
-    if @extras_count_store.nil?
-      @extras_count_store = {}
-      extras_summary.each do |extra_summary|
-        @extras_count_store[name_with_unit(extra_summary)] ||= 0
-        @extras_count_store[name_with_unit(extra_summary)] += 1
-      end
-    end
     @extras_count_store[name_with_unit(extra)] || 0
+  end
+
+  def sum_totals(extras_summary)
+    @extras_count_store = {}
+    extras_summary.each do |extra_summary|
+      @extras_count_store[name_with_unit(extra_summary)] ||= 0
+      @extras_count_store[name_with_unit(extra_summary)] += extra_summary[:count]
+    end
   end
 
   def packages(distributor, date)
