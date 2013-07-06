@@ -14,5 +14,5 @@
         %div= "#{key.to_s.humanize}: #{value}"
     %td
     %td
-    %td.remove{ colspan: 2 }
-      = link_to("remove transaction", distributor_payment_path(import_transaction), method: :delete, confirm: "This will also reverse any changes made to customer accounts", remote: true)
+    %td.remove.text-right.text-bottom{ colspan: 2 }
+      = link_to("remove transaction", distributor_payment_path(import_transaction), method: :delete, confirm: "This will also reverse any changes made to customer accounts", remote: true, class: "minor-action")
