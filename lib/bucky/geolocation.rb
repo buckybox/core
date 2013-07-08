@@ -24,12 +24,14 @@ module Bucky
         format = Biggs::Format.new("NZ").format_string
       end
 
+      required_fields = %w(street city)
+
       format.split("\n").map do |line|
         fields = line.scan(/{{(.+?)}}/).flatten - ["recipient", "country"]
 
         html = fields.map do |field|
           %Q{
-            <input class="required" id="#{model}_localised_address_#{field}" name="#{model}[localised_address_attributes][#{field}]" placeholder="#{field.capitalize}" required="required" type="text">
+            <input id="#{model}_localised_address_#{field}" name="#{model}[localised_address_attributes][#{field}]" placeholder="#{field.capitalize}" #{'required="required"' if field.in? required_fields} type="text">
           }
         end.join
 
