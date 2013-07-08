@@ -2,22 +2,22 @@ class SignUpWizardController < ApplicationController
   layout 'sign_up_wizard'
 
   def form
-    country = Bucky::Geolocation.get_country(request.remote_ip)
-    country = "NZ" if country.blank? || country == "RD" # Reserved
+    @country = Bucky::Geolocation.get_country(request.remote_ip)
+    @country = "NZ" if @country.blank? || @country == "RD" # Reserved
 
-    time_zone = Bucky::Geolocation.get_time_zone(country)
+    @time_zone = Bucky::Geolocation.get_time_zone(@country)
 
-    render :form, locals: { country: country, time_zone: time_zone }
+    render :form, locals: { country: @country, time_zone: @time_zone }
   end
 
   def country
     country = Country.where(alpha2: params[:country]).first
 
-    fields = Bucky::Geolocation.get_address_form country.alpha2
-    banks = OmniImporter.where(payment_type: "Bank Deposit", country_id: country.id).pluck(:name).sort
-    banks << "Other"
+    @fields = Bucky::Geolocation.get_address_form country.alpha2
+    @banks = OmniImporter.where(payment_type: "Bank Deposit", country_id: country.id).pluck(:name).sort
+    @banks << "Other"
 
-    render json: { address: fields, banks: banks }
+    render json: { address: @fields, banks: @banks }
   end
 
   def sign_up
