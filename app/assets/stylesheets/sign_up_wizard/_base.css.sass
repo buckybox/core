@@ -20,10 +20,14 @@ abbr[title="required"]
   box-shadow: 0 0 2px 1px #F00
 
 body
-  max-width: 600px
+  max-width: 620px
+  margin: 10px
   border: 1px solid #595959
   border-radius: 4px
   box-shadow: 0 0 4px 4px #AAA
+
+form
+  background: #FFF
 
 form > *
   padding: 15px
@@ -66,7 +70,6 @@ fieldset
 
 fieldset > div
   clear: both
-  overflow-x: hidden
   white-space: nowrap
   padding: 5px 0
 
@@ -80,10 +83,10 @@ legend
   padding: 2px 4px
   text-shadow: 0 -1px #7B7474
 
-input[type="text"], input[type="email"], input[type="password"]
+input[type="text"], input[type="email"], input[type="password"], input[type="tel"]
   margin: 5px 0
   padding: 2px 4px
-  width: 100%
+  width: 420px
   border-radius: 4px
   border: 1px solid #CCC
 
@@ -117,8 +120,28 @@ input.primary
   border-color: #0163B5
   color: #FFF
 
-.url > label
-  margin-top: 8px
+.url
+  overflow: hidden
+  input
+    border: none
+    padding-left: 0
+    &:focus
+      border: none
+  label
+    margin-top: 8px
+
+#message
+  display: none
+  border: 1px solid #C00
+  border-radius: 4px
+  background-color: #F2DEDE
+  color: #B94A4A
+  padding: 5px
+  font-weight: bold
+
+#address_fields
+  input
+    margin-right: 3px
 
 #payment_types legend
   margin-bottom: 5px

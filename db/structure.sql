@@ -552,13 +552,10 @@ ALTER SEQUENCE boxes_id_seq OWNED BY boxes.id;
 
 CREATE TABLE countries (
     id integer NOT NULL,
-    name character varying(255),
-    default_currency character varying(255),
-    default_time_zone character varying(255),
     default_consumer_fee_cents integer,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
-    full_name character varying(255)
+    alpha2 character varying(2) DEFAULT ''::character varying NOT NULL
 );
 
 
@@ -1144,7 +1141,8 @@ CREATE TABLE distributors (
     require_suburb boolean DEFAULT false NOT NULL,
     require_city boolean DEFAULT false NOT NULL,
     keep_me_updated boolean DEFAULT true,
-    email_templates text
+    email_templates text,
+    phone character varying(255)
 );
 
 
@@ -1525,6 +1523,42 @@ CREATE SEQUENCE line_items_id_seq
 --
 
 ALTER SEQUENCE line_items_id_seq OWNED BY line_items.id;
+
+
+--
+-- Name: localised_addresses; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE localised_addresses (
+    id integer NOT NULL,
+    addressable_id integer NOT NULL,
+    addressable_type character varying(255) NOT NULL,
+    street character varying(255),
+    city character varying(255),
+    zip character varying(255),
+    state character varying(255),
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: localised_addresses_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE localised_addresses_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: localised_addresses_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE localised_addresses_id_seq OWNED BY localised_addresses.id;
 
 
 --
@@ -2358,6 +2392,13 @@ ALTER TABLE ONLY line_items ALTER COLUMN id SET DEFAULT nextval('line_items_id_s
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
+ALTER TABLE ONLY localised_addresses ALTER COLUMN id SET DEFAULT nextval('localised_addresses_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
 ALTER TABLE ONLY omni_importers ALTER COLUMN id SET DEFAULT nextval('omni_importers_id_seq'::regclass);
 
 
@@ -2730,6 +2771,14 @@ ALTER TABLE ONLY line_items
 
 
 --
+-- Name: localised_addresses_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY localised_addresses
+    ADD CONSTRAINT localised_addresses_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: omni_importers_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -2926,6 +2975,13 @@ CREATE INDEX index_bank_statements_on_distributor_id ON bank_statements USING bt
 --
 
 CREATE INDEX index_boxes_on_distributor_id ON boxes USING btree (distributor_id);
+
+
+--
+-- Name: index_countries_on_alpha2; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_countries_on_alpha2 ON countries USING btree (alpha2);
 
 
 --
@@ -3645,9 +3701,6 @@ INSERT INTO schema_migrations (version) VALUES ('20130514034901');
 
 INSERT INTO schema_migrations (version) VALUES ('20130515012606');
 
-
-INSERT INTO schema_migrations (version) VALUES ('20130516232210');
-
 INSERT INTO schema_migrations (version) VALUES ('20130610041926');
 
 INSERT INTO schema_migrations (version) VALUES ('20130610110940');
@@ -3655,3 +3708,9 @@ INSERT INTO schema_migrations (version) VALUES ('20130610110940');
 INSERT INTO schema_migrations (version) VALUES ('20130610121509');
 
 INSERT INTO schema_migrations (version) VALUES ('20130616094641');
+
+INSERT INTO schema_migrations (version) VALUES ('20130703031111');
+
+INSERT INTO schema_migrations (version) VALUES ('20130703055630');
+
+INSERT INTO schema_migrations (version) VALUES ('20130705011742');

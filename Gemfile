@@ -43,6 +43,10 @@ gem 'attr_encryptor',  '~> 1.0.2'
 
 gem 'draper', '~> 1.0'
 
+gem 'countries', '~> 0.9.2', require: 'iso3166'
+gem 'country_select', '~> 1.1.3'
+gem 'biggs', '~> 0.3.3'
+
 # Use this SHA while the latest version is not released to RubyGems
 gem 'usercycle', github: 'usercycle/usercycle-api-ruby', ref: '3d650aeed09944c608be182bcec3d3619b21f692'
 

@@ -8,6 +8,7 @@ MISSION_SITE_URL: http://www.buckybox.org/
 SUPPORT_EMAIL: Bucky Box <support@buckybox.com>
 NO_REPLY_EMAIL: no-reply@buckybox.com
 MAIL_SAFE: crashtestdummy@buckybox.com
+TEAM_EMAILS: invite@buckybox.com, will@buckybox.com, sam@buckybox.com, jordan@buckybox.com, samson@buckybox.com, cedric@buckybox.com
 
 # Delayed::Job
 DELAYED_JOB_PRIORITY_HIGH: 0
