@@ -1,6 +1,7 @@
 class Distributor < ActiveRecord::Base
   has_one :bank_information,          dependent: :destroy
   has_one :invoice_information,       dependent: :destroy
+  has_one :localised_address,         dependent: :destroy, as: :addressable, autosave: true
 
   has_many :extras,                   dependent: :destroy
   has_many :boxes,                    dependent: :destroy
@@ -67,7 +68,7 @@ class Distributor < ActiveRecord::Base
     :require_address_1, :require_address_2, :require_suburb, :require_postcode,
     :require_phone, :require_city, :omni_importer_ids, :notes,
     :payment_cash_on_delivery, :payment_bank_deposit, :payment_credit_card,
-    :keep_me_updated, :email_templates
+    :keep_me_updated, :email_templates, :phone
 
   validates_presence_of :country
   validates_presence_of :email

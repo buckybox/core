@@ -17,4 +17,10 @@ class AdminMailer < ActionMailer::Base
          end
   end
 
+  def information_email(options)
+    headers['X-MC-Tags'] = "admin,information"
+
+    mail({ from: Figaro.env.no_reply_email }.merge(options))
+  end
+
 end
