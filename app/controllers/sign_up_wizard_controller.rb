@@ -64,6 +64,8 @@ private
         Accept cash on delivery: #{distributor[:payment_cash_on_delivery]}
         Accept credit card: #{distributor[:payment_credit_card]}
         Accept direct debit: #{distributor[:payment_direct_debit]}
+
+        <a href="#{impersonate_admin_distributor_url(id: @distributor.id)}">Impersonate</a>
       BODY
     }
 
