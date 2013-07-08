@@ -23,7 +23,7 @@ class OrderPrice
 
     total_price = order_extras.map do |order_extra|
       money = Money.new(order_extra[:price_cents], order_extra[:currency])
-      count = (order_extra[:count].to_i || 0)
+      count = order_extra[:count].to_i
       money * count
     end.sum
 
