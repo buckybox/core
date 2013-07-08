@@ -2999,6 +2999,13 @@ CREATE UNIQUE INDEX index_customers_on_confirmation_token ON customers USING btr
 
 
 --
+-- Name: index_customers_on_distributor_id_and_number; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE UNIQUE INDEX index_customers_on_distributor_id_and_number ON customers USING btree (distributor_id, number);
+
+
+--
 -- Name: index_customers_on_email; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -3708,6 +3715,8 @@ INSERT INTO schema_migrations (version) VALUES ('20130610110940');
 INSERT INTO schema_migrations (version) VALUES ('20130610121509');
 
 INSERT INTO schema_migrations (version) VALUES ('20130616094641');
+
+INSERT INTO schema_migrations (version) VALUES ('20130625112501');
 
 INSERT INTO schema_migrations (version) VALUES ('20130703031111');
 
