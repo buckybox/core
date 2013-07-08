@@ -68,7 +68,9 @@ class Distributor < ActiveRecord::Base
     :require_address_1, :require_address_2, :require_suburb, :require_postcode,
     :require_phone, :require_city, :omni_importer_ids, :notes,
     :payment_cash_on_delivery, :payment_bank_deposit, :payment_credit_card,
-    :keep_me_updated, :email_templates, :phone
+    :keep_me_updated, :email_templates, :phone, :localised_address_attributes
+
+  accepts_nested_attributes_for :localised_address
 
   validates_presence_of :country
   validates_presence_of :email

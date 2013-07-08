@@ -16,4 +16,19 @@ class DistributorMailer < ActionMailer::Base
          end
   end
 
+  def welcome(distributor)
+    @distributor = distributor
+
+    headers['X-MC-Tags'] = "distributor,welcome"
+
+    attachments.inline["powering-local-food.png"] = \
+      File.read(Rails.root.join("app/assets/images/bucky-box-powering-local-food.png"))
+
+    attachments.inline["getting-started.png"] = \
+      File.read(Rails.root.join("app/assets/images/bucky-box-getting-started.png"))
+
+    mail to: @distributor.email,
+         subject: "#{@distributor.name}, welcome to Bucky Box!"
+  end
+
 end

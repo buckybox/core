@@ -18,7 +18,7 @@ class CustomerMailer < ActionMailer::Base
     @distributor = customer.distributor
     @customer = customer
     @oops = ['Uh-oh', 'Whoops', 'Oooops'].sample
-    
+
     headers['X-MC-Tags'] = "customer,orders_halted,#{@distributor.name.parameterize}"
 
     mail to: @customer.email,

@@ -1,6 +1,6 @@
 class LocalisedAddress < ActiveRecord::Base
   belongs_to :addressable, polymorphic: true
-  validates_presence_of :addressable
+  validates_presence_of :street, :city
 
   biggs :postal_address
 

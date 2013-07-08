@@ -16,7 +16,7 @@ module Bucky
       country.default_time_zone if country
     end
 
-    def get_address_form country_code, model = "distributor_address"
+    def get_address_form country_code, model = "distributor"
       format = Biggs::Format.new(country_code).format_string
 
       unless format
@@ -29,7 +29,7 @@ module Bucky
 
         html = fields.map do |field|
           %Q{
-            <input class="required" id="#{model}_#{field}" name="#{model}[#{field}]" placeholder="#{field.capitalize}" required="required" type="text">
+            <input class="required" id="#{model}_localised_address_#{field}" name="#{model}[localised_address_attributes][#{field}]" placeholder="#{field.capitalize}" required="required" type="text">
           }
         end.join
 
