@@ -20,7 +20,12 @@ class AdminMailer < ActionMailer::Base
   def information_email(options)
     headers['X-MC-Tags'] = "admin,information"
 
-    mail({ from: Figaro.env.no_reply_email }.merge(options))
+    body = options.delete :body
+
+    mail({ from: Figaro.env.no_reply_email }.merge(options)) do |format|
+      format.text { render text: body }
+      format.html { render text: simple_format(body) }
+    end
   end
 
 end
