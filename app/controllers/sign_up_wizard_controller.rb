@@ -34,12 +34,11 @@ class SignUpWizardController < ApplicationController
     source = details.delete :source # store the source as a tag
 
     @distributor = Distributor.new(details)
+    @distributor.tag_list.add source
 
     if @distributor.save
-      @distributor.tag_list.add source
-      @distributor.save!
-
       render json: nil
+
       send_follow_up_email
       send_welcome_email
 
