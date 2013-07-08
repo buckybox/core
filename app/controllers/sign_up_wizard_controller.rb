@@ -13,7 +13,7 @@ class SignUpWizardController < ApplicationController
   def country
     country = Country.where(alpha2: params[:country]).first
 
-    fields = Bucky::Geolocation.get_address_form country.alpha2, "distributor_address"
+    fields = Bucky::Geolocation.get_address_form country.alpha2
     banks = OmniImporter.where(payment_type: "Bank Deposit", country_id: country.id).pluck(:name).sort
     banks << "Other"
 
@@ -23,24 +23,29 @@ class SignUpWizardController < ApplicationController
   def sign_up
     details = params[:distributor].dup
 
-    source = details.delete :source # store the source as a tag
-    details.delete :payment_direct_debit # just send an email for now
+    %w(payment_direct_debit bank_name).each do |param|
+      details.delete param # just send a follow up email for now
+    end
 
     # fetch country ID from ISO code
     country = Country.where(alpha2: details.delete(:country)).first
     details[:country_id] = country.id if country
 
-    distributor = Distributor.new(details)
+    source = details.delete :source # store the source as a tag
 
-    if distributor.save
-      distributor.tags << source
-      distributor.save!
+    @distributor = Distributor.new(details)
+
+    if @distributor.save
+      @distributor.tag_list.add source
+      @distributor.save!
 
       render json: nil
       send_follow_up_email
+      send_welcome_email
 
     else
-      render json: distributor.errors.values.join("<br>"), status: :unprocessable_entity
+      render json: @distributor.errors.full_messages.join("<br>"),
+             status: :unprocessable_entity
     end
   end
 
@@ -63,6 +68,10 @@ private
     }
 
     AdminMailer.information_email(options).deliver
+  end
+
+  def send_welcome_email
+    DistributorMailer.welcome(@distributor).deliver
   end
 end
 
