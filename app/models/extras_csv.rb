@@ -9,16 +9,15 @@ class ExtrasCsv
   def generate(date, extras, extras_summary)
     sum_totals(extras_summary)
     CSV.generate do |csv|
-      headers(csv, date)
+      headers(csv)
       extras.each do |extra|
-        csv << [extra.name, extra.unit, extra.price, extras_count(extra, extras_summary)]
+        csv << [date.iso8601, extra.name, extra.unit, extra.price, extras_count(extra, extras_summary)]
       end
     end
   end
 
-  def headers(csv, date)
-    csv << ['','','',date.iso8601]
-    csv << ["Name", "Unit", "Price", "Count"]
+  def headers(csv)
+    csv << ["delivery date", "extra line item name", "extra line item unit", "extra line item unit price", "extra line item quantity"]
   end
   
   def extras_summary(distributor, date)
