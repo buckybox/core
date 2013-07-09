@@ -375,39 +375,41 @@ private
   end
 end
 
-class Customer::EmailRule
-  def self.all
-    @all ||= EmailRule.new(:all)
-  end
-
-  def self.only_pending_orders
-    @only_pending_orders ||= EmailRule.new(:only_pending_orders)
-  end
-
-  def self.no_email
-    @no_email ||= EmailRule.new(:no_email)
-  end
-
-  attr_writer :type
-
-  def initialize(type)
-    self.type = type
-  end
-
-  def send_email?(customer)
-    case type
-    when :no_email
-      false
-    when :only_pending_orders
-      customer.orders_pending_package_creation?
-    when :all
-      true
+class Customer
+  class EmailRule
+    def self.all
+      @all ||= EmailRule.new(:all)
     end
-  end
 
-private
+    def self.only_pending_orders
+      @only_pending_orders ||= EmailRule.new(:only_pending_orders)
+    end
 
-  def type
-    @type
+    def self.no_email
+      @no_email ||= EmailRule.new(:no_email)
+    end
+
+    attr_writer :type
+
+    def initialize(type)
+      self.type = type
+    end
+
+    def send_email?(customer)
+      case type
+      when :no_email
+        false
+      when :only_pending_orders
+        customer.orders_pending_package_creation?
+      when :all
+        true
+      end
+    end
+
+  private
+
+    def type
+      @type
+    end
   end
 end
