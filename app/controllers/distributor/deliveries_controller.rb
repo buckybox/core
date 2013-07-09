@@ -120,7 +120,7 @@ class Distributor::DeliveriesController < Distributor::ResourceController
     date = Date.parse(params[:export_extras][:date])
     csv_string = ExtrasCsv.generate(current_distributor, date)
 
-    send_csv("extras_export.csv", csv_string)
+    send_csv("bucky-box-extra-line-items-export-#{date.iso8601}", csv_string)
   end
 
   def nav_start_date
