@@ -309,42 +309,4 @@ describe Customer do
       customer.last_paid.should_not be_nil
     end
   end
-
-  describe "after_save address change" do
-    it 'receives address_changed from its address when address is saved' do
-      address_attrs = customer
-      attrs[:address] = address
-
-      customer = Customer.new(attrs)
-      customer.should_receive(:address_changed)
-      address.suburb = "somewhere else"
-      address.save!
-    end
-
-    #it "should not notify the distributor if notify_address_change is configured false" do
-    #  distributor = Fabricate(:distributor, notify_address_change: false)
-    #  Event.should_not_receive(:customer_address_changed)
-    #  customer = distributor.customers.create(Fabricate.attributes_for(:customer))
-    #  address = customer.address
-    #  address.suburb = "somewhere else"
-    #  address.save!
-    #end
-
-    #it "should not notify distributor on customer creation" do
-    #  distributor = Fabricate(:distributor, notify_address_change: true)
-    #  Event.should_not_receive(:customer_address_changed)
-    #  customer = distributor.customers.create(Fabricate.attributes_for(:customer))
-    #end
-
-    #it "should notify distributor when a customer changes address" do
-    #  distributor = Fabricate(:distributor, notify_address_change: true)
-    #  customer = distributor.customers.create(Fabricate.attributes_for(:customer))
-    #  distributor.should_receive(:notify_address_changed).with(customer)
-    #  Event.should_receive(:customer_address_changed)
-    #  binding.pry
-    #  address = customer.address
-    #  address.suburb = "somewhere else"
-    #  address.save!
-    #end
-  end
 end
