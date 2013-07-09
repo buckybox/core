@@ -12,6 +12,7 @@ class Address < ActiveRecord::Base
   validate :validate_address_and_phone
 
   before_save :update_address_hash
+  after_save :notify_customer_of_change
 
   def to_s(join_with = ', ', options = {})
     result = [address_1]
@@ -85,6 +86,10 @@ class Address < ActiveRecord::Base
   end
 
 private
+
+  def notify_customer_of_change
+    customer.address_changed unless id_was.nil?
+  end
 
   def validate_address_and_phone
     return unless distributor
