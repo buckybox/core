@@ -26,7 +26,7 @@ class Customer < ActiveRecord::Base
 
   attr_accessible :address_attributes, :first_name, :last_name, :email, :name, :distributor_id, :distributor,
     :route, :route_id, :password, :password_confirmation, :remember_me, :tag_list, :discount, :number, :notes,
-    :special_order_preference, :balance_threshold, :via_webstore
+    :special_order_preference, :balance_threshold, :via_webstore, :address
 
   validates_presence_of :distributor_id, :route_id, :first_name, :email, :discount, :address
   validates_uniqueness_of :number, scope: :distributor_id
@@ -337,6 +337,10 @@ class Customer < ActiveRecord::Base
     last_payment.present? ? last_payment.display_time : nil
   end
 
+  def address_changed
+    distributor.notify_address_changed(self)
+  end
+
 private
   def reversal_transaction_ids
     reversed = payments.reversed
@@ -371,41 +375,39 @@ private
   end
 end
 
-class Customer
-  class EmailRule
-    def self.all
-      @all ||= EmailRule.new(:all)
+class Customer::EmailRule
+  def self.all
+    @all ||= EmailRule.new(:all)
+  end
+
+  def self.only_pending_orders
+    @only_pending_orders ||= EmailRule.new(:only_pending_orders)
+  end
+
+  def self.no_email
+    @no_email ||= EmailRule.new(:no_email)
+  end
+
+  attr_writer :type
+
+  def initialize(type)
+    self.type = type
+  end
+
+  def send_email?(customer)
+    case type
+    when :no_email
+      false
+    when :only_pending_orders
+      customer.orders_pending_package_creation?
+    when :all
+      true
     end
+  end
 
-    def self.only_pending_orders
-      @only_pending_orders ||= EmailRule.new(:only_pending_orders)
-    end
+private
 
-    def self.no_email
-      @no_email ||= EmailRule.new(:no_email)
-    end
-
-    attr_writer :type
-
-    def initialize(type)
-      self.type = type
-    end
-
-    def send_email?(customer)
-      case type
-      when :no_email
-        false
-      when :only_pending_orders
-        customer.orders_pending_package_creation?
-      when :all
-        true
-      end
-    end
-
-  private
-
-    def type
-      @type
-    end
+  def type
+    @type
   end
 end

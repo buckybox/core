@@ -13,18 +13,19 @@ class Event < ActiveRecord::Base
   # Global variables
   EVENT_CATEGORIES = %w(customer billing delivery)
   EVENT_TYPES = {
-    customer_new:             'customer_new',
-    customer_webstore_new:    'customer_webstore_new',
-    customer_call_reminder:   'customer_call_reminder',
-    delivery_scheduler_issue: 'delivery_scheduler_issue',
-    delivery_pending:         'delivery_pending',
-    credit_limit_reached:     'credit_limit_reached',
-    payment_overdue:          'payment_overdue',
-    invoice_reminder:         'invoice_reminder',
-    invoice_mail_sent:        'invoice_mail_sent',
-    transaction_success:      'transaction_success',
-    transaction_failure:      'transaction_failure',
-    customer_halted:          'customer_halted'
+    customer_new:              'customer_new',
+    customer_webstore_new:     'customer_webstore_new',
+    customer_call_reminder:    'customer_call_reminder',
+    delivery_scheduler_issue:  'delivery_scheduler_issue',
+    delivery_pending:          'delivery_pending',
+    credit_limit_reached:      'credit_limit_reached',
+    payment_overdue:           'payment_overdue',
+    invoice_reminder:          'invoice_reminder',
+    invoice_mail_sent:         'invoice_mail_sent',
+    transaction_success:       'transaction_success',
+    transaction_failure:       'transaction_failure',
+    customer_halted:           'customer_halted',
+    customer_address_changed:  'customer_address_changed'
   }
 
   validates_presence_of :distributor_id
@@ -86,12 +87,22 @@ class Event < ActiveRecord::Base
     )
   end
 
+  def self.customer_changed_address(customer)
+    trigger(
+      customer.distributor_id,
+      Event::EVENT_TYPES[:customer_address_changed],
+      { event_category: 'customer', customer_id: customer.id }
+    )
+  end
+
   def message
     case event_type
     when EVENT_TYPES[:customer_webstore_new]
       "New webstore customer"
     when EVENT_TYPES[:customer_halted]
       "Deliveries halted"
+    when EVENT_TYPES[:customer_address_changed]
+      "Customer changed address"
     end
   end
 
