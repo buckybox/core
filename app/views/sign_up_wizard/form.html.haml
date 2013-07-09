@@ -48,19 +48,19 @@
           %legend payment types
           %div
             = f.input_field :payment_bank_deposit, as: "boolean"
-            %label{for: "distributor_payment_bank_deposit"} I accept payments by <strong>Bank Deposit</strong>
+            %label{for: "distributor_payment_bank_deposit"} We accept payments by <strong>Bank Deposit</strong>
           #bank_deposit_details
             -# = f.input_field :bank_name, placeholder: "Bank name", required: true, disabled: true
             = f.input :bank_name, collection: [], include_blank: false
           %div
             = f.input_field :payment_cash_on_delivery, as: "boolean"
-            %label{for: "distributor_payment_cash_on_delivery"} I accept <strong>Cash on Delivery</strong>
+            %label{for: "distributor_payment_cash_on_delivery"} We accept <strong>Cash on Delivery</strong>
           %div
             = f.input_field :payment_credit_card, as: "boolean"
-            %label{for: "distributor_payment_credit_card", title: "Available soon!"} I would like to accept payments by <strong>Credit Card</strong>
+            %label{for: "distributor_payment_credit_card", title: "Available soon!"} We would like to accept payments by <strong>Credit Card</strong>
           %div
             = f.input_field :payment_direct_debit, as: "boolean"
-            %label{for: "distributor_payment_direct_debit", title: "Available soon!"} I would like to charge by <strong>Direct Debit</strong>
+            %label{for: "distributor_payment_direct_debit", title: "Available soon!"} We would like to charge by <strong>Direct Debit</strong>
 
         %fieldset
           %legend Thanks!
