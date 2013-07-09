@@ -7,7 +7,7 @@ describe ExtrasCsv do
       @date = Date.today
 
       distributor = Fabricate(:distributor, advance_days: 1)
-      extras = 4.times.collect{|i| Fabricate(:extra, distributor: distributor, price_cents: i*200+50, unit: ['kg','l','each','g'][i])}
+      extras = 4.times.collect{|i| Fabricate(:extra, name: "Extra #{i}", distributor: distributor, price_cents: i*200+50, unit: ['kg','l','each','g'][i])}
       customers = 2.times.collect{|i| Fabricate(:customer, distributor: distributor)}
       box = Fabricate(:box, distributor: distributor, extras_limit: 10)
       orders = 2.times.collect{|i| Fabricate(:order, account: customers[i].account, box: box, schedule_rule: new_everyday_schedule(Date.current))}
