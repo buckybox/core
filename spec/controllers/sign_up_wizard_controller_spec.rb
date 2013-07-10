@@ -27,10 +27,6 @@ describe SignUpWizardController do
     it "sets the form fields" do
       assigns[:fields].should include(*%w(street state city zip))
     end
-
-    it "sets the bank list" do
-      assigns[:banks].should eq ["Other"]
-    end
   end
 
   describe "#sign_up" do
