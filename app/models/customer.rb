@@ -268,6 +268,14 @@ class Customer < ActiveRecord::Base
     status_halted
   end
 
+  def active?
+    active_orders.empty?
+  end
+
+  def active_orders
+    orders.active
+  end
+
   def halt_orders!
     ScheduleRule.update_all({halted: true}, ["scheduleable_id IN (?) AND scheduleable_type = 'Order'", orders.collect(&:id)])
     update_next_occurrence!
