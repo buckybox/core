@@ -39,9 +39,8 @@
         %fieldset
           %legend customer support and url
           = f.input_field :support_email, type: "email", placeholder: "Email address for customer support", required: true
-          %div.url
-            %label buckybox.com/
-            = f.input_field :parameter_name, placeholder: "(URL) e.g. farmville-organics", required: true
+          %div
+            = f.input_field :parameter_name, title: "(URL) e.g. farmville-organics", required: true, value: "my.buckybox.com/"
 
       %article#three.step.hide
         %fieldset#payment_types

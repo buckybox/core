@@ -27,6 +27,9 @@ class SignUpWizardController < ApplicationController
       details.delete param # just use them for the follow up email for now
     end
 
+    # remove URL prefix
+    details[:parameter_name].sub! "my.buckybox.com/", ""
+
     # fetch country ID from ISO code
     country = Country.where(alpha2: details.delete(:country)).first
     details[:country_id] = country.id if country

@@ -48,13 +48,21 @@ var BuckyBoxSignUpWizard = function() {
         update_country();
       });
 
+      var url_prefix = "my.buckybox.com/";
+
       // copy parameterzed text into URL field
       $("#distributor_name").change(function() {
         var slug = $(this).val().
           replace(/\s/g, '-').replace(/[^a-zA-Z0-9\-]/g, '').
           toLowerCase();
 
-        $("#distributor_parameter_name").val(slug);
+        $("#distributor_parameter_name").val(url_prefix + slug);
+      });
+
+      $("#distributor_parameter_name").on("blur", function() {
+        if ($(this).val().indexOf(url_prefix) !== 0) {
+          $(this).val(url_prefix + $(this).val());
+        }
       });
 
       // toggle bank deposit details visibility
@@ -69,7 +77,7 @@ var BuckyBoxSignUpWizard = function() {
         $("#bank_deposit_details").toggle(this.checked);
       });
 
-      // Turn those dropdowns into neat custom comboboxes
+      // turn those dropdowns into neat custom comboboxes
       $("#distributor_bank_name").combobox();
       $("#distributor_source").combobox();
 
