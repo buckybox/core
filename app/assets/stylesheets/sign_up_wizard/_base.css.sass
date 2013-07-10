@@ -124,11 +124,12 @@ input[type="button"], input[type="submit"]
   background: linear-gradient(#FFF, #EAEAEB)
   border-color: #CCC
   color: #333
-
-input.primary
-  background: linear-gradient(#007CC2, #00549A)
-  border-color: #0163B5
-  color: #FFF
+  &.primary
+    background: linear-gradient(#007CC2, #00549A)
+    border-color: #0163B5
+    color: #FFF
+  &:disabled
+    cursor: wait
 
 #message
   display: none

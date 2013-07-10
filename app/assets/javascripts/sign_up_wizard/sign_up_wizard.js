@@ -163,7 +163,14 @@ var BuckyBoxSignUpWizard = function() {
               url: host + "/sign_up_wizard/sign_up",
               data: form.serialize(),
               beforeSend: function() {
+                $("footer input").attr("disabled", true);
+                $("#next").val("...");
+
                 $("#message").hide();
+              },
+              complete: function() {
+                $("footer input").attr("disabled", false);
+                $("#next").val("Done!");
               },
               success: function(response) {
                 jQuery("#" + id).remove();
