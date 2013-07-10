@@ -69,6 +69,10 @@ var BuckyBoxSignUpWizard = function() {
         $("#bank_deposit_details").toggle(this.checked);
       });
 
+      // Turn those dropdowns into neat custom comboboxes
+      $("#distributor_bank_name").combobox();
+      $("#distributor_source").combobox();
+
       var update_country = function() {
         jQuery.ajax({
           type: "GET",

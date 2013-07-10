@@ -50,8 +50,7 @@
             = f.input_field :payment_bank_deposit, as: "boolean"
             %label{for: "distributor_payment_bank_deposit"} We accept payments by <strong>Bank Deposit</strong>
           #bank_deposit_details
-            -# = f.input_field :bank_name, placeholder: "Bank name", required: true, disabled: true
-            = f.input :bank_name, collection: [], include_blank: false
+            = f.input_field :bank_name, label: false, collection: [], placeholder: "Which bank do you use to accept payments?"
           %div
             = f.input_field :payment_cash_on_delivery, as: "boolean"
             %label{for: "distributor_payment_cash_on_delivery"} We accept <strong>Cash on Delivery</strong>
@@ -65,8 +64,9 @@
         %fieldset
           %legend Thanks!
           %div
-            %label{for: "distributor_source"} How did you find us?
-            = f.input :source, label: false, include_blank: false, collection: ["Word of mouth", "Search engine", "Twitter", "Facebook", "Online ad", "Other"]
+            = f.input_field :source, label: false, collection: ["Word of mouth", "Search engine", "Twitter", "Facebook", "Online ad"], placeholder: "How did you first hear about us?"
+          %div
+            = f.input_field :deliveries_per_week, label: false, placeholder: "How many boxes do you deliver per week?", type: "number", min: 0, step: 10
 
     %footer
       %input#back.hide{type: "button", value: "Back"}
