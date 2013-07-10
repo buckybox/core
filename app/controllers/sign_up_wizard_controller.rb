@@ -15,7 +15,6 @@ class SignUpWizardController < ApplicationController
 
     @fields = Bucky::Geolocation.get_address_form country.alpha2
     @banks = OmniImporter.where(payment_type: "Bank Deposit", country_id: country.id).pluck(:name).sort
-    @banks << "Other"
 
     render json: { address: @fields, banks: @banks }
   end
@@ -63,6 +62,7 @@ private
         Name: #{distributor[:name]}
         Email: #{distributor[:email]}
         Accept bank deposit: #{distributor[:payment_bank_deposit]} - #{distributor[:bank_name]}
+        Accept PayPal: #{!!distributor[:payment_paypal]}
         Accept cash on delivery: #{distributor[:payment_cash_on_delivery]}
         Accept credit card: #{distributor[:payment_credit_card]}
         Accept direct debit: #{distributor[:payment_direct_debit]}

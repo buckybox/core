@@ -53,6 +53,9 @@
           #bank_deposit_details
             = f.input_field :bank_name, label: false, collection: [], placeholder: "Which bank do you use to accept payments?"
           %div
+            = f.input_field :payment_paypal, as: "boolean"
+            %label{for: "distributor_payment_paypal"} We accept <strong>PayPal</strong>
+          %div
             = f.input_field :payment_cash_on_delivery, as: "boolean"
             %label{for: "distributor_payment_cash_on_delivery"} We accept <strong>Cash on Delivery</strong>
           %div
