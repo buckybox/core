@@ -24,7 +24,7 @@
           = f.input_field :password_confirmation, type: "password", placeholder: "Confirm password", required: true
 
         %fieldset
-          %legend localisation
+          %legend location
           %div
             = f.input :country, collection: Country.all, value_method: :alpha2, label_method: :full_name, include_blank: false, selected: country
           %div
@@ -62,7 +62,7 @@
             %label{for: "distributor_payment_direct_debit", title: "Available soon!"} We would like to charge by <strong>Direct Debit</strong>
 
         %fieldset
-          %legend Thanks!
+          %legend Survey
           %div
             = f.input_field :source, label: false, collection: ["Word of mouth", "Search engine", "Twitter", "Facebook", "Online ad"], placeholder: "How did you first hear about us?"
           %div
