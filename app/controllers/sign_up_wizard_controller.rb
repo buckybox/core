@@ -14,7 +14,7 @@ class SignUpWizardController < ApplicationController
     country = Country.where(alpha2: params[:country]).first
 
     @fields = Bucky::Geolocation.get_address_form country.alpha2
-    @banks = OmniImporter.where(payment_type: "Bank Deposit", country_id: country.id).pluck(:name).sort
+    @banks = OmniImporter.where(payment_type: "Bank Deposit", country_id: country.id).pluck(:bank_name).uniq.sort
 
     render json: { address: @fields, banks: @banks }
   end
