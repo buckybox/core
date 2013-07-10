@@ -42,7 +42,7 @@
 
         %fieldset
           %legend your bucky box webstore url
-          = f.input_field :parameter_name, title: "(URL) e.g. farmville-organics", required: true, value: "my.buckybox.com/", pattern: "[a-z0-9]"
+          = f.input_field :parameter_name, title: "(URL) e.g. farmville-organics", required: true, value: "my.buckybox.com/", pattern: "[a-z0-9/\.\-]+", title: "No special characters please"
 
       %article#three.step.hide
         %fieldset#payment_types
