@@ -7,9 +7,10 @@ gem 'rails', '~> 3.2.13'
 gem 'pg', '~> 0.14.0'
 
 gem 'haml-rails',      '~> 0.3.4'
-gem 'jquery-rails',    '~> 2.1.1'
+gem 'jquery-rails',    '~> 2.3.0'
+gem 'jquery-ui-rails', '~> 4.0.3'
 gem 'bootstrap-sass',  '~> 2.3.2.0'
-gem 'select2-rails',   '~> 3.2.1'
+gem 'select2-rails',   '~> 3.4.3'
 gem 'ember-rails',     '~> 0.7.0'
 
 gem 'json',                 '~> 1.7.7'
