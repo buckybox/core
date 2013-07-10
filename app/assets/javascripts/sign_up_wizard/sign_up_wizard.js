@@ -123,7 +123,7 @@ var BuckyBoxSignUpWizard = function() {
         var step = $(".step:visible").hide();
         step = (direction == 1 ? step.next() : step.prev());
 
-        step.slideDown(400, function() {
+        step.show(0, function() {
           current_step = step;
         });
 
