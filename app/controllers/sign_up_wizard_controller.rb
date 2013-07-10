@@ -23,8 +23,8 @@ class SignUpWizardController < ApplicationController
   def sign_up
     details = params[:distributor].dup
 
-    %w(payment_direct_debit bank_name).each do |param|
-      details.delete param # just send a follow up email for now
+    %w(payment_direct_debit bank_name deliveries_per_week).each do |param|
+      details.delete param # just use them for the follow up email for now
     end
 
     # fetch country ID from ISO code
@@ -63,6 +63,8 @@ private
         Accept cash on delivery: #{distributor[:payment_cash_on_delivery]}
         Accept credit card: #{distributor[:payment_credit_card]}
         Accept direct debit: #{distributor[:payment_direct_debit]}
+        Source: #{distributor[:source]}
+        Deliveries per week: #{distributor[:deliveries_per_week]}
 
         <a href="#{impersonate_admin_distributor_url(id: @distributor.id)}">Impersonate</a>
       BODY
