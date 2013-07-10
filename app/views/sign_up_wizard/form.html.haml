@@ -37,10 +37,12 @@
           = f.input_field :phone, type: "tel", placeholder: "Phone", required: true
 
         %fieldset
-          %legend customer support and url
+          %legend customer support
           = f.input_field :support_email, type: "email", placeholder: "Email address for customer support", required: true
-          %div
-            = f.input_field :parameter_name, title: "(URL) e.g. farmville-organics", required: true, value: "my.buckybox.com/"
+
+        %fieldset
+          %legend your bucky box webstore url
+          = f.input_field :parameter_name, title: "(URL) e.g. farmville-organics", required: true, value: "my.buckybox.com/", pattern: "[a-z0-9]"
 
       %article#three.step.hide
         %fieldset#payment_types
