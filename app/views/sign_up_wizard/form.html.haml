@@ -26,7 +26,7 @@
         %fieldset
           %legend location
           %div
-            = f.input :country, collection: Country.all, value_method: :alpha2, label_method: :full_name, include_blank: false, selected: country
+            = f.input :country, collection: Country.all.sort_by(&:name), value_method: :alpha2, label_method: :full_name, include_blank: false, selected: country
           %div
             = f.input :time_zone, as: :time_zone, priority: Regexp.new(time_zone)
 
