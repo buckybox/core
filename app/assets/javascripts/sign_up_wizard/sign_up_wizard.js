@@ -102,6 +102,8 @@ var BuckyBoxSignUpWizard = function() {
             jQuery.each(response.banks, function() {
               $("#distributor_bank_name").append(jQuery("<option />").val(this).text(this));
             });
+
+            register_validity_handlers();
           }
         });
       };
@@ -197,17 +199,25 @@ var BuckyBoxSignUpWizard = function() {
       password.change(checkPasswordValidity);
       password_confirmation.change(checkPasswordValidity);
 
-      $(":input").on("invalid", function() {
-        if ($(this).closest(".step")[0] != current_step[0]) {
-          return false; // don't validate hidden inputs
-        } else {
-          $(this).addClass("invalid");
-        }
-      }).on("change", function() {
-        if ($(this)[0].validity.valid) {
-          $(this).removeClass("invalid");
-        }
-      });
+      var register_validity_handlers = function() {
+        $(".step:not(:visible) input").prop("disabled", true);
+
+        $(":input").on("invalid", function() {
+          if ($(this).closest(".step")[0] != current_step[0]) {
+            return false; // don't validate hidden inputs
+          } else {
+            $(this).addClass("invalid");
+          }
+        }).on("change", function() {
+          $(this)[0].setCustomValidity("");
+
+          if ($(this)[0].validity.valid) {
+            $(this).removeClass("invalid");
+          }
+        });
+      };
+
+      register_validity_handlers();
 
     }).appendTo("body");
 
