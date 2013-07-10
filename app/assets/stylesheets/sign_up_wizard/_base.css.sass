@@ -1,7 +1,9 @@
+$input_width: 420px
+
 *
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif
   color: #666
-  font-size: 13px
+  font-size: 14px
   -moz-box-sizing: border-box
   -webkit-box-sizing: border-box
   box-sizing: border-box
@@ -83,10 +85,14 @@ legend
   padding: 2px 4px
   text-shadow: 0 -1px #7B7474
 
-input[type="text"], input[type="email"], input[type="password"], input[type="tel"]
-  margin: 5px 0
-  padding: 2px 4px
-  width: 420px
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="tel"],
+input[type="number"]
+  margin: 1px 0
+  padding: 6px
+  width: $input_width
   border-radius: 4px
   border: 1px solid #CCC
 
@@ -104,6 +110,7 @@ select
   width: 50%
   float: right
   margin-top: -3px
+  padding: 6px
 
 input[type="button"], input[type="submit"]
   font-weight: bold
@@ -136,8 +143,10 @@ input.primary
   border-radius: 4px
   background-color: #F2DEDE
   color: #B94A4A
-  padding: 5px
+  padding: 2px 4px
+  height: 22px
   font-weight: bold
+  overflow: hidden
 
 #address_fields
   input
@@ -149,7 +158,7 @@ input.primary
 #payment_types label
   font-weight: inherit
 
-#payment_types input
+#payment_types input[type="checkbox"]
   float: left
   margin: 3px 5px 0 0
 
