@@ -26,12 +26,19 @@ module Bucky
 
       required_fields = %w(street city)
 
+      field_descriptions = {
+        "street" => "Street and Number",
+        "city"   => "City",
+        "zip"    => "Post code / Zip",
+        "state"  => "Region / Province / State"
+      }
+
       format.split("\n").map do |line|
         fields = line.scan(/{{(.+?)}}/).flatten - ["recipient", "country"]
 
         html = fields.map do |field|
           %Q{
-            <input id="#{model}_localised_address_#{field}" name="#{model}[localised_address_attributes][#{field}]" placeholder="#{field.capitalize}" #{'required="required"' if field.in? required_fields} type="text">
+            <input id="#{model}_localised_address_#{field}" name="#{model}[localised_address_attributes][#{field}]" placeholder="#{field_descriptions[field]}" #{'required="required"' if field.in? required_fields} type="text">
           }
         end.join
 
