@@ -1573,7 +1573,8 @@ CREATE TABLE omni_importers (
     name character varying(255),
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
-    payment_type character varying(255)
+    payment_type character varying(255),
+    bank_name character varying(255)
 );
 
 
@@ -3723,3 +3724,5 @@ INSERT INTO schema_migrations (version) VALUES ('20130703031111');
 INSERT INTO schema_migrations (version) VALUES ('20130703055630');
 
 INSERT INTO schema_migrations (version) VALUES ('20130705011742');
+
+INSERT INTO schema_migrations (version) VALUES ('20130710053124');
