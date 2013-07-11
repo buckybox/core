@@ -173,6 +173,8 @@ var BuckyBoxSignUpWizard = function() {
                 $("#next").val("Done!");
               },
               success: function(response) {
+                alert("You will receive an email with instructions soon!");
+
                 jQuery("#" + id).remove();
               },
               error: function(response) {
