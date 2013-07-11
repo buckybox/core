@@ -1,13 +1,11 @@
 module Select2Helper
+  # @example
+  #   select2_select "Item", from: "select_id"
+  #
+  # @note Works with Select2 version 3.4.1.
   def select2_select(text, options)
-    # FIXME snippet found on the interwebs, not sure if it works properly
-    page.find("#s2id_#{options[:from]} input").click
-    page.all("ul.select2-results li").each do |e|
-      if e.text == text
-        e.click
-        return
-      end
-    end
+    page.find("#s2id_#{options[:from]}").click
+    page.all(".select2-result-label").detect { |result| result.text == text }.click
   end
 end
 
