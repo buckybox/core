@@ -48,7 +48,7 @@ var BuckyBoxSignUpWizard = function() {
         update_country();
       });
 
-      var url_prefix = "my.buckybox.com/";
+      var url_prefix = "my.buckybox.com/webstore/";
 
       // copy parameterzed text into URL field
       $("#distributor_name").change(function() {
