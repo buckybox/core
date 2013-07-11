@@ -74,6 +74,10 @@ GEM
     arel (3.0.2)
     attr_encryptor (1.0.2)
       encryptor2 (>= 1.0.0)
+    barber (0.4.2)
+      ember-source
+      execjs
+      handlebars-source
     bcrypt-ruby (3.0.1)
     better_errors (0.9.0)
       coderay (>= 1.0.0)
@@ -177,10 +181,17 @@ GEM
       actionpack (>= 3.0)
       activesupport (>= 3.0)
       request_store (~> 1.0.3)
-    ember-rails (0.7.0)
+    ember-data-source (0.13)
+      ember-source
+    ember-rails (0.12.0)
       active_model_serializers
+      barber (>= 0.4.1)
+      ember-data-source
+      ember-source (>= 1.0.0.rc2.2)
       execjs (>= 1.2)
-      railties (~> 3.1)
+      railties (>= 3.1)
+    ember-source (1.0.0.rc6.2)
+      handlebars-source (= 1.0.12)
     encryptor2 (1.0.0)
     erubis (2.7.0)
     eventmachine (1.0.3)
@@ -220,6 +231,7 @@ GEM
       activesupport (>= 3.1, < 4.1)
       haml (~> 3.1)
       railties (>= 3.1, < 4.1)
+    handlebars-source (1.0.12)
     has_scope (0.5.1)
     highline (1.6.19)
     hike (1.2.3)
@@ -465,7 +477,7 @@ DEPENDENCIES
   delorean
   devise (~> 2.2.4)
   draper (~> 1.0)
-  ember-rails (~> 0.7.0)
+  ember-rails (~> 0.12.0)
   fabrication
   figaro (~> 0.6.4)
   fuubar (~> 1.0.0)
