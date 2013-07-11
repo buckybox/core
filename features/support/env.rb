@@ -67,17 +67,17 @@ Capybara.save_and_open_page_path = Rails.root
 # JavaScript driver
 require 'capybara/poltergeist'
 
-Capybara.javascript_driver = :poltergeist
+# Capybara.javascript_driver = :poltergeist
 
 # Debug driver
 
 Capybara.register_driver :poltergeist_debug do |app|
   Capybara::Poltergeist::Driver.new(app,
     debug: false,
-    js_errors: false, # TODO ideally we want JS testing as well
-    timeout: 300
+    js_errors: true,
+    timeout: 300,
   )
 end
 
-# Capybara.javascript_driver = :poltergeist_debug
+Capybara.javascript_driver = :poltergeist_debug
 
