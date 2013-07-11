@@ -20,7 +20,7 @@ class Country < ActiveRecord::Base
       # noop
     end
 
-    time_zones = ["Etc/UTC"] if time_zones.nil? || time_zones.empty?
+    time_zones = ["Etc/UTC"] if time_zones.blank?
 
     @time_zones ||= time_zones
   end
