@@ -40,6 +40,10 @@ class Distributor < ActiveRecord::Base
   DEFAULT_AUTOMATIC_DELIVERY_HOUR = 18
   DEFAULT_AUTOMATIC_DELIVERY_DAYS = 1
 
+  HUMANIZED_ATTRIBUTES = {
+    email: "Account login email"
+  }
+
   devise :database_authenticatable, :recoverable, :rememberable, :trackable, :validatable
 
   acts_as_taggable
@@ -483,6 +487,10 @@ class Distributor < ActiveRecord::Base
   end
 
 private
+
+  def self.human_attribute_name(attr, options = {})
+    HUMANIZED_ATTRIBUTES[attr.to_sym] || super
+  end
 
   def required_fields_for_webstore
     if active_webstore_changed? && active_webstore?
