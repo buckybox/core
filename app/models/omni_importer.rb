@@ -9,6 +9,7 @@ class OmniImporter < ActiveRecord::Base
   has_and_belongs_to_many :distributors
 
   scope :ordered, joins("LEFT JOIN countries ON countries.id = omni_importers.country_id").order('countries.alpha2, omni_importers.name')
+  scope :bank_deposit, -> { where(payment_type: "Bank Deposit") }
 
   # used to name the uploaded files
   def file_format
