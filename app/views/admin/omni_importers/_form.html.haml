@@ -42,6 +42,7 @@
         .alert You must have an example file uploaded before adding the definition.
     .span6
       = f.input :name
+      = f.input :bank_name
       = f.input :country_id, collection: Country.all
       = f.input :tag_list, as: :string
       = f.input :payment_type, hint: "Bank Deposit, Credit Card, PayPal, Direct Debit, etc.."

@@ -47,10 +47,6 @@ class OmniImporter < ActiveRecord::Base
     ""
   end
 
-  def bank_name
-    name
-  end
-
   def tag_name
     [name, country.try(:full_name)].compact.join(' - ')
   end
