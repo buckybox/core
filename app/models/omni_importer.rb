@@ -19,6 +19,7 @@ class OmniImporter < ActiveRecord::Base
     @rows ||= CSV.parse(import_transaction_list.read)
   rescue StandardError => ex
     errors.add(:import_transaction_list, ex.message)
+    @rows ||= [[]]
   end
 
   def select_label
