@@ -207,8 +207,6 @@ var BuckyBoxSignUpWizard = function() {
       password_confirmation.change(checkPasswordValidity);
 
       var register_validity_handlers = function() {
-        $(".step:not(:visible) input").prop("disabled", true);
-
         $(":input").on("invalid", function() {
           if ($(this).closest(".step")[0] != current_step[0]) {
             return false; // don't validate hidden inputs
