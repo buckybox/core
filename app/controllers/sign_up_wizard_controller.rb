@@ -14,7 +14,7 @@ class SignUpWizardController < ApplicationController
     country = Country.where(alpha2: params[:country]).first
 
     @fields = Bucky::Geolocation.get_address_form country.alpha2
-    @banks = OmniImporter.where(payment_type: "Bank Deposit", country_id: country.id).pluck(:bank_name).uniq.sort
+    @banks = OmniImporter.bank_deposit.where(country_id: country.id).pluck(:bank_name).uniq.sort
 
     render json: { address: @fields, banks: @banks }
   end
@@ -22,8 +22,8 @@ class SignUpWizardController < ApplicationController
   def sign_up
     details = params[:distributor].dup
 
-    %w(payment_paypal payment_direct_debit bank_name deliveries_per_week).each do |param|
-      details.delete param # just use them for the follow up email for now
+    %w(payment_paypal payment_direct_debit deliveries_per_week).each do |param|
+      details.delete param # just use them for the follow-up email for now
     end
 
     # remove URL prefix
@@ -33,10 +33,13 @@ class SignUpWizardController < ApplicationController
     country = Country.where(alpha2: details.delete(:country)).first
     details[:country_id] = country.id if country
 
-    source = details.delete :source # store the source as a tag
+    # we can't mass-assign these attributes
+    source = details.delete :source
+    bank_name = details.delete :bank_name
 
     @distributor = Distributor.new(details)
     @distributor.tag_list.add source
+    @distributor.omni_importers = OmniImporter.bank_deposit.where(bank_name: bank_name)
 
     if @distributor.save
       render json: nil
