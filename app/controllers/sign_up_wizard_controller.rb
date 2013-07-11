@@ -22,7 +22,7 @@ class SignUpWizardController < ApplicationController
   def sign_up
     details = params[:distributor].dup
 
-    %w(payment_direct_debit bank_name deliveries_per_week).each do |param|
+    %w(payment_paypal payment_direct_debit bank_name deliveries_per_week).each do |param|
       details.delete param # just use them for the follow up email for now
     end
 
@@ -62,7 +62,7 @@ private
         Name: #{distributor[:name]}
         Email: #{distributor[:email]}
         Accept bank deposit: #{distributor[:payment_bank_deposit]} - #{distributor[:bank_name]}
-        Accept PayPal: #{!!distributor[:payment_paypal]}
+        Accept PayPal: #{distributor[:payment_paypal]}
         Accept cash on delivery: #{distributor[:payment_cash_on_delivery]}
         Accept credit card: #{distributor[:payment_credit_card]}
         Accept direct debit: #{distributor[:payment_direct_debit]}
