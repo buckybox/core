@@ -88,6 +88,7 @@ class Distributor < ActiveRecord::Base
   validates_numericality_of :automatic_delivery_hour, greater_than_or_equal_to: 0
   validate :required_fields_for_webstore
   validate :payment_options_valid
+  validate :validate_omni_importers
 
   before_validation :check_emails
   before_create :parameterize_name, if: 'parameter_name.nil?'
@@ -171,6 +172,10 @@ class Distributor < ActiveRecord::Base
 
   def email_to
     sanitise_email_header "#{contact_name} <#{email}>"
+  end
+
+  def bank
+    omni_importers.bank_deposit.pluck(:bank_name).first
   end
 
   def consumer_delivery_fee_cents
@@ -509,6 +514,12 @@ private
 
   def payment_options_valid
     errors.add(:payment_cash_on_delivery, "Must have at least one payment option selected") if payment_options.empty?
+  end
+
+  def validate_omni_importers
+    if omni_importers.bank_deposit.pluck(:bank_name).uniq.count > 1
+      errors.add(:omni_importers, "Cannot have more than one deposit bank")
+    end
   end
 
   def check_emails
