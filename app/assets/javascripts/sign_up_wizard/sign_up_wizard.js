@@ -85,6 +85,10 @@ var BuckyBoxSignUpWizard = function() {
         jQuery.ajax({
           type: "GET",
           url: host + "/sign_up_wizard/country",
+          crossDomain: true,
+          xhrFields: {
+            withCredentials: true
+          },
           data: "country=" + $("#distributor_country").val(),
           success: function(response) {
             // update address fields
@@ -161,6 +165,10 @@ var BuckyBoxSignUpWizard = function() {
             jQuery.ajax({
               type: "POST",
               url: host + "/sign_up_wizard/sign_up",
+              crossDomain: true,
+              xhrFields: {
+                withCredentials: true
+              },
               data: form.serialize(),
               beforeSend: function() {
                 $("footer input").attr("disabled", true);
