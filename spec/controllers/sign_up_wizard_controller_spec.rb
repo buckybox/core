@@ -70,6 +70,33 @@ describe SignUpWizardController do
 
         post_form.call
       end
+
+      context "with matching omni importer" do
+        before do
+          @omni_importer = Fabricate(:omni_importer_for_bank_deposit, bank_name: form_params["distributor"]["bank_name"])
+        end
+
+        it "sets up omni importers for the bank" do
+          post_form.call
+
+          distributor = Distributor.where(name: form_params["distributor"]["name"]).last
+          distributor.omni_importers.should eq [@omni_importer]
+        end
+      end
+
+      context "when a new bank is selected" do
+        let(:form_params_with_new_bank) do
+          form_params_with_new_bank = form_params
+          form_params_with_new_bank["distributor"]["bank_name"] = "My new bank"
+          form_params_with_new_bank
+        end
+
+        it "sends the bank setup email" do
+          DistributorMailer.should_receive(:bank_setup) { double(deliver: nil) }
+
+          post :sign_up, form_params_with_new_bank
+        end
+      end
     end
 
     context "with invalid params" do
