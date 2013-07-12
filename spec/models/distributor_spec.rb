@@ -23,11 +23,25 @@ describe Distributor do
     end
   end
 
-  describe "#email_name" do
-    it "strips colons" do
-      distributor = Fabricate.build(:distributor, name: "Garden City 2.0: FoodBag Delivery")
+  describe "#email_from" do
+    it "returns the expected sender" do
+      distributor = Fabricate.build(:distributor,
+        name: "Garden City 2.0: FoodBag Delivery",
+        support_email: "support@example.net"
+      )
 
-      distributor.email_name.should eq "Garden City 2.0 FoodBag Delivery"
+      distributor.email_from.should eq "Garden City 2.0 FoodBag Delivery <support@example.net>"
+    end
+  end
+
+  describe "#email_to" do
+    it "returns the expected recipient" do
+      distributor = Fabricate.build(:distributor,
+        contact_name: "Nelle",
+        email: "contact@example.net"
+      )
+
+      distributor.email_to.should eq "Nelle <contact@example.net>"
     end
   end
 

@@ -1,4 +1,6 @@
 class Distributor < ActiveRecord::Base
+  include Bucky::Email
+
   has_one :bank_information,          dependent: :destroy
   has_one :invoice_information,       dependent: :destroy
   has_one :localised_address,         dependent: :destroy, as: :addressable, autosave: true
@@ -162,8 +164,12 @@ class Distributor < ActiveRecord::Base
     end
   end
 
-  def email_name
-    name.gsub ":", ""
+  def email_from
+    sanitise_email_header "#{name} <#{support_email}>"
+  end
+
+  def email_to
+    sanitise_email_header "#{contact_name} <#{email}>"
   end
 
   def consumer_delivery_fee_cents

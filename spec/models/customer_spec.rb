@@ -121,6 +121,17 @@ describe Customer do
       specify { @customer.email.should == 'buckybox@example.com' }
     end
 
+    describe "#email_to" do
+      it "returns the expected recipient" do
+        customer = Fabricate.build(:customer,
+          name: "Will Lau",
+          email: "will@example.net"
+        )
+
+        customer.email_to.should eq "Will Lau <will@example.net>"
+      end
+    end
+
     describe '#number' do
       before { @customer.number = -1 }
       specify { @customer.should_not be_valid }

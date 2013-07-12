@@ -6,7 +6,7 @@ describe EmailForm do
     body: 'A very excited cat tried to run through the door... Sorry.',
     preview_email: 'admin@buckybox.com'
   }}
-  let(:distributor){ double('Distributor', email: 'test@test.com', contact_name: 'Test Dummy') }
+  let(:distributor){ double('Distributor', email: 'test@test.com', email_to: 'Test Dummy <test@test.com>', contact_name: 'Test Dummy') }
 
   it 'fucking well better send email' do
     email_form = EmailForm.new(fields)
