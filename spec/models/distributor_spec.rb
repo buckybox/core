@@ -23,6 +23,14 @@ describe Distributor do
     end
   end
 
+  describe "#send_welcome_email" do
+    it "sends the welcome email upon creation" do
+      DistributorMailer.should_receive(:welcome) { double(deliver: nil) }
+
+      Fabricate(:distributor)
+    end
+  end
+
   describe "#email_from" do
     it "returns the expected sender" do
       distributor = Fabricate.build(:distributor,

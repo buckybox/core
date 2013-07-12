@@ -45,7 +45,8 @@ class SignUpWizardController < ApplicationController
       render json: nil
 
       send_follow_up_email
-      send_welcome_email
+
+      send_bank_setup_email(bank_name) if @distributor.omni_importers.empty?
 
     else
       render json: @distributor.errors.full_messages.join("<br>"),
@@ -79,8 +80,8 @@ private
     AdminMailer.information_email(options).deliver
   end
 
-  def send_welcome_email
-    DistributorMailer.welcome(@distributor).deliver
+  def send_bank_setup_email bank_name
+    DistributorMailer.bank_setup(@distributor, bank_name).deliver
   end
 end
 

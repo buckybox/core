@@ -31,8 +31,9 @@ class DistributorMailer < ActionMailer::Base
          subject: "#{@distributor.name}, welcome to Bucky Box!"
   end
 
-  def bank_setup(distributor)
+  def bank_setup(distributor, bank_name)
     @distributor = distributor
+    @bank_name = bank_name
 
     headers['X-MC-Tags'] = "distributor,bank_setup"
 
