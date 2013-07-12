@@ -70,6 +70,8 @@ class Distributor::DeliveriesController < Distributor::ResourceController
       result = Delivery.reverse_pay_on_delivery(deliveries)
     else
       result = Delivery.pay_on_delivery(deliveries)
+
+      usercycle.event(current_distributor, "distributor_marked_an_order_as_payment_on_delivery")
     end
 
     if result
@@ -83,7 +85,9 @@ class Distributor::DeliveriesController < Distributor::ResourceController
     export = get_export(params)
 
     if export
-      usercycle.event(current_distributor, "distributor_exported_packing_list")
+      screen = params[:screen] # delivery or packing
+      usercycle.event(current_distributor, "distributor_exported_#{screen}_list")
+
       send_data(*export.csv)
     else
       redirect_to :back
@@ -102,6 +106,8 @@ class Distributor::DeliveriesController < Distributor::ResourceController
     end
 
     @date = @packages.first.packing_list.date
+
+    usercycle.event(current_distributor, "distributor_printed_packing_list")
 
     render layout: 'print'
   end
