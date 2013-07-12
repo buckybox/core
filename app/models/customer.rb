@@ -1,4 +1,5 @@
 class Customer < ActiveRecord::Base
+  include Bucky::Email
   include PgSearch
 
   belongs_to :distributor
@@ -102,6 +103,10 @@ class Customer < ActiveRecord::Base
 
   def new?
     deliveries.size <= 1
+  end
+
+  def email_to
+    sanitise_email_header "#{name} <#{email}>"
   end
 
   def name

@@ -10,7 +10,7 @@ class DistributorMailer < ActionMailer::Base
     headers['X-MC-Tags'] = "distributor,bucky_update"
 
     mail subject: @email.subject,
-         to: @distributor.email do |format|
+         to: @distributor.email_to do |format|
           format.text { render text: @email.mail_merge(@distributor) }
           format.html { render text: simple_format(@email.mail_merge(@distributor)) }
          end
@@ -27,8 +27,17 @@ class DistributorMailer < ActionMailer::Base
     attachments.inline["getting-started.png"] = \
       File.read(Rails.root.join("app/assets/images/bucky-box-getting-started.png"))
 
-    mail to: @distributor.email,
+    mail to: @distributor.email_to,
          subject: "#{@distributor.name}, welcome to Bucky Box!"
+  end
+
+  def bank_setup(distributor)
+    @distributor = distributor
+
+    headers['X-MC-Tags'] = "distributor,bank_setup"
+
+    mail to: @distributor.email_to,
+         subject: "[Bucky Box] Setting up your bank feed"
   end
 
 end
