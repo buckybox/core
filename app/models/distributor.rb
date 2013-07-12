@@ -91,6 +91,7 @@ class Distributor < ActiveRecord::Base
 
   before_validation :check_emails
   before_create :parameterize_name, if: 'parameter_name.nil?'
+  after_create :send_welcome_email
 
   after_save :generate_required_daily_lists
   after_save :update_halted_statuses
@@ -527,6 +528,10 @@ private
       attributes.all? { |attr| send(attr).present? }
       Bucky::Usercycle.instance.event(self, "distributor_populated_business_information")
     end
+  end
+
+  def send_welcome_email
+    DistributorMailer.welcome(self).deliver
   end
 
   # This is meant to be run within console for dev work via Distributor.send(:travel_forward_a_day)
