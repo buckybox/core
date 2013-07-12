@@ -34,7 +34,6 @@ gem 'delayed_job_active_record',  '~> 0.4.4'
 gem 'daemons',                    '~> 1.1.9' # able to monitor delayed_job via monit
 gem 'analytical',                 '~> 3.0.12'
 gem 'newrelic_rpm',               '~> 3.6.1'
-gem 'skylight',                   '~> 0.1.6'
 gem 'airbrake',                   '~> 3.1.2'
 
 gem 'ace-rails-ap',  '~> 2.0.0'

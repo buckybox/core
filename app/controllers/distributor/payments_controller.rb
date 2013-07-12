@@ -5,7 +5,7 @@ class Distributor::PaymentsController < Distributor::ResourceController
 
   before_filter :load_import_transaction_list, only: [:process_payments, :show]
 
-  def index 
+  def index
     @import_transaction_list = current_distributor.import_transaction_lists.new
     @show_tour = current_distributor.payments_index_intro
     @selected_omni_importer = current_distributor.last_used_omni_importer
@@ -21,6 +21,8 @@ class Distributor::PaymentsController < Distributor::ResourceController
     else
       @selected_omni_importer = current_distributor.last_used_omni_importer(@import_transaction_list.omni_importer)
     end
+
+    usercycle.event(current_distributor, "distributor_uploaded_payment_records")
 
     load_index
 
@@ -48,6 +50,8 @@ class Distributor::PaymentsController < Distributor::ResourceController
     processed_data = @import_transaction_list.process_import_transactions_attributes(params[:import_transaction_list])
 
     if @import_transaction_list.process_attributes(processed_data)
+      usercycle.event(current_distributor, "distributor_saved_payment_records")
+
       redirect_to distributor_payments_url, notice: "Payments processed successfully"
     else
       flash.now[:alert] = "There was a problem"
