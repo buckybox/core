@@ -9,6 +9,10 @@ class PhoneCollection
     TYPES.values
   end
 
+  def self.types_as_options
+    TYPES.each_key.map { |type| type_option(type) }
+  end
+
   def initialize address
     @address = address
   end
@@ -30,7 +34,10 @@ class PhoneCollection
 
 private
 
-  # Default number attributes
+  def type_option(type)
+    [ type.capitalize, type ]
+  end
+
   def default
     default = TYPES.first
     { type: default.first, attribute: default.last }
