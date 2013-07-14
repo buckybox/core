@@ -1,6 +1,11 @@
-class Webstore::PaymentInstructions < Webstore::Form
-  def initialize(cart)
-    @cart = cart
+module Webstore::PaymentInstructions
+  def payment_method
+    #'value'
+    customer.payment_method
+  end
+
+  def payment_required?
+    !closing_balance.positive?
   end
 
   def current_balance
@@ -14,16 +19,13 @@ class Webstore::PaymentInstructions < Webstore::Form
   end
 
   def closing_balance
-    #current_balance + order_price)
+    #@current_balance = (current_customer ? current_customer.account.balance : Money.new(0))
+    #@closing_balance = @current_balance - @order_price
     MoneyDisplay.new(Money.new(0))
   end
 
-  def existing_customer?
-    #current_customer && current_customer.persisted?
-    true
+  def amount_due
+    #MoneyDisplay.new(@amount_due).negative
+    closing_balance * -1
   end
-
-private
-
-  attr_reader :cart
 end
