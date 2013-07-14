@@ -1,14 +1,20 @@
 module Devise::RequestHelpers
   include Warden::Test::Helpers
 
-  def sign_in_as_a_valid_customer(customer = nil)
-    @customer = customer || Fabricate(:customer)
-    login_customer @customer
+  def distributor_sign_in
+    @distributor = Fabricate(:distributor)
+    visit new_distributor_session_path
+    fill_in 'Email', :with => @distributor.email
+    fill_in 'Password', :with => @distributor.password
+    click_button 'Sign in'
   end
 
-  def sign_in_as_a_valid_distributor(distributor = nil)
-    @distributor = distributor || Fabricate(:distributor_with_everything)
-    login_distributor @distributor
+  def customer_sign_in
+    @customer = Fabricate(:customer)
+    visit new_customer_session_path
+    fill_in 'Email', :with => @customer.email
+    fill_in 'Password', :with => @customer.password
+    click_button 'Sign in'
   end
 
   def login_customer(customer)
@@ -26,6 +32,6 @@ module Devise::RequestHelpers
     `lynx -dump -width 120 test_dump.html > output.txt`
     puts `cat output.txt`
   ensure
-    File.delete('test_dump.html')    
+    File.delete('test_dump.html')
   end
 end

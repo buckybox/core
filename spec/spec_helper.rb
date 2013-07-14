@@ -10,6 +10,13 @@ require File.expand_path("../../config/environment", __FILE__)
 require 'rspec/rails'
 require 'rspec/autorun'
 
+require 'capybara/rspec' 
+require 'capybara/rails'
+require 'capybara/poltergeist'
+
+Capybara.javascript_driver = :poltergeist
+Capybara.asset_host = 'http://buckybox.dev:3000'
+
 Dir[Rails.root.join("spec/support/**/*.rb")].each { |f| require f }
 
 RSpec.configure do |config|
@@ -22,10 +29,10 @@ RSpec.configure do |config|
   config.include Delorean
   config.include Devise::TestHelpers,       type: :controller
   config.include Devise::ControllerHelpers, type: :controller
-  config.include Devise::RequestHelpers,    type: :request
+  config.include Devise::RequestHelpers,    type: :feature
 
   config.extend Devise::ControllerMacros, type: :controller
-  config.extend Devise::RequestMacros,    type: :request
+  config.extend Devise::RequestMacros,    type: :feature
 
   config.before(:suite) do
     DatabaseCleaner.strategy = :transaction
