@@ -63,6 +63,7 @@ require 'cucumber/rspec/doubles'
 
 require 'capybara-screenshot/cucumber'
 Capybara.save_and_open_page_path = Rails.root
+Capybara.asset_host = "http://buckybox.dev:3000"
 
 # JavaScript driver
 require 'capybara/poltergeist'
