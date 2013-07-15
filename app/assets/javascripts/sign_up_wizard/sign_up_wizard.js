@@ -26,10 +26,8 @@ var BuckyBoxSignUpWizard = function() {
     $.ajax({
       url: css,
       dataType: "text",
-      error: function(jqXHR, textStatus, error) {
+      error: function() {
         console.log("Could not load CSS");
-        console.log(textStatus);
-        console.log(error);
       },
       success: function() {
         console.log("CSS loaded");
