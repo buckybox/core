@@ -9,11 +9,12 @@ class SignUpWizardController < ApplicationController
 
     @time_zone = Bucky::Geolocation.get_time_zone(@country)
 
-    render :form, locals: { country: @country, time_zone: @time_zone }
+    render :form, layout: false, locals: { country: @country, time_zone: @time_zone }
   end
 
   def country
     country = Country.where(alpha2: params[:country]).first
+    raise "Invalid country" if country.nil?
 
     @fields = Bucky::Geolocation.get_address_form country.alpha2
     @banks = OmniImporter.bank_deposit.where(country_id: country.id).pluck(:bank_name).uniq.sort
@@ -43,7 +44,11 @@ class SignUpWizardController < ApplicationController
     @distributor.tag_list.add source
     @distributor.omni_importers = OmniImporter.bank_deposit.where(bank_name: bank_name)
 
-    if @distributor.save
+    unless bank_name.nil?
+      @distributor.errors.add(:bank_name, "can't be empty") if bank_name.empty?
+    end
+
+    if @distributor.errors.empty? && @distributor.save
       render json: nil
 
       send_follow_up_email

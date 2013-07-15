@@ -1,171 +1,178 @@
 $input_width: 420px
 
-*
+#bucky_box_sign_up_wizard
+  position: fixed
+  top: 5%
+  left: 50%
+  width: 620px
+  margin: 10px
+  margin-left: -310px
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif
   color: #666
   font-size: 14px
   -moz-box-sizing: border-box
   -webkit-box-sizing: border-box
   box-sizing: border-box
-
-a
-  text-decoration: none
-
-abbr[title="required"]
-  display: none
-
-\:invalid
-  box-shadow: none // FF
-  outline: 0       // IE 10
-
-.invalid
-  box-shadow: 0 0 2px 1px #FF9393
-
-input[required]
-  background-color: #FEFAE4
-
-body
-  max-width: 620px
-  margin: 10px
   border: 1px solid #595959
   border-radius: 4px
   box-shadow: 0 0 4px 4px #AAA
 
-form
-  background: #FFF
+  a
+    text-decoration: none
 
-form > *
-  padding: 15px
+  abbr[title="required"]
+    display: none
 
-header
-  text-align: center
-  background: linear-gradient(#8BAB23, #7A9324)
-  height: 75px
+  \:invalid
+    box-shadow: none // FF
+    outline: 0       // IE 10
 
-#close
-  float: right
-  color: #333
+  .invalid
+    box-shadow: 0 0 2px 1px #FF9393
 
-#close:hover
-  color: #000
+  input[required]
+    background-color: #FEFAE4
 
-section
-  box-shadow: 0 -4px 8px rgba(0, 0, 0, 0.2)
-  padding: 20px 100px
-  height: 400px
-  position: relative
+  p
+    font-size: 18px
+    line-height: 3em
+    padding: 3em 0
+    text-align: center
 
-#step
-  position: absolute
-  right: 5px
-  top: 5px
-  font-size: 10px
+  form
+    background: #FFF
+    margin: 0
 
-footer
-  text-align: center
-  border-top: 1px solid #CCC
+  form > *
+    padding: 15px
 
-.hide
-  display: none
+  header
+    text-align: center
+    background: linear-gradient(#8BAB23, #7A9324)
 
-fieldset
-  margin: 15px 0 0 0
-  padding: 0
-  border: none
+  #close
+    float: right
+    color: #333
+    &:hover
+      color: #000
 
-fieldset > div
-  clear: both
-  white-space: nowrap
+  section
+    box-shadow: 0 -4px 8px rgba(0, 0, 0, 0.2)
+    padding: 20px 100px
+    height: 400px
+    position: relative
 
-legend
-  margin-bottom: 5px
-  background: #999
-  color: #FFF
-  text-transform: uppercase
-  border-radius: 4px
-  font-weight: bold
-  font-size: 11px
-  padding: 2px 4px
-  text-shadow: 0 -1px #7B7474
+  #step
+    position: absolute
+    right: 5px
+    top: 5px
+    font-size: 10px
 
-input[type="text"],
-input[type="email"],
-input[type="password"],
-input[type="tel"],
-input[type="number"]
-  margin: 1px 0
-  padding: 6px
-  width: $input_width
-  border-radius: 4px
-  border: 1px solid #CCC
+  footer
+    text-align: center
+    border-top: 1px solid #CCC
 
-input[type="checkbox"]
-  margin: 5px 0 0 0
+  .hide
+    display: none
 
-input:focus
-  border-color: rgba(250,225,163,0.8)
+  fieldset
+    margin: 15px 0 0 0
+    padding: 0
+    border: none
 
-label
-  font-weight: bold
-  float: left
-  margin: 5px 0
+  fieldset > div
+    clear: both
+    white-space: nowrap
 
-select
-  width: 50%
-  float: right
-  margin-top: -3px
-  padding: 6px
-  margin: 1px 0
-
-input[type="button"], input[type="submit"]
-  font-weight: bold
-  border-radius: 4px
-  border-style: groove
-  width: 80px
-  height: 30px
-  background: linear-gradient(#FFF, #EAEAEB)
-  border-color: #CCC
-  color: #333
-  &.primary
-    background: linear-gradient(#007CC2, #00549A)
-    border-color: #0163B5
+  legend
+    margin-bottom: 5px
+    background: #999
     color: #FFF
-  &:disabled
-    cursor: wait
+    text-transform: uppercase
+    border-radius: 4px
+    font-weight: bold
+    font-size: 11px
+    padding: 2px 4px
+    text-shadow: 0 -1px #7B7474
 
-#message
-  display: none
-  border: 1px solid #C00
-  border-radius: 4px
-  background-color: #F2DEDE
-  color: #B94A4A
-  padding: 2px 4px
-  height: 22px
-  font-weight: bold
-  overflow: hidden
+  input[type="text"],
+  input[type="email"],
+  input[type="password"],
+  input[type="tel"],
+  input[type="number"]
+    margin: 1px 0
+    padding: 6px
+    width: $input_width
+    border-radius: 4px
+    border: 1px solid #CCC
 
-#address_fields
-  input
-    margin-right: 3px
+  input[type="checkbox"]
+    margin: 5px 0 0 0
 
-#payment_types legend
-  margin-bottom: 5px
+  input:focus
+    border-color: rgba(250,225,163,0.8)
 
-#payment_types label
-  font-weight: inherit
+  label
+    font-weight: bold
+    float: left
+    margin: 5px 0
 
-#payment_types input[type="checkbox"]
-  float: left
-  margin: 3px 5px 0 0
+  select
+    width: 50%
+    float: right
+    margin-top: -3px
+    padding: 6px
+    margin: 1px 0
 
-#bank_deposit_details
-  display: none
-  margin-left: 18px
-  padding: 2px
+  input[type="button"], input[type="submit"]
+    font-weight: bold
+    border-radius: 4px
+    border-style: groove
+    width: 80px
+    height: 30px
+    background: linear-gradient(#FFF, #EAEAEB)
+    border-color: #CCC
+    color: #333
+    &.primary
+      background: linear-gradient(#007CC2, #00549A)
+      border-color: #0163B5
+      color: #FFF
+    &:disabled
+      cursor: wait
 
-#distributor_bank_name
-  width: 378px
+  #message
+    display: none
+    border: 1px solid #C00
+    border-radius: 4px
+    background-color: #F2DEDE
+    color: #B94A4A
+    padding: 2px 4px
+    height: 20px
+    font-weight: bold
+    overflow: hidden
 
-#distributor_source
-  width: 398px
+  #address_fields
+    input
+      margin-right: 3px
+
+  #payment_types legend
+    margin-bottom: 5px
+
+  #payment_types label
+    font-weight: inherit
+
+  #payment_types input[type="checkbox"]
+    float: left
+    margin: 3px 5px 0 0
+
+  #bank_deposit_details
+    display: none
+    margin-left: 18px
+    padding: 2px
+
+  #distributor_bank_name
+    width: 378px
+
+  #distributor_source
+    width: 398px
 
