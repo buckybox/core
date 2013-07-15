@@ -80,10 +80,6 @@ var BuckyBoxSignUpWizard = function() {
 
           // toggle bank deposit details visibility
           sign_up_wizard("#distributor_payment_bank_deposit").change(function() {
-            if (sign_up_wizard("#distributor_bank_name option").length <= 1) {
-              return false;
-            }
-
             // HTML5 validation don't happen on disabled fields
             sign_up_wizard("#bank_deposit_details :input").prop("disabled", !this.checked);
 
