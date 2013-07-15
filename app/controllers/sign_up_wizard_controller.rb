@@ -94,10 +94,6 @@ private
   def set_cors_headers
     if request.headers["HTTP_ORIGIN"]
       headers['Access-Control-Allow-Origin'] = request.headers["HTTP_ORIGIN"]
-      headers['Access-Control-Expose-Headers'] = 'ETag'
-      headers['Access-Control-Allow-Methods'] = 'GET, POST, PATCH, PUT, DELETE, OPTIONS, HEAD'
-      headers['Access-Control-Allow-Headers'] = '*,x-requested-with,Content-Type,If-Modified-Since,If-None-Match,Auth-User-Token'
-      headers['Access-Control-Max-Age'] = '86400'
       headers['Access-Control-Allow-Credentials'] = 'true'
     end
   end
