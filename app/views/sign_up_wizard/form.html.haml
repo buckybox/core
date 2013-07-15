@@ -1,7 +1,7 @@
 = simple_form_for("distributor", url: "javascript:void(0)", remote: true, html: { novalidate: false, autocomplete: "off" }) do |f|
 
   %header
-    = image_tag "bucky-box-logo-white.png", alt: "Bucky Box"
+    = image_tag asset_url("bucky-box-logo-white.png"), alt: "Bucky Box"
     %a#close{href: "javascript:void(0)", title: "Cancel"} &times;
 
   %section
