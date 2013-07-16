@@ -61,16 +61,4 @@ class CustomerMailer < ActionMailer::Base
          end
   end
 
-  # FIXME we are not doing invoicing at the moment
-  def invoice invoice
-    #@invoice = invoice
-    #@account = invoice.account
-    #@customer = @account.customer
-    #@distributor = @account.distributor
-
-    #mail to: @customer.email,
-         #from: "#{@distributor.email_name} <#{Figaro.env.no_reply_email}>",
-         #reply_to: @distributor.support_email,
-         #subject: "Your #{@distributor.name} Bill/Account Statement ##{@invoice.number}"
-  end
 end
