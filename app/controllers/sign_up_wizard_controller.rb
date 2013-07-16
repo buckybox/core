@@ -25,7 +25,7 @@ class SignUpWizardController < ApplicationController
   def sign_up
     details = params[:distributor].dup
 
-    %w(payment_paypal payment_direct_debit deliveries_per_week).each do |param|
+    %w(payment_direct_debit deliveries_per_week).each do |param|
       details.delete param # just use them for the follow-up email for now
     end
 
@@ -39,10 +39,16 @@ class SignUpWizardController < ApplicationController
     # we can't mass-assign these attributes
     source = details.delete :source
     bank_name = details.delete :bank_name
+    payment_paypal = details.delete :payment_paypal
 
     @distributor = Distributor.new(details)
     @distributor.tag_list.add source
-    @distributor.omni_importers = OmniImporter.bank_deposit.where(bank_name: bank_name)
+    @distributor.omni_importers = if payment_paypal == "1"
+      # NOTE: using hardcoded PayPal omni until we get more formats
+      OmniImporter.where(id: 16)
+    else
+      OmniImporter.bank_deposit.where(bank_name: bank_name)
+    end
 
     unless bank_name.nil?
       @distributor.errors.add(:bank_name, "can't be empty") if bank_name.empty?
