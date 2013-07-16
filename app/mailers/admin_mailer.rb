@@ -1,8 +1,4 @@
-class AdminMailer < ActionMailer::Base
-  default 'X-Mailer' => Figaro.env.x_mailer
-
-  include ActionView::Helpers::TextHelper
-
+class AdminMailer < AppMailer
   def preview_email(email, admin)
     @email = email
     @admin = admin
@@ -17,5 +13,4 @@ class AdminMailer < ActionMailer::Base
           format.html { render text: simple_format(@email.mail_merge(@admin)) }
          end
   end
-
 end
