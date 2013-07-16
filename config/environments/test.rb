@@ -40,4 +40,7 @@ BuckyBox::Application.configure do
 
   # Print deprecation notices to the stderr
   config.active_support.deprecation = :stderr
+
+  # Don't fill up logs and save your SSD
+  config.log_level = :warn unless ENV["DEBUG"]
 end
