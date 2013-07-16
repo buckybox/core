@@ -1,4 +1,4 @@
-class AdminMailer < AppMailer
+class AdminMailer < ApplicationMailer
   def preview_email(email, admin)
     @email = email
     @admin = admin

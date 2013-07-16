@@ -1,4 +1,4 @@
-class CustomerMailer < AppMailer
+class CustomerMailer < ApplicationMailer
   default from: Figaro.env.no_reply_email
 
   def login_details(customer)

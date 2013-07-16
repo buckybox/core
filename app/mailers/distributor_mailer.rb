@@ -1,4 +1,4 @@
-class DistributorMailer < AppMailer
+class DistributorMailer < ApplicationMailer
   default from: Figaro.env.support_email,
           reply_to: Figaro.env.support_email
 
