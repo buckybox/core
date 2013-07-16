@@ -1,7 +1,8 @@
 class DistributorMailer < ActionMailer::Base
   include ActionView::Helpers::TextHelper
   default from: Figaro.env.support_email,
-          reply_to: Figaro.env.support_email
+          reply_to: Figaro.env.support_email,
+          'X-Mailer' => Figaro.env.x_mailer
 
   def update_email(email, distributor)
     @email = email
