@@ -62,8 +62,14 @@ class SignUpWizardController < ApplicationController
       send_bank_setup_email(bank_name) if @distributor.omni_importers.empty?
 
     else
-      render json: @distributor.errors.full_messages.join("<br>"),
-             status: :unprocessable_entity
+      errors = @distributor.errors.full_messages
+
+      # NOTE: temporary until we accept no payment types
+      if @distributor.errors.has_key? :payment_cash_on_delivery
+        errors.unshift "You must select Bank Deposit and/or Cash on Delivery"
+      end
+
+      render json: errors.join("<br>"), status: :unprocessable_entity
     end
   end
 
