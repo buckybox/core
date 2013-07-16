@@ -84,6 +84,26 @@ describe SignUpWizardController do
         end
       end
 
+      context "when PayPal is selected" do
+        let(:form_params_with_paypal) do
+          form_params_with_paypal = form_params
+          form_params_with_paypal["distributor"]["payment_paypal"] = "1"
+          form_params_with_paypal
+        end
+
+        before do
+          # NOTE: hardcoded for now, see controller
+          @omni_importer = Fabricate(:omni_importer, id: 16)
+        end
+
+        it "sets up it up" do
+          post :sign_up, form_params_with_paypal
+
+          distributor = Distributor.where(name: form_params["distributor"]["name"]).last
+          distributor.omni_importers.should eq [@omni_importer]
+        end
+      end
+
       context "when a new bank is selected" do
         let(:form_params_with_new_bank) do
           form_params_with_new_bank = form_params
