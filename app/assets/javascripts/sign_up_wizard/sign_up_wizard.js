@@ -53,8 +53,9 @@ var BuckyBoxSignUpWizard = function() {
 
           // register event handlers
           sign_up_wizard("#close").click(function() {
-            // ga('send', 'event', 'sign_up_wizard', 'close'); FIXME
             sign_up_wizard("").remove();
+
+            _gaq.push(['_trackEvent', 'sign_up_wizard', 'close']);
           });
 
           sign_up_wizard("#distributor_country").change(function() {
@@ -152,8 +153,12 @@ var BuckyBoxSignUpWizard = function() {
             if (is_last_step()) {
               sign_up_wizard("#step").hide();
             } else {
-              var steps = sign_up_wizard(".step");
-              sign_up_wizard("#step").html(1 + steps.index(visible_step) + "/" + (steps.length - 1));
+              var steps = sign_up_wizard(".step"),
+                  current_step = 1 + steps.index(visible_step);
+
+              sign_up_wizard("#step").html(current_step + "/" + (steps.length - 1));
+
+              _gaq.push(['_trackPageview', '/sign_up_wizard/form#' + current_step]);
             }
           };
 
