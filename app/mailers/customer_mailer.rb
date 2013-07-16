@@ -1,6 +1,7 @@
 class CustomerMailer < ActionMailer::Base
   include ActionView::Helpers::TextHelper
-  default from: Figaro.env.no_reply_email
+  default from: Figaro.env.no_reply_email,
+          'X-Mailer' => Figaro.env.x_mailer
 
   def login_details(customer)
     @distributor = customer.distributor
@@ -18,7 +19,7 @@ class CustomerMailer < ActionMailer::Base
     @distributor = customer.distributor
     @customer = customer
     @oops = ['Uh-oh', 'Whoops', 'Oooops'].sample
-    
+
     headers['X-MC-Tags'] = "customer,orders_halted,#{@distributor.name.parameterize}"
 
     mail to: @customer.email,

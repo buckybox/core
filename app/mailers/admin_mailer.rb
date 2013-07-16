@@ -1,4 +1,5 @@
 class AdminMailer < ActionMailer::Base
+  default 'X-Mailer' => Figaro.env.x_mailer
 
   include ActionView::Helpers::TextHelper
 
