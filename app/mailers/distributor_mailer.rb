@@ -1,8 +1,6 @@
-class DistributorMailer < ActionMailer::Base
-  include ActionView::Helpers::TextHelper
+class DistributorMailer < AppMailer
   default from: Figaro.env.support_email,
-          reply_to: Figaro.env.support_email,
-          'X-Mailer' => Figaro.env.x_mailer
+          reply_to: Figaro.env.support_email
 
   def update_email(email, distributor)
     @email = email
@@ -16,5 +14,4 @@ class DistributorMailer < ActionMailer::Base
           format.html { render text: simple_format(@email.mail_merge(@distributor)) }
          end
   end
-
 end

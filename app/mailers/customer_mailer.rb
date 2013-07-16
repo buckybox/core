@@ -1,7 +1,5 @@
-class CustomerMailer < ActionMailer::Base
-  include ActionView::Helpers::TextHelper
-  default from: Figaro.env.no_reply_email,
-          'X-Mailer' => Figaro.env.x_mailer
+class CustomerMailer < AppMailer
+  default from: Figaro.env.no_reply_email
 
   def login_details(customer)
     @distributor = customer.distributor
@@ -60,5 +58,4 @@ class CustomerMailer < ActionMailer::Base
           format.html { render text: simple_format(email.body) }
          end
   end
-
 end

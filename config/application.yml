@@ -17,28 +17,26 @@ DELAYED_JOB_PRIORITY_LOW:  50
 USERCYCLE_API_KEY: '624a19c076449cb71c750ab7ef5909de7f488dc1'
 USERCYCLE_API_URL: 'https://api.usercycle.com/api/v1'
 
+# Email headers
+X_MAILER: 'Bucky Box Mailer (1.0.0) www.buckybox.com'
+
 # Environment-dependant configuration
 development:
   HOST: buckybox.dev
   PORT: 3000
-  X_MAILER: 'Bucky Box Mailer (1.0.0) www.buckybox.com'
 
 test:
   HOST: buckybox.dev
   PORT: 3000
-  X_MAILER: 'Bucky Box Mailer (1.0.0) www.buckybox.com'
 
 staging:
   HOST: staging.buckybox.com
   MANDRILL_PASSWORD: "B44y6SC4tEhaQMLKMfIvdA"
   MANDRILL_EMAIL: "sysadmins@buckybox.com"
-  X_MAILER: 'Bucky Box Mailer (1.0.0) www.buckybox.com'
 
 production:
   HOST: my.buckybox.com
   USERCYCLE_API_KEY: '8c7ad3ac4a5e8fe80258662dd42d961f99f4e703'
   MANDRILL_PASSWORD: "Tw231I6mhCW5ZJTs2KG8NA"
   MANDRILL_EMAIL: "sysadmins+prod@buckybox.com"
-  X_MAILER: 'Bucky Box Mailer (1.0.0) www.buckybox.com'
-
 
