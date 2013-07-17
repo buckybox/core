@@ -10,8 +10,12 @@
     - @notifications.each do |notification|
       %li.notification
         %div.message
-          %span= notification.message
-          = customer_badge(notification.customer)
+          - if notification.append?
+            %span= notification.message
+            = customer_badge(notification.customer)
+          - else 
+            = customer_badge(notification.customer)
+            %span= notification.message
         %div.date
           = time_since(notification.trigger_on)
 

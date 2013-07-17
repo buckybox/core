@@ -102,8 +102,12 @@ class Event < ActiveRecord::Base
     when EVENT_TYPES[:customer_halted]
       "Deliveries halted"
     when EVENT_TYPES[:customer_address_changed]
-      "Customer changed address"
+      "has updated their address"
     end
+  end
+
+  def append?
+    ![EVENT_TYPES[:customer_address_changed]].include? event_type
   end
 
   def self.remove_duplicates(notifications)

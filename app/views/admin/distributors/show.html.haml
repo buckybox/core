@@ -44,6 +44,10 @@
       %dd= @distributor.created_at.to_s(:pretty)
       %dt Notify of Address change
       %dd= checkmark_boolean(@distributor.notify_address_change?)
+      %dt Notify on Halt
+      %dd= checkmark_boolean(@distributor.notify_address_change?)
+      %dt Notify of for new webstore customer
+      %dd= checkmark_boolean(@distributor.notify_address_change?)
       %dt Active Webstore
       %dd= checkmark_boolean(@distributor.active_webstore)
       %dt Payment options

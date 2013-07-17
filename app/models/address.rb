@@ -12,7 +12,6 @@ class Address < ActiveRecord::Base
   validate :validate_address_and_phone
 
   before_save :update_address_hash
-  after_save :notify_customer_of_change
 
   def to_s(join_with = ', ', options = {})
     result = [address_1]
@@ -85,11 +84,20 @@ class Address < ActiveRecord::Base
     @skip_validations = [] unless items.empty?
   end
 
-private
+  def update_with_notify(params, customer)
+    self.attributes = params
+    
+    return true unless changed? #nothing to save, nothing to notify
 
-  def notify_customer_of_change
-    customer.address_changed unless id_was.nil?
+    if save
+      customer.send_address_change_notification
+      return true
+    else
+      return false
+    end
   end
+
+private
 
   def validate_address_and_phone
     return unless distributor

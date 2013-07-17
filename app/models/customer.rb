@@ -337,8 +337,18 @@ class Customer < ActiveRecord::Base
     last_payment.present? ? last_payment.display_time : nil
   end
 
-  def address_changed
+  def send_address_change_notification
     distributor.notify_address_changed(self)
+  end
+
+  def update_address(address_params, opts = {})
+    opts.reverse_update({notify_distributor: false})
+
+    if opts[:notify_distributor]
+      address.update_with_notify(address_params, self)
+    else
+      address.update_attributes(address_params)
+    end
   end
 
 private
