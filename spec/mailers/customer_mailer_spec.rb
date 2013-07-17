@@ -11,6 +11,7 @@ describe CustomerMailer do
       mail.to.should eq([@customer.email])
       mail.from.should eq(['no-reply@buckybox.com'])
       mail.reply_to.should eq([@customer.distributor.support_email])
+      mail.header["X-Mailer"].value.should eq(Figaro.env.x_mailer)
     end
   end
 
