@@ -5,8 +5,10 @@ class AddBankNameToOmniImporter < ActiveRecord::Migration
     OmniImporter.all.each do |omni|
       bank_name = omni.name
 
-      # strip date format for Westpac
-      bank_name = "Westpac" if bank_name.start_with? "Westpac"
+      # strip date format
+      %w(HSBC Westpac).each do |bank|
+        bank_name = bank if bank_name.start_with? bank
+      end
 
       omni.update_attributes(bank_name: bank_name)
     end
