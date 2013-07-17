@@ -162,7 +162,7 @@ $(function() {
         update_template_link_attributes(selected_email_template_link());
 
         show_success(data.message);
-      } else if (data.delete) {
+      } else if (data['delete']) {
         // hide template contextual actions
         send_email_modal.find('.template-link-action').hide();
 
