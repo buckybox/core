@@ -1,5 +1,4 @@
-class DistributorMailer < ActionMailer::Base
-  include ActionView::Helpers::TextHelper
+class DistributorMailer < ApplicationMailer
   default from: Figaro.env.support_email,
           reply_to: Figaro.env.support_email
 
@@ -15,5 +14,4 @@ class DistributorMailer < ActionMailer::Base
           format.html { render text: simple_format(@email.mail_merge(@distributor)) }
          end
   end
-
 end
