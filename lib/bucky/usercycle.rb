@@ -15,6 +15,9 @@ module Bucky
     def event(identity, action_name, properties = {}, occurred_at = Time.now)
       raise TypeError, "Identity cannot be nil" if identity.nil?
 
+      # FIXME: temporary plug to try out Vero
+      identity.track(action_name, properties)
+
       if Rails.env.production? || Rails.env.staging?
         @client.event.delay(
           priority: Figaro.env.delayed_job_priority_low

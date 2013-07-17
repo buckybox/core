@@ -39,6 +39,9 @@ class Distributor < ActiveRecord::Base
   DEFAULT_AUTOMATIC_DELIVERY_HOUR = 18
   DEFAULT_AUTOMATIC_DELIVERY_DAYS = 1
 
+  include Vero::Trackable
+  trackable :email, :name, :contact_name, :country
+
   devise :database_authenticatable, :recoverable, :rememberable, :trackable, :validatable
 
   acts_as_taggable
