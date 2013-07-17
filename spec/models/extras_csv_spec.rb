@@ -21,14 +21,14 @@ describe ExtrasCsv do
     end
 
     it "exports the header into the csv" do
-      @rows.first.should eq ["delivery date", "extra line item name", "extra line item unit", "extra line item unit price", "extra line item quantity"]
+      @rows.first.should eq ["delivery date", "extra line item name", "extra line item unit", "extra line item unit price", "quantity"]
     end
 
     it "exports customer data into csv" do
-      @rows[1].should eq ["2013-07-09", "Extra 0", "kg", "0.50", "5"]
-      @rows[2].should eq ["2013-07-09", "Extra 1", "l", "2.50", "2"]
-      @rows[3].should eq ["2013-07-09", "Extra 2", "each", "4.50", "3"]
-      @rows[4].should eq ["2013-07-09", "Extra 3", "g", "6.50", "0"]
+      @rows[1].should eq [Date.today.iso8601, "Extra 0", "kg", "0.50", "5"]
+      @rows[2].should eq [Date.today.iso8601, "Extra 1", "l", "2.50", "2"]
+      @rows[3].should eq [Date.today.iso8601, "Extra 2", "each", "4.50", "3"]
+      @rows[4].should eq [Date.today.iso8601, "Extra 3", "g", "6.50", "0"]
     end
   end
 end
