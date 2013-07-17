@@ -17,7 +17,7 @@ class ExtrasCsv
   end
 
   def headers(csv)
-    csv << ["delivery date", "extra line item name", "extra line item unit", "extra line item unit price", "extra line item quantity"]
+    csv << ["delivery date", "extra line item name", "extra line item unit", "extra line item unit price", "quantity"]
   end
   
   def extras_summary(distributor, date)
