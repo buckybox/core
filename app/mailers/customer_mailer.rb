@@ -1,5 +1,4 @@
-class CustomerMailer < ActionMailer::Base
-  include ActionView::Helpers::TextHelper
+class CustomerMailer < ApplicationMailer
   default from: Figaro.env.no_reply_email
 
   def login_details(customer)
@@ -18,7 +17,7 @@ class CustomerMailer < ActionMailer::Base
     @distributor = customer.distributor
     @customer = customer
     @oops = ['Uh-oh', 'Whoops', 'Oooops'].sample
-    
+
     headers['X-MC-Tags'] = "customer,orders_halted,#{@distributor.name.parameterize}"
 
     mail to: @customer.email,
@@ -58,18 +57,5 @@ class CustomerMailer < ActionMailer::Base
           format.text { render text: email.body }
           format.html { render text: simple_format(email.body) }
          end
-  end
-
-  # FIXME we are not doing invoicing at the moment
-  def invoice invoice
-    #@invoice = invoice
-    #@account = invoice.account
-    #@customer = @account.customer
-    #@distributor = @account.distributor
-
-    #mail to: @customer.email,
-         #from: "#{@distributor.email_name} <#{Figaro.env.no_reply_email}>",
-         #reply_to: @distributor.support_email,
-         #subject: "Your #{@distributor.name} Bill/Account Statement ##{@invoice.number}"
   end
 end
