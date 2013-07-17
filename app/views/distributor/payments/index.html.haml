@@ -34,7 +34,7 @@
                 %ul#omni_importer_menu.dropdown-menu
                   - current_distributor.omni_importers.ordered.each do |omni_importer|
                     %li{data:{id: omni_importer.id, label: "Upload #{omni_importer.name} Transactions"}}= link_to omni_importer.name, '#', style: 'text-align:left'
-                
+
           %input#import_transaction_list_csv_file{name: 'import_transaction_list[csv_file]', type:'file', style: 'display:none', class: 'auto_submit'}
 
         .ajax-spinner
@@ -69,7 +69,7 @@
         %tr
           %td.text-center{ colspan: 5 }
             .ajax_loader_hide= link_to_function "more...", "window.payments.load_more_rows_on_bottom()" unless @import_transactions.blank?
-            .ajax-spinner.hidden
+            .ajax-spinner
 
 - if @import_transaction_list.has_failed?
   :javascript

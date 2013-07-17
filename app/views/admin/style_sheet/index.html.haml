@@ -33,8 +33,25 @@
         %a.action Create a new customer
       %td
         %ul
+          %li Color used for actions
           %li Different style on hover
           %li First letter must be capitalised in markup (#{link_to "text-transform", "https://developer.mozilla.org/en-US/docs/Web/CSS/text-transform"} can't do it)
+    %tr
+      %td .secondary-action
+      %td Secondary action link
+      %td
+        %a.secondary-action cancel
+      %td
+        %ul
+          %li Different style on hover
+    %tr
+      %td .minor-action
+      %td Minor action link
+      %td
+        %a.minor-action pause
+      %td
+        %ul
+          %li Different style on hover
     %tr
       %td .label
       %td
@@ -73,6 +90,26 @@
         %ul
           %li.bold Where would we use it?
           %li= link_to "Other types (colors) available", "http://twitter.github.io/bootstrap/components.html#labels-badges"
+    %tr
+      %td "data-toggle" => "tooltip"
+      %td Extra information
+      %td
+        %a{"href" => "javascript:void()", "data-toggle" => "tooltip", "data-original-title" => "Title"} Hover me
+        :javascript
+          $('[data-toggle="tooltip"]').tooltip();
+      %td
+        %ul
+          %li= link_to "More information", "http://twitter.github.io/bootstrap/javascript.html#tooltips"
+    %tr
+      %td "data-toggle" => "popover"
+      %td Extra long information
+      %td
+        %a{"href" => "javascript:void()", "data-toggle" => "popover", "data-original-title" => "My title", "data-content" => "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce ac mauris nunc. Maecenas massa urna, hendrerit eu pretium eu, faucibus in massa. Aliquam tincidunt est eget mauris tincidunt sodales. Fusce sollicitudin euismod tortor sit amet consequat. Aenean volutpat dui sit amet neque imperdiet aliquet."} Click me
+        :javascript
+          $('[data-toggle="popover"]').popover();
+      %td
+        %ul
+          %li= link_to "More information", "http://twitter.github.io/bootstrap/javascript.html#popovers"
     %tr
       %td .alert.alert-error
       %td Error message
@@ -118,9 +155,17 @@
         %ul
           %li.bold Should we replace it with <code>.alert.alert-info</code>?
     %tr
+      %td .amount
+      %td Positive amount
+      %td.text-right
+        %span.amount= Money.new(1337).format
+      %td
+        %ul
+          %li.bold Should we rename it to <code>.money</code> for more generic usage?
+    %tr
       %td .balance
       %td Positive balance
-      %td
+      %td.text-right
         %span.balance= Money.new(1337).format
       %td
         %ul
@@ -128,7 +173,7 @@
     %tr
       %td .balance.negative
       %td Negative balance
-      %td
+      %td.text-right
         %span.balance.negative= Money.new(-1337).format
       %td
         %ul

@@ -1,7 +1,4 @@
-class AdminMailer < ActionMailer::Base
-
-  include ActionView::Helpers::TextHelper
-
+class AdminMailer < ApplicationMailer
   def preview_email(email, admin)
     @email = email
     @admin = admin
@@ -16,5 +13,4 @@ class AdminMailer < ActionMailer::Base
           format.html { render text: simple_format(@email.mail_merge(@admin)) }
          end
   end
-
 end
