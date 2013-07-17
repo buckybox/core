@@ -97,7 +97,7 @@ class Distributor < ActiveRecord::Base
 
   default_value_for :invoice_threshold_cents, -500
   default_value_for :bucky_box_percentage, 0.0175
-  default_value_for :notify_address_change, false
+  default_value_for :notify_address_change, true
 
   scope :keep_updated, where(keep_me_updated: true)
 
@@ -487,6 +487,14 @@ class Distributor < ActiveRecord::Base
   def notify_address_changed(customer, notifier = Event)
     return false unless notify_address_change?
     notifier.customer_changed_address(customer)
+  end
+
+  def notify_on_halt
+    true
+  end
+
+  def notify_for_new_webstore_customer
+    true
   end
 
 private

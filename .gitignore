@@ -24,6 +24,7 @@
 
 # Ignore all logfiles and tempfiles.
 /log/*.log
+/log/munin*
 /tmp
 *.swp
 *.swo
