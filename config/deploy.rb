@@ -46,10 +46,16 @@ namespace :deploy do
   task :restart_workers do
     sudo %( monit restart delayed_job )
   end
-  
+
   task :symlink_uploads do
     run %(
       ln -nfs #{shared_path}/private_uploads/ #{release_path}/
+    )
+  end
+
+  task :symlink_delayed_job_web do
+    run %(
+      ln -nfs #{shared_path}/bundle/ruby/1.9.1/gems/delayed_job_web-1.2.0/lib/delayed_job_web/application/public #{release_path}/public/delayed_job
     )
   end
 end
@@ -63,6 +69,7 @@ end
 after 'deploy:assets:symlink' do
   deploy.symlink_configs
   deploy.symlink_uploads
+  deploy.symlink_delayed_job_web
 end
 
 after "deploy:update_code", "deploy:migrate"
