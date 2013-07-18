@@ -53,8 +53,8 @@ describe Distributor do
     end
   end
 
-  describe "#bank" do
-    it "returns the bank name from omni importers" do
+  describe "#banks" do
+    it "returns the bank names from omni importers" do
       omni_importers = [
         Fabricate.build(:omni_importer_for_bank_deposit,
           name: "Westpac - mm/dd/yyyy",
@@ -63,29 +63,16 @@ describe Distributor do
         Fabricate.build(:omni_importer_for_bank_deposit,
           name: "Westpac - dd/mm/yyyy",
           bank_name: "Westpac"
-        )
-      ]
-
-      distributor = Fabricate(:distributor, omni_importers: omni_importers)
-
-      distributor.bank.should eq "Westpac"
-    end
-  end
-
-  describe "#validate_omni_importers" do
-    it "does not allow more than one bank for deposits" do
-      omni_importers = [
-        Fabricate.build(:omni_importer_for_bank_deposit,
-          bank_name: "Westpac"
         ),
         Fabricate.build(:omni_importer_for_bank_deposit,
+          name: "Kiwibank",
           bank_name: "Kiwibank"
         )
       ]
 
       distributor = Fabricate(:distributor, omni_importers: omni_importers)
 
-      distributor.should_not be_valid
+      expect(distributor.banks).to match_array %w(Westpac Kiwibank)
     end
   end
 
