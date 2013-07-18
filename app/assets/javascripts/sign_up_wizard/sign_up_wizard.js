@@ -16,8 +16,6 @@ var BuckyBoxSignUpWizard = function() {
   };
 
   this.show = function() {
-    console.log("SHOW");
-
     var host = this.host,
           id = this.id;
 
@@ -30,7 +28,6 @@ var BuckyBoxSignUpWizard = function() {
         console.log("Could not load CSS");
       },
       success: function() {
-        console.log("CSS loaded");
         // Could be nicer but have to use that way for IE compat
         $("head").append('<link rel="stylesheet" type="text/css" href="' + css + '" />');
 
@@ -40,8 +37,6 @@ var BuckyBoxSignUpWizard = function() {
             name: id,
             frameborder: 0
           }).html(data).appendTo("body");
-
-          console.log("LOADED");
 
           // jQuery selector within our div
           var sign_up_wizard = function(selector) {
@@ -268,8 +263,6 @@ var BuckyBoxSignUpWizard = function() {
           };
 
           register_validity_handlers();
-
-          console.log("READY");
         });
       }
     });
