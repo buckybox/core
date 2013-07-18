@@ -1,7 +1,6 @@
 class DistributorMailer < ActionMailer::Base
   include ActionView::Helpers::TextHelper
-  default from: Figaro.env.support_email,
-          reply_to: Figaro.env.support_email
+  default from: "Bucky Box Support <#{Figaro.env.support_email}>"
 
   def update_email(email, distributor)
     @email = email
@@ -28,6 +27,7 @@ class DistributorMailer < ActionMailer::Base
       File.read(Rails.root.join("app/assets/images/bucky-box-getting-started.png"))
 
     mail to: @distributor.email_to,
+         from: "Sam Rye <#{Figaro.env.support_email}>",
          subject: "#{@distributor.name}, welcome to Bucky Box!"
   end
 
@@ -38,6 +38,7 @@ class DistributorMailer < ActionMailer::Base
     headers['X-MC-Tags'] = "distributor,bank_setup"
 
     mail to: @distributor.email_to,
+         from: "Jordan Carter <#{Figaro.env.support_email}>",
          subject: "[Bucky Box] Setting up your bank feed"
   end
 

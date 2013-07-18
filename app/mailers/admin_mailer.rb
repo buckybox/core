@@ -10,7 +10,6 @@ class AdminMailer < ActionMailer::Base
 
     mail to: @email.preview_email,
          from: Figaro.env.support_email,
-         reply_to: Figaro.env.support_email,
          subject: @email.subject do |format|
           format.text { render text: @email.mail_merge(@admin) }
           format.html { render text: simple_format(@email.mail_merge(@admin)) }
@@ -22,7 +21,7 @@ class AdminMailer < ActionMailer::Base
 
     body = options.delete :body
 
-    mail({ from: Figaro.env.no_reply_email }.merge(options)) do |format|
+    mail({ from: Figaro.env.support_email }.merge(options)) do |format|
       format.text { render text: body }
       format.html { render text: simple_format(body) }
     end
