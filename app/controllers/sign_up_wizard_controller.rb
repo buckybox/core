@@ -43,11 +43,11 @@ class SignUpWizardController < ApplicationController
 
     @distributor = Distributor.new(details)
     @distributor.tag_list.add source
-    @distributor.omni_importers = if payment_paypal == "1"
+    @distributor.omni_importers = OmniImporter.bank_deposit.where(bank_name: bank_name)
+
+    if payment_paypal == "1"
       # NOTE: using hardcoded PayPal omni until we get more formats
-      OmniImporter.where(id: 16)
-    else
-      OmniImporter.bank_deposit.where(bank_name: bank_name)
+      @distributor.omni_importers << OmniImporter.where(id: OmniImporter::PAYPAL_ID)
     end
 
     unless bank_name.nil?
