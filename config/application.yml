@@ -12,7 +12,7 @@ TEAM_EMAILS: invite@buckybox.com, will@buckybox.com, sam@buckybox.com, jordan@bu
 
 # GMail SMTP
 GMAIL_SMTP_HOST: smtp.gmail.com
-GMAIL_SMTP_PORT: 465
+GMAIL_SMTP_PORT: 587
 GMAIL_SMTP_USER_NAME: support@buckybox.com
 GMAIL_SMTP_PASSWORD: betathanever
 GMAIL_SMTP_AUTHENTICATION: plain
