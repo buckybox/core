@@ -31,9 +31,18 @@ class DistributorMailer < ActionMailer::Base
 
     headers['X-MC-Tags'] = "distributor,bank_setup"
 
-    mail to: @distributor.email_to,
+    message = mail to: @distributor.email_to,
          from: "Jordan Carter <#{Figaro.env.support_email}>",
          subject: "[Bucky Box] Setting up your bank feed"
+
+    message.delivery_method.settings.merge!(
+      address: Figaro.env.gmail_smtp_host,
+      port: Figaro.env.gmail_smtp_port,
+      user_name: Figaro.env.gmail_smtp_user_name,
+      password: Figaro.env.gmail_smtp_password
+    )
+
+    message
   end
 
 end
