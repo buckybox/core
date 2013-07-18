@@ -59,7 +59,9 @@ class SignUpWizardController < ApplicationController
 
       send_follow_up_email
 
-      send_bank_setup_email(bank_name) if @distributor.omni_importers.empty?
+      if details[:payment_bank_deposit] == "1" && @distributor.omni_importers.bank_deposit.empty?
+        send_bank_setup_email(bank_name)
+      end
 
     else
       errors = @distributor.errors.full_messages
