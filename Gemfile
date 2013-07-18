@@ -29,6 +29,9 @@ gem 'fuzzy-string-match',   '~> 0.9.4',  require: 'fuzzystringmatch' # This perf
 gem 'state_machine',        '~> 1.1.2'
 gem 'figaro',               '~> 0.6.4'
 
+gem 'premailer-rails',      '~> 1.4.0'
+gem 'nokogiri',             '~> 1.6.0' # premailer-rails dependency
+
 gem 'delayed_job',                '~> 3.0.5' #send emails offline
 gem 'delayed_job_active_record',  '~> 0.4.4'
 gem 'daemons',                    '~> 1.1.9' # able to monitor delayed_job via monit

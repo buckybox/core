@@ -1,0 +1,90 @@
+<html>
+<head>
+<style type="text/css">
+body {
+  font-family:'Arial';
+  font-size:14px;
+  color:#111;
+}
+h2 {
+  font-size: 18px;
+}
+</style>
+</head>
+
+<body>
+
+<p>Hi <%= @distributor.contact_name %>,</p>
+
+<p>Thanks for signing up for Bucky Box, my name is Sam and I'll be guiding you through your setup with Bucky Box</p>
+
+<h2>What Bucky Box does in 80 seconds</h2>
+
+<p>We've designed Bucky Box to make 4 things easy for you:</p>
+
+<ul>
+  <li>Sell food</li>
+  <li>Manage customers</li>
+  <li>Fulfil orders</li>
+  <li>Make payments easy</li>
+</ul>
+
+<p>Have a quick peek at this video to get a quick run down of the major parts of Bucky Box:</p>
+
+<a href="http://vimeo.com/70011659"><img src="http://www.buckybox.com/images/email/introducing-buckybox.png"></a>
+
+<br>
+<br>
+
+<h2>Here's how to log into your new account</h2>
+
+<p>You have a starter account which gives you 30 transactional customers free in your database (customers without any transactions in their accounts are free).</sup></p>
+
+<h3><center><%= link_to("Login to your Bucky Box account", new_distributor_session_url) %><br>(<%= @distributor.email %>)</center></h3>
+
+<br>
+<br>
+
+<h2>Set up your Local Food Enterprise in 4 minutes</h2>
+<p>Once you've logged in, have a watch of this video to setup your organisation into Bucky Box</p>
+<a href="https://buckybox.uservoice.com/knowledgebase/articles/117303/"><img src="http://www.buckybox.com/images/email/getting-started-settings.png"></a>
+
+<br>
+<br>
+<br>
+
+
+<h2>More on getting started:</h2>
+<ul>
+  <li>We'd love to give you a personal introduction to Bucky Box, just email me to arrange a time.</li>
+  <li>Watch <a href="https://buckybox.uservoice.com/knowledgebase/articles/202260">the video</a> on how to add some customers and an order.
+  </li>
+  <li>Look through the <a href="https://buckybox.uservoice.com/knowledgebase">support forums</a>.</li>
+  <li>Make suggestions and <a href="http://buckybox.uservoice.com/forums/176691-feature-requests">feature requests</a>.</li>
+  <li>Contact us through the green Feedback tab inside Bucky Box to confirm your Payment Types and we will set up your Webstore.</li>
+</ul>
+
+<p>Thanks for being a local food hero, and welcome to your new account with Bucky Box.</p>
+
+<p>Regards<br>
+-Sam</p>
+<br>
+<br>
+<br>
+
+
+___<br>
+<br>
+<table width="450" border="0" cellpadding="0" cellspacing="0">
+  <tr>
+    <td width="150"><a href="http://www.buckybox.com"><img src="http://www.buckybox.com/images/logo-bucky-grey.png" width="123" height="32" border="0"/></a></td>
+    <td width="130" nowrap="nowrap"><span style="Font:'Arial'; font-size:10px; color:#444;"><strong>Sam Rye</strong><br />
+      Community Connector</span></td>
+     <td width="10"></td>
+    <td width="130" nowrap="nowrap"><span style="Font:'Arial'; font-size:10px; color:#444;">2/22 Allen St, Te Aro<br />
+    Wellington 6011, NZ</span></td>
+  </tr>
+</table>
+
+</body>
+</html>
