@@ -72,4 +72,31 @@ describe Distributor::DeliveriesController do
       response.should redirect_to 'where_i_came_from'
     end
   end
+
+  describe "#export_extras" do
+    let(:date){Date.current.to_s(:db)}
+
+    before do
+      @distributor.save!
+      @post = lambda { post :export_extras, export_extras: {date: date}}
+    end
+
+    it "downloads a csv" do
+      ExtrasCsv.stub(:generate).and_return("")
+      @post.call
+      response.headers['Content-Type'].should eq "text/csv; charset=utf-8; header=present"
+    end
+
+    it "exports customer data into csv" do
+      ExtrasCsv.stub(:generate).and_return("I am the kind of csvs")
+      @post.call
+      response.body.should eq "I am the kind of csvs"
+    end
+
+    it "calls ExtrasCsv.generate" do
+      ExtrasCsv.stub(:generate)
+      ExtrasCsv.should_receive(:generate).with(@distributor, Date.parse(date))
+      @post.call
+    end
+  end
 end
