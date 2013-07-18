@@ -12,4 +12,13 @@ class Distributor::ReportsController < ApplicationController
     send_data(csv_output, type: type, filename: filename)
   end
 
+  def export_customer_account_history
+    date = Date.parse(params[:export][:date])
+    csv_string = CustomerAccountHistoryCsv.generate(date, current_distributor)
+
+    usercycle.event(current_distributor, "distributor_exported_csv_customer_account_history_list")
+
+    send_csv("bucky-box-customer-account-balance-export-#{date.iso8601}", csv_string)
+  end
+
 end
