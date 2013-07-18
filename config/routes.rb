@@ -3,6 +3,8 @@ BuckyBox::Application.routes.draw do
   devise_for :distributors, controllers: { sessions: 'distributor/sessions', passwords: 'distributor/passwords' }
   devise_for :customers,    controllers: { sessions: 'customer/sessions', passwords: 'customer/passwords' }
 
+  match "/delayed_job" => DelayedJobWeb, anchor: false
+
   root to: 'distributor/customers#index'
 
   namespace :sign_up_wizard do
