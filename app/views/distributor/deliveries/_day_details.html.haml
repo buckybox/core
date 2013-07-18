@@ -34,7 +34,7 @@
         - unless extras.blank?
           %dl.packing-summary
             %dt Extras
-            - extras.sort{|a,b| Extra.name_with_unit(a)<=>Extra.name_with_unit(b)}.group_by{ |g| "#{g[:name]} #{g[:unit]}" }.each do |extra, array|
+            - extras.sort{|a,b| Extra.name_with_unit(a).downcase<=>Extra.name_with_unit(b).downcase}.group_by{ |g| "#{g[:name]} #{g[:unit]}" }.each do |extra, array|
               %dd
                 %span.badge= array.collect{ |a| a[:count].to_i }.sum
                 = "#{extra}"
