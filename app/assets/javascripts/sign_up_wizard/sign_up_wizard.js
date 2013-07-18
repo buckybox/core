@@ -69,7 +69,7 @@ var BuckyBoxSignUpWizard = function() {
 
           var url_prefix = "my.buckybox.com/webstore/";
 
-          // copy parameterzed text into URL field
+          // copy text slug into URL field
           sign_up_wizard("#distributor_name").change(function() {
             var slug = $(this).val().
               replace(/\s/g, '-').replace(/[^a-zA-Z0-9\-]/g, '').
@@ -78,10 +78,14 @@ var BuckyBoxSignUpWizard = function() {
             sign_up_wizard("#distributor_parameter_name").val(url_prefix + slug);
           });
 
-          sign_up_wizard("#distributor_parameter_name").on("blur", function() {
+          sign_up_wizard("#distributor_parameter_name").on("keyup", function() {
             if ($(this).val().indexOf(url_prefix) !== 0) {
-              $(this).val(url_prefix + $(this).val());
+              $(this).val(url_prefix);
             }
+
+            $(this).val(url_prefix + $(this).val().replace(url_prefix, '')
+              .replace(/[^a-zA-Z0-9\-]/g, '')
+            );
           });
 
           // toggle bank deposit details visibility
