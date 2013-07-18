@@ -92,15 +92,18 @@ describe SignUpWizardController do
         end
 
         before do
-          # NOTE: hardcoded for now, see controller
-          @omni_importer = Fabricate(:omni_importer, id: 16)
+          @omni_importers = [
+            # NOTE: hardcoded for now, see controller
+            Fabricate(:omni_importer, id: OmniImporter::PAYPAL_ID),
+            Fabricate(:omni_importer_for_bank_deposit, bank_name: form_params["distributor"]["bank_name"])
+          ]
         end
 
         it "sets up it up" do
           post :sign_up, form_params_with_paypal
 
           distributor = Distributor.where(name: form_params["distributor"]["name"]).last
-          distributor.omni_importers.should eq [@omni_importer]
+          expect(distributor.omni_importers).to match_array @omni_importers
         end
       end
 

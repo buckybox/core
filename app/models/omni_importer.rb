@@ -1,4 +1,6 @@
 class OmniImporter < ActiveRecord::Base
+  PAYPAL_ID = 16
+
   attr_accessible :global, :country_id, :import_transaction_list, :name, :rules, :remove_import_transaction_list, :import_transaction_list_cache, :tag_list, :payment_type, :bank_name
 
   mount_uploader :import_transaction_list, ImportTransactionListUploader
