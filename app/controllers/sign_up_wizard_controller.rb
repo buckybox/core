@@ -102,9 +102,10 @@ private
   end
 
   def send_bank_setup_email bank_name
-    DistributorMailer.bank_setup(@distributor, bank_name).deliver
+    DistributorMailer.delay(
+      run_at: 5.minutes.from_now
+    ).bank_setup(@distributor, bank_name)
   end
-  handle_asynchronously :send_bank_setup_email, run_at: lambda { 3.minutes.from_now }
 
   def set_cors_headers
     if request.headers["HTTP_ORIGIN"]
