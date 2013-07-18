@@ -36,10 +36,12 @@ class DistributorMailer < ActionMailer::Base
          subject: "[Bucky Box] Setting up your bank feed"
 
     message.delivery_method.settings.merge!(
-      address: Figaro.env.gmail_smtp_host,
-      port: Figaro.env.gmail_smtp_port,
-      user_name: Figaro.env.gmail_smtp_user_name,
-      password: Figaro.env.gmail_smtp_password
+      address:              Figaro.env.gmail_smtp_host,
+      port:                 Figaro.env.gmail_smtp_port,
+      user_name:            Figaro.env.gmail_smtp_user_name,
+      password:             Figaro.env.gmail_smtp_password,
+      authentication:       Figaro.env.gmail_smtp_authentication,
+      enable_starttls_auto: Figaro.env.gmail_smtp_enable_starttls_auto,
     )
 
     message
