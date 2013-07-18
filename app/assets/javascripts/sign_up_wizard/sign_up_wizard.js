@@ -43,6 +43,16 @@ var BuckyBoxSignUpWizard = function() {
             return $("#" + id + " " + selector);
           };
 
+          var analytics = function(event) {
+            if (typeof _gaq === 'undefined') {
+              console.log("Google Analytics not available");
+            } else {
+              _gaq.push(event);
+            }
+          };
+
+          analytics(['_trackPageview', '/sign_up_wizard/form#1']);
+
           var visible_step = sign_up_wizard(".step:visible");
           var current_step = visible_step;
 
@@ -50,7 +60,7 @@ var BuckyBoxSignUpWizard = function() {
           sign_up_wizard("#close").click(function() {
             sign_up_wizard("").remove();
 
-            _gaq.push(['_trackEvent', 'sign_up_wizard', 'close']);
+            analytics(['_trackEvent', 'sign_up_wizard', 'close']);
           });
 
           sign_up_wizard("#distributor_country").change(function() {
@@ -153,7 +163,7 @@ var BuckyBoxSignUpWizard = function() {
 
               sign_up_wizard("#step").html(current_step + "/" + (steps.length - 1));
 
-              _gaq.push(['_trackPageview', '/sign_up_wizard/form#' + current_step]);
+              analytics(['_trackPageview', '/sign_up_wizard/form#' + current_step]);
             }
           };
 
