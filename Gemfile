@@ -34,6 +34,7 @@ gem 'nokogiri',             '~> 1.6.0' # premailer-rails dependency
 
 gem 'delayed_job',                '~> 3.0.5' #send emails offline
 gem 'delayed_job_active_record',  '~> 0.4.4'
+gem 'delayed_job_web',            '~> 1.2.0'
 gem 'daemons',                    '~> 1.1.9' # able to monitor delayed_job via monit
 gem 'analytical',                 '~> 3.0.12'
 gem 'newrelic_rpm',               '~> 3.6.1'

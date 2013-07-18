@@ -22,6 +22,10 @@ GMAIL_SMTP_ENABLE_STARTTLS_AUTO: true
 DELAYED_JOB_PRIORITY_HIGH: 0
 DELAYED_JOB_PRIORITY_LOW:  50
 
+# Delayed::Job Web interface
+DELAYED_JOB_USERNAME: "bg_job_master"
+DELAYED_JOB_PASSWORD: "What's in the queue?"
+
 # Usercycle
 USERCYCLE_API_KEY: '624a19c076449cb71c750ab7ef5909de7f488dc1'
 USERCYCLE_API_URL: 'https://api.usercycle.com/api/v1'
@@ -40,11 +44,9 @@ staging:
   MANDRILL_PASSWORD: "B44y6SC4tEhaQMLKMfIvdA"
   MANDRILL_EMAIL: "sysadmins@buckybox.com"
 
-
 production:
   HOST: my.buckybox.com
   USERCYCLE_API_KEY: '8c7ad3ac4a5e8fe80258662dd42d961f99f4e703'
   MANDRILL_PASSWORD: "Tw231I6mhCW5ZJTs2KG8NA"
   MANDRILL_EMAIL: "sysadmins+prod@buckybox.com"
-
 
