@@ -89,6 +89,7 @@ class Distributor < ActiveRecord::Base
   validate :required_fields_for_webstore
   validate :payment_options_valid
   validate :validate_omni_importers
+  validate :validate_parameter_name
 
   before_validation :check_emails
   before_create :parameterize_name, if: 'parameter_name.nil?'
@@ -519,6 +520,14 @@ private
   def validate_omni_importers
     if omni_importers.bank_deposit.pluck(:bank_name).uniq.count > 1
       errors.add(:omni_importers, "Cannot have more than one deposit bank")
+    end
+  end
+
+  def validate_parameter_name
+    return if parameter_name.nil?
+
+    if Distributor.parameterize_name(parameter_name) != parameter_name
+      errors.add(:parameter_name, "contains invalid characters")
     end
   end
 

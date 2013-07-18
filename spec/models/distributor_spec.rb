@@ -97,6 +97,15 @@ describe Distributor do
       end
 
       specify { distributor.parameter_name.should == 'new-distributor' }
+
+      context "and an invalid parameter name is set" do
+        before do
+          distributor.name = 'New Distributor'
+          distributor.parameter_name = "invalid/name/@)*&"
+        end
+
+        specify { distributor.should_not be_valid }
+      end
     end
 
     context 'when updating an existing distributor' do
