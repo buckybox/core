@@ -10,6 +10,12 @@ NO_REPLY_EMAIL: no-reply@buckybox.com
 MAIL_SAFE: crashtestdummy@buckybox.com
 TEAM_EMAILS: invite@buckybox.com, will@buckybox.com, sam@buckybox.com, jordan@buckybox.com, samson@buckybox.com, ced@buckybox.com
 
+# GMail SMTP
+GMAIL_SMTP_HOST: smtp.gmail.com
+GMAIL_SMTP_PORT: 465
+GMAIL_SMTP_USER_NAME: support@buckybox.com
+GMAIL_SMTP_PASSWORD: betathanever
+
 # Delayed::Job
 DELAYED_JOB_PRIORITY_HIGH: 0
 DELAYED_JOB_PRIORITY_LOW:  50
