@@ -43,6 +43,9 @@ var BuckyBoxSignUpWizard = function() {
             return $("#" + id + " " + selector);
           };
 
+          // fake placeholders for IE
+          sign_up_wizard('input, textarea').placeholder();
+
           var analytics = function(event) {
             if (typeof _gaq === 'undefined') {
               console.log("Google Analytics not available");
@@ -195,15 +198,23 @@ var BuckyBoxSignUpWizard = function() {
             var valid = true;
 
             sign_up_wizard(".step:visible input").each(function() {
-              if (!this.checkValidity()) {
-                valid = false;
-                return false;
+              try {
+                if (!this.checkValidity()) {
+                  valid = false;
+                  return false;
+                }
+              } catch(e) {
+                // IE fix
+                valid = true;
               }
             });
 
             if (valid) {
               if (is_submit_step()) {
                 var form = sign_up_wizard('form');
+
+                // IE fix: http://stackoverflow.com/a/11187563
+                $.support.cors = true;
 
                 $.ajax({
                   type: "POST",
@@ -268,8 +279,6 @@ var BuckyBoxSignUpWizard = function() {
                 $(this).addClass("invalid");
               }
             }).on("change", function() {
-              // $(this)[0].setCustomValidity("");
-
               if ($(this)[0].validity.valid) {
                 $(this).removeClass("invalid");
               }
