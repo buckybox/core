@@ -17,3 +17,11 @@
     = text_field_tag :start_date, '', placeholder: 'Date from', data: {value: (Date.current.beginning_of_month - 3.months).to_s(:date_picker)}, class: 'date_picker start'
     = text_field_tag :end_date, '', placeholder: 'Date to', data: {value: Date.current.yesterday.to_s(:date_picker)}, class: 'date_picker end'
     = link_to "Export transactions", distributor_reports_transaction_history_path(Date.current.beginning_of_month - 3.months, Date.current.yesterday), id: 'export_transactions', data: {href: '/distributor/reports/transaction_history/'}
+
+.row-fluid.reporting_calendar_select
+  .span12
+    .title Export Customer Balance History
+    = text_field_tag '[export][date]', '', placeholder: 'Date', data: {value: (Date.current.beginning_of_month - 3.months).to_s(:date_picker)}, class: 'date_picker start'
+    = link_to "Export balances", distributor_reports_export_customer_account_history_path, data: {href: distributor_reports_export_customer_account_history_path}, id: "export_customer_account_history_link"
+    = simple_form_for(:export_customer_account_history, url: distributor_reports_export_customer_account_history_path, html:{style:'display:none', id: 'export_extras_form'}) do |f|
+      = f.input :date, as: :hidden, input_html: {value: Date.today.to_s(:db)}
