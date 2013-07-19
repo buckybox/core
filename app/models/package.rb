@@ -21,7 +21,7 @@ class Package < ActiveRecord::Base
 
   attr_accessible :order, :order_id, :packing_list, :status, :position
 
-  STATUS = %w(unpacked packed) #TODO: change to state_mchine next time this is touched
+  STATUS = %w(unpacked packed) #TODO: change to state_machine next time this is touched
   PACKING_METHOD = %w(manual auto)
 
   validates_presence_of :order, :packing_list_id, :status

@@ -79,5 +79,6 @@ Capybara.register_driver :poltergeist_debug do |app|
   )
 end
 
+Capybara.asset_host = "http://buckybox.dev:3000"
 # Capybara.javascript_driver = :poltergeist_debug
-
+Capybara.default_wait_time = 30
