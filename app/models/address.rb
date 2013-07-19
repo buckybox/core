@@ -84,6 +84,19 @@ class Address < ActiveRecord::Base
     @skip_validations = [] unless items.empty?
   end
 
+  def update_with_notify(params, customer)
+    self.attributes = params
+    
+    return true unless changed? #nothing to save, nothing to notify
+
+    if save
+      customer.send_address_change_notification
+      return true
+    else
+      return false
+    end
+  end
+
 private
 
   def validate_address_and_phone

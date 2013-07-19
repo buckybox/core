@@ -32,6 +32,11 @@
     = f.input :feature_spend_limit, label: 'Enable the minimum balance feature?', hint: 'This gives the distributor the option to turn on a minimum balance for customers.'
     = f.input :send_email, as: :boolean, label: "Send any emails to customers?"
 
+  %fieldset
+    %legend Notifications
+    = f.input :notify_address_change, label: "Notify distributor when a customers address is changed"
+    = f.input :notify_on_halt, as: :boolean, input_html: {disabled: true}
+    = f.input :notify_for_new_webstore_customer, as: :boolean, input_html: {disabled: true}
 
   %fieldset
     %legend Webstore
