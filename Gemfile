@@ -29,6 +29,7 @@ gem 'state_machine',        '~> 1.1.2'
 gem 'figaro',               '~> 0.6.4'
 gem 'virtus',               '~> 0.5.5'
 gem 'draper',               '~> 1.2.1'
+gem 'naught',               '~> 0.0.2'
 
 gem 'premailer-rails',      '~> 1.4.0'
 gem 'nokogiri',             '~> 1.6.0' # premailer-rails dependency
