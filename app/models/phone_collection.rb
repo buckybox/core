@@ -34,7 +34,7 @@ class PhoneCollection
 
 private
 
-  def type_option(type)
+  def self.type_option(type)
     [ type.capitalize, type ]
   end
 
