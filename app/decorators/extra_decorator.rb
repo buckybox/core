@@ -1,5 +1,4 @@
 require 'draper'
-require_relative 'extras_decorator'
 
 class ExtraDecorator < Draper::Decorator
   delegate_all
