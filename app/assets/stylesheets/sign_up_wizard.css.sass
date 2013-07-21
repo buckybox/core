@@ -23,6 +23,19 @@
   border-radius: 4px
   box-shadow: 0 0 4px 4px #AAA
 
+  * // reset CSS to prevent clash from other stylesheets
+    font: normal
+    height: auto
+    letter-spacing: normal
+    line-height: normal
+    margin: 0
+    padding: 0
+    text-transform: normal
+    visibility: visible
+    width: auto
+    word-spacing: normal
+    z-index: auto
+
   a
     text-decoration: none
 
@@ -30,6 +43,7 @@
     display: none
 
   \:invalid
+    color: inherit
     box-shadow: none // FF
     outline: 0       // IE 10
 
