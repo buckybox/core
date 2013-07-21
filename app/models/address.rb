@@ -53,7 +53,15 @@ class Address < ActiveRecord::Base
   end
 
   def phones
-    @phones ||= PhoneCollection.new self
+    @phones ||= PhoneCollection.new(self)
+  end
+
+  def default_phone_number
+    phones.default_number
+  end
+
+  def default_phone_type
+    phones.default_type
   end
 
   # Without arguments, returns an array of validations to skip
@@ -86,7 +94,7 @@ class Address < ActiveRecord::Base
 
   def update_with_notify(params, customer)
     self.attributes = params
-    
+
     return true unless changed? #nothing to save, nothing to notify
 
     if save
