@@ -95,6 +95,7 @@ private
         Deliveries per week: #{distributor[:deliveries_per_week]}
 
         <a href="#{impersonate_admin_distributor_url(id: @distributor.id)}">Impersonate</a>
+        <a href="mailto:#{distributor[:email]}&subject=Following%20up&body=Hi%20#{distributor[:name]}">Email</a>
       BODY
     }
 
