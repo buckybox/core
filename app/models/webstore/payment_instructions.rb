@@ -1,31 +1,35 @@
-module Webstore::PaymentInstructions
+class Webstore::PaymentInstructions
+  def initialize(args)
+    @customer = args[:customer]
+    @order    = args[:order]
+  end
+
   def payment_method
-    #'value'
-    customer.payment_method
+    order.payment_method
   end
 
   def payment_required?
-    !closing_balance.positive?
+    closing_balance.negative?
   end
 
   def current_balance
-    #(current_customer ? current_customer.account.balance : Money.new(0))
-    MoneyDisplay.new(Money.new(0))
+    customer.account_balance
   end
 
   def order_price
-    #order.order_price(current_customer)
-    MoneyDisplay.new(Money.new(0)).negative
+    order.total
   end
 
   def closing_balance
-    #@current_balance = (current_customer ? current_customer.account.balance : Money.new(0))
-    #@closing_balance = @current_balance - @order_price
-    MoneyDisplay.new(Money.new(0))
+    current_balance - order_price
   end
 
   def amount_due
-    #MoneyDisplay.new(@amount_due).negative
-    closing_balance * -1
+    -closing_balance
   end
+
+private
+
+  attr_reader :customer
+  attr_reader :order
 end
