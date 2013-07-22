@@ -86,9 +86,11 @@ class Distributor < ActiveRecord::Base
   before_validation :check_emails
   before_create :parameterize_name, if: 'parameter_name.nil?'
 
+  after_create :usercycle_tracking_on_create
+
   after_save :generate_required_daily_lists
   after_save :update_halted_statuses
-  after_save :usercycle_tracking
+  after_save :usercycle_tracking_on_save
 
   serialize :email_templates, Array
 
@@ -510,7 +512,16 @@ private
     self.support_email = self.email if self.support_email.blank?
   end
 
-  def usercycle_tracking
+  def usercycle_tracking_on_create
+    # macro event (acquisition)
+    Bucky::Usercycle.instance.event(self, 'signed_up', {
+      company: name,
+      email: email,
+      first_name: contact_name
+    })
+  end
+
+  def usercycle_tracking_on_save
     attributes = %w(city details about)
 
     if attributes.any? { |attr| send("#{attr}_changed?") } and \
