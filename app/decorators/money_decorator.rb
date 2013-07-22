@@ -8,7 +8,7 @@ class MoneyDecorator < Draper::Decorator
   end
 
   def negative
-    MoneyDisplay.new(-object)
+    MoneyDecorator.decorate(-object)
   end
 
 private
