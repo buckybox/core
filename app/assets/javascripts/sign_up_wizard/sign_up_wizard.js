@@ -273,7 +273,6 @@ var BuckyBoxSignUpWizard = function() {
           var register_validity_handlers = function() {
             sign_up_wizard(":input").on("invalid", function() {
               if ($(this).closest(".step")[0] != current_step[0]) {
-                console.log("Dont validate ", this.id);
                 return false; // don't validate hidden inputs
               } else {
                 $(this).addClass("invalid");
