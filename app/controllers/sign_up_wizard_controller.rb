@@ -94,8 +94,8 @@ private
         Source: #{distributor[:source]}
         Deliveries per week: #{distributor[:deliveries_per_week]}
 
-        <a href="#{impersonate_admin_distributor_url(id: @distributor.id)}">Impersonate</a>
-        <a href="mailto:#{distributor[:email]}&subject=Following%20up&body=Hi%20#{distributor[:name]}">Email</a>
+        #{view_context.link_to "Impersonate", impersonate_admin_distributor_url(id: @distributor.id)}
+        #{view_context.mail_to distributor[:email], "Email", subject: "Following up", body: "Hi #{distributor[:name]}"}
       BODY
     }
 
