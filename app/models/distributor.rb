@@ -515,9 +515,9 @@ private
   def usercycle_tracking_on_create
     # macro event (acquisition)
     Bucky::Usercycle.instance.event(self, 'signed_up', {
-      company: name,
+      business_name: name,
       email: email,
-      first_name: contact_name
+      contact_name: contact_name
     })
   end
 
