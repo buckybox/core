@@ -25,8 +25,8 @@ class Distributor::OrdersController < Distributor::ResourceController
 
     create!  do |success, failure|
       success.html do
-        usercycle.event(current_distributor, "distributor_created_order")
-        usercycle.event(current_distributor, "activated") # macro event
+        tracking.event(current_distributor, "distributor_created_order")
+        tracking.event(current_distributor, "activated") # macro event
         redirect_to [:distributor, @account.customer]
       end
 
