@@ -121,7 +121,7 @@ class Distributor::CustomersController < Distributor::ResourceController
 
     usercycle.event(current_distributor, "distributor_exported_csv_customer_list")
 
-    send_csv("customer_export.csv", csv_string)
+    send_csv("customer_export", csv_string)
   end
 
 protected
