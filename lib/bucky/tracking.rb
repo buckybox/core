@@ -1,12 +1,12 @@
 require 'singleton'
 
 module Bucky
-  class Usercycle
+  class Tracking
     include Singleton
 
     def initialize
-      # Set up a client to talk to the Usercycle API
-      @client = ::Usercycle::Client.new(
+      # Set up a client to talk to the Tracking API
+      @client = ::Tracking::Client.new(
         Figaro.env.usercycle_api_key,
         Figaro.env.usercycle_api_url
       )
@@ -16,12 +16,10 @@ module Bucky
       raise TypeError, "Identity cannot be nil" if identity.nil?
 
       if Rails.env.production? || Rails.env.staging?
-        # FIXME: temporary plug to try out Vero
-        identity.track(action_name, properties)
-
-        @client.event.delay(
+        # Vero tracking
+        identity.delay(
           priority: Figaro.env.delayed_job_priority_low
-        ).create(identity.id, action_name, properties, occurred_at)
+        ).track(action_name, properties)
       end
     end
 

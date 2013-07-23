@@ -5,9 +5,9 @@ class BankInformation < ActiveRecord::Base
 
   validates_presence_of :distributor, :name, :account_name, :account_number, :customer_message, :bsb_number
 
-  after_create :usercycle_tracking
+  after_create :tracking
 
   def usercycle_tracking
-    Bucky::Usercycle.instance.event(distributor, "distributor_populated_bank_information")
+    Bucky::Tracking.instance.event(distributor, "distributor_populated_bank_information")
   end
 end
