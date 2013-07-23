@@ -45,9 +45,6 @@ gem 'draper', '~> 1.0'
 
 gem 'vero', '~> 0.5.10'
 
-# Use this SHA while the latest version is not released to RubyGems
-gem 'usercycle', github: 'usercycle/usercycle-api-ruby', ref: '3d650aeed09944c608be182bcec3d3619b21f692'
-
 ########## THE GEMS ABOVE ARE THE ONLY ONES THAT RUN ON PRODUCTION ##########
 
 group :assets do
