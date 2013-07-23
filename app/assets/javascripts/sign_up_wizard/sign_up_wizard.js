@@ -41,7 +41,10 @@ var BuckyBoxSignUpWizard = function() {
         $("head").append('<link rel="stylesheet" type="text/css" href="' + css + '" />');
 
         $.get(host + "/sign_up_wizard/form", function(data) {
-          $("<div />", { id: id, name: id }).html(data).appendTo("body");
+          $("<div />", { id: id, name: id })
+            .addClass("ui-front") // used by jQuery UI for comboboxes
+            .html(data)
+            .appendTo("body");
 
           // jQuery selector within our div
           var sign_up_wizard = function(selector) {

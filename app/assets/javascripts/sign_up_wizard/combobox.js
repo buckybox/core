@@ -13,7 +13,7 @@
     _createAutocomplete: function() {
       var selected = this.element.children( ":selected" );
 
-      this.input = $( "<input>")
+      this.input = $( "<input>" )
         .attr( "id", this.element.attr("id") )
         .attr( "name", this.element.attr("name") )
         .attr( "placeholder", this.element.attr("placeholder") )
