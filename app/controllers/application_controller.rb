@@ -15,11 +15,11 @@ class ApplicationController < ActionController::Base
 
 
 protected
-  
+
   def send_csv(filename, data)
     type = 'text/csv; charset=utf-8; header=present'
 
-    send_data(data, type: type, filename: filename + ".csv")
+    send_data(data, type: type, filename: "#{filename}.csv")
   end
 
   def usercycle
