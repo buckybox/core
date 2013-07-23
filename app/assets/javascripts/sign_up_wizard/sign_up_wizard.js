@@ -34,7 +34,8 @@ var BuckyBoxSignUpWizard = function() {
       url: css,
       dataType: "text",
       error: function() {
-        console.log("Could not load CSS");
+        active = false;
+        alert("Sorry, Bucky Box sign up wizard cannot be loaded.");
       },
       success: function() {
         // could be nicer but have to use that way for IE compat
