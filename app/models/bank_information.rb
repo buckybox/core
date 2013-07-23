@@ -7,7 +7,7 @@ class BankInformation < ActiveRecord::Base
 
   after_create :tracking
 
-  def usercycle_tracking
+  def tracking
     Bucky::Tracking.instance.event(distributor, "distributor_populated_bank_information")
   end
 end
