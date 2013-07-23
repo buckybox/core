@@ -2,6 +2,8 @@ var BuckyBoxSignUpWizard = function() {
   this.id = "bucky_box_sign_up_wizard"
   this.host = "https://staging.buckybox.com" // FIXME
 
+  var active = false;
+
   this.push = function() {
     for (var i = 0; i < arguments.length; i++) {
       var fn = arguments[i][0];
@@ -16,10 +18,17 @@ var BuckyBoxSignUpWizard = function() {
   };
 
   this.show = function() {
-    var host = this.host,
-          id = this.id;
+    // prevent to load the wizard twice
+    if (active) {
+      alert("Bucky Box sign up wizard is already open.");
+      return false;
+    }
 
-    var css = host + "/assets/sign_up_wizard.css";
+    active = true;
+
+    var host = this.host,
+          id = this.id,
+         css = host + "/assets/sign_up_wizard.css";
 
     $.ajax({
       url: css,
@@ -28,15 +37,11 @@ var BuckyBoxSignUpWizard = function() {
         console.log("Could not load CSS");
       },
       success: function() {
-        // Could be nicer but have to use that way for IE compat
+        // could be nicer but have to use that way for IE compat
         $("head").append('<link rel="stylesheet" type="text/css" href="' + css + '" />');
 
         $.get(host + "/sign_up_wizard/form", function(data) {
-          $("<div />", {
-            id: id,
-            name: id,
-            frameborder: 0
-          }).html(data).appendTo("body");
+          $("<div />", { id: id, name: id }).html(data).appendTo("body");
 
           // jQuery selector within our div
           var sign_up_wizard = function(selector) {
@@ -62,6 +67,7 @@ var BuckyBoxSignUpWizard = function() {
           // register event handlers
           sign_up_wizard("#close").click(function() {
             sign_up_wizard("").remove();
+            active = false;
 
             analytics(['_trackEvent', 'sign_up_wizard', 'close']);
           });
@@ -192,6 +198,7 @@ var BuckyBoxSignUpWizard = function() {
           sign_up_wizard("#next").click(function() {
             if (is_last_step()) {
               sign_up_wizard("").remove();
+              active = false;
               return false;
             }
 
