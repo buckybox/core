@@ -4,14 +4,6 @@ module Bucky
   class Tracking
     include Singleton
 
-    def initialize
-      # Set up a client to talk to the Tracking API
-      @client = ::Tracking::Client.new(
-        Figaro.env.usercycle_api_key,
-        Figaro.env.usercycle_api_url
-      )
-    end
-
     def event(identity, action_name, properties = {}, occurred_at = Time.now)
       raise TypeError, "Identity cannot be nil" if identity.nil?
 
