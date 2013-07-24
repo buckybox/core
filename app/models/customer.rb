@@ -369,7 +369,12 @@ class Customer < ActiveRecord::Base
     end
   end
 
+  def via_webstore!
+    self.via_webstore = true
+  end
+
 private
+
   def reversal_transaction_ids
     reversed = payments.reversed
     reversed.pluck(:transaction_id) + reversed.pluck(:reversal_transaction_id)

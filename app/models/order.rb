@@ -468,7 +468,11 @@ class Order < ActiveRecord::Base
     customer.remind_customer_is_halted if halted?
   end
 
-  private
+  def completed!
+    self.completed = true
+  end
+
+private
 
   def remove_recurrence_rule_day(day)
     s = schedule
