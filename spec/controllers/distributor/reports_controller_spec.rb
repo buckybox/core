@@ -7,7 +7,7 @@ describe Distributor::ReportsController do
     let(:date) { Date.today }
 
     before do
-      @post = lambda { post :export_customer_account_history, export: {date: date.iso8601}}
+      @post = lambda { post :export_customer_account_history, to: {date: date.iso8601}}
     end
 
     it "downloads a csv" do
