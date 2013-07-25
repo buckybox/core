@@ -251,7 +251,12 @@ var BuckyBoxSignUpWizard = function() {
                     update_buttons();
                     update_step_counter();
 
-                    sign_up_wizard("#message").html(response.responseText).show();
+                    var message = response.responseText;
+                    if (!message) {
+                      message = "Oops! Something went wrong, please try again.";
+                    }
+
+                    sign_up_wizard("#message").html(message).show();
                   }
                 });
               } else {
