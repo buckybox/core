@@ -1,6 +1,4 @@
 class RefactorCountry < ActiveRecord::Migration
-  class Country < ActiveRecord::Base; end
-
   def up
     add_column :countries, :alpha2, :string, limit: 2, null: false, default: ""
     add_index :countries, :alpha2
