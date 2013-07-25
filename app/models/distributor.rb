@@ -489,6 +489,14 @@ class Distributor < ActiveRecord::Base
     Bucky::Sql.transactional_customer_count(self)
   end
 
+  def new_transactional_customer_count
+    Bucky::Sql.transactional_customer_count(self, 1.week.ago.to_date)
+  end
+
+  def new_customer_count
+    customers.where(["created_at >= ?", 1.week.ago]).count
+  end
+
   def notify_address_changed(customer, notifier = Event)
     return false unless notify_address_change?
     notifier.customer_changed_address(customer)
