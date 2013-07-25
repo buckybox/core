@@ -71,7 +71,7 @@ class SignUpWizardController < ApplicationController
         errors.unshift "You must select Bank Deposit and/or Cash on Delivery"
       end
 
-      render json: errors.join("<br>"), status: :unprocessable_entity
+      render json: errors.first, status: :unprocessable_entity
     end
   end
 
