@@ -14,6 +14,7 @@
 .row-fluid.reporting_calendar_select
   .span12
     %h2 Export Transaction List
+    %p A list of all transactions in the system
     = text_field_tag :start_date, '', placeholder: 'Date from', data: {value: (Date.current.beginning_of_month - 3.months).to_s(:date_picker)}, class: 'date_picker start'
     = text_field_tag :end_date, '', placeholder: 'Date to', data: {value: Date.current.yesterday.to_s(:date_picker)}, class: 'date_picker end'
     = link_to "Export transactions", distributor_reports_transaction_history_path(Date.current.beginning_of_month - 3.months, Date.current.yesterday), id: 'export_transactions', data: {href: '/distributor/reports/transaction_history/'}
