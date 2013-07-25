@@ -21,7 +21,6 @@
 .row-fluid.reporting_calendar_select
   .span12
     .title Export Customer Balance History
-    = text_field_tag '[export][date]', '', placeholder: 'Date', data: {value: (Date.current.beginning_of_month - 3.months).to_s(:date_picker)}, class: 'date_picker start'
-    = link_to "Export balances", distributor_reports_export_customer_account_history_path, data: {href: distributor_reports_export_customer_account_history_path}, id: "export_customer_account_history_link"
-    = simple_form_for(:export_customer_account_history, url: distributor_reports_export_customer_account_history_path, html:{style:'display:none', id: 'export_extras_form'}) do |f|
-      = f.input :date, as: :hidden, input_html: {value: Date.today.to_s(:db)}
+    = text_field_tag '[export][date]', '', placeholder: 'Date', data: {value: (Date.current.beginning_of_month).to_s(:date_picker)}, class: 'date_picker export_account_balance'
+    = link_to "Export balances", distributor_reports_export_customer_account_history_path(Date.current.beginning_of_month), id: "export_customer_account_history_link", data: {href: '/distributor/reports/export_customer_account_history/'}
+
