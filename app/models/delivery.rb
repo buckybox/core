@@ -26,7 +26,7 @@ class Delivery < ActiveRecord::Base
 
   before_save :update_dso
   before_create :set_delivery_number
-  after_save :usercycle_tracking
+  after_save :tracking
 
   scope :pending,   where(status: 'pending')
   scope :delivered, where(status: 'delivered')
@@ -241,10 +241,10 @@ private
     end
   end
 
-  def usercycle_tracking
+  def tracking
     if status_changed? && status == 'delivered'
-      Bucky::Usercycle.instance.event(distributor, "distributor_delivered_order")
-      Bucky::Usercycle.instance.event(distributor, "engaged") # macro event
+      Bucky::Tracking.instance.event(distributor, "distributor_delivered_order")
+      Bucky::Tracking.instance.event(distributor, "engaged")
     end
   end
 end
