@@ -7,8 +7,7 @@ class Distributor::ReportsController < ApplicationController
     csv_string = current_distributor.transaction_history_report(date_from, date_to)
     filename = "bucky-box-transaction-history-export-#{date_from.to_s(:transaction)}-to-#{date_to.to_s(:transaction)}"
 
-    #Add back when wizard merged to master
-    #tracking.event(current_distributor, "exported_transaction_history")
+    tracking.event(current_distributor, "exported_transaction_history")
 
     send_csv(filename, csv_string)
   end
@@ -17,8 +16,7 @@ class Distributor::ReportsController < ApplicationController
     date = Date.parse(params[:to])
     csv_string = CustomerAccountHistoryCsv.generate(date, current_distributor)
 
-    #Add back when wizard merged to master
-    #tracking.event(current_distributor, "exported_customer_account_history")
+    tracking.event(current_distributor, "exported_customer_account_history")
 
     send_csv("bucky-box-customer-account-balance-export-#{date.iso8601}", csv_string)
   end
