@@ -52,6 +52,14 @@ describe Bucky::Geolocation do
 
     it "returns nil when it times out" do
       Net::HTTP::Get.stub(:new) { sleep 2 }
+
+      Bucky::Geolocation.get_geoip_info("202.162.73.2").should be_nil
+    end
+
+    it "ignores bad responses" do
+      http = double(request: double(body: "500 - Oops, not JSON"))
+      Net::HTTP.stub(:new) { http }
+
       Bucky::Geolocation.get_geoip_info("202.162.73.2").should be_nil
     end
   end

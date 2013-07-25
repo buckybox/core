@@ -55,8 +55,8 @@ module Bucky
           response = http.request(Net::HTTP::Get.new(uri.request_uri))
           JSON.parse(response.body)
         end
-      rescue Timeout::Error, SocketError
-        # too slow, just return nil
+      rescue Timeout::Error, SocketError, JSON::ParserError
+        # too slow or not valid JSON, just return nil
       end
     end
   end
