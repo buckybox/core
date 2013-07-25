@@ -148,6 +148,10 @@ class Account < ActiveRecord::Base
     end
   end
 
+  def balance_at(date)
+    BigDecimal.new(transactions.where(['display_time <= ?', date]).sum(&:amount_cents)) / BigDecimal.new(100)
+  end
+
 private
 
   def default_balance_and_currency
