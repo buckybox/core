@@ -7,14 +7,6 @@ GIT
       capistrano (>= 2.5.5)
       highline (>= 1.4.0)
 
-GIT
-  remote: git://github.com/usercycle/usercycle-api-ruby.git
-  revision: 3d650aeed09944c608be182bcec3d3619b21f692
-  ref: 3d650aeed09944c608be182bcec3d3619b21f692
-  specs:
-    usercycle (0.1.3)
-      httparty (>= 0.8.1)
-
 GEM
   remote: https://rubygems.org/
   specs:
@@ -133,6 +125,7 @@ GEM
       sass (~> 3.1)
     compass-rails (1.0.3)
       compass (>= 0.12.2, < 0.14)
+    connection_pool (1.1.0)
     coolline (0.4.2)
     cucumber (1.3.2)
       builder (>= 2.1.2)
@@ -199,6 +192,9 @@ GEM
       RubyInline (>= 3.8.6)
     gherkin (2.12.0)
       multi_json (~> 1.3)
+    girl_friday (0.11.2)
+      connection_pool (~> 1.0)
+      rubinius-actor
     guard (1.8.1)
       formatador (>= 0.2.4)
       listen (>= 1.0.0)
@@ -219,9 +215,6 @@ GEM
     hike (1.2.3)
     hodel_3000_compliant_logger (0.1.1)
     http_parser.rb (0.5.3)
-    httparty (0.11.0)
-      multi_json (~> 1.0)
-      multi_xml (>= 0.5.2)
     i18n (0.6.1)
     inherited_resources (1.3.1)
       has_scope (~> 0.5.0)
@@ -264,7 +257,6 @@ GEM
       money (~> 5.0.0)
       railties (~> 3.0)
     multi_json (1.3.7)
-    multi_xml (0.5.4)
     net-scp (1.1.1)
       net-ssh (>= 2.6.5)
     net-sftp (2.1.2)
@@ -341,6 +333,8 @@ GEM
     request_store (1.0.5)
     responders (0.9.3)
       railties (~> 3.1)
+    rest-client (1.6.7)
+      mime-types (>= 1.16)
     rspec (2.13.0)
       rspec-core (~> 2.13.0)
       rspec-expectations (~> 2.13.0)
@@ -357,6 +351,9 @@ GEM
       rspec-core (~> 2.13.0)
       rspec-expectations (~> 2.13.0)
       rspec-mocks (~> 2.13.0)
+    rubinius-actor (0.0.2)
+      rubinius-core-api
+    rubinius-core-api (0.0.1)
     ruby-prof (0.13.0)
     ruby-progressbar (0.0.10)
     ruby2ruby (2.0.5)
@@ -408,6 +405,10 @@ GEM
       execjs (>= 0.3.0)
       multi_json (~> 1.3)
     uniform_notifier (1.2.0)
+    vero (0.5.10)
+      girl_friday (>= 0.11.2)
+      json
+      rest-client
     warden (1.2.1)
       rack (>= 1.0)
     webrick (1.3.1)
@@ -493,7 +494,7 @@ DEPENDENCIES
   term-ansicolor
   therubyracer
   uglifier (~> 1.2.7)
-  usercycle!
+  vero (~> 0.5.10)
   webrick
   whenever (~> 0.7.3)
   xray-rails

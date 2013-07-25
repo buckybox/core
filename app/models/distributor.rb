@@ -39,6 +39,9 @@ class Distributor < ActiveRecord::Base
   DEFAULT_AUTOMATIC_DELIVERY_HOUR = 18
   DEFAULT_AUTOMATIC_DELIVERY_DAYS = 1
 
+  include Vero::Trackable
+  trackable :email, :name, :contact_name
+
   devise :database_authenticatable, :recoverable, :rememberable, :trackable, :validatable
 
   acts_as_taggable
@@ -83,9 +86,11 @@ class Distributor < ActiveRecord::Base
   before_validation :check_emails
   before_create :parameterize_name, if: 'parameter_name.nil?'
 
+  after_create :tracking_on_create
+
   after_save :generate_required_daily_lists
   after_save :update_halted_statuses
-  after_save :usercycle_tracking
+  after_save :tracking_on_save
 
   serialize :email_templates, Array
 
@@ -521,12 +526,20 @@ private
     self.support_email = self.email if self.support_email.blank?
   end
 
-  def usercycle_tracking
+  def tracking_on_create
+    Bucky::Tracking.instance.event(self, 'signed_up', {
+      business_name: name,
+      email: email,
+      contact_name: contact_name
+    })
+  end
+
+  def tracking_on_save
     attributes = %w(city details about)
 
     if attributes.any? { |attr| send("#{attr}_changed?") } and \
       attributes.all? { |attr| send(attr).present? }
-      Bucky::Usercycle.instance.event(self, "distributor_populated_business_information")
+      Bucky::Tracking.instance.event(self, "distributor_populated_business_information")
     end
   end
 

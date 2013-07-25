@@ -126,7 +126,7 @@ describe Delivery do
     specify { expect { delivery.reposition!(101) }.to change(delivery, :position).to(101) }
   end
 
-  describe "#usercycle_tracking" do
+  describe "#tracking" do
     context "when I change the status to 'delivered'" do
       before do
         delivery.status.should_not eq 'delivered'
@@ -136,7 +136,7 @@ describe Delivery do
 
     %w(engaged distributor_delivered_order).each do |event|
       it "sends the '#{event}' event" do
-        Bucky::Usercycle.instance.should_receive(:event). \
+        Bucky::Tracking.instance.should_receive(:event). \
           with(delivery.distributor.id, event).at_least(:once)
 
         delivery.save
