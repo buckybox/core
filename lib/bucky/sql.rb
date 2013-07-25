@@ -53,8 +53,13 @@ class Bucky::Sql
     end
   end
 
-  def self.transactional_customer_count(distributor)
-    execute(substitute('customer_transaction_count', {distributor_id: distributor.id}))[0]["count"].to_i
+  def self.transactional_customer_count(distributor, date=nil)
+    if date.nil?
+      execute(substitute('customer_transaction_count', {distributor_id: distributor.id}))[0]["count"].to_i
+    else
+      raise "Expecting 'date' to be an instance of Date" unless date.is_a? Date
+      execute(substitute('customer_transaction_count_date', {date: date.to_s(:db), distributor_id: distributor.id}))[0]["count"].to_i
+    end
   end
 
   def self.order_ids(distributor, date)
