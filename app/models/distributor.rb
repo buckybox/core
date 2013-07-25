@@ -67,7 +67,7 @@ class Distributor < ActiveRecord::Base
     :require_address_1, :require_address_2, :require_suburb, :require_postcode,
     :require_phone, :require_city, :omni_importer_ids, :notes,
     :payment_cash_on_delivery, :payment_bank_deposit, :payment_credit_card,
-    :keep_me_updated, :email_templates
+    :keep_me_updated, :email_templates, :notify_address_change
 
   validates_presence_of :country
   validates_presence_of :email
@@ -97,6 +97,7 @@ class Distributor < ActiveRecord::Base
 
   default_value_for :invoice_threshold_cents, -500
   default_value_for :bucky_box_percentage, 0.0175
+  default_value_for :notify_address_change, true
 
   scope :keep_updated, where(keep_me_updated: true)
 
@@ -481,6 +482,19 @@ class Distributor < ActiveRecord::Base
 
   def transactional_customer_count
     Bucky::Sql.transactional_customer_count(self)
+  end
+
+  def notify_address_changed(customer, notifier = Event)
+    return false unless notify_address_change?
+    notifier.customer_changed_address(customer)
+  end
+
+  def notify_on_halt
+    true
+  end
+
+  def notify_for_new_webstore_customer
+    true
   end
 
 private

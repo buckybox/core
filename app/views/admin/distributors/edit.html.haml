@@ -1,6 +1,6 @@
 - title("Admin - Editing #{@distributor.name}")
 
-= render 'admin/distributors/nav'
+= render partial: 'admin/distributors/nav', locals: { distributor: @distributor }
 = render 'form'
 
 = link_to 'Show', admin_distributor_path(@distributor)

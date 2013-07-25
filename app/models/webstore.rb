@@ -350,6 +350,10 @@ private
         @order.schedule_rule = ScheduleRule.recur_on(start, days_of_the_week, frequency.to_sym, week)
       end
     end
+
+    if @order.schedule_rule && !@order.route.schedule_rule.includes?(@order.schedule_rule)
+      @controller.flash[:error] = "You've selected a day which is not available for this route, please select another one."
+    end
   end
 
   def assign_extras_frequency(extra_information)
