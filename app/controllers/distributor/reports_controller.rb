@@ -13,7 +13,7 @@ class Distributor::ReportsController < ApplicationController
   end
 
   def export_customer_account_history
-    date = Date.parse(params[:export][:date])
+    date = Date.parse(params[:to])
     csv_string = CustomerAccountHistoryCsv.generate(date, current_distributor)
 
     usercycle.event(current_distributor, "distributor_exported_csv_customer_account_history_list")
