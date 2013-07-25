@@ -1,5 +1,5 @@
 - title("Admin - #{@distributor.name}")
-= render 'admin/distributors/nav'
+= render partial: 'admin/distributors/nav', locals: { distributor: @distributor }
 
 .row
   .span12.text-right
@@ -42,6 +42,12 @@
       %dd= checkmark_boolean(@distributor.separate_bucky_fee)
       %dt Created On
       %dd= @distributor.created_at.to_s(:pretty)
+      %dt Notify of Address change
+      %dd= checkmark_boolean(@distributor.notify_address_change?)
+      %dt Notify on Halt
+      %dd= checkmark_boolean(@distributor.notify_address_change?)
+      %dt Notify of for new webstore customer
+      %dd= checkmark_boolean(@distributor.notify_address_change?)
       %dt Active Webstore
       %dd= checkmark_boolean(@distributor.active_webstore)
       %dt Payment options

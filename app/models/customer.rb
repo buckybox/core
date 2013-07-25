@@ -26,7 +26,7 @@ class Customer < ActiveRecord::Base
 
   attr_accessible :address_attributes, :first_name, :last_name, :email, :name, :distributor_id, :distributor,
     :route, :route_id, :password, :password_confirmation, :remember_me, :tag_list, :discount, :number, :notes,
-    :special_order_preference, :balance_threshold, :via_webstore
+    :special_order_preference, :balance_threshold, :via_webstore, :address
 
   validates_presence_of :distributor_id, :route_id, :first_name, :email, :discount, :address
   validates_uniqueness_of :number, scope: :distributor_id
@@ -336,6 +336,20 @@ class Customer < ActiveRecord::Base
     last_payment = last_payment.ordered_by_display_time.first
 
     last_payment.present? ? last_payment.display_time : nil
+  end
+
+  def send_address_change_notification
+    distributor.notify_address_changed(self)
+  end
+
+  def update_address(address_params, opts = {})
+    opts.reverse_update({notify_distributor: false})
+
+    if opts[:notify_distributor]
+      address.update_with_notify(address_params, self)
+    else
+      address.update_attributes(address_params)
+    end
   end
 
 private

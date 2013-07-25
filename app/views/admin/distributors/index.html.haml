@@ -1,5 +1,5 @@
 - title("Admin - Distributors <span class='big'>(#{@distributors.size})<span>".html_safe)
-= render 'admin/distributors/nav'
+= render partial: 'admin/distributors/nav', locals: { distributor: false }
 
 %table#distributors.table.table-bordered
   - @distributors.each do |distributor|

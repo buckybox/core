@@ -3,10 +3,10 @@ Given /^A distributor is in the system$/ do
 end
 
 Given /^I am a distributor$/ do
-  distributor = Fabricate(:distributor_with_everything)
-  distributor.active_webstore = true
-  distributor.save!
-  login_as distributor
+  @distributor = Fabricate(:distributor_with_everything)
+  @distributor.active_webstore = true
+  @distributor.save!
+  login_as @distributor
 
   step "I dismiss the intro screen"
 end
