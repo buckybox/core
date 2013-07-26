@@ -49,7 +49,7 @@ class Order < ActiveRecord::Base
 
   validates_presence_of :account_id, :box_id, :quantity
   validates_numericality_of :quantity, greater_than: 0
-  validate :route_includes_schedule_rule
+  validate :route_includes_schedule_rule, unless: -> { customer.nil? } # FIXME
   validate :extras_within_box_limit
   validate :likes_dislikes_within_limits
 
