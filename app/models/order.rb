@@ -426,6 +426,10 @@ class Order < ActiveRecord::Base
     end
   end
 
+  def completed!
+    self.completed = true
+  end
+
   protected
 
   def update_next_occurrence
@@ -466,10 +470,6 @@ class Order < ActiveRecord::Base
 
   def remind_customer_if_halted
     customer.remind_customer_is_halted if halted?
-  end
-
-  def completed!
-    self.completed = true
   end
 
 private
