@@ -154,6 +154,8 @@ private
   end
 
   def update_delivery_information(delivery_information)
+    Rails.logger.info("delivery_information = #{delivery_information.inspect}")
+
     assign_route(delivery_information[:route])                      if delivery_information[:route]
     set_schedule(delivery_information[:schedule_rule])              if delivery_information[:schedule_rule]
     assign_extras_frequency(delivery_information[:extra_frequency]) if delivery_information[:extra_frequency]
