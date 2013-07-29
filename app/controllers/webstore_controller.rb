@@ -42,6 +42,7 @@ class WebstoreController < ApplicationController
     @selected_route_id = current_customer.route_id if active_orders?
     @days = view_context.order_dates_grid
     @order_frequencies = [
+      ['- Select delivery frequency -', nil],
       ['Deliver weekly on...', :weekly],
       ['Deliver every 2 weeks on...', :fortnightly],
       ['Deliver monthly', :monthly],
