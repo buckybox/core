@@ -1,6 +1,6 @@
 var BuckyBoxSignUpWizard = function() {
   this.id = "bucky_box_sign_up_wizard"
-  this.host = "https://staging.buckybox.com" // FIXME
+  this.host = "https://my.buckybox.com"
 
   var active = false;
 
