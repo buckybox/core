@@ -16,7 +16,7 @@ describe Distributor::BankInformationController do
         }
       end
 
-      specify { flash[:notice].should eq('Bank information was successfully created.') }
+      specify { flash[:notice].should eq('Payments information was successfully created.') }
       specify { assigns(:bank_information).account_name.should eq('company account') }
       specify { response.should redirect_to(distributor_settings_bank_information_url) }
     end
@@ -36,7 +36,7 @@ describe Distributor::BankInformationController do
         put :update, { bank_information: { account_name: 'company account' } }
       end
 
-      specify { flash[:notice].should eq('Bank information was successfully updated.') }
+      specify { flash[:notice].should eq('Payments information was successfully updated.') }
       specify { assigns(:bank_information).account_name.should eq('company account') }
       specify { response.should redirect_to(distributor_settings_bank_information_url) }
     end

@@ -6,9 +6,9 @@ class Distributor::BankInformationController < Distributor::ResourceController
 
   def create
     create! do |success, failure|
-      success.html { 
+      success.html {
         tracking.event(current_distributor, "new_bank_information") unless current_admin.present?
-        redirect_to distributor_settings_bank_information_url, notice: 'Bank information was successfully created.'
+        redirect_to distributor_settings_bank_information_url, notice: 'Payments information was successfully created.'
       }
       failure.html { render 'distributor/settings/bank_information' }
     end
@@ -18,7 +18,7 @@ class Distributor::BankInformationController < Distributor::ResourceController
     update! do |success, failure|
       success.html {
         tracking.event(current_distributor, "new_bank_information") unless current_admin.present?
-        redirect_to distributor_settings_bank_information_url, notice: 'Bank information was successfully updated.'
+        redirect_to distributor_settings_bank_information_url, notice: 'Payments information was successfully updated.'
       }
       failure.html { render 'distributor/settings/bank_information' }
     end
