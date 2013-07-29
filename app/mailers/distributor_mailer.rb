@@ -1,5 +1,4 @@
-class DistributorMailer < ActionMailer::Base
-  include ActionView::Helpers::TextHelper
+class DistributorMailer < ApplicationMailer
   default from: "Bucky Box Support <#{Figaro.env.support_email}>"
 
   def update_email(email, distributor)
@@ -46,5 +45,4 @@ class DistributorMailer < ActionMailer::Base
 
     message
   end
-
 end

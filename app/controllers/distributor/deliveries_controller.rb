@@ -70,6 +70,8 @@ class Distributor::DeliveriesController < Distributor::ResourceController
       result = Delivery.reverse_pay_on_delivery(deliveries)
     else
       result = Delivery.pay_on_delivery(deliveries)
+
+      tracking.event(current_distributor, "distributor_marked_an_order_as_payment_on_delivery")
     end
 
     if result
@@ -83,7 +85,9 @@ class Distributor::DeliveriesController < Distributor::ResourceController
     export = get_export(params)
 
     if export
-      usercycle.event(current_distributor, "distributor_exported_packing_list")
+      screen = params[:screen] # delivery or packing
+      tracking.event(current_distributor, "distributor_exported_#{screen}_list")
+
       send_data(*export.csv)
     else
       redirect_to :back
@@ -103,6 +107,8 @@ class Distributor::DeliveriesController < Distributor::ResourceController
 
     @date = @packages.first.packing_list.date
 
+    tracking.event(current_distributor, "distributor_printed_packing_list")
+
     render layout: 'print'
   end
 
@@ -114,6 +120,13 @@ class Distributor::DeliveriesController < Distributor::ResourceController
     else
       head :bad_request
     end
+  end
+
+  def export_extras
+    date = Date.parse(params[:export_extras][:date])
+    csv_string = ExtrasCsv.generate(current_distributor, date)
+
+    send_csv("bucky-box-extra-line-items-export-#{date.iso8601}", csv_string)
   end
 
   def nav_start_date

@@ -154,6 +154,8 @@ private
   end
 
   def update_delivery_information(delivery_information)
+    Rails.logger.info("delivery_information = #{delivery_information.inspect}")
+
     assign_route(delivery_information[:route])                      if delivery_information[:route]
     set_schedule(delivery_information[:schedule_rule])              if delivery_information[:schedule_rule]
     assign_extras_frequency(delivery_information[:extra_frequency]) if delivery_information[:extra_frequency]
@@ -199,6 +201,8 @@ private
     elsif !payment_due?(@order) && webstore_params[:payment_method] == 'paid'
       customer = find_or_create_customer(address_information)
       update_address(customer, address_information) if address_information
+
+      @order.payment_method = webstore_params[:payment_method]
       @order.account = customer.account
 
       if @order.create_order
@@ -347,6 +351,10 @@ private
 
         @order.schedule_rule = ScheduleRule.recur_on(start, days_of_the_week, frequency.to_sym, week)
       end
+    end
+
+    if @order.schedule_rule && !@order.route.schedule_rule.includes?(@order.schedule_rule)
+      @controller.flash[:error] = "You've selected a day which is not available for this route, please select another one."
     end
   end
 

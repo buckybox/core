@@ -125,13 +125,14 @@ $(function() {
     return template_link;
   };
 
-  var commit_button = send_email_modal.find('input[type="submit"][name="commit"]');
+  var commit_button = send_email_modal.find('[type="submit"][name="commit"]');
   commit_button.click(function() {
     $(this).data("hide-info", true).button("loading");
   });
 
   send_email_modal.find('form')
     .bind("ajax:beforeSend", function() {
+      commit_button.prop("disabled", true);
       $("#email_template_subject").prop("disabled", true);
       $("#email_template_body").prop("disabled", true);
 
@@ -148,6 +149,7 @@ $(function() {
 
       $("#link_action").val("");
 
+      commit_button.prop("disabled", false);
       $("#email_template_subject").prop("disabled", false);
       $("#email_template_body").prop("disabled", false);
     })
@@ -425,4 +427,7 @@ $(function() {
     $("#export_recipient_ids").val(recipient_ids);
     $("#export_customer_details_form").submit();
   });
+
+  //transaction customers count tooltip
+  $('#transactional_customer_count').tooltip({placement: "right", html: true})
 });

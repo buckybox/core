@@ -20,7 +20,6 @@ $payments-grey: $grayLighter
           width: 28%
         th.amount
           width: 2%
-          text-align: right
         th.account
           width: 13%
         th.customer
@@ -34,7 +33,6 @@ $payments-grey: $grayLighter
             width: 32%
           th.amount
             width: 10%
-            text-align: right
           th.account
             width: 13%
           th.customer
@@ -43,6 +41,9 @@ $payments-grey: $grayLighter
     background-color: $white
     #draft-transactions-controls
       margin-left: 20px
+    tbody
+      tr.row_description
+        cursor: pointer
     tr
       &.new-row
         td
@@ -54,7 +55,6 @@ $payments-grey: $grayLighter
         width: 33%
       th.amount, td.amount
         width: 10%
-        text-align: right
       th.account, td.account
         width: 13%
       th.customer, td.customer

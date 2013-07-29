@@ -18,10 +18,7 @@ class Address < ActiveRecord::Base
     result << address_2 unless address_2.blank?
     result << suburb unless suburb.blank?
     result << city unless city.blank?
-
-    if options[:with_postcode]
-      result << postcode unless postcode.blank?
-    end
+    result << postcode unless postcode.blank?
 
     if options[:with_phone]
       result << phones.all.join(join_with)
@@ -33,7 +30,7 @@ class Address < ActiveRecord::Base
   alias_method :join, :to_s
 
   def ==(address)
-    address.is_a?(Address) && [:address_1, :address_2, :suburb, :city].all?{ |a|
+    address.is_a?(Address) && [:address_1, :address_2, :suburb, :city, :postcode].all?{ |a|
       send(a) == address.send(a)
     }
   end
@@ -43,7 +40,7 @@ class Address < ActiveRecord::Base
   end
 
   def compute_address_hash
-    Digest::SHA1.hexdigest([:address_1, :address_2, :suburb, :city].collect{|a| send(a).downcase.strip rescue ''}.join(''))
+    Digest::SHA1.hexdigest([:address_1, :address_2, :suburb, :city, :postcode].collect{|a| send(a).downcase.strip rescue ''}.join(''))
   end
 
   def update_address_hash
@@ -85,6 +82,19 @@ class Address < ActiveRecord::Base
 
   ensure
     @skip_validations = [] unless items.empty?
+  end
+
+  def update_with_notify(params, customer)
+    self.attributes = params
+    
+    return true unless changed? #nothing to save, nothing to notify
+
+    if save
+      customer.send_address_change_notification
+      return true
+    else
+      return false
+    end
   end
 
 private

@@ -1,5 +1,4 @@
-class CustomerMailer < ActionMailer::Base
-  include ActionView::Helpers::TextHelper
+class CustomerMailer < ApplicationMailer
 
   def login_details(customer)
     @distributor = customer.distributor

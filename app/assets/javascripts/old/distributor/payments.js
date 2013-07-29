@@ -8,7 +8,7 @@ $(function() {
 
       $("#import_transaction_list_csv_file").change(function() {
         $('.ajax_loader_hide').hide();
-        $('#payment-tables .ajax-spinner').show();
+        $('#upload_more_transactions .ajax-spinner').show();
 
         return $(this).closest('form').submit();
       });

@@ -41,7 +41,7 @@
                       = check_box_tag delivery.order_id, '1', false, data: { deliveries: delivery.id }
                       .label.state-label.dso-number
                         = map_pin(delivery)
-                        = dso_tooltip(delivery.formated_delivery_number)
+                        = link_to delivery.formated_delivery_number, '#', title: "Delivery Sequence Number (printed on labels)"
                       = render partial: 'status_icons', locals: { status: delivery.status }
                       .customer-holder
                         = customer_badge(delivery.customer, customer_name: delivery.package.archived_customer_name)

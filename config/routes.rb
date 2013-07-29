@@ -57,7 +57,8 @@ BuckyBox::Application.routes.draw do
     end
 
     namespace :reports do
-      get 'transaction_history/:start/:to', action: 'transaction_history', as: 'transaction_history'
+      get 'transaction_history/:start/:to',   action: 'transaction_history',            as: 'transaction_history'
+      get 'export_customer_account_history/:to', action: :export_customer_account_history, as: 'export_customer_account_history'
     end
 
     resources :distributors,        only: :update
@@ -81,6 +82,7 @@ BuckyBox::Application.routes.draw do
         post 'make_payment',          action: :make_payment,         as: 'make_payment'
         post 'master_packing_sheet',  action: :master_packing_sheet, as: 'master_packing_sheet'
         post 'export',                action: :export,               as: 'export'
+        post 'export_extras',         action: :export_extras,        as: 'export_extras'
       end
     end
 
