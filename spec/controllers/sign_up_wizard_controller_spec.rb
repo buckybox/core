@@ -126,7 +126,6 @@ describe SignUpWizardController do
       let(:invalid_form_params) do
         invalid_form_params = form_params
         invalid_form_params["distributor"]["localised_address_attributes"]["street"] = ""
-        invalid_form_params["distributor"]["localised_address_attributes"]["city"] = ""
         invalid_form_params
       end
 
@@ -149,7 +148,7 @@ describe SignUpWizardController do
       it "mentions the invalid fields" do
         post_form.call
 
-        response.body.should include "street", "city"
+        response.body.should include "street"
       end
     end
   end
