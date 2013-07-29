@@ -27,7 +27,7 @@ class Customer < ActiveRecord::Base
 
   attr_accessible :address_attributes, :first_name, :last_name, :email, :name, :distributor_id, :distributor,
     :route, :route_id, :password, :password_confirmation, :remember_me, :tag_list, :discount, :number, :notes,
-    :special_order_preference, :balance_threshold, :via_webstore
+    :special_order_preference, :balance_threshold, :via_webstore, :address
 
   validates_presence_of :distributor_id, :route_id, :first_name, :email, :discount, :address
   validates_uniqueness_of :number, scope: :distributor_id
@@ -54,6 +54,7 @@ class Customer < ActiveRecord::Base
   delegate :separate_bucky_fee?, :consumer_delivery_fee, :default_balance_threshold_cents, :has_balance_threshold, to: :distributor
   delegate :currency, :send_email?, to: :distributor, allow_nil: true
   delegate :name, to: :route, prefix: true
+  delegate :balance_at, to: :account
 
   scope :ordered_by_next_delivery, lambda { order("CASE WHEN next_order_occurrence_date IS NULL THEN '9999-01-01' WHEN next_order_occurrence_date < '#{Date.current.to_s(:db)}' THEN '9999-01-01' ELSE next_order_occurrence_date END ASC, lower(customers.first_name) ASC, lower(customers.last_name) ASC") }
   scope :ordered, order("lower(customers.first_name) ASC, lower(customers.last_name) ASC")
@@ -340,6 +341,20 @@ class Customer < ActiveRecord::Base
     last_payment = last_payment.ordered_by_display_time.first
 
     last_payment.present? ? last_payment.display_time : nil
+  end
+
+  def send_address_change_notification
+    distributor.notify_address_changed(self)
+  end
+
+  def update_address(address_params, opts = {})
+    opts.reverse_update({notify_distributor: false})
+
+    if opts[:notify_distributor]
+      address.update_with_notify(address_params, self)
+    else
+      address.update_attributes(address_params)
+    end
   end
 
 private

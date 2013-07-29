@@ -32,5 +32,10 @@ describe Event do
       specify { expect { Event.create_call_reminder(@customer) }.to change(Event, :count).by(1) }
       specify { Event.create_call_reminder(@customer).event_type.should == Event::EVENT_TYPES[:customer_call_reminder] }
     end
+
+    context '.customer_changed_address' do
+      specify { expect { Event.customer_changed_address(@customer) }.to change(Event, :count).by(1) }
+      specify { Event.customer_changed_address(@customer).event_type.should == Event::EVENT_TYPES[:customer_address_changed] }
+    end
   end
 end

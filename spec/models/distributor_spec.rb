@@ -426,4 +426,50 @@ describe Distributor do
       customer.next_order_occurrence_date.should eq order.next_occurrence(Time.current.hour >= distributor.automatic_delivery_hour ? Date.current.tomorrow : Date.current)
     end
   end
+
+  describe ".transactional_customer_count" do
+
+    let(:distributor) { Fabricate(:distributor) }
+    let(:customer){ customer = Fabricate(:customer, distributor: distributor) }
+
+    it "returns zero when no transactions on any customers" do
+      customer
+      distributor.transactional_customer_count.should eq 0
+    end
+    
+    it "counts the number of customers with transactions" do
+      Fabricate(:transaction, account: customer.account)
+      Fabricate(:customer, distributor: distributor)
+      Fabricate(:transaction, account: Fabricate(:account))
+      distributor.transactional_customer_count.should eq 1
+    end
+  end
+
+  describe "#notify_of_address_change" do
+    context "notify_address_change is true" do
+      let(:distributor){ Fabricate.build(:distributor, notify_address_change: true) }
+
+      it "retruns true if successful" do
+        customer = double('customer')
+        notifier = double('Event', customer_changed_address: true)
+
+        distributor.notify_address_changed(customer, notifier).should eq true
+      end
+    end
+
+    context "returns false if unsuccesful" do
+      it "retuns false if notify address change is false" do
+        distributor.notify_address_change = false
+        customer = double('customer')
+        notifier = double('Event')
+        distributor.notify_address_changed(customer, notifier).should eq false
+      end
+
+      it "returns false if fails" do
+        customer = double('customer')
+        notifier = double('Event', customer_changed_address: false)
+        distributor.notify_address_changed(customer, notifier).should eq false
+      end
+    end
+  end
 end

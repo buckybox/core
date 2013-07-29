@@ -21,7 +21,7 @@ class Package < ActiveRecord::Base
 
   attr_accessible :order, :order_id, :packing_list, :status, :position
 
-  STATUS = %w(unpacked packed) #TODO: change to state_mchine next time this is touched
+  STATUS = %w(unpacked packed) #TODO: change to state_machine next time this is touched
   PACKING_METHOD = %w(manual auto)
 
   validates_presence_of :order, :packing_list_id, :status
@@ -119,7 +119,7 @@ class Package < ActiveRecord::Base
     if has_archived_address_details?
       read_attribute(:archived_address)
     else
-      archived_address_details.join(', ')
+      archived_address_details.join
     end
   end
 
@@ -149,11 +149,11 @@ class Package < ActiveRecord::Base
     deliveries.order("created_at DESC").first
   end
 
-  private
+private
 
   def archive_data
     if status != 'packed'
-      self.archived_address               = address.join(', ')
+      self.archived_address               = address.join
       self.archived_address_details       = address
 
       self.archived_box_name              = box.name

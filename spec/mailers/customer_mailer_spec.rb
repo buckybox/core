@@ -10,6 +10,7 @@ describe CustomerMailer do
       mail.subject.should include "login details"
       mail.from.should eq [@customer.distributor.support_email]
       mail.to.should eq [@customer.email]
+      mail.header["X-Mailer"].value.should eq(Figaro.env.x_mailer)
     end
   end
 

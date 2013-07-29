@@ -9,25 +9,25 @@ class ApplicationController < ActionController::Base
 
   before_filter :set_user_time_zone
   before_filter :set_user_currency
-  after_filter :usercycle_track
+  after_filter :track
 
   layout :layout_by_resource
 
 
 protected
-  
+
   def send_csv(filename, data)
     type = 'text/csv; charset=utf-8; header=present'
 
-    send_data(data, type: type, filename: filename)
+    send_data(data, type: type, filename: "#{filename}.csv")
   end
 
-  def usercycle
-    @usercycle ||= Bucky::Usercycle.instance
+  def tracking
+    @tracking ||= Bucky::Tracking.instance
   end
 
-  def usercycle_track
-    usercycle.track(current_distributor) if current_distributor
+  def track
+    tracking.track(current_distributor) if current_distributor
   end
 
   def layout_by_resource

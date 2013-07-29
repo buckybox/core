@@ -1,9 +1,9 @@
 module Devise::RequestMacros
-  def simulate_distributor_sign_in
-    before { simulate_distributor_sign_in }
+  def as_distributor
+    before { sign_in_as_a_valid_distributor }
   end
 
-  def simulate_customer
-    before { simulate_customer_sign_in }
+  def as_customer
+    before { sign_in_as_a_valid_customer }
   end
 end

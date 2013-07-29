@@ -1,7 +1,4 @@
-class AdminMailer < ActionMailer::Base
-
-  include ActionView::Helpers::TextHelper
-
+class AdminMailer < ApplicationMailer
   def preview_email(email, admin)
     @email = email
     @admin = admin

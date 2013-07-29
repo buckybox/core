@@ -46,6 +46,9 @@ class Distributor < ActiveRecord::Base
     email: "Account login email"
   }
 
+  include Vero::Trackable
+  trackable :email, :name, :contact_name
+
   devise :database_authenticatable, :recoverable, :rememberable, :trackable, :validatable
 
   acts_as_taggable
@@ -74,7 +77,8 @@ class Distributor < ActiveRecord::Base
     :require_address_1, :require_address_2, :require_suburb, :require_postcode,
     :require_phone, :require_city, :omni_importer_ids, :notes,
     :payment_cash_on_delivery, :payment_bank_deposit, :payment_credit_card,
-    :keep_me_updated, :email_templates, :phone, :localised_address_attributes
+    :keep_me_updated, :email_templates, :notify_address_change, :phone,
+    :localised_address_attributes
 
   accepts_nested_attributes_for :localised_address
 
@@ -94,9 +98,11 @@ class Distributor < ActiveRecord::Base
   before_create :parameterize_name, if: 'parameter_name.nil?'
   after_create :send_welcome_email
 
+  after_create :tracking_on_create
+
   after_save :generate_required_daily_lists
   after_save :update_halted_statuses
-  after_save :usercycle_tracking
+  after_save :tracking_on_save
 
   serialize :email_templates, Array
 
@@ -108,6 +114,7 @@ class Distributor < ActiveRecord::Base
 
   default_value_for :invoice_threshold_cents, -500
   default_value_for :bucky_box_percentage, 0.0175
+  default_value_for :notify_address_change, true
 
   scope :keep_updated, where(keep_me_updated: true)
 
@@ -498,6 +505,31 @@ class Distributor < ActiveRecord::Base
     payment_options.first.last
   end
 
+  def transactional_customer_count
+    Bucky::Sql.transactional_customer_count(self)
+  end
+
+  def new_transactional_customer_count
+    Bucky::Sql.transactional_customer_count(self, 1.week.ago.to_date)
+  end
+
+  def new_customer_count
+    customers.where(["created_at >= ?", 1.week.ago]).count
+  end
+
+  def notify_address_changed(customer, notifier = Event)
+    return false unless notify_address_change?
+    notifier.customer_changed_address(customer)
+  end
+
+  def notify_on_halt
+    true
+  end
+
+  def notify_for_new_webstore_customer
+    true
+  end
+
 private
 
   def self.human_attribute_name(attr, options = {})
@@ -534,12 +566,20 @@ private
     self.support_email = self.email if self.support_email.blank?
   end
 
-  def usercycle_tracking
+  def tracking_on_create
+    Bucky::Tracking.instance.event(self, 'signed_up', {
+      business_name: name,
+      email: email,
+      contact_name: contact_name
+    })
+  end
+
+  def tracking_on_save
     attributes = %w(city details about)
 
     if attributes.any? { |attr| send("#{attr}_changed?") } and \
       attributes.all? { |attr| send(attr).present? }
-      Bucky::Usercycle.instance.event(self, "distributor_populated_business_information")
+      Bucky::Tracking.instance.event(self, "distributor_populated_business_information")
     end
   end
 
