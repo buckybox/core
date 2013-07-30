@@ -552,7 +552,7 @@ ALTER SEQUENCE boxes_id_seq OWNED BY boxes.id;
 
 CREATE TABLE countries (
     id integer NOT NULL,
-    default_consumer_fee_cents integer,
+    default_consumer_fee_cents integer DEFAULT 0 NOT NULL,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
     alpha2 character varying(2) DEFAULT ''::character varying NOT NULL
@@ -3726,6 +3726,8 @@ INSERT INTO schema_migrations (version) VALUES ('20130703055630');
 
 INSERT INTO schema_migrations (version) VALUES ('20130705011742');
 
+INSERT INTO schema_migrations (version) VALUES ('20130705053401');
+
 INSERT INTO schema_migrations (version) VALUES ('20130710053124');
 
-INSERT INTO schema_migrations (version) VALUES ('20130705053401');
+INSERT INTO schema_migrations (version) VALUES ('20130730021915');
