@@ -336,11 +336,15 @@ private
     frequency = schedule_information[:frequency]
     start = Date.parse(schedule_information[:start_date])
 
-    if frequency == 'single'
+    if frequency.empty?
+      @controller.flash[:error] = "You must select a delivery frequency."
+
+    elsif frequency == 'single'
       @order.schedule_rule = ScheduleRule.one_off(start)
+
     else
       if schedule_information[:days].nil?
-        @controller.flash[:error] = 'The schedule requires you select a day of the week.'
+        @controller.flash[:error] = 'You must select a day of the week.'
       else
         days_of_the_month = schedule_information[:days].keys.map(&:to_i)
         week = days_of_the_month.first / ScheduleRule::DAYS.size
