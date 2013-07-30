@@ -3,7 +3,7 @@ require 'spec_helper'
 describe Distributor::ExtrasController do
   render_views
 
-  as_distributor
+  sign_in_as_distributor
 
   describe '#create' do
     context 'with valid params' do

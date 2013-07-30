@@ -3,7 +3,7 @@ require 'spec_helper'
 describe Distributor::CustomersController do
   render_views
 
-  as_distributor
+  sign_in_as_distributor
   context :with_customer do
     before { @customer = Fabricate(:customer, distributor: @distributor) }
 

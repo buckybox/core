@@ -27,12 +27,18 @@ RSpec.configure do |config|
   config.infer_base_class_for_anonymous_controllers = false
 
   config.include Delorean
-  config.include Devise::TestHelpers,       type: :controller
-  config.include Devise::ControllerHelpers, type: :controller
-  config.include Devise::RequestHelpers,    type: :feature
+  config.include Devise::TestHelpers,        type: :controller
 
-  config.extend Devise::ControllerMacros, type: :controller
-  config.extend Devise::RequestMacros,    type: :feature
+  # FIXME: Changed to all use @vars as this is majority convention.
+  # Want to change this to passed in vars to avoid side effects when
+  # it make sense to do so, in it's own branch on an eve or weekend.
+  config.include Devise::ControllerHelpers,  type: :controller
+  config.include Devise::RequestHelpers,     type: :request
+  config.include Devise::FeatureHelpers,     type: :feature
+
+  config.extend Devise::ControllerMacros,  type: :controller
+  config.extend Devise::RequestMacros,     type: :request
+  config.extend Devise::FeatureMacros,     type: :feature
 
   config.before(:suite) do
     DatabaseCleaner.strategy = :transaction

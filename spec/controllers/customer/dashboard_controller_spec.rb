@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe Customer::DashboardController do
-  as_customer
+  sign_in_as_customer
 
   describe "GET 'index'" do
     it "returns http success" do
