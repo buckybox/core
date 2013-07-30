@@ -47,8 +47,13 @@ class Admin::DistributorsController < Admin::ResourceController
   def country_setting
     @country = Country.find(params[:id])
 
+    time_zone = ActiveSupport::TimeZone::MAPPING.find do |_, city|
+      city == @country.default_time_zone
+    end
+    time_zone = time_zone.first if time_zone
+
     render json: {
-      time_zone: ActiveSupport::TimeZone::MAPPING.invert[@country.default_time_zone],
+      time_zone: time_zone,
       currency: Money.parse(@country.default_currency).currency.id.upcase,
       fee: @country.default_consumer_fee_cents / 100.0
     }
