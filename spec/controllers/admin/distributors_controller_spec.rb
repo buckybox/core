@@ -126,7 +126,7 @@ describe Admin::DistributorsController do
   describe 'country_setting' do
     as_distributor
     before do
-      c = double(Country, default_time_zone: "Auckland",
+      c = double(Country, default_time_zone: "Pacific/Auckland",
                 default_currency: "nzd",
                 default_consumer_fee_cents: 20)
       Country.should_receive(:find).with("32").and_return(c)
