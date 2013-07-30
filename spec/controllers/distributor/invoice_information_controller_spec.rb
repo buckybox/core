@@ -3,7 +3,7 @@ require 'spec_helper'
 describe Distributor::InvoiceInformationController do
   render_views
 
-  as_distributor
+  sign_in_as_distributor
   before { @customer = Fabricate(:customer, :distributor => @distributor) }
 
   describe '#create' do

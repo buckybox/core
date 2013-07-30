@@ -1,43 +1,30 @@
 module Devise::RequestHelpers
   include Warden::Test::Helpers
+  Warden.test_mode!
 
-  def distributor_sign_in
-    @distributor = Fabricate(:distributor)
-    visit new_distributor_session_path
-    fill_in 'Email', :with => @distributor.email
-    fill_in 'Password', :with => @distributor.password
-    click_button 'Sign in'
+  def self.included(base)
+    base.after { Warden.test_reset! }
   end
 
-  def customer_sign_in
-    @customer = Fabricate(:customer)
-    visit new_customer_session_path
-    fill_in 'Email', :with => @customer.email
-    fill_in 'Password', :with => @customer.password
-    click_button 'Sign in'
+  def admin_login
+    @admin ||= Fabricate(:admin)
+    @last_login = :admin
+    login_as @admin, scope: :admin
   end
 
-  def sign_in_as_a_valid_customer(customer = nil)
-    @customer = customer || Fabricate(:customer)
-    login_customer @customer
-  end
-
-  def sign_in_as_a_valid_distributor(distributor = nil)
-    @distributor = distributor || Fabricate(:distributor_with_everything)
-    login_distributor @distributor
-  end
-
-  def login_customer(customer)
-    @last_login = :customer
-    login_as customer, scope: :customer
-  end
-
-  def login_distributor(distributor)
+  def distributor_login
+    @distributor ||= Fabricate(:distributor)
     @last_login = :distributor
-    login_as distributor, scope: :distributor
+    login_as @distributor, scope: :distributor
   end
 
-  def dump_html(html)
+  def customer_login
+    @customer ||= Fabricate(:customer)
+    @last_login = :customer
+    login_as @customer, scope: :customer
+  end
+
+  def pretty_html(html)
     File.open('test_dump.html', 'w') {|f| f.write(html) }
     `lynx -dump -width 120 test_dump.html > output.txt`
     puts `cat output.txt`

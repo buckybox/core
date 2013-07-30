@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe Customer::AddressesController do
-  as_customer
+  sign_in_as_customer
 
   describe "PUT 'update'" do
     context "with a valid customer" do

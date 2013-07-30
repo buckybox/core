@@ -10,7 +10,7 @@ describe ApplicationController do
   let(:customer_hk) { Fabricate(:customer, distributor: distributor_hk) }
 
   context 'as admin' do
-    as_admin
+    sign_in_as_admin
 
     before { get :index }
 
@@ -19,7 +19,7 @@ describe ApplicationController do
 
   context 'as distributor' do
     context 'default' do
-      as_distributor
+      sign_in_as_distributor
 
       before { get :index }
 
@@ -41,7 +41,7 @@ describe ApplicationController do
 
   context 'as customer' do
     context 'default' do
-      as_customer
+      sign_in_as_customer
 
       before { get :index }
 

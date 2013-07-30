@@ -80,6 +80,8 @@ Devise.setup do |config|
   # your test suite dramatically. However, it is STRONGLY RECOMMENDED to not use
   # a value less than 10 in other environments.
   config.stretches = Rails.env.test? ? 1 : 10
+  # https://github.com/plataformatec/devise/wiki/How-To:-Test-with-Cucumber
+  config.sign_out_via = Rails.env.test? ? :get : :delete
 
   # Setup a pepper to generate the encrypted password.
   # config.pepper = "8d08746029dce2fefc1faa93f8b153fb86c69f38202746f871df6aa96197f437a0e781011843025e6858bb2479ce26ed542f893acb5dc86f19eb7e6a5d7507fd"

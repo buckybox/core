@@ -1,7 +1,7 @@
 require 'spec_helper.rb'
 
 describe Distributor::ReportsController do
-  as_distributor
+  sign_in_as_distributor
 
   describe '#index' do
     before { get :index, distributor_id: @distributor.id }

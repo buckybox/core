@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe Distributor::DeliveriesController do
-  as_distributor
+  sign_in_as_distributor
 
   context :delivery_sequence_order do
     before do
