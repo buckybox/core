@@ -7,12 +7,16 @@ class Webstore::CustomerAuthorisationController < Webstore::BaseController
   end
 
   def save_customer_authorisation
-    args = { cart: current_cart }.merge(params[:webstore_customer_authorisation])
+    args = { cart: current_cart }.merge(user_attributes)
     customer_authorisation = Webstore::CustomerAuthorisation.new(args)
     customer_authorisation.save ? successful_customer_authorisation : failed_customer_authorisation(customer_authorisation)
   end
 
 private
+
+  def user_attributes
+    params[:webstore_customer_authorisation][:user]
+  end
 
   def successful_customer_authorisation
     redirect_to webstore_delivery_options_path
