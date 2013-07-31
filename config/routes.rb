@@ -25,9 +25,9 @@ BuckyBox::Application.routes.draw do
       post '/customise_order',  action: 'save_order_customisation',  as: 'customise_orders'
     end
 
-    scope module: :customer_authorisation do
-      get  '/customer_authorisation',  action: 'customer_authorisation',       as: 'customer_authorisation'
-      post '/customer_authorisation',  action: 'save_customer_authorisation',  as: 'customer_authorisations'
+    scope module: :authentication do
+      get  '/authentication',  action: 'authentication',       as: 'authentication'
+      post '/authentication',  action: 'save_authentication',  as: 'authentications'
     end
 
     scope module: :delivery_options do
