@@ -15,9 +15,9 @@ BuckyBox::Application.routes.draw do
 
   namespace :webstore, path: 'webstore/:distributor_parameter_name' do
     scope module: :store do
-      get  '/',                            action: 'store',           as: 'store'
-      post '/start_checkout/:product_id',  action: 'start_checkout',  as: 'start_checkout'
-      get  '/completed',                   action: 'completed',       as: 'completed'
+      get   '/',                            action: 'store',           as: 'store'
+      match '/start_checkout/:product_id',  action: 'start_checkout',  as: 'start_checkout'
+      get   '/completed',                   action: 'completed',       as: 'completed'
     end
 
     scope module: :customise_order do
