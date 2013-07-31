@@ -1,4 +1,4 @@
 Fabricator(:line_item) do
   distributor
-  name 'Grapes'
+  name { sequence(:name) { |i| "Line Item #{i}" } }
 end

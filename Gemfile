@@ -101,9 +101,11 @@ group :test do
   gem 'database_cleaner'
   gem 'therubyracer', require: false # embeded JS interpreter for our CI server
 
+  gem 'cucumber-rails', require: false
+
   gem 'capybara', require: false
   gem 'capybara-screenshot'
-  gem 'cucumber-rails', require: false
+
   gem 'poltergeist', require: false
   gem 'launchy'
 
