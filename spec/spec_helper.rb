@@ -14,8 +14,10 @@ require 'capybara/rspec'
 require 'capybara/rails'
 require 'capybara/poltergeist'
 
-Capybara.javascript_driver = :poltergeist
+Capybara.current_driver = :poltergeist
 Capybara.asset_host = 'http://buckybox.dev:3000'
+
+require 'capybara-screenshot/rspec'
 
 Dir[Rails.root.join("spec/support/**/*.rb")].each { |f| require f }
 

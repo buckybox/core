@@ -3,6 +3,3 @@ module AliasesHelper
     save_and_open_page
   end
 end
-
-World(AliasesHelper)
-
