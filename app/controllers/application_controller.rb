@@ -30,6 +30,13 @@ protected
     tracking.track(current_distributor) if current_distributor
   end
 
+  def attempt_customer_sign_in(email, password, options = {})
+    customer = Customer.where(email: email).first
+    return if customer.nil? || (customer.distributor != current_distributor)
+    return if !customer.valid_password?(password)
+    customer if customer_sign_in(customer, options[:no_track])
+  end
+
   def layout_by_resource
     if devise_controller?
       "#{resource_name}_devise"
@@ -50,6 +57,11 @@ protected
   end
 
 private
+
+  def customer_sign_in(customer, no_track = false)
+    CustomerLogin.track(customer) unless no_track
+    sign_in(customer)
+  end
 
   def set_user_time_zone
     distributor = current_distributor || current_customer.try(:distributor)
