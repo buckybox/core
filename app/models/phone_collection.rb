@@ -25,7 +25,7 @@ class PhoneCollection
   end
 
   def default_number
-    @address.reload.send(default[:attribute])
+    @address.send(default[:attribute])
   end
 
   def default_type
