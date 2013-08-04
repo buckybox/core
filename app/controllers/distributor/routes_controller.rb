@@ -5,6 +5,7 @@ class Distributor::RoutesController < Distributor::ResourceController
 
   def create
     create! { distributor_settings_routes_url }
+    tracking.event(current_distributor, 'distributor_created_route')
   end
 
   def update

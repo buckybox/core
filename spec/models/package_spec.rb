@@ -16,11 +16,11 @@ describe Package do
       @package     = Fabricate(:package, order: @order)
     end
 
-    specify { @package.archived_address.should == @address.join(', ') }
-    specify { @package.archived_order_quantity.should == @order.quantity }
-    specify { @package.archived_box_name.should == @box.name }
-    specify { pending "HKD/NZD currency issue"; @package.archived_box_price.should == @box.price }
-    specify { @package.archived_customer_name.should == @address.customer.name }
+    specify { @package.archived_address.should eq @address.join }
+    specify { @package.archived_address.should include @address.postcode }
+    specify { @package.archived_order_quantity.should eq @order.quantity }
+    specify { @package.archived_box_name.should eq @box.name }
+    specify { @package.archived_customer_name.should eq @address.customer.name }
 
     context :seperate_bucky_fee do
       it 'should archive the fee' do

@@ -42,6 +42,39 @@ describe Address do
       valid = address.skip_validations(:customer) { |address| address.valid? }
       valid.should be_true
     end
+
+    it "skips the validation if address attributes have not been changed" do
+      # hairy long test but needed to test the expected behaviour
+      customer = Fabricate(:customer)
+      customer.address.postcode = nil
+      customer.save!
+      customer.should be_valid
+
+      customer.distributor.require_phone = true
+      customer.distributor.require_postcode = true
+
+      customer.address.postcode_changed?.should be_false
+      customer.address.should be_valid
+
+      customer.address.postcode = "1234"
+      customer.address.postcode_changed?.should be_true
+
+      customer.address.should be_valid
+      customer.save!
+    end
+
+    it "does not skip validation if the record is new" do
+      distributor = Fabricate(:distributor)
+      route = Fabricate(:route)
+      customer = Fabricate.build(:customer, distributor: distributor, route: route)
+      customer.address.postcode = nil
+      customer.distributor.require_postcode = true
+      customer.distributor.save!
+
+      customer.should be_new_record
+      customer.address.should_not be_valid
+      customer.address.errors.keys.should eq [:postcode]
+    end
   end
 
   describe '#join' do
@@ -50,13 +83,12 @@ describe Address do
 
     specify { address.should be_valid }
 
-    specify { full_address.join.should == '1 Address St, Apartment 1, Suburb, City' }
-    specify { full_address.join('#').should == '1 Address St#Apartment 1#Suburb#City' }
-    specify { full_address.join(', ', with_postcode: true).should == '1 Address St, Apartment 1, Suburb, City, 00000' }
-    specify { full_address.join(', ', with_phone: true).should == '1 Address St, Apartment 1, Suburb, City, Mobile phone: 11-111-111-1111, Home phone: 22-222-222-2222, Work phone: 33-333-333-3333' }
+    specify { full_address.join.should == '1 Address St, Apartment 1, Suburb, City, 00000' }
+    specify { full_address.join('#').should == '1 Address St#Apartment 1#Suburb#City#00000' }
+    specify { full_address.join(', ').should == '1 Address St, Apartment 1, Suburb, City, 00000' }
+    specify { full_address.join(', ', with_phone: true).should == '1 Address St, Apartment 1, Suburb, City, 00000, Mobile phone: 11-111-111-1111, Home phone: 22-222-222-2222, Work phone: 33-333-333-3333' }
 
-    specify { Fabricate.build(:full_address, all_attrs.merge(home_phone: nil)).join(', ', with_phone: true).should == '1 Address St, Apartment 1, Suburb, City, Mobile phone: 11-111-111-1111, Work phone: 33-333-333-3333' }
-    specify { Fabricate.build(:full_address, all_attrs.merge(postcode: nil)).join(', ', with_postcode: true).should == '1 Address St, Apartment 1, Suburb, City' }
+    specify { Fabricate.build(:full_address, all_attrs.merge(home_phone: nil)).join(', ', with_phone: true).should == '1 Address St, Apartment 1, Suburb, City, 00000, Mobile phone: 11-111-111-1111, Work phone: 33-333-333-3333' }
   end
 
   describe '.==' do

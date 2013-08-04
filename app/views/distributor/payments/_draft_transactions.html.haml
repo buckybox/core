@@ -11,7 +11,7 @@
             = tf.input :draft, as: :hidden, input_html: { value: false }
             %td.date= import_transaction.transaction_date.to_s(:transaction)
             %td.description= truncate(import_transaction.description, length: 70)
-            %td.amount.text-right= import_transaction.amount.format
+            %td.amount{ class: "#{'negative' if import_transaction.amount.negative?}" }= import_transaction.amount.format
             %td.account= import_transaction.payment_type
             %td.customer{ title: "#{import_transaction.confidence*100}% Match" }
               .chosen-background{ class: payment_color(import_transaction) }

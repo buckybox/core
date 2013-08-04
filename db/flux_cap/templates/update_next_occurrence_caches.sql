@@ -8,7 +8,7 @@ FROM (
         FROM (
           SELECT customers.id as customer_id, orders.id as order_id, next_occurrence(':date', schedule_rules.*) as occurrence
             FROM customers
-            JOIN accounts ON accounts.id = customers.id
+            JOIN accounts ON accounts.customer_id = customers.id
             JOIN orders ON accounts.id = orders.account_id AND orders.active = 't'
             JOIN schedule_rules on schedule_rules.scheduleable_id = orders.id AND schedule_rules.scheduleable_type = 'Order'
             WHERE distributor_id = :id

@@ -24,7 +24,12 @@ class Distributor::OrdersController < Distributor::ResourceController
     @order = Order.new(order_hash)
 
     create!  do |success, failure|
-      success.html { redirect_to [:distributor, @account.customer] }
+      success.html do
+        tracking.event(current_distributor, "distributor_created_order")
+        tracking.event(current_distributor, "activated") # macro event
+        redirect_to [:distributor, @account.customer]
+      end
+
       failure.html do
         load_form
         flash[:error] = 'There was a problem creating this order.'

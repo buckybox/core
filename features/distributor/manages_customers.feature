@@ -1,3 +1,4 @@
+@javascript
 Feature: Distributor manages customers
   In order to sell veggies to customers
   As a distributor

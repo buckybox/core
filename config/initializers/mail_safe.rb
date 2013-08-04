@@ -4,5 +4,5 @@ if defined?(MailSafe::Config)
     address != Figaro.env.support_email
   }
 
-  MailSafe::Config.replacement_address = 'beta@buckybox.com'
+  MailSafe::Config.replacement_address = Figaro.env.mail_safe
 end

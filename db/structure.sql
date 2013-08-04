@@ -552,13 +552,10 @@ ALTER SEQUENCE boxes_id_seq OWNED BY boxes.id;
 
 CREATE TABLE countries (
     id integer NOT NULL,
-    name character varying(255),
-    default_currency character varying(255),
-    default_time_zone character varying(255),
-    default_consumer_fee_cents integer,
+    default_consumer_fee_cents integer DEFAULT 0 NOT NULL,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
-    full_name character varying(255)
+    alpha2 character varying(2) DEFAULT ''::character varying NOT NULL
 );
 
 
@@ -753,7 +750,8 @@ CREATE TABLE customers (
     next_order_id integer,
     next_order_occurrence_date date,
     balance_threshold_cents integer,
-    status_halted boolean DEFAULT false
+    status_halted boolean DEFAULT false,
+    via_webstore boolean DEFAULT false
 );
 
 
@@ -818,6 +816,45 @@ CREATE SEQUENCE deductions_id_seq
 --
 
 ALTER SEQUENCE deductions_id_seq OWNED BY deductions.id;
+
+
+--
+-- Name: delayed_jobs; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE delayed_jobs (
+    id integer NOT NULL,
+    priority integer DEFAULT 0,
+    attempts integer DEFAULT 0,
+    handler text,
+    last_error text,
+    run_at timestamp without time zone,
+    locked_at timestamp without time zone,
+    failed_at timestamp without time zone,
+    locked_by character varying(255),
+    queue character varying(255),
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: delayed_jobs_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE delayed_jobs_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: delayed_jobs_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE delayed_jobs_id_seq OWNED BY delayed_jobs.id;
 
 
 --
@@ -1102,7 +1139,11 @@ CREATE TABLE distributors (
     require_address_1 boolean DEFAULT true NOT NULL,
     require_address_2 boolean DEFAULT false NOT NULL,
     require_suburb boolean DEFAULT false NOT NULL,
-    require_city boolean DEFAULT false NOT NULL
+    require_city boolean DEFAULT false NOT NULL,
+    keep_me_updated boolean DEFAULT true,
+    email_templates text,
+    notify_address_change boolean,
+    phone character varying(255)
 );
 
 
@@ -1486,6 +1527,42 @@ ALTER SEQUENCE line_items_id_seq OWNED BY line_items.id;
 
 
 --
+-- Name: localised_addresses; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE localised_addresses (
+    id integer NOT NULL,
+    addressable_id integer NOT NULL,
+    addressable_type character varying(255) NOT NULL,
+    street character varying(255),
+    city character varying(255),
+    zip character varying(255),
+    state character varying(255),
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: localised_addresses_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE localised_addresses_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: localised_addresses_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE localised_addresses_id_seq OWNED BY localised_addresses.id;
+
+
+--
 -- Name: omni_importers; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -1497,7 +1574,8 @@ CREATE TABLE omni_importers (
     name character varying(255),
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
-    payment_type character varying(255)
+    payment_type character varying(255),
+    bank_name character varying(255)
 );
 
 
@@ -1647,8 +1725,8 @@ CREATE TABLE packages (
     archived_customer_discount numeric DEFAULT 0 NOT NULL,
     archived_extras text,
     archived_consumer_delivery_fee_cents integer DEFAULT 0,
-    archived_substitutions character varying(255),
-    archived_exclusions character varying(255),
+    archived_substitutions text,
+    archived_exclusions text,
     archived_address_details text
 );
 
@@ -2190,6 +2268,13 @@ ALTER TABLE ONLY deductions ALTER COLUMN id SET DEFAULT nextval('deductions_id_s
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
+ALTER TABLE ONLY delayed_jobs ALTER COLUMN id SET DEFAULT nextval('delayed_jobs_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
 ALTER TABLE ONLY deliveries ALTER COLUMN id SET DEFAULT nextval('deliveries_id_seq'::regclass);
 
 
@@ -2303,6 +2388,13 @@ ALTER TABLE ONLY invoices ALTER COLUMN id SET DEFAULT nextval('invoices_id_seq':
 --
 
 ALTER TABLE ONLY line_items ALTER COLUMN id SET DEFAULT nextval('line_items_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY localised_addresses ALTER COLUMN id SET DEFAULT nextval('localised_addresses_id_seq'::regclass);
 
 
 --
@@ -2537,6 +2629,14 @@ ALTER TABLE ONLY deductions
 
 
 --
+-- Name: delayed_jobs_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY delayed_jobs
+    ADD CONSTRAINT delayed_jobs_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: deliveries_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -2670,6 +2770,14 @@ ALTER TABLE ONLY invoices
 
 ALTER TABLE ONLY line_items
     ADD CONSTRAINT line_items_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: localised_addresses_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY localised_addresses
+    ADD CONSTRAINT localised_addresses_pkey PRIMARY KEY (id);
 
 
 --
@@ -2809,6 +2917,13 @@ ALTER TABLE ONLY webstore_orders
 
 
 --
+-- Name: delayed_jobs_priority; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX delayed_jobs_priority ON delayed_jobs USING btree (priority, run_at);
+
+
+--
 -- Name: index_accounts_on_customer_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -2865,6 +2980,13 @@ CREATE INDEX index_boxes_on_distributor_id ON boxes USING btree (distributor_id)
 
 
 --
+-- Name: index_countries_on_alpha2; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_countries_on_alpha2 ON countries USING btree (alpha2);
+
+
+--
 -- Name: index_customers_on_authentication_token; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -2876,6 +2998,13 @@ CREATE UNIQUE INDEX index_customers_on_authentication_token ON customers USING b
 --
 
 CREATE UNIQUE INDEX index_customers_on_confirmation_token ON customers USING btree (confirmation_token);
+
+
+--
+-- Name: index_customers_on_distributor_id_and_number; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE UNIQUE INDEX index_customers_on_distributor_id_and_number ON customers USING btree (distributor_id, number);
 
 
 --
@@ -3571,8 +3700,34 @@ INSERT INTO schema_migrations (version) VALUES ('20130430034231');
 
 INSERT INTO schema_migrations (version) VALUES ('20130508035922');
 
+INSERT INTO schema_migrations (version) VALUES ('20130509012650');
+
 INSERT INTO schema_migrations (version) VALUES ('20130510023753');
+
+INSERT INTO schema_migrations (version) VALUES ('20130514032841');
 
 INSERT INTO schema_migrations (version) VALUES ('20130514034901');
 
 INSERT INTO schema_migrations (version) VALUES ('20130515012606');
+
+INSERT INTO schema_migrations (version) VALUES ('20130610041926');
+
+INSERT INTO schema_migrations (version) VALUES ('20130610110940');
+
+INSERT INTO schema_migrations (version) VALUES ('20130610121509');
+
+INSERT INTO schema_migrations (version) VALUES ('20130616094641');
+
+INSERT INTO schema_migrations (version) VALUES ('20130625112501');
+
+INSERT INTO schema_migrations (version) VALUES ('20130703031111');
+
+INSERT INTO schema_migrations (version) VALUES ('20130703055630');
+
+INSERT INTO schema_migrations (version) VALUES ('20130705011742');
+
+INSERT INTO schema_migrations (version) VALUES ('20130705053401');
+
+INSERT INTO schema_migrations (version) VALUES ('20130710053124');
+
+INSERT INTO schema_migrations (version) VALUES ('20130730021915');

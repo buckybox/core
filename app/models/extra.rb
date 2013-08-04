@@ -24,11 +24,15 @@ class Extra < ActiveRecord::Base
     "#{name} (#{unit})"
   end
 
+  def self.name_with_unit(hash)
+    "#{hash[:name]} (#{hash[:unit]})"
+  end
+
   def name_with_price(customer_discount = nil)
     if customer_discount
       "#{name} - #{price_with_discount(customer_discount).format} (#{unit})"
     else
-      "#{name} - #{price.format} (#{unit})"
+      "#{name} (#{price.format} per #{unit})"
     end
   end
 
