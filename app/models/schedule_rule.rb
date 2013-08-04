@@ -9,10 +9,7 @@ class ScheduleRule < ActiveRecord::Base
   belongs_to :schedule_pause, dependent: :destroy
 
   scope :with_next_occurrence, (lambda do |date, ignore_pauses, ignore_halts|
-    select(
-      "schedule_rules.*, next_occurrence('?', ?, ?, schedule_rules.*) AS next_occurrence",
-      date.to_s(:db), !!ignore_pauses, !!ignore_halts
-    )
+    select("schedule_rules.*, next_occurrence('#{date.to_s(:db)}', #{ignore_pauses}, #{ignore_halts}, schedule_rules.*) as next_occurrence")
   end)
 
   after_save :notify_associations
