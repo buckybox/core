@@ -16,5 +16,5 @@ bundle exec rake secret # generate secret token
 bundle exec rake db:drop db:create db:structure:load
 bundle exec rake
 
-bundle exec brakeman -qz --no-progress -w2
+bundle exec brakeman -qz --no-progress -w3
 
