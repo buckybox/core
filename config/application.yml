@@ -2,10 +2,36 @@
 
 # URLs
 MARKETING_SITE_URL: http://www.buckybox.com/
+MISSION_SITE_URL: http://www.buckybox.org/
 
 # Emails
 SUPPORT_EMAIL: support@buckybox.com
 NO_REPLY_EMAIL: no-reply@buckybox.com
+MAIL_SAFE: crashtestdummy@buckybox.com
+TEAM_EMAILS: invite@buckybox.com, will@buckybox.com, sam@buckybox.com, jordan@buckybox.com, samson@buckybox.com, ced@buckybox.com
+
+# GMail SMTP
+GMAIL_SMTP_HOST: smtp.gmail.com
+GMAIL_SMTP_PORT: 587
+GMAIL_SMTP_USER_NAME: support@buckybox.com
+GMAIL_SMTP_PASSWORD: betathanever
+GMAIL_SMTP_AUTHENTICATION: plain
+GMAIL_SMTP_ENABLE_STARTTLS_AUTO: true
+
+# Delayed::Job
+DELAYED_JOB_PRIORITY_HIGH: 0
+DELAYED_JOB_PRIORITY_LOW:  50
+
+# Delayed::Job Web interface
+DELAYED_JOB_USERNAME: "bg_job_master"
+DELAYED_JOB_PASSWORD: "What's in the queue?"
+
+# Vero
+VERO_API_KEY: '8029577e167a4f55a6262d8eff46ea0a445d21b0'
+VERO_SECRET: '76ab27793509fe90650d66de91841d3e41dafefe'
+
+# Email headers
+X_MAILER: 'Bucky Box Mailer (1.0.0) www.buckybox.com'
 
 # Environment-dependant configuration
 development:
@@ -18,9 +44,12 @@ test:
 
 staging:
   HOST: staging.buckybox.com
-  POSTMARK_API_KEY: 3c3bf3ae-b9a4-4c9a-b850-bc6528fb12bc
+  MANDRILL_PASSWORD: "B44y6SC4tEhaQMLKMfIvdA"
+  MANDRILL_EMAIL: "sysadmins@buckybox.com"
 
 production:
   HOST: my.buckybox.com
-  POSTMARK_API_KEY: 63583ad4-c990-4ccb-a7db-afcc85d9070a
+  USERCYCLE_API_KEY: '8c7ad3ac4a5e8fe80258662dd42d961f99f4e703'
+  MANDRILL_PASSWORD: "Tw231I6mhCW5ZJTs2KG8NA"
+  MANDRILL_EMAIL: "sysadmins+prod@buckybox.com"
 

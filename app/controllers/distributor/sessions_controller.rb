@@ -6,8 +6,11 @@ class Distributor::SessionsController < Devise::SessionsController
 
   def create
     analytical.event('distributor_signed_in')
+
     result = super
+
     DistributorLogin.track(current_distributor)
+
     result
   end
 end

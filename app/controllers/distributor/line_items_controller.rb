@@ -5,6 +5,8 @@ class Distributor::LineItemsController < Distributor::ResourceController
 
   def create
     if LineItem.from_list(current_distributor, params[:stock_list][:names])
+      tracking.event(current_distributor, "distributor_created_item_in_stock_list")
+
       flash[:notice] = 'The stock list was successfully updated.'
       redirect_to distributor_settings_stock_list_url
     else

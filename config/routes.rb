@@ -3,7 +3,15 @@ BuckyBox::Application.routes.draw do
   devise_for :distributors, controllers: { sessions: 'distributor/sessions', passwords: 'distributor/passwords' }
   devise_for :customers,    controllers: { sessions: 'customer/sessions', passwords: 'customer/passwords' }
 
+  match "/delayed_job" => DelayedJobWeb, anchor: false
+
   root to: 'distributor/customers#index'
+
+  namespace :sign_up_wizard do
+    get 'form'
+    get 'country'
+    post 'sign_up'
+  end
 
   namespace :webstore do
     get ':distributor_parameter_name',           action: 'store',     as: 'store'
@@ -11,8 +19,7 @@ BuckyBox::Application.routes.draw do
     get ':distributor_parameter_name/login',     action: 'login',     as: 'login'
     get ':distributor_parameter_name/delivery',  action: 'delivery',  as: 'delivery'
     get ':distributor_parameter_name/complete',  action: 'complete',  as: 'complete'
-    get ':distributor_parameter_name/payment',  action: 'payment',  as: 'payment'
-    get ':distributor_parameter_name/placed',    action: 'placed',    as: 'complete'
+    get ':distributor_parameter_name/placed',    action: 'placed',    as: 'placed'
 
     post ':distributor_parameter_name/process_step',  action: 'process_step',  as: 'process_step'
   end
@@ -50,7 +57,8 @@ BuckyBox::Application.routes.draw do
     end
 
     namespace :reports do
-      get 'transaction_history/:start/:to', action: 'transaction_history', as: 'transaction_history'
+      get 'transaction_history/:start/:to',   action: 'transaction_history',            as: 'transaction_history'
+      get 'export_customer_account_history/:to', action: :export_customer_account_history, as: 'export_customer_account_history'
     end
 
     resources :distributors,        only: :update
@@ -74,6 +82,7 @@ BuckyBox::Application.routes.draw do
         post 'make_payment',          action: :make_payment,         as: 'make_payment'
         post 'master_packing_sheet',  action: :master_packing_sheet, as: 'master_packing_sheet'
         post 'export',                action: :export,               as: 'export'
+        post 'export_extras',         action: :export_extras,        as: 'export_extras'
       end
     end
 
@@ -110,6 +119,8 @@ BuckyBox::Application.routes.draw do
       collection do
         get 'search',   action: :index, as: 'search'
         get 'tag/:tag', action: :index, as: 'tag'
+        post 'email'
+        post 'export'
       end
 
       member do
@@ -180,6 +191,7 @@ BuckyBox::Application.routes.draw do
     root to: 'dashboard#index'
 
     resources :cron_logs, only: :index
+    resources :style_sheet, only: :index
 
     resources :distributors do
       member do
@@ -192,6 +204,8 @@ BuckyBox::Application.routes.draw do
       end
 
       collection do
+        get 'send_email', action: :write_email
+        post 'send_email'
         get 'unimpersonate'
         get 'country_setting/:id', controller: 'distributors', action: 'country_setting'
         get 'tag/:tag', action: :index, as: 'tag'

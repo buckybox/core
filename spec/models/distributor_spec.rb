@@ -23,6 +23,59 @@ describe Distributor do
     end
   end
 
+  describe "#send_welcome_email" do
+    it "sends the welcome email upon creation" do
+      DistributorMailer.should_receive(:welcome) { double(deliver: nil) }
+
+      Fabricate(:distributor)
+    end
+  end
+
+  describe "#email_from" do
+    it "returns the expected sender" do
+      distributor = Fabricate.build(:distributor,
+        name: "Garden City 2.0: FoodBag Delivery",
+        support_email: "support@example.net"
+      )
+
+      distributor.email_from.should eq "Garden City 2.0 FoodBag Delivery <support@example.net>"
+    end
+  end
+
+  describe "#email_to" do
+    it "returns the expected recipient" do
+      distributor = Fabricate.build(:distributor,
+        contact_name: "Nelle",
+        email: "contact@example.net"
+      )
+
+      distributor.email_to.should eq "Nelle <contact@example.net>"
+    end
+  end
+
+  describe "#banks" do
+    it "returns the bank names from omni importers" do
+      omni_importers = [
+        Fabricate.build(:omni_importer_for_bank_deposit,
+          name: "Westpac - mm/dd/yyyy",
+          bank_name: "Westpac"
+        ),
+        Fabricate.build(:omni_importer_for_bank_deposit,
+          name: "Westpac - dd/mm/yyyy",
+          bank_name: "Westpac"
+        ),
+        Fabricate.build(:omni_importer_for_bank_deposit,
+          name: "Kiwibank",
+          bank_name: "Kiwibank"
+        )
+      ]
+
+      distributor = Fabricate(:distributor, omni_importers: omni_importers)
+
+      expect(distributor.banks).to match_array %w(Westpac Kiwibank)
+    end
+  end
+
   context 'parameter name' do
     context 'when creating a new distributor' do
       before do
@@ -31,6 +84,15 @@ describe Distributor do
       end
 
       specify { distributor.parameter_name.should == 'new-distributor' }
+
+      context "and an invalid parameter name is set" do
+        before do
+          distributor.name = 'New Distributor'
+          distributor.parameter_name = "invalid/name/@)*&"
+        end
+
+        specify { distributor.should_not be_valid }
+      end
     end
 
     context 'when updating an existing distributor' do
@@ -339,16 +401,75 @@ describe Distributor do
   describe :balance_thresholds do
     let(:distributor) { Fabricate(:distributor_a_customer) }
 
-    xit 'should save balance threshold to the distributor' do
-      distributor.has_balance_threshold.should be_false
-      distributor.update_attributes({has_balance_threshold: true, default_balance_threshold: 200.00}).should be_true
-      distributor.has_balance_threshold.should be_true
-      distributor.default_balance_threshold_cents.should eq(20000)
-    end
-
     it 'should update all customers spend limit' do 
       Customer.any_instance.should_receive(:update_halted_status!).with(nil, Customer::EmailRule.only_pending_orders)
       distributor.update_attributes({has_balance_threshold: true, default_balance_threshold: 200.00, spend_limit_on_all_customers: '0'}).should be_true
+    end
+  end
+
+  describe ".update_next_occurrence_caches" do
+    let(:customer){
+      distributor.save!
+      Fabricate(:customer, distributor: distributor)
+    }
+    let(:order){Fabricate(:order, account: customer.account)}
+    it 'updates cached value of next order' do
+      order
+      customer.update_column(:next_order_occurrence_date, nil)
+      customer.update_column(:next_order_id, nil)
+      customer.reload
+      customer.next_order_occurrence_date.should eq nil
+
+      distributor.update_next_occurrence_caches
+
+      customer.reload
+      customer.next_order_occurrence_date.should eq order.next_occurrence(Time.current.hour >= distributor.automatic_delivery_hour ? Date.current.tomorrow : Date.current)
+    end
+  end
+
+  describe ".transactional_customer_count" do
+
+    let(:distributor) { Fabricate(:distributor) }
+    let(:customer){ customer = Fabricate(:customer, distributor: distributor) }
+
+    it "returns zero when no transactions on any customers" do
+      customer
+      distributor.transactional_customer_count.should eq 0
+    end
+    
+    it "counts the number of customers with transactions" do
+      Fabricate(:transaction, account: customer.account)
+      Fabricate(:customer, distributor: distributor)
+      Fabricate(:transaction, account: Fabricate(:account))
+      distributor.transactional_customer_count.should eq 1
+    end
+  end
+
+  describe "#notify_of_address_change" do
+    context "notify_address_change is true" do
+      let(:distributor){ Fabricate.build(:distributor, notify_address_change: true) }
+
+      it "retruns true if successful" do
+        customer = double('customer')
+        notifier = double('Event', customer_changed_address: true)
+
+        distributor.notify_address_changed(customer, notifier).should eq true
+      end
+    end
+
+    context "returns false if unsuccesful" do
+      it "retuns false if notify address change is false" do
+        distributor.notify_address_change = false
+        customer = double('customer')
+        notifier = double('Event')
+        distributor.notify_address_changed(customer, notifier).should eq false
+      end
+
+      it "returns false if fails" do
+        customer = double('customer')
+        notifier = double('Event', customer_changed_address: false)
+        distributor.notify_address_changed(customer, notifier).should eq false
+      end
     end
   end
 end

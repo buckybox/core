@@ -1,6 +1,9 @@
 class Distributor < ActiveRecord::Base
+  include Bucky::Email
+
   has_one :bank_information,          dependent: :destroy
   has_one :invoice_information,       dependent: :destroy
+  has_one :localised_address,         dependent: :destroy, as: :addressable, autosave: true
 
   has_many :extras,                   dependent: :destroy
   has_many :boxes,                    dependent: :destroy
@@ -39,6 +42,13 @@ class Distributor < ActiveRecord::Base
   DEFAULT_AUTOMATIC_DELIVERY_HOUR = 18
   DEFAULT_AUTOMATIC_DELIVERY_DAYS = 1
 
+  HUMANIZED_ATTRIBUTES = {
+    email: "Account login email"
+  }
+
+  include Vero::Trackable
+  trackable :email, :name, :contact_name
+
   devise :database_authenticatable, :recoverable, :rememberable, :trackable, :validatable
 
   acts_as_taggable
@@ -66,7 +76,11 @@ class Distributor < ActiveRecord::Base
     :feature_spend_limit, :contact_name, :tag_list, :collect_phone,
     :require_address_1, :require_address_2, :require_suburb, :require_postcode,
     :require_phone, :require_city, :omni_importer_ids, :notes,
-    :payment_cash_on_delivery, :payment_bank_deposit, :payment_credit_card
+    :payment_cash_on_delivery, :payment_bank_deposit, :payment_credit_card,
+    :keep_me_updated, :email_templates, :notify_address_change, :phone,
+    :localised_address_attributes
+
+  accepts_nested_attributes_for :localised_address
 
   validates_presence_of :country
   validates_presence_of :email
@@ -78,12 +92,19 @@ class Distributor < ActiveRecord::Base
   validates_numericality_of :automatic_delivery_hour, greater_than_or_equal_to: 0
   validate :required_fields_for_webstore
   validate :payment_options_valid
+  validate :validate_parameter_name
 
   before_validation :check_emails
   before_create :parameterize_name, if: 'parameter_name.nil?'
+  after_create :send_welcome_email
+
+  after_create :tracking_on_create
 
   after_save :generate_required_daily_lists
   after_save :update_halted_statuses
+  after_save :tracking_on_save
+
+  serialize :email_templates, Array
 
   default_value_for :time_zone,               DEFAULT_TIME_ZONE
   default_value_for :currency,                DEFAULT_CURRENCY
@@ -93,6 +114,9 @@ class Distributor < ActiveRecord::Base
 
   default_value_for :invoice_threshold_cents, -500
   default_value_for :bucky_box_percentage, 0.0175
+  default_value_for :notify_address_change, true
+
+  scope :keep_updated, where(keep_me_updated: true)
 
   # Devise Override: Avoid validations on update or if now password provided
   def password_required?
@@ -147,6 +171,18 @@ class Distributor < ActiveRecord::Base
         end
       end
     end
+  end
+
+  def email_from
+    sanitise_email_header "#{name} <#{support_email}>"
+  end
+
+  def email_to
+    sanitise_email_header "#{contact_name} <#{email}>"
+  end
+
+  def banks
+    omni_importers.bank_deposit.pluck(:bank_name).uniq
   end
 
   def consumer_delivery_fee_cents
@@ -469,7 +505,36 @@ class Distributor < ActiveRecord::Base
     payment_options.first.last
   end
 
+  def transactional_customer_count
+    Bucky::Sql.transactional_customer_count(self)
+  end
+
+  def new_transactional_customer_count
+    Bucky::Sql.transactional_customer_count(self, 1.week.ago.to_date)
+  end
+
+  def new_customer_count
+    customers.where(["created_at >= ?", 1.week.ago]).count
+  end
+
+  def notify_address_changed(customer, notifier = Event)
+    return false unless notify_address_change?
+    notifier.customer_changed_address(customer)
+  end
+
+  def notify_on_halt
+    true
+  end
+
+  def notify_for_new_webstore_customer
+    true
+  end
+
 private
+
+  def self.human_attribute_name(attr, options = {})
+    HUMANIZED_ATTRIBUTES[attr.to_sym] || super
+  end
 
   def required_fields_for_webstore
     if active_webstore_changed? && active_webstore?
@@ -483,6 +548,14 @@ private
     errors.add(:payment_cash_on_delivery, "Must have at least one payment option selected") if payment_options.empty?
   end
 
+  def validate_parameter_name
+    return if parameter_name.nil?
+
+    if Distributor.parameterize_name(parameter_name) != parameter_name
+      errors.add(:parameter_name, "contains invalid characters")
+    end
+  end
+
   def check_emails
     if self.email
       self.email.strip!
@@ -491,6 +564,27 @@ private
 
 
     self.support_email = self.email if self.support_email.blank?
+  end
+
+  def tracking_on_create
+    Bucky::Tracking.instance.event(self, 'signed_up', {
+      business_name: name,
+      email: email,
+      contact_name: contact_name
+    })
+  end
+
+  def tracking_on_save
+    attributes = %w(city details about)
+
+    if attributes.any? { |attr| send("#{attr}_changed?") } and \
+      attributes.all? { |attr| send(attr).present? }
+      Bucky::Tracking.instance.event(self, "distributor_populated_business_information")
+    end
+  end
+
+  def send_welcome_email
+    DistributorMailer.welcome(self).deliver
   end
 
   # This is meant to be run within console for dev work via Distributor.send(:travel_forward_a_day)

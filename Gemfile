@@ -1,16 +1,16 @@
 source 'https://rubygems.org'
 
 # Core
-gem 'rails', '~> 3.2.13'
+gem 'rails', '~> 3.2.14'
 
 # Database
 gem 'pg', '~> 0.14.0'
 
 gem 'haml-rails',      '~> 0.3.4'
-gem 'jquery-rails',    '~> 2.1.1'
-gem 'bootstrap-sass',  '~> 2.1.0.0'
-gem 'select2-rails',   '~> 3.2.1'
-gem 'ember-rails',     '~> 0.7.0'
+gem 'jquery-rails',    '~> 2.3.0'
+gem 'jquery-ui-rails', '~> 4.0.3'
+gem 'bootstrap-sass',  '~> 2.3.2.0'
+gem 'select2-rails',   '~> 3.4.3'
 
 gem 'json',                 '~> 1.7.7'
 gem 'devise',               '~> 2.2.4'
@@ -29,15 +29,29 @@ gem 'fuzzy-string-match',   '~> 0.9.4',  require: 'fuzzystringmatch' # This perf
 gem 'state_machine',        '~> 1.1.2'
 gem 'figaro',               '~> 0.6.4'
 
-gem 'postmark-rails',  '~> 0.4.1'
-gem 'analytical',      '~> 3.0.12'
-gem 'newrelic_rpm',    '~> 3.6.1'
-gem 'airbrake',        '~> 3.1.2'
+gem 'premailer-rails',      '~> 1.4.0'
+gem 'nokogiri',             '~> 1.6.0' # premailer-rails dependency
+
+gem 'delayed_job',                '~> 3.0.5' #send emails offline
+gem 'delayed_job_active_record',  '~> 0.4.4'
+gem 'delayed_job_web',            '~> 1.2.0'
+gem 'daemons',                    '~> 1.1.9' # able to monitor delayed_job via monit
+gem 'analytical',                 '~> 3.0.12'
+gem 'newrelic_rpm',               '~> 3.6.1'
+gem 'airbrake',                   '~> 3.1.2'
 
 gem 'ace-rails-ap',  '~> 2.0.0'
 
 gem 'activemerchant',  '~> 1.32.1'
 gem 'attr_encryptor',  '~> 1.0.2'
+
+gem 'draper', '~> 1.0'
+
+gem 'countries', '~> 0.9.2', require: 'iso3166'
+gem 'country_select', '~> 1.1.3'
+gem 'biggs', '~> 0.3.3'
+
+gem 'vero', '~> 0.5.10'
 
 ########## THE GEMS ABOVE ARE THE ONLY ONES THAT RUN ON PRODUCTION ##########
 
@@ -64,14 +78,12 @@ group :development do
   gem 'term-ansicolor'
 
   gem 'guard-rspec'
-  gem 'guard-spork'
-  gem 'spork-rails'
+  gem 'parallel_tests'
 
   # Pry: IRB + ruby debug alternative which is active and easier to install
   gem 'pry-rails'
   gem 'pry-debugger'
   gem 'pry-coolline'
-  gem 'pry-remote' # Needed for using pry in spork
 
   gem 'better_errors'
   gem 'binding_of_caller'
@@ -87,10 +99,12 @@ group :test do
   gem 'therubyracer', require: false # embeded JS interpreter for our CI server
 
   gem 'capybara', require: false
+  gem 'capybara-screenshot'
   gem 'cucumber-rails', require: false
+  gem 'poltergeist', require: false
   gem 'launchy'
 
-  gem 'fuubar'
+  gem 'fuubar', '~> 1.0.0' # 1.1.1 is broken
 
   gem 'bundler-audit', require: false
 end

@@ -25,11 +25,9 @@ class Deduction < ActiveRecord::Base
 
   after_create :make_deduction!
 
-  scope :delivery,    where(kind: 'delivery')
   scope :unspecified, where(kind: 'unspecified')
 
   scope :manual,   where(source: 'manual')
-  scope :delivery, where(source: 'delivery')
 
   scope :reversed, where(reversed: true)
 

@@ -19,12 +19,11 @@ class WebstoreOrder < ActiveRecord::Base
 
   validate :extras_within_box_limit
 
-  # Should really use state_machine here but don't have the time to risk it at the moment
+  # Should REALLY use state_machine here but don't have the time to risk it at the moment
   CUSTOMISE = :customise
   LOGIN     = :login
   DELIVERY  = :delivery
   COMPLETE  = :complete
-  PAYMENT   = :payment
   PLACED    = :placed
 
   def self.box_price(box, customer = nil)
@@ -85,10 +84,6 @@ class WebstoreOrder < ActiveRecord::Base
 
   def complete_step
     self.status = COMPLETE
-  end
-
-  def payment_step
-    self.status = PAYMENT
   end
 
   def placed_step
@@ -200,6 +195,7 @@ class WebstoreOrder < ActiveRecord::Base
     if order.nil?
       extras_hash = {}
       extras.each { |id, count| extras_hash[id] = { count: count } }
+      raise "Account should not be nil" unless account
       order = Order.create(
         box: box,
         completed: true,

@@ -5,7 +5,7 @@ class Distributor::PaymentsController < Distributor::ResourceController
 
   before_filter :load_import_transaction_list, only: [:process_payments, :show]
 
-  def index 
+  def index
     @import_transaction_list = current_distributor.import_transaction_lists.new
     @show_tour = current_distributor.payments_index_intro
     @selected_omni_importer = current_distributor.last_used_omni_importer
@@ -22,6 +22,8 @@ class Distributor::PaymentsController < Distributor::ResourceController
       @selected_omni_importer = current_distributor.last_used_omni_importer(@import_transaction_list.omni_importer)
     end
 
+    tracking.event(current_distributor, "distributor_uploaded_payment_records")
+
     load_index
 
     render :index
@@ -34,7 +36,7 @@ class Distributor::PaymentsController < Distributor::ResourceController
       failure.html do
         if params[:payment][:account_id].blank?
           flash[:error] = 'Please, select a customer for this payment.'
-        elsif params[:payment][:amount].to_f <= 0
+        elsif BigDecimal.new(params[:payment][:amount]) <= 0
           flash[:error] = 'Please, enter in a positive amount for the payment.'
         elsif params[:payment][:description].blank?
           flash[:error] = 'Please, include a description for this payment.'
@@ -48,6 +50,8 @@ class Distributor::PaymentsController < Distributor::ResourceController
     processed_data = @import_transaction_list.process_import_transactions_attributes(params[:import_transaction_list])
 
     if @import_transaction_list.process_attributes(processed_data)
+      tracking.event(current_distributor, "distributor_saved_payment_records")
+
       redirect_to distributor_payments_url, notice: "Payments processed successfully"
     else
       flash.now[:alert] = "There was a problem"
