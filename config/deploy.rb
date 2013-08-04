@@ -38,6 +38,7 @@ namespace :deploy do
 
   task :symlink_configs do
     run %( cd #{release_path} &&
+      ln -nfs #{shared_path}/config/initializers/secret_token.rb #{release_path}/config/initializers/secret_token.rb &&
       ln -nfs #{shared_path}/config/database.yml #{release_path}/config/database.yml &&
       ln -nfs #{shared_path}/log/ #{release_path}/log/
     )
