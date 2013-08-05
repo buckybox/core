@@ -32,7 +32,6 @@ protected
 
   def attempt_customer_sign_in(email, password, options = {})
     customer = Customer.where(email: email).first
-    return if customer.nil? || (customer.distributor != current_distributor)
     return if !customer.valid_password?(password)
     customer if customer_sign_in(customer, options[:no_track])
   end
