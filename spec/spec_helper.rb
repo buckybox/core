@@ -14,8 +14,7 @@ require 'capybara/rspec'
 require 'capybara/rails'
 require 'capybara/poltergeist'
 
-Capybara.current_driver = :poltergeist
-Capybara.javascript_driver = Capybara.current_driver
+Capybara.default_driver = Capybara.javascript_driver = :poltergeist
 Capybara.asset_host = 'http://buckybox.dev:3000'
 
 require 'capybara-screenshot/rspec'
