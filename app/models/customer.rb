@@ -269,7 +269,7 @@ class Customer < ActiveRecord::Base
   end
 
   def active?
-    active_orders.empty?
+    !active_orders.empty?
   end
 
   def active_orders
