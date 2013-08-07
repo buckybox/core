@@ -446,6 +446,7 @@ GEM
     xray-rails (0.1.6)
       coffee-rails
       rails (>= 3.1.0)
+    yard (0.8.6.1)
 
 PLATFORMS
   ruby
@@ -531,3 +532,4 @@ DEPENDENCIES
   webrick
   whenever (~> 0.7.3)
   xray-rails
+  yard

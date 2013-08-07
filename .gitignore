@@ -25,6 +25,8 @@
 # Ignore all logfiles and tempfiles.
 /log
 /tmp
+/doc
+/.yardoc
 *.swp
 *.swo
 .~lock*
