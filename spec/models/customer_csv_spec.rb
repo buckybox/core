@@ -14,7 +14,6 @@ describe CustomerCSV do
   end
 
   describe ".generate" do
-    
     before do
       customer = customer_with({
         first_name:      "John",
@@ -49,7 +48,6 @@ describe CustomerCSV do
       customer.stub_chain(:next_order, :box, :name).and_return("Apples")
       customer.stub(:last_paid).and_return(3.weeks.ago)
       @customers = [customer.decorate]
-                             
       @rows = CSV.parse(CustomerCSV.instance.generate(@customers))
     end
 
@@ -58,7 +56,7 @@ describe CustomerCSV do
     end
 
     it "exports customer data into csv" do
-      @rows[1].should eq ["0666", "Johnny", "Boy", "jony.boy@example.com", 3.weeks.ago.to_date.iso8601, "0.00", "0.23", "false", "0.2", "fisherman, beers, vip", Date.today.iso8601, "Manual", "7", "Likes beer", "dislikes wine eh", "Franklin", "Casa Bucky", "The Stables", "Vic", "Welly", "6012", "dislikes wine eh", "3423213423", "34543", "21455423", "7", 1.week.from_now.to_date.iso8601, "Apples"]
+      @rows[1].should eq ["0666", "Johnny", "Boy", "jony.boy@example.com", 3.weeks.ago.to_date.iso8601, "0.00", "0.23", "false", "0.2", "fisherman, beers, vip", @customers.first.created_at.to_date.iso8601, "Manual", "7", "Likes beer", "dislikes wine eh", "Franklin", "Casa Bucky", "The Stables", "Vic", "Welly", "6012", "dislikes wine eh", "3423213423", "34543", "21455423", "7", 1.week.from_now.to_date.iso8601, "Apples"]
     end
   end
 end
