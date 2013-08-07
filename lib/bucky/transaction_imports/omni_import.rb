@@ -57,19 +57,33 @@ EOF
     end
 
     def self.test_file
-      File.new(File.join(Rails.root, "spec/support/test_upload_files/transaction_imports/uk_lloyds_tsb.csv"))
+      File.join(Rails.root, "spec/support/test_upload_files/transaction_imports/uk_lloyds_tsb.csv")
     end
 
     def self.test_file2
-      File.new(File.join(Rails.root, "spec/support/test_upload_files/transaction_imports/st_george_au.csv"))
+      File.join(Rails.root, "spec/support/test_upload_files/transaction_imports/st_george_au.csv")
     end
 
     def self.test_rows
-      CSV.read(test_file)
+      csv_read(test_file)
     end
 
     def self.test_hash
       YAML.load(test_yaml)
+    end
+
+    def self.csv_read(path)
+      string = File.read(path)
+      encoding = CharlockHolmes::EncodingDetector.detect(string)[:encoding]
+      CSV.read(path, encoding: encoding)
+    rescue CSV::MalformedCSVError => e #Handle stupid windows \r instead of \r\n csv files.  STANDARDS!
+      raise e unless e.message == "Unquoted fields do not allow \\r or \\n (line 20)."
+      CSV.parse(string.force_encoding(encoding).encode("UTF-8").gsub(/\r(?!\n)/, "\r\n"))
+    end
+
+    def self.csv_parse(string)
+      encoding = CharlockHolmes::EncodingDetector.detect(string)[:encoding]
+      CSV.parse(string, encoding: encoding)
     end
 
     def self.test
@@ -77,7 +91,7 @@ EOF
     end
 
     def self.test2
-      OmniImport.new(CSV.read(test_file2), YAML.load(test_yaml2))
+      OmniImport.new(csv_read(test_file2), YAML.load(test_yaml2))
     end
     
     attr_accessor :rows, :rules
