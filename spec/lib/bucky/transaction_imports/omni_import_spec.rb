@@ -150,6 +150,6 @@ describe Bucky::TransactionImports::OmniImport do
   it 'should handle shitty windows excel csv format' do
     rows = Bucky::TransactionImports::OmniImport.csv_read(File.join(Rails.root, "spec/support/test_upload_files/transaction_imports/TheLocalVegBoxBank19Jul13.csv"))
     rows[0].should eq ["Date", "Transaction", "Deposits", "Withdrawals"]
-    rows[1].should eq ["02/08/13", "MR SIMON J MORLEY", "£5.00", nil]
+    rows[1].should eq ["19/07/2013", "MR SIMON J MORLEY", "£5.00", nil]
   end
 end
