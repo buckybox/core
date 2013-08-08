@@ -53,6 +53,8 @@ gem 'biggs', '~> 0.3.3'
 
 gem 'vero', '~> 0.5.10'
 
+gem 'charlock_holmes'
+
 ########## THE GEMS ABOVE ARE THE ONLY ONES THAT RUN ON PRODUCTION ##########
 
 group :assets do
