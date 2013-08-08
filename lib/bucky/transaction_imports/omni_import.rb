@@ -81,11 +81,6 @@ EOF
       CSV.parse(string.force_encoding(encoding).encode("UTF-8").gsub(/\r(?!\n)/, "\r\n"))
     end
 
-    def self.csv_parse(string)
-      encoding = CharlockHolmes::EncodingDetector.detect(string)[:encoding]
-      CSV.parse(string, encoding: encoding)
-    end
-
     def self.test
       OmniImport.new(test_rows, test_hash)
     end
