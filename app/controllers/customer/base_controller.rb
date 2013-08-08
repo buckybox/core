@@ -5,6 +5,6 @@ class Customer::BaseController < ApplicationController
 protected
 
   def current_customer
-    super.decorate
+    super.decorate if super
   end
 end
