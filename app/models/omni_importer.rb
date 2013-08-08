@@ -19,7 +19,7 @@ class OmniImporter < ActiveRecord::Base
   end
 
   def test_rows
-    @rows ||= CSV.parse(import_transaction_list.read)
+    @rows ||=  Bucky::TransactionImports::OmniImport.csv_read(import_transaction_list.path)
   rescue StandardError => ex
     errors.add(:import_transaction_list, ex.message)
     @rows ||= [[]]
@@ -32,7 +32,7 @@ class OmniImporter < ActiveRecord::Base
   def import(csv_path)
     return @omni_import unless @omni_import.blank?
 
-    rows = CSV.parse(remove_crap_utf8(File.read(csv_path)))
+    rows =  Bucky::TransactionImports::OmniImport.csv_read(csv_path)
     @omni_import = Bucky::TransactionImports::OmniImport.new(rows, YAML.load(rules))
 
     return self
@@ -62,9 +62,4 @@ class OmniImporter < ActiveRecord::Base
     Bucky::TransactionImports::OmniImport.new([], YAML.load(rules)).header?
   end
 
-private
-
-  def remove_crap_utf8(string)
-    string.chars.select{|i| i.valid_encoding?}.join
-  end
 end
