@@ -77,7 +77,7 @@ EOF
       encoding = CharlockHolmes::EncodingDetector.detect(string)[:encoding]
       CSV.read(path, encoding: encoding)
     rescue CSV::MalformedCSVError => e #Handle stupid windows \r instead of \r\n csv files.  STANDARDS!
-      raise e unless e.message == "Unquoted fields do not allow \\r or \\n (line 20)."
+      raise e unless e.message.include?("Unquoted fields do not allow \\r or \\n")
       CSV.parse(string.force_encoding(encoding).encode("UTF-8").gsub(/\r(?!\n)/, "\r\n"))
     end
 
