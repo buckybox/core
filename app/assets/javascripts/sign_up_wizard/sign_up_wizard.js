@@ -30,6 +30,9 @@ var BuckyBoxSignUpWizard = function() {
           id = this.id,
          css = host + "/assets/sign_up_wizard.css";
 
+    // IE fix: http://stackoverflow.com/a/11187563
+    $.support.cors = true;
+
     $.ajax({
       url: css,
       dataType: "text",
@@ -223,9 +226,6 @@ var BuckyBoxSignUpWizard = function() {
             if (valid) {
               if (is_submit_step()) {
                 var form = sign_up_wizard('form');
-
-                // IE fix: http://stackoverflow.com/a/11187563
-                $.support.cors = true;
 
                 $.ajax({
                   type: "POST",
