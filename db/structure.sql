@@ -2123,10 +2123,10 @@ ALTER SEQUENCE transactions_id_seq OWNED BY transactions.id;
 
 
 --
--- Name: webstore_cart_persistances; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: webstore_cart_persistences; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
-CREATE TABLE webstore_cart_persistances (
+CREATE TABLE webstore_cart_persistences (
     id integer NOT NULL,
     collected_data text,
     created_at timestamp without time zone NOT NULL,
@@ -2135,10 +2135,10 @@ CREATE TABLE webstore_cart_persistances (
 
 
 --
--- Name: webstore_cart_persistances_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+-- Name: webstore_cart_persistences_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE webstore_cart_persistances_id_seq
+CREATE SEQUENCE webstore_cart_persistences_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -2147,10 +2147,10 @@ CREATE SEQUENCE webstore_cart_persistances_id_seq
 
 
 --
--- Name: webstore_cart_persistances_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+-- Name: webstore_cart_persistences_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
-ALTER SEQUENCE webstore_cart_persistances_id_seq OWNED BY webstore_cart_persistances.id;
+ALTER SEQUENCE webstore_cart_persistences_id_seq OWNED BY webstore_cart_persistences.id;
 
 
 --
@@ -2544,7 +2544,7 @@ ALTER TABLE ONLY transactions ALTER COLUMN id SET DEFAULT nextval('transactions_
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY webstore_cart_persistances ALTER COLUMN id SET DEFAULT nextval('webstore_cart_persistances_id_seq'::regclass);
+ALTER TABLE ONLY webstore_cart_persistences ALTER COLUMN id SET DEFAULT nextval('webstore_cart_persistences_id_seq'::regclass);
 
 
 --
@@ -2947,11 +2947,11 @@ ALTER TABLE ONLY transactions
 
 
 --
--- Name: webstore_cart_persistances_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: webstore_cart_persistences_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
 
-ALTER TABLE ONLY webstore_cart_persistances
-    ADD CONSTRAINT webstore_cart_persistances_pkey PRIMARY KEY (id);
+ALTER TABLE ONLY webstore_cart_persistences
+    ADD CONSTRAINT webstore_cart_persistences_pkey PRIMARY KEY (id);
 
 
 --
