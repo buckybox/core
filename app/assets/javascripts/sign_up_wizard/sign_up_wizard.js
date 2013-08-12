@@ -36,9 +36,12 @@ var BuckyBoxSignUpWizard = function() {
     $.ajax({
       url: css,
       dataType: "text",
-      error: function() {
+      error: function(xhr, text, error) {
         active = false;
-        alert("Sorry, Bucky Box sign up wizard cannot be loaded.");
+
+        // NOTE: hack to fallback to old sign up form
+        $("#sign_up").hide();
+        $("form#contact").fadeIn();
       },
       success: function() {
         // could be nicer but have to use that way for IE compat
