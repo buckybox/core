@@ -1,5 +1,5 @@
+/ Uservoice
 :javascript
-  // Uservoice
   try {
 
     var uvOptions = {};
@@ -13,15 +13,4 @@
   } catch(e) {
     // catch error for IE8 so it does not break the JS
   }
-
-  // Pingdom
-  var _prum = [['id', '52089352abe53d6347000000'],
-               ['mark', 'firstbyte', (new Date()).getTime()]];
-  (function() {
-      var s = document.getElementsByTagName('script')[0]
-        , p = document.createElement('script');
-      p.async = 'async';
-      p.src = '//rum-static.pingdom.net/prum.min.js';
-      s.parentNode.insertBefore(p, s);
-  })();
 
