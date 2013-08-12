@@ -109,8 +109,10 @@ private
   end
 
   def set_cors_headers
-    if request.headers["HTTP_ORIGIN"]
-      headers['Access-Control-Allow-Origin'] = request.headers["HTTP_ORIGIN"]
+    origin = request.headers["HTTP_ORIGIN"]
+
+    if origin && origin =~ /^https?:\/\/.*\.buckybox\.com$/
+      headers['Access-Control-Allow-Origin'] = origin
       headers['Access-Control-Allow-Credentials'] = 'true'
     end
   end
