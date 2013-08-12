@@ -472,4 +472,13 @@ describe Distributor do
       end
     end
   end
+
+  describe '#customer_for_export' do
+    it 'returns customers based on customer ids' do
+      distributor.save
+      customer_1 = Fabricate(:customer, distributor: distributor)
+      customer_2 = Fabricate(:customer, distributor: distributor)
+      distributor.customers_for_export([customer_1.id]).should eq([customer_1])
+    end
+  end
 end
