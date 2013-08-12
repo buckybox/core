@@ -1,6 +1,12 @@
 - stylesheet 'distributor'
 - javascript 'distributor'
 
+- content_for :uservoice do
+  = render 'layouts/uservoice'
+
+- content_for :pingdom do
+  = render 'layouts/pingdom'
+
 - content_for :body do
   .container
     = render_site_messages(flash)
