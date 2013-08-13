@@ -1,4 +1,13 @@
 class Address < ActiveRecord::Base
+  ADDRESS_ATTRIBUTES = %w(
+    address_1
+    address_2
+    suburb
+    city
+    postcode
+    delivery_note
+  )
+
   belongs_to :customer, inverse_of: :address
 
   attr_accessible :customer, :address_1, :address_2, :suburb, :city, :postcode, :delivery_note
@@ -125,7 +134,7 @@ private
   end
 
   def validate_address
-    %w(address_1 address_2 suburb city postcode).each do |attr|
+    (ADDRESS_ATTRIBUTES - ["delivery_note"]).each do |attr|
       if distributor.public_send("require_#{attr}") && (
           customer && customer.new_record? ||
           send("#{attr}_changed?")
