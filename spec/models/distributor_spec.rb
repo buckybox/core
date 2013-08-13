@@ -436,7 +436,7 @@ describe Distributor do
       customer
       distributor.transactional_customer_count.should eq 0
     end
-    
+
     it "counts the number of customers with transactions" do
       Fabricate(:transaction, account: customer.account)
       Fabricate(:customer, distributor: distributor)
@@ -479,6 +479,22 @@ describe Distributor do
       customer_1 = Fabricate(:customer, distributor: distributor)
       customer_2 = Fabricate(:customer, distributor: distributor)
       distributor.customers_for_export([customer_1.id]).should eq([customer_1])
+    end
+  end
+
+  describe '#transactions_for_export' do
+    it 'returns customers based on customer ids' do
+      distributor.save
+      customer = Fabricate(:customer, distributor: distributor)
+      account  = Fabricate(:account, customer: customer)
+      day1     = Date.today
+      day2     = day1 + 1.day
+      day3     = day1 + 2.day
+      payment1 = Fabricate(:transaction, account: account, display_time: day1)
+      payment2 = Fabricate(:transaction, account: account, display_time: day2)
+      payment3 = Fabricate(:transaction, account: account, display_time: day2)
+      payment4 = Fabricate(:transaction, account: account, display_time: day3)
+      distributor.transactions_for_export(day1, day2).should eq([payment3, payment2])
     end
   end
 end

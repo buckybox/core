@@ -534,6 +534,12 @@ class Distributor < ActiveRecord::Base
     data.includes(route: {}, account: { route: {} }, next_order: { box: {} })
   end
 
+  def transactions_for_export(from, to)
+    data = transactions.where(["? <= display_time AND display_time < ?", from, to])
+    data = data.order('display_time DESC, created_at DESC')
+    data.includes(account: { customer: { address: {} } })
+  end
+
 private
 
   def self.human_attribute_name(attr, options = {})
