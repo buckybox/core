@@ -6,11 +6,9 @@ describe CustomerCSV do
   let(:customer)     { double('customer') }
   let(:customers)    { [customer] }
 
-  class String
-    def titleize; self; end
-  end
+  [ [ 'city' , 'Wellington' ], [ 'email', 'test@example.com' ] ].each do |field, value|
+    def field.titleize; self; end # needed by CustomerCSV#headers
 
-  [ [ :city , 'Wellington' ], [ :email, 'test@example.com' ] ].each do |field, value|
     context "with the field '#{field}' and value '#{value}'" do
       let(:fields) { [ field ] }
 
