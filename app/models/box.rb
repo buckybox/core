@@ -69,8 +69,16 @@ class Box < ActiveRecord::Base
     read_attribute(:substitutions_limit) || 0
   end
 
+  def substitutions_unlimited?
+    substitutions_limit == -1
+  end
+
   def exclusions_limit
     read_attribute(:exclusions_limit) || 0
+  end
+
+  def exclusions_unlimited?
+    exclusions_limit == -1
   end
 
   def extras_disabled?
