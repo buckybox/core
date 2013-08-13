@@ -530,6 +530,11 @@ class Distributor < ActiveRecord::Base
     true
   end
 
+  def customers_for_export(customer_ids)
+    data = customers.ordered.where(id: customer_ids)
+    data.includes(route: {}, account: { route: {} }, next_order: { box: {} })
+  end
+
 private
 
   def self.human_attribute_name(attr, options = {})

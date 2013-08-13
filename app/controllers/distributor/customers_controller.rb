@@ -117,7 +117,7 @@ class Distributor::CustomersController < Distributor::ResourceController
 
   def export
     recipient_ids = params[:export][:recipient_ids].split(',').map(&:to_i)
-    csv_string = CustomerCSV.generate(current_distributor, recipient_ids)
+    csv_string    = CustomerCSV.generate(current_distributor, recipient_ids)
 
     tracking.event(current_distributor, "distributor_exported_csv_customer_list")
 
