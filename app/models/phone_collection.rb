@@ -39,8 +39,14 @@ private
   end
 
   def default
-    default = TYPES.first
-    { type: default.first, attribute: default.last }
+    TYPES.each do |type, attribute|
+      number = @address.public_send(attribute)
+      return { type: type, attribute: attribute } if number.present?
+    end
+
+    # fallback to first type if all blank
+    type, attribute = TYPES.first
+    { type: type, attribute: attribute }
   end
 end
 
