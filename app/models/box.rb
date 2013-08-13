@@ -70,7 +70,7 @@ class Box < ActiveRecord::Base
   end
 
   def substitutions_unlimited?
-    substitutions_limit == -1
+    substitutions_limit == 0
   end
 
   def exclusions_limit
@@ -78,7 +78,7 @@ class Box < ActiveRecord::Base
   end
 
   def exclusions_unlimited?
-    exclusions_limit == -1
+    exclusions_limit == 0
   end
 
   def extras_disabled?
