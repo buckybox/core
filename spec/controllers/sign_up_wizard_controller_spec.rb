@@ -99,7 +99,7 @@ describe SignUpWizardController do
           ]
         end
 
-        it "sets up it up" do
+        it "sets it up" do
           post :sign_up, form_params_with_paypal
 
           distributor = Distributor.where(name: form_params["distributor"]["name"]).last

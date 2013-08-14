@@ -22,8 +22,8 @@ require 'capybara-screenshot/rspec'
 Dir[Rails.root.join("spec/support/**/*.rb")].each { |f| require f }
 
 RSpec.configure do |config|
-  config.order = 'random'
-
+  config.treat_symbols_as_metadata_keys_with_true_values = true
+  config.order = "random"
   config.mock_with :rspec
   config.use_transactional_fixtures = false
   config.infer_base_class_for_anonymous_controllers = false
@@ -42,14 +42,22 @@ RSpec.configure do |config|
   config.extend Devise::RequestMacros,     type: :request
   config.extend Devise::FeatureMacros,     type: :feature
 
+  # Order matters!
   config.before(:suite) do
-    DatabaseCleaner.strategy = :transaction
     DatabaseCleaner.clean_with :truncation
   end
 
   config.before(:each) do
-    DatabaseCleaner.start
+    DatabaseCleaner.strategy = :transaction
     Time.zone = BuckyBox::Application.config.time_zone
+  end
+
+  config.before(:each, js: true) do
+    DatabaseCleaner.strategy = :truncation
+  end
+
+  config.before(:each) do
+    DatabaseCleaner.start
   end
 
   config.after(:each) do
