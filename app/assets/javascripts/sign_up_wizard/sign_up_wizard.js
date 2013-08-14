@@ -180,6 +180,9 @@ var BuckyBoxSignUpWizard = function() {
           var update_step_counter = function() {
             if (is_last_step()) {
               sign_up_wizard("#step").hide();
+
+              analytics(['_trackPageview', '/sign_up_wizard/form#completed']);
+
             } else {
               var steps = sign_up_wizard(".step"),
                   current_step = 1 + steps.index(visible_step);
