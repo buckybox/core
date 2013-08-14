@@ -22,6 +22,10 @@ class Address < ActiveRecord::Base
 
   before_save :update_address_hash
 
+  def self.address_attributes
+    ADDRESS_ATTRIBUTES
+  end
+
   def to_s(join_with = ', ', options = {})
     result = [address_1]
     result << address_2 unless address_2.blank?
