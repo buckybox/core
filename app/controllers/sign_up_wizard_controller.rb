@@ -93,6 +93,7 @@ private
         Accept direct debit: #{distributor[:payment_direct_debit]}
         Source: #{distributor[:source]}
         Deliveries per week: #{distributor[:deliveries_per_week]}
+        Country: #{distributor[:country]}
 
         #{view_context.link_to "Impersonate", impersonate_admin_distributor_url(id: @distributor.id)}
         #{view_context.mail_to distributor[:email], "Email", subject: "Following up", body: "Hi #{distributor[:name]}"}
