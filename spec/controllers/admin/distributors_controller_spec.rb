@@ -7,6 +7,10 @@ describe Admin::DistributorsController do
 
   describe 'GET index' do
     it 'assigns all distributors as @distributors' do
+      # NOTE: prevent random failure when existing distributors would not be
+      # wiped out by DatabaseCleaner
+      Distributor.delete_all
+
       distributor = Fabricate(:distributor)
       get :index, {}
       assigns(:distributors).should eq([distributor])
