@@ -1,8 +1,8 @@
 class ScheduleBuilder
   def initialize(args)
-    @start_date = Date.parse(args[:start_date].to_s)
-    @frequency  = args[:frequency].to_s.to_sym
-    @days       = args[:days]
+    @start_date = Date.parse(args.fetch(:start_date).to_s)
+    @frequency  = args.fetch(:frequency).to_s.to_sym
+    @days       = args.fetch(:days)
   end
 
   def self.build(args)
@@ -29,6 +29,8 @@ private
   end
 
   def recurring
+    return if days.empty?
+
     ScheduleRule.recur_on(start_date, days_of_the_week, frequency, week)
   end
 
