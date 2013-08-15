@@ -375,7 +375,7 @@ describe Distributor do
       ]
 
       EXTRAS_IMPORT_TESTS.each do |name, unit, match|
-        specify { @distributor.find_extra_from_import(mock('Extra', { name: name, unit: unit })).should eq(@s[match]) }
+        specify { @distributor.find_extra_from_import(double('Extra', { name: name, unit: unit })).should eq(@s[match]) }
       end
     end
   end
