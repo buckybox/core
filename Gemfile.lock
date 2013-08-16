@@ -481,7 +481,7 @@ DEPENDENCIES
   default_value_for (~> 2.0.1)
   delayed_job (~> 3.0.5)
   delayed_job_active_record (~> 0.4.4)
-  delayed_job_web (~> 1.2.0)
+  delayed_job_web (= 1.2.0)
   delorean
   devise (~> 2.2.4)
   draper (~> 1.0)
