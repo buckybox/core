@@ -9,5 +9,4 @@ end
 Fabricator(:customisable_box, from: :box) do
   dislikes true
   extras_limit 5
-  extras(count: 2)
 end

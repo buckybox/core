@@ -1,5 +1,5 @@
 Given(/^I have notify address option turned on$/) do
-  @distributor.update_attribute(:notify_address_change, true)
+  Distributor.last.update_attribute(:notify_address_change, true)
 end
 
 Then(/^I should not receive a notification of the address change$/) do
