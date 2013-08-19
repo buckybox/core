@@ -3,6 +3,12 @@ require 'spec_helper.rb'
 describe Distributor::ReportsController do
   as_distributor
 
+  describe '#index' do
+    before { get :index, distributor_id: @distributor.id }
+
+    specify { response.should render_template 'distributor/reports/index' }
+  end
+
   describe "#export_customer_account_history" do
     let(:date) { Date.today }
 
