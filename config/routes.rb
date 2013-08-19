@@ -45,7 +45,6 @@ BuckyBox::Application.routes.draw do
       get 'bank_information'
       get 'invoice_information'
       get 'stock_list'
-      get 'reporting'
     end
 
     namespace :notifications do
@@ -57,8 +56,9 @@ BuckyBox::Application.routes.draw do
     end
 
     namespace :reports do
-      get 'transaction_history/:start/:to',   action: 'transaction_history',            as: 'transaction_history'
-      get 'export_customer_account_history/:to', action: :export_customer_account_history, as: 'export_customer_account_history'
+      get '/',                                    action: 'index'
+      get 'transaction_history/:start/:to',       action: 'transaction_history',             as: 'transaction_history'
+      get 'export_customer_account_history/:to',  action: :export_customer_account_history,  as: 'export_customer_account_history'
     end
 
     resources :distributors,        only: :update
