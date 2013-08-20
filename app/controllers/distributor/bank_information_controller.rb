@@ -7,7 +7,7 @@ class Distributor::BankInformationController < Distributor::ResourceController
   def create
     create! do |success, failure|
       success.html { 
-        Bucky::Tracking.instance.event(current_distributor, "new_bank_information")
+        tracking.event(current_distributor, "new_bank_information") unless current_admin.present?
         redirect_to distributor_settings_bank_information_url, notice: 'Bank information was successfully created.'
       }
       failure.html { render 'distributor/settings/bank_information' }
@@ -17,7 +17,7 @@ class Distributor::BankInformationController < Distributor::ResourceController
   def update
     update! do |success, failure|
       success.html {
-        Bucky::Tracking.instance.event(current_distributor, "new_bank_information")
+        tracking.event(current_distributor, "new_bank_information") unless current_admin.present?
         redirect_to distributor_settings_bank_information_url, notice: 'Bank information was successfully updated.'
       }
       failure.html { render 'distributor/settings/bank_information' }
