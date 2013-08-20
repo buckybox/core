@@ -531,12 +531,6 @@ class Distributor < ActiveRecord::Base
     data = customers.ordered.where(id: customer_ids)
     data.includes(route: {}, account: { route: {} }, next_order: { box: {} })
   end
-  
-  def track(action_name, occurred_at=Time.current)
-    user = Intercom::User.find_by_user_id(self.id)
-    user.custom_data["#{action_name}_at"] = occurred_at
-    user.save
-  end
 
 private
 
@@ -575,6 +569,8 @@ private
   end
 
   def tracking_after_create
+    return unless Rails.env.production?
+
     ::Intercom::User.create(user_id: id, email: email, name: name, created_at: created_at, custom_data: {contact_name: contact_name, phone: phone})
   end
 
@@ -591,6 +587,8 @@ private
   end
 
   def update_tags
+    return unless Rails.env.production? #no accidents.
+
     tag_list.each do |tag_name|
       tag = nil
       begin
