@@ -50,7 +50,4 @@ class Distributor::SettingsController < Distributor::BaseController
     @line_items = current_distributor.line_items
     @placeholder_text = 'Enter items one per line or separated by commas. e.g. Silverbeet, Cabbage, Celery'
   end
-
-  def reporting
-  end
 end

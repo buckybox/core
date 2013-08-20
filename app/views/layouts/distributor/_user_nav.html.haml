@@ -6,9 +6,10 @@
         %b.caret
       %ul.dropdown-menu
         %li= link_to 'settings', distributor_settings_business_information_path
-        %li
-          - if current_distributor.active_webstore?
-            = link_to 'view webstore', webstore_store_path(current_distributor.parameter_name), target: '_blank'
+        - if current_distributor.active_webstore?
+          %li= link_to 'view webstore', webstore_store_path(current_distributor.parameter_name), target: '_blank'
+        %li= link_to 'reporting', distributor_reports_path
+        %li.divider
         %li
           - if admin_signed_in?
             = link_to 'logout', unimpersonate_admin_distributors_path

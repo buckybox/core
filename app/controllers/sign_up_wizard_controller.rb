@@ -84,8 +84,9 @@ private
       to: Figaro.env.team_emails,
       subject: "Sign up follow-up [#{Rails.env}]",
       body: <<-BODY
-        Name: #{distributor[:name]}
+        Organisation name: #{distributor[:name]}
         Email: #{distributor[:email]}
+        Contact name: #{distributor[:contact_name]}
         Accept bank deposit: #{distributor[:payment_bank_deposit]} - #{distributor[:bank_name]}
         Accept PayPal: #{distributor[:payment_paypal]}
         Accept cash on delivery: #{distributor[:payment_cash_on_delivery]}

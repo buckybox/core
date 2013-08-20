@@ -75,10 +75,4 @@ describe Distributor::SettingsController do
 
     specify { response.should render_template 'distributor/settings/stock_list' }
   end
-
-  describe '#reporting' do
-    before { get :reporting, distributor_id: @distributor.id }
-
-    specify { response.should render_template 'distributor/settings/reporting' }
-  end
 end
