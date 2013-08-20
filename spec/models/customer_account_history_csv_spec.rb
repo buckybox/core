@@ -34,8 +34,6 @@ describe CustomerAccountHistoryCsv do
       rows = CSV.parse(CustomerAccountHistoryCsv.generate(date, @distributor))
       rows[1..-1].should eq [[date.iso8601, "0001", "C1", "CL1", "1@buckybox.com", "-40.0"],
                               [date.iso8601, "0002", "C2", "CL2", "2@buckybox.com", "40.0"]]
-      
-      @distributor.destroy
     end
   end
 end
