@@ -1,4 +1,7 @@
-class Distributor::ReportsController < ApplicationController
+class Distributor::ReportsController < Distributor::BaseController
+
+  def index
+  end
 
   def transaction_history
     date_from = Date.parse(params[:start])
