@@ -70,6 +70,7 @@ class Order < ActiveRecord::Base
     self.schedule_rule ||= ScheduleRule.one_off(Date.current) if new_record?
   end
 
+  # TODO: move to decorator
   def self.dates_grid
     days = []
     4.times do |week| # 4 first weeks of the month
@@ -80,6 +81,7 @@ class Order < ActiveRecord::Base
     days
   end
 
+  # TODO: move to decorator
   def self.start_dates(route, time_from_now = nil)
     time_from_now ||= 12.weeks.from_now
     from_time = route.distributor.window_end_at + 1.day #next_occurrence includes the start date, so choose the next day
