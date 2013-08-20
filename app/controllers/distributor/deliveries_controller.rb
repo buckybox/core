@@ -70,8 +70,6 @@ class Distributor::DeliveriesController < Distributor::ResourceController
       result = Delivery.reverse_pay_on_delivery(deliveries)
     else
       result = Delivery.pay_on_delivery(deliveries)
-
-      tracking.event(current_distributor, "distributor_marked_an_order_as_payment_on_delivery")
     end
 
     if result
@@ -86,7 +84,7 @@ class Distributor::DeliveriesController < Distributor::ResourceController
 
     if export
       screen = params[:screen] # delivery or packing
-      tracking.event(current_distributor, "distributor_exported_#{screen}_list")
+      tracking.event(current_distributor, "export_#{screen}_list")
 
       send_data(*export.csv)
     else
@@ -107,7 +105,7 @@ class Distributor::DeliveriesController < Distributor::ResourceController
 
     @date = @packages.first.packing_list.date
 
-    tracking.event(current_distributor, "distributor_printed_packing_list")
+    tracking.event(current_distributor, "print_packing_list")
 
     render layout: 'print'
   end

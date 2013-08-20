@@ -16,7 +16,7 @@ class Distributor::ReportsController < ApplicationController
     date = Date.parse(params[:to])
     csv_string = CustomerAccountHistoryCsv.generate(date, current_distributor)
 
-    tracking.event(current_distributor, "exported_customer_account_history")
+    tracking.event(current_distributor, "exported_account_history")
 
     send_csv("bucky-box-customer-account-balance-export-#{date.iso8601}", csv_string)
   end

@@ -46,9 +46,6 @@ class Distributor < ActiveRecord::Base
     email: "Account login email"
   }
 
-  include Vero::Trackable
-  trackable :email, :name, :contact_name
-
   devise :database_authenticatable, :recoverable, :rememberable, :trackable, :validatable
 
   acts_as_taggable
@@ -98,11 +95,11 @@ class Distributor < ActiveRecord::Base
   before_create :parameterize_name, if: 'parameter_name.nil?'
   after_create :send_welcome_email
 
-  after_create :tracking_on_create
+  after_create :tracking_after_create
 
   after_save :generate_required_daily_lists
   after_save :update_halted_statuses
-  after_save :tracking_on_save
+  after_save :tracking_after_save
 
   serialize :email_templates, Array
 
@@ -534,6 +531,12 @@ class Distributor < ActiveRecord::Base
     data = customers.ordered.where(id: customer_ids)
     data.includes(route: {}, account: { route: {} }, next_order: { box: {} })
   end
+  
+  def track(action_name, occurred_at=Time.current)
+    user = Intercom::User.find_by_user_id(self.id)
+    user.custom_data["#{action_name}_at"] = occurred_at
+    user.save
+  end
 
 private
 
@@ -571,25 +574,36 @@ private
     self.support_email = self.email if self.support_email.blank?
   end
 
-  def tracking_on_create
-    Bucky::Tracking.instance.event(self, 'signed_up', {
-      business_name: name,
-      email: email,
-      contact_name: contact_name
-    })
+  def tracking_after_create
+    ::Intercom::User.create(user_id: id, email: email, name: name, created_at: created_at, custom_data: {contact_name: contact_name, phone: phone})
   end
 
-  def tracking_on_save
-    attributes = %w(city details about)
+  def tracking_after_save
+    return unless Rails.env.production?
 
-    if attributes.any? { |attr| send("#{attr}_changed?") } and \
-      attributes.all? { |attr| send(attr).present? }
-      Bucky::Tracking.instance.event(self, "distributor_populated_business_information")
-    end
+    self.delay(
+      priority: Figaro.env.delayed_job_priority_low
+    ).update_tags
   end
 
   def send_welcome_email
     DistributorMailer.welcome(self).deliver
+  end
+
+  def update_tags
+    tag_list.each do |tag_name|
+      tag = nil
+      begin
+        tag = ::Intercom::Tag.find_by_name(tag_name)
+      rescue Intercom::ResourceNotFound
+        tag = ::Intercom::Tag.new
+        tag.name = tag_name
+      end
+      tag.user_ids = [self.id.to_s]
+      tag.color = 'blue'
+      tag.tag_or_untag = 'tag'
+      tag.save
+    end
   end
 
   # This is meant to be run within console for dev work via Distributor.send(:travel_forward_a_day)

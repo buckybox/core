@@ -9,7 +9,6 @@ class ApplicationController < ActionController::Base
 
   before_filter :set_user_time_zone
   before_filter :set_user_currency
-  after_filter :track
 
   layout :layout_by_resource
 
@@ -24,10 +23,6 @@ protected
 
   def tracking
     @tracking ||= Bucky::Tracking.instance
-  end
-
-  def track
-    tracking.track(current_distributor) if current_distributor
   end
 
   def layout_by_resource

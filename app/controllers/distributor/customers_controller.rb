@@ -23,7 +23,7 @@ class Distributor::CustomersController < Distributor::ResourceController
   def create
     create! do |success, failure|
       success.html do
-        tracking.event(current_distributor, "distributor_created_customer")
+        tracking.event(current_distributor, "new_customer")
         redirect_to distributor_customer_url(@customer)
       end
     end
@@ -80,7 +80,7 @@ class Distributor::CustomersController < Distributor::ResourceController
       end
     end
 
-    tracking.event(current_distributor, "distributor_sent_login_details")
+    tracking.event(current_distributor, "sent_login_details")
 
     redirect_to distributor_customer_url(@customer)
   end
@@ -119,7 +119,7 @@ class Distributor::CustomersController < Distributor::ResourceController
     recipient_ids = params[:export][:recipient_ids].split(',').map(&:to_i)
     csv_string    = CustomerCSV.generate(current_distributor, recipient_ids)
 
-    tracking.event(current_distributor, "distributor_exported_csv_customer_list")
+    tracking.event(current_distributor, "export_csv_customer_list")
 
     send_csv("customer_export", csv_string)
   end
@@ -143,7 +143,7 @@ protected
         @customers = current_distributor.customers.where(number: query.to_i)
       end
 
-      tracking.event(current_distributor, "distributor_searched_customer_list")
+      tracking.event(current_distributor, "search_customer_list")
     end
 
     @customers = @customers.ordered_by_next_delivery.includes(account: {route: {}}, tags: {}, next_order: {box: {}})
@@ -189,7 +189,7 @@ private
 
         tracking.event(
           current_distributor,
-          "distributor_sent_group_email",
+          "sent_group_email",
           { recipient_count: recipient_ids.count }
         )
       end

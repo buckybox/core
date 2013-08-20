@@ -22,7 +22,7 @@ class Distributor::PaymentsController < Distributor::ResourceController
       @selected_omni_importer = current_distributor.last_used_omni_importer(@import_transaction_list.omni_importer)
     end
 
-    tracking.event(current_distributor, "distributor_uploaded_payment_records")
+    tracking.event(current_distributor, "payment_csv_uploaded")
 
     load_index
 
@@ -50,7 +50,7 @@ class Distributor::PaymentsController < Distributor::ResourceController
     processed_data = @import_transaction_list.process_import_transactions_attributes(params[:import_transaction_list])
 
     if @import_transaction_list.process_attributes(processed_data)
-      tracking.event(current_distributor, "distributor_saved_payment_records")
+      tracking.event(current_distributor, "payment_csv_commited")
 
       redirect_to distributor_payments_url, notice: "Payments processed successfully"
     else

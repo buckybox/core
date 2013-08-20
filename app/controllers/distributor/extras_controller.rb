@@ -5,7 +5,7 @@ class Distributor::ExtrasController < Distributor::ResourceController
 
   def create
     create! { distributor_settings_extras_url }
-    tracking.event(current_distributor, "distributor_created_extra")
+    tracking.event(current_distributor, "new_extra")
   end
 
   def update
