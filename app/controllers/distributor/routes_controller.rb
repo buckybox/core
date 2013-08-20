@@ -5,7 +5,7 @@ class Distributor::RoutesController < Distributor::ResourceController
 
   def create
     create! { distributor_settings_routes_url }
-    tracking.event(current_distributor, 'new_route')
+    tracking.event(current_distributor, 'new_route') unless current_admin.present?
   end
 
   def update

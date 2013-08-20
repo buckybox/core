@@ -9,7 +9,7 @@ class Distributor::SessionsController < Devise::SessionsController
 
     result = super
 
-    DistributorLogin.track(current_distributor)
+    DistributorLogin.track(current_distributor) unless current_admin.present?
 
     result
   end

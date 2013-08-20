@@ -30,5 +30,6 @@
 
           .row-fluid
             .span12= yield
+  = intercom_script_tag unless current_admin.present?
 
 = render 'layouts/base'

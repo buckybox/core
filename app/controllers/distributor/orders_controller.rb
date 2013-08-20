@@ -25,7 +25,7 @@ class Distributor::OrdersController < Distributor::ResourceController
 
     create!  do |success, failure|
       success.html do
-        tracking.event(current_distributor, "new_order")
+        tracking.event(current_distributor, "new_order") unless current_admin.present?
         redirect_to [:distributor, @account.customer]
       end
 

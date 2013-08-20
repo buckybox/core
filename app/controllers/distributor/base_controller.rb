@@ -5,6 +5,8 @@ class Distributor::BaseController < ApplicationController
   before_filter :mark_seen_recently
   before_filter :get_notifications
 
+  skip_after_filter :intercom_rails_auto_include
+
 private
 
   def mark_seen_recently
