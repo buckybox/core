@@ -6,13 +6,12 @@ module Bucky
 
     def event(identity, action_name, occurred_at = Time.now)
       raise TypeError, "Identity cannot be nil" if identity.nil?
+      return unless Rails.env.production?
 
-      if Rails.env.production?
-        # tracking
-        identity.delay(
-          priority: Figaro.env.delayed_job_priority_low
-        ).track(action_name, occurred_at)
-      end
+      # tracking
+      identity.delay(
+        priority: Figaro.env.delayed_job_priority_low
+      ).track(action_name, occurred_at)
     end
   end
 end
