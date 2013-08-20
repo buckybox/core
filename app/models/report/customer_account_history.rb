@@ -7,7 +7,7 @@ class Report::CustomerAccountHistory
   def initialize(args = {})
     @distributor = args[:distributor]
     @date        = Date.parse(args[:date])
-    @customers   = distributor.customers.ordered
+    @customers   = get_customers
   end
 
   def name
@@ -47,6 +47,10 @@ private
       customer.email,
       customer.balance_at(date),
     ]
+  end
+
+  def get_customers
+    distributor.customers.ordered
   end
 
 end
