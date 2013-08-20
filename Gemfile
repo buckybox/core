@@ -51,7 +51,8 @@ gem 'countries', '~> 0.9.2', require: 'iso3166'
 gem 'country_select', '~> 1.1.3'
 gem 'biggs', '~> 0.3.3'
 
-gem 'vero', '~> 0.5.10'
+gem 'intercom-rails', '~> 0.2.21'
+gem 'intercom', '~> 0.1.11'
 
 gem 'charlock_holmes'
 

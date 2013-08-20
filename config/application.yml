@@ -26,10 +26,6 @@ DELAYED_JOB_PRIORITY_LOW:  50
 DELAYED_JOB_USERNAME: "bg_job_master"
 DELAYED_JOB_PASSWORD: "What's in the queue?"
 
-# Vero
-VERO_API_KEY: '8029577e167a4f55a6262d8eff46ea0a445d21b0'
-VERO_SECRET: '76ab27793509fe90650d66de91841d3e41dafefe'
-
 # Email headers
 X_MAILER: 'Bucky Box Mailer (1.0.0) www.buckybox.com'
 
