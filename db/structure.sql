@@ -2123,37 +2123,6 @@ ALTER SEQUENCE transactions_id_seq OWNED BY transactions.id;
 
 
 --
--- Name: webstore_cart_persistences; Type: TABLE; Schema: public; Owner: -; Tablespace: 
---
-
-CREATE TABLE webstore_cart_persistences (
-    id integer NOT NULL,
-    collected_data text,
-    created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
-);
-
-
---
--- Name: webstore_cart_persistences_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE webstore_cart_persistences_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: webstore_cart_persistences_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE webstore_cart_persistences_id_seq OWNED BY webstore_cart_persistences.id;
-
-
---
 -- Name: webstore_orders; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -2538,13 +2507,6 @@ ALTER TABLE ONLY tags ALTER COLUMN id SET DEFAULT nextval('tags_id_seq'::regclas
 --
 
 ALTER TABLE ONLY transactions ALTER COLUMN id SET DEFAULT nextval('transactions_id_seq'::regclass);
-
-
---
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY webstore_cart_persistences ALTER COLUMN id SET DEFAULT nextval('webstore_cart_persistences_id_seq'::regclass);
 
 
 --
@@ -2944,14 +2906,6 @@ ALTER TABLE ONLY tags
 
 ALTER TABLE ONLY transactions
     ADD CONSTRAINT transactions_pkey PRIMARY KEY (id);
-
-
---
--- Name: webstore_cart_persistences_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
---
-
-ALTER TABLE ONLY webstore_cart_persistences
-    ADD CONSTRAINT webstore_cart_persistences_pkey PRIMARY KEY (id);
 
 
 --
