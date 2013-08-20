@@ -2154,50 +2154,6 @@ ALTER SEQUENCE webstore_cart_persistences_id_seq OWNED BY webstore_cart_persiste
 
 
 --
--- Name: webstore_orders; Type: TABLE; Schema: public; Owner: -; Tablespace: 
---
-
-CREATE TABLE webstore_orders (
-    id integer NOT NULL,
-    account_id integer,
-    box_id integer,
-    order_id integer,
-    exclusions text,
-    substitutions text,
-    extras text,
-    status character varying(255),
-    remote_ip character varying(255),
-    created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL,
-    schedule text,
-    frequency character varying(255),
-    extras_one_off boolean,
-    distributor_id integer,
-    route_id integer,
-    payment_method character varying(255)
-);
-
-
---
--- Name: webstore_orders_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE webstore_orders_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: webstore_orders_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE webstore_orders_id_seq OWNED BY webstore_orders.id;
-
-
---
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -2545,13 +2501,6 @@ ALTER TABLE ONLY transactions ALTER COLUMN id SET DEFAULT nextval('transactions_
 --
 
 ALTER TABLE ONLY webstore_cart_persistences ALTER COLUMN id SET DEFAULT nextval('webstore_cart_persistences_id_seq'::regclass);
-
-
---
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY webstore_orders ALTER COLUMN id SET DEFAULT nextval('webstore_orders_id_seq'::regclass);
 
 
 --
@@ -2952,14 +2901,6 @@ ALTER TABLE ONLY transactions
 
 ALTER TABLE ONLY webstore_cart_persistences
     ADD CONSTRAINT webstore_cart_persistences_pkey PRIMARY KEY (id);
-
-
---
--- Name: webstore_orders_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
---
-
-ALTER TABLE ONLY webstore_orders
-    ADD CONSTRAINT webstore_orders_pkey PRIMARY KEY (id);
 
 
 --
@@ -3781,3 +3722,5 @@ INSERT INTO schema_migrations (version) VALUES ('20130705053401');
 INSERT INTO schema_migrations (version) VALUES ('20130710053124');
 
 INSERT INTO schema_migrations (version) VALUES ('20130730021915');
+
+INSERT INTO schema_migrations (version) VALUES ('20130820025105');
