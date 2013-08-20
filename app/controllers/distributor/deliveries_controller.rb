@@ -84,7 +84,7 @@ class Distributor::DeliveriesController < Distributor::ResourceController
 
     if export
       screen = params[:screen] # delivery or packing
-      tracking.event(current_distributor, "export_#{screen}_list")
+      tracking.event(current_distributor, "export_#{screen}_list") unless current_admin.present?
 
       send_data(*export.csv)
     else
@@ -105,7 +105,7 @@ class Distributor::DeliveriesController < Distributor::ResourceController
 
     @date = @packages.first.packing_list.date
 
-    tracking.event(current_distributor, "print_packing_list")
+    tracking.event(current_distributor, "print_packing_list") unless current_admin.present?
 
     render layout: 'print'
   end
