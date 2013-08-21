@@ -19,9 +19,9 @@ class ExtrasCsv
   def headers(csv)
     csv << ["delivery date", "extra line item name", "extra line item unit", "extra line item unit price", "quantity"]
   end
-  
+
   def extras_summary(distributor, date)
-    packages(distributor, date).collect(&:extras_summary).flatten
+    packages(distributor, date).map(&:extras_summary).flatten
   end
 
   private
