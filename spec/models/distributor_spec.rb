@@ -67,12 +67,16 @@ describe Distributor do
         Fabricate.build(:omni_importer_for_bank_deposit,
           name: "Kiwibank",
           bank_name: "Kiwibank"
-        )
+        ),
+        Fabricate.build(:omni_importer_for_bank_deposit,
+          name: "PayPal",
+          bank_name: "PayPal"
+        ),
       ]
 
       distributor = Fabricate(:distributor, omni_importers: omni_importers)
 
-      expect(distributor.banks).to match_array %w(Westpac Kiwibank)
+      expect(distributor.banks).to match_array %w(Westpac Kiwibank PayPal)
     end
   end
 
