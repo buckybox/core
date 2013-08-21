@@ -1,7 +1,7 @@
 - title('Customer Payments', false)
 = intro_tour(@show_tour)
 
-- if current_distributor.can_upload_payments?
+- if distributor.can_upload_payments?
   = simple_form_for(@import_transaction_list, url: match_payments_distributor_payments_path, html: { multipart: true }) do |f|
     #upload_more_transactions.modal.hide.fade
       .modal-body
@@ -12,7 +12,7 @@
 
         #describe-available-importers.row-fluid
           .span12
-            %p= "Login to #{supported_csv_formats(current_distributor)} to download your transactions in #{content_tag(:strong, 'CSV format')}".html_safe
+            %p= "Please log into #{distributor.banks} to download your transactions in #{content_tag(:strong, 'CSV format')}.".html_safe
 
         .row-fluid#upload_error_messages
           .span12
@@ -24,21 +24,21 @@
                   Did you upload the right file?
       .modal-footer
         .form_fields.ajax_loader_hide
-          - unless current_distributor.omni_importers.count.zero?
+          - unless distributor.omni_importers.count.zero?
             = f.input :omni_importer_id, as: :hidden, input_html: { value: @selected_omni_importer.id}
             .btn-group.text-center
               %button#upload_btn.btn.btn-primary= "Upload #{@selected_omni_importer.name} Transactions"
-              - if current_distributor.omni_importers.count > 1
+              - if distributor.omni_importers.count > 1
                 %button.btn.btn-primary.dropdown-toggle{data:{toggle:'dropdown'}}
                   %span.caret
                 %ul#omni_importer_menu.dropdown-menu
-                  - current_distributor.omni_importers.ordered.each do |omni_importer|
+                  - distributor.omni_importers.ordered.each do |omni_importer|
                     %li{data:{id: omni_importer.id, label: "Upload #{omni_importer.name} Transactions"}}= link_to omni_importer.name, '#', style: 'text-align:left'
 
           %input#import_transaction_list_csv_file{name: 'import_transaction_list[csv_file]', type:'file', style: 'display:none', class: 'auto_submit'}
 
         .ajax-spinner
-- elsif !current_distributor.show_payments_tab?
+- elsif !distributor.show_payments_tab?
   .alert
     You have no bank feeds setup. Please contact #{mail_to Figaro.env.support_email} and supply a sample of your Internet Banking Statement in CSV format.
 
@@ -53,7 +53,7 @@
           %th.account Payment Type
           %th.customer Customer
       %tbody
-        - if current_distributor.can_upload_payments?
+        - if distributor.can_upload_payments?
           %tr.new-row
             %td{ colspan: 5 }= import_modal_link(@import_transactions, '#upload_more_transactions', 'upload_more_transactions_link')
         - else
