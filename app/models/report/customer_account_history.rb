@@ -1,3 +1,5 @@
+require 'date'
+require 'csv'
 require_relative '../report'
 
 class Report::CustomerAccountHistory
