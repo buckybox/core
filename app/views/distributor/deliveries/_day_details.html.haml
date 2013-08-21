@@ -47,9 +47,9 @@
       - if @items.blank?
         %h3 No Deliveries
         %p
-          There are no deliveries for 
+          There are no deliveries for
           %strong= @route.name
-          on 
+          on
           %strong= @selected_date.strftime("%A %d %B")
       - else
         - if @route_id != 0
