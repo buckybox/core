@@ -10,7 +10,7 @@ package :monit, :provides => :monitoring do
   push_text File.read(MONIT_SCRIPT_PATH), tmp_file do
     post :install, "mv #{tmp_file} /etc/default/monit"
   end
-  push_text File.read(MONIT_CONFIG_PATH), tmp_file do
+  push_text Package.preprocess_stage(File.read(MONIT_CONFIG_PATH)), tmp_file do
     post :install, "mv #{tmp_file} /etc/monit/monitrc"
     post :install, "chown -R root:root /etc/monit"
     post :install, "/etc/init.d/monit restart"

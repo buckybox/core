@@ -1,8 +1,11 @@
 - stylesheet 'distributor'
 - javascript 'distributor'
 
-- content_for :thrid_party_code do
-  = render 'layouts/distributor/third_party_code'
+- content_for :uservoice do
+  = render 'layouts/uservoice'
+
+- content_for :pingdom do
+  = render 'layouts/pingdom'
 
 - content_for :body do
   .container
@@ -11,7 +14,6 @@
 
     .row
       .span12= render 'layouts/distributor/user_nav'
-
 
     .row
       .span1= render 'layouts/distributor/topic_tabs'

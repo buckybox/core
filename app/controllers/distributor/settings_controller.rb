@@ -9,7 +9,7 @@ class Distributor::SettingsController < Distributor::BaseController
   end
 
   def spend_limit_confirmation
-    spend_limit = params[:spend_limit].to_f * 100.0
+    spend_limit = BigDecimal.new(params[:spend_limit]) * BigDecimal.new(100)
     update_existing = params[:update_existing] == '1'
     send_halt_email = params[:send_halt_email] == '1'
     count = current_distributor.number_of_customers_halted_after_update(spend_limit, update_existing)
@@ -49,8 +49,5 @@ class Distributor::SettingsController < Distributor::BaseController
 
     @line_items = current_distributor.line_items
     @placeholder_text = 'Enter items one per line or separated by commas. e.g. Silverbeet, Cabbage, Celery'
-  end
-
-  def reporting
   end
 end

@@ -1,7 +1,7 @@
 Hi #{@customer.first_name.strip},
 %br
 %br
-#{@oops}, you're recent order won't be fulfilled until your account is above your minimum balance - your existing account balance is
+#{@oops}, your recent order won't be fulfilled until your account is above your minimum balance - your existing account balance is
 %strong= @customer.account.balance.format
 (your account should always be above your minimum balance of #{@customer.balance_threshold.format} in order to receive deliveries).
 %br

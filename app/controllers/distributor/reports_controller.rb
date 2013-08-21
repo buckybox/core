@@ -1,15 +1,27 @@
-class Distributor::ReportsController < ApplicationController
+class Distributor::ReportsController < Distributor::BaseController
+
+  def index
+  end
 
   def transaction_history
     date_from = Date.parse(params[:start])
     date_to = Date.parse(params[:to])
 
-    csv_output = current_distributor.transaction_history_report(date_from, date_to)
+    csv_string = current_distributor.transaction_history_report(date_from, date_to)
+    filename = "bucky-box-transaction-history-export-#{date_from.to_s(:transaction)}-to-#{date_to.to_s(:transaction)}"
 
-    filename = "bucky-box-transaction-history-export-#{date_from.to_s(:transaction)}-to-#{date_to.to_s(:transaction)}.csv"
-    type     = 'text/csv; charset=utf-8; header=present'
+    tracking.event(current_distributor, "exported_transaction_history")
 
-    send_data(csv_output, type: type, filename: filename)
+    send_csv(filename, csv_string)
+  end
+
+  def export_customer_account_history
+    date = Date.parse(params[:to])
+    csv_string = CustomerAccountHistoryCsv.generate(date, current_distributor)
+
+    tracking.event(current_distributor, "exported_customer_account_history")
+
+    send_csv("bucky-box-customer-account-balance-export-#{date.iso8601}", csv_string)
   end
 
 end

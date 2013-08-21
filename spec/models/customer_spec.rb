@@ -19,8 +19,8 @@ describe Customer do
       delivery_city: 'Masterton',
       delivery_postcode: '1234567',
       delivery_instructions: 'by the zips please',
-      phone_1: '0800 999 666 333',
-      phone_2: '0800 BOWIES IN SPACE',
+      mobile_phone: '0800 999 666 333',
+      home_phone: '0800 BOWIES IN SPACE',
       tags: ["Flight of the concords", "rock"],
       boxes: 2.times.collect{box_mock},
     }.merge(opts)
@@ -77,8 +77,29 @@ describe Customer do
     let(:distributor) { Fabricate(:distributor, default_balance_threshold_cents: -50000, has_balance_threshold: true) }
 
     it 'should create a valid customer' do
-      c = distributor.customers.create({"first_name"=>"Jordan", "last_name"=>"Carter", "tag_list"=>"", "email"=>"jordan+3@buckybox.com", "address_attributes"=>{"phone_1"=>"", "phone_2"=>"", "phone_3"=>"", "address_1"=>"43a Warwick St", "address_2"=>"Wilton", "suburb"=>"Wellington", "city"=>"Wellington", "postcode"=>"6012", "delivery_note"=>""}, "balance_threshold"=>"1.00", "discount"=>"0", "special_order_preference"=>"", "route_id"=>"68"})
+      c = distributor.customers.create({"first_name"=>"Jordan", "last_name"=>"Carter", "tag_list"=>"", "email"=>"jordan+3@buckybox.com", "address_attributes"=>{"mobile_phone"=>"", "home_phone"=>"", "work_phone"=>"", "address_1"=>"43a Warwick St", "address_2"=>"Wilton", "suburb"=>"Wellington", "city"=>"Wellington", "postcode"=>"6012", "delivery_note"=>""}, "balance_threshold"=>"1.00", "discount"=>"0", "special_order_preference"=>"", "route_id"=>"68"})
       c.should be_valid
+    end
+  end
+
+  it "enforce password minimum length requirement" do
+    new_customer = Fabricate.build(:customer, password: 'a' * 5)
+
+    new_customer.should_not be_valid
+    new_customer.errors.get(:password).should include "is too short (minimum is 6 characters)"
+  end
+
+  context "when a customer is created" do
+    it "does not send their login details" do
+      CustomerMailer.should_not_receive(:login_details)
+      Fabricate(:customer)
+    end
+  end
+
+  context "when a customer is created via the webstore" do
+    it "does send their login details" do
+      CustomerMailer.should_receive(:login_details).and_call_original
+      Fabricate(:customer, via_webstore: true)
     end
   end
 
@@ -100,9 +121,31 @@ describe Customer do
       specify { @customer.email.should == 'buckybox@example.com' }
     end
 
+    describe "#email_to" do
+      it "returns the expected recipient" do
+        customer = Fabricate.build(:customer,
+          name: "Will Lau",
+          email: "will@example.net"
+        )
+
+        customer.email_to.should eq "Will Lau <will@example.net>"
+      end
+    end
+
     describe '#number' do
       before { @customer.number = -1 }
       specify { @customer.should_not be_valid }
+
+      it "enforces uniqueness per distributor at the DB level" do
+        customer_1 = Fabricate(:customer)
+        customer_2 = Fabricate(:customer, distributor: customer_1.distributor)
+
+        customer_2.number = customer_1.number
+
+        expect {
+          customer_2.save(validate: false)
+        }.to raise_error ActiveRecord::RecordNotUnique
+      end
     end
 
     describe 'a random password is generated if empty' do
@@ -217,233 +260,7 @@ describe Customer do
     specify { customer.next_delivery_time.should == @order.schedule_rule.next_occurrence.to_date }
   end
 
-  describe '#import' do
-    let(:customer) { Fabricate(:customer) }
-
-    xit "should import customer with all fields" do
-      route = mock_model(Route)
-      route.stub(:includes?).and_return(true)
-
-      boxes = []
-      box = box_mock({box_type: "Rural Van", extras_unlimited?: true})
-      customer.stub_chain(:distributor, :boxes, :find_by_name).with("Rural Van").and_return(mock_model('Box', extras_unlimited?: true, substitutions_limit: 0, exclusions_limit: 0))
-      boxes << box
-
-      box = box_mock({box_type: "City Van", extras_unlimited?: true})
-      customer.stub_chain(:distributor, :boxes, :find_by_name).with("City Van").and_return(mock_model('Box', extras_unlimited?: true, substitutions_limit: 0, exclusions_limit: 0))
-      boxes << box
-
-      Distributor.any_instance.stub(:find_extra_from_import).and_return(mock_model('Extra'))
-      customer.stub(:default_balance_threshold_cents).and_return(-100000)
-      customer.stub(:has_balance_threshold).and_return(false)
-      customer.stub(:currency).and_return('NZD')
-
-      attrs = {
-        first_name: 'Jordan',
-        last_name: 'Carter',
-        email: 'jc@example.com',
-        discount: 0.1,
-        number: 1234,
-        notes: 'Good one dave, your a legend Dave',
-        account_balance: 80.65,
-        delivery_route: "Rural Van",
-        delivery_address_line_1: 'camp site 2c',
-        delivery_address_line_2: 'next to the toilet',
-        delivery_suburb: 'Solway',
-        delivery_city: 'Masterton',
-        delivery_postcode: '1234567',
-        delivery_instructions: 'by the zips please',
-        phone_1: '0800 999 666 333',
-        phone_2: '0800 BOWIES IN SPACE',
-        tags: ["Flight of the concords", "rock"],
-        boxes: boxes
-      }
-      import_customer = customer_mock(attrs)
-
-      customer.import(import_customer, route)
-
-      customer.first_name.should eq(attrs[:first_name])
-      customer.last_name.should eq(attrs[:last_name])
-      customer.email.should eq(attrs[:email])
-      customer.route_id.should eq(route.id)
-      customer.number.should eq(attrs[:number])
-      customer.notes.should eq(attrs[:notes])
-      customer.discount.should eq(attrs[:discount])
-      customer.tag_list.should eq(["flight-of-the-concords", "rock"])
-
-      address = customer.address
-      address.phone_1.should eq(attrs[:phone_1])
-      address.phone_2.should eq(attrs[:phone_2])
-      address.address_1.should eq(attrs[:delivery_address_line_1])
-      address.address_2.should eq(attrs[:delivery_address_line_2])
-      address.suburb.should eq(attrs[:delivery_suburb])
-      address.city.should eq(attrs[:delivery_city])
-      address.postcode.should eq(attrs[:delivery_postcode])
-      address.delivery_note.should eq(attrs[:delivery_instructions])
-
-      account = customer.account
-      account.balance.should eq(attrs[:account_balance])
-
-      0.upto(1).to_a.each do |n|
-        order = customer.orders[n]
-        box = boxes[n]
-      end
-    end
-  end
-
   describe "balance_threshold" do
-    xit 'should set balance threshold from distributor' do
-      distributor = Fabricate(:distributor, default_balance_threshold_cents: 20000)
-
-      customer = Fabricate(:customer, distributor: distributor).reload
-
-      customer.balance_threshold.should eq(200)
-    end
-
-    context :changing_balance do
-      before do
-        pending "fails randomly"
-
-        customer = Fabricate(:customer, balance_threshold_cents: -20000)
-        customer.reload
-        distributor = customer.distributor
-        distributor.has_balance_threshold = true
-        distributor.save!
-
-        customer.balance_threshold_cents = -20000
-        customer.save!
-
-        customer.status_halted.should be_false
-        customer.balance_threshold.should eq(-200)
-
-        account = customer.account
-        @customer = customer
-        @account = account
-      end
-
-      it 'should put customer into a halt state if they exceed balance threshold' do
-        @account.change_balance_to(-200.00)
-        @account.save!
-
-        @customer.reload.halted?.should be_true
-      end
-
-      it 'should take customer out of halt state when balance goes below threshold' do
-        @account.change_balance_to(-200.00)
-        @account.save!
-        @customer.reload.halted?.should be_true
-        @account.reload
-
-        @account.change_balance_to(-199.99)
-        @account.save!
-
-        @customer.reload.halted?.should be_false
-      end
-    end
-
-    context :changing_threshold do
-      before do
-        pending "fails randomly"
-
-        customer = Fabricate(:customer)
-        customer.reload
-        account = customer.account
-
-        distributor = customer.distributor
-        distributor.has_balance_threshold = true
-        distributor.save!
-
-        customer.balance_threshold_cents = -20000
-        customer.save!
-
-        @account = account
-        @customer = customer
-        @distributor = distributor
-      end
-
-      it 'should put customer into halt state when threshold lowered' do
-        @account.change_balance_to(-100)
-        @account.save!
-        @customer.reload
-        @customer.halted?.should be_false
-
-        @customer.balance_threshold_cents = -5000
-        @customer.save!
-
-        @customer.reload.halted?.should be_true
-      end
-
-      it 'should take customer out of halt state when threshold raised' do
-        @account.change_balance_to(-300)
-        @account.save!
-
-        @customer.reload
-        @customer.halted?.should be_true
-
-        @customer.balance_threshold_cents = -50000
-        @customer.save!
-
-        @customer.reload.halted?.should be_false
-      end
-
-      it 'should take customer out of halt when threshold turned off' do
-        @account.change_balance_to(-300)
-        @account.save!
-
-        @customer.reload
-        @customer.halted?.should be_true
-        @distributor.reload
-
-        @distributor.has_balance_threshold = false
-        @distributor.save!
-
-        @customer.reload.halted?.should be_false
-      end
-
-      it 'should put customer into halt when threshold turned on' do
-        @distributor.has_balance_threshold = false
-        @distributor.save!
-        @account.change_balance_to(-300)
-        @account.save!
-        @customer.reload
-        @customer.halted?.should be_false
-        @distributor.reload
-
-        @distributor.has_balance_threshold = true
-        @distributor.save!
-
-        @customer.reload.halted?.should be_true
-      end
-
-      it 'should take customer out of halt state when override threshold raised' do
-        @account.change_balance_to(-300)
-        @account.save!
-
-        @customer.reload
-        @customer.halted?.should be_true
-        @distributor.reload
-
-        @customer.balance_threshold_cents = -50000
-        @customer.save!
-
-        @customer.reload.halted?.should be_false
-      end
-
-      it 'should put customer into halt state when override threshold lowered' do
-        @account.change_balance_to(-100)
-        @account.save!
-
-        @customer.reload
-        @customer.halted?.should be_false
-        @distributor.reload
-
-        @customer.balance_threshold_cents = -5000
-        @customer.save!
-
-        @customer.reload.halted?.should be_true
-      end
-    end
-
     context :halt_orders do
       it 'should halt orders' do
         customer = Fabricate(:customer).reload
@@ -476,6 +293,31 @@ describe Customer do
         customer.should_receive(:create_halt_notifications)
         customer.halt!
       end
+    end
+  end
+
+  describe ".last_paid" do
+    it "returns the last payment transaction date" do
+      distributor = customer.distributor
+      Fabricate(:payment, display_time: 1.weeks.ago, account: customer.account, amount_cents: 100, distributor: distributor)
+      p = Fabricate(:payment, display_time: 1.day.ago, account: customer.account, amount_cents: 100, distributor: distributor)
+      Fabricate(:payment, display_time: 3.days.ago, account: customer.account, amount_cents: -100, distributor: distributor)
+      Fabricate(:payment, display_time: 2.weeks.ago, account: customer.account, amount_cents: 100, distributor: distributor)
+      p.reverse_payment!
+
+      customer.last_paid.to_date.should eq 1.weeks.ago.to_date
+    end
+
+    it "returns nil when no payments" do
+      customer.last_paid.should be_nil
+    end
+
+    it "includes COD payments" do
+      delivery = Fabricate(:delivery)
+      delivery.stub(:account).and_return(customer.account)
+      delivery.stub(:distributor).and_return(customer.distributor)
+      Delivery.pay_on_delivery([delivery])
+      customer.last_paid.should_not be_nil
     end
   end
 end

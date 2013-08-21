@@ -30,3 +30,8 @@ EOY
     )
   }
 end
+
+Fabricator(:omni_importer_for_bank_deposit, from: :omni_importer) do
+  payment_type "Bank Deposit"
+end
+

@@ -1,8 +1,10 @@
+# NOTE: this model is tightly coupled to the controller and full of spaghetti code
+
 class Webstore
   attr_reader :controller, :distributor, :order
 
   def initialize(controller, distributor)
-    @controller  = controller
+    @controller  = controller # FIXME: models should not talk to controllers
     @distributor = distributor
 
     @order = WebstoreOrder.find_by_id(webstore_session[:webstore_order_id]) if webstore_session
@@ -30,16 +32,17 @@ class Webstore
     if (credit_card_params = payment_params[:credit_card])
       process_credit_card(CreditCard.new(credit_card_params)) if credit_card_params.present?
     end
+
     if @order.no_payment_action? && @order.create_order
       customer = @controller.current_customer
       CustomerCheckout.track(customer) unless @controller.current_admin.present?
       @order.placed_step
-      @controller.flash[:notice] = 'Your order has been placed'
     else
       @controller.flash[:error] = 'There was a problem completing your order'
-      @order.payment_step
+      @order.complete_step
     end
-    return true
+
+    true
   end
 
   def next_step
@@ -66,7 +69,7 @@ class Webstore
     webstore_session[:email] if webstore_session
   end
 
-  private
+private
 
   def payment_due?(order)
     return false if order.account.blank? 
@@ -78,6 +81,7 @@ class Webstore
     box = Box.where(id: box_id, distributor_id: @distributor.id).first
     customer = @controller.current_customer
 
+    raise "Must have a distributor" unless @distributor
     @order = WebstoreOrder.create(box: box, distributor: @distributor, remote_ip: @controller.request.remote_ip)
     @order.account = customer.account if customer
 
@@ -150,6 +154,8 @@ class Webstore
   end
 
   def update_delivery_information(delivery_information)
+    Rails.logger.info("delivery_information = #{delivery_information.inspect}")
+
     assign_route(delivery_information[:route])                      if delivery_information[:route]
     set_schedule(delivery_information[:schedule_rule])              if delivery_information[:schedule_rule]
     assign_extras_frequency(delivery_information[:extra_frequency]) if delivery_information[:extra_frequency]
@@ -163,14 +169,40 @@ class Webstore
 
   def add_address_and_payment_select(webstore_params)
     address_information = webstore_params[:address]
-    payment_option = PaymentOption.new(webstore_params[:payment_method], @distributor)
 
-    if address_information && (address_information[:name].blank? || address_information[:street_address].blank?)
-      @controller.flash[:error] = 'Please include a your name'
+    if address_information && (address_information.keys - ["phone_type", "delivery_note"]).empty?
+      address_information = nil
+    end
+
+    payment_option = PaymentOption.new(webstore_params[:payment_method], @distributor)
+    @controller.session[:webstore][:payment_method] = webstore_params[:payment_method]
+
+    errors = false
+
+    if address_information
+      address_attributes = %w(
+        name
+        phone_number phone_type
+        street_address street_address_2 suburb city postcode
+        delivery_note
+      )
+
+      @controller.session[:webstore][:address] ||= {}
+      address_attributes.each do |input|
+        @controller.session[:webstore][:address][input] = address_information[input]
+      end
+
+      errors = validate_address_information(address_information)
+    end
+
+    if errors
+      @controller.flash[:error] = errors.join('<br>').html_safe
       @order.complete_step
     elsif !payment_due?(@order) && webstore_params[:payment_method] == 'paid'
       customer = find_or_create_customer(address_information)
       update_address(customer, address_information) if address_information
+
+      @order.payment_method = webstore_params[:payment_method]
       @order.account = customer.account
 
       if @order.create_order
@@ -192,8 +224,9 @@ class Webstore
       payment_option.apply(@order)
 
       @order.account = customer.account
-      @order.payment_step
+      @order.placed_step
       @order.save!
+      @order.create_order
     end
   end
 
@@ -208,42 +241,66 @@ class Webstore
         @controller.flash[:error] = 'You have already created this order'
       else
         @controller.flash[:error] = 'There was a problem completing your order'
-        @order.payment_step
+        @order.complete_step
       end
     else
       @controller.flash[:error] = ['There was a problem with your credit card', credit_card.errors.full_messages.join(', ')].join(', ')
     end
   end
 
+  def validate_address_information address_information
+    errors = []
+    errors << "Your name can't be blank" if address_information[:name].blank?
+
+    attrs = {
+      "street_address" => "address_1",
+      "street_address_2" => "address_2",
+      "suburb" => "suburb",
+      "city" => "city",
+      "postcode" => "postcode"
+    }.inject({}) do |accu, (from, to)|
+      accu.merge(to => address_information[from])
+    end
+
+    address = Address.new attrs
+    address.distributor = @distributor
+    address.phone = { type: address_information["phone_type"],
+                      number: address_information["phone_number"] }
+
+    return if address.skip_validations(:customer) { |address| address.valid? } && errors.empty?
+
+    errors + address.errors.full_messages
+  end
+
   def find_or_create_customer(address_information)
     return @controller.current_customer unless @controller.current_customer.nil?
 
-    customer       = @order.distributor.customers.new(email: self.current_email)
+    args           = { email: self.current_email, via_webstore: true }
+    customer       = @order.distributor.customers.new(args)
     customer.route = @order.route
     customer.name  = address_information[:name]
-
-    if customer.save
-      Event.new_customer_webstore(customer)
-      CustomerMailer.raise_errors do
-        customer.send_login_details
-      end
-      
-      CustomerLogin.track(customer) unless @controller.current_admin.present?
-      @controller.sign_in(customer)
-    end
 
     customer
   end
 
   def update_address(customer, address_information)
-    address           = customer.address
-    address.phone_1   = address_information[:phone_1]
-    address.address_1 = address_information[:street_address]
-    address.address_2 = address_information[:street_address_2]
-    address.suburb    = address_information[:suburb]
-    address.city      = address_information[:city]
-    address.postcode  = address_information[:post_code]
-    address.save
+    customer.name              = address_information[:name]
+
+    customer.address ||= Address.new
+
+    customer.address.phone     = {
+      number: address_information[:phone_number],
+      type:   address_information[:phone_type]
+    }
+
+    customer.address.address_1 = address_information[:street_address]
+    customer.address.address_2 = address_information[:street_address_2]
+    customer.address.suburb    = address_information[:suburb]
+    customer.address.city      = address_information[:city]
+    customer.address.postcode  = address_information[:postcode]
+    customer.address.delivery_note = address_information[:delivery_note]
+
+    customer.save
   end
 
   def add_exclusions_to_order(exclusions)
@@ -279,11 +336,15 @@ class Webstore
     frequency = schedule_information[:frequency]
     start = Date.parse(schedule_information[:start_date])
 
-    if frequency == 'single'
+    if frequency.empty?
+      @controller.flash[:error] = "You must select a delivery frequency."
+
+    elsif frequency == 'single'
       @order.schedule_rule = ScheduleRule.one_off(start)
+
     else
       if schedule_information[:days].nil?
-        @controller.flash[:error] = 'The schedule requires you select a day of the week.'
+        @controller.flash[:error] = 'You must select a day of the week.'
       else
         days_of_the_month = schedule_information[:days].keys.map(&:to_i)
         week = days_of_the_month.first / ScheduleRule::DAYS.size
@@ -294,6 +355,10 @@ class Webstore
 
         @order.schedule_rule = ScheduleRule.recur_on(start, days_of_the_week, frequency.to_sym, week)
       end
+    end
+
+    if @order.schedule_rule && !@order.route.schedule_rule.includes?(@order.schedule_rule)
+      @controller.flash[:error] = "You've selected a day which is not available for this route, please select another one."
     end
   end
 

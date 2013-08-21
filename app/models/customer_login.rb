@@ -1,3 +1,4 @@
+# Keeps track of customer logins
 class CustomerLogin < ActiveRecord::Base
   attr_accessible :customer, :distributor_id
 

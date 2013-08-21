@@ -1,5 +1,7 @@
 class OmniImporter < ActiveRecord::Base
-  attr_accessible :global, :country_id, :import_transaction_list, :name, :rules, :remove_import_transaction_list, :import_transaction_list_cache, :tag_list, :payment_type
+  PAYPAL_ID = 16
+
+  attr_accessible :global, :country_id, :import_transaction_list, :name, :rules, :remove_import_transaction_list, :import_transaction_list_cache, :tag_list, :payment_type, :bank_name
 
   mount_uploader :import_transaction_list, ImportTransactionListUploader
 
@@ -8,7 +10,8 @@ class OmniImporter < ActiveRecord::Base
   belongs_to :country
   has_and_belongs_to_many :distributors
 
-  scope :ordered, joins("LEFT JOIN countries ON countries.id = omni_importers.country_id").order('countries.name, omni_importers.name')
+  scope :ordered, joins("LEFT JOIN countries ON countries.id = omni_importers.country_id").order('countries.alpha2, omni_importers.name')
+  scope :bank_deposit, -> { where(payment_type: "Bank Deposit") }
 
   # used to name the uploaded files
   def file_format
@@ -16,9 +19,10 @@ class OmniImporter < ActiveRecord::Base
   end
 
   def test_rows
-    @rows ||= CSV.parse(import_transaction_list.read)
+    @rows ||=  Bucky::TransactionImports::OmniImport.csv_read(import_transaction_list.path)
   rescue StandardError => ex
     errors.add(:import_transaction_list, ex.message)
+    @rows ||= [[]]
   end
 
   def select_label
@@ -28,7 +32,7 @@ class OmniImporter < ActiveRecord::Base
   def import(csv_path)
     return @omni_import unless @omni_import.blank?
 
-    rows = CSV.parse(remove_crap_utf8(File.read(csv_path)))
+    rows =  Bucky::TransactionImports::OmniImport.csv_read(csv_path)
     @omni_import = Bucky::TransactionImports::OmniImport.new(rows, YAML.load(rules))
 
     return self
@@ -46,10 +50,6 @@ class OmniImporter < ActiveRecord::Base
     ""
   end
 
-  def bank_name
-    name
-  end
-
   def tag_name
     [name, country.try(:full_name)].compact.join(' - ')
   end
@@ -62,9 +62,4 @@ class OmniImporter < ActiveRecord::Base
     Bucky::TransactionImports::OmniImport.new([], YAML.load(rules)).header?
   end
 
-  private
-  
-  def remove_crap_utf8(string)
-    string.chars.select{|i| i.valid_encoding?}.join
-  end
 end

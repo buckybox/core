@@ -22,7 +22,11 @@ module Bucky::TransactionImports
     end
 
     def amount
-      @amount_string.to_f
+      BigDecimal.new(@amount_string)
+    end
+
+    def amount_cents
+      (amount * 100).to_i
     end
 
     MATCH_STRATEGY = [[:email_match, 1.0],
@@ -82,8 +86,8 @@ module Bucky::TransactionImports
     end
 
     def account_match(customer)
-      if amount == (-1.0 * customer.account.balance.to_f) && # Account matches amount (account must be negative)
-        customer.distributor.accounts.where(["customers.id != ? AND accounts.balance_cents = ?", customer.id, -100 * amount]).count.zero? # No other accounts match the amount
+      if amount == (BigDecimal.new(customer.account.balance_cents / BigDecimal.new(-100))) && # Account matches amount (account must be negative)
+          no_other_account_matches?(customer)
         1.0
       else
         0
@@ -171,7 +175,7 @@ module Bucky::TransactionImports
 
     def row_is_valid
       unless date_valid? && description_valid? && amount_valid?
-        errors.add(:base, "The file you uploaded didn't match what we expected a #{bank_name} file to look like.  There was a problem on row #{index-1}, make sure it was the correct file from your bank or contact Bucky Box with support@buckybox.com.")
+        errors.add(:base, "The file you uploaded didn't match what we expected a #{bank_name} file to look like.  There was a problem on row #{index-1}, make sure it was the correct file from your bank or contact Bucky Box with #{Figaro.env.support_email}.")
       end
     end
 
@@ -192,6 +196,12 @@ module Bucky::TransactionImports
     end
 
     private
+
+    # No other accounts match the amount
+    def no_other_account_matches?(customer)
+      customer.distributor.accounts.where(["customers.id != ? AND accounts.balance_cents = ?", customer.id, BigDecimal.new(-100) * amount]).count.zero? 
+    end
+
 
     def fuzzy_match(a, b)
       Bucky::Util.fuzzy_match(a, b)

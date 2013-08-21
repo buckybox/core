@@ -8,16 +8,16 @@
         %span.medium
           = mail_to(distributor.email, distributor.contact_name_for_email)
           -# Display main contact name if available, else display email, open in new window
-      .span3
+      .span2
         %span.medium= distributor.location
-      .span1.align-right.medium.bold
+      .span2.align-right.medium.bold
         = distributor.customers.count
-        %i.icon-user
+        = "(#{distributor.transactional_customer_count})"
+        %i.icon-user(title="total customers (transactional customers)")
         %br
-        - new_count = distributor.customers.where(["created_at > ?", 1.week.ago]).count
-        - unless new_count.zero?
-          = "#{new_count}"
-          %i.icon-plus
+        = distributor.new_customer_count
+        = "(#{distributor.new_transactional_customer_count})"
+        %i.icon-plus(title="new customer in last 7 days (new transactions)")
       .span1.align-right.medium.bold 
         = distributor.orders.active.count 
         %i.icon-shopping-cart(title="Active orders")
@@ -49,6 +49,8 @@
           %span.label.label-important credit-card
         - distributor.omni_importers.includes(:country).each do |omni_importer|
           %span.label.label-success{title: omni_importer.payment_type}= omni_importer.tag_name
+        - unless distributor.keep_me_updated?
+          %span.label dont-send-email-updates
       .span5
         %small
           Next delivery:

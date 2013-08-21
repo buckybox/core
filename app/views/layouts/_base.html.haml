@@ -22,7 +22,9 @@
     - analytical.identify(current_distributor.id, email: current_distributor.email) if current_distributor
     = raw analytical.head_append_javascript
 
-    = yield(:thrid_party_code)
+    = yield(:uservoice)
+    = yield(:pingdom)
+
   %body
     = raw analytical.body_prepend_javascript
     = yield(:body)

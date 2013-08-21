@@ -5,9 +5,10 @@
 #   git config --global core.excludesfile ~/.gitignore_global
 
 # Ignore RVM config
-.rvmrc
 .ruby-version
 .ruby-gemset
+.rvmrc
+.rbenv-version
 
 # Ignore POW config
 .powrc
@@ -22,8 +23,10 @@
 /config/database.yml
 
 # Ignore all logfiles and tempfiles.
-/log/*.log
+/log
 /tmp
+/doc
+/.yardoc
 *.swp
 *.swo
 .~lock*
@@ -53,4 +56,3 @@ private_uploads
 /tags
 /**/*/tags
 
-.rbenv-version

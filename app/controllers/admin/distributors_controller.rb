@@ -47,9 +47,16 @@ class Admin::DistributorsController < Admin::ResourceController
   def country_setting
     @country = Country.find(params[:id])
 
-    render json: {time_zone: ActiveSupport::TimeZone.new(@country.default_time_zone).name,
-                  currency: Money.parse(@country.default_currency).currency.id.upcase,
-                  fee: @country.default_consumer_fee_cents / 100.0}
+    time_zone = ActiveSupport::TimeZone::MAPPING.find do |_, city|
+      city == @country.default_time_zone
+    end
+    time_zone = time_zone.first if time_zone
+
+    render json: {
+      time_zone: time_zone,
+      currency: Money.parse(@country.default_currency).currency.id.upcase,
+      fee: @country.default_consumer_fee_cents / 100.0
+    }
   end
 
   def invoice
@@ -73,7 +80,27 @@ class Admin::DistributorsController < Admin::ResourceController
     redirect_to :back
   end
 
-  private
+  def write_email
+    @email = EmailForm.new(preview_email: current_admin.email)
+  end
+
+  def send_email
+    @email = EmailForm.new(params[:email_form])
+    if params[:commit] == 'Send' && @email.send!
+      flash.now[:notice] = 'Emails queued for delivery.'
+      @sent = true
+    elsif @email.send_preview!
+      flash.now[:notice] = "Preview email sent to #{@email.preview_email}."
+      @sent = false
+    else
+      flash.now[:alert] = "Email could not be sent. #{@email.errors.full_messages.join(', ')}"
+      @sent = false
+    end
+
+    render :write_email
+  end
+
+private
 
   def parameterize_name
     if params[:distributor]
