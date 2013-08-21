@@ -50,17 +50,21 @@ BuckyBox::Application.configure do
   # Enable serving of images, stylesheets, and JavaScripts from an asset server
   # config.action_controller.asset_host = "http://assets.example.com"
 
-  # Precompile additional assets (application.js, application.css, and all non-JS/CSS are already added)
-  config.assets.precompile += %w( admin.js admin.css distributor.js distributor.css customer.js customer.css print.js print.css )
-
   # Disable delivery errors, bad email addresses will be ignored
   config.action_mailer.raise_delivery_errors = false
-  config.action_mailer.default_url_options = { :host => 'my.buckybox.com' }
+  config.action_mailer.default_url_options = { host: Figaro.env.host }
 
   # postmark settings
-  config.action_mailer.delivery_method   = :postmark
-  config.action_mailer.postmark_settings = { :api_key => "63583ad4-c990-4ccb-a7db-afcc85d9070a" }
-
+  config.action_mailer.delivery_method   = :smtp
+  config.action_mailer.smtp_settings = {
+    :address   => "smtp.mandrillapp.com",
+    :port      => 587,
+    :enable_starttls_auto => true, # detects and uses STARTTLS
+    :user_name => Figaro.env.mandrill_email,
+    :password  => Figaro.env.mandrill_password,
+    :authentication => 'login', # Mandrill supports 'plain' or 'login'
+    :domain => 'my.buckybox.com', # your domain to identify your server when connecting
+  }
   # Enable threaded mode
   # config.threadsafe!
 
@@ -74,8 +78,5 @@ BuckyBox::Application.configure do
   # Log the query plan for queries taking more than this (works
   # with SQLite, MySQL, and PostgreSQL)
   # config.active_record.auto_explain_threshold_in_seconds = 0.5
-
-  # Ember
-  config.ember.variant = :production
 end
 

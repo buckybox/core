@@ -14,7 +14,7 @@
             %span.label.label-info= tag.name
 
       #account-information{data: {account_id: @account.id}}
-        %span.important{ class: "#{'negative' if @account.balance.negative?}" }= @account.balance
+        %span.balance{ class: "#{'negative' if @account.balance.negative?}" }= @account.balance.format
 
       %ul.unstyled
         - unless @customer.discount.zero?
@@ -29,18 +29,18 @@
         %li
           Email:
           %strong= @customer.email
-        - unless @address.phone_1.blank?
+        - unless @address.mobile_phone.blank?
           %li
             Mobile:
-            %strong= @address.phone_1
-        - unless @address.phone_2.blank?
+            %strong= @address.mobile_phone
+        - unless @address.home_phone.blank?
           %li
             Home:
-            %strong= @address.phone_2
-        - unless @address.phone_3.blank?
+            %strong= @address.home_phone
+        - unless @address.work_phone.blank?
           %li
             Work:
-            %strong= @address.phone_3
+            %strong= @address.work_phone
 
       - unless @customer.special_order_preference.blank?
         %p.note-field= @customer.special_order_preference

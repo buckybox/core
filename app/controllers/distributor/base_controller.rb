@@ -1,10 +1,11 @@
 class Distributor::BaseController < ApplicationController
+  layout 'distributor'
+
   before_filter :authenticate_distributor!
   before_filter :mark_seen_recently
   before_filter :get_notifications
-  layout 'distributor'
 
-  private
+private
 
   def mark_seen_recently
     current_distributor.mark_seen_recently! if current_distributor.present? && !current_admin.present?

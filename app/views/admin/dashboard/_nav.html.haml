@@ -1,0 +1,10 @@
+.row-fluid
+  .span12
+    - unless @distributors.blank?
+      = link_to 'Full Distributor List', admin_distributors_path
+      \|
+    = link_to 'New Distributor', new_admin_distributor_path, class: 'button radius'
+    |
+    = link_to 'Omni Importers', admin_omni_importers_path
+    |
+    = link_to_unless_current 'Send update email', send_email_admin_distributors_path

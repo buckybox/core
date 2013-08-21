@@ -11,6 +11,9 @@ class Jobs
 
     CronLog.log("Checking distributors if next order cache needs updating.")
     Distributor.update_next_occurrence_caches
+
+    CronLog.log("Running metrics for Munin graphs.")
+    Metrics.calculate_and_store_for_munin
   end
 
   def self.run_daily

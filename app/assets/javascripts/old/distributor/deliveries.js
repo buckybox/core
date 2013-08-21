@@ -3,37 +3,10 @@
 
 $(function() {
   var element = $('#calendar-navigation').jScrollPane();
-  $('#delivery-listings').equalHeights();
 
   if(element.length > 0) {
     var api = element.data('jsp');
-    var throttleTimeout;
-
     api.scrollToElement($('#scroll-to'), true);
-
-    $(window).bind(
-      'resize',
-      function()
-      {
-        if ($.browser.msie) {
-          // IE fires multiple resize events while you are dragging the browser window which
-          // causes it to crash if you try to update the scrollpane on every one. So we need
-          // to throttle it to fire a maximum of once every 50 milliseconds...
-          if (!throttleTimeout) {
-            throttleTimeout = setTimeout(
-              function()
-              {
-                api.reinitialise();
-                throttleTimeout = null;
-              },
-              50
-            );
-          }
-        } else {
-          api.reinitialise();
-        }
-      }
-    );
   }
 
   $('.sortable').sortable({
@@ -56,6 +29,13 @@ $(function() {
     }
   });
   $('.sortable').disableSelection();
+
+  $('#delivery-listings .tag-links').each(function() {
+    if (typeof window.chrome === "object") {
+      // Display tooltip for Chrome since it doesn't expand the tags
+      $(this).tooltip();
+    }
+  });
 
   $('#delivery-listings #all').change(function() {
     var checked_deliveries = $('#delivery-listings .data-listings input[type=checkbox]');
@@ -120,6 +100,11 @@ $(function() {
   });
 
   $('.dso-tooltip').tooltip();
+
+  $('#link_to_download_extras_csv').click(function(){
+    $('#export_extras_form').submit();
+    return false;
+  });
 });
 
 function updateDeliveryStatus(status, checked_deliveries, date) {
@@ -163,15 +148,13 @@ function makePayments(checked_deliveries, reverse_payment) {
   });
 
   $.each(checked_deliveries, function(i, ckbx) {
-    var holder = $(ckbx).closest('.data-listings');
-    var customerHolder = holder.find('.customer-holder');
-    var paidLabel = 'paid-label';
+    var paid_label = $(ckbx).closest('.data-listings').find('.paid-label');
 
     if(reverse_payment) {
-      customerHolder.removeClass(paidLabel);
+      paid_label.removeClass('paid');
     }
     else {
-      customerHolder.addClass(paidLabel);
+      paid_label.addClass('paid');
     }
   });
 }

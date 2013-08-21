@@ -2,34 +2,32 @@ class ApplicationController < ActionController::Base
   protect_from_forgery
 
   unless Rails.env.development?
-    analytical modules: [:google, :kiss_metrics], use_session_store: true
+    analytical modules: [:google], use_session_store: true
   else
     analytical modules: [], use_session_store: true
   end
 
   before_filter :set_user_time_zone
   before_filter :set_user_currency
+  after_filter :track
 
   layout :layout_by_resource
 
-  rescue_from Postmark::InvalidMessageError, with: :postmark_delivery_error
-  # Taken from http://stackoverflow.com/questions/7642648/what-is-the-best-way-to-handle-email-exceptions-in-a-rails-app-using-postmarkapp
 
 protected
 
-  def postmark_delivery_error(exception)
-    if (address = derive_email_from_postmark_exception(exception)).present?
-      #link = %Q[<a href="#{ reactivate_email_bounce_path(address)  }">reactivating</a>]
-      msg = "We could not deliver a recent message to '#{ address }'. The email was disabled due to a hard bounce or a spam complaint.  Please contact support."# You can try #{ link } it and try again."
-    else
-      msg = "We could not deliver a recent message. The email was disabled due to a hard bounce or a spam complaint.  Please contact support."
-    end
-    flash[:alert] = msg
-    redirect_to :back
+  def send_csv(filename, data)
+    type = 'text/csv; charset=utf-8; header=present'
+
+    send_data(data, type: type, filename: "#{filename}.csv")
   end
 
-  def derive_email_from_postmark_exception(exception)
-    exception.message.scan(/\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b/i).uniq.join(', ').strip rescue false
+  def tracking
+    @tracking ||= Bucky::Tracking.instance
+  end
+
+  def track
+    tracking.track(current_distributor) if current_distributor
   end
 
   def layout_by_resource
@@ -92,7 +90,7 @@ private
         webstore_store_url(distributor_param_name)
       end
     else
-      'http://www.buckybox.com/' # Shouldn't happen but better than nothing.
+      Figaro.env.marketing_site_url # Shouldn't happen but better than nothing.
     end
   end
 end

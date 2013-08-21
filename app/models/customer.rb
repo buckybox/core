@@ -1,4 +1,5 @@
 class Customer < ActiveRecord::Base
+  include Bucky::Email
   include PgSearch
 
   belongs_to :distributor
@@ -7,7 +8,7 @@ class Customer < ActiveRecord::Base
   has_one :address, dependent: :destroy, inverse_of: :customer, autosave: true
   has_one :account, dependent: :destroy
 
-  has_many :events
+  has_many :events,       dependent: :destroy
   has_many :transactions, through: :account
   has_many :payments,     through: :account
   has_many :deductions,   through: :account
@@ -26,31 +27,37 @@ class Customer < ActiveRecord::Base
 
   attr_accessible :address_attributes, :first_name, :last_name, :email, :name, :distributor_id, :distributor,
     :route, :route_id, :password, :password_confirmation, :remember_me, :tag_list, :discount, :number, :notes,
-    :special_order_preference, :balance_threshold
+    :special_order_preference, :balance_threshold, :via_webstore, :address
 
-  validates_presence_of :distributor_id, :route_id, :first_name, :email, :discount
+  validates_presence_of :distributor_id, :route_id, :first_name, :email, :discount, :address
   validates_uniqueness_of :number, scope: :distributor_id
   validates_numericality_of :number, greater_than: 0
   validates_numericality_of :discount, greater_than_or_equal_to: 0.0, less_than_or_equal_to: 1.0
-  validates_associated :account, unless: 'account.nil?'
-  validates_associated :address, unless: 'address.nil?'
+  validates_associated :account
+  validates_associated :address
 
   before_validation :initialize_number, if: 'number.nil?'
   before_validation :random_password, unless: 'encrypted_password.present?'
   before_validation :discount_percentage
   before_validation :format_email
 
-  before_create :setup_account
-  before_create :setup_address
-
-  after_save :update_next_occurrence # This could be more specific about when it updates
   before_save :set_balance_threshold, if: :new_record?
   before_save :update_halted_status, if: :balance_threshold_cents_changed?
 
+  before_create :setup_account
+  before_create :setup_address
+
+  after_create :via_webstore_notifications, if: :via_webstore?
+
+  after_save :update_next_occurrence # This could be more specific about when it updates
+
   delegate :separate_bucky_fee?, :consumer_delivery_fee, :default_balance_threshold_cents, :has_balance_threshold, to: :distributor
   delegate :currency, :send_email?, to: :distributor, allow_nil: true
+  delegate :name, to: :route, prefix: true
+  delegate :balance_at, to: :account
 
   scope :ordered_by_next_delivery, lambda { order("CASE WHEN next_order_occurrence_date IS NULL THEN '9999-01-01' WHEN next_order_occurrence_date < '#{Date.current.to_s(:db)}' THEN '9999-01-01' ELSE next_order_occurrence_date END ASC, lower(customers.first_name) ASC, lower(customers.last_name) ASC") }
+  scope :ordered, order("lower(customers.first_name) ASC, lower(customers.last_name) ASC")
 
   default_value_for :discount, 0
   default_value_for :balance_threshold_cents do |c|
@@ -99,6 +106,10 @@ class Customer < ActiveRecord::Base
     deliveries.size <= 1
   end
 
+  def email_to
+    sanitise_email_header "#{name} <#{email}>"
+  end
+
   def name
     "#{first_name} #{last_name}".strip
   end
@@ -128,8 +139,9 @@ class Customer < ActiveRecord::Base
         city: c.delivery_city,
         postcode: c.delivery_postcode,
         delivery_note: c.delivery_instructions,
-        phone_1: c.phone_1,
-        phone_2: c.phone_2
+        mobile_phone: c.mobile_phone,
+        home_phone: c.home_phone,
+        work_phone: c.work_phone
       }
     })
 
@@ -147,12 +159,8 @@ class Customer < ActiveRecord::Base
     c_boxes.each do |b|
       box = distributor.boxes.find_by_name(b.box_type)
       raise "Can't find Box '#{b.box_type}' for distributor with id #{id}" if box.blank?
-      
-      begin
-        delivery_date = Time.zone.parse(b.next_delivery_date.to_s)
-      rescue
-        binding.pry
-      end
+
+      delivery_date = Time.zone.parse(b.next_delivery_date.to_s)
       raise "Date couldn't be parsed from '#{b.delivery_date}'" if delivery_date.blank?
 
       order = self.orders.build({
@@ -167,7 +175,7 @@ class Customer < ActiveRecord::Base
                             else
                               ScheduleRule.recur_on(delivery_date, ScheduleRule::DAYS.select{|day| b.delivery_days =~ /#{day.to_s}/i}, b.delivery_frequency.to_sym)
                             end
-                              
+
       order.activate
 
       order.import_extras(b.extras) unless b.extras.blank?
@@ -275,6 +283,21 @@ class Customer < ActiveRecord::Base
     orders.any?{|o| o.pending_package_creation?}
   end
 
+  def send_login_details
+    if send_email?
+      CustomerMailer.login_details(self).deliver
+    else
+      false
+    end
+  end
+
+  def via_webstore_notifications
+    Event.new_customer_webstore(self)
+    CustomerMailer.raise_errors do
+      self.send_login_details
+    end
+  end
+
   def send_halted_email
     if distributor.send_email? && distributor.send_halted_email?
       CustomerMailer.orders_halted(self).deliver
@@ -287,21 +310,15 @@ class Customer < ActiveRecord::Base
     end
   end
 
-  def send_login_details
-    if send_email?
-      CustomerMailer.login_details(self).deliver
-    else
-      false
-    end
-  end
-
   def set_balance_threshold
     self.balance_threshold_cents = default_balance_threshold_cents unless balance_threshold_cents_changed?
   end
 
   def account_balance
+    account = account(true) # force reload
+
     if account.present?
-      account(true).balance
+      account.balance
     else
       Money.new(0, currency)
     end
@@ -315,7 +332,36 @@ class Customer < ActiveRecord::Base
     orders.any?(&:has_yellow_deliveries?)
   end
 
-  private
+  def last_paid
+    r_ids = reversal_transaction_ids
+    last_payment = transactions.payments
+    if r_ids.present?
+      last_payment = last_payment.where(["transactions.id not in (?)", r_ids])
+    end  
+    last_payment = last_payment.ordered_by_display_time.first
+
+    last_payment.present? ? last_payment.display_time : nil
+  end
+
+  def send_address_change_notification
+    distributor.notify_address_changed(self)
+  end
+
+  def update_address(address_params, opts = {})
+    opts.reverse_update({notify_distributor: false})
+
+    if opts[:notify_distributor]
+      address.update_with_notify(address_params, self)
+    else
+      address.update_attributes(address_params)
+    end
+  end
+
+private
+  def reversal_transaction_ids
+    reversed = payments.reversed
+    reversed.pluck(:transaction_id) + reversed.pluck(:reversal_transaction_id)
+  end
 
   def initialize_number
     self.number = Customer.next_number(self.distributor) unless self.distributor.nil?
@@ -358,7 +404,7 @@ class Customer
     def self.no_email
       @no_email ||= EmailRule.new(:no_email)
     end
-    
+
     attr_writer :type
 
     def initialize(type)
@@ -376,7 +422,7 @@ class Customer
       end
     end
 
-    private
+  private
 
     def type
       @type

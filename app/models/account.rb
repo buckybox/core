@@ -7,7 +7,7 @@ class Account < ActiveRecord::Base
   has_many :payments,      dependent: :destroy
   has_many :deductions,    dependent: :destroy
   has_many :active_orders, class_name: 'Order', conditions: { active: true }
-  has_many :transactions,  autosave: true
+  has_many :transactions,  dependent: :destroy, autosave: true
   has_many :deliveries,    through: :orders
   has_many :invoices
 
@@ -148,7 +148,11 @@ class Account < ActiveRecord::Base
     end
   end
 
-  private
+  def balance_at(date)
+    BigDecimal.new(transactions.where(['display_time <= ?', date]).sum(&:amount_cents)) / BigDecimal.new(100)
+  end
+
+private
 
   def default_balance_and_currency
     write_attribute(:balance_cents, 0) if balance_cents.blank?

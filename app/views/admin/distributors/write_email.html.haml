@@ -1,0 +1,20 @@
+- title('Admin - Send Email')
+
+= render partial: 'admin/dashboard/nav'
+
+.row-fluid
+  .span12
+    = simple_form_for(@email, url: send_email_admin_distributors_path, method: :post, html: { class: '' }) do |f|
+      .row-fluid
+        .span12
+          %fieldset
+            = f.input :subject, as: :string, input_html: {class: 'span6'}, label: false, placeholder: 'Subject'
+            .row-fluid
+              .span12
+                = f.input :body, as: :text, input_html: {class: 'span12'}, label: false, placeholder: 'Body', hint: 'You can use [[name]] in the body and it will be replaced with the distributors contact name (test emails will sub in the admins email address).'
+                .input-prepend.pull-left
+                  = f.button :submit, 'Send preview to', class: 'btn btn-primary'
+                  = f.input_field :preview_email, hint: 'Preview email address'
+      .row-fluid
+        .span12.form-actions
+          = f.button :submit, @sent ? 'Sent' : 'Send', class: 'btn btn-primary pull-right', confirm: "This will be sent to #{Distributor.keep_updated.count} distributors who want to be kept updated, are you sure?", disabled: @sent

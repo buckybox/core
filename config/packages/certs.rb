@@ -12,7 +12,8 @@ package :certs do
   certs_local = File.join(File.dirname(__FILE__), 'configs', 'certs', Package.stage, 'certs.tar.gzip.gpg')
   certs_remote = "/etc/ssl/certs/"
   tmp_file = "/tmp/certs.tar.gzip.gpg"
-  key_name = Package.stage == 'production' ? 'my_buckybox_com' : 'staging_buckybox_com'
+  key_name = Package.stage == 'production' ? 'my_buckybox_com-2013-july' : 'staging_buckybox_com'
+  cert_name = Package.stage == 'production' ? 'ssl-bundle-2013-july.crt' : 'ssl-bundle.crt'
 
   transfer certs_local, tmp_file do
     post :install, "mv #{tmp_file} #{certs_remote}"
@@ -25,7 +26,7 @@ package :certs do
   end
 
   verify do
-    has_file "#{certs_remote}ssl-bundle.crt"
+    has_file "#{certs_remote}#{cert_name}"
     has_file "/etc/ssl/private/#{key_name}.key"
   end
 

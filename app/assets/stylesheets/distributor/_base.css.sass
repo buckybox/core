@@ -183,9 +183,6 @@ body
     border-width: 1px
     border-color: $content-border
 
-.negative
-  color: $negative-colour
-
 .notification
   min-height: 39px
   border-bottom: solid #D5D5D5 1px
@@ -197,8 +194,118 @@ body
   .date
     color: #CCC
     font-size: 11px
+
 #notification-dropdown
   .clear-notifications
     background-color: $action-colour
-    +border-bottom-radius(6px)    
+    +border-bottom-radius(6px)
   padding: 0
+
+#distributor_customers_send_email.modal
+  width: 620px
+  margin-left: -375px // must be half of the width, minus scrollbar on the left (30px)
+
+  form
+    margin: 0
+
+  input, textarea, button
+    &:disabled
+      cursor: wait
+
+  .ajax-spinner
+    display: inline-block
+    margin-left: 4px
+
+  .alert
+    margin: 0
+    padding: 4px 8px
+    +border-radius(0px)
+
+  .recipients
+    margin-left: 7px
+
+  .customer-badge
+    overflow: inherit
+
+  .composer
+    .selected
+      font-weight: bold
+    .caret
+      position: relative
+      top: 4px
+      left: 8px
+
+    .template-link-action
+      display: none
+    .template-link
+      .subject, .body
+        display: none
+    input, textarea
+      background-color: $white
+      box-shadow: none
+      border: none
+      &::-webkit-input-placeholder
+        color: #ccc
+        font-weight: normal
+      &::-moz-placeholder
+        color: #ccc
+        font-weight: normal
+
+    .subject
+      overflow-x: hidden
+      margin: 0
+      input
+        margin: 0 0 0 2px
+        padding: 0
+
+    .body textarea
+      margin: 0
+      border-top: 1px solid #eee
+      background: -webkit-radial-gradient(50% 0%, 50% 6px, #aaa 0%, white 100%)
+      background: radial-gradient(50% 0%, 50% 6px, #aaa 0%, white 100%)
+      resize: none
+
+    .dropdown-menu
+      a
+        padding: 2px 8px
+
+    .dropdown-toggle
+      cursor: pointer
+      width: 28px
+      height: 30px
+      border-color: #FFF
+      border-width: 1px 1px 1px 0
+      border-style: solid
+      opacity: .7
+      &:hover
+        opacity: 1
+        background-image: linear-gradient(#f3f3f3,#e0e0e0)
+        border-color: #CCC
+
+  .modal-header, .modal-footer
+    padding: 7px
+    .pull-left
+      margin-top: 4px
+
+  .modal-header
+    background-color: $action-colour
+    border-bottom: none
+
+  .modal-body
+    padding: 0
+
+  .modal-footer
+    background: #FFF
+    .pull-left
+      margin-top: 3px
+    .btn-group
+      margin-left: 16px
+    .popover
+      max-width: inherit
+      width: 350px
+      border-width: 4px
+      .close
+        margin-top: -3px
+      .popover-content
+        +columns(2)
+

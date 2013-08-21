@@ -7,7 +7,7 @@
 
 = simple_form_for(:webstore_order, url: webstore_process_step_path) do |f|
   #webstore-route.row-fluid.webstore-section{ style: "display: #{@selected_route_id ? 'none' : 'block'}" }
-    .span10
+    .span12
       = f.simple_fields_for(:route) do |g|
         .row-fluid
           .span12
@@ -23,7 +23,7 @@
                 = simple_format(route.estimated_delivery_time)
 
   #webstore-schedule.row-fluid{ class: "#{@selected_route_id ? 'webstore-section' : ''}" }
-    .span10
+    .span12
       = f.simple_fields_for(:schedule_rule) do |g|
         .row-fluid
           .span12
@@ -34,7 +34,7 @@
 
   - if @webstore_order.box.extras_allowed? && @webstore_order.extras.present?
     #webstore-extras-frequency.row-fluid
-      .span10
+      .span12
         = f.simple_fields_for(:extra_frequency) do |g|
           .row-fluid
             .span12
@@ -43,21 +43,6 @@
                   %h4 What about those extra items?
               .row-fluid
                 .span12= g.input :extra_frequency, label: false, collection: @extra_frequencies, include_blank: false, input_html: { class: 'span12' }
-
-  - if @webstore_order.has_bucky_fee?
-    #webstore-bucky-fee.row-fluid.webstore-section
-      .span10
-        .row-fluid
-          .span12
-            %h4 Bucky Box fee
-        .row-fluid
-          .span12
-            We're using
-            = link_to 'Bucky Box', 'http://www.buckybox.org/', target: '_blank'
-            to take orders, Bucky Box is a social enterprise with a mission to 
-            support local food and organic farming worldwide.
-      .span2
-        .important.text-right= @webstore_order.bucky_fee.format
 
   .row-fluid.webstore-section
     .span12= f.button :submit, 'Next', class: 'pull-right btn btn-process'

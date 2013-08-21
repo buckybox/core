@@ -1,0 +1,42 @@
+- title 'Reporting'
+
+#reporting
+  .alert.alert-block
+    %h4 NOTICE
+    We are still refining these features so please be aware things may move, change, or be upgraded in future.
+    Please feel free to use these features as they currently are but look forward to future improvements.
+
+  .row-fluid
+    .span12
+      %h2 Metrics
+      %p.muted A summary of your current stats
+
+      %dl.dl-horizontal
+        %dt Distributor Since
+        %dd= current_distributor.created_at.to_s(:month_and_year)
+        %dt Total Customers
+        %dd= current_distributor.customers.count
+        %dt Deliveries to Date
+        %dd= current_distributor.deliveries.delivered.count
+
+  %hr
+
+  .row-fluid.reporting_calendar_select
+    .span12
+      %h2 Export Transaction List
+      %p.muted A list of all transactions in the system
+      .form
+        = text_field_tag :start_date, '', placeholder: 'Date from', data: {value: (Date.current.beginning_of_month - 3.months).to_s(:date_picker)}, class: 'date_picker start'
+        = text_field_tag :end_date, '', placeholder: 'Date to', data: {value: Date.current.yesterday.to_s(:date_picker)}, class: 'date_picker end'
+        = link_to "Export transactions", distributor_reports_transaction_history_path(Date.current.beginning_of_month - 3.months, Date.current.yesterday), id: 'export_transactions', data: {href: '/distributor/reports/transaction_history/'}, class: 'btn btn-primary'
+
+  %hr
+
+  .row-fluid.reporting_calendar_select
+    .span12
+      %h2 Export Historic Customer Balances
+      %p.muted A summary of customer balances at any date in the past, calculated by transaction date (not transaction processed date)
+      .form
+        = text_field_tag '[export][date]', '', placeholder: 'Date', data: {value: (Date.current.beginning_of_month).to_s(:date_picker)}, class: 'date_picker export_account_balance'
+        = link_to "Export balances", distributor_reports_export_customer_account_history_path(Date.current.beginning_of_month), id: "export_customer_account_history_link", data: {href: '/distributor/reports/export_customer_account_history/'}, class: 'btn btn-primary'
+

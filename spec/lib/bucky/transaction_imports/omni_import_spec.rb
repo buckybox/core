@@ -1,3 +1,5 @@
+# encoding: utf-8
+# Using the £ symbol
 require 'spec_helper'
 
 include Bucky::TransactionImports
@@ -137,5 +139,17 @@ describe Bucky::TransactionImports::OmniImport do
       row[:DESC].should_not eq("Opening Balance")
       row[:DESC].should_not eq("Closing Balance")
     end
+  end
+
+  it 'should handle ISO8859-1 encoding' do
+    rows = Bucky::TransactionImports::OmniImport.csv_read(File.join(Rails.root, "spec/support/test_upload_files/transaction_imports/TLVB-Accounts02Aug13.csv"))
+    rows[0].should eq ["Date", "Transaction", "Deposits", "Withdrawals"]
+    rows[1].should eq ["02/08/13", "MR SIMON J MORLEY", "£5.00", " "]
+  end
+
+  it 'should handle shitty windows excel csv format' do
+    rows = Bucky::TransactionImports::OmniImport.csv_read(File.join(Rails.root, "spec/support/test_upload_files/transaction_imports/TheLocalVegBoxBank19Jul13.csv"))
+    rows[0].should eq ["Date", "Transaction", "Deposits", "Withdrawals"]
+    rows[1].should eq ["19/07/2013", "MR SIMON J MORLEY", "£5.00", nil]
   end
 end

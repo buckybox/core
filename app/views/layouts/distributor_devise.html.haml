@@ -1,6 +1,12 @@
 - stylesheet 'distributor'
 - javascript 'distributor'
 
+- content_for :uservoice do
+  = render 'layouts/uservoice'
+
+- content_for :pingdom do
+  = render 'layouts/pingdom'
+
 - content_for :body do
   .container
     = render_site_messages(flash)
@@ -9,7 +15,7 @@
       #logo-holder.span6.offset3
         .row
           #buckybox-logo.span6
-            = link_to image_tag('logo-grey.png', title: 'Bucky Box, simple to use software for your CSA, Vegetable Box Scheme, or Food Hub to automate orders, billing and delivery logistics'), 'http://www.buckybox.com/'
+            = link_to image_tag('logo-grey.png', title: 'Bucky Box, simple to use software for your CSA, Vegetable Box Scheme, or Food Hub to automate orders, billing and delivery logistics'), Figaro.env.marketing_site_url
 
       #devise-frame.span6.offset3
         #up-arrow
