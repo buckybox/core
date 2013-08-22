@@ -9,7 +9,7 @@ class Distributor::ReportsController < Distributor::BaseController
     send_csv(report.name, report.data)
   end
 
-  def export_customer_account_history
+  def customer_account_history
     report = Report::CustomerAccountHistory.new(distributor: current_distributor, date: params[:to])
     tracking.event(current_distributor, "exported_customer_account_history")
     send_csv(report.name, report.data)
