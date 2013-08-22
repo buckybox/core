@@ -46,11 +46,11 @@ class DeliveryService < ActiveRecord::Base
   def name_days_and_fee
     days = schedule_rule.days.map { |d| d.to_s.titleize[0..2] }
 
-    result = name.titleize
-    result += " (#{days.join(', ')}) "
-    result += fee.format
-
-    return result
+    [
+      name.titleize,
+      "(#{days.join(', ')})",
+      fee.with_currency(distributor.currency),
+    ].join(" ")
   end
 
   def next_run

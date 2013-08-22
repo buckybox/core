@@ -512,7 +512,6 @@ CREATE TABLE boxes (
     likes boolean DEFAULT false NOT NULL,
     dislikes boolean DEFAULT false NOT NULL,
     price_cents integer DEFAULT 0 NOT NULL,
-    currency character varying(255),
     available_single boolean DEFAULT false NOT NULL,
     available_weekly boolean DEFAULT false NOT NULL,
     available_fourtnightly boolean DEFAULT false NOT NULL,
@@ -783,7 +782,6 @@ CREATE TABLE deductions (
     distributor_id integer,
     account_id integer DEFAULT 0 NOT NULL,
     amount_cents integer DEFAULT 0 NOT NULL,
-    currency character varying(255),
     kind character varying(255),
     description text,
     reversed boolean,
@@ -1005,7 +1003,6 @@ CREATE TABLE delivery_services (
     created_at timestamp without time zone,
     updated_at timestamp without time zone,
     fee_cents integer DEFAULT 0 NOT NULL,
-    currency character varying(255),
     area_of_service text,
     estimated_delivery_time text
 );
@@ -1348,7 +1345,6 @@ CREATE TABLE extras (
     unit character varying(255),
     distributor_id integer,
     price_cents integer DEFAULT 0 NOT NULL,
-    currency character varying(255),
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
     hidden boolean DEFAULT false
@@ -1531,7 +1527,6 @@ CREATE TABLE invoices (
     number integer,
     amount_cents integer DEFAULT 0 NOT NULL,
     balance_cents integer DEFAULT 0 NOT NULL,
-    currency character varying(255),
     date date,
     start_date date,
     end_date date,
@@ -1787,7 +1782,6 @@ CREATE TABLE packages (
     archived_order_quantity integer,
     archived_box_name character varying(255),
     archived_box_price_cents integer DEFAULT 0 NOT NULL,
-    currency character varying(255),
     archived_customer_name character varying(255),
     archived_delivery_service_fee_cents integer DEFAULT 0 NOT NULL,
     archived_customer_discount numeric DEFAULT 0 NOT NULL,
@@ -1859,7 +1853,6 @@ CREATE TABLE payments (
     distributor_id integer,
     account_id integer,
     amount_cents integer DEFAULT 0 NOT NULL,
-    currency character varying(255),
     kind character varying(255),
     description text,
     created_at timestamp without time zone,
@@ -2091,7 +2084,6 @@ CREATE TABLE transactions (
     id integer NOT NULL,
     account_id integer,
     amount_cents integer DEFAULT 0 NOT NULL,
-    currency character varying(255),
     description text,
     created_at timestamp without time zone,
     updated_at timestamp without time zone,
@@ -3728,3 +3720,5 @@ INSERT INTO schema_migrations (version) VALUES ('20130820025105');
 INSERT INTO schema_migrations (version) VALUES ('20130826015549');
 
 INSERT INTO schema_migrations (version) VALUES ('20130826051545');
+
+INSERT INTO schema_migrations (version) VALUES ('20130827002646');

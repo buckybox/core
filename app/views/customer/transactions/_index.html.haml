@@ -14,7 +14,7 @@
           %th.text-right Balance
 
       %tbody
-        - transaction_total = Money.new(0, @distributor.currency) # manual calculation until we start storing historical balance
+        - transaction_total = EasyMoney.new(0) # manual calculation until we start storing historical balance
 
         - @transactions.each do |transaction|
           %tr.transaction-data
