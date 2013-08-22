@@ -487,7 +487,7 @@ describe Distributor do
       distributor.save
       customer = Fabricate(:customer, distributor: distributor)
       account  = Fabricate(:account, customer: customer)
-      day1     = Date.today
+      day1     = Date.parse('2013-08-03')
       day2     = day1 + 1.day
       day3     = day1 + 2.day
       payment1 = Fabricate(:transaction, account: account, display_time: day1)
