@@ -133,14 +133,5 @@ describe Delivery do
         delivery.deliver
       end
     end
-
-    %w(engaged distributor_delivered_order).each do |event|
-      it "sends the '#{event}' event" do
-        Bucky::Tracking.instance.should_receive(:event). \
-          with(delivery.distributor.id, event).at_least(:once)
-
-        delivery.save
-      end
-    end
   end
 end
