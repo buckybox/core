@@ -26,7 +26,7 @@ describe Package do
       it 'should archive the fee' do
         distributor = double('found_distributor')
         distributor.stub(:separate_bucky_fee?) { true }
-        distributor.stub(:consumer_delivery_fee) { Money.new(10) }
+        distributor.stub(:consumer_delivery_fee) { EasyMoney.new(0.1) }
         Distributor.stub(:find_by_id).and_return(distributor)
         @package = Fabricate(:package, order: @order, packing_list: @package.packing_list)
         @package.archived_consumer_delivery_fee_cents.should == 10

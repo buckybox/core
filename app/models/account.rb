@@ -27,7 +27,7 @@ class Account < ActiveRecord::Base
   # THIS SHOULD NEVER HAPPEN! If it does fix the root cause don't make this write a new balance.
   # Likely somewhere a transaction is being created manually.
   def calculate_balance(offset_size = 0)
-    (transactions.offset(offset_size).sum(&:amount_cents) / 100.0).to_money
+    EasyMoney.new(transactions.offset(offset_size).sum(&:amount))
   end
 
   def balance_cents=(value)
@@ -43,14 +43,13 @@ class Account < ActiveRecord::Base
   end
 
   def change_balance_to(amount, options = {})
-    amount = amount.to_money(currency)
+    amount = EasyMoney.new(amount)
     amount_difference = amount - balance
 
     transactionable = (options[:transactionable] ? options[:transactionable] : self)
     description = (options[:description] ? options[:description] : 'Manual Transaction.')
 
     write_attribute(:balance_cents, amount.cents)
-    clear_aggregation_cache # without this the composed_of balance attribute does not update
 
     transaction_options = { amount: amount_difference, transactionable: transactionable, description: description }
     transaction_options.merge!(display_time: options[:display_time]) if options[:display_time]
@@ -58,7 +57,7 @@ class Account < ActiveRecord::Base
   end
 
   def add_to_balance(amount, options = {})
-    amount = balance + amount.to_money
+    amount = balance + amount
     change_balance_to(amount, options)
   end
 
@@ -156,6 +155,5 @@ private
 
   def default_balance_and_currency
     write_attribute(:balance_cents, 0) if balance_cents.blank?
-    write_attribute(:currency, Money.default_currency.to_s) if currency.blank?
   end
 end

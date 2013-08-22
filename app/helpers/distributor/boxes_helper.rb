@@ -12,9 +12,9 @@ module Distributor::BoxesHelper
         element = []
 
         if customer.separate_bucky_fee?
-          text = "#{box.name} - (#{OrderPrice.individual(box, delivery_service, customer).format} + #{customer.consumer_delivery_fee.format} Fee)"
+          text = "#{box.name} - (#{OrderPrice.individual(box, delivery_service, customer)} + #{customer.consumer_delivery_fee} Fee)"
         else
-          text = "#{box.name} - (#{OrderPrice.individual(box, delivery_service, customer).format})"
+          text = "#{box.name} - (#{OrderPrice.individual(box, delivery_service, customer)})"
         end
 
         text << " (#{box.extras_limit})" if options[:with_extras_limit]

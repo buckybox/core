@@ -14,7 +14,7 @@
             %span.label.label-info= tag.name
 
       #account-information{data: {account_id: @account.id}}
-        %span.balance{ class: "#{'negative' if @account.balance.negative?}" }= @account.balance.format
+        %span.balance{ class: "#{'negative' if @account.balance.negative?}" }= @account.balance
 
       %ul.unstyled
         - unless @customer.discount.zero?
@@ -25,7 +25,7 @@
           %li
             %span.highlightable{class: @customer.halted? ? 'highlighted' : ''}
               Minimum balance:
-              %strong= @customer.balance_threshold.format
+              %strong= @customer.balance_threshold
         %li
           Email:
           %strong= @customer.email

@@ -11,7 +11,7 @@ module ApplicationHelper
   end
 
   def currency_hash
-    @currency_hash ||= Money::Currency.table.each_with_object({}) { |(k,v), h| h[k] = "#{v[:name]} (#{v[:iso_code]})" }
+    @currency_hash ||= CurrencyData.table.each_with_object({}) { |(k,v), h| h[k] = "#{v[:name]} (#{v[:iso_code]})" }
   end
 
   def select_currencies
