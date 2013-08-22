@@ -51,7 +51,6 @@ private
   def csv_row(transaction)
     row = add_transaction_data(transaction)
     row += add_customer_data(transaction)
-    row
   end
 
   def add_transaction_data(transaction)
