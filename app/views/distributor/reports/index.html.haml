@@ -38,5 +38,5 @@
       %p.muted A summary of customer balances at any date in the past, calculated by transaction date (not transaction processed date)
       .form
         = text_field_tag '[export][date]', '', placeholder: 'Date', data: {value: (Date.current.beginning_of_month).to_s(:date_picker)}, class: 'date_picker export_account_balance'
-        = link_to "Export balances", distributor_reports_export_customer_account_history_path(Date.current.beginning_of_month), id: "export_customer_account_history_link", data: {href: '/distributor/reports/export_customer_account_history/'}, class: 'btn btn-primary'
+        = link_to "Export balances", distributor_reports_customer_account_history_path(Date.current.beginning_of_month), id: "export_customer_account_history_link", data: {href: '/distributor/reports/customer_account_history/'}, class: 'btn btn-primary'
 

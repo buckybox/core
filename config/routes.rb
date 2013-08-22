@@ -73,9 +73,9 @@ BuckyBox::Application.routes.draw do
     end
 
     namespace :reports do
-      get '/',                                    action: 'index'
-      get 'transaction_history/:start/:to',       action: 'transaction_history',             as: 'transaction_history'
-      get 'export_customer_account_history/:to',  action: :export_customer_account_history,  as: 'export_customer_account_history'
+      get '/',                               action: 'index'
+      get 'transaction_history/:start/:to',  action: 'transaction_history',      as: 'transaction_history'
+      get 'customer_account_history/:to',    action: :customer_account_history,  as: 'customer_account_history'
     end
 
     resources :distributors,        only: :update
