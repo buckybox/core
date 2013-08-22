@@ -115,6 +115,8 @@ class Distributor < ActiveRecord::Base
 
   scope :keep_updated, where(keep_me_updated: true)
 
+  delegate :tracking_after_create, :tracking_after_save, :track, to: :tracking
+
   # Devise Override: Avoid validations on update or if now password provided
   def password_required?
     password.present? && password.size > 0 || new_record?
@@ -568,40 +570,12 @@ private
     self.support_email = self.email if self.support_email.blank?
   end
 
-  def tracking_after_create
-    return unless Rails.env.production?
-
-    ::Intercom::User.create(user_id: id, email: email, name: name, created_at: created_at, custom_data: {contact_name: contact_name, phone: phone})
-  end
-
-  def tracking_after_save
-    return unless Rails.env.production?
-
-    self.delay(
-      priority: Figaro.env.delayed_job_priority_low
-    ).update_tags
-  end
-
   def send_welcome_email
     DistributorMailer.welcome(self).deliver
   end
 
-  def update_tags
-    return unless Rails.env.production? #no accidents.
-
-    tag_list.each do |tag_name|
-      tag = nil
-      begin
-        tag = ::Intercom::Tag.find_by_name(tag_name)
-      rescue Intercom::ResourceNotFound
-        tag = ::Intercom::Tag.new
-        tag.name = tag_name
-      end
-      tag.user_ids = [self.id.to_s]
-      tag.color = 'blue'
-      tag.tag_or_untag = 'tag'
-      tag.save
-    end
+  def tracking
+    @tracking ||= DistributorTracking.new(self)
   end
 
   # This is meant to be run within console for dev work via Distributor.send(:travel_forward_a_day)
