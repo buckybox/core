@@ -30,6 +30,6 @@
 
           .row-fluid
             .span12= yield
-  = intercom_script_tag if Rails.env.production? && current_admin.blank?
+  = intercom_script_tag unless Bucky::CommsTracking.instance.skip?(Rails.env) || current_admin.present?
 
 = render 'layouts/base'
