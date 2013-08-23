@@ -6,27 +6,6 @@ $(function() {
   });
 
   //////////////////////////////////////////////////////////////////////////////
-  // Sticky bar
-  //
-  var $sticky_bar = $('#sub-nav');
-
-  if ($sticky_bar.length) {
-    var $window = $(window), // cached for performance
-        bar_top = $sticky_bar.offset().top;
-
-    var resize_sticky_bar = function() {
-      $sticky_bar.width($sticky_bar.parent().outerWidth());
-    };
-
-    $window.bind('resize', resize_sticky_bar);
-    resize_sticky_bar();
-
-    $window.scroll(function() {
-       $sticky_bar.toggleClass('sticky', $window.scrollTop() > bar_top);
-    });
-  }
-
-  //////////////////////////////////////////////////////////////////////////////
   // Checkbox selector
   //
 
