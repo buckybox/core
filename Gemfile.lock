@@ -153,6 +153,9 @@ GEM
     debugger-linecache (1.2.0)
     debugger-ruby_core_source (1.2.3)
     default_value_for (2.0.3)
+    delayed-plugins-airbrake (1.0.0)
+      airbrake
+      delayed_job
     delayed_job (3.0.5)
       activesupport (~> 3.0)
     delayed_job_active_record (0.4.4)
@@ -469,6 +472,7 @@ DEPENDENCIES
   daemons (~> 1.1.9)
   database_cleaner
   default_value_for (~> 2.0.1)
+  delayed-plugins-airbrake
   delayed_job (~> 3.0.5)
   delayed_job_active_record (~> 0.4.4)
   delayed_job_web (= 1.2.0)
