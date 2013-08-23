@@ -7,7 +7,7 @@ class Distributor::BoxesController < Distributor::ResourceController
 
   def create
     create! { distributor_settings_boxes_url }
-    tracking.event(current_distributor, 'distributor_created_box') unless current_admin.present?
+    tracking.event(current_distributor, 'new_box') unless current_admin.present?
   end
 
   def update

@@ -5,7 +5,7 @@ module Bucky
       @instance ||= CommsTracking.new
     end
 
-    def create_user(attrs, env=nil)
+    def create_user(attrs, env = nil)
       return if skip? env
       
       ::Intercom::User.create(attrs)
@@ -17,7 +17,7 @@ module Bucky
       report(e)
     end
 
-    def update_tags(attrs, env=nil)
+    def update_tags(attrs, env = nil)
       return if skip? env
 
       attrs[:tag_list].each do |name|
@@ -27,7 +27,9 @@ module Bucky
       report(e)
     end
   
-    def track(id, action_name, occurred_at=Time.current)
+    def track(id, action_name, occurred_at = Time.current, env = nil)
+      return if skip? env
+
       user = ::Intercom::User.find_by_user_id(id)
       user.custom_data["#{action_name}_at"] = occurred_at
       user.save
@@ -39,6 +41,9 @@ module Bucky
       report(e)
     end
 
+    def skip?(env, expected_env = 'production')
+      env != expected_env
+    end
 
     private
 
@@ -76,12 +81,12 @@ module Bucky
       raise Bucky::NonFatalException.new(e)
     end
 
-    def skip?(env)
-      env.blank? || !env.respond_to?(:production?) || env.production?
-    end
-
     def report(exception)
-      Rails.logger.warn(exception) if Object.const_defined?('Rails')
+      if Object.const_defined?('Rails')
+        Rails.logger.warn(exception.message)
+        Rails.logger.warn(exception.backtrace.join("\n"))
+      end
+
       Airbrake.notify(exception) if Object.const_defined?('Airbrake')
       nil
     end
