@@ -3,7 +3,7 @@
 export CI=1
 export RAILS_ENV=test
 export COVERAGE=1
-export SPEC_OPTS="--format documentation"
+export SPEC_OPTS="--format p"
 
 pwd
 git log -1
