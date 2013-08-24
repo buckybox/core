@@ -1,23 +1,23 @@
-ENV["RAILS_ENV"] ||= 'test'
+ENV["RAILS_ENV"] ||= "test"
 
-require 'simplecov' if ENV['COVERAGE']
+require "simplecov" if ENV["COVERAGE"]
 
 # Prevent main application to eager_load in the prefork block (do not load files in autoload_paths)
 # https://github.com/pluginaweek/state_machine/issues/163
-require 'rails/application'
+require "rails/application"
 
 require File.expand_path("../../config/environment", __FILE__)
-require 'rspec/rails'
-require 'rspec/autorun'
+require "rspec/rails"
+require "rspec/autorun"
 
-require 'capybara/rspec' 
-require 'capybara/rails'
-require 'capybara/poltergeist'
+require "capybara/rspec" 
+require "capybara/rails"
+require "capybara/poltergeist"
 
 Capybara.default_driver = Capybara.javascript_driver = :poltergeist
-Capybara.asset_host = 'http://buckybox.dev:3000'
+Capybara.asset_host = "http://buckybox.dev:3000"
 
-require 'capybara-screenshot/rspec'
+require "capybara-screenshot/rspec"
 
 Dir[Rails.root.join("spec/support/**/*.rb")].each { |f| require f }
 
@@ -27,6 +27,7 @@ RSpec.configure do |config|
   config.mock_with :rspec
   config.use_transactional_fixtures = false
   config.infer_base_class_for_anonymous_controllers = false
+  config.filter_run_excluding :js, :slow unless ENV["CI"]
 
   config.include Delorean
   config.include Devise::TestHelpers,        type: :controller
