@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe Customer::OrdersController do
   render_views
-  as_customer
+  sign_in_as_customer
 
   describe "PUT 'update'" do
     before do

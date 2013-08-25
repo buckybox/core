@@ -1,6 +1,6 @@
 class CustomerDecorator < Draper::Decorator
-
   delegate_all
+
   delegate :name, to: :route, prefix: true
   delegate :address_1, :address_2, :suburb, :city, :postcode, :delivery_note, :mobile_phone, :home_phone, :work_phone, to: :address
 
@@ -14,6 +14,10 @@ class CustomerDecorator < Draper::Decorator
 
   def minimum_balance
     object.balance_threshold
+  end
+
+  def balance_threshold
+    object.balance_threshold.format
   end
 
   def delivery_note

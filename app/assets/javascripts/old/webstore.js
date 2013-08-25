@@ -1,4 +1,4 @@
-$(function() { 
+$(function() {
   $('#buy_extra_include_extras').change(function() {
     if($(this).is(':checked')) {
       $('#webstore_extras').show();
@@ -33,12 +33,20 @@ $(function() {
     var dislikes = $('#webstore-customise .dislikes_input');
     var likes = $('#webstore-customise .likes_input');
 
-    dislikes.find('select').select2({maximumSelectionSize: dislikes.find('select').data('limits')});
-    likes.find('select').select2({maximumSelectionSize: likes.find('select').data('limits')});
-    likes.hide();
-    $('#webstore-customisations').hide();
+    dislikes.find('select').select2({
+      maximumSelectionSize: dislikes.find('select').data('limits')
+    });
+    likes.find('select').select2({
+      maximumSelectionSize: likes.find('select').data('limits')
+    });
 
-    $('#webstore_order_customise_costomise').click(function() {
+    likes.hide();
+
+    $('#webstore-customisations').toggle(
+      $('#webstore_customise_order_has_customisations').is(":checked")
+    );
+
+    $('#webstore_customise_order_has_customisations').click(function() {
       checkbox_toggle(this, $('#webstore-customisations'));
     });
 
@@ -50,8 +58,7 @@ $(function() {
 
       if(!dislikes_input.is(':hidden') && dislikes_input.find('option:selected').length > 0) {
         likes_input.show();
-      }
-      else {
+      } else {
         likes_input.find('option:selected').removeAttr('selected');
         likes_input.find('select').trigger('liszt:updated');
         likes_input.find('select').select2("val", "");
@@ -78,16 +85,23 @@ $(function() {
   }
 
   if($('#webstore-extras').length > 0) {
+    var extras_list = $("#webstore-extras .extras-row");
+    extras_list.each(function() {
+      var quantity = $(this).find("input").val();
+      if (quantity > 0) {
+        $(this).show();
+      }
+    });
+
     var extras_input = $('#webstore-extras select');
-
-    extras_input.select2();
-    $('#webstore-extras-options').hide();
-
+    extras_input.select2({
+      placeholder: "Add an extra item"
+    });
     extras_input.change(function() {
       var extras_input = $(this);
       var selected_extra = $(extras_input.find('option:selected')[0]);
       var extra_id = selected_extra.val();
-      var quantity_input = $('#webstore_order_extras_' + extra_id);
+      var quantity_input = $('#webstore_customise_order_extras_' + extra_id);
 
       quantity_input.val(1);
       quantity_input.closest('tr').show();
@@ -105,13 +119,15 @@ $(function() {
   }
 
   if($('#webstore-login').length > 0) {
+    function password_field_visibility() {
+      var show_password_field = ($('#registered input[type=radio]:checked').val() != 'new');
+      $('#password-field').toggle(show_password_field);
+    }
+
+    password_field_visibility();
+
     $('#registered input[type="radio"]').click(function() {
-      if($(this).val() == 'new') {
-        $('#password-field').hide();
-      }
-      else {
-        $('#password-field').show();
-      }
+      password_field_visibility();
     });
   }
 
@@ -125,29 +141,15 @@ $(function() {
 
     route_select.change(function() {
       update_route_information(route_select.val());
+      update_days();
       update_day_checkboxes_style();
     });
 
+    update_days();
+
+    $('.route-schedule-frequency').change(update_days);
     $('.route-schedule-frequency').change(function() {
-      var frequency = $(this).val();
-      var weeks = $('.route-schedule-inputs:visible .order-days tr');
-      var week_numbers = weeks.find('td:first-child');
-
-      if (!frequency || frequency === 'single') {
-        weeks.hide();
-      } else if (frequency === 'monthly') {
-        week_numbers.show();
-        weeks.show();
-      } else {
-        week_numbers.hide();
-        weeks.slice(1).hide();
-        weeks.first().show();
-      }
-
-      weeks.find('input:data(enabled)').removeAttr('disabled');
-      var route_id = $('#route_select').val();
-      var route_schedule = $('#route-schedule-inputs-' + route_id);
-      update_day_checkboxes(route_schedule.find('.schedule-start-date'));
+      $("#webstore-extras-frequency").toggle($(this).val() !== "single");
     });
 
     $('.order-days input').click({weeks: weeks}, function(event) {
@@ -176,15 +178,37 @@ $(function() {
 
   if($('#webstore-address').length > 0) {
     var webstore_address = $('#webstore-address');
-    var has_address = webstore_address.data('has-address');
-    display_address_information(webstore_address, has_address);
 
     $('#webstore-address #edit-address').click(function() {
-      $('#webstore-address').data('has-address', false);
-      display_address_information($('#webstore-address'), false);
+      $("#existing-address").hide();
+      $("#update-address").show();
     });
   }
 });
+
+function update_days() {
+  var frequency = $('.route-schedule-frequency:visible').val();
+  var weeks = $('.route-schedule-inputs:visible .order-days tr');
+  var week_numbers = weeks.find('td:first-child');
+  var other_weeks = $('.route-schedule-inputs:not(:visible) .order-days tr')
+  other_weeks.find('input').prop('disabled', 'true').removeAttr('checked');
+
+  if (!frequency || frequency === 'single') {
+    weeks.hide();
+  } else if (frequency === 'monthly') {
+    week_numbers.show();
+    weeks.show();
+  } else {
+    week_numbers.hide();
+    weeks.slice(1).hide();
+    weeks.first().show();
+  }
+
+  weeks.find('input:data(enabled)').removeAttr('disabled');
+  var route_id = $('#route_select').val();
+  var route_schedule = $('#route-schedule-inputs-' + route_id);
+  update_day_checkboxes(route_schedule.find('.schedule-start-date'));
+}
 
 function update_day_checkboxes_style() {
   $('.order-days:visible input[type="checkbox"]').each(function() {
@@ -217,22 +241,6 @@ function update_day_checkboxes(start_date) {
     var checkbox_selector = '#day-' + date.getDay() + ' input[type="checkbox"]';
     selected_checkbox = route_schedule_inputs.find(checkbox_selector);
     selected_checkbox.prop('checked', true);
-  }
-}
-
-function display_address_information(from_div, has_address) {
-  var existing_address = from_div.find('#existing-address');
-  var update_address = from_div.find('#update-address');
-
-  if(has_address) {
-    existing_address.show();
-    update_address.hide();
-    update_address.find('input').attr('disabled', true);
-  }
-  else {
-    existing_address.hide();
-    update_address.show();
-    update_address.find('input').attr('disabled', false);
   }
 }
 

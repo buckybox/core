@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe Distributor::OrdersController do
-  as_distributor
+  sign_in_as_distributor
 
   context :with_mocks do
     before do

@@ -9,6 +9,10 @@ class PhoneCollection
     TYPES.values
   end
 
+  def self.types_as_options
+    TYPES.each_key.map { |type| type_option(type) }
+  end
+
   def initialize address
     @address = address
   end
@@ -21,7 +25,7 @@ class PhoneCollection
   end
 
   def default_number
-    @address.reload.send(default[:attribute])
+    @address.send(default[:attribute])
   end
 
   def default_type
@@ -30,10 +34,19 @@ class PhoneCollection
 
 private
 
-  # Default number attributes
+  def self.type_option(type)
+    [ type.capitalize, type ]
+  end
+
   def default
-    default = TYPES.first
-    { type: default.first, attribute: default.last }
+    TYPES.each do |type, attribute|
+      number = @address.public_send(attribute)
+      return { type: type, attribute: attribute } if number.present?
+    end
+
+    # fallback to first type if all blank
+    type, attribute = TYPES.first
+    { type: type, attribute: attribute }
   end
 end
 

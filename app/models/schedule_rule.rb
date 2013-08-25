@@ -55,6 +55,14 @@ class ScheduleRule < ActiveRecord::Base
     recur_on(start, days, :monthly)
   end
 
+  def self.number_of_days
+    @number_of_days ||= DAYS.size
+  end
+
+  def self.day(number)
+    DAYS[number % number_of_days]
+  end
+
   def recur
     r = read_attribute(:recur)
     if r.nil?

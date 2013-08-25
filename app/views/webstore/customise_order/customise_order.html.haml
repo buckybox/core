@@ -1,0 +1,41 @@
+- title('Webstore - Customise Order', false)
+= render partial: 'webstore/sidebar'
+= render partial: 'webstore/order', object: order
+
+= simple_form_for(customise_order, html: { class: 'form-inline' }) do |f|
+  - if customise_order.exclusions?
+    #webstore-customise.row-fluid.webstore-section
+      .span12
+        .row-fluid
+          .span12= f.input :has_customisations, as: :boolean, label: 'Customise my box', wrapper: :inline_checkbox, wrapper_html: { class: 'checkbox-header' }
+        #webstore-customisations.row-fluid
+          .span12
+            .dislikes_input.clearfix
+              = f.input :dislikes, label: "<i class='icon-minus-sign'></i>", collection: customise_order.stock_list, input_html: { multiple: true, data: { placeholder: 'Exclude these items...' , limits: customise_order.exclusions_limit} }, wrapper: :inline
+            - if customise_order.substitutions?
+              .likes_input.clearfix
+                = f.input :likes, label:  "<i class='icon-plus-sign'></i>", collection: customise_order.stock_list, input_html: { multiple: true, data: { placeholder: 'Substitute for these items...' , limits: customise_order.substitutions_limit} }, wrapper: :inline
+
+  - if customise_order.extras_allowed?
+    #webstore-extras.row-fluid.webstore-section
+      .span12
+        .row-fluid
+          .span12
+            %h4
+              %i.icon-plus
+              - if customise_order.extras_unlimited?
+                Add any amount of extra items
+              - else
+                Add up to #{customise_order.extras_limit} extra items
+
+        .row-fluid
+          .span12
+            %table.table.table-bordered
+              = f.simple_fields_for(:extras) do |g|
+                %tbody
+                  = render partial: 'extra', collection: customise_order.extras_list, locals: { g: g }
+
+            = f.input :add_extra, label: false, collection: customise_order.extras_list, label_method: :name_with_price, input_html: { class: 'span12' }
+
+  .row-fluid.webstore-section
+    .span12= f.button :submit, 'Next', class: 'pull-right btn btn-process'

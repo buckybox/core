@@ -94,6 +94,10 @@ class Customer < ActiveRecord::Base
     return result
   end
 
+  def guest?
+    false
+  end
+
   def formated_number
     "%04d" % number
   end
@@ -264,6 +268,14 @@ class Customer < ActiveRecord::Base
     status_halted
   end
 
+  def active?
+    !active_orders.empty?
+  end
+
+  def active_orders
+    orders.active
+  end
+
   def halt_orders!
     ScheduleRule.update_all({halted: true}, ["scheduleable_id IN (?) AND scheduleable_type = 'Order'", orders.collect(&:id)])
     update_next_occurrence!
@@ -357,7 +369,12 @@ class Customer < ActiveRecord::Base
     end
   end
 
+  def via_webstore!
+    self.via_webstore = true
+  end
+
 private
+
   def reversal_transaction_ids
     reversed = payments.reversed
     reversed.pluck(:transaction_id) + reversed.pluck(:reversal_transaction_id)

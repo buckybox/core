@@ -19,7 +19,7 @@ Fabricator(:distributor_a_customer, from: :distributor) do
 end
 
 Fabricator(:distributor_with_everything, from: :distributor_with_information) do
-  after_create do |distributor|
+  before_create do |distributor|
     %w(Grapes Avocado).each do |item|
       Fabricate(:line_item, distributor: distributor, name: item)
     end

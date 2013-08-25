@@ -8,8 +8,6 @@
   = render partial: 'layouts/customer/banner', locals: { distributor: @distributor }
 
   .container
-    - if current_customer.present? && current_customer.halted?
-      .alert.alert-error= "WARNING: Deliveries have been SUSPENDED because you have reached your minimum balance of #{current_customer.balance_threshold.format}, please make a payment."
     #customer-messages= render_site_messages(flash)
 
     .row

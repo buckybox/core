@@ -6,22 +6,24 @@ describe "Updates address" do
       let(:distributor){ Fabricate(:distributor_with_information, notify_address_change: true) }
       let(:customer) { customer = Fabricate(:customer, distributor: distributor) }
 
+      before do
+        @customer = customer
+        customer_login
+      end
+
       it "notifies distributor when address is updated" do
-        login_customer customer
         change_address customer
 
         distributor_should_include_notifications distributor
       end
 
       it 'does not notify distributor when something other than address is updated' do
-        login_customer customer
         change_first_name customer
 
         distributor_should_not_include_notifications distributor
       end
 
       it 'does not notify distributor when address is saved without update' do
-        login_customer customer
         get_via_redirect customer_dashboard_path
         put_via_redirect customer_address_path, {}
         response.body.should match 'Your delivery address has been updated'
@@ -35,8 +37,12 @@ describe "Updates address" do
       let(:distributor){ Fabricate(:distributor_with_information, notify_address_change: false) }
       let(:customer) { customer = Fabricate(:customer, distributor: distributor) }
 
+      before do
+        @customer = customer
+        customer_login
+      end
+
       it "does not notify distributor" do
-        login_customer customer
         change_address customer
 
         distributor_should_not_include_notifications distributor
@@ -49,8 +55,12 @@ describe "Updates address" do
       let(:distributor){ Fabricate(:distributor_with_information, notify_address_change: true) }
       let(:customer) { customer = Fabricate(:customer, distributor: distributor) }
 
+      before do
+        @distributor = distributor
+        distributor_login
+      end
+
       it "does not notify distributor" do
-        login_distributor distributor
         clear_notifications
         change_address customer
 
@@ -78,21 +88,24 @@ def change_first_name(customer)
   original_first_name = customer.first_name
   modified_first_name = original_first_name + "_"
 
-  login_customer customer
+  @customer = customer
+  customer_login
   get_via_redirect customer_dashboard_path
   put_via_redirect customer_customer_path(customer), {first_name: modified_first_name}
   response.body.should match 'Your details have successfully been updated.'
 end
 
 def distributor_should_not_include_notifications(distributor = nil)
-  login_distributor distributor unless distributor.nil?
+  @distributor = distributor
+  distributor_login unless distributor.nil?
   get_via_redirect distributor_root_path
   response.body.should match 'No new notifications'
   response.body.should_not match 'has updated their address'
 end  
 
 def distributor_should_include_notifications(distributor)
-  login_distributor distributor unless distributor.nil?
+  @distributor = distributor
+  distributor_login unless distributor.nil?
   get_via_redirect distributor_root_path
   response.body.should_not match 'No new notifications'
   response.body.should match 'has updated their address'

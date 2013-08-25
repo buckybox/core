@@ -3,12 +3,20 @@ require 'spec_helper'
 describe LocalisedAddress do
   describe "#postal_address" do
     def address(country)
-      LocalisedAddress.new(
+      address = LocalisedAddress.new(
         street: "Cuba Street",
         city:   "Wellington",
         zip:    "6011",
-        addressable: Fabricate(:distributor, name: "Foodie", country: country)
       )
+
+      addressable = double("addressable",
+        name: "Foodie",
+        country: country,
+      )
+
+      address.stub(:addressable) { addressable }
+
+      address
     end
 
     it "returns the localised postal address" do

@@ -320,4 +320,33 @@ describe Customer do
       customer.last_paid.should_not be_nil
     end
   end
+
+  describe 'customer activity' do
+    let(:customer) { Fabricate.build(:customer) }
+
+    describe '#active?' do
+      it 'with active orders returns true' do
+        stub_active_orders(customer, [ double('orders') ])
+        customer.active?.should be_true
+      end
+
+      it 'without active orders returns false' do
+        stub_active_orders(customer, [ ])
+        customer.active?.should be_false
+      end
+    end
+
+    describe '#active_orders' do
+      it 'returns the customers orders that are active' do
+        orders = [ double('orders') ]
+        stub_active_orders(customer, orders)
+        customer.active_orders.should eq(orders)
+      end
+    end
+
+    def stub_active_orders(customer, orders)
+      scoped = double('scoped', active: orders)
+      customer.stub(:orders) { scoped }
+    end
+  end
 end

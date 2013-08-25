@@ -1,31 +1,34 @@
 module Devise::RequestHelpers
   include Warden::Test::Helpers
+  Warden.test_mode!
 
-  def sign_in_as_a_valid_customer(customer = nil)
-    @customer = customer || Fabricate(:customer)
-    login_customer @customer
+  def self.included(base)
+    base.after { Warden.test_reset! }
   end
 
-  def sign_in_as_a_valid_distributor(distributor = nil)
-    @distributor = distributor || Fabricate(:distributor_with_everything)
-    login_distributor @distributor
+  def admin_login
+    @admin ||= Fabricate(:admin)
+    @last_login = :admin
+    login_as @admin, scope: :admin
   end
 
-  def login_customer(customer)
-    @last_login = :customer
-    login_as customer, scope: :customer
-  end
-
-  def login_distributor(distributor)
+  def distributor_login
+    @distributor ||= Fabricate(:distributor)
     @last_login = :distributor
-    login_as distributor, scope: :distributor
+    login_as @distributor, scope: :distributor
   end
 
-  def dump_html(html)
+  def customer_login
+    @customer ||= Fabricate(:customer)
+    @last_login = :customer
+    login_as @customer, scope: :customer
+  end
+
+  def pretty_html(html)
     File.open('test_dump.html', 'w') {|f| f.write(html) }
     `lynx -dump -width 120 test_dump.html > output.txt`
     puts `cat output.txt`
   ensure
-    File.delete('test_dump.html')    
+    File.delete('test_dump.html')
   end
 end

@@ -1,4 +1,6 @@
 class Invoice < ActiveRecord::Base
+  attr_accessible
+
   belongs_to :account
 
   has_one :distributor, through: :account

@@ -1,6 +1,0 @@
-.row-fluid
-  - unless @bank.cod_payment_message.blank?
-    .span12.alert.payment-message
-      .row-fluid
-        .span12
-          = simple_format(@bank.cod_payment_message, {}, sanitize: false)

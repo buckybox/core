@@ -1,4 +1,13 @@
 class Address < ActiveRecord::Base
+  ADDRESS_ATTRIBUTES = %w(
+    address_1
+    address_2
+    suburb
+    city
+    postcode
+    delivery_note
+  )
+
   belongs_to :customer, inverse_of: :address
 
   attr_accessible :customer, :address_1, :address_2, :suburb, :city, :postcode, :delivery_note
@@ -12,6 +21,10 @@ class Address < ActiveRecord::Base
   validate :validate_address_and_phone
 
   before_save :update_address_hash
+
+  def self.address_attributes
+    ADDRESS_ATTRIBUTES
+  end
 
   def to_s(join_with = ', ', options = {})
     result = [address_1]
@@ -53,7 +66,15 @@ class Address < ActiveRecord::Base
   end
 
   def phones
-    @phones ||= PhoneCollection.new self
+    @phones ||= PhoneCollection.new(self)
+  end
+
+  def default_phone_number
+    phones.default_number
+  end
+
+  def default_phone_type
+    phones.default_type
   end
 
   # Without arguments, returns an array of validations to skip
@@ -86,7 +107,7 @@ class Address < ActiveRecord::Base
 
   def update_with_notify(params, customer)
     self.attributes = params
-    
+
     return true unless changed? #nothing to save, nothing to notify
 
     if save
@@ -117,7 +138,7 @@ private
   end
 
   def validate_address
-    %w(address_1 address_2 suburb city postcode).each do |attr|
+    (ADDRESS_ATTRIBUTES - ["delivery_note"]).each do |attr|
       if distributor.public_send("require_#{attr}") && (
           customer && customer.new_record? ||
           send("#{attr}_changed?")

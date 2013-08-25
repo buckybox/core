@@ -1,0 +1,37 @@
+- title('Webstore - Completed Order', false)
+= render partial: 'webstore/sidebar'
+
+.row-fluid.span12
+  .important Payment instructions
+  = render partial: 'webstore/payment_instructions', locals: { form_object: cart }
+
+- if cart.payment_required?
+  .row-fluid
+    #webstore-payment.span12
+      .row-fluid
+        #payment.span12
+          .row-fluid
+            .span12.text-center.payment-title== Please pay #{cart.amount_due} by #{completed.payment_title}
+          .row-fluid
+            .span9.center-row= render partial: "confirmation_#{cart.payment_method}", locals: { form_object: completed }
+
+.row-fluid
+  .important Order summary
+  = render partial: 'webstore/order', object: cart.order.decorate
+
+.row-fluid
+  #webstore-placed.span12
+    .row-fluid
+      .span6
+        .important Deliver to
+        = completed.customer_name
+        %br
+        = completed.customer_address
+      .span6
+        .important Delivery date
+        = completed.schedule_description
+
+.row-fluid
+  .span12.text-center
+    = link_to 'Back to webstore', webstore_store_path(completed.distributor.parameter_name), class: 'btn btn-process', id: 'webstore'
+    = link_to 'My account', customer_root_path, class: 'btn btn-process', id: 'webstore-my-account'

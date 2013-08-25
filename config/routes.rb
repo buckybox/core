@@ -13,15 +13,32 @@ BuckyBox::Application.routes.draw do
     post 'sign_up'
   end
 
-  namespace :webstore do
-    get ':distributor_parameter_name',           action: 'store',     as: 'store'
-    get ':distributor_parameter_name/customise', action: 'customise', as: 'customise'
-    get ':distributor_parameter_name/login',     action: 'login',     as: 'login'
-    get ':distributor_parameter_name/delivery',  action: 'delivery',  as: 'delivery'
-    get ':distributor_parameter_name/complete',  action: 'complete',  as: 'complete'
-    get ':distributor_parameter_name/placed',    action: 'placed',    as: 'placed'
+  namespace :webstore, path: 'webstore/:distributor_parameter_name' do
+    scope module: :store do
+      get   '/',                            action: 'store',           as: 'store'
+      match '/start_checkout/:product_id',  action: 'start_checkout',  as: 'start_checkout'
+      get   '/completed',                   action: 'completed',       as: 'completed'
+    end
 
-    post ':distributor_parameter_name/process_step',  action: 'process_step',  as: 'process_step'
+    scope module: :customise_order do
+      get  '/customise_order',  action: 'customise_order',           as: 'customise_order'
+      post '/customise_order',  action: 'save_order_customisation',  as: 'customise_orders'
+    end
+
+    scope module: :authentication do
+      get  '/authentication',  action: 'authentication',       as: 'authentication'
+      post '/authentication',  action: 'save_authentication',  as: 'authentications'
+    end
+
+    scope module: :delivery_options do
+      get  '/delivery_options',  action: 'delivery_options',       as: 'delivery_options'
+      post '/delivery_options',  action: 'save_delivery_options',  as: 'delivery_options_index'
+    end
+
+    scope module: :payment_options do
+      get  '/payment_options',  action: 'payment_options',       as: 'payment_options'
+      post '/payment_options',  action: 'save_payment_options',  as: 'payment_options_index'
+    end
   end
 
   namespace :distributor do

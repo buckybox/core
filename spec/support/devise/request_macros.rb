@@ -1,9 +1,13 @@
 module Devise::RequestMacros
-  def as_distributor
-    before { sign_in_as_a_valid_distributor }
+  def login_as_admin
+    before { admin_login }
   end
 
-  def as_customer
-    before { sign_in_as_a_valid_customer }
+  def login_as_distributor
+    before { distributor_login }
+  end
+
+  def login_as_customer
+    before { customer_login }
   end
 end

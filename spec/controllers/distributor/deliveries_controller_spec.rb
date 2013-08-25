@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe Distributor::DeliveriesController do
-  as_distributor
+  sign_in_as_distributor
 
   context :delivery_sequence_order do
     before do
@@ -33,7 +33,7 @@ describe Distributor::DeliveriesController do
       delivery_list = mock_model(DeliveryList)
       delivery_ids = ['2', '1', '3']
       delivery_list.should_receive(:reposition).with(delivery_ids)
-      delivery_lists = mock('DeliveryLists')
+      delivery_lists = double('DeliveryLists')
       delivery_lists.stub(:find_by_date).with(@date_string).and_return(delivery_list)
       Distributor.any_instance.stub(:delivery_lists).and_return(delivery_lists)
 

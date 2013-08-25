@@ -2,7 +2,6 @@ class Box < ActiveRecord::Base
   belongs_to :distributor
 
   has_many :orders
-  has_many :webstore_orders
   has_many :box_extras
   has_many :extras, through: :box_extras
 
@@ -32,6 +31,10 @@ class Box < ActiveRecord::Base
 
   def big_thumb_url
     box_image.thumb.url
+  end
+
+  def webstore_image_url
+    box_image.webstore.url
   end
 
   def customisable?
@@ -66,8 +69,16 @@ class Box < ActiveRecord::Base
     read_attribute(:substitutions_limit) || 0
   end
 
+  def substitutions_unlimited?
+    substitutions_limit == 0
+  end
+
   def exclusions_limit
     read_attribute(:exclusions_limit) || 0
+  end
+
+  def exclusions_unlimited?
+    exclusions_limit == 0
   end
 
   def extras_disabled?
@@ -94,5 +105,9 @@ class Box < ActiveRecord::Base
 
   def limits_data
     {likes: substitutions_limit, dislikes: exclusions_limit}
+  end
+
+  def available_extras
+    extras.not_hidden.alphabetically
   end
 end
