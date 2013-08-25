@@ -496,27 +496,34 @@ describe Distributor do
     end
 
     it "returns 3 transactions" do
-      from = Date.parse('2013-08-02')
-      to   = Date.parse('2013-08-06')
-      expect(@dist.transactions_for_export(from, to)).to eq([@pay3, @pay2, @pay1])
+      from   = Date.parse('2013-08-02')
+      to     = Date.parse('2013-08-06')
+      result = @dist.transactions_for_export(from, to)
+      expect(result).to include(@pay1)
+      expect(result).to include(@pay2)
+      expect(result).to include(@pay3)
     end
 
     it "returns 2 transactions" do
-      from = Date.parse('2013-08-03')
-      to   = Date.parse('2013-08-05')
-      expect(@dist.transactions_for_export(from, to)).to eq([@pay3, @pay2])
+      from   = Date.parse('2013-08-03')
+      to     = Date.parse('2013-08-05')
+      result = @dist.transactions_for_export(from, to)
+      expect(result).to include(@pay2)
+      expect(result).to include(@pay3)
     end
 
     it "returns 1 transactions" do
-      from = Date.parse('2013-08-03')
-      to   = Date.parse('2013-08-04')
-      expect(@dist.transactions_for_export(from, to)).to eq([@pay2])
+      from   = Date.parse('2013-08-03')
+      to     = Date.parse('2013-08-04')
+      result = @dist.transactions_for_export(from, to)
+      expect(result).to include(@pay2)
     end
 
     it "returns 0 transactions" do
-      from = Date.parse('2013-08-04')
-      to   = Date.parse('2013-08-04')
-      expect(@dist.transactions_for_export(from, to)).to eq([])
+      from   = Date.parse('2013-08-04')
+      to     = Date.parse('2013-08-04')
+      result = @dist.transactions_for_export(from, to)
+      expect(result).to be_empty
     end
   end
 end
