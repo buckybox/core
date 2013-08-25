@@ -483,20 +483,40 @@ describe Distributor do
   end
 
   describe '#transactions_for_export' do
-    it 'returns customers based on customer ids' do
-      day1        = Date.parse('2013-08-03')
-      day2        = Date.parse('2013-08-04')
-      day3        = Date.parse('2013-08-05')
+    let(:day1)    { Date.parse('2013-08-03') }
+    let(:day2)    { Date.parse('2013-08-04') }
+    let(:day3)    { Date.parse('2013-08-05') }
 
-      payment1    = Fabricate(:transaction, display_time: day1)
-      account     = payment1.account
-      distributor = account.distributor
+    before do
+      @pay1   = Fabricate(:transaction, display_time: day1)
+      account = @pay1.account
+      @dist    = account.distributor
+      @pay2   = Fabricate(:transaction, display_time: day2, account: account)
+      @pay3   = Fabricate(:transaction, display_time: day3, account: account)
+    end
 
-      payment2 = Fabricate(:transaction, display_time: day2, account: account)
-      payment3 = Fabricate(:transaction, display_time: day2, account: account)
-      payment4 = Fabricate(:transaction, display_time: day3, account: account)
+    it "returns 3 transactions" do
+      from = Date.parse('2013-08-02')
+      to   = Date.parse('2013-08-06')
+      expect(@dist.transactions_for_export(from, to)).to eq([@pay3, @pay2, @pay1])
+    end
 
-      distributor.transactions_for_export(day1, day2).should eq([payment3, payment2])
+    it "returns 2 transactions" do
+      from = Date.parse('2013-08-03')
+      to   = Date.parse('2013-08-05')
+      expect(@dist.transactions_for_export(from, to)).to eq([@pay3, @pay2])
+    end
+
+    it "returns 1 transactions" do
+      from = Date.parse('2013-08-03')
+      to   = Date.parse('2013-08-04')
+      expect(@dist.transactions_for_export(from, to)).to eq([@pay2])
+    end
+
+    it "returns 0 transactions" do
+      from = Date.parse('2013-08-04')
+      to   = Date.parse('2013-08-04')
+      expect(@dist.transactions_for_export(from, to)).to eq([])
     end
   end
 end
