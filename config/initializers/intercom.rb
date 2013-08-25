@@ -1,5 +1,5 @@
-Intercom.app_id = "b3e72f90ddcc230dea36a8e35ec7e4dd65860b61"
-Intercom.api_key = "229897e267e10c51092f04ef67bac6813cb4c078"
+Intercom.app_id = Figaro.env.intercom_app_id
+Intercom.api_key = Figaro.env.intercom_api_key
 
 IntercomRails.config do |config|
   # == Intercom app_id
@@ -10,7 +10,7 @@ IntercomRails.config do |config|
   # This is required to enable secure mode, you can find it on your Intercom 
   # "security" configuration page.
   # 
-  config.api_secret = "prVxueBF1rB3TaRdjPOUfy-_Y8uuFPr62VCOLxbs"
+  config.api_secret = Figaro.env.intercom_api_secret
 
   # == Intercom API Key
   # This is required for some Intercom rake tasks like importing your users;

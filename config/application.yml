@@ -26,6 +26,11 @@ DELAYED_JOB_PRIORITY_LOW:  50
 DELAYED_JOB_USERNAME: "bg_job_master"
 DELAYED_JOB_PASSWORD: "What's in the queue?"
 
+# Intercom
+INTERCOM_APP_ID: "b3e72f90ddcc230dea36a8e35ec7e4dd65860b61"
+INTERCOM_API_KEY: "229897e267e10c51092f04ef67bac6813cb4c078"
+INTERCOM_API_SECRET: "prVxueBF1rB3TaRdjPOUfy-_Y8uuFPr62VCOLxbs"
+
 # Email headers
 X_MAILER: 'Bucky Box Mailer (1.0.0) www.buckybox.com'
 
