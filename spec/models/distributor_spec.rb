@@ -495,40 +495,30 @@ describe Distributor do
       @pay3   = Fabricate(:transaction, display_time: day3, account: account)
     end
 
-    it "creates an expected SQL query" do
-      from   = Date.parse('2013-08-03')
-      to     = Date.parse('2013-08-05')
-      expected_result = "SELECT \"transactions\".* FROM \"transactions\" INNER JOIN \"accounts\" ON \"transactions\".\"account_id\" = \"accounts\".\"id\" INNER JOIN \"customers\" ON \"accounts\".\"customer_id\" = \"customers\".\"id\" WHERE \"customers\".\"distributor_id\" = #{@dist.id} AND (display_time >= '#{from}') AND (display_time < '#{to}') ORDER BY display_time DESC, created_at DESC"
-      expect(@dist.transactions_for_export(from, to).to_sql).to eq(expected_result)
-    end
-
     it "returns 3 transactions" do
       from   = Date.parse('2013-08-02')
       to     = Date.parse('2013-08-06')
       result = @dist.transactions_for_export(from, to)
-      expect(result).to include(@pay1)
-      expect(result).to include(@pay2)
-      expect(result).to include(@pay3)
+      expect(result).to eq([@pay3, @pay2, @pay1])
     end
 
     it "returns 2 transactions" do
-      from   = Date.parse('2013-08-03')
-      to     = Date.parse('2013-08-05')
+      from   = day1
+      to     = day3
       result = @dist.transactions_for_export(from, to)
-      expect(result).to include(@pay2)
-      expect(result).to include(@pay3)
+      expect(result).to eq([@pay2, @pay1])
     end
 
     it "returns 1 transactions" do
-      from   = Date.parse('2013-08-03')
-      to     = Date.parse('2013-08-04')
+      from   = day1
+      to     = day2
       result = @dist.transactions_for_export(from, to)
-      expect(result).to include(@pay2)
+      expect(result).to eq([@pay1])
     end
 
     it "returns 0 transactions" do
-      from   = Date.parse('2013-08-04')
-      to     = Date.parse('2013-08-04')
+      from   = day2
+      to     = day2
       result = @dist.transactions_for_export(from, to)
       expect(result).to be_empty
     end
