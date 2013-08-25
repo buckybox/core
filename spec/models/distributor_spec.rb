@@ -484,16 +484,18 @@ describe Distributor do
 
   describe '#transactions_for_export' do
     it 'returns customers based on customer ids' do
-      distributor.save
-      customer = Fabricate(:customer, distributor: distributor)
-      account  = Fabricate(:account, customer: customer)
-      day1     = Date.parse('2013-08-03')
-      day2     = day1 + 1.day
-      day3     = day1 + 2.day
-      payment1 = Fabricate(:transaction, account: account, display_time: day1)
-      payment2 = Fabricate(:transaction, account: account, display_time: day2)
-      payment3 = Fabricate(:transaction, account: account, display_time: day2)
-      payment4 = Fabricate(:transaction, account: account, display_time: day3)
+      day1        = Date.parse('2013-08-03')
+      day2        = Date.parse('2013-08-04')
+      day3        = Date.parse('2013-08-05')
+
+      payment1    = Fabricate(:transaction, display_time: day1)
+      account     = payment1.account
+      distributor = account.distributor
+
+      payment2 = Fabricate(:transaction, display_time: day2, account: account)
+      payment3 = Fabricate(:transaction, display_time: day2, account: account)
+      payment4 = Fabricate(:transaction, display_time: day3, account: account)
+
       distributor.transactions_for_export(day1, day2).should eq([payment3, payment2])
     end
   end
