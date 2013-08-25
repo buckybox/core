@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe Distributor::BoxesController do
   render_views
-  as_distributor
+  sign_in_as_distributor
 
   before do
     @extras = 2.times.collect{Fabricate(:extra, distributor: @distributor)}

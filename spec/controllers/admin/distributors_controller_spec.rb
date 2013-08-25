@@ -1,12 +1,16 @@
 require 'spec_helper'
 
 describe Admin::DistributorsController do
-  as_admin
+  sign_in_as_admin
 
   specify { subject.current_admin.should_not be_nil }
 
   describe 'GET index' do
     it 'assigns all distributors as @distributors' do
+      # NOTE: prevent random failure when existing distributors would not be
+      # wiped out by DatabaseCleaner
+      Distributor.delete_all
+
       distributor = Fabricate(:distributor)
       get :index, {}
       assigns(:distributors).should eq([distributor])
@@ -113,7 +117,7 @@ describe Admin::DistributorsController do
   end
 
   describe 'unimpersonate' do
-    as_distributor
+    sign_in_as_distributor
 
     specify { subject.current_distributor.should_not be_nil }
 
@@ -124,7 +128,7 @@ describe Admin::DistributorsController do
   end
 
   describe 'country_setting' do
-    as_distributor
+    sign_in_as_distributor
     before do
       c = double(Country, default_time_zone: "Pacific/Auckland",
                 default_currency: "nzd",

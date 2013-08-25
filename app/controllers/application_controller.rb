@@ -25,6 +25,19 @@ protected
     @tracking ||= Bucky::Tracking.instance
   end
 
+  def attempt_customer_sign_in(email, password, options = {})
+    customer = Customer.where(email: email).first
+    return if !customer || !customer.valid_password?(password)
+    customer if customer_sign_in(customer, options)
+  end
+
+  def customer_sign_in(customer, options = {})
+    return if current_customer == customer
+    options = { no_track: false }.merge(options)
+    CustomerLogin.track(customer) unless options[:no_track]
+    sign_in(customer)
+  end
+
   def layout_by_resource
     if devise_controller?
       "#{resource_name}_devise"

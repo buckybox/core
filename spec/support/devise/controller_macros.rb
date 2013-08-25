@@ -1,13 +1,13 @@
 module Devise::ControllerMacros
-  def as_admin
+  def sign_in_as_admin
     before { admin_sign_in }
   end
 
-  def as_distributor
+  def sign_in_as_distributor
     before { distributor_sign_in }
   end
 
-  def as_customer
+  def sign_in_as_customer
     before { customer_sign_in }
   end
 end

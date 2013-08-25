@@ -62,7 +62,7 @@ Cucumber::Rails::Database.javascript_strategy = :truncation
 require 'cucumber/rspec/doubles'
 
 require 'capybara-screenshot/cucumber'
-Capybara.save_and_open_page_path = Rails.root
+Capybara.save_and_open_page_path = Rails.root.join("tmp")
 Capybara.asset_host = "http://buckybox.dev:3000"
 
 # JavaScript driver

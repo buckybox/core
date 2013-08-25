@@ -70,6 +70,31 @@ class Order < ActiveRecord::Base
     self.schedule_rule ||= ScheduleRule.one_off(Date.current) if new_record?
   end
 
+  # TODO: move to decorator
+  def self.dates_grid
+    days = []
+    4.times do |week| # 4 first weeks of the month
+      days << ScheduleRule::DAYS.map do |day|
+        [day.to_s.titleize, ScheduleRule::DAYS.index(day) + ScheduleRule::DAYS.size * week]
+      end
+    end
+    days
+  end
+
+  # TODO: move to decorator
+  def self.start_dates(route, time_from_now = nil)
+    time_from_now ||= 12.weeks.from_now
+    from_time = route.distributor.window_end_at + 1.day #next_occurrence includes the start date, so choose the next day
+    next_occurrences = route.occurrences_between(from_time, time_from_now)
+    next_occurrences.map do |time|
+      [
+        time.to_s(:route_delivery_dates),
+        time.to_date,
+        { 'data-weekday' => time.strftime('%a').downcase }
+      ]
+    end
+  end
+
   def self.deactivate_finished
     active.each do |order|
       order.use_local_time_zone do
@@ -403,6 +428,10 @@ class Order < ActiveRecord::Base
     end
   end
 
+  def completed!
+    self.completed = true
+  end
+
   protected
 
   def update_next_occurrence
@@ -445,7 +474,7 @@ class Order < ActiveRecord::Base
     customer.remind_customer_is_halted if halted?
   end
 
-  private
+private
 
   def remove_recurrence_rule_day(day)
     s = schedule
