@@ -1,7 +1,7 @@
 class Delivery < ActiveRecord::Base
   belongs_to :order
   belongs_to :delivery_list
-  belongs_to :route
+  belongs_to :delivery_service
   belongs_to :package
 
   has_one :distributor, through: :delivery_list
@@ -13,16 +13,16 @@ class Delivery < ActiveRecord::Base
   has_many :payments,   as: :payable
   has_many :deductions, as: :deductable
 
-  acts_as_list scope: [:delivery_list_id, :route_id]
+  acts_as_list scope: [:delivery_list_id, :delivery_service_id]
 
-  attr_accessible :order, :order_id, :route, :status, :status_change_type, :delivery_list, :package, :package_id, :account
+  attr_accessible :order, :order_id, :delivery_service, :status, :status_change_type, :delivery_list, :package, :package_id, :account
 
   STATUS_CHANGE_TYPE = %w(manual auto)
 
-  validates_presence_of :order_id, :delivery_list_id, :route_id, :package_id, :status, :status_change_type
+  validates_presence_of :order_id, :delivery_list_id, :delivery_service_id, :package_id, :status, :status_change_type
   validates_inclusion_of :status_change_type, in: STATUS_CHANGE_TYPE, message: "%{value} is not a valid status change type"
 
-  before_validation :default_route, if: 'route.nil?'
+  before_validation :default_delivery_service, if: 'delivery_service.nil?'
 
   before_save :update_dso
   before_create :set_delivery_number
@@ -162,7 +162,7 @@ class Delivery < ActiveRecord::Base
   end
 
   def self.matching_dso(delivery_sequence_order)
-    delivery_ids = Delivery.joins({delivery_list:{}, account: {customer: {address: {}}}}).where(['deliveries.route_id = ? AND addresses.address_hash = ? AND EXTRACT(DOW FROM delivery_lists.date) = ?', delivery_sequence_order.route_id, delivery_sequence_order.address_hash, delivery_sequence_order.day]).collect(&:id)
+    delivery_ids = Delivery.joins({delivery_list:{}, account: {customer: {address: {}}}}).where(['deliveries.delivery_service_id = ? AND addresses.address_hash = ? AND EXTRACT(DOW FROM delivery_lists.date) = ?', delivery_sequence_order.delivery_service_id, delivery_sequence_order.address_hash, delivery_sequence_order.day]).collect(&:id)
     Delivery.where(['id in (?)', delivery_ids])
   end
 
@@ -185,8 +185,8 @@ class Delivery < ActiveRecord::Base
 
 private
 
-  def default_route
-    self.route = order.route if order
+  def default_delivery_service
+    self.delivery_service = order.delivery_service if order
   end
 
   def deduct_account

@@ -122,11 +122,11 @@ class Distributor::OrdersController < Distributor::ResourceController
   end
 
   def load_form
-    @customer      = @account.customer
-    @route         = @customer.route
-    @stock_list    = current_distributor.line_items
-    @form_params   = [:distributor, @account, @order]
-    @dislikes_list = @order.exclusions.map { |e| e.line_item_id.to_s }
-    @likes_list    = @order.substitutions.map { |s| s.line_item_id.to_s }
+    @customer         = @account.customer
+    @delivery_service = @customer.delivery_service
+    @stock_list       = current_distributor.line_items
+    @form_params      = [:distributor, @account, @order]
+    @dislikes_list    = @order.exclusions.map { |e| e.line_item_id.to_s }
+    @likes_list       = @order.substitutions.map { |s| s.line_item_id.to_s }
   end
 end

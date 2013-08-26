@@ -8,9 +8,9 @@ describe Distributor::OrdersController do
       Distributor.any_instance.stub_chain(:accounts, :find).and_return(
         @account = mock_model(Account, {
           customer: mock_model(Customer, {
-            id: 1, route: @route = mock_model(Route)
+            id: 1, delivery_service: @delivery_service = mock_model(DeliveryService)
           }),
-          route: @route,
+          delivery_service: @delivery_service,
           id: 675
       }))
       Distributor.any_instance.stub_chain(:boxes, :count, :zero?).and_return(false)

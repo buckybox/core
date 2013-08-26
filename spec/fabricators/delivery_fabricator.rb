@@ -1,6 +1,6 @@
 Fabricator(:delivery) do
   order
   delivery_list
-  route
+  delivery_service
   package
 end

@@ -79,7 +79,7 @@ describe Bucky::Import do
       specify { @john.delivery_suburb.should eq('Ngaio') }
       specify { @john.delivery_city.should eq('Wellington') }
       specify { @john.delivery_postcode.should be_nil }
-      specify { @john.delivery_route.should eq('CBD Van') }
+      specify { @john.delivery_service.should eq('CBD Van') }
       specify { @john.delivery_instructions.should eq('Leave on deck, by door at side of house') }
 
       context :boxes do
@@ -126,7 +126,7 @@ describe Bucky::Import do
       specify { @mary.delivery_suburb.should eq('Aro Valley') }
       specify { @mary.delivery_city.should eq('Wellington') }
       specify { @mary.delivery_postcode.should be_nil }
-      specify { @mary.delivery_route.should eq('CBD Van') }
+      specify { @mary.delivery_service.should eq('CBD Van') }
       specify { @mary.delivery_instructions.should be_nil }
 
       context :boxes do
@@ -174,7 +174,7 @@ describe Bucky::Import do
       specify { @will.delivery_suburb.should eq('Ngaio') }
       specify { @will.delivery_city.should eq('Wellington') }
       specify { @will.delivery_postcode.should eq('543') }
-      specify { @will.delivery_route.should eq('Rural Van') }
+      specify { @will.delivery_service.should eq('Rural Van') }
       specify { @will.delivery_instructions.should eq('Door round back please.') }
 
       context :boxes do

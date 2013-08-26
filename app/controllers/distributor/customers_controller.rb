@@ -5,8 +5,8 @@ class Distributor::CustomersController < Distributor::ResourceController
   before_filter :get_email_templates, only: [:index, :show]
 
   def index
-    if current_distributor.routes.empty?
-      redirect_to distributor_settings_routes_url, alert: 'You must create a route before you can create users.' and return
+    if current_distributor.delivery_services.empty?
+      redirect_to distributor_settings_delivery_services_url, alert: 'You must create a delivery service before you can create users.' and return
     end
 
     index! do
@@ -146,7 +146,7 @@ protected
       tracking.event(current_distributor, "search_customer_list") unless current_admin.present?
     end
 
-    @customers = @customers.ordered_by_next_delivery.includes(account: {route: {}}, tags: {}, next_order: {box: {}})
+    @customers = @customers.ordered_by_next_delivery.includes(account: {delivery_service: {}}, tags: {}, next_order: {box: {}})
   end
 
 private

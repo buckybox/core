@@ -78,7 +78,7 @@ $(function() {
     prepare_csv_export(this);
   });
 
-  $('#route-controls #delivered, #missed-options a').click(function() {
+  $('#delivery_service-controls #delivered, #missed-options a').click(function() {
     var status = $(this).attr('id');
     var checked_deliveries = $('#delivery-listings .data-listings input[type=checkbox]:checked');
 

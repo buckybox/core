@@ -1,5 +1,5 @@
 Fabricator(:delivery_sequence_order) do
-  route
+  delivery_service
   day 1
   position 1
 end

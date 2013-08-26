@@ -4,10 +4,10 @@ class Order < ActiveRecord::Base
   belongs_to :account
   belongs_to :box
 
-  has_one :customer,    through: :account
-  has_one :distributor, through: :account
-  has_one :address,     through: :account
-  has_one :route,       through: :account
+  has_one :customer,         through: :account
+  has_one :distributor,      through: :account
+  has_one :address,          through: :account
+  has_one :delivery_service, through: :account
 
   has_many :packages
   has_many :deliveries
@@ -49,7 +49,7 @@ class Order < ActiveRecord::Base
 
   validates_presence_of :account_id, :box_id, :quantity
   validates_numericality_of :quantity, greater_than: 0
-  validate :route_includes_schedule_rule
+  validate :delivery_service_includes_schedule_rule
   validate :extras_within_box_limit
   validate :likes_dislikes_within_limits
 
@@ -82,13 +82,13 @@ class Order < ActiveRecord::Base
   end
 
   # TODO: move to decorator
-  def self.start_dates(route, time_from_now = nil)
+  def self.start_dates(delivery_service, time_from_now = nil)
     time_from_now ||= 12.weeks.from_now
-    from_time = route.distributor.window_end_at + 1.day #next_occurrence includes the start date, so choose the next day
-    next_occurrences = route.occurrences_between(from_time, time_from_now)
+    from_time = delivery_service.distributor.window_end_at + 1.day #next_occurrence includes the start date, so choose the next day
+    next_occurrences = delivery_service.occurrences_between(from_time, time_from_now)
     next_occurrences.map do |time|
       [
-        time.to_s(:route_delivery_dates),
+        time.to_s(:delivery_service_dates),
         time.to_date,
         { 'data-weekday' => time.strftime('%a').downcase }
       ]
@@ -106,9 +106,9 @@ class Order < ActiveRecord::Base
     end
   end
 
-  def self.for_route_read_only(route)
+  def self.for_delivery_service_read_only(delivery_service)
     # Getting the data needed via a join
-    order_ids = Order.where(customers: { route_id: route.id }).joins(:customer).map(&:id)
+    order_ids = Order.where(customers: { delivery_service_id: delivery_service.id }).joins(:customer).map(&:id)
     # The join causes the returned models to be read-only. Thus, must to another search to get updateable models returned.
     Order.where(id: order_ids)
   end
@@ -148,7 +148,7 @@ class Order < ActiveRecord::Base
   end
 
   def individual_price
-    OrderPrice.individual(box, route, customer)
+    OrderPrice.individual(box, delivery_service, customer)
   end
 
   def extras_price
@@ -187,8 +187,8 @@ class Order < ActiveRecord::Base
     box.name
   end
 
-  def route_name
-    route.name
+  def delivery_service_name
+    delivery_service.name
   end
 
   def has_exclusions?
@@ -392,17 +392,17 @@ class Order < ActiveRecord::Base
   end
 
   def dso(wday)
-    dso_position = DeliverySequenceOrder.position_for(address.address_hash, wday, route.id)
+    dso_position = DeliverySequenceOrder.position_for(address.address_hash, wday, delivery_service.id)
     dso_position || -1
   end
 
-  def route_id
-    account.customer.route_id
+  def delivery_service_id
+    account.customer.delivery_service_id
   end
 
-  def self.order_count(distributor, date, route_id=nil)
+  def self.order_count(distributor, date, delivery_service_id=nil)
     distributor.use_local_time_zone do
-      Bucky::Sql.order_count(distributor, date, route_id)
+      Bucky::Sql.order_count(distributor, date, delivery_service_id)
     end
   end
 
@@ -438,9 +438,9 @@ class Order < ActiveRecord::Base
     customer.update_next_occurrence.save!
   end
 
-  def route_includes_schedule_rule
-    unless account.route.includes?(schedule_rule, {ignore_start: true})
-      errors.add(:schedule_rule, "Route #{account.route.name}'s schedule '#{account.route.schedule_rule.inspect} doesn't include this order's schedule of '#{schedule_rule.inspect}'")
+  def delivery_service_includes_schedule_rule
+    unless account.delivery_service.includes?(schedule_rule, {ignore_start: true})
+      errors.add(:schedule_rule, "DeliveryService #{account.delivery_service.name}'s schedule '#{account.delivery_service.schedule_rule.inspect} doesn't include this order's schedule of '#{schedule_rule.inspect}'")
     end
   end
 

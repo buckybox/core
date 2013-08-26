@@ -47,7 +47,7 @@ BuckyBox::Application.routes.draw do
     namespace :wizard do
       get 'business'
       get 'boxes'
-      get 'routes'
+      get 'delivery_services'
       get 'payment'
       get 'billing'
       get 'success'
@@ -58,7 +58,7 @@ BuckyBox::Application.routes.draw do
       post 'spend_limit_confirmation'
       get 'extras'
       get 'boxes'
-      get 'routes'
+      get 'delivery_services'
       get 'bank_information'
       get 'invoice_information'
       get 'stock_list'
@@ -83,7 +83,7 @@ BuckyBox::Application.routes.draw do
     resource  :invoice_information, only: [:create, :update]
     resources :boxes,               except: [:index]
     resources :extras,              except: [:index, :show]
-    resources :routes,              except: [:index, :show]
+    resources :delivery_services,   except: [:index, :show]
 
     resources :line_items, except: [:index, :show, :update] do
       collection do

@@ -31,7 +31,7 @@ describe SalesCsv::OrderGenerator do
 
   def expected_csv_header
     [
-      'Delivery Route',
+      'Delivery Service',
       'Delivery Sequence Number',
       'Delivery Pickup Point Name',
       'Order Number',

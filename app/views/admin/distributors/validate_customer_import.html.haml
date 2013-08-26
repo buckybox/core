@@ -6,7 +6,7 @@
       %h3 No Customers Found
     - else
       - @customers.each do |customer|
-        - route = @distributor.routes.find_by_name(customer.delivery_route)
+        - delivery_service = @distributor.delivery_services.find_by_name(customer.delivery_service)
 
         .row-fluid
           %h3.span12== Customer ##{customer.number}
@@ -21,8 +21,8 @@
 
                   - if field == :tags
                     %dd= customer.tags.join(', ')
-                  - elsif field == :delivery_route
-                    %dd{ class: delivery_route_status(route) }= customer.delivery_route
+                  - elsif field == :delivery_service
+                    %dd{ class: delivery_service_status(delivery_service) }= customer.delivery_service
                   - else
                     %dd= customer.send(field)
 
@@ -34,7 +34,7 @@
                   %th= field.to_s.titleize
             %tbody
               - customer.boxes.each do |box|
-                %tr{ class: order_status(route, box) }
+                %tr{ class: order_status(delivery_service, box) }
                   - @order_data_fields.each do |field|
                     - if field == :box_type
                       %td{ class: box_type_status(@distributor, box) }= box.box_type

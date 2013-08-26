@@ -36,18 +36,18 @@ class Bucky::Sql
     })
   end
 
-  def self.find_schedules_route(distributor, date, route_id)
-    flux_substitute('find_schedules_route', {
+  def self.find_schedules_delivery_service(distributor, date, delivery_service_id)
+    flux_substitute('find_schedules_delivery_service', {
       dow: date.strftime('%a').downcase,
       date: date.to_s(:db),
       distributor_id: distributor.id.to_s,
-      route_id: route_id
+      delivery_service_id: delivery_service_id
     })
   end
 
-  def self.order_count(distributor, date, route_id=nil)
-    if route_id
-      select_execute('sum(orders.quantity) as count', find_schedules_route(distributor, date, route_id))[0]['count'].to_i
+  def self.order_count(distributor, date, delivery_service_id=nil)
+    if delivery_service_id
+      select_execute('sum(orders.quantity) as count', find_schedules_delivery_service(distributor, date, delivery_service_id))[0]['count'].to_i
     else
       select_execute('sum(orders.quantity) as count', find_schedules(distributor, date))[0]['count'].to_i
     end

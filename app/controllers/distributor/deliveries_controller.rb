@@ -11,10 +11,10 @@ class Distributor::DeliveriesController < Distributor::ResourceController
 
   # NOTE: When this is refactored also fix the "items" ordering in the sale_csv models.
   def index
-    @routes = current_distributor.routes
+    @delivery_services = current_distributor.delivery_services
 
-    if @routes.empty?
-      redirect_to distributor_settings_routes_url, alert: 'You must create a route before you can view the deliveries page.' and return
+    if @delivery_services.empty?
+      redirect_to distributor_settings_delivery_services_url, alert: 'You must create a delivery service before you can view the deliveries page.' and return
     end
 
     unless params[:date] && params[:view]
@@ -23,26 +23,26 @@ class Distributor::DeliveriesController < Distributor::ResourceController
 
     index! do
       @selected_date = Date.parse(params[:date])
-      @route_id      = params[:view].to_i
+      @delivery_service_id = params[:view].to_i
 
       @date_navigation = (nav_start_date..nav_end_date).to_a
       @months          = @date_navigation.group_by(&:month)
 
-      if @route_id.zero?
+      if @delivery_service_id.zero?
         @packing_list = current_distributor.packing_list_by_date(@selected_date)
         @all_packages = @packing_list.ordered_packages
 
         @items     = @all_packages
         @real_list = @items.all? { |i| i.is_a?(Package) }
-        @route     = @routes.first
+        @delivery_service = @delivery_services.first
         @show_tour = current_distributor.deliveries_index_packing_intro
       else
         @delivery_list  = current_distributor.delivery_list_by_date(@selected_date)
         @all_deliveries = @delivery_list.ordered_deliveries
 
-        @items     = @all_deliveries.select{ |delivery| delivery.route_id  == @route_id }
+        @items     = @all_deliveries.select{ |delivery| delivery.delivery_service_id  == @delivery_service_id }
         @real_list = @items.all? { |i| i.is_a?(Delivery) }
-        @route     = @routes.find(@route_id)
+        @delivery_service = @delivery_services.find(@delivery_service_id)
         @show_tour = current_distributor.deliveries_index_deliveries_intro
       end
     end

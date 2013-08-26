@@ -44,21 +44,21 @@ module Distributor::DeliveriesHelper
     end
   end
 
-  def reschedule_dates(route)
-    dates = route.schedule.next_occurrences(5, Time.current)
+  def reschedule_dates(delivery_service)
+    dates = delivery_service.schedule.next_occurrences(5, Time.current)
     options_from_collection_for_select(dates, 'to_date', 'to_date')
   end
 
-  def order_delivery_route_name(order, date)
+  def order_delivery_service_name(order, date)
     delivery = order.delivery_for_date(date)
-    delivery.route.name if delivery
+    delivery.delivery_service.name if delivery
   end
 
-  def order_delivery_count(calendar_array, date, route = nil)
+  def order_delivery_count(calendar_array, date, delivery_service = nil)
     data = calendar_array.select{|cdate, cdata| cdate == date}[0][1]
 
-    if route
-      Order.find(data[:order_ids]).select{|o| o.route(date) == route}.size
+    if delivery_service
+      Order.find(data[:order_ids]).select{|o| o.delivery_service(date) == delivery_service}.size
     else
       data[:order_ids].size
     end
@@ -77,12 +77,12 @@ module Distributor::DeliveriesHelper
     end
   end
 
-  def delivery_quantity(distributor, date, route_id = nil)
+  def delivery_quantity(distributor, date, delivery_service_id = nil)
     delivery_list = current_distributor.delivery_lists.where(date: date).first
     if delivery_list
-      delivery_list.quantity_for(route_id)
+      delivery_list.quantity_for(delivery_service_id)
     else
-      Order.order_count(distributor, date, route_id)
+      Order.order_count(distributor, date, delivery_service_id)
     end
   end
 

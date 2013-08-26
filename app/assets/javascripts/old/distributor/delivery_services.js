@@ -1,12 +1,12 @@
 /* Show a confirmation dialog box when checkboxes are unchecked
  * from a the inital page load state of checked.  This allows
  * a confirmation dialog box to be shown to confirm that the deletion
- * to a routes weekday is confirmed.
+ * to a delivery service's weekday is confirmed.
  *
  * To use:
  * add data-conditional-confirm to the submit button and include in it
  * the text to be shown as the confirm dialog
- * add data-conditional-on as a key ('route_deleted' is already used)
+ * add data-conditional-on as a key ('delivery_service_deleted' is already used)
  * and update the switch method below to accomodate the new key
  */
 
@@ -18,7 +18,7 @@ $(function() {
     var conditionalOn = $(element).attr('data-conditional-on')
 
     switch(conditionalOn) {
-      case 'route_deleted':
+      case 'delivery_service_deleted':
         var weekdays = {};
         $("#weekdays input[type='checkbox']").each(function(index, weekday) {
           weekday = $(weekday);
@@ -31,7 +31,7 @@ $(function() {
   inputs.click(function() {
     var conditionalOn = $(this).attr('data-conditional-on')
     switch(conditionalOn) {
-      case 'route_deleted':
+      case 'delivery_service_deleted':
         var deleted = false;
         var prevWeekdays = window.conditionalConfirms[this];
         $("#weekdays input[type='checkbox']").each(function(index, weekday){

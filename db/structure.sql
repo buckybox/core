@@ -725,7 +725,7 @@ CREATE TABLE customers (
     updated_at timestamp without time zone,
     last_name character varying(255),
     distributor_id integer,
-    route_id integer,
+    delivery_service_id integer,
     encrypted_password character varying(128) DEFAULT ''::character varying NOT NULL,
     reset_password_token character varying(255),
     reset_password_sent_at timestamp without time zone,
@@ -867,7 +867,7 @@ CREATE TABLE deliveries (
     created_at timestamp without time zone,
     updated_at timestamp without time zone,
     status character varying(255),
-    route_id integer,
+    delivery_service_id integer,
     status_change_type character varying(255),
     delivery_list_id integer,
     "position" integer,
@@ -935,7 +935,7 @@ ALTER SEQUENCE delivery_lists_id_seq OWNED BY delivery_lists.id;
 CREATE TABLE delivery_sequence_orders (
     id integer NOT NULL,
     address_hash character varying(255),
-    route_id integer,
+    delivery_service_id integer,
     day integer,
     "position" integer,
     created_at timestamp without time zone NOT NULL,
@@ -960,6 +960,74 @@ CREATE SEQUENCE delivery_sequence_orders_id_seq
 --
 
 ALTER SEQUENCE delivery_sequence_orders_id_seq OWNED BY delivery_sequence_orders.id;
+
+
+--
+-- Name: delivery_service_schedule_transactions; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE delivery_service_schedule_transactions (
+    id integer NOT NULL,
+    delivery_service_id integer,
+    schedule text,
+    created_at timestamp without time zone,
+    updated_at timestamp without time zone
+);
+
+
+--
+-- Name: delivery_service_schedule_transactions_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE delivery_service_schedule_transactions_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: delivery_service_schedule_transactions_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE delivery_service_schedule_transactions_id_seq OWNED BY delivery_service_schedule_transactions.id;
+
+
+--
+-- Name: delivery_services; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE delivery_services (
+    id integer NOT NULL,
+    distributor_id integer,
+    name character varying(255),
+    created_at timestamp without time zone,
+    updated_at timestamp without time zone,
+    fee_cents integer DEFAULT 0 NOT NULL,
+    currency character varying(255),
+    area_of_service text,
+    estimated_delivery_time text
+);
+
+
+--
+-- Name: delivery_services_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE delivery_services_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: delivery_services_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE delivery_services_id_seq OWNED BY delivery_services.id;
 
 
 --
@@ -1721,7 +1789,7 @@ CREATE TABLE packages (
     archived_box_price_cents integer DEFAULT 0 NOT NULL,
     currency character varying(255),
     archived_customer_name character varying(255),
-    archived_route_fee_cents integer DEFAULT 0 NOT NULL,
+    archived_delivery_service_fee_cents integer DEFAULT 0 NOT NULL,
     archived_customer_discount numeric DEFAULT 0 NOT NULL,
     archived_extras text,
     archived_consumer_delivery_fee_cents integer DEFAULT 0,
@@ -1825,74 +1893,6 @@ CREATE SEQUENCE payments_id_seq
 --
 
 ALTER SEQUENCE payments_id_seq OWNED BY payments.id;
-
-
---
--- Name: route_schedule_transactions; Type: TABLE; Schema: public; Owner: -; Tablespace: 
---
-
-CREATE TABLE route_schedule_transactions (
-    id integer NOT NULL,
-    route_id integer,
-    schedule text,
-    created_at timestamp without time zone,
-    updated_at timestamp without time zone
-);
-
-
---
--- Name: route_schedule_transactions_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE route_schedule_transactions_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: route_schedule_transactions_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE route_schedule_transactions_id_seq OWNED BY route_schedule_transactions.id;
-
-
---
--- Name: routes; Type: TABLE; Schema: public; Owner: -; Tablespace: 
---
-
-CREATE TABLE routes (
-    id integer NOT NULL,
-    distributor_id integer,
-    name character varying(255),
-    created_at timestamp without time zone,
-    updated_at timestamp without time zone,
-    fee_cents integer DEFAULT 0 NOT NULL,
-    currency character varying(255),
-    area_of_service text,
-    estimated_delivery_time text
-);
-
-
---
--- Name: routes_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE routes_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: routes_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE routes_id_seq OWNED BY routes.id;
 
 
 --
@@ -2283,6 +2283,20 @@ ALTER TABLE ONLY delivery_sequence_orders ALTER COLUMN id SET DEFAULT nextval('d
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
+ALTER TABLE ONLY delivery_service_schedule_transactions ALTER COLUMN id SET DEFAULT nextval('delivery_service_schedule_transactions_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY delivery_services ALTER COLUMN id SET DEFAULT nextval('delivery_services_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
 ALTER TABLE ONLY distributor_gateways ALTER COLUMN id SET DEFAULT nextval('distributor_gateways_id_seq'::regclass);
 
 
@@ -2431,20 +2445,6 @@ ALTER TABLE ONLY packing_lists ALTER COLUMN id SET DEFAULT nextval('packing_list
 --
 
 ALTER TABLE ONLY payments ALTER COLUMN id SET DEFAULT nextval('payments_id_seq'::regclass);
-
-
---
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY route_schedule_transactions ALTER COLUMN id SET DEFAULT nextval('route_schedule_transactions_id_seq'::regclass);
-
-
---
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY routes ALTER COLUMN id SET DEFAULT nextval('routes_id_seq'::regclass);
 
 
 --
@@ -2648,6 +2648,22 @@ ALTER TABLE ONLY delivery_sequence_orders
 
 
 --
+-- Name: delivery_service_schedule_transactions_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY delivery_service_schedule_transactions
+    ADD CONSTRAINT delivery_service_schedule_transactions_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: delivery_services_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY delivery_services
+    ADD CONSTRAINT delivery_services_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: distributor_gateways_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -2824,22 +2840,6 @@ ALTER TABLE ONLY payments
 
 
 --
--- Name: route_schedule_transactions_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
---
-
-ALTER TABLE ONLY route_schedule_transactions
-    ADD CONSTRAINT route_schedule_transactions_pkey PRIMARY KEY (id);
-
-
---
--- Name: routes_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
---
-
-ALTER TABLE ONLY routes
-    ADD CONSTRAINT routes_pkey PRIMARY KEY (id);
-
-
---
 -- Name: schedule_pauses_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -2988,6 +2988,13 @@ CREATE UNIQUE INDEX index_customers_on_confirmation_token ON customers USING btr
 
 
 --
+-- Name: index_customers_on_delivery_service_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_customers_on_delivery_service_id ON customers USING btree (delivery_service_id);
+
+
+--
 -- Name: index_customers_on_distributor_id_and_number; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -3006,13 +3013,6 @@ CREATE UNIQUE INDEX index_customers_on_email ON customers USING btree (email);
 --
 
 CREATE UNIQUE INDEX index_customers_on_reset_password_token ON customers USING btree (reset_password_token);
-
-
---
--- Name: index_customers_on_route_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
---
-
-CREATE INDEX index_customers_on_route_id ON customers USING btree (route_id);
 
 
 --
@@ -3044,6 +3044,13 @@ CREATE INDEX index_deliveries_on_delivery_list_id ON deliveries USING btree (del
 
 
 --
+-- Name: index_deliveries_on_delivery_service_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_deliveries_on_delivery_service_id ON deliveries USING btree (delivery_service_id);
+
+
+--
 -- Name: index_deliveries_on_package_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -3051,17 +3058,24 @@ CREATE INDEX index_deliveries_on_package_id ON deliveries USING btree (package_i
 
 
 --
--- Name: index_deliveries_on_route_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
---
-
-CREATE INDEX index_deliveries_on_route_id ON deliveries USING btree (route_id);
-
-
---
 -- Name: index_delivery_lists_on_distributor_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE INDEX index_delivery_lists_on_distributor_id ON delivery_lists USING btree (distributor_id);
+
+
+--
+-- Name: index_delivery_service_schedule_transactions_on_ds_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_delivery_service_schedule_transactions_on_ds_id ON delivery_service_schedule_transactions USING btree (delivery_service_id);
+
+
+--
+-- Name: index_delivery_services_on_distributor_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_delivery_services_on_distributor_id ON delivery_services USING btree (distributor_id);
 
 
 --
@@ -3237,20 +3251,6 @@ CREATE INDEX index_payments_on_account_id ON payments USING btree (account_id);
 --
 
 CREATE INDEX index_payments_on_distributor_id ON payments USING btree (distributor_id);
-
-
---
--- Name: index_route_schedule_transactions_on_route_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
---
-
-CREATE INDEX index_route_schedule_transactions_on_route_id ON route_schedule_transactions USING btree (route_id);
-
-
---
--- Name: index_routes_on_distributor_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
---
-
-CREATE INDEX index_routes_on_distributor_id ON routes USING btree (distributor_id);
 
 
 --
@@ -3724,3 +3724,5 @@ INSERT INTO schema_migrations (version) VALUES ('20130710053124');
 INSERT INTO schema_migrations (version) VALUES ('20130730021915');
 
 INSERT INTO schema_migrations (version) VALUES ('20130820025105');
+
+INSERT INTO schema_migrations (version) VALUES ('20130826015549');

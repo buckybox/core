@@ -4,7 +4,7 @@
 //= require_tree ./views
 //= require_tree ./helpers
 //= require_tree ./templates
-//= require_tree ./routes
+//= require_tree ./delivery_services
 //= require_self
 
 //BuckyBox.initialize();

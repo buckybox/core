@@ -68,8 +68,8 @@ Devise.setup do |config|
   # By default Devise will store the user in session. You can skip storage for
   # :http_auth and :token_auth by adding those symbols to the array below.
   # Notice that if you are skipping storage for all authentication paths, you
-  # may want to disable generating routes to Devise's sessions controller by
-  # passing :skip => :sessions to `devise_for` in your config/routes.rb
+  # may want to disable generating delivery_services to Devise's sessions controller by
+  # passing :skip => :sessions to `devise_for` in your config/delivery_services.rb
   config.skip_session_storage = [:http_auth]
 
   # ==> Configuration for :database_authenticatable
@@ -183,7 +183,7 @@ Devise.setup do |config|
   # config.scoped_views = true
 
   # Configure the default scope given to Warden. By default it's the first
-  # devise role declared in your routes (usually :user).
+  # devise role declared in your delivery_services (usually :user).
   # config.default_scope = :user
 
   # Set this configuration to false if you want /users/sign_out to sign out

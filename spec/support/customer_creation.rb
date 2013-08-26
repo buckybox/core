@@ -1,6 +1,6 @@
 def customer_with(args={})
   distributor = Fabricate(:distributor)
-  route = Fabricate(:route, name: args[:delivery_service], distributor: distributor)
+  delivery_service = Fabricate(:delivery_service, name: args[:delivery_service], distributor: distributor)
   customer = Fabricate(:customer,
     first_name: args[:first_name],
     last_name: args[:last_name],
@@ -13,7 +13,7 @@ def customer_with(args={})
     special_order_preference: args[:special_order_preference],
     tag_list: args[:labels],
     distributor: distributor,
-    route: route,
+    delivery_service: delivery_service,
     )
   customer.address.attributes = {
     address_1: args[:address_1],

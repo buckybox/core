@@ -7,9 +7,9 @@ class Distributor::WizardController < Distributor::BaseController
     @boxes = current_distributor.boxes
   end
 
-  def routes
-    @route = Route.new
-    @routes = current_distributor.routes
+  def delivery_services
+    @delivery_service = DeliveryService.new
+    @delivery_services = current_distributor.delivery_services
   end
 
   def payment

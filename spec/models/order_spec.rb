@@ -80,8 +80,8 @@ describe Order do
       ORDER_PRICE_PERMUTATIONS.each do |pp|
         context "where discount is #{pp[:discount]}, fee is #{pp[:fee]}, and quantity is #{pp[:quantity]}" do
           before do
-            route = Fabricate(:route, fee: pp[:fee])
-            customer = Fabricate(:customer, discount: pp[:discount], route: route)
+            delivery_service = Fabricate(:delivery_service, fee: pp[:fee])
+            customer = Fabricate(:customer, discount: pp[:discount], delivery_service: delivery_service)
             @order = Fabricate(:order, quantity: pp[:quantity], account: customer.account)
           end
 
@@ -94,7 +94,7 @@ describe Order do
     context :schedule_rule do
       before do
         order.save
-        @route = Fabricate(:route, distributor: order.distributor)
+        @delivery_service = Fabricate(:delivery_service, distributor: order.distributor)
         order.completed = true
         order.active = true
       end
@@ -166,7 +166,7 @@ describe Order do
 
     describe '#deactivate_finished' do
       before do
-        Order.any_instance.stub(:route_includes_schedule_rule).and_return(true)
+        Order.any_instance.stub(:delivery_service_includes_schedule_rule).and_return(true)
 
         rule_schedule = Fabricate(:schedule_rule, start: Date.current - 2.months)
         @order1 = Fabricate(:order, schedule_rule: rule_schedule)

@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe DeliveryList, :slow do
   let(:distributor) { Fabricate.build(:distributor) }
-  let(:route) { Fabricate.build(:route) }
+  let(:delivery_service) { Fabricate.build(:delivery_service) }
   let(:delivery_list) { Fabricate.build(:delivery_list, distributor: distributor) }
   let(:delivery) { Fabricate.build(:delivery, delivery_list: delivery_list) }
 
@@ -142,22 +142,22 @@ describe DeliveryList, :slow do
   end
 
   describe '#reposition' do
-    context 'makes sure the deliveries are from the same route' do
+    context 'makes sure the deliveries are from the same delivery_service' do
       before do
         delivery_list.save
         delivery.save
-        @diff_route = Fabricate(:delivery, delivery_list: delivery_list)
-        delivery_list.stub(:delivery_ids).and_return([delivery, @diff_route])
+        @diff_delivery_service = Fabricate(:delivery, delivery_list: delivery_list)
+        delivery_list.stub(:delivery_ids).and_return([delivery, @diff_delivery_service])
       end
 
-      specify { expect { delivery_list.reposition([@diff_route.id, delivery.id]) }.to raise_error(RuntimeError) }
+      specify { expect { delivery_list.reposition([@diff_delivery_service.id, delivery.id]) }.to raise_error(RuntimeError) }
     end
 
     context 'delivery ids must match' do
       before do
         @ids = [1, 2, 3]
 
-        Delivery.stub_chain(:find, :route_id)
+        Delivery.stub_chain(:find, :delivery_service_id)
         Delivery.stub_chain(:find, :delivery_list, :date, :wday)
         delivery_list.stub_chain(:deliveries, :where, :select, :map).and_return(@ids)
 
@@ -174,9 +174,9 @@ describe DeliveryList, :slow do
         delivery_list.save
         DeliveryList.any_instance.stub(:archived?).and_return(false)
         d1 = fab_delivery(delivery_list, distributor)
-        @route = d1.route
-        d2 = fab_delivery(delivery_list, distributor, @route)
-        d3 = fab_delivery(delivery_list, distributor, @route)
+        @delivery_service = d1.delivery_service
+        d2 = fab_delivery(delivery_list, distributor, @delivery_service)
+        d3 = fab_delivery(delivery_list, distributor, @delivery_service)
         @ids = delivery_list.reload.deliveries.ordered.collect(&:id)
         @new_ids = [@ids.last, @ids.first, @ids[1]]
       end
@@ -205,8 +205,8 @@ describe DeliveryList, :slow do
         addresses = delivery_list.deliveries.ordered.collect(&:address)
         
         box = Fabricate(:box, distributor: distributor)
-        account = Fabricate(:account, customer: Fabricate(:customer, distributor: distributor, route: @route))
-        account2 = Fabricate(:account, customer: Fabricate(:customer, distributor: distributor, route: @route))
+        account = Fabricate(:account, customer: Fabricate(:customer, distributor: distributor, delivery_service: @delivery_service))
+        account2 = Fabricate(:account, customer: Fabricate(:customer, distributor: distributor, delivery_service: @delivery_service))
         order = Fabricate(:active_order, account: account, schedule_rule: new_single_schedule(date), box: box)
         order2 = Fabricate(:active_order, account: account2, schedule_rule: new_single_schedule(date), box: box)
 
@@ -221,14 +221,14 @@ describe DeliveryList, :slow do
     context 'with duplicate or similar addresses' do
       before do
         delivery_list.save
-        route = Fabricate(:route, distributor: distributor)
-        @d1 = fab_delivery(delivery_list, distributor, route)
-        @d2 = fab_delivery(delivery_list, distributor, route)
-        @d3 = fab_delivery(delivery_list, distributor, route)
+        delivery_service = Fabricate(:delivery_service, distributor: distributor)
+        @d1 = fab_delivery(delivery_list, distributor, delivery_service)
+        @d2 = fab_delivery(delivery_list, distributor, delivery_service)
+        @d3 = fab_delivery(delivery_list, distributor, delivery_service)
         
         d1_address = @d1.order.address
         address = Fabricate.build(:address, address_1: d1_address.address_1, address_2: d1_address.address_2, suburb: d1_address.suburb, city: d1_address.city, delivery_note: "Im different")
-        @d4 = fab_delivery(delivery_list, distributor, route, address)
+        @d4 = fab_delivery(delivery_list, distributor, delivery_service, address)
 
         @ids = [@d1.id, @d2.id, @d3.id, @d4.id]
       end
@@ -252,10 +252,10 @@ describe DeliveryList, :slow do
   end
 end
 
-def fab_delivery(delivery_list, distributor, route=nil, address=nil)
-  route ||= Fabricate(:route, distributor: distributor, schedule_rule: Fabricate(:schedule_rule, start: Date.current.yesterday))
+def fab_delivery(delivery_list, distributor, delivery_service=nil, address=nil)
+  delivery_service ||= Fabricate(:delivery_service, distributor: distributor, schedule_rule: Fabricate(:schedule_rule, start: Date.current.yesterday))
 
-  customer = Fabricate(:customer, distributor: distributor, route: route)
+  customer = Fabricate(:customer, distributor: distributor, delivery_service: delivery_service)
   account = Fabricate(:account, customer: customer)
 
   customer.address.delete
@@ -269,5 +269,5 @@ def fab_delivery(delivery_list, distributor, route=nil, address=nil)
 
   customer.address = address
 
-  Fabricate(:delivery, delivery_list: delivery_list, order: Fabricate(:recurring_order_everyday, account: account), route: route)
+  Fabricate(:delivery, delivery_list: delivery_list, order: Fabricate(:recurring_order_everyday, account: account), delivery_service: delivery_service)
 end

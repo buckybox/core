@@ -5,7 +5,7 @@ class Bucky::Kolle::Import
     d = Distributor.find(32)
     k = Bucky::Kolle::Import.new(FILE)
     k.import
-    setup_routes(d)
+    setup_delivery_services(d)
     d.import_customers(k.customers)
     k
   end
@@ -80,7 +80,7 @@ class Bucky::Kolle::Import
     c.delivery_address_line_1 = r.delivery_address_line_1
     c.delivery_suburb = r.delivery_suburb
     c.delivery_city = r.delivery_city
-    c.delivery_route = r.delivery_route
+    c.delivery_service = r.delivery_service
     c
   end
 
@@ -121,7 +121,7 @@ class Bucky::Kolle::Import
         read_column_unless_blank(name, '-')
       when :email
         read_column_unless_blank(name,"bucky+#{index}@kollebloem.be").gsub(/,/,'.')
-      when :delivery_route
+      when :delivery_service
         read_column_unless_blank(name, 'geen afhaalpunt')
       when :delivery_address_line_1
         read_column_unless_blank(name, 'geen afhaalpunt')
@@ -143,7 +143,7 @@ class Bucky::Kolle::Import
     end
 
     def read_column(name)
-      return translate_route(row[0]) if name == :delivery_route
+      return translate_delivery_service(row[0]) if name == :delivery_service
 
       row[{
       first_name: 2,
@@ -157,7 +157,7 @@ class Bucky::Kolle::Import
       delivery_address_line_1: 0,
       delivery_suburb: 0,
       delivery_city: 0,
-      delivery_route: 0,
+      delivery_service: 0,
       box_type: 14,
       delivery_frequency: 15,
       odd: 16,
@@ -183,8 +183,8 @@ class Bucky::Kolle::Import
       end
     end
 
-    def translate_route(route_name)
-      return nil if route_name.blank?
+    def translate_delivery_service(delivery_service_name)
+      return nil if delivery_service_name.blank?
       {
         "wereldwinkel" => "Zottegem",
         "onderweg" => "Zottegem",
@@ -205,7 +205,7 @@ class Bucky::Kolle::Import
         "Doornstraat" => "Kollebloem",
         "Meerbeke" => "Meerbeke", 
         "Herbatheek Stef Mintiens" => "Gent"
-      }.inject({}){|result, element| result.merge(element[0].downcase => element[1])}[route_name.downcase]
+      }.inject({}){|result, element| result.merge(element[0].downcase => element[1])}[delivery_service_name.downcase]
     end
 
     def get_notes
@@ -245,8 +245,8 @@ class Bucky::Kolle::Import
     end
   end
 
-  def self.setup_routes(d)
-    d.routes.destroy_all
+  def self.setup_delivery_services(d)
+    d.delivery_services.destroy_all
    [["Zottegem", "wereldwinkel
 onderweg
 Duysburg - van der Linden
@@ -267,7 +267,7 @@ Vollezele", :tue],
   ["Meerbeke", "Meerbeke", :tue],
   ["Gent", "Herbatheek Stef Mintiens", :wed],
   ["geen afhaalpunt", "geen afhaalpunt", :tue]].each do |name, desc, day|
-    d.routes << Route.create!(name: name, distributor: d, area_of_service: desc, estimated_delivery_time: '16u00', schedule_rule: ScheduleRule.weekly(nil, [day]))
+    d.delivery_services << DeliveryService.create!(name: name, distributor: d, area_of_service: desc, estimated_delivery_time: '16u00', schedule_rule: ScheduleRule.weekly(nil, [day]))
   end
     
   end

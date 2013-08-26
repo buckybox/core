@@ -98,13 +98,13 @@ class Customer::OrdersController < Customer::ResourceController
   end
 
   def load_form
-    @customer      = current_customer
-    @distributor   = current_customer.distributor
-    @account       = @customer.account
-    @route         = @customer.route
-    @stock_list    = @distributor.line_items
-    @form_params   = [:customer, @order]
-    @dislikes_list = @order.exclusions.map { |e| e.line_item_id.to_s }
-    @likes_list    = @order.substitutions.map { |s| s.line_item_id.to_s }
+    @customer         = current_customer
+    @distributor      = current_customer.distributor
+    @account          = @customer.account
+    @delivery_service = @customer.delivery_service
+    @stock_list       = @distributor.line_items
+    @form_params      = [:customer, @order]
+    @dislikes_list    = @order.exclusions.map { |e| e.line_item_id.to_s }
+    @likes_list       = @order.substitutions.map { |s| s.line_item_id.to_s }
   end
 end

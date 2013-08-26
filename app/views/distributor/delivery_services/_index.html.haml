@@ -1,0 +1,30 @@
+.row-fluid
+  .span12
+    %table.table.table-bordered.table-striped.no-horizontal-dividers
+      %thead
+        %tr
+          %th Name
+          %th Mon
+          %th Tue
+          %th Wed
+          %th Thu
+          %th Fri
+          %th Sat
+          %th Sun
+          %th Fee
+          %th Actions
+
+      %tbody
+        - @delivery_services.each do |delivery_service|
+          %tr
+            %td= delivery_service.name
+            %td= checkmark_boolean(delivery_service.mon)
+            %td= checkmark_boolean(delivery_service.tue)
+            %td= checkmark_boolean(delivery_service.wed)
+            %td= checkmark_boolean(delivery_service.thu)
+            %td= checkmark_boolean(delivery_service.fri)
+            %td= checkmark_boolean(delivery_service.sat)
+            %td= checkmark_boolean(delivery_service.sun)
+            %td= delivery_service.fee.format
+            %td
+              = link_to 'Edit', edit_distributor_delivery_service_path(delivery_service)

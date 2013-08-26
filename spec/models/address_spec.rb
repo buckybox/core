@@ -65,8 +65,8 @@ describe Address do
 
     it "does not skip validation if the record is new" do
       distributor = Fabricate(:distributor)
-      route = Fabricate(:route)
-      customer = Fabricate.build(:customer, distributor: distributor, route: route)
+      delivery_service = Fabricate(:delivery_service)
+      customer = Fabricate.build(:customer, distributor: distributor, delivery_service: delivery_service)
       customer.address.postcode = nil
       customer.distributor.require_postcode = true
       customer.distributor.save!
