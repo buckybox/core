@@ -9,25 +9,25 @@
         %h2 Bank Deposit Settings
         %p.muted This information is displayed to customers at the webstore during the checkout process.
 
-        = f.input :name, label: 'Bank name:', placeholder: 'e.g. The Community Bank', input_html: { class: 'input-block-level' }
-        = f.input :account_name, label: 'Account name:', placeholder: 'e.g. Bristol Veg Scheme', input_html: { class: 'input-block-level' }
-        = f.input :bsb_number, label: 'BSB number / Sort code:', placeholder: 'e.g. 9324', input_html: { class: 'input-block-level' }
-        = f.input :account_number, label: 'Account number:', placeholder: 'e.g. 324-2345-1256743', input_html: { class: 'input-block-level' }
-        = f.input :customer_message,
-          label: 'Webstore payment instructions:',
-          placeholder: %q(e.g. Please make your payment 3 days before your delivery and don't forget to use your reference number so we can match it properly. Thanks!),
-          input_html: { class: 'input-block-level', rows: 10 }
-        .controls.clearfix
-          = f.button :submit, 'Save', class: 'btn btn-primary pull-right'
+      = f.input :name, label: 'Bank name:', placeholder: 'e.g. The Community Bank', input_html: { class: 'input-block-level' }
+      = f.input :account_name, label: 'Account name:', placeholder: 'e.g. Bristol Veg Scheme', input_html: { class: 'input-block-level' }
+      = f.input :bsb_number, label: 'BSB number / Sort code:', placeholder: 'e.g. 9324', input_html: { class: 'input-block-level' }
+      = f.input :account_number, label: 'Account number:', placeholder: 'e.g. 324-2345-1256743', input_html: { class: 'input-block-level' }
+      = f.input :customer_message,
+        label: 'Webstore payment instructions:',
+        placeholder: %q(e.g. Please make your payment 3 days before your delivery and don't forget to use your reference number so we can match it properly. Thanks!),
+        input_html: { class: 'input-block-level', rows: 10 }
+      .controls.clearfix
+        = f.button :submit, 'Save', class: 'btn btn-primary pull-right'
 
     %section
       %header
         %h2 Cash on Delivery Settings
         %p.muted This information is displayed to customers at the webstore during the checkout process.
 
-        = f.input :cod_payment_message,
-          label: 'Webstore payment instructions:',
-          placeholder: %q(e.g. Please have as close to exact change as possible.),
-          input_html: { class: 'input-block-level', rows: 10 }
-        .controls.clearfix
-          = f.button :submit, 'Save', class: 'btn btn-primary pull-right'
+      = f.input :cod_payment_message,
+        label: 'Webstore payment instructions:',
+        placeholder: %q(e.g. Please have as close to exact change as possible.),
+        input_html: { class: 'input-block-level', rows: 10 }
+      .controls.clearfix
+        = f.button :submit, 'Save', class: 'btn btn-primary pull-right'
