@@ -59,7 +59,8 @@ BuckyBox::Application.routes.draw do
       get 'extras'
       get 'boxes'
       get 'delivery_services'
-      get 'bank_information'
+      get 'routes'
+      get 'payments'
       get 'invoice_information'
       get 'customer_preferences'
     end
