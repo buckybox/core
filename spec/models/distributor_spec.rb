@@ -436,7 +436,7 @@ describe Distributor do
       customer
       distributor.transactional_customer_count.should eq 0
     end
-    
+
     it "counts the number of customers with transactions" do
       Fabricate(:transaction, account: customer.account)
       Fabricate(:customer, distributor: distributor)
@@ -479,6 +479,48 @@ describe Distributor do
       customer_1 = Fabricate(:customer, distributor: distributor)
       customer_2 = Fabricate(:customer, distributor: distributor)
       distributor.customers_for_export([customer_1.id]).should eq([customer_1])
+    end
+  end
+
+  describe '#transactions_for_export' do
+    let(:day1)    { Date.parse('2013-08-03') }
+    let(:day2)    { Date.parse('2013-08-04') }
+    let(:day3)    { Date.parse('2013-08-05') }
+
+    before do
+      @pay1   = Fabricate(:transaction, display_time: day1)
+      account = @pay1.account
+      @dist    = account.distributor
+      @pay2   = Fabricate(:transaction, display_time: day2, account: account)
+      @pay3   = Fabricate(:transaction, display_time: day3, account: account)
+    end
+
+    it "returns 3 transactions" do
+      from   = Date.parse('2013-08-02')
+      to     = Date.parse('2013-08-06')
+      result = @dist.transactions_for_export(from, to)
+      expect(result).to eq([@pay3, @pay2, @pay1])
+    end
+
+    it "returns 2 transactions" do
+      from   = day1
+      to     = day3
+      result = @dist.transactions_for_export(from, to)
+      expect(result).to eq([@pay2, @pay1])
+    end
+
+    it "returns 1 transactions" do
+      from   = day1
+      to     = day2
+      result = @dist.transactions_for_export(from, to)
+      expect(result).to eq([@pay1])
+    end
+
+    it "returns 0 transactions" do
+      from   = day2
+      to     = day2
+      result = @dist.transactions_for_export(from, to)
+      expect(result).to be_empty
     end
   end
 end
