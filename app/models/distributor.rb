@@ -181,7 +181,8 @@ class Distributor < ActiveRecord::Base
   end
 
   def banks
-    omni_importers.bank_deposit.pluck(:bank_name).uniq
+    omnis = omni_importers.bank_deposit | omni_importers.paypal
+    omnis.map(&:bank_name).uniq
   end
 
   def consumer_delivery_fee_cents
@@ -334,10 +335,6 @@ class Distributor < ActiveRecord::Base
 
   def find_previous_match(description)
     import_transactions.processed.matched.not_removed.where(description: description).ordered.last
-  end
-
-  def supported_csv_formats
-    omni_importers.collect{|o| o.name}.to_sentence({two_words_connector: ' or ', last_word_connector: ', or '})
   end
 
   def last_used_omni_importer(prefered=nil)
