@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Delivery do
+describe Delivery, :slow do
   let(:delivery) { Fabricate(:delivery) }
   let(:package) { delivery.package }
 

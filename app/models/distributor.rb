@@ -180,7 +180,8 @@ class Distributor < ActiveRecord::Base
   end
 
   def banks
-    omni_importers.bank_deposit.pluck(:bank_name).uniq
+    omnis = omni_importers.bank_deposit | omni_importers.paypal
+    omnis.map(&:bank_name).uniq
   end
 
   def consumer_delivery_fee_cents
@@ -333,10 +334,6 @@ class Distributor < ActiveRecord::Base
 
   def find_previous_match(description)
     import_transactions.processed.matched.not_removed.where(description: description).ordered.last
-  end
-
-  def supported_csv_formats
-    omni_importers.collect{|o| o.name}.to_sentence({two_words_connector: ' or ', last_word_connector: ', or '})
   end
 
   def last_used_omni_importer(prefered=nil)
@@ -529,8 +526,18 @@ class Distributor < ActiveRecord::Base
   end
 
   def customers_for_export(customer_ids)
-    data = customers.ordered.where(id: customer_ids)
-    data.includes(route: {}, account: { route: {} }, next_order: { box: {} })
+    customers.includes(route: {}, account: { route: {} }, next_order: { box: {} })  \
+      .ordered.where(id: customer_ids)
+  end
+
+  def transactions_for_export(from, to)
+    from = from.to_time_in_current_zone
+    to = to.to_time_in_current_zone
+    transactions.includes(account: { customer: { address: {} } })  \
+      .where("display_time >= ?", from)                            \
+      .where("display_time < ?", to)                               \
+      .order('display_time DESC')                                  \
+      .order('created_at DESC')
   end
 
 private
