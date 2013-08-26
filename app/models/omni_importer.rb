@@ -11,7 +11,11 @@ class OmniImporter < ActiveRecord::Base
   has_and_belongs_to_many :distributors
 
   scope :ordered, joins("LEFT JOIN countries ON countries.id = omni_importers.country_id").order('countries.alpha2, omni_importers.name')
+
+  scope :paypal, -> { where(payment_type: "PayPal") }
+  scope :credit_card, -> { where(payment_type: "Credit Card") }
   scope :bank_deposit, -> { where(payment_type: "Bank Deposit") }
+  scope :manual_processing, -> { where(payment_type: "Manual Processing") }
 
   # used to name the uploaded files
   def file_format

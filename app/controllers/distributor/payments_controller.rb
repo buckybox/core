@@ -10,6 +10,8 @@ class Distributor::PaymentsController < Distributor::ResourceController
     @show_tour = current_distributor.payments_index_intro
     @selected_omni_importer = current_distributor.last_used_omni_importer
     load_index
+
+    render :index, locals: { distributor: current_distributor.decorate }
   end
 
   def match_payments
@@ -26,7 +28,7 @@ class Distributor::PaymentsController < Distributor::ResourceController
 
     load_index
 
-    render :index
+    render :index, locals: { distributor: current_distributor.decorate }
   end
 
   def create
