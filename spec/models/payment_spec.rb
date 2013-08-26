@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Payment do
+describe Payment, :slow do
   let(:payment) { Fabricate(:payment) }
 
   specify { payment.should be_valid }
@@ -66,12 +66,11 @@ describe Payment do
   context 'negative payment reducing account' do
     let(:account){Fabricate(:account)}
     let(:payment){Fabricate(:payment, amount: -10, account: account)}
-    
+
     it "should reduce account balance" do
       payment.save
       account.reload.balance_cents.should eq(-1000)
     end
-
   end
 end
 

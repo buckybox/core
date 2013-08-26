@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe DeliveryList do
+describe DeliveryList, :slow do
   let(:distributor) { Fabricate.build(:distributor) }
   let(:route) { Fabricate.build(:route) }
   let(:delivery_list) { Fabricate.build(:delivery_list, distributor: distributor) }
