@@ -37,8 +37,4 @@ module Distributor::PaymentsHelper
     name = import_transactions.blank? ? 'Import transactions' : 'Import more transactions'
     link_to(name, modal_id, id: id, data: { toggle: 'modal' })
   end
-
-  def supported_csv_formats(distributor)
-    distributor.omni_importers.collect{|oi| content_tag(:strong, oi.name)}.to_sentence({two_words_connector: ' or ', last_word_connector: ', or '}).html_safe
-  end
 end

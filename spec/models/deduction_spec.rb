@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Deduction do
+describe Deduction, :slow do
   let(:deduction) { Fabricate(:deduction) }
 
   specify { deduction.should be_valid }
