@@ -36,8 +36,9 @@ class Distributor::SettingsController < Distributor::BaseController
     @boxes = current_distributor.boxes
   end
 
-  def bank_information
-    @bank_information = current_distributor.bank_information || BankInformation.new
+  def payments
+    payments = current_distributor.bank_information || BankInformation.new
+    render 'payments', locals: { payments: payments }
   end
 
   def invoice_information
