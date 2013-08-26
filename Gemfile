@@ -42,8 +42,7 @@ gem 'countries',                  '~> 0.9.2', require: 'iso3166'
 gem 'country_select',             '~> 1.1.3'
 gem 'biggs',                      '~> 0.3.3'
 gem 'vero',                       '~> 0.5.10'
-
-gem 'charlock_holmes'
+gem 'charlock_holmes',            '~> 0.6.9.4'
 
 ########## THE GEMS ABOVE ARE THE ONLY ONES THAT RUN ON PRODUCTION ##########
 
