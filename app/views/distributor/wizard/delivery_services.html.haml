@@ -1,8 +1,8 @@
-- title "Your Routes"
+- title "Your Delivery Services"
 
 .row-fluid
   .span4
-    = simple_form_for([:distributor, @route]) do |f|
+    = simple_form_for([:distributor, @delivery_service]) do |f|
       = f.error_notification
 
       .inputs
@@ -22,5 +22,5 @@
     = button_to 'Next', distributor_wizard_payment_path, :method => :get, :class => 'button radius'
 
   .span8
-    = render :partial => 'distributor/routes/index'
+    = render :partial => 'distributor/delivery_services/index'
 

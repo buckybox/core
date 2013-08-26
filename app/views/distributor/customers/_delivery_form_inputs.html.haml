@@ -1,4 +1,4 @@
-= f.association :route, collection: current_distributor.routes, include_blank: false
+= f.association :delivery_service, collection: current_distributor.delivery_services, include_blank: false
 
 = f.simple_fields_for :address do |g|
   = g.input :address_1, required: current_distributor.require_address_1

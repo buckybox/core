@@ -3,7 +3,7 @@ class Customer < ActiveRecord::Base
   include PgSearch
 
   belongs_to :distributor
-  belongs_to :route
+  belongs_to :delivery_service
 
   has_one :address, dependent: :destroy, inverse_of: :customer, autosave: true
   has_one :account, dependent: :destroy
@@ -26,10 +26,10 @@ class Customer < ActiveRecord::Base
   monetize :balance_threshold_cents
 
   attr_accessible :address_attributes, :first_name, :last_name, :email, :name, :distributor_id, :distributor,
-    :route, :route_id, :password, :password_confirmation, :remember_me, :tag_list, :discount, :number, :notes,
+    :delivery_service, :delivery_service_id, :password, :password_confirmation, :remember_me, :tag_list, :discount, :number, :notes,
     :special_order_preference, :balance_threshold, :via_webstore, :address
 
-  validates_presence_of :distributor_id, :route_id, :first_name, :email, :discount, :address
+  validates_presence_of :distributor_id, :delivery_service_id, :first_name, :email, :discount, :address
   validates_uniqueness_of :number, scope: :distributor_id
   validates_numericality_of :number, greater_than: 0
   validates_numericality_of :discount, greater_than_or_equal_to: 0.0, less_than_or_equal_to: 1.0
@@ -53,7 +53,7 @@ class Customer < ActiveRecord::Base
 
   delegate :separate_bucky_fee?, :consumer_delivery_fee, :default_balance_threshold_cents, :has_balance_threshold, to: :distributor
   delegate :currency, :send_email?, to: :distributor, allow_nil: true
-  delegate :name, to: :route, prefix: true
+  delegate :name, to: :delivery_service, prefix: true
   delegate :balance_at, to: :account
 
   scope :ordered_by_next_delivery, lambda { order("CASE WHEN next_order_occurrence_date IS NULL THEN '9999-01-01' WHEN next_order_occurrence_date < '#{Date.current.to_s(:db)}' THEN '9999-01-01' ELSE next_order_occurrence_date END ASC, lower(customers.first_name) ASC, lower(customers.last_name) ASC") }
@@ -127,12 +127,12 @@ class Customer < ActiveRecord::Base
     self.password_confirmation = self.password
   end
 
-  def import(c, c_route)
+  def import(c, c_delivery_service)
     self.update_attributes({
       first_name: c.first_name,
       last_name: c.last_name,
       email: c.email,
-      route: c_route,
+      delivery_service: c_delivery_service,
       discount: c.discount,
       number: c.number,
       notes: c.notes,
@@ -173,7 +173,7 @@ class Customer < ActiveRecord::Base
         account: self.account,
         extras_one_off: b.extras_recurring?
       })
-      account.route = self.route
+      account.delivery_service = self.delivery_service
       order.schedule_rule = if b.delivery_frequency == 'single'
                               ScheduleRule.one_off(delivery_date, ScheduleRule::DAYS.select{|day| b.delivery_days =~ /#{day.to_s}/i})
                             else

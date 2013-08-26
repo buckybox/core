@@ -1,4 +1,4 @@
-Route 1: Zottegem
+DeliveryService 1: Zottegem
 wereldwinkel
 onderweg
 Duysburg - van der Linden
@@ -8,7 +8,7 @@ Ruth Brijs
 Guido en Elga
 Jo en Annelies Verhaevert
 
-Route 2: Aalst
+DeliveryService 2: Aalst
 Aalst
 Asselman
 De Zonnebloem
@@ -16,15 +16,15 @@ Iddergem
 Linda - Joost
 De Boom
 
-Route 3: Geraardsbergen
+DeliveryService 3: Geraardsbergen
 Apotheker Vogels
 Vollezele
 
-Route 4: Kollebloem
+DeliveryService 4: Kollebloem
 Doornstraat
 
-Route 5: Meerbeke
+DeliveryService 5: Meerbeke
 Meerbeke
 
-Route 6: Gent
+DeliveryService 6: Gent
 Herbatheek Stef Mintiens

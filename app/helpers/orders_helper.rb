@@ -31,7 +31,7 @@ module OrdersHelper
       formatted_day = day.to_s(:flux_cap)
 
       if options[:with_link] && day <= Order::FORCAST_RANGE_FORWARD.from_now.to_date
-        link_to(formatted_day, date_distributor_deliveries_path(day, order.route))
+        link_to(formatted_day, date_distributor_deliveries_path(day, order.delivery_service))
       else
         formatted_day
       end
@@ -53,7 +53,7 @@ module OrdersHelper
   end
 
   def all_order_start_dates(distributor, count = 14)
-    next_occurrences = distributor.routes.inject([]) { |a,r| a += order_start_dates(r, count); a }
+    next_occurrences = distributor.delivery_services.inject([]) { |a,r| a += order_start_dates(r, count); a }
     return next_occurrences.uniq.sort{ |a,b| a[1] <=> b[1] }
   end
 

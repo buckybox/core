@@ -49,10 +49,10 @@ class DeliveryList < ActiveRecord::Base
 
     packages.each do |package|
       order = package.order
-      route = order.route
+      delivery_service = order.delivery_service
 
-      # need to pass route as well or the position scope for this delivery list is not set properly
-      delivery = delivery_list.deliveries.find_or_create_by_package_id(package.id, order: order, route: route)
+      # need to pass delivery service as well or the position scope for this delivery list is not set properly
+      delivery = delivery_list.deliveries.find_or_create_by_package_id(package.id, order: order, delivery_service: delivery_service)
 
       delivery.update_dso
       delivery.save! if delivery.changed?
@@ -62,12 +62,12 @@ class DeliveryList < ActiveRecord::Base
   end
 
   def reposition(delivery_order)
-    # Assuming all routes are from the same route, if not it will fail on match anyway
+    # Assuming all delivery services are from the same delivery service, if not it will fail on match anyway
     first_delivery = Delivery.find(delivery_order.first)
-    route_id = first_delivery.route_id
+    delivery_service_id = first_delivery.delivery_service_id
     day = first_delivery.delivery_list.date.wday
 
-    raise 'Your delivery ids do not match' if delivery_order.map(&:to_i).sort != deliveries.where(route_id: route_id).select(:id).map(&:id).sort
+    raise 'Your delivery ids do not match' if delivery_order.map(&:to_i).sort != deliveries.where(delivery_service_id: delivery_service_id).select(:id).map(&:id).sort
 
     # Don't know an easy way to preload like this in Rails, but load up all deliveries matching on id, PRESERVING the order of the ids thru to the deliveries array, VERY IMPORTANT
     deliveries_cache = Delivery.where(id: delivery_order).includes(:address).inject({}){|cache, d| cache.merge!(d.id => d)}
@@ -76,9 +76,9 @@ class DeliveryList < ActiveRecord::Base
       ordered_address_hashes << deliveries_cache[id.to_i].address.address_hash if deliveries_cache[id.to_i]
     end
 
-    master = DeliverySequenceOrder.where(route_id: route_id, day: day).ordered.collect(&:address_hash).uniq
+    master = DeliverySequenceOrder.where(delivery_service_id: delivery_service_id, day: day).ordered.collect(&:address_hash).uniq
     new_master_list = Bucky::Dso::List.sort(master, ordered_address_hashes.uniq) #Assuming .uniq is stable to the order
-    DeliverySequenceOrder.update_ordering(new_master_list, route_id, day)
+    DeliverySequenceOrder.update_ordering(new_master_list, delivery_service_id, day)
 
     return true
   end
@@ -106,7 +106,7 @@ class DeliveryList < ActiveRecord::Base
       delivery_to_same_address.delivery_number
     else
       @delivery_number ||= {}
-      last_delivery = deliveries(true).where(route_id: delivery.route.id).order(:delivery_number).last
+      last_delivery = deliveries(true).where(delivery_service_id: delivery.delivery_service.id).order(:delivery_number).last
       @delivery_number[self.id] = last_delivery.delivery_number if last_delivery
       @delivery_number[self.id] ||= 0
       @delivery_number[self.id] += 1
@@ -117,11 +117,11 @@ class DeliveryList < ActiveRecord::Base
     date.past?
   end
 
-  def quantity_for(route_id)
-    if route_id.nil?
+  def quantity_for(delivery_service_id)
+    if delivery_service_id.nil?
       Package.sum(:archived_order_quantity, joins: :deliveries, conditions: {deliveries: {delivery_list_id: id}})
     else
-      Package.sum(:archived_order_quantity, joins: :deliveries, conditions: {deliveries: {delivery_list_id: id, route_id: route_id}})
+      Package.sum(:archived_order_quantity, joins: :deliveries, conditions: {deliveries: {delivery_list_id: id, delivery_service_id: delivery_service_id}})
     end
   end
 end

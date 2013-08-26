@@ -3,18 +3,18 @@ class Package < ActiveRecord::Base
   belongs_to :packing_list
   belongs_to :original_package, class_name: 'Package', foreign_key: 'original_package_id'
 
-  has_one :new_package, class_name: 'Package', foreign_key: 'original_package_id'
-  has_one :distributor, through: :packing_list
-  has_one :box,         through: :order
-  has_one :route,       through: :order
-  has_one :account,     through: :order
-  has_one :customer,    through: :order
-  has_one :address,     through: :order
+  has_one :new_package,      class_name: 'Package', foreign_key: 'original_package_id'
+  has_one :distributor,      through: :packing_list
+  has_one :box,              through: :order
+  has_one :delivery_service, through: :order
+  has_one :account,          through: :order
+  has_one :customer,         through: :order
+  has_one :address,          through: :order
 
   has_many :deliveries
 
   monetize :archived_box_price_cents
-  monetize :archived_route_fee_cents
+  monetize :archived_delivery_service_fee_cents
   monetize :archived_consumer_delivery_fee_cents
 
   acts_as_list scope: :packing_list_id
@@ -57,7 +57,7 @@ class Package < ActiveRecord::Base
   end
 
   def individual_price
-    OrderPrice.individual(archived_box_price, archived_route_fee, archived_customer_discount)
+    OrderPrice.individual(archived_box_price, archived_delivery_service_fee, archived_customer_discount)
   end
 
   def individual_extras_price
@@ -160,7 +160,7 @@ private
       self.archived_customer_name         = customer.name
 
       self.archived_box_price             = box.price
-      self.archived_route_fee             = route.fee
+      self.archived_delivery_service_fee  = delivery_service.fee
       self.archived_customer_discount     = customer.discount
       self.archived_order_quantity        = order.quantity
 

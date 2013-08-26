@@ -2,11 +2,11 @@ module Admin::DistributorsHelper
   ERROR_CLASS = 'text-error'
   PASS_CLASS = ''
 
-  def delivery_route_status(route)
-    route.blank? ? ERROR_CLASS : PASS_CLASS
+  def delivery_service_status(delivery_service)
+    delivery_service.blank? ? ERROR_CLASS : PASS_CLASS
   end
 
-  def order_status(route, box)
+  def order_status(delivery_service, box)
     raise "Need to complete this method"
   end
 

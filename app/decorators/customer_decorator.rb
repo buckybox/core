@@ -1,7 +1,7 @@
 class CustomerDecorator < Draper::Decorator
   delegate_all
 
-  delegate :name, to: :route, prefix: true
+  delegate :name, to: :delivery_service, prefix: true
   delegate :address_1, :address_2, :suburb, :city, :postcode, :delivery_note, :mobile_phone, :home_phone, :work_phone, to: :address
 
   def account_balance
@@ -44,10 +44,6 @@ class CustomerDecorator < Draper::Decorator
     else
       nil
     end
-  end
-
-  def delivery_service
-    object.route_name
   end
 
   def customer_packing_notes

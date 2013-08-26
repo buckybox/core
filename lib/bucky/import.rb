@@ -23,7 +23,7 @@ module Bucky
       DELIVERY_SUBURB          = "Delivery Suburb",
       DELIVERY_CITY            = "Delivery City",
       DELIVERY_POST_CODE_ZIP   = "Delivery Post Code / ZIP",
-      DELIVERY_ROUTE           = "Delivery Route",
+      DELIVERY_SERVICE         = "Delivery Service",
       DELIVERY_INSTRUCTIONS    = "Delivery Instructions",
       BOX_TYPE                 = "Box Type",
       EXTRAS                   = "Extras",
@@ -85,7 +85,7 @@ module Bucky
       customer.delivery_suburb         = row[DELIVERY_SUBURB]
       customer.delivery_city           = row[DELIVERY_CITY]
       customer.delivery_postcode       = row[DELIVERY_POST_CODE_ZIP]
-      customer.delivery_route          = row[DELIVERY_ROUTE]
+      customer.delivery_service        = row[DELIVERY_SERVICE]
       customer.delivery_instructions   = row[DELIVERY_INSTRUCTIONS]
 
       tags = row[CUSTOMER_TAGS]
@@ -209,7 +209,7 @@ module Bucky
       DATA_FIELDS = [:number, :first_name, :last_name, :email, :phone_1, :phone_2,
         :notes, :discount, :account_balance, :delivery_address_line_1,
         :delivery_address_line_2, :delivery_suburb, :delivery_city, :delivery_postcode,
-        :delivery_route, :delivery_instructions]
+        :delivery_service, :delivery_instructions]
 
       attr_accessor *DATA_FIELDS
       attr_accessor :distributor, :boxes, :tags

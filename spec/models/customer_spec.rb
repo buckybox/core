@@ -12,7 +12,7 @@ describe Customer do
       number: 1234,
       notes: 'Good one dave, your a legend Dave',
       account_balance: 80.65,
-      delivery_route: "Rural Van",
+      delivery_service: "Rural Van",
       delivery_address_line_1: 'camp site 2c',
       delivery_address_line_2: 'next to the toilet',
       delivery_suburb: 'Solway',
@@ -77,7 +77,7 @@ describe Customer do
     let(:distributor) { Fabricate(:distributor, default_balance_threshold_cents: -50000, has_balance_threshold: true) }
 
     it 'should create a valid customer' do
-      c = distributor.customers.create({"first_name"=>"Jordan", "last_name"=>"Carter", "tag_list"=>"", "email"=>"jordan+3@buckybox.com", "address_attributes"=>{"mobile_phone"=>"", "home_phone"=>"", "work_phone"=>"", "address_1"=>"43a Warwick St", "address_2"=>"Wilton", "suburb"=>"Wellington", "city"=>"Wellington", "postcode"=>"6012", "delivery_note"=>""}, "balance_threshold"=>"1.00", "discount"=>"0", "special_order_preference"=>"", "route_id"=>"68"})
+      c = distributor.customers.create({"first_name"=>"Jordan", "last_name"=>"Carter", "tag_list"=>"", "email"=>"jordan+3@buckybox.com", "address_attributes"=>{"mobile_phone"=>"", "home_phone"=>"", "work_phone"=>"", "address_1"=>"43a Warwick St", "address_2"=>"Wilton", "suburb"=>"Wellington", "city"=>"Wellington", "postcode"=>"6012", "delivery_note"=>""}, "balance_threshold"=>"1.00", "discount"=>"0", "special_order_preference"=>"", "delivery_service_id"=>"68"})
       c.should be_valid
     end
   end

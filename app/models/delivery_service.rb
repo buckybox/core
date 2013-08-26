@@ -1,4 +1,4 @@
-class Route < ActiveRecord::Base
+class DeliveryService < ActiveRecord::Base
   include Bucky
 
   belongs_to :distributor
@@ -35,12 +35,12 @@ class Route < ActiveRecord::Base
     self.schedule_rule ||= ScheduleRule.weekly if new_record?
   end
 
-  def self.default_route(distributor)
-    distributor.routes.first # For now the first one is the default
+  def self.default_delivery_service(distributor)
+    distributor.delivery_services.first # For now the first one is the default
   end
 
-  def self.default_route_on(distributor, time)
-    distributor.routes.find { |r| r.delivers_on?(time) }
+  def self.default_delivery_service_on(distributor, time)
+    distributor.delivery_services.find { |r| r.delivers_on?(time) }
   end
 
   def name_days_and_fee
@@ -62,7 +62,7 @@ class Route < ActiveRecord::Base
   end
 
   def future_orders
-    Order.for_route_read_only(self)
+    Order.for_delivery_service_read_only(self)
   end
   
   def schedule_changed(schedule_rule)
@@ -77,7 +77,7 @@ class Route < ActiveRecord::Base
 
   def schedule_rule_has_at_least_one_day
     unless schedule_rule.has_at_least_one_day?
-      errors[:base] << "You must select at least one day for the route."
+      errors[:base] << "You must select at least one day for the delivery service."
     end
   end
 end

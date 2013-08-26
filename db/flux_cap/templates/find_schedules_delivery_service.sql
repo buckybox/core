@@ -6,7 +6,7 @@ INNER JOIN schedule_rules ON schedule_rules.scheduleable_id = orders.id AND sche
 FULL OUTER JOIN schedule_pauses ON schedule_pauses.id = schedule_rules.schedule_pause_id
 WHERE customers.distributor_id = :distributor_id
 AND schedule_rules.halted = 'f'
-AND customers.route_id = :route_id
+AND customers.delivery_service_id = :delivery_service_id
 AND orders.active = 't'
 AND (	(
 		(recur is NULL OR recur = 'single') AND schedule_rules.start = ':date'

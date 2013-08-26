@@ -6,7 +6,7 @@ required_constants %w(Order)
 describe SalesCsv::OrderRowGenerator do
   let(:order) do
     double('order',
-      route_name: 'rname',
+      delivery_service_name: 'rname',
       id: 1,
       customer: customer,
       address: address,

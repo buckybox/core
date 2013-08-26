@@ -5,7 +5,7 @@ require_model 'delivery_row_generator', sub_dir: 'sales_csv'
 describe SalesCsv::DeliveryRowGenerator do
   let(:order) do
     double('order',
-      route_name: 'rname',
+      delivery_service_name: 'rname',
       id: 1,
       customer: customer,
     )

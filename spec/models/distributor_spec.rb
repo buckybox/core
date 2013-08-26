@@ -317,7 +317,7 @@ describe Distributor do
     specify { expect { distributor.import_customers([123, 456, 789]) }.to raise_error('Expecting Bucky::Import::Customer but was Fixnum') }
 
     it 'calls import on each customer' do
-      route = mock_model(Route)
+      delivery_service = mock_model(DeliveryService)
       import_customers = []
 
       2.times do |n|
@@ -325,22 +325,22 @@ describe Distributor do
         customer.stub(:import)
 
         import_customer = new_import_customer(n)
-        distributor.stub_chain(:routes, :find_by_name).and_return(route)
+        distributor.stub_chain(:delivery_services, :find_by_name).and_return(delivery_service)
         distributor.stub_chain(:customers, :find_by_number).with(n).and_return(customer)
 
-        customer.should_receive(:import).with(import_customer, route)
+        customer.should_receive(:import).with(import_customer, delivery_service)
         import_customers << import_customer
       end
 
       distributor.import_customers(import_customers)
     end
 
-    it 'raises error if can not find route' do
+    it 'raises error if can not find delivery_service' do
       import_customer = new_import_customer
-      distributor.stub_chain(:routes, :find_by_name).and_return(nil)
+      distributor.stub_chain(:delivery_services, :find_by_name).and_return(nil)
       distributor.stub_chain(:customers, :find_by_number).and_return(double('Customer'))
 
-      expect { distributor.import_customers([import_customer]) }.to raise_error('Route  not found for distributor with id ' )
+      expect { distributor.import_customers([import_customer]) }.to raise_error('DeliveryService  not found for distributor with id ' )
     end
 
     context '.find_extra_from_import' do
@@ -393,7 +393,7 @@ describe Distributor do
 
     import_customer.stub(:class).and_return(Bucky::Import::Customer)
     import_customer.stub(:number).and_return(number)
-    import_customer.stub(:delivery_route)
+    import_customer.stub(:delivery_service)
 
     return import_customer
   end

@@ -6,7 +6,7 @@ module SalesCsv
 
     def generate
       [
-        delivery_route,
+        delivery_service,
         delivery_sequence_number,
         delivery_pickup_point_name,
         order_number,
@@ -46,8 +46,8 @@ module SalesCsv
       @customer ||= order.customer
     end
 
-    def delivery_route
-      order.route_name
+    def delivery_service
+      order.delivery_service_name
     end
 
     def delivery_sequence_number

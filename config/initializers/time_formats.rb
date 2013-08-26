@@ -8,7 +8,7 @@ Date::DATE_FORMATS[:date_month] = "%d %B"
 Date::DATE_FORMATS[:date_short_month] = "%d %b"
 Date::DATE_FORMATS[:day_month_and_year] = "%-d %B %Y"
 Date::DATE_FORMATS[:flux_cap] = "%d %b"
-Date::DATE_FORMATS[:route_delivery_dates] = "%a - %b %-d, %Y"
+Date::DATE_FORMATS[:delivery_service_dates] = "%a - %b %-d, %Y"
 Date::DATE_FORMATS[:date_picker] = "%d %b '%y"
 Date::DATE_FORMATS[:day_date_month] = "%A %d %b"
 

@@ -4,7 +4,7 @@
       %span.label PACKING
       .tabbable.tabs-left
         %ul.nav.nav-tabs
-          %li{ class: "#{'active' if @route_id == 0}" }
+          %li{ class: "#{'active' if @delivery_service_id == 0}" }
             = link_to date_distributor_deliveries_path(@selected_date, 'packing') do
               All Boxes
               %span.badge= delivery_quantity(current_distributor, @selected_date)
@@ -12,11 +12,11 @@
       %span.label DELIVERIES
       .tabbable.tabs-left
         %ul.nav.nav-tabs
-          - @routes.each do |route|
-            %li{ class: "#{'active' if @route_id == route.id}" }
-              = link_to date_distributor_deliveries_path(@selected_date, route.id) do
-                = route.name
-                %span.badge= delivery_quantity(current_distributor, @selected_date, route.id)
+          - @delivery_services.each do |delivery_service|
+            %li{ class: "#{'active' if @delivery_service_id == delivery_service.id}" }
+              = link_to date_distributor_deliveries_path(@selected_date, delivery_service.id) do
+                = delivery_service.name
+                %span.badge= delivery_quantity(current_distributor, @selected_date, delivery_service.id)
 
       - if params[:view] == 'packing' && !@items.blank?
         %span.label SUMMARY
@@ -48,11 +48,11 @@
         %h3 No Deliveries
         %p
           There are no deliveries for
-          %strong= @route.name
+          %strong= @delivery_service.name
           on
           %strong= @selected_date.strftime("%A %d %B")
       - else
-        - if @route_id != 0
-          = render 'route_list'
+        - if @delivery_service_id != 0
+          = render 'delivery_service_list'
         - else
           = render 'packing_list'

@@ -6,11 +6,11 @@ describe Distributor::SettingsController do
   sign_in_as_distributor
   before { @customer = Fabricate(:customer, distributor: @distributor) }
 
-  describe '#routes' do
-    before { get :routes, distributor_id: @distributor.id }
+  describe '#delivery_services' do
+    before { get :delivery_services, distributor_id: @distributor.id }
 
-    specify { assigns(:routes).should eq(@distributor.routes) }
-    specify { assigns(:route).should be_a_new(Route) }
+    specify { assigns(:delivery_services).should eq(@distributor.delivery_services) }
+    specify { assigns(:delivery_service).should be_a_new(DeliveryService) }
   end
 
   describe '#boxes' do

@@ -7,7 +7,7 @@ class Distributor < ActiveRecord::Base
 
   has_many :extras,                   dependent: :destroy
   has_many :boxes,                    dependent: :destroy
-  has_many :routes,                   dependent: :destroy
+  has_many :delivery_services,        dependent: :destroy
   has_many :orders,                   dependent: :destroy, through: :boxes
   has_many :deliveries,               dependent: :destroy, through: :orders
   has_many :payments,                 dependent: :destroy
@@ -278,9 +278,9 @@ class Distributor < ActiveRecord::Base
         loaded_customers.each do |c|
           customer = customers.find_by_number(c.number) || self.customers.build({number: c.number})
 
-          c_route = routes.find_by_name(c.delivery_route)
-          raise "Route #{c.delivery_route} not found for distributor with id #{id}" if c_route.blank?
-          customer.import(c, c_route)
+          c_delivery_service = delivery_services.find_by_name(c.delivery_service)
+          raise "DeliveryService #{c.delivery_service} not found for distributor with id #{id}" if c_delivery_service.blank?
+          customer.import(c, c_delivery_service)
         end
       end
     end
@@ -549,7 +549,7 @@ private
   def required_fields_for_webstore
     if active_webstore_changed? && active_webstore?
       errors.add(:active_webstore, "Need bank information filled in before enabling the webstore") unless bank_information.present? && bank_information.valid?
-      errors.add(:active_webstore, "Need to have a route setup before enabling the webstore") if routes.count.zero?
+      errors.add(:active_webstore, "Need to have a delivery service setup before enabling the webstore") if delivery_services.count.zero?
       errors.add(:active_webstore, "Need to have a box setup before enabling the webstore") if boxes.count.zero?
     end
   end

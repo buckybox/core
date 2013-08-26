@@ -5,27 +5,27 @@ describe Distributor::DeliveriesController do
 
   context :delivery_sequence_order do
     before do
-      @route = Fabricate(:route, distributor: @distributor)
+      @delivery_service = Fabricate(:delivery_service, distributor: @distributor)
       @date = Date.today
       @date_string = @date.to_s
       @box = Fabricate(:box, distributor: @distributor)
       @deliveries = []
       @packages = []
       [3, 1, 2].collect { |position|
-        result = delivery_and_package_for_distributor(@distributor, @route, @box, @date, position)
+        result = delivery_and_package_for_distributor(@distributor, @delivery_service, @box, @date, position)
         @deliveries << result.delivery
         @packages << result.package
       }
     end
 
     it "should order deliveries based on the DSO" do
-      get :index, {date: @date, view: @route.id.to_s}
+      get :index, {date: @date, view: @delivery_service.id.to_s}
 
       assigns[:all_deliveries].should eq(@deliveries.sort_by(&:dso))
     end
 
     it "should order future deliveries based on the DSO" do
-      get :index, {date: @date+1.week, view: @route.id.to_s}
+      get :index, {date: @date+1.week, view: @delivery_service.id.to_s}
       assigns[:all_deliveries].should eq(@deliveries.sort_by(&:dso).collect(&:order))
     end
 

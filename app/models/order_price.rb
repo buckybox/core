@@ -8,12 +8,12 @@ class OrderPrice
     discounted_price.to_money
   end
 
-  def self.individual(box_price, route_fee, customer_discount = nil)
-    box_price         = box_price.price if box_price.is_a?(Box)
-    route_fee         = route_fee.fee   if route_fee.is_a?(Route)
+  def self.individual(box_price, delivery_service_fee, customer_discount = nil)
+    box_price = box_price.price if box_price.is_a?(Box)
+    delivery_service_fee = delivery_service_fee.fee if delivery_service_fee.is_a?(DeliveryService)
     customer_discount = customer_discount.discount if customer_discount.is_a?(Customer)
 
-    total_price = box_price + route_fee
+    total_price = box_price + delivery_service_fee
 
     customer_discount ? discounted(total_price, customer_discount) : total_price
   end

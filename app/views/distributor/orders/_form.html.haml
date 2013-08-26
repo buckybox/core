@@ -9,7 +9,7 @@
 
       - unless @order.persisted?
         = f.simple_fields_for(:schedule_rule) do |sf|
-          = sf.input :start, label: 'Start date', collection: Order.start_dates(@route), include_blank: false
+          = sf.input :start, label: 'Start date', collection: Order.start_dates(@delivery_service), include_blank: false
 
           = sf.input :recur, label: 'Frequency', collection: order_frequencies, include_blank: false, input_html: { class: 'frequency' }
 
@@ -43,7 +43,7 @@
                     %td
                       - input_name = day.downcase
                       - wrapper_id = "day-#{number}"
-                      = sf.input input_name, label: day, as: :boolean, input_html: { data: { week: number/7, enabled: @route.runs_on(number) } }, wrapper_html: { id: wrapper_id }, disabled: !@route.runs_on(number)
+                      = sf.input input_name, label: day, as: :boolean, input_html: { data: { week: number/7, enabled: @delivery_service.runs_on(number) } }, wrapper_html: { id: wrapper_id }, disabled: !@delivery_service.runs_on(number)
 
   .row-fluid
     .span12.form-actions

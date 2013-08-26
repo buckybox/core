@@ -8,7 +8,7 @@ describe Bucky::Sql do
     @order.schedule_rule.recur = 'monthly'
 
     @distributor = @order.box.distributor
-    @route = @distributor.routes.first
+    @delivery_service = @distributor.delivery_services.first
   end
 
   after do
@@ -45,7 +45,7 @@ describe Bucky::Sql do
 
       describe "#order_count" do
         it "returns the order count" do
-          order_count = Bucky::Sql.order_count(@distributor, @next_occurrence, @route.id)
+          order_count = Bucky::Sql.order_count(@distributor, @next_occurrence, @delivery_service.id)
 
           order_count.should eq 1
         end
