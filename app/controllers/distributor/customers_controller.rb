@@ -187,11 +187,7 @@ private
       if params[:commit]
         message = send_email recipient_ids, email_template
 
-        tracking.event(
-          current_distributor,
-          "sent_group_email",
-          { recipient_count: recipient_ids.count }
-        ) unless current_admin.present?
+        tracking.event(current_distributor, "sent_group_email") unless current_admin.present?
       end
     end
 
