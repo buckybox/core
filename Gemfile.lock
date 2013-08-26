@@ -481,7 +481,7 @@ DEPENDENCIES
   daemons (~> 1.1.9)
   database_cleaner
   default_value_for (~> 2.0.1)
-  delayed-plugins-airbrake
+  delayed-plugins-airbrake (~> 1.0.0)
   delayed_job (~> 3.0.5)
   delayed_job_active_record (~> 0.4.4)
   delayed_job_web (= 1.2.0)
