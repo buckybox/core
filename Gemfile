@@ -31,7 +31,7 @@ gem 'nokogiri',                   '~> 1.6.0' # premailer-rails dependency
 gem 'delayed_job',                '~> 3.0.5' # send emails offline
 gem 'delayed_job_active_record',  '~> 0.4.4'
 gem 'delayed_job_web',            '= 1.2.0' # version hardcoded in config/deploy.rb
-gem 'delayed-plugins-airbrake'              # Notify Airbrake when delayed_job has an error
+gem 'delayed-plugins-airbrake',   '~> 1.0.0' # Notify Airbrake when delayed_job has an error
 gem 'daemons',                    '~> 1.1.9' # able to monitor delayed_job via monit
 gem 'analytical',                 '~> 3.0.12'
 gem 'newrelic_rpm',               '~> 3.6.1'
@@ -44,7 +44,6 @@ gem 'attr_encryptor',             '~> 1.0.2'
 gem 'countries',                  '~> 0.9.2', require: 'iso3166'
 gem 'country_select',             '~> 1.1.3'
 gem 'biggs',                      '~> 0.3.3'
-
 gem 'charlock_holmes',            '~> 0.6.9.4'
 
 ########## THE GEMS ABOVE ARE THE ONLY ONES THAT RUN ON PRODUCTION ##########
