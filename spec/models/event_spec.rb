@@ -38,4 +38,21 @@ describe Event do
       specify { Event.customer_changed_address(@customer).event_type.should == Event::EVENT_TYPES[:customer_address_changed] }
     end
   end
+
+  describe ".all_for_distributor" do
+    let(:distributor) { Fabricate(:distributor) }
+
+    it "returns all three types of events for a distributor" do
+      event1 = Fabricate(:customer_event,  distributor: distributor)
+      event2 = Fabricate(:billing_event,   distributor: distributor)
+      event3 = Fabricate(:delivery_event,  distributor: distributor)
+      expect(Event.all_for_distributor(distributor)).to eq([event3, event2, event1])
+    end
+
+    it "returns only the distributor's events" do
+      event = Fabricate(:customer_event,  distributor: distributor)
+      Fabricate(:customer_event)
+      expect(Event.all_for_distributor(distributor)).to eq([event])
+    end
+  end
 end

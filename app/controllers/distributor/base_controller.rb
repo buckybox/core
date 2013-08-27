@@ -14,6 +14,6 @@ private
   end
 
   def get_notifications
-    @notifications = Event.remove_duplicates(current_distributor.events.active.current.scoped.includes(:customer, :delivery, :transaction))
+    @notifications ||= Event.all_for_distributor(current_distributor)
   end
 end
