@@ -171,6 +171,15 @@ class Distributor < ActiveRecord::Base
     end
   end
 
+  def self.mark_as_seen!(distributor, options = {})
+    return if distributor.nil? || options[:no_track]
+    distributor.mark_as_seen!
+  end
+
+  def mark_as_seen!
+    touch(:last_seen_at) #No validations or callbacks are performed
+  end
+
   def email_from
     sanitise_email_header "#{name} <#{support_email}>"
   end
@@ -461,10 +470,6 @@ class Distributor < ActiveRecord::Base
 
   def location
     [country.try(:full_name), city].reject(&:blank?).join(', ')
-  end
-
-  def mark_seen_recently!
-    touch(:last_seen_at) #No validations or callbacks are performed
   end
 
   def packing_list_by_date(date)
