@@ -526,8 +526,11 @@ class Distributor < ActiveRecord::Base
   end
 
   def customers_for_export(customer_ids)
-    customers.includes(route: {}, account: { route: {} }, next_order: { box: {} })  \
-      .ordered.where(id: customer_ids)
+    customers.includes(
+      delivery_service: {},
+      account: { delivery_service: {} },
+      next_order: { box: {} }
+    ).ordered.where(id: customer_ids)
   end
 
   def transactions_for_export(from, to)
