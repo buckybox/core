@@ -17,3 +17,6 @@
             = link_to 'logout', destroy_distributor_session_path, method: :delete
     %li.dropdown.pull-right
       = render partial: 'distributor/notifications/index'
+    - unless @distributor_setup.finished?
+      %li#welcome-guide-indicator.pull-right
+        = render partial: 'distributor/welcome/guide'
