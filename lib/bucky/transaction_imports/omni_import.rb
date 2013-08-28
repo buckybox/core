@@ -73,12 +73,18 @@ EOF
     end
 
     def self.csv_read(path)
-      string = File.read(path)
-      encoding = CharlockHolmes::EncodingDetector.detect(string)[:encoding]
+      file     = File.read(path)
+      encoding = find_file_encoding(file)
       CSV.read(path, encoding: encoding)
     rescue CSV::MalformedCSVError => e #Handle stupid windows \r instead of \r\n csv files.  STANDARDS!
       raise e unless e.message.include?("Unquoted fields do not allow \\r or \\n")
-      CSV.parse(string.force_encoding(encoding).encode("UTF-8").gsub(/\r(?!\n)/, "\r\n"))
+      CSV.parse(file.force_encoding(encoding).encode("UTF-8").gsub(/\r(?!\n)/, "\r\n"))
+    end
+
+    def self.find_file_encoding(file, encoding_detector = CharlockHolmes::EncodingDetector)
+      encoding = encoding_detector.detect_all(file)
+      encoding = encoding.map { |hash| hash[:encoding] }
+      encoding.compact.first
     end
 
     def self.test
