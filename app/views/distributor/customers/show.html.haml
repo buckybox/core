@@ -48,6 +48,9 @@
       %small= link_to 'edit profile', edit_distributor_customer_path(@customer)
       \|
       %small= link_to 'send logins', send_login_details_distributor_customer_path(@customer), confirm: 'Are you sure? This will reset the users password.'
+      - if current_admin.present?
+        %br
+        %small= link_to 'impersonate', impersonate_distributor_customer_path(@customer), target: '_blank'
 
     #section-two
       %span.label.label-important= @customer.delivery_service.name.upcase
