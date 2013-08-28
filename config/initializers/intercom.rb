@@ -41,7 +41,8 @@ IntercomRails.config do |config|
   #
   config.user.custom_data = {
     :transactional_customers => :transactional_customer_count,
-    :contact_name => :contact_name
+    :contact_name => :contact_name,
+    :contact_name_first => :contact_name_first
   }
 
   # == User -> Company association
