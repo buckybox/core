@@ -5,11 +5,11 @@ class Distributor::Setup
   end
 
   def finished?
-    has_routes?
+    has_delivery_services?
   end
 
   def progress
-    done = has_routes? ? 1.0 : 0.0
+    done = has_delivery_services? ? 1.0 : 0.0
     (done / 1.0 * 100.0)
   end
 
@@ -21,7 +21,7 @@ private
 
   attr_reader :distributor
 
-  def has_routes?
-    !distributor.routes.empty?
+  def has_delivery_services?
+    !distributor.delivery_services.empty?
   end
 end
