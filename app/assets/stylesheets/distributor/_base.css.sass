@@ -129,6 +129,8 @@ body
       li
         a:hover
           background-color: $action-colour-hover
+        a:focus
+          background-color: transparent
         .customer-id:hover
           background-color: black
         .dropdown-menu
@@ -151,23 +153,50 @@ body
             position: absolute
             top: -6px
             right: 10px
-          &#notification-dropdown
-            min-width: 270px
-            &:before
-              right: 13px
-            &:after
-              right: 14px
-            li
-              strong
-                display: block
-                padding: 3px 20px
-                text-align: center
-                background-color: $white
-              #dismiss-notifications
-                margin: 0
-                text-align: center
-                a
-                  color: #08C
+
+  #user-nav
+    .nav-pills
+      li
+        #notification-dropdown
+          min-width: 270px
+          &:before
+            right: 13px
+          &:after
+            right: 14px
+          li
+            strong
+              display: block
+              padding: 3px 20px
+              text-align: center
+              background-color: $white
+            #dismiss-notifications
+              margin: 0
+              text-align: center
+              a
+                color: #08C
+
+  #user-nav
+    .nav-pills
+      li#welcome-guide-indicator
+        >a
+          font-weight: bold
+        .progress
+          height: 10px
+          width: 100px
+          display: inline-block
+          margin-bottom: 0px
+        #welcome-guide
+          .modal-header
+            text-align: center
+            background-color: #8BAB23
+            background: linear-gradient(#8bab23,#7a9324)
+            img
+              padding: 7px 0px
+          h2
+            margin-top: 0px
+            text-align: center
+          dd
+            margin-bottom: 15px
 
   #sub-nav
     background-color: rgba(255,255,255,0.9)
