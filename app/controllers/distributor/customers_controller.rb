@@ -125,7 +125,7 @@ class Distributor::CustomersController < Distributor::ResourceController
   end
 
   def impersonate
-    redirect_to distributor_root_path unless current_admin.present?
+    redirect_to distributor_root_path and return unless current_admin.present?
 
     customer = current_distributor.customers.find(params[:id])
     sign_in(customer, bypass: true) # bypass means it won't update last logged in stats
