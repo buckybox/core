@@ -124,6 +124,15 @@ class Distributor::CustomersController < Distributor::ResourceController
     send_csv("customer_export", csv_string)
   end
 
+  def impersonate
+    redirect_to distributor_root_path and return unless current_admin.present?
+
+    customer = current_distributor.customers.find(params[:id])
+    sign_in(customer, bypass: true) # bypass means it won't update last logged in stats
+
+    redirect_to customer_root_path
+  end
+
 protected
 
   def get_form_type
