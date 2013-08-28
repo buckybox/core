@@ -10632,7 +10632,7 @@ Ember.Application = Ember.Namespace.extend(
       // By default, the router's namespace is the current application.
       //
       // This allows it to find model classes when a state has a
-      // delivery_service like `/posts/:post_id`. In that case, it would first
+      // route like `/posts/:post_id`. In that case, it would first
       // convert `post_id` into `Post`, and then look it up on its
       // namespace.
       set(router, 'namespace', this);
@@ -10673,8 +10673,8 @@ Ember.Application = Ember.Namespace.extend(
   /**
     @private
 
-    If the application has a router, use it to delivery_service to the current URL, and
-    trigger a new call to `delivery_service` whenever the URL changes.
+    If the application has a router, use it to route to the current URL, and
+    trigger a new call to `route` whenever the URL changes.
   */
   startRouting: function(router) {
     var location = get(router, 'location'),
@@ -10690,9 +10690,9 @@ Ember.Application = Ember.Namespace.extend(
 
     applicationView.appendTo(rootElement);
 
-    router.delivery_service(location.getURL());
+    router.route(location.getURL());
     location.onUpdateURL(function(url) {
-      router.delivery_service(url);
+      router.route(url);
     });
   },
 
@@ -15519,7 +15519,7 @@ Transition.prototype = {
 
   ## Managing currentState with Actions
   To control which transitions between states are possible for a given state, StateManager
-  can receive and delivery_service action messages to its states via the `send` method.  Calling to `send` with
+  can receive and route action messages to its states via the `send` method.  Calling to `send` with
   an action name will begin searching for a method with the same name starting at the current state
   and moving up through the parent states in a state hierarchy until an appropriate method is found
   or the StateManager instance itself is reached.
@@ -16095,10 +16095,10 @@ Ember.Routable = Ember.Mixin.create({
       };
     }
 
-    // normalize empty delivery_service to '/'
-    var delivery_service = get(this, 'delivery_service');
-    if (delivery_service === '') {
-      delivery_service = '/';
+    // normalize empty route to '/'
+    var route = get(this, 'route');
+    if (route === '') {
+      route = '/';
     }
 
     this._super();
@@ -16143,7 +16143,7 @@ Ember.Routable = Ember.Mixin.create({
   /**
     @private
 
-    Get the absolute delivery_service for the current state and a given
+    Get the absolute route for the current state and a given
     hash.
 
     This method is private, as it expects a serialized hash,
@@ -16154,7 +16154,7 @@ Ember.Routable = Ember.Mixin.create({
     var path = '', generated;
 
     // If the parent state is routable, use its current path
-    // as this delivery_service's prefix.
+    // as this route's prefix.
     if (get(parentState, 'isRoutable')) {
       path = parentState.absoluteRoute(manager, hash);
     }
@@ -16179,11 +16179,11 @@ Ember.Routable = Ember.Mixin.create({
   /**
     @private
 
-    At the moment, a state is routable if it has a string `delivery_service`
+    At the moment, a state is routable if it has a string `route`
     property. This heuristic may change.
   */
   isRoutable: Ember.computed(function() {
-    return typeof get(this, 'delivery_service') === 'string';
+    return typeof get(this, 'route') === 'string';
   }).cacheable(),
 
   /**
@@ -16199,20 +16199,20 @@ Ember.Routable = Ember.Mixin.create({
   /**
     @private
 
-    A _RouteMatcher object generated from the current delivery_service's `delivery_service`
+    A _RouteMatcher object generated from the current route's `route`
     string property.
   */
   routeMatcher: Ember.computed(function() {
-    var delivery_service = get(this, 'delivery_service');
-    if (delivery_service) {
-      return Ember._RouteMatcher.create({ delivery_service: delivery_service });
+    var route = get(this, 'route');
+    if (route) {
+      return Ember._RouteMatcher.create({ route: route });
     }
   }).cacheable(),
 
   /**
     @private
 
-    Check whether the delivery_service has dynamic segments and therefore takes
+    Check whether the route has dynamic segments and therefore takes
     a context.
   */
   hasContext: Ember.computed(function() {
@@ -16342,8 +16342,8 @@ Ember.Routable = Ember.Mixin.create({
     childStates = childStates.sort(function(a, b) {
       var aDynamicSegments = get(a, 'routeMatcher.identifiers.length'),
           bDynamicSegments = get(b, 'routeMatcher.identifiers.length'),
-          aRoute = get(a, 'delivery_service'),
-          bRoute = get(b, 'delivery_service');
+          aRoute = get(a, 'route'),
+          bRoute = get(b, 'route');
 
       if (aRoute.indexOf(bRoute) === 0) {
         return -1;
@@ -16355,7 +16355,7 @@ Ember.Routable = Ember.Mixin.create({
         return aDynamicSegments - bDynamicSegments;
       }
 
-      return get(b, 'delivery_service.length') - get(a, 'delivery_service.length');
+      return get(b, 'route.length') - get(a, 'route.length');
     });
 
     var state = childStates.find(function(state) {
@@ -16380,7 +16380,7 @@ Ember.Routable = Ember.Mixin.create({
     @private
 
     Once `unroute` has finished unwinding, `routePath` will be called
-    with the remainder of the delivery_service.
+    with the remainder of the route.
 
     For example, if you were in the /posts/1/comments state, and you
     moved into the /posts/2/comments state, `routePath` will be called
@@ -16399,8 +16399,8 @@ Ember.Routable = Ember.Mixin.create({
     if (hasPromises) {
       manager.transitionTo('loading');
 
-      Ember.assert('Loading state should be the child of a delivery_service', Ember.Routable.detect(get(manager, 'currentState.parentState')));
-      Ember.assert('Loading state should not be a delivery_service', !Ember.Routable.detect(get(manager, 'currentState')));
+      Ember.assert('Loading state should be the child of a route', Ember.Routable.detect(get(manager, 'currentState.parentState')));
+      Ember.assert('Loading state should not be a route', !Ember.Routable.detect(get(manager, 'currentState')));
 
       manager.handleStatePromises(resolvedStates, runTransition);
     } else {
@@ -16411,7 +16411,7 @@ Ember.Routable = Ember.Mixin.create({
   /**
     @private
 
-    When you move to a new delivery_service by pressing the back
+    When you move to a new route by pressing the back
     or forward button, this method is called first.
 
     Its job is to move the state manager into a parent
@@ -16428,11 +16428,11 @@ Ember.Routable = Ember.Mixin.create({
     path = path.replace(/^(?=[^\/])/, "/");
     var absolutePath = this.absoluteRoute(router);
 
-    var delivery_service = get(this, 'delivery_service');
+    var route = get(this, 'route');
 
     // If the current path is empty, move up one state,
     // because the index ('/') state must be a leaf node.
-    if (delivery_service !== '/') {
+    if (route !== '/') {
       // If the current path is a prefix of the path we're trying
       // to go to, we're done.
       var index = path.indexOf(absolutePath),
@@ -16456,7 +16456,7 @@ Ember.Routable = Ember.Mixin.create({
   /**
     The `connectOutlets` event will be triggered once a
     state has been entered. It will be called with the
-    delivery_service's context.
+    route's context.
   */
   connectOutlets: Ember.K,
 
@@ -16492,17 +16492,17 @@ Ember._RouteMatcher = Ember.Object.extend({
   state: null,
 
   init: function() {
-    var delivery_service = this.delivery_service,
+    var route = this.route,
         identifiers = [],
         count = 1,
         escaped;
 
     // Strip off leading slash if present
-    if (delivery_service.charAt(0) === '/') {
-      delivery_service = this.delivery_service = delivery_service.substr(1);
+    if (route.charAt(0) === '/') {
+      route = this.route = route.substr(1);
     }
 
-    escaped = escapeForRegex(delivery_service);
+    escaped = escapeForRegex(route);
 
     var regex = escaped.replace(/:([a-z_]+)(?=$|\/)/gi, function(match, id) {
       identifiers[count++] = id;
@@ -16532,12 +16532,12 @@ Ember._RouteMatcher = Ember.Object.extend({
   },
 
   generate: function(hash) {
-    var identifiers = this.identifiers, delivery_service = this.delivery_service, id;
+    var identifiers = this.identifiers, route = this.route, id;
     for (var i=1, l=identifiers.length; i<l; i++) {
       id = identifiers[i];
-      delivery_service = delivery_service.replace(new RegExp(":" + id), hash[id]);
+      route = route.replace(new RegExp(":" + id), hash[id]);
     }
-    return delivery_service;
+    return route;
   }
 });
 
@@ -16866,7 +16866,7 @@ var merge = function(original, hash) {
   An instance of Ember.Router can be associated with an instance of Ember.Application in one of two ways:
 
   You can provide a subclass of Ember.Router as the `Router` property of your application. An instance
-  of this Router class will be instantiated and delivery_service detection will be enabled when the application's
+  of this Router class will be instantiated and route detection will be enabled when the application's
   `initialize` method is called. The Router instance will be available as the `router` property
   of the application:
 
@@ -16888,15 +16888,15 @@ var merge = function(original, hash) {
 
   ## Adding Routes to a Router
   The `initialState` property of Ember.Router instances is named `root`. The state stored in this
-  property must be a subclass of Ember.Route. The `root` delivery_service acts as the container for the
+  property must be a subclass of Ember.Route. The `root` route acts as the container for the
   set of routable states but is not routable itself. It should have states that are also subclasses
-  of Ember.Route which each have a `delivery_service` property describing the URL pattern you would like to detect.
+  of Ember.Route which each have a `route` property describing the URL pattern you would like to detect.
 
       App = Ember.Application.create({
         Router: Ember.Router.extend({
           root: Ember.Route.extend({
             index: Ember.Route.extend({
-              delivery_service: '/'
+              route: '/'
             }),
             ... additional Ember.Routes ...
           })
@@ -16909,36 +16909,36 @@ var merge = function(original, hash) {
   the application's states that matches. (The example URL-matching below will use the default
   'hash syntax' provided by `Ember.HashLocation`.)
 
-  In the following delivery_service structure:
+  In the following route structure:
 
       App = Ember.Application.create({
         Router: Ember.Router.extend({
           root: Ember.Route.extend({
             aRoute: Ember.Route.extend({
-              delivery_service: '/'
+              route: '/'
             }),
             bRoute: Ember.Route.extend({
-              delivery_service: '/alphabeta'
+              route: '/alphabeta'
             })
           })
         })
       });
       App.initialize();
 
-  Loading the page at the URL '#/' will detect the delivery_service property of 'root.aRoute' ('/') and
+  Loading the page at the URL '#/' will detect the route property of 'root.aRoute' ('/') and
   transition the router first to the state named 'root' and then to the substate 'aRoute'.
 
-  Respectively, loading the page at the URL '#/alphabeta' would detect the delivery_service property of
+  Respectively, loading the page at the URL '#/alphabeta' would detect the route property of
   'root.bRoute' ('/alphabeta') and transition the router first to the state named 'root' and
   then to the substate 'bRoute'.
 
   ## Adding Nested Routes to a Router
-  Routes can contain nested subdelivery_services each with their own `delivery_service` property describing the nested
+  Routes can contain nested subroutes each with their own `route` property describing the nested
   portion of the URL they would like to detect and handle. Router, like all instances of StateManager,
   cannot call `transitonTo` with an intermediary state. To avoid transitioning the Router into an
-  intermediary state when detecting URLs, a Route with nested delivery_services must define both a base `delivery_service`
-  property for itself and a child Route with a `delivery_service` property of `'/'` which will be transitioned
-  to when the base delivery_service is detected in the URL:
+  intermediary state when detecting URLs, a Route with nested routes must define both a base `route`
+  property for itself and a child Route with a `route` property of `'/'` which will be transitioned
+  to when the base route is detected in the URL:
 
   Given the following application code:
 
@@ -16946,18 +16946,18 @@ var merge = function(original, hash) {
         Router: Ember.Router.extend({
           root: Ember.Route.extend({
             aRoute: Ember.Route.extend({
-              delivery_service: '/theBaseRouteForThisSet',
+              route: '/theBaseRouteForThisSet',
 
               indexSubRoute: Ember.Route.extend({
-                delivery_service: '/'
+                route: '/'
               }),
 
               subRouteOne: Ember.Route.extend({
-                delivery_service: '/subroute1'
+                route: '/subroute1'
               }),
 
               subRouteTwo: Ember.Route.extend({
-                delivery_service: '/subRoute2'
+                route: '/subRoute2'
               })
 
             })
@@ -16966,25 +16966,25 @@ var merge = function(original, hash) {
       });
       App.initialize();
 
-  When the application is loaded at '/theBaseRouteForThisSet' the Router will transition to the delivery_service
+  When the application is loaded at '/theBaseRouteForThisSet' the Router will transition to the route
   at path 'root.aRoute' and then transition to state 'indexSubRoute'.
 
   When the application is loaded at '/theBaseRouteForThisSet/subRoute1' the Router will transition to
-  the delivery_service at path 'root.aRoute' and then transition to state 'subRouteOne'.
+  the route at path 'root.aRoute' and then transition to state 'subRouteOne'.
 
   ## Route Transition Events
   Transitioning between Ember.Route instances (including the transition into the detected
-  delivery_service when loading the application)  triggers the same transition events as state transitions for
+  route when loading the application)  triggers the same transition events as state transitions for
   base `Ember.State`s. However, the default `setup` transition event is named `connectOutlets` on
   Ember.Router instances (see 'Changing View Hierarchy in Response To State Change').
 
-  The following delivery_service structure when loaded with the URL "#/"
+  The following route structure when loaded with the URL "#/"
 
       App = Ember.Application.create({
         Router: Ember.Router.extend({
           root: Ember.Route.extend({
             aRoute: Ember.Route.extend({
-              delivery_service: '/',
+              route: '/',
               enter: function(router) {
                 console.log("entering root.aRoute from", router.get('currentState.name'));
               },
@@ -17006,7 +17006,7 @@ var merge = function(original, hash) {
   'Serializing/Deserializing URLs'
 
   ## Routes With Dynamic Segments
-  An Ember.Route's `delivery_service` property can reference dynamic sections of the URL by prefacing a URL segment
+  An Ember.Route's `route` property can reference dynamic sections of the URL by prefacing a URL segment
   with the ':' character.  The values of these dynamic segments will be passed as a hash to the
   `deserialize` method of the matching Route (see 'Serializing/Deserializing URLs').
 
@@ -17021,13 +17021,13 @@ var merge = function(original, hash) {
   the application's router as its first argument and a hash of the URL's dynamic segments and values
   as its second argument.
 
-  The following delivery_service structure when loaded with the URL "#/fixed/thefirstvalue/anotherFixed/thesecondvalue":
+  The following route structure when loaded with the URL "#/fixed/thefirstvalue/anotherFixed/thesecondvalue":
 
       App = Ember.Application.create({
         Router: Ember.Router.extend({
           root: Ember.Route.extend({
             aRoute: Ember.Route.extend({
-              delivery_service: '/fixed/:dynamicSectionA/anotherFixed/:dynamicSectionB',
+              route: '/fixed/:dynamicSectionA/anotherFixed/:dynamicSectionB',
               deserialize: function(router, params) {}
             })
           })
@@ -17052,21 +17052,21 @@ var merge = function(original, hash) {
   the transition will be passed and `deserialize` is not called (see 'Transitions Between States').
 
   ### Serializing An Object For URLs with Dynamic Segments
-  When transitioning into a Route whose `delivery_service` property contains dynamic segments the Route's
+  When transitioning into a Route whose `route` property contains dynamic segments the Route's
   `serialize` method is called with the Route's router as the first argument and the Route's
   context as the second argument.  The return value of `serialize` will be used to populate the
   dynamic segments and should be an object with keys that match the names of the dynamic sections.
 
-  Given the following delivery_service structure:
+  Given the following route structure:
 
       App = Ember.Application.create({
         Router: Ember.Router.extend({
           root: Ember.Route.extend({
             aRoute: Ember.Route.extend({
-              delivery_service: '/'
+              route: '/'
             }),
             bRoute: Ember.Route.extend({
-              delivery_service: '/staticSection/:someDynamicSegment',
+              route: '/staticSection/:someDynamicSegment',
               serialize: function(router, context) {
                 return {
                   someDynamicSegment: context.get('name')
@@ -17085,18 +17085,18 @@ var merge = function(original, hash) {
 
   ## Transitions Between States
   Once a routed application has initialized its state based on the entry URL, subsequent transitions to other
-  states will update the URL if the entered Route has a `delivery_service` property. Given the following delivery_service structure
+  states will update the URL if the entered Route has a `route` property. Given the following route structure
   loaded at the URL '#/':
 
       App = Ember.Application.create({
         Router: Ember.Router.extend({
           root: Ember.Route.extend({
             aRoute: Ember.Route.extend({
-              delivery_service: '/',
+              route: '/',
               moveElsewhere: Ember.Route.transitionTo('bRoute')
             }),
             bRoute: Ember.Route.extend({
-              delivery_service: '/someOtherLocation'
+              route: '/someOtherLocation'
             })
           })
         })
@@ -17118,11 +17118,11 @@ var merge = function(original, hash) {
         Router: Ember.Router.extend({
           root: Ember.Route.extend({
             aRoute: Ember.Route.extend({
-              delivery_service: '/',
+              route: '/',
               moveElsewhere: Ember.Route.transitionTo('bRoute')
             }),
             bRoute: Ember.Route.extend({
-              delivery_service: '/a/delivery_service/:dynamicSection/:anotherDynamicSection',
+              route: '/a/route/:dynamicSection/:anotherDynamicSection',
               connectOutlets: function(router, context) {},
             })
           })
@@ -17138,7 +17138,7 @@ var merge = function(original, hash) {
       });
 
   Will transition the application's state to 'root.bRoute' and trigger an update of the URL to
-  '#/a/delivery_service/42/Life'.
+  '#/a/route/42/Life'.
 
   The context argument will also be passed as the second argument to the `serialize` method call.
 
@@ -17171,13 +17171,13 @@ var merge = function(original, hash) {
         Router: Ember.Router.extend({
           root: Ember.Route.extend({
             aRoute: Ember.Route.extend({
-              delivery_service: '/',
+              route: '/',
               anActionOnTheRouter: function(router, context) {
                 router.transitionTo('anotherState', context);
               }
             })
             anotherState: Ember.Route.extend({
-              delivery_service: '/differentUrl',
+              route: '/differentUrl',
               connectOutlets: function(router, context) {
 
               }
@@ -17224,7 +17224,7 @@ var merge = function(original, hash) {
         Router: Ember.Router.extend({
           root: Ember.Route.extend({
             aRoute: Ember.Route.extend({
-              delivery_service: '/',
+              route: '/',
               connectOutlets: function(router, context) {
                 router.get('oneController').connectOutlet('another');
               },
@@ -17291,7 +17291,7 @@ Ember.Router = Ember.StateManager.extend(
     this._super.apply(this, arguments);
   },
 
-  delivery_service: function(path) {
+  route: function(path) {
     this.abortRoutingPromises();
 
     set(this, 'isRouting', true);
@@ -17331,8 +17331,8 @@ Ember.Router = Ember.StateManager.extend(
     var currentState = get(this, 'currentState') || this,
         state = this.findStateByPath(currentState, path);
 
-    Ember.assert(Ember.String.fmt("Could not find delivery_service with path '%@'", [path]), !!state);
-    Ember.assert("To get a URL for a state, it must have a `delivery_service` property.", !!get(state, 'routeMatcher'));
+    Ember.assert(Ember.String.fmt("Could not find route with path '%@'", [path]), !!state);
+    Ember.assert("To get a URL for a state, it must have a `route` property.", !!get(state, 'routeMatcher'));
 
     var location = get(this, 'location'),
         absoluteRoute = state.absoluteRoute(this, hash);
