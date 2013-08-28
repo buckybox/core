@@ -20,7 +20,7 @@ class CustomerCSV
     :sign_in_count,
     :customer_note,
     :customer_packing_notes,
-    :delivery_service,
+    :delivery_service_name,
     :address_line_1,
     :address_line_2,
     :suburb,
