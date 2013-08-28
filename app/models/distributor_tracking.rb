@@ -29,6 +29,7 @@ private
       created_at:  distributor.created_at,
       custom_data: {
         contact_name: distributor.contact_name,
+        contact_name_first: distributor.contact_name_first,
         phone:        distributor.phone,
       }
     }

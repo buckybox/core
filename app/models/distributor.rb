@@ -459,6 +459,10 @@ class Distributor < ActiveRecord::Base
     contact_name.present? ? contact_name : email
   end
 
+  def contact_name_first
+    contact_name.split(" ").first
+  end
+
   def location
     [country.try(:full_name), city].reject(&:blank?).join(', ')
   end
