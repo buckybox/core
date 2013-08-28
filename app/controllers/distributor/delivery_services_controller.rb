@@ -5,7 +5,7 @@ class Distributor::DeliveryServicesController < Distributor::ResourceController
 
   def create
     create! { distributor_settings_delivery_services_url }
-    tracking.event(current_distributor, 'distributor_created_delivery_service')
+    tracking.event(current_distributor, 'new_delivery_service')
   end
 
   def update
