@@ -460,7 +460,7 @@ class Distributor < ActiveRecord::Base
   end
 
   def contact_name_first
-    contact_name.split(" ").first
+    contact_name.split(" ").first if contact_name.present?
   end
 
   def location
