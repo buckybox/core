@@ -152,4 +152,41 @@ describe Bucky::TransactionImports::OmniImport do
     rows[0].should eq ["Date", "Transaction", "Deposits", "Withdrawals"]
     rows[1].should eq ["19/07/2013", "MR SIMON J MORLEY", "£5.00", nil]
   end
+
+  describe ".find_file_endocing" do
+    let(:file)              { double("file") }
+    let(:encoding_detector) { double("encoding_detector") }
+    let(:omni_import)       { Bucky::TransactionImports::OmniImport }
+
+    it "returns an encoding if the first result has an encoding" do
+      result_hash = [
+        { type: :text, encoding: "windows-1252", confidence: 100, language: "en" },
+      ]
+      encoding_detector.stub(:detect_all) { result_hash }
+      expect(omni_import.find_file_encoding(file, encoding_detector)).to eq("windows-1252")
+    end
+
+    it "returns the next best encoding if the first result does not have an encoding" do
+      result_hash = [
+        { type: :binary, confidence: 100 },
+        { type: :text, encoding: "windows-1252", confidence: 36, language: "en" }
+      ]
+      encoding_detector.stub(:detect_all) { result_hash }
+      expect(omni_import.find_file_encoding(file, encoding_detector)).to eq("windows-1252")
+    end
+
+    it "returns nil if there were no encodings found" do
+      result_hash = [
+        { type: :binary, confidence: 100 },
+      ]
+      encoding_detector.stub(:detect_all) { result_hash }
+      expect(omni_import.find_file_encoding(file, encoding_detector)).to eq(nil)
+    end
+
+    it "returns nil if there were no results found" do
+      result_hash = []
+      encoding_detector.stub(:detect_all) { result_hash }
+      expect(omni_import.find_file_encoding(file, encoding_detector)).to eq(nil)
+    end
+  end
 end
