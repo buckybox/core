@@ -12,7 +12,7 @@
           = p.input :pause_date, collection: order.possible_pause_dates, selected: pause_date, include_blank: false, label: false, input_html: { class: 'input-small' }
         = f.button :submit, 'Pause', class: 'btn-mini btn-primary'
       .remove-link= link_to 'remove', remove_pause_customer_order_path(order)
-      .cancel-link= link_to 'cancel', '#'
+      .cancel-link= link_to 'close', '#'
 
     .resulting-link{ style: "display: #{pause_date ? 'block' : 'none'};", data: { date: pause_date } }
       = link_to 'pausing', '#'
@@ -28,7 +28,7 @@
           = p.input :pause_date, collection: order.possible_resume_dates, selected: resume_date, include_blank: false, label: false, input_html: { class: 'input-small' }
         = f.button :submit, 'Resume', class: 'btn-mini btn-primary'
       .remove-link= link_to 'remove', remove_resume_customer_order_path(order), class: 'links'
-      .cancel-link= link_to 'cancel', '#', class: 'links'
+      .cancel-link= link_to 'close', '#', class: 'links'
 
     .resulting-link{ style: "display: #{resume_date ? 'block' : 'none'};", data: { date: resume_date } }
       = link_to 'resuming', '#'
