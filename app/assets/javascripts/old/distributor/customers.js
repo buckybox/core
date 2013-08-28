@@ -286,8 +286,13 @@ $(function() {
       $.ajax({ type: 'POST',
                dataType: 'html',
                url: url,
-               success: function(data){
+               success: function(data) {
                  reload_pause_details(order_id, data);
+               },
+               error: function() {
+                 bootbox.alert("Oops! Something went wrong. Please try again.", function() {
+                   location.reload();
+                 });
                }});
       return false;
     });
@@ -301,6 +306,11 @@ $(function() {
                url: url,
                success: function(data){
                  reload_pause_details(order_id, data);
+               },
+               error: function() {
+                 bootbox.alert("Oops! Something went wrong. Please try again.", function() {
+                   location.reload();
+                 });
                }});
       return false;
     });
@@ -320,6 +330,11 @@ $(function() {
         data: $.param({ date: date }),
         success: function(data){
           reload_pause_details(order_id, data);
+        },
+        error: function() {
+          bootbox.alert("Oops! Something went wrong. Please try again.", function() {
+            location.reload();
+          });
         }});
 
       return false;
@@ -340,6 +355,11 @@ $(function() {
         data: $.param({ date: date }),
         success: function(data){
           reload_pause_details(order_id, data);
+        },
+        error: function() {
+          bootbox.alert("Oops! Something went wrong. Please try again.", function() {
+            location.reload();
+          });
         }});
 
       return false;
