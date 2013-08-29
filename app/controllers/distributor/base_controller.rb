@@ -23,4 +23,8 @@ private
     @distributor_setup ||= Distributor::Setup.new(current_distributor)
   end
 
+  def check_setup
+    redirect_to distributor_root_url and return unless distributor_setup.finished_settings?
+  end
+
 end

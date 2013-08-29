@@ -3,6 +3,7 @@ class Distributor::PaymentsController < Distributor::ResourceController
 
   respond_to :html, :xml, :json
 
+  before_filter :check_setup
   before_filter :load_import_transaction_list, only: [:process_payments, :show]
 
   def index
