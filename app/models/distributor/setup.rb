@@ -15,15 +15,15 @@ class Distributor::Setup
   end
 
   def total_steps
-    STEPS.size.to_f
+    STEPS.size
   end
 
   def steps_done
-    STEPS.map { |step| send("has_#{step}?") }.count(true).to_f
+    STEPS.map { |step| send("has_#{step}?") }.count(true)
   end
 
   def progress
-    percentage = steps_done / total_steps
+    percentage = steps_done.to_f / total_steps.to_f
     percentage * 100.0
   end
 
