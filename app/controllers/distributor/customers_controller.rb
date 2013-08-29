@@ -1,14 +1,11 @@
 class Distributor::CustomersController < Distributor::ResourceController
   respond_to :html, :xml, :json
 
+  before_filter :check_setup
   before_filter :get_form_type, only: [:edit, :update]
   before_filter :get_email_templates, only: [:index, :show]
 
   def index
-    if current_distributor.delivery_services.empty?
-      redirect_to distributor_settings_delivery_services_url, alert: 'You must create a delivery service before you can create users.' and return
-    end
-
     index! do
       @show_tour = current_distributor.customers_index_intro
     end

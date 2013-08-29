@@ -1,8 +1,11 @@
+- if params[:welcome]
+  :javascript
+    $(function() { $('#welcome-guide').modal(); });
+
 = link_to "#welcome-guide", data: { toggle: "modal" } do
-  %div
-    == Setup #{@distributor_setup.steps_done} / #{@distributor_setup.total_steps}
-    .progress
-      .bar.bar-success{ style: "width: #{@distributor_setup.progress}%;" }
+  == Setup #{@distributor_setup.steps_done} / #{@distributor_setup.total_steps}
+  .progress
+    .bar.bar-success{ style: "width: #{@distributor_setup.progress}%;" }
 
 #welcome-guide.modal.hide.fade
   .modal-header
@@ -13,18 +16,19 @@
       %h2 Welcome!
       %p
         Thank you for signing up to Bucky Box. Please follow the steps below to get going. If you have any questions
-        don't hesitate to email us at:
+        please don't hesitate to email us at:
         = mail_to 'support@buckybox.com'
     %section
       %dl
         %dt#add-a-delivery-service Add a Delivery Service
         %dd
-          The first thing you need to do is add a new delivery service. A delivery service is a a delivery service or a drop off point.
+          The first step in your Bucky Box journey is creating a delivery service that gets your boxes to your customers.
 
         %dt#add-a-box Add a Box
         %dd
-          Then you need to create your first box! You give it a name, price, description, picture set a few options and your off!
+          After that the next thing to do is to create your first box, and your almost done!
 
         %dt#add-a-customer Add a Customer
         %dd
-          You should now start creating customers.
+          Finally, the funnest part, you can start adding in your customers! Enjoy and thanks again for signing up with
+          Bucky Box.

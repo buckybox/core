@@ -5,6 +5,8 @@ require 'csv'
 class Distributor::DeliveriesController < Distributor::ResourceController
   custom_actions collection: [:update_status, :master_packing_sheet, :export]
 
+  before_filter :check_setup
+
   respond_to :html, :xml, except: [:update_status, :export]
   respond_to :json, except: [:master_packing_sheet, :export]
   respond_to :csv, only: :export
@@ -12,10 +14,6 @@ class Distributor::DeliveriesController < Distributor::ResourceController
   # NOTE: When this is refactored also fix the "items" ordering in the sale_csv models.
   def index
     @delivery_services = current_distributor.delivery_services
-
-    if @delivery_services.empty?
-      redirect_to distributor_settings_delivery_services_url, alert: 'You must create a delivery service before you can view the deliveries page.' and return
-    end
 
     unless params[:date] && params[:view]
       redirect_to date_distributor_deliveries_url(Date.current, 'packing') and return
