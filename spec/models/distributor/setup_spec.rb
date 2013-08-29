@@ -26,22 +26,22 @@ describe Distributor::Setup do
 
   describe "#total_steps" do
     it "returns the total number of steps for setup" do
-      expect(distributor_setup.total_steps).to eq(3)
+      expect(distributor_setup.total_steps).to eql(3)
     end
   end
 
   describe "#steps_done" do
     it "returns the steps completed so far" do
-      expect(distributor_setup.steps_done).to eq(0)
+      expect(distributor_setup.steps_done).to eql(0)
 
       distributor.stub(:delivery_services) { [ double("delivery_service") ] }
-      expect(distributor_setup.steps_done).to eq(1)
+      expect(distributor_setup.steps_done).to eql(1)
 
       distributor.stub(:boxes) { [ double("boxes") ] }
-      expect(distributor_setup.steps_done).to eq(2)
+      expect(distributor_setup.steps_done).to eql(2)
 
       distributor.stub(:customers) { [ double("customers") ] }
-      expect(distributor_setup.steps_done).to eq(3)
+      expect(distributor_setup.steps_done).to eql(3)
     end
   end
 
