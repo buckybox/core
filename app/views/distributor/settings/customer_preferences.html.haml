@@ -1,10 +1,15 @@
-- title 'Stock List'
+- title("Customer Preferences", false)
 - show_settings_sub_nav
+
+%h2 Customer Preferences
+%p.muted
+  This is a list of all the items that may appear in your mystery box over time. During the checkout process, for boxes 
+  that have like or dislike preferences enabled, customers may nominate their like and dislike choices.
 
 - if @edit_mode
   #stock-list-controls.row-fluid
     .span12.text-right
-      = link_to 'cancel', distributor_settings_stock_list_path, id: 'cancel-link'
+      = link_to 'cancel', distributor_settings_customer_preferences_path, id: 'cancel-link'
       = link_to 'Done', '#', class: 'btn btn-primary', id: 'submit-button'
 
   = render partial: 'distributor/line_items/form'
@@ -29,7 +34,7 @@
 - else
   #stock-list-controls.row-fluid
     .span12.text-right
-      = link_to 'Edit', distributor_settings_stock_list_path(edit: true), class: 'btn btn-danger'
+      = link_to 'Edit', distributor_settings_customer_preferences_path(edit: true), class: 'btn btn-danger'
 
   %table.table.table-bordered.table-striped.no-horizontal-dividers
     %thead
