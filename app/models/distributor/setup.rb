@@ -3,6 +3,7 @@ class Distributor::Setup
   STEPS = [
     "delivery_services",
     "boxes",
+    "customers",
   ].freeze
 
   def initialize(distributor, args = {})
@@ -40,5 +41,9 @@ private
 
   def has_boxes?
     !distributor.boxes.to_a.empty?
+  end
+
+  def has_customers?
+    !distributor.customers.to_a.empty?
   end
 end
