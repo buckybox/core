@@ -24,6 +24,27 @@ describe Distributor::Setup do
     end
   end
 
+  describe "#total_steps" do
+    it "returns the total number of steps for setup" do
+      expect(distributor_setup.total_steps).to eq(3)
+    end
+  end
+
+  describe "#steps_done" do
+    it "returns the steps completed so far" do
+      expect(distributor_setup.steps_done).to eq(0)
+
+      distributor.stub(:delivery_services) { [ double("delivery_service") ] }
+      expect(distributor_setup.steps_done).to eq(1)
+
+      distributor.stub(:boxes) { [ double("boxes") ] }
+      expect(distributor_setup.steps_done).to eq(2)
+
+      distributor.stub(:customers) { [ double("customers") ] }
+      expect(distributor_setup.steps_done).to eq(3)
+    end
+  end
+
   describe "#progress" do
     it "returns a percentage of progress" do
       expect(distributor_setup.progress).to eql(0.0)
