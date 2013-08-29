@@ -114,6 +114,7 @@ group :development, :test do
   gem 'rspec-rails'
   gem 'guard'
   gem 'listen'
+  gem 'terminal-notifier-guard' # Mac 10.8 system notifications for Guard
 
   gem 'letter_opener'
 
