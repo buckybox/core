@@ -419,6 +419,7 @@ GEM
     temple (0.6.6)
     term-ansicolor (1.2.2)
       tins (~> 0.8)
+    terminal-notifier-guard (1.5.3)
     terminal-table (1.4.5)
     therubyracer (0.12.0)
       libv8 (~> 3.16.14.0)
@@ -534,6 +535,7 @@ DEPENDENCIES
   sprinkle!
   state_machine (~> 1.1.2)
   term-ansicolor
+  terminal-notifier-guard
   therubyracer
   uglifier (~> 1.2.7)
   virtus (~> 0.5.5)
