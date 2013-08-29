@@ -31,6 +31,10 @@ class Distributor::Setup
     100.0 - progress
   end
 
+  def finished_settings?
+    has_delivery_services? && has_boxes?
+  end
+
 private
 
   attr_reader :distributor
