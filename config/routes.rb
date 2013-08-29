@@ -61,7 +61,7 @@ BuckyBox::Application.routes.draw do
       get 'delivery_services'
       get 'bank_information'
       get 'invoice_information'
-      get 'stock_list'
+      get 'customer_preferences'
     end
 
     namespace :notifications do

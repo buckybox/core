@@ -44,7 +44,7 @@ class Distributor::SettingsController < Distributor::BaseController
     @invoice_information = current_distributor.invoice_information || InvoiceInformation.new
   end
 
-  def stock_list
+  def customer_preferences
     @edit_mode = params[:edit] || false
 
     @line_items = current_distributor.line_items

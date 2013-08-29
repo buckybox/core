@@ -8,10 +8,10 @@ class Distributor::LineItemsController < Distributor::ResourceController
       tracking.event(current_distributor, "new_stock_item") unless current_admin.present?
 
       flash[:notice] = 'The stock list was successfully updated.'
-      redirect_to distributor_settings_stock_list_url
+      redirect_to distributor_settings_customer_preferences_url
     else
       flash[:error] = 'Could not update the stock list.'
-      redirect_to distributor_settings_stock_list_url(edit: true)
+      redirect_to distributor_settings_customer_preferences_url(edit: true)
     end
   end
 
@@ -20,10 +20,10 @@ class Distributor::LineItemsController < Distributor::ResourceController
 
     if LineItem.bulk_update(current_distributor, line_items)
       flash[:notice] = 'The stock list was successfully updated.'
-      redirect_to distributor_settings_stock_list_url
+      redirect_to distributor_settings_customer_preferences_url
     else
       flash[:error] = 'Could not update the stock list.'
-      redirect_to distributor_settings_stock_list_url(edit: true)
+      redirect_to distributor_settings_customer_preferences_url(edit: true)
     end
   end
 end
