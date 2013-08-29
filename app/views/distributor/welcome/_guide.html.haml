@@ -1,7 +1,8 @@
 = link_to "#welcome-guide", data: { toggle: "modal" } do
-  == Setup #{@distributor_setup.steps_done} / #{@distributor_setup.total_steps}
-  .progress
-    .bar.bar-success{ style: "width: #{@distributor_setup.progress}%;" }
+  %div
+    == Setup #{@distributor_setup.steps_done} / #{@distributor_setup.total_steps}
+    .progress
+      .bar.bar-success{ style: "width: #{@distributor_setup.progress}%;" }
 
 #welcome-guide.modal.hide.fade
   .modal-header
