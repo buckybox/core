@@ -27,7 +27,7 @@ IntercomRails.config do |config|
   # The method/variable that contains the logged in user in your controllers.
   # If it is `current_user` or `@user`, then you can ignore this
   #
-  config.user.current = Proc.new { current_distributor }
+  config.user.current = Proc.new { current_distributor.contact_name }
   
   # == User model class
   # The class which defines your user model
@@ -41,8 +41,7 @@ IntercomRails.config do |config|
   #
   config.user.custom_data = {
     :transactional_customers => :transactional_customer_count,
-    :contact_name => :contact_name,
-    :contact_name_first => :contact_name_first
+    :business_name => :name,
   }
 
   # == User -> Company association
