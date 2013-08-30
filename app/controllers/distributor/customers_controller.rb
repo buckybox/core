@@ -1,7 +1,7 @@
 class Distributor::CustomersController < Distributor::ResourceController
   respond_to :html, :xml, :json
 
-  before_filter :check_setup
+  before_filter :check_setup, only: [:index]
   before_filter :get_form_type, only: [:edit, :update]
   before_filter :get_email_templates, only: [:index, :show]
 

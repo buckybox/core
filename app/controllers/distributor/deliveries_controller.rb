@@ -5,7 +5,7 @@ require 'csv'
 class Distributor::DeliveriesController < Distributor::ResourceController
   custom_actions collection: [:update_status, :master_packing_sheet, :export]
 
-  before_filter :check_setup
+  before_filter :check_setup, only: [:index]
 
   respond_to :html, :xml, except: [:update_status, :export]
   respond_to :json, except: [:master_packing_sheet, :export]
