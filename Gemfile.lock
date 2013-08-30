@@ -1,4 +1,17 @@
 GIT
+  remote: git://github.com/buckybox/currency_data.git
+  revision: edab135a955b0f7698313d7e88c1904441724785
+  specs:
+    currency_data (1.0.0)
+
+GIT
+  remote: git://github.com/buckybox/easy_money.git
+  revision: ccc57e00b47cbae497d1ce939a817b321dccdf5d
+  specs:
+    easy_money (1.0.0)
+      currency_data (~> 1.0.0)
+
+GIT
   remote: git://github.com/jordandcarter/sprinkle.git
   revision: 408a82c764f07f96b49df805b3356197123dbfc4
   specs:
@@ -6,17 +19,6 @@ GIT
       activesupport (>= 2.0.2)
       capistrano (>= 2.5.5)
       highline (>= 1.4.0)
-
-PATH
-  remote: ../currency_data
-  specs:
-    currency_data (1.0.0)
-
-PATH
-  remote: ../easy_money
-  specs:
-    easy_money (1.0.0)
-      currency_data (~> 1.0.0)
 
 GEM
   remote: https://rubygems.org/
