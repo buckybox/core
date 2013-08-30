@@ -42,16 +42,3 @@ private
     Bucky::CommsTracking.instance
   end
 end
-
-def p(order)
-  start = Date.parse("2013-08-26")
-  fin = Date.parse("2013-09-02")
-  if order.paused? && (order.schedule_rule.schedule_pause.finish.present? && order.schedule_rule.schedule_pause.finish > start)
-    start = order.schedule_rule.schedule_pause.start > start ? start : order.schedule_rule.schedule_pause.start
-    fin = !order.schedule_rule.schedule_pause.finish.nil? && order.schedule_rule.schedule_pause.finish < fin ? fin : order.schedule_rule.schedule_pause.finish
-  end
-  fin = nil if order.schedule_rule.schedule_pause.finish.nil?
-  #"#{start} -> #{fin} \t #{order.schedule_rule.schedule_pause.start if order.paused?} -> #{order.schedule_rule.schedule_pause.finish if order.paused?}"
-  order.pause!(start,fin)
-end
-puts d.orders.active.collect{|o| p(o)}
