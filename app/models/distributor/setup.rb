@@ -11,7 +11,7 @@ class Distributor::Setup
   end
 
   def finished?
-    progress == 100.0
+    steps_done == total_steps
   end
 
   def total_steps
