@@ -17,7 +17,7 @@ class Extra < ActiveRecord::Base
   scope :none, where("1 = 0")
 
   def to_hash
-    { name: name, unit: unit, price_cents: price_cents }
+    { name: name, unit: unit, price: price }
   end
 
   def name_with_unit
