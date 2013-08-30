@@ -80,6 +80,7 @@ group :development do
   gem 'pry-coolline'
   gem 'pry-stack_explorer'
 
+  gem 'sextant'
   gem 'better_errors'
   gem 'binding_of_caller'
   gem 'quiet_assets'
