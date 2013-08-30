@@ -11,7 +11,7 @@ describe Distributor::LineItemsController do
         post :create, { stock_list: { names: "Apples\nOranges\nGrapes" } }
       end
 
-      specify { flash[:notice].should eq('The stock list was successfully updated.') }
+      specify { flash[:notice].should eq('The customer preferences were successfully updated.') }
       specify { response.should redirect_to(distributor_settings_customer_preferences_url) }
     end
 
@@ -20,7 +20,7 @@ describe Distributor::LineItemsController do
         post :create, { stock_list: { names: "" } }
       end
 
-      specify { flash[:error].should eq('Could not update the stock list.') }
+      specify { flash[:error].should eq('Could not update the customer preferences.') }
       specify { response.should redirect_to(distributor_settings_customer_preferences_url(edit: true)) }
     end
   end
