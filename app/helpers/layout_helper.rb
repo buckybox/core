@@ -17,10 +17,11 @@ module LayoutHelper
   end
 
   FLASH_CLASSES = {
-    notice:  'alert-success',
-    warning: 'info-warning',
-    error:   'alert-error',
-    alert:   'alert-error'
+    notice:   'alert-success',
+    warning:  'info-warning',
+    error:    'alert-error',
+    alert:    'alert-error',
+    info:     'alert-info',
   }
 
   def render_site_messages(flash, options = {})
