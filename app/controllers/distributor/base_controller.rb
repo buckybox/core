@@ -1,19 +1,30 @@
 class Distributor::BaseController < ApplicationController
+
   layout 'distributor'
 
   before_filter :authenticate_distributor!
-  before_filter :mark_seen_recently
-  before_filter :get_notifications
+  before_filter :mark_as_seen
+  before_filter :notifications
+  before_filter :distributor_setup
 
   skip_after_filter :intercom_rails_auto_include
 
 private
 
-  def mark_seen_recently
-    current_distributor.mark_seen_recently! if current_distributor.present? && !current_admin.present?
+  def mark_as_seen
+    Distributor.mark_as_seen!(current_distributor, no_track: current_admin.present?)
   end
 
-  def get_notifications
-    @notifications = Event.remove_duplicates(current_distributor.events.active.current.scoped.includes(:customer, :delivery, :transaction))
+  def notifications
+    @notifications ||= Event.all_for_distributor(current_distributor)
   end
+
+  def distributor_setup
+    @distributor_setup ||= Distributor::Setup.new(current_distributor)
+  end
+
+  def check_setup
+    redirect_to distributor_root_url and return unless distributor_setup.finished_settings?
+  end
+
 end

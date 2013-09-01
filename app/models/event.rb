@@ -1,4 +1,5 @@
 class Event < ActiveRecord::Base
+
   belongs_to :distributor
 
   belongs_to :customer
@@ -110,6 +111,18 @@ class Event < ActiveRecord::Base
     ![EVENT_TYPES[:customer_address_changed]].include? event_type
   end
 
+  def self.all_for_distributor(distributor)
+    events = distributor.events.active.current.scoped
+    events = events.includes(:customer, :delivery, :transaction)
+    remove_duplicates(events)
+  end
+
+  def key
+    @key ||= "#{event_category}#{event_type}#{customer_id}"
+  end
+
+private
+
   def self.remove_duplicates(notifications)
     seen = {}
     notifications.select do |notification|
@@ -122,12 +135,6 @@ class Event < ActiveRecord::Base
       end
     end
   end
-
-  def key
-    @key ||= "#{event_category}#{event_type}#{customer_id}"
-  end
-
-  private
 
   def check_trigger
     self.trigger_on = Time.current if self.trigger_on.nil?
@@ -168,4 +175,5 @@ class Event < ActiveRecord::Base
       EVENT_TYPES[:transaction_failure]
     ].include?(self.event_type)
   end
+
 end

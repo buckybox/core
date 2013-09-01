@@ -42,7 +42,7 @@ BuckyBox::Application.routes.draw do
   end
 
   namespace :distributor do
-    root to: 'customers#index'
+    root to: 'welcome#index'
 
     namespace :wizard do
       get 'business'

@@ -394,6 +394,8 @@ GEM
       sass-rails
       thor (~> 0.14)
     sexp_processor (4.3.0)
+    sextant (0.2.4)
+      rails (>= 3.2)
     simple_form (2.1.0)
       actionpack (~> 3.0)
       activemodel (~> 3.0)
@@ -530,6 +532,7 @@ DEPENDENCIES
   ruby-prof
   sass-rails (~> 3.2.5)
   select2-rails (~> 3.4.3)
+  sextant
   simple_form (~> 2.1.0)
   simplecov
   sprinkle!

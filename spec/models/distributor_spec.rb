@@ -538,4 +538,28 @@ describe Distributor do
       expect(result).to be_empty
     end
   end
+
+  context "when tracking a distributor" do
+    before { distributor.save }
+
+    describe "#mark_as_seen!" do
+      it "changes the last seen timestamp of the distributor" do
+        expect{ distributor.mark_as_seen! }.to change{ distributor.last_seen_at }
+      end
+    end
+
+    describe ".mark_as_seen!" do
+      it "changes nothing if there is no distributor" do
+        expect{ Distributor.mark_as_seen!(nil) }.not_to change{ distributor.last_seen_at }
+      end
+
+      it "changes nothing if no tracking option is passed in" do
+        expect{ Distributor.mark_as_seen!(distributor, no_track: true) }.not_to change{ distributor.last_seen_at }
+      end
+
+      it "changes the last seen timestap of the distributor" do
+        expect{ Distributor.mark_as_seen!(distributor) }.to change{ distributor.last_seen_at }
+      end
+    end
+  end
 end
