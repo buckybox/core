@@ -1,12 +1,12 @@
 GIT
   remote: git://github.com/buckybox/currency_data.git
-  revision: edab135a955b0f7698313d7e88c1904441724785
+  revision: 3cd880de7a4c01e57ce9701c589d602f156b36d7
   specs:
     currency_data (1.0.0)
 
 GIT
   remote: git://github.com/buckybox/easy_money.git
-  revision: ccc57e00b47cbae497d1ce939a817b321dccdf5d
+  revision: 35560d4f20432319daf3310129b772885b95a888
   specs:
     easy_money (1.0.0)
       currency_data (~> 1.0.0)
