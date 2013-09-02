@@ -13,6 +13,10 @@ class DistributorTracking
     ).update_tags
   end
 
+  def update
+    comms_tracking.update_user(distributor.id, tracking_data, Rails.env)
+  end
+
   def track(action_name, occurred_at = Time.current, env = Rails.env)
     comms_tracking.track(distributor.id, action_name, occurred_at, env)
   end
