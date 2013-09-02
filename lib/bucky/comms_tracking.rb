@@ -5,6 +5,20 @@ module Bucky
       @instance ||= CommsTracking.new
     end
 
+    def update_user(id, attrs, env = nil)
+      return if skip? env
+
+      user = find_user(id)
+      return if user.blank?
+
+      attrs.each do |key, value|
+        user.send("#{key.to_s}=", value)
+      end
+      user.save
+    rescue Bucky::NonFatalException => e
+      report(e)
+    end
+
     def create_user(attrs, env = nil)
       return if skip? env
       
@@ -46,6 +60,16 @@ module Bucky
     end
 
     private
+
+    def find_user(id)
+      ::Intercom::User.find(user_id: id)
+    rescue Intercom::ResourceNotFound
+      return nil
+    rescue ::Intercom::AuthenticationError,
+            ::Intercom::ServerError,
+            ::Intercom::ServiceUnavailableError => e
+      raise Bucky::NonFatalException.new(e)
+    end
 
     def add_user_to_tag(id, name)
       tag = find_or_create_tag(name)
