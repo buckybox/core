@@ -158,7 +158,7 @@
       %td .amount
       %td Positive amount
       %td.text-right
-        %span.amount= EasyMoney.new(13.37).format
+        %span.amount= EasyMoney.new(13.37).with_currency("NZD")
       %td
         %ul
           %li.bold Should we rename it to <code>.money</code> for more generic usage?
@@ -166,7 +166,7 @@
       %td .balance
       %td Positive balance
       %td.text-right
-        %span.balance= EasyMoney.new(13.37).format
+        %span.balance= EasyMoney.new(13.37).with_currency("NZD")
       %td
         %ul
           %li.bold Should we rename it to <code>.money</code> for more generic usage?
@@ -174,7 +174,7 @@
       %td .balance.negative
       %td Negative balance
       %td.text-right
-        %span.balance.negative= EasyMoney.new(-13.37).format
+        %span.balance.negative= EasyMoney.new(-13.37).with_currency("NZD")
       %td
         %ul
           %li.bold Should we rename it to <code>.money</code> for more generic usage?

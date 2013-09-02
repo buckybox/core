@@ -20,8 +20,9 @@ class OrderPrice
   def self.extras_price(order_extras, customer_discount = nil)
     customer_discount = customer_discount.discount if customer_discount.is_a?(Customer)
 
-    total_price = order_extras.map do |extra, count|
-      extra.price * count
+    total_price = order_extras.map do |order_extra|
+      order_extra = order_extra.to_hash unless order_extra.is_a? Hash
+      order_extra[:price] * order_extra[:count]
     end.sum
 
     customer_discount ? discounted(total_price, customer_discount) : total_price
