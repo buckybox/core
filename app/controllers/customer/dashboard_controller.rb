@@ -3,11 +3,12 @@ class Customer::DashboardController < Customer::BaseController
     @customer     = current_customer
     @account      = @customer.account
     @address      = @customer.address
-    @orders       = @customer.orders.active
     @balance      = @customer.account.balance
     @transactions = @customer.transactions.limit(6)
     @show_more_link = @transactions.size != @customer.transactions.count
     @distributor  = @customer.distributor
+    @currency     = @distributor.currency
+    @orders       = @customer.orders.active.decorate(context: { currency: @currency })
     @bank = @distributor.bank_information
 
     @order = @customer.orders.new
