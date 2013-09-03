@@ -584,7 +584,7 @@ private
   end
 
   def tracking
-    @tracking ||= DistributorTracking.new(self)
+    @tracking ||= Messaging::Distributor.new(self)
   end
 
   # This is meant to be run within console for dev work via Distributor.send(:travel_forward_a_day)

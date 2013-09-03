@@ -1,5 +1,5 @@
-module Bucky
-  class CommsTracking
+module Messaging
+  class IntercomProxy
     
     def self.instance
       @instance ||= CommsTracking.new

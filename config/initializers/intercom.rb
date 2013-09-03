@@ -1,28 +1,6 @@
 Intercom.app_id = Figaro.env.intercom_app_id
 Intercom.api_key = Figaro.env.intercom_api_key
 
-# Intercom expects #contact_name to be #name,
-# swap them so it makes sense.
-class DistributorNameSwap
-  def initialize(distributor)
-    @distributor = distributor
-  end
-
-  def name
-    distributor.contact_name
-  end
-
-  def method_missing(method, *args)
-    return distributor.send(method, *args)
-  end
-
-private
-  
-  def distributor
-    @distributor
-  end
-end
-
 IntercomRails.config do |config|
   # == Intercom app_id
   # 
@@ -49,7 +27,7 @@ IntercomRails.config do |config|
   # The method/variable that contains the logged in user in your controllers.
   # If it is `current_user` or `@user`, then you can ignore this
   #
-  config.user.current = Proc.new { DistributorNameSwap.new(current_distributor) }
+  config.user.current = Proc.new { Messaging::DistributorNameSwap.new(current_distributor) }
   
   # == User model class
   # The class which defines your user model
@@ -63,7 +41,7 @@ IntercomRails.config do |config|
   #
   config.user.custom_data = {
     :transactional_customers => :transactional_customer_count,
-    :business_name => :name,
+    :business_name => :business_name,
   }
 
   # == User -> Company association
