@@ -490,11 +490,11 @@ describe Distributor do
     end
   end
 
-  context "Communications and tracking" do
+  context "Messaging and tracking" do
     subject { distributor }
-    it { should delegate(:tracking_after_create).to(:tracking) }
-    it { should delegate(:tracking_after_save).to(:tracking) }
-    it { should delegate(:track).to(:tracking) }
+    it { should delegate(:tracking_after_create).to(:messaging) }
+    it { should delegate(:tracking_after_save).to(:messaging) }
+    it { should delegate(:track).to(:messaging) }
   end
 
   describe '#transactions_for_export' do
