@@ -37,8 +37,17 @@ class Distributor::SettingsController < Distributor::BaseController
   end
 
   def payments
-    payments = current_distributor.bank_information || BankInformation.new
-    render 'payments', locals: { payments: payments }
+    bank_deposit = Distributor::Settings::Payments::BankDeposit.new(
+      distributor: current_distributor
+    )
+    cash_on_delivery = Distributor::Settings::Payments::CashOnDelivery.new(
+      distributor: current_distributor
+    )
+
+    render 'payments', locals: {
+      bank_deposit:     bank_deposit,
+      cash_on_delivery: cash_on_delivery,
+    }
   end
 
   def invoice_information

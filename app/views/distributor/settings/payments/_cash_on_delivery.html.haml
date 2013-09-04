@@ -1,0 +1,20 @@
+= simple_form_for(cash_on_delivery, as: "cash_on_delivery", url: distributor_bank_information_path, method: "put", html: { class: 'form-horizontal' }) do |f|
+  = f.error_notification
+  %section
+    %header
+      %h3 Cash on Delivery Settings
+      %p.muted This information is displayed to customers at the webstore during the checkout process.
+
+      - unless current_distributor.payment_cash_on_delivery
+        %p Please #{mail_to Figaro.env.support_email, "contact us"} if you wish to allow this payment method.
+
+    - if current_distributor.payment_cash_on_delivery
+      = f.input :cod_payment_message,
+        label: 'Webstore payment instructions',
+        placeholder: %q(e.g. Please place money in the mailbox if nobody is home.),
+        as: :text, input_html: { class: 'input-block-level', rows: 10 },
+        required: false
+
+      .controls.clearfix
+        = f.button :submit, 'Save', class: 'btn btn-primary pull-right'
+
