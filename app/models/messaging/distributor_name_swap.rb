@@ -17,6 +17,10 @@ module Messaging
     def method_missing(method, *args)
       return distributor.send(method, *args)
     end
+  
+    def respond_to_missing?(method_name, include_private = false)
+      distributor.respond_to?(method_name, include_private)
+    end
 
   private
     
