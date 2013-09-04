@@ -1,23 +1,40 @@
 class Distributor::BankInformationController < Distributor::BaseController
-  def create
-    bank_information = current_distributor.build_bank_information(params[:webstore_order])
+  before_filter :fetch_payment_settings
 
-    if bank_information.save
+  def update
+    if @payment_settings.save
       tracking.event(current_distributor, "new_bank_information") unless current_admin.present?
-      redirect_to distributor_settings_bank_information_url, notice: "Your payment information was successfully updated."
+      redirect_to distributor_settings_payments_url, notice: "Your #{@payment_method} settings were successfully updated."
+
     else
-      render "distributor/settings/payments", locals: { payments: bank_information }
+      flash[:error] = "You must fill in all the required fields."
+      render 'distributor/settings/payments', locals: {
+        bank_deposit:     bank_deposit,
+        cash_on_delivery: cash_on_delivery,
+      }
     end
   end
 
-  def update
-    bank_information = current_distributor.bank_information
+private
 
-    if bank_information.update_attributes(params[:bank_information])
-      tracking.event(current_distributor, "new_bank_information") unless current_admin.present?
-      redirect_to distributor_settings_payments_url, notice: "Your payment information was successfully updated."
-    else
-      render "distributor/settings/payments", locals: { payments: bank_information }
+  def fetch_payment_settings
+    %w(bank_deposit cash_on_delivery).each do |payment_method|
+      if params[payment_method]
+        @payment_method = payment_method.titleize
+        @payment_settings = send(payment_method)
+      end
     end
+  end
+
+  def bank_deposit
+    Distributor::Settings::Payments::BankDeposit.new(params_with_distributor)
+  end
+
+  def cash_on_delivery
+    Distributor::Settings::Payments::CashOnDelivery.new(params_with_distributor)
+  end
+
+  def params_with_distributor
+    params.merge(distributor: current_distributor)
   end
 end

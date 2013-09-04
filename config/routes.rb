@@ -80,7 +80,7 @@ BuckyBox::Application.routes.draw do
     end
 
     resources :distributors,        only: :update
-    resource  :bank_information,    only: [:create, :update]
+    resource  :bank_information,    only: :update
     resource  :invoice_information, only: [:create, :update]
     resources :boxes,               except: [:index]
     resources :extras,              except: [:index, :show]

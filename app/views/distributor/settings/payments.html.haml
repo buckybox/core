@@ -2,32 +2,6 @@
 - show_settings_sub_nav(:bank_info)
 
 .settings-forms
-  = simple_form_for(payments, url: distributor_bank_information_path, html: { class: 'form-horizontal' }) do |f|
-    = f.error_notification
-    %section
-      %header
-        %h3 Bank Deposit Settings
-        %p.muted This information is displayed to customers at the webstore during the checkout process.
+    = render partial: "distributor/settings/payments/bank_deposit", locals: { bank_deposit: bank_deposit }
+    = render partial: "distributor/settings/payments/cash_on_delivery", locals: { cash_on_delivery: cash_on_delivery }
 
-      = f.input :name, label: 'Bank name:', placeholder: 'e.g. The Community Bank', input_html: { class: 'input-block-level' }
-      = f.input :account_name, label: 'Account name:', placeholder: "e.g. #{current_distributor.name}", input_html: { class: 'input-block-level' }
-      = f.input :bsb_number, label: 'BSB number / Sort code:', input_html: { class: 'input-block-level' }
-      = f.input :account_number, label: 'Account number:', input_html: { class: 'input-block-level' }
-      = f.input :customer_message,
-        label: 'Webstore payment instructions:',
-        placeholder: %q(e.g. Please make your payment 3 days before your delivery and don't forget to use your reference number so we can match it properly. Thanks!),
-        input_html: { class: 'input-block-level', rows: 10 }
-      .controls.clearfix
-        = f.button :submit, 'Save', class: 'btn btn-primary pull-right'
-
-    %section
-      %header
-        %h3 Cash on Delivery Settings
-        %p.muted This information is displayed to customers at the webstore during the checkout process.
-
-      = f.input :cod_payment_message,
-        label: 'Webstore payment instructions:',
-        placeholder: %q(e.g. Please place money in the mailbox if nobody is home.),
-        input_html: { class: 'input-block-level', rows: 10 }
-      .controls.clearfix
-        = f.button :submit, 'Save', class: 'btn btn-primary pull-right'
