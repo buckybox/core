@@ -39,6 +39,7 @@ module Messaging
         custom_data: {
           business_name: distributor.name,
           phone:        distributor.phone,
+          needs_setup:  distributor.needs_setup?
         }
       }
     end
