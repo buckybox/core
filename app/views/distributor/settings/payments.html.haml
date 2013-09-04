@@ -10,7 +10,7 @@
         %p.muted This information is displayed to customers at the webstore during the checkout process.
 
       = f.input :name, label: 'Bank name:', placeholder: 'e.g. The Community Bank', input_html: { class: 'input-block-level' }
-      = f.input :account_name, label: 'Account name:'"e.g. #{current_distributor.name}", input_html: { class: 'input-block-level' }
+      = f.input :account_name, label: 'Account name:', placeholder: "e.g. #{current_distributor.name}", input_html: { class: 'input-block-level' }
       = f.input :bsb_number, label: 'BSB number / Sort code:', input_html: { class: 'input-block-level' }
       = f.input :account_number, label: 'Account number:', input_html: { class: 'input-block-level' }
       = f.input :customer_message,
