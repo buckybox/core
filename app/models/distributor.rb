@@ -114,7 +114,7 @@ class Distributor < ActiveRecord::Base
 
   scope :keep_updated, where(keep_me_updated: true)
 
-  delegate :tracking_after_create, :tracking_after_save, :track, to: :tracking
+  delegate :tracking_after_create, :tracking_after_save, :track, to: :messaging
 
   # Devise Override: Avoid validations on update or if now password provided
   def password_required?
@@ -548,6 +548,15 @@ class Distributor < ActiveRecord::Base
       .order('created_at DESC')
   end
 
+  def skip_tracking?(env = Rails.env)
+    messaging.skip?(env)
+  end
+
+  # sent to intercom
+  def needs_setup?
+    delivery_services.count.zero? || boxes.count.zero?
+  end
+
 private
 
   def self.human_attribute_name(attr, options = {})
@@ -588,8 +597,12 @@ private
     DistributorMailer.welcome(self).deliver
   end
 
-  def tracking
-    @tracking ||= DistributorTracking.new(self)
+  def messaging
+    @messaging ||= Distributor.messaging_class.new(self)
+  end
+
+  def self.messaging_class
+    Messaging::Distributor
   end
 
   # This is meant to be run within console for dev work via Distributor.send(:travel_forward_a_day)
