@@ -5,7 +5,7 @@ module Messaging
     end
 
     def tracking_after_create
-      comms_tracking.create_user(tracking_data, Rails.env)
+      messaging_proxy.create_user(tracking_data, Rails.env)
     end
 
     def tracking_after_save
@@ -15,11 +15,15 @@ module Messaging
     end
 
     def update
-      comms_tracking.update_user(distributor.id, tracking_data, Rails.env)
+      messaging_proxy.update_user(distributor.id, tracking_data, Rails.env)
     end
 
     def track(action_name, occurred_at = Time.current, env = Rails.env)
-      comms_tracking.track(distributor.id, action_name, occurred_at, env)
+      messaging_proxy.track(distributor.id, action_name, occurred_at, env)
+    end
+
+    def skip?(env = Rails.env)
+      messaging_proxy.skip?(env)
     end
 
   private
@@ -40,10 +44,10 @@ module Messaging
     end
 
     def update_tags
-      comms_tracking.update_tags({id: distributor.id, tag_list: distributor.tag_list}, Rails.env)
+      messaging_proxy.update_tags({id: distributor.id, tag_list: distributor.tag_list}, Rails.env)
     end
 
-    def comms_tracking
+    def messaging_proxy
       Messaging::IntercomProxy.instance
     end
   end
