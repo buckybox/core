@@ -547,6 +547,11 @@ class Distributor < ActiveRecord::Base
     messaging.skip?(env)
   end
 
+  # sent to intercom
+  def needs_setup?
+    delivery_services.count.zero? || boxes.count.zero?
+  end
+
 private
 
   def self.human_attribute_name(attr, options = {})
