@@ -59,7 +59,8 @@ BuckyBox::Application.routes.draw do
       get 'extras'
       get 'boxes'
       get 'delivery_services'
-      get 'bank_information'
+      get 'routes'
+      get 'payments'
       get 'invoice_information'
       get 'customer_preferences'
     end
@@ -79,7 +80,7 @@ BuckyBox::Application.routes.draw do
     end
 
     resources :distributors,        only: :update
-    resource  :bank_information,    only: [:create, :update]
+    resource  :bank_information,    only: :update
     resource  :invoice_information, only: [:create, :update]
     resources :boxes,               except: [:index]
     resources :extras,              except: [:index, :show]
