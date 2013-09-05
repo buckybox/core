@@ -53,6 +53,12 @@ describe SignUpWizardController do
         distributor.country.should eq Country.find_by_alpha2("NZ")
       end
 
+      it 'adds default line items to distributor' do
+        expect {
+          post_form.call
+        }.to change(LineItem, :count).by(LineItem::DEFAULT_LIST.split(",").size)
+      end
+
       it "returns success response" do
         post_form.call
 

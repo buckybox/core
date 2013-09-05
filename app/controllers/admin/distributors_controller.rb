@@ -9,6 +9,15 @@ class Admin::DistributorsController < Admin::ResourceController
     index!
   end
 
+  def create
+    create! do |success, failure|
+      success.html do
+        DistributorDefaults.populate_defaults(@distributor)
+        redirect_to admin_distributor_path(@distributor)
+      end
+    end
+  end
+
   def impersonate
     distributor = Distributor.find(params[:id])
     sign_in(distributor, bypass: true) # bypass means it won't update last logged in stats

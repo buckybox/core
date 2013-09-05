@@ -48,6 +48,12 @@ describe Admin::DistributorsController do
         }.to change(Distributor, :count).by(1)
       end
 
+      it 'adds default line items to distributor' do
+        expect {
+          post :create, { distributor: Fabricate.attributes_for(:distributor) }
+        }.to change(LineItem, :count).by(LineItem::DEFAULT_LIST.split(",").size)
+      end
+
       it 'assigns a newly created admin_distributor as @admin_distributor' do
         post :create, { distributor: Fabricate.attributes_for(:distributor) }
         assigns(:distributor).should be_a(Distributor)
