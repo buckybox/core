@@ -1,5 +1,12 @@
-- title 'Delivery Service Settings'
+- title 'Delivery Service Settings', false
 - show_settings_sub_nav
+
+.row-fluid.settings-information
+  .span6
+    Your organisation will use one or more Delivery Services to deliver to customers.  Each of your customers will be assigned to a Delivery Service that best services their location.
+  .span6
+    %span.label Hint
+    It's best to name your Delivery Service according to the geographic region it services.  For example: Inner City, Northern Suburbs, Regional Courier, National Courier, Packing Center Pickup
 
 = render partial: 'distributor/delivery_services/index'
 %h3 Add Delivery Service
