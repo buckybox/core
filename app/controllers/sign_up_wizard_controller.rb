@@ -63,6 +63,7 @@ class SignUpWizardController < ApplicationController
         send_bank_setup_email(bank_name)
       end
 
+      DistributorDefaults.populate_defaults(@distributor)
     else
       errors = @distributor.errors.full_messages
 

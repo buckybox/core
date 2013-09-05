@@ -14,6 +14,8 @@ class LineItem < ActiveRecord::Base
 
   default_scope order(:name)
 
+  DEFAULT_LIST = "Beetroot, Broccoli, Cabbage, Carrots, Cauliflower, Celery, Courgette, Cucumber, Fennel, Kale, Leeks, Lettuce, Onions, Parsnips, Peppers, Potatoes, Red Cabbage, Red Onions, Rhubarb, Spinach, Spring Greens, Sprouts, Squash, Swede, Tomatoes, Turnips"
+
   def self.from_list(distributor, text)
     return false if text.blank?
 
@@ -53,6 +55,10 @@ class LineItem < ActiveRecord::Base
 
   def substitution_count_by_customer
     substitutions.active.uniq_by{ |e| e.customer.id }.size
+  end
+
+  def self.add_defaults_to(distributor)
+    from_list(distributor, DEFAULT_LIST)
   end
 
   private
