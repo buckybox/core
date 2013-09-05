@@ -3,9 +3,10 @@
   %section
     %header
       %h3 Cash on Delivery Settings
-      %p.muted This information is displayed to customers at the webstore during the checkout process.
 
-      - unless current_distributor.payment_cash_on_delivery
+      - if current_distributor.payment_cash_on_delivery
+        %p.muted This information is displayed to customers at the webstore during the checkout process.
+      - else
         %p Please #{mail_to Figaro.env.support_email, "contact us"} if you wish to allow this payment method.
 
     - if current_distributor.payment_cash_on_delivery
