@@ -82,8 +82,8 @@ $(function() {
     var status = $(this).attr('id');
     var checked_deliveries = $('#delivery-listings .data-listings input[type=checkbox]:checked');
 
-    if(status === 'cash-on-delivery' || status === 'undo-payment') {
-      reverse_payment = (status === 'undo-payment');
+    if(status === 'apply-cash-on-delivery' || status === 'undo-cash-on-delivery') {
+      reverse_payment = (status === 'undo-cash-on-delivery');
       makePayments(checked_deliveries, reverse_payment);
     }
     else {
