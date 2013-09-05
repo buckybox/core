@@ -8,7 +8,7 @@ class ActiveRecord::Base
       end
 
       define_method "#{attribute}=" do |value|
-        send("#{attribute_cents}=", EasyMoney.new(value).cents)
+        send("#{attribute_cents}=", EasyMoney.new(value).cents.to_i)
       end
     end
   end
