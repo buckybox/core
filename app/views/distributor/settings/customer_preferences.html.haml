@@ -1,7 +1,6 @@
 - title("Customer Preferences", false)
 - show_settings_sub_nav
 
-%h2 Customer Preferences
 %p.muted
   These are items that make up your mystery boxes. During the checkout process, customers may nominate to exclude and substitute items in this list.
 
@@ -15,11 +14,14 @@
 
   = simple_form_for(:edited, url: bulk_update_distributor_line_items_path, method: :put, html: { id: 'bulk-update' }) do |f|
     = simple_fields_for :line do |g|
-      %table.table.table-bordered.table-striped.no-horizontal-dividers
+      %table.table.table-striped
         %thead
           %tr
-            %th{ colspan: 2 } Item
-            %th.text-right Customer Preferences
+            %th{colspan: 2}
+              %span.label Item
+            %th
+              %span.pull-right
+                %span.label Customer Preferences
 
         %tbody
           - @line_items.each do |line_item|
@@ -35,11 +37,14 @@
     .span12.text-right
       = link_to 'Edit', distributor_settings_customer_preferences_path(edit: true), class: 'btn btn-danger'
 
-  %table.table.table-bordered.table-striped.no-horizontal-dividers
+  %table.table.table-striped
     %thead
       %tr
-        %th Item
-        %th.text-right Customer Preferences
+        %th
+          %span.label Item
+        %th
+          %span.pull-right
+            %span.label Customer Preferences
 
     %tbody
       - @line_items.each do |line_item|
