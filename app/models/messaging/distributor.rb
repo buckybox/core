@@ -1,11 +1,15 @@
 module Messaging
   class Distributor
+
+    AUTO_MESSAGE_TAG = "[[auto-messages]]"
+
     def initialize(distributor)
       @distributor = distributor
     end
 
     def tracking_after_create
       messaging_proxy.create_user(tracking_data, Rails.env)
+      messaging_proxy.add_tag(distributor.id, AUTO_MESSAGE_TAG, Rails.env)
     end
 
     def tracking_after_save
