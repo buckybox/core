@@ -1,7 +1,7 @@
 class Distributor::Settings::Payments::Base
   def initialize(args)
     distributor = args.fetch(:distributor)
-    @bank_information = distributor.bank_information || BankInformation.new
+    @bank_information = distributor.bank_information || distributor.create_bank_information
   end
 
 protected
