@@ -153,10 +153,6 @@ body
             position: absolute
             top: -6px
             right: 10px
-
-  #user-nav
-    .nav-pills
-      li
         #notification-dropdown
           min-width: 270px
           &:before
@@ -174,29 +170,26 @@ body
               text-align: center
               a
                 color: #08C
-
-  #user-nav
-    .nav-pills
-      li#welcome-guide-indicator
-        >a
-          font-weight: bold
-        .progress
-          height: 10px
-          width: 100px
-          display: inline-block
-          margin-bottom: 0px
-        #welcome-guide
-          .modal-header
-            text-align: center
-            background-color: #8BAB23
-            background: linear-gradient(#8bab23,#7a9324)
-            img
-              padding: 7px 0px
-          h2
-            margin-top: 0px
-            text-align: center
-          dd
-            margin-bottom: 15px
+        #welcome-guide-indicator
+          >a
+            font-weight: bold
+          .progress
+            height: 10px
+            width: 100px
+            display: inline-block
+            margin-bottom: 0px
+          #welcome-guide
+            .modal-header
+              text-align: center
+              background-color: #8BAB23
+              background: linear-gradient(#8bab23,#7a9324)
+              img
+                padding: 7px 0px
+            h2
+              margin-top: 0px
+              text-align: center
+            dd
+              margin-bottom: 15px
 
   #sub-nav
     background-color: rgba(255,255,255,0.9)
@@ -206,6 +199,22 @@ body
     margin-bottom: 14px
     .nav
       margin-bottom: 0px
+
+  #sub-sub-nav
+    float: left
+    list-style-type: none
+    margin: 0
+    li
+      line-height: 2em
+      padding: .5em 2em .5em 1em
+      border-right: 1px solid #DDD
+      &.selected
+        border-width: 1px 0 1px 1px
+        border-style: solid
+        border-color: #DDD
+        +border-left-radius(6px)
+        a
+          color: #000
 
   #content
     min-height: 750px
