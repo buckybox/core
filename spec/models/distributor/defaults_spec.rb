@@ -1,6 +1,6 @@
 require "spec_helper"
 
-describe DistributorDefaults do
+describe Distributor::Defaults do
 
   describe ".populate_defaults" do
     before do
@@ -8,7 +8,7 @@ describe DistributorDefaults do
         contact_name: "Bob"
       )
 
-      DistributorDefaults.populate_defaults(@distributor)
+      Distributor::Defaults.populate_defaults(@distributor)
     end
 
     specify { expect(@distributor.line_items).to_not be_empty }

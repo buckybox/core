@@ -12,7 +12,7 @@ class Admin::DistributorsController < Admin::ResourceController
   def create
     create! do |success, failure|
       success.html do
-        DistributorDefaults.populate_defaults(@distributor)
+        Distributor::Defaults.populate_defaults(@distributor)
         redirect_to admin_distributor_path(@distributor)
       end
     end
