@@ -1,4 +1,4 @@
-class DistributorDefaults
+class Distributor::Defaults
   class << self
     def populate_defaults(distributor)
       @distributor = distributor
