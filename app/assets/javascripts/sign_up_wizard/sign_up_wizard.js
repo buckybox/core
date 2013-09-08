@@ -65,6 +65,7 @@ var BuckyBoxSignUpWizard = function() {
             if (typeof _gaq === 'undefined') {
               console.log("Google Analytics not available");
             } else {
+              _gaq.push(['_setDomainName', 'www.buckybox.com']);
               _gaq.push(event);
             }
           };
