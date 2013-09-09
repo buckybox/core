@@ -2,6 +2,8 @@ class Distributor::BankInformationController < Distributor::BaseController
   before_filter :fetch_payment_settings
 
   def update
+    params[:bank_deposit][:account_number] = params[:bank_deposit][:account_number].join
+
     if @payment_settings.save
       tracking.event(current_distributor, "new_bank_information") unless current_admin.present?
       redirect_to distributor_settings_payments_url, notice: "Your #{@payment_method} settings were successfully updated."

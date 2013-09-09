@@ -1,5 +1,5 @@
 .span5
-  = simple_form_for(bank_deposit, as: "bank_deposit", url: distributor_bank_information_path, method: "put", html: { class: 'form-horizontal' }) do |f|
+  = simple_form_for(bank_deposit, as: "bank_deposit", url: distributor_bank_information_path, method: "put", html: { class: 'form-horizontal', novalidate: false }) do |f|
     = f.error_notification
     %header
       - unless current_distributor.payment_bank_deposit
@@ -13,7 +13,7 @@
 
       %fieldset
         %legend bank account number
-        = f.input_field :account_number, placeholder: 'Account number'
+        = f.input_field :account_number, as: :bank_account_number, country: current_distributor.country.alpha2, value: bank_deposit.account_number
 
       %fieldset
         %legend customer message
