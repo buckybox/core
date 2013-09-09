@@ -6,21 +6,24 @@
 - if @distributor.active_webstore
   .row-fluid
     #new-customer-order.span12= link_to 'Create new order from webstore', webstore_store_path(@distributor.parameter_name)
+- else
+  .alert.alert-info Hi #{@customer.first_name}, #{@distributor.name} is not set up quite yet. You can #{mail_to(@distributor.support_email, "contact them")} for more information.
 
 - unless @orders.empty?
   = render partial: 'customer/orders/order', collection: @orders
 
-.row-fluid
-  .span12
-    %h3 Account Statement
+- if @bank
+  .row-fluid
+    .span12
+      %h3 Account Statement
 
-    .row-fluid.dashboard-box
-      .span12
-        #make_a_payment.dash-boxed-link.span12= link_to 'make a payment', '#make_a_payment'
-        #bank_payment_details
-          %button.close
-            %i.icon-remove#close_bank_payment_details
-          = render partial: 'customer/dashboard/payment_details'
+      .row-fluid.dashboard-box
+        .span12
+          #make_a_payment.dash-boxed-link.span12= link_to 'make a payment', '#make_a_payment'
+          #bank_payment_details
+            %button.close
+              %i.icon-remove#close_bank_payment_details
+            = render partial: 'customer/dashboard/payment_details'
 
 - unless @transactions.empty?
   #sortable_transactions{data: {user: 'customer'}}
