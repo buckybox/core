@@ -1,18 +1,22 @@
 .row-fluid
-  .span12.alert.payment-message
+  .span12.payment-message
     .row-fluid
       .span12
-        %strong== Please deposit funds into #{form_object.bank_name} Bank
+        %strong
+          Please deposit funds into
+          %span.bank_deposit_name #{form_object.bank_name}
+          Bank
+
     .row-fluid
       .span12
-        == Account Name: #{form_object.bank_account_name}
+        Account Name:
+        %span.bank_deposit_account_name #{form_object.bank_account_name}
         %br
-        == BSB Number: #{form_object.bank_bsb_number}
+        Account Number:
+        %span.bank_deposit_account_number #{form_object.bank_account_number}
         %br
-        == Account Number: #{form_object.bank_account_number}
-        %br
-        == Reference: #{form_object.customer_number}
-    - if form_object.payment_message
-      .row-fluid
-        .span12
-          = simple_format(form_object.payment_message, {}, sanitize: false)
+        Reference: #{form_object.customer_number || current_customer.number}
+
+    .row-fluid
+      .span12
+        = simple_format(form_object.payment_message, { class: "bank_deposit_customer_message" }, sanitize: false)

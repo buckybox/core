@@ -23,7 +23,7 @@ $(function(){
     }
     return false;
   });
-  
+
   var update_balance_threshold_display = function(){
     if($("#distributor_has_balance_threshold:checked").size() === 0) {
       $("#balance_threshold").hide('highlight');
@@ -33,4 +33,22 @@ $(function(){
   }
   // Show/hide spend limit (balance_threshold) extra fields
   $("#distributor_has_balance_threshold").click(update_balance_threshold_display);
+
+  if ($("#payments").length) {
+    var update_preview = function() {
+      var klass = this.id;
+      var inputs = $('#new_bank_deposit [id="' + klass + '"]');
+      var text = '';
+      inputs.each(function() {
+        if (text !== '') text += '-';
+        text += this.value;
+      });
+
+      $(".payment-message:visible ." + klass).text(text);
+    };
+
+    var fields = $("#new_bank_deposit :input:visible");
+    fields.on('keyup', update_preview);
+    fields.trigger('keyup');
+  }
 });
