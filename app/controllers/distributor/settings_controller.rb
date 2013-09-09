@@ -47,6 +47,7 @@ class Distributor::SettingsController < Distributor::BaseController
     render 'payments', locals: {
       bank_deposit:     bank_deposit,
       cash_on_delivery: cash_on_delivery,
+      type: params[:type] || "bank_deposit"
     }
   end
 
