@@ -37,18 +37,22 @@ $(function(){
   if ($("#payments").length) {
     var update_preview = function() {
       var klass = this.id;
-      var inputs = $('#new_bank_deposit [id="' + klass + '"]');
+      var inputs = $('form [id="' + klass + '"]');
       var text = '';
       inputs.each(function() {
         if (text !== '') text += '-';
         text += this.value;
       });
 
-      $(".payment-message:visible ." + klass).text(text);
+      text = text.replace(/(\n|\r|\r\n)/g, '<br>');
+      $(".payment-message:visible ." + klass)[0].innerHTML = text;
+
+      // $("#payments .preview").toggle($(this).text().trim() != "");
     };
 
-    var fields = $("#new_bank_deposit :input:visible");
+    var fields = $("form :input:visible");
     fields.on('keyup', update_preview);
     fields.trigger('keyup');
   }
 });
+
