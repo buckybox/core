@@ -25,14 +25,8 @@
         = f.button :submit, 'Save', class: 'btn btn-primary pull-right'
 
 .span4.pull-right.preview
-  customer preview
+  .label customer preview
   %p.muted This information is displayed to customers at the webstore during the checkout process.
 
-  blah<br>
-  blah<br>
-  blah<br>
-  blah<br>
-  blah<br>
-  blah<br>
-  blah<br>
+  = render partial: 'webstore/store/confirmation_bank_deposit', locals: { form_object: NullObject.new }
 
