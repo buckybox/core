@@ -7,11 +7,18 @@ describe Distributor::Defaults do
       @distributor = Fabricate(:distributor,
         contact_name: "Bob"
       )
+      @distributor.stub(:omni_importers) do
+        double(bank_deposit: [ double(bank_name: "KiwiBank") ])
+      end
 
       Distributor::Defaults.populate_defaults(@distributor)
     end
 
     specify { expect(@distributor.line_items).to_not be_empty }
+
+    specify { expect(@distributor.bank_information.name).to eq("KiwiBank") }
+    specify { expect(@distributor.bank_information.account_name).to eq("Bob") }
+
     specify { expect(@distributor.email_templates).to_not be_empty }
   end
 

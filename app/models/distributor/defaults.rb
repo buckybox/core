@@ -4,6 +4,7 @@ class Distributor::Defaults
       @distributor = distributor
 
       populate_line_items
+      populate_bank_information
       populate_email_templates
       @distributor.save
     end
@@ -12,6 +13,13 @@ class Distributor::Defaults
 
     def populate_line_items
       LineItem.add_defaults_to(@distributor)
+    end
+
+    def populate_bank_information
+      bank_information = @distributor.bank_information || @distributor.create_bank_information
+      bank_information.name = @distributor.omni_importers.bank_deposit.first.bank_name
+      bank_information.account_name = @distributor.contact_name
+      bank_information.save(validate: false) # because model is missing account number
     end
 
     def populate_email_templates
