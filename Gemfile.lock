@@ -7,6 +7,12 @@ GIT
       capistrano (>= 2.5.5)
       highline (>= 1.4.0)
 
+PATH
+  remote: ../simple_form-bank_account_number
+  specs:
+    simple_form-bank_account_number (1.0.0)
+      simple_form (~> 2.1.0)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -534,6 +540,7 @@ DEPENDENCIES
   select2-rails (~> 3.4.3)
   sextant
   simple_form (~> 2.1.0)
+  simple_form-bank_account_number (~> 1.0.0)!
   simplecov
   sprinkle!
   state_machine (~> 1.1.2)
