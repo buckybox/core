@@ -1,0 +1,35 @@
+- content_for :payment_type do
+  .span5
+    = simple_form_for(bank_deposit, as: "bank_deposit", url: distributor_settings_payments_bank_deposit_path, method: "put", html: { class: 'form-horizontal', novalidate: false }) do |f|
+      = f.error_notification
+      %header
+        - unless current_distributor.payment_bank_deposit
+          %p Please #{mail_to Figaro.env.support_email, "contact us"} if you wish to allow this payment method.
+
+      - if current_distributor.payment_bank_deposit
+        %fieldset
+          %legend bank details
+          = f.input_field :name, placeholder: 'Bank name', required: true
+          = f.input_field :account_name, placeholder: 'Account name', required: true
+
+        %fieldset
+          %legend bank account number
+          = f.input_field :account_number, as: :bank_account_number, country: current_distributor.country.alpha2, value: bank_deposit.account_number
+
+        %fieldset
+          %legend customer message
+          = f.input_field :customer_message,
+            placeholder: "e.g. All payments to be made at least 3 days before delivery ",
+            as: :text, rows: 4, required: false
+
+        .controls.clearfix
+          = f.button :submit, 'Save', class: 'btn btn-primary pull-right'
+
+  .span5.pull-right.preview
+    .label customer preview
+    %p.muted This information is displayed to customers at the webstore during the checkout process.
+
+    = render partial: 'webstore/store/confirmation_bank_deposit', locals: { form_object: NullObject.new }
+
+= render partial: 'distributor/settings/payments', locals: { type: 'bank_deposit' }
+

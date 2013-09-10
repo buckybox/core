@@ -1,0 +1,12 @@
+- title("Payments", false)
+- show_settings_sub_nav(:bank_info)
+
+#payments.row-fluid
+  %ul#sub-sub-nav
+    %li
+    %li{ class: "#{'selected' if type == 'bank_deposit'}" }= link_to "Bank Deposit", distributor_settings_payments_bank_deposit_path
+    %li{ class: "#{'selected' if type == 'cash_on_delivery'}" }= link_to "Cash On Delivery", distributor_settings_payments_cash_on_delivery_path
+    %li
+
+  = yield(:payment_type)
+
