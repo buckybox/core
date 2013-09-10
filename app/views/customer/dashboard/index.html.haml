@@ -19,11 +19,11 @@
 
       .row-fluid.dashboard-box
         .span12
-          #make_a_payment.dash-boxed-link.span12= link_to 'make a payment', '#make_a_payment'
+          #make_a_payment.dash-boxed-link.span12= link_to 'Make a payment', 'javascript:void(0)'
           #bank_payment_details
             %button.close
-              %i.icon-remove#close_bank_payment_details
-            = render partial: 'customer/dashboard/payment_details'
+              %i.icon-remove
+            = render partial: 'webstore/store/confirmation_bank_deposit', locals: { form_object: @bank }
 
 - unless @transactions.empty?
   #sortable_transactions{data: {user: 'customer'}}
