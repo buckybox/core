@@ -7,8 +7,6 @@
       .span6
         == Account Name: #{@bank.account_name}
         %br
-        == BSB Number: #{@bank.bsb_number}
-        %br
         == Account Number: #{@bank.account_number}
         - if customer_signed_in?
           %br
