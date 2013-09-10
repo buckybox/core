@@ -20,7 +20,7 @@
     .label customer preview
     %p.muted This information is displayed to customers at the webstore during the checkout process.
 
-    = render partial: 'webstore/store/confirmation_cash_on_delivery', locals: { form_object: NullObject.new }
+    = render partial: 'partials/payments/cash_on_delivery', locals: { form_object: NullObject.new }
 
 = render partial: 'distributor/settings/payments', locals: { type: 'cash_on_delivery' }
 

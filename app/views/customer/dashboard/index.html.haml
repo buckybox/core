@@ -23,7 +23,7 @@
           #bank_payment_details
             %button.close
               %i.icon-remove
-            = render partial: 'webstore/store/confirmation_bank_deposit', locals: { form_object: @bank }
+            = render partial: 'partials/payments/bank_deposit', locals: { form_object: @bank }
 
 - unless @transactions.empty?
   #sortable_transactions{data: {user: 'customer'}}
