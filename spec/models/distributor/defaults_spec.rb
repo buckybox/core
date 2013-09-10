@@ -8,7 +8,10 @@ describe Distributor::Defaults do
         contact_name: "Bob"
       )
       @distributor.stub(:omni_importers) do
-        double(bank_deposit: [ double(bank_name: "KiwiBank") ])
+        double(
+          bank_deposit: [ double(bank_name: "KiwiBank") ],
+          paypal: []
+        )
       end
 
       Distributor::Defaults.populate_defaults(@distributor)

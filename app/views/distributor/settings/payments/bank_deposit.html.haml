@@ -29,7 +29,7 @@
     .label customer preview
     %p.muted This information is displayed to customers at the webstore during the checkout process.
 
-    = render partial: 'webstore/store/confirmation_bank_deposit', locals: { form_object: NullObject.new }
+    = render partial: 'partials/payments/bank_deposit', locals: { form_object: NullObject.new }
 
 = render partial: 'distributor/settings/payments', locals: { type: 'bank_deposit' }
 
