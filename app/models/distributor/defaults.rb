@@ -17,7 +17,7 @@ class Distributor::Defaults
 
     def populate_bank_information
       bank_information = @distributor.bank_information || @distributor.create_bank_information
-      bank_information.name = @distributor.omni_importers.bank_deposit.first.bank_name
+      bank_information.name = @distributor.banks.first
       bank_information.account_name = @distributor.contact_name
       bank_information.cod_payment_message = "Please place payment in your mailbox."
       bank_information.save(validate: false) # because model is missing account number
