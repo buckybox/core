@@ -1,4 +1,11 @@
 GIT
+  remote: git://github.com/buckybox/simple_form-bank_account_number.git
+  revision: 2565ae0b39800ad504d85bc616ad78d9f2925a36
+  specs:
+    simple_form-bank_account_number (1.0.0)
+      simple_form (~> 2.1.0)
+
+GIT
   remote: git://github.com/jordandcarter/sprinkle.git
   revision: 408a82c764f07f96b49df805b3356197123dbfc4
   specs:
@@ -6,12 +13,6 @@ GIT
       activesupport (>= 2.0.2)
       capistrano (>= 2.5.5)
       highline (>= 1.4.0)
-
-PATH
-  remote: ../simple_form-bank_account_number
-  specs:
-    simple_form-bank_account_number (1.0.0)
-      simple_form (~> 2.1.0)
 
 GEM
   remote: https://rubygems.org/
@@ -540,7 +541,7 @@ DEPENDENCIES
   select2-rails (~> 3.4.3)
   sextant
   simple_form (~> 2.1.0)
-  simple_form-bank_account_number (~> 1.0.0)!
+  simple_form-bank_account_number!
   simplecov
   sprinkle!
   state_machine (~> 1.1.2)
