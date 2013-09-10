@@ -1,7 +1,6 @@
 class Distributor::Settings::Payments::BankDeposit < Distributor::Settings::Payments::Base
   delegate :name,
     :account_name,
-    :bsb_number,
     :account_number,
     :account_name,
     :customer_message,

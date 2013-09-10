@@ -412,7 +412,6 @@ CREATE TABLE bank_information (
     customer_message text,
     created_at timestamp without time zone,
     updated_at timestamp without time zone,
-    bsb_number character varying(255),
     cod_payment_message text
 );
 
@@ -3728,3 +3727,5 @@ INSERT INTO schema_migrations (version) VALUES ('20130820025105');
 INSERT INTO schema_migrations (version) VALUES ('20130826015549');
 
 INSERT INTO schema_migrations (version) VALUES ('20130826051545');
+
+INSERT INTO schema_migrations (version) VALUES ('20130910033818');
