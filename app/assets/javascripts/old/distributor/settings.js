@@ -37,6 +37,8 @@ $(function(){
   if ($("#payments").length) {
     var update_preview = function() {
       var klass = this.id;
+      if (!klass) return;
+
       var inputs = $('form [id="' + klass + '"]');
       var text = '';
       inputs.each(function() {
@@ -45,14 +47,25 @@ $(function(){
       });
 
       text = text.replace(/(\n|\r|\r\n)/g, '<br>');
-      $(".payment-message:visible ." + klass)[0].innerHTML = text;
+      $(".payment-message ." + klass)[0].innerHTML = text;
 
-      // $("#payments .preview").toggle($(this).text().trim() != "");
+      $("#payments .preview").toggle(
+        $("#payments .preview .payment-message").text().trim() != ""
+      );
     };
 
     var fields = $("form :input:visible");
     fields.on('keyup', update_preview);
     fields.trigger('keyup');
+
+    // fields.on('keyup', function() {
+    //   console.log($(this).val().length, $(this).prop("maxlength"));
+    //   // if ($(this).val().length == $(this).prop("maxlength")) {
+    //     $(this).next("input").focus();
+    //   // }
+    // });
+
+    fields.filter('[data-toggle="tooltip"]').tooltip({ 'trigger': 'focus' });
   }
 });
 
