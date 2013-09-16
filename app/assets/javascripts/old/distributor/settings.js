@@ -58,13 +58,6 @@ $(function(){
     fields.on('keyup', update_preview);
     fields.trigger('keyup');
 
-    // fields.on('keyup', function() {
-    //   console.log($(this).val().length, $(this).prop("maxlength"));
-    //   // if ($(this).val().length == $(this).prop("maxlength")) {
-    //     $(this).next("input").focus();
-    //   // }
-    // });
-
     fields.filter('[data-toggle="tooltip"]').tooltip({ 'trigger': 'focus' });
   }
 });
