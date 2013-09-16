@@ -22,7 +22,14 @@ class OrderPrice
 
     total_price = order_extras.map do |order_extra|
       order_extra = order_extra.to_hash unless order_extra.is_a? Hash
-      order_extra[:price] * order_extra[:count]
+
+      price = if order_extra[:price_cents]
+        order_extra[:price_cents] / 100.0 # NOTE: legacy support for archived packages
+      else
+        order_extra[:price]
+      end
+
+      price * order_extra[:count]
     end.sum
 
     customer_discount ? discounted(total_price, customer_discount) : total_price
