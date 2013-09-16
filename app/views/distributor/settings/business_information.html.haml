@@ -1,74 +1,52 @@
-- title 'Your Business Information'
+- title 'Organisation', false
 - show_settings_sub_nav(:contact_info)
 
-= simple_form_for([:distributor, current_distributor], html: { class: 'form-horizontal' }) do |f|
+= simple_form_for([:distributor, current_distributor], html: { class: 'form-horizontal', novalidate: false }) do |f|
   = f.error_notification
 
-  .row-fluid
-    .span12
-      = f.input :name, label: 'Business name', input_html: { class: 'span6' }
-      = f.input :support_email, label: 'Support Email', input_html: { class: 'span6' }
-      = f.input :url, label: 'Website', input_html: { class: 'span6' }
-      = f.input :time_zone, as: :time_zone, label: 'Local Timezone', input_html: { class: 'span6' }
-      = f.input :city
-      = f.input :keep_me_updated, inline_label: 'Keep me up to date with Bucky Box via email', label: false
-  #webstore-information.row-fluid
-    .span12
-      %h2.text-center Webstore Information
-      = f.input :company_logo, input_html: { class: 'span6' }
-      = f.input :company_logo_cache, as: :hidden
-
-      - if current_distributor.company_logo?
-        = f.input :remove_company_logo, as: :boolean, label: 'Remove image', input_html: { class: 'span6' }
-        .row-fluid
-          = image_tag(current_distributor.company_logo.frame_banner.url, class: 'span6 offset2 image-upload')
-
-      = f.input :company_team_image, input_html: { class: 'span6' }
-      = f.input :company_team_image_cache, as: :hidden
-
-      - if current_distributor.company_team_image?
-        = f.input :remove_company_team_image, as: :boolean, label: 'Remove image', input_html: { class: 'span6' }
-        .row-fluid
-          = image_tag(current_distributor.company_team_image.half_size_photo.url, class: 'span6 offset2 image-upload')
-
-      = f.input :about, input_html: { class: 'span6' }
-      = f.input :details, input_html: { class: 'span6' }
-      = f.input :facebook_url, as: :url, input_html: { class: 'span6' }
+  #organisation.row-fluid
+    .span6
+      %fieldset
+        %legend your organisation
+        = f.input_field :name, placeholder: 'Organisation name', class: 'span12'
+        .address
+          = Bucky::Geolocation.get_address_form(current_distributor.country)
+        = f.input_field :country, collection: Country.all.sort_by(&:name), value_method: :alpha2, label_method: :full_name, selected: current_distributor.country.alpha2, class: 'span6', disabled: true, title: "Contact us to change your country"
+        = f.input_field :time_zone, as: :time_zone, title: 'Timezone', class: 'span6'
 
       %fieldset
-        %legend Delivery Window
+        %legend customer support email
+        = f.input_field :support_email, placeholder: 'Emails to customers will be sent from this address', class: 'span12'
+        = f.input_field :remind_customers_to_order
+        = f.input_field :confirm_placed_orders
+        = f.input_field :confirm_delivered_deliveries
+        = f.input_field :send_account_statement
+        = f.input_field :follow_up_new_customers
+
+    .span6
+      %fieldset
+        %legend order deadline
         %p
-          Customers must place orders by
-          = select_hour @default_delivery_time, { ampm: true }, { id: :distributor_advance_hour, name: 'distributor[advance_hour]' }
-          = select_tag 'distributor_advance_days', options_for_select(days_in_advance, selected: @default_delivery_days), name: 'distributor[advance_days]'
-          before delivery.
+          Customers must place orders by:
+        %p
+          = select_hour @default_delivery_time, { ampm: true }, { id: :distributor_advance_hour, name: 'distributor[advance_hour]', class: 'span3' }
+          = select_tag 'distributor_advance_days', options_for_select(days_in_advance, selected: @default_delivery_days), name: 'distributor[advance_days]', class: 'span3'
+          before delivery
+          = link_to "(more info)", 'https://buckybox.uservoice.com/knowledgebase/articles/254113-deliveries-order-deadline-yellow-zone-delivery'
 
       %fieldset
-        %legend Automatic Delivery
-        %p
-          Automatically assume all deliveries are successfully delivered by
-          = select_hour @default_automatic_time, { ampm: true }, { id: :distributor_automatic_delivery_hour, name: 'distributor[automatic_delivery_hour]' }
-          on the day of delivery.
+        %legend minimum customer balance
+        = f.input_field :has_balance_threshold, inline_label: true, label: "Halt deliveries when customers reach their minimum balance #{link_to '(more info)', 'https://buckybox.uservoice.com/knowledgebase/articles/172464-customers-minimum-balance'}"
+        #balance_threshold{ :class => ("hide" unless current_distributor.has_balance_threshold?) }
+          %strong Minimum balance.
+          E.g. a setting of 0.00 means customers must have at least 0.01 in their account for deliveries to be made.
 
-      - if current_distributor.feature_spend_limit?
-        %fieldset#customer_spend_limit
-          %legend Customer Minimum Balance
-          %p
-            = f.input :has_balance_threshold, label: "Enable minimum balance?"
-            #balance_threshold{style: current_distributor.has_balance_threshold? ? '' : 'display: none'}
-              = f.input :default_balance_threshold, label: "Default minimum balance", hint: "New customers will have this minimum balance set on their account.  Deliveries will halt when their balance reaches the minimum balance", :wrapper => :append do
-                = f.input_field :default_balance_threshold
-                %span.add-on
-                  %label{for: "distributor_spend_limit_on_all_customers"}
-                    %input.boolean.optional{id: "distributor_spend_limit_on_all_customers", name: "distributor[spend_limit_on_all_customers]", type: "checkbox", value: "1"}
-                    Update existing customers
-              - if current_distributor.send_email?
-                = f.input :send_halted_email, as: :boolean, label: "Send email to customers informing them their account is halted once they reach the minimum balance?" 
-              - else
-                = f.input :send_halted_email, as: :hidden
+          .input-append
+            = f.input_field :default_balance_threshold, placeholder: "Minimum balance e.g. 0.00", class: 'span6'
+            %span.add-on= f.input_field :spend_limit_on_all_customers, as: :boolean, inline_label: true, label: "Also update existing customers"
 
+          = f.input_field :send_halted_email, inline_label: true, label: "Send an email to customers when their account is halted"
 
-
-  .row-fluid
-    .span12.form-actions
-      = f.button :submit, 'Update', class: 'btn btn-primary', id: 'business_information_submit'
+    .row-fluid
+      .span12.form-actions
+        = f.button :submit, 'Save', class: 'btn btn-primary', id: 'business_information_submit'

@@ -35,15 +35,16 @@ module Bucky
 
       format.split("\n").map do |line|
         fields = line.scan(/{{(.+?)}}/).flatten - ["recipient", "country"]
+        width = 100.0 / fields.size
 
         html = fields.map do |field|
           %Q{
-            <input id="#{model}_localised_address_#{field}" name="#{model}[localised_address_attributes][#{field}]" placeholder="#{field_descriptions[field]}" #{'required="required"' if field.in? required_fields} type="text">
-          }
+            <input id="#{model}_localised_address_#{field}" name="#{model}[localised_address_attributes][#{field}]" placeholder="#{field_descriptions[field]}" #{'required="required"' if field.in? required_fields} type="text" style="width: #{width}%">
+          }.strip
         end.join
 
         "<div>#{html}</div>" if html.present?
-      end.join
+      end.join.html_safe
     end
 
     def get_geoip_info ip_address
