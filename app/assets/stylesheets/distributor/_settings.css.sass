@@ -72,21 +72,35 @@
 #distributor_spend_limit_on_all_customers
   margin-bottom: 6px
 
-#payments
-  .nav
-    li:first-child
-      margin-top: 1em
-    li:last-child
-      margin-bottom: 20em
+#organisation, #payments
   textarea
     resize: vertical
-  input:not(.btn), textarea
+  input:not(.btn), textarea, select
     +box-sizing(border-box)
-    display: block
-    width: 100%
     margin-bottom: 4px
+    &.span6:last-child
+      float: right
   input:not(.btn)
     height: 30px
+  .form-actions
+    text-align: right
+
+#organisation
+  .address input
+    +border-radius(0)
+    &:first-child
+      +border-radius(4px 0 0 4px)
+    &:last-child
+      +border-radius(0 4px 4px 0)
+    &:only-child
+      +border-radius(4px)
+
+  #balance_threshold
+    padding-left: 20px
+    .input-append
+      margin: 10px 0
+
+#payments
   .preview
     p
       margin-top: 10px

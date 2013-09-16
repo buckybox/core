@@ -10,8 +10,8 @@
 
         %fieldset
           %legend bank details
-          = f.input_field :name, placeholder: 'Bank name', required: true
-          = f.input_field :account_name, placeholder: 'Account name', required: true
+          = f.input_field :name, placeholder: 'Bank name', required: true, class: 'span12'
+          = f.input_field :account_name, placeholder: 'Account name', required: true, class: 'span12'
 
         %fieldset
           %legend bank account number
@@ -21,7 +21,7 @@
           %legend customer message
           = f.input_field :customer_message,
             placeholder: "e.g. All payments to be made at least 3 days before delivery ",
-            as: :text, rows: 4, required: false
+            as: :text, rows: 4, required: false, class: 'span12'
 
         .controls.clearfix
           = f.button :submit, 'Save', class: 'btn btn-primary pull-right'
