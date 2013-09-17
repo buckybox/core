@@ -82,7 +82,7 @@ private
     distributor = params[:distributor]
 
     options = {
-      to: Figaro.env.team_emails,
+      to: Figaro.env.signups_email,
       subject: "Sign up follow-up [#{Rails.env}]",
       body: <<-BODY
         Organisation name: #{distributor[:name]}
