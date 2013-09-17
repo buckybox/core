@@ -7,6 +7,7 @@ MISSION_SITE_URL: http://www.buckybox.org/
 # Emails
 SUPPORT_EMAIL: support@buckybox.com
 NO_REPLY_EMAIL: no-reply@buckybox.com
+SIGNUPS_EMAIL: signups@buckybox.com
 MAIL_SAFE: crashtestdummy@buckybox.com
 TEAM_EMAILS: invite@buckybox.com, will@buckybox.com, sam@buckybox.com, jordan@buckybox.com, samson@buckybox.com, ced@buckybox.com
 
