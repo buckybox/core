@@ -1,6 +1,6 @@
 GIT
   remote: git://github.com/buckybox/simple_form-bank_account_number.git
-  revision: ccc87780b628663b0b67ba675b4fdb53a6b2907e
+  revision: e4303e0dc05e07acde7ac5ba23acb0e1c8fdd989
   specs:
     simple_form-bank_account_number (1.0.0)
       simple_form (~> 2.1.0)
