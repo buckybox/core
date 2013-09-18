@@ -14,7 +14,7 @@
       %th
         %span.label
           Total:
-          = @customers.map(&:account).map(&:balance).sum
+          = @customers_total_balance.with_currency
 
   %tbody
     %tr.new-row
