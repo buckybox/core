@@ -14,7 +14,6 @@ class DeliveryService < ActiveRecord::Base
   accepts_nested_attributes_for :schedule_rule
 
   validates_presence_of :distributor_id, :name, :fee, :area_of_service, :estimated_delivery_time, :schedule_rule
-  validate :schedule_rule_has_at_least_one_day
 
   default_scope order(:name)
 
@@ -70,14 +69,6 @@ class DeliveryService < ActiveRecord::Base
       future_orders.active.each do |order|
         order.deactivate_for_day!(day)
       end
-    end
-  end
-
-  private
-
-  def schedule_rule_has_at_least_one_day
-    unless schedule_rule.has_at_least_one_day?
-      errors[:base] << "You must select at least one day for the delivery service."
     end
   end
 end
