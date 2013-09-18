@@ -9,11 +9,11 @@ describe ExtraDecorator do
   let(:object) { double('object') }
   let(:extra_decorator) { ExtraDecorator.new(object) }
 
-  describe '#with_units' do
+  describe '#with_unit' do
     it 'returns a string with the extra name and unit' do
       object.stub(:name) { 'Extra' }
       object.stub(:unit) { 1 }
-      extra_decorator.with_units.should { 'Extra (1)' }
+      extra_decorator.with_unit.should { 'Extra (1)' }
     end
   end
 end
