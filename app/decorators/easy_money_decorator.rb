@@ -1,3 +1,5 @@
+require "draper"
+
 class EasyMoneyDecorator < Draper::Decorator
   delegate_all
 
