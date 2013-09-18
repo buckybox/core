@@ -1,3 +1,4 @@
+# define Money Gem drop-in `monetize` helper
 class ActiveRecord::Base
   class << self
     def monetize attribute_cents
@@ -13,4 +14,7 @@ class ActiveRecord::Base
     end
   end
 end
+
+# make EasyMoney objects decoratable with Draper
+EasyMoney.send(:include, Draper::Decoratable)
 
