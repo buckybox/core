@@ -4,6 +4,7 @@ module Distributor::BoxesHelper
 
     if options[:with_price]
       delivery_service = customer.delivery_service
+      currency = customer.distributor.currency
 
       boxes = boxes.not_hidden if options[:no_hidden_boxes]
       boxes << options[:ensure_box] if options[:ensure_box] && !boxes.include?(options[:ensure_box])
@@ -11,10 +12,11 @@ module Distributor::BoxesHelper
       boxes = boxes.map do |box|
         element = []
 
+        price = OrderPrice.individual(box, delivery_service, customer).with_currency(currency)
+        text = "#{box.name} - (#{price})"
+
         if customer.separate_bucky_fee?
-          text = "#{box.name} - (#{OrderPrice.individual(box, delivery_service, customer)} + #{customer.consumer_delivery_fee} Fee)"
-        else
-          text = "#{box.name} - (#{OrderPrice.individual(box, delivery_service, customer)})"
+          text << " + #{customer.consumer_delivery_fee} Fee)"
         end
 
         text << " (#{box.extras_limit})" if options[:with_extras_limit]
