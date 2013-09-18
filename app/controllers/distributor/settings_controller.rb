@@ -1,11 +1,28 @@
 class Distributor::SettingsController < Distributor::BaseController
   respond_to :html, :json
 
+  before_filter :catch_cancel
+
   def business_information
     time = Time.new
     @default_delivery_time  = Time.new(time.year, time.month, time.day, current_distributor.advance_hour)
     @default_delivery_days  = current_distributor.advance_days
     @default_automatic_time = Time.new(time.year, time.month, time.day, current_distributor.automatic_delivery_hour)
+  end
+  
+  def webstore(form = SettingsWebstoreForm.for_distributor(current_distributor))
+    @form = form
+    render :webstore
+  end
+
+  def save_webstore
+    form = SettingsWebstoreForm.new(params[:settings_webstore_form])
+
+    if form.save(current_distributor)
+      redirect_to distributor_settings_webstore_path, notice: "Webstore settings were successfully saved."
+    else
+      webstore(form)
+    end
   end
 
   def spend_limit_confirmation
@@ -59,5 +76,9 @@ class Distributor::SettingsController < Distributor::BaseController
 
     @line_items = current_distributor.line_items
     @placeholder_text = 'Enter items one per line or separated by commas. e.g. Silverbeet, Cabbage, Celery'
+  end
+
+  def catch_cancel
+    redirect_to :back if params[:commit] == 'cancel'
   end
 end

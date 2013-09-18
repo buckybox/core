@@ -71,3 +71,92 @@
 
 #distributor_spend_limit_on_all_customers
   margin-bottom: 6px
+
+.placeholder
+  margin-bottom: 40px
+  .banner
+    margin-top: 5px
+    padding: 20px 70px
+    border: 1px solid #999999
+    color: #999999
+  .banner-description
+    strong
+      display: block
+    text-align: center
+  .size-info
+    float: right
+    line-height: 10px
+    .label
+      +border-top-radius(0px)
+      font-size: 10px
+      line-height: 10px
+      text-transform: none
+
+#team_photo_file_upload, #org_banner_file_upload
+  cursor: pointer
+
+.about_us, .details
+  textarea
+    width: 100%
+  margin-bottom: 15px
+
+.facebook_link, .phone
+  input[type='text']
+    width: 100%
+
+i.icon-face, i.icon-cellphone
+  margin: 0
+  background: 0 0 url(/assets/furl-icon.png)
+  width: 16px
+  height: 16px
+
+i.icon-cellphone
+  background: 0 0 url(/assets/cellphone-icon.png)
+
+.black-circle
+  +border-radius(36px)
+  width: 36px
+  height: 36px
+  background: black
+  text-align: center
+  line-height: 36px
+  font-size: 30px
+  color: white
+  font-weight: bold
+  @media (max-width: 1200px)
+    width: 24px
+    height: 24px
+    line-height: 24px
+    font-size: 18px
+
+.white-circle
+  +border-radius(39px)
+  padding: 3px
+  background: white
+  margin-top: 20px
+  @media (max-width: 979px)
+    display: none
+.span1 > .white-circle
+  margin-left: -30%
+
+.row-fluid
+  &.org-banner .white-circle
+    margin-top: 40px
+
+.image-overlay
+  position: relative
+  .overlay
+    position: absolute
+    left: 86px
+    .white-circle
+      margin-top: 0px
+    &.one
+      top: 86px
+    &.two
+      top: 244px
+    &.three
+      top: 414px
+    &.four
+      top: 576px
+    &.five
+      top: 707px

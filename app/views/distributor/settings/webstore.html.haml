@@ -1,0 +1,122 @@
+- title 'Webstore', false
+- show_settings_sub_nav(:web_store)
+
+= simple_form_for(@form, url: distributor_settings_webstore_url) do |f|
+  .row-fluid
+    .span5
+      .row-fluid.org-banner
+        .span1
+          .white-circle
+            .black-circle
+              1
+        .span11
+          %fieldset
+            %legend Banner
+            .hidden
+              = f.input_field :org_banner_file, as: :file, style: 'display: none'
+              = f.input_field :org_banner_file_cache, as: :hidden
+            - if current_distributor.company_logo?
+              #org_banner_file_upload
+                = image_tag(current_distributor.company_logo.frame_banner.url, class: 'span6 offset2 image-upload')
+            - else
+              #org_banner_file_upload.placeholder
+                .banner
+                  .banner-description
+                    %strong your organisation's banner
+                    appears on customer login page and web store
+                .size-info
+                  %span.label
+                    960x160
+
+        .row-fluid.team_photo
+          .span1
+            .white-circle
+              .black-circle
+                2
+          .span11
+            %fieldset
+              %legend Team Photo
+              .hidden
+                = f.input_field :team_photo_file, as: :file, style: 'display: none'
+                = f.input_field :team_photo_file_cache, as: :hidden
+              - if current_distributor.company_team_image?
+                #team_photo_file_upload
+                  = image_tag(current_distributor.company_team_image.half_size_photo.url, class: 'span6 offset2 image-upload')
+              - else
+                #team_photo_file_upload.placeholder
+                  .banner
+                    .banner-description
+                      %strong your team photo
+                      appears on your web store sidebar
+                  .size-info
+                    %span.label
+                      420x280
+
+        .row-fluid.about_us
+          .span1
+            .white-circle
+              .black-circle
+                3
+          .span11
+            %fieldset
+              %legend About Us
+              .about_us
+                = f.input_field :about_us, as: :text, placeholder: "Our Eco-farm was born out of a desire to produce quality...", label: false, rows: 10
+            
+        .row-fluid.details
+          .span1
+            .white-circle
+              .black-circle
+                4
+          .span11
+            %fieldset
+              %legend Details
+              .details
+                = f.input_field :details, as: :text, placeholder: "Deliveries are every Thursday (11am onwards), please place orders by Monday...", label: false, rows: 10
+
+        .row-fluid.other_details
+          .span1
+            .white-circle
+              .black-circle
+                5
+          .span11
+            %fieldset
+              %legend Other Details
+              .facebook_link
+                .input-prepend
+                  %span.add-on
+                    %i.icon-face
+                  = f.input_field :facebook, placeholder: "Facebook page URL", label: false
+              .phone
+                .input-prepend
+                  %span.add-on
+                    %i.icon-cellphone
+                  = f.input_field :phone, placeholder: "Customer service phone number", label: false
+    .span6.offset1.image-overlay.visible-desktop
+      = image_tag("webstore-preview.png")
+      .overlay.one
+        .white-circle
+          .black-circle
+            1
+      .overlay.two
+        .white-circle
+          .black-circle
+            2
+      .overlay.three
+        .white-circle
+          .black-circle
+            3
+      .overlay.four
+        .white-circle
+          .black-circle
+            4
+      .overlay.five
+        .white-circle
+          .black-circle
+            5
+  
+  .row-fluid
+    .span8.offset2
+      .pull-right
+        = f.submit 'cancel' , class: 'btn btn-link'
+        = f.submit 'Save', class: 'btn btn-primary'

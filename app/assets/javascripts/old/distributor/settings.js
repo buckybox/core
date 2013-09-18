@@ -33,4 +33,14 @@ $(function(){
   }
   // Show/hide spend limit (balance_threshold) extra fields
   $("#distributor_has_balance_threshold").click(update_balance_threshold_display);
+
+  $("#org_banner_file_upload").click(function(event){
+    $("#settings_webstore_form_org_banner_file").trigger('click');
+    return false;
+  });
+
+  $("#team_photo_file_upload").click(function(event){
+    $("#settings_webstore_form_team_photo_file").trigger('click');
+    return false;
+  });
 });
