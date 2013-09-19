@@ -14,9 +14,7 @@
           = f.input_field :account_name, placeholder: 'Account name', required: true
 
         %fieldset
-          %legend
-            bank account number
-            .muted no hyphens, no spaces
+          %legend bank account number
           = f.input_field :account_number, as: :bank_account_number, country: current_distributor.country.alpha2, value: bank_deposit.account_number
 
         %fieldset
