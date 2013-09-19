@@ -1,4 +1,6 @@
 class RemoveBsbNumberFromBankInformation < ActiveRecord::Migration
+  class BankInformation < ActiveRecord::Base; end
+
   def up
     BankInformation.all.each do |bank_information|
       sanitised_bsb_number = sanitise_number(bank_information.bsb_number)
