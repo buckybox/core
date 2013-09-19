@@ -6,7 +6,7 @@ GIT
 
 GIT
   remote: git://github.com/buckybox/easy_money.git
-  revision: 01e9c4daf9705fc308b3203ca826c8014d6a57bc
+  revision: c0b32d57313c0c66b1113b6707b083b0d6bdf481
   specs:
     easy_money (1.0.0)
       currency_data (~> 1.0.0)
