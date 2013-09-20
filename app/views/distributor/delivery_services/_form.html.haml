@@ -9,6 +9,8 @@
       = f.input :estimated_delivery_time, input_html: { class: 'span12', rows: 5 }
     #weekdays.span6
       = f.simple_fields_for(:schedule_rule) do |schedule_rule_form|
+        .control-group.error
+          .help-block= @delivery_service.schedule_rule.errors.full_messages.to_sentence
         = schedule_rule_form.input :mon, input_html: { class: 'span12' }
         = schedule_rule_form.input :tue, input_html: { class: 'span12' }
         = schedule_rule_form.input :wed, input_html: { class: 'span12' }
