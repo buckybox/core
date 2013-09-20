@@ -1,12 +1,11 @@
 - title("Payments", false)
 - show_settings_sub_nav(:bank_info)
 
-#payments.row-fluid
-  %ul#sub-sub-nav
-    %li
-    %li{ class: "#{'selected' if type == 'bank_deposit'}" }= link_to "Bank Deposit", distributor_settings_payments_bank_deposit_path
-    %li{ class: "#{'selected' if type == 'cash_on_delivery'}" }= link_to "Cash On Delivery", distributor_settings_payments_cash_on_delivery_path
-    %li
+#payments.tabbable.tabs-left
+  %ul.nav.nav-tabs
+    %li{ class: "#{'active' if type == 'bank_deposit'}" }= link_to "Bank Deposit", distributor_settings_payments_bank_deposit_path
+    %li{ class: "#{'active' if type == 'cash_on_delivery'}" }= link_to "Cash On Delivery", distributor_settings_payments_cash_on_delivery_path
 
-  = yield(:payment_type)
+  .tab-content
+    = yield(:payment_type)
 
