@@ -251,7 +251,7 @@ EOF
       end
 
       def skip?(row)
-        skip_rules.present? && skip_rules.any?{|r| r.skip?(row)}
+        skip_rules.present? && skip_rules.any?{|r| r.skip?(row)} rescue false
       end
 
       def process(row)
@@ -480,7 +480,7 @@ EOF
       def skip?(row)
         skip_blanks?(row) ||
           skip_matches?(row) ||
-          skip_not_matches?(row) rescue false
+          skip_not_matches?(row)
       end
 
       def skip_blanks?(row)
