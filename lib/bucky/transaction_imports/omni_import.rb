@@ -56,12 +56,43 @@ EOY
 EOF
     end
 
+    def self.test_yaml_paypal
+      <<EOF
+        columns: date time timezone name type status currency gross fee net from_email_address to_email_address transaction_id
+        options:
+          - header
+        DATE:
+          date_parse:
+            - date
+            - format: "%d/%m/%Y"
+        DESC:
+          not_blank:
+            - merge:
+              - name
+              - from_email_address
+            - type
+        AMOUNT:
+          gross
+        skip:
+          - when:
+              blank:
+                - date
+          - when:
+              not_match:
+                - status: Completed
+EOF
+    end
+
     def self.test_file
       File.join(Rails.root, "spec/support/test_upload_files/transaction_imports/uk_lloyds_tsb.csv")
     end
 
     def self.test_file2
       File.join(Rails.root, "spec/support/test_upload_files/transaction_imports/st_george_au.csv")
+    end
+
+    def self.test_file_paypal
+      File.join(Rails.root, "spec/support/test_upload_files/transaction_imports/paypal-coopers.csv")
     end
 
     def self.test_rows
@@ -93,6 +124,10 @@ EOF
 
     def self.test2
       OmniImport.new(csv_read(test_file2), YAML.load(test_yaml2))
+    end
+
+    def self.test_paypal
+      OmniImport.new(csv_read(test_file_paypal), YAML.load(test_yaml_paypal))
     end
     
     attr_accessor :rows, :rules
@@ -216,7 +251,7 @@ EOF
       end
 
       def skip?(row)
-        skip_rules.present? && skip_rules.any?{|r| r.skip?(row)} rescue false
+        skip_rules.present? && skip_rules.any?{|r| r.skip?(row)}
       end
 
       def process(row)
@@ -423,13 +458,14 @@ EOF
     end
 
     class SkipRule
-      attr_accessor :blanks, :matches, :parent
+      attr_accessor :blanks, :matches, :parent, :not_matches
 
       delegate :get, to: :parent
       
       def initialize(shash, parent)
         self.blanks = shash[:blank] if shash[:blank].is_a?(Array)
         self.matches = shash[:match].inject({}){|result, element| result.merge(element)} unless shash[:match].blank?
+        self.not_matches = shash[:not_match].inject({}){|result, element| result.merge(element)} unless shash[:not_match].blank?
         self.parent = parent
       end
 
@@ -438,27 +474,36 @@ EOF
       end
       
       def to_s
-        {blanks: blanks, matches: matches}.inspect
+        {blanks: blanks, matches: matches, not_matches: not_matches}.inspect
       end
 
       def skip?(row)
+        skip_blanks?(row) ||
+          skip_matches?(row) ||
+          skip_not_matches?(row)
+      end
+
+      def skip_blanks?(row)
         if blanks.blank?
-          if matches.blank?
-            return false
-          else
-            matches_row?(row)
-          end
+          false
         else
-          if matches.blank?
-            blanks.all?{|column| get(row, column).blank?}
-          else
-            matches_row?(row) &&
-              blanks.all?{|column| get(row, column).blank?}
-          end
+          blanks.all?{|column| get(row, column).blank?}
         end
       end
 
-      def matches_row?(row)
+      def skip_matches?(row)
+        if matches.blank?
+          false
+        else
+          matches_row?(row)
+        end
+      end
+
+      def skip_not_matches?(row)
+        !not_matches.blank? && not_matches_row(row)
+      end
+
+      def matches_row?(row, matches = self.matches)
         matches.all? do |column, t|
           text = t.to_s
           if text[0] == '/' && text[-1] == '/'
@@ -467,6 +512,10 @@ EOF
             get(row, column) == text
           end
         end
+      end
+
+      def not_matches_row(row)
+        !matches_row?(row, not_matches)
       end
     end
   end
