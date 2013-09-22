@@ -39,7 +39,6 @@ class Distributor < ActiveRecord::Base
   DEFAULT_ADVANCED_HOURS          = 18
   DEFAULT_ADVANCED_DAYS           = 3
   DEFAULT_AUTOMATIC_DELIVERY_HOUR = 18
-  DEFAULT_AUTOMATIC_DELIVERY_DAYS = 1
 
   HUMANIZED_ATTRIBUTES = {
     email: "Account login email"
