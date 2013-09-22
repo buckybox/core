@@ -480,7 +480,7 @@ EOF
       def skip?(row)
         skip_blanks?(row) ||
           skip_matches?(row) ||
-          skip_not_matches?(row)
+          skip_not_matches?(row) rescue false
       end
 
       def skip_blanks?(row)
