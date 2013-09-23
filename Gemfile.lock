@@ -1,4 +1,11 @@
 GIT
+  remote: git://github.com/buckybox/simple_form-bank_account_number.git
+  revision: ce11026e9374563b0f4045c445a82a881aef1197
+  specs:
+    simple_form-bank_account_number (1.0.0)
+      simple_form (~> 2.1.0)
+
+GIT
   remote: git://github.com/jordandcarter/sprinkle.git
   revision: 408a82c764f07f96b49df805b3356197123dbfc4
   specs:
@@ -534,6 +541,7 @@ DEPENDENCIES
   select2-rails (~> 3.4.3)
   sextant
   simple_form (~> 2.1.0)
+  simple_form-bank_account_number!
   simplecov
   sprinkle!
   state_machine (~> 1.1.2)

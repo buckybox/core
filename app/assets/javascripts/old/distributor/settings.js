@@ -23,7 +23,7 @@ $(function(){
     }
     return false;
   });
-  
+
   var update_balance_threshold_display = function(){
     if($("#distributor_has_balance_threshold:checked").size() === 0) {
       $("#balance_threshold").hide('highlight');
@@ -43,4 +43,32 @@ $(function(){
     $("#settings_webstore_form_team_photo_file").trigger('click');
     return false;
   });
+  
+  if ($("#payments").length) {
+    var update_preview = function() {
+      var klass = this.id;
+      if (!klass) return;
+
+      var inputs = $('form [id="' + klass + '"]');
+      var text = '';
+      inputs.each(function() {
+        if (text !== '') text += '-';
+        text += this.value;
+      });
+
+      text = text.replace(/(\n|\r|\r\n)/g, '<br>');
+      $(".payment-message ." + klass)[0].innerHTML = text;
+
+      $("#payments .preview").toggle(
+        $("#payments .preview .payment-message").text().trim() != ""
+      );
+    };
+
+    var fields = $("form :input:visible");
+    fields.on('keyup', update_preview);
+    fields.trigger('keyup');
+
+    fields.filter('[data-toggle="tooltip"]').tooltip({ 'trigger': 'focus' });
+  }
 });
+

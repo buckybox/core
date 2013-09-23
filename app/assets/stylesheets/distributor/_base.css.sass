@@ -153,10 +153,6 @@ body
             position: absolute
             top: -6px
             right: 10px
-
-  #user-nav
-    .nav-pills
-      li
         #notification-dropdown
           min-width: 270px
           &:before
@@ -174,29 +170,26 @@ body
               text-align: center
               a
                 color: #08C
-
-  #user-nav
-    .nav-pills
-      li#welcome-guide-indicator
-        >a
-          font-weight: bold
-        .progress
-          height: 10px
-          width: 100px
-          display: inline-block
-          margin-bottom: 0px
-        #welcome-guide
-          .modal-header
-            text-align: center
-            background-color: #8BAB23
-            background: linear-gradient(#8bab23,#7a9324)
-            img
-              padding: 7px 0px
-          h2
-            margin-top: 0px
-            text-align: center
-          dd
-            margin-bottom: 15px
+        #welcome-guide-indicator
+          >a
+            font-weight: bold
+          .progress
+            height: 10px
+            width: 100px
+            display: inline-block
+            margin-bottom: 0px
+          #welcome-guide
+            .modal-header
+              text-align: center
+              background-color: #8BAB23
+              background: linear-gradient(#8bab23,#7a9324)
+              img
+                padding: 7px 0px
+            h2
+              margin-top: 0px
+              text-align: center
+            dd
+              margin-bottom: 15px
 
   #sub-nav
     background-color: rgba(255,255,255,0.9)
@@ -341,4 +334,22 @@ body
         margin-top: -3px
       .popover-content
         +columns(2)
+
+.payment-message
+  color: #000
+  background: #FCF8E4
+  text-align: center
+  padding: 25px 20px
+  .note
+    color: #333
+    font-style: italic
+  .row-fluid
+    margin-top: 15px
+    &:last-child
+      margin-top: 30px
+    &:first-child
+      margin-bottom: 0
+    &:only-child
+      margin-top: 30px
+      margin-bottom: 40px
 

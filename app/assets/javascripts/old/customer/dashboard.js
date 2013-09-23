@@ -1,10 +1,11 @@
 $(function() {
-  $("#bank_payment_details").toggle();
-  $("#make_a_payment, #close_bank_payment_details").click(function(){
+  var toggle_payment_details = function() {
     $("#make_a_payment").toggle();
     $("#bank_payment_details").toggle();
-    return false;
-  });
+  };
+
+  $("#make_a_payment").click(toggle_payment_details);
+  $("#bank_payment_details .close").click(toggle_payment_details);
 
   var phone_inputs = $('#address-modal input[type="tel"]').not('.optional');
   phone_inputs.keyup(update_phone_inputs_style);

@@ -95,68 +95,88 @@
 #team_photo_file_upload, #org_banner_file_upload
   cursor: pointer
 
-.about_us, .details
+#webstore-settings
+  .about_us, .details
+    textarea
+      width: 100%
+    margin-bottom: 15px
+
+  .facebook_link, .phone
+    input[type='text']
+      width: 100%
+
+  i.icon-face, i.icon-cellphone
+    margin: 0
+    background: 0 0 url(/assets/furl-icon.png)
+    width: 16px
+    height: 16px
+
+  i.icon-cellphone
+    background: 0 0 url(/assets/cellphone-icon.png)
+
+  .black-circle
+    +border-radius(36px)
+    width: 36px
+    height: 36px
+    background: black
+    text-align: center
+    line-height: 36px
+    font-size: 30px
+    color: white
+    font-weight: bold
+    @media (max-width: 1200px)
+      width: 24px
+      height: 24px
+      line-height: 24px
+      font-size: 18px
+
+  .white-circle
+    +border-radius(39px)
+    padding: 3px
+    background: white
+    margin-top: 20px
+    @media (max-width: 979px)
+      display: none
+  .span1 > .white-circle
+    margin-left: -30%
+
+  .row-fluid
+    &.org-banner .white-circle
+      margin-top: 40px
+
+  .image-overlay
+    position: relative
+    .overlay
+      position: absolute
+      left: 86px
+      .white-circle
+        margin-top: 0px
+      &.one
+        top: 86px
+      &.two
+        top: 244px
+      &.three
+        top: 414px
+      &.four
+        top: 576px
+      &.five
+        top: 707px
+
+#payments
+  .nav
+    li:first-child
+      margin-top: 1em
+    li:last-child
+      margin-bottom: 20em
   textarea
+    resize: vertical
+  input:not(.btn), textarea
+    +box-sizing(border-box)
+    display: block
     width: 100%
-  margin-bottom: 15px
-
-.facebook_link, .phone
-  input[type='text']
-    width: 100%
-
-i.icon-face, i.icon-cellphone
-  margin: 0
-  background: 0 0 url(/assets/furl-icon.png)
-  width: 16px
-  height: 16px
-
-i.icon-cellphone
-  background: 0 0 url(/assets/cellphone-icon.png)
-
-.black-circle
-  +border-radius(36px)
-  width: 36px
-  height: 36px
-  background: black
-  text-align: center
-  line-height: 36px
-  font-size: 30px
-  color: white
-  font-weight: bold
-  @media (max-width: 1200px)
-    width: 24px
-    height: 24px
-    line-height: 24px
-    font-size: 18px
-
-.white-circle
-  +border-radius(39px)
-  padding: 3px
-  background: white
-  margin-top: 20px
-  @media (max-width: 979px)
-    display: none
-.span1 > .white-circle
-  margin-left: -30%
-
-.row-fluid
-  &.org-banner .white-circle
-    margin-top: 40px
-
-.image-overlay
-  position: relative
-  .overlay
-    position: absolute
-    left: 86px
-    .white-circle
-      margin-top: 0px
-    &.one
-      top: 86px
-    &.two
-      top: 244px
-    &.three
-      top: 414px
-    &.four
-      top: 576px
-    &.five
-      top: 707px
+    margin-bottom: 4px
+  input:not(.btn)
+    height: 30px
+  .preview
+    p
+      margin-top: 10px
