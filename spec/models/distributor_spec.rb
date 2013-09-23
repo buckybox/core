@@ -7,7 +7,6 @@ describe Distributor do
     specify { distributor.should be_valid }
     specify { distributor.time_zone.should == 'Wellington' }
     specify { distributor.currency.should == 'nzd' }
-    specify { distributor.advance_hour.should == 18 }
     specify { distributor.advance_days.should == 3 }
     specify { distributor.customer_can_remove_orders.should be_true }
 
