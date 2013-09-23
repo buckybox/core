@@ -62,9 +62,13 @@ BuckyBox::Application.routes.draw do
       get 'boxes'
       get 'delivery_services'
       get 'routes'
-      get 'payments'
       get 'invoice_information'
       get 'customer_preferences'
+
+      namespace :payments do
+        resource :bank_deposit, controller: "bank_deposit", only: [:show, :update]
+        resource :cash_on_delivery, controller: "cash_on_delivery", only: [:show, :update]
+      end
     end
 
     namespace :notifications do
