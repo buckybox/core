@@ -5,7 +5,7 @@ class Distributor::SettingsController < Distributor::BaseController
     time = Time.new
     @default_delivery_time  = Time.new(time.year, time.month, time.day, current_distributor.advance_hour)
     @default_delivery_days  = current_distributor.advance_days
-    @default_automatic_time = Time.new(time.year, time.month, time.day, current_distributor.automatic_delivery_hour)
+    @default_automatic_time = Time.new(time.year, time.month, time.day, Distributor::AUTOMATIC_DELIVERY_HOUR)
   end
 
   def spend_limit_confirmation
