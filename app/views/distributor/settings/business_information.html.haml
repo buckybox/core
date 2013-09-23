@@ -11,7 +11,8 @@
         = f.input_field :name, placeholder: 'Organisation name', class: 'span12'
         .address
           = Bucky::Geolocation.get_address_form(current_distributor.country)
-        = f.input_field :country, collection: Country.all.sort_by(&:name), value_method: :alpha2, label_method: :full_name, selected: current_distributor.country.alpha2, class: 'span6', disabled: true, title: "Contact us to change your country"
+        .country.pull-left
+          %strong= current_distributor.country.name
         = f.input_field :time_zone, as: :time_zone, title: 'Timezone', class: 'span6'
 
       %fieldset
