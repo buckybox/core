@@ -10,7 +10,7 @@
         %legend your organisation
         = f.input_field :name, placeholder: 'Organisation name', class: 'span12', required: true
         .address
-          = Bucky::Geolocation.get_address_form(current_distributor.country)
+          = Bucky::Geolocation.get_address_form(current_distributor.country, current_distributor)
         .country.pull-left
           %strong= current_distributor.country.name
         = f.input_field :time_zone, as: :time_zone, title: 'Timezone', class: 'span6'
