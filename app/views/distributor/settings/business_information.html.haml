@@ -8,7 +8,7 @@
     .span6
       %fieldset
         %legend your organisation
-        = f.input_field :name, placeholder: 'Organisation name', class: 'span12'
+        = f.input_field :name, placeholder: 'Organisation name', class: 'span12', required: true
         .address
           = Bucky::Geolocation.get_address_form(current_distributor.country)
         .country.pull-left
