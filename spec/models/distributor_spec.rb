@@ -239,7 +239,7 @@ describe Distributor do
         before do
           Time.zone = 'Wellington'
           time = Time.current
-          time_tomorrow = Time.current + 1.day
+          time_tomorrow = time + 1.day
           @today = [time.year, time.month, time.day]
           @tomorrow = [time_tomorrow.year, time_tomorrow.month, time_tomorrow.day]
           @schedule_start = [Distributor::DEFAULT_ADVANCED_HOURS, 0]
