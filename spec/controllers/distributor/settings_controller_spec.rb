@@ -27,10 +27,10 @@ describe Distributor::SettingsController do
     specify { assigns(:extra).should be_a_new(Extra) }
   end
 
-  describe '#business_information' do
-    before { get :business_information, distributor_id: @distributor.id }
+  describe '#organisation' do
+    before { get :organisation, distributor_id: @distributor.id }
 
-    specify { response.should render_template 'distributor/settings/business_information' }
+    specify { response.should render_template 'distributor/settings/organisation' }
   end
 
   describe '#customer_preferences' do

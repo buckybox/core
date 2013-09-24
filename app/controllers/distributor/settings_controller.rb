@@ -1,7 +1,7 @@
 class Distributor::SettingsController < Distributor::BaseController
   respond_to :html, :json
 
-  def business_information
+  def organisation
     time = Time.new
     @default_delivery_time  = Time.new(time.year, time.month, time.day, current_distributor.advance_hour)
     @default_delivery_days  = current_distributor.advance_days
