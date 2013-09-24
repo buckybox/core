@@ -54,7 +54,7 @@ BuckyBox::Application.routes.draw do
     end
 
     namespace :settings do
-      get 'business_information'
+      get 'organisation'
       post 'spend_limit_confirmation'
       get 'extras'
       get 'boxes'
