@@ -16,7 +16,7 @@ class SignUpWizardController < ApplicationController
     country = Country.where(alpha2: params[:country]).first
     raise "Invalid country" if country.nil?
 
-    @fields = Bucky::Geolocation.get_address_form country.alpha2
+    @fields = Bucky::Geolocation.get_address_form country.alpha2, Distributor.new
     @banks = OmniImporter.bank_deposit.where(country_id: country.id).pluck(:bank_name).uniq.sort
 
     render json: { address: @fields, banks: @banks }
