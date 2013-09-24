@@ -101,7 +101,7 @@ class Distributor < ActiveRecord::Base
 
   default_value_for :time_zone,               DEFAULT_TIME_ZONE
   default_value_for :currency,                DEFAULT_CURRENCY
-  default_value_for :advance_hour,            AUTOMATIC_DELIVERY_HOUR
+  default_value_for :advance_hour,            DEFAULT_ADVANCED_HOURS
   default_value_for :advance_days,            DEFAULT_ADVANCED_DAYS
 
   default_value_for :invoice_threshold_cents, -500
