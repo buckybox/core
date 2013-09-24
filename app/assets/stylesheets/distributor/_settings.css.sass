@@ -85,13 +85,15 @@
 
 #organisation
   .address input
-    +border-radius(0)
-    &:first-child
+    +border-radius(4px)
+    &:first-child:not(:only-child)
       +border-radius(4px 0 0 4px)
-    &:last-child
+      &:not(:focus)
+        border-right-color: transparent
+    &:last-child:not(:only-child)
       +border-radius(0 4px 4px 0)
-    &:only-child
-      +border-radius(4px)
+      &:not(:focus)
+        border-left-color: transparent
 
   .country
     margin: 5px 9px
