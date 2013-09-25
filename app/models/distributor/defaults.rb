@@ -40,19 +40,27 @@ private
   end
 
   def customer_login_url
-    parameter_name = distributor.parameter_name
-    host           = Figaro.env.host
-    Rails.application.routes.url_helpers.new_customer_session_url(host: host, distributor: parameter_name)
+    url_helper.new_customer_session_url(host: app_host, distributor: distributor_parameter_name)
   end
 
   def customer_reset_password_url
-    parameter_name = distributor.parameter_name
-    host           = Figaro.env.host
-    Rails.application.routes.url_helpers.new_customer_password_url(host: host, distributor: parameter_name)
+    url_helper.new_customer_password_url(host: app_host, distributor: distributor_parameter_name)
   end
 
   def distributor_name
     distributor.name
+  end
+
+  def distributor_parameter_name
+    distributor.parameter_name
+  end
+
+  def app_host
+    Figaro.env.host
+  end
+
+  def url_helper
+    Rails.application.routes.url_helpers
   end
 
   #TODO: Figure out the best way to move the email content below into a config file
