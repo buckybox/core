@@ -557,6 +557,10 @@ class Distributor < ActiveRecord::Base
     delivery_services.count.zero? || boxes.count.zero?
   end
 
+  def webstore_status_changed?
+    active_webstore_changed?
+  end
+
 private
 
   def self.human_attribute_name(attr, options = {})
