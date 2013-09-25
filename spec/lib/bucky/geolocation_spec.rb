@@ -25,19 +25,25 @@ describe Bucky::Geolocation do
 
   describe ".get_address_form" do
     let(:fields) { %w(street state city zip) }
+    let(:resource) do
+      double(
+        'class' => double(model_name: "resource"),
+        localised_address: nil
+      )
+    end
 
     before do
       Fabricate(:country)
     end
 
     it "returns the right address fields" do
-      form = Bucky::Geolocation.get_address_form("NZ")
+      form = Bucky::Geolocation.get_address_form("NZ", resource)
 
       form.should include(*fields)
     end
 
     it "fallbacks to NZ if format not available for this country" do
-      form = Bucky::Geolocation.get_address_form("KE")
+      form = Bucky::Geolocation.get_address_form("KE", resource)
 
       form.should include(*fields)
     end
