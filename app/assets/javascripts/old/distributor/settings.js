@@ -8,28 +8,22 @@ $(function(){
          update_existing: $("#distributor_spend_limit_on_all_customers:checked").size(),
          send_halt_email: $("#distributor_send_halted_email:checked").size()
        },
-       function(data, textStatus, jqXHR) {
-         if (data === "safe") {
-           $("#organisation_submit").closest("form").submit();
-         } else if(confirm(data)) {
-           $("#organisation_submit").closest("form").submit();
-         } else {
-           $("#organisation_submit").removeAttr('disabled');
-           return false;
-         }
+       function(data) {
+         if (data !== "safe" && !confirm(data)) return false;
        }
-      ).fail(function(a,b,c) {
+      ).complete(function() {
         $("#organisation_submit").removeAttr('disabled');
       });
     }
-
-    return true;
   });
 
   // Show/hide spend limit (balance_threshold) extra fields
   $("#distributor_has_balance_threshold").change(function() {
-    $("#balance_threshold").toggle('highlight');
-  });
+    $("#balance_threshold").toggle(
+      $("#distributor_has_balance_threshold").is(":checked")
+    );
+  }).trigger("change");
+
 
   if ($("#payments").length) {
     var update_preview = function() {

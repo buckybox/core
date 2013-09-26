@@ -15,7 +15,7 @@ class Distributor::SettingsController < Distributor::BaseController
     count = current_distributor.number_of_customers_halted_after_update(spend_limit, update_existing)
     if count > 0
       count_emailed = current_distributor.number_of_customers_emailed_after_update(spend_limit, update_existing)
-      render text: "Updating the minimum balance will halt #{count} customers deliveries.  #{count_emailed.to_s + " customers with pending orders will be emailed that their account has been halted until payment is made.  " if count_emailed > 0 && send_halt_email && current_distributor.send_email? }Are you sure?"
+      render text: "Updating the minimum balance will halt #{count} customers deliveries. #{count_emailed.to_s + " customers with pending orders will be emailed that their account has been halted until payment is made. " if count_emailed > 0 && send_halt_email && current_distributor.send_email? }Are you sure?"
     else
       render text: "safe"
     end
