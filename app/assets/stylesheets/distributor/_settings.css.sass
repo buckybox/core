@@ -72,38 +72,111 @@
 #distributor_spend_limit_on_all_customers
   margin-bottom: 6px
 
-.placeholder
-  margin-bottom: 40px
-  .banner
-    margin-top: 5px
-    padding: 20px 70px
-    border: 1px solid #999999
-    color: #999999
-  .banner-description
-    strong
-      display: block
-    text-align: center
-  .size-info
-    float: right
-    line-height: 10px
-    .label
-      +border-top-radius(0px)
-      font-size: 10px
-      line-height: 10px
-      text-transform: none
-
-#team_photo_file_upload, #org_banner_file_upload
-  cursor: pointer
 
 #webstore-settings
-  .about_us, .details
+  .column-right
+    padding-left: 5px
+  .column-left
+    padding-right: 5px
+    
+  fieldset
+    +border-radius(5px)
+    background: #CDE7F6
+    padding: 10px
+
+    .header
+      .title
+        display: inline-block
+        font-weight: bold
+        font-size: 14px
+        line-height: 30px
+        height: 30px
+        margin-left: 5px
+        color: #08C
+
+    .body
+      margin-top: 5px
+      .image-box
+        position: relative
+        height: 82px
+        overflow: hidden
+        .image-rollover
+          position: absolute
+          height: 82px
+          width: 482px
+          .image-message
+            display: none
+            padding: 6px 30px
+            width: 100px
+            margin: 18px auto
+            text-align: center
+            color: #08C
+            font-size: 13px
+            background: #FFF
+            +border-radius(30px)
+          &:hover
+            .image-message
+              display: block
+
+      .banner
+        padding: 10px 70px
+        border: 1px solid #999999
+        color: #999999
+        background: #FFF
+      .banner-description
+        font-size: 14px
+        strong
+          display: block
+        text-align: center
+
+      .banner, .image-rollover
+        cursor: pointer
+
+      img.banner
+        padding: 0
+        height: 82px
+        width: auto
+    
+    &.team_photo
+      .body
+        .image-box
+          height: 282px
+          .image-rollover
+            height: 282px
+          .image-message
+            margin: 105px auto
+        img.banner
+          height: 282px
+
     textarea
+      box-sizing: border-box 
       width: 100%
-    margin-bottom: 15px
+      margin-bottom: 0
+
+  .blue-circle
+    display: inline-block
+    +border-radius(24px)
+    padding: 2px
+    background: #08C
+    .blue-inner-circle
+      +border-radius(28px)
+      width: 20px
+      height: 20px
+      border: solid #FFF 2px
+      background: #08C
+      text-align: center
+      line-height: 20px
+      font-size: 16px
+      color: white
+      font-weight: bold
 
   .facebook_link, .phone
     input[type='text']
       width: 100%
+
+  .phone
+    .input-prepend
+      margin-bottom: 0
 
   i.icon-face, i.icon-cellphone
     margin: 0
@@ -114,53 +187,21 @@
   i.icon-cellphone
     background: 0 0 url(/assets/cellphone-icon.png)
 
-  .black-circle
-    +border-radius(36px)
-    width: 36px
-    height: 36px
-    background: black
-    text-align: center
-    line-height: 36px
-    font-size: 30px
-    color: white
-    font-weight: bold
-    @media (max-width: 1200px)
-      width: 24px
-      height: 24px
-      line-height: 24px
-      font-size: 18px
-
-  .white-circle
-    +border-radius(39px)
-    padding: 3px
-    background: white
-    margin-top: 20px
-    @media (max-width: 979px)
-      display: none
-  .span1 > .white-circle
-    margin-left: -30%
-
-  .row-fluid
-    &.org-banner .white-circle
-      margin-top: 40px
-
   .image-overlay
     position: relative
     .overlay
       position: absolute
-      left: 86px
-      .white-circle
+      left: 90px
+      .blue-circle
         margin-top: 0px
       &.one
         top: 86px
       &.two
         top: 244px
       &.three
-        top: 414px
+        top: 481px
       &.four
-        top: 576px
-      &.five
-        top: 707px
+        top: 708px
 
 #payments
   .nav
