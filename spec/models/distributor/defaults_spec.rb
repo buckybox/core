@@ -3,8 +3,8 @@
 class Distributor; end
 class LineItem; end
 class EmailTemplate; end
-class Rails; end
-class Figaro; end
+class Rails; end unless defined? Rails
+class Figaro; end unless defined? Figaro
 
 require_relative "../../../app/models/distributor/defaults"
 
