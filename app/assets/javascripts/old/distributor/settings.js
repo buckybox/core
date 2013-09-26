@@ -1,27 +1,29 @@
 $(function(){
   $("#organisation_submit").click(function(){
-    if($("#distributor_has_balance_threshold:checked").size() !== 0){
+    if ($("#distributor_has_balance_threshold:checked").size() !== 0) {
       $("#organisation_submit").attr('disabled', 'disabled');
-      $.post("/distributor/settings/spend_limit_confirmation",
-             {spend_limit: $("#distributor_default_balance_threshold").val(),
-              update_existing: $("#distributor_spend_limit_on_all_customers:checked").size(),
-              send_halt_email: $("#distributor_send_halted_email:checked").size()},
-             function(data, textStatus, jqXHR){
-               if(data === "safe"){
-                $("#organisation_submit").closest("form").submit();
-               }else if(confirm(data)){
-                $("#organisation_submit").closest("form").submit();
-               }else{
-                $("#organisation_submit").removeAttr('disabled');
-               }
-             }
-            ).error(function(){
-              $("#organisation_submit").removeAttr('disabled');
-            });
-    }else{
-      return true;
+
+      $.post("/distributor/settings/spend_limit_confirmation", {
+         spend_limit: $("#distributor_default_balance_threshold").val(),
+         update_existing: $("#distributor_spend_limit_on_all_customers:checked").size(),
+         send_halt_email: $("#distributor_send_halted_email:checked").size()
+       },
+       function(data, textStatus, jqXHR) {
+         if (data === "safe") {
+           $("#organisation_submit").closest("form").submit();
+         } else if(confirm(data)) {
+           $("#organisation_submit").closest("form").submit();
+         } else {
+           $("#organisation_submit").removeAttr('disabled');
+           return false;
+         }
+       }
+      ).fail(function(a,b,c) {
+        $("#organisation_submit").removeAttr('disabled');
+      });
     }
-    return false;
+
+    return true;
   });
 
   // Show/hide spend limit (balance_threshold) extra fields
