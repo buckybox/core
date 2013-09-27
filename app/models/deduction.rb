@@ -21,7 +21,7 @@ class Deduction < ActiveRecord::Base
   validates_presence_of :distributor_id, :account_id, :amount, :kind, :description, :deductable_id, :deductable_type
   validates_inclusion_of :kind, in: KINDS, message: "%{value} is not a valid kind of payment"
   validates_inclusion_of :source, in: SOURCES, message: "%{value} is not a valid source of payment"
-  validates_numericality_of :amount, greater_than_or_equal_to: 0
+  validates_numericality_of :amount_cents, greater_than_or_equal_to: 0, only_integer: true
 
   after_create :make_deduction!
 
@@ -47,11 +47,11 @@ class Deduction < ActiveRecord::Base
     options = { description: "[REVERSED] " + self.description, display_time: self.display_time }
 
     Deduction.transaction do
-      self.reversal_transaction = self.account.add_to_balance(-transaction.amount, options)
+      self.reversal_transaction = self.account.add_to_balance(transaction.amount.opposite, options)
       self.reversal_transactions << reversal_transaction
 
       if bucky_fee
-        self.reversal_transactions << self.account.add_to_balance(-bucky_fee.amount, {description: "[REVERSED] Bucky Box Fee", display_time: self.display_time})
+        self.reversal_transactions << self.account.add_to_balance(bucky_fee.amount.opposite, {description: "[REVERSED] Bucky Box Fee", display_time: self.display_time})
       end
 
       self.save

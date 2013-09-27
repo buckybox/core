@@ -2,7 +2,7 @@
   Hi #{@customer.first_name.strip},
 
 
-  #{@oops}, we've noticed your account has reached your minimum balance - your existing account balance is #{@customer.account.balance.format} (your account should always be above your minimum balance of #{@customer.balance_threshold.format} in order to receive deliveries).
+  #{@oops}, we've noticed your account has reached your minimum balance - your existing account balance is #{@customer.account.balance} (your account should always be above your minimum balance of #{@customer.balance_threshold} in order to receive deliveries).
 
 
   #{link_to "Please make a payment", new_customer_session_url(distributor: @distributor.parameter_name) or contact @distributor.name}.

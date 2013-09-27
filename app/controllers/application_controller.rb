@@ -8,7 +8,6 @@ class ApplicationController < ActionController::Base
   end
 
   before_filter :set_user_time_zone
-  before_filter :set_user_currency
 
   layout :layout_by_resource
 
@@ -66,14 +65,6 @@ private
       Time.zone = distributor.time_zone
     else
       Time.zone = BuckyBox::Application.config.time_zone
-    end
-  end
-
-  def set_user_currency
-    distributor = current_distributor || current_customer.try(:distributor)
-
-    if distributor.present? && distributor.currency.present?
-      Money.default_currency = Money::Currency.new(distributor.currency)
     end
   end
 

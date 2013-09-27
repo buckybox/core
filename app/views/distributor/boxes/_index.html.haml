@@ -18,7 +18,7 @@
           %tr
             %td= image_tag(box.box_image.tiny_thumb.url)
             %td= box.name
-            %td= box.price.format
+            %td= box.price
             %td= checkmark_boolean(box.hidden)
             - if box.dislikes
               %td= box.exclusions_limit.zero? ? "Unlimited" : "Limited to #{box.exclusions_limit}"

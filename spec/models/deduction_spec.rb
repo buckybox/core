@@ -37,7 +37,7 @@ describe Deduction, :slow do
       @deduction.deductable = Fabricate(:delivery)
       @account_amount = @deduction.account.balance
       @amount = @deduction.amount
-      @fee = Money.new(25)
+      @fee = EasyMoney.new(0.25)
       @deduction.stub_chain(:distributor, :separate_bucky_fee).and_return(true)
       @deduction.stub_chain(:distributor, :consumer_delivery_fee).and_return(@fee)
       @deduction.save!
@@ -46,10 +46,10 @@ describe Deduction, :slow do
     context 'after create' do
       specify { @deduction.transaction.should_not be_nil }
       specify { @deduction.transaction.persisted?.should be_true }
-      specify { @deduction.transaction.amount.should == -@amount }
+      specify { @deduction.transaction.amount.should == @amount.opposite }
 
       specify { @deduction.account.balance.should == @account_amount - @amount - @fee}
-      specify { @deduction.bucky_fee.amount.should == -@fee}
+      specify { @deduction.bucky_fee.amount.should == @fee.opposite }
     end
 
     describe '#reverse_deduction' do
