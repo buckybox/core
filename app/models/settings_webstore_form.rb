@@ -2,47 +2,55 @@ require 'action_mailer'
 require_relative 'form'
 require 'active_model/validations'
 require 'active_model/translation'
+require 'active_model/naming'
 
 class SettingsWebstoreForm < Form
-  attr_accessor :errors, :org_banner_file, :org_banner_file_cache, :team_photo_file, :team_photo_file_cache, :sidebar_description, :facebook, :phone
+  extend ActiveModel::Naming
+
+  INTERFACE = {
+    webstore_enabled: :active_webstore,
+    org_banner_file: :company_logo,
+    org_banner_file_cache: :company_logo_cache,
+    team_photo_file: :company_team_image,
+    team_photo_file_cache: :company_team_image_cache,
+    sidebar_description: :sidebar_description,
+    facebook: :facebook_url,
+    phone: :phone
+  }
+  attr_reader :errors
+  attr_accessor *(INTERFACE.keys)
+
   
   def initialize(opts)
-    self.org_banner_file = opts[:org_banner_file]
-    self.org_banner_file_cache = opts[:org_banner_file_cache]
-    self.team_photo_file = opts[:team_photo_file]
-    self.team_photo_file_cache = opts[:team_photo_file_cache]
-    self.sidebar_description = opts[:sidebar_description]
-    self.facebook = opts[:facebook]
-    self.phone = opts[:phone]
+    opts.each do |k,v|
+      instance_variable_set("@#{k}", v)
+    end
+    @errors = ActiveModel::Errors.new(self)
   end
 
   def self.for_distributor(distributor)
     SettingsWebstoreForm.new(
-      org_banner_file: distributor.company_logo,
-      org_banner_file_cache: distributor.company_logo_cache,
-      team_photo_file: distributor.company_team_image,
-      team_photo_file_cache: distributor.company_team_image_cache,
-      sidebar_description: distributor.sidebar_description,
-      facebook: distributor.facebook_url,
-      phone: distributor.phone
+      SettingsWebstoreForm::INTERFACE.inject({}) { |result, element|
+        result.merge(element.first => distributor.send(element.last))
+      }
     )
   end
 
   def save(distributor)
-    distributor.company_logo = org_banner_file
-    distributor.company_logo_cache = org_banner_file_cache
-    distributor.company_team_image = team_photo_file
-    distributor.company_team_image_cache = team_photo_file_cache
-    distributor.sidebar_description = sidebar_description
-    distributor.facebook_url = facebook
-    distributor.phone = phone
-    
+    INTERFACE.each do |k,v|
+      distributor.send("#{v.to_s}=", self.send(k))
+    end
+
     saved = distributor.save
     set_errors(distributor.errors) unless saved
     saved
   end
 
   def set_errors(errors)
-    self.errors = errors
+    INTERFACE.each { |k,v|
+      errors[v].each do |error|
+        self.errors.add(k, error)
+      end
+    }
   end
 end

@@ -70,5 +70,13 @@ $(function(){
 
     fields.filter('[data-toggle="tooltip"]').tooltip({ 'trigger': 'focus' });
   }
+
+
+  $(".important_action").click(function(event){
+    if(event.target === this){
+      var input = $(this).find("input");
+      input.trigger("click");
+    }
+  });
 });
 
