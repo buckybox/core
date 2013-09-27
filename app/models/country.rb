@@ -36,10 +36,11 @@ class Country < ActiveRecord::Base
 private
 
   def validate_currency_and_time_zone
-    errors.add(:default_time_zone, "'#{default_time_zone}' not valid") if ActiveSupport::TimeZone.new(default_time_zone).nil?
-    begin
-      Money.parse(default_currency)
-    rescue
+    if ActiveSupport::TimeZone.new(default_time_zone).nil?
+      errors.add(:default_time_zone, "'#{default_time_zone}' not valid")
+    end
+
+    if CurrencyData.find(default_currency).nil?
       errors.add(:default_currency, "'#{default_currency}' not valid")
     end
   end

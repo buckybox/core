@@ -8,6 +8,9 @@ class Distributor::CustomersController < Distributor::ResourceController
   def index
     index! do
       @show_tour = current_distributor.customers_index_intro
+      @customers_total_balance = @customers.map(&:account).map(&:balance).sum.decorate(
+        context: { distributor: current_distributor }
+      )
     end
   end
 
@@ -51,8 +54,8 @@ class Distributor::CustomersController < Distributor::ResourceController
   def show
     show! do
       @address          = @customer.address
-      @account          = @customer.account
-      @orders           = @account.orders.active
+      @account          = @customer.account.decorate
+      @orders           = @account.orders.active.decorate
       @deliveries       = @account.deliveries.ordered
       @transactions     = account_transactions(@account)
       @show_more_link   = (@transactions.size != @account.transactions.count)

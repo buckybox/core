@@ -14,7 +14,7 @@
       %th
         %span.label
           Total:
-          = @customers.size.zero? ? Money.new(0, current_distributor.currency).format : @customers.map(&:account).map(&:balance).sum.format
+          = @customers_total_balance.with_currency
 
   %tbody
     %tr.new-row
@@ -36,5 +36,5 @@
           %td
             %small= customer.account.delivery_service.name
           %td
-            %span.balance{ class: "#{'negative' if customer.account.balance.negative?}" }= customer.account.balance.format
+            %span.balance{ class: "#{'negative' if customer.account.balance.negative?}" }= customer.account.balance
 

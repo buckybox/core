@@ -33,7 +33,7 @@
       %dt Currency
       %dd= currency_name(@distributor.currency)
       %dt Consumer Delivery Fee
-      %dd= @distributor.consumer_delivery_fee.format
+      %dd= @distributor.consumer_delivery_fee
       %dt Separate Bucky Fee
       %dd= checkmark_boolean(@distributor.separate_bucky_fee)
       %dt Omni Importers
@@ -58,7 +58,7 @@
       - if !@distributor.feature_spend_limit?
         %dd Feature not enabled by admin.
       - elsif @distributor.has_balance_threshold?
-        %dd= Money.new(@distributor.default_balance_threshold_cents, @distributor.currency).format
+        %dd= @distributor.default_balance_threshold
         %dt Send email to customers informing them their account is halted?
         %dd= checkmark_boolean(@distributor.send_halted_email?)
       - else
@@ -71,22 +71,4 @@
       %dd= @distributor.customers.count
       %dt Deliveries to Date
       %dd= @distributor.deliveries.delivered.count
-
-= simple_form_for(:invoice, url: [:invoice, :admin, @distributor], html: { class: 'form-horizontal' }) do |f|
-  %fieldset
-    %legend Invoicing
-    #invoice_loader.ajax-spinner
-    = f.input :start_date, as: :string, input_html: { value: Date.current.beginning_of_month, class: 'date_picker' }
-    = f.input :end_date, as: :string, input_html: { value: Date.current.end_of_month, class: 'date_picker' }
-
-    %table.table.table-striped
-      %tr
-        %td Deliveries Made
-        %td#deliveries_made.text-center= '?'
-      %tr
-        %td Deliveries Cancelled
-        %td#deliveries_cancelled.text-center= '?'
-      %tr
-        %td Value Shipped
-        %td#value_shipped.text-center= '?'
 
