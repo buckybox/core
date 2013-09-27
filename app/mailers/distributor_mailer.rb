@@ -20,7 +20,7 @@ class DistributorMailer < ApplicationMailer
     headers['X-MC-Tags'] = "distributor,welcome"
 
     mail to: @distributor.email_to,
-         from: "Sam Rye <#{Figaro.env.support_email}>",
+         from: "Will Lau <#{Figaro.env.support_email}>",
          subject: "#{@distributor.name}, welcome to Bucky Box!"
   end
 
