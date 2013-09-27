@@ -329,7 +329,7 @@ class Customer < ActiveRecord::Base
   def account_balance
     account = account(true) # force reload
 
-    account.present? ? account.balance : EasyMoney.new(0)
+    account.present? ? account.balance : EasyMoney.zero
   end
 
   def calculate_next_order(date=Date.current.to_s(:db))
