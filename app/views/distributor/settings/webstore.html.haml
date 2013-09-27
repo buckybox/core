@@ -3,6 +3,9 @@
 
 #webstore-settings
   = simple_form_for(@form, url: distributor_settings_webstore_url) do |f|
+    .important_action{class: @form.webstore_enabled ? 'complete' : ''}
+      = f.input :webstore_enabled, as: :boolean, inline_label: "Activate the <strong>Web Store</strong>".html_safe, label: false
+
     .row-fluid
       .span6.column-left
         %fieldset.org_banner
@@ -113,7 +116,7 @@
                   4
     
     .row-fluid
-      .span8.offset2
+      .span12
         .pull-right
           = f.submit 'cancel' , class: 'btn btn-link'
           = f.submit 'Save', class: 'btn btn-primary'
