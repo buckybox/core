@@ -56,12 +56,15 @@ BuckyBox::Application.routes.draw do
     namespace :settings do
       get 'organisation'
       post 'spend_limit_confirmation'
-      get 'extras'
-      get 'boxes'
       get 'delivery_services'
       get 'routes'
       get 'invoice_information'
       get 'customer_preferences'
+
+      namespace :products do
+        resource :boxes, only: [:show, :create, :update]
+        resource :box_items, only: [:show, :update]
+      end
 
       namespace :payments do
         resource :bank_deposit, controller: "bank_deposit", only: [:show, :update]

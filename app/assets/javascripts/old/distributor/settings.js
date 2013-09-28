@@ -24,6 +24,47 @@ $(function(){
     );
   }).trigger("change");
 
+  if ($("#products").length) {
+    // Enable Bootstrap components
+    $('i[data-toggle="tooltip"]').tooltip();
+    $("form.collapse").collapse();
+
+    // Photo uploader rollover
+    $(".edit .photo").on({
+      mouseenter: function() { $(this).find("a").show(); },
+      mouseleave: function() { $(this).find("a").hide(); },
+    });
+    $(".edit .photo .upload").click(function() {
+      $(this).closest(".edit").find("#box_box_image").trigger('click');
+    });
+
+    // Toggle extra items visibility
+    $('.edit input[id="box_extras_allowed"]').change(function() {
+      $(this).closest(".edit").find(".extra-items").toggle($(this).is(":checked"));
+    }).trigger('change');
+
+    // Toggle box extras visibility
+    $('.edit select[id="box_all_extras"]').change(function() {
+      $(this).closest(".edit").find(".box-extras").toggle($(this).val() === "false");
+    }).trigger('change');
+
+    // Turn links into dropdowns
+    $(".edit .selector").each(function() {
+      var link = $(this).find("a");
+      var select = $(this).find("select");
+      var selected = select.find("option:selected");
+
+      link.text(selected.text());
+      link.hover(function() {
+        link.hide(); select.show();
+      });
+
+      select.hide();
+    });
+
+    // Turn box extras dropdown into a Select2 one
+    $(".edit .box-extras select").select2({ width: '100%' });
+  }
 
   if ($("#payments").length) {
     var update_preview = function() {
