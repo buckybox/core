@@ -32,7 +32,7 @@ class Invoice < ActiveRecord::Base
   end
 
   def starting_balance
-    balance - transactions.inject(Money.new(0)) { |sum, t| sum += t[:amount] }
+    balance - transactions.inject(EasyMoney.zero) { |sum, t| sum += t[:amount] }
   end
 
   #creates invoices for all accounts which need it
@@ -70,7 +70,7 @@ class Invoice < ActiveRecord::Base
     occurrences = account_occurrences.map { |o| { date: o[:date], description: o[:description], amount: account.amount_with_bucky_fee(o[:price]) } }
 
     self.deliveries = real_deliveries + occurrences
-    self.amount = deliveries.inject(Money.new(0)) { |sum, occurrence| sum += occurrence[:amount] } - balance
+    self.amount = deliveries.inject(EasyMoney.zero) { |sum, occurrence| sum += occurrence[:amount] } - balance
 
      return (amount > 0) ? amount : 0
   end

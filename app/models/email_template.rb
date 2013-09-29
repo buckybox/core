@@ -39,7 +39,9 @@ class EmailTemplate
       replace = customer.public_send(keyword)
 
       # NOTE: format money - will need to be less ad-hoc if we add new keywords
-      replace = replace.format if replace.respond_to? :format
+      if replace.respond_to? :with_currency
+        replace = replace.with_currency(customer.distributor.currency)
+      end
 
       hash.merge!(keyword => replace.to_s)
     end.freeze

@@ -11,7 +11,7 @@
           %tr.row_description{id: "import_transaction_#{import_transaction.id}"}
             %td.date= import_transaction.transaction_date.to_s(:transaction)
             %td.description= import_transaction.description
-            %td.amount= import_transaction.amount.format
+            %td.amount= import_transaction.amount
             %td.account= import_transaction.account
             %td.customer{ id: "edit_row_match_#{import_transaction.id}" }
               = render partial: 'processed_row_detail', locals: {import_transaction: import_transaction}

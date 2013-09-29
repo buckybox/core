@@ -57,7 +57,7 @@ describe Payment, :slow do
 
       specify { @payment.reversal_transaction.should_not be_nil }
       specify { @payment.reversal_transaction.persisted?.should be_true }
-      specify { @payment.reversal_transaction.amount.should == -@amount }
+      specify { @payment.reversal_transaction.amount.should == @amount.opposite }
 
       specify { @payment.account.balance.should == @account_amount }
     end

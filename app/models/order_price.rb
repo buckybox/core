@@ -3,9 +3,8 @@ class OrderPrice
     return price if customer_discount.nil? # Convenience so we don't have to check all over app for nil
 
     customer_discount = customer_discount.discount if customer_discount.is_a?(Customer)
-    discounted_price = price * (1 - customer_discount)
 
-    discounted_price.to_money
+    price * (1 - customer_discount)
   end
 
   def self.individual(box_price, delivery_service_fee, customer_discount = nil)
@@ -19,14 +18,19 @@ class OrderPrice
   end
 
   def self.extras_price(order_extras, customer_discount = nil)
-    order_extras      = order_extras.map(&:to_hash) unless order_extras.is_a?(Hash)
     customer_discount = customer_discount.discount if customer_discount.is_a?(Customer)
 
     total_price = order_extras.map do |order_extra|
-      money = Money.new(order_extra[:price_cents], order_extra[:currency])
-      count = order_extra[:count].to_i
-      money * count
-    end.sum.to_money
+      order_extra = order_extra.to_hash unless order_extra.is_a? Hash
+
+      price = if order_extra[:price_cents]
+        order_extra[:price_cents] / 100.0 # NOTE: legacy support for archived packages
+      else
+        order_extra[:price]
+      end
+
+      price * order_extra[:count]
+    end.sum
 
     customer_discount ? discounted(total_price, customer_discount) : total_price
   end

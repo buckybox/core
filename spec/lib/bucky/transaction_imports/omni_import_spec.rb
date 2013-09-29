@@ -141,6 +141,12 @@ describe Bucky::TransactionImports::OmniImport do
     end
   end
 
+  it 'should skip all but Completed rows' do
+    Bucky::TransactionImports::OmniImport.test_paypal.process.each do |row|
+      row[:raw_data][:status].should eq("Completed")
+    end
+  end
+
   it 'should handle ISO8859-1 encoding' do
     rows = Bucky::TransactionImports::OmniImport.csv_read(File.join(Rails.root, "spec/support/test_upload_files/transaction_imports/TLVB-Accounts02Aug13.csv"))
     rows[0].should eq ["Date", "Transaction", "Deposits", "Withdrawals"]
