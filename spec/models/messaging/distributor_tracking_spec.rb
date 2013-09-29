@@ -16,13 +16,4 @@ describe Messaging::Distributor do
       distributor_tracking.tracking_after_create
     end
   end
-
-  describe '#tracking_after_save' do
-    it 'updates tags' do
-      messaging.stub(:update_tags).and_return(nil)
-      messaging.should_receive(:update_tags)
-      
-      distributor_tracking.tracking_after_save
-    end
-  end
 end
