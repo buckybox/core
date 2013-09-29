@@ -25,6 +25,6 @@
             %td= checkmark_boolean(delivery_service.fri)
             %td= checkmark_boolean(delivery_service.sat)
             %td= checkmark_boolean(delivery_service.sun)
-            %td= delivery_service.fee.format
+            %td= delivery_service.fee
             %td
               = link_to 'Edit', edit_distributor_delivery_service_path(delivery_service)

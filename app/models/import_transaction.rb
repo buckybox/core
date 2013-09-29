@@ -207,7 +207,7 @@ class ImportTransaction < ActiveRecord::Base
   end
 
   def payment_description(payment_type, amount)
-    if amount > Money.new(0, currency)
+    if amount.positive?
       "Payment made by #{payment_type}"
     else
       "Refund made by #{payment_type}"

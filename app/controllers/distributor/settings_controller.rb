@@ -23,17 +23,17 @@ class Distributor::SettingsController < Distributor::BaseController
 
   def delivery_services
     @delivery_service = DeliveryService.new
-    @delivery_services = current_distributor.delivery_services
+    @delivery_services = current_distributor.delivery_services.decorate
   end
 
   def extras
     @extra = Extra.new
-    @extras = current_distributor.extras.alphabetically
+    @extras = current_distributor.extras.alphabetically.decorate
   end
 
   def boxes
     @box = Box.new
-    @boxes = current_distributor.boxes
+    @boxes = current_distributor.boxes.decorate
   end
 
   def payments

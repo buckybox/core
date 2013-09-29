@@ -15,7 +15,7 @@
                 = tf.input :draft, as: :hidden, input_html: {value: false}
                 %td.date= import_transaction.transaction_date.to_s(:transaction)
                 %td.description= import_transaction.description
-                %td.amount= import_transaction.amount.format
+                %td.amount= import_transaction.amount
                 %td.account= @import_transaction_list.account
                 %td.customer
                   %span{style: "display: inline-block"}= tf.input :customer_id, as: :select, collection: import_transaction.possible_customers, selected: import_transaction.match_id, label: false, input_html: { class: 'chosen-payee-select' }

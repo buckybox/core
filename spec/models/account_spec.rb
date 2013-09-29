@@ -9,7 +9,6 @@ describe Account do
 
   context :balance do
     specify { account.balance.cents.should == 0 }
-    specify { account.balance.currency_as_string.should == Money.default_currency.to_s }
     specify { expect { account.balance_cents=(10) }.to raise_error(ArgumentError) }
     specify { expect { account.balance=(10) }.to raise_error(ArgumentError) }
   end
@@ -23,8 +22,8 @@ describe Account do
             account.change_balance_to(value)
           end
 
-          specify { account.balance.should == value.to_money }
-          specify { account.transactions.last.amount.should == value.to_money }
+          specify { account.balance.should == value }
+          specify { account.transactions.last.amount.should == value }
         end
       end
     end
@@ -39,8 +38,8 @@ describe Account do
             account.add_to_balance(value)
           end
 
-          specify { account.balance.should == (250 + value).to_money }
-          specify { account.transactions.last.amount.should == value.to_money }
+          specify { account.balance.should == (250 + value) }
+          specify { account.transactions.last.amount.should == value }
         end
       end
     end
@@ -55,8 +54,8 @@ describe Account do
             account.subtract_from_balance(value)
           end
 
-          specify { account.balance.should == (250 - value).to_money }
-          specify { account.transactions.last.amount.should == (-1 * value).to_money }
+          specify { account.balance.should == (250 - value) }
+          specify { account.transactions.last.amount.should == (-1 * value) }
         end
       end
     end

@@ -4,10 +4,10 @@ class Distributor::AccountsController < Distributor::ResourceController
   def change_balance
     @account = Account.find(params[:id])
 
-    delta_cents = (BigDecimal.new(params[:delta]) * BigDecimal.new(100)).to_i
+    delta = EasyMoney.new(params[:delta])
 
-    if delta_cents != 0
-      new_balance = @account.balance + Money.new(delta_cents)
+    if !delta.zero?
+      new_balance = @account.balance + delta
       note = params[:note]
       time = Date.parse(params[:date]).to_time_in_current_zone
 
@@ -21,7 +21,7 @@ class Distributor::AccountsController < Distributor::ResourceController
     end
 
     respond_to do |format|
-      if @account.save && delta_cents != 0
+      if @account.save && !delta.zero?
         format.html { redirect_to [:distributor, @account.customer], notice: 'Account balance was successfully updated.' }
         format.json { head :no_content }
       else
