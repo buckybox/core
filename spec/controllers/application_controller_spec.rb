@@ -24,7 +24,6 @@ describe ApplicationController do
       before { get :index }
 
       specify { Time.zone.name.should == default_time_zone }
-      specify { Money.default_currency.iso_code.should == default_currency }
     end
 
     context 'in hong kong' do
@@ -35,7 +34,6 @@ describe ApplicationController do
       end
 
       specify { Time.zone.name.should == time_zone }
-      specify { Money.default_currency.iso_code.should == currency }
     end
   end
 
@@ -46,7 +44,6 @@ describe ApplicationController do
       before { get :index }
 
       specify { Time.zone.name.should == default_time_zone }
-      specify { Money.default_currency.iso_code.should == default_currency }
     end
 
     context 'in hong kong' do
@@ -57,7 +54,6 @@ describe ApplicationController do
       end
 
       specify { Time.zone.name.should == time_zone }
-      specify { Money.default_currency.iso_code.should == currency }
     end
   end
 

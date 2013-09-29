@@ -17,7 +17,7 @@ class Extra < ActiveRecord::Base
   scope :none, where("1 = 0")
 
   def to_hash
-    { name: name, unit: unit, price_cents: price_cents, currency: currency }
+    { name: name, unit: unit, price: price }
   end
 
   def name_with_unit
@@ -30,9 +30,9 @@ class Extra < ActiveRecord::Base
 
   def name_with_price(customer_discount = nil)
     if customer_discount
-      "#{name} - #{price_with_discount(customer_discount).format} (#{unit})"
+      "#{name} - #{price_with_discount(customer_discount)} (#{unit})"
     else
-      "#{name} (#{price.format} per #{unit})"
+      "#{name} (#{price} per #{unit})"
     end
   end
 

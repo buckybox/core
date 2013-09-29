@@ -14,15 +14,15 @@
           %th.text-right Balance
 
       %tbody
-        - transaction_total = Money.new(0, @distributor.currency) # manual calculation until we start storing historical balance
+        - transaction_total = EasyMoney.zero # manual calculation until we start storing historical balance
 
         - @transactions.each do |transaction|
           %tr.transaction-data
             %td.date= transaction.created_at.to_s(:transaction)
             %td.date= transaction.display_time.to_s(:transaction)
             %td.details= transaction.description
-            %td.price.text-right= transaction.amount.format
-            %td.price.text-right= (@balance - transaction_total).format
+            %td.price.text-right= transaction.amount.with_currency(@currency)
+            %td.price.text-right= (@balance - transaction_total).with_currency(@currency)
 
           - transaction_total += transaction.amount
         - if @show_more_link

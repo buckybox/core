@@ -15,7 +15,6 @@ gem 'simple_form',                '~> 2.1.0'
 gem 'inherited_resources',        '~> 1.3.1'
 gem 'mini_magick',                '~> 3.4'
 gem 'carrierwave',                '~> 0.6.2'
-gem 'money-rails',                '~> 0.5.0'
 gem 'acts-as-taggable-on',        '~> 2.3.3'
 gem 'pg_search',                  '~> 0.5.1'
 gem 'whenever',                   '~> 0.7.3'
@@ -46,7 +45,8 @@ gem 'countries',                  '~> 0.9.2', require: 'iso3166'
 gem 'country_select',             '~> 1.1.3'
 gem 'biggs',                      '~> 0.3.3'
 gem 'charlock_holmes',            '~> 0.6.9.4'
-gem 'simple_form-bank_account_number', github: 'buckybox/simple_form-bank_account_number'
+gem 'easy_money',                 '~> 1.0.0', github: 'buckybox/easy_money'
+gem 'currency_data',              '~> 1.0.0', github: 'buckybox/currency_data'
 
 ########## THE GEMS ABOVE ARE THE ONLY ONES THAT RUN ON PRODUCTION ##########
 

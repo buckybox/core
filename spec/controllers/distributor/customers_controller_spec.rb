@@ -4,10 +4,25 @@ describe Distributor::CustomersController do
   render_views
 
   sign_in_as_distributor
-  context :with_customer do
+
+  context "with a customer" do
     before { @customer = Fabricate(:customer, distributor: @distributor) }
 
-    context "send_login_details" do
+    describe "#index" do
+      before { controller.stub(:check_setup) }
+
+      context "with no customers" do
+        before { get :index, query: "query_with_no_results" }
+        specify { expect(response).to be_success }
+      end
+
+      context "with customers" do
+        before { get :index }
+        specify { expect(response).to be_success }
+      end
+    end
+
+    describe "#send_login_details" do
       before do
         @send_login_details = lambda { get :send_login_details, id: @customer.id }
         @send_login_details.call
@@ -28,7 +43,7 @@ describe Distributor::CustomersController do
       end
     end
 
-    context "#update" do
+    describe "#update" do
       before do
         @customer_2 = Fabricate(:customer, distributor: @distributor, email: "duplicate@dups.com")
       end
