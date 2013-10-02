@@ -27,7 +27,6 @@ $(function(){
   if ($("#products").length) {
     // Enable Bootstrap components
     $('i[data-toggle="tooltip"]').tooltip();
-    $("form.collapse").collapse();
 
     // Photo uploader rollover
     $(".edit .photo").on({

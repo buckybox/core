@@ -103,9 +103,13 @@
       margin: 10px 0
 
 #products
+  .action
+    margin-bottom: 4px
   table
     color: #000
     tr
+      &[data-toggle='collapse']
+        cursor: pointer
       td
         padding: 0
         border: none
@@ -158,12 +162,12 @@
         padding-left: 3em
         margin-left: -2px
 
-  > .extras
+  > .extra_items
     .edit
       .name
-        width: 69%
+        width: 72%
       .unit
-        width: 18%
+        width: 15%
       .amount
         width: 12%
       .field

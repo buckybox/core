@@ -1,4 +1,4 @@
-class Distributor::Settings::Products::ExtrasController < Distributor::BaseController
+class Distributor::Settings::Products::ExtraItemsController < Distributor::BaseController
   def show
     render_form
   end
@@ -9,7 +9,7 @@ private
     @extras = current_distributor.extras.decorate
     @extras.unshift(Extra.new.decorate) # new extra
 
-    render 'distributor/settings/products/extras', locals: {
+    render 'distributor/settings/products/extra_items', locals: {
       extras: @extras,
     }
   end
