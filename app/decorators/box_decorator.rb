@@ -1,6 +1,8 @@
 require "draper"
 
 class BoxDecorator < Draper::Decorator
+  include ActionView::Helpers::TextHelper # to get `pluralize` helper
+
   delegate_all
 
   def formatted_price
@@ -11,7 +13,7 @@ class BoxDecorator < Draper::Decorator
     if object.extras_unlimited?
       "Any amount of extra items"
     else
-      "Up to #{object.extras_limit} extra items"
+      "Up to #{pluralize(object.extras_limit, 'extra item')}"
     end
   end
 
@@ -19,7 +21,7 @@ class BoxDecorator < Draper::Decorator
     if object.exclusions_unlimited?
       "Any amount of exclusions"
     else
-      "Up to #{object.exclusions_limit} exclusions"
+      "Up to #{pluralize(object.exclusions_limit, 'exclusion')}"
     end
   end
 
@@ -27,7 +29,7 @@ class BoxDecorator < Draper::Decorator
     if object.substitutions_unlimited?
       "Any amount of substitutions"
     else
-      "Up to #{object.substitutions_limit} substitutions"
+      "Up to #{pluralize(object.substitutions_limit, 'substitution')}"
     end
   end
 end

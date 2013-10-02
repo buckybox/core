@@ -63,8 +63,8 @@ BuckyBox::Application.routes.draw do
 
       namespace :products do
         resource :boxes, only: [:show, :create, :update]
-        resource :box_items, only: [:show, :update]
-        resource :extras, only: [:show, :create, :update]
+        resource :box_items, only: [:show, :create, :update]
+        resource :extra_items, only: [:show, :create, :update]
       end
 
       namespace :payments do
