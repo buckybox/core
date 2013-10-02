@@ -39,7 +39,7 @@ $(function(){
     });
 
     // Toggle extra items visibility
-    $('.edit input[id="box_extras_allowed"]').change(function() {
+    $('.edit input[id="box_extras_limit"]').change(function() {
       $(this).closest(".edit").find(".extra-items").toggle($(this).is(":checked"));
     }).trigger('change');
 
