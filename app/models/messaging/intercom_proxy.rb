@@ -39,6 +39,14 @@ module Messaging
       report(e)
     end
 
+    def remove_tag(user_id, tag, env = nil)
+      return if skip? env
+
+      remove_user_from_tag(user_id, tag)
+    rescue Bucky::NonFatalException => e
+      report(e)
+    end
+
     def update_tags(attrs, env = nil)
       return if skip? env
 
@@ -83,6 +91,14 @@ module Messaging
       tag = find_or_create_tag(name)
       tag.user_ids = [id.to_s]
       tag.tag_or_untag = 'tag'
+      tag.save
+    end
+
+
+    def remove_user_from_tag(id, name)
+      tag = find_or_create_tag(name)
+      tag.user_ids = [id.to_s]
+      tag.tag_or_untag = 'untag'
       tag.save
     end
 
