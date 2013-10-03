@@ -43,11 +43,8 @@ class SettingsWebstoreForm < Form
 
     saved = distributor.save
     set_errors(distributor.errors) unless saved
+    self.webstore_enabled = false unless errors[:webstore_enabled].blank?
     saved
-  end
-
-  def webstore_enabled
-    @webstore_enabled && errors[:webstore_enabled].blank?
   end
 
   def set_errors(errors)

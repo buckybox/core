@@ -3,7 +3,7 @@
 
 #webstore-settings
   = simple_form_for(@form, url: distributor_settings_webstore_url) do |f|
-    .important_action{class: @form.webstore_enabled ? 'complete' : ''}
+    .important_action{class: @form.webstore_enabled ? 'green' : 'red'}
       = f.input :webstore_enabled, as: :boolean, inline_label: "Activate the <strong>Web Store</strong>".html_safe, label: false
 
     .row-fluid
