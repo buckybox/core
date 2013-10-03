@@ -106,13 +106,17 @@
           display: inline-block
         .image-rollover
           position: absolute
-          height: 82px
-          width: 482px
+          height: 100%
+          width: 100%
+          text-align: center
+          vertical-align: middle
           .image-message
+            position: relative
             display: none
             padding: 6px 30px
             width: 100px
-            margin: 18px auto
+            margin-top: -26px
+            top: 50%
             text-align: center
             color: #08C
             font-size: 13px
@@ -120,7 +124,7 @@
             +border-radius(30px)
           &:hover
             .image-message
-              display: block
+              display: inline-block
 
       .banner
         padding: 10px 70px
@@ -138,20 +142,8 @@
 
       img.banner
         padding: 0
-        height: 82px
         width: auto
     
-    &.team_photo
-      .body
-        .image-box
-          height: 282px
-          .image-rollover
-            height: 282px
-          .image-message
-            margin: 105px auto
-        img.banner
-          height: 282px
-
     textarea
       +box-sizing(border-box)
       width: 100%
@@ -195,17 +187,17 @@
     position: relative
     .overlay
       position: absolute
-      left: 90px
+      left: 19%
       .blue-circle
         margin-top: 0px
       &.one
-        top: 86px
+        top: 10.5%
       &.two
-        top: 244px
+        top: 30.5%
       &.three
-        top: 481px
+        top: 61%
       &.four
-        top: 708px
+        top: 88.5%
 
 #payments
   .nav
