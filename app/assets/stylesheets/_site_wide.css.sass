@@ -222,3 +222,20 @@ table.no-horizontal-dividers
   .span6:first-child
     padding: 0 20px 0 0
 
+// Fix textfield width issue so that they match parents width. See webstore settings page for
+// example, search for ".input-block-level"
+// http://stackoverflow.com/questions/11232627/perfect-100-width-of-parent-container-for-a-bootstrap-input
+.input-prepend.input-block-level 
+  display: table
+  width: 100%
+
+.input-prepend.input-block-level .add-on 
+  display: table-cell
+  background-color: white
+
+.input-prepend.input-block-level > input 
+  +box-sizing(border-box)
+  height: 30px
+  display: table-cell
+  width: 100%
+  border-left-style: none
