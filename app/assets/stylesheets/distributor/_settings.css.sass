@@ -150,7 +150,7 @@
           height: 282px
 
     textarea
-      box-sizing: border-box 
+      +box-sizing(border-box)
       width: 100%
       margin-bottom: 0
 
@@ -225,8 +225,8 @@
 
 .important_action
   text-align: center
-  background: #F9D9D9
-  color: #993300
+  &.red
+    color: #993300
   border-radius: 5px
   padding: 2px
   margin: 6px 0 20px 0
@@ -237,6 +237,3 @@
     .controls
       label.checkbox
         margin-bottom: 0
-  &.complete
-    background: #D4E4C4
-    color: #525252

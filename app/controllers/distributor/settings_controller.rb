@@ -19,8 +19,9 @@ class Distributor::SettingsController < Distributor::BaseController
     form = SettingsWebstoreForm.new(params[:settings_webstore_form])
 
     if form.save(current_distributor)
-      redirect_to distributor_settings_webstore_path, notice: "Webstore settings were successfully saved."
+      redirect_to distributor_settings_webstore_path, notice: "Web Store settings were successfully saved."
     else
+      flash.now[:alert] = "Web Store settings could not be saved, please check the errors displayed."
       webstore(form)
     end
   end
