@@ -544,6 +544,10 @@ class Distributor < ActiveRecord::Base
     link[0..6] == "http://" ? link : "http://#{link}"
   end
 
+  def webstore_status_changed?
+    active_webstore_changed?
+  end
+
 private
 
   def self.human_attribute_name(attr, options = {})

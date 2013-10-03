@@ -2,6 +2,8 @@ module Messaging
   class Distributor
 
     AUTO_MESSAGE_TAG = "[[auto-messages]]"
+    WEBSTORE_ENABLED_TAG = "[webstore]-on"
+    WEBSTORE_DISABLED_TAG = "[webstore]-off"
 
     def initialize(distributor)
       @distributor = distributor
@@ -13,9 +15,13 @@ module Messaging
     end
 
     def tracking_after_save
+      toggle_webstore_tag if distributor.webstore_status_changed?
+    end
+
+    def toggle_webstore_tag
       delay(
         priority: Figaro.env.delayed_job_priority_low
-      ).update_tags
+      ).delayed_toggle_webstore_tag
     end
 
     def update
@@ -50,6 +56,16 @@ module Messaging
 
     def update_tags
       messaging_proxy.update_tags({id: distributor.id, tag_list: distributor.tag_list}, Rails.env)
+    end
+
+    def delayed_toggle_webstore_tag
+      if distributor.active_webstore?
+        messaging_proxy.add_tag(distributor.id, WEBSTORE_ENABLED_TAG, Rails.env)
+        messaging_proxy.remove_tag(distributor.id, WEBSTORE_DISABLED_TAG, Rails.env)
+      else
+        messaging_proxy.add_tag(distributor.id, WEBSTORE_DISABLED_TAG, Rails.env)
+        messaging_proxy.remove_tag(distributor.id, WEBSTORE_ENABLED_TAG, Rails.env)
+      end
     end
 
     def messaging_proxy
