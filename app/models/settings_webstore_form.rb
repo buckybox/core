@@ -46,6 +46,10 @@ class SettingsWebstoreForm < Form
     saved
   end
 
+  def webstore_enabled
+    @webstore_enabled && errors[:webstore_enabled].blank?
+  end
+
   def set_errors(errors)
     INTERFACE.each { |k,v|
       errors[v].each do |error|
