@@ -20,7 +20,9 @@ module Distributor::BaseHelper
   end
 
   def sub_tab(text, path, opts = {})
-    highlighted = current_page?(path) || opts[:force_highlighted].to_s == text.downcase
+    highlighted = current_page?(path) ||
+      params[:controller].include?(text.downcase) ||
+      opts[:force_highlighted].to_s == text.downcase
 
     content_tag(:li, class: highlighted ? 'active' : '') do
       link_to text, path

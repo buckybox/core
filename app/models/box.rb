@@ -12,6 +12,7 @@ class Box < ActiveRecord::Base
     :available_fourtnightly, :box_image, :box_image_cache, :remove_box_image, :extras_limit, :extra_ids, :hidden, :visible, :exclusions_limit, :substitutions_limit, :extras
 
   validates_presence_of :distributor, :name, :description, :price
+  validates_numericality_of :price, greater_than_or_equal_to: 0
   validates :extras_limit, numericality: { greater_than: -2 }
 
   monetize :price_cents
