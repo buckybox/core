@@ -538,6 +538,12 @@ class Distributor < ActiveRecord::Base
     delivery_services.count.zero? || boxes.count.zero?
   end
 
+  def facebook_url
+    link = read_attribute(:facebook_url)
+    return '' if link.blank?
+    link[0..6] == "http://" ? link : "http://#{link}"
+  end
+
 private
 
   def self.human_attribute_name(attr, options = {})
@@ -546,7 +552,6 @@ private
 
   def required_fields_for_webstore
     if active_webstore_changed? && active_webstore?
-      errors.add(:active_webstore, "Need bank information filled in before enabling the webstore") unless bank_information.present? && bank_information.valid?
       errors.add(:active_webstore, "Need to have a delivery service setup before enabling the webstore") if delivery_services.count.zero?
       errors.add(:active_webstore, "Need to have a box setup before enabling the webstore") if boxes.count.zero?
     end
