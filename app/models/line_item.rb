@@ -30,9 +30,9 @@ class LineItem < ActiveRecord::Base
   def self.bulk_update(distributor, line_item_hash)
     line_item_hash ||= {}
 
-    line_item_hash.each do |id, name|
+    line_item_hash.each do |id, attrs|
       line_item = LineItem.find(id)
-      name = name.titleize
+      name = attrs.fetch(:name).titleize
 
       if name.blank?
         line_item.destroy

@@ -26,43 +26,71 @@ $(function(){
 
   if ($("#products").length) {
     // Enable Bootstrap components
-    $('i[data-toggle="tooltip"]').tooltip();
+    $('[data-toggle="tooltip"]').tooltip();
 
-    // Photo uploader rollover
-    $(".edit .photo").on({
-      mouseenter: function() { $(this).find("a").show(); },
-      mouseleave: function() { $(this).find("a").hide(); },
-    });
-    $(".edit .photo .upload").click(function() {
-      $(this).closest(".edit").find("#box_box_image").trigger('click');
-    });
-
-    // Toggle extra items visibility
-    $('.edit input[id="box_extras_limit"]').change(function() {
-      $(this).closest(".edit").find(".extra-items").toggle($(this).is(":checked"));
-    }).trigger('change');
-
-    // Toggle box extras visibility
-    $('.edit select[id="box_all_extras"]').change(function() {
-      $(this).closest(".edit").find(".box-extras").toggle($(this).val() === "false");
-    }).trigger('change');
-
-    // Turn links into dropdowns
-    $(".edit .selector").each(function() {
-      var link = $(this).find("a");
-      var select = $(this).find("select");
-      var selected = select.find("option:selected");
-
-      link.text(selected.text());
-      link.hover(function() {
-        link.hide(); select.show();
+    if ($("#products > .boxes").length) {
+      // Photo uploader rollover
+      $(".edit .photo").on({
+        mouseenter: function() { $(this).find("a").show(); },
+        mouseleave: function() { $(this).find("a").hide(); },
+      });
+      $(".edit .photo .upload").click(function() {
+        $(this).closest(".edit").find("#box_box_image").trigger('click');
       });
 
-      select.hide();
-    });
+      // Toggle extra items visibility
+      $('.edit input[id="box_extras_limit"]').change(function() {
+        $(this).closest(".edit").find(".extra-items").toggle($(this).is(":checked"));
+      }).trigger('change');
 
-    // Turn box extras dropdown into a Select2 one
-    $(".edit .box-extras select").select2({ width: '100%' });
+      // Toggle box extras visibility
+      $('.edit select[id="box_all_extras"]').change(function() {
+        $(this).closest(".edit").find(".box-extras").toggle($(this).val() === "false");
+      }).trigger('change');
+
+      // Turn links into dropdowns
+      $(".edit .selector").each(function() {
+        var link = $(this).find("a");
+        var select = $(this).find("select");
+        var selected = select.find("option:selected");
+
+        link.text(selected.text());
+        link.hover(function() {
+          link.hide(); select.show();
+        });
+
+        select.hide();
+      });
+
+      // Turn box extras dropdown into a Select2 one
+      $(".edit .box-extras select").select2({ width: '100%' });
+    }
+
+    if ($("#products > .box_items").length) {
+      $("form tr:not(.edit), form a.cancel").click(function() {
+        $("form table tr").each(function() {
+          $(this).toggle();
+        });
+
+        $("form .form-actions").toggle();
+      });
+
+      $("#products > .box_items tr.edit input.name").keyup(function() {
+        var warning = $(this).closest('tr').find('.warning');
+        var remove = $(this).closest('tr').find('.remove');
+        var original_value = $(this).data('original-value');
+        var current_value  = $(this).val();
+
+        warning.toggle(current_value !== original_value);
+        remove.prop("disabled", current_value.length === 0);
+      }).trigger('keyup');
+
+      $("#products > .box_items tr.edit button.remove").click(function() {
+        var input = $(this).closest('tr').find('input');
+        input.val('');
+        input.trigger('keyup');
+      });
+    }
   }
 
   if ($("#payments").length) {

@@ -58,7 +58,7 @@
                 .span10.pull-right.fields
                   .row-fuild
                     = f.input_field :name, class: 'name', required: true, placeholder: 'Box Name'
-                    = f.input_field :price, class: 'pull-right amount', required: true, placeholder: '0.00', title: 'Price'
+                    = f.input_field :price, class: 'pull-right amount', required: true, placeholder: '0.00', title: 'Price', type: 'number', min: 0, step: 'any'
                   .row-fuild
                     = f.input_field :description, rows: 3, class: 'span12', required: true, placeholder: 'Description'
 

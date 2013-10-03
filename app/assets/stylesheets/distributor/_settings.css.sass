@@ -110,31 +110,33 @@
     tr
       &[data-toggle='collapse']
         cursor: pointer
+      &:last-child
+        border-bottom: none
       td
         padding: 0
         border: none
         vertical-align: middle
         border: none
         .photo img
-          cursor: pointer
+          padding: 2px 0
         &.text-right
           white-space: nowrap
       &:first-child
         padding: 4px 0
-    form
-      border-bottom: 1px solid #DDD
-      margin: 0
-      .container-fluid
-        padding: 8px
-        border-top: 1px dotted #DDD
-      .line
-        line-height: 38px
-      .form-actions
-        border: none
-        padding: 0
-        margin: 1em 0 0 0
-        input
-          margin-left: 1em
+  form
+    border-bottom: 1px solid #DDD
+    margin: 0
+    .container-fluid
+      padding: 8px
+      border-top: 1px dotted #DDD
+    .line
+      line-height: 38px
+    .form-actions
+      border: none
+      padding: 0
+      margin: 1em 0 0 0
+      input
+        margin-left: 1em
 
   > .boxes
     .edit
@@ -161,6 +163,59 @@
       .extra-items
         padding-left: 3em
         margin-left: -2px
+
+  > .box_items
+    #new_line_item
+      margin: 1em 0
+      background-color: $action-colour
+      +border-radius(4px)
+      .table
+        margin: 0
+        tr
+          border: none
+      .form-actions
+        +border-radius(0 0 4px 4px)
+      .action
+        margin: 0
+    .form-actions
+      text-align: center
+      display: none
+      padding-bottom: 1em
+      padding-bottom: 1em
+      margin: 0
+    form
+      border: none
+      textarea
+        width: 100%
+    table
+      &.list
+        border-top: 1px solid #DDD
+      tr
+        border-bottom: 1px solid #DDD
+        .badge
+          margin: 2px 0
+        &:not(.edit)
+          cursor: pointer
+        &.edit
+          display: none
+          td
+            padding: 4px
+            &:first-child
+              width: 50%
+          input
+            margin: 0
+            width: 90%
+          .warning
+            display: none
+          .input-append
+            margin: 0
+          .add-on // Bootstrap fix
+            padding: 0
+            border-right: none
+            button
+              margin-top: -1px
+              &[disabled]
+                opacity: inherit
 
   > .extra_items
     .edit

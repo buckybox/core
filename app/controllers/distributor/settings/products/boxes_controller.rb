@@ -11,9 +11,12 @@ class Distributor::Settings::Products::BoxesController < Distributor::BaseContro
     box_params.delete(:extras)
 
     box = Box.new(box_params)
+    box.distributor = current_distributor
 
     if box.save
       flash.now[:notice] = "Your new box has heen created."
+    else
+      flash.now[:error] = box.errors.full_messages.to_sentence
     end
 
     render_form
@@ -29,6 +32,8 @@ class Distributor::Settings::Products::BoxesController < Distributor::BaseContro
 
     if box.update_attributes(box_params)
       flash.now[:notice] = "Your box has heen updated."
+    else
+      flash.now[:error] = box.errors.full_messages.to_sentence
     end
 
     render_form
