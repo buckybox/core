@@ -81,8 +81,9 @@ class Distributor < ActiveRecord::Base
   validates_presence_of :country
   validates_presence_of :email
   validates_uniqueness_of :email
-  validates_presence_of :name, on: :update
-  validates_uniqueness_of :name, on: :update
+  validates_presence_of :name
+  validates_uniqueness_of :name
+  validates_uniqueness_of :parameter_name, allow_nil: true
   validates_numericality_of :advance_hour, greater_than_or_equal_to: 0
   validates_numericality_of :advance_days, greater_than_or_equal_to: 0
   validates_numericality_of :automatic_delivery_hour, greater_than_or_equal_to: 0
