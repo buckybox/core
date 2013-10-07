@@ -12,8 +12,8 @@ class Box < ActiveRecord::Base
     :available_fourtnightly, :box_image, :box_image_cache, :remove_box_image, :extras_limit, :extra_ids, :hidden, :visible, :exclusions_limit, :substitutions_limit, :extras
 
   validates_presence_of :distributor, :name, :description, :price
-  validates_numericality_of :price, greater_than_or_equal_to: 0
   validates :extras_limit, numericality: { greater_than: -2 }
+  validate :validate_price
 
   monetize :price_cents
 
@@ -118,5 +118,11 @@ class Box < ActiveRecord::Base
 
   def available_extras
     extras.not_hidden.alphabetically
+  end
+
+private
+
+  def validate_price
+    errors.add(:price, "must be a positive number") if price < 0
   end
 end
