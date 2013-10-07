@@ -1,0 +1,12 @@
+- title 'Products', false
+- show_settings_sub_nav
+
+#products.tabbable.tabs-left
+  %ul.nav.nav-tabs
+    %li{ class: "#{'active' if type == 'boxes'}" }= link_to "Boxes", distributor_settings_products_boxes_path
+    %li{ class: "#{'active' if type == 'box_items'}" }= link_to "Box Items", distributor_settings_products_box_items_path
+    %li{ class: "#{'active' if type == 'extra_items'}" }= link_to "Extra Items", distributor_settings_products_extra_items_path
+
+  .tab-content{ class: type }
+    = yield(:product_type)
+

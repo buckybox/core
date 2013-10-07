@@ -17,7 +17,7 @@
       .span11
         #content
           - unless yield(:sub_nav).blank?
-            .row-fluid{style: "z-index: 10"}
+            #sub-nav-container.row-fluid
               #sub-nav.span12= yield(:sub_nav)
 
           - if show_title?

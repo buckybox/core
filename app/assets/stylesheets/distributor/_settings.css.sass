@@ -11,7 +11,7 @@
     .btn
       margin-bottom: 25px
 
-//----- Business Information
+//----- Organisation
 
 #webstore-information
   .image-upload
@@ -66,12 +66,8 @@
   .controls
     margin-left: 290px
 
-#business_information_submit
-  margin-right: 20px
-
 #distributor_spend_limit_on_all_customers
   margin-bottom: 6px
-
 
 #webstore-settings
   margin-top: 20px
@@ -207,13 +203,165 @@
       margin-bottom: 20em
   textarea
     resize: vertical
-  input:not(.btn), textarea
-    +box-sizing(border-box)
-    display: block
-    width: 100%
-    margin-bottom: 4px
-  input:not(.btn)
+  input:not(.btn):not(.boolean)
     height: 30px
+  input:not(.btn), textarea, select
+    +box-sizing(border-box)
+    margin-bottom: 4px
+    &.span6:last-child
+      float: right
+
+#organisation
+  .address input
+    +border-radius(4px)
+    &:first-child:not(:only-child)
+      +border-radius(4px 0 0 4px)
+      &:not(:focus)
+        border-right-color: transparent
+    &:last-child:not(:only-child)
+      +border-radius(0 4px 4px 0)
+      &:not(:focus)
+        border-left-color: transparent
+
+  .country
+    margin: 5px 9px
+  .time_zone
+    width: 50%
+
+  #balance_threshold
+    padding-left: 20px
+    .input-append
+      margin: 10px 0
+
+#products
+  .action
+    margin-bottom: 4px
+  table
+    color: #000
+    tr
+      &[data-toggle='collapse']
+        cursor: pointer
+      &:last-child
+        border-bottom: none
+      td
+        padding: 0
+        border: none
+        vertical-align: middle
+        border: none
+        .photo img
+          padding: 2px 0
+        &.text-right
+          white-space: nowrap
+      &:first-child
+        padding: 4px 0
+  form
+    border-bottom: 1px solid #DDD
+    margin: 0
+    .container-fluid
+      padding: 8px
+      border-top: 1px dotted #DDD
+    .line
+      line-height: 38px
+    .form-actions
+      border: none
+      padding: 0
+      margin: 1em 0 0 0
+      input
+        margin-left: 1em
+
+  > .boxes
+    .edit
+      border: none
+      .photo
+        border: 1px solid #999
+        img
+          width: 100%
+        a
+          position: absolute
+          top: 55px
+          left: 22px
+          background: #FFF
+          padding: .2em .4em
+          border: 1px dotted #ccc
+          +border-radius(1em)
+          display: none
+      .name
+        width: 87%
+      .amount
+        width: 12%
+      .field
+        display: inline-block
+      .extra-items
+        padding-left: 3em
+        margin-left: -2px
+
+  > .box_items
+    #new_line_item
+      margin: 1em 0
+      background-color: $action-colour
+      +border-radius(4px)
+      .table
+        margin: 0
+        tr
+          border: none
+      .form-actions
+        +border-radius(0 0 4px 4px)
+      .action
+        margin: 0
+    .form-actions
+      text-align: center
+      display: none
+      padding-bottom: 1em
+      padding-bottom: 1em
+      margin: 0
+    form
+      border: none
+      textarea
+        width: 100%
+    table
+      &.list
+        border-top: 1px solid #DDD
+      tr
+        border-bottom: 1px solid #DDD
+        .badge
+          margin: 2px 0
+        &:not(.edit)
+          cursor: pointer
+        &.edit
+          display: none
+          td
+            padding: 4px
+            &:first-child
+              width: 50%
+          input
+            margin: 0
+            width: 90%
+          .warning
+            display: none
+          .input-append
+            margin: 0
+          .add-on // Bootstrap fix
+            padding: 0
+            border-right: none
+            button
+              margin-top: -1px
+              &[disabled]
+                opacity: inherit
+
+  > .extra_items
+    .edit
+      .name
+        width: 72%
+      .unit
+        width: 15%
+      .amount
+        width: 12%
+      .field
+        display: inline-block
+      form .form-actions
+        margin: 0
+
+#payments
   .preview
     p
       margin-top: 10px
@@ -232,3 +380,12 @@
     .controls
       label.checkbox
         margin-bottom: 0
+
+.nav-tabs
+  padding-top: 1em
+  padding-bottom: 1em
+  min-width: 10em
+  min-height: 20em
+  border-left: 0
+  border-image: linear-gradient(#DDD, #FFF) 1 100%
+

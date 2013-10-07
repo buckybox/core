@@ -1170,7 +1170,6 @@ CREATE TABLE distributors (
     time_zone character varying(255),
     advance_hour integer,
     advance_days integer,
-    automatic_delivery_hour integer,
     currency character varying(255),
     country_id integer,
     consumer_delivery_fee_cents integer,
@@ -3726,3 +3725,5 @@ INSERT INTO schema_migrations (version) VALUES ('20130827002646');
 INSERT INTO schema_migrations (version) VALUES ('20130910033818');
 
 INSERT INTO schema_migrations (version) VALUES ('20130926033607');
+
+INSERT INTO schema_migrations (version) VALUES ('20130923050455');

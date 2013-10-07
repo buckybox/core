@@ -1,0 +1,49 @@
+- content_for :product_type do
+  .row-fluid
+    .span6
+      %strong Extra Items
+      are value added items that your customers may choose to add to their box during the checkout process.
+    .span6
+      .label Hint:
+      Each of your boxes can be configured individually whether to accept Extra Items or not.
+
+  %table.table.table-condensed.spacer
+    %tr
+      %td{colspan: 5}
+        - first_extra = extras.one?
+        = link_to 'javascript:void(0)', class: (first_extra ? 'required-action' : 'action'), 'data-toggle' => 'collapse', 'data-target' => '#new_extra' do
+          Create
+          = first_extra ? 'your first' : 'a new'
+          <strong>Extra Item</strong>
+
+    - extras.each do |extra|
+      - if extra.persisted?
+        %tr{ 'data-toggle' => 'collapse', 'data-target' => "#edit_extra_#{extra.id}" }
+          %td
+            %strong= link_to extra.name, 'javascript:void(0)'
+          %td
+            = extra.unit
+          %td.text-right
+            - if extra.visible
+              %i.icon-shopping-cart{'data-toggle' => 'tooltip', 'title' => 'Visible on webstore'}
+          %td.amount
+            = extra.formatted_price
+
+      %tr.edit
+        %td{colspan: 5}
+          = simple_form_for(extra, url: distributor_settings_products_extra_items_path, html: { novalidate: false, class: 'collapse background-yellow' }) do |f|
+            = f.hidden_field :id if extra.id
+            .container-fluid
+              .line
+                = f.input_field :name, class: 'name', required: true, placeholder: 'Name'
+                = f.input_field :unit, class: 'unit', required: true, placeholder: 'Unit e.g. 1/2 doz.'
+                = f.input_field :price, class: 'amount', required: true, placeholder: '0.00', title: 'Price'
+              .line
+                .field= f.input_field :visible, inline_label: true, label: '<i class="icon-shopping-cart"></i> Visible on webstore', as: :boolean
+
+                .form-actions.pull-right
+                  = link_to 'cancel', 'javascript:void(0)', 'data-toggle' => 'collapse', 'data-target' => (extra.new_record? ? "#new_extra" : "#edit_extra_#{extra.id}")
+                  = f.button :submit, 'Save', class: 'btn btn-primary'
+
+= render partial: 'distributor/settings/products', locals: { type: 'extra_items' }
+

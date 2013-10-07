@@ -1,38 +1,97 @@
 $(function(){
-  $("#business_information_submit").click(function(){
-    if($("#distributor_has_balance_threshold:checked").size() !== 0){
-      $("#business_information_submit").attr('disabled', 'disabled');
-      $.post("/distributor/settings/spend_limit_confirmation",
-             {spend_limit: $("#distributor_default_balance_threshold").val(),
-              update_existing: $("#distributor_spend_limit_on_all_customers:checked").size(),
-              send_halt_email: $("#distributor_send_halted_email:checked").size()},
-             function(data, textStatus, jqXHR){
-               if(data === "safe"){
-                $("#business_information_submit").closest("form").submit();
-               }else if(confirm(data)){
-                $("#business_information_submit").closest("form").submit();
-               }else{
-                $("#business_information_submit").removeAttr('disabled');
-               }
-             }
-            ).error(function(){
-              $("#business_information_submit").removeAttr('disabled');
-            });
-    }else{
-      return true;
+  $("#organisation_submit").click(function(){
+    if ($("#distributor_has_balance_threshold:checked").size() !== 0) {
+      $("#organisation_submit").attr('disabled', 'disabled');
+
+      $.post("/distributor/settings/spend_limit_confirmation", {
+         spend_limit: $("#distributor_default_balance_threshold").val(),
+         update_existing: $("#distributor_spend_limit_on_all_customers:checked").size(),
+         send_halt_email: $("#distributor_send_halted_email:checked").size()
+       },
+       function(data) {
+         if (data !== "safe" && !confirm(data)) return false;
+       }
+      ).complete(function() {
+        $("#organisation_submit").removeAttr('disabled');
+      });
     }
-    return false;
   });
 
-  var update_balance_threshold_display = function(){
-    if($("#distributor_has_balance_threshold:checked").size() === 0) {
-      $("#balance_threshold").hide('highlight');
-    } else {
-      $("#balance_threshold").show('highlight');
+  // Show/hide spend limit (balance_threshold) extra fields
+  $("#distributor_has_balance_threshold").change(function() {
+    $("#balance_threshold").toggle(
+      $("#distributor_has_balance_threshold").is(":checked")
+    );
+  }).trigger("change");
+
+  if ($("#products").length) {
+    // Enable Bootstrap components
+    $('[data-toggle="tooltip"]').tooltip();
+
+    if ($("#products > .boxes").length) {
+      // Photo uploader rollover
+      $(".edit .photo").on({
+        mouseenter: function() { $(this).find("a").show(); },
+        mouseleave: function() { $(this).find("a").hide(); },
+      });
+      $(".edit .photo .upload").click(function() {
+        $(this).closest(".edit").find("#box_box_image").trigger('click');
+      });
+
+      // Toggle extra items visibility
+      $('.edit input[id="box_extras_limit"]').change(function() {
+        $(this).closest(".edit").find(".extra-items").toggle($(this).is(":checked"));
+      }).trigger('change');
+
+      // Toggle box extras visibility
+      $('.edit select[id="box_all_extras"]').change(function() {
+        $(this).closest(".edit").find(".box-extras").toggle($(this).val() === "false");
+      }).trigger('change');
+
+      // Turn links into dropdowns
+      $(".edit .selector").each(function() {
+        var link = $(this).find("a");
+        var select = $(this).find("select");
+        var selected = select.find("option:selected");
+
+        link.text(selected.text());
+        link.hover(function() {
+          link.hide(); select.show();
+        });
+
+        select.hide();
+      });
+
+      // Turn box extras dropdown into a Select2 one
+      $(".edit .box-extras select").select2({ width: '100%' });
+    }
+
+    if ($("#products > .box_items").length) {
+      $("form tr:not(.edit), form a.cancel").click(function() {
+        $("form table tr").each(function() {
+          $(this).toggle();
+        });
+
+        $("form .form-actions").toggle();
+      });
+
+      $("#products > .box_items tr.edit input.name").keyup(function() {
+        var warning = $(this).closest('tr').find('.warning');
+        var remove = $(this).closest('tr').find('.remove');
+        var original_value = $(this).data('original-value');
+        var current_value  = $(this).val();
+
+        warning.toggle(current_value !== original_value);
+        remove.prop("disabled", current_value.length === 0);
+      }).trigger('keyup');
+
+      $("#products > .box_items tr.edit button.remove").click(function() {
+        var input = $(this).closest('tr').find('input');
+        input.val('');
+        input.trigger('keyup');
+      });
     }
   }
-  // Show/hide spend limit (balance_threshold) extra fields
-  $("#distributor_has_balance_threshold").click(update_balance_threshold_display);
 
   $("#org_banner_file_upload").click(function(event){
     $("#settings_webstore_form_org_banner_file").trigger('click');
