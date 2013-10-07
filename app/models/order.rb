@@ -272,7 +272,7 @@ class Order < ActiveRecord::Base
 
   def possible_resume_dates(look_ahead = 12.weeks)
     if pause_date
-      start_time           = (pause_date + 1.day).to_time_in_current_zone
+      start_time           = [(pause_date + 1.day).to_time_in_current_zone, distributor.window_end_at.to_time_in_current_zone + 1.day].compact.max
       end_time             = start_time + look_ahead
       existing_resume_date = resume_date
 
