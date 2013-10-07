@@ -9,9 +9,10 @@ class Box < ActiveRecord::Base
 
   # Setup accessible (or protected) attributes for your model
   attr_accessible :distributor, :name, :description, :likes, :dislikes, :price, :available_single, :available_weekly,
-    :available_fourtnightly, :box_image, :box_image_cache, :remove_box_image, :extras_limit, :extra_ids, :hidden, :exclusions_limit, :substitutions_limit
+    :available_fourtnightly, :box_image, :box_image_cache, :remove_box_image, :extras_limit, :extra_ids, :hidden, :visible, :exclusions_limit, :substitutions_limit, :extras
 
   validates_presence_of :distributor, :name, :description, :price
+  validates_numericality_of :price, greater_than_or_equal_to: 0
   validates :extras_limit, numericality: { greater_than: -2 }
 
   monetize :price_cents
@@ -28,6 +29,14 @@ class Box < ActiveRecord::Base
   SPECIAL_EXTRA_OPTIONS = ['disable extras', 'allow any number of extra items'].zip([0, -1])
   COUNT_EXTRA_OPTIONS = 1.upto(10).map{ |i| "allow #{i} extra items" }.zip(1.upto(10).to_a)
   EXTRA_OPTIONS = (SPECIAL_EXTRA_OPTIONS + COUNT_EXTRA_OPTIONS)
+
+  def exclusions?; dislikes?; end
+  def substitutions?; likes?; end
+  def visible; !hidden; end
+
+  def visible=(value)
+    write_attribute(:hidden, !value)
+  end
 
   def big_thumb_url
     box_image.thumb.url

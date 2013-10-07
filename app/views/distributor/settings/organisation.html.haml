@@ -1,0 +1,48 @@
+- title 'Organisation', false
+- show_settings_sub_nav(:contact_info)
+
+= simple_form_for([:distributor, current_distributor], html: { class: 'form-horizontal', novalidate: false }) do |f|
+  = f.error_notification
+
+  #organisation.row-fluid
+    .span6
+      %fieldset
+        %legend your organisation
+        = f.input_field :name, placeholder: 'Organisation name', class: 'span12', required: true
+        .address
+          = Bucky::Geolocation.get_address_form(current_distributor.country, current_distributor)
+        .country.pull-left
+          %strong= current_distributor.country.name
+        = f.input_field :time_zone, as: :time_zone, title: 'Timezone', class: 'span6'
+
+      %fieldset
+        %legend customer support email
+        = f.input_field :support_email, placeholder: 'Emails to customers will be sent from this address', class: 'span12'
+
+    .span6
+      %fieldset
+        %legend order deadline
+        %p
+          Customers must place orders by:
+        %p
+          = select_hour @default_delivery_time, { ampm: true }, { id: :distributor_advance_hour, name: 'distributor[advance_hour]', class: 'span3' }
+          = select_tag 'distributor_advance_days', options_for_select(days_in_advance, selected: @default_delivery_days), name: 'distributor[advance_days]', class: 'span3'
+          before delivery
+          = link_to "(more info)", 'https://buckybox.uservoice.com/knowledgebase/articles/254113-deliveries-order-deadline-yellow-zone-delivery', target: '_blank'
+
+      %fieldset
+        %legend minimum customer balance
+        = f.input_field :has_balance_threshold, inline_label: true, label: "Halt deliveries when customers reach their minimum balance #{link_to '(more info)', 'https://buckybox.uservoice.com/knowledgebase/articles/172464-customers-minimum-balance', target: '_blank'}"
+        #balance_threshold{ :class => ("hide" unless current_distributor.has_balance_threshold?) }
+          %strong Minimum balance.
+          E.g. a setting of 0.00 means customers must have at least 0.01 in their account for deliveries to be made.
+
+          .input-append
+            = f.input_field :default_balance_threshold, placeholder: "Minimum balance e.g. 0.00", class: 'span6'
+            %span.add-on= f.input_field :spend_limit_on_all_customers, as: :boolean, inline_label: true, label: "Also update existing customers"
+
+          = f.input_field :send_halted_email, inline_label: true, label: "Send an email to customers when their account is halted"
+
+    .row-fluid
+      .span12.form-actions
+        = f.button :submit, 'Save', class: 'btn btn-primary', id: 'organisation_submit'

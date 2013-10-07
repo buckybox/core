@@ -66,8 +66,13 @@ input[type="button"],
   text-transform: capitalize
 
 input, textarea, select
-  &.required
+  &.required, &[required=required]
     background-color: #FEFAE4
+
+.background-yellow
+  background-color: #FEFAE4
+  input, textarea, select
+    background-color: #FFF
 
 fieldset
   margin-bottom: 2em
@@ -138,7 +143,7 @@ table.no-horizontal-dividers
   font-size: large
   font-weight: bold
 
-.action
+.action, .required-action
   display: block
   padding: 5px 0px
   text-align: center
@@ -155,6 +160,11 @@ table.no-horizontal-dividers
   background-color: $red-colour
 .yellow
   background-color: $yellow-colour
+
+.required-action
+  background-color: #F79D76
+  &:hover
+    background-color: #F78554
 
 .secondary-action
   font-size: 13px
@@ -239,3 +249,11 @@ table.no-horizontal-dividers
   display: table-cell
   width: 100%
   border-left-style: none
+
+.form-actions
+  text-align: right
+  background-color: inherit
+
+.spacer
+  margin-top: 2em
+

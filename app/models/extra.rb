@@ -6,7 +6,7 @@ class Extra < ActiveRecord::Base
   validates_presence_of :distributor, :name, :unit, :price
   validates :unit, :name, length: {maximum: 80}
 
-  attr_accessible :distributor, :name, :unit, :price, :hidden
+  attr_accessible :distributor, :name, :unit, :price, :hidden, :visible
 
   monetize :price_cents
 
@@ -15,6 +15,12 @@ class Extra < ActiveRecord::Base
   scope :alphabetically, order('name ASC, unit ASC')
   scope :not_hidden, where(hidden: false)
   scope :none, where("1 = 0")
+
+  def visible; !hidden; end
+
+  def visible=(value)
+    write_attribute(:hidden, !value)
+  end
 
   def to_hash
     { name: name, unit: unit, price: price }

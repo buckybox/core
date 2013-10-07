@@ -1,0 +1,99 @@
+- content_for :product_type do
+  .row-fluid
+    .span6
+      %strong Boxes
+      appear in your webstore and form the basis of customer orders.
+    .span6
+      .label Hint:
+      If you allow customers to exclude and substitute
+      %strong Box Items
+      in their box, make sure you fill in the
+      = link_to "Box Items", distributor_settings_products_box_items_path
+      area.
+
+  %table.table.table-condensed.spacer
+    %tr
+      %td{colspan: 4}
+        - first_box = boxes.one?
+        = link_to 'javascript:void(0)', class: (first_box ? 'required-action' : 'action'), 'data-toggle' => 'collapse', 'data-target' => '#new_box' do
+          Create
+          = first_box ? 'your first' : 'a new'
+          <strong>Box</strong>
+
+    - boxes.each do |box|
+      - if box.persisted?
+        %tr{ 'data-toggle' => 'collapse', 'data-target' => "#edit_box_#{box.id}" }
+          %td
+            .photo.pull-left= image_tag(box.box_image.tiny_thumb.url, class: "img-circle")
+          %td
+            %strong= link_to box.name, 'javascript:void(0)', 'data-toggle' => 'collapse', 'data-target' => "#edit_box_#{box.id}"
+            %br
+            %em.muted.description= truncate(box.description, length: 100, separator: ' ')
+          %td.text-right
+            - if box.extras_allowed?
+              %i.icon-plus{'data-toggle' => 'tooltip', 'title' => box.extras}
+            - if box.exclusions?
+              %i.icon-minus-sign{'data-toggle' => 'tooltip', 'title' => box.exclusions}
+            - if box.substitutions?
+              %i.icon-plus-sign{'data-toggle' => 'tooltip', 'title' => box.substitutions}
+            - if box.visible
+              %i.icon-shopping-cart{'data-toggle' => 'tooltip', 'title' => 'Visible on webstore'}
+          %td.amount
+            = box.formatted_price
+
+      %tr.edit
+        %td{colspan: 4}
+          = simple_form_for(box, url: distributor_settings_products_boxes_path, html: { novalidate: false, class: 'collapse background-yellow' }) do |f|
+            = f.hidden_field :id
+            .container-fluid
+              .row-fluid
+                .span2.photo
+                  .hidden
+                    = f.input_field :box_image, as: :file, style: 'display: none'
+                    = f.input_field :box_image_cache, as: :hidden
+
+                  .text-center= link_to 'update image', 'javascript:void(0)', class: 'upload'
+                  = image_tag(box.box_image.small_thumb.url, class: 'image-upload')
+
+                .span10.pull-right.fields
+                  .row-fuild
+                    = f.input_field :name, class: 'name', required: true, placeholder: 'Box Name'
+                    = f.input_field :price, class: 'pull-right amount', required: true, placeholder: '0.00', title: 'Price', type: 'number', min: 0, step: 'any'
+                  .row-fuild
+                    = f.input_field :description, rows: 3, class: 'span12', required: true, placeholder: 'Description'
+
+                    .line
+                      .field= f.input_field :visible, inline_label: true, label: '<i class="icon-shopping-cart"></i> Visible on webstore', as: :boolean
+                    .line
+                      .field= f.input_field :dislikes, inline_label: true, label: '<i class="icon-minus-sign"></i> Box Items can be <strong>excluded</strong>'
+                      %span.selector
+                        = link_to '', 'javascript:void(0)'
+                        - box_items_limit = 1.upto(7).each_with_object({}) { |i, h| h["limited to #{pluralize(i, "item")}"] = i }.merge!("without limits" => 0) # eek!
+                        = f.input_field :exclusions_limit, include_blank: false, collection: box_items_limit
+                    .line
+                      .field= f.input_field :likes, inline_label: true, label: '<i class="icon-plus-sign"></i> Box Items can be <strong>substituted</strong>'
+                      %span.selector
+                        = link_to '', 'javascript:void(0)'
+                        = f.input_field :substitutions_limit, include_blank: false, collection: box_items_limit
+                    .line
+                      .field= f.input_field :extras_limit, inline_label: true, label: '<i class="icon-plus"></i> <strong>Extra items</strong> can be added to this box', as: :boolean
+                    .line.extra-items
+                      %span.selector
+                        = link_to '', 'javascript:void(0)'
+                        - extra_items_limit = 1.upto(10).each_with_object({}) { |i, h| h["Allow up to #{pluralize(i, "item")}"] = i }.merge!("Allow any number of items" => 0) # eek!
+                        = f.input_field :extras_limit, include_blank: false, collection: extra_items_limit
+                        from the
+                      %span.selector
+                        = link_to '', 'javascript:void(0)'
+                        - extra_items_from = { "entire catalog" => true, "items below" => false }
+                        = f.input_field :all_extras, include_blank: false, collection: extra_items_from
+
+                      .box-extras
+                        = f.input_field :extras, include_blank: false, multiple: true, collection: current_distributor.line_items, selected: box.extra_ids
+
+                  .form-actions
+                    = link_to 'cancel', 'javascript:void(0)', 'data-toggle' => 'collapse', 'data-target' => (box.new_record? ? "#new_box" : "#edit_box_#{box.id}")
+                    = f.button :submit, 'Save', class: 'btn btn-primary'
+
+= render partial: 'distributor/settings/products', locals: { type: 'boxes' }
+

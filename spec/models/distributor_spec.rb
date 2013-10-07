@@ -7,9 +7,7 @@ describe Distributor do
     specify { distributor.should be_valid }
     specify { distributor.time_zone.should == 'Wellington' }
     specify { distributor.currency.should == 'nzd' }
-    specify { distributor.advance_hour.should == 18 }
     specify { distributor.advance_days.should == 3 }
-    specify { distributor.automatic_delivery_hour.should == 18 }
     specify { distributor.customer_can_remove_orders.should be_true }
 
     context 'after validation' do
@@ -141,7 +139,6 @@ describe Distributor do
   context 'delivery window parameters' do
     specify { Fabricate.build(:distributor, advance_hour: -1).should_not be_valid }
     specify { Fabricate.build(:distributor, advance_days: -1).should_not be_valid }
-    specify { Fabricate.build(:distributor, automatic_delivery_hour: -1).should_not be_valid }
   end
 
   context 'support email' do
@@ -169,16 +166,16 @@ describe Distributor do
       @current_time = Time.zone.local(2012, 3, 20, Distributor::DEFAULT_ADVANCED_HOURS)
       Delorean.time_travel_to(@current_time)
 
-      @distributor1 = Fabricate(:distributor, advance_hour: 18, advance_days: 3, automatic_delivery_hour: 18)
+      @distributor1 = Fabricate(:distributor, advance_hour: 18, advance_days: 3)
       daily_orders(@distributor1)
 
       @current_time = @current_time + 1.day
       Delorean.time_travel_to(@current_time)
 
-      @distributor2 = Fabricate(:distributor, advance_hour: 12, advance_days: 4, automatic_delivery_hour: 22)
+      @distributor2 = Fabricate(:distributor, advance_hour: 12, advance_days: 4)
       daily_orders(@distributor2)
 
-      @distributor3 = Fabricate(:distributor, advance_hour: 0, advance_days: 7, automatic_delivery_hour: 24)
+      @distributor3 = Fabricate(:distributor, advance_hour: 0, advance_days: 7)
       daily_orders(@distributor3)
     end
 
@@ -242,7 +239,7 @@ describe Distributor do
         before do
           Time.zone = 'Wellington'
           time = Time.current
-          time_tomorrow = Time.current + 1.day
+          time_tomorrow = time + 1.day
           @today = [time.year, time.month, time.day]
           @tomorrow = [time_tomorrow.year, time_tomorrow.month, time_tomorrow.day]
           @schedule_start = [Distributor::DEFAULT_ADVANCED_HOURS, 0]
@@ -431,7 +428,7 @@ describe Distributor do
       distributor.update_next_occurrence_caches
 
       customer.reload
-      customer.next_order_occurrence_date.should eq order.next_occurrence(Time.current.hour >= distributor.automatic_delivery_hour ? Date.current.tomorrow : Date.current)
+      customer.next_order_occurrence_date.should eq order.next_occurrence(Time.current.hour >= Distributor::AUTOMATIC_DELIVERY_HOUR ? Date.current.tomorrow : Date.current)
     end
   end
 
