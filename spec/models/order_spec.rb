@@ -46,15 +46,17 @@ describe Order do
 
     describe "#possible_resume_dates" do
       it "lists possible dates to resume" do
+        Distributor.any_instance.stub(:window_start_from).and_return(Date.parse("2012-10-01"))
+        Distributor.any_instance.stub(:advance_days).and_return(3)
         everyday_order.pause!(Date.parse("2012-09-30"))
-        everyday_order.possible_resume_dates(1.week).collect(&:first).should eq ["Thu 10 Oct",
-        "Fri 11 Oct",
-        "Sat 12 Oct",
-        "Sun 13 Oct",
-        "Mon 14 Oct",
-        "Tue 15 Oct",
-        "Wed 16 Oct",
-        "Thu 17 Oct"]
+        everyday_order.possible_resume_dates(1.week).collect(&:first).should eq ["Thu 4 Oct",
+          "Fri 5 Oct",
+          "Sat 6 Oct",
+          "Sun 7 Oct",
+          "Mon 8 Oct",
+          "Tue 9 Oct",
+          "Wed 10 Oct",
+          "Thu 11 Oct"]
       end
     end
   end
