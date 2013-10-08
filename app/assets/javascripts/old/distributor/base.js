@@ -13,10 +13,10 @@ $(function() {
     var conditional_actions = $('.action-buttons .conditional-actions');
 
     if ($('.select_one:checked').length === 0) {
-      $('#select_all').prop("indeterminate", false).attr('checked', false);
+      $('#select_all').prop("indeterminate", false).prop('checked', false);
 
     } else if ($('.select_one:not(:checked)').length === 0) {
-      $('#select_all').prop("indeterminate", false).attr('checked', true);
+      $('#select_all').prop("indeterminate", false).prop('checked', true);
       conditional_actions.fadeIn().css('display', 'inline-block');
 
     } else {
