@@ -8,17 +8,16 @@
           .span12
             %ul.unstyled
               - deliveries.each do |delivery|
-                %li.row-fluid.data-listings.customer-row{ class: delivery.status, data: { delivery_id: delivery.id } }
+                %li.row-fluid.data-listings.customer-row.row-grip{ class: delivery.status, data: { delivery_id: delivery.id } }
                   .span6.customer
-                    .row-grip
-                      = check_box_tag delivery.order_id, '1', false, data: { deliveries: delivery.id }, class: 'select_one', 'data-customer-id' => delivery.customer.id
-                      .label.state-label.dso-number
-                        = map_pin(delivery)
-                        = link_to delivery.formated_delivery_number, '#', title: "Delivery Sequence Number (printed on labels)"
-                      = render partial: 'status_icons', locals: { status: delivery.status }
-                      .customer-holder
-                        = customer_badge(delivery.customer, customer_name: delivery.package.archived_customer_name)
-                      = render partial: 'distributor/customers/customer_tags', locals: { customer: delivery.customer }
+                    = check_box_tag delivery.order_id, '1', false, data: { deliveries: delivery.id }, class: 'select_one', 'data-customer-id' => delivery.customer.id
+                    .label.state-label.dso-number
+                      = map_pin(delivery)
+                      = link_to delivery.formated_delivery_number, '#', title: "Delivery Sequence Number (printed on labels)"
+                    = render partial: 'status_icons', locals: { status: delivery.status }
+                    .customer-holder
+                      = customer_badge(delivery.customer, customer_name: delivery.package.archived_customer_name)
+                    = render partial: 'distributor/customers/customer_tags', locals: { customer: delivery.customer }
 
                   .span1{class: "paid-label #{'paid' if delivery.paid?}"}
                     &nbsp;
