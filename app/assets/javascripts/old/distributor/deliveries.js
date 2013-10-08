@@ -30,6 +30,9 @@ $(function() {
   });
   $('.sortable').disableSelection();
 
+  // Pre-select all checkboxes
+  $("#delivery-listings #select_all-all").trigger("click");
+
   $('#delivery-listings .tag-links').each(function() {
     if (typeof window.chrome === "object") {
       // Display tooltip for Chrome since it doesn't expand the tags
