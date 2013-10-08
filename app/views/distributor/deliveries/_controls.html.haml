@@ -1,5 +1,5 @@
 .row-fluid.data-headings
-  .span12
+  .span12.action-buttons
     .btn-group
       = button_tag class: 'btn btn-primary' do
         = check_box_tag 'select_all'
@@ -52,4 +52,6 @@
         %li
           = link_to "#distributor_customers_copy_email", "data-toggle" => "modal" do
             View as email addresses
+
+= render partial: "distributor/shared/email_templates"
 
