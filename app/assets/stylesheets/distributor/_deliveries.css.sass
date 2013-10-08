@@ -96,6 +96,11 @@ $navigation-month: #5c5c5c
       min-height: 0px
     .sortable-highlight
       background-color: $grayLighter
+    .row-grip
+      background-image: image-url('row-grip.png')
+      background-repeat: repeat-y
+      background-position: 2px 1px
+      cursor: move
     .data-headings
       margin-top: 30px
       &:first-child
@@ -121,10 +126,6 @@ $navigation-month: #5c5c5c
       .customer
         overflow: hidden
         -webkit-mask-image: -webkit-gradient(linear, center top, right top, from(rgba(0,0,0,1)), to(rgba(0,0,0,0)))
-      .row-grip
-        background-image: image-url('row-grip.png')
-        background-repeat: repeat-y
-        background-position: 2px 1px
       .customer-holder
         display: inline-block
         .customer-badge
