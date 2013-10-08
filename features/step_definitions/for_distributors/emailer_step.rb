@@ -3,10 +3,10 @@ When "I select all my customers in the list" do
 end
 
 When "I open the emailer" do
-  find('a[href="#distributor_customers_send_email"]').click
+  find('a[href="#distributor_send_email"]').click
 
   # assert that the modal is visible
-  page.should have_selector("#distributor_customers_send_email")
+  page.should have_selector("#distributor_send_email")
 end
 
 When /^I fill in the (subject|body) with "(.*)"$/ do |field, content|

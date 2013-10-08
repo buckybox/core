@@ -7,9 +7,9 @@
     #list_type{ data: { type: 'packages', date: @selected_date, screen: 'packing' } }
       %ul#delivery_list.unstyled
         - array.each do |package|
-          %li.row-fluid.data-listings{ class: package.status }
+          %li.row-fluid.data-listings.customer-row{ class: package.status }
             .span6.customer
-              = check_box_tag package.order_id, '1', false, data: { packages: package.id }, class: 'select_one'
+              = check_box_tag package.order_id, '1', false, data: { packages: package.id }, class: 'select_one', 'data-customer-id' => package.customer.id
               .label.state-label.dso-number= map_pin(package)
               = render partial: 'status_icons', locals: { status: package.status }
               .customer-holder
@@ -29,9 +29,9 @@
     #list_type{ data: { type: 'orders', date: @selected_date, screen: 'packing' } }
       %ul#delivery_list.unstyled
         - array.each do |order|
-          %li.row-fluid.data-listings.pending
+          %li.row-fluid.data-listings.pending.customer-row
             .span6.customer
-              = check_box_tag order.id, '1', false, data: { orders: order.id }, class: 'select_one'
+              = check_box_tag order.id, '1', false, data: { orders: order.id }, class: 'select_one', 'data-customer-id' => order.customer.id
               .label.state-label.dso-number= map_pin(order)
               .label.state-label.staus-icon.status-unpacked{ title: 'UNPACKED package' }
                 %i.icon-time

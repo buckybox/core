@@ -49,7 +49,7 @@ $(function() {
   // Email modal
   //
 
-  var send_email_modal = $('#distributor_customers_send_email.modal');
+  var send_email_modal = $('#distributor_send_email.modal');
 
   var template_link_handler = function() {
     var current_link = $(this);
@@ -196,16 +196,16 @@ $(function() {
       var recipient_ids = customer.find('.customer-name').data('customer-id');
 
     } else {
-      var customers = $('#customers .select_one:checked');
+      var customers = $('.select_one:checked');
       var max_customers = 3;
       var first_customers = customers.slice(0, max_customers);
 
       var recipients = first_customers.map(function() {
-        return $("#" + this.id).closest('tr').find('.customer-badge').parent().html();
+        return $(this).closest('.customer-row').find('.customer-badge').parent().html();
       }).get().join(', ');
 
       var recipient_ids = customers.map(function() {
-        return this.id;
+        return $(this).data('customer-id');
       }).get().join(',');
 
       var other_customers = customers.length - max_customers;
@@ -214,16 +214,17 @@ $(function() {
       }
     }
 
+    console.log("IDS:" + recipient_ids);
     $('#recipient_ids').val(recipient_ids);
     send_email_modal.find('.recipients').html(recipients);
     send_email_modal.find('.template-link').click(template_link_handler);
     send_email_modal.find('.alert').hide();
-    $('#distributor_customers_send_email_merge_tags').popover(); // enable popover
+    $('#distributor_send_email_merge_tags').popover(); // enable popover
   });
 
 
-  $("#distributor_customers_copy_email.modal").on("show", function() {
-    var customers = $('#customers .select_one:checked').closest('tr').find('.customer-name');
+  $("#distributor_copy_email.modal").on("show", function() {
+    var customers = $('.select_one:checked').closest('.customer-row').find('.customer-name');
 
     var emails = customers.map(function() {
       return $(this).data('customer-email');
