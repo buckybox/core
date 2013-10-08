@@ -24,14 +24,14 @@
                 Inverse
 
       .btn-group{:class => ("conditional-actions" if defined? @customers)}
-        = link_to "#distributor_customers_send_email", class: "btn btn-primary", title: "Send an email", role: "button", "data-toggle" => "modal" do
+        = link_to "#distributor_send_email", class: "btn btn-primary", title: "Send an email", role: "button", "data-toggle" => "modal" do
           %i.icon-envelope.icon-white
         = button_tag class: "btn btn-primary dropdown-toggle", data: { toggle: 'dropdown' } do
           %span.caret
         %ul.dropdown-menu{ role: 'menu' }
           - if defined? @customers
             %li
-              = link_to "#distributor_customers_copy_email", "data-toggle" => "modal" do
+              = link_to "#distributor_copy_email", "data-toggle" => "modal" do
                 View as email addresses
           %li
             = link_to "Export customer details", "#distributors_customers_export", id: "export_customer_details"

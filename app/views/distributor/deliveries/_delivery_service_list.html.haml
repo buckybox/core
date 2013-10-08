@@ -8,10 +8,10 @@
           .span12
             %ul.unstyled
               - deliveries.each do |delivery|
-                %li.row-fluid.data-listings{ class: delivery.status, data: { delivery_id: delivery.id } }
+                %li.row-fluid.data-listings.customer-row{ class: delivery.status, data: { delivery_id: delivery.id } }
                   .span6.customer
                     .row-grip
-                      = check_box_tag delivery.order_id, '1', false, data: { deliveries: delivery.id }, class: 'select_one'
+                      = check_box_tag delivery.order_id, '1', false, data: { deliveries: delivery.id }, class: 'select_one', 'data-customer-id' => delivery.customer.id
                       .label.state-label.dso-number
                         = map_pin(delivery)
                         = link_to delivery.formated_delivery_number, '#', title: "Delivery Sequence Number (printed on labels)"
@@ -32,9 +32,9 @@
   #list_type{ data: { type: 'orders', date: @selected_date, screen: 'delivery' } }
     %ul#delivery_list.unstyled
       - @items.each do |order|
-        %li.row-fluid.data-listings.pending
+        %li.row-fluid.data-listings.pending.customer-row
           .span6.customer
-            = check_box_tag order.id, '1', false, data: { orders: order.id }, class: 'select_one'
+            = check_box_tag order.id, '1', false, data: { orders: order.id }, class: 'select_one', 'data-customer-id' => order.customer.id
             .label.state-label.dso-number= map_pin(order)
             .label.state-label.staus-icon.status-pending{ title: 'PENDING delivery' }
               %i.icon-time

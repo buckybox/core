@@ -21,8 +21,8 @@
       %td{ colspan: 7 }= link_to 'Create a new customer', new_distributor_customer_path
 
       - @customers.each do |customer|
-        %tr
-          %td= check_box_tag customer.id, 1, false, class: "select_one"
+        %tr.customer-row
+          %td= check_box_tag customer.id, 1, false, class: "select_one", 'data-customer-id' => customer.id
           %td= customer_badge(customer)
           %td
             - if customer.halted?
