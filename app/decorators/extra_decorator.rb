@@ -11,7 +11,11 @@ class ExtraDecorator < Draper::Decorator
     !object.hidden
   end
 
-  def with_units
+  def with_price_per_unit
+    "#{object.name} (#{price} per #{object.unit})"
+  end
+
+  def with_unit
     "#{object.name} (#{object.unit})"
   end
 
