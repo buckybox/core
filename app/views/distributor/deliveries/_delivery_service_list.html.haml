@@ -1,31 +1,4 @@
 .row-fluid.data-headings
-  #delivery_service-controls.span7.delivery-actions
-    = check_box_tag 'all'
-    .btn-group
-      = button_tag class: !@real_list ? 'btn' : 'btn btn-primary', id: 'delivered', disabled: !@real_list do
-        %i.icon-ok-sign.icon-white
-        Delivered
-      = button_tag class: "btn#{' btn-primary' if @real_list} dropdown-toggle", data: { toggle: 'dropdown' }, disabled: !@real_list do
-        %span.caret
-      %ul#missed-options.dropdown-menu{ role: 'menu' }
-        %li
-          = link_to '#', id: 'pending', tabindex: -1 do
-            %i.icon-time
-            Delivery Pending
-        %li
-          = link_to '#', id: 'cancelled', tabindex: -1 do
-            %i.icon-remove-sign
-            Delivery Cancelled
-        %li.divider
-        %li= link_to 'Apply Payment On Delivery', '#', id: 'payment-on-delivery', tabindex: -1
-        %li= link_to 'Undo Payment', '#', id: 'undo-payment', tabindex: -1
-
-  .span5.export.text-right
-    = button_to('Export',
-      export_distributor_deliveries_path,
-      { id: 'delivery-export', class: 'btn' })
-
-.row-fluid.data-headings
 
 - if @real_list
   #list_type{ data: { type: 'deliveries', date: @selected_date, screen: 'delivery' } }
