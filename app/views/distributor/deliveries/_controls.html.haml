@@ -18,7 +18,7 @@
             Inverse
 
     - if @real_list && params[:view] != 'packing'
-      .btn-group
+      .btn-group.conditional-actions
         = button_tag class: 'btn btn-primary', id: 'delivered' do
           %i.icon-ok-sign.icon-white
           Delivered
@@ -38,7 +38,7 @@
           %li= link_to 'Apply Payment On Delivery', '#', id: 'payment-on-delivery', tabindex: -1
           %li= link_to 'Undo Payment', '#', id: 'undo-payment', tabindex: -1
 
-    .btn-group.packing-actions
+    .btn-group.conditional-actions
       = link_to "javascript:void(0)", class: "btn btn-primary export-details", role: "button" do
         %i.icon-share.icon-white
         - if params[:view] == 'packing'

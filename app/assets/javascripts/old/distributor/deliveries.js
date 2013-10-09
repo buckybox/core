@@ -60,8 +60,6 @@ $(function() {
       $("<input type='hidden'>").attr('name', 'packages[]').attr('value', package_id).appendTo(form);
     });
 
-    checked_packages.prop('checked', false);
-
     form.submit();
   });
 
@@ -69,7 +67,7 @@ $(function() {
     prepare_csv_export(this);
   });
 
-  $('#delivery_service-controls #delivered, #missed-options a').click(function() {
+  $('#delivery-listings #delivered, #missed-options a').click(function() {
     var status = $(this).attr('id');
     var checked_deliveries = $('#delivery-listings .data-listings input[type=checkbox]:checked');
 
@@ -80,8 +78,6 @@ $(function() {
     else {
       updateDeliveryStatus(status, checked_deliveries);
     }
-
-    checked_deliveries.prop('checked', false);
   });
 
   $('#delivery-listings #more-delivery-options').click(function() {
