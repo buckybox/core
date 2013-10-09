@@ -194,20 +194,26 @@ $(function() {
     if ($("#customer-details #section-one").length) {
       var customer = $("#customer-details #section-one .customer-badge").parent();
       var recipients = customer.html();
-      var recipient_ids = customer.find('.customer-name').data('customer-id');
+      var recipient_ids = [ customer.find('.customer-name').data('customer-id') ];
 
     } else {
-      var customers = $('.select_one:checked');
+      var all_customers = $('.select_one:checked');
+      var recipient_ids = [];
+      var customers = all_customers.map(function() {
+        var customer_id = $(this).data('customer-id');
+
+        if (recipient_ids.indexOf(customer_id) === -1) {
+          recipient_ids.push(customer_id);
+          return $(this);
+        }
+      });
+
       var max_customers = 3;
       var first_customers = customers.slice(0, max_customers);
 
       var recipients = first_customers.map(function() {
         return $(this).closest('.customer-row').find('.customer-badge').parent().html();
       }).get().join(', ');
-
-      var recipient_ids = customers.map(function() {
-        return $(this).data('customer-id');
-      }).get().join(',');
 
       var other_customers = customers.length - max_customers;
       if (other_customers > 0) {
@@ -220,7 +226,7 @@ $(function() {
       return false;
     }
 
-    $('#recipient_ids').val(recipient_ids);
+    $('#recipient_ids').val(recipient_ids.join(','));
     send_email_modal.find('.recipients').html(recipients);
     send_email_modal.find('.template-link').click(template_link_handler);
     send_email_modal.find('.alert').hide();
@@ -231,9 +237,11 @@ $(function() {
   $("#distributor_copy_email.modal").on("show", function() {
     var customers = $('.select_one:checked').closest('.customer-row').find('.customer-name');
 
-    var emails = customers.map(function() {
-      return $(this).data('customer-email');
-    }).get().join(', ');
+    var emails = $.unique(
+      customers.map(function() {
+        return $(this).data('customer-email');
+      }).get()
+    ).join(', ');
 
     var list = $(this).find('textarea');
     list.val(emails);
