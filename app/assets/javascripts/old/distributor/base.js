@@ -14,6 +14,7 @@ $(function() {
 
     if ($('.select_one:checked').length === 0) {
       $('#select_all').prop("indeterminate", false).prop('checked', false);
+      conditional_actions.hide();
 
     } else if ($('.select_one:not(:checked)').length === 0) {
       $('#select_all').prop("indeterminate", false).prop('checked', true);
@@ -214,7 +215,11 @@ $(function() {
       }
     }
 
-    console.log("IDS:" + recipient_ids);
+    if (recipient_ids.length === 0) {
+      alert("You must select at least one recipient.");
+      return false;
+    }
+
     $('#recipient_ids').val(recipient_ids);
     send_email_modal.find('.recipients').html(recipients);
     send_email_modal.find('.template-link').click(template_link_handler);
