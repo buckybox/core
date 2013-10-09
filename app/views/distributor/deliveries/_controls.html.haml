@@ -3,6 +3,7 @@
     .btn-group
       = button_tag class: 'btn btn-primary' do
         = check_box_tag 'select_all'
+
       = button_tag class: "btn btn-primary dropdown-toggle", data: { toggle: 'dropdown' } do
         %span.caret
       %ul.dropdown-menu{ role: 'menu' }
@@ -16,12 +17,13 @@
           = link_to 'javascript:void(0)', id: 'select_all-inverse' do
             Inverse
 
-    - unless params[:view] == 'packing'
+    - if @real_list && params[:view] != 'packing'
       .btn-group
-        = button_tag class: !@real_list ? 'btn' : 'btn btn-primary', id: 'delivered', disabled: !@real_list do
+        = button_tag class: 'btn btn-primary', id: 'delivered' do
           %i.icon-ok-sign.icon-white
           Delivered
-        = button_tag class: "btn#{' btn-primary' if @real_list} dropdown-toggle", data: { toggle: 'dropdown' }, disabled: !@real_list do
+
+        = button_tag class: "btn btn-primary dropdown-toggle", data: { toggle: 'dropdown' } do
           %span.caret
         %ul#missed-options.dropdown-menu{ role: 'menu' }
           %li
@@ -37,21 +39,31 @@
           %li= link_to 'Undo Payment', '#', id: 'undo-payment', tabindex: -1
 
     .btn-group.packing-actions
-      = link_to "#export", class: "btn btn-primary", role: "button" do
+      = link_to "javascript:void(0)", class: "btn btn-primary export-details", role: "button" do
         %i.icon-share.icon-white
-        Export Packing Details
+        - if params[:view] == 'packing'
+          Export Packing Details
+        - else
+          Export Delivery Details
+
       = button_tag class: "btn btn-primary dropdown-toggle", data: { toggle: 'dropdown' } do
         %span.caret
       %ul.dropdown-menu{ role: 'menu' }
         - if params[:view] == 'packing'
           %li
-            = link_to "Print packing summary", "#distributors_customers_export", id: "export_customer_details"
+            = link_to "Print packing summary", "javascript:void(0)", id: 'master-print'
           %li.divider
         %li
           = link_to "Send email", "#distributor_send_email", "data-toggle" => "modal"
         %li
           = link_to "#distributor_copy_email", "data-toggle" => "modal" do
             View as email addresses
+
+    %form{action: master_packing_sheet_distributor_deliveries_path, method: 'post', target: '_blank', id: 'master-print-form'}
+      = token_tag(nil)
+
+    %form{action: export_distributor_deliveries_path, method: 'post', id: 'export-details-form'}
+      = token_tag(nil)
 
 = render partial: "distributor/shared/email_templates"
 
