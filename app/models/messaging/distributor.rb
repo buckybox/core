@@ -15,7 +15,7 @@ module Messaging
     end
 
     def tracking_after_save
-      delayed_update
+      update
       toggle_webstore_tag if distributor.webstore_status_changed?
     end
 
