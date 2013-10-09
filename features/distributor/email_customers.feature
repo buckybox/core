@@ -7,7 +7,6 @@ Feature: Distributor emails their customers
 Background:
   Given I am a distributor
   And I am viewing the customers page
-  And I dismiss the intro screen
   And I select all my customers in the list
   And I open the emailer
 

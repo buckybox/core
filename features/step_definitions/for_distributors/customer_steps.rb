@@ -1,6 +1,5 @@
 Given /^I am viewing the customers page$/ do
   visit distributor_customers_path
-  step "I dismiss the intro screen"
 end
 
 Given /^I am viewing an existing customer$/ do
@@ -35,7 +34,6 @@ Then /^The customer should be on the customers index page$/ do
 end
 
 When /^I edit the customer's profile$/ do
-  step "I dismiss the intro screen"
   click_link "edit profile"
 end
 

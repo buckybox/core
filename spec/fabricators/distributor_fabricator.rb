@@ -40,3 +40,11 @@ Fabricator(:distributor_with_everything, from: :distributor_with_information) do
     distributor.save!
   end
 end
+
+Fabricator(:existing_distributor_with_everything, from: :distributor_with_everything) do
+  customers_index_intro false
+  customers_show_intro false
+  deliveries_index_deliveries_intro false
+  deliveries_index_packing_intro false
+  payments_index_intro false
+end
