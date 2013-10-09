@@ -40,15 +40,6 @@ $(function() {
     }
   });
 
-  $('#delivery-listings #all').change(function() {
-    var checked_deliveries = $('#delivery-listings .data-listings input[type=checkbox]');
-
-    if($(this).is(':checked')) { checked_deliveries.prop('checked', true); }
-    else { checked_deliveries.prop('checked', false); }
-
-    return false;
-  });
-
   $('#delivery-listings #master-print').click(function () {
     var checked_packages = $('#delivery-listings .data-listings input[type=checkbox]:checked');
     var ckbx_ids = $.map(checked_packages, function(ckbx) { return $(ckbx).data('packages'); });
@@ -63,21 +54,18 @@ $(function() {
       holder.find('.status-unpacked').hide();
     });
 
-    var form = $(this).parent().parent('form');
+    var form = $('#master-print-form');
 
     $.each(ckbx_ids, function(index, package_id) {
       $("<input type='hidden'>").attr('name', 'packages[]').attr('value', package_id).appendTo(form);
     });
 
     checked_packages.prop('checked', false);
-    $('#delivery-listings #all').prop('checked', false);
+
+    form.submit();
   });
 
-  $('#delivery-listings #packing-export').click(function() {
-    prepare_csv_export(this);
-  });
-
-  $('#delivery-listings #delivery-export').click(function() {
+  $('#delivery-listings .export-details').click(function() {
     prepare_csv_export(this);
   });
 
@@ -94,7 +82,6 @@ $(function() {
     }
 
     checked_deliveries.prop('checked', false);
-    $('#delivery-listings #all').prop('checked', false);
   });
 
   $('#delivery-listings #more-delivery-options').click(function() {
@@ -167,7 +154,7 @@ function prepare_csv_export(el) {
   var checked_items = $('#delivery-listings .data-listings input[type=checkbox]:checked');
   var ckbx_ids      = $.map(checked_items, function(ckbx) { return $(ckbx).data(data_property); });
 
-  var form   = $(el).parent().parent('form');
+  var form   = $('#export-details-form');
   var date   = $('#list_type').data('date');
   var screen = $('#list_type').data('screen');
 
@@ -178,6 +165,6 @@ function prepare_csv_export(el) {
   $("<input type='hidden'>").attr('name', 'date').attr('value', date).appendTo(form);
   $("<input type='hidden'>").attr('name', 'screen').attr('value', screen).appendTo(form);
 
-  checked_items.prop('checked', false);
-  $('#delivery-listings #all').prop('checked', false);
+  form.submit();
 }
+
