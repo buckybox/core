@@ -1,5 +1,5 @@
 @javascript
-Feature: Customer logs in
+Feature: Customer authentication
   In order to use the application
   As a customer
   I want to be able to log in and log out
@@ -17,4 +17,3 @@ Scenario: Log out
   Given I am a customer
   When I log out
   Then I should be logged out
-

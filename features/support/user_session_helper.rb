@@ -9,7 +9,7 @@ module UserSessionHelper
     click_button "Login"
   end
 
-  def user_type user
+  def user_type(user)
     case user
     when Distributor
       "distributor"
