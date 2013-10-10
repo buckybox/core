@@ -5,13 +5,7 @@
   #customer-details.span4
     #section-one
       = customer_title(@customer, class: 'important')
-      - if @customer.halted?
-        %span.label.label-info.halted HALTED
-
-      - unless @customer.tags.empty?
-        - @customer.tags.each do |tag|
-          = link_to tag_distributor_customers_path(tag.name), class: 'link-label' do
-            %span.label.label-info= tag.name
+      = render partial: 'customer_tags', locals: { customer: @customer }
 
       #account-information{data: {account_id: @account.id}}
         %span.balance{ class: "#{'negative' if @account.negative_balance?}" }= @account.balance

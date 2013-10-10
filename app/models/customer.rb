@@ -21,6 +21,11 @@ class Customer < ActiveRecord::Base
 
   acts_as_taggable
 
+  DYNAMIC_TAGS = {
+    'halted'           => 'important',
+    'negative-balance' => 'hidden'
+  }.freeze
+
   accepts_nested_attributes_for :address
 
   monetize :balance_threshold_cents
@@ -330,6 +335,10 @@ class Customer < ActiveRecord::Base
     account = account(true) # force reload
 
     account.present? ? account.balance : EasyMoney.zero
+  end
+
+  def negative_balance?
+    account_balance.negative?
   end
 
   def calculate_next_order(date=Date.current.to_s(:db))

@@ -1,6 +1,11 @@
 - tags = customer.tags.sort_by { |tag| tag.name.length }
-
 .tag-links{data: {"toggle" => "tooltip", "placement" => "left", "title" => tags.join(' ') }}
   - tags.each do |tag|
     = link_to tag_distributor_customers_path(tag.name), class: 'link-label' do
       %span.label.label-info= tag.name
+
+- Customer::DYNAMIC_TAGS.each do |tag, label|
+  - if customer.public_send(tag.questionize)
+    = link_to tag_distributor_customers_path(tag), class: 'link-label' do
+      %span.label{ class: "label-#{label}" }= tag
+
