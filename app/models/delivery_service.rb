@@ -65,10 +65,11 @@ class DeliveryService < ActiveRecord::Base
   end
   
   def schedule_changed(schedule_rule)
-    schedule_rule.deleted_day_numbers.each do |day|
-      future_orders.active.each do |order|
-        order.deactivate_for_day!(day)
-      end
+    day_numbers = schedule_rule.deleted_day_numbers
+    return if day_numbers.blank?
+
+    future_orders.active.each do |order|
+      order.deactivate_for_days!(day_numbers)
     end
   end
 end

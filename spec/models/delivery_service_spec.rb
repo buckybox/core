@@ -79,7 +79,7 @@ describe DeliveryService do
         delivery_service.save!
         delivery_service.schedule_rule.wed = false
         stub_future_active_orders(delivery_service, [order])
-        order.should_receive(:deactivate_for_day!).with(3)
+        order.should_receive(:deactivate_for_days!).with([3])
 
         delivery_service.save
       end
@@ -92,5 +92,4 @@ describe DeliveryService do
       delivery_service.schedule_rule.should_not == nil
     end
   end
-
 end
