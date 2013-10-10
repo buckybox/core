@@ -81,9 +81,9 @@ describe Distributor::DeliveryServicesController do
 
       it "removes days on order which have been removed from delivery service" do
         put :update, { id: @delivery_service.id, delivery_service: { schedule_rule_attributes: {mon: '0', tue: '1', wed: '1', thu: '1', fri: '1', sat: '0', sun: '0' } } }
-        @order.reload.schedule_rule.days.sort.should eq [:tue, :wed, :fri].sort
+        @order.reload.schedule_rule.days.should match_array [:tue, :wed, :fri]
         @order.should be_active
-        @delivery_service.reload.schedule_rule.days.sort.should eq [:tue, :wed, :thu, :fri].sort
+        @delivery_service.reload.schedule_rule.days.should match_array [:tue, :wed, :thu, :fri]
       end
     end
   end
