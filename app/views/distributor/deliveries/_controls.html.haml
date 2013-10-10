@@ -21,7 +21,7 @@
       .btn-group.conditional-actions
         = button_tag class: 'btn btn-primary', id: 'delivered' do
           %i.icon-ok-sign.icon-white
-          Delivered
+          Mark As Delivered
 
         = button_tag class: "btn btn-primary dropdown-toggle", data: { toggle: 'dropdown' } do
           %span.caret
@@ -29,14 +29,14 @@
           %li
             = link_to '#', id: 'pending', tabindex: -1 do
               %i.icon-time
-              Delivery Pending
+              Mark delivery as pending
           %li
             = link_to '#', id: 'cancelled', tabindex: -1 do
               %i.icon-remove-sign
-              Delivery Cancelled
+              Mark delivery as cancelled
           %li.divider
-          %li= link_to 'Apply Payment On Delivery', '#', id: 'payment-on-delivery', tabindex: -1
-          %li= link_to 'Undo Payment', '#', id: 'undo-payment', tabindex: -1
+          %li= link_to 'Apply cash on delivery', '#', id: 'payment-on-delivery', tabindex: -1
+          %li= link_to 'Cancel cash on delivery', '#', id: 'undo-payment', tabindex: -1
 
     .btn-group.conditional-actions
       = link_to "javascript:void(0)", class: "btn btn-primary export-details", role: "button" do
