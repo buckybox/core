@@ -65,6 +65,20 @@ input, textarea, select
   &.required
     background-color: #FEFAE4
 
+fieldset > legend, .heading
+  font-weight: bold
+  font-size: 12px
+  background: #DFDFCF
+  color: #000
+  padding: 2px 4px
+  margin: .5em 0
+  text-transform: uppercase
+  width: inherit
+  font-size: 12px
+  line-height: 14px
+  +border-radius(3px)
+  +single-text-shadow(0px, 0px, 0px)
+
 .alert
   font-weight: bold
   i
@@ -147,8 +161,14 @@ table.no-horizontal-dividers
   background: #DFDFCF
   color: #000
 
-.badge
-  text-transform: capitalize
+[class="badge"] // don't match "badge-*"
+  background: #DFDFD0
+  color: #000
+
+.table th
+  text-transform: uppercase
+  font-size: 11px
+  color: #000
 
 .customer-badge
   max-width: 100%
