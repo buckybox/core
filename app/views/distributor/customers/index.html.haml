@@ -6,15 +6,14 @@
   %thead
     %tr.muted
       %th{ colspan: 3 }
-        %span#transactional_customer_count.label{title: "Total customers #{current_distributor.customers.count}<br />Transactional customers #{current_distributor.transactional_customer_count}"}
+        #transactional_customer_count{title: "Total customers #{current_distributor.customers.count}<br />Transactional customers #{current_distributor.transactional_customer_count}"}
           %i.icon-user
           = pluralize(@customers.count, "customer")
       %th{ colspan: 3 }
-        %span.label Next Delivery
+        Next Delivery
       %th
-        %span.label
-          Total:
-          = @customers_total_balance
+        Total:
+        = @customers_total_balance
 
   %tbody
     %tr.new-row
