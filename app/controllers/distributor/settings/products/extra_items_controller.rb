@@ -23,7 +23,7 @@ class Distributor::Settings::Products::ExtraItemsController < Distributor::BaseC
     extra = current_distributor.extras.find(extra_params.delete(:id))
 
     if extra.update_attributes(extra_params)
-      flash.now[:notice] = "Your new extra item has heen updated."
+      flash.now[:notice] = "Your extra item has heen updated."
     else
       flash.now[:error] = extra.errors.full_messages.to_sentence
     end
