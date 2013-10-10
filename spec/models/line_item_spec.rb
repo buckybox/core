@@ -43,7 +43,7 @@ describe LineItem do
 
     describe '.bulk_update' do
       context 'blank name' do
-        before { LineItem.bulk_update(distributor, { line_item.id => '' }) }
+        before { LineItem.bulk_update(distributor, { line_item.id => {name: ''} }) }
 
         specify { LineItem.find_by_id(line_item.id).should be_nil }
         specify { Exclusion.find_by_id(exclusion.id).should be_nil }
@@ -56,7 +56,7 @@ describe LineItem do
           @new_line_item = Fabricate(:line_item, name: @new_name)
           LineItem.stub(:find_or_create_by_name).and_return(@new_line_item)
 
-          LineItem.bulk_update(distributor, { line_item.id => @new_name })
+          LineItem.bulk_update(distributor, { line_item.id => {name: @new_name} })
         end
 
         specify { @new_line_item.name.should == @new_name.titleize }
@@ -65,7 +65,7 @@ describe LineItem do
       end
 
       context 'same name' do
-        before { LineItem.bulk_update(distributor, { line_item.id => line_item.name }) }
+        before { LineItem.bulk_update(distributor, { line_item.id => {name: line_item.name} }) }
 
         specify { line_item.reload.persisted?.should be_true }
         specify { line_item.id.should == exclusion.line_item_id }
