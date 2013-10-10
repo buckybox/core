@@ -142,9 +142,7 @@ protected
   def collection
     @customers = end_of_association_chain
 
-    @customers = @customers.tagged_with(params[:tag]) unless params[:tag].blank?
-
-    unless params[:query].blank?
+    if params[:query].present?
       query = params[:query].gsub(/\./, '')
       if params[:query].to_i == 0
         @customers = current_distributor.customers.search(query)
@@ -155,7 +153,15 @@ protected
       tracking.event(current_distributor, "search_customer_list") unless current_admin.present?
     end
 
+    if (tag = params[:tag]).present?
+      @customers = @customers.tagged_with(tag) unless tag.in?(Customer::DYNAMIC_TAGS)
+    end
+
     @customers = @customers.ordered_by_next_delivery.includes(account: {delivery_service: {}}, tags: {}, next_order: {box: {}})
+
+    if tag.in?(Customer::DYNAMIC_TAGS)
+      @customers = @customers.select { |customer| customer.public_send(tag.questionize) }
+    end
   end
 
 private

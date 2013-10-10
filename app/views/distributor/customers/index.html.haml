@@ -25,9 +25,6 @@
           %td= check_box_tag customer.id, 1, false, class: "select_one"
           %td= customer_badge(customer)
           %td
-            - if customer.halted?
-              %span.label.label-info.halted HALTED
-
             = render partial: 'customer_tags', locals: { customer: customer }
           %td
             %small= next_customer_delivery_occurrence(customer)
