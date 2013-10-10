@@ -441,6 +441,7 @@ class Order < ActiveRecord::Base
     self.completed = true
   end
 
+  # If we saved the current state of this order, would it be rendered deactivated?
   def effectively_deactivated?
     inactive? || (!new_record? && next_occurrence.nil?)
   end
