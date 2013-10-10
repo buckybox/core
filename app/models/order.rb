@@ -47,11 +47,11 @@ class Order < ActiveRecord::Base
   FORCAST_RANGE_BACK = 9.weeks
   FORCAST_RANGE_FORWARD = 6.weeks
 
-  validates_presence_of :account_id, :box_id, :quantity
-  validates_numericality_of :quantity, greater_than: 0
-  validate :delivery_service_includes_schedule_rule
-  validate :extras_within_box_limit
-  validate :likes_dislikes_within_limits
+  validates_presence_of :account_id, :box_id, :quantity, unless: :effectively_deactivated?
+  validates_numericality_of :quantity, greater_than: 0, unless: :effectively_deactivated?
+  validate :delivery_service_includes_schedule_rule, unless: :effectively_deactivated?
+  validate :extras_within_box_limit, unless: :effectively_deactivated?
+  validate :likes_dislikes_within_limits, unless: :effectively_deactivated?
 
   before_validation :activate, if: :just_completed?
 
@@ -173,14 +173,23 @@ class Order < ActiveRecord::Base
     return results
   end
 
-  def deactivate_for_day!(day)
-    remove_day(day) unless schedule_empty?
-    deactivate if schedule_empty?
+  def deactivate_for_days!(days)
+    if deactived_after_removed_days?(days)
+      deactivate
+    else
+      days.each do |day|
+        remove_day(day)
+      end
+    end
     save!
   end
 
+  def deactived_after_removed_days?(days)
+    (schedule_rule.days - days.collect{|i| ScheduleRule::DAYS[i]}).blank?
+  end
+
   def schedule_empty?
-    schedule_rule.blank? || schedule_rule.next_occurrence.blank?
+    schedule_rule.blank? || schedule_rule.next_occurrence.blank? || !schedule_rule.has_at_least_one_day?
   end
 
   def box_name
@@ -432,6 +441,11 @@ class Order < ActiveRecord::Base
     self.completed = true
   end
 
+  # If we saved the current state of this order, would it be rendered deactivated?
+  def effectively_deactivated?
+    inactive? || (!new_record? && next_occurrence.nil?)
+  end
+
   protected
 
   def update_next_occurrence
@@ -439,19 +453,19 @@ class Order < ActiveRecord::Base
   end
 
   def delivery_service_includes_schedule_rule
-    unless account.delivery_service.includes?(schedule_rule, {ignore_start: true})
+    if !account.delivery_service.includes?(schedule_rule, {ignore_start: true})
       errors.add(:schedule_rule, "DeliveryService #{account.delivery_service.name}'s schedule '#{account.delivery_service.schedule_rule.inspect} doesn't include this order's schedule of '#{schedule_rule.inspect}'")
     end
   end
 
   def extras_within_box_limit
-    if box.present? && !box.extras_unlimited? && extras_count > box.extras_limit
+    if box.present? && new_record? && !box.extras_unlimited? && extras_count > box.extras_limit
       errors.add(:base, "There is more than #{box.extras_limit} extras for this box")
     end
   end
 
   def likes_dislikes_within_limits
-    return unless box.present?
+    return unless new_record? && box.present?
 
     if !box.exclusions_limit.zero? && exclusions.size > box.exclusions_limit
       errors.add(:exclusions, " is limited to #{box.exclusions_limit}")
