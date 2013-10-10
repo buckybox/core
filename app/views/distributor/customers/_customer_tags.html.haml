@@ -4,8 +4,7 @@
     = link_to tag_distributor_customers_path(tag.name), class: 'link-label' do
       %span.label.label-info= tag.name
 
-- Customer::DYNAMIC_TAGS.each do |tag, label|
-  - if customer.public_send(tag.questionize)
-    = link_to tag_distributor_customers_path(tag), class: 'link-label' do
-      %span.label{ class: "label-#{label}" }= tag
+- customer.dynamic_tags.each do |tag, label|
+  = link_to tag_distributor_customers_path(tag), class: 'link-label' do
+    %span.label{ class: "label-#{label}" }= tag
 

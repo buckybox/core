@@ -196,6 +196,12 @@ class Customer < ActiveRecord::Base
     self.name <=> b.name
   end
 
+  def dynamic_tags
+    DYNAMIC_TAGS.select do |tag|
+      public_send(tag.questionize)
+    end
+  end
+
   def has_first_and_last_name?
     first_name.present? && last_name.present?
   end

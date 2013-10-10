@@ -160,7 +160,7 @@ protected
     @customers = @customers.ordered_by_next_delivery.includes(account: {delivery_service: {}}, tags: {}, next_order: {box: {}})
 
     if tag.in?(Customer::DYNAMIC_TAGS)
-      @customers = @customers.select { |customer| customer.public_send(tag.questionize) }
+      @customers = @customers.select { |customer| tag.in?(customer.dynamic_tags) }
     end
   end
 
