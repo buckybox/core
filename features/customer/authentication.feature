@@ -4,16 +4,17 @@ Feature: Customer authentication
   As a customer
   I want to be able to log in and log out
 
-Scenario: Log in
-  Given I am a customer
-  Then I should be viewing my profile page
+Scenario: Log in with valid credentials
+  Given I am viewing the customer login page
+  When I fill in valid customer credentials
+  Then I should be viewing the customer home page
 
-Scenario: Try to log in with invalid credentials
-  Given I am viewing the customers login page
-  When I fill in invalid credentials
-  And  I should be viewing the customers login page
+Scenario: Log in with invalid credentials
+  Given I am viewing the customer login page
+  When I fill in invalid customer credentials
+  Then I should be viewing the customer login page
 
 Scenario: Log out
-  Given I am a customer
-  When I log out
-  Then I should be logged out
+  Given I am logged in as a customer
+  When I log out of the customer section
+  Then I should be viewing the webstore

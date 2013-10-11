@@ -4,7 +4,7 @@ Feature: Distributor gets notified of customer address change
   I want to be notified when a customers address changes
 
 Background:
-  Given I am a distributor
+  Given I am logged in as a distributor
   And I have notify address option turned on
 
 Scenario: Create new customer

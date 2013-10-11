@@ -1,18 +1,10 @@
-Given "I am unauthenticated" do
+Given /^I am unauthenticated$/ do
   find("#user-nav .distributor-name").click
-  step "I log out"
+  click_link "logout" if page.has_link? "logout"
   page.should have_button "Login"
 end
 
-When /^I log out$/ do
-  click_link "logout" if page.has_link? "logout"
-end
-
-Then /^I should be logged out$/ do
-  page.should_not have_link "Login"
-end
-
-Then "I should not see a message" do
+Then /^I should not see a message$/ do
   %w(success failure).each do |type|
     step "I should not see a #{type} message"
   end
