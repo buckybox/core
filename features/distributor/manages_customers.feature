@@ -5,7 +5,7 @@ Feature: Distributor manages customers
   I want to be able to manage a list of customers
 
 Background:
-  Given I am a distributor
+  Given I am logged in as a distributor
 
 Scenario: Create new customer
   Given I am viewing the customers page

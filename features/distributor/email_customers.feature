@@ -5,7 +5,7 @@ Feature: Distributor emails their customers
   I want to be able to email them with a kick-ass emailer
 
 Background:
-  Given I am a distributor
+  Given I am logged in as a distributor
   And I am viewing the customers page
   And I select all my customers in the list
   And I open the emailer
