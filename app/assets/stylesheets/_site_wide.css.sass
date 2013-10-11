@@ -65,11 +65,11 @@ input, textarea, select
   &.required
     background-color: #FEFAE4
 
-fieldset > legend, .modal-header span
+fieldset > legend, .modal-header span, .heading
   font-weight: bold
   font-size: 12px
   background: #DFDFCF
-  color: #000
+  color: #333
   padding: 2px 4px
   margin: .5em 0
   text-transform: uppercase
@@ -78,6 +78,9 @@ fieldset > legend, .modal-header span
   line-height: 14px
   +border-radius(3px)
   +single-text-shadow(0px, 0px, 0px)
+  &.red
+    color: #FFF
+    background-color: #C00
 
 .alert
   font-weight: bold
