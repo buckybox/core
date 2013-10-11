@@ -47,7 +47,7 @@
         %small= link_to 'impersonate', impersonate_distributor_customer_path(@customer), target: '_blank'
 
     #section-two
-      %span.label.label-important= @customer.delivery_service.name.upcase
+      %span.heading.red= @customer.delivery_service.name
       - if @address
         %address= @address.join('<br>')
 
