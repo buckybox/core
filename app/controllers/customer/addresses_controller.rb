@@ -10,7 +10,7 @@ class Customer::AddressesController < Customer::BaseController
 
         redirect_to customer_root_url
       else
-        redirect_to customer_root_url, flash: { error: resource.errors.full_messages.join('<br>').html_safe }
+        redirect_to customer_root_url, flash: { error: "You must fill in all the required fields." }
       end
     end
   end
