@@ -18,9 +18,4 @@ class ExtraDecorator < Draper::Decorator
   def with_unit
     "#{object.name} (#{object.unit})"
   end
-
-  # FIXME
-  def extra_image
-    OpenStruct.new({ tiny_thumb: OpenStruct.new({ url: nil }) })
-  end
 end
