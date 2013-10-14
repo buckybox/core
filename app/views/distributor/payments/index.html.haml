@@ -4,12 +4,11 @@
 - if distributor.can_upload_payments?
   = simple_form_for(@import_transaction_list, url: match_payments_distributor_payments_path, html: { multipart: true }) do |f|
     #upload_more_transactions.modal.hide.fade
-      .modal-body
-        .row-fluid
-          .span12
-            = button_tag '×', class: 'close', data: { dismiss: 'modal' }, aria: { hidden: 'true' }
-            %span.label IMPORT TRANSACTIONS
+      .modal-header
+        = button_tag '×', class: 'close', data: { dismiss: 'modal' }, aria: { hidden: 'true' }
+        %span import transactions
 
+      .modal-body
         #describe-available-importers.row-fluid
           .span12
             %p= "Please log into #{distributor.banks} to download your transactions in #{content_tag(:strong, 'CSV format')}.".html_safe

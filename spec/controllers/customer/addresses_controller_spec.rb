@@ -12,6 +12,7 @@ describe Customer::AddressesController do
 
       it "updates the customer address" do
         put :update, id: @customer.id
+
         flash[:error].should be_nil
       end
     end
@@ -30,7 +31,20 @@ describe Customer::AddressesController do
 
       it "still updates the customer address" do
         put :update, id: @customer.id
+
         flash[:error].should be_nil
+      end
+    end
+
+    context "with an invalid customer address" do
+      before do
+        @customer = Fabricate(:customer)
+      end
+
+      it "returns an error" do
+        put :update, id: @customer.id, address: { address_1: '' }
+
+        flash[:error].should_not be_nil
       end
     end
   end

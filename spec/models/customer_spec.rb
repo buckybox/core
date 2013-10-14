@@ -132,6 +132,22 @@ describe Customer do
       end
     end
 
+    describe "#dynamic_tags" do
+      specify { expect(@customer.dynamic_tags).to be_a Hash }
+
+      context "with a negative balance" do
+        before { @customer.stub(:account_balance) { EasyMoney.new(-1) } }
+
+        specify { expect(@customer.dynamic_tags).to have_key "negative-balance" }
+      end
+
+      context "with a positive balance" do
+        before { @customer.stub(:account_balance) { EasyMoney.new(1) } }
+
+        specify { expect(@customer.dynamic_tags).to_not have_key "negative-balance" }
+      end
+    end
+
     describe '#number' do
       before { @customer.number = -1 }
       specify { @customer.should_not be_valid }

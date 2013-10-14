@@ -5,13 +5,7 @@
   #customer-details.span4
     #section-one
       = customer_title(@customer, class: 'important')
-      - if @customer.halted?
-        %span.label.label-info.halted HALTED
-
-      - unless @customer.tags.empty?
-        - @customer.tags.each do |tag|
-          = link_to tag_distributor_customers_path(tag.name), class: 'link-label' do
-            %span.label.label-info= tag.name
+      = render partial: 'customer_tags', locals: { customer: @customer }
 
       #account-information{data: {account_id: @account.id}}
         %span.balance{ class: "#{'negative' if @account.negative_balance?}" }= @account.balance
@@ -53,7 +47,7 @@
         %small= link_to 'impersonate', impersonate_distributor_customer_path(@customer), target: '_blank'
 
     #section-two
-      %span.label.label-important= @customer.delivery_service.name.upcase
+      %span.heading.red= @customer.delivery_service.name
       - if @address
         %address= @address.join('<br>')
 
@@ -65,19 +59,22 @@
   #customer-associations.span8
     .row-fluid
       #note-section.span12
-        %span.label.label-success NOTES
-        = simple_form_for([:distributor, @customer]) do |f|
-          = f.input :notes, placeholder: 'E.g. Credit card bounced 23 July, to follow up', label: false, input_html: { class: 'span12', rows: 4 }
-          = f.button :submit, 'Update', class: 'btn btn-primary pull-right'
+        %fieldset
+          %legend notes
+          = simple_form_for([:distributor, @customer]) do |f|
+            = f.input :notes, placeholder: 'E.g. Credit card bounced 23 July, to follow up', label: false, input_html: { class: 'span12', rows: 4 }
+            = f.button :submit, 'Update', class: 'btn btn-primary pull-right'
 
     .row-fluid
       #order-section.span12
-        %span.label.label-success ORDERS
+        %fieldset
+          %legend orders
         = render 'distributor/orders/index'
 
     .row-fluid
       #transaction-section.span12
-        %span.label.label-success TRANSACTIONS
-        #sortable_transactions{data: {user: 'distributor'}}
-          = render 'distributor/transactions/index'
+        %fieldset
+          %legend transactions
+          #sortable_transactions{data: {user: 'distributor'}}
+            = render 'distributor/transactions/index'
 
