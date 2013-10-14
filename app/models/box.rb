@@ -38,18 +38,6 @@ class Box < ActiveRecord::Base
     write_attribute(:hidden, !value)
   end
 
-  def big_thumb_url
-    box_image.thumb.url
-  end
-
-  def webstore_image_url
-    box_image.webstore.url
-  end
-
-  def customisable?
-    dislikes? || extras_allowed?
-  end
-
   def extras_allowed?
     !extras_not_allowed?
   end
@@ -59,8 +47,9 @@ class Box < ActiveRecord::Base
   end
 
   def extras_not_allowed?
-    (extras_limit.blank? || extras_limit.zero?)
+    extras_limit.blank? || extras_limit.zero?
   end
+  alias_method :extras_disabled?, :extras_not_allowed?
 
   def extra_option
     if extras_unlimited?
@@ -72,6 +61,18 @@ class Box < ActiveRecord::Base
     else
       "#{extras_limit} extras allowed"
     end
+  end
+
+  def big_thumb_url
+    box_image.thumb.url
+  end
+
+  def webstore_image_url
+    box_image.webstore.url
+  end
+
+  def customisable?
+    dislikes? || extras_allowed?
   end
 
   def substitutions_limit
@@ -88,10 +89,6 @@ class Box < ActiveRecord::Base
 
   def exclusions_unlimited?
     exclusions_limit == 0
-  end
-
-  def extras_disabled?
-    extras_limit == 0
   end
 
   def has_all_extras?(exclude=[])

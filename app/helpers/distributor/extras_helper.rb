@@ -2,7 +2,7 @@ module Distributor::ExtrasHelper
   def extras_limit_collection
     1.upto(10).each_with_object({}) do |i, h|
       h["Allow up to #{pluralize(i, "item")}"] = i
-    end.merge!("Allow any number of items" => 0) # eek!
+    end.merge!("Allow any number of items" => -1) # eek!
   end
 
   def box_items_limit_collection
@@ -12,6 +12,6 @@ module Distributor::ExtrasHelper
   end
 
   def all_extras_collection
-    { "entire catalog" => true, "items below" => false }
+    { "entire catalog" => 1, "items below" => 0 }
   end
 end
