@@ -4,7 +4,7 @@
       %strong Boxes
       appear in your webstore and form the basis of customer orders.
     .span6
-      .label Hint:
+      .label Hint
       If you allow customers to exclude and substitute
       %strong Box Items
       in their box, make sure you fill in the
@@ -68,25 +68,22 @@
                       .field= f.input_field :dislikes, inline_label: true, label: '<i class="icon-minus-sign"></i> Box Items can be <strong>excluded</strong>'
                       %span.selector
                         = link_to '', 'javascript:void(0)'
-                        - box_items_limit = 1.upto(7).each_with_object({}) { |i, h| h["limited to #{pluralize(i, "item")}"] = i }.merge!("without limits" => 0) # eek!
-                        = f.input_field :exclusions_limit, include_blank: false, collection: box_items_limit
+                        = f.input_field :exclusions_limit, include_blank: false, collection: box_items_limit_collection
                     .line
                       .field= f.input_field :likes, inline_label: true, label: '<i class="icon-plus-sign"></i> Box Items can be <strong>substituted</strong>'
                       %span.selector
                         = link_to '', 'javascript:void(0)'
-                        = f.input_field :substitutions_limit, include_blank: false, collection: box_items_limit
+                        = f.input_field :substitutions_limit, include_blank: false, collection: box_items_limit_collection
                     .line
                       .field= f.input_field :extras_limit, inline_label: true, label: '<i class="icon-plus"></i> <strong>Extra items</strong> can be added to this box', as: :boolean
                     .line.extra-items
                       %span.selector
                         = link_to '', 'javascript:void(0)'
-                        - extra_items_limit = 1.upto(10).each_with_object({}) { |i, h| h["Allow up to #{pluralize(i, "item")}"] = i }.merge!("Allow any number of items" => 0) # eek!
-                        = f.input_field :extras_limit, include_blank: false, collection: extra_items_limit
+                        = f.input_field :extras_limit, include_blank: false, collection: extras_limit_collection
                         from the
                       %span.selector
                         = link_to '', 'javascript:void(0)'
-                        - extra_items_from = { "entire catalog" => true, "items below" => false }
-                        = f.input_field :all_extras, include_blank: false, collection: extra_items_from
+                        = f.input_field :all_extras, include_blank: false, collection: all_extras_collection
 
                       .box-extras
                         = f.input_field :extras, include_blank: false, multiple: true, collection: current_distributor.line_items, selected: box.extra_ids
