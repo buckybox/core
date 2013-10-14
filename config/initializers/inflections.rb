@@ -10,3 +10,9 @@ ActiveSupport::Inflector.inflections do |inflect|
     inflect.singular /(ss)$/i, '\1' # for things like address and business
     inflect.irregular 'information', 'information'
 end
+
+class String
+  def questionize
+    "#{self.underscore}?"
+  end
+end

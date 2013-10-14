@@ -6,15 +6,14 @@
   %thead
     %tr.muted
       %th{ colspan: 3 }
-        %span#transactional_customer_count.label{title: "Total customers #{current_distributor.customers.count}<br />Transactional customers #{current_distributor.transactional_customer_count}"}
+        %span#transactional_customer_count{title: "Total customers: #{current_distributor.customers.count}<br />Transactional customers: #{current_distributor.transactional_customer_count}"}
           %i.icon-user
           = pluralize(@customers.count, "customer")
       %th{ colspan: 3 }
-        %span.label Next Delivery
+        Next Delivery
       %th
-        %span.label
-          Total:
-          = @customers_total_balance
+        Total:
+        = @customers_total_balance
 
   %tbody
     %tr.new-row
@@ -25,9 +24,6 @@
           %td= check_box_tag customer.id, 1, false, class: "select_one"
           %td= customer_badge(customer)
           %td
-            - if customer.halted?
-              %span.label.label-info.halted HALTED
-
             = render partial: 'customer_tags', locals: { customer: customer }
           %td
             %small= next_customer_delivery_occurrence(customer)
