@@ -1,28 +1,34 @@
 $(function(){
-  $("#organisation_submit").click(function(){
-    if ($("#distributor_has_balance_threshold:checked").size() !== 0) {
-      $("#organisation_submit").attr('disabled', 'disabled');
+  if ($("#organisation").length) {
+    // Show/hide spend limit (balance_threshold) extra fields
+    $("#distributor_has_balance_threshold").change(function() {
+      $("#balance_threshold").toggle(
+        $("#distributor_has_balance_threshold").is(":checked")
+      );
+    }).trigger("change");
 
-      $.post("/distributor/settings/spend_limit_confirmation", {
-         spend_limit: $("#distributor_default_balance_threshold").val(),
-         update_existing: $("#distributor_spend_limit_on_all_customers:checked").size(),
-         send_halt_email: $("#distributor_send_halted_email:checked").size()
-       },
-       function(data) {
-         if (data !== "safe" && !confirm(data)) return false;
-       }
-      ).complete(function() {
-        $("#organisation_submit").removeAttr('disabled');
-      });
-    }
-  });
+    $("form").submit(function(event){
+      event.preventDefault();
 
-  // Show/hide spend limit (balance_threshold) extra fields
-  $("#distributor_has_balance_threshold").change(function() {
-    $("#balance_threshold").toggle(
-      $("#distributor_has_balance_threshold").is(":checked")
-    );
-  }).trigger("change");
+      var form = this;
+      var submit = $(form).find("input[type='submit']");
+
+      submit.button('loading');
+
+      if ($("#distributor_has_balance_threshold").is(":checked")) {
+        $.post("/distributor/settings/spend_limit_confirmation", {
+           spend_limit: $("#distributor_default_balance_threshold").val(),
+           update_existing: $("#distributor_spend_limit_on_all_customers:checked").size(),
+           send_halt_email: $("#distributor_send_halted_email:checked").size()
+         },
+         function(data) {
+           if (data === "safe" || confirm(data)) form.submit();
+           else submit.button('reset');
+         }
+        );
+      }
+    });
+  }
 
   if ($("#products").length) {
     // Enable Bootstrap components
