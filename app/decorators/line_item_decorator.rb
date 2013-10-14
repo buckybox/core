@@ -34,7 +34,7 @@ class LineItemDecorator < Draper::Decorator
   end
 
   def affected_customers
-    label_text = "this will affect "
+    label_text = "This will affect "
     count = object.exclusions_count_by_customer + object.substitution_count_by_customer
     label_text += pluralize(count, 'customer')
 
