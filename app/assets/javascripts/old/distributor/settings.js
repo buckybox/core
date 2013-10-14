@@ -39,13 +39,20 @@ $(function(){
       });
 
       // Toggle extra items visibility
-      $('.edit input[id="box_extras_limit"]').change(function() {
+      $('.edit input[id="box_extras_allowed"]').change(function() {
         $(this).closest(".edit").find(".extra-items").toggle($(this).is(":checked"));
       }).trigger('change');
 
       // Toggle box extras visibility
       $('.edit select[id="box_all_extras"]').change(function() {
-        $(this).closest(".edit").find(".box-extras").toggle($(this).val() === "false");
+        var all_extras = $(this).val() != false;
+        var box_extras = $(this).closest(".edit").find(".box-extras");
+
+        if ($(this).data("original-value") != false) {
+          box_extras.find("#box_extra_ids").val(""); // clear extras
+        }
+
+        box_extras.toggle(!all_extras);
       }).trigger('change');
 
       // Turn links into dropdowns
@@ -62,8 +69,11 @@ $(function(){
         select.hide();
       });
 
-      // Turn box extras dropdown into a Select2 one
-      $(".edit .box-extras select").select2({ width: '100%' });
+      // Turn box extras dropdown into a Select2 one (only when a box is clicked otherwise Select2
+      // freezes the page load when there are heaps of boxes and extras)
+      $(".edit .collapse").on("shown", function() {
+        $(this).find(".box-extras select").select2({ width: '100%' });
+      });
     }
 
     if ($("#products > .box_items").length) {

@@ -1,16 +1,12 @@
 class Distributor::Settings::Products::BoxesController < Distributor::BaseController
+  before_filter :fetch_box_params, only: [:create, :update]
+
   def show
     render_form
   end
 
   def create
-    box_params = params[:box]
-
-    # FIXME
-    box_params.delete(:all_extras)
-    box_params.delete(:extras)
-
-    box = Box.new(box_params)
+    box = Box.new(@box_params)
     box.distributor = current_distributor
 
     if box.save
@@ -24,14 +20,9 @@ class Distributor::Settings::Products::BoxesController < Distributor::BaseContro
   end
 
   def update
-    box_params = params[:box]
-    box = current_distributor.boxes.find(box_params.delete(:id))
+    box = current_distributor.boxes.find(params[:box][:id])
 
-    # FIXME
-    box_params.delete(:all_extras)
-    box_params.delete(:extras)
-
-    if box.update_attributes(box_params)
+    if box.update_attributes(@box_params)
       flash.now[:notice] = "Your box has heen updated."
     else
       flash.now[:error] = box.errors.full_messages.to_sentence
@@ -49,6 +40,18 @@ private
     render 'distributor/settings/products/boxes', locals: {
       boxes: @boxes,
     }
+  end
+
+  def fetch_box_params
+    @box_params = params[:box]
+
+    if @box_params.delete(:extras_allowed).to_i.zero?
+      @box_params[:extras_limit] = 0
+    end
+
+    unless @box_params.delete(:all_extras).to_i.zero?
+      @box_params[:extra_ids] = current_distributor.extra_ids
+    end
   end
 end
 

@@ -19,11 +19,13 @@ describe Distributor::Settings::Products::BoxesController do
   describe '#create' do
     context 'with valid params' do
       before do
-        post :create, {
-          box: {
-            name: 'yodas box', price: '246', likes: '1', dislikes: '1', description: "tasty selection of herbs from Yoda's garden.", extras_limit: 0, extra_ids: @extra_ids, all_extras: false
+        expect do
+          post :create, {
+            box: {
+              "name" => "Yoda", "price" => "234.00", "description" => "Nom nom nom", "visible" => "1", "dislikes" => "1", "exclusions_limit" => "3", "likes" => "1", "substitutions_limit" => "1", "extras_allowed" => "1", "extras_limit" => "4", "all_extras" => "0", "extra_ids" => @extra_ids
+            }
           }
-        }
+        end.to change { @distributor.boxes.count }.by(1)
       end
 
       specify { flash[:notice].should eq('Your new box has heen created.') }

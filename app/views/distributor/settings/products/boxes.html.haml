@@ -75,7 +75,7 @@
                         = link_to '', 'javascript:void(0)'
                         = f.input_field :substitutions_limit, include_blank: false, collection: box_items_limit_collection
                     .line
-                      .field= f.input_field :extras_limit, inline_label: true, label: '<i class="icon-plus"></i> <strong>Extra items</strong> can be added to this box', as: :boolean
+                      .field= f.input_field :extras_allowed?, inline_label: true, label: '<i class="icon-plus"></i> <strong>Extra items</strong> can be added to this box', as: :boolean
                     .line.extra-items
                       %span.selector
                         = link_to '', 'javascript:void(0)'
@@ -83,10 +83,10 @@
                         from the
                       %span.selector
                         = link_to '', 'javascript:void(0)'
-                        = f.input_field :all_extras, include_blank: false, collection: all_extras_collection
+                        = f.input_field :all_extras, include_blank: false, collection: all_extras_collection, selected: box.all_extras ? 1 : 0, 'data-original-value' => box.all_extras ? 1 : 0
 
                       .box-extras
-                        = f.input_field :extras, include_blank: false, multiple: true, collection: current_distributor.line_items, selected: box.extra_ids
+                        = f.input_field :extra_ids, include_blank: false, multiple: true, collection: current_distributor.extras
 
                   .form-actions
                     = link_to 'cancel', 'javascript:void(0)', 'data-toggle' => 'collapse', 'data-target' => (box.new_record? ? "#new_box" : "#edit_box_#{box.id}")
