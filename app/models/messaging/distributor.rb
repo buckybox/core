@@ -15,6 +15,7 @@ module Messaging
     end
 
     def tracking_after_save
+      update
       toggle_webstore_tag if distributor.webstore_status_changed?
     end
 
@@ -25,6 +26,12 @@ module Messaging
     end
 
     def update
+      delay(
+        priority: Figaro.env.delayed_job_priority_low
+      ).delayed_update
+    end
+
+    def delayed_update
       messaging_proxy.update_user(distributor.id, tracking_data, Rails.env)
     end
 

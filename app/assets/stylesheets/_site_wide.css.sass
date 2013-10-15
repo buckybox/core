@@ -153,17 +153,30 @@ table.no-horizontal-dividers
   +single-text-shadow(0px, 0px, 0px)
 
 .label
-  font-weight: bold
-  font-size: 12px
+  font-weight: normal
+  font-size: 11px
   color: #FFF
-  text-transform: uppercase
+  text-transform: lowercase
+  &.label-hidden
+    display: none
+  &.label-status
+    font-size: 12px
 
 [class="label"] // don't match "label-*"
   background: #DFDFCF
   color: #000
 
-.badge
-  text-transform: capitalize
+[class="badge"] // don't match "badge-*"
+  background: #DFDFD0
+  color: #000
+
+.table th
+  text-transform: uppercase
+  font-size: 11px
+  color: #000
+
+.tooltip
+  text-transform: none
 
 .customer-badge
   max-width: 100%
