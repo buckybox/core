@@ -41,7 +41,9 @@
 
           %tr.edit.background-yellow
             %td
-              %strong= link_to line_item.name, 'javascript:void(0)'
+              = f.input_field :name, name: "line_items[#{line_item.id}][name]", class: 'name', required: true, placeholder: "Remove item #{line_item.name}", value: line_item.name, required: false, 'data-original-value' => line_item.name
+              %button.remove &times;
+
             %td
               = line_item.affected_customers
 

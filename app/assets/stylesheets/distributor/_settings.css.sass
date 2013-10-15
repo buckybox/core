@@ -337,15 +337,24 @@
             width: 90%
           .warning
             display: none
-          .input-append
-            margin: 0
-          .add-on // Bootstrap fix
+          .remove
+            margin-top: -2px
+            margin-left: -25px
             padding: 0
-            border-right: none
-            button
-              margin-top: -1px
-              &[disabled]
-                opacity: inherit
+            font-size: 20px
+            font-weight: bold
+            line-height: 20px
+            color: black
+            text-shadow: 0 1px 0 white
+            opacity: 0.2
+            cursor: pointer
+            background: transparent
+            border: 0
+            &:hover
+              color: black
+              text-decoration: none
+              cursor: pointer
+              opacity: 0.4
 
   > .extra_items
     .edit
