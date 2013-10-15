@@ -7,7 +7,7 @@ $(function(){
       );
     }).trigger("change");
 
-    $("form").submit(function(event){
+    $("form").submit(function(event) {
       event.preventDefault();
 
       var form = this;
@@ -22,10 +22,15 @@ $(function(){
            send_halt_email: $("#distributor_send_halted_email:checked").size()
          },
          function(data) {
-           if (data === "safe" || confirm(data)) form.submit();
-           else submit.button('reset');
+           if (data === "safe" || confirm(data)) {
+             form.submit();
+           } else {
+             submit.button('reset');
+           }
          }
         );
+      } else {
+        form.submit();
       }
     });
   }
