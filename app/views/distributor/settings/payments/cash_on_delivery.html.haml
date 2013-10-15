@@ -18,7 +18,7 @@
           = f.button :submit, 'Save', class: 'btn btn-primary pull-right'
 
     .span6.pull-right.preview
-      .label customer preview
+      %span.heading customer preview
       %p.muted This information is displayed to customers at the webstore during the checkout process.
 
       = render partial: 'partials/payments/cash_on_delivery', locals: { form_object: NullObject.new }
