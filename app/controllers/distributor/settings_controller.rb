@@ -9,7 +9,7 @@ class Distributor::SettingsController < Distributor::BaseController
     @default_delivery_days  = current_distributor.advance_days
     @default_automatic_time = Time.new(time.year, time.month, time.day, Distributor::AUTOMATIC_DELIVERY_HOUR)
   end
-  
+
   def webstore(form = SettingsWebstoreForm.for_distributor(current_distributor))
     @form = form
     render :webstore
