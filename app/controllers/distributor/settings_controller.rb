@@ -44,27 +44,6 @@ class Distributor::SettingsController < Distributor::BaseController
     @delivery_services = current_distributor.delivery_services.decorate
   end
 
-  def extras
-    @extra = Extra.new
-    @extras = current_distributor.extras.alphabetically.decorate
-  end
-
-  def boxes
-    @box = Box.new
-    @boxes = current_distributor.boxes.decorate
-  end
-
-  def invoice_information
-    @invoice_information = current_distributor.invoice_information || InvoiceInformation.new
-  end
-
-  def customer_preferences
-    @edit_mode = params[:edit] || false
-
-    @line_items = current_distributor.line_items
-    @placeholder_text = 'Enter items one per line or separated by commas. e.g. Silverbeet, Cabbage, Celery'
-  end
-
   def catch_cancel
     redirect_to :back if params[:commit] == 'cancel'
   end
