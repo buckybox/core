@@ -98,10 +98,12 @@ $(function(){
         var current_value  = $(this).val();
 
         warning.toggle(current_value !== original_value);
-        remove.prop("disabled", current_value.length === 0);
+        remove.toggle(current_value.length !== 0);
       }).trigger('keyup');
 
-      $("#products > .box_items tr.edit button.remove").click(function() {
+      $("#products > .box_items tr.edit .remove").click(function(event) {
+        event.preventDefault();
+
         var input = $(this).closest('tr').find('input');
         input.val('');
         input.trigger('keyup');
