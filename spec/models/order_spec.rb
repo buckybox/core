@@ -3,6 +3,7 @@ include Bucky
 
 describe Order do
   let(:order) { Fabricate(:order) }
+  let(:everyday_order) { Fabricate(:recurring_order_everyday, schedule_rule: new_everyday_schedule(Date.parse("2012-09-24"))) }
 
   context 'pausing' do
     describe '#pause!' do
@@ -40,6 +41,22 @@ describe Order do
         order.pause!(Date.current + 1.day, Date.current + 3.days)
         order.schedule_rule.should_receive(:resume_date)
         order.resume_date
+      end
+    end
+
+    describe "#possible_resume_dates" do
+      it "lists possible dates to resume" do
+        Distributor.any_instance.stub(:window_start_from).and_return(Date.parse("2012-10-01"))
+        Distributor.any_instance.stub(:advance_days).and_return(3)
+        everyday_order.pause!(Date.parse("2012-09-30"))
+        everyday_order.possible_resume_dates(1.week).collect(&:first).should eq ["Thu 4 Oct",
+          "Fri 5 Oct",
+          "Sat 6 Oct",
+          "Sun 7 Oct",
+          "Mon 8 Oct",
+          "Tue 9 Oct",
+          "Wed 10 Oct",
+          "Thu 11 Oct"]
       end
     end
   end
