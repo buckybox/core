@@ -10,12 +10,12 @@
       = link_to "Boxes", distributor_settings_products_boxes_path
       are configured to allow excludes and substitutes for this list to take effect.
 
-  = simple_form_for(line_items, url: distributor_settings_products_box_items_path, html: { novalidate: false, method: :put }) do |f|
+  = simple_form_for(:line_item, url: distributor_settings_products_box_items_path, html: { novalidate: false, method: :put }) do |f|
     #new_line_item
       %table.table.table-condensed.spacer
         %tr
           %td
-            - first_line_item = line_items.one?
+            - first_line_item = line_items.size.zero?
             = link_to 'javascript:void(0)', class: (first_line_item ? 'required-action' : 'action') do
               Add
               = first_line_item ? '' : 'or edit'
@@ -28,32 +28,29 @@
         = link_to 'cancel', 'javascript:void(0)', class: 'cancel'
         = f.button :submit, 'Save', class: 'btn btn-primary'
 
-    %table.table.table-condensed.list
-      - line_items.each do |line_item|
-        - if line_item.persisted?
-          %tr
+    - unless first_line_item
+      %table.table.table-condensed.list
+        - line_items.each do |line_item|
+          - if line_item.persisted?
+            %tr
+              %td
+                %strong= link_to line_item.name, 'javascript:void(0)'
+              %td
+              %td.text-right
+                = line_item.using_customers
+
+          %tr.edit.background-yellow
             %td
               %strong= link_to line_item.name, 'javascript:void(0)'
             %td
+              = line_item.affected_customers
+
             %td.text-right
               = line_item.using_customers
 
-        %tr.edit.background-yellow
-          %td
-            .input-append
-              = f.input_field :name, name: "line_items[#{line_item.id}][name]", class: 'name form-control', required: true, placeholder: "Remove item #{line_item.name}", value: line_item.name, required: false, 'data-original-value' => line_item.name
-              %span.add-on
-                %button.btn.remove{ type: 'button' } &times;
-
-          %td
-            = line_item.affected_customers
-
-          %td.text-right
-            = line_item.using_customers
-
-    .form-actions.background-yellow
-      = link_to 'cancel', 'javascript:void(0)', class: 'cancel'
-      = f.button :submit, 'Save', class: 'btn btn-primary'
+      .form-actions.background-yellow
+        = link_to 'cancel', 'javascript:void(0)', class: 'cancel'
+        = f.button :submit, 'Save', class: 'btn btn-primary'
 
 = render partial: 'distributor/settings/products', locals: { type: 'box_items' }
 
