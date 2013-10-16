@@ -33,8 +33,8 @@ class SignUpWizardController < ApplicationController
     details[:parameter_name].sub! "my.buckybox.com/webstore/", ""
 
     # fetch country ID from ISO code
-    country = Country.where(alpha2: details.delete(:country)).first
-    details[:country_id] = country.id if country
+    country = Country.find_by(alpha2: details.delete(:country))
+    details[:country_id] = country.id
 
     # we can't mass-assign these attributes
     source = details.delete :source
@@ -43,7 +43,9 @@ class SignUpWizardController < ApplicationController
 
     @distributor = Distributor.new(details)
     @distributor.tag_list.add source
-    @distributor.omni_importers = OmniImporter.bank_deposit.where(bank_name: bank_name)
+    @distributor.omni_importers = OmniImporter.bank_deposit.where(
+      country_id: country.id, bank_name: bank_name
+    )
 
     if payment_paypal == "1"
       # NOTE: using hardcoded PayPal omni until we get more formats
