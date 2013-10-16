@@ -6,4 +6,5 @@
   = g.input :suburb, input_html: { required: current_distributor.require_suburb }
   = g.input :city, input_html: { required: current_distributor.require_city }
   = g.input :postcode, input_html: { required: current_distributor.require_postcode }
-  = g.input :delivery_note, placeholder: 'E.g. Place on back porch', input_html: { required: current_distributor.require_delivery_note }
+  - if current_distributor.collect_delivery_note
+    = g.input :delivery_note, placeholder: 'E.g. Place on back porch', input_html: { required: current_distributor.require_delivery_note }
