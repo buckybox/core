@@ -1,6 +1,5 @@
 module Messaging
   class IntercomProxy
-    
     def self.instance
       @instance ||= Messaging::IntercomProxy.new
     end
@@ -21,11 +20,12 @@ module Messaging
 
     def create_user(attrs, env = nil)
       return if skip? env
-      
+
       ::Intercom::User.create(attrs)
 
     rescue ::Intercom::AuthenticationError,
             ::Intercom::ServerError,
+            ::Intercom::BadGatewayError,
             ::Intercom::ServiceUnavailableError,
             ::Intercom::ResourceNotFound => e
       report(e)
@@ -56,7 +56,7 @@ module Messaging
     rescue Bucky::NonFatalException => e
       report(e)
     end
-  
+
     def track(id, action_name, occurred_at = Time.current, env = nil)
       return if skip? env
 
@@ -66,6 +66,7 @@ module Messaging
 
     rescue ::Intercom::AuthenticationError,
             ::Intercom::ServerError,
+            ::Intercom::BadGatewayError,
             ::Intercom::ServiceUnavailableError,
             ::Intercom::ResourceNotFound => e
       report(e)
@@ -83,6 +84,7 @@ module Messaging
       return nil
     rescue ::Intercom::AuthenticationError,
             ::Intercom::ServerError,
+            ::Intercom::BadGatewayError,
             ::Intercom::ServiceUnavailableError => e
       raise Bucky::NonFatalException.new(e)
     end
@@ -113,6 +115,7 @@ module Messaging
       return nil
     rescue ::Intercom::AuthenticationError,
             ::Intercom::ServerError,
+            ::Intercom::BadGatewayError,
             ::Intercom::ServiceUnavailableError => e
       raise Bucky::NonFatalException.new(e)
     end
@@ -123,6 +126,7 @@ module Messaging
       tag
     rescue ::Intercom::AuthenticationError,
             ::Intercom::ServerError,
+            ::Intercom::BadGatewayError,
             ::Intercom::ServiceUnavailableError,
             ::Intercom::ResourceNotFound => e
       raise Bucky::NonFatalException.new(e)
