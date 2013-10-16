@@ -7,7 +7,8 @@
     = f.input :suburb, input_html: { required: @address.customer.distributor.require_suburb }
     = f.input :city, input_html: { required: @address.customer.distributor.require_city }
     = f.input :postcode, input_html: { required: @address.customer.distributor.require_postcode }
-    = f.input :delivery_note, input_html: { required: @address.customer.distributor.require_delivery_note }
+    - if @address.customer.distributor.collect_delivery_note
+      = f.input :delivery_note, input_html: { required: @address.customer.distributor.require_delivery_note }
 
   .modal-footer
     = f.button :submit, class: 'btn btn-primary'
