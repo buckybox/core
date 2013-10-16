@@ -138,7 +138,7 @@ private
   end
 
   def validate_address
-    (ADDRESS_ATTRIBUTES - ["delivery_note"]).each do |attr|
+    ADDRESS_ATTRIBUTES.each do |attr|
       if distributor.public_send("require_#{attr}") && (
           customer && customer.new_record? ||
           send("#{attr}_changed?")
