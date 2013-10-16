@@ -1,9 +1,9 @@
 = f.association :delivery_service, collection: current_distributor.delivery_services, include_blank: false
 
 = f.simple_fields_for :address do |g|
-  = g.input :address_1, required: current_distributor.require_address_1
-  = g.input :address_2, required: current_distributor.require_address_2
-  = g.input :suburb, required: current_distributor.require_suburb
-  = g.input :city, required: current_distributor.require_city
-  = g.input :postcode, required: current_distributor.require_postcode
-  = g.input :delivery_note, placeholder: 'E.g. Place on back porch'
+  = g.input :address_1, input_html: { required: current_distributor.require_address_1 }
+  = g.input :address_2, input_html: { required: current_distributor.require_address_2 }
+  = g.input :suburb, input_html: { required: current_distributor.require_suburb }
+  = g.input :city, input_html: { required: current_distributor.require_city }
+  = g.input :postcode, input_html: { required: current_distributor.require_postcode }
+  = g.input :delivery_note, placeholder: 'E.g. Place on back porch', input_html: { required: current_distributor.require_delivery_note }
