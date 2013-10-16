@@ -10,6 +10,7 @@ class Distributor::Defaults
 
   def populate_defaults
     populate_line_items
+    populate_bank_information
     populate_email_templates
     distributor.save
   end
@@ -20,6 +21,17 @@ private
 
   def populate_line_items
     LineItem.add_defaults_to(distributor)
+  end
+
+  def populate_bank_information
+    bank_information = distributor.bank_information || distributor.create_bank_information
+
+    banks = distributor.omni_importers.bank_deposit
+    bank_information.name = banks.first.bank_name unless banks.empty?
+    bank_information.account_name = distributor.name
+    bank_information.cod_payment_message = "Please place payment in your mailbox."
+
+    bank_information.save(validate: false) # because model is missing account number
   end
 
   def populate_email_templates
