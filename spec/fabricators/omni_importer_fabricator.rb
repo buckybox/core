@@ -35,3 +35,9 @@ Fabricator(:omni_importer_for_bank_deposit, from: :omni_importer) do
   payment_type "Bank Deposit"
 end
 
+Fabricator(:paypal_omni_importer, from: :omni_importer) do
+  id OmniImporter::PAYPAL_ID
+  payment_type "PayPal"
+  country nil
+end
+
