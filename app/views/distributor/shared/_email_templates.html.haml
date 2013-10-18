@@ -1,9 +1,9 @@
-#distributor_customers_send_email.modal.hide.fade{'tabindex' => '-1', 'role' => 'dialog'}
+#distributor_send_email.modal.hide.fade{'tabindex' => '-1', 'role' => 'dialog'}
   .modal-header
     %button.close{ data: { dismiss: 'modal'} }
       %i.icon-remove
     %i.icon-envelope
-    %span.recipients
+    %span.recipients.raw
 
   = simple_form_for :email_template, url: email_distributor_customers_path, remote: true do |f|
     = hidden_field_tag :recipient_ids
@@ -59,10 +59,10 @@
       :ruby
         title = <<-TITLE
           Use <strong>merge tags</strong> to insert customer details
-          <button class="close" onclick="$('#distributor_customers_send_email_merge_tags').popover('hide'); return false">&times;</button>
+          <button class="close" onclick="$('#distributor_send_email_merge_tags').popover('hide'); return false">&times;</button>
         TITLE
 
-      = link_to 'javascript:void(0)', id: "distributor_customers_send_email_merge_tags", class: 'pull-left', title: title, 'data-html' => true, 'data-placement' => 'right', 'data-toggle' => 'popover', 'data-content' => EmailTemplate.keywords_with_delimiters.join('<br>') do
+      = link_to 'javascript:void(0)', id: "distributor_send_email_merge_tags", class: 'pull-left', title: title, 'data-html' => true, 'data-placement' => 'right', 'data-toggle' => 'popover', 'data-content' => EmailTemplate.keywords_with_delimiters.join('<br>') do
         %i.icon-info-sign
         help
 
@@ -80,7 +80,7 @@
               = link_to_submit 'data-link-action' => 'save' do
                 Save as new template
 
-#distributor_customers_copy_email.modal.hide.fade{'tabindex' => '-1', 'role' => 'dialog'}
+#distributor_copy_email.modal.hide.fade{'tabindex' => '-1', 'role' => 'dialog'}
   .modal-header
     %button.close{ data: { dismiss: 'modal'} }
       %i.icon-remove

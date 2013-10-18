@@ -231,13 +231,19 @@ body
     color: #CCC
     font-size: 11px
 
+.action-buttons
+  .conditional-actions
+    display: none
+  .btn-group > button > input[type='checkbox']
+    margin-top: -3px
+
 #notification-dropdown
   .clear-notifications
     background-color: $action-colour
     +border-bottom-radius(6px)
   padding: 0
 
-#distributor_customers_send_email.modal
+#distributor_send_email.modal
   width: 620px
   margin-left: -375px // must be half of the width, minus scrollbar on the left (30px)
 

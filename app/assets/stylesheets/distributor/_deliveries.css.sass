@@ -92,23 +92,19 @@ $navigation-month: #5c5c5c
         padding: 2px 8px
   #delivery-list
     min-height: 750px
-    .row-fluid [class*="span"]
-      min-height: 0px
     .sortable-highlight
       background-color: $grayLighter
+    .row-grip
+      background-image: image-url('row-grip.png')
+      background-repeat: repeat-y
+      background-position: 2px 1px
+      cursor: move
     .data-headings
       margin-top: 30px
       &:first-child
         margin-top: 10px
       form
         margin: 0px
-      .packing-actions, .delivery-actions
-        input[type='checkbox']
-          margin-top: 0px
-        form
-          display: inline-block
-        .btn-group
-          display: inline-block
     .data-listings
       overflow: hidden
       white-space: nowrap
@@ -128,20 +124,13 @@ $navigation-month: #5c5c5c
       .customer
         overflow: hidden
         -webkit-mask-image: -webkit-gradient(linear, center top, right top, from(rgba(0,0,0,1)), to(rgba(0,0,0,0)))
-      .row-grip
-        background-image: image-url('row-grip.png')
-        background-repeat: repeat-y
-        background-position: 2px 1px
       .customer-holder
         display: inline-block
-        .customer-badge
-          margin: 4px 0
       .tag-links
-        overflow: hidden
         &:hover
           background-color: $white
           position: absolute
-          margin: 1px 4px
+          margin: 6px 4px
           padding-right: 2px
       .paid-label
         visibility: hidden
@@ -156,9 +145,9 @@ $navigation-month: #5c5c5c
         text-align: center
         color: $black
         padding: 3px 3px 2px 3px
-        margin: 3px 0px 3px 1px
+        margin: 6px 0
         i
-          margin-top: 0px
+          margin-top: 0
       .dso-number
         font-weight: bold
         +border-right-radius(0px)
