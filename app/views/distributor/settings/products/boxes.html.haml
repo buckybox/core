@@ -86,7 +86,7 @@
                         = f.input_field :all_extras, include_blank: false, collection: all_extras_collection, selected: box.all_extras ? 1 : 0, 'data-original-value' => box.all_extras ? 1 : 0
 
                       .box-extras
-                        = f.input_field :extra_ids, include_blank: false, multiple: true, collection: current_distributor.extras
+                        = f.input_field :extra_ids, include_blank: false, multiple: true, collection: current_distributor.extras, placeholder: "Enter your Extra Items here"
 
                   .form-actions
                     = link_to 'cancel', 'javascript:void(0)', 'data-toggle' => 'collapse', 'data-target' => (box.new_record? ? "#new_box" : "#edit_box_#{box.id}")
