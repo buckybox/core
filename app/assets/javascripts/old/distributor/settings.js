@@ -72,12 +72,15 @@ $(function(){
         var select = $(this).find("select");
         var selected = select.find("option:selected");
 
-        link.text(selected.text());
-        link.hover(function() {
-          link.hide(); select.show();
+        link.text( selected.text() ).click(function() {
+          link.hide();
+          select.show();
         });
 
-        select.hide();
+        select.change(function() {
+          $(this).hide();
+          link.text( $(this).find("option:selected").text() ).show();
+        }).hide();
       });
 
       // Turn box extras dropdown into a Select2 one (only when a box is clicked otherwise Select2
