@@ -16,7 +16,7 @@ class Distributor::Settings::Payments::CashOnDeliveryController < Distributor::S
       redirect_to distributor_settings_payments_cash_on_delivery_path,
         notice: "Your Cash on Delivery settings were successfully updated."
     else
-      flash[:error] = "You must fill in all the required fields."
+      flash[:error] = @cash_on_delivery.errors.to_sentence
 
       render_form
     end
