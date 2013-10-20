@@ -1,12 +1,11 @@
 class Distributor::Settings::Payments::BankDeposit < Distributor::Settings::Payments::Base
+  delegate :payment_bank_deposit, to: :distributor
   delegate :name,
     :account_name,
     :account_number,
     :account_name,
     :customer_message,
     to: :bank_information
-
-  delegate :payment_bank_deposit, to: :distributor
 
   def initialize(args)
     super

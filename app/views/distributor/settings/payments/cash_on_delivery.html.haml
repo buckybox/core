@@ -1,13 +1,12 @@
 - content_for :payment_type do
-  - unless current_distributor.payment_cash_on_delivery
-    .span6
-      %p Please #{mail_to Figaro.env.support_email, "contact us"} if you wish to allow this payment method.
+  = simple_form_for(cash_on_delivery, as: "cash_on_delivery", url: distributor_settings_payments_cash_on_delivery_path, method: "put", html: { class: 'form-horizontal', novalidate: false }) do |f|
+    .row-fluid
+      .span12
+        .important_action{class: current_distributor.payment_cash_on_delivery ? 'green' : 'red'}
+          = f.input_field :payment_cash_on_delivery, as: :boolean, inline_label: "Accept payments by <strong>Cash on Delivery</strong>".html_safe, label: false
 
-  - else
-    .span6
-      = simple_form_for(cash_on_delivery, as: "cash_on_delivery", url: distributor_settings_payments_cash_on_delivery_path, method: "put", html: { class: 'form-horizontal', novalidate: false }) do |f|
-        = f.error_notification
-
+    .row-fluid
+      .span6
         %fieldset
           %legend webstore payment instructions
           = f.input_field :cod_payment_message,
@@ -17,11 +16,11 @@
         .controls.clearfix
           = f.button :submit, 'Save', class: 'btn btn-primary pull-right'
 
-    .span6.pull-right.preview
-      %span.heading customer preview
-      %p.muted This information is displayed to customers at the webstore during the checkout process.
+      .span6.pull-right.preview
+        %span.heading customer preview
+        %p.muted This information is displayed to customers at the webstore during the checkout process.
 
-      = render partial: 'partials/payments/cash_on_delivery', locals: { form_object: NullObject.new }
+        = render partial: 'partials/payments/cash_on_delivery', locals: { form_object: NullObject.new }
 
 = render partial: 'distributor/settings/payments', locals: { type: 'cash_on_delivery' }
 
