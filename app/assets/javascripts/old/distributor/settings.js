@@ -49,9 +49,14 @@ $(function(){
         $(this).closest(".edit").find("#box_box_image").trigger('click');
       });
 
+      // Toggle links visibility
+      $('.edit input[id="box_likes"], .edit input[id="box_dislikes"]').change(function() {
+        $(this).closest(".line").find(".selector").toggle( $(this).is(":checked") );
+      }).trigger('change');
+
       // Toggle extra items visibility
       $('.edit input[id="box_extras_allowed"]').change(function() {
-        $(this).closest(".edit").find(".extra-items").toggle($(this).is(":checked"));
+        $(this).closest(".edit").find(".extra-items").toggle( $(this).is(":checked") );
       }).trigger('change');
 
       // Toggle box extras visibility
