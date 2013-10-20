@@ -170,10 +170,6 @@ private
     render json: { message: message }, status: :unprocessable_entity
   end
 
-  def get_email_templates
-    @email_templates = current_distributor.email_templates
-  end
-
   def email_templates_update action, email_template = nil
     selected_email_template_id = params[:selected_email_template_id].to_i
     recipient_ids = params[:recipient_ids].split(',').map(&:to_i)

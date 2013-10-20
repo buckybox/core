@@ -20,5 +20,8 @@ class Jobs
     CronLog.log("Running metrics.")
     count = Metrics.calculate_and_store
     CronLog.log("#{count} metrics calculated and stored.")
+
+    CronLog.log("Running data integrity tests.")
+    DataIntegrity.check_and_email
   end
 end

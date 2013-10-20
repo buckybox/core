@@ -12,8 +12,3 @@ every '0 1 * * *' do
   runner 'Jobs.run_daily'
 end
 
-#TODO we are not doing invoicing at the moment
-#every 1.day, :at => '6am' do
-#  runner 'CronLog.log("Generating and sending out invoices if needed.")'
-#  runner 'Invoice.generate_invoices'
-#end

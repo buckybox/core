@@ -77,7 +77,7 @@ input, textarea, select
 fieldset
   margin-bottom: 2em
 
-fieldset > legend, .modal-header span, .heading
+fieldset > legend, .modal-header > span:not(.raw), .heading
   font-weight: bold
   font-size: 12px
   background: #DFDFCF
@@ -212,7 +212,6 @@ table.no-horizontal-dividers
 .customer-badge
   max-width: 100%
   white-space: nowrap
-  overflow: hidden
   text-overflow: ellipsis
   display: inline-block
   color: #333
