@@ -1,6 +1,6 @@
 - content_for :sub_nav do
   .row-fuild
-    #action-buttons.span3
+    .action-buttons.span3
       - unless defined? @customers
         .btn-group
           = link_to distributor_customers_path, { class: "btn", title: "Back to customer list" } do
@@ -23,15 +23,15 @@
               = link_to 'javascript:void(0)', id: 'select_all-inverse' do
                 Inverse
 
-      .btn-group.email-actions{:class => ("list-view" if defined? @customers)}
-        = link_to "#distributor_customers_send_email", class: "btn btn-primary", title: "Send an email", role: "button", "data-toggle" => "modal" do
+      .btn-group{:class => ("conditional-actions" if defined? @customers)}
+        = link_to "#distributor_send_email", class: "btn btn-primary", title: "Send an email", role: "button", "data-toggle" => "modal" do
           %i.icon-envelope.icon-white
         = button_tag class: "btn btn-primary dropdown-toggle", data: { toggle: 'dropdown' } do
           %span.caret
         %ul.dropdown-menu{ role: 'menu' }
           - if defined? @customers
             %li
-              = link_to "#distributor_customers_copy_email", "data-toggle" => "modal" do
+              = link_to "#distributor_copy_email", "data-toggle" => "modal" do
                 View as email addresses
           %li
             = link_to "Export customer details", "#distributors_customers_export", id: "export_customer_details"
@@ -57,5 +57,5 @@
     .span3
       / future settings drop-down
 
-= render partial: "email_templates"
+= render partial: "distributor/shared/email_templates"
 = render partial: "customer_export_form"

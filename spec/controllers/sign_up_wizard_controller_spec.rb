@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe SignUpWizardController do
   before do
-    Fabricate(:country, alpha2: "NZ")
+    @nz = Fabricate(:country, alpha2: "NZ")
   end
 
   describe "#form" do
@@ -79,7 +79,7 @@ describe SignUpWizardController do
 
       context "with matching omni importer" do
         before do
-          @omni_importer = Fabricate(:omni_importer_for_bank_deposit, bank_name: form_params["distributor"]["bank_name"])
+          @omni_importer = Fabricate(:omni_importer_for_bank_deposit, country: @nz, bank_name: form_params["distributor"]["bank_name"])
         end
 
         it "sets up omni importers for the bank" do
@@ -99,9 +99,8 @@ describe SignUpWizardController do
 
         before do
           @omni_importers = [
-            # NOTE: hardcoded for now, see controller
-            Fabricate(:omni_importer, id: OmniImporter::PAYPAL_ID),
-            Fabricate(:omni_importer_for_bank_deposit, bank_name: form_params["distributor"]["bank_name"])
+            Fabricate(:paypal_omni_importer),
+            Fabricate(:omni_importer_for_bank_deposit, country: @nz, bank_name: form_params["distributor"]["bank_name"])
           ]
         end
 
@@ -155,6 +154,24 @@ describe SignUpWizardController do
         post_form.call
 
         response.body.should include "street"
+      end
+    end
+
+    context "with unknown country" do
+      let(:unknown_country_form_params) do
+        unknown_country_form_params = form_params
+        unknown_country_form_params["distributor"]["country"] = "ZZ"
+        unknown_country_form_params
+      end
+
+      let(:post_form) do
+        lambda { post :sign_up, unknown_country_form_params }
+      end
+
+      it "crashes!" do
+        expect {
+          post_form.call
+        }.to raise_error RuntimeError
       end
     end
   end

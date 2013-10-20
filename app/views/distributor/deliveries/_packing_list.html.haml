@@ -1,14 +1,3 @@
-.row-fluid.data-headings
-  .span6.packing-actions
-    = check_box_tag 'all'
-    = button_to('Print - Master List',
-      master_packing_sheet_distributor_deliveries_path,
-      { id: 'master-print', class: !@real_list ? 'btn' : 'btn btn-primary', disabled: !@real_list, form: { target: '_blank' } })
-  .span6.export.text-right
-    = button_to('Export',
-      export_distributor_deliveries_path,
-      { id: 'packing-export', class: 'btn' })
-
 - if @real_list
   - DeliverySort.new(@items).grouped_by_boxes.each do |box, array|
     .row-fluid.data-headings
@@ -18,9 +7,9 @@
     #list_type{ data: { type: 'packages', date: @selected_date, screen: 'packing' } }
       %ul#delivery_list.unstyled
         - array.each do |package|
-          %li.row-fluid.data-listings{ class: package.status }
+          %li.row-fluid.data-listings.customer-row{ class: package.status }
             .span6.customer
-              = check_box_tag package.order_id, '1', false, data: { packages: package.id }
+              = check_box_tag package.order_id, '1', false, data: { packages: package.id }, class: 'select_one', 'data-customer-id' => package.customer.id
               .label.state-label.dso-number= map_pin(package)
               = render partial: 'status_icons', locals: { status: package.status }
               .customer-holder
@@ -40,9 +29,9 @@
     #list_type{ data: { type: 'orders', date: @selected_date, screen: 'packing' } }
       %ul#delivery_list.unstyled
         - array.each do |order|
-          %li.row-fluid.data-listings.pending
+          %li.row-fluid.data-listings.pending.customer-row
             .span6.customer
-              = check_box_tag order.id, '1', false, data: { orders: order.id }
+              = check_box_tag order.id, '1', false, data: { orders: order.id }, class: 'select_one', 'data-customer-id' => order.customer.id
               .label.state-label.dso-number= map_pin(order)
               .label.state-label.staus-icon.status-unpacked{ title: 'UNPACKED package' }
                 %i.icon-time

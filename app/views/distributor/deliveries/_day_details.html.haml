@@ -55,7 +55,10 @@
           on
           %strong= @selected_date.strftime("%A %d %B")
       - else
+        = render 'controls'
+
         - if @delivery_service_id != 0
           = render 'delivery_service_list'
         - else
           = render 'packing_list'
+
