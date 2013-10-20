@@ -20,7 +20,6 @@ class SettingsWebstoreForm < Form
   attr_reader :errors
   attr_accessor *(INTERFACE.keys)
 
-  
   def initialize(opts)
     opts.each do |k,v|
       instance_variable_set("@#{k}", v)

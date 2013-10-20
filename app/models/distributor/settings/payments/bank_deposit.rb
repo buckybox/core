@@ -6,6 +6,8 @@ class Distributor::Settings::Payments::BankDeposit < Distributor::Settings::Paym
     :customer_message,
     to: :bank_information
 
+  delegate :payment_bank_deposit, to: :distributor
+
   def initialize(args)
     super
     @bank_deposit = args[:bank_deposit]
@@ -15,6 +17,8 @@ class Distributor::Settings::Payments::BankDeposit < Distributor::Settings::Paym
   end
 
   def save
-    @bank_information.update_attributes(@bank_deposit)
+    @bank_information.distributor.update_attributes(
+      payment_bank_deposit: @bank_deposit.delete(:payment_bank_deposit)
+    ) && @bank_information.update_attributes(@bank_deposit)
   end
 end

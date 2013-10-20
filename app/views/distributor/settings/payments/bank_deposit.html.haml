@@ -1,13 +1,12 @@
 - content_for :payment_type do
-  - unless current_distributor.payment_bank_deposit
-    .span6
-      %p Please #{mail_to Figaro.env.support_email, "contact us"} if you wish to allow this payment method.
+  = simple_form_for(bank_deposit, as: "bank_deposit", url: distributor_settings_payments_bank_deposit_path, method: "put", html: { class: 'form-horizontal', novalidate: false }) do |f|
+    .row-fluid
+      .span12
+        .important_action{class: current_distributor.payment_bank_deposit ? 'green' : 'red'}
+          = f.input_field :payment_bank_deposit, as: :boolean, inline_label: "Accept payments by <strong>Bank Deposit</strong>".html_safe, label: false
 
-  - else
-    .span6
-      = simple_form_for(bank_deposit, as: "bank_deposit", url: distributor_settings_payments_bank_deposit_path, method: "put", html: { class: 'form-horizontal', novalidate: false }) do |f|
-        = f.error_notification
-
+    .row-fluid
+      .span6
         %fieldset
           %legend bank details
           = f.input_field :name, placeholder: 'Bank name', required: true, class: 'span12'
@@ -26,11 +25,11 @@
         .controls.clearfix
           = f.button :submit, 'Save', class: 'btn btn-primary pull-right'
 
-    .span6.pull-right.preview
-      %span.heading customer preview
-      %p.muted This information is displayed to customers at the webstore during the checkout process.
+      .span6.pull-right.preview
+        %span.heading customer preview
+        %p.muted This information is displayed to customers at the webstore during the checkout process.
 
-      = render partial: 'partials/payments/bank_deposit', locals: { form_object: NullObject.new }
+        = render partial: 'partials/payments/bank_deposit', locals: { form_object: NullObject.new }
 
 = render partial: 'distributor/settings/payments', locals: { type: 'bank_deposit' }
 
