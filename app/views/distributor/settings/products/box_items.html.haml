@@ -19,7 +19,8 @@
             = link_to 'javascript:void(0)', class: (first_line_item ? 'required-action' : 'action') do
               Add
               = first_line_item ? '' : 'or edit'
-              <strong>Box Items</strong>
+              your
+              %strong Box Items
         %tr.edit
           %td
             = f.input_field :name, name: "new_line_items", as: :text, rows: 3, value: '', placeholder: 'Add new items: one per line or separated by commas. E.g. Silverbeet, Cabbage, Celery'
