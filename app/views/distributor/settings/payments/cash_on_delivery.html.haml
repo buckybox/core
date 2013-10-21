@@ -1,4 +1,13 @@
 - content_for :payment_type do
+  .row-fluid
+    .span6
+      Activate this area if you plan to accept
+      %strong Cash on Pickup or Delivery.
+
+    .span6
+      %span.heading hint
+      The information entered here will be displayed to customers during the Web Store checkout process.
+
   = simple_form_for(cash_on_delivery, as: "cash_on_delivery", url: distributor_settings_payments_cash_on_delivery_path, method: "put", html: { class: 'form-horizontal', novalidate: false }) do |f|
     .row-fluid
       .span12
