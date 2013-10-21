@@ -3,9 +3,9 @@
     .row-fluid
       .span12
         .important_action{class: current_distributor.payment_cash_on_delivery ? 'green' : 'red'}
-          = f.input_field :payment_cash_on_delivery, as: :boolean, inline_label: "Accept payments by <strong>Cash on Delivery</strong>".html_safe, label: false
+          = f.input_field :payment_cash_on_delivery, as: :boolean, inline_label: "Accept payments by <strong>Cash on Delivery</strong>".html_safe, label: false, 'data-toggle' => 'collapse', 'data-target' => '#cash_on_delivery_details'
 
-    .row-fluid
+    #cash_on_delivery_details.row-fluid.collapse{ class: "#{'in' if current_distributor.payment_cash_on_delivery}" }
       .span6
         %fieldset
           %legend webstore payment instructions
@@ -13,14 +13,14 @@
             placeholder: %q(e.g. Please place payment in your mailbox.),
             as: :text, rows: 4, required: false, class: 'span12'
 
-        .controls.clearfix
-          = f.button :submit, 'Save', class: 'btn btn-primary pull-right'
-
       .span6.pull-right.preview
         %span.heading customer preview
         %p.muted This information is displayed to customers at the webstore during the checkout process.
 
         = render partial: 'partials/payments/cash_on_delivery', locals: { form_object: NullObject.new }
+
+    .row-fluid
+      = f.button :submit, 'Save', class: 'btn btn-primary pull-right'
 
 = render partial: 'distributor/settings/payments', locals: { type: 'cash_on_delivery' }
 

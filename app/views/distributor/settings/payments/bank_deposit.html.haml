@@ -3,9 +3,9 @@
     .row-fluid
       .span12
         .important_action{class: current_distributor.payment_bank_deposit ? 'green' : 'red'}
-          = f.input_field :payment_bank_deposit, as: :boolean, inline_label: "Accept payments by <strong>Bank Deposit</strong>".html_safe, label: false
+          = f.input_field :payment_bank_deposit, as: :boolean, inline_label: "Accept payments by <strong>Bank Deposit</strong>".html_safe, label: false, 'data-toggle' => 'collapse', 'data-target' => '#bank_deposit_details'
 
-    .row-fluid
+    #bank_deposit_details.row-fluid.collapse{ class: "#{'in' if current_distributor.payment_bank_deposit}" }
       .span6
         %fieldset
           %legend bank details
@@ -22,14 +22,14 @@
             placeholder: "e.g. All payments to be made at least 3 days before delivery ",
             as: :text, rows: 4, required: false, class: 'span12'
 
-        .controls.clearfix
-          = f.button :submit, 'Save', class: 'btn btn-primary pull-right'
-
       .span6.pull-right.preview
         %span.heading customer preview
         %p.muted This information is displayed to customers at the webstore during the checkout process.
 
         = render partial: 'partials/payments/bank_deposit', locals: { form_object: NullObject.new }
+
+    .row-fluid
+      = f.button :submit, 'Save', class: 'btn btn-primary pull-right'
 
 = render partial: 'distributor/settings/payments', locals: { type: 'bank_deposit' }
 
