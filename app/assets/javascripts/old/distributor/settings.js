@@ -133,7 +133,7 @@ $(function(){
     $("#settings_webstore_form_team_photo_file").trigger('click');
     return false;
   });
-  
+
   if ($("#payments").length) {
     var update_preview = function() {
       var klass = this.id;
@@ -154,7 +154,7 @@ $(function(){
       );
     };
 
-    var fields = $("form :input:visible");
+    var fields = $("form :input:not([type='checkbox']):visible");
     fields.on('keyup', update_preview);
     fields.trigger('keyup');
 
