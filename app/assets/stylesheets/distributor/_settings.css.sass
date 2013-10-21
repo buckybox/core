@@ -237,19 +237,21 @@
       margin: 10px 0
 
 #products
-  .action
-    margin-bottom: 4px
   table
+    border-top: 1px solid #DDD
     color: #000
     tr
       &[data-toggle='collapse']
         cursor: pointer
         &:hover
           background-color: #EEE
+      &:first-child td
+        padding: 4px 0 0 0
       &:last-child
         border-bottom: none
       td
-        padding: 0
+        line-height: 24px
+        padding: 5px 0
         border: none
         vertical-align: middle
         border: none
@@ -257,8 +259,6 @@
           padding: 2px 0
         &.text-right
           white-space: nowrap
-      &:first-child
-        padding: 4px 0
   form
     border-bottom: 1px solid #DDD
     margin: 0
@@ -303,13 +303,17 @@
   > .box_items
     #new_line_item
       margin: 1em 0 5px
-      background-color: $action-colour
       +border-radius(4px)
       .table
         margin: 0
         tr
           border: none
+          &:hover
+            background-color: inherit
+          &.edit
+            background-color: $action-colour
       .form-actions
+        background-color: $action-colour
         +border-radius(0 0 4px 4px)
       .action
         margin: 0
