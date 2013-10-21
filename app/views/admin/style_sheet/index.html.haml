@@ -53,20 +53,23 @@
         %ul
           %li Different style on hover
     %tr
+      %td fieldset > legend, .modal-header > span:not(.raw), .heading
+      %td
+        Heading
+      %td
+        %span.heading heading
+        %span.heading.red delivery service
+      %td
+        %ul
+          %li
+            %code .raw
+            can be used for raw (unstyled) modal titles such as the emailer
+    %tr
       %td .label
       %td
-        %ul
-          %li Section title
-          %li Table header
-          %li Tag
+        Tag
       %td
-        %ul
-          %li
-            .label transactions
-          %li
-            .label total
-          %li
-            .label credit card
+        .label.label-info credit card
       %td
         %ul
           %li= link_to "Other types (colors) available", "http://twitter.github.io/bootstrap/components.html#labels-badges"

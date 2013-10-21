@@ -19,7 +19,7 @@ class DistributorMailer < ApplicationMailer
 
     headers['X-MC-Tags'] = "distributor,welcome"
 
-    mail to: @distributor.email_to,
+    send_via_gmail mail to: @distributor.email_to,
          from: "Will Lau <#{Figaro.env.support_email}>",
          subject: "#{@distributor.name}, welcome to Bucky Box!"
   end
@@ -30,11 +30,15 @@ class DistributorMailer < ApplicationMailer
 
     headers['X-MC-Tags'] = "distributor,bank_setup"
 
-    message = mail to: @distributor.email_to,
+    send_via_gmail mail to: @distributor.email_to,
          from: "Jordan Carter <#{Figaro.env.support_email}>",
          subject: "[Bucky Box] Setting up your bank feed"
+  end
 
-    message.delivery_method.settings.merge!(
+private
+
+  def send_via_gmail email
+    email.delivery_method.settings.merge!(
       address:              Figaro.env.gmail_smtp_host,
       port:                 Figaro.env.gmail_smtp_port,
       user_name:            Figaro.env.gmail_smtp_user_name,
@@ -43,6 +47,6 @@ class DistributorMailer < ApplicationMailer
       enable_starttls_auto: Figaro.env.gmail_smtp_enable_starttls_auto,
     )
 
-    message
+    email
   end
 end
