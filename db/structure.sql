@@ -1210,7 +1210,8 @@ CREATE TABLE distributors (
     notify_address_change boolean,
     phone character varying(255),
     collect_delivery_note boolean DEFAULT true NOT NULL,
-    require_delivery_note boolean DEFAULT false NOT NULL
+    require_delivery_note boolean DEFAULT false NOT NULL,
+    notify_for_new_webstore_order boolean DEFAULT false NOT NULL
 );
 
 
@@ -3731,3 +3732,5 @@ INSERT INTO schema_migrations (version) VALUES ('20131020234439');
 INSERT INTO schema_migrations (version) VALUES ('20131016215622');
 
 INSERT INTO schema_migrations (version) VALUES ('20131016215636');
+
+INSERT INTO schema_migrations (version) VALUES ('20131022003933');
