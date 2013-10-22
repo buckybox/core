@@ -5,6 +5,7 @@ describe Metrics do
     let(:keys) { %w(
       new_distributors_last_7_days
       new_customers_last_7_days
+      new_transactional_customers_last_7_days
       delivered_deliveries_last_day
     ) }
 
