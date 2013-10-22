@@ -315,7 +315,8 @@ class Customer < ActiveRecord::Base
   end
 
   def via_webstore_notifications
-    Event.new_customer_webstore(self)
+    Event.new_customer_webstore(self) if distributor.notify_for_new_webstore_customer
+
     CustomerMailer.raise_errors do
       self.send_login_details
     end
