@@ -1,7 +1,5 @@
 class Event < ActiveRecord::Base
-
   belongs_to :distributor
-
   belongs_to :customer
   belongs_to :delivery
   belongs_to :invoice
