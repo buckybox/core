@@ -506,10 +506,6 @@ class Distributor < ActiveRecord::Base
     notifier.customer_changed_address(customer)
   end
 
-  def notify_on_halt
-    true
-  end
-
   def notify_for_new_webstore_customer
     true
   end
