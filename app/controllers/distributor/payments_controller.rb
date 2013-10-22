@@ -50,15 +50,13 @@ class Distributor::PaymentsController < Distributor::ResourceController
   end
 
   def process_payments
-    processed_data = @import_transaction_list.process_import_transactions_attributes(params[:import_transaction_list])
-
-    if @import_transaction_list.process_attributes(processed_data)
+    processor = Payments::Processor.new(@import_transaction_list)
+    if processor.process(params[:import_transaction_list])
       tracking.event(current_distributor, "payment_csv_commited") unless current_admin.present?
 
       redirect_to distributor_payments_url, notice: "Payments processed successfully"
     else
-      flash.now[:alert] = "There was a problem"
-      render :match_payments
+      redirect_to distributor_payments_url, alert: "There was a problem"
     end
   end
 

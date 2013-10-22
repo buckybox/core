@@ -1414,7 +1414,8 @@ CREATE TABLE import_transaction_lists (
     csv_file text,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
-    omni_importer_id integer
+    omni_importer_id integer,
+    status character varying(255)
 );
 
 
@@ -3722,3 +3723,5 @@ INSERT INTO schema_migrations (version) VALUES ('20130826015549');
 INSERT INTO schema_migrations (version) VALUES ('20130826051545');
 
 INSERT INTO schema_migrations (version) VALUES ('20130827002646');
+
+INSERT INTO schema_migrations (version) VALUES ('20131020234439');
