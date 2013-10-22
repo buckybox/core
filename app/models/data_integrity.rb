@@ -2,6 +2,7 @@ class DataIntegrity
   def self.check
     checker = DataIntegrity.new
     checker.account_balance_equals_sum_of_transactions
+    checker.import_transaction_lists_processing_is_stuck
     checker
   end
 
@@ -41,6 +42,14 @@ class DataIntegrity
       if sum != balance
         error "Account ##{account.id}: transactions sum = #{sum} != #{balance} = balance"
       end
+    end
+  end
+
+  def import_transaction_lists_processing_is_stuck
+    ImportTransactionList.where(
+      ["status != :pending AND status != :processed AND updated_at < :hours_ago", {pending: ImportTransactionList::PENDING, processed: ImportTransactionList::PROCESSED, hours_ago: 24.hours.ago}]
+    ).each do |import_transaction_list|
+    error "ImportTransactionList ##{import_transaction_list.id} has a status #{import_transaction_list.status} and was last updated at #{import_transaction_list.updated_at}"
     end
   end
 

@@ -1,5 +1,9 @@
 class ImportTransactionList < ActiveRecord::Base
 
+  PENDING = 'pending'
+  PROCESSING = 'processing'
+  PROCESSED = 'processed'
+
   belongs_to :distributor
   has_many :import_transactions, autosave: true, validate: true, dependent: :destroy
   belongs_to :omni_importer
@@ -8,7 +12,6 @@ class ImportTransactionList < ActiveRecord::Base
 
   mount_uploader :csv_file, ImportTransactionListUploader
 
-
   validates_presence_of :csv_file
 
   validate :csv_ready, on: :create
@@ -16,6 +19,7 @@ class ImportTransactionList < ActiveRecord::Base
   before_create :import_rows
 
   default_value_for :draft, true
+  default_value_for :status, PENDING
 
   scope :ordered, order("created_at DESC")
   scope :draft, where(['import_transaction_lists.draft = ?', true])
@@ -23,7 +27,6 @@ class ImportTransactionList < ActiveRecord::Base
 
   attr_accessible :csv_file, :import_transactions_attributes, :draft, :omni_importer_id
   delegate :payment_type, to: :omni_importer, allow_nil: true
-
 
   # Used to move the csv_files to the new directory private_uploads
   def move_old_csv_file
@@ -119,7 +122,37 @@ class ImportTransactionList < ActiveRecord::Base
     end
   end
 
+  def can_process?
+    with_lock do
+      return false if processed? || processing?
+      set_processing!
+    end
+    true
+  end
+
+  def processing_failed!
+    set_pending!
+  end
+
   private
+
+  def processed?
+    status == PROCESSED
+  end
+
+  def processing?
+    status == PROCESSING
+  end
+
+  def set_processing!
+    self.status = PROCESSING
+    save!
+  end
+
+  def set_pending!
+    self.status = PENDING
+    save!
+  end
 
   def csv_ready
     errors.add(:csv_file, "Seems to be a problem with the csv file.") unless csv_valid?
