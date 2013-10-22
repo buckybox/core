@@ -40,6 +40,15 @@ $(function(){
     $('[data-toggle="tooltip"]').tooltip();
 
     if ($("#products > .boxes").length) {
+      // Toggle action bar visibility
+      $("#new_box")
+        .on('show', function() {
+          $('a.action[data-toggle="collapse"][data-target="#new_box"]').closest('tr').hide();
+        })
+        .on('hide', function() {
+          $('a.action[data-toggle="collapse"][data-target="#new_box"]').closest('tr').show();
+        });
+
       // Photo uploader rollover
       $(".edit .photo").on({
         mouseenter: function() { $(this).find("a").show(); },
@@ -121,6 +130,17 @@ $(function(){
         input.val('');
         input.trigger('keyup');
       });
+    }
+
+    if ($("#products > .extra_items").length) {
+      // Toggle action bar visibility
+      $("#new_extra")
+        .on('show', function() {
+          $('a.action[data-toggle="collapse"][data-target="#new_extra"]').closest('tr').hide();
+        })
+        .on('hide', function() {
+          $('a.action[data-toggle="collapse"][data-target="#new_extra"]').closest('tr').show();
+        });
     }
   }
 
