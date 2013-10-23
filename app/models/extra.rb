@@ -19,7 +19,7 @@ class Extra < ActiveRecord::Base
   def visible; !hidden; end
 
   def visible=(value)
-    write_attribute(:hidden, !value)
+    write_attribute(:hidden, !value.to_bool)
   end
 
   def to_hash
