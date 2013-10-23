@@ -246,17 +246,21 @@
         &:hover
           background-color: #EEE
       &:first-child td
+        line-height: 24px
         padding: 4px 0
       &:last-child
         border-bottom: none
       td
-        line-height: 24px
-        padding: 0
+        padding: 0 10px
         border: none
         vertical-align: middle
         border: none
         .photo img
           padding: 2px 0
+        &:first-child
+          padding-left: 0
+        &:last-child
+          padding-right: 0
         &.text-right
           white-space: nowrap
   form
@@ -286,7 +290,7 @@
         a
           position: absolute
           top: 55px
-          left: 22px
+          left: 20px
           background: #FFF
           padding: .2em .4em
           border: 1px dotted #ccc
@@ -301,6 +305,8 @@
       .extra-items
         padding-left: 3em
         margin-left: -2px
+        &.line
+          margin-top: -.6em
 
   > .box_items
     #new_line_item
