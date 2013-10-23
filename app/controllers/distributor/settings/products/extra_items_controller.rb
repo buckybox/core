@@ -34,7 +34,7 @@ class Distributor::Settings::Products::ExtraItemsController < Distributor::BaseC
 private
 
   def render_form
-    @extras = current_distributor.extras.decorate
+    @extras = current_distributor.extras.alphabetically.decorate
     @extras.unshift(Extra.new.decorate) # new extra
 
     render 'distributor/settings/products/extra_items', locals: {
