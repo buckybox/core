@@ -13,6 +13,7 @@ class Box < ActiveRecord::Base
 
   validates_presence_of :distributor, :name, :description, :price
   validates :extras_limit, numericality: { greater_than: -2 }
+  validates :name, length: {maximum: 80}
   validate :validate_price
 
   monetize :price_cents
