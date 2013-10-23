@@ -66,7 +66,7 @@ input[type="button"],
   text-transform: capitalize
 
 input, textarea, select
-  &.required, &[required=required]
+  &.required, &[required]
     background-color: #FEFAE4
 
 .background-yellow
@@ -153,6 +153,12 @@ table.no-horizontal-dividers
   +border-radius(0.4em)
   &:hover
     background-color: $action-colour-hover
+
+.action-background
+  margin: 0
+  padding: 4px
+  background-color: $action-colour
+  +border-radius(4px)
 
 .required-action
   color: #930 !important
