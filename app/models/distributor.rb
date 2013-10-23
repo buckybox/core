@@ -407,7 +407,7 @@ class Distributor < ActiveRecord::Base
   end
 
   def spend_limit_on_all_customers=(val)
-    @spend_limit_on_all_customers = (val == '1')
+    @spend_limit_on_all_customers = val.to_bool
   end
 
   def spend_limit_on_all_customers

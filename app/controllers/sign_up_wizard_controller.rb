@@ -47,7 +47,7 @@ class SignUpWizardController < ApplicationController
       country_id: country.id, bank_name: bank_name
     )
 
-    if payment_paypal == "1"
+    if payment_paypal.to_bool
       # NOTE: using hardcoded PayPal omni until we get more formats
       @distributor.omni_importers << OmniImporter.where(id: OmniImporter::PAYPAL_ID)
     end
@@ -61,7 +61,7 @@ class SignUpWizardController < ApplicationController
 
       send_follow_up_email
 
-      if details[:payment_bank_deposit] == "1" && @distributor.omni_importers.bank_deposit.empty?
+      if details[:payment_bank_deposit].to_bool && @distributor.omni_importers.bank_deposit.empty?
         send_bank_setup_email(bank_name)
       end
 
