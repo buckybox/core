@@ -382,19 +382,22 @@
               opacity: 0.4
 
   > .extra_items
-    .edit
-      #new_extra .container-fluid
-        border-top: none
-      .name
-        width: 71.9%
-      .unit
-        width: 15%
-      .amount
-        width: 12%
-      .field
-        display: inline-block
-      form .form-actions
-        margin: 0
+    tr
+      &.edit
+        #new_extra .container-fluid
+          border-top: none
+        .name
+          width: 71.9%
+        .unit
+          width: 15%
+        .amount
+          width: 12%
+        .field
+          display: inline-block
+        form .form-actions
+          margin: 0
+      &:not(.edit)
+        height: 34px
 
 #payments
   .important_action
