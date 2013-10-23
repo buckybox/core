@@ -304,16 +304,26 @@
 
   > .box_items
     #new_line_item
-      margin: 1em 0 5px
-      +border-radius(4px)
+      margin: 1em 0 0
+      padding: 4px 0
+      border-top: 1px solid #DDD
       .table
+        border-collapse: separate
+        border: none
         margin: 0
         tr
           border: none
           &:hover
             background-color: inherit
           &.edit
-            background-color: $action-colour
+            margin-top: 4px
+            td
+              padding-bottom: 0
+              background-color: $action-colour
+              +border-radius(4px 4px 0 0)
+          &:not(.edit)
+            td
+              padding: 0
       .form-actions
         background-color: $action-colour
         +border-radius(0 0 4px 4px)
@@ -322,8 +332,7 @@
     .form-actions
       text-align: center
       display: none
-      padding-bottom: 1em
-      padding-bottom: 1em
+      padding-bottom: 4px
       margin: 0
     form
       border: none
@@ -340,10 +349,12 @@
           cursor: pointer
           &:hover
             background-color: #EEE
+          td
+            padding: 4px 0
         &.edit
           display: none
           td
-            padding: 4px
+            padding: 2px 4px
             &:first-child
               width: 50%
           input
