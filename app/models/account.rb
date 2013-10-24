@@ -22,19 +22,18 @@ class Account < ActiveRecord::Base
 
   before_validation :default_balance_and_currency
 
+  delegate :name, to: :customer
+
   # A way to double check that the transactions and the balance have not gone out of sync.
   # THIS SHOULD NEVER HAPPEN! If it does fix the root cause don't make this write a new balance.
   # Likely somewhere a transaction is being created manually.
+  # FIXME
   def calculate_balance(offset_size = 0)
     EasyMoney.new(transactions.offset(offset_size).sum(&:amount))
   end
 
   def balance_cents=(value)
     raise(ArgumentError, "The balance can not be updated this way. Please use one of the model balance methods that create transactions.")
-  end
-
-  def name
-    customer.name
   end
 
   def balance=(value)
