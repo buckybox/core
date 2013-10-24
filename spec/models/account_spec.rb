@@ -8,85 +8,112 @@ describe Account do
   specify { account.should be_valid }
 
   context :balance do
-    specify { account.balance.cents.should == 0 }
+    specify { account.balance.cents.should eq 0 }
     specify { expect { account.balance_cents=(10) }.to raise_error(ArgumentError) }
     specify { expect { account.balance=(10) }.to raise_error(ArgumentError) }
   end
 
   context 'when updating balance' do
-    describe '#change_balance_to' do
-      [-5, 0, 5].each do |value|
+    describe '#create_transaction' do
+      [-5, EasyMoney.new(0.01), 5].each do |value|
         context "with #{value} of type #{value.class}" do
           before do
             account.save
-            account.change_balance_to(value)
+            account.create_transaction(value)
           end
 
-          specify { account.balance.should == value }
-          specify { account.transactions.last.amount.should == value }
+          specify { account.balance.should eq value }
+          specify { account.transactions.last.amount.should eq value }
         end
       end
     end
 
     describe '#add_to_balance' do
-      [-5, 0, 5].each do |value|
+      [-5, 0.02, 5].each do |value|
         context "with #{value} of type #{value.class}" do
           before(:each) do
             account.save
-            account.change_balance_to(250)
+            account.create_transaction(250)
             account.save
-            account.add_to_balance(value)
+            account.add_to_balance(EasyMoney.new(value))
           end
 
-          specify { account.balance.should == (250 + value) }
-          specify { account.transactions.last.amount.should == value }
+          specify { account.balance.should eq (250 + value) }
+          specify { account.transactions.last.amount.should eq value }
         end
       end
     end
 
     describe '#subtract_from_balance' do
-      [-5, 0, 5].each do |value|
+      [-5, 0.03, 5].each do |value|
         context "with #{value} of type #{value.class}" do
           before(:each) do
             account.save
-            account.change_balance_to(250)
+            account.create_transaction(250)
             account.save
-            account.subtract_from_balance(value)
+            account.subtract_from_balance(EasyMoney.new(value))
           end
 
-          specify { account.balance.should == (250 - value) }
-          specify { account.transactions.last.amount.should == (-1 * value) }
+          specify { account.balance.should eq (250 - value) }
+          specify { account.transactions.last.amount.should eq (-1 * value) }
         end
+      end
+    end
+
+    describe '#change_balance_to!' do
+      [-5, 0.04, 5].each do |value|
+        context "with #{value} of type #{value.class}" do
+          before(:each) do
+            account.save
+            account.create_transaction(250)
+            account.save
+            account.change_balance_to!(EasyMoney.new(value))
+          end
+
+          specify { account.balance.should eq value }
+          specify { account.transactions.last.amount.should eq (value - 250)}
+        end
+      end
+    end
+
+    describe "#check_customer_threshold" do
+      let(:customer) { account.customer }
+      let(:distributor) { customer.distributor }
+
+      it "updates halted status when balance changes" do
+        
+        account.should_receive(:update_halted_status)
+        account.change_balance_to!(-100)
       end
     end
   end
 
   describe "#calculate_balance" do
     before do
-      account.change_balance_to(250)
-      account.change_balance_to(500)
+      account.change_balance_to!(250)
+      account.change_balance_to!(500)
     end
 
     it "should calculate balance correctly" do
-      account.calculate_balance == 250
+      account.calculate_balance.should eq 500
     end
   end
 
   describe "#all_occurrences" do
-    specify { order_account.all_occurrences(4.weeks.from_now).size.should == 20 }
+    specify { order_account.all_occurrences(4.weeks.from_now).size.should eq 20 }
   end
 
   describe "#amount_with_bucky_fee" do
     it "returns amount if bucky fee is not separate" do
       account.distributor.stub(:separate_bucky_fee).and_return(true)
       account.distributor.stub(:bucky_box_percentage).and_return(0.02) #%
-      account.amount_with_bucky_fee(100).should == 102
+      account.amount_with_bucky_fee(100).should eq 102
     end
 
     it "includes bucky fee if bucky fee is separate" do
       account.distributor.stub(:separate_bucky_fee).and_return(false)
       account.distributor.stub(:bucky_box_percentage).and_return(0.02) #%
-      account.amount_with_bucky_fee(100).should == 100
+      account.amount_with_bucky_fee(100).should eq 100
     end
   end
 

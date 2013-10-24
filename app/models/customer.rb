@@ -158,7 +158,7 @@ class Customer < ActiveRecord::Base
     self.save! # Blow up on error so transaction is aborted
 
     self.account.currency = self.currency
-    self.account.change_balance_to(c.account_balance, {description: "Inital CSV Import"})
+    self.account.create_transaction(c.account_balance, {description: "Inital CSV Import"})
     self.account.save! # Blow up on error so transaction is aborted
 
     self.import_boxes(c.boxes)

@@ -21,7 +21,6 @@ class Account < ActiveRecord::Base
   validates_presence_of :customer_id, :balance
 
   before_validation :default_balance_and_currency
-  after_save :check_customer_threshold
 
   # A way to double check that the transactions and the balance have not gone out of sync.
   # THIS SHOULD NEVER HAPPEN! If it does fix the root cause don't make this write a new balance.
@@ -42,27 +41,43 @@ class Account < ActiveRecord::Base
     raise(ArgumentError, "The balance can not be updated this way. Please use one of the model balance methods that create transactions.")
   end
 
-  def change_balance_to(amount, options = {})
-    amount = EasyMoney.new(amount)
-    amount_difference = amount - balance
-
-    transactionable = (options[:transactionable] ? options[:transactionable] : self)
-    description = (options[:description] ? options[:description] : 'Manual Transaction.')
-
-    write_attribute(:balance_cents, amount.cents)
-
-    transaction_options = { amount: amount_difference, transactionable: transactionable, description: description }
-    transaction_options.merge!(display_time: options[:display_time]) if options[:display_time]
-    transactions.build(transaction_options)
-  end
-
   def add_to_balance(amount, options = {})
-    amount = balance + amount
-    change_balance_to(amount, options)
+    create_transaction(amount, options)
   end
 
   def subtract_from_balance(amount, options = {})
-    add_to_balance((amount * -1), options)
+    create_transaction(amount * -1, options)
+  end
+
+  def create_transaction(amount, options = {})
+    raise "amount should not be a float as floats are inaccurate for currency" if amount.is_a? Float
+    raise "amount should not be zero" if amount.zero?
+
+    amount = EasyMoney.new(amount)
+    with_lock do
+      transactionable = (options[:transactionable] ? options[:transactionable] : self)
+      description = (options[:description] ? options[:description] : 'Manual Transaction.')
+
+      Account.update_counters(self.id, balance_cents: amount.cents)
+
+      transaction_options = { amount: amount, transactionable: transactionable, description: description }
+      transaction_options.merge!(display_time: options[:display_time]) if options[:display_time]
+      transaction = transactions.create(transaction_options)
+
+      self.reload
+      update_halted_status
+
+      transaction
+    end
+  end
+
+  def change_balance_to!(amount, opts = {})
+    raise "amount should not be a float as floats are unprecise for currency" if amount.is_a? Float
+
+    amount = EasyMoney.new(amount)
+    with_lock do
+      create_transaction(amount - balance, opts)
+    end
   end
 
   #all accounts that need invoicing
@@ -141,10 +156,8 @@ class Account < ActiveRecord::Base
     Invoice.create_for_account(self) if needs_invoicing?
   end
 
-  def check_customer_threshold
-    if balance_cents_changed?
-      customer.update_halted_status!(nil, Customer::EmailRule.all)
-    end
+  def update_halted_status
+    customer.update_halted_status!(nil, Customer::EmailRule.all)
   end
 
   def balance_at(date)

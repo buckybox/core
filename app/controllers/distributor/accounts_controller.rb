@@ -4,24 +4,8 @@ class Distributor::AccountsController < Distributor::ResourceController
   def change_balance
     @account = Account.find(params[:id])
 
-    delta = EasyMoney.new(params[:delta])
-
-    if !delta.zero?
-      new_balance = @account.balance + delta
-      note = params[:note]
-      time = Date.parse(params[:date]).to_time_in_current_zone
-
-      if note.blank?
-        @account.change_balance_to(new_balance, display_time: time)
-      else
-        @account.change_balance_to(new_balance, description: note, display_time: time)
-      end
-    else
-      flash[:error] = 'Change in balance must be a number and not zero.'
-    end
-
     respond_to do |format|
-      if @account.save && !delta.zero?
+      if create_transaction(@account, params)
         format.html { redirect_to [:distributor, @account.customer], notice: 'Account balance was successfully updated.' }
         format.json { head :no_content }
       else
@@ -44,5 +28,28 @@ class Distributor::AccountsController < Distributor::ResourceController
     @transactions_sum = @account.calculate_balance(offset_size)
 
     render partial: 'distributor/transactions/index'   
+  end
+
+  private
+
+  def create_transaction(account, params)
+    opts = {}
+    delta = EasyMoney.new(params[:delta])
+
+    if delta.zero?
+      flash[:error] = 'Change in balance must be a number and not zero.'
+    else
+      opts[:delta] = delta
+    end
+
+    if params[:note].present?
+      opts[:description] = params[:note]
+    end
+
+    if params[:date].present?
+      opts[:display_time] = Date.parse(params[:date]).to_time_in_current_zone
+    end
+
+    !delta.zero? && account.create_transaction(delta, opts)
   end
 end
