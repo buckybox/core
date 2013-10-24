@@ -178,7 +178,7 @@ $(function(){
     fields.on('keyup', update_preview);
     fields.trigger('keyup');
 
-    fields.filter('[data-toggle="tooltip"]').tooltip({ 'trigger': 'focus' });
+    fields.filter('[data-toggle="tooltip"]').tooltip({ 'trigger': 'focus', 'container': 'body' });
   }
 
 
