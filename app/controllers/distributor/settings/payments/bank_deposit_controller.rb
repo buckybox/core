@@ -16,7 +16,7 @@ class Distributor::Settings::Payments::BankDepositController < Distributor::Sett
       redirect_to distributor_settings_payments_bank_deposit_path,
         notice: "Your Bank Deposit settings were successfully updated."
     else
-      flash[:error] = @bank_deposit.errors.to_sentence
+      flash.now[:error] = @bank_deposit.errors.to_sentence
 
       render_form
     end
