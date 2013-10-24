@@ -556,7 +556,9 @@ private
   end
 
   def payment_options_valid
-    errors.add(:payment_cash_on_delivery, "Must have at least one payment option selected") if payment_options.empty?
+    if active_webstore && payment_options.empty?
+      errors.add(:payment_cash_on_delivery, "At least one payment method must be activated because your Web Store is on")
+    end
   end
 
   def validate_parameter_name
