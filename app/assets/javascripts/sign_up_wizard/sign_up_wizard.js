@@ -92,7 +92,7 @@ var BuckyBoxSignUpWizard = function() {
 
           // copy text slug into URL field
           sign_up_wizard("#distributor_name").change(function() {
-            var slug = $(this).val().
+            var slug = $(this).val().trim().
               replace(/\s/g, '-').replace(/[^a-zA-Z0-9\-]/g, '').
               toLowerCase();
 
