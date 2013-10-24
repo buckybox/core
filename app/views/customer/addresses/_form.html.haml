@@ -1,13 +1,14 @@
-= simple_form_for(@address, url: customer_address_path, html: { method: :put }) do |f|
+= simple_form_for(@address, url: customer_address_path, html: { method: :put, novalidate: false }) do |f|
   .modal-body
     = f.error_notification
 
-    = f.input :address_1, required: @address.customer.distributor.require_address_1
-    = f.input :address_2, required: @address.customer.distributor.require_address_2
-    = f.input :suburb, required: @address.customer.distributor.require_suburb
-    = f.input :city, required: @address.customer.distributor.require_city
-    = f.input :postcode, required: @address.customer.distributor.require_postcode
-    = f.input :delivery_note
+    = f.input :address_1, input_html: { required: @address.customer.distributor.require_address_1 }
+    = f.input :address_2, input_html: { required: @address.customer.distributor.require_address_2 }
+    = f.input :suburb, input_html: { required: @address.customer.distributor.require_suburb }
+    = f.input :city, input_html: { required: @address.customer.distributor.require_city }
+    = f.input :postcode, input_html: { required: @address.customer.distributor.require_postcode }
+    - if @address.customer.distributor.collect_delivery_note
+      = f.input :delivery_note, placeholder: "Delivery instructions such as where to place the package, e.g. Place on back porch", input_html: { required: @address.customer.distributor.require_delivery_note }
 
   .modal-footer
     = f.button :submit, class: 'btn btn-primary'
