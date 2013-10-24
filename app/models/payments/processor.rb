@@ -14,7 +14,7 @@ class Payments::Processor
     else
       false
     end
-  rescue StandardError => e
+  rescue => e
     @import_transaction_list.processing_failed!
     raise e
   end

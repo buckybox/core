@@ -54,21 +54,21 @@ class Account < ActiveRecord::Base
     raise "amount should not be zero" if amount.zero?
 
     amount = EasyMoney.new(amount)
+    transactionable = (options[:transactionable] ? options[:transactionable] : self)
+    description = (options[:description] ? options[:description] : 'Manual Transaction.')
+    transaction_options = { amount: amount, transactionable: transactionable, description: description }
+    transaction_options.merge!(display_time: options[:display_time]) if options[:display_time]
+    transaction = nil
+
     with_lock do
-      transactionable = (options[:transactionable] ? options[:transactionable] : self)
-      description = (options[:description] ? options[:description] : 'Manual Transaction.')
-
       Account.update_counters(self.id, balance_cents: amount.cents)
-
-      transaction_options = { amount: amount, transactionable: transactionable, description: description }
-      transaction_options.merge!(display_time: options[:display_time]) if options[:display_time]
       transaction = transactions.create(transaction_options)
-
-      self.reload
-      update_halted_status
-
-      transaction
     end
+
+    self.reload
+    update_halted_status
+
+    transaction
   end
 
   def change_balance_to!(amount, opts = {})
