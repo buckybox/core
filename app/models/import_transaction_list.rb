@@ -1,9 +1,5 @@
 class ImportTransactionList < ActiveRecord::Base
 
-  PENDING = 'pending'
-  PROCESSING = 'processing'
-  PROCESSED = 'processed'
-
   belongs_to :distributor
   has_many :import_transactions, autosave: true, validate: true, dependent: :destroy
   belongs_to :omni_importer
@@ -19,7 +15,6 @@ class ImportTransactionList < ActiveRecord::Base
   before_create :import_rows
 
   default_value_for :draft, true
-  default_value_for :status, PENDING
 
   scope :ordered, order("created_at DESC")
   scope :draft, where(['import_transaction_lists.draft = ?', true])
@@ -134,25 +129,16 @@ class ImportTransactionList < ActiveRecord::Base
     set_pending!
   end
 
+  state_machine :status, initial: :pending do
+    event :set_processing! do
+      transition all - :processing => :processing
+    end
+
+    event :set_pending! do
+      transition all => :pending
+    end
+  end
   private
-
-  def processed?
-    status == PROCESSED
-  end
-
-  def processing?
-    status == PROCESSING
-  end
-
-  def set_processing!
-    self.status = PROCESSING
-    save!
-  end
-
-  def set_pending!
-    self.status = PENDING
-    save!
-  end
 
   def csv_ready
     errors.add(:csv_file, "Seems to be a problem with the csv file.") unless csv_valid?
