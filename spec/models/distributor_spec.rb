@@ -6,7 +6,7 @@ describe Distributor do
   context :initialize do
     specify { distributor.should be_valid }
     specify { distributor.time_zone.should == 'Wellington' }
-    specify { distributor.currency.should == 'nzd' }
+    specify { distributor.currency.should == 'NZD' }
     specify { distributor.advance_hour.should == 18 }
     specify { distributor.advance_days.should == 3 }
     specify { distributor.automatic_delivery_hour.should == 18 }
