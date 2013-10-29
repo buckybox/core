@@ -7,6 +7,16 @@ describe Account do
 
   specify { account.should be_valid }
 
+  describe "#currency" do
+    it "defaults to the customer's currency" do
+      customer = Fabricate.build(:customer)
+      customer.stub(:currency) { "EUR" }
+      account = Fabricate.build(:account, customer: customer)
+
+      expect(account.currency).to eq customer.currency
+    end
+  end
+
   context :balance do
     specify { account.balance.cents.should == 0 }
     specify { expect { account.balance_cents=(10) }.to raise_error(ArgumentError) }
