@@ -7,8 +7,8 @@ class Country < ActiveRecord::Base
   delegate :name, to: :iso3166
   alias_method :full_name, :name
 
-  def default_currency
-    @default_currency ||= iso3166.currency.code
+  def currency
+    @currency ||= iso3166.currency.code.upcase
   end
 
   def time_zones
@@ -25,8 +25,8 @@ class Country < ActiveRecord::Base
     @time_zones ||= time_zones
   end
 
-  def default_time_zone
-    @default_time_zone ||= time_zones.first
+  def time_zone
+    @time_zone ||= time_zones.first
   end
 
   def iso3166
@@ -36,12 +36,12 @@ class Country < ActiveRecord::Base
 private
 
   def validate_currency_and_time_zone
-    if ActiveSupport::TimeZone.new(default_time_zone).nil?
-      errors.add(:default_time_zone, "'#{default_time_zone}' not valid")
+    if ActiveSupport::TimeZone.new(time_zone).nil?
+      errors.add(:time_zone, "'#{time_zone}' not valid")
     end
 
-    if CurrencyData.find(default_currency).nil?
-      errors.add(:default_currency, "'#{default_currency}' not valid")
+    if CurrencyData.find(currency).nil?
+      errors.add(:currency, "'#{currency}' not valid")
     end
   end
 end

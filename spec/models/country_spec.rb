@@ -20,15 +20,15 @@ describe Country do
       end
     end
 
-    describe "#default_currency" do
+    describe "#currency" do
       it "returns NZD" do
-        @country.default_currency.should eq "NZD"
+        @country.currency.should eq "NZD"
       end
     end
 
-    describe "#default_time_zone" do
+    describe "#time_zone" do
       it "returns Pacific/Auckland" do
-        @country.default_time_zone.should eq "Pacific/Auckland"
+        @country.time_zone.should eq "Pacific/Auckland"
       end
     end
   end
