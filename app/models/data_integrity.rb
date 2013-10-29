@@ -46,7 +46,15 @@ class DataIntegrity
       distributor_currency = account.distributor.currency
 
       if account.currency != distributor_currency
-        error "Account ##{account.id}: currency = #{account.currency} != #{distributor_currency} = distributor's currency"
+        error "Account ##{account.id}: currency = #{account.currency.inspect} != #{distributor_currency.inspect} = distributor's currency"
+      end
+    end
+  end
+
+  def distributor_currency_is_valid
+    Distributor.find_each do |distributor|
+      if distributor.currency !~ /[A-Z]{3}/
+        error "Distributor ##{distributor.id}: currency = #{distributor.currency.inspect} !~ /[A-Z]{3}/"
       end
     end
   end
