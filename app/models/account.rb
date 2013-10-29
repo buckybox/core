@@ -23,6 +23,10 @@ class Account < ActiveRecord::Base
   before_validation :default_balance_and_currency
   after_save :check_customer_threshold
 
+  default_value_for :currency do |account|
+    account.customer.currency if account.customer
+  end
+
   # A way to double check that the transactions and the balance have not gone out of sync.
   # THIS SHOULD NEVER HAPPEN! If it does fix the root cause don't make this write a new balance.
   # Likely somewhere a transaction is being created manually.
