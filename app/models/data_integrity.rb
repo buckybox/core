@@ -2,6 +2,7 @@ class DataIntegrity
   def self.check
     checker = DataIntegrity.new
     checker.account_balance_equals_sum_of_transactions
+    checker.account_currency_matches_distributor_currency
     checker
   end
 
@@ -40,6 +41,16 @@ class DataIntegrity
 
       if sum != balance
         error "Account ##{account.id}: transactions sum = #{sum} != #{balance} = balance"
+      end
+    end
+  end
+
+  def account_currency_matches_distributor_currency
+    Account.find_each do |account|
+      distributor_currency = account.distributor.currency
+
+      if account.currency != distributor_currency
+        error "Account ##{account.id}: currency = #{account.currency} != #{distributor_currency} = distributor's currency"
       end
     end
   end
