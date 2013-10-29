@@ -35,7 +35,7 @@ class Distributor < ActiveRecord::Base
   belongs_to :country
 
   DEFAULT_TIME_ZONE               = 'Wellington'
-  DEFAULT_CURRENCY                = 'nzd'
+  DEFAULT_CURRENCY                = 'NZD'
   DEFAULT_ADVANCED_HOURS          = 18
   DEFAULT_ADVANCED_DAYS           = 3
   DEFAULT_AUTOMATIC_DELIVERY_HOUR = 18
