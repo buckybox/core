@@ -18,14 +18,10 @@ class Account < ActiveRecord::Base
 
   attr_accessible :customer, :tag_list
 
-  validates_presence_of :customer_id, :balance
+  validates_presence_of :customer, :balance, :currency
 
   before_validation :default_balance_and_currency
   after_save :check_customer_threshold
-
-  default_value_for :currency do |account|
-    account.customer.currency if account.customer
-  end
 
   # A way to double check that the transactions and the balance have not gone out of sync.
   # THIS SHOULD NEVER HAPPEN! If it does fix the root cause don't make this write a new balance.
@@ -159,5 +155,6 @@ private
 
   def default_balance_and_currency
     write_attribute(:balance_cents, 0) if balance_cents.blank?
+    write_attribute(:currency, customer.currency) if currency.blank?
   end
 end

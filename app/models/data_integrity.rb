@@ -17,7 +17,7 @@ class DataIntegrity
 
         #{errors.join("\n")}
 
-        Tip: you can run these tests manually with `RAILS_ENV=production bundle exec rails r 'DataIntegrity.check_and_print'`
+        Tip: you can run these tests manually with `RAILS_ENV=#{Rails.env} bundle exec rails r 'DataIntegrity.check_and_print'`
       BODY
     }
 

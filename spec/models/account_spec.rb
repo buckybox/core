@@ -11,7 +11,7 @@ describe Account do
     it "defaults to the customer's currency" do
       customer = Fabricate.build(:customer)
       customer.stub(:currency) { "EUR" }
-      account = Fabricate.build(:account, customer: customer)
+      account = Fabricate(:account, customer: customer)
 
       expect(account.currency).to eq customer.currency
     end
