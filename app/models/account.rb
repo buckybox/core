@@ -64,6 +64,7 @@ class Account < ActiveRecord::Base
       transaction = transactions.create(transaction_options)
     end
 
+    # force update `balance_cents` attribute changed via `Account.update_counters` above
     self.reload
     update_halted_status
 
