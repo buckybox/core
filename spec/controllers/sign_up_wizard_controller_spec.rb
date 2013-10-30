@@ -51,6 +51,7 @@ describe SignUpWizardController do
         distributor = Distributor.where(name: form_params["distributor"]["name"]).last
         distributor.parameter_name.should eq "my-new-org"
         distributor.country.should eq Country.find_by_alpha2("NZ")
+        distributor.currency.should eq "NZD"
       end
 
       it 'adds default line items to distributor' do
@@ -124,6 +125,28 @@ describe SignUpWizardController do
 
           post :sign_up, form_params_with_new_bank
         end
+      end
+    end
+
+    context "with GB as the country" do
+      let(:gb) { Fabricate(:country, alpha2: "GB") }
+
+      let(:gb_form_params) do
+        gb_form_params = form_params
+        gb_form_params["distributor"]["country"] = gb.alpha2
+        gb_form_params
+      end
+
+      let(:post_form) do
+        lambda { post :sign_up, gb_form_params }
+      end
+
+      it "sets it up correctly" do
+        post_form.call
+
+        distributor = Distributor.last
+        distributor.country.alpha2.should eq "GB"
+        distributor.currency.should eq "GBP"
       end
     end
 

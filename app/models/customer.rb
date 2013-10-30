@@ -65,9 +65,9 @@ class Customer < ActiveRecord::Base
   scope :ordered, order("lower(customers.first_name) ASC, lower(customers.last_name) ASC")
 
   default_value_for :discount, 0
-  default_value_for :balance_threshold_cents do |c|
-    if c.distributor.present?
-      c.distributor.default_balance_threshold_cents
+  default_value_for :balance_threshold_cents do |customer|
+    if customer.distributor.present?
+      customer.distributor.default_balance_threshold_cents
     else
       0
     end

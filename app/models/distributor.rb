@@ -35,7 +35,7 @@ class Distributor < ActiveRecord::Base
   belongs_to :country
 
   DEFAULT_TIME_ZONE               = 'Wellington'
-  DEFAULT_CURRENCY                = 'nzd'
+  DEFAULT_CURRENCY                = 'NZD'
   DEFAULT_ADVANCED_HOURS          = 18
   DEFAULT_ADVANCED_DAYS           = 3
   DEFAULT_AUTOMATIC_DELIVERY_HOUR = 18
@@ -69,9 +69,9 @@ class Distributor < ActiveRecord::Base
     :customers_index_intro, :customer_can_remove_orders, :parameter_name,
     :default_balance_threshold, :has_balance_threshold,
     :spend_limit_on_all_customers, :send_email, :send_halted_email,
-    :feature_spend_limit, :contact_name, :tag_list, :collect_phone,
+    :feature_spend_limit, :contact_name, :tag_list, :collect_phone, :collect_delivery_note,
     :require_address_1, :require_address_2, :require_suburb, :require_postcode,
-    :require_phone, :require_city, :omni_importer_ids, :notes,
+    :require_phone, :require_city, :require_delivery_note, :omni_importer_ids, :notes,
     :payment_cash_on_delivery, :payment_bank_deposit, :payment_credit_card,
     :keep_me_updated, :email_templates, :notify_address_change, :phone,
     :localised_address_attributes
@@ -90,6 +90,8 @@ class Distributor < ActiveRecord::Base
   validate :required_fields_for_webstore
   validate :payment_options_valid
   validate :validate_parameter_name
+  validate :validate_require_phone
+  validate :validate_require_delivery_note
 
   before_validation :check_emails
   before_create :parameterize_name, if: 'parameter_name.nil?'
@@ -589,6 +591,18 @@ private
 
   def self.messaging_class
     Messaging::Distributor
+  end
+
+  def validate_require_phone
+    if require_phone && !collect_phone
+      errors.add :require_phone, "You must collect the phone if you want to require it."
+    end
+  end
+
+  def validate_require_delivery_note
+    if require_delivery_note && !collect_delivery_note
+      errors.add :require_delivery_note, "You must collect the delivery note if you want to require it."
+    end
   end
 
   # This is meant to be run within console for dev work via Distributor.send(:travel_forward_a_day)

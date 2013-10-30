@@ -21,14 +21,14 @@ SimpleForm.setup do |config|
     # You can also pass a string as f.input :placeholder => "Placeholder"
     b.use :placeholder
 
+    # Calculates maxlength from length validations for string inputs
+    b.use :maxlength
+
     ## Optional extensions
     # They are disabled unless you pass `f.input EXTENSION_NAME => :lookup`
     # to the input. If so, they will retrieve the values from the model
     # if any exists. If you want to enable the lookup for any of those
     # extensions by default, you can change `b.optional` to `b.use`.
-
-    # Calculates maxlength from length validations for string inputs
-    b.optional :maxlength
 
     # Calculates pattern from format validations for string inputs
     b.optional :pattern

@@ -13,21 +13,11 @@ $ ->
       , 'json'
       )
 
-  update_require_phone = ->
-    require = $('#distributor_require_phone')
-    collected = $('#distributor_collect_phone').is(':checked')
-
-    require.attr('disabled', !collected)
-    require.attr('checked', false) unless collected
-
   $('#distributor_country_id').change ->
     load_settings()
   $('#distributor_currency').change ->
     $("#currency_code").html($('#distributor_currency').val())
-  $('#distributor_collect_phone').change ->
-    update_require_phone()
 
   if !$('#distributor_country_id').attr('disabled') && $(".error_notification").size() == 0
     load_settings()
 
-  update_require_phone()

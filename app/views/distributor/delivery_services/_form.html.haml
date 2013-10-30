@@ -24,4 +24,4 @@
       - if @delivery_service.new_record?
         = f.button :submit, class: 'btn btn-primary'
       - else
-        = f.button :submit, class: 'btn btn-primary', data: { 'conditional-confirm' => "A day has been unchecked, this might affect customer orders, are you sure?", 'conditional-on' => 'delivery_service_deleted' }
+        = f.button :submit, class: 'btn btn-primary', data: { 'conditional-confirm' => "A day has been unchecked. Customer orders on this day will be DELETED. Are you sure?", 'conditional-on' => 'delivery_service_deleted' }

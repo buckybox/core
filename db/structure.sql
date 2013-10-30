@@ -1208,7 +1208,9 @@ CREATE TABLE distributors (
     keep_me_updated boolean DEFAULT true,
     email_templates text,
     notify_address_change boolean,
-    phone character varying(255)
+    phone character varying(255),
+    collect_delivery_note boolean DEFAULT true NOT NULL,
+    require_delivery_note boolean DEFAULT false NOT NULL
 );
 
 
@@ -3725,3 +3727,7 @@ INSERT INTO schema_migrations (version) VALUES ('20130826051545');
 INSERT INTO schema_migrations (version) VALUES ('20130827002646');
 
 INSERT INTO schema_migrations (version) VALUES ('20131020234439');
+
+INSERT INTO schema_migrations (version) VALUES ('20131016215622');
+
+INSERT INTO schema_migrations (version) VALUES ('20131016215636');
