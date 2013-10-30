@@ -257,7 +257,7 @@ class Customer < ActiveRecord::Base
       Customer.transaction do
         self.status_halted = true
         save!
-        
+
         create_halt_notifications(email_rule)
         halt_orders!
       end
