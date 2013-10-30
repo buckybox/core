@@ -22,7 +22,7 @@ describe Payment, :slow do
   end
 
   context :amount do
-    specify { Fabricate(:payment, amount: 0).should be_valid }
+    specify { Fabricate(:payment, amount: 1).should be_valid }
     specify { Fabricate(:payment, amount: -1).should be_valid }
   end
 
