@@ -37,6 +37,11 @@ class Metrics
       "new_customers_last_7_days" => -> {
         Customer.where("created_at > ?", 7.day.ago).count
       },
+      "new_transactional_customers_last_7_days" => -> {
+        Distributor.all.sum do |distributor|
+          distributor.new_transactional_customer_count
+        end
+      },
       "delivered_deliveries_last_day" => -> {
         Delivery.delivered.where("updated_at > ?", 1.day.ago).count
       }
@@ -54,6 +59,9 @@ new_distributors_last_7_days.info The number of new distributors in the last 7 d
 new_customers_last_7_days.label new customers
 new_customers_last_7_days.draw LINE2
 new_customers_last_7_days.info The number of new customers in the last 7 days.
+new_transactional_customers_last_7_days.label new transactional customers
+new_transactional_customers_last_7_days.draw LINE2
+new_transactional_customers_last_7_days.info The number of new transactional customers in the last 7 days.
 delivered_deliveries_last_day.label delivered deliveries
 delivered_deliveries_last_day.draw LINE2
 delivered_deliveries_last_day.info The number of delivered deliveries in the last 24 hours.

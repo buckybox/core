@@ -76,6 +76,11 @@
         = f.input :collect_postcode, as: :fake_boolean, disabled: true, input_html: { checked: true }
       .span3
         = f.input :require_postcode
+    .row
+      .span3
+        = f.input :collect_delivery_note
+      .span3
+        = f.input :require_delivery_note
 
   %fieldset
     %legend Change Password

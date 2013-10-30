@@ -18,7 +18,7 @@ class Account < ActiveRecord::Base
 
   attr_accessible :customer, :tag_list
 
-  validates_presence_of :customer_id, :balance
+  validates_presence_of :customer, :balance, :currency
 
   before_validation :default_balance_and_currency
 
@@ -168,5 +168,6 @@ private
 
   def default_balance_and_currency
     write_attribute(:balance_cents, 0) if balance_cents.blank?
+    write_attribute(:currency, customer.currency) if currency.blank?
   end
 end
