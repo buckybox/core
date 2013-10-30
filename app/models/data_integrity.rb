@@ -59,6 +59,14 @@ class DataIntegrity
     end
   end
 
+  def orders_are_valid
+    Order.find_each do |order|
+      if order.invalid?
+        error "Order ##{order.id} is invalid: #{order.errors.full_messages.to_sentence}"
+      end
+    end
+  end
+
 private
 
   def self.check
@@ -67,6 +75,7 @@ private
     checker.account_balance_equals_sum_of_transactions
     checker.account_currency_matches_distributor_currency
     checker.distributor_currency_is_valid
+    checker.orders_are_valid
 
     checker
   end
