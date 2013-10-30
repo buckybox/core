@@ -23,6 +23,16 @@ class ImportTransactionList < ActiveRecord::Base
   attr_accessible :csv_file, :import_transactions_attributes, :draft, :omni_importer_id
   delegate :payment_type, to: :omni_importer, allow_nil: true
 
+  state_machine :status, initial: :pending do
+    event :set_processing! do
+      transition all - :processing => :processing
+    end
+
+    event :set_pending! do
+      transition all => :pending
+    end
+  end
+
   # Used to move the csv_files to the new directory private_uploads
   def move_old_csv_file
     original_path = [nil, "omni_importer", "bnz", "kiwibank", "anz", "national", "paypal", "reo_uk", "st_george_au", "uk_coop_bank", "uk_lloyds_tsb"].collect{|f|
@@ -129,16 +139,7 @@ class ImportTransactionList < ActiveRecord::Base
     set_pending!
   end
 
-  state_machine :status, initial: :pending do
-    event :set_processing! do
-      transition all - :processing => :processing
-    end
-
-    event :set_pending! do
-      transition all => :pending
-    end
-  end
-  private
+private
 
   def csv_ready
     errors.add(:csv_file, "Seems to be a problem with the csv file.") unless csv_valid?
