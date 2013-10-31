@@ -468,8 +468,8 @@ class Distributor < ActiveRecord::Base
 
   def payment_options
     options = []
-    options << ["Bank deposit", :bank_deposit] if payment_bank_deposit?
-    options << ["Cash on delivery", :cash_on_delivery] if payment_cash_on_delivery?
+    options << ["Bank Deposit", :bank_deposit] if payment_bank_deposit?
+    options << ["Cash on Delivery", :cash_on_delivery] if payment_cash_on_delivery?
     options
   end
 
