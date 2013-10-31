@@ -4,6 +4,11 @@ class CustomerDecorator < Draper::Decorator
   delegate :name, to: :delivery_service, prefix: true
   delegate :address_1, :address_2, :suburb, :city, :postcode, :delivery_note, :mobile_phone, :home_phone, :work_phone, to: :address
 
+  def badge
+    link = Rails.application.routes.url_helpers.distributor_customer_path(id: object.id)
+    ApplicationController.helpers.customer_badge(object, link: link)
+  end
+
   def account_balance
     object.account.balance
   end
