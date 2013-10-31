@@ -1,177 +1,88 @@
 class Event < ActiveRecord::Base
   belongs_to :distributor
-  belongs_to :customer
-  belongs_to :delivery
-  belongs_to :invoice
-  belongs_to :transaction
+  attr_accessible :distributor, :event_type, :dismissed, :trigger_on, :message, :key
+  validates_presence_of :distributor, :event_type, :message, :key
 
-  # Setup accessible (or protected) attributes for your model
-  attr_accessible :distributor_id, :event_category, :event_type, :customer_id, :invoice_id, :reconciliation_id,
-    :transaction_id, :delivery_id, :dismissed, :trigger_on
+  before_save :set_trigger_on
 
-  # Global variables
-  EVENT_CATEGORIES = %w(customer billing delivery)
-  EVENT_TYPES = {
-    customer_new:              'customer_new',
-    customer_webstore_new:     'customer_webstore_new',
-    customer_call_reminder:    'customer_call_reminder',
-    delivery_scheduler_issue:  'delivery_scheduler_issue',
-    delivery_pending:          'delivery_pending',
-    credit_limit_reached:      'credit_limit_reached',
-    payment_overdue:           'payment_overdue',
-    invoice_reminder:          'invoice_reminder',
-    invoice_mail_sent:         'invoice_mail_sent',
-    transaction_success:       'transaction_success',
-    transaction_failure:       'transaction_failure',
-    customer_halted:           'customer_halted',
-    customer_address_changed:  'customer_address_changed'
-  }
-
-  validates_presence_of :distributor_id
-  validates_presence_of :customer_id,       if: :requires_customer?
-  validates_presence_of :delivery_id,       if: :requires_delivery?
-  validates_presence_of :invoice_id,        if: :requires_invoice?
-  validates_presence_of :reconciliation_id, if: :requires_reconciliation?
-  validates_presence_of :transaction_id,    if: :requires_transaction?
-
-  validates_inclusion_of :event_category, in: EVENT_CATEGORIES
-  validates_inclusion_of :event_type,     in: EVENT_TYPES.values
-
-  before_save :check_trigger
-
-  scope :active,  where(dismissed: false)
-  scope :current, lambda { where('trigger_on <= ?', Time.current) }
+  scope :active, where(dismissed: false)
+  scope :current, -> { where('trigger_on <= ?', Time.current) }
 
   default_scope order('trigger_on DESC')
 
   def dismiss!
-    update_attribute('dismissed', true)
+    update_attributes!(dismissed: true)
   end
 
-  def self.trigger(distributor_id, event_type, params = {})
-    # TODO resolve event_category based on event_type (instead of passing it as a param everytime the method is called)
-    create( { distributor_id: distributor_id, event_type: event_type }.merge!(params) )
-  end
-
-  def self.new_customer(customer)
-    # FIXME never used?
+  def self.new_webstore_customer(customer)
     trigger(
-      customer.distributor_id,
-      Event::EVENT_TYPES[:customer_new],
-      { event_category: 'customer', customer_id: customer.id }
-    )
-  end
-
-  def self.new_customer_webstore(customer)
-    trigger(
-      customer.distributor_id,
-      Event::EVENT_TYPES[:customer_webstore_new],
-      { event_category: 'customer', customer_id: customer.id }
-    )
-  end
-
-  def self.create_call_reminder(customer)
-    trigger(
-      customer.distributor.id,
-      Event::EVENT_TYPES[:customer_call_reminder],
-      { event_category: 'customer', customer_id: customer.id, trigger_on: (Time.current + 1.day) }
+      customer,
+      :new_webstore_customer,
+      "New web store customer #{customer_badge(customer)}"
     )
   end
 
   def self.customer_halted(customer)
     trigger(
-      customer.distributor_id,
-      Event::EVENT_TYPES[:customer_halted],
-      { event_category: 'customer', customer_id: customer.id }
+      customer,
+      :customer_halted,
+      "Deliveries halted for #{customer_badge(customer)}"
     )
   end
 
-  def self.customer_changed_address(customer)
+  def self.customer_address_changed(customer)
     trigger(
-      customer.distributor_id,
-      Event::EVENT_TYPES[:customer_address_changed],
-      { event_category: 'customer', customer_id: customer.id }
+      customer,
+      :customer_address_changed,
+      "#{customer_badge(customer)} has updated their address"
     )
   end
 
-  def message
-    case event_type
-    when EVENT_TYPES[:customer_webstore_new]
-      "New webstore customer"
-    when EVENT_TYPES[:customer_halted]
-      "Deliveries halted"
-    when EVENT_TYPES[:customer_address_changed]
-      "has updated their address"
-    end
-  end
+  def self.new_webstore_order(order)
+    message = "#{customer_badge(order.customer)} placed an order"
+    payment_method = order.account.default_payment_method
 
-  def append?
-    ![EVENT_TYPES[:customer_address_changed]].include? event_type
+    if payment_method && payment_method != PaymentOption::PAID
+      payment_option = PaymentOption.new(payment_method, order.distributor)
+      message << " paying by #{payment_option.option.description}"
+    end
+
+    trigger(
+      order,
+      :new_webstore_order,
+      message
+    )
   end
 
   def self.all_for_distributor(distributor)
-    events = distributor.events.active.current.scoped
-    events = events.includes(:customer, :delivery, :transaction)
-    remove_duplicates(events)
+    distributor.events.active.current.scoped
   end
 
-  def key
-    @key ||= "#{event_category}#{event_type}#{customer_id}"
+  def set_key(resource)
+    self.key = [event_type, resource.id].join
   end
 
 private
 
-  def self.remove_duplicates(notifications)
-    seen = {}
-    notifications.select do |notification|
-      if seen.has_key?(notification.key)
-        notification.dismiss!
-        false
-      else
-        seen.merge!(notification.key => true)
-        true
-      end
+  def self.trigger(resource, event_type, message)
+    distributor = resource.distributor
+    events = Event.all_for_distributor(distributor)
+    new_event = Event.new(distributor: distributor, event_type: event_type, message: message)
+    new_event.set_key(resource)
+
+    events.each do |event|
+      event.dismiss! if event.key == new_event.key
     end
+
+    new_event.save!
+    new_event
   end
 
-  def check_trigger
-    self.trigger_on = Time.current if self.trigger_on.nil?
+  def self.customer_badge(customer)
+    customer.decorate.badge
   end
 
-  def requires_customer?
-    [
-      EVENT_TYPES[:customer_new],
-      EVENT_TYPES[:customer_call_reminder],
-      EVENT_TYPES[:credit_limit_reached],
-      EVENT_TYPES[:payment_overdue]
-    ].include?(self.event_type)
+  def set_trigger_on
+    self.trigger_on ||= Time.current
   end
-
-  def requires_delivery?
-    [
-      EVENT_TYPES[:delivery_scheduler_issue],
-      EVENT_TYPES[:delivery_pending]
-    ].include?(self.event_type)
-  end
-
-  def requires_invoice?
-    [
-      EVENT_TYPES[:invoice_reminder],
-      EVENT_TYPES[:invoice_mail_sent]
-    ].include?(self.event_type)
-  end
-
-  def requires_reconciliation?
-    [
-      EVENT_TYPES[:invoice_reminder]
-    ].include?(self.event_type)
-  end
-
-  def requires_transaction?
-    [
-      EVENT_TYPES[:transaction_success],
-      EVENT_TYPES[:transaction_failure]
-    ].include?(self.event_type)
-  end
-
 end
