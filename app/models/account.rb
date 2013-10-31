@@ -16,11 +16,12 @@ class Account < ActiveRecord::Base
 
   monetize :balance_cents
 
-  attr_accessible :customer, :tag_list
-
-  validates_presence_of :customer, :balance, :currency
+  attr_accessible :customer, :tag_list, :default_payment_method
 
   before_validation :default_balance_and_currency
+
+  validates_presence_of :customer, :balance, :currency
+  validate :validates_default_payment_method
 
   delegate :name, to: :customer
 
@@ -169,5 +170,11 @@ private
   def default_balance_and_currency
     write_attribute(:balance_cents, 0) if balance_cents.blank?
     write_attribute(:currency, customer.currency) if currency.blank?
+  end
+
+  def validates_default_payment_method
+    if default_payment_method && !PaymentOption.new(default_payment_method, distributor).valid?
+      errors.add(:default_payment_method, "Unknown payment method #{default_payment_method.inspect}")
+    end
   end
 end
