@@ -50,7 +50,6 @@ class Account < ActiveRecord::Base
 
   def create_transaction(amount, options = {})
     raise "amount should not be a float as floats are inaccurate for currency" if amount.is_a? Float
-    raise "amount should not be zero" if amount.zero?
 
     amount = EasyMoney.new(amount)
     transactionable = (options[:transactionable] ? options[:transactionable] : self)
