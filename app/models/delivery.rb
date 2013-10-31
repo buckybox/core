@@ -213,10 +213,6 @@ private
     self.deduction.reverse_deduction! if self.deducted?
   end
 
-  def customer_callback
-    Event.create_call_reminder(customer)
-  end
-
   def remove_from_schedule
     unless new_delivery
       errors.add(:base, 'There is no "new delivery" to remove from the schedule so this status change can not be completed.')
