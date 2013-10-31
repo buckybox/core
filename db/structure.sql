@@ -1273,17 +1273,13 @@ ALTER SEQUENCE distributors_omni_importers_id_seq OWNED BY distributors_omni_imp
 CREATE TABLE events (
     id integer NOT NULL,
     distributor_id integer NOT NULL,
-    event_category character varying(255) NOT NULL,
     event_type character varying(255) NOT NULL,
-    customer_id integer,
-    invoice_id integer,
-    reconciliation_id integer,
-    transaction_id integer,
-    delivery_id integer,
     dismissed boolean DEFAULT false NOT NULL,
     created_at timestamp without time zone,
     updated_at timestamp without time zone,
-    trigger_on timestamp without time zone
+    trigger_on timestamp without time zone,
+    message text,
+    key character varying(255)
 );
 
 
@@ -3727,10 +3723,14 @@ INSERT INTO schema_migrations (version) VALUES ('20130826051545');
 
 INSERT INTO schema_migrations (version) VALUES ('20130827002646');
 
-INSERT INTO schema_migrations (version) VALUES ('20131020234439');
-
 INSERT INTO schema_migrations (version) VALUES ('20131016215622');
 
 INSERT INTO schema_migrations (version) VALUES ('20131016215636');
 
+INSERT INTO schema_migrations (version) VALUES ('20131020234439');
+
 INSERT INTO schema_migrations (version) VALUES ('20131022003933');
+
+INSERT INTO schema_migrations (version) VALUES ('20131022015514');
+
+INSERT INTO schema_migrations (version) VALUES ('20131022025554');
