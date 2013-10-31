@@ -173,8 +173,10 @@ private
   end
 
   def validates_default_payment_method
-    if default_payment_method && !PaymentOption.new(default_payment_method, distributor).valid?
-      errors.add(:default_payment_method, "Unknown payment method #{default_payment_method.inspect}")
-    end
+    return if default_payment_method.nil? ||
+      default_payment_method == PaymentOption::PAID ||
+      PaymentOption.new(default_payment_method, distributor).valid?
+
+    errors.add(:default_payment_method, "Unknown payment method #{default_payment_method.inspect}")
   end
 end
