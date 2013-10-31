@@ -1,4 +1,6 @@
 class PaymentOption
+  PAID = 'paid'.freeze
+
   attr_accessor :option, :distributor
 
   delegate :valid?, to: :option, allow_nil: true
@@ -31,6 +33,14 @@ class PaymentOption
 
     def to_s
       option.to_s
+    end
+
+    def description
+      distributor.payment_options.each do |description, symbol|
+        return description if symbol == method
+      end
+
+      nil
     end
   end
 end
