@@ -23,14 +23,14 @@ describe Bucky::TransactionImports::Row do
     specify { Row.amount_match(10, 2).should eq(0)}
   end
 
-  describe ".amount_cents" do
+  describe "#amount_cents" do
     it "converts string to cents integer" do
       row = new_row("17.9")
       row.amount_cents.should eq 1790
     end
   end
 
-  describe ".account_match" do
+  describe "#account_match" do
     it "matches row to customers account based on account balance and row amount" do
       row = new_row("20.01")
       customer = double("customer")
@@ -38,6 +38,15 @@ describe Bucky::TransactionImports::Row do
       row.stub(:no_other_account_matches?).and_return(true)
       row.account_match(customer).should eq 1.0
     end
+  end
+
+  describe "#amount_valid?" do
+    specify { expect(new_row("12.34").amount_valid?).to be_true }
+    specify { expect(new_row("1000").amount_valid?).to be_true }
+    specify { expect(new_row("-1.2").amount_valid?).to be_true }
+    specify { expect(new_row("+1.2").amount_valid?).to be_true }
+    specify { expect(new_row(".19").amount_valid?).to be_true }
+    specify { expect(new_row("-.19").amount_valid?).to be_true }
   end
 end
 
