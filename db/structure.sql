@@ -1212,7 +1212,7 @@ CREATE TABLE distributors (
     phone character varying(255),
     collect_delivery_note boolean DEFAULT true NOT NULL,
     require_delivery_note boolean DEFAULT false NOT NULL,
-    notify_for_new_webstore_order boolean DEFAULT false NOT NULL
+    notify_for_new_webstore_order boolean DEFAULT true NOT NULL
 );
 
 
