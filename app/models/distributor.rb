@@ -503,7 +503,7 @@ class Distributor < ActiveRecord::Base
 
   def notify_address_changed(customer, notifier = Event)
     return false unless notify_address_change?
-    notifier.customer_changed_address(customer)
+    notifier.customer_address_changed(customer)
   end
 
   def notify_for_new_webstore_customer
