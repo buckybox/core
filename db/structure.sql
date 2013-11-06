@@ -3,6 +3,7 @@
 --
 
 SET statement_timeout = 0;
+SET lock_timeout = 0;
 SET client_encoding = 'UTF8';
 SET standard_conforming_strings = on;
 SET check_function_bodies = false;
@@ -1036,7 +1037,8 @@ CREATE TABLE delivery_services (
     updated_at timestamp without time zone,
     fee_cents integer DEFAULT 0 NOT NULL,
     area_of_service text,
-    estimated_delivery_time text
+    estimated_delivery_time text,
+    pickup_point boolean DEFAULT false NOT NULL
 );
 
 
@@ -3808,12 +3810,11 @@ INSERT INTO schema_migrations (version) VALUES ('20131022015514');
 
 INSERT INTO schema_migrations (version) VALUES ('20131022025554');
 
+INSERT INTO schema_migrations (version) VALUES ('20131106103858');
+
 INSERT INTO schema_migrations (version) VALUES ('20131112025426');
-
 INSERT INTO schema_migrations (version) VALUES ('20131212220220');
-
 INSERT INTO schema_migrations (version) VALUES ('20131216225521');
-
 INSERT INTO schema_migrations (version) VALUES ('20140109004934');
 
 INSERT INTO schema_migrations (version) VALUES ('20140109032329');

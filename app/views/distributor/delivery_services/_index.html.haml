@@ -4,6 +4,7 @@
       %thead
         %tr
           %th Name
+          %th Pickup Point
           %th Mon
           %th Tue
           %th Wed
@@ -18,6 +19,7 @@
         - @delivery_services.each do |delivery_service|
           %tr
             %td= delivery_service.name
+            %td= checkmark_boolean(delivery_service.pickup_point)
             %td= checkmark_boolean(delivery_service.mon)
             %td= checkmark_boolean(delivery_service.tue)
             %td= checkmark_boolean(delivery_service.wed)
