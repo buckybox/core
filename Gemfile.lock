@@ -1,18 +1,18 @@
 GIT
-  remote: git://github.com/buckybox/currency_data.git
+  remote: https://github.com/buckybox/currency_data.git
   revision: d6e6392133f93b55a40ade241dae7067552a1183
   specs:
     currency_data (1.0.0)
 
 GIT
-  remote: git://github.com/buckybox/easy_money.git
+  remote: https://github.com/buckybox/easy_money.git
   revision: e8acb05e85532082808d04d21cf07e27d33af7fb
   specs:
     easy_money (1.0.0)
       currency_data (~> 1.0.0)
 
 GIT
-  remote: git://github.com/jordandcarter/sprinkle.git
+  remote: https://github.com/jordandcarter/sprinkle.git
   revision: 408a82c764f07f96b49df805b3356197123dbfc4
   specs:
     sprinkle (0.4.2)
@@ -103,7 +103,7 @@ GEM
     builder (3.0.4)
     bullet (4.6.0)
       uniform_notifier
-    bundler-audit (0.1.2)
+    bundler-audit (0.3.0)
       bundler (~> 1.2)
     callsite (0.0.11)
     capistrano (2.15.5)
