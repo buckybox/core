@@ -7,9 +7,13 @@ export SPEC_OPTS="--format p"
 
 cp config/database.yml.example config/database.yml
 
-bundle exec bundle-audit
+bundle exec bundle-audit update
+bundle exec bundle-audit check
+
 bundle exec rake generate_secret_token
 bundle exec rake db:drop db:create db:structure:load
+
 bundle exec rake
+
 bundle exec brakeman -qz --no-progress -w3 || true # FIXME
 
