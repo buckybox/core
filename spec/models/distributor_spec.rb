@@ -459,7 +459,7 @@ describe Distributor do
 
       it "retruns true if successful" do
         customer = double('customer')
-        notifier = double('Event', customer_changed_address: true)
+        notifier = double('Event', customer_address_changed: true)
 
         distributor.notify_address_changed(customer, notifier).should eq true
       end
@@ -475,7 +475,7 @@ describe Distributor do
 
       it "returns false if fails" do
         customer = double('customer')
-        notifier = double('Event', customer_changed_address: false)
+        notifier = double('Event', customer_address_changed: false)
         distributor.notify_address_changed(customer, notifier).should eq false
       end
     end
