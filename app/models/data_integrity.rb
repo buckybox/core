@@ -42,9 +42,7 @@ class DataIntegrity
   end
 
   def import_transaction_lists_processing_is_stuck
-    ImportTransactionList.where(
-      "status != 'pending' AND status != 'processed' AND updated_at < ?", 24.hours.ago
-    ).each do |import_transaction_list|
+    ImportTransactionList.draft.where("updated_at < ?", 1.day.ago).each do |import_transaction_list|
       error "ImportTransactionList ##{import_transaction_list.id} has a status #{import_transaction_list.status} and was last updated at #{import_transaction_list.updated_at}"
     end
   end
