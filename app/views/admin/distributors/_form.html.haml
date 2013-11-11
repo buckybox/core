@@ -35,8 +35,8 @@
   %fieldset
     %legend Notifications
     = f.input :notify_address_change, label: "Notify distributor when a customers address is changed"
-    = f.input :notify_on_halt, as: :boolean, input_html: {disabled: true}
     = f.input :notify_for_new_webstore_customer, as: :boolean, input_html: {disabled: true}
+    = f.input :notify_for_new_webstore_order
 
   %fieldset
     %legend Webstore
@@ -76,6 +76,11 @@
         = f.input :collect_postcode, as: :fake_boolean, disabled: true, input_html: { checked: true }
       .span3
         = f.input :require_postcode
+    .row
+      .span3
+        = f.input :collect_delivery_note
+      .span3
+        = f.input :require_delivery_note
 
   %fieldset
     %legend Change Password

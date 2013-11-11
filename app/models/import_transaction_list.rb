@@ -8,7 +8,6 @@ class ImportTransactionList < ActiveRecord::Base
 
   mount_uploader :csv_file, ImportTransactionListUploader
 
-
   validates_presence_of :csv_file
 
   validate :csv_ready, on: :create
@@ -24,6 +23,15 @@ class ImportTransactionList < ActiveRecord::Base
   attr_accessible :csv_file, :import_transactions_attributes, :draft, :omni_importer_id
   delegate :payment_type, to: :omni_importer, allow_nil: true
 
+  state_machine :status, initial: :pending do
+    event :set_processing! do
+      transition all - :processing => :processing
+    end
+
+    event :set_pending! do
+      transition all => :pending
+    end
+  end
 
   # Used to move the csv_files to the new directory private_uploads
   def move_old_csv_file
@@ -119,7 +127,19 @@ class ImportTransactionList < ActiveRecord::Base
     end
   end
 
-  private
+  def can_process?
+    with_lock do
+      return false if processed? || processing?
+      set_processing!
+    end
+    true
+  end
+
+  def processing_failed!
+    set_pending!
+  end
+
+private
 
   def csv_ready
     errors.add(:csv_file, "Seems to be a problem with the csv file.") unless csv_valid?

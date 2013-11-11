@@ -9,14 +9,9 @@
   - else
     - @notifications.each do |notification|
       %li.notification
-        %div.message
-          - if notification.append?
-            %span= notification.message
-            = customer_badge(notification.customer)
-          - else 
-            = customer_badge(notification.customer)
-            %span= notification.message
-        %div.date
+        .message
+          = notification.message.html_safe
+        .date
           = time_since(notification.trigger_on)
 
     %li.clear-notifications

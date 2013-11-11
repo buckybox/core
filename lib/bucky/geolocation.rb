@@ -13,7 +13,7 @@ module Bucky
 
     def get_time_zone country_code
       country = Country.where(alpha2: country_code).first
-      country.default_time_zone if country
+      country.time_zone if country
     end
 
     # TODO: this is terribly filthy

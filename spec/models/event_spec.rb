@@ -1,58 +1,73 @@
-require 'spec_helper'
+require "spec_helper"
 
 describe Event do
-  let(:customer_event) { Fabricate(:customer_event) }
-  let(:billing_event)  { Fabricate(:billing_event)  }
-  let(:delivery_event) { Fabricate(:delivery_event) }
+  let(:event) { Fabricate(:event) }
 
-  specify { customer_event.should be_valid }
-  specify { billing_event.should be_valid }
-  specify { delivery_event.should be_valid }
+  specify { event.should be_valid }
 
-  specify { expect{ Fabricate(:billing_event, event_category: 'not_a_category')}.to raise_error(ActiveRecord::RecordInvalid, /Event category is not included in the list/)}
-  specify { expect{ Fabricate(:billing_event, event_type: 'not_a_type')}.to raise_error(ActiveRecord::RecordInvalid, /Event type is not included in the list/)}
-
-  context '#dismiss!' do
-    before { customer_event.dismiss! }
-    specify { customer_event.dismissed.should be_true }
+  describe "#dismiss!" do
+    before { event.dismiss! }
+    specify { event.dismissed.should be_true }
   end
 
-  context 'customer event methods' do
-    before do
-      @customer = Fabricate(:customer)
-      @customer.stub(:id).and_return(1)
+  shared_examples_for "an event" do
+    let!(:new_event) { Event.public_send(event_name, resource) }
+
+    it "removes duplicate events" do
+      new_event
+      event2 = new_event
+
+      expect(Event.all_for_distributor(resource.distributor)).to eq [event2]
     end
 
-    context '.new_customer' do
-      specify { expect { Event.new_customer(@customer) }.to change(Event, :count).by(1) }
-      specify { Event.new_customer(@customer).event_type.should == Event::EVENT_TYPES[:customer_new] }
+    it "includes a clickable customer badge" do
+      expect(new_event.message).to include "customer-badge", "<a"
     end
+  end
 
-    context '.create_call_reminder' do
-      specify { expect { Event.create_call_reminder(@customer) }.to change(Event, :count).by(1) }
-      specify { Event.create_call_reminder(@customer).event_type.should == Event::EVENT_TYPES[:customer_call_reminder] }
-    end
+  describe ".new_webstore_customer" do
+    let(:event_name) { "new_webstore_customer" }
+    let(:resource) { Fabricate(:customer) }
 
-    context '.customer_changed_address' do
-      specify { expect { Event.customer_changed_address(@customer) }.to change(Event, :count).by(1) }
-      specify { Event.customer_changed_address(@customer).event_type.should == Event::EVENT_TYPES[:customer_address_changed] }
-    end
+    it_behaves_like "an event"
+  end
+
+  describe ".customer_halted" do
+    let(:event_name) { "customer_halted" }
+    let(:resource) { Fabricate(:customer) }
+
+    it_behaves_like "an event"
+  end
+
+  describe ".customer_address_changed" do
+    let(:event_name) { "customer_address_changed" }
+    let(:resource) { Fabricate(:customer) }
+
+    it_behaves_like "an event"
+  end
+
+  describe ".new_webstore_order" do
+    let(:event_name) { "new_webstore_order" }
+    let(:resource) { Fabricate(:order) }
+
+    it_behaves_like "an event"
   end
 
   describe ".all_for_distributor" do
     let(:distributor) { Fabricate(:distributor) }
 
-    it "returns all three types of events for a distributor" do
-      event1 = Fabricate(:customer_event,  distributor: distributor)
-      event2 = Fabricate(:billing_event,   distributor: distributor)
-      event3 = Fabricate(:delivery_event,  distributor: distributor)
-      expect(Event.all_for_distributor(distributor)).to eq([event3, event2, event1])
+    it "returns all events for a distributor" do
+      event1 = Fabricate(:event, distributor: distributor)
+      event2 = Fabricate(:event, distributor: distributor)
+
+      expect(Event.all_for_distributor(distributor)).to match_array [event1, event2]
     end
 
     it "returns only the distributor's events" do
-      event = Fabricate(:customer_event,  distributor: distributor)
-      Fabricate(:customer_event)
-      expect(Event.all_for_distributor(distributor)).to eq([event])
+      event = Fabricate(:event,  distributor: distributor)
+      Fabricate(:event)
+
+      expect(Event.all_for_distributor(distributor)).to eq [event]
     end
   end
 end

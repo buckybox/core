@@ -72,7 +72,7 @@ private
   def set_account_balance_to_zero(distributor)
     distributor.accounts.each do |account|
       stdout "Reseting customer #{account.customer.name}'s account balance to zero."
-      account.change_balance_to(0)
+      account.change_balance_to!(0)
       account.save
     end
   end

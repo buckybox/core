@@ -65,9 +65,9 @@ class Customer < ActiveRecord::Base
   scope :ordered, order("lower(customers.first_name) ASC, lower(customers.last_name) ASC")
 
   default_value_for :discount, 0
-  default_value_for :balance_threshold_cents do |c|
-    if c.distributor.present?
-      c.distributor.default_balance_threshold_cents
+  default_value_for :balance_threshold_cents do |customer|
+    if customer.distributor.present?
+      customer.distributor.default_balance_threshold_cents
     else
       0
     end
@@ -158,7 +158,7 @@ class Customer < ActiveRecord::Base
     self.save! # Blow up on error so transaction is aborted
 
     self.account.currency = self.currency
-    self.account.change_balance_to(c.account_balance, {description: "Inital CSV Import"})
+    self.account.create_transaction(c.account_balance, {description: "Inital CSV Import"})
     self.account.save! # Blow up on error so transaction is aborted
 
     self.import_boxes(c.boxes)
@@ -257,7 +257,7 @@ class Customer < ActiveRecord::Base
       Customer.transaction do
         self.status_halted = true
         save!
-        
+
         create_halt_notifications(email_rule)
         halt_orders!
       end
@@ -315,7 +315,8 @@ class Customer < ActiveRecord::Base
   end
 
   def via_webstore_notifications
-    Event.new_customer_webstore(self)
+    Event.new_webstore_customer(self) if distributor.notify_for_new_webstore_customer
+
     CustomerMailer.raise_errors do
       self.send_login_details
     end
