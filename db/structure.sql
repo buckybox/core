@@ -1208,10 +1208,10 @@ CREATE TABLE distributors (
     email_templates text,
     notify_address_change boolean,
     phone character varying(255),
-    sidebar_description text,
     collect_delivery_note boolean DEFAULT true NOT NULL,
     require_delivery_note boolean DEFAULT false NOT NULL,
-    notify_for_new_webstore_order boolean DEFAULT true NOT NULL
+    notify_for_new_webstore_order boolean DEFAULT true NOT NULL,
+    sidebar_description text
 );
 
 
