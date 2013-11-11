@@ -40,13 +40,12 @@ $(function(){
     $('[data-toggle="tooltip"]').tooltip();
 
     if ($("#products > .boxes").length) {
-      // Toggle action bar visibility
-      $("#new_box")
+      $("tr.edit .collapse")
         .on('show', function() {
-          $('a.action[data-toggle="collapse"][data-target="#new_box"]').closest('tr').hide();
+          $(this).closest('tr.edit').prev('[data-toggle="collapse"]').hide();
         })
         .on('hide', function() {
-          $('a.action[data-toggle="collapse"][data-target="#new_box"]').closest('tr').show();
+          $(this).closest('tr.edit').prev('[data-toggle="collapse"]').show();
         });
 
       // Photo uploader rollover
@@ -133,13 +132,12 @@ $(function(){
     }
 
     if ($("#products > .extra_items").length) {
-      // Toggle action bar visibility
-      $("#new_extra")
+      $("tr.edit .collapse")
         .on('show', function() {
-          $('a.action[data-toggle="collapse"][data-target="#new_extra"]').closest('tr').hide();
+          $(this).closest('tr.edit').prev('[data-toggle="collapse"]').hide();
         })
         .on('hide', function() {
-          $('a.action[data-toggle="collapse"][data-target="#new_extra"]').closest('tr').show();
+          $(this).closest('tr.edit').prev('[data-toggle="collapse"]').show();
         });
     }
   }
