@@ -22,7 +22,7 @@ describe Deduction, :slow do
   end
 
   context :amount do
-    specify { Fabricate(:deduction, amount: 0).should be_valid }
+    specify { Fabricate(:deduction, amount: 1).should be_valid }
     specify { Fabricate.build(:deduction, amount: -1).should_not be_valid }
   end
 

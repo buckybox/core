@@ -16,16 +16,19 @@ class Account < ActiveRecord::Base
 
   monetize :balance_cents
 
-  attr_accessible :customer, :tag_list
-
-  validates_presence_of :customer_id, :balance
+  attr_accessible :customer, :tag_list, :default_payment_method
 
   before_validation :default_balance_and_currency
-  after_save :check_customer_threshold
+
+  validates_presence_of :customer, :balance, :currency
+  validate :validates_default_payment_method
+
+  delegate :name, to: :customer
 
   # A way to double check that the transactions and the balance have not gone out of sync.
   # THIS SHOULD NEVER HAPPEN! If it does fix the root cause don't make this write a new balance.
   # Likely somewhere a transaction is being created manually.
+  # FIXME
   def calculate_balance(offset_size = 0)
     EasyMoney.new(transactions.offset(offset_size).sum(&:amount))
   end
@@ -34,35 +37,47 @@ class Account < ActiveRecord::Base
     raise(ArgumentError, "The balance can not be updated this way. Please use one of the model balance methods that create transactions.")
   end
 
-  def name
-    customer.name
-  end
-
   def balance=(value)
     raise(ArgumentError, "The balance can not be updated this way. Please use one of the model balance methods that create transactions.")
   end
 
-  def change_balance_to(amount, options = {})
-    amount = EasyMoney.new(amount)
-    amount_difference = amount - balance
-
-    transactionable = (options[:transactionable] ? options[:transactionable] : self)
-    description = (options[:description] ? options[:description] : 'Manual Transaction.')
-
-    write_attribute(:balance_cents, amount.cents)
-
-    transaction_options = { amount: amount_difference, transactionable: transactionable, description: description }
-    transaction_options.merge!(display_time: options[:display_time]) if options[:display_time]
-    transactions.build(transaction_options)
-  end
-
   def add_to_balance(amount, options = {})
-    amount = balance + amount
-    change_balance_to(amount, options)
+    create_transaction(amount, options)
   end
 
   def subtract_from_balance(amount, options = {})
-    add_to_balance((amount * -1), options)
+    create_transaction(amount * -1, options)
+  end
+
+  def create_transaction(amount, options = {})
+    raise "amount should not be a float as floats are inaccurate for currency" if amount.is_a? Float
+
+    amount = EasyMoney.new(amount)
+    transactionable = (options[:transactionable] ? options[:transactionable] : self)
+    description = (options[:description] ? options[:description] : 'Manual Transaction.')
+    transaction_options = { amount: amount, transactionable: transactionable, description: description }
+    transaction_options.merge!(display_time: options[:display_time]) if options[:display_time]
+    transaction = nil
+
+    with_lock do
+      Account.update_counters(self.id, balance_cents: amount.cents)
+      transaction = transactions.create(transaction_options)
+    end
+
+    # force update `balance_cents` attribute changed via `Account.update_counters` above
+    self.reload
+    update_halted_status
+
+    transaction
+  end
+
+  def change_balance_to!(amount, opts = {})
+    raise "amount should not be a float as floats are unprecise for currency" if amount.is_a? Float
+
+    amount = EasyMoney.new(amount)
+    with_lock do
+      create_transaction(amount - balance, opts)
+    end
   end
 
   #all accounts that need invoicing
@@ -141,10 +156,8 @@ class Account < ActiveRecord::Base
     Invoice.create_for_account(self) if needs_invoicing?
   end
 
-  def check_customer_threshold
-    if balance_cents_changed?
-      customer.update_halted_status!(nil, Customer::EmailRule.all)
-    end
+  def update_halted_status
+    customer.update_halted_status!(nil, Customer::EmailRule.all)
   end
 
   def balance_at(date)
@@ -155,5 +168,14 @@ private
 
   def default_balance_and_currency
     write_attribute(:balance_cents, 0) if balance_cents.blank?
+    write_attribute(:currency, customer.currency) if currency.blank?
+  end
+
+  def validates_default_payment_method
+    return if default_payment_method.nil? ||
+      default_payment_method == PaymentOption::PAID ||
+      PaymentOption.new(default_payment_method, distributor).valid?
+
+    errors.add(:default_payment_method, "Unknown payment method #{default_payment_method.inspect}")
   end
 end

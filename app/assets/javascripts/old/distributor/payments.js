@@ -6,6 +6,10 @@ $(function() {
         return false;
       });
 
+      $("#draft-transactions-controls").click(function() {
+        $(this).button('loading');
+      });
+
       $("#import_transaction_list_csv_file").change(function() {
         $('.ajax_loader_hide').hide();
         $('#upload_more_transactions .ajax-spinner').show();

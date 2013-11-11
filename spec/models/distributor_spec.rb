@@ -6,7 +6,7 @@ describe Distributor do
   context :initialize do
     specify { distributor.should be_valid }
     specify { distributor.time_zone.should == 'Wellington' }
-    specify { distributor.currency.should == 'nzd' }
+    specify { distributor.currency.should == 'NZD' }
     specify { distributor.advance_days.should == 3 }
     specify { distributor.customer_can_remove_orders.should be_true }
 
@@ -456,7 +456,7 @@ describe Distributor do
 
       it "retruns true if successful" do
         customer = double('customer')
-        notifier = double('Event', customer_changed_address: true)
+        notifier = double('Event', customer_address_changed: true)
 
         distributor.notify_address_changed(customer, notifier).should eq true
       end
@@ -472,7 +472,7 @@ describe Distributor do
 
       it "returns false if fails" do
         customer = double('customer')
-        notifier = double('Event', customer_changed_address: false)
+        notifier = double('Event', customer_address_changed: false)
         distributor.notify_address_changed(customer, notifier).should eq false
       end
     end

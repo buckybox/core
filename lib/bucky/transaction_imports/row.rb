@@ -190,12 +190,12 @@ module Bucky::TransactionImports
       description.present?
     end
 
-    AMOUNT_REGEX = /\A[+-]?\d+?(\.\d+)?\Z/
+    AMOUNT_REGEX = /\A[+-]?\d*\.?\d+\Z/
     def amount_valid?
       amount_string.present? && amount_string.match(AMOUNT_REGEX).present?
     end
 
-    private
+  private
 
     # No other accounts match the amount
     def no_other_account_matches?(customer)

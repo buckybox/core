@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-gem 'rails',                      '~> 3.2.14'
+gem 'rails',                      '~> 3.2.15'
 gem 'pg',                         '~> 0.14.0'
 gem 'haml-rails',                 '~> 0.3.4'
 gem 'jquery-rails',               '~> 3.0.4'
@@ -45,9 +45,9 @@ gem 'countries',                  '~> 0.9.2', require: 'iso3166'
 gem 'country_select',             '~> 1.1.3'
 gem 'biggs',                      '~> 0.3.3'
 gem 'charlock_holmes',            '~> 0.6.9.4'
-gem 'easy_money',                 '~> 1.0.0', github: 'buckybox/easy_money'
-gem 'currency_data',              '~> 1.0.0', github: 'buckybox/currency_data'
-gem 'simple_form-bank_account_number', '~> 1.0.0', github: 'buckybox/simple_form-bank_account_number'
+gem 'easy_money',                 '~> 1.0.0', git: 'https://github.com/buckybox/easy_money.git'
+gem 'currency_data',              '~> 1.0.0', git: 'https://github.com/buckybox/currency_data.git'
+gem 'simple_form-bank_account_number', '~> 1.0.0', git: 'https://github.com/buckybox/simple_form-bank_account_number.git'
 
 ########## THE GEMS ABOVE ARE THE ONLY ONES THAT RUN ON PRODUCTION ##########
 
@@ -59,7 +59,7 @@ group :assets do
 end
 
 group :install do
-  gem 'sprinkle',  github: 'jordandcarter/sprinkle' # patched to be awesome.. added more verifiers and updated some installers
+  gem 'sprinkle',  git: 'https://github.com/jordandcarter/sprinkle.git' # patched to be awesome.. added more verifiers and updated some installers
 end
 
 group :development do

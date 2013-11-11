@@ -295,7 +295,8 @@ CREATE TABLE accounts (
     balance_cents integer DEFAULT 0 NOT NULL,
     currency character varying(255),
     created_at timestamp without time zone,
-    updated_at timestamp without time zone
+    updated_at timestamp without time zone,
+    default_payment_method character varying(255)
 );
 
 
@@ -1207,7 +1208,10 @@ CREATE TABLE distributors (
     email_templates text,
     notify_address_change boolean,
     phone character varying(255),
-    sidebar_description text
+    sidebar_description text,
+    collect_delivery_note boolean DEFAULT true NOT NULL,
+    require_delivery_note boolean DEFAULT false NOT NULL,
+    notify_for_new_webstore_order boolean DEFAULT true NOT NULL
 );
 
 
@@ -1269,17 +1273,13 @@ ALTER SEQUENCE distributors_omni_importers_id_seq OWNED BY distributors_omni_imp
 CREATE TABLE events (
     id integer NOT NULL,
     distributor_id integer NOT NULL,
-    event_category character varying(255) NOT NULL,
     event_type character varying(255) NOT NULL,
-    customer_id integer,
-    invoice_id integer,
-    reconciliation_id integer,
-    transaction_id integer,
-    delivery_id integer,
     dismissed boolean DEFAULT false NOT NULL,
     created_at timestamp without time zone,
     updated_at timestamp without time zone,
-    trigger_on timestamp without time zone
+    trigger_on timestamp without time zone,
+    message text,
+    key character varying(255)
 );
 
 
@@ -1413,7 +1413,8 @@ CREATE TABLE import_transaction_lists (
     csv_file text,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
-    omni_importer_id integer
+    omni_importer_id integer,
+    status character varying(255)
 );
 
 
@@ -3727,3 +3728,15 @@ INSERT INTO schema_migrations (version) VALUES ('20130910033818');
 INSERT INTO schema_migrations (version) VALUES ('20130923050455');
 
 INSERT INTO schema_migrations (version) VALUES ('20130926033607');
+
+INSERT INTO schema_migrations (version) VALUES ('20131016215622');
+
+INSERT INTO schema_migrations (version) VALUES ('20131016215636');
+
+INSERT INTO schema_migrations (version) VALUES ('20131020234439');
+
+INSERT INTO schema_migrations (version) VALUES ('20131022003933');
+
+INSERT INTO schema_migrations (version) VALUES ('20131022015514');
+
+INSERT INTO schema_migrations (version) VALUES ('20131022025554');

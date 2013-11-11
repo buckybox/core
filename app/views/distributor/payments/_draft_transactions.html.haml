@@ -28,4 +28,4 @@
       %tr
         %td.text-center{ colspan: 5 }
           = link_to 'Cancel', distributor_import_transaction_list_path(import_transaction_list), method: :delete, id: 'payment_upload_cancel'
-          = f.submit "Import transactions", class: 'btn btn-primary', id: 'draft-transactions-controls'
+          = f.submit "Import transactions", class: 'btn btn-primary', id: 'draft-transactions-controls', 'data-loading-text' => 'Please wait...'

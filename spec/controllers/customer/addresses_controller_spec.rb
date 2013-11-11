@@ -25,6 +25,7 @@ describe Customer::AddressesController do
         end
         @customer.save!
 
+        @customer.distributor.collect_phone = true
         @customer.distributor.require_phone = true
         @customer.distributor.save!
       end

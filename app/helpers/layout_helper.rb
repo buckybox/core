@@ -71,12 +71,15 @@ module LayoutHelper
   def customer_badge(customer, options = {})
     customer_id = customer.formated_number.to_s
 
-    if options[:link] == false
-      content = content_tag(:span, customer_id, class: 'customer-id')
-    elsif options.has_key?(:link)
-      content = link_to(customer_id, url_for(options[:link]), class: 'customer-id')
+    content = case options[:link]
+    when false
+      content_tag(:span, customer_id, class: 'customer-id')
+    when Hash
+      link_to(customer_id, url_for(options[:link]), class: 'customer-id')
+    when String
+      link_to(customer_id, options[:link], class: 'customer-id')
     else
-      content = link_to(customer_id, [:distributor, customer], class: 'customer-id')
+      link_to(customer_id, [:distributor, customer], class: 'customer-id')
     end
 
     customer_name = options[:customer_name] || customer.name
