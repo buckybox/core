@@ -1,10 +1,14 @@
 class Extra < ActiveRecord::Base
-  belongs_to :distributor
-
   FUZZY_MATCH_THRESHOLD = 0.8
+  HUMANIZED_ATTRIBUTES  = {
+    price_cents: "Price"
+  }
+
+  belongs_to :distributor
 
   validates_presence_of :distributor, :name, :unit, :price
   validates :unit, :name, length: {maximum: 80}
+  validates :price_cents, numericality: { greater_than_or_equal_to: 0, less_than: 1E8 }
 
   attr_accessible :distributor, :name, :unit, :price, :hidden, :visible
 
@@ -77,5 +81,11 @@ class Extra < ActiveRecord::Base
         box.extras << self
       end
     end
+  end
+
+private
+
+  def self.human_attribute_name(attr, options = {})
+    HUMANIZED_ATTRIBUTES[attr.to_sym] || super
   end
 end
