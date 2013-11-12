@@ -1,10 +1,14 @@
-class Api::V0::CustomersController < ApplicationController
+class Api::V0::CustomersController < Api::V0::BaseController
 	
 	def index
-	    @customers = Customer.all
-	    respond_to do |format|
-	      format.json { render :json => @customers }
-	    end
-  	end
-  	
+    @customers = @distributor.customers
+  end
+
+	def create
+
+	end
+
+  
+
+
 end

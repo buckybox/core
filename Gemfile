@@ -47,8 +47,8 @@ gem 'biggs',                      '~> 0.3.3'
 gem 'charlock_holmes',            '~> 0.6.9.4'
 gem 'easy_money',                 '~> 1.0.0', git: 'https://github.com/buckybox/easy_money.git'
 gem 'currency_data',              '~> 1.0.0', git: 'https://github.com/buckybox/currency_data.git'
-gem 'rabl', 			  '~> 0.9.0'
-gem 'oj',			  '~> 2.1.7'
+gem 'rabl', 			                '~> 0.9.0'
+gem 'oj',			                    '~> 2.1.7'
 
 ########## THE GEMS ABOVE ARE THE ONLY ONES THAT RUN ON PRODUCTION ##########
 
