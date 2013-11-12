@@ -3,9 +3,12 @@ class Box < ActiveRecord::Base
     price_cents: "Price"
   }
 
+  EXTRAS_UNLIMITED = -1
+  EXTRAS_DISABLED = 0
+
   # [["disable extras", 0], ["allow any number of extra items", -1],
   # ["allow 1 extra items", 1], ["allow 2 extra items", 2], ... ["allow n extra items, n]]
-  SPECIAL_EXTRA_OPTIONS = ['disable extras', 'allow any number of extra items'].zip([0, -1])
+  SPECIAL_EXTRA_OPTIONS = ['disable extras', 'allow any number of extra items'].zip([EXTRAS_DISABLED, EXTRAS_UNLIMITED])
   COUNT_EXTRA_OPTIONS = 1.upto(10).map{ |i| "allow #{i} extra items" }.zip(1.upto(10).to_a)
   EXTRA_OPTIONS = (SPECIAL_EXTRA_OPTIONS + COUNT_EXTRA_OPTIONS)
 
@@ -28,7 +31,7 @@ class Box < ActiveRecord::Base
 
   monetize :price_cents
 
-  default_value_for :extras_limit, 0
+  default_value_for :extras_limit, EXTRAS_DISABLED
   default_value_for :substitutions_limit, 0
   default_value_for :exclusions_limit, 0
 
@@ -48,11 +51,11 @@ class Box < ActiveRecord::Base
   end
 
   def extras_unlimited?
-    extras_limit == -1
+    extras_limit == EXTRAS_UNLIMITED
   end
 
   def extras_not_allowed?
-    extras_limit.blank? || extras_limit.zero?
+    extras_limit.blank? || extras_limit == EXTRAS_DISABLED
   end
   alias_method :extras_disabled?, :extras_not_allowed?
 

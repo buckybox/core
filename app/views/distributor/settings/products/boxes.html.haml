@@ -79,7 +79,7 @@
                     .line.extra-items
                       %span.selector
                         = link_to '', 'javascript:void(0)'
-                        = f.input_field :extras_limit, include_blank: false, collection: extras_limit_collection
+                        = f.input_field :extras_limit, include_blank: false, collection: extras_limit_collection, selected: box.extras_disabled? ? Box::EXTRAS_UNLIMITED : box.extras_limit
                         from the
                       %span.selector
                         = link_to '', 'javascript:void(0)'
