@@ -1,4 +1,14 @@
 class Box < ActiveRecord::Base
+  HUMANIZED_ATTRIBUTES = {
+    price_cents: "Price"
+  }
+
+  # [["disable extras", 0], ["allow any number of extra items", -1],
+  # ["allow 1 extra items", 1], ["allow 2 extra items", 2], ... ["allow n extra items, n]]
+  SPECIAL_EXTRA_OPTIONS = ['disable extras', 'allow any number of extra items'].zip([0, -1])
+  COUNT_EXTRA_OPTIONS = 1.upto(10).map{ |i| "allow #{i} extra items" }.zip(1.upto(10).to_a)
+  EXTRA_OPTIONS = (SPECIAL_EXTRA_OPTIONS + COUNT_EXTRA_OPTIONS)
+
   belongs_to :distributor
 
   has_many :orders
@@ -14,7 +24,7 @@ class Box < ActiveRecord::Base
   validates_presence_of :distributor, :name, :description, :price
   validates :extras_limit, numericality: { greater_than: -2 }
   validates :name, length: {maximum: 80}
-  validate :validate_price
+  validates :price_cents, numericality: { greater_than_or_equal_to: 0, less_than: 1E8 }
 
   monetize :price_cents
 
@@ -24,12 +34,6 @@ class Box < ActiveRecord::Base
 
   default_scope order(:name)
   scope :not_hidden, where(hidden: false)
-
-  # [["disable extras", 0], ["allow any number of extra items", -1],
-  # ["allow 1 extra items", 1], ["allow 2 extra items", 2], ... ["allow n extra items, n]]
-  SPECIAL_EXTRA_OPTIONS = ['disable extras', 'allow any number of extra items'].zip([0, -1])
-  COUNT_EXTRA_OPTIONS = 1.upto(10).map{ |i| "allow #{i} extra items" }.zip(1.upto(10).to_a)
-  EXTRA_OPTIONS = (SPECIAL_EXTRA_OPTIONS + COUNT_EXTRA_OPTIONS)
 
   def exclusions?; dislikes?; end
   def substitutions?; likes?; end
@@ -120,7 +124,7 @@ class Box < ActiveRecord::Base
 
 private
 
-  def validate_price
-    errors.add(:price, "must be a positive number") if price < 0
+  def self.human_attribute_name(attr, options = {})
+    HUMANIZED_ATTRIBUTES[attr.to_sym] || super
   end
 end
