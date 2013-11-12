@@ -49,6 +49,7 @@ gem 'easy_money',                 '~> 1.0.0', git: 'https://github.com/buckybox/
 gem 'currency_data',              '~> 1.0.0', git: 'https://github.com/buckybox/currency_data.git'
 gem 'rabl', 			                '~> 0.9.0'
 gem 'oj',			                    '~> 2.1.7'
+gem 'apipie-rails',               '~> 0.0.24'
 
 ########## THE GEMS ABOVE ARE THE ONLY ONES THAT RUN ON PRODUCTION ##########
 

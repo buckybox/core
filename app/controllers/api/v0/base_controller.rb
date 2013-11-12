@@ -19,4 +19,13 @@ class Api::V0::BaseController < ApplicationController
 	  def unauthorized
   		render nothing: true, status: :unauthorized, formats: :json and return
   	end
+
+  	def internal_server_error errors
+        #print errors to body 
+  			render nothing: true, status: :internal_server_error, formats: :json and return
+  	end
+
+    def not_found
+        render nothing: true, status: :not_found, formats: :json and return
+    end
 end
