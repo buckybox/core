@@ -99,7 +99,16 @@ $(function(){
       // Turn box extras dropdown into a Select2 one (only when a box is clicked otherwise Select2
       // freezes the page load when there are heaps of boxes and extras)
       $(".edit .collapse").on("shown", function() {
-        $(this).find(".box-extras select").select2({ width: '100%' });
+        $(this).find('select[id="box_extras_limit"]').change(function() {
+          var limit = $(this).val();
+          var select = $(this).closest(".extra-items").find(".box-extras select");
+
+          if (limit > 0) { // strip any extra extra items
+            select.val(select.val().slice(0, limit));
+          }
+
+          select.select2({ width: '100%', maximumSelectionSize: limit });
+        }).trigger('change');
       });
     }
 
