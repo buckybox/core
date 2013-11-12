@@ -191,16 +191,14 @@ BuckyBox::Application.routes.draw do
 
   namespace :customer do
     root to: 'dashboard#index'
+
     get 'dashboard',               controller: 'dashboard', action: 'index'
     get 'order/:order_id/box/:id', controller: 'dashboard', action: 'box'
 
-    resources :customers, only: :update do
-      member do
-        put 'update_password'
-      end
-    end
+    put 'update_contact_details',   controller: 'customers',  action: 'update_contact_details'
+    put 'update_delivery_address',  controller: 'customers',  action: 'update_delivery_address'
+    put 'update_password',          controller: 'customers',  action: 'update_password'
 
-    resource  :address, only: :update
     resources :boxes, only: [:show] do
       member do
         get 'extras'

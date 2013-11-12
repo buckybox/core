@@ -1,16 +1,22 @@
 class Customer::DashboardController < Customer::BaseController
   def index
-    @customer     = current_customer
-    @account      = @customer.account
-    @address      = @customer.address
-    @balance      = @customer.account.balance
-    @transactions = @customer.transactions.limit(6)
+    @customer       = current_customer
+    @account        = @customer.account
+    @address        = @customer.address
+    @balance        = @customer.account.balance
+    @transactions   = @customer.transactions.limit(6)
     @show_more_link = @transactions.size != @customer.transactions.count
-    @distributor  = @customer.distributor
-    @currency     = @distributor.currency
-    @orders       = @customer.orders.active.decorate(context: { currency: @currency })
-    @bank         = @distributor.bank_information.decorate(context: { customer: @customer }) if @distributor.bank_information
-    @order        = @customer.orders.new
+    @distributor    = @customer.distributor
+    @currency       = @distributor.currency
+    @orders         = @customer.orders.active.decorate(context: { currency: @currency })
+    @bank           = @distributor.bank_information.decorate(context: { customer: @customer }) if @distributor.bank_information
+    @order          = @customer.orders.new
+
+    render "index", locals: {
+      update_contact_details:  Customer::Form::UpdateContactDetails.new(customer: current_customer),
+      update_delivery_address: Customer::Form::UpdateDeliveryAddress.new(customer: current_customer),
+      update_password:         Customer::Form::UpdatePassword.new(customer: current_customer),
+    }
   end
 
   def box

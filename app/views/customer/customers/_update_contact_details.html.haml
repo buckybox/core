@@ -1,0 +1,12 @@
+= simple_form_for(update_contact_details, url: customer_update_contact_details_path, html: { method: :put, novalidate: false }) do |f|
+  .modal-body
+    = f.error_notification
+
+    = f.input :name
+    = f.input :email,  hint: 'Please double check this email as it is also used as your login.'
+    = f.input :mobile_phone
+    = f.input :home_phone
+    = f.input :work_phone
+
+  .modal-footer
+    = f.button :submit, 'Update', class: 'btn btn-primary'
