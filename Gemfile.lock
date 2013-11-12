@@ -73,6 +73,8 @@ GEM
       builder
       json
     analytical (3.0.12)
+    apipie-rails (0.0.24)
+      rails (>= 3.0.10)
     arel (3.0.2)
     attr_encryptor (1.0.2)
       encryptor2 (>= 1.0.0)
@@ -474,6 +476,7 @@ DEPENDENCIES
   acts_as_list (~> 0.1.8)
   airbrake (~> 3.1.2)
   analytical (~> 3.0.12)
+  apipie-rails (~> 0.0.24)
   attr_encryptor (~> 1.0.2)
   better_errors
   biggs (~> 0.3.3)
