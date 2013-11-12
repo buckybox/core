@@ -296,11 +296,12 @@ GEM
     oink (0.10.1)
       activerecord
       hodel_3000_compliant_logger
+    oj (2.1.7)
     orm_adapter (0.4.0)
     parallel (0.7.1)
     parallel_tests (0.15.3)
       parallel
-    pg (0.14.1)
+    pg (0.17.0)
     pg_search (0.5.7)
       activerecord (>= 3)
       activesupport (>= 3)
@@ -332,6 +333,8 @@ GEM
       pry (>= 0.9.11)
     quiet_assets (1.0.2)
       railties (>= 3.1, < 5.0)
+    rabl (0.9.0)
+      activesupport (>= 2.3.14)
     rack (1.4.5)
     rack-cache (1.2)
       rack (>= 0.4)
@@ -526,8 +529,9 @@ DEPENDENCIES
   newrelic_rpm (~> 3.6.1)
   nokogiri (~> 1.6.0)
   oink
+  oj (~> 2.1.7)
   parallel_tests
-  pg (~> 0.14.0)
+  pg (~> 0.17.0)
   pg_search (~> 0.5.1)
   poltergeist
   premailer-rails (~> 1.4.0)
@@ -536,6 +540,7 @@ DEPENDENCIES
   pry-rails
   pry-stack_explorer
   quiet_assets
+  rabl (~> 0.9.0)
   rails (~> 3.2.15)
   rspec-rails
   ruby-prof
