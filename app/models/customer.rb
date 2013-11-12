@@ -33,12 +33,11 @@ class Customer < ActiveRecord::Base
     :delivery_service, :delivery_service_id, :password, :password_confirmation, :remember_me, :tag_list, :discount, :number, :notes,
     :special_order_preference, :balance_threshold, :via_webstore, :address
 
-  validates_presence_of :distributor_id, :delivery_service_id, :first_name, :email, :discount, :address
+  validates_presence_of :distributor_id, :delivery_service_id, :first_name, :email, :discount
   validates_uniqueness_of :number, scope: :distributor_id
   validates_numericality_of :number, greater_than: 0
   validates_numericality_of :discount, greater_than_or_equal_to: 0.0, less_than_or_equal_to: 1.0
   validates_associated :account
-  validates_associated :address
 
   before_validation :initialize_number, if: 'number.nil?'
   before_validation :random_password, unless: 'encrypted_password.present?'
