@@ -236,4 +236,13 @@ BuckyBox::Application.routes.draw do
       end
     end
   end
+
+  namespace :api, :path => "", :defaults => {:format => :json}, :constraints => {:subdomain => "api"} do
+    namespace :v0 do
+      resources :customers
+      resources :orders
+      resources :delivery_services
+    end
+  end
+
 end
