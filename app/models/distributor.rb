@@ -74,13 +74,14 @@ class Distributor < ActiveRecord::Base
     :require_phone, :require_city, :require_delivery_note, :omni_importer_ids, :notes,
     :payment_cash_on_delivery, :payment_bank_deposit, :payment_credit_card,
     :keep_me_updated, :email_templates, :notify_address_change, :notify_for_new_webstore_order,
-    :phone, :localised_address_attributes
+    :phone, :localised_address_attributes, :api_key
 
   accepts_nested_attributes_for :localised_address
 
   validates_presence_of :country
   validates_presence_of :email
   validates_uniqueness_of :email
+  validates_uniqueness_of :api_key
   validates_presence_of :name
   validates_uniqueness_of :name
   validates_uniqueness_of :parameter_name, allow_nil: true
@@ -539,6 +540,10 @@ class Distributor < ActiveRecord::Base
 
   def webstore_status_changed?
     active_webstore_changed?
+  end
+
+  def generate_api_key!
+    update_attributes(api_key: SecureRandom.uuid)
   end
 
 private
