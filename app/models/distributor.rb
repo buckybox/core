@@ -74,7 +74,7 @@ class Distributor < ActiveRecord::Base
     :require_phone, :require_city, :require_delivery_note, :omni_importer_ids, :notes,
     :payment_cash_on_delivery, :payment_bank_deposit, :payment_credit_card,
     :keep_me_updated, :email_templates, :notify_address_change, :notify_for_new_webstore_order,
-    :phone, :localised_address_attributes, :api_key
+    :phone, :localised_address_attributes, :api_key, :api_secret
 
   accepts_nested_attributes_for :localised_address
 
@@ -543,7 +543,16 @@ class Distributor < ActiveRecord::Base
   end
 
   def generate_api_key!
-    update_attributes(api_key: SecureRandom.uuid)
+    return if api_key.present?
+    update_attributes(api_key: SecureRandom.uuid, api_secret: SecureRandom.uuid)
+  end
+
+  def generate_api_secret!
+    update_attributes(api_secret: SecureRandom.uuid)
+  end
+
+  def remove_api_key!
+    update_attributes(api_key: nil, api_secret: nil)
   end
 
 private
