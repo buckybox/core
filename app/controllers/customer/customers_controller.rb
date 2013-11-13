@@ -37,7 +37,6 @@ private
   end
 
   def formatted_error_messages(form)
-    form.valid?
     form.errors.full_messages.join(", ").downcase
   end
 
