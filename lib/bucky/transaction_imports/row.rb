@@ -9,7 +9,7 @@ module Bucky::TransactionImports
 
     def initialize(date_string, description, amount_string, index=nil, raw_data=nil, parser=nil, bank_name=nil)
       self.date_string = date_string
-      self.description = description
+      self.description = description || ""
       self.amount_string = amount_string.gsub(/,/,'') unless amount_string.blank?
       self.index = index
       self.parser = parser
@@ -174,20 +174,16 @@ module Bucky::TransactionImports
     end
 
     def row_is_valid
-      unless date_valid? && description_valid? && amount_valid?
+      unless date_valid? && amount_valid?
         errors.add(:base, "There was a problem on row #{index}.")
       end
     end
 
     def date_valid?
-      Date.parse(date_string) # Will throw ArgumentError: invalid date
-      true
+      date = Date.parse(date_string) # Will throw ArgumentError: invalid date
+      date > 6.months.ago.to_date && date <= 1.day.from_now.to_date
     rescue
       false
-    end
-
-    def description_valid?
-      description.present?
     end
 
     AMOUNT_REGEX = /\A[+-]?\d*\.?\d+\Z/
