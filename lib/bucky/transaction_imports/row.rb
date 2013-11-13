@@ -175,7 +175,7 @@ module Bucky::TransactionImports
 
     def row_is_valid
       unless date_valid? && description_valid? && amount_valid?
-        errors.add(:base, "The file you uploaded didn't match what we expected a #{bank_name} file to look like.  There was a problem on row #{index-1}, make sure it was the correct file from your bank or contact Bucky Box with #{Figaro.env.support_email}.")
+        errors.add(:base, "There was a problem on row #{index}.")
       end
     end
 

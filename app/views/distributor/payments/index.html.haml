@@ -18,9 +18,14 @@
             .form_fields.ajax_loader_hide
               - if @import_transaction_list.has_failed?
                 .alert.alert-error
-                  %strong Ooops! That file didn't look right.
-                  %br
-                  Did you upload the right file?
+                  %p
+                    Ooops! That file didn't look right.
+                    Make sure it was the correct file from your bank or
+                    = mail_to Figaro.env.support_email, "contact Bucky Box"
+
+                  %ul
+                    - @import_transaction_list.error_messages.flatten.each do |error|
+                      %li= error
       .modal-footer
         .form_fields.ajax_loader_hide
           - unless distributor.omni_importers.count.zero?
