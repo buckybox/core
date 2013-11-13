@@ -13,16 +13,16 @@ class Api::V0::CustomersController < Api::V0::BaseController
 	end
 
 	def_param_group :customer do
-	  param :customer, Hash do
-	    param :first_name, String, "First name of the customer"
+	  param :customer, Hash, "JSON String ", required: true do
+	    param :first_name, String, "First name of the customer", required: true
 	    param :last_name, String, "Last name of the customer"
-	    param_group :address
+	    param_group :address, required: true 
 	  end
 	end
 
 
-	api :GET, '/customers',  "Get list of customers"
-	param :email , String, desc: "Customer's Email Address. Returns array of single customer" , required: false
+	api :GET, '/v0/customers',  "Get list of customers"
+	param :email , String, desc: "Customer's Email Address. Returns array of single customer"
 	def index
 		cust_email = params[:email]
 		if cust_email.nil?
@@ -33,7 +33,7 @@ class Api::V0::CustomersController < Api::V0::BaseController
   end
 
 	api :GET, '/customers/:id',  "Get single customer"
-	param :id, Fixnum, desc: "Customer ID", required: true  
+	param :id,Integer, desc: "Customer ID", required: true  
   def show
 		cust_id = params[:id]
 		@customer  = @distributor.customers.find_by(id: cust_id)
@@ -45,25 +45,20 @@ class Api::V0::CustomersController < Api::V0::BaseController
 	api :POST, '/customers',  "Create a new customer"
 	param_group :customer
 	def create
-		new_customer = params[:customer]
+		new_customer = request.body.read
+
+		internal_server_error if new_customer.nil?
+
 		new_customer = JSON.parse new_customer
-		binding.pry
-=begin
-		@customer = Customer.new(	
-															email: cust_email, 
-															first_name: cust_fname, 
-															last_name: cust_lname, 
-															delivery_service_id: delivery_service_id
-														)
-		
-		@customer.address = Address.new( params )
+		@customer = Customer.new	new_customer['customer']
+		@customer.distributor_id = @distributor.id
+		@customer.number = Customer.next_number(@distributor)
 
 		if @customer.save
-			@customer
+			render 'api/v0/customers/create', status: :created, location: api_v0_customer_url(id: @customer.id) and return
 		else
-			internal_server_error customer.errors
+			internal_server_error @customer.errors
 		end
-=end
 	end
 
 end

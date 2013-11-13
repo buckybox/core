@@ -22,8 +22,7 @@ class Api::V0::BaseController < ApplicationController
   	end
 
   	def internal_server_error errors
-        #print errors to body 
-  			render nothing: true, status: :internal_server_error, formats: :json and return
+  			render json: errors.to_json, status: :internal_server_error and return
   	end
 
     def not_found
