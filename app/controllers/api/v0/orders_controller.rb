@@ -1,3 +1,3 @@
-class API::V0::OrdersController < Api::V0::BaseController
+class Api::V0::OrdersController < Api::V0::BaseController
 
 end
