@@ -25,7 +25,7 @@ class Api::V0::CustomersController < Api::V0::BaseController
 	end
 
 
-	api :GET, '/v0/customers',  "Get list of customers"
+	api :GET, '/customers',  "Get list of customers"
 	param :email , String, desc: "Customer's Email Address. Returns array of single customer"
 	param :embed,String, desc: "Children available: address"
 	example "/customers/?email=will@buckybox.com&embed=address"  
@@ -38,7 +38,7 @@ class Api::V0::CustomersController < Api::V0::BaseController
     end
   end
 
-	api :GET, '/v0/customers/:id',  "Get single customer"
+	api :GET, '/customers/:id',  "Get single customer"
 	param :id,Integer, desc: "Customer ID", required: true
 	param :embed,String, desc: "Children available: address"
 	example "/customers/123?embed=address"  
@@ -50,7 +50,7 @@ class Api::V0::CustomersController < Api::V0::BaseController
 		end
 	end
 
-	api :POST, '/v0/customers',  "Create a new customer"
+	api :POST, '/customers',  "Create a new customer"
 	description 'A json object representing the new customer'
 	example '{ 
     "customer": {
