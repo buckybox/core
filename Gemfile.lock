@@ -201,7 +201,7 @@ GEM
     erubis (2.7.0)
     eventmachine (1.0.3)
     execjs (2.0.0)
-    fabrication (2.7.2)
+    fabrication (2.9.3)
     fastercsv (1.5.5)
     faye-websocket (0.4.7)
       eventmachine (>= 0.12.0)

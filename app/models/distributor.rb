@@ -81,7 +81,7 @@ class Distributor < ActiveRecord::Base
   validates_presence_of :country
   validates_presence_of :email
   validates_uniqueness_of :email
-  validates_uniqueness_of :api_key
+  validates_uniqueness_of :api_key, allow_nil: true
   validates_presence_of :name
   validates_uniqueness_of :name
   validates_uniqueness_of :parameter_name, allow_nil: true
