@@ -1,7 +1,7 @@
 class Api::V0::CustomersController < Api::V0::BaseController
 	
 	api :GET, '/customers'
-	param :email #, String, "Customer's Email Address" , required: false
+	param :email, String, "Customer's Email Address" , required: false
 	def index
 		cust_email = params[:email]
 		if cust_email.nil?

@@ -1,3 +1,3 @@
-class API::V0::Deliver_ServicesController < Api::V0::BaseController
+class Api::V0::DeliveryServicesController < Api::V0::BaseController
 
 end
