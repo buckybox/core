@@ -181,8 +181,8 @@ module Bucky::TransactionImports
 
     def date_valid?
       date = Date.parse(date_string) # Will throw ArgumentError: invalid date
-      date > 6.months.ago.to_date && date <= 1.day.from_now.to_date
-    rescue
+      date > 1.year.ago.to_date && date <= 1.day.from_now.to_date
+    rescue ArgumentError
       false
     end
 
