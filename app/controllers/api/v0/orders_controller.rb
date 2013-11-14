@@ -56,7 +56,7 @@ class Api::V0::OrdersController < Api::V0::BaseController
 		@order = Order.new
 		@order.account = Account.find_by(customer_id: customer.id)
 		@order.box_id = new_order['order']['box_id']
-
+		@customer_id = @order.account.customer_id
 		if @order.save
 			render 'api/v0/orders/create', status: :created, location: api_v0_order_url(id: @order.id) and return
 		else
