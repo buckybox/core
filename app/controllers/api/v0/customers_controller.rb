@@ -1,7 +1,7 @@
 class Api::V0::CustomersController < Api::V0::BaseController
 
 	def_param_group :address do
-		param :address, Hash, "Customer Address", required: true do
+		param :address, Object, "Customer Address", required: true do
 		  param :line_1, String, required: true
 		  param :line_2, String
 		  param :suburb, String
@@ -15,7 +15,7 @@ class Api::V0::CustomersController < Api::V0::BaseController
 	end
 
 	def_param_group :customer do
-	  param :customer, Hash, "JSON String ", required: true do
+	  param :customer, Object, "JSON String ", required: true do
 	    param :first_name, String, "First name of the customer", required: true
 	    param :last_name, String, "Last name of the customer"
 	    param :email, String, "Customer's email address", required: true
