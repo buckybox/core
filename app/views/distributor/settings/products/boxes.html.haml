@@ -28,7 +28,7 @@
           %td
             %strong= link_to box.name, 'javascript:void(0)', 'data-toggle' => 'collapse', 'data-target' => "#edit_box_#{box.id}"
             %br
-            %em.muted.description= truncate(box.description, length: 50, separator: ' ')
+            %em.muted.description= truncate(box.description, length: 100, separator: ' ')
           %td.text-right
             - if box.extras_allowed?
               %i.icon-plus{'data-toggle' => 'tooltip', 'title' => box.extras}
