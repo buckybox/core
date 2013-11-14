@@ -280,33 +280,39 @@
         margin-left: 1em
 
   > .boxes
-    .edit
-      border: none
-      #new_box .container-fluid
-        border-top: none
-      .photo
-        border: 1px solid #999
-        img
-          width: 100%
-        a
-          position: absolute
-          top: 55px
-          left: 20px
-          background: #FFF
-          padding: .2em .4em
-          +border-radius(1em)
-          display: none
-      .name
-        width: 87%
-      .amount
-        width: 12%
-      .field
-        display: inline-block
-      .extra-items
-        padding-left: 3em
-        margin-left: -2px
-        &.line
-          margin-top: -.6em
+    tr
+      &.edit
+        border: none
+        #new_box .container-fluid
+          border-top: none
+        .photo
+          border: 1px solid #999
+          img
+            width: 100%
+          a
+            position: absolute
+            top: 55px
+            left: 20px
+            background: #FFF
+            padding: .2em .4em
+            +border-radius(1em)
+            display: none
+        .name
+          width: 87%
+        .amount
+          width: 12%
+        .field
+          display: inline-block
+        .extra-items
+          padding-left: 3em
+          margin-left: -2px
+          &.line
+            margin-top: -.6em
+      &:not(.edit)
+        td
+          &:first-child, &:last-child
+            white-space: nowrap
+            width: 1px
 
   > .box_items
     #new_line_item
@@ -404,6 +410,9 @@
           margin: 0
       &:not(.edit)
         height: 34px
+        td.amount
+          white-space: nowrap
+          width: 1px
 
 #payments
   .important_action
