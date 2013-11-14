@@ -244,6 +244,7 @@ BuckyBox::Application.routes.draw do
       resources :customers
       resources :orders
       resources :delivery_services
+      resources :boxes
     end
   end
 
