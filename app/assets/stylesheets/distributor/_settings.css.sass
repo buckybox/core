@@ -255,7 +255,7 @@
         border: none
         vertical-align: middle
         border: none
-        .photo img
+        .photo .img-circle
           padding: 2px 0
         .description
           font-size: 12px
@@ -310,7 +310,9 @@
             margin-top: -.6em
       &:not(.edit)
         td
-          &:first-child, &:last-child
+          &:first-child
+            width: 50px
+          &:last-child
             white-space: nowrap
             width: 1px
 
