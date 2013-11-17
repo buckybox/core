@@ -129,14 +129,12 @@ describe "API v0" do
         }'
       end
 
-      before do
-        post url, params, headers
-        expect(response.status).to eq 201
-      end
-
       # it_behaves_like "an authenticated API", :post # FIXME
 
       it "returns the customer" do
+        post url, params, headers
+        expect(response.status).to eq 201
+
         expect(json.size).to eq 1
 
         expected_response = JSON.parse(params)
@@ -145,10 +143,16 @@ describe "API v0" do
       end
 
       it "returns the expected attributes" do
+        post url, params, headers
+        expect(response.status).to eq 201
+
         expect(json_customer.keys).to eq(model_attributes | embedable_attributes)
       end
 
       it "returns the location of the newly created resource" do
+        post url, params, headers
+        expect(response.status).to eq 201
+
         expect(response.headers["Location"]).to eq api_v0_customer_url(id: customer.id)
       end
 
@@ -178,16 +182,23 @@ describe "API v0" do
 
       context "with invalid attributes" do
         context "without missing attributes" do
-          before do
+          it "returns the extra attributes" do
             invalid_params = JSON.parse(params)
             invalid_params["customer"]["admin_with_super_powers"] = true
 
             post url, invalid_params.to_json, headers
+            expect(response.status).to eq 422
+            expect(json["errors"]).to eq '{admin_with_super_powers: "unknown attr"}'
           end
 
-          it "returns the missing attributes" do
+          it "validates the delivery service ID" do
+            delivery_service = Fabricate(:delivery_service, distributor: Fabricate(:distributor))
+            invalid_params = JSON.parse(params)
+            invalid_params["customer"]["delivery_service_id"] = delivery_service.id
+
+            post url, invalid_params.to_json, headers
             expect(response.status).to eq 422
-            expect(json["errors"]).to eq '{admin_with_super_powers: "l"}'
+            expect(json["errors"]).to eq '{DL ID is not yours!}'
           end
         end
 

@@ -430,6 +430,10 @@ GEM
       rack (~> 1.0)
       tilt (~> 1.1, != 1.3.0)
     state_machine (1.1.2)
+    strong_parameters (0.2.1)
+      actionpack (~> 3.0)
+      activemodel (~> 3.0)
+      railties (~> 3.0)
     subexec (0.2.3)
     temple (0.6.6)
     term-ansicolor (1.2.2)
@@ -554,6 +558,7 @@ DEPENDENCIES
   simplecov
   sprinkle!
   state_machine (~> 1.1.2)
+  strong_parameters (~> 0.2.1)
   term-ansicolor
   terminal-notifier-guard
   therubyracer
