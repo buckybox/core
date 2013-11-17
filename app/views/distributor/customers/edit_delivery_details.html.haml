@@ -1,0 +1,13 @@
+- title("Update Delivery Details", false)
+= content_tag(:h1, "Update Delivery Details for #{customer_badge(delivery_details.customer)}".html_safe, class: 'text-center')
+
+= simple_form_for(delivery_details, url: update_delivery_details_distributor_customer_path(delivery_details.customer), html: { class: 'form-horizontal' }) do |f|
+  = f.error_notification
+
+  = render partial: "edit_delivery_details_inputs", locals: { f: f, delivery_details: delivery_details }
+
+  .row-fluid
+    .span12.form-actions
+      = f.button :submit, 'Update', class: 'btn btn-primary'
+      or
+      = link_to 'cancel', :back

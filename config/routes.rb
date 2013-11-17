@@ -148,7 +148,7 @@ BuckyBox::Application.routes.draw do
 
     resources :import_transaction_lists, only: [:destroy]
 
-    resources :customers do
+    resources :customers, except: [ :edit, :update ] do
       collection do
         get 'search',   action: :index, as: 'search'
         get 'tag/:tag', action: :index, as: 'tag'
@@ -160,6 +160,10 @@ BuckyBox::Application.routes.draw do
         get :send_login_details
         get 'impersonate'
         get 'activity'
+        get 'edit_profile',             action: 'edit_profile',             as: 'edit_profile'
+        put 'update_profile',           action: 'update_profile',           as: 'update_profile'
+        get 'edit_delivery_details',    action: 'edit_delivery_details',    as: 'edit_delivery_details'
+        put 'update_delivery_details',  action: 'update_delivery_details',  as: 'update_delivery_details'
       end
     end
 
