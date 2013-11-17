@@ -1,0 +1,13 @@
+- title("Update Profile", false)
+= content_tag(:h1, "Update Profile for #{customer_badge(customer_profile.customer)}".html_safe, class: 'text-center')
+
+= simple_form_for(customer_profile, url: update_profile_distributor_customer_path(customer_profile.customer), html: { class: "form-horizontal" }) do |f|
+  = f.error_notification
+
+  = render partial: "edit_profile_inputs", locals: { f: f, customer_profile: customer_profile }
+
+  .row-fluid
+    .span12.form-actions
+      = f.button :submit, "Update", class: "btn btn-primary"
+      or
+      = link_to "cancel", :back

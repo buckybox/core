@@ -2,7 +2,6 @@ class Distributor::CustomersController < Distributor::ResourceController
   respond_to :html, :xml, :json
 
   before_filter :check_setup, only: [:index]
-  before_filter :get_form_type, only: [:edit, :update]
   before_filter :get_email_templates, only: [:index, :show]
 
   def index
@@ -15,40 +14,43 @@ class Distributor::CustomersController < Distributor::ResourceController
   end
 
   def new
-    new! do
-      @address = @customer.build_address
-    end
+    render "new", locals: {
+      new_customer: Distributor::Form::NewCustomer.new(pre_form_args)
+    }
   end
 
   def create
-    create! do |success, failure|
-      success.html do
-        tracking.event(current_distributor, "new_customer") unless current_admin.present?
-        redirect_to distributor_customer_url(@customer)
-      end
-    end
+    args     = form_args(:distributor_form_new_customer)
+    form     = Distributor::Form::NewCustomer.new(args)
+    form_url = new_distributor_customer_url(form.customer)
+    tracking.event(current_distributor, "new_customer") if form.save && !current_admin.present?
+    form.save ? successful_create(form) : failed_form_submission(form, form_url)
   end
 
-  def edit
-    edit!
+  def edit_profile
+    render "edit_profile", locals: {
+      customer_profile: Distributor::Form::EditCustomerProfile.new(pre_form_args),
+    }
   end
 
-  def update
-    update! do |success, failure|
-      success.html { redirect_to distributor_customer_url(@customer) }
-      failure.html do
-        if (phone_errors = @customer.address.errors.get(:phone_number))
-          # Highlight all missing phone fields
-          phone_errors.each do |error|
-            PhoneCollection.attributes.each do |type|
-              @customer.address.errors[type] << error
-            end
-          end
-        end
+  def update_profile
+    args     = form_args(:distributor_form_edit_customer_profile)
+    form     = Distributor::Form::EditCustomerProfile.new(args)
+    form_url = edit_profile_distributor_customer_url(form.customer)
+    form.save ? successful_update(form, 'profile') : failed_form_submission(form, form_url)
+  end
 
-        render get_form_type
-      end
-    end
+  def edit_delivery_details
+    render "edit_delivery_details", locals: {
+      delivery_details: Distributor::Form::EditCustomerDeliveryDetails.new(pre_form_args),
+    }
+  end
+
+  def update_delivery_details
+    args     = form_args(:distributor_form_edit_customer_delivery_details)
+    form     = Distributor::Form::EditCustomerDeliveryDetails.new(args)
+    form_url = edit_delivery_details_distributor_customer_url(form.customer)
+    form.save ? successful_update(form, 'delivery details') : failed_form_submission(form, form_url)
   end
 
   def show
@@ -141,10 +143,6 @@ class Distributor::CustomersController < Distributor::ResourceController
 
 protected
 
-  def get_form_type
-    @form_type = (params[:form_type].to_s == 'delivery' ? 'delivery_form' : 'personal_form')
-  end
-
   def collection
     @customers = end_of_association_chain
 
@@ -171,6 +169,39 @@ protected
   end
 
 private
+
+  def form_args(param_key)
+    pre_form_args.merge(params[param_key])
+  end
+
+  def pre_form_args
+    customer = Customer.find_by(id: params[:id]) || Address.new.build_customer
+    { distributor: current_distributor, customer: customer }
+  end
+
+  def successful_create(form)
+    notice = "The customer have been successfully created."
+    successful_form_submission(form, notice)
+  end
+
+  def successful_update(form, submitted_changes)
+    notice = "The customers #{submitted_changes} have been successfully updated."
+    successful_form_submission(form, notice)
+  end
+
+  def successful_form_submission(form, notice)
+    flash[:notice] = notice
+    redirect_to distributor_customer_url(form.customer)
+  end
+
+  def failed_form_submission(form, form_url)
+    flash[:alert] = "Oops there was an issue: #{formatted_error_messages(form)}"
+    redirect_to form_url
+  end
+
+  def formatted_error_messages(form)
+    form.errors.full_messages.join(", ").downcase
+  end
 
   def error message
     render json: { message: message }, status: :unprocessable_entity
