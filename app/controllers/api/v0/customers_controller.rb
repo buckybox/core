@@ -1,5 +1,6 @@
 class Api::V0::CustomersController < Api::V0::BaseController
-  def_param_group :address_attributes do
+  def_param_group :address do
+    # :nocov:
     param :address, Object, "Customer Address", required: true do
       param :line_1, String, required: true
       param :line_2, String
@@ -11,15 +12,18 @@ class Api::V0::CustomersController < Api::V0::BaseController
       param :home_phone, String
       param :work_phone, String
     end
+    # :nocov:
   end
 
   def_param_group :customer do
+    # :nocov:
     param :customer, Object, "JSON String ", required: true do
       param :first_name, String, "First name of the customer", required: true
       param :last_name, String, "Last name of the customer"
       param :email, String, "Customer's email address", required: true
-      param_group :address_attributes
+      param_group :address
     end
+    # :nocov:
   end
 
   api :GET, '/customers',  "Get list of customers"
@@ -48,14 +52,14 @@ class Api::V0::CustomersController < Api::V0::BaseController
   end
 
   api :POST, '/customers',  "Create a new customer"
-  description 'A json object representing the new customer'
+  description 'A JSON object representing the new customer'
   example '{
     "customer": {
         "first_name": "Will",
         "last_name": "Lau",
         "email": "will@buckybox.com",
         "delivery_service_id": 56,
-        "address_attributes": {
+        "address": {
             "address_1": "12 Bucky Lane",
             "address_2": "",
             "suburb": "Boxville",
@@ -70,11 +74,11 @@ class Api::V0::CustomersController < Api::V0::BaseController
 
   param_group :customer
   def create
-    new_customer = params[:customer]
-    internal_server_error if new_customer.nil?
-
-    new_customer = JSON.parse new_customer
-    @customer = Customer.new  new_customer['customer']
+    body = request.body.read
+    new_customer = JSON.parse(body)["customer"]
+    address = new_customer.delete("address")
+    @customer = Customer.new new_customer
+    @customer.address = Address.new address
     @customer.distributor_id = @distributor.id
     @customer.number = Customer.next_number(@distributor)
 
