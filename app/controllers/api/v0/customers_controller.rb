@@ -73,20 +73,31 @@ class Api::V0::CustomersController < Api::V0::BaseController
 }'
 
   param_group :customer
+  before_filter :fetch_json_body, only: :create
   def create
-    body = request.body.read
+    customer_json = @json_body["customer"] || {}
+    address_json = customer_json.delete("address")
 
-    begin
-      json = JSON.parse(body)
-    rescue JSON::ParserError
-      render json: { message: "Invalid JSON" }, status: :unprocessable_entity and return
-    end
+    customer_parameters = ActionController::Parameters.new(customer_json)
+    @customer = Customer.new(customer_parameters.permit(
+      :first_name,
+      :last_name,
+      :email,
+      :delivery_service_id
+    ))
 
-    new_customer = json["customer"] || {}
-    address = new_customer.delete("address")
+    address_parameters = ActionController::Parameters.new(address_json)
+    @customer.build_address(address_parameters.permit(
+      :address_1,
+      :address_2,
+      :suburb,
+      :city,
+      :delivery_note,
+      :home_phone,
+      :mobile_phone,
+      :work_phone
+    ))
 
-    @customer = Customer.new new_customer
-    @customer.build_address(address)
     @customer.distributor_id = @distributor.id
     @customer.number = Customer.next_number(@distributor)
 
