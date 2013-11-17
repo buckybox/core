@@ -1,6 +1,26 @@
 require "spec_helper"
 
 describe "API v0" do
+  let(:base_url) { "http://api.test.dev/v0" }
+  let(:headers) do
+    {
+      "key" => distributor.api_key, # FIXME change to "X-Key" or sth standard
+      "secret" => distributor.api_secret, # FIXME
+    }
+  end
+  let(:distributor) { Fabricate(:distributor) }
+
+  shared_examples_for "an authenticated API" do
+    it "requires authentication" do
+      # url = "#{base_url}/customers"
+      get url
+      expect(response.status).to eq 401
+
+      get url, nil, { "key" => "fuck", "secret" => "off" }
+      expect(response.status).to eq 401
+    end
+  end
+
   describe "customers" do
     shared_examples_for "a customer" do
       it "returns the expected attributes" do
@@ -20,17 +40,9 @@ describe "API v0" do
       @customers ||= Fabricate.times(2, :customer, distributor: distributor)
     end
 
-    let(:base_url) { "http://api.test.dev/v0" }
-    let(:headers) do
-      {
-        "key" => distributor.api_key, # FIXME change to "X-Key" or sth standard
-        "secret" => distributor.api_secret, # FIXME
-      }
-    end
-
-    let(:distributor) { Fabricate(:distributor) }
     let(:model_attributes) { %w(id first_name last_name email delivery_service_id) }
     let(:embedable_attributes) { %w(address) }
+
 
     describe "GET /customers" do
       let(:url) { "#{base_url}/customers" }
@@ -41,6 +53,7 @@ describe "API v0" do
         expect(response).to be_success
       end
 
+      it_behaves_like "an authenticated API"
       it_behaves_like "a customer"
 
       it "returns the list of customers" do
@@ -67,11 +80,27 @@ describe "API v0" do
         expect(response).to be_success
       end
 
+      it_behaves_like "an authenticated API"
       it_behaves_like "a customer"
 
       it "returns the customer" do
         expect(json.size).to eq 1
         expect(json["customer"]["id"]).to eq customer.id
+      end
+
+      context "with a unknown ID" do
+        before { get "#{url}0000", nil, headers }
+        specify { expect(response).to be_not_found }
+      end
+
+      context "with a customer of another distributor" do
+        before do
+          distributor = Fabricate(:distributor)
+          customer = Fabricate(:customer, distributor: distributor)
+          get "#{base_url}/customers/#{customer.id}", nil, headers
+        end
+
+        specify { expect(response).to be_not_found }
       end
     end
 
@@ -105,6 +134,8 @@ describe "API v0" do
         expect(response.status).to eq 201
       end
 
+      # it_behaves_like "an authenticated API", :post # FIXME
+
       it "returns the customer" do
         expect(json.size).to eq 1
 
@@ -119,6 +150,61 @@ describe "API v0" do
 
       it "returns the location of the newly created resource" do
         expect(response.headers["Location"]).to eq api_v0_customer_url(id: customer.id)
+      end
+
+      context "with an empty body" do
+        before { post url, '', headers }
+
+        it "returns an error message" do
+          expect(response.status).to eq 422
+          expect(json["message"]).to eq "Invalid JSON"
+        end
+      end
+
+      context "with missing attributes" do
+        before { post url, '{}', headers }
+
+        it "returns the missing attributes" do
+          expect(response.status).to eq 422
+          expect(json["errors"].keys).to match_array %w(
+            email
+            first_name
+            delivery_service_id
+            address
+            address.address_1
+          )
+        end
+      end
+
+      context "with invalid attributes" do
+        context "without missing attributes" do
+          before do
+            invalid_params = JSON.parse(params)
+            invalid_params["customer"]["admin_with_super_powers"] = true
+
+            post url, invalid_params.to_json, headers
+          end
+
+          it "returns the missing attributes" do
+            expect(response.status).to eq 422
+            expect(json["errors"]).to eq '{admin_with_super_powers: "l"}'
+          end
+        end
+
+        context "with missing attributes" do
+          before { post url, '{"admin_with_super_powers": "1337"}', headers }
+
+          it "returns the missing attributes" do
+            expect(response.status).to eq 422
+            expect(json["errors"].keys).to match_array %w(
+              email
+              first_name
+              delivery_service_id
+              address
+              address.address_1
+            )
+          end
+        end
       end
     end
   end

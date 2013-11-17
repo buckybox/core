@@ -75,17 +75,25 @@ class Api::V0::CustomersController < Api::V0::BaseController
   param_group :customer
   def create
     body = request.body.read
-    new_customer = JSON.parse(body)["customer"]
+
+    begin
+      json = JSON.parse(body)
+    rescue JSON::ParserError
+      render json: { message: "Invalid JSON" }, status: :unprocessable_entity and return
+    end
+
+    new_customer = json["customer"] || {}
     address = new_customer.delete("address")
+
     @customer = Customer.new new_customer
-    @customer.address = Address.new address
+    @customer.build_address(address)
     @customer.distributor_id = @distributor.id
     @customer.number = Customer.next_number(@distributor)
 
     if @customer.save
       render 'api/v0/customers/create', status: :created, location: api_v0_customer_url(id: @customer.id) and return
     else
-      internal_server_error @customer.errors
+      unprocessable_entity @customer.errors
     end
   end
 
