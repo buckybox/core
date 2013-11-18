@@ -4,20 +4,23 @@ describe "API v0" do
   let(:base_url) { "http://api.test.dev/v0" }
   let(:headers) do
     {
-      "key" => distributor.api_key, # FIXME change to "X-Key" or sth standard
-      "secret" => distributor.api_secret, # FIXME
+      "API-Key" => distributor.api_key,
+      "API-Secret" => distributor.api_secret,
     }
   end
   let(:distributor) { Fabricate(:distributor) }
 
-  shared_examples_for "an authenticated API" do
+  shared_examples_for "an authenticated API" do |method|
     it "requires authentication" do
-      # url = "#{base_url}/customers"
-      get url
-      expect(response.status).to eq 401
+      [
+        {},
+        {"API-Key" => "fuck", "API-Secret" => "off"}
+      ].each do |headers|
+        json_request(method, url, nil, headers)
 
-      get url, nil, { "key" => "fuck", "secret" => "off" }
-      expect(response.status).to eq 401
+        expect(response.status).to eq 401
+        expect(json_response).to have_key "message"
+      end
     end
   end
 
@@ -28,7 +31,7 @@ describe "API v0" do
       end
 
       it "returns embedable attributes" do
-        get "#{url}?embed=#{embedable_attributes.join(',')}", nil, headers
+        json_request :get, "#{url}?embed=#{embedable_attributes.join(',')}", nil, headers
 
         expect(response).to be_success
         expect(json_customer.keys).to eq(model_attributes | embedable_attributes)
@@ -46,50 +49,50 @@ describe "API v0" do
 
     describe "GET /customers" do
       let(:url) { "#{base_url}/customers" }
-      let(:json_customer) { json.first["customer"] }
+      let(:json_customer) { json_response.first["customer"] }
 
       before do
-        get url, nil, headers
+        json_request :get, url, nil, headers
         expect(response).to be_success
       end
 
-      it_behaves_like "an authenticated API"
+      it_behaves_like "an authenticated API", :get
       it_behaves_like "a customer"
 
       it "returns the list of customers" do
-        expect(json.size).to eq @customers.size
+        expect(json_response.size).to eq @customers.size
       end
 
       it "accepts an email as a search query" do
         customer = @customers.last
 
-        get "#{url}?email=#{customer.email}", nil, headers
+        json_request :get, "#{url}?email=#{customer.email}", nil, headers
         expect(response).to be_success
-        expect(json.size).to eq 1
-        expect(json.first["customer"]["id"]).to eq customer.id
+        expect(json_response.size).to eq 1
+        expect(json_response.first["customer"]["id"]).to eq customer.id
       end
     end
 
     describe "GET /customers/:id" do
       let(:url) { "#{base_url}/customers/#{customer.id}" }
       let(:customer) { @customers.first }
-      let(:json_customer) { json["customer"] }
+      let(:json_customer) { json_response["customer"] }
 
       before do
-        get url, nil, headers
+        json_request :get, url, nil, headers
         expect(response).to be_success
       end
 
-      it_behaves_like "an authenticated API"
+      it_behaves_like "an authenticated API", :get
       it_behaves_like "a customer"
 
       it "returns the customer" do
-        expect(json.size).to eq 1
-        expect(json["customer"]["id"]).to eq customer.id
+        expect(json_response.size).to eq 1
+        expect(json_response["customer"]["id"]).to eq customer.id
       end
 
       context "with a unknown ID" do
-        before { get "#{url}0000", nil, headers }
+        before { json_request :get, "#{url}0000", nil, headers }
         specify { expect(response).to be_not_found }
       end
 
@@ -97,16 +100,16 @@ describe "API v0" do
         before do
           distributor = Fabricate(:distributor)
           customer = Fabricate(:customer, distributor: distributor)
-          get "#{base_url}/customers/#{customer.id}", nil, headers
+          json_request :get, "#{base_url}/customers/#{customer.id}", nil, headers
         end
 
         specify { expect(response).to be_not_found }
       end
     end
 
-    describe "POST /customers" do
+    describe "json_request :post, /customers" do
       let(:url) { "#{base_url}/customers" }
-      let(:json_customer) { json["customer"] }
+      let(:json_customer) { json_response["customer"] }
       let(:customer) { Customer.last }
       let(:params) do
         '{
@@ -129,48 +132,48 @@ describe "API v0" do
         }'
       end
 
-      # it_behaves_like "an authenticated API", :post # FIXME
+      it_behaves_like "an authenticated API", :post
 
       it "returns the customer" do
-        post url, params, headers
+        json_request :post, url, params, headers
         expect(response.status).to eq 201
 
-        expect(json.size).to eq 1
+        expect(json_response.size).to eq 1
 
         expected_response = JSON.parse(params)
         expected_response["customer"]["id"] = customer.id
-        expect(json).to eq expected_response
+        expect(json_response).to eq expected_response
       end
 
       it "returns the expected attributes" do
-        post url, params, headers
+        json_request :post, url, params, headers
         expect(response.status).to eq 201
 
         expect(json_customer.keys).to eq(model_attributes | embedable_attributes)
       end
 
       it "returns the location of the newly created resource" do
-        post url, params, headers
+        json_request :post, url, params, headers
         expect(response.status).to eq 201
 
         expect(response.headers["Location"]).to eq api_v0_customer_url(id: customer.id)
       end
 
       context "with an empty body" do
-        before { post url, '', headers }
+        before { json_request :post, url, '', headers }
 
         it "returns an error message" do
           expect(response.status).to eq 422
-          expect(json["message"]).to eq "Invalid JSON"
+          expect(json_response["message"]).to eq "Invalid JSON"
         end
       end
 
       context "with missing attributes" do
-        before { post url, '{}', headers }
+        before { json_request :post, url, '{}', headers }
 
         it "returns the missing attributes" do
           expect(response.status).to eq 422
-          expect(json["errors"].keys).to match_array %w(
+          expect(json_response["errors"].keys).to match_array %w(
             email
             first_name
             delivery_service_id
@@ -186,9 +189,9 @@ describe "API v0" do
             invalid_params = JSON.parse(params)
             invalid_params["customer"]["admin_with_super_powers"] = true
 
-            post url, invalid_params.to_json, headers
+            json_request :post, url, invalid_params.to_json, headers
             expect(response.status).to eq 422
-            expect(json["errors"]).to eq '{admin_with_super_powers: "unknown attr"}'
+            expect(json_response["errors"]).to eq '{admin_with_super_powers: "unknown attr"}'
           end
 
           it "validates the delivery service ID" do
@@ -196,18 +199,18 @@ describe "API v0" do
             invalid_params = JSON.parse(params)
             invalid_params["customer"]["delivery_service_id"] = delivery_service.id
 
-            post url, invalid_params.to_json, headers
+            json_request :post, url, invalid_params.to_json, headers
             expect(response.status).to eq 422
-            expect(json["errors"]).to eq '{DL ID is not yours!}'
+            expect(json_response["errors"]).to eq '{DL ID is not yours!}'
           end
         end
 
         context "with missing attributes" do
-          before { post url, '{"admin_with_super_powers": "1337"}', headers }
+          before { json_request :post, url, '{"admin_with_super_powers": "1337"}', headers }
 
           it "returns the missing attributes" do
             expect(response.status).to eq 422
-            expect(json["errors"].keys).to match_array %w(
+            expect(json_response["errors"].keys).to match_array %w(
               email
               first_name
               delivery_service_id
