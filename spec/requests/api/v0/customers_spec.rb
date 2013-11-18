@@ -8,14 +8,14 @@ describe "API v0" do
   describe "customers" do
     shared_examples_for "a customer" do
       it "returns the expected attributes" do
-        expect(json_customer.keys).to eq model_attributes
+        expect(json_customer.keys).to match_array model_attributes
       end
 
       it "returns embedable attributes" do
         json_request :get, "#{url}?embed=#{embedable_attributes.join(',')}", nil, headers
 
         expect(response).to be_success
-        expect(json_customer.keys).to eq(model_attributes | embedable_attributes)
+        expect(json_customer.keys).to match_array(model_attributes | embedable_attributes)
       end
     end
 
@@ -123,13 +123,6 @@ describe "API v0" do
         expected_response = JSON.parse(params)
         expected_response["customer"]["id"] = customer.id
         expect(json_response).to eq expected_response
-      end
-
-      it "returns the expected attributes" do
-        json_request :post, url, params, headers
-        expect(response.status).to eq 201
-
-        expect(json_customer.keys).to eq(model_attributes | embedable_attributes)
       end
 
       it "returns the location of the newly created resource" do
