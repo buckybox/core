@@ -6,7 +6,7 @@ describe "API v0" do
   describe "delivery services" do
     shared_examples_for "a delivery service" do
       it "returns the expected attributes" do
-        expect(json_delivery_service.keys).to eq model_attributes
+        expect(json_delivery_service.keys).to match_array model_attributes
       end
     end
 

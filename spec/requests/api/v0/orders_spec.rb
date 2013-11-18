@@ -6,7 +6,7 @@ describe "API v0" do
   describe "orders" do
     shared_examples_for "an order" do
       it "returns the expected attributes" do
-        expect(json_order.keys).to eq model_attributes
+        expect(json_order.keys).to match_array model_attributes
       end
     end
 
