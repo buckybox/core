@@ -1,4 +1,16 @@
 $(function(){
+  //reads local image data to show preview before saving
+  function readURL(input, target) {
+  if (input.files && input.files[0]) {
+      var reader = new FileReader();
+      reader.readAsDataURL(input.files[0]);
+      reader.onload = function (e) {
+        console.log(target);
+        $(target).attr('src', e.target.result); 
+      }
+    }
+  }
+
   if ($("#organisation").length) {
     // Show/hide spend limit (balance_threshold) extra fields
     $("#distributor_has_balance_threshold").change(function() {
@@ -35,6 +47,27 @@ $(function(){
     });
   }
 
+  if($("#webstore-settings").length){
+    //shows preview of images before saving
+    $("#settings_webstore_form_org_banner_file").change(function(){
+      var update = "#org_banner_file_upload";
+      if($("img"+update).length==0){
+        $("div"+update).html('<img class="image-upload banner" id="'+update+'" src="" />');
+      }
+      var target = $("div"+update).children()[0];
+      readURL(this, target);
+  });
+  
+  $("#settings_webstore_form_team_photo_file").change(function(){
+      var update = "#team_photo_file_upload";
+      if($("img"+update).length==0){
+        $("div"+update).html('<img class="image-upload banner" id="'+update+'" src="" />');
+      }
+      var target = $("div"+update).children()[0];
+      readURL(this, target);
+   });
+  }
+
   if ($("#products").length) {
     // Enable Bootstrap components
     $('[data-toggle="tooltip"]').tooltip();
@@ -56,6 +89,12 @@ $(function(){
       $(".edit .photo .upload").click(function() {
         $(this).closest(".edit").find("#box_box_image").trigger('click');
       });
+
+      //shows preview of image before saving
+      $('.hidden input[id="box_box_image"]').change(function(){
+          var update = $(this).closest(".hidden").siblings('img');
+          readURL(this, update);
+       });
 
       // Toggle links visibility
       $('.edit input[id="box_likes"], .edit input[id="box_dislikes"]').change(function() {
