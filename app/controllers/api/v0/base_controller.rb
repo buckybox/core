@@ -48,10 +48,4 @@ private
   def unprocessable_entity errors
     render json: { errors: errors }, status: :unprocessable_entity and return
   end
-
-  # 500
-  def internal_server_error errors
-    raise "FIXME: we should never return 500"
-    render json: errors.to_json, status: :internal_server_error and return
-  end
 end
