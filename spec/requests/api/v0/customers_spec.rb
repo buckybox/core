@@ -1,29 +1,9 @@
 require "spec_helper"
 
+include ApiHelpers
+
 describe "API v0" do
-  let(:base_url) { "http://api.test.dev/v0" }
-  let(:headers) do
-    {
-      "API-Key" => distributor.api_key,
-      "API-Secret" => distributor.api_secret,
-    }
-  end
-  let(:distributor) { Fabricate(:distributor) }
   let(:delivery_service) { Fabricate(:delivery_service, distributor: distributor) }
-
-  shared_examples_for "an authenticated API" do |method|
-    it "requires authentication" do
-      [
-        {},
-        {"API-Key" => "fuck", "API-Secret" => "off"}
-      ].each do |headers|
-        json_request(method, url, nil, headers)
-
-        expect(response.status).to eq 401
-        expect(json_response).to have_key "message"
-      end
-    end
-  end
 
   describe "customers" do
     shared_examples_for "a customer" do
@@ -40,13 +20,11 @@ describe "API v0" do
     end
 
     before do
-      distributor.generate_api_key!
       @customers ||= Fabricate.times(2, :customer, distributor: distributor)
     end
 
     let(:model_attributes) { %w(id first_name last_name email delivery_service_id) }
     let(:embedable_attributes) { %w(address) }
-
 
     describe "GET /customers" do
       let(:url) { "#{base_url}/customers" }
@@ -108,7 +86,7 @@ describe "API v0" do
       end
     end
 
-    describe "json_request :post, /customers" do
+    describe "POST /customers" do
       let(:url) { "#{base_url}/customers" }
       let(:json_customer) { json_response["customer"] }
       let(:customer) { Customer.last }

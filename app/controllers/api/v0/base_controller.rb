@@ -1,7 +1,6 @@
 class Api::V0::BaseController < ApplicationController
-
-  before_filter :authenticate, :embed_options
   layout false
+  before_filter :authenticate, :embed_options
 
 private
 
