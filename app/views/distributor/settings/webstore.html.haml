@@ -47,7 +47,7 @@
             .hidden
               = f.input_field :team_photo_file, as: :file, style: 'display: none'
               = f.input_field :team_photo_file_cache, as: :hidden
-            - unless current_distributor.company_team_image?
+            - if current_distributor.company_team_image?
               .image-box
                 #team_photo_file_upload.image-rollover
                   .image-message
