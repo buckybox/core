@@ -14,7 +14,9 @@ class Api::V0::OrdersController < Api::V0::BaseController
     if cust_id.nil?
       @orders = @distributor.orders
     else
-      @orders = @distributor.customers.orders.all
+      customer = @distributor.customers.find_by(id: cust_id)
+      return unprocessable_entity({}) if customer.nil?
+      @orders = customer.orders
     end
   end
 
@@ -41,21 +43,21 @@ class Api::V0::OrdersController < Api::V0::BaseController
     }
 }'
   param_group :order
+  before_filter :fetch_json_body, only: :create
   def create
-    new_order = params[:order]
-    return internal_server_error if new_order.nil?
-    new_order = JSON.parse new_order
-    customer = @distributor.customers.find_by(id: new_order['order']['customer_id'])
-    return internal_server_error if customer.nil?
-
+    new_order = @json_body["order"] || {}
+    customer = @distributor.customers.find_by(id: new_order['customer_id'])
+    return unprocessable_entity({"customer_id"=>"cannot find customer"}) if customer.nil?
     @order = Order.new
     @order.account = Account.find_by(customer_id: customer.id)
-    @order.box_id = new_order['order']['box_id']
+    box = @distributor.boxes.find_by(id: new_order['box_id'])
+    return unprocessable_entity({"box_id"=>"cannot find box"}) if box.nil?
+    @order.box_id = box.id
     @customer_id = @order.account.customer_id
     if @order.save
       render 'api/v0/orders/create', status: :created, location: api_v0_order_url(id: @order.id) and return
     else
-      return internal_server_error @order.errors
+      return unprocessable_entity @order.errors
     end
   end
 end

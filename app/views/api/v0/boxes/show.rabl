@@ -1,10 +1,10 @@
 # app/views/api/v0/boxes/show.rabl
 object @box
-attributes :id, :name, :description, :likes, :dislikes, :price_cents, :available_single, :available_weekly, :available_fortnightly, :available_monthly, :extras_limit, :exclusions_limit, :substitutions_limit ,:hidden 
+attributes :id, :name, :description, :price_cents
 
-unless @embed['available_extras'].nil?
+unless @embed['extras'].nil?
 	child :extras do
-	  attributes :id, :name, :unit, :price_cents, :hidden
+	  attributes :id, :name, :unit, :price_cents
 	end
 end
 

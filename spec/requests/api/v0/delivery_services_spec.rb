@@ -14,7 +14,7 @@ describe "API v0" do
       @delivery_services ||= Fabricate.times(2, :delivery_service, distributor: distributor)
     end
 
-    let(:model_attributes) { %w(id name) }
+    let(:model_attributes) { %w(id name fee_cents) }
 
     describe "GET /delivery_services" do
       let(:url) { "#{base_url}/delivery_services" }
