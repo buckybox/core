@@ -9,6 +9,7 @@ describe "API v0" do
     }
   end
   let(:distributor) { Fabricate(:distributor) }
+  let(:delivery_service) { Fabricate(:delivery_service, distributor: distributor) }
 
   shared_examples_for "an authenticated API" do |method|
     it "requires authentication" do
@@ -111,13 +112,13 @@ describe "API v0" do
       let(:url) { "#{base_url}/customers" }
       let(:json_customer) { json_response["customer"] }
       let(:customer) { Customer.last }
-      let(:params) do
-        '{
+      let(:params) do <<-JSON
+        {
           "customer": {
               "first_name": "Will",
               "last_name": "Lau",
               "email": "will@buckybox.com",
-              "delivery_service_id": 56,
+              "delivery_service_id": #{delivery_service.id},
               "address": {
                   "address_1": "12 Bucky Lane",
                   "address_2": "",
@@ -129,7 +130,8 @@ describe "API v0" do
                   "work_phone": "98 765 4321"
               }
           }
-        }'
+        }
+        JSON
       end
 
       it_behaves_like "an authenticated API", :post
@@ -185,13 +187,12 @@ describe "API v0" do
 
       context "with invalid attributes" do
         context "without missing attributes" do
-          it "returns the extra attributes" do
-            invalid_params = JSON.parse(params)
-            invalid_params["customer"]["admin_with_super_powers"] = true
+          it "filters out the extra attributes" do
+            extra_params = JSON.parse(params)
+            extra_params["customer"]["admin_with_super_powers"] = true
 
-            json_request :post, url, invalid_params.to_json, headers
-            expect(response.status).to eq 422
-            expect(json_response["errors"]).to eq '{admin_with_super_powers: "unknown attr"}'
+            json_request :post, url, extra_params.to_json, headers
+            expect(response).to be_success
           end
 
           it "validates the delivery service ID" do
@@ -201,7 +202,7 @@ describe "API v0" do
 
             json_request :post, url, invalid_params.to_json, headers
             expect(response.status).to eq 422
-            expect(json_response["errors"]).to eq '{DL ID is not yours!}'
+            expect(json_response["errors"].keys).to match_array %w(delivery_service_id)
           end
         end
 
