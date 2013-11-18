@@ -95,8 +95,12 @@
       .image-box
         position: relative
         min-height: 82px
-        overflow: hidden
+        max-height: 280px
         text-align: center
+        display: flex
+        align-items: center
+        justify-content: center
+        overflow: hidden
         img
           display: inline-block
         .image-rollover
@@ -105,6 +109,8 @@
           width: 100%
           text-align: center
           vertical-align: middle
+          top: 0
+          left: 0
           .image-message
             position: relative
             display: none
@@ -128,13 +134,22 @@
         background: #FFF
       #org_banner_file_upload
         text-align: center
-        .banner
-          max-height: 160px
+        max-height: 160px
       #team_photo_file_upload
+        display: flex
+        align-items: center
+        justify-content: center
         text-align: center
+        width: 100%
+        overflow: hidden
+        img
+          max-height: auto
         .banner
-          max-height: 280px
-          max-width: 420px
+          width: 100%
+        .image-message
+          top: 0%
+      div#team_photo_file_upload
+        max-height: 280px
       .banner-description
         font-size: 14px
         strong
@@ -449,4 +464,3 @@
     .controls
       label.checkbox
         margin-bottom: 0
-
