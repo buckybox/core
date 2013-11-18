@@ -53,8 +53,10 @@ $(function(){
       var update = "#org_banner_file_upload";
       if($("img"+update).length==0){
         $("div"+update).html('<img class="image-upload banner" id="'+update+'" src="" />');
+        var target = $("div"+update+" .banner");
+      }else{
+        var target = $("img"+update);
       }
-      var target = $("div"+update).children()[0];
       readURL(this, target);
   });
   
@@ -62,8 +64,10 @@ $(function(){
       var update = "#team_photo_file_upload";
       if($("img"+update).length==0){
         $("div"+update).html('<img class="image-upload banner" id="'+update+'" src="" />');
+        var target = $("div"+update+" .banner");
+      }else{
+        var target = $("img"+update);
       }
-      var target = $("div"+update).children()[0];
       readURL(this, target);
    });
   }
