@@ -76,14 +76,14 @@ class Api::V0::CustomersController < Api::V0::BaseController
   before_filter :fetch_json_body, only: :create
   def create
     customer_json = @json_body["customer"] || {}
+    delivery_service_id = customer_json.delete("delivery_service_id")
     address_json = customer_json.delete("address")
 
     customer_parameters = ActionController::Parameters.new(customer_json)
     @customer = Customer.new(customer_parameters.permit(
       :first_name,
       :last_name,
-      :email,
-      :delivery_service_id
+      :email
     ))
 
     address_parameters = ActionController::Parameters.new(address_json)
@@ -99,6 +99,7 @@ class Api::V0::CustomersController < Api::V0::BaseController
     ))
 
     @customer.distributor_id = @distributor.id
+    @customer.delivery_service = @distributor.delivery_services.find_by(id: delivery_service_id)
     @customer.number = Customer.next_number(@distributor)
 
     if @customer.save
