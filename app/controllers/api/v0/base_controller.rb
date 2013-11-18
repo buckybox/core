@@ -6,8 +6,9 @@ class Api::V0::BaseController < ApplicationController
 private
 
   def authenticate
-    api_key = request.headers['key']
-    api_secret = request.headers['secret']
+    api_key = request.headers['API-Key']
+    api_secret = request.headers['API-Secret']
+
     if api_key.nil? || api_secret.nil?
        unauthorized
     else
@@ -36,7 +37,12 @@ private
 
   # 401
   def unauthorized
-    render nothing: true, status: :unauthorized, formats: :json and return
+    render json: { message: "Could not authenticate. You must set the API-Key and API-Secret headers." }, status: :unauthorized and return
+  end
+
+  # 404
+  def not_found
+    render json: { message: "Resource not found" }, status: :not_found and return
   end
 
   # 422
@@ -46,12 +52,7 @@ private
 
   # 500
   def internal_server_error errors
-      raise "FIXME: we should never return 500"
-      render json: errors.to_json, status: :internal_server_error and return
-  end
-
-  # 404
-  def not_found
-      render nothing: true, status: :not_found, formats: :json and return
+    raise "FIXME: we should never return 500"
+    render json: errors.to_json, status: :internal_server_error and return
   end
 end

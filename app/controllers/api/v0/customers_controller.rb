@@ -102,10 +102,9 @@ class Api::V0::CustomersController < Api::V0::BaseController
     @customer.number = Customer.next_number(@distributor)
 
     if @customer.save
-      render 'api/v0/customers/create', status: :created, location: api_v0_customer_url(id: @customer.id) and return
+      render 'api/v0/customers/create', status: :created, location: api_v0_customer_url(id: @customer.id)
     else
       unprocessable_entity @customer.errors
     end
   end
-
 end
