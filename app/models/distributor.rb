@@ -530,12 +530,6 @@ class Distributor < ActiveRecord::Base
     delivery_services.count.zero? || boxes.count.zero?
   end
 
-  def facebook_url
-    link = read_attribute(:facebook_url)
-    return '' if link.blank?
-    link[0..6] == "http://" ? link : "http://#{link}"
-  end
-
   def webstore_status_changed?
     active_webstore_changed?
   end
