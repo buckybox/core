@@ -50,23 +50,24 @@ $(function(){
   if($("#webstore-settings").length){
     //shows preview of images before saving
     $("#settings_webstore_form_org_banner_file").change(function(){
-      var update = "#org_banner_file_upload";
-      if($("img"+update).length==0){
-        $("div"+update).html('<img class="image-upload banner" id="'+update+'" src="" />');
-        var target = $("div"+update+" .banner");
+      var update = "org_banner_file_upload";
+      if($("img#"+update).length==0){
+        $("div#"+update).html('<img class="image-upload banner" id="'+update+'" src="" />');
+        var target = $("div#"+update+" .banner");
       }else{
-        var target = $("img"+update);
+        var target = $("img#"+update);
       }
       readURL(this, target);
+      $(target).parent().siblings("img").css("opacity",0);
   });
   
   $("#settings_webstore_form_team_photo_file").change(function(){
-      var update = "#team_photo_file_upload";
-      if($("img"+update).length==0){
-        $("div"+update).html('<img class="image-upload banner" id="'+update+'" src="" />');
-        var target = $("div"+update+" .banner");
+      var update = "team_photo_file_upload";
+      if($("img#"+update).length==0){
+        $("div#"+update).html('<img class="image-upload banner" id="'+update+'" src="" />');
+        var target = $("div#"+update+" .banner");
       }else{
-        var target = $("img"+update);
+        var target = $("img#"+update);
       }
       readURL(this, target);
    });
