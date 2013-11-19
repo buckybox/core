@@ -15,7 +15,7 @@ class Api::V0::OrdersController < Api::V0::BaseController
       @orders = @distributor.orders
     else
       customer = @distributor.customers.find_by(id: cust_id)
-      return unprocessable_entity({}) if customer.nil?
+      return unprocessable_entity(customer_id: "can't be blank") if customer.nil?
       @orders = customer.orders
     end
   end
@@ -46,15 +46,23 @@ class Api::V0::OrdersController < Api::V0::BaseController
   before_filter :fetch_json_body, only: :create
   def create
     new_order = @json_body["order"] || {}
-    customer = @distributor.customers.find_by(id: new_order['customer_id'])
-    return unprocessable_entity({"customer_id"=>"cannot find customer"}) if customer.nil?
     @order = Order.new
-    @order.account = Account.find_by(customer_id: customer.id)
-    box = @distributor.boxes.find_by(id: new_order['box_id'])
-    return unprocessable_entity({"box_id"=>"cannot find box"}) if box.nil?
-    @order.box_id = box.id
-    @customer_id = @order.account.customer_id
-    if @order.save
+
+    if customer = @distributor.customers.find_by(id: new_order['customer_id'])
+      @order.account = customer.account
+    else
+      @order.errors.add(:customer_id, "can't be blank")
+    end
+
+    if box = @distributor.boxes.find_by(id: new_order['box_id'])
+      @order.box = box
+    else
+      @order.errors.add(:box_id, "can't be blank")
+    end
+
+    if @order.errors.empty? && @order.save
+      @customer_id = customer.id
+
       render 'api/v0/orders/create', status: :created, location: api_v0_order_url(id: @order.id) and return
     else
       return unprocessable_entity @order.errors
