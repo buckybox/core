@@ -60,7 +60,8 @@
 
         - @import_transaction_lists.each do |import_transaction_list|
           %tr.draft_import_transaction_list
-            %td{ colspan: 5 }= render partial: 'draft_transactions', locals: { import_transaction_list: import_transaction_list }
+            %td{ colspan: 5 }
+              .action-background= render partial: 'draft_transactions', locals: { import_transaction_list: import_transaction_list }
           %tr.hidden
 
         = render partial: 'distributor/import_transactions/rows'

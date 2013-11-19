@@ -1,6 +1,6 @@
 %h1 Bucky Box Style Sheet
 
-%blockquote Discipline will set you free.
+%blockquote #{link_to "Live Style Sheet", "https://www.dropbox.com/s/cacfw3oj1dy9pgp/xxx-master-styling-guide.fw.png"} by Will
 
 %ul
   %li Use these shared styles and #{link_to "Bootstrap", "http://twitter.github.io/bootstrap/"} styles when possible, fallback to custom CSS only if necessary.
@@ -9,6 +9,12 @@
     Unless stated otherwise, all text in HTML markup should be lowercase and
     = link_to "text-transform", "https://developer.mozilla.org/en-US/docs/Web/CSS/text-transform"
     will enforce consistency for each class.
+
+%ul
+  %li.grey Grey #EFEFEF
+  %li.yellow Yellow #FAE1A0
+  %li.red Red #F9D9D9
+  %li.green Green #D4E4C4
 
 %table.table.table-hover.table-bordered
   %thead
@@ -73,6 +79,23 @@
       %td
         %ul
           %li= link_to "Other types (colors) available", "http://twitter.github.io/bootstrap/components.html#labels-badges"
+    %tr
+      %td .label.label-warning
+      %td
+        Warning labels
+      %td
+        .label.label-warning This will affect 8 customers
+      %td
+        %ul
+    %tr
+      %td fieldset > legend
+      %td
+        Form section
+      %td
+        %fieldset
+          %legend Legend
+          %em form fields
+      %td
     %tr
       %td .customer-badge
       %td Customer badge
@@ -222,4 +245,3 @@
       %td
         .ajax-spinner
       %td
-

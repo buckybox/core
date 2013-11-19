@@ -15,7 +15,9 @@ describe Distributor::Defaults do
            parameter_name: "veg-people",
            name: "Veg People",
            save: true,
-           "email_templates=" => true
+           bank_information: double.as_null_object,
+           omni_importers: double.as_null_object,
+           "email_templates=" => true,
           )
   end
 

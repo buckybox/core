@@ -3,8 +3,12 @@
 //------ Site wide colours
 
 $note-colour: #FEF7DF
-$action-colour: #FAE1A3
+$action-colour: #FAE1A0
 $action-colour-hover: darken($action-colour, 15%)
+$green-colour: #D4E4C4
+$grey-colour: #EFEFEF
+$red-colour: #F9D9D9
+$yellow-colour: #FAE1A0
 $archived-colour: #F0F0F0
 $forcasting-colour: #D4E2C5
 $error-colour: #F69585
@@ -65,16 +69,23 @@ input, textarea, select
   &.required, &[required]
     background-color: #FEFAE4
 
+.background-yellow
+  background-color: #FEFAE4
+  input, textarea, select
+    background-color: #FFF
+
+fieldset
+  margin-bottom: 2em
+
 fieldset > legend, .modal-header > span:not(.raw), .heading
   font-weight: bold
   font-size: 12px
   background: #DFDFCF
   color: #333
   padding: 2px 4px
-  margin: .5em 0
+  margin: 0 0 .5em 0
   text-transform: uppercase
   width: inherit
-  font-size: 12px
   line-height: 14px
   +border-radius(3px)
   +single-text-shadow(0px, 0px, 0px)
@@ -134,14 +145,35 @@ table.no-horizontal-dividers
   font-size: large
   font-weight: bold
 
-.action
+.action, .required-action
   display: block
-  padding: 5px 0px
+  padding: 2px 0px
   text-align: center
   background-color: $action-colour
   +border-radius(0.4em)
   &:hover
     background-color: $action-colour-hover
+
+.action-background
+  margin: 0
+  padding: 4px
+  background-color: $action-colour
+  +border-radius(4px)
+
+.required-action
+  color: #930 !important
+  background-color: #F9D9D9
+  &:hover
+    background-color: darken(#F9D9D9, 15%)
+
+.green
+  background-color: $green-colour
+.grey
+  background-color: $grey-colour
+.red
+  background-color: $red-colour
+.yellow
+  background-color: $yellow-colour
 
 .secondary-action
   font-size: 13px
@@ -161,6 +193,11 @@ table.no-horizontal-dividers
     display: none
   &.label-status
     font-size: 12px
+  &.label-warning
+    font-size: 12px
+    background-color: #C00
+    color: #FFF
+    text-transform: none
 
 [class="label"] // don't match "label-*"
   background: #DFDFCF
@@ -220,4 +257,29 @@ table.no-horizontal-dividers
     padding: 0 0 0 20px
   .span6:first-child
     padding: 0 20px 0 0
+
+// Fix textfield width issue so that they match parents width. See webstore settings page for
+// example, search for ".input-block-level"
+// http://stackoverflow.com/questions/11232627/perfect-100-width-of-parent-container-for-a-bootstrap-input
+.input-prepend.input-block-level 
+  display: table
+  width: 100%
+
+.input-prepend.input-block-level .add-on 
+  display: table-cell
+  background-color: white
+
+.input-prepend.input-block-level > input 
+  +box-sizing(border-box)
+  height: 30px
+  display: table-cell
+  width: 100%
+  border-left-style: none
+
+.form-actions
+  text-align: right
+  background-color: inherit
+
+.spacer
+  margin-top: 2em
 

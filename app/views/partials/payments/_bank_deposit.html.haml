@@ -1,0 +1,23 @@
+.row-fluid
+  .span12.payment-message
+    .row-fluid
+      .span12
+        %strong
+          Please deposit funds into
+          %span.bank_deposit_name #{form_object.bank_name}
+
+    .row-fluid
+      .span12
+        Account Name:
+        %span.bank_deposit_account_name #{form_object.bank_account_name}
+        %br
+        Account Number:
+        %span.bank_deposit_account_number #{form_object.bank_account_number}
+        %br
+        Reference: #{form_object.customer_number || "0001"}
+
+    .row-fluid
+      .span12.note
+        = simple_format(form_object.note, { class: "bank_deposit_customer_message" }, sanitize: false)
+
+

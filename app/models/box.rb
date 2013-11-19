@@ -1,4 +1,17 @@
 class Box < ActiveRecord::Base
+  HUMANIZED_ATTRIBUTES = {
+    price_cents: "Price"
+  }
+
+  EXTRAS_UNLIMITED = -1
+  EXTRAS_DISABLED = 0
+
+  # [["disable extras", 0], ["allow any number of extra items", -1],
+  # ["allow 1 extra items", 1], ["allow 2 extra items", 2], ... ["allow n extra items, n]]
+  SPECIAL_EXTRA_OPTIONS = ['disable extras', 'allow any number of extra items'].zip([EXTRAS_DISABLED, EXTRAS_UNLIMITED])
+  COUNT_EXTRA_OPTIONS = 1.upto(10).map{ |i| "allow #{i} extra items" }.zip(1.upto(10).to_a)
+  EXTRA_OPTIONS = (SPECIAL_EXTRA_OPTIONS + COUNT_EXTRA_OPTIONS)
+
   belongs_to :distributor
 
   has_many :orders
@@ -9,36 +22,28 @@ class Box < ActiveRecord::Base
 
   # Setup accessible (or protected) attributes for your model
   attr_accessible :distributor, :name, :description, :likes, :dislikes, :price, :available_single, :available_weekly,
-    :available_fourtnightly, :box_image, :box_image_cache, :remove_box_image, :extras_limit, :extra_ids, :hidden, :exclusions_limit, :substitutions_limit
+    :available_fourtnightly, :box_image, :box_image_cache, :remove_box_image, :extras_limit, :extra_ids, :hidden, :visible, :exclusions_limit, :substitutions_limit, :extras
 
   validates_presence_of :distributor, :name, :description, :price
   validates :extras_limit, numericality: { greater_than: -2 }
+  validates :name, length: {maximum: 80}
+  validates :price_cents, numericality: { greater_than_or_equal_to: 0, less_than: 1E8 }
 
   monetize :price_cents
 
-  default_value_for :extras_limit, 0
+  default_value_for :extras_limit, EXTRAS_DISABLED
   default_value_for :substitutions_limit, 0
   default_value_for :exclusions_limit, 0
 
   default_scope order(:name)
   scope :not_hidden, where(hidden: false)
 
-  # [["disable extras", 0], ["allow any number of extra items", -1],
-  # ["allow 1 extra items", 1], ["allow 2 extra items", 2], ... ["allow n extra items, n]]
-  SPECIAL_EXTRA_OPTIONS = ['disable extras', 'allow any number of extra items'].zip([0, -1])
-  COUNT_EXTRA_OPTIONS = 1.upto(10).map{ |i| "allow #{i} extra items" }.zip(1.upto(10).to_a)
-  EXTRA_OPTIONS = (SPECIAL_EXTRA_OPTIONS + COUNT_EXTRA_OPTIONS)
+  def exclusions?; dislikes?; end
+  def substitutions?; likes?; end
+  def visible; !hidden; end
 
-  def big_thumb_url
-    box_image.thumb.url
-  end
-
-  def webstore_image_url
-    box_image.webstore.url
-  end
-
-  def customisable?
-    dislikes? || extras_allowed?
+  def visible=(value)
+    write_attribute(:hidden, !value.to_bool)
   end
 
   def extras_allowed?
@@ -46,12 +51,13 @@ class Box < ActiveRecord::Base
   end
 
   def extras_unlimited?
-    extras_limit == -1
+    extras_limit == EXTRAS_UNLIMITED
   end
 
   def extras_not_allowed?
-    (extras_limit.blank? || extras_limit.zero?)
+    extras_limit.blank? || extras_limit == EXTRAS_DISABLED
   end
+  alias_method :extras_disabled?, :extras_not_allowed?
 
   def extra_option
     if extras_unlimited?
@@ -63,6 +69,18 @@ class Box < ActiveRecord::Base
     else
       "#{extras_limit} extras allowed"
     end
+  end
+
+  def big_thumb_url
+    box_image.thumb.url
+  end
+
+  def webstore_image_url
+    box_image.webstore.url
+  end
+
+  def customisable?
+    dislikes? || extras_allowed?
   end
 
   def substitutions_limit
@@ -79,10 +97,6 @@ class Box < ActiveRecord::Base
 
   def exclusions_unlimited?
     exclusions_limit == 0
-  end
-
-  def extras_disabled?
-    extras_limit == 0
   end
 
   def has_all_extras?(exclude=[])
@@ -109,5 +123,11 @@ class Box < ActiveRecord::Base
 
   def available_extras
     extras.not_hidden.alphabetically
+  end
+
+private
+
+  def self.human_attribute_name(attr, options = {})
+    HUMANIZED_ATTRIBUTES[attr.to_sym] || super
   end
 end

@@ -3,8 +3,12 @@ require 'draper'
 class ExtraDecorator < Draper::Decorator
   delegate_all
 
-  def price
-    object.price.with_currency(distributor.currency)
+  def formatted_price
+    object.price.zero? ? "Free" : object.price
+  end
+
+  def visible
+    !object.hidden
   end
 
   def with_price_per_unit

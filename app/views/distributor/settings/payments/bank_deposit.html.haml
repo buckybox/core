@@ -1,0 +1,44 @@
+- content_for :payment_type do
+  .row-fluid
+    .span6
+      Activate this area if you plan to accept payments from customers by
+      %strong Bank Deposit.
+
+    .span6
+      %span.heading hint
+      The information entered here will be displayed to customers during the Web Store checkout process.
+
+  = simple_form_for(bank_deposit, as: "bank_deposit", url: distributor_settings_payments_bank_deposit_path, method: "put", html: { class: 'form-horizontal', novalidate: false }) do |f|
+    .row-fluid
+      .span12
+        .important_action{class: current_distributor.payment_bank_deposit ? 'green' : 'red'}
+          = f.input_field :payment_bank_deposit, as: :boolean, inline_label: "Accept payments by <strong>Bank Deposit</strong>".html_safe, label: false, 'data-toggle' => 'collapse', 'data-target' => '#bank_deposit_details'
+
+    #bank_deposit_details.row-fluid.collapse{ class: "#{'in' if current_distributor.payment_bank_deposit}" }
+      .span6
+        %fieldset
+          %legend bank details
+          = f.input_field :name, placeholder: 'Bank name', required: true, class: 'span12'
+          = f.input_field :account_name, placeholder: 'Account name', required: true, class: 'span12'
+
+        %fieldset
+          %legend bank account number
+          = f.input_field :account_number, as: :bank_account_number, country: current_distributor.country.alpha2, value: bank_deposit.account_number
+
+        %fieldset
+          %legend customer message
+          = f.input_field :customer_message,
+            placeholder: "e.g. All payments to be made at least 3 days before delivery ",
+            as: :text, rows: 4, required: false, class: 'span12'
+
+      .span6.pull-right.preview
+        %span.heading customer preview
+        %p.muted This information is displayed to customers at the webstore during the checkout process.
+
+        = render partial: 'partials/payments/bank_deposit', locals: { form_object: NullObject.new }
+
+    .row-fluid
+      = f.button :submit, 'Save', class: 'btn btn-primary pull-right'
+
+= render partial: 'distributor/settings/payments', locals: { type: 'bank_deposit' }
+
