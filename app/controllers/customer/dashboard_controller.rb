@@ -9,9 +9,8 @@ class Customer::DashboardController < Customer::BaseController
     @distributor  = @customer.distributor
     @currency     = @distributor.currency
     @orders       = @customer.orders.active.decorate(context: { currency: @currency })
-    @bank = @distributor.bank_information
-
-    @order = @customer.orders.new
+    @bank         = @distributor.bank_information.decorate
+    @order        = @customer.orders.new
   end
 
   def box

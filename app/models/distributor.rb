@@ -34,14 +34,12 @@ class Distributor < ActiveRecord::Base
 
   belongs_to :country
 
-  DEFAULT_TIME_ZONE               = 'Wellington'
-  DEFAULT_CURRENCY                = 'NZD'
-  DEFAULT_ADVANCED_HOURS          = 18
-  DEFAULT_ADVANCED_DAYS           = 3
-  DEFAULT_AUTOMATIC_DELIVERY_HOUR = 18
-  DEFAULT_AUTOMATIC_DELIVERY_DAYS = 1
-
-  HUMANIZED_ATTRIBUTES = {
+  DEFAULT_TIME_ZONE       = 'Wellington'
+  DEFAULT_CURRENCY        = 'NZD'
+  DEFAULT_ADVANCED_HOURS  = 18
+  DEFAULT_ADVANCED_DAYS   = 3
+  AUTOMATIC_DELIVERY_HOUR = 23
+  HUMANIZED_ATTRIBUTES    = {
     email: "Account login email"
   }
 
@@ -61,7 +59,7 @@ class Distributor < ActiveRecord::Base
     :name, :url, :company_logo, :company_logo_cache, :remove_company_logo,
     :company_team_image, :company_team_image_cache, :remove_company_team_image,
     :completed_wizard, :support_email, :invoice_threshold, :separate_bucky_fee,
-    :advance_hour, :advance_days, :automatic_delivery_hour, :time_zone, :currency,
+    :advance_hour, :advance_days, :time_zone, :currency,
     :country_id, :consumer_delivery_fee, :consumer_delivery_fee_cents,
     :active_webstore, :about, :details, :facebook_url, :city,
     :customers_show_intro, :deliveries_index_packing_intro,
@@ -78,16 +76,12 @@ class Distributor < ActiveRecord::Base
 
   accepts_nested_attributes_for :localised_address
 
-  validates_presence_of :country
-  validates_presence_of :email
-  validates_uniqueness_of :email
+  validates_presence_of :country, :email, :name, :support_email
+  validates_uniqueness_of :email, :name
   validates_uniqueness_of :api_key, allow_nil: true
-  validates_presence_of :name
-  validates_uniqueness_of :name
   validates_uniqueness_of :parameter_name, allow_nil: true
   validates_numericality_of :advance_hour, greater_than_or_equal_to: 0
   validates_numericality_of :advance_days, greater_than_or_equal_to: 0
-  validates_numericality_of :automatic_delivery_hour, greater_than_or_equal_to: 0
   validate :required_fields_for_webstore
   validate :payment_options_valid
   validate :validate_parameter_name
@@ -108,9 +102,8 @@ class Distributor < ActiveRecord::Base
 
   default_value_for :time_zone,               DEFAULT_TIME_ZONE
   default_value_for :currency,                DEFAULT_CURRENCY
-  default_value_for :advance_hour,            DEFAULT_AUTOMATIC_DELIVERY_HOUR
+  default_value_for :advance_hour,            DEFAULT_ADVANCED_HOURS
   default_value_for :advance_days,            DEFAULT_ADVANCED_DAYS
-  default_value_for :automatic_delivery_hour, DEFAULT_AUTOMATIC_DELIVERY_HOUR
 
   default_value_for :invoice_threshold_cents, -500
   default_value_for :bucky_box_percentage, 0.0175
@@ -150,7 +143,7 @@ class Distributor < ActiveRecord::Base
       distributor.use_local_time_zone do
         local_time = time.in_time_zone
 
-        if local_time.hour == distributor.automatic_delivery_hour
+        if local_time.hour == AUTOMATIC_DELIVERY_HOUR
           # considering the next day as standard across all distributors for now
           successful = distributor.automate_completed_status
 
@@ -167,7 +160,7 @@ class Distributor < ActiveRecord::Base
   def self.update_next_occurrence_caches
     all.each do |distributor|
       distributor.use_local_time_zone do
-        if Time.current.hour == distributor.automatic_delivery_hour
+        if Time.current.hour == AUTOMATIC_DELIVERY_HOUR
           CronLog.log("Updated next order caches for #{distributor.id} at local time #{Time.current.to_s(:pretty)}.")
           distributor.update_next_occurrence_caches 
         end
@@ -207,7 +200,7 @@ class Distributor < ActiveRecord::Base
 
   def update_next_occurrence_caches(date=nil)
     use_local_time_zone do
-      if Time.current.hour >= automatic_delivery_hour
+      if Time.current.hour >= AUTOMATIC_DELIVERY_HOUR
         date ||= Date.current.tomorrow
       else
         date ||= Date.current
@@ -248,7 +241,7 @@ class Distributor < ActiveRecord::Base
   # Date is always in distributors timezone
   def automate_completed_status
     # If we have missed the cutoff point add a day so we start auto deliveries from today
-    if_passed  = ( automatic_delivery_hour < Time.current.hour ? 1 : 0 )
+    if_passed  = ( AUTOMATIC_DELIVERY_HOUR < Time.current.hour ? 1 : 0 )
 
     date = Date.yesterday + if_passed.day
 
@@ -417,7 +410,7 @@ class Distributor < ActiveRecord::Base
   end
 
   def spend_limit_on_all_customers=(val)
-    @spend_limit_on_all_customers = (val == '1')
+    @spend_limit_on_all_customers = val.to_bool
   end
 
   def spend_limit_on_all_customers
@@ -538,6 +531,12 @@ class Distributor < ActiveRecord::Base
     delivery_services.count.zero? || boxes.count.zero?
   end
 
+  def facebook_url
+    link = read_attribute(:facebook_url)
+    return '' if link.blank?
+    link[0..6] == "http://" ? link : "http://#{link}"
+  end
+
   def webstore_status_changed?
     active_webstore_changed?
   end
@@ -563,14 +562,15 @@ private
 
   def required_fields_for_webstore
     if active_webstore_changed? && active_webstore?
-      errors.add(:active_webstore, "Need bank information filled in before enabling the webstore") unless bank_information.present? && bank_information.valid?
       errors.add(:active_webstore, "Need to have a delivery service setup before enabling the webstore") if delivery_services.count.zero?
       errors.add(:active_webstore, "Need to have a box setup before enabling the webstore") if boxes.count.zero?
     end
   end
 
   def payment_options_valid
-    errors.add(:payment_cash_on_delivery, "Must have at least one payment option selected") if payment_options.empty?
+    if active_webstore && payment_options.empty?
+      errors.add(:payment_cash_on_delivery, "At least one payment method must be activated because your Web Store is on")
+    end
   end
 
   def validate_parameter_name

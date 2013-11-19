@@ -5,8 +5,8 @@ class Distributor::DistributorsController < Distributor::ResourceController
 
   def update
     update! do |success, failure|
-      success.html { redirect_to distributor_settings_business_information_url, notice: 'Business information was successfully created.' }
-      failure.html { render 'distributor/settings/business_information' }
+      success.html { redirect_to distributor_settings_organisation_path, notice: 'Organisation was successfully updated.' }
+      failure.html { render 'distributor/settings/organisation' }
     end
   end
 

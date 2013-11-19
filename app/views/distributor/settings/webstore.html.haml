@@ -1,0 +1,122 @@
+- title 'Webstore', false
+- show_settings_sub_nav(:web_store)
+
+#webstore-settings
+  = simple_form_for(@form, url: distributor_settings_webstore_url) do |f|
+    .important_action{class: @form.webstore_enabled ? 'green' : 'red'}
+      = f.input :webstore_enabled, as: :boolean, inline_label: "Activate the <strong>Web Store</strong>".html_safe, label: false
+
+    .row-fluid
+      .span6.column-left
+        %fieldset.org_banner
+          .row-fluid.header
+            .span12
+              .pull-left
+                .blue-circle
+                  .blue-inner-circle
+                    1
+              .pull-left.title Organisation Banner
+          .row-fluid.body
+            .hidden
+              = f.input_field :org_banner_file, as: :file, style: 'display: none'
+              = f.input_field :org_banner_file_cache, as: :hidden
+            - if current_distributor.company_logo?
+              .image-box
+                #org_banner_file_upload.image-rollover
+                  .image-message
+                    update image
+                    960px x 160px
+                = image_tag(current_distributor.company_logo.frame_banner.url, id: "org_banner_file_upload", class: 'image-upload banner')
+            - else
+              #org_banner_file_upload
+                .banner
+                  .banner-description
+                    %strong Your organisation's banner
+                    Appears on your customer login page and Web Store
+                    960px x 160px
+
+        %fieldset.team_photo
+          .row-fluid.header
+            .span12
+              .pull-left
+                .blue-circle
+                  .blue-inner-circle
+                    2
+              .pull-left.title Team Photo
+          .row-fluid.body
+            .hidden
+              = f.input_field :team_photo_file, as: :file, style: 'display: none'
+              = f.input_field :team_photo_file_cache, as: :hidden
+            - if current_distributor.company_team_image?
+              .image-box
+                #team_photo_file_upload.image-rollover
+                  .image-message
+                    update image
+                    420px x 280px
+                = image_tag(current_distributor.company_team_image.half_size_photo.url, id: "team_photo_file_upload", class: 'image-upload banner')
+            - else
+              #team_photo_file_upload
+                .banner
+                  .banner-description
+                    %strong Your team photo
+                    Appears on your Web Store sidebar
+                    %br
+                    420px x 280px
+
+        %fieldset.sidebar_description
+          .row-fluid.header
+            .span12
+              .pull-left
+                .blue-circle
+                  .blue-inner-circle
+                    3
+              .pull-left.title Sidebar Description
+          .row-fluid.body
+            = f.input_field :sidebar_description, as: :text, placeholder: "Our Eco-farm was born out of a desire to produce quality...", label: false, rows: 10
+
+        %fieldset.sidebar_description
+          .row-fluid.header
+            .span12
+              .pull-left
+                .blue-circle
+                  .blue-inner-circle
+                    4
+              .pull-left.title Other Details
+          .row-fluid.body
+            .facebook_link
+              .input-prepend.input-block-level
+                %span.add-on
+                  %i.icon-face
+                = f.input_field :facebook, placeholder: "Facebook page URL", label: false
+            .phone
+              .input-prepend.input-block-level
+                %span.add-on
+                  %i.icon-cellphone
+                = f.input_field :phone, placeholder: "Customer service phone number", label: false
+
+      .span6.column-right.hidden-phone
+        .row-fluid
+          .span12.image-overlay
+            = image_tag("webstore-preview.jpg")
+            .overlay.one
+              .blue-circle
+                .blue-inner-circle
+                  1
+            .overlay.two
+              .blue-circle
+                .blue-inner-circle
+                  2
+            .overlay.three
+              .blue-circle
+                .blue-inner-circle
+                  3
+            .overlay.four
+              .blue-circle
+                .blue-inner-circle
+                  4
+    
+    .row-fluid.line-break
+      .span12
+        .pull-right
+          = f.submit 'cancel' , class: 'btn btn-link'
+          = f.submit 'Save', class: 'btn btn-primary'

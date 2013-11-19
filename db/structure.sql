@@ -414,7 +414,6 @@ CREATE TABLE bank_information (
     customer_message text,
     created_at timestamp without time zone,
     updated_at timestamp without time zone,
-    bsb_number character varying(255),
     cod_payment_message text
 );
 
@@ -1173,7 +1172,6 @@ CREATE TABLE distributors (
     time_zone character varying(255),
     advance_hour integer,
     advance_days integer,
-    automatic_delivery_hour integer,
     currency character varying(255),
     country_id integer,
     consumer_delivery_fee_cents integer,
@@ -1214,6 +1212,7 @@ CREATE TABLE distributors (
     collect_delivery_note boolean DEFAULT true NOT NULL,
     require_delivery_note boolean DEFAULT false NOT NULL,
     notify_for_new_webstore_order boolean DEFAULT true NOT NULL,
+    sidebar_description text,
     api_key character varying(255),
     api_secret character varying(255)
 );
@@ -3733,6 +3732,12 @@ INSERT INTO schema_migrations (version) VALUES ('20130826015549');
 INSERT INTO schema_migrations (version) VALUES ('20130826051545');
 
 INSERT INTO schema_migrations (version) VALUES ('20130827002646');
+
+INSERT INTO schema_migrations (version) VALUES ('20130910033818');
+
+INSERT INTO schema_migrations (version) VALUES ('20130923050455');
+
+INSERT INTO schema_migrations (version) VALUES ('20130926033607');
 
 INSERT INTO schema_migrations (version) VALUES ('20131016215622');
 

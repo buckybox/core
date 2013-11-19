@@ -16,7 +16,9 @@ module Bucky
       country.time_zone if country
     end
 
-    def get_address_form country_code, model = "distributor"
+    # TODO: this is terribly filthy
+    def get_address_form country_code, resource
+      model_name = resource.class.model_name.downcase
       format = Biggs::Format.new(country_code).format_string
 
       unless format
@@ -34,16 +36,18 @@ module Bucky
       }
 
       format.split("\n").map do |line|
-        fields = line.scan(/{{(.+?)}}/).flatten - ["recipient", "country"]
+        fields = line.scan(/{{(.+?)}}/).flatten - %w(recipient country)
+        width = 100.0 / fields.size
 
         html = fields.map do |field|
+          value = resource.localised_address && resource.localised_address.public_send(field)
           %Q{
-            <input id="#{model}_localised_address_#{field}" name="#{model}[localised_address_attributes][#{field}]" placeholder="#{field_descriptions[field]}" #{'required="required"' if field.in? required_fields} type="text">
-          }
+            <input id="#{model_name}_localised_address_#{field}" name="#{model_name}[localised_address_attributes][#{field}]" placeholder="#{field_descriptions[field]}" #{'required="required"' if field.in? required_fields} type="text" style="width: #{width}%" value="#{value}">
+          }.strip
         end.join
 
         "<div>#{html}</div>" if html.present?
-      end.join
+      end.join.html_safe
     end
 
     def get_geoip_info ip_address

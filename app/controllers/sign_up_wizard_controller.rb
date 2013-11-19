@@ -16,7 +16,7 @@ class SignUpWizardController < ApplicationController
     country = Country.where(alpha2: params[:country]).first
     raise "Invalid country" if country.nil?
 
-    @fields = Bucky::Geolocation.get_address_form country.alpha2
+    @fields = Bucky::Geolocation.get_address_form country.alpha2, Distributor.new
     @banks = OmniImporter.bank_deposit.where(country_id: country.id).pluck(:bank_name).uniq.sort
 
     render json: { address: @fields, banks: @banks }
@@ -48,7 +48,7 @@ class SignUpWizardController < ApplicationController
       country_id: country.id, bank_name: bank_name
     )
 
-    if payment_paypal == "1"
+    if payment_paypal.try(:to_bool)
       # NOTE: using hardcoded PayPal omni until we get more formats
       @distributor.omni_importers << OmniImporter.where(id: OmniImporter::PAYPAL_ID)
     end
@@ -62,7 +62,7 @@ class SignUpWizardController < ApplicationController
 
       send_follow_up_email
 
-      if details[:payment_bank_deposit] == "1" && @distributor.omni_importers.bank_deposit.empty?
+      if details[:payment_bank_deposit].to_bool && @distributor.omni_importers.bank_deposit.empty?
         send_bank_setup_email(bank_name)
       end
 
