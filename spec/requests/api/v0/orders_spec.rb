@@ -41,8 +41,16 @@ describe "API v0" do
 
         json_request :get, "#{url}?customer_id=#{customer.id}", nil, headers
         expect(response).to be_success
-        expect(json_response.size).to eq 1
-        expect(json_response.first["order"]["id"]).to eq order.id
+        expect(json_response.size).to eq customer.orders.size
+      end
+
+      context "with an unknown customer ID" do
+        it "returns an empty result" do
+          json_request :get, "#{url}?customer_id=0", nil, headers
+
+          expect(response.status).to eq 422
+          expect(json_response["errors"].keys).to match_array %w(customer_id)
+        end
       end
     end
 
@@ -82,7 +90,6 @@ describe "API v0" do
     describe "POST /orders" do
       let(:url) { "#{base_url}/orders" }
       let(:json_order) { json_response["order"] }
-      let(:order) { order.last }
       let(:params) do <<-JSON
         {
           "order": {
@@ -102,7 +109,8 @@ describe "API v0" do
         expect(json_response.size).to eq 1
 
         expected_response = JSON.parse(params)
-        expected_response["order"]["id"] = order.id
+        expected_response["order"]["id"] = Order.maximum(:id)
+        expected_response["order"]["active"] = false
         expect(json_response).to eq expected_response
       end
 
@@ -110,14 +118,14 @@ describe "API v0" do
         json_request :post, url, params, headers
         expect(response.status).to eq 201
 
-        expect(json_order.keys).to eq(model_attributes | embedable_attributes)
+        expect(json_order.keys).to match_array(model_attributes | embedable_attributes)
       end
 
       it "returns the location of the newly created resource" do
         json_request :post, url, params, headers
         expect(response.status).to eq 201
 
-        expect(response.headers["Location"]).to eq api_v0_order_url(id: order.id)
+        expect(response.headers["Location"]).to eq api_v0_order_url(id: json_order["id"])
       end
 
       context "with an empty body" do
