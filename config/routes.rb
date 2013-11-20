@@ -8,7 +8,7 @@ BuckyBox::Application.routes.draw do
   devise_for :customers,    controllers: { sessions: 'customer/sessions', passwords: 'customer/passwords' }
 
   match "/delayed_job" => DelayedJobWeb, anchor: false
-  match '/' => 'api#index', :constraints => API_SUBDOMAIN
+  match '/' => 'api#index', constraints: API_SUBDOMAIN
 
   root to: 'distributor/customers#index'
 
@@ -252,7 +252,7 @@ BuckyBox::Application.routes.draw do
     end
   end
 
-  namespace :api, :path => "", :defaults => {:format => :json}, :constraints => API_SUBDOMAIN do
+  namespace :api, path: "", defaults: { format: :json }, constraints: API_SUBDOMAIN do
     namespace :v0 do
       resources :customers
       resources :orders
