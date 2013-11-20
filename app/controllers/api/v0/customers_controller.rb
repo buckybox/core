@@ -1,4 +1,6 @@
 class Api::V0::CustomersController < Api::V0::BaseController
+  before_filter :fetch_json_body, only: :create
+
   def_param_group :address do
     # :nocov:
     param :address, Object, "Customer Address", required: true do
@@ -73,7 +75,6 @@ class Api::V0::CustomersController < Api::V0::BaseController
 }'
 
   param_group :customer
-  before_filter :fetch_json_body, only: :create
   def create
     customer_json = @json_body["customer"] || {}
     delivery_service_id = customer_json.delete("delivery_service_id")

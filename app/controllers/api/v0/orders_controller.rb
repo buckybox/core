@@ -1,4 +1,6 @@
 class Api::V0::OrdersController < Api::V0::BaseController
+  before_filter :fetch_json_body, only: :create
+
   def_param_group :order do
     param :order, Hash, "Json object representing the new order", required: true do
       param :box_id, Integer, "ID of the box", required: true
@@ -43,7 +45,6 @@ class Api::V0::OrdersController < Api::V0::BaseController
     }
 }'
   param_group :order
-  before_filter :fetch_json_body, only: :create
   def create
     new_order = @json_body["order"] || {}
     @order = Order.new
