@@ -1,0 +1,31 @@
+!!! 5
+
+%html
+  %head
+    %meta{ charset: 'utf-8' }
+    %title= "Bucky Box - API"
+
+    %style{:type => "text/css"}
+      :sass
+        dt
+          float: left
+          margin-right: .5em
+          &:after
+            content: ":"
+
+  %body
+    %strong Hi #{current_distributor.contact_name}
+
+    - if current_distributor.api_key
+      %dl
+        %dt API-Key
+        %dd= current_distributor.api_key
+        %dt API-Secret
+        %dd= current_distributor.api_secret
+        %dt Documentation
+        %dd= link_to(apipie_apipie_url, apipie_apipie_url)
+
+    - else
+      %p Please #{mail_to Figaro.env.support_email, "contact us"} if you wish to use the Bucky Box API.
+
+
