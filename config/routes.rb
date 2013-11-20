@@ -1,4 +1,4 @@
-API_SUBDOMAIN = { subdomain: /\A(staging-)?api\Z/ }
+API_SUBDOMAIN = { subdomain: /\A(staging-)?api\Z/ } unless defined? API_SUBDOMAIN
 
 BuckyBox::Application.routes.draw do
   apipie
