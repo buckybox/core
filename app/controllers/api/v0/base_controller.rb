@@ -4,18 +4,19 @@ class Api::V0::BaseController < ApplicationController
 
 private
 
-  def authenticate
-    api_key = request.headers['API-Key']
-    api_secret = request.headers['API-Secret']
+  def api_key
+    request.headers['API-Key']
+  end
 
-    if api_key.nil? || api_secret.nil?
-       unauthorized
-    else
-      @distributor = Distributor.find_by(api_key: api_key)
-      if @distributor.nil? || @distributor.api_secret != api_secret
-        unauthorized
-      end
-    end
+  def api_secret
+    request.headers['API-Secret']
+  end
+
+  def authenticate
+    return unauthorized if api_key.nil? || api_secret.nil?
+
+    @distributor = Distributor.find_by(api_key: api_key, api_secret: api_secret)
+    return unauthorized if @distributor.nil?
   end
 
   # hash parameters (2nd+ level json is only provided when requested via ?embed={object} )
