@@ -15,8 +15,9 @@ describe "API v0" do
     end
 
     let(:customer) { Fabricate(:customer, distributor: distributor) }
-    let(:box) { Fabricate(:box, distributor: distributor) }
-    let(:model_attributes) { %w(id box_id customer_id active) }
+    let(:extras) { Fabricate.times(2, :extra, distributor: distributor) }
+    let(:box) { Fabricate(:box, distributor: distributor, extras: extras) }
+    let(:model_attributes) { %w(id box_id customer_id active extras) }
     let(:embedable_attributes) { %w() }
 
     describe "GET /orders" do
@@ -93,8 +94,22 @@ describe "API v0" do
       let(:params) do <<-JSON
         {
           "order": {
-              "box_id": #{box.id},
-              "customer_id": #{customer.id}
+            "box_id": #{box.id},
+            "customer_id": #{customer.id},
+            "extras": [
+              {
+                "extra": {
+                  "id": #{extras.first.id},
+                  "quantity": 1
+                }
+              },
+              {
+                "extra": {
+                  "id": #{extras.last.id},
+                  "quantity": 3
+                }
+              }
+            ]
           }
         }
         JSON
