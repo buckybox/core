@@ -17,8 +17,8 @@ describe "API v0" do
     let(:customer) { Fabricate(:customer, distributor: distributor) }
     let(:extras) { Fabricate.times(2, :extra, distributor: distributor) }
     let(:box) { Fabricate(:box, distributor: distributor, extras: extras) }
-    let(:model_attributes) { %w(id box_id customer_id active) }
-    let(:model_attributes_extras) { model_attributes + %w(extras) }
+    let(:model_attributes) { %w(id box_id customer_id active start_date next_date) }
+    let(:model_attributes_extras) { model_attributes + %w(extras extras_one_off) }
     let(:embedable_attributes) { %w() }
 
     describe "GET /orders" do
@@ -97,6 +97,8 @@ describe "API v0" do
           "order": {
             "box_id": #{box.id},
             "customer_id": #{customer.id},
+            "frequency": "weekly",
+            "extras_one_off": true,
             "extras": [
               {
                 "extra": {
@@ -127,6 +129,15 @@ describe "API v0" do
         expected_response["order"]["id"] = Order.maximum(:id)
         expected_response["order"]["active"] = false
         expect(json_response).to eq expected_response
+      end
+
+      it "creates the order properly" do
+        json_request :post, url, params, headers
+
+        new_order = Order.find(json_response["order"]["id"])
+        expect(new_order.extras.size).to eq 2
+        expect(new_order.extras_one_off).to be_true
+        expect(new_order.schedule_rule.frequency).to eq "weekly"
       end
 
       it "returns the expected attributes" do
