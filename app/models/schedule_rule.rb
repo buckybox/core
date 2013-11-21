@@ -1,5 +1,5 @@
 class ScheduleRule < ActiveRecord::Base
-  attr_accessible :fri, :mon, :month_day, :recur, :sat, :start, :sun, :thu, :tue, :wed, :order_id, :week
+  attr_accessible :fri, :mon, :recur, :sat, :start, :sun, :thu, :tue, :wed, :order_id, :week
   attr_accessor :next_occurrence
 
   DAYS = [:sun, :mon, :tue, :wed, :thu, :fri, :sat] #Order of this is important, it matches sunday: 0, monday: 1 as is standard
