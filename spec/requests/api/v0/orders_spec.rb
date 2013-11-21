@@ -92,12 +92,20 @@ describe "API v0" do
     describe "POST /orders" do
       let(:url) { "#{base_url}/orders" }
       let(:json_order) { json_response["order"] }
+      let(:substitutes) { Fabricate.times(2, :line_item, distributor: distributor) }
+      let(:exclusions) { Fabricate.times(2, :line_item, distributor: distributor) }
       let(:params) do <<-JSON
         {
           "order": {
             "box_id": #{box.id},
             "customer_id": #{customer.id},
             "frequency": "weekly",
+            "substitutes": [
+              #{substitutes.map(&:id).join(',')}
+            ],
+            "exclusions": [
+              #{exclusions.map(&:id).join(',')}
+            ],
             "extras_one_off": true,
             "extras": [
               {
@@ -139,6 +147,8 @@ describe "API v0" do
         expect(new_order.extras_count).to eq 4
         expect(new_order.extras_one_off).to be_true
         expect(new_order.schedule_rule.frequency).to eq "weekly"
+        expect(new_order.substitutions).to eq substitutes
+        expect(new_order.exclusions).to eq exclusions
       end
 
       it "returns the expected attributes" do
