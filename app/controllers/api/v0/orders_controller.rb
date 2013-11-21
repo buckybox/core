@@ -100,7 +100,7 @@ class Api::V0::OrdersController < Api::V0::BaseController
 
     frequency_white_list = %w(single weekly fortnightly)
 
-    if new_order['frequency'].in? frequency_white_list
+    if customer && new_order['frequency'].in?(frequency_white_list)
       schedule_days = customer.delivery_service.schedule_rule.days
       @order.schedule_rule = ScheduleRule.recur_on( Date.today, schedule_days, new_order['frequency'].to_sym)
     else
