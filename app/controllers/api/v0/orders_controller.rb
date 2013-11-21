@@ -10,7 +10,11 @@ class Api::V0::OrdersController < Api::V0::BaseController
     param :order, Hash, "Json object representing the new order", required: true do
       param :customer_id, String, "The customer's ID. If you don't have this refer to customer API."
       param :box_id, Integer, "ID of the box", required: true
-      param :array_param, [ :extra ], 'Array of "extra": { "id": 123, "quantity": 2 }'
+      param :extras_one_off, [ :boolean ], 'True or false determining whether the extras should match the frequency of the box (false), or be a one off (true)'
+      param :extras, [ :extra ], 'Array of extras, refer to above example'
+      param :substitutes, [ :id ], 'Array of integers representing box_item ids that can be substituted for exclusions'
+      param :exclusions, [ :id ], 'Array of integers representing box_item ids that should be excluded'
+      param :frequency, String, "Indicates how often the order should be delivered. Acceptable values are 'one_off', 'weekly', or 'fortnightly'"
     end
   end
 
@@ -96,7 +100,7 @@ class Api::V0::OrdersController < Api::V0::BaseController
 
     frequency_white_list = %w(one_off weekly fortnightly)
     unless new_order['frequency'].in? frequency_white_list
-      @order.schedule_rule = ScheduleBuilder.create( start_date: Date.today, frequency: new_order['frequency'], days: customer.delivery_service.schedule_rule.days )
+      @order.schedule_rule = ScheduleBuilder.build( start_date: Date.today, frequency: new_order['frequency'], days: customer.delivery_service.schedule_rule.days )
     else
       @order.errors.add(:frequency, "must be one of: #{frequency_white_list}")
     end
@@ -104,13 +108,13 @@ class Api::V0::OrdersController < Api::V0::BaseController
     begin
       @order.substitution_ids = new_order['substitutes']
     rescue ActiveRecord::RecordNotFound
-      @order.errors.add(:substitutes, "one of more substitute id are not valid")
+      @order.errors.add(:substitutes, "one or more substitute id are not valid")
     end
 
     begin
       @order.exclusion_ids = new_order['exclusions']
     rescue ActiveRecord::RecordNotFound
-      @order.errors.add(:exclusions, "one of more exclusions id are not valid")
+      @order.errors.add(:exclusions, "one or more exclusions id are not valid")
     end
 
     @order.extras_one_off = new_order['extras_one_off']
