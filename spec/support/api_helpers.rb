@@ -3,7 +3,7 @@ module ApiHelpers
     "http://api.test.dev/v0"
   end
 
-  def distributor
+  def api_distributor
     @distributor ||= Fabricate(:distributor)
     @distributor.generate_api_key!
     @distributor
@@ -11,8 +11,8 @@ module ApiHelpers
 
   def headers
     {
-      "API-Key" => distributor.api_key,
-      "API-Secret" => distributor.api_secret,
+      "API-Key" => api_distributor.api_key,
+      "API-Secret" => api_distributor.api_secret,
     }
   end
 
