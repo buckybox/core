@@ -15,6 +15,14 @@ describe "API v0" do
         expect(response).to be_success
         expect(json_box.keys).to match_array(model_attributes | embedable_attributes)
       end
+
+      describe "box_items" do
+        it "returns the expected attributes" do
+          json_request :get, "#{url}?embed=box_items", nil, headers
+
+          expect(json_box["box_items"].keys).to match_array %w(id name)
+        end
+      end
     end
 
     before do
@@ -22,7 +30,7 @@ describe "API v0" do
     end
 
     let(:model_attributes) { %w(id name description price_cents) }
-    let(:embedable_attributes) { %w(extras images) }
+    let(:embedable_attributes) { %w(images box_items extras extras_limit exclusion_limit substitute_limit) }
 
     describe "GET /boxes" do
       let(:url) { "#{base_url}/boxes" }

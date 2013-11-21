@@ -136,6 +136,7 @@ describe "API v0" do
 
         new_order = Order.find(json_response["order"]["id"])
         expect(new_order.extras.size).to eq 2
+        expect(new_order.extras_count).to eq 4
         expect(new_order.extras_one_off).to be_true
         expect(new_order.schedule_rule.frequency).to eq "weekly"
       end
