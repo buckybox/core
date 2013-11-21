@@ -1,9 +1,9 @@
 require 'spec_helper'
 
-describe Customer::DashboardController, :js do
+describe Customer::DashboardController do
   before do
     @distributor = Fabricate(:distributor_with_information)
-    @customer = Fabricate(:customer, distributor: distributor)
+    @customer = Fabricate(:customer, distributor: @distributor)
   end
 
   describe "GET 'index'" do
