@@ -65,17 +65,17 @@ class Api::V0::OrdersController < Api::V0::BaseController
           7
         ],
         "extras_one_off": false,
-        "extras": [ 
+        "extras": [
           {
-            "extra": { 
-                "id": 11, 
+            "extra": {
+                "id": 11,
                 "quantity": 1
             }
           },
           {
-            "extra": { 
-                "id": 14, 
-                "quantity": 2 
+            "extra": {
+                "id": 14,
+                "quantity": 2
             }
           }
         ]
@@ -99,30 +99,29 @@ class Api::V0::OrdersController < Api::V0::BaseController
     end
 
     frequency_white_list = %w(single weekly fortnightly)
-
     if customer && new_order['frequency'].in?(frequency_white_list)
       schedule_days = customer.delivery_service.schedule_rule.days
-      @order.schedule_rule = ScheduleRule.recur_on( Date.today, schedule_days, new_order['frequency'].to_sym)
+      @order.schedule_rule = ScheduleRule.recur_on(Date.today, schedule_days, new_order['frequency'].to_sym)
     else
-      @order.errors.add(:frequency, "must be one of: #{frequency_white_list}")
+      @order.errors.add(:frequency, "must be one of #{frequency_white_list.join(',')}")
     end
 
     begin
-      @order.substitution_ids = new_order['substitutes']
+      @order.excluded_line_item_ids = new_order['exclusions']
     rescue ActiveRecord::RecordNotFound
-      @order.errors.add(:substitutes, "one or more substitute id are not valid")
+      @order.errors.add(:exclusions, "one or more exclusions ID are not valid")
     end
 
     begin
-      @order.exclusion_ids = new_order['exclusions']
+      @order.substituted_line_item_ids = new_order['substitutes']
     rescue ActiveRecord::RecordNotFound
-      @order.errors.add(:exclusions, "one or more exclusions id are not valid")
+      @order.errors.add(:substitutes, "one or more substitute ID are not valid")
     end
 
     @order.extras_one_off = new_order['extras_one_off']
 
     @extras = new_order['extras']
-    unless @extra.nil? 
+    unless @extras.nil?
       @order.order_extras = @extras.each_with_object({}) do |extra, hash|
         id = extra["extra"]["id"]
         count = extra["extra"]["quantity"]
