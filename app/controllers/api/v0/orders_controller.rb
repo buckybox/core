@@ -1,15 +1,21 @@
 class Api::V0::OrdersController < Api::V0::BaseController
   before_filter :fetch_json_body, only: :create
 
+  def_param_group :extra do
+    param :id
+    param :quantity
+  end
+
   def_param_group :order do
     param :order, Hash, "Json object representing the new order", required: true do
-      param :box_id, Integer, "ID of the box", required: true
       param :customer_id, String, "The customer's ID. If you don't have this refer to customer API."
+      param :box_id, Integer, "ID of the box", required: true
+      param :array_param, [ :extra ], 'Array of "extra": { "id": 123, "quantity": 2 }'
     end
   end
 
   api :GET, '/orders',  "Get list of orders"
-  param :customer_id, String, desc: "Customer's id. Selects orders for that customer."
+  param :customer_id, String, desc: "Customer's id. Selects orders for that customer.", required: true
   example "/orders/?customer_id=123"
   def index
     cust_id = params[:customer_id]
@@ -42,6 +48,20 @@ class Api::V0::OrdersController < Api::V0::BaseController
     "order": {
         "box_id": 12,
         "customer_id": 123
+        "extras": [ 
+          {
+            "extra": { 
+                "id": 11, 
+                "quantity": 1
+            }
+          },
+          {
+            "extra": { 
+                "id": 14, 
+                "quantity": 2 
+            }
+          }
+        ]
     }
 }'
   param_group :order
@@ -59,6 +79,15 @@ class Api::V0::OrdersController < Api::V0::BaseController
       @order.box = box
     else
       @order.errors.add(:box_id, "can't be blank")
+    end
+
+    extras = new_order['extras']
+
+    @order.order_extras = extras.each_with_object({}) do |extra, hash|
+      id = extra["extra"]["id"]
+      count = extra["extra"]["quantity"]
+
+      hash[id] = { count: count }
     end
 
     if @order.errors.empty? && @order.save
