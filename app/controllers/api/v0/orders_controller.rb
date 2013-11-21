@@ -14,7 +14,7 @@ class Api::V0::OrdersController < Api::V0::BaseController
       param :extras, [ :extra ], 'Array of extras, refer to above example'
       param :substitutes, [ :id ], 'Array of integers representing box_item ids that can be substituted for exclusions'
       param :exclusions, [ :id ], 'Array of integers representing box_item ids that should be excluded'
-      param :frequency, String, "Indicates how often the order should be delivered. Acceptable values are 'one_off', 'weekly', or 'fortnightly'"
+      param :frequency, String, "Indicates how often the order should be delivered. Acceptable values are 'single', 'weekly', or 'fortnightly'"
     end
   end
 
@@ -98,9 +98,11 @@ class Api::V0::OrdersController < Api::V0::BaseController
       @order.errors.add(:box_id, "can't be blank")
     end
 
-    frequency_white_list = %w(one_off weekly fortnightly)
-    unless new_order['frequency'].in? frequency_white_list
-      @order.schedule_rule = ScheduleBuilder.build( start_date: Date.today, frequency: new_order['frequency'], days: customer.delivery_service.schedule_rule.days )
+    frequency_white_list = %w(single weekly fortnightly)
+
+    if new_order['frequency'].in? frequency_white_list
+      schedule_days = customer.delivery_service.schedule_rule.days
+      @order.schedule_rule = ScheduleRule.recur_on( Date.today, schedule_days, new_order['frequency'].to_sym)
     else
       @order.errors.add(:frequency, "must be one of: #{frequency_white_list}")
     end

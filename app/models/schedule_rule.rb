@@ -34,7 +34,7 @@ class ScheduleRule < ActiveRecord::Base
     days = days.inject({}){|h, i| h.merge(i => true)} # Turn array into hash
     days = DAYS.inject({}){|h, i| h.merge(i => false)}.merge(days) # Fill out the rest with false
 
-    valid_recur = RECUR - [:single]
+    valid_recur = RECUR
     raise "recur '#{recur}' is not part of #{valid_recur}" unless recur.in? valid_recur
 
     params = days.merge(recur: recur, week: week)
