@@ -19,8 +19,7 @@ describe "API v0" do
       describe "box_items" do
         it "returns the expected attributes" do
           json_request :get, "#{url}?embed=box_items", nil, headers
-
-          expect(json_box["box_items"].keys).to match_array %w(id name)
+          expect(json_box).to have_key "box_items"
         end
       end
     end

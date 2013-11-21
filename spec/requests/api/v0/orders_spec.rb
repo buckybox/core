@@ -141,7 +141,6 @@ describe "API v0" do
 
       it "creates the order properly" do
         json_request :post, url, params, headers
-
         new_order = Order.find(json_response["order"]["id"])
         expect(new_order.extras.size).to eq 2
         expect(new_order.extras_count).to eq 4
@@ -204,7 +203,7 @@ describe "API v0" do
 
             json_request :post, url, invalid_params.to_json, headers
             expect(response.status).to eq 422
-            expect(json_response["errors"].keys).to match_array %w(box_id)
+            expect(json_response["errors"].keys).to match_array %w(box_id exclusions substitutes)
           end
 
           it "validates the customer ID" do
@@ -214,7 +213,7 @@ describe "API v0" do
 
             json_request :post, url, invalid_params.to_json, headers
             expect(response.status).to eq 422
-            expect(json_response["errors"].keys).to match_array %w(customer_id)
+            expect(json_response["errors"].keys).to match_array %w(customer_id exclusions frequency substitutes)
           end
 
           it "validates the frequency" do
@@ -225,7 +224,7 @@ describe "API v0" do
 
               json_request :post, url, invalid_params.to_json, headers
               expect(response.status).to eq 422
-              expect(json_response["errors"].keys).to match_array %w(frequency)
+              expect(json_response["errors"].keys).to match_array %w(frequency exclusions substitutes)
             end
           end
         end
@@ -238,6 +237,7 @@ describe "API v0" do
             expect(json_response["errors"].keys).to match_array %w(
               box_id
               customer_id
+              frequency
             )
           end
         end
