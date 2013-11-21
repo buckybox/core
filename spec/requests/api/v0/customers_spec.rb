@@ -3,7 +3,7 @@ require "spec_helper"
 include ApiHelpers
 
 describe "API v0" do
-  let(:delivery_service) { Fabricate(:delivery_service, distributor: distributor) }
+  let(:delivery_service) { Fabricate(:delivery_service, distributor: api_distributor) }
 
   describe "customers" do
     shared_examples_for "a customer" do
@@ -20,7 +20,7 @@ describe "API v0" do
     end
 
     before do
-      @customers ||= Fabricate.times(2, :customer, distributor: distributor)
+      @customers ||= Fabricate.times(2, :customer, distributor: api_distributor)
     end
 
     let(:model_attributes) { %w(id first_name last_name email delivery_service_id) }
@@ -77,8 +77,8 @@ describe "API v0" do
 
       context "with a customer of another distributor" do
         before do
-          distributor = Fabricate(:distributor)
-          customer = Fabricate(:customer, distributor: distributor)
+          new_distributor = Fabricate(:distributor)
+          customer = Fabricate(:customer, distributor: new_distributor)
           json_request :get, "#{base_url}/customers/#{customer.id}", nil, headers
         end
 

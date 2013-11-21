@@ -25,7 +25,7 @@ describe "API v0" do
     end
 
     before do
-      @boxes ||= Fabricate.times(2, :box, distributor: distributor)
+      @boxes ||= Fabricate.times(2, :box, distributor: api_distributor)
     end
 
     let(:model_attributes) { %w(id name description price_cents extras_limit exclusion_limit substitute_limit) }
@@ -73,8 +73,8 @@ describe "API v0" do
 
       context "with a box of another distributor" do
         before do
-          distributor = Fabricate(:distributor)
-          box = Fabricate(:box, distributor: distributor)
+          new_distributor = Fabricate(:distributor)
+          box = Fabricate(:box, distributor: new_distributor)
           json_request :get, "#{base_url}/boxes/#{box.id}", nil, headers
         end
 

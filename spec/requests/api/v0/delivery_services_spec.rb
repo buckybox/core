@@ -11,7 +11,7 @@ describe "API v0" do
     end
 
     before do
-      @delivery_services ||= Fabricate.times(2, :delivery_service, distributor: distributor)
+      @delivery_services ||= Fabricate.times(2, :delivery_service, distributor: api_distributor)
     end
 
     let(:model_attributes) { %w(id name fee_cents area_of_service) }

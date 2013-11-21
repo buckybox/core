@@ -14,9 +14,9 @@ describe "API v0" do
       @orders ||= Fabricate.times(2, :order, customer: customer, box: box)
     end
 
-    let(:customer) { Fabricate(:customer, distributor: distributor) }
-    let(:extras) { Fabricate.times(2, :extra, distributor: distributor) }
-    let(:box) { Fabricate(:box, distributor: distributor, extras: extras) }
+    let(:customer) { Fabricate(:customer, distributor: api_distributor) }
+    let(:extras) { Fabricate.times(2, :extra, distributor: api_distributor) }
+    let(:box) { Fabricate(:box, distributor: api_distributor, extras: extras) }
     let(:model_attributes) { %w(id box_id customer_id active frequency) }
     let(:model_attributes_post) { model_attributes + %w(extras extras_one_off exclusions substitutes) }
     let(:embedable_attributes) { %w() }
@@ -92,8 +92,8 @@ describe "API v0" do
     describe "POST /orders" do
       let(:url) { "#{base_url}/orders" }
       let(:json_order) { json_response["order"] }
-      let(:substitutes) { Fabricate.times(2, :line_item, distributor: distributor) }
-      let(:exclusions) { Fabricate.times(2, :line_item, distributor: distributor) }
+      let(:substitutes) { Fabricate.times(2, :line_item, distributor: api_distributor) }
+      let(:exclusions) { Fabricate.times(2, :line_item, distributor: api_distributor) }
       let(:params) do <<-JSON
         {
           "order": {
