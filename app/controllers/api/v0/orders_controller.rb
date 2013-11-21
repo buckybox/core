@@ -94,6 +94,27 @@ class Api::V0::OrdersController < Api::V0::BaseController
       @order.errors.add(:box_id, "can't be blank")
     end
 
+    frequency_white_list = %w(one_off weekly fortnightly)
+    unless new_order['frequency'].in? frequency_white_list
+      @order.schedule_rule = ScheduleBuilder.create( start_date: Date.today, frequency: new_order['frequency'], days: @customer.delivery_service.days )
+    else
+      @order.errors.add(:frequency, "must be one of: #{frequency_white_list}")
+    end
+
+    begin
+      @order.substitution_ids = new_order['substitutes']
+    rescue ActiveRecord::RecordNotFound
+      @order.errors.add(:substitutes, "one of more substitute id are not valid")
+    end
+
+    begin
+      @order.exclusion_ids = new_order['exclusions']
+    rescue ActiveRecord::RecordNotFound
+      @order.errors.add(:exclusions, "one of more exclusions id are not valid")
+    end
+
+    @order.extras_one_off = new_order['extras_one_off']
+
     @extras = new_order['extras']
     unless @extra.nil? 
       @order.order_extras = @extras.each_with_object({}) do |extra, hash|
@@ -105,7 +126,6 @@ class Api::V0::OrdersController < Api::V0::BaseController
 
     if @order.errors.empty? && @order.save
       @customer_id = customer.id
-
       render 'api/v0/orders/create', status: :created, location: api_v0_order_url(id: @order.id) and return
     else
       return unprocessable_entity @order.errors
