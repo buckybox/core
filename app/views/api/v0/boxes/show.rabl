@@ -2,7 +2,7 @@
 object @box
 attributes :id, :name, :description, :price_cents, :extras_limit
 attribute :exclusions_limit => :exclusion_limit
-attribute :substitutions_limit => :substitution_limit
+attribute :substitutions_limit => :substitute_limit
 
 unless @embed['extras'].nil?
 	child :extras do
