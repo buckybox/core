@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 
 gem 'rails',                      '~> 3.2.15'
-gem 'pg',                         '~> 0.14.0'
+gem 'pg',                         '~> 0.17.0'
 gem 'haml-rails',                 '~> 0.3.4'
 gem 'jquery-rails',               '~> 3.0.4'
 gem 'jquery-ui-rails',            '~> 4.0.5'
@@ -48,6 +48,10 @@ gem 'charlock_holmes',            '~> 0.6.9.4'
 gem 'easy_money',                 '~> 1.0.0', git: 'https://github.com/buckybox/easy_money.git'
 gem 'currency_data',              '~> 1.0.0', git: 'https://github.com/buckybox/currency_data.git'
 gem 'simple_form-bank_account_number', '~> 1.0.0', git: 'https://github.com/buckybox/simple_form-bank_account_number.git'
+gem 'rabl',                       '~> 0.9.0'
+gem 'oj',                         '~> 2.1.7'
+gem 'apipie-rails',               '~> 0.0.24'
+gem 'strong_parameters',          '~> 0.2.1'
 
 ########## THE GEMS ABOVE ARE THE ONLY ONES THAT RUN ON PRODUCTION ##########
 
