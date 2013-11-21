@@ -17,7 +17,7 @@ describe "API v0" do
     let(:customer) { Fabricate(:customer, distributor: distributor) }
     let(:extras) { Fabricate.times(2, :extra, distributor: distributor) }
     let(:box) { Fabricate(:box, distributor: distributor, extras: extras) }
-    let(:model_attributes) { %w(id box_id customer_id active start_date next_date) }
+    let(:model_attributes) { %w(id box_id customer_id active start_date next_date frequency) }
     let(:model_attributes_extras) { model_attributes + %w(extras extras_one_off) }
     let(:embedable_attributes) { %w() }
 
