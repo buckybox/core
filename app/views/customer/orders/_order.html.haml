@@ -30,7 +30,7 @@
                     %td.quantity
                       %span.label= order.extra_count(extra_object)
             %br
-            %small= link_to 'edit order', edit_customer_order_path(order)
+            %small= link_to 'edit this order', edit_customer_order_path(order)
           %td.thumb{ rowspan: 2 }= image_tag(order.box.box_image.small_thumb.url)
           %td.total
             .price= order.price
