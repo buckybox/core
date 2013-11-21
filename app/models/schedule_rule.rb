@@ -1,5 +1,5 @@
 class ScheduleRule < ActiveRecord::Base
-  attr_accessible :fri, :mon, :month_day, :recur, :sat, :start, :sun, :thu, :tue, :wed, :order_id, :week
+  attr_accessible :fri, :mon, :recur, :sat, :start, :sun, :thu, :tue, :wed, :order_id, :week
   attr_accessor :next_occurrence
 
   DAYS = [:sun, :mon, :tue, :wed, :thu, :fri, :sat] #Order of this is important, it matches sunday: 0, monday: 1 as is standard
@@ -34,7 +34,7 @@ class ScheduleRule < ActiveRecord::Base
     days = days.inject({}){|h, i| h.merge(i => true)} # Turn array into hash
     days = DAYS.inject({}){|h, i| h.merge(i => false)}.merge(days) # Fill out the rest with false
 
-    valid_recur = RECUR - [:single]
+    valid_recur = RECUR
     raise "recur '#{recur}' is not part of #{valid_recur}" unless recur.in? valid_recur
 
     params = days.merge(recur: recur, week: week)

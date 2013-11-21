@@ -1211,7 +1211,9 @@ CREATE TABLE distributors (
     collect_delivery_note boolean DEFAULT true NOT NULL,
     require_delivery_note boolean DEFAULT false NOT NULL,
     notify_for_new_webstore_order boolean DEFAULT true NOT NULL,
-    sidebar_description text
+    sidebar_description text,
+    api_key character varying(255),
+    api_secret character varying(255)
 );
 
 
@@ -3071,6 +3073,13 @@ CREATE INDEX index_delivery_services_on_distributor_id ON delivery_services USIN
 
 
 --
+-- Name: index_distributors_on_api_key; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE UNIQUE INDEX index_distributors_on_api_key ON distributors USING btree (api_key);
+
+
+--
 -- Name: index_distributors_on_authentication_token; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -3740,3 +3749,5 @@ INSERT INTO schema_migrations (version) VALUES ('20131022003933');
 INSERT INTO schema_migrations (version) VALUES ('20131022015514');
 
 INSERT INTO schema_migrations (version) VALUES ('20131022025554');
+
+INSERT INTO schema_migrations (version) VALUES ('20131112025426');

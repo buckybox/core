@@ -59,6 +59,12 @@ namespace :deploy do
       ln -nfs #{shared_path}/bundle/ruby/1.9.1/gems/delayed_job_web-1.2.0/lib/delayed_job_web/application/public #{release_path}/public/delayed_job
     )
   end
+
+  task :symlink_docs do
+    run %(
+      ln -nfs #{shared_path}/docs/api #{release_path}/public/docs
+    )
+  end
 end
 
 task :setup_private_uploads do
@@ -71,6 +77,7 @@ after 'deploy:assets:symlink' do
   deploy.symlink_configs
   deploy.symlink_uploads
   deploy.symlink_delayed_job_web
+  deploy.symlink_docs
 end
 
 after "deploy:update_code", "deploy:migrate"
@@ -139,10 +146,17 @@ namespace :deploy do
       namespace :assets do
         task :precompile, :roles => :web, :except => { :no_release => true } do
           from = source.next_revision(current_revision)
+
           if capture("cd #{latest_release} && #{source.local.log(from)} vendor/assets/ app/assets/ | wc -l").to_i > 0
             run %Q{cd #{latest_release} && #{rake} RAILS_ENV=#{rails_env} #{asset_env} assets:precompile}
           else
-            logger.info "Skipping asset pre-compilation because there were no asset changes"
+            logger.info "Skipping application asset pre-compilation because there were no changes"
+          end
+
+          if capture("cd #{latest_release} && #{source.local.log(from)} app/controllers/api/ | wc -l").to_i > 0
+            run %Q{cd #{latest_release} && RAILS_ENV=#{rails_env} #{rake} apipie:static OUT=#{shared_path}/docs/api}
+          else
+            logger.info "Skipping API doc pre-compilation because there were no changes"
           end
       end
     end

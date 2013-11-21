@@ -43,6 +43,8 @@ RSpec.configure do |config|
   config.extend Devise::RequestMacros,     type: :request
   config.extend Devise::FeatureMacros,     type: :feature
 
+  config.include Requests::JsonHelpers, type: :request
+
   # Order matters!
   config.before(:suite) do
     DatabaseCleaner.clean_with :truncation
