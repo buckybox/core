@@ -96,7 +96,7 @@ class Api::V0::OrdersController < Api::V0::BaseController
 
     frequency_white_list = %w(one_off weekly fortnightly)
     unless new_order['frequency'].in? frequency_white_list
-      @order.schedule_rule = ScheduleBuilder.create( start_date: Date.today, frequency: new_order['frequency'], days: @customer.delivery_service.days )
+      @order.schedule_rule = ScheduleBuilder.create( start_date: Date.today, frequency: new_order['frequency'], days: customer.delivery_service.days )
     else
       @order.errors.add(:frequency, "must be one of: #{frequency_white_list}")
     end
