@@ -182,6 +182,7 @@ describe "API v0" do
           expect(json_response["errors"].keys).to match_array %w(
             box_id
             customer_id
+            frequency
           )
         end
       end
