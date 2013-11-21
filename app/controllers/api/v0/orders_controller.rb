@@ -47,7 +47,20 @@ class Api::V0::OrdersController < Api::V0::BaseController
   example '{
     "order": {
         "box_id": 12,
-        "customer_id": 123
+        "customer_id": 123,
+        "frequency": "weekly",
+        "substitutes": [
+          23,
+          54,
+          3
+        ],
+        "exclusions": [
+          17,
+          98,
+          345,
+          7
+        ],
+        "extras_one_off": false,
         "extras": [ 
           {
             "extra": { 
