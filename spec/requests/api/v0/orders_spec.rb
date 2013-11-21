@@ -17,8 +17,8 @@ describe "API v0" do
     let(:customer) { Fabricate(:customer, distributor: distributor) }
     let(:extras) { Fabricate.times(2, :extra, distributor: distributor) }
     let(:box) { Fabricate(:box, distributor: distributor, extras: extras) }
-    let(:model_attributes) { %w(id box_id customer_id active start_date next_date frequency) }
-    let(:model_attributes_extras) { model_attributes + %w(extras extras_one_off) }
+    let(:model_attributes) { %w(id box_id customer_id active frequency) }
+    let(:model_attributes_post) { model_attributes + %w(extras extras_one_off exclusions substitutes) }
     let(:embedable_attributes) { %w() }
 
     describe "GET /orders" do
@@ -141,20 +141,21 @@ describe "API v0" do
 
       it "creates the order properly" do
         json_request :post, url, params, headers
+
         new_order = Order.find(json_response["order"]["id"])
         expect(new_order.extras.size).to eq 2
         expect(new_order.extras_count).to eq 4
         expect(new_order.extras_one_off).to be_true
-        expect(new_order.schedule_rule.frequency).to eq "weekly"
-        expect(new_order.substitutions).to eq substitutes
-        expect(new_order.exclusions).to eq exclusions
+        expect(new_order.schedule_rule.frequency.to_s).to eq "weekly"
+        expect(new_order.substitutions.map(&:line_item_id)).to eq substitutes.map(&:id)
+        expect(new_order.exclusions.map(&:line_item_id)).to eq exclusions.map(&:id)
       end
 
       it "returns the expected attributes" do
         json_request :post, url, params, headers
         expect(response.status).to eq 201
 
-        expect(json_order.keys).to match_array(model_attributes_extras | embedable_attributes)
+        expect(json_order.keys).to match_array(model_attributes_post)
       end
 
       it "returns the location of the newly created resource" do
@@ -203,7 +204,7 @@ describe "API v0" do
 
             json_request :post, url, invalid_params.to_json, headers
             expect(response.status).to eq 422
-            expect(json_response["errors"].keys).to match_array %w(box_id exclusions substitutes)
+            expect(json_response["errors"].keys).to match_array %w(box_id)
           end
 
           it "validates the customer ID" do
@@ -213,7 +214,7 @@ describe "API v0" do
 
             json_request :post, url, invalid_params.to_json, headers
             expect(response.status).to eq 422
-            expect(json_response["errors"].keys).to match_array %w(customer_id exclusions frequency substitutes)
+            expect(json_response["errors"].keys).to match_array %w(customer_id frequency)
           end
 
           it "validates the frequency" do
@@ -224,7 +225,7 @@ describe "API v0" do
 
               json_request :post, url, invalid_params.to_json, headers
               expect(response.status).to eq 422
-              expect(json_response["errors"].keys).to match_array %w(frequency exclusions substitutes)
+              expect(json_response["errors"].keys).to match_array %w(frequency)
             end
           end
         end
