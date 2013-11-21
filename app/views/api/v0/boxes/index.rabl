@@ -1,6 +1,8 @@
 # app/views/api/v0/boxes/index.rabl
 collection @boxes
-attributes :id, :name, :description, :price_cents
+attributes :id, :name, :description, :price_cents, :extras_limit
+attribute :exclusions_limit => :exclusion_limit
+attribute :substitutions_limit => :substitution_limit
 
 unless @embed['extras'].nil?
 	child :extras do
@@ -14,3 +16,8 @@ unless @embed['images'].nil?
 	end  
 end
 
+unless @embed['box_items'].nil?
+	node :box_items do
+		@items.select('id, name')
+	end  
+end

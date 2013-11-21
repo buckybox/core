@@ -4,6 +4,7 @@ class Api::V0::BoxesController < Api::V0::BaseController
   example '/v0/boxes?embed=extras,images'
   def index
     @boxes = @distributor.boxes.all
+    @items = @distributor.line_items
     @box_images = @boxes.each_with_object({}) do |box, hash|
       hash[box.id] = box.box_image.versions.each_with_object({}) do |(version, image), images|
         images[version] = "//"+request.host_with_port+image.url
