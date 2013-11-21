@@ -205,6 +205,18 @@ describe "API v0" do
             expect(response.status).to eq 422
             expect(json_response["errors"].keys).to match_array %w(customer_id)
           end
+
+          it "validates the frequency" do
+            # don't allow monthly for now because we'd need to handle the week of the month
+            %w(monthy every_single_day).each do |frequency|
+              invalid_params = JSON.parse(params)
+              invalid_params["order"]["frequency"] = frequency
+
+              json_request :post, url, invalid_params.to_json, headers
+              expect(response.status).to eq 422
+              expect(json_response["errors"].keys).to match_array %w(frequency)
+            end
+          end
         end
 
         context "with missing attributes" do
