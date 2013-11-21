@@ -81,13 +81,13 @@ class Api::V0::OrdersController < Api::V0::BaseController
       @order.errors.add(:box_id, "can't be blank")
     end
 
-    extras = new_order['extras']
-
-    @order.order_extras = extras.each_with_object({}) do |extra, hash|
-      id = extra["extra"]["id"]
-      count = extra["extra"]["quantity"]
-
-      hash[id] = { count: count }
+    @extras = new_order['extras']
+    unless @extra.nil? 
+      @order.order_extras = @extras.each_with_object({}) do |extra, hash|
+        id = extra["extra"]["id"]
+        count = extra["extra"]["quantity"]
+        hash[id] = { count: count }
+      end
     end
 
     if @order.errors.empty? && @order.save

@@ -17,7 +17,8 @@ describe "API v0" do
     let(:customer) { Fabricate(:customer, distributor: distributor) }
     let(:extras) { Fabricate.times(2, :extra, distributor: distributor) }
     let(:box) { Fabricate(:box, distributor: distributor, extras: extras) }
-    let(:model_attributes) { %w(id box_id customer_id active extras) }
+    let(:model_attributes) { %w(id box_id customer_id active) }
+    let(:model_attributes_extras) { model_attributes + %w(extras) }
     let(:embedable_attributes) { %w() }
 
     describe "GET /orders" do
@@ -120,7 +121,6 @@ describe "API v0" do
       it "returns the order" do
         json_request :post, url, params, headers
         expect(response.status).to eq 201
-
         expect(json_response.size).to eq 1
 
         expected_response = JSON.parse(params)
@@ -133,7 +133,7 @@ describe "API v0" do
         json_request :post, url, params, headers
         expect(response.status).to eq 201
 
-        expect(json_order.keys).to match_array(model_attributes | embedable_attributes)
+        expect(json_order.keys).to match_array(model_attributes_extras | embedable_attributes)
       end
 
       it "returns the location of the newly created resource" do
