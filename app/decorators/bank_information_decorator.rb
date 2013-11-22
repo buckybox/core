@@ -8,7 +8,7 @@ class BankInformationDecorator < Draper::Decorator
   end
 
   def customer_number
-    nil
+    context[:customer].customer_number
   end
 
   def bank
