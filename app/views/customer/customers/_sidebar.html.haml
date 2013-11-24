@@ -1,8 +1,8 @@
 .row-fluid
   .span12
     .customer-information-section
-      %h1= customer.name
-      == ID: #{customer.formated_number}
+      %p.name= customer.name
+      == Customer number: #{customer.formated_number}
       %br
       = customer.email
       %br
