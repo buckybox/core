@@ -53,14 +53,14 @@ gem 'oj',                         '~> 2.1.7'
 gem 'apipie-rails',               '~> 0.0.24'
 gem 'strong_parameters',          '~> 0.2.1'
 
-########## THE GEMS ABOVE ARE THE ONLY ONES THAT RUN ON PRODUCTION ##########
-
 group :assets do
   gem 'coffee-rails',   '~> 3.2.2'
   gem 'uglifier',       '~> 1.2.7'
   gem 'sass-rails',     '~> 3.2.5'
   gem 'compass-rails',  '~> 1.0.3'
 end
+
+########## THE GEMS ABOVE ARE THE ONLY ONES THAT RUN ON PRODUCTION ##########
 
 group :install do
   gem 'sprinkle',  git: 'https://github.com/jordandcarter/sprinkle.git' # patched to be awesome.. added more verifiers and updated some installers
@@ -74,7 +74,7 @@ group :development do
   gem 'xray-rails', require: false
   gem 'ruby-prof',  require: false # profiling with /newrelic
 
-  gem 'capistrano'
+  gem 'capistrano', '~> 2' # v3 is broken with `undefined local variable or method `tasks_without_stage_dependency'` atm
   gem 'term-ansicolor'
 
   gem 'guard-rspec'
@@ -108,7 +108,7 @@ group :test do
   gem 'poltergeist', require: false
   gem 'launchy'
 
-  gem 'fuubar', '~> 1.0.0' # 1.1.1 is broken
+  gem 'fuubar'
 
   gem 'bundler-audit', require: false
 end
@@ -119,7 +119,7 @@ end
 
 group :development, :test do
   gem 'rspec-rails'
-  gem 'guard'
+  gem 'guard', '~> 1' # v2 is broken with a version mismatch issue
   gem 'listen'
   gem 'terminal-notifier-guard' # Mac 10.8 system notifications for Guard
 
@@ -129,7 +129,7 @@ group :development, :test do
 end
 
 group :development, :staging do
-  gem 'oink',  require: 'oink'
+  gem 'oink', require: 'oink'
 end
 
 group :development, :test, :staging do
