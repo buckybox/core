@@ -80,6 +80,7 @@ describe SignUpWizardController do
 
       context "with matching omni importer" do
         before do
+          pending "fails randomly because of hardcoded OmniImporter::PAYPAL_ID - re-enable this test once resolved"
           @omni_importer = Fabricate(:omni_importer_for_bank_deposit, country: @nz, bank_name: form_params["distributor"]["bank_name"])
         end
 
@@ -99,6 +100,7 @@ describe SignUpWizardController do
         end
 
         before do
+          pending "fails randomly because of hardcoded OmniImporter::PAYPAL_ID - re-enable this test once resolved"
           @omni_importers = [
             Fabricate(:paypal_omni_importer),
             Fabricate(:omni_importer_for_bank_deposit, country: @nz, bank_name: form_params["distributor"]["bank_name"])

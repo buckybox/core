@@ -21,8 +21,9 @@ Fabricator(:omni_importer) do
         options:
           - header
 EOY
-  
+
   name "UK Lloyds"
+
   import_transaction_list{
     ActionDispatch::Http::UploadedFile.new(
       :tempfile => File.new(Rails.root.join('spec','support','test_upload_files','transaction_imports','uk_lloyds_tsb.csv')),
