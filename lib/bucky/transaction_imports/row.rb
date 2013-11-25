@@ -9,7 +9,7 @@ module Bucky::TransactionImports
 
     def initialize(date_string, description, amount_string, index=nil, raw_data=nil, parser=nil, bank_name=nil)
       self.date_string = date_string
-      self.description = description
+      self.description = description || ""
       self.amount_string = amount_string.gsub(/,/,'') unless amount_string.blank?
       self.index = index
       self.parser = parser
@@ -174,20 +174,16 @@ module Bucky::TransactionImports
     end
 
     def row_is_valid
-      unless date_valid? && description_valid? && amount_valid?
-        errors.add(:base, "The file you uploaded didn't match what we expected a #{bank_name} file to look like.  There was a problem on row #{index-1}, make sure it was the correct file from your bank or contact Bucky Box with #{Figaro.env.support_email}.")
+      unless date_valid? && amount_valid?
+        errors.add(:base, "Transaction line #{index.succ} looks suspect.")
       end
     end
 
     def date_valid?
-      Date.parse(date_string) # Will throw ArgumentError: invalid date
-      true
-    rescue
+      date = Date.parse(date_string) # Will throw ArgumentError: invalid date
+      date > 1.year.ago.to_date && date <= 1.day.from_now.to_date
+    rescue ArgumentError
       false
-    end
-
-    def description_valid?
-      description.present?
     end
 
     AMOUNT_REGEX = /\A[+-]?\d*\.?\d+\Z/

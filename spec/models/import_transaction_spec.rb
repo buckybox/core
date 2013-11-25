@@ -35,7 +35,7 @@ describe ImportTransaction do
 
       import_transaction.payment.description.should match("Payment")
     end
-    
+
     it "should create 'payment' labeled payments when positive amount" do
       import_transaction.match = ImportTransaction::MATCH_MATCHED
       import_transaction.stub(:customer).and_return(customer)
