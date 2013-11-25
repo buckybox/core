@@ -1,10 +1,10 @@
 package :ruby do
   description 'Ruby Virtual Machine'
-  version '1.9.3'
-  patchlevel '194'
+  version '2.0.0'
+  patchlevel '353'
   binaries = %w( ruby rdoc ri rake irb erb )
   source "ftp://ftp.ruby-lang.org/pub/ruby/#{version.split(".")[0..1].join(".")}/ruby-#{version}-p#{patchlevel}.tar.gz" do
-    binaries.each {|bin| post :install, "ln -s usr/local/bin/#{bin} /usr/bin/#{bin}"}
+    binaries.each {|bin| post :install, "ln -sf usr/local/bin/#{bin} /usr/bin/#{bin}"}
   end
   requires :ruby_dependencies
   verify do
@@ -46,11 +46,11 @@ end
 
 package :rubygems do
   description 'Ruby Gems Package Management System'
-  version '1.8.24'
+  version '2.1.7'
   binaries = %w( gem )
   source "http://production.cf.rubygems.org/rubygems/rubygems-#{version}.tgz" do
     custom_install 'ruby setup.rb'
-    binaries.each {|bin| post :install, "ln -s usr/local/bin/#{bin} /usr/bin/#{bin}"}
+    binaries.each {|bin| post :install, "ln -sf usr/local/bin/#{bin} /usr/bin/#{bin}"}
   end
   requires :ruby
   verify do
