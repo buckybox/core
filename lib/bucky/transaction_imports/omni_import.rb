@@ -472,7 +472,7 @@ EOF
       def get(row, column_name_or_number)
         parent.get(row, column_name_or_number)
       end
-      
+
       def to_s
         {blanks: blanks, matches: matches, not_matches: not_matches}.inspect
       end

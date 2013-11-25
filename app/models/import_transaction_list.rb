@@ -53,10 +53,10 @@ class ImportTransactionList < ActiveRecord::Base
   end
 
   def error_messages
-    if errors.size > 0
-      errors.full_messages.join(', ')
-    elsif csv_parser.present?
-      csv_parser.rows.find(&:invalid?).errors.full_messages.join(', ')
+    if csv_parser.present?
+      csv_parser.rows.select(&:invalid?).map { |row| row.errors.values }
+    elsif errors.size > 0
+      errors.full_messages
     end
   end
 
@@ -120,6 +120,7 @@ class ImportTransactionList < ActiveRecord::Base
       logger.warn(ex.to_s)
       return false
     end
+
     if csv_parser.is_a?(OmniImporter)
       errors.blank? && csv_parser.present? && csv_parser.rows_are_valid?
     else
