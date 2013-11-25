@@ -21,7 +21,7 @@
                   %p
                     Ooops! That file didn't look right.
                     Make sure it was the correct file from your bank or
-                    = mail_to Figaro.env.support_email, "contact Bucky Box"
+                    = mail_to Figaro.env.support_email, "contact Bucky Box", class: "intercom"
 
                   %ul
                     - @import_transaction_list.error_messages.flatten.each do |error|
