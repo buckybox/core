@@ -131,7 +131,10 @@ class Distributor < ActiveRecord::Base
           if successful
             CronLog.log("Create daily list for #{distributor.id} at local time #{local_time.to_s(:pretty)} successful.", details)
           else
-            CronLog.log("FAILURE: Create daily list for #{distributor.id} at local time #{local_time.to_s(:pretty)}.", details)
+            message = "FAILURE: Create daily list for #{distributor.id} at local time #{local_time.to_s(:pretty)}."
+
+            CronLog.log(message, details)
+            Airbrake.notify(RuntimeError.new("#{message} #{details}"))
           end
         end
       end
@@ -150,7 +153,10 @@ class Distributor < ActiveRecord::Base
           if successful
             CronLog.log("Automated completion for #{distributor.id} at local time #{local_time.to_s(:pretty)} successful.")
           else
-            CronLog.log("FAILURE: Automated completion for #{distributor.id} at local time #{local_time.to_s(:pretty)}.")
+            message = "FAILURE: Automated completion for #{distributor.id} at local time #{local_time.to_s(:pretty)}."
+
+            CronLog.log(message, details)
+            Airbrake.notify(RuntimeError.new("#{message} #{details}"))
           end
         end
       end
