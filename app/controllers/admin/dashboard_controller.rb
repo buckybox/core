@@ -1,7 +1,10 @@
 class Admin::DashboardController < Admin::BaseController
   def index
-    # OPTIMIZE: This should be done with some sort of Arel magic or something (NOT SQL) but this works for now.
-    @distributors = Distributor.all.sort { |a,b| b.orders.active.size <=> a.orders.active.size }[0..15]
-    @cron_logs    = CronLog.limit(5)
+    @distributors = Distributor.
+      where("current_sign_in_at > ?", 1.month.ago).
+      select { |d| d.transactional_customer_count > 10}.
+      sort_by(&:transactional_customer_count).reverse
+
+    @cron_logs = CronLog.limit(10)
   end
 end
