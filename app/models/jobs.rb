@@ -21,7 +21,12 @@ class Jobs
     count = Metrics.calculate_and_store
     CronLog.log("#{count} metrics calculated and stored.")
 
-    CronLog.log("Running data integrity tests.")
-    DataIntegrity.check_and_email
+    DataIntegrity.delay(
+      # - servers are using NZ time
+      # - 2pm to 3pm is the calmest window for us (little visits) --> +14
+      # - houly jobs run at minute 0 and we don't want to run integrity tests at the same time in
+      #   order to spread resource usage -> +.5
+      run_at: DateTime.tomorrow + 14.5.hours
+    ).check_and_email
   end
 end

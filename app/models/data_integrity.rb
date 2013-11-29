@@ -4,6 +4,8 @@ class DataIntegrity
   end
 
   def self.check_and_email
+    CronLog.log("Running data integrity tests.")
+
     errors = check.errors
     email(errors) unless errors.empty?
   end
