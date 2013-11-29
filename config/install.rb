@@ -24,6 +24,7 @@ require File.expand_path('../helper', __FILE__)
 policy :myapp, :roles => :app do
   requires :build_essential
   requires :htop
+  requires :ntp
   requires :git
   requires :ruby
   requires :ruby_tuned
