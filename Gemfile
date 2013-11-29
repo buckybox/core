@@ -67,50 +67,40 @@ group :install do
 end
 
 group :development do
+  gem 'webrick' # Included explicitly so #chunked warnings no longer show up in the dev log
   gem 'yard',       require: false
-
   gem 'bullet',     require: false
   gem 'brakeman',   require: false
   gem 'xray-rails', require: false
   gem 'ruby-prof',  require: false # profiling with /newrelic
-
   gem 'capistrano', '~> 2' # v3 is broken with `undefined local variable or method `tasks_without_stage_dependency'` atm
   gem 'term-ansicolor'
-
   gem 'guard-rspec'
   gem 'parallel_tests'
-
-  # Pry: IRB + ruby debug alternative which is active and easier to install
-  gem 'pry-rails'
-  gem 'pry-debugger'
-  gem 'pry-coolline'
-  gem 'pry-stack_explorer'
-
   gem 'sextant'
   gem 'better_errors'
   gem 'binding_of_caller'
   gem 'quiet_assets'
   gem 'meta_request'
 
-  gem 'webrick' # Included explicitly so #chunked warnings no longer show up in the dev log
+  # Pry: IRB + ruby debug alternative which is active and easier to install
+  gem 'pry-rails'
+  gem 'pry-debugger'
+  gem 'pry-coolline'
+  gem 'pry-stack_explorer'
 end
 
 group :test do
   gem 'fabrication'
   gem 'database_cleaner'
   gem 'therubyracer', require: false # embeded JS interpreter for our CI server
-
+  gem 'simplecov', require: false
   gem 'cucumber-rails', require: false
-
   gem 'capybara', require: false
   gem 'capybara-screenshot'
-
   gem 'poltergeist', require: false
   gem 'launchy'
-
   gem 'fuubar'
-
-  gem 'bundler-audit', require: false
 end
 
 group :staging do
@@ -122,10 +112,8 @@ group :development, :test do
   gem 'guard', '~> 1' # v2 is broken with a version mismatch issue
   gem 'listen'
   gem 'terminal-notifier-guard' # Mac 10.8 system notifications for Guard
-
   gem 'letter_opener'
-
-  gem 'simplecov', require: false
+  gem 'bundler-audit', require: false
 end
 
 group :development, :staging do
