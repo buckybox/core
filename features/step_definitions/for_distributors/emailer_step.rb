@@ -19,7 +19,8 @@ Then "I should be able to send an email" do
     CustomerMailer.should_receive(:email_template).at_least(:once).and_return(double(deliver: nil))
 
     click_button "Send"
-    sleep 10 # wait for the page reload from JS
+    sleep 1 # wait for the page reload from JS
+    page.should have_content "Your email", "is being sent" # wait for the page to be reloaded
     step "I should be viewing the dashboard"
 end
 
