@@ -14,8 +14,6 @@ module Messaging
         user.send("#{key.to_s}=", value)
       end
       user.save
-    rescue Bucky::NonFatalException => e
-      report(e)
     end
 
     def create_user(attrs, env = nil)
@@ -28,23 +26,19 @@ module Messaging
             ::Intercom::BadGatewayError,
             ::Intercom::ServiceUnavailableError,
             ::Intercom::ResourceNotFound => e
-      report(e)
+      raise Bucky::NonFatalException.new(e)
     end
 
     def add_tag(user_id, tag, env = nil)
       return if skip? env
 
       add_user_to_tag(user_id, tag)
-    rescue Bucky::NonFatalException => e
-      report(e)
     end
 
     def remove_tag(user_id, tag, env = nil)
       return if skip? env
 
       remove_user_from_tag(user_id, tag)
-    rescue Bucky::NonFatalException => e
-      report(e)
     end
 
     def update_tags(attrs, env = nil)
@@ -53,8 +47,6 @@ module Messaging
       attrs[:tag_list].each do |name|
         add_user_to_tag(attrs[:id], name)
       end
-    rescue Bucky::NonFatalException => e
-      report(e)
     end
 
     def track(id, action_name, occurred_at = Time.current, env = nil)
@@ -69,7 +61,7 @@ module Messaging
             ::Intercom::BadGatewayError,
             ::Intercom::ServiceUnavailableError,
             ::Intercom::ResourceNotFound => e
-      report(e)
+      raise Bucky::NonFatalException.new(e)
     end
 
     def skip?(env, expected_env = 'production')
@@ -130,16 +122,6 @@ module Messaging
             ::Intercom::ServiceUnavailableError,
             ::Intercom::ResourceNotFound => e
       raise Bucky::NonFatalException.new(e)
-    end
-
-    def report(exception)
-      if Object.const_defined?('Rails')
-        Rails.logger.warn(exception.message)
-        Rails.logger.warn(exception.backtrace.join("\n"))
-      end
-
-      Airbrake.notify(exception) if Object.const_defined?('Airbrake')
-      nil
     end
   end
 end
