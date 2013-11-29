@@ -8,12 +8,12 @@ end
 
 package :certs do
   requires :gpg
-  
+
   certs_local = File.join(File.dirname(__FILE__), 'configs', 'certs', Package.stage, 'certs.tar.gzip.gpg')
   certs_remote = "/etc/ssl/certs/"
   tmp_file = "/tmp/certs.tar.gzip.gpg"
-  key_name = Package.stage == 'production' ? 'my_buckybox_com-2013-july' : 'staging_buckybox_com'
-  cert_name = Package.stage == 'production' ? 'ssl-bundle-2013-july.crt' : 'ssl-bundle.crt'
+  key_name = 'buckybox_com'
+  cert_name = 'ssl-bundle.crt'
 
   transfer certs_local, tmp_file do
     post :install, "mv #{tmp_file} #{certs_remote}"
