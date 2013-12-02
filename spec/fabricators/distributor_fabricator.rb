@@ -7,6 +7,13 @@ Fabricator(:distributor) do
   consumer_delivery_fee_cents 0
   send_email true
   send_halted_email true
+
+  # Disable intros since we don't want them most of the time
+  customers_index_intro false
+  customers_show_intro false
+  deliveries_index_packing_intro false
+  deliveries_index_deliveries_intro false
+  payments_index_intro false
 end
 
 Fabricator(:distributor_with_information, from: :distributor) do

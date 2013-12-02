@@ -10,7 +10,7 @@ require File.expand_path("../../config/environment", __FILE__)
 require "rspec/rails"
 require "rspec/autorun"
 
-require "capybara/rspec" 
+require "capybara/rspec"
 require "capybara/rails"
 require "capybara/poltergeist"
 
