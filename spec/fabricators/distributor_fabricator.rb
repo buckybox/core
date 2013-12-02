@@ -14,7 +14,7 @@ Fabricator(:distributor_with_information, from: :distributor) do
   bank_information
 end
 
-Fabricator(:distributor_a_customer, from: :distributor) do
+Fabricator(:distributor_with_a_customer, from: :distributor) do
   after_create {|distributor| distributor.customers << Fabricate(:customer, distributor: distributor)}
 end
 
