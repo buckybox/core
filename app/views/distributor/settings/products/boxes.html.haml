@@ -63,19 +63,19 @@
                     = f.input_field :description, rows: 3, class: 'span12', required: true, placeholder: 'Description'
 
                     .line
-                      .field= f.input_field :visible, inline_label: true, label: '<i class="icon-shopping-cart"></i> Visible on webstore', as: :boolean
+                      .field= f.input_field :visible, inline_label: true, label: "<i class='icon-shopping-cart'></i> Visible on webstore".html_safe, as: :boolean
                     .line
-                      .field= f.input_field :dislikes, inline_label: true, label: '<i class="icon-minus-sign"></i> Box Items can be <strong>excluded</strong>'
+                      .field= f.input_field :dislikes, inline_label: true, label: "<i class='icon-minus-sign'></i> Box Items can be <strong>excluded</strong>".html_safe
                       %span.selector
                         = link_to '', 'javascript:void(0)'
                         = f.input_field :exclusions_limit, include_blank: false, collection: box_items_limit_collection
                     .line
-                      .field= f.input_field :likes, inline_label: true, label: '<i class="icon-plus-sign"></i> Box Items can be <strong>substituted</strong>'
+                      .field= f.input_field :likes, inline_label: true, label: "<i class='icon-plus-sign'></i> Box Items can be <strong>substituted</strong>".html_safe
                       %span.selector
                         = link_to '', 'javascript:void(0)'
                         = f.input_field :substitutions_limit, include_blank: false, collection: box_items_limit_collection
                     .line
-                      .field= f.input_field :extras_allowed?, inline_label: true, label: '<i class="icon-plus"></i> <strong>Extra items</strong> can be added to this box', as: :boolean
+                      .field= f.input_field :extras_allowed?, inline_label: true, label: "<i class='icon-plus'></i> <strong>Extra items</strong> can be added to this box".html_safe, as: :boolean
                     .line.extra-items
                       %span.selector
                         = link_to '', 'javascript:void(0)'
