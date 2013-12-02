@@ -4,7 +4,7 @@ describe "Updates address" do
   context 'as customer' do
     context 'with notify address is set to true' do
       let(:distributor){ Fabricate(:distributor_with_information, notify_address_change: true) }
-      let(:customer) { customer = Fabricate(:customer, distributor: distributor) }
+      let(:customer) { Fabricate(:customer, distributor: distributor) }
 
       before do
         @customer = customer
@@ -26,7 +26,7 @@ describe "Updates address" do
       it 'does not notify distributor when address is saved without update' do
         get_via_redirect customer_dashboard_path
         put_via_redirect customer_address_path, {}
-        response.body.should match 'Your delivery address has been updated'
+        response.body.should match 'Your delivery details have been updated'
 
 
         distributor_should_not_include_notifications distributor
@@ -35,7 +35,7 @@ describe "Updates address" do
 
     context 'with notify address is set to false' do
       let(:distributor){ Fabricate(:distributor_with_information, notify_address_change: false) }
-      let(:customer) { customer = Fabricate(:customer, distributor: distributor) }
+      let(:customer) { Fabricate(:customer, distributor: distributor) }
 
       before do
         @customer = customer
@@ -77,7 +77,7 @@ def change_address(customer)
   get_via_redirect customer_dashboard_path
   if @last_login == :customer
     put_via_redirect customer_address_path, {address: {suburb: modified_suburb}}
-    response.body.should match 'Your delivery address has been updated'
+    response.body.should match 'Your delivery details have been updated'
   else
     put_via_redirect distributor_customer_path(customer), {customer: {address_attributes: {suburb: modified_suburb}}}
     response.body.should match 'Customer was successfully updated.'
@@ -101,7 +101,7 @@ def distributor_should_not_include_notifications(distributor = nil)
   get_via_redirect distributor_root_path
   response.body.should match 'No new notifications'
   response.body.should_not match 'has updated their address'
-end  
+end
 
 def distributor_should_include_notifications(distributor)
   @distributor = distributor
