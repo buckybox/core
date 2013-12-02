@@ -32,7 +32,7 @@
 
       %fieldset
         %legend minimum customer balance
-        = f.input_field :has_balance_threshold, inline_label: true, label: "Halt deliveries when customers reach their minimum balance #{link_to '(more info)', 'https://buckybox.uservoice.com/knowledgebase/articles/172464-customers-minimum-balance', target: '_blank'}"
+        = f.input_field :has_balance_threshold, inline_label: true, label: "Halt deliveries when customers reach their minimum balance #{link_to('(more info)', 'https://buckybox.uservoice.com/knowledgebase/articles/172464-customers-minimum-balance', target: '_blank').tr!('"', "'")}".html_safe
         #balance_threshold{ :class => ("hide" unless current_distributor.has_balance_threshold?) }
           %strong Minimum balance.
           E.g. a setting of 0.00 means customers must have at least 0.01 in their account for deliveries to be made.
