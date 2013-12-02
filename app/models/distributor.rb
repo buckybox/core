@@ -619,7 +619,7 @@ private
   # This will simulate the cron jobs each hour and move the time forward 1 day. It is designed to
   # be run repeatedly to move forward a day at a time
   def self.travel_forward_a_day(day=1)
-    #every 1.hour do
+    # :nocov:
     @@original_time ||= Time.current
     @@advanced ||= 0
     (24 * day).times.each do |h|
@@ -629,5 +629,6 @@ private
       Jobs.run_hourly
     end
     @@advanced += day
+    # :nocov:
   end
 end
