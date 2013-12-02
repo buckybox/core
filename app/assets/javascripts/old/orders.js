@@ -37,7 +37,7 @@ $(function() {
       current_order.find('#dislikes-input').hide();
       current_order.find('#likes-input').hide();
     }
-  });
+  }).trigger('change');
 
   $('#order_schedule_rule_attributes_start').change(update_start_checkbox);
 
