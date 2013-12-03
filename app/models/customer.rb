@@ -25,8 +25,6 @@ class Customer < ActiveRecord::Base
     'negative-balance' => 'hidden'
   }.freeze
 
-  accepts_nested_attributes_for :address
-
   monetize :balance_threshold_cents
 
   attr_accessible :address_attributes, :first_name, :last_name, :email, :name, :distributor_id, :distributor,

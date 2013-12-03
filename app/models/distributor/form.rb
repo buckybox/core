@@ -22,8 +22,7 @@ module Distributor::Form
     attribute :customer,     Integer
 
     def_delegators :customer,
-      :id,
-      :address
+      :id
 
     def initialize(attributes = {})
       @distributor = attributes.delete(:distributor)
@@ -37,6 +36,7 @@ module Distributor::Form
     end
 
     def save
+      binding.pry
       return false unless valid?
       result = customer.update_attributes(customer_args)
       result &&= address.update_attributes(address_args)
@@ -44,6 +44,12 @@ module Distributor::Form
     end
 
   protected
+
+    def address
+      @address ||= begin
+        customer.address || Address.new
+      end
+    end
 
     def assign_attributes(attributes)
       #No Op
