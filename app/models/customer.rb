@@ -202,6 +202,10 @@ class Customer < ActiveRecord::Base
     end
   end
 
+  def labels
+    tag_list.sort.join(", ")
+  end
+
   def has_first_and_last_name?
     first_name.present? && last_name.present?
   end
