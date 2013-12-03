@@ -34,23 +34,22 @@ private
 
   def csv_header
     [
-      "Date Transaction Occurred",
-      "Date Transaction Processed",
-      "Amount",
-      "Description",
-      "Customer Name",
+      "Transaction Date",
+      "Transaction Processed Date",
+      "Transaction Amount",
+      "Transaction Type",
+      "Transaction Description",
       "Customer Number",
+      "Customer First Name",
+      "Customer Last Name",
       "Customer Email",
-      "Customer City",
-      "Customer Suburb",
-      "Customer Tags",
-      "Discount",
+      "Customer Discount",
+      "Customer Labels",
     ]
   end
 
   def csv_row(transaction)
-    row = add_transaction_data(transaction)
-    row += add_customer_data(transaction)
+    add_transaction_data(transaction) + add_customer_data(transaction)
   end
 
   def add_transaction_data(transaction)
@@ -58,30 +57,26 @@ private
       transaction.created_at.strftime(DATE_FORMAT),
       transaction.display_time.strftime(DATE_FORMAT),
       transaction.amount,
+      transaction.transactionable_type,
       transaction.description,
     ]
   end
 
   def add_customer_data(transaction)
     customer = transaction_customer(transaction)
-    address  = customer.address
+
     [
-      customer.name,
       customer.number,
+      customer.first_name,
+      customer.last_name,
       customer.email,
-      address.city,
-      address.suburb,
-      customer_tags(customer),
       customer.discount,
+      customer.labels,
     ]
   end
 
   def transaction_customer(transaction)
     transaction.customer
-  end
-
-  def customer_tags(customer)
-    customer.tags.map { |t| "\"#{t.name}\"" }.join(", ")
   end
 
 end
