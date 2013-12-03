@@ -175,7 +175,7 @@ private
   end
 
   def pre_form_args
-    customer = Customer.find_by(id: params[:id]) || Address.new.build_customer
+    customer = Customer.find_by(id: params[:id]) || Customer.new
     { distributor: current_distributor, customer: customer }
   end
 

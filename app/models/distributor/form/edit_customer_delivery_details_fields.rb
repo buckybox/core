@@ -48,7 +48,7 @@ module Distributor::Form::EditCustomerDeliveryDetailsFields
 
     def delivery_details_customer_args
       {
-        delivery_service_id: delivery_service,
+        delivery_service_id:  delivery_service,
       }
     end
 
