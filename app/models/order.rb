@@ -229,7 +229,9 @@ class Order < ActiveRecord::Base
   end
 
   def order_extras=(collection)
-    raise "I wasn't expecting you to set these directly" unless collection.is_a?(Hash) || collection.is_a?(Array)
+    unless collection.is_a?(Hash) || collection.is_a?(Array) || collection.nil?
+      raise "I wasn't expecting you to set these directly"
+    end
 
     original_order_extras.destroy_all
     self.extras_packing_list = nil
