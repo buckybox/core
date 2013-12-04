@@ -24,6 +24,6 @@
       %p Extras can be either a one off order or every delivery.
 - else
   = simple_fields_for(:order) do |f|
-    = f.input "order_extras[][]", as: :hidden, input_html: { value: ""}, label: false
+    = f.input "order_extras[][]", as: :hidden, input_html: { value: "" }, label: false
 
   %p No extras allowed for this box
