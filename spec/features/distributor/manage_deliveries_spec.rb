@@ -1,7 +1,7 @@
 require "spec_helper"
 
 feature "Manage deliveries", js: true do
-  scenario "marks a delivery as delivered and paid" do
+  before do
     # setup
     @distributor = Fabricate(:distributor_with_everything)
     simulate_distributor_sign_in
@@ -15,7 +15,9 @@ feature "Manage deliveries", js: true do
     # go to the first yellow day
     find(:xpath, '//a[@title="pending deliveries"]').click
     click_link order.delivery_service.name
+  end
 
+  scenario "marks a delivery as delivered and paid" do
     # test "Mark as delivered" button
     page.should_not have_selector(".state-label.status-delivered")
     find(:xpath, '//button[@id="delivered"]').click
@@ -31,5 +33,13 @@ feature "Manage deliveries", js: true do
     visit current_path
     page.should have_selector(".state-label.status-delivered")
     page.should have_selector(".paid-label.paid")
+  end
+
+  scenario "exports delivery details" do
+    click_link "Export Delivery Details"
+
+    headers = page.response_headers
+    expect(headers["Content-Disposition"]).to start_with "attachment"
+    expect(headers["Content-Type"]).to include "text/csv"
   end
 end
