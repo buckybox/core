@@ -211,7 +211,8 @@ private
       personalised_email = email.personalise(customer)
 
       CustomerMailer.delay(
-        priority: Figaro.env.delayed_job_priority_high
+        priority: Figaro.env.delayed_job_priority_high,
+        queue: "#{__FILE__}:#{__LINE__}",
       ).email_template(customer, personalised_email)
     end
 

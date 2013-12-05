@@ -9,7 +9,8 @@ module Bucky
 
       # tracking
       identity.delay(
-        priority: Figaro.env.delayed_job_priority_low
+        priority: Figaro.env.delayed_job_priority_low,
+        queue: "#{__FILE__}:#{__LINE__}",
       ).track(action_name, occurred_at, Rails.env)
     end
   end

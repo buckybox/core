@@ -26,7 +26,8 @@ class Jobs
       # - 2pm to 3pm is the calmest window for us (little visits) --> +14
       # - houly jobs run at minute 0 and we don't want to run integrity tests at the same time in
       #   order to spread resource usage -> +.5
-      run_at: DateTime.tomorrow + 14.5.hours
+      run_at: DateTime.tomorrow + 14.5.hours,
+      queue: "#{__FILE__}:#{__LINE__}",
     ).check_and_email
   end
 end
