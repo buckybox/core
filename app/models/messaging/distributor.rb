@@ -21,13 +21,15 @@ module Messaging
 
     def toggle_webstore_tag
       delay(
-        priority: Figaro.env.delayed_job_priority_low
+        priority: Figaro.env.delayed_job_priority_low,
+        queue: "#{__FILE__}:#{__LINE__}",
       ).delayed_toggle_webstore_tag
     end
 
     def update
       delay(
-        priority: Figaro.env.delayed_job_priority_low
+        priority: Figaro.env.delayed_job_priority_low,
+        queue: "#{__FILE__}:#{__LINE__}",
       ).delayed_update
     end
 

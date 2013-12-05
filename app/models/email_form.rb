@@ -20,7 +20,8 @@ class EmailForm < Form
     if valid?
       to.each do |distributor|
         DistributorMailer.delay(
-          priority: Figaro.env.delayed_job_priority_high
+          priority: Figaro.env.delayed_job_priority_high,
+          queue: "#{__FILE__}:#{__LINE__}",
         ).update_email(self, distributor)
       end
       true

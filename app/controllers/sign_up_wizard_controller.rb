@@ -110,7 +110,8 @@ private
 
   def send_bank_setup_email bank_name
     DistributorMailer.delay(
-      run_at: 5.minutes.from_now
+      run_at: 5.minutes.from_now,
+      queue: "#{__FILE__}:#{__LINE__}",
     ).bank_setup(@distributor, bank_name)
   end
 
