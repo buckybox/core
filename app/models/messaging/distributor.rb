@@ -57,8 +57,9 @@ module Messaging
         created_at:  distributor.created_at,
         custom_data: {
           business_name: distributor.name,
-          phone:        distributor.phone,
-          needs_setup:  distributor.needs_setup?
+          phone:         distributor.phone,
+          needs_setup:   distributor.needs_setup?,
+          admin_link:    Rails.application.routes.url_helpers.admin_distributor_url(id: distributor.id),
         }
       }
     end
