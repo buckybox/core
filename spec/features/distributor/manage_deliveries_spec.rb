@@ -30,6 +30,7 @@ feature "Manage deliveries", js: true do
     page.should have_selector(".paid-label.paid")
 
     # reload the page and make sure the AJAX requests went through
+    sleep 1
     visit current_path
     page.should have_selector(".state-label.status-delivered")
     page.should have_selector(".paid-label.paid")
