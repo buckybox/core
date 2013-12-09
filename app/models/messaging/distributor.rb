@@ -59,7 +59,10 @@ module Messaging
           business_name: distributor.name,
           phone:         distributor.phone,
           needs_setup:   distributor.needs_setup?,
-          admin_link:    Rails.application.routes.url_helpers.admin_distributor_url(id: distributor.id),
+          admin_link:    Rails.application.routes.url_helpers.admin_distributor_url(
+            id: distributor.id,
+            host: Figaro.env.host,
+          )
         }
       }
     end
