@@ -75,6 +75,22 @@ class DataIntegrity
     end
   end
 
+  def past_deliveries_are_marked_as_deliverd
+    Distributor.find_each do |distributor|
+      Time.use_zone(distributor.time_zone) do
+        date = Date.current
+        date -= 1.day if Time.current.hour < Distributor::AUTOMATIC_DELIVERY_HOUR
+
+        delivery_lists = distributor.delivery_lists.find_by_date(date)
+        undelivered = delivery_lists.deliveries.where("status != 'delivered'") if delivery_lists
+
+        if undelivered.present?
+          error "Distributor ##{distributor.id} (#{distributor.time_zone}): #{undelivered.count} deliveries are not marked as delivered for #{date}"
+        end
+      end
+    end
+  end
+
 private
 
   def self.check
@@ -85,6 +101,7 @@ private
     checker.import_transaction_lists_processing_is_stuck
     checker.distributor_currency_is_valid
     checker.orders_are_valid
+    checker.past_deliveries_are_marked_as_deliverd
 
     checker
   end
