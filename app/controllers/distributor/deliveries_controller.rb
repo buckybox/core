@@ -51,9 +51,6 @@ class Distributor::DeliveriesController < Distributor::ResourceController
     deliveries = current_distributor.deliveries.ordered.where(id: params[:deliveries])
     status = Delivery::STATUS_TO_EVENT[params[:status]]
 
-    options = {}
-    options[:date] = params[:date] if params[:date]
-
     if Delivery.change_statuses(deliveries, status)
       head :ok
     else
