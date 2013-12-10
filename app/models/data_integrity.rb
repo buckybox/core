@@ -85,7 +85,7 @@ class DataIntegrity
         undelivered = delivery_lists.deliveries.where("status != 'delivered'") if delivery_lists
 
         if undelivered.present?
-          error "Distributor ##{distributor.id} (#{distributor.time_zone}): #{undelivered.count} deliveries are not marked as delivered for #{date}"
+          error "Distributor ##{distributor.id} (#{Time.current} @ #{distributor.time_zone}): #{undelivered.count} deliveries are not marked as delivered for #{date}"
         end
       end
     end
