@@ -150,8 +150,10 @@ class Distributor < ActiveRecord::Base
           # considering the next day as standard across all distributors for now
           successful = distributor.automate_completed_status
 
+          details = ["#{distributor.name}", "TZ #{distributor.time_zone} #{Time.current}"].join("\n")
+
           if successful
-            CronLog.log("Automated completion for #{distributor.id} at local time #{local_time.to_s(:pretty)} successful.")
+            CronLog.log("Automated completion for #{distributor.id} at local time #{local_time.to_s(:pretty)} successful.", details)
           else
             message = "FAILURE: Automated completion for #{distributor.id} at local time #{local_time.to_s(:pretty)}."
 
@@ -161,6 +163,12 @@ class Distributor < ActiveRecord::Base
         end
       end
     end
+
+    # XXX Temporary check
+    checker = DataIntegrity.new
+    checker.past_deliveries_are_marked_as_delivered
+    DataIntegrity.email checker.errors if checker.errors.present?
+    # XXX
   end
 
   def self.update_next_occurrence_caches
