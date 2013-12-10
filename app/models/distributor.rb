@@ -166,7 +166,7 @@ class Distributor < ActiveRecord::Base
 
     # XXX Temporary check
     checker = DataIntegrity.new
-    checker.past_deliveries_are_marked_as_delivered
+    checker.past_deliveries_are_not_pending
     DataIntegrity.email checker.errors if checker.errors.present?
     # XXX
   end

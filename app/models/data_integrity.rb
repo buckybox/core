@@ -15,7 +15,7 @@ class DataIntegrity
       to: Figaro.env.sysalerts_email,
       subject: "Data integrity tests failed [#{Rails.env}]",
       body: <<-BODY
-        Doh! Something does not look right:
+        Doh! Something does not look right (#{errors.count} errors):
 
         #{errors.join("\n")}
 
@@ -75,17 +75,17 @@ class DataIntegrity
     end
   end
 
-  def past_deliveries_are_marked_as_delivered
+  def past_deliveries_are_not_pending
     Distributor.find_each do |distributor|
       Time.use_zone(distributor.time_zone) do
         date = Date.current
         date -= 1.day if Time.current.hour < Distributor::AUTOMATIC_DELIVERY_HOUR
 
         delivery_lists = distributor.delivery_lists.find_by_date(date)
-        undelivered = delivery_lists.deliveries.where("status != 'delivered'") if delivery_lists
+        pending = delivery_lists.deliveries.where(status: "pending") if delivery_lists
 
-        if undelivered.present?
-          error "Distributor ##{distributor.id} (#{Time.current} @ #{distributor.time_zone}): #{undelivered.count} deliveries are not marked as delivered for #{date}"
+        if pending.present?
+          error "Distributor ##{distributor.id} (#{Time.current} @ #{distributor.time_zone}): #{pending.count} deliveries are still pending for #{date}"
         end
       end
     end
@@ -101,7 +101,7 @@ private
     checker.import_transaction_lists_processing_is_stuck
     checker.distributor_currency_is_valid
     checker.orders_are_valid
-    checker.past_deliveries_are_marked_as_delivered
+    checker.past_deliveries_are_not_pending
 
     checker
   end
