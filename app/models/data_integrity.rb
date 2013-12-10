@@ -75,7 +75,7 @@ class DataIntegrity
     end
   end
 
-  def past_deliveries_are_marked_as_deliverd
+  def past_deliveries_are_marked_as_delivered
     Distributor.find_each do |distributor|
       Time.use_zone(distributor.time_zone) do
         date = Date.current
@@ -101,7 +101,7 @@ private
     checker.import_transaction_lists_processing_is_stuck
     checker.distributor_currency_is_valid
     checker.orders_are_valid
-    checker.past_deliveries_are_marked_as_deliverd
+    checker.past_deliveries_are_marked_as_delivered
 
     checker
   end
