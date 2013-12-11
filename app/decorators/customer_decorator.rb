@@ -13,6 +13,22 @@ class CustomerDecorator < Draper::Decorator
     object.account.balance
   end
 
+  def account_balance_with_currency
+    account_balance.with_currency(object.account.currency)
+  end
+
+  def next_delivery_summary
+    date = object.next_order_occurrence_date
+    return "(no upcoming delivery)" unless date
+
+    next_orders = object.calculate_next_orders(date).map(&:decorate)
+
+    [
+      date.strftime("%A, %d %b %Y"),
+      next_orders.map(&:summary).sort
+    ].join("\n")
+  end
+
   def active_orders_count
     object.orders.active.count
   end
