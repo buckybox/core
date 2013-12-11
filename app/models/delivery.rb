@@ -59,16 +59,11 @@ class Delivery < ActiveRecord::Base
   end
 
   def self.auto_deliver(delivery)
-    auto_delivered = false
+    return true if delivery.delivered? || delivery.manual?
 
-    unless delivery.manual?
-      delivery.status_change_type = 'auto'
-      delivery.status_event = 'deliver'
-
-      auto_delivered = delivery.save
-    end
-
-    return auto_delivered
+    delivery.status_change_type = 'auto'
+    delivery.status_event = 'deliver'
+    delivery.save
   end
 
   def self.change_statuses(deliveries, status_event)
