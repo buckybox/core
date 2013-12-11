@@ -6,7 +6,7 @@ class BankInformationDecorator < Draper::Decorator
   def bank_account_number
     SimpleForm::Inputs::BankAccountNumberInput.formatted_bank_account_number(
       bank.account_number, bank.country.alpha2
-    )
+    ) unless bank.account_number.blank?
   end
 
   def note
