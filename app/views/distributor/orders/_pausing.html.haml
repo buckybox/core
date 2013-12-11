@@ -15,8 +15,8 @@
       .cancel-link= link_to 'cancel', '#'
 
     .resulting-link{ style: "display: #{pause_date ? 'block' : 'none'};", data: { date: pause_date } }
-      = link_to 'pausing', '#'
-      %span== on #{order_pause_date_formatted(order)}
+      pausing starts
+      = link_to order_pause_date_formatted(order), '#'
 
   .resume.info-controller{ style: "display: #{pause_date ? 'block' : 'none'};" }
     .initial-link{ style: "display: #{resume_date ? 'none' : 'block'};" }
@@ -31,5 +31,5 @@
       .cancel-link= link_to 'cancel', '#', class: 'links'
 
     .resulting-link{ style: "display: #{resume_date ? 'block' : 'none'};", data: { date: resume_date } }
-      = link_to 'resuming', '#'
-      %span== on #{order_resume_date_formatted(order)}
+      resuming deliveries on
+      = link_to order_resume_date_formatted(order), '#'
