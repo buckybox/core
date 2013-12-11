@@ -11,6 +11,8 @@ end
 
 module BuckyBox
   class Application < Rails::Application
+    config.version = `git log -1 --pretty='format:%h (%ci)'` rescue '[unknown]'
+
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration should go into files in config/initializers
     # -- all .rb files in that directory are automatically loaded.
