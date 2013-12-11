@@ -27,7 +27,7 @@
             %td.date-column
               .new-form-input= text_field_tag 'date', Time.zone.today.to_s(:date_picker), id: 'transaction_date', class: 'span11 offest1'
             %td.details-column
-              .new-form-input= text_area_tag 'note', '', rows: 1, placeholder: 'e.g. Discount Credit Applied', class: 'span12'
+              .new-form-input= text_field_tag 'note', '', placeholder: 'e.g. Discount Credit Applied', class: 'span12'
             %td.money-column.text-right
               .new-form-input= text_field_tag 'delta', '0.00', required: 'required', class: 'span12'
             %td.button-column
