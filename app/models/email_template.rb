@@ -2,7 +2,13 @@
 class EmailTemplate
 
   # white-list of special keywords to be replaced
-  KEYWORDS = %w(first_name last_name account_balance address)
+  KEYWORDS = {
+    first_name:            :first_name,
+    last_name:             :last_name,
+    account_balance:       :account_balance_with_currency,
+    address:               :address,
+    next_delivery_summary: :next_delivery_summary,
+  }
 
   # 2-array with left and right keyword delimiters
   DELIMITERS = %w({ })
@@ -35,14 +41,10 @@ class EmailTemplate
   def personalise customer
     raise @errors unless valid?
 
-    replace_map = KEYWORDS.inject({}) do |hash, keyword|
-      replace = customer.public_send(keyword)
+    customer = customer.decorate unless customer.decorated?
 
-      # NOTE: format money - will need to be less ad-hoc if we add new keywords
-      if replace.respond_to? :with_currency
-        replace = replace.with_currency(customer.distributor.currency)
-      end
-
+    replace_map = KEYWORDS.inject({}) do |hash, (keyword,method)|
+      replace = customer.public_send(method)
       hash.merge!(keyword => replace.to_s)
     end.freeze
 
@@ -64,11 +66,11 @@ class EmailTemplate
   def unknown_keywords
     regexp = /#{Regexp.escape(DELIMITERS.first)}(.*?)#{Regexp.escape(DELIMITERS.last)}/
 
-    keywords = ATTRIBUTES.map do |attribute|
+    present_keywords = ATTRIBUTES.map do |attribute|
       public_send(attribute).to_s.scan(regexp).map(&:first)
     end.flatten
 
-    keywords - KEYWORDS
+    present_keywords - self.class.keywords
   end
 
   def self.keyword_with_delimiters keyword
@@ -76,8 +78,18 @@ class EmailTemplate
   end
 
   def self.keywords_with_delimiters
-    KEYWORDS.map do |keyword|
+    keywords.map do |keyword|
       keyword_with_delimiters keyword
     end
+  end
+
+private
+
+  def self.keywords
+    KEYWORDS.keys.map(&:to_s)
+  end
+
+  def self.methods
+    KEYWORDS.values
   end
 end
