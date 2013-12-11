@@ -215,15 +215,6 @@ describe Distributor do
     end
 
     describe '.use_local_time_zone' do
-      context 'with no time_zone settings' do
-        before { @distributor = Fabricate(:distributor, time_zone: '') }
-
-        it 'should temporarily change Time.now' do
-          @distributor.use_local_time_zone { Time.zone.name.should eq('Wellington') }
-          Time.zone.name.should eq('Paris')
-        end
-      end
-
       context 'with time_zone set to Berlin' do
         before { @distributor = Fabricate(:distributor, time_zone: 'Berlin') }
 

@@ -77,7 +77,7 @@ class DataIntegrity
 
   def past_deliveries_are_not_pending
     Distributor.find_each do |distributor|
-      Time.use_zone(distributor.time_zone) do
+      distributor.use_local_time_zone do
         date = Date.current
         date -= 1.day if Time.current.hour < Distributor::AUTOMATIC_DELIVERY_HOUR
 

@@ -142,12 +142,11 @@ class Distributor < ActiveRecord::Base
   end
 
   def self.automate_completed_status(time = Time.current)
-    all.each do |distributor|
+    find_each do |distributor|
       distributor.use_local_time_zone do
         local_time = time.in_time_zone
 
         if local_time.hour == AUTOMATIC_DELIVERY_HOUR
-          # considering the next day as standard across all distributors for now
           successful = distributor.automate_completed_status
 
           details = ["#{distributor.name}", "TZ #{distributor.time_zone} #{Time.current}"].join("\n")
@@ -254,10 +253,11 @@ class Distributor < ActiveRecord::Base
 
   # Date is always in distributors timezone
   def automate_completed_status
-    # If we have missed the cutoff point add a day so we start auto deliveries from today
-    if_passed  = ( AUTOMATIC_DELIVERY_HOUR < Time.current.hour ? 1 : 0 )
+    now = Time.current
+    date = now.to_date - 1.day
 
-    date = Date.yesterday + if_passed.day
+    # If we have missed the cutoff point add a day so we start auto deliveries from today
+    date += 1.day if now.hour > Distributor::AUTOMATIC_DELIVERY_HOUR
 
     dates_delivery_lists = delivery_lists.find_by_date(date)
     dates_packing_lists  = packing_lists.find_by_date(date)
@@ -270,19 +270,19 @@ class Distributor < ActiveRecord::Base
     return successful
   end
 
+  # TODO: get rid of me
   def local_time_zone
     [time_zone, BuckyBox::Application.config.time_zone].select(&:present?).first
   end
 
+  # TODO: get rid of me
   def change_to_local_time_zone
     new_time_zone = local_time_zone
     Time.zone = new_time_zone unless new_time_zone.blank?
   end
 
   def use_local_time_zone
-    new_time_zone = local_time_zone
-
-    Time.use_zone(new_time_zone) do
+    Time.use_zone(time_zone) do
       yield
     end
   end
