@@ -12,5 +12,5 @@
             = cron_log.log
             = link_to_function('details', '', class: 'show-hide-details') if cron_log.details.present?
           .cron-log-details.hide= simple_format cron_log.details
-        %td= cron_log.created_at.to_s(:pretty)
+        %td= cron_log.created_at
 
