@@ -54,7 +54,7 @@ class Account < ActiveRecord::Base
 
     amount = EasyMoney.new(amount)
     transactionable = (options[:transactionable] ? options[:transactionable] : self)
-    description = (options[:description] ? options[:description] : 'Manual Transaction.')
+    description = (options[:description] ? options[:description] : 'Manual Transaction')
     transaction_options = { amount: amount, transactionable: transactionable, description: description }
     transaction_options.merge!(display_time: options[:display_time]) if options[:display_time]
     transaction = nil
