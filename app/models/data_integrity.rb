@@ -91,6 +91,24 @@ class DataIntegrity
     end
   end
 
+  def deduction_count_matches_delivery_count
+    Distributor.find_each do |distributor|
+      distributor.use_local_time_zone do
+        date = Date.current
+        date -= 1.day if Time.current.hour < Distributor::AUTOMATIC_DELIVERY_HOUR
+
+        delivery_lists = distributor.delivery_lists.find_by_date(date)
+        delivery_count = delivery_lists ? delivery_lists.deliveries.count : 0
+
+        deduction_count = distributor.transactions.where(transactionable_type: "Deduction").where("display_time::date = ?", date).count
+
+        if delivery_count != deduction_count
+          error "Distributor ##{distributor.id}: #{delivery_count} deliveries on #{date} but #{deduction_count} deductions"
+        end
+      end
+    end
+  end
+
 private
 
   def self.check
@@ -102,6 +120,7 @@ private
     checker.distributor_currency_is_valid
     checker.orders_are_valid
     checker.past_deliveries_are_not_pending
+    checker.deduction_count_matches_delivery_count
 
     checker
   end
