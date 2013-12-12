@@ -166,6 +166,8 @@ class Distributor < ActiveRecord::Base
     # XXX Temporary check
     checker = DataIntegrity.new
     checker.past_deliveries_are_not_pending
+    checker.deduction_count_matches_delivery_count
+    # binding.pry if checker.errors.present?
     DataIntegrity.email checker.errors if checker.errors.present?
     # XXX
   end
@@ -257,7 +259,7 @@ class Distributor < ActiveRecord::Base
     date = now.to_date - 1.day
 
     # If we have missed the cutoff point add a day so we start auto deliveries from today
-    date += 1.day if now.hour > Distributor::AUTOMATIC_DELIVERY_HOUR
+    date += 1.day if now.hour >= Distributor::AUTOMATIC_DELIVERY_HOUR
 
     dates_delivery_lists = delivery_lists.find_by_date(date)
     dates_packing_lists  = packing_lists.find_by_date(date)
