@@ -78,14 +78,15 @@ class DataIntegrity
   def past_deliveries_are_not_pending
     Distributor.find_each do |distributor|
       distributor.use_local_time_zone do
-        date = Date.current
-        date -= 1.day if Time.current.hour < Distributor::AUTOMATIC_DELIVERY_HOUR
+        current_time = Time.current
+        local_date = current_time.to_date
+        local_date -= 1.day if current_time.hour < Distributor::AUTOMATIC_DELIVERY_HOUR
 
-        delivery_lists = distributor.delivery_lists.find_by_date(date)
+        delivery_lists = distributor.delivery_lists.find_by_date(local_date)
         pending = delivery_lists.deliveries.where(status: "pending") if delivery_lists
 
         if pending.present?
-          error "Distributor ##{distributor.id} (#{Time.current} @ #{distributor.time_zone}): #{pending.count} deliveries are still pending for #{date}"
+          error "Distributor ##{distributor.id} (#{current_time} @ #{distributor.time_zone}): #{pending.count} deliveries are still pending for #{local_date}"
         end
       end
     end
@@ -94,16 +95,22 @@ class DataIntegrity
   def deduction_count_matches_delivery_count
     Distributor.find_each do |distributor|
       distributor.use_local_time_zone do
-        date = Date.current
-        date -= 1.day if Time.current.hour < Distributor::AUTOMATIC_DELIVERY_HOUR
+        local_time = Time.current
+        local_time -= 1.day if local_time.hour < Distributor::AUTOMATIC_DELIVERY_HOUR
 
-        delivery_lists = distributor.delivery_lists.find_by_date(date)
+        local_date = local_time.to_date
+        utc_date = local_time.beginning_of_day.utc.to_date
+
+        delivery_lists = distributor.delivery_lists.find_by_date(local_date)
         delivery_count = delivery_lists ? delivery_lists.deliveries.count : 0
 
-        deduction_count = distributor.transactions.where(transactionable_type: "Deduction").where("display_time::date = ?", date).count
+        deduction_count = distributor.transactions.
+          where(transactionable_type: "Deduction").
+          where("display_time::date = ?", utc_date). # display_time is UTC
+          count
 
         if delivery_count != deduction_count
-          error "Distributor ##{distributor.id}: #{delivery_count} deliveries on #{date} but #{deduction_count} deductions"
+          error "Distributor ##{distributor.id}: #{delivery_count} deliveries on #{local_date} but #{deduction_count} deductions"
         end
       end
     end
