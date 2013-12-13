@@ -353,7 +353,7 @@ class Customer < ActiveRecord::Base
   end
 
   def calculate_next_order(date = Date.current.to_s(:db))
-    calculate_next_orders.first
+    calculate_next_orders(date).first
   end
 
   # next orders scheduled on `date` and later
