@@ -80,6 +80,7 @@ class Distributor::OrdersController < Distributor::ResourceController
     start_date = Date.parse(params[:date])
 
     @order.pause!(start_date, @order.resume_date)
+    @order.customer.add_activity(current_distributor, :order_pause, order: @order)
     render partial: 'distributor/orders/details', locals: { order: @order }
   end
 
