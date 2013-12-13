@@ -21,7 +21,7 @@ private
 
   ACTIONS = {
     order_pause: ->(params) {
-      "#{params[:initiator]} paused their order of <em>#{params[:order].box.name}</em> starting #{params[:order].pause_date.strftime("%a %d %b")}"
+      "#{params[:initiator]} paused their order of #{params[:order].box.name} starting #{params[:order].pause_date.strftime("%a %d %b")}"
     },
     order_remove_pause: ->(params) {
       "#{params[:initiator]} unpaused their order of <em>#{params[:order].box.name}</em>"
