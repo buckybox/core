@@ -21,7 +21,9 @@ class CustomerDecorator < Draper::Decorator
     date = object.next_order_occurrence_date
     return "(no upcoming delivery)" unless date
 
-    next_orders = object.calculate_next_orders(date).map(&:decorate)
+    next_orders = object.calculate_next_orders(date).select do |order|
+      order.next_occurrence == date
+    end.map(&:decorate)
 
     [
       date.strftime("%A, %d %b %Y"),
