@@ -25,8 +25,8 @@ describe EmailTemplate do
 
   describe "#personalise" do
     it "replaces keywords" do
-      customer = Fabricate.build(:customer, first_name: "Joe", last_name: "Dalton")
-      customer.stub(:account_balance) { "$0.00" }
+      customer = Fabricate(:customer, first_name: "Joe", last_name: "Dalton")
+      Fabricate(:account, customer: customer) # need an account to test `account_balance`
 
       template = EmailTemplate.new "Hi {first_name}", <<-BODY
         Hey {first_name}!
