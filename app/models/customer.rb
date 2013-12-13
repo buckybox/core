@@ -352,8 +352,14 @@ class Customer < ActiveRecord::Base
     account_balance.negative?
   end
 
-  def calculate_next_order(date=Date.current.to_s(:db))
-    orders.active.select("orders.*, next_occurrence('#{date}', false, false, schedule_rules.*)").joins(:schedule_rule).reject{|sr| sr.next_occurrence.blank?}.sort_by(&:next_occurrence).first
+  def calculate_next_order(date = Date.current.to_s(:db))
+    calculate_next_orders.first
+  end
+
+  # next orders scheduled on `date` and later
+  def calculate_next_orders(date = Date.current.to_s(:db))
+    orders.active.select("orders.*, next_occurrence('#{date}', false, false, schedule_rules.*)").
+      joins(:schedule_rule).reject { |sr| sr.next_occurrence.blank? }.sort_by(&:next_occurrence)
   end
 
   def has_yellow_deliveries?
