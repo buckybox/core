@@ -133,6 +133,12 @@ class Distributor::CustomersController < Distributor::ResourceController
     redirect_to customer_root_path
   end
 
+  def activity
+    customer = current_distributor.customers.find(params[:id])
+
+    render partial: "activity", locals: { activities: customer.recent_activities }
+  end
+
 protected
 
   def get_form_type

@@ -140,6 +140,17 @@ $(function() {
   function reload_pause_details(order_id, data) {
     $('#order_' + order_id + '_details').html(data);
     order_pause_init();
+
+    reload_activities();
+  }
+
+  function reload_activities() {
+    var customer_id = $("#customer-details .customer-name").data("customer-id");
+
+    $.get("/distributor/customers/" + customer_id + "/activity", function(data) {
+      $("#activities").html(data).
+        closest("#activity-section").parent().slideDown(); // make sure it is visible if first item
+    });
   }
 
   function fromPausingElementFind(startElement, findName) {

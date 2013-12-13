@@ -57,6 +57,13 @@
       %small= link_to 'edit delivery details', edit_distributor_customer_path(@customer, form_type: :delivery)
 
   #customer-associations.span8
+    .row-fluid{ class: "#{'hide' if @customer.recent_activities.empty?}" }
+      #activity-section.span12
+        %fieldset
+          %legend recent activity
+          #activities
+            = render partial: 'activity', locals: { activities: @customer.recent_activities }
+
     .row-fluid
       #note-section.span12
         %fieldset

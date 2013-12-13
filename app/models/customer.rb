@@ -9,6 +9,7 @@ class Customer < ActiveRecord::Base
   has_one :account, dependent: :destroy
 
   has_many :events,       dependent: :destroy
+  has_many :activities,   dependent: :destroy
   has_many :transactions, through: :account
   has_many :payments,     through: :account
   has_many :deductions,   through: :account
@@ -97,6 +98,19 @@ class Customer < ActiveRecord::Base
     end
 
     return result
+  end
+
+  def add_activity(initiator, type, options = {})
+    Activity.add(
+      customer: self,
+      initiator: initiator,
+      type: type,
+      options: options
+    )
+  end
+
+  def recent_activities(limit = 5)
+    activities.order("created_at DESC").first(limit)
   end
 
   def guest?
