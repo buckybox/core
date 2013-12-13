@@ -101,12 +101,7 @@ class Customer < ActiveRecord::Base
   end
 
   def add_activity(initiator, type, options = {})
-    Activity.add(
-      customer: self,
-      initiator: initiator,
-      type: type,
-      options: options
-    )
+    Activity.add(self, initiator, type, options)
   end
 
   def recent_activities(limit = 5)

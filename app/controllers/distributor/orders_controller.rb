@@ -86,6 +86,7 @@ class Distributor::OrdersController < Distributor::ResourceController
 
   def remove_pause
     @order.remove_pause!
+    @order.customer.add_activity(current_distributor, :order_remove_pause, order: @order)
     render partial: 'distributor/orders/details', locals: { order: @order }
   end
 
