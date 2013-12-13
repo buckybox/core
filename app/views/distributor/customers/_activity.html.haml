@@ -1,6 +1,6 @@
 %ul
   - activities.each do |activity|
     %li
-      #{activity.action.html_safe},
-      #{time_ago_in_words(activity.created_at)} ago.
+      %strong #{time_ago_in_words(activity.created_at).capitalize} ago
+      = "- #{activity.action}."
 
