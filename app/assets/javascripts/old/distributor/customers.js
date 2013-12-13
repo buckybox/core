@@ -149,7 +149,7 @@ $(function() {
 
     $.get("/distributor/customers/" + customer_id + "/activity", function(data) {
       $("#activities").html(data).
-        closest("#activity-section").parent().slideDown(); // make sure it is visible if first item
+        closest("#activity-section").slideDown(); // make sure it is visible if first item
     });
   }
 
