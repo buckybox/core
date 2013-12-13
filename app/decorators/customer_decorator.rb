@@ -19,7 +19,7 @@ class CustomerDecorator < Draper::Decorator
 
   def next_delivery_summary
     date = object.next_order_occurrence_date
-    return "(no upcoming delivery)" unless date
+    return "(no upcoming deliveries)" unless date
 
     next_orders = object.calculate_next_orders(date).select do |order|
       order.next_occurrence == date
