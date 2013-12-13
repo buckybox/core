@@ -6,7 +6,7 @@ describe CustomerDecorator do
   describe "#next_delivery_summary" do
     context "with no upcoming deliveries" do
       specify do
-        expect(customer.next_delivery_summary).to eq "(no upcoming delivery)"
+        expect(customer.next_delivery_summary).to eq "(no upcoming deliveries)"
       end
     end
 
