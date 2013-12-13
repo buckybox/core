@@ -35,6 +35,7 @@ class Customer::OrdersController < Customer::ResourceController
 
   def remove_pause
     @order.remove_pause!
+    @order.customer.add_activity(current_customer, :order_remove_pause, order: @order)
     render partial: 'customer/orders/details', locals: { order: @order }
   end
 

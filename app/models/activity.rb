@@ -1,20 +1,32 @@
 class Activity < ActiveRecord::Base
-  def self.add(params)
-    initiator = case params.fetch(:initiator)
+  def self.add(customer, initiator, type, params = {})
+    params[:initiator] = case initiator
       when Customer
-        params[:initiator].name
+        initiator.name
       when Distributor
         "You"
       else
-        raise
+        raise ArgumentError, "Invalid initiator"
     end
 
-    options = params.fetch(:options)
+    action = ACTIONS.fetch(type).call(params)
 
     create!(
-      customer_id: params.fetch(:customer).id,
-      action: "#{initiator} paused their order of <em>#{options[:order].box.name}</em> starting #{options[:order].pause_date.strftime("%a %d %b")}"
+      customer_id: customer.id,
+      action: action,
     )
   end
+
+private
+
+  ACTIONS = {
+    order_pause: ->(params) {
+      "#{params[:initiator]} paused their order of <em>#{params[:order].box.name}</em> starting #{params[:order].pause_date.strftime("%a %d %b")}"
+    },
+    order_remove_pause: ->(params) {
+      "#{params[:initiator]} unpaused their order of <em>#{params[:order].box.name}</em>"
+    },
+
+  }
 end
 
