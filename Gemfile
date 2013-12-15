@@ -81,11 +81,10 @@ group :development do
   gem 'binding_of_caller'
   gem 'quiet_assets'
   gem 'meta_request'
-
-  # Pry: IRB + ruby debug alternative which is active and easier to install
+  gem 'byebug'
+  gem 'pry-byebug'
   gem 'pry-rails'
-  gem 'pry-debugger'
-  gem 'pry-coolline'
+  gem 'pry-coolline' # as-you-type syntax highlighting
   gem 'pry-stack_explorer'
 end
 
