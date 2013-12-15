@@ -75,7 +75,6 @@ group :development do
   gem 'ruby-prof',  require: false # profiling with /newrelic
   gem 'capistrano', '~> 2' # v3 is broken with `undefined local variable or method `tasks_without_stage_dependency'` atm
   gem 'term-ansicolor'
-  gem 'guard-rspec'
   gem 'parallel_tests'
   gem 'sextant'
   gem 'better_errors'
@@ -101,6 +100,8 @@ group :test do
   gem 'poltergeist', require: false
   gem 'launchy'
   gem 'fuubar'
+  gem 'guard', '~> 1' # v2 is broken with a version mismatch issue
+  gem 'guard-rspec'
 end
 
 group :staging do
@@ -109,7 +110,6 @@ end
 
 group :development, :test do
   gem 'rspec-rails'
-  gem 'guard', '~> 1' # v2 is broken with a version mismatch issue
   gem 'listen'
   gem 'terminal-notifier-guard' # Mac 10.8 system notifications for Guard
   gem 'letter_opener'
