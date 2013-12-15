@@ -224,6 +224,8 @@ BuckyBox::Application.routes.draw do
   namespace :admin do
     root to: 'dashboard#index'
 
+    get 'wut', to: 'dashboard#wut'
+
     resources :cron_logs, only: :index
     resources :style_sheet, only: :index
 

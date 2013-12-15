@@ -4,6 +4,17 @@ require 'rails/all'
 
 if defined?(Bundler)
   # If you precompile assets before deploying to production, use this line
+  # # require 'pry'
+  # # binding.pry
+  # module Bundler
+  #   class << self
+  #     alias :old_require :require
+  #     def require(*a)
+  #       d = Benchmark.realtime { old_require(*a) }
+  #       p "TOOK #{d} for #{a.inspect}"
+  #     end
+  #   end
+  # end
   Bundler.require(*Rails.groups(assets: %w(development test)))
   # If you want your assets lazily compiled in production, use this line
   # Bundler.require(:default, :assets, Rails.env)

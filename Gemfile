@@ -1,5 +1,6 @@
 source 'https://rubygems.org'
 
+gem 'fnordmetric'
 gem 'rails',                      '~> 3.2.16'
 gem 'pg',                         '~> 0.17.0'
 gem 'haml-rails',                 '~> 0.3.4'

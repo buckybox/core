@@ -7,4 +7,8 @@ class Admin::DashboardController < Admin::BaseController
 
     @cron_logs = CronLog.limit(10)
   end
+
+  def wut
+    render text: "<ul><li>" + get_wut.join("<li>").html_safe
+  end
 end
