@@ -37,13 +37,13 @@ class Customer::OrdersController < Customer::ResourceController
     start_date = Date.parse(params[:date])
 
     @order.pause!(start_date, @order.resume_date)
-    @order.customer.add_activity(current_customer, :order_pause, order: @order)
+    @order.customer.add_activity(:order_pause, order: @order)
     render partial: 'customer/orders/details', locals: { order: @order }
   end
 
   def remove_pause
     @order.remove_pause!
-    @order.customer.add_activity(current_customer, :order_remove_pause, order: @order)
+    @order.customer.add_activity(:order_remove_pause, order: @order)
     render partial: 'customer/orders/details', locals: { order: @order }
   end
 
@@ -56,7 +56,7 @@ class Customer::OrdersController < Customer::ResourceController
     end_date   = Date.parse(params[:date])
 
     @order.pause!(start_date, end_date)
-    @order.customer.add_activity(current_customer, :order_resume, order: @order)
+    @order.customer.add_activity(:order_resume, order: @order)
     render partial: 'customer/orders/details', locals: { order: @order }
   end
 
@@ -64,7 +64,7 @@ class Customer::OrdersController < Customer::ResourceController
     start_date = @order.pause_date
 
     @order.pause!(start_date)
-    @order.customer.add_activity(current_customer, :order_remove_resume, order: @order)
+    @order.customer.add_activity(:order_remove_resume, order: @order)
     render partial: 'customer/orders/details', locals: { order: @order }
   end
 
@@ -79,7 +79,7 @@ class Customer::OrdersController < Customer::ResourceController
         format.html {redirect_to customer_root_path, alert: 'We could not remove this order as the impending delivery is too late to cancel.'}
 
       elsif current_customer.can_deactivate_orders? && @order.update_attribute(:active, false)
-        @order.customer.add_activity(current_customer, :order_remove, order: @order)
+        @order.customer.add_activity(:order_remove, order: @order)
 
         format.html do
           if @order.recurs? && @order.has_yellow_deliveries?
@@ -124,16 +124,16 @@ class Customer::OrdersController < Customer::ResourceController
 
   def create_activities_from_changes
     if @old_box != @order.reload.box
-      @order.customer.add_activity(current_customer, :order_update_box, order: @order, old_box_name: @old_box.name)
+      @order.customer.add_activity(:order_update_box, order: @order, old_box_name: @old_box.name)
     end
 
     new_order_extras = @order.reload.order_extras
     if @old_order_extras.present? && new_order_extras.empty?
-      @order.customer.add_activity(current_customer, :order_remove_extras, order: @order)
+      @order.customer.add_activity(:order_remove_extras, order: @order)
     elsif @old_order_extras.empty? && new_order_extras.present?
-      @order.customer.add_activity(current_customer, :order_add_extras, order: @order)
+      @order.customer.add_activity(:order_add_extras, order: @order)
     elsif @old_order_extras != new_order_extras
-      @order.customer.add_activity(current_customer, :order_update_extras, order: @order)
+      @order.customer.add_activity(:order_update_extras, order: @order)
     end
   end
 end

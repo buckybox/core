@@ -100,7 +100,8 @@ class Customer < ActiveRecord::Base
     return result
   end
 
-  def add_activity(initiator, type, options = {})
+  def add_activity(type, options = {})
+    initiator = options.delete(:initiator) || self
     Activity.add(self, initiator, type, options)
   end
 
