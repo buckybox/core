@@ -27,6 +27,7 @@ class Distributor::OrdersController < Distributor::ResourceController
       success.html do
         tracking.event(current_distributor, "new_order") unless current_admin.present?
         @order.customer.add_activity(:order_create, order: @order, initiator: current_distributor)
+        send_confirmation_email(@order) if current_distributor.email_customer_on_new_order
 
         redirect_to [:distributor, @account.customer]
       end
@@ -159,5 +160,12 @@ class Distributor::OrdersController < Distributor::ResourceController
     elsif @old_order_extras != new_order_extras
       @order.customer.add_activity(:order_update_extras, order: @order, initiator: current_distributor)
     end
+  end
+
+  def send_confirmation_email(order)
+    CustomerMailer.delay(
+      priority: Figaro.env.delayed_job_priority_high,
+      queue: "#{__FILE__}:#{__LINE__}",
+    ).order_confirmation(order)
   end
 end
