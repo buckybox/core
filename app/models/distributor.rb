@@ -54,25 +54,26 @@ class Distributor < ActiveRecord::Base
   monetize :consumer_delivery_fee_cents
   monetize :default_balance_threshold_cents
 
-  # Setup accessible (or protected) attributes for your model
-  attr_accessible :email, :password, :password_confirmation, :remember_me,
-    :name, :url, :company_logo, :company_logo_cache, :remove_company_logo,
-    :company_team_image, :company_team_image_cache, :remove_company_team_image,
-    :completed_wizard, :support_email, :invoice_threshold, :separate_bucky_fee,
-    :advance_hour, :advance_days, :time_zone, :currency,
-    :country_id, :consumer_delivery_fee, :consumer_delivery_fee_cents,
-    :active_webstore, :about, :details, :facebook_url, :city,
-    :customers_show_intro, :deliveries_index_packing_intro,
-    :deliveries_index_deliveries_intro, :payments_index_intro,
-    :customers_index_intro, :customer_can_remove_orders, :parameter_name,
-    :default_balance_threshold, :has_balance_threshold,
-    :spend_limit_on_all_customers, :send_email, :send_halted_email,
-    :feature_spend_limit, :contact_name, :tag_list, :collect_phone, :collect_delivery_note,
-    :require_address_1, :require_address_2, :require_suburb, :require_postcode,
-    :require_phone, :require_city, :require_delivery_note, :omni_importer_ids, :notes,
-    :payment_cash_on_delivery, :payment_bank_deposit, :payment_credit_card,
-    :keep_me_updated, :email_templates, :notify_address_change, :notify_for_new_webstore_order,
+  # Actual model attributes
+  attr_accessible :email, :password, :password_confirmation, :remember_me, :name, :url,
+    :company_logo, :company_logo_cache, :remove_company_logo, :company_team_image,
+    :company_team_image_cache, :remove_company_team_image, :completed_wizard, :support_email,
+    :invoice_threshold, :separate_bucky_fee, :advance_hour, :advance_days, :time_zone, :currency,
+    :country_id, :consumer_delivery_fee, :consumer_delivery_fee_cents, :active_webstore, :about,
+    :details, :facebook_url, :city, :parameter_name, :spend_limit_on_all_customers,
+    :feature_spend_limit, :contact_name, :tag_list, :omni_importer_ids, :notes, :email_templates,
     :phone, :localised_address_attributes, :api_key, :api_secret
+
+  # Intro flags
+  attr_accessible :customers_show_intro, :deliveries_index_packing_intro,
+    :deliveries_index_deliveries_intro, :payments_index_intro, :customers_index_intro
+
+  # Settings
+  attr_accessible :customer_can_remove_orders, :default_balance_threshold, :has_balance_threshold,
+    :send_email, :send_halted_email, :collect_phone, :collect_delivery_note, :require_address_1,
+    :require_address_2, :require_suburb, :require_postcode, :require_phone, :require_city,
+    :require_delivery_note, :payment_cash_on_delivery, :payment_bank_deposit, :payment_credit_card,
+    :keep_me_updated, :notify_address_change, :notify_for_new_webstore_order
 
   accepts_nested_attributes_for :localised_address
 
