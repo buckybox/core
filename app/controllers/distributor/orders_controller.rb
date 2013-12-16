@@ -51,8 +51,16 @@ class Distributor::OrdersController < Distributor::ResourceController
     # Will revisit when we have time to build a proper UI for it
     params[:order].delete(:frequency)
 
+    # keep references to old values for create_activities_from_changes
+    @old_box = @order.box
+    @old_order_extras = @order.order_extras.dup
+
     update!  do |success, failure|
-      success.html { redirect_to [:distributor, @account.customer] }
+      success.html do
+        create_activities_from_changes
+        redirect_to [:distributor, @account.customer]
+      end
+
       failure.html do
         load_form
         flash[:error] = 'There was a problem creating this order.'
@@ -67,6 +75,8 @@ class Distributor::OrdersController < Distributor::ResourceController
 
     respond_to do |format|
       if @order.update_attribute(:active, false)
+        @order.customer.add_activity(current_distributor, :order_remove, order: @order)
+
         format.html { redirect_to [:distributor, @account.customer], notice: 'Order was successfully deactivated.' }
         format.json { head :no_content }
       else
@@ -132,5 +142,20 @@ class Distributor::OrdersController < Distributor::ResourceController
     @form_params      = [:distributor, @account, @order]
     @dislikes_list    = @order.exclusions.map { |e| e.line_item_id.to_s }
     @likes_list       = @order.substitutions.map { |s| s.line_item_id.to_s }
+  end
+
+  def create_activities_from_changes
+    if @old_box != @order.reload.box
+      @order.customer.add_activity(current_distributor, :order_update_box, order: @order, old_box_name: @old_box.name)
+    end
+
+    new_order_extras = @order.reload.order_extras
+    if @old_order_extras.present? && new_order_extras.empty?
+      @order.customer.add_activity(current_distributor, :order_remove_extras, order: @order)
+    elsif @old_order_extras.empty? && new_order_extras.present?
+      @order.customer.add_activity(current_distributor, :order_add_extras, order: @order)
+    elsif @old_order_extras != new_order_extras
+      @order.customer.add_activity(current_distributor, :order_update_extras, order: @order)
+    end
   end
 end
