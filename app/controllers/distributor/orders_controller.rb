@@ -75,7 +75,7 @@ class Distributor::OrdersController < Distributor::ResourceController
 
     respond_to do |format|
       if @order.update_attribute(:active, false)
-        @order.customer.add_activity(current_distributor, :order_remove, order: @order)
+        @order.customer.add_activity(:order_remove, order: @order, initiator: current_distributor)
 
         format.html { redirect_to [:distributor, @account.customer], notice: 'Order was successfully deactivated.' }
         format.json { head :no_content }
@@ -90,13 +90,13 @@ class Distributor::OrdersController < Distributor::ResourceController
     start_date = Date.parse(params[:date])
 
     @order.pause!(start_date, @order.resume_date)
-    @order.customer.add_activity(current_distributor, :order_pause, order: @order)
+    @order.customer.add_activity(:order_pause, order: @order, initiator: current_distributor)
     render partial: 'distributor/orders/details', locals: { order: @order }
   end
 
   def remove_pause
     @order.remove_pause!
-    @order.customer.add_activity(current_distributor, :order_remove_pause, order: @order)
+    @order.customer.add_activity(:order_remove_pause, order: @order, initiator: current_distributor)
     render partial: 'distributor/orders/details', locals: { order: @order }
   end
 
@@ -109,7 +109,7 @@ class Distributor::OrdersController < Distributor::ResourceController
     end_date   = Date.parse(params[:date])
 
     @order.pause!(start_date, end_date)
-    @order.customer.add_activity(current_distributor, :order_resume, order: @order)
+    @order.customer.add_activity(:order_resume, order: @order, initiator: current_distributor)
     render partial: 'distributor/orders/details', locals: { order: @order }
   end
 
@@ -117,7 +117,7 @@ class Distributor::OrdersController < Distributor::ResourceController
     start_date = @order.pause_date
 
     @order.pause!(start_date)
-    @order.customer.add_activity(current_distributor, :order_remove_resume, order: @order)
+    @order.customer.add_activity(:order_remove_resume, order: @order, initiator: current_distributor)
     render partial: 'distributor/orders/details', locals: { order: @order }
   end
 
@@ -146,16 +146,16 @@ class Distributor::OrdersController < Distributor::ResourceController
 
   def create_activities_from_changes
     if @old_box != @order.reload.box
-      @order.customer.add_activity(current_distributor, :order_update_box, order: @order, old_box_name: @old_box.name)
+      @order.customer.add_activity(:order_update_box, order: @order, old_box_name: @old_box.name, initiator: current_distributor)
     end
 
     new_order_extras = @order.reload.order_extras
     if @old_order_extras.present? && new_order_extras.empty?
-      @order.customer.add_activity(current_distributor, :order_remove_extras, order: @order)
+      @order.customer.add_activity(:order_remove_extras, order: @order, initiator: current_distributor)
     elsif @old_order_extras.empty? && new_order_extras.present?
-      @order.customer.add_activity(current_distributor, :order_add_extras, order: @order)
+      @order.customer.add_activity(:order_add_extras, order: @order, initiator: current_distributor)
     elsif @old_order_extras != new_order_extras
-      @order.customer.add_activity(current_distributor, :order_update_extras, order: @order)
+      @order.customer.add_activity(:order_update_extras, order: @order, initiator: current_distributor)
     end
   end
 end
