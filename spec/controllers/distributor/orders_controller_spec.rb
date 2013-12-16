@@ -26,7 +26,7 @@ describe Distributor::OrdersController do
 
     describe '#edit' do
       it 'should render edit' do
-        @order = mock_model(Order, { create_schedule: nil, exclusions: [], substitutions: [] })
+        @order = double('order').as_null_object
         @account.stub_chain(:orders, :find).and_return(@order)
         get :edit, account_id: @account.id, id: 7
         response.should render_template('edit')
@@ -35,7 +35,7 @@ describe Distributor::OrdersController do
 
     describe '#update' do
       before do
-        @order = mock_model(Order, {exclusions: [], substitutions: [] })
+        @order = double('order').as_null_object
         Distributor.any_instance.stub_chain(:orders, :find).and_return(@order)
       end
 
