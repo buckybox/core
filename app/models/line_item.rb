@@ -37,7 +37,7 @@ class LineItem < ActiveRecord::Base
       if name.blank?
         line_item.destroy
       elsif name != line_item.name
-        new_line_item = LineItem.find_or_create_by_name(name, distributor: distributor)
+        new_line_item = LineItem.where(name: name, distributor_id: distributor.id).first_or_create
         move_exclustions_and_substitutions!(line_item, new_line_item)
       end
     end
