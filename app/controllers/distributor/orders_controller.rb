@@ -99,6 +99,7 @@ class Distributor::OrdersController < Distributor::ResourceController
     end_date   = Date.parse(params[:date])
 
     @order.pause!(start_date, end_date)
+    @order.customer.add_activity(current_distributor, :order_resume, order: @order)
     render partial: 'distributor/orders/details', locals: { order: @order }
   end
 
@@ -106,9 +107,10 @@ class Distributor::OrdersController < Distributor::ResourceController
     start_date = @order.pause_date
 
     @order.pause!(start_date)
+    @order.customer.add_activity(current_distributor, :order_remove_resume, order: @order)
     render partial: 'distributor/orders/details', locals: { order: @order }
   end
-  
+
   private
 
   def check_for_boxes

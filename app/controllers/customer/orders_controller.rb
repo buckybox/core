@@ -48,6 +48,7 @@ class Customer::OrdersController < Customer::ResourceController
     end_date   = Date.parse(params[:date])
 
     @order.pause!(start_date, end_date)
+    @order.customer.add_activity(current_customer, :order_resume, order: @order)
     render partial: 'customer/orders/details', locals: { order: @order }
   end
 
@@ -55,6 +56,7 @@ class Customer::OrdersController < Customer::ResourceController
     start_date = @order.pause_date
 
     @order.pause!(start_date)
+    @order.customer.add_activity(current_customer, :order_remove_resume, order: @order)
     render partial: 'customer/orders/details', locals: { order: @order }
   end
 
