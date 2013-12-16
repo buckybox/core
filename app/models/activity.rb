@@ -46,11 +46,16 @@ private
     order_update_box: ->(params) {
       "#{params.initiator} changed their order from #{params.old_box_name} to a #{params.order.box.name}"
     },
-    order_update_frequency: ->(params) {
+    order_update_frequency: ->(params) { # XXX for future use - the UI doesn't allow to update this yet
       "#{params.initiator} changed the frequency of #{params.order.box.name} from #{params.old_frequency} to #{params.order.schedule_rule.frequency}"
     },
     order_remove: ->(params) {
       "#{params.initiator} removed their order of #{params.order.box.name}"
+    },
+    order_create: ->(params) {
+      message = "#{params.initiator} created an order of #{params.order.box.name}"
+      message << " with #{params.order.extras_description}" if params.order.extras.present?
+      message
     },
   }
 end
