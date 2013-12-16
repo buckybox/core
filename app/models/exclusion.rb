@@ -11,14 +11,12 @@ class Exclusion < ActiveRecord::Base
 
   scope :active, includes(:order).where("orders.active = ?", true)
 
+  delegate :name, to: :line_item
+
   def self.change_line_items!(old_line_item, new_line_item)
     old_line_item.exclusions.each do |e|
       e.update_attribute(:line_item_id, new_line_item.id)
       e.save
     end
-  end
-
-  def name
-    line_item.name
   end
 end
