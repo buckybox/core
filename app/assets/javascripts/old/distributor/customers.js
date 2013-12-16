@@ -146,6 +146,7 @@ $(function() {
 
   function reload_activities() {
     var customer_id = $("#customer-details .customer-name").data("customer-id");
+    if (!customer_id) return; // customer facing section
 
     $.get("/distributor/customers/" + customer_id + "/activity", function(data) {
       $("#activities").html(data).
