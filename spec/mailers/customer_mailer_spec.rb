@@ -3,7 +3,7 @@ require "spec_helper"
 describe CustomerMailer do
   before { @customer = Fabricate(:customer) }
 
-  describe "login_details" do
+  describe "#login_details" do
     let(:mail) { CustomerMailer.login_details(@customer)}
 
     it "renders the headers" do
@@ -14,7 +14,7 @@ describe CustomerMailer do
     end
   end
 
-  describe "halt" do
+  describe "#halt" do
     let(:mail){ CustomerMailer.orders_halted(@customer) }
 
     it "cc's distributor" do
@@ -22,7 +22,7 @@ describe CustomerMailer do
     end
   end
 
-  describe "email_template" do
+  describe "#email_template" do
     let(:email_template) {
       Fabricate.build(:email_template)
     }
@@ -31,5 +31,18 @@ describe CustomerMailer do
     specify { mail.to.should eq [@customer.email] }
     specify { mail.subject.should eq email_template.subject }
     specify { mail.body.parts.find{|p| p.content_type.match(/plain/)}.body.raw_source.should eq(email_template.body)}
+  end
+
+  describe "#order_confirmation" do
+    let(:order) { Fabricate(:order) }
+    let(:mail) { CustomerMailer.order_confirmation(order) }
+
+    specify { expect(mail.to).to eq [order.customer.email] }
+    specify { expect(mail.cc).to be_empty }
+
+    it "cc's distributor if enabled" do
+      order.distributor.stub(:email_distributor_on_new_webstore_order) { true }
+      expect(mail.cc).to eq [order.distributor.support_email]
+    end
   end
 end
