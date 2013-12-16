@@ -1245,7 +1245,10 @@ CREATE TABLE distributors (
     notify_for_new_webstore_order boolean DEFAULT true NOT NULL,
     sidebar_description text,
     api_key character varying(255),
-    api_secret character varying(255)
+    api_secret character varying(255),
+    email_customer_on_new_webstore_order boolean DEFAULT true NOT NULL,
+    email_customer_on_new_order boolean DEFAULT false NOT NULL,
+    email_distributor_on_new_webstore_order boolean DEFAULT false NOT NULL
 );
 
 
@@ -3807,3 +3810,5 @@ INSERT INTO schema_migrations (version) VALUES ('20131022025554');
 INSERT INTO schema_migrations (version) VALUES ('20131112025426');
 
 INSERT INTO schema_migrations (version) VALUES ('20131212220220');
+
+INSERT INTO schema_migrations (version) VALUES ('20131216225521');

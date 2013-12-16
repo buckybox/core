@@ -73,7 +73,9 @@ class Distributor < ActiveRecord::Base
     :send_email, :send_halted_email, :collect_phone, :collect_delivery_note, :require_address_1,
     :require_address_2, :require_suburb, :require_postcode, :require_phone, :require_city,
     :require_delivery_note, :payment_cash_on_delivery, :payment_bank_deposit, :payment_credit_card,
-    :keep_me_updated, :notify_address_change, :notify_for_new_webstore_order
+    :keep_me_updated, :notify_address_change, :notify_for_new_webstore_order,
+    :email_customer_on_new_webstore_order, :email_customer_on_new_order,
+    :email_distributor_on_new_webstore_order
 
   accepts_nested_attributes_for :localised_address
 
