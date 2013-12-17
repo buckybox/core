@@ -54,7 +54,7 @@ private
     },
     order_create: ->(params) {
       message = "#{params.initiator} created an order of #{params.order.box.name}"
-      message << " with #{params.order.extras_description}" if params.order.extras.present?
+      message << " with extras" if params.order.extras.present?
       message
     },
   }
