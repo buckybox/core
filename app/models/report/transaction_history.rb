@@ -34,17 +34,17 @@ private
 
   def csv_header
     [
-      "Transaction Date",
-      "Transaction Processed Date",
-      "Transaction Amount",
-      "Transaction Type",
-      "Transaction Description",
-      "Customer Number",
-      "Customer First Name",
-      "Customer Last Name",
-      "Customer Email",
-      "Customer Discount",
-      "Customer Labels",
+      "transaction date",
+      "transaction processed date",
+      "transaction amount",
+      "transaction type",
+      "transaction description",
+      "customer number",
+      "customer first name",
+      "customer last name",
+      "customer email",
+      "customer discount",
+      "customer labels",
     ]
   end
 
