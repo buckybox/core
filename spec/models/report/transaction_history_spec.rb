@@ -38,7 +38,7 @@ describe Report::TransactionHistory do
   describe '#data' do
     it 'returns the customers data in csv format' do
       transaction_history = Report::TransactionHistory.new(args)
-      expected_result = "06/Jul/2013,07/Jul/2013,3,Payment,Desc,9,Joe,Dalton,email@example.com,0.0,tag\n"
+      expected_result = "07/Jul/2013,06/Jul/2013,3,Payment,Desc,9,Joe,Dalton,email@example.com,0.0,tag\n"
       expect(transaction_history.data.lines.last).to eq(expected_result)
     end
   end
