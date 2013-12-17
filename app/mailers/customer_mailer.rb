@@ -56,8 +56,8 @@ class CustomerMailer < ApplicationMailer
 
   def order_confirmation(order)
     @order = order.decorate
-    @distributor = @order.distributor
-    @customer = @order.customer
+    @distributor = @order.distributor.decorate
+    @customer = @order.customer.decorate
 
     cc = @distributor.email_from if @distributor.email_distributor_on_new_webstore_order
 

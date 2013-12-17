@@ -120,9 +120,9 @@ class Order < ActiveRecord::Base
     result.upcase
   end
 
-  def self.extras_description(order_extras)
+  def self.extras_description(order_extras, join_with = ', ')
     order_extras = order_extras.map(&:to_hash) unless order_extras.is_a? Hash
-    order_extras.map{ |e| "#{e[:count]}x #{e[:name]} #{e[:unit]}" }.join(', ')
+    order_extras.map{ |e| "#{e[:count]}x #{e[:name]} #{e[:unit]}" }.join(join_with)
   end
 
   def change_to_local_time_zone

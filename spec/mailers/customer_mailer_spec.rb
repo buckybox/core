@@ -34,7 +34,8 @@ describe CustomerMailer do
   end
 
   describe "#order_confirmation" do
-    let(:order) { Fabricate(:order) }
+    let(:customer) { Fabricate(:customer) }
+    let(:order) { Fabricate(:order, customer: customer) }
     let(:mail) { CustomerMailer.order_confirmation(order) }
 
     specify { expect(mail.to).to eq [order.customer.email] }
@@ -42,7 +43,26 @@ describe CustomerMailer do
 
     it "cc's distributor if enabled" do
       order.distributor.stub(:email_distributor_on_new_webstore_order) { true }
+
       expect(mail.cc).to eq [order.distributor.support_email]
+    end
+
+    it "includes the present phone numbers" do
+      # ugly way to stub the decorated customer
+      decorated_customer = order.customer.decorate
+      decorated_customer.stub(mobile_phone: "MOB", work_phone: "WORK")
+      order.customer.stub(:decorate) { decorated_customer }
+
+      expect(mail.body.encoded).to include "Mobile Phone", "MOB"
+      expect(mail.body.encoded).to include "Work Phone", "WORK"
+      expect(mail.body.encoded).not_to include "Home Phone"
+    end
+
+    it "includes line items if present" do
+      order.stub(:exclusions_string) { "EXC" }
+
+      expect(mail.body.encoded).to include "Exclusions", "EXC"
+      expect(mail.body.encoded).not_to include "Substitutes"
     end
   end
 end
