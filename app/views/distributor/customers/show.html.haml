@@ -58,6 +58,13 @@
 
   #customer-associations.span8
     .row-fluid
+      #activity-section.span12{ class: "#{'hide' if @customer.recent_activities.empty?}" }
+        %fieldset
+          %legend recent activity
+          #activities
+            = render partial: 'activity', locals: { activities: @customer.recent_activities }
+
+    .row-fluid
       #note-section.span12
         %fieldset
           %legend notes
