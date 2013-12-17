@@ -55,14 +55,15 @@ class CustomerMailer < ApplicationMailer
   end
 
   def order_confirmation(order)
-    @order = order
+    @order = order.decorate
     @distributor = @order.distributor
+    @customer = @order.customer
 
     cc = @distributor.email_from if @distributor.email_distributor_on_new_webstore_order
 
     headers['X-MC-Tags'] = "customer,order_confirmation,#{@distributor.name.parameterize}"
 
-    mail to: @order.customer.email_to,
+    mail to: @customer.email_to,
          from: @distributor.email_from,
          cc: cc,
          subject: "Your #{@distributor.name} Order"
