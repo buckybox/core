@@ -8,7 +8,8 @@
 <strong>Thanks for your order <%= @customer.first_name %>!</strong><br>
 <br>
 
-Did you know you can view and edit your orders 24 hours a day? Visit <%= link_to "your account", new_customer_session_url(distributor: @distributor.parameter_name) %><br>
+Did you know you can view and edit your orders 24 hours a day? Visit <%= link_to "your account", new_customer_session_url(distributor: @distributor.parameter_name) %>.
+<br>
 <br>
 
 <table width="100%" cellpadding="8" cellspacing="0" border="1" bordercolor="#555555">
@@ -28,7 +29,9 @@ Did you know you can view and edit your orders 24 hours a day? Visit <%= link_to
           <span style="font-size:14px">
           <b>Customer Number:</b>&nbsp;&nbsp;<%= @customer.formated_number %><br>
           <b>E-mail:</b>&nbsp;&nbsp;<%= @customer.email %><br>
-          <b>Phone:</b>&nbsp;&nbsp;<%= @customer.address.default_phone_number %><br>
+          <%= "<b>Mobile Phone:</b>&nbsp;&nbsp;#{@customer.mobile_phone}<br>" if @customer.mobile_phone %>
+          <%= "<b>Home Phone:</b>&nbsp;&nbsp;#{@customer.home_phone}<br>" if @customer.home_phone %>
+          <%= "<b>Work Phone:</b>&nbsp;&nbsp;#{@customer.work_phone}<br>" if @customer.work_phone %>
           </span>
         </td>
 
@@ -62,10 +65,13 @@ Did you know you can view and edit your orders 24 hours a day? Visit <%= link_to
   <td width="80%" valign="top">
     <b><%= @order.box.name %></b><br>
     <span style="font-size:14px">
-    Exclude: <%= @order.exclusions_string %><br>
-    Substitute: <%= @order.substitutions_string %><br>
-    <%= Order.extras_description(@order.order_extras) %>
-    <br>
+    <%= "Exclusions: #{@order.exclusions_string}<br>" if @order.exclusions_string.present? %>
+    <%= "Substitutes: #{@order.substitutions_string}<br>" if @order.substitutions_string.present? %>
+    <%=
+      extras = Order.extras_description(@order.order_extras, "<br>")
+      extras if extras.present?
+    %>
+    <br><br>
     <i><%= @order.schedule_rule %></i><br>
     </span>
   </td>
@@ -90,5 +96,5 @@ If you have any questions or feel something is out of place, please get in touch
 </td></tr></table>
 </td></tr></table>
 
+<center><font size="1">Powered by <a href="<%= Figaro.env.marketing_site_url %>">Bucky Box</a></font></center>
 </div>
-
