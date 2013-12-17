@@ -159,6 +159,7 @@ BuckyBox::Application.routes.draw do
       member do
         get :send_login_details
         get 'impersonate'
+        get 'activity'
       end
     end
 

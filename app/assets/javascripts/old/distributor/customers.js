@@ -52,9 +52,7 @@ $(function() {
                  reload_pause_details(order_id, data);
                },
                error: function() {
-                 bootbox.alert("Oops! Something went wrong. Please try again.", function() {
-                   location.reload();
-                 });
+                 bootbox.alert("Oops! Something went wrong. Please refresh and try again.");
                }});
       return false;
     });
@@ -70,9 +68,7 @@ $(function() {
                  reload_pause_details(order_id, data);
                },
                error: function() {
-                 bootbox.alert("Oops! Something went wrong. Please try again.", function() {
-                   location.reload();
-                 });
+                 bootbox.alert("Oops! Something went wrong. Please refresh and try again.");
                }});
       return false;
     });
@@ -82,21 +78,23 @@ $(function() {
       var url  = form.attr('action');
       var date = form.find('select :selected').val();
       var order_id = form.closest('.pausing').attr('data-order-id');
+      var button = $(this);
 
-      $(this).attr('disabled', true);
+      button.prop('disabled', true);
 
       $.ajax({
         type: 'PUT',
         dataType: 'html',
         url: url,
         data: $.param({ date: date }),
+        complete: function() {
+          button.prop('disabled', false);
+        },
         success: function(data){
           reload_pause_details(order_id, data);
         },
         error: function() {
-          bootbox.alert("Oops! Something went wrong. Please try again.", function() {
-            location.reload();
-          });
+          bootbox.alert("Oops! Something went wrong. Please refresh and try again.");
         }});
 
       return false;
@@ -107,21 +105,23 @@ $(function() {
       var url  = form.attr('action');
       var date = form.find('select :selected').val();
       var order_id = form.closest('.pausing').attr('data-order-id');
+      var button = $(this);
 
-      $(this).attr('disabled', true);
+      button.prop('disabled', true);
 
       $.ajax({
         type: 'PUT',
         dataType: 'html',
         url: url,
         data: $.param({ date: date }),
+        complete: function() {
+          button.prop('disabled', false);
+        },
         success: function(data){
           reload_pause_details(order_id, data);
         },
         error: function() {
-          bootbox.alert("Oops! Something went wrong. Please try again.", function() {
-            location.reload();
-          });
+          bootbox.alert("Oops! Something went wrong. Please refresh and try again.");
         }});
 
       return false;
@@ -140,6 +140,18 @@ $(function() {
   function reload_pause_details(order_id, data) {
     $('#order_' + order_id + '_details').html(data);
     order_pause_init();
+
+    reload_activities();
+  }
+
+  function reload_activities() {
+    var customer_id = $("#customer-details .customer-name").data("customer-id");
+    if (!customer_id) return; // customer facing section
+
+    $.get("/distributor/customers/" + customer_id + "/activity", function(data) {
+      $("#activities").html(data).
+        closest("#activity-section").slideDown(); // make sure it is visible if first item
+    });
   }
 
   function fromPausingElementFind(startElement, findName) {
