@@ -54,8 +54,8 @@ private
 
   def add_transaction_data(transaction)
     [
-      transaction.created_at.strftime(DATE_FORMAT),
       transaction.display_time.strftime(DATE_FORMAT),
+      transaction.created_at.strftime(DATE_FORMAT),
       transaction.amount,
       transaction.transactionable_type,
       transaction.description,
