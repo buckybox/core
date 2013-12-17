@@ -1,16 +1,11 @@
 <div style="font-family: Arial; font-size:15px;">
 
-
-
-
 <table width="90%" border="0" cellspacing="0" cellpadding="1" align="center" bgcolor="#333333"><tr><td>
 <table width="100%" border="0" cellspacing="0" cellpadding="16" align="center" bgcolor="#FFFFFF">
   <tr><td align="right"><%= @distributor.name %></td></tr>
   <tr><td>
 
-
-
-<strong>Thanks for your order <%= @order.customer.first_name %>!</strong><br>
+<strong>Thanks for your order <%= @customer.first_name %>!</strong><br>
 <br>
 
 Did you know you can view and edit your orders 24 hours a day? Visit <%= link_to "your account", new_customer_session_url(distributor: @distributor.parameter_name) %><br>
@@ -31,18 +26,18 @@ Did you know you can view and edit your orders 24 hours a day? Visit <%= link_to
         <tr>
         <td width="50%" valign="top">
           <span style="font-size:14px">
-          <b>Customer Number:</b>&nbsp;&nbsp;0131<br>
-          <b>E-mail:</b>&nbsp;&nbsp;will@danger.co.nz<br>
-          <b>Mobile Phone:</b>&nbsp;&nbsp;021 1234567<br>
-          <b>Home Phone:</b>&nbsp;&nbsp;04 12345677<br>
-          <b>Work Phone:</b>&nbsp;&nbsp;04 12345677<br>
+          <b>Customer Number:</b>&nbsp;&nbsp;<%= @customer.formated_number %><br>
+          <b>E-mail:</b>&nbsp;&nbsp;<%= @customer.email %><br>
+          <b>Phone:</b>&nbsp;&nbsp;<%= @customer.address.default_phone_number %><br>
           </span>
         </td>
 
         <td width="50%" valign="top">
           <span style="font-size:14px">
           <b>Delivery Address:</b><br>
-          Will Lau<br/>PO Box 147-365<br/>Ponsonby<br/>Auckland<br/><br/>
+          <%= @customer.name %>
+          <br/>
+          <%= @customer.address.to_s("<br/>") %>
           </span>
         </td>
         </tr>
@@ -53,13 +48,6 @@ Did you know you can view and edit your orders 24 hours a day? Visit <%= link_to
 
 <br>
 <br>
-
-
- 
-
-
-
-
 
 <table width="100%" cellpadding="8" cellspacing="0" border="1" bordercolor="#555555">
     <tr>
@@ -72,21 +60,19 @@ Did you know you can view and edit your orders 24 hours a day? Visit <%= link_to
 
   <tr>
   <td width="80%" valign="top">
-    <b>Fancy Box</b><br>
+    <b><%= @order.box.name %></b><br>
     <span style="font-size:14px">
-    Exclude: Silverbeet, Rhurbarb<br>
-    Substitute: Magic Mushrooms<br>
-    1x White Bread Rolls (per loaf)<br>
-    2x Fair Trade Coffee (400g bag)<br>
-    1x Free Range Eggs (6-pack)<br>
+    Exclude: <%= @order.exclusions_string %><br>
+    Substitute: <%= @order.substitutions_string %><br>
+    <%= Order.extras_description(@order.order_extras) %>
     <br>
-    <i>Deliver Weekly on Monday, Wednesday, Friday, Starting 13th December</i><br>
+    <i><%= @order.schedule_rule %></i><br>
     </span>
   </td>
   </td>
 
   <td width="20%" align="right" valign="top">
-    <b>$35.00</b><br/>
+    <b><%= @order.price %></b><br/>
   </td>
   </tr>
 
