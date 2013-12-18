@@ -29,9 +29,9 @@ Did you know you can view and edit your orders 24 hours a day? Visit <%= link_to
           <span style="font-size:14px">
           <b>Customer Number:</b>&nbsp;&nbsp;<%= @customer.formated_number %><br>
           <b>E-mail:</b>&nbsp;&nbsp;<%= @customer.email %><br>
-          <%= "<b>Mobile Phone:</b>&nbsp;&nbsp;#{@customer.mobile_phone}<br>" if @customer.mobile_phone %>
-          <%= "<b>Home Phone:</b>&nbsp;&nbsp;#{@customer.home_phone}<br>" if @customer.home_phone %>
-          <%= "<b>Work Phone:</b>&nbsp;&nbsp;#{@customer.work_phone}<br>" if @customer.work_phone %>
+          <%= "<b>Mobile Phone:</b>&nbsp;&nbsp;#{@customer.mobile_phone}<br>".html_safe if @customer.mobile_phone %>
+          <%= "<b>Home Phone:</b>&nbsp;&nbsp;#{@customer.home_phone}<br>".html_safe if @customer.home_phone %>
+          <%= "<b>Work Phone:</b>&nbsp;&nbsp;#{@customer.work_phone}<br>".html_safe if @customer.work_phone %>
           </span>
         </td>
 
@@ -65,11 +65,11 @@ Did you know you can view and edit your orders 24 hours a day? Visit <%= link_to
   <td width="80%" valign="top">
     <b><%= @order.box.name %></b><br>
     <span style="font-size:14px">
-    <%= "Exclusions: #{@order.exclusions_string}<br>" if @order.exclusions_string.present? %>
-    <%= "Substitutes: #{@order.substitutions_string}<br>" if @order.substitutions_string.present? %>
+    <%= "Exclusions: #{@order.exclusions_string}<br>".html_safe if @order.exclusions_string.present? %>
+    <%= "Substitutes: #{@order.substitutions_string}<br>".html_safe if @order.substitutions_string.present? %>
     <%=
       extras = Order.extras_description(@order.order_extras, "<br>")
-      extras if extras.present?
+      extras.html_safe if extras.present?
     %>
     <br><br>
     <i><%= @order.schedule_rule %></i><br>
