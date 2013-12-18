@@ -29,9 +29,9 @@ Did you know you can view and edit your orders 24 hours a day? Visit <%= link_to
           <span style="font-size:14px">
           <b>Customer Number:</b>&nbsp;&nbsp;<%= @customer.formated_number %><br>
           <b>E-mail:</b>&nbsp;&nbsp;<%= @customer.email %><br>
-          <%= "<b>Mobile Phone:</b>&nbsp;&nbsp;#{@customer.mobile_phone}<br>".html_safe if @customer.mobile_phone %>
-          <%= "<b>Home Phone:</b>&nbsp;&nbsp;#{@customer.home_phone}<br>".html_safe if @customer.home_phone %>
-          <%= "<b>Work Phone:</b>&nbsp;&nbsp;#{@customer.work_phone}<br>".html_safe if @customer.work_phone %>
+          <%= "<b>Mobile Phone:</b>&nbsp;&nbsp;#{@customer.mobile_phone}<br>".html_safe if @customer.mobile_phone.present? %>
+          <%= "<b>Home Phone:</b>&nbsp;&nbsp;#{@customer.home_phone}<br>".html_safe if @customer.home_phone.present? %>
+          <%= "<b>Work Phone:</b>&nbsp;&nbsp;#{@customer.work_phone}<br>".html_safe if @customer.work_phone.present? %>
           </span>
         </td>
 
