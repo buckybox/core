@@ -90,7 +90,7 @@ Did you know you can view and edit your orders 24 hours a day? Visit <%= link_to
 
 You can review your orders and your account statement at anytime by logging into <%= link_to "your account", new_customer_session_url(distributor: @distributor.parameter_name) %>.<br>
 <br>
-If you have any questions or feel something is out of place, please get in touch at <%= @distributor.support_email %><%= " or #{@distributor.phone}" if @distributor.phone.present? %>.
+If you have any questions or feel something is out of place, please get in touch at <%= mail_to(@distributor.support_email) %><%= " or #{@distributor.phone}" if @distributor.phone.present? %>.
 
 
 </td></tr></table>
