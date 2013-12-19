@@ -13,6 +13,6 @@
             %tr
               %td.check-space
               %td= package.id
-              %td= customer_badge(package.customer, customer_name: package.archived_customer_name)
+              %td= customer_badge(package.customer, customer_name: package.archived_customer_name, link: false)
               %td= package.archived_address
               %td== #{package.contents_description}
