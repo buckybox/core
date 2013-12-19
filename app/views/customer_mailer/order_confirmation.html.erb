@@ -72,7 +72,18 @@ Did you know you can view and edit your orders 24 hours a day? Visit <%= link_to
       extras.html_safe if extras.present?
     %>
     <br><br>
-    <i><%= @order.schedule_rule %></i><br>
+    <i>
+    <%=
+      schedule_rule = @order.schedule_rule.to_s
+
+      if @order.recurs?
+        start = @order.schedule_rule.start
+        schedule_rule << ", starting #{start.strftime("%A #{start.day.ordinalize} %B")}"
+      end
+
+      schedule_rule
+    %>
+    </i><br>
     </span>
   </td>
   </td>
