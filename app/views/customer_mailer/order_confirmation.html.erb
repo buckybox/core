@@ -1,0 +1,112 @@
+<div style="font-family: Arial; font-size:15px;">
+
+<table width="90%" border="0" cellspacing="0" cellpadding="1" align="center" bgcolor="#333333"><tr><td>
+<table width="100%" border="0" cellspacing="0" cellpadding="16" align="center" bgcolor="#FFFFFF">
+  <tr><td align="right"><%= @distributor.name %></td></tr>
+  <tr><td>
+
+<strong>Thanks for your order <%= @customer.first_name %>!</strong><br>
+<br>
+
+Did you know you can view and edit your orders 24 hours a day? Visit <%= link_to "your account", new_customer_session_url(distributor: @distributor.parameter_name) %>.
+<br>
+<br>
+
+<table width="100%" cellpadding="8" cellspacing="0" border="1" bordercolor="#555555">
+    <tr>
+        <td bgcolor="#555555">
+            <font color="#FFFFFF" size="+1">
+                <b>Order Information:</b>
+            </font>
+        </td>
+    </tr>
+
+    <tr>
+      <td>
+      <table cellpadding="0" cellspacing="8" width="100%">
+        <tr>
+        <td width="50%" valign="top">
+          <span style="font-size:14px">
+          <b>Customer Number:</b>&nbsp;&nbsp;<%= @customer.formated_number %><br>
+          <b>E-mail:</b>&nbsp;&nbsp;<%= @customer.email %><br>
+          <%= "<b>Mobile Phone:</b>&nbsp;&nbsp;#{@customer.mobile_phone}<br>".html_safe if @customer.mobile_phone.present? %>
+          <%= "<b>Home Phone:</b>&nbsp;&nbsp;#{@customer.home_phone}<br>".html_safe if @customer.home_phone.present? %>
+          <%= "<b>Work Phone:</b>&nbsp;&nbsp;#{@customer.work_phone}<br>".html_safe if @customer.work_phone.present? %>
+          </span>
+        </td>
+
+        <td width="50%" valign="top">
+          <span style="font-size:14px">
+          <b>Delivery Address:</b><br>
+          <%= @customer.name %>
+          <br/>
+          <%= @customer.address.to_s("<br/>") %>
+          </span>
+        </td>
+        </tr>
+      </table>
+    </td>
+    </tr>
+</table>
+
+<br>
+<br>
+
+<table width="100%" cellpadding="8" cellspacing="0" border="1" bordercolor="#555555">
+    <tr>
+        <td bgcolor="#555555" colspan="2">
+            <font color="#FFFFFF" size="+1">
+                <b>Order Summary:</b>
+          </font>
+        </td>
+    </tr>
+
+  <tr>
+  <td width="80%" valign="top">
+    <b><%= @order.box.name %></b><br>
+    <span style="font-size:14px">
+    <%= "Exclusions: #{@order.exclusions_string}<br>".html_safe if @order.exclusions_string.present? %>
+    <%= "Substitutes: #{@order.substitutions_string}<br>".html_safe if @order.substitutions_string.present? %>
+    <%=
+      extras = Order.extras_description(@order.order_extras, "<br>")
+      extras.html_safe if extras.present?
+    %>
+    <br><br>
+    <i>
+    <%=
+      schedule_rule = @order.schedule_rule.to_s
+
+      if @order.recurs?
+        start = @order.schedule_rule.start
+        schedule_rule << ", starting #{start.strftime("%A #{start.day.ordinalize} %B")}"
+      end
+
+      schedule_rule
+    %>
+    </i><br>
+    </span>
+  </td>
+  </td>
+
+  <td width="20%" align="right" valign="top">
+    <b><%= @order.price %></b><br/>
+  </td>
+  </tr>
+
+</table>
+
+
+<br>
+<br>
+
+You can review your orders and your account statement at anytime by logging into <%= link_to "your account", new_customer_session_url(distributor: @distributor.parameter_name) %>.<br>
+<br>
+If you have any questions or feel something is out of place, please get in touch at <%= mail_to(@distributor.support_email) %><%= " or #{@distributor.phone}" if @distributor.phone.present? %>.
+
+
+</td></tr></table>
+</td></tr></table>
+
+<br>
+<center><font size="1">Powered by <a href="<%= Figaro.env.marketing_site_url %>">Bucky Box</a></font></center>
+</div>
