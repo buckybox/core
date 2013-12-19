@@ -165,14 +165,6 @@ class Distributor < ActiveRecord::Base
         end
       end
     end
-
-    # XXX Temporary check
-    checker = DataIntegrity.new
-    checker.past_deliveries_are_not_pending
-    checker.deduction_count_matches_delivery_count
-    # binding.pry if checker.errors.present?
-    DataIntegrity.email checker.errors if checker.errors.present?
-    # XXX
   end
 
   def self.update_next_occurrence_caches
@@ -180,7 +172,7 @@ class Distributor < ActiveRecord::Base
       distributor.use_local_time_zone do
         if Time.current.hour == AUTOMATIC_DELIVERY_HOUR
           CronLog.log("Updated next order caches for #{distributor.id} at local time #{Time.current.to_s(:pretty)}.")
-          distributor.update_next_occurrence_caches 
+          distributor.update_next_occurrence_caches
         end
       end
     end
