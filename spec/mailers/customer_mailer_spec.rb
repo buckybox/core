@@ -64,5 +64,9 @@ describe CustomerMailer do
       expect(mail.body.encoded).to include "Exclusions", "EXC"
       expect(mail.body.encoded).not_to include "Substitutes"
     end
+
+    it "includes the schedule rule" do
+      expect(mail.body.encoded).to include "Deliver weekly", "starting"
+    end
   end
 end
