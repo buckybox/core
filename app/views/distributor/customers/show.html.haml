@@ -69,7 +69,7 @@
         %fieldset
           %legend notes
           = simple_form_for([:distributor, @customer]) do |f|
-            = f.input :notes, placeholder: 'E.g. Credit card bounced 23 July, to follow up', label: false, input_html: { class: 'span12', rows: 4 }
+            = f.input :notes, placeholder: 'E.g. Credit card bounced 23 July, to follow up', label: false, input_html: { class: 'span12', rows: nil }
             = f.button :submit, 'Update', class: 'btn btn-primary pull-right'
 
     .row-fluid

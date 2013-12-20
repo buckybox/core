@@ -203,4 +203,6 @@ $(function() {
 
   //transaction customers count tooltip
   $('#transactional_customer_count').tooltip({placement: "right", html: true})
+
+  $("#customer_notes").autosize();
 });
