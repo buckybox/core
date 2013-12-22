@@ -71,3 +71,140 @@ module BuckyBox
     config.active_record.schema_format = :sql
   end
 end
+
+$dot = File.open("t.dot", "w")
+$dot.puts <<DOT
+digraph g {
+graph [
+rankdir = "LR"
+];
+node [
+fontsize = "16"
+shape = "ellipse"
+];
+edge [
+];
+DOT
+
+$append = ""
+require 'set'
+$known_classes = Set.new
+
+def san s
+  n = s.gsub /\W/, ''
+  n == "" ? "fuck_me" : n
+end
+
+  $white = %w(
+    Active
+  ).freeze
+
+trace = TracePoint.trace(:call, :c_call) do |tp|
+  next if tp.event == :c_call
+  # p [tp.lineno, tp.defined_class, tp.method_id, tp.event]
+  # binding.pry
+  defined_class_string = tp.defined_class.to_s
+
+  # p defined_class_string
+  match_data = defined_class_string.match(/\A#<Class:(.+)>\Z/)
+  if match_data
+    class_string = match_data.captures.first
+    method_prefix = "."
+  else
+    class_string = defined_class_string
+    method_prefix = "#"
+  end
+
+  $old_level ||= caller_locations.size
+  level = caller_locations.size
+
+  prefix = if $old_level == level - 1
+    has_emitter = true
+    " -> "
+  else
+    has_emitter = false
+    "\nTP: "
+  end
+
+  $old_level = level
+
+  method_string = "#{method_prefix}#{tp.method_id}"
+  # print "#{prefix}#{class_string}#{method_string}"
+  # emitter = tp.binding.eval("caller_locations[2].label")
+  # p emitter
+
+if !$known_classes.include?(class_string) && $white.any?{|w| class_string.include?(w)}
+$dot.puts <<DOT
+"#{class_string}" [
+label = "<f0> #{class_string}| <#{san(method_string)}> #{san(method_string)}"
+shape = "record"
+];
+DOT
+end
+
+  $old_call ||= Class.new do
+    attr_accessor :c, :m, :p
+  end.new
+  # p "OLD: #{$old_call.c}#{$old_call.m}"
+
+  if has_emitter && !$known_classes.include?(class_string) && $white.any?{|w| class_string.include?(w)}
+$append << <<DOT
+"#{$old_call.c}":#{san($old_call.m)} -> "#{class_string}":#{san(method_string)} [
+];
+DOT
+  end
+
+  $old_call.p = $old_call.dup
+  $old_call.c = class_string
+  $old_call.m = method_string
+
+  $known_classes << class_string
+
+end
+
+at_exit do
+$dot.puts $append
+$dot.puts <<DOT
+}
+DOT
+end
+# trace = TracePoint.trace(:call, :c_call) do |tp|
+#   next if tp.event == :c_call
+#   # p [tp.lineno, tp.defined_class, tp.method_id, tp.event]
+#   # binding.pry
+#   defined_class_string = tp.defined_class.to_s
+
+#   next if %w(
+#     Journey
+#     Rails::Initializable
+#   ).detect { |w| defined_class_string.start_with?(w) }
+
+#   # next unless defined_class_string.include? "Distributor"
+#   # p defined_class_string
+#   match_data = defined_class_string.match /\A#<Class:(.+?)(\(.*\))?>\Z/
+#   if match_data
+#     class_string = match_data.captures.first
+#     method_prefix = "."
+#   else
+#     class_string = defined_class_string
+#     method_prefix = "#"
+#   end
+
+#   # p defined_class_string, class_string
+
+#   $old_level ||= caller_locations.size
+#   level = caller_locations.size
+
+#   prefix = if $old_level == level - 1
+#     " -> "
+#   else
+#     "\nTP: "
+#   end
+
+#   $old_level = level
+
+#   print "#{prefix}#{class_string}#{method_prefix}#{tp.method_id}"
+#   # p tp.binding.eval("caller_locations.inspect")
+#   # emitter = tp.binding.eval("caller_locations[2].label")
+#   # p emitter
+# end

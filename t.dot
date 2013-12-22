@@ -1,0 +1,509 @@
+digraph g {
+graph [
+rankdir = "LR"
+];
+node [
+fontsize = "16"
+shape = "ellipse"
+];
+edge [
+];
+"ActiveSupport::Dependencies::Loadable" [
+label = "<f0> ActiveSupport::Dependencies::Loadable| <require> require"
+shape = "record"
+];
+"ActiveSupport::Dependencies" [
+label = "<f0> ActiveSupport::Dependencies| <load> load"
+shape = "record"
+];
+"ActiveSupport::Dependencies::WatchStack" [
+label = "<f0> ActiveSupport::Dependencies::WatchStack| <watching> watching"
+shape = "record"
+];
+"ActiveSupport::Dependencies::Blamable" [
+label = "<f0> ActiveSupport::Dependencies::Blamable| <blame_file> blame_file"
+shape = "record"
+];
+"ActiveSupport::Inflector" [
+label = "<f0> ActiveSupport::Inflector| <demodulize> demodulize"
+shape = "record"
+];
+"ActiveSupport::OrderedOptions" [
+label = "<f0> ActiveSupport::OrderedOptions| <method_missing> method_missing"
+shape = "record"
+];
+"ActiveSupport" [
+label = "<f0> ActiveSupport| <on_load> on_load"
+shape = "record"
+];
+"ActiveSupport::Deprecation" [
+label = "<f0> ActiveSupport::Deprecation| <deprecate_methods> deprecate_methods"
+shape = "record"
+];
+"ActiveSupport::BufferedLogger" [
+label = "<f0> ActiveSupport::BufferedLogger| <silencer> silencer"
+shape = "record"
+];
+"ActiveSupport::TaggedLogging" [
+label = "<f0> ActiveSupport::TaggedLogging| <initialize> initialize"
+shape = "record"
+];
+"ActiveSupport::StringInquirer" [
+label = "<f0> ActiveSupport::StringInquirer| <method_missing> method_missing"
+shape = "record"
+];
+"ActiveSupport::Cache" [
+label = "<f0> ActiveSupport::Cache| <lookup_store> lookup_store"
+shape = "record"
+];
+"ActiveSupport::Inflector::Inflections" [
+label = "<f0> ActiveSupport::Inflector::Inflections| <instance> instance"
+shape = "record"
+];
+"ActiveSupport::Cache::FileStore" [
+label = "<f0> ActiveSupport::Cache::FileStore| <initialize> initialize"
+shape = "record"
+];
+"ActiveSupport::Cache::Store" [
+label = "<f0> ActiveSupport::Cache::Store| <initialize> initialize"
+shape = "record"
+];
+"ActiveSupport::Cache::Strategy::LocalCache" [
+label = "<f0> ActiveSupport::Cache::Strategy::LocalCache| <middleware> middleware"
+shape = "record"
+];
+"ActiveSupport::Cache::Strategy::LocalCache::Middleware" [
+label = "<f0> ActiveSupport::Cache::Strategy::LocalCache::Middleware| <initialize> initialize"
+shape = "record"
+];
+"ActiveSupport::FileUpdateChecker" [
+label = "<f0> ActiveSupport::FileUpdateChecker| <initialize> initialize"
+shape = "record"
+];
+"ActiveSupport::Concern" [
+label = "<f0> ActiveSupport::Concern| <append_features> append_features"
+shape = "record"
+];
+"ActiveSupport::Callbacks::ClassMethods" [
+label = "<f0> ActiveSupport::Callbacks::ClassMethods| <define_callbacks> define_callbacks"
+shape = "record"
+];
+"ActiveSupport::Callbacks::CallbackChain" [
+label = "<f0> ActiveSupport::Callbacks::CallbackChain| <initialize> initialize"
+shape = "record"
+];
+"ActiveSupport::DescendantsTracker" [
+label = "<f0> ActiveSupport::DescendantsTracker| <descendants> descendants"
+shape = "record"
+];
+"ActiveSupport::Callbacks::Callback" [
+label = "<f0> ActiveSupport::Callbacks::Callback| <initialize> initialize"
+shape = "record"
+];
+"ActiveSupport::TimeZone" [
+label = "<f0> ActiveSupport::TimeZone| <fuck_me> fuck_me"
+shape = "record"
+];
+"ActiveSupport::Configurable::ClassMethods" [
+label = "<f0> ActiveSupport::Configurable::ClassMethods| <config> config"
+shape = "record"
+];
+"ActiveSupport::Configurable::Configuration" [
+label = "<f0> ActiveSupport::Configurable::Configuration| <compile_methods> compile_methods"
+shape = "record"
+];
+"ActiveRecord::Base" [
+label = "<f0> ActiveRecord::Base| <time_zone_aware_attributes> time_zone_aware_attributes"
+shape = "record"
+];
+"ActiveModel::MassAssignmentSecurity::ClassMethods" [
+label = "<f0> ActiveModel::MassAssignmentSecurity::ClassMethods| <mass_assignment_sanitizer> mass_assignment_sanitizer"
+shape = "record"
+];
+"ActiveModel::MassAssignmentSecurity::Sanitizer" [
+label = "<f0> ActiveModel::MassAssignmentSecurity::Sanitizer| <initialize> initialize"
+shape = "record"
+];
+"ActiveSupport::Duration" [
+label = "<f0> ActiveSupport::Duration| <fuck_me> fuck_me"
+shape = "record"
+];
+"ActiveRecord::Base::ConnectionSpecification::Resolver" [
+label = "<f0> ActiveRecord::Base::ConnectionSpecification::Resolver| <initialize> initialize"
+shape = "record"
+];
+"ActiveRecord::Base::ConnectionSpecification" [
+label = "<f0> ActiveRecord::Base::ConnectionSpecification| <initialize> initialize"
+shape = "record"
+];
+"ActiveRecord::DynamicMatchers" [
+label = "<f0> ActiveRecord::DynamicMatchers| <respond_to> respond_to"
+shape = "record"
+];
+"ActiveRecord::DynamicFinderMatch" [
+label = "<f0> ActiveRecord::DynamicFinderMatch| <match> match"
+shape = "record"
+];
+"ActiveRecord::DynamicScopeMatch" [
+label = "<f0> ActiveRecord::DynamicScopeMatch| <match> match"
+shape = "record"
+];
+"ActiveRecord::ConnectionAdapters::ConnectionHandler" [
+label = "<f0> ActiveRecord::ConnectionAdapters::ConnectionHandler| <remove_connection> remove_connection"
+shape = "record"
+];
+"ActiveRecord::ConnectionAdapters::ConnectionPool" [
+label = "<f0> ActiveRecord::ConnectionAdapters::ConnectionPool| <initialize> initialize"
+shape = "record"
+];
+"ActiveSupport::InheritableOptions" [
+label = "<f0> ActiveSupport::InheritableOptions| <inheritable_copy> inheritable_copy"
+shape = "record"
+];
+"ActiveRecord::Acts::List" [
+label = "<f0> ActiveRecord::Acts::List| <included> included"
+shape = "record"
+];
+"ActiveSupport::Dependencies::ModuleConstMissing" [
+label = "<f0> ActiveSupport::Dependencies::ModuleConstMissing| <const_missing> const_missing"
+shape = "record"
+];
+"ActiveMerchant::PostsData" [
+label = "<f0> ActiveMerchant::PostsData| <included> included"
+shape = "record"
+];
+"ActiveMerchant::Billing::Gateway" [
+label = "<f0> ActiveMerchant::Billing::Gateway| <_ssl_strict> _ssl_strict"
+shape = "record"
+];
+"ActiveMerchant::NetworkConnectionRetries" [
+label = "<f0> ActiveMerchant::NetworkConnectionRetries| <included> included"
+shape = "record"
+];
+"ActiveSupport::Notifications" [
+label = "<f0> ActiveSupport::Notifications| <subscribe> subscribe"
+shape = "record"
+];
+"ActiveSupport::Notifications::Fanout" [
+label = "<f0> ActiveSupport::Notifications::Fanout| <subscribe> subscribe"
+shape = "record"
+];
+"ActiveSupport::Notifications::Fanout::Subscriber" [
+label = "<f0> ActiveSupport::Notifications::Fanout::Subscriber| <initialize> initialize"
+shape = "record"
+];
+"ActiveSupport::HashWithIndifferentAccess" [
+label = "<f0> ActiveSupport::HashWithIndifferentAccess| <initialize> initialize"
+shape = "record"
+];
+"ActiveSupport::Dependencies::ClassCache" [
+label = "<f0> ActiveSupport::Dependencies::ClassCache| <store> store"
+shape = "record"
+];
+"ActiveSupport::LogSubscriber" [
+label = "<f0> ActiveSupport::LogSubscriber| <attach_to> attach_to"
+shape = "record"
+];
+"Oink::Instrumentation::ActiveRecord" [
+label = "<f0> Oink::Instrumentation::ActiveRecord| <included> included"
+shape = "record"
+];
+"ActiveRecord::QueryCache" [
+label = "<f0> ActiveRecord::QueryCache| <initialize> initialize"
+shape = "record"
+];
+"ActiveRecord::ConnectionAdapters::ConnectionManagement" [
+label = "<f0> ActiveRecord::ConnectionAdapters::ConnectionManagement| <initialize> initialize"
+shape = "record"
+];
+"ActiveSupport::Callbacks" [
+label = "<f0> ActiveSupport::Callbacks| <run_callbacks> run_callbacks"
+shape = "record"
+];
+"ActiveRecord::ModelSchema::ClassMethods" [
+label = "<f0> ActiveRecord::ModelSchema::ClassMethods| <clear_cache> clear_cache"
+shape = "record"
+];
+"ActiveRecord::ConnectionAdapters::PostgreSQLAdapter" [
+label = "<f0> ActiveRecord::ConnectionAdapters::PostgreSQLAdapter| <initialize> initialize"
+shape = "record"
+];
+"ActiveRecord::ConnectionAdapters::AbstractAdapter" [
+label = "<f0> ActiveRecord::ConnectionAdapters::AbstractAdapter| <initialize> initialize"
+shape = "record"
+];
+"ActiveSupport::Notifications::Instrumenter" [
+label = "<f0> ActiveSupport::Notifications::Instrumenter| <initialize> initialize"
+shape = "record"
+];
+"ActiveRecord::ConnectionAdapters::SchemaCache" [
+label = "<f0> ActiveRecord::ConnectionAdapters::SchemaCache| <initialize> initialize"
+shape = "record"
+];
+"ActiveRecord::LogSubscriber" [
+label = "<f0> ActiveRecord::LogSubscriber| <logger> logger"
+shape = "record"
+];
+"ActiveSupport::Notifications::Event" [
+label = "<f0> ActiveSupport::Notifications::Event| <initialize> initialize"
+shape = "record"
+];
+"ActiveRecord::ExplainSubscriber" [
+label = "<f0> ActiveRecord::ExplainSubscriber| <call> call"
+shape = "record"
+];
+"ActiveSupport::JSON" [
+label = "<f0> ActiveSupport::JSON| <encode> encode"
+shape = "record"
+];
+"ActiveSupport::JSON::Encoding::Encoder" [
+label = "<f0> ActiveSupport::JSON::Encoding::Encoder| <initialize> initialize"
+shape = "record"
+];
+"ActiveSupport::JSON::Encoding" [
+label = "<f0> ActiveSupport::JSON::Encoding| <escape> escape"
+shape = "record"
+];
+"ActiveRecord::ConnectionAdapters::PostgreSQLAdapter::StatementPool" [
+label = "<f0> ActiveRecord::ConnectionAdapters::PostgreSQLAdapter::StatementPool| <initialize> initialize"
+shape = "record"
+];
+"ActiveRecord::ConnectionAdapters::StatementPool" [
+label = "<f0> ActiveRecord::ConnectionAdapters::StatementPool| <initialize> initialize"
+shape = "record"
+];
+"ActiveModel::Observing::ClassMethods" [
+label = "<f0> ActiveModel::Observing::ClassMethods| <instantiate_observers> instantiate_observers"
+shape = "record"
+];
+"ActiveModel::ObserverArray" [
+label = "<f0> ActiveModel::ObserverArray| <initialize> initialize"
+shape = "record"
+];
+"ActiveMerchant::Billing::Base" [
+label = "<f0> ActiveMerchant::Billing::Base| <mode> mode"
+shape = "record"
+];
+"NewRelic::Agent::Instrumentation::ActiveRecord" [
+label = "<f0> NewRelic::Agent::Instrumentation::ActiveRecord| <included> included"
+shape = "record"
+];
+"ActiveModel::AttributeMethods::ClassMethods" [
+label = "<f0> ActiveModel::AttributeMethods::ClassMethods| <generated_attribute_methods> generated_attribute_methods"
+shape = "record"
+];
+"ActiveModel::Validations::ClassMethods" [
+label = "<f0> ActiveModel::Validations::ClassMethods| <inherited> inherited"
+shape = "record"
+];
+"ActiveModel::Validations::Callbacks::ClassMethods" [
+label = "<f0> ActiveModel::Validations::Callbacks::ClassMethods| <before_validation> before_validation"
+shape = "record"
+];
+"ActiveModel::Validations::HelperMethods" [
+label = "<f0> ActiveModel::Validations::HelperMethods| <validates_presence_of> validates_presence_of"
+shape = "record"
+];
+"ActiveModel::EachValidator" [
+label = "<f0> ActiveModel::EachValidator| <initialize> initialize"
+shape = "record"
+];
+"ActiveModel::Validator" [
+label = "<f0> ActiveModel::Validator| <initialize> initialize"
+shape = "record"
+];
+"ActiveRecord::Validations::ClassMethods" [
+label = "<f0> ActiveRecord::Validations::ClassMethods| <validates_uniqueness_of> validates_uniqueness_of"
+shape = "record"
+];
+"ActiveRecord::Validations::UniquenessValidator" [
+label = "<f0> ActiveRecord::Validations::UniquenessValidator| <initialize> initialize"
+shape = "record"
+];
+"ActiveModel::Validations::FormatValidator" [
+label = "<f0> ActiveModel::Validations::FormatValidator| <check_validity> check_validity"
+shape = "record"
+];
+"ActiveModel::Validations::ConfirmationValidator" [
+label = "<f0> ActiveModel::Validations::ConfirmationValidator| <setup> setup"
+shape = "record"
+];
+"ActiveModel::Validations::LengthValidator" [
+label = "<f0> ActiveModel::Validations::LengthValidator| <initialize> initialize"
+shape = "record"
+];
+"ActiveModel::MassAssignmentSecurity::PermissionSet" [
+label = "<f0> ActiveModel::MassAssignmentSecurity::PermissionSet| <fuck_me> fuck_me"
+shape = "record"
+];
+"ActiveRecord::Associations::ClassMethods" [
+label = "<f0> ActiveRecord::Associations::ClassMethods| <has_one> has_one"
+shape = "record"
+];
+"ActiveRecord::Associations::Builder::Association" [
+label = "<f0> ActiveRecord::Associations::Builder::Association| <build> build"
+shape = "record"
+];
+"ActiveRecord::Associations::Builder::HasOne" [
+label = "<f0> ActiveRecord::Associations::Builder::HasOne| <build> build"
+shape = "record"
+];
+"ActiveRecord::AutosaveAssociation::AssociationBuilderExtension" [
+label = "<f0> ActiveRecord::AutosaveAssociation::AssociationBuilderExtension| <build> build"
+shape = "record"
+];
+"ActiveRecord::Reflection::ClassMethods" [
+label = "<f0> ActiveRecord::Reflection::ClassMethods| <create_reflection> create_reflection"
+shape = "record"
+];
+"ActiveRecord::Reflection::AssociationReflection" [
+label = "<f0> ActiveRecord::Reflection::AssociationReflection| <initialize> initialize"
+shape = "record"
+];
+"ActiveRecord::Reflection::MacroReflection" [
+label = "<f0> ActiveRecord::Reflection::MacroReflection| <initialize> initialize"
+shape = "record"
+];
+"ActiveRecord::Associations::Builder::SingularAssociation" [
+label = "<f0> ActiveRecord::Associations::Builder::SingularAssociation| <define_accessors> define_accessors"
+shape = "record"
+];
+"ActiveRecord::AutosaveAssociation::ClassMethods" [
+label = "<f0> ActiveRecord::AutosaveAssociation::ClassMethods| <add_autosave_association_callbacks> add_autosave_association_callbacks"
+shape = "record"
+];
+"ActiveRecord::Associations::Builder::CollectionAssociation" [
+label = "<f0> ActiveRecord::Associations::Builder::CollectionAssociation| <build> build"
+shape = "record"
+];
+"ActiveRecord::Associations::Builder::HasMany" [
+label = "<f0> ActiveRecord::Associations::Builder::HasMany| <build> build"
+shape = "record"
+];
+"ActiveRecord::Associations::Builder::BelongsTo" [
+label = "<f0> ActiveRecord::Associations::Builder::BelongsTo| <build> build"
+shape = "record"
+];
+"ActiveRecord::Inheritance::ClassMethods" [
+label = "<f0> ActiveRecord::Inheritance::ClassMethods| <abstract_class> abstract_class"
+shape = "record"
+];
+"ActiveRecord::Relation" [
+label = "<f0> ActiveRecord::Relation| <initialize> initialize"
+shape = "record"
+];
+"CarrierWave::ActiveRecord" [
+label = "<f0> CarrierWave::ActiveRecord| <mount_uploader> mount_uploader"
+shape = "record"
+];
+"CarrierWave::Validations::ActiveModel::HelperMethods" [
+label = "<f0> CarrierWave::Validations::ActiveModel::HelperMethods| <validates_integrity_of> validates_integrity_of"
+shape = "record"
+];
+"ActiveRecord::NestedAttributes::ClassMethods" [
+label = "<f0> ActiveRecord::NestedAttributes::ClassMethods| <accepts_nested_attributes_for> accepts_nested_attributes_for"
+shape = "record"
+];
+"ActiveModel::Validations::NumericalityValidator" [
+label = "<f0> ActiveModel::Validations::NumericalityValidator| <check_validity> check_validity"
+shape = "record"
+];
+"ActiveRecord::AttributeMethods::Serialization::ClassMethods" [
+label = "<f0> ActiveRecord::AttributeMethods::Serialization::ClassMethods| <serialize> serialize"
+shape = "record"
+];
+"ActiveRecord::Coders::YAMLColumn" [
+label = "<f0> ActiveRecord::Coders::YAMLColumn| <initialize> initialize"
+shape = "record"
+];
+"ActiveRecord::Querying" [
+label = "<f0> ActiveRecord::Querying| <where> where"
+shape = "record"
+];
+"ActiveRecord::Scoping::Named::ClassMethods" [
+label = "<f0> ActiveRecord::Scoping::Named::ClassMethods| <scoped> scoped"
+shape = "record"
+];
+"ActiveRecord::Scoping::ClassMethods" [
+label = "<f0> ActiveRecord::Scoping::ClassMethods| <current_scope> current_scope"
+shape = "record"
+];
+"ActiveRecord::QueryMethods" [
+label = "<f0> ActiveRecord::QueryMethods| <where> where"
+shape = "record"
+];
+"ActiveRecord::Sanitization::ClassMethods" [
+label = "<f0> ActiveRecord::Sanitization::ClassMethods| <expand_hash_conditions_for_aggregates> expand_hash_conditions_for_aggregates"
+shape = "record"
+];
+"ActiveRecord::PredicateBuilder" [
+label = "<f0> ActiveRecord::PredicateBuilder| <build_from_hash> build_from_hash"
+shape = "record"
+];
+"ActiveSupport::Dependencies::Loadable":load_dependency -> "ActiveSupport::Dependencies":load [
+];
+"Module":deprecate -> "ActiveSupport::Deprecation":deprecate_methods [
+];
+"ActiveSupport::Inflector":inflections -> "ActiveSupport::Inflector::Inflections":instance [
+];
+"ActiveSupport::Cache::FileStore":initialize -> "ActiveSupport::Cache::Store":initialize [
+];
+"I18n::Railtie":reloader_paths -> "ActiveSupport::FileUpdateChecker":initialize [
+];
+"Time":find_zone -> "ActiveSupport::TimeZone":fuck_me [
+];
+"ActionController::Base":logger -> "ActiveSupport::Configurable::ClassMethods":config [
+];
+"Time":minus_with_duration -> "ActiveSupport::Duration":fuck_me [
+];
+"ActiveRecord::Base":configurations -> "ActiveRecord::Base::ConnectionSpecification::Resolver":initialize [
+];
+"ActiveRecord::DynamicMatchers":respond_to -> "ActiveRecord::DynamicFinderMatch":match [
+];
+"ActiveRecord::Base":connection_handler -> "ActiveRecord::ConnectionAdapters::ConnectionHandler":remove_connection [
+];
+"Kernel":require_with_backports -> "ActiveMerchant::PostsData":included [
+];
+"MetaRequest::AppNotifications":subscribe -> "ActiveSupport::Notifications":subscribe [
+];
+"ActiveSupport::Notifications":subscribe -> "ActiveSupport::Notifications::Fanout":subscribe [
+];
+"ActiveSupport::Dependencies":reference -> "ActiveSupport::Dependencies::ClassCache":store [
+];
+"ActiveRecord::Base":logger -> "ActiveRecord::ConnectionAdapters::PostgreSQLAdapter":initialize [
+];
+"ActiveRecord::ConnectionAdapters::PostgreSQLAdapter":initialize -> "ActiveRecord::ConnectionAdapters::AbstractAdapter":initialize [
+];
+"ActiveSupport::LogSubscriber":call -> "ActiveRecord::LogSubscriber":logger [
+];
+"ActiveSupport::Notifications::Fanout::Subscriber":publish -> "ActiveRecord::ExplainSubscriber":call [
+];
+"String":to_json -> "ActiveSupport::JSON":encode [
+];
+"ActiveSupport::JSON::Encoding::Encoder":escape -> "ActiveSupport::JSON::Encoding":escape [
+];
+"ActiveRecord::ConnectionAdapters::PostgreSQLAdapter::StatementPool":initialize -> "ActiveRecord::ConnectionAdapters::StatementPool":initialize [
+];
+"ActiveRecord::Base":initialize_generated_modules -> "ActiveModel::AttributeMethods::ClassMethods":generated_attribute_methods [
+];
+"ActiveModel::Observing::ClassMethods":inherited -> "ActiveModel::Validations::ClassMethods":inherited [
+];
+"ActiveRecord::Associations::ClassMethods":has_one -> "ActiveRecord::Associations::Builder::Association":build [
+];
+"ActiveRecord::Associations::Builder::HasOne":build -> "ActiveRecord::AutosaveAssociation::AssociationBuilderExtension":build [
+];
+"ActiveRecord::Associations::Builder::HasOne":macro -> "ActiveRecord::Reflection::ClassMethods":create_reflection [
+];
+"ActiveRecord::Reflection::AssociationReflection":initialize -> "ActiveRecord::Reflection::MacroReflection":initialize [
+];
+"ActiveRecord::Associations::ClassMethods":has_many -> "ActiveRecord::Associations::Builder::CollectionAssociation":build [
+];
+"ActiveRecord::ModelSchema::ClassMethods":reset_table_name -> "ActiveRecord::Inheritance::ClassMethods":abstract_class [
+];
+"ActiveRecord::Querying":where -> "ActiveRecord::Scoping::Named::ClassMethods":scoped [
+];
+"ActiveRecord::Scoping::Named::ClassMethods":scoped -> "ActiveRecord::Scoping::ClassMethods":current_scope [
+];
+"ActiveRecord::QueryMethods":build_where -> "ActiveRecord::Sanitization::ClassMethods":expand_hash_conditions_for_aggregates [
+];
+}
