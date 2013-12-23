@@ -25,6 +25,7 @@ policy :myapp, :roles => :app do
   requires :build_essential
   requires :htop
   requires :ntp
+  requires :cron_apt
   requires :git
   requires :ruby
   requires :ruby_tuned

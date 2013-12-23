@@ -1,0 +1,5 @@
+# Configuration for cron-apt. For further information about the possible
+# configuration settings see the README file.
+
+MAILTO="root"
+MAILON="upgrade"
