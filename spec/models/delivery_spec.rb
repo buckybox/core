@@ -32,6 +32,20 @@ describe Delivery, :slow do
   end
 
   context 'changing status' do
+    context 'when changed from pending' do
+      before do
+        @delivery = delivery_pending
+        @starting_balance = @delivery.account.balance
+      end
+
+      context "to cancelled" do
+        before { @delivery.cancel }
+
+        specify { @delivery.deducted?.should be_false }
+        specify { @delivery.account(true).balance.should == @starting_balance }
+      end
+    end
+
     context 'when changed to delivered' do
       shared_examples 'it deducts accounts' do
         before do
