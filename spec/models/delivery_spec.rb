@@ -125,13 +125,4 @@ describe Delivery, :slow do
   describe '#reposition!' do
     specify { expect { delivery.reposition!(101) }.to change(delivery, :position).to(101) }
   end
-
-  describe "#tracking" do
-    context "when I change the status to 'delivered'" do
-      before do
-        delivery.status.should_not eq 'delivered'
-        delivery.deliver
-      end
-    end
-  end
 end
