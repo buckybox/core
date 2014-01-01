@@ -36,7 +36,6 @@ module Distributor::Form
     end
 
     def save
-      binding.pry
       return false unless valid?
       result = customer.update_attributes(customer_args)
       result &&= address.update_attributes(address_args)

@@ -14,43 +14,40 @@ class Distributor::CustomersController < Distributor::ResourceController
   end
 
   def new
-    render "new", locals: {
-      new_customer: Distributor::Form::NewCustomer.new(pre_form_args)
-    }
-  end
-
-  def create
-    args     = form_args(:distributor_form_new_customer)
-    form     = Distributor::Form::NewCustomer.new(args)
-    form_url = new_distributor_customer_url(form.customer)
-    tracking.event(current_distributor, "new_customer") if form.save && !current_admin.present?
-    form.save ? successful_create(form) : failed_form_submission(form, form_url)
+    locals = { new_customer: Distributor::Form::NewCustomer.new(pre_form_args) }
+    render "new", locals: locals
   end
 
   def edit_profile
-    render "edit_profile", locals: {
-      customer_profile: Distributor::Form::EditCustomerProfile.new(pre_form_args),
-    }
-  end
-
-  def update_profile
-    args     = form_args(:distributor_form_edit_customer_profile)
-    form     = Distributor::Form::EditCustomerProfile.new(args)
-    form_url = edit_profile_distributor_customer_url(form.customer)
-    form.save ? successful_update(form, 'profile') : failed_form_submission(form, form_url)
+    locals = { customer_profile: Distributor::Form::EditCustomerProfile.new(pre_form_args) }
+    render "edit_profile", locals: locals
   end
 
   def edit_delivery_details
-    render "edit_delivery_details", locals: {
-      delivery_details: Distributor::Form::EditCustomerDeliveryDetails.new(pre_form_args),
-    }
+    locals = { delivery_details: Distributor::Form::EditCustomerDeliveryDetails.new(pre_form_args) }
+    render "edit_delivery_details", locals: locals
+  end
+
+  def create
+    args   = form_args(:distributor_form_new_customer)
+    form   = Distributor::Form::NewCustomer.new(args)
+    locals = { new_customer: form }
+    tracking.event(current_distributor, "new_customer") if form.save && !current_admin.present?
+    form.save ? successful_create(form) : failed_form_submission(form, "new", locals)
+  end
+
+  def update_profile
+    args   = form_args(:distributor_form_edit_customer_profile)
+    form   = Distributor::Form::EditCustomerProfile.new(args)
+    locals = { customer_profile: form }
+    form.save ? successful_update(form, "profile") : failed_form_submission(form, "edit_profile", locals)
   end
 
   def update_delivery_details
-    args     = form_args(:distributor_form_edit_customer_delivery_details)
-    form     = Distributor::Form::EditCustomerDeliveryDetails.new(args)
-    form_url = edit_delivery_details_distributor_customer_url(form.customer)
-    form.save ? successful_update(form, 'delivery details') : failed_form_submission(form, form_url)
+    args   = form_args(:distributor_form_edit_customer_delivery_details)
+    form   = Distributor::Form::EditCustomerDeliveryDetails.new(args)
+    locals = { delivery_details: form }
+    form.save ? successful_update(form, "delivery details") : failed_form_submission(form, "edit_delivery_details", locals)
   end
 
   def show
@@ -194,9 +191,9 @@ private
     redirect_to distributor_customer_url(form.customer)
   end
 
-  def failed_form_submission(form, form_url)
+  def failed_form_submission(form, action, locals)
     flash[:alert] = "Oops there was an issue: #{formatted_error_messages(form)}"
-    redirect_to form_url
+    render action, locals: locals
   end
 
   def formatted_error_messages(form)
