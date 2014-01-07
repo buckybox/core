@@ -15,6 +15,10 @@ class Customer::OrdersController < Customer::ResourceController
   def update
     @order = current_customer.orders.find(params[:id])
 
+    unless @order.customer_can_edit?
+      redirect_to customer_root_path, alert: 'You are not allowed to edit this order.' and return
+    end
+
     # keep references to old values for create_activities_from_changes
     @old_box = @order.box
     @old_order_extras = @order.order_extras.dup
