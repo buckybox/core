@@ -125,6 +125,10 @@ class Order < ActiveRecord::Base
     order_extras.map{ |e| "#{e[:count]}x #{e[:name]} #{e[:unit]}" }.join(join_with)
   end
 
+  def customer_can_edit?
+    distributor.customer_can_edit_orders
+  end
+
   def change_to_local_time_zone
     distributor.change_to_local_time_zone
   end
