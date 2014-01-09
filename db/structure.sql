@@ -3054,10 +3054,10 @@ CREATE UNIQUE INDEX index_customers_on_distributor_id_and_number ON customers US
 
 
 --
--- Name: index_customers_on_email; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_customers_on_email_and_distributor_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
-CREATE UNIQUE INDEX index_customers_on_email ON customers USING btree (email);
+CREATE UNIQUE INDEX index_customers_on_email_and_distributor_id ON customers USING btree (email, distributor_id);
 
 
 --
@@ -3815,3 +3815,5 @@ INSERT INTO schema_migrations (version) VALUES ('20131212220220');
 INSERT INTO schema_migrations (version) VALUES ('20131216225521');
 
 INSERT INTO schema_migrations (version) VALUES ('20140109004934');
+
+INSERT INTO schema_migrations (version) VALUES ('20140109032329');
