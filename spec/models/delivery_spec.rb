@@ -32,6 +32,20 @@ describe Delivery, :slow do
   end
 
   context 'changing status' do
+    context 'when changed from pending' do
+      before do
+        @delivery = delivery_pending
+        @starting_balance = @delivery.account.balance
+      end
+
+      context "to cancelled" do
+        before { @delivery.cancel }
+
+        specify { @delivery.deducted?.should be_false }
+        specify { @delivery.account(true).balance.should == @starting_balance }
+      end
+    end
+
     context 'when changed to delivered' do
       shared_examples 'it deducts accounts' do
         before do
@@ -124,14 +138,5 @@ describe Delivery, :slow do
 
   describe '#reposition!' do
     specify { expect { delivery.reposition!(101) }.to change(delivery, :position).to(101) }
-  end
-
-  describe "#tracking" do
-    context "when I change the status to 'delivered'" do
-      before do
-        delivery.status.should_not eq 'delivered'
-        delivery.deliver
-      end
-    end
   end
 end

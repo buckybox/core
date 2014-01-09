@@ -72,6 +72,7 @@ class Delivery < ActiveRecord::Base
 
       unless result
         delivery.status_event = status_event
+        delivery.status_change_type = 'manual'
         result = delivery.save
       end
 
