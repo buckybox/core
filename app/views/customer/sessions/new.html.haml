@@ -1,6 +1,7 @@
 %h2 Account Login
 
-= simple_form_for(resource, as: resource_name, url: session_path(resource_name), html: { class: 'form-inline' }) do |f|
+= simple_form_for(resource, as: resource_name, url: request.fullpath, html: { class: 'form-inline' }) do |f|
+  = f.input :distributor_id, as: :hidden, input_html: { value: @distributor_id }
   = f.input :email, required: false, label: false, placeholder: 'enter your email', autofocus: true, input_html: { class: 'span12' }
   = f.input :password, required: false, label: false, placeholder: 'enter your password', input_html: { class: 'span12' }
   = f.input :remember_me, as: :boolean, wrapper: :inline_checkbox if devise_mapping.rememberable?
