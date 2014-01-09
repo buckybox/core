@@ -18,8 +18,6 @@ class Customer < ActiveRecord::Base
 
   belongs_to :next_order, class_name: 'Order'
 
-  devise :database_authenticatable, :recoverable, :rememberable, :trackable, :validatable
-
   acts_as_taggable
 
   DYNAMIC_TAGS = {
@@ -64,6 +62,33 @@ class Customer < ActiveRecord::Base
 
   scope :ordered_by_next_delivery, lambda { order("CASE WHEN next_order_occurrence_date IS NULL THEN '9999-01-01' WHEN next_order_occurrence_date < '#{Date.current.to_s(:db)}' THEN '9999-01-01' ELSE next_order_occurrence_date END ASC, lower(customers.first_name) ASC, lower(customers.last_name) ASC") }
   scope :ordered, order("lower(customers.first_name) ASC, lower(customers.last_name) ASC")
+
+  # <HACK>
+  # Scope authentication by distributor ID
+  # More info: https://github.com/plataformatec/devise/wiki/How-to:-Scope-login-to-subdomain
+
+  # 1. Disable uniqueness constraint added by
+  #    https://github.com/plataformatec/devise/blob/master/lib/devise/models/validatable.rb
+  def self.validates_uniqueness_of(*args)
+    args.first == :email ? nil : super
+  end
+
+  # 2. Tell Devise to fetch distributor_id too with the *_keys options
+  devise :database_authenticatable, :recoverable, :rememberable, :trackable, :validatable,
+    authentication_keys: [:email, :distributor_id],
+    reset_password_keys: [:email, :distributor_id]
+
+  # 3. Override Devise's method to scope by distributor_id
+  def self.find_first_by_auth_conditions(warden_conditions)
+    if warden_conditions.keys == %w(email distributor_id)
+      # the login and lost_password (GET) forms
+      find_by(email: warden_conditions[:email], distributor_id: warden_conditions[:distributor_id])
+    else
+      # the lost_password (POST) form which uses a token
+      super
+    end
+  end
+  # </HACK>
 
   default_value_for :discount, 0
   default_value_for :balance_threshold_cents do |customer|
