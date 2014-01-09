@@ -1,7 +1,8 @@
 %h2 Change my password
 
-= simple_form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :put }) do |f|
+= simple_form_for(resource, as: resource_name, url: "#{password_path(resource_name)}?#{request.query_string}", html: { method: :put }) do |f|
   = f.error_notification
+  = f.input :distributor_id, as: :hidden, input_html: { value: @distributor_id }
   = f.input :reset_password_token, as: :hidden
   = f.full_error :reset_password_token
 
