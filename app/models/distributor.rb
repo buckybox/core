@@ -26,7 +26,7 @@ class Distributor < ActiveRecord::Base
   has_many :distributors_omni_importers, class_name: DistributorsOmniImporters
   has_many :omni_importers, through: :distributors_omni_importers
 
-  #Metrics
+  # Metrics
   has_many :distributor_metrics
   has_many :distributor_logins
   has_many :customer_logins
@@ -69,13 +69,13 @@ class Distributor < ActiveRecord::Base
     :deliveries_index_deliveries_intro, :payments_index_intro, :customers_index_intro
 
   # Settings
-  attr_accessible :customer_can_remove_orders, :default_balance_threshold, :has_balance_threshold,
-    :send_email, :send_halted_email, :collect_phone, :collect_delivery_note, :require_address_1,
-    :require_address_2, :require_suburb, :require_postcode, :require_phone, :require_city,
-    :require_delivery_note, :payment_cash_on_delivery, :payment_bank_deposit, :payment_credit_card,
-    :keep_me_updated, :notify_address_change, :notify_for_new_webstore_order,
-    :email_customer_on_new_webstore_order, :email_customer_on_new_order,
-    :email_distributor_on_new_webstore_order
+  attr_accessible :customer_can_edit_orders, :customer_can_remove_orders,
+    :default_balance_threshold, :has_balance_threshold, :send_email, :send_halted_email,
+    :collect_phone, :collect_delivery_note, :require_address_1, :require_address_2, :require_suburb,
+    :require_postcode, :require_phone, :require_city, :require_delivery_note,
+    :payment_cash_on_delivery, :payment_bank_deposit, :payment_credit_card, :keep_me_updated,
+    :notify_address_change, :notify_for_new_webstore_order, :email_customer_on_new_webstore_order,
+    :email_customer_on_new_order, :email_distributor_on_new_webstore_order
 
   accepts_nested_attributes_for :localised_address
 

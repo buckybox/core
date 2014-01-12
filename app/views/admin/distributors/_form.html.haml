@@ -28,6 +28,7 @@
     :javascript
       $(function(){$("#distributor_omni_importer_ids").select2({ width: 'resolve' });});
 
+    = f.input :customer_can_edit_orders
     = f.input :customer_can_remove_orders
     = f.input :feature_spend_limit, label: 'Enable the minimum balance feature?', hint: 'This gives the distributor the option to turn on a minimum balance for customers.'
     = f.input :send_email, as: :boolean, label: "Send any emails to customers?"
