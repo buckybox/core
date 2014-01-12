@@ -41,7 +41,7 @@
             = f.input_field :default_balance_threshold, placeholder: "Minimum balance e.g. 0.00", class: 'span6'
             %span.add-on= f.input_field :spend_limit_on_all_customers, as: :boolean, inline_label: true, label: "Also update existing customers"
 
-          = f.input_field :send_halted_email, inline_label: true, label: "Send an email to customers when their account is halted"
+          = f.input_field :send_halted_email, inline_label: true, label: "Email customers when their account is halted (24-hour delay)"
 
     .row-fluid
       .span12.form-actions

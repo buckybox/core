@@ -313,7 +313,7 @@ class Customer < ActiveRecord::Base
 
   def create_halt_notifications(email_rule = Customer::EmailRule.only_pending_orders)
     Event.customer_halted(self)
-    send_halted_email if email_rule.send_email?(self)
+    queue_halted_email if email_rule.send_email?(self)
   end
 
   def orders_pending_package_creation?
@@ -336,8 +336,19 @@ class Customer < ActiveRecord::Base
     end
   end
 
+  def queue_halted_email
+    # automatic delivery happens around 11pm which triggers the halted check
+    # some distributors doing late deliveries input COD the next day
+    # that's why we wait 23 hours before actually sending the email to customers
+    delay(
+      run_at: 23.hours.from_now,
+      priority: Figaro.env.delayed_job_priority_low,
+      queue: "#{__FILE__}:#{__LINE__}",
+    ).send_halted_email
+  end
+
   def send_halted_email
-    if distributor.send_email? && distributor.send_halted_email?
+    if distributor.send_email? && distributor.send_halted_email? && halted?
       CustomerMailer.orders_halted(self).deliver
     end
   end
