@@ -6,12 +6,13 @@ describe Customer::OrdersController do
 
   describe "PUT 'update'" do
     before do
-      @id    = Fabricate(:order, quantity: 1, account: @customer.account).id
-      @order = { quantity: 3 }
+      @order = Fabricate(:order, quantity: 1, account: @customer.account)
+      @id = @order.id
+      @order_params = { quantity: 3 }
     end
 
     describe 'with valid params' do
-      before { put :update, { id: @id, order: @order } }
+      before { put :update, { id: @id, order: @order_params } }
 
       specify { assigns(:order).should be_a(Order) }
       specify { assigns(:order).should be_persisted }
@@ -20,12 +21,26 @@ describe Customer::OrdersController do
 
     describe 'with invalid params' do
       before do
-        @order[:quantity] = 'all of the times!'
-        put :update, { id: @id, order: @order }
+        @order_params[:quantity] = 'all of the times!'
+        put :update, { id: @id, order: @order_params }
       end
 
       specify { Order.last.quantity.should == 1 }
       specify { response.should render_template('edit') }
+    end
+
+    context "with customer_can_edit_orders = false" do
+      before do
+        distributor = @customer.distributor
+        distributor.update_attributes(customer_can_edit_orders: false)
+      end
+
+      it "does not update the order" do
+        @order_params[:quantity] = 2
+        put :update, { id: @id, order: @order_params }
+
+        expect(@order.reload.quantity).not_to eq 2
+      end
     end
   end
 
