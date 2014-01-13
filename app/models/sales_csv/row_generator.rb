@@ -16,6 +16,7 @@ module SalesCsv
         customer_first_name,
         customer_last_name,
         customer_phone,
+        customer_labels,
         new_customer,
         delivery_address_line_1,
         delivery_address_line_2,
@@ -31,6 +32,7 @@ module SalesCsv
         price,
         bucky_box_transaction_fee,
         total_price,
+        customer_payment_method,
         customer_email,
         customer_special_preferences,
         package_status,
@@ -43,7 +45,7 @@ module SalesCsv
     attr_reader :data
 
     def customer
-      @customer ||= order.customer
+      @customer ||= order.customer.decorate
     end
 
     def delivery_service
@@ -85,6 +87,10 @@ module SalesCsv
 
     def customer_phone
       address.phones.default_number
+    end
+
+    def customer_labels
+      customer.customer_labels
     end
 
     def new_customer
@@ -145,6 +151,11 @@ module SalesCsv
 
     def total_price
       archived.total_price
+    end
+
+    def customer_payment_method
+      method = customer.account.default_payment_method
+      method ? method.humanize : "Unknown"
     end
 
     def customer_email
