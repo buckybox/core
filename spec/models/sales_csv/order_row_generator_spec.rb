@@ -23,12 +23,16 @@ describe SalesCsv::OrderRowGenerator do
   end
   let(:customer) do
     double('customer',
-      number: 1,
-      first_name: 'fname',
-      last_name: 'lname',
-      new?: true,
-      email: 'em@ex.com',
-      special_order_preference: 'pref',
+      decorate: double(
+        number: 1,
+        first_name: 'fname',
+        last_name: 'lname',
+        new?: true,
+        email: 'em@ex.com',
+        special_order_preference: 'pref',
+        customer_labels: "label1,label2",
+        account: double(default_payment_method: nil),
+      )
     )
   end
   let(:address) do
@@ -48,7 +52,7 @@ describe SalesCsv::OrderRowGenerator do
     it 'generates a array for conversion to csv row' do
       Order.stub(:short_code) { 'sc' }
       Order.stub(:extras_description) { 'exd' }
-      row_generator.generate.should == ["rname", nil, nil, 1, nil, nil, 1, "fname", "lname", 8888, "NEW", "street 1", "apt 1", "sub", "city", 123, "note", "sc", "bname", "sub", "ex", "exd", 10.0, 1.0, 11.0, "em@ex.com", "pref", "waiting", "waiting"]
+      row_generator.generate.should == ["rname", nil, nil, 1, nil, nil, 1, "fname", "lname", 8888, "label1,label2", "NEW", "street 1", "apt 1", "sub", "city", 123, "note", "sc", "bname", "sub", "ex", "exd", 10.0, 1.0, 11.0, "Unknown", "em@ex.com", "pref", "waiting", "waiting"]
     end
   end
 end
