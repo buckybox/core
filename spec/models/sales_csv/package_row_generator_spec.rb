@@ -38,12 +38,16 @@ describe SalesCsv::PackageRowGenerator do
   end
   let(:customer) do
     double('customer',
-      number: 1,
-      first_name: 'fname',
-      last_name: 'lname',
-      new?: true,
-      email: 'em@ex.com',
-      special_order_preference: 'pref',
+      decorate: double(
+        number: 1,
+        first_name: 'fname',
+        last_name: 'lname',
+        new?: true,
+        email: 'em@ex.com',
+        special_order_preference: 'pref',
+        customer_labels: "label1,label2",
+        account: double(default_payment_method: nil),
+      )
     )
   end
   let(:address) do
@@ -61,7 +65,7 @@ describe SalesCsv::PackageRowGenerator do
 
   describe '#generate' do
     it 'generates a array for conversion to csv row' do
-      row_generator.generate.should == ["rname", 1, nil, 1, 1, "11 Apr 2013", 1, "fname", "lname", 8888, "NEW", "street 1", "apt 1", "sub", "city", 123, "note", "c", "bname", "sub", "ex", "exd", 10.0, 1.0, 11.0, "em@ex.com", "pref", "pending", "pending"]
+      row_generator.generate.should == ["rname", 1, nil, 1, 1, "11 Apr 2013", 1, "fname", "lname", 8888, "label1,label2", "NEW", "street 1", "apt 1", "sub", "city", 123, "note", "c", "bname", "sub", "ex", "exd", 10.0, 1.0, 11.0, "Unknown", "em@ex.com", "pref", "pending", "pending"]
     end
   end
 end
