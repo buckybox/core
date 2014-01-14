@@ -64,6 +64,9 @@
         %div
           = f.input_field :payment_direct_debit, as: "boolean"
           %label{for: "distributor_payment_direct_debit", title: "Available soon!"} We would like to charge by <strong>Direct Debit</strong>
+        %div
+          = f.input_field :payment_bitcoin, as: "boolean"
+          %label{for: "distributor_payment_bitcoin", title: "Available soon!"} We would like to accept payments in <strong>Bitcoins</strong>
 
       %fieldset
         %legend Survey
