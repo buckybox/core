@@ -8,6 +8,7 @@ class ApplicationController < ActionController::Base
   end
 
   before_filter :set_user_time_zone
+  before_filter :customer_smart_sign_in
 
   layout :layout_by_resource
 
@@ -24,16 +25,57 @@ protected
     @tracking ||= Bucky::Tracking.instance
   end
 
+  # @return {distributor_parameter_name => customer_id, ...}
+  def current_customers
+    # return {} unless current_customer
+
+    cookie = cookies.signed[:current_customers]
+    cookie ? JSON.parse(cookie) : {}
+  end
+  helper_method :current_customers
+
+  def customer_smart_sign_in
+    guessed_distributor = if params[:switch_to_distributor] && customer_can_swith_account?
+      params[:switch_to_distributor]
+    else
+      current_distributor && current_distributor.parameter_name
+    end
+
+    guessed_customer_id = current_customers[guessed_distributor]
+    current_customer_id = current_customer && current_customer.id
+
+    return unless guessed_customer_id
+    return if current_customer_id && current_customer_id == guessed_customer_id
+
+    if params[:distributor_parameter_name]
+      params[:distributor_parameter_name] = guessed_distributor
+    end
+
+    sign_in Customer.find(guessed_customer_id)
+    redirect_to url_for(params)
+  end
+
+  def customer_has_incomplete_cart?
+    !!session[:cart_id]
+  end
+
+  def customer_can_swith_account?
+    !customer_has_incomplete_cart?
+  end
+  helper_method :customer_can_swith_account?
+
   def attempt_customer_sign_in(email, password, options = {})
-    customer = Customer.where(email: email).first
+    customer = Customer.find_by(email: email, distributor_id: current_distributor.id)
     return if !customer || !customer.valid_password?(password)
     customer if customer_sign_in(customer, options)
   end
 
   def customer_sign_in(customer, options = {})
     return if current_customer == customer
+
     options = { no_track: false }.merge(options)
     CustomerLogin.track(customer) unless options[:no_track]
+
     sign_in(customer)
   end
 
