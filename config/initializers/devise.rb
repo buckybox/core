@@ -220,6 +220,21 @@ Devise.setup do |config|
   #   manager.default_strategies(:scope => :user).unshift :some_external_strategy
   # end
 
+  Warden::Manager.after_authentication do |user, auth, opts|
+    if opts.fetch(:scope) == :customer
+      cookie = auth.cookies.signed[:current_customers]
+      hash = cookie ? JSON.parse(cookie) : {}
+      hash.merge!(user.distributor.parameter_name => user.id)
+      auth.cookies.signed[:current_customers] = hash.to_json
+    end
+  end
+
+  # Warden::Manager.before_logout do |user, auth, opts|
+  #   if opts.fetch(:scope) == :customer
+  #     auth.cookies.delete :current_customers
+  #   end
+  # end
+
   # ==> Mountable engine configurations
   # When using Devise inside an engine, let's call it `MyEngine`, and this engine
   # is mountable, there are some extra configurations to be taken into account.

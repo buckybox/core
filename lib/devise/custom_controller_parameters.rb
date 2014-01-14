@@ -3,7 +3,7 @@ module Devise::CustomControllerParameters
     base.before_filter :setup_custom_variables
   end
 
-  private
+private
 
   def setup_custom_variables
     @distributor = Distributor.find_by_parameter_name(params[:distributor]) if params[:distributor]

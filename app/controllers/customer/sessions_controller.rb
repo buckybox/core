@@ -12,5 +12,10 @@ class Customer::SessionsController < Devise::SessionsController
     CustomerLogin.track(current_customer) unless current_admin.present?
     result
   end
+
+  def destroy
+    cookies.delete :current_customers
+    super
+  end
 end
 
