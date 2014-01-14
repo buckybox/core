@@ -36,6 +36,6 @@ private
       @link_args = nil
     end
 
-    @distributor_id = @distributor ? @distributor.id : nil
+    @distributor_id = @distributor ? @distributor.id : 0
   end
 end

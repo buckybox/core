@@ -69,9 +69,11 @@ class Customer < ActiveRecord::Base
 
   # 1. Disable uniqueness constraint added by
   #    https://github.com/plataformatec/devise/blob/master/lib/devise/models/validatable.rb
+  #    and create our own scoped constraint
   def self.validates_uniqueness_of(*args)
-    args.first == :email ? nil : super
+    args.first == :email && !args.last.delete(:force) ? nil : super
   end
+  validates_uniqueness_of :email, scope: :distributor_id, force: true
 
   # 2. Tell Devise to fetch distributor_id too with the *_keys options
   devise :database_authenticatable, :recoverable, :rememberable, :trackable, :validatable,
@@ -80,13 +82,19 @@ class Customer < ActiveRecord::Base
 
   # 3. Override Devise's method to scope by distributor_id
   def self.find_first_by_auth_conditions(warden_conditions)
-    if warden_conditions.keys == %w(email distributor_id)
-      # the login and lost_password (GET) forms
-      find_by(email: warden_conditions[:email], distributor_id: warden_conditions[:distributor_id])
-    else
+    distributor_id = warden_conditions[:distributor_id].to_i
+
+    customers = if distributor_id.zero?
+      # the login and lost_password (GET) forms without the distributor param
       # the lost_password (POST) form which uses a token
-      super
+      where(email: warden_conditions[:email])
+    else
+      # the login and lost_password (GET) forms with the distributor param
+      where(email: warden_conditions[:email], distributor_id: warden_conditions[:distributor_id])
     end
+
+    raise "Ambiguous match" if customers.count > 1
+    customers.first
   end
   # </HACK>
 
