@@ -84,13 +84,19 @@ class Customer < ActiveRecord::Base
   def self.find_first_by_auth_conditions(warden_conditions)
     distributor_id = warden_conditions[:distributor_id].to_i
 
-    customers = if distributor_id.zero?
-      # the login and lost_password (GET) forms without the distributor param
+    customers = if warden_conditions[:email]
+      if distributor_id.zero?
+        # the login and lost_password (GET) forms without the distributor param
+        where(email: warden_conditions[:email])
+      else
+        # the login and lost_password (GET) forms with the distributor param
+        where(email: warden_conditions[:email], distributor_id: warden_conditions[:distributor_id])
+      end
+    elsif warden_conditions[:reset_password_token]
       # the lost_password (POST) form which uses a token
-      where(email: warden_conditions[:email])
+      Array(super)
     else
-      # the login and lost_password (GET) forms with the distributor param
-      where(email: warden_conditions[:email], distributor_id: warden_conditions[:distributor_id])
+      raise "Unexcepted authentication"
     end
 
     return customers.first if customers.one?
