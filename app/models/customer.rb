@@ -93,8 +93,7 @@ class Customer < ActiveRecord::Base
       where(email: warden_conditions[:email], distributor_id: warden_conditions[:distributor_id])
     end
 
-    raise "Ambiguous match" if customers.count > 1
-    customers.first
+    return customers.first if customers.one?
   end
   # </HACK>
 

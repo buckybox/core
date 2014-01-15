@@ -25,30 +25,50 @@ protected
     @tracking ||= Bucky::Tracking.instance
   end
 
-  # @return {distributor_parameter_name => customer_id, ...}
-  def current_customers
+  def current_customers(options = {})
     # return {} unless current_customer
 
-    cookie = cookies.signed[:current_customers]
-    cookie ? JSON.parse(cookie) : {}
+    cookie = cookies.signed[:current_customers] || []
+
+    if options[:all]
+      if current_customer
+        Customer.where(email: current_customer.email).sort_by do |customer|
+          # signed in accounts first
+          customer.id.in?(cookie) ? 0 : 1
+        end
+      else
+        []
+      end
+    else
+      cookie.map do |customer_id|
+        Customer.find(customer_id)
+      end
+    end
   end
   helper_method :current_customers
 
   def customer_smart_sign_in
     guessed_distributor = if params[:switch_to_distributor] && customer_can_swith_account?
-      params[:switch_to_distributor]
-    else
-      current_distributor && current_distributor.parameter_name
+      Distributor.find_by(parameter_name: params[:switch_to_distributor])
+    # else
+    #   binding.pry if current_distributor
+    #   current_distributor
     end
 
-    guessed_customer_id = current_customers[guessed_distributor]
-    current_customer_id = current_customer && current_customer.id
+    return unless guessed_distributor
 
-    return unless guessed_customer_id
+    guessed_customer = current_customers.detect { |c| c.distributor == guessed_distributor }
+    guessed_customer_id = guessed_customer && guessed_customer.id
+    unless guessed_customer_id
+      sign_out :customer
+      redirect_to new_customer_session_url(distributor: guessed_distributor.parameter_name) and return
+    end
+
+    current_customer_id = current_customer && current_customer.id
     return if current_customer_id && current_customer_id == guessed_customer_id
 
     if params[:distributor_parameter_name]
-      params[:distributor_parameter_name] = guessed_distributor
+      params[:distributor_parameter_name] = guessed_distributor.parameter_name
     end
 
     sign_in Customer.find(guessed_customer_id)
