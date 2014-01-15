@@ -7,18 +7,29 @@
           = link_to '', Figaro.env.marketing_site_url, class: 'image-map-links', id: 'com-link', title: 'Bucky Box, simple to use software for your CSA, Vege Box Scheme, or Food Hub.', target: '_blank'
 
       #auth-controls.span6.text-right
-        -# = current_customers.inspect
         - if current_customer
           .btn-group
             = link_to "My account (#{current_customer.name})", customer_root_path, class: 'btn btn-inverse'
             = link_to '#', { class: 'btn btn-inverse dropdown-toggle', "data-toggle" => "dropdown" } do
               %span.caret
             %ul.dropdown-menu.pull-right
-              - if current_customers.count > 1
-                %li= link_to current_customer.distributor.name, "#"
-                - current_customers.each do |distributor_parameter_name, customer_id|
-                  - if current_customer.id != customer_id
-                    %li= link_to Distributor.find_by(parameter_name: distributor_parameter_name).name, customer_can_swith_account? ? url_for(switch_to_distributor: distributor_parameter_name) : 'javascript:alert("You cannot switch account now because you have an ongoing order.")'
+              - all_accounts = current_customers(all: true)
+              - if all_accounts.count > 1
+                %li
+                  = link_to "#" do
+                    %i.icon-star.icon-white{ title: "Current account" }
+                    = current_customer.distributor.name
+
+                - all_accounts.each do |customer|
+                  - if current_customer != customer
+                    %li
+                      = link_to customer_can_swith_account? ? url_for(switch_to_distributor: customer.distributor.parameter_name) : 'javascript:alert("You cannot switch account now because you have an ongoing order.")' do
+                        - if customer.in?(current_customers)
+                          %i.icon-ok{ title: "Signed in" }
+                        - else
+                          %i.icon-remove{ title: "Signed out" }
+                        = customer.distributor.name
+
                 %li.divider
 
               %li= link_to 'Logout', destroy_customer_session_path, method: :delete
