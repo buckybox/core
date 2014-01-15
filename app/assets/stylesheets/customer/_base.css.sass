@@ -119,10 +119,27 @@ table
       right: 0
   #auth-controls
     margin-top: 11px
-    .dropdown-menu
-      background-color: #222
-      .divider
-        border: none
+    .account-dropdown
+      padding: 0
+      border: 1px solid #fff
+      +border-radius(0px)
+      > *
+        padding: 4px 8px
+        border: 1px solid #000
+      .current-account
+        background-color: #333
+        border-bottom: 1px solid #fff
+        .logout a
+          border: 1px solid #fff
+          padding: 4px
+          font-size: 13px
+      .switch-accounts
+        background-color: #666
+        border-top: none
+        .signed-out
+          opacity: 0.4
+        a
+          font-weight: normal
 
 #public-banner
   background-color: $grayDarker
