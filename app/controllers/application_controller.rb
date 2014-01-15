@@ -26,11 +26,11 @@ protected
   end
 
   def current_customers(options = {})
-    # return {} unless current_customer
+    options = { current: true }.merge!(options)
 
     cookie = cookies.signed[:current_customers] || []
 
-    if options[:all]
+    customers = if options[:all]
       if current_customer
         Customer.where(email: current_customer.email).sort_by do |customer|
           # signed in accounts first
@@ -44,6 +44,10 @@ protected
         Customer.find(customer_id)
       end
     end
+
+    customers.delete(current_customer) unless options[:current]
+
+    customers
   end
   helper_method :current_customers
 
