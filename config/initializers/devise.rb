@@ -223,6 +223,12 @@ Devise.setup do |config|
   Warden::Manager.after_set_user do |user, auth, opts|
     if opts.fetch(:scope) == :customer
       cookie = auth.cookies.signed[:current_customers] || []
+
+      if cookie.present? && Customer.find(cookie.first).email != user.email
+        # reset cookie if logging in with a different email
+        cookie = []
+      end
+
       auth.cookies.signed[:current_customers] = cookie | [user.id]
     end
   end
