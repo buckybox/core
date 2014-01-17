@@ -2,10 +2,11 @@ class DeviseMailer < Devise::Mailer
 protected
 
   def headers_for(action, opts)
-    custom_opts = {
+    opts.merge!(
       'X-Mailer' => Figaro.env.x_mailer,
-    }
-    opts.merge!(custom_opts)
+      'From'     => resource.distributor.support_email,
+      'Reply-To' => resource.distributor.support_email,
+    )
 
     super(action, opts)
   end
