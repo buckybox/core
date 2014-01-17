@@ -25,6 +25,10 @@ protected
     @tracking ||= Bucky::Tracking.instance
   end
 
+  # @param options
+  #   current: Include current_customer
+  #   all: Include signed off accounts
+  # @return [Array] List of customer account
   def current_customers(options = {})
     options = { current: true }.merge!(options)
 
@@ -36,14 +40,10 @@ protected
           # signed in accounts first
           customer.id.in?(cookie) ? 0 : 1
         end
-      else
-        []
       end
     else
-      cookie.map do |customer_id|
-        Customer.find(customer_id)
-      end
-    end
+      cookie.map { |customer_id| Customer.find(customer_id) }
+    end || []
 
     customers.delete(current_customer) unless options[:current]
 
@@ -52,16 +52,14 @@ protected
   helper_method :current_customers
 
   def customer_smart_sign_in
+    # guess distributor
     guessed_distributor = if params[:switch_to_distributor] && customer_can_swith_account?
       Distributor.find_by(parameter_name: params[:switch_to_distributor])
-    # else
-    #   binding.pry if current_distributor
-    #   current_distributor
     end
-
     return unless guessed_distributor
 
-    guessed_customer = current_customers.detect { |c| c.distributor == guessed_distributor }
+    # guess customer
+    guessed_customer = current_customers.detect { |customer| customer.distributor == guessed_distributor }
     guessed_customer_id = guessed_customer && guessed_customer.id
     unless guessed_customer_id
       sign_out :customer
@@ -71,10 +69,12 @@ protected
     current_customer_id = current_customer && current_customer.id
     return if current_customer_id && current_customer_id == guessed_customer_id
 
+    # update URL for guesed distributor
     if params[:distributor_parameter_name]
       params[:distributor_parameter_name] = guessed_distributor.parameter_name
     end
 
+    # sign in guesed customer
     sign_in Customer.find(guessed_customer_id)
     redirect_to url_for(params)
   end
