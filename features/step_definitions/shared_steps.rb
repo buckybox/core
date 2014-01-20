@@ -39,13 +39,13 @@ Then(/^I should not see an? "(.*?)" field$/) do |field_name|
   expect(page.has_field? field_name).to be_false
 end
 
-When(/^I submit the form without an? "(.*?)"$/) do |field_name|
-  fill_in field_name, with: ""
+When(/^I submit the form with an? "(.*?)" of "(.*?)"$/) do |field_name, value|
+  fill_in field_name, with: value
   step 'I click on "Update"'
 end
 
-When(/^I submit the form with an? "(.*?)" of "(.*?)"$/) do |field_name, value|
-  fill_in field_name, with: value
+When(/^I submit the form without an? "(.*?)"$/) do |field_name|
+  fill_in field_name, with: ""
   step 'I click on "Update"'
 end
 

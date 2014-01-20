@@ -5,8 +5,10 @@ Fabricator(:customer) do
   email { sequence(:email) { |i| "customer#{i}@example.com" } }
   password 'password'
   password_confirmation { |attrs| attrs[:password] }
+end
 
+Fabricator(:customer_with_address, from: :customer) do
   after_build do |customer|
-    Fabricate(:address, customer: customer)
+    Fabricate(:full_address, customer: customer)
   end
 end
