@@ -1,19 +1,19 @@
-Given(/^I am a customer for a distributor that collects (.*?)$/) do |attribute|
-  distributor = Fabricate(:distributor_with_everything, collect_options(attribute))
-
-  customer = distributor.customers.last
-  customer.password = "Let me in!"
-  customer.save!
-
-  login_as customer
-end
-
 Given(/^I am a customer for a distributor that does not collect (.*?)$/) do |attribute|
   distributor = Fabricate(:distributor_with_everything, collect_options(attribute, false))
+  customer_login_with_distributor(distributor)
+end
 
-  customer = distributor.customers.last
-  customer.password = "Let me in!"
-  customer.save!
+Given(/^I am a customer for a distributor that collects (.*?)$/) do |attribute|
+  distributor = Fabricate(:distributor_with_everything, collect_options(attribute))
+  customer_login_with_distributor(distributor)
+end
 
-  login_as customer
+Given(/^I am a customer for a distributor that does not require (.*?)$/) do
+  distributor = Fabricate(:distributor_with_everything, require_options(attribute, false))
+  customer_login_with_distributor(distributor)
+end
+
+Given(/^I am a customer for a distributor that requires (.*?)$/) do
+  distributor = Fabricate(:distributor_with_everything, require_options(attribute))
+  customer_login_with_distributor(distributor)
 end
