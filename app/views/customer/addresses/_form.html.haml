@@ -1,4 +1,4 @@
-= simple_form_for(@address, url: customer_address_path, html: { method: :put, novalidate: false }) do |f|
+= simple_form_for(@address, url: customer_address_path, html: { method: :put }) do |f|
   .modal-body
     = f.error_notification
 
@@ -11,4 +11,4 @@
       = f.input :delivery_note, placeholder: "Delivery instructions such as where to place the package, e.g. Place on back porch", input_html: { required: @address.customer.distributor.require_delivery_note }
 
   .modal-footer
-    = f.button :submit, class: 'btn btn-primary'
+    = f.button :submit, 'Update', class: 'btn btn-primary'
