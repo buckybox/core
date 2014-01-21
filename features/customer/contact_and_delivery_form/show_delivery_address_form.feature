@@ -14,7 +14,7 @@ Feature: Customers are presented with a form to change their delivery details
     Given I am a customer for a distributor that collects the second line of an address
     And I am viewing my dashboard
     When I click on "change my delivery address"
-    Then I should see an "Address 1" field
+    Then I should see an "Address 2" field
 
   Scenario: Updating your suburb
     Given I am a customer for a distributor that collects a suburb
