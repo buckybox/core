@@ -48,7 +48,7 @@ describe ExtrasCsv do
         "extra line item unit",
         "extra line item unit price",
         "quantity",
-        "visible on web store",
+        "web store visibility",
       ]
     end
 
