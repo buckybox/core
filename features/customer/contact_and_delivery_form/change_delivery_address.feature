@@ -1,8 +1,8 @@
 @javascript
-Feature: Customers are presented with a form to change their delivery details
-  In order for a distributor to have the latest customer delivery details
+Feature: Existing customer changes their delivery details
+  In order for a customer to get their boxes delivered to the correct address
   As a customer
-  I want to be able view the delivery details form
+  I want to be able to keep my address up to date
 
   Scenario: Updating the first line of your address
     Given I am a customer for a distributor that does not require a first line of an address

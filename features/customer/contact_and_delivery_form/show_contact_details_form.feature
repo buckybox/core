@@ -1,8 +1,8 @@
 @javascript
-Feature: Existing customer changes their contact details
-  In order for a customer to make sure the distributor can contact them
+Feature: Customers are presented with a form to change their contact details
+  In order for a distributor to have the latest customer contact details
   As a customer
-  I want to be able to keep my contact information up to date
+  I want to be able view the contact details form
 
   Scenario: Updating your name
     Given I am a customer
