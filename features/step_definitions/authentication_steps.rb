@@ -45,5 +45,6 @@ When /^I log out of the distributor section$/ do
 end
 
 When /^I log out of the customer section$/ do
+  find("#auth-controls .dropdown-toggle").click
   click_link "Logout"
 end
