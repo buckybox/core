@@ -11,13 +11,27 @@ class ExtrasCsv
     CSV.generate do |csv|
       headers(csv)
       extras.each do |extra|
-        csv << [date.iso8601, extra.name, extra.unit, extra.price, extras_count(extra, extras_summary)]
+        csv << [
+          date.iso8601,
+          extra.name,
+          extra.unit,
+          extra.price,
+          extras_count(extra, extras_summary),
+          extra.visible ? "yes" : "no",
+        ]
       end
     end
   end
 
   def headers(csv)
-    csv << ["delivery date", "extra line item name", "extra line item unit", "extra line item unit price", "quantity"]
+    csv << [
+      "delivery date",
+      "extra line item name",
+      "extra line item unit",
+      "extra line item unit price",
+      "quantity",
+      "visible on web store",
+    ]
   end
 
   def extras_summary(distributor, date)
