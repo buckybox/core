@@ -2,7 +2,7 @@
   .row-fluid
     .span6
       %strong Boxes
-      appear in your webstore and form the basis of customer orders.
+      appear in your web store and form the basis of customer orders.
     .span6
       %span.heading hint
       If you allow customers to exclude and substitute
@@ -37,7 +37,7 @@
             - if box.substitutions?
               %i.icon-plus-sign{'data-toggle' => 'tooltip', 'title' => box.substitutions}
             - if box.visible
-              %i.icon-shopping-cart{'data-toggle' => 'tooltip', 'title' => 'Visible on webstore'}
+              %i.icon-shopping-cart{'data-toggle' => 'tooltip', 'title' => 'Visible on web store'}
           %td.amount
             = box.formatted_price
 
@@ -63,7 +63,7 @@
                     = f.input_field :description, rows: 3, class: 'span12', required: true, placeholder: 'Description'
 
                     .line
-                      .field= f.input_field :visible, inline_label: true, label: "<i class='icon-shopping-cart'></i> Visible on webstore".html_safe, as: :boolean
+                      .field= f.input_field :visible, inline_label: true, label: "<i class='icon-shopping-cart'></i> Visible on web store".html_safe, as: :boolean
                     .line
                       .field= f.input_field :dislikes, inline_label: true, label: "<i class='icon-minus-sign'></i> Box Items can be <strong>excluded</strong>".html_safe
                       %span.selector

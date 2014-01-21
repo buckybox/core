@@ -25,7 +25,7 @@
             = extra.unit
           %td.text-right
             - if extra.visible
-              %i.icon-shopping-cart{'data-toggle' => 'tooltip', 'title' => 'Visible on webstore'}
+              %i.icon-shopping-cart{'data-toggle' => 'tooltip', 'title' => 'Visible on web store'}
           %td.amount
             = extra.formatted_price
 
@@ -39,7 +39,7 @@
                 = f.input_field :unit, class: 'unit', required: true, placeholder: 'Unit e.g. 1/2 doz.'
                 = f.input_field :price, class: 'amount', required: true, placeholder: '0.00', title: 'Price'
               .line
-                .field= f.input_field :visible, inline_label: true, label: "<i class='icon-shopping-cart'></i> Visible on webstore".html_safe, as: :boolean
+                .field= f.input_field :visible, inline_label: true, label: "<i class='icon-shopping-cart'></i> Visible on web store".html_safe, as: :boolean
 
                 .form-actions.pull-right
                   = link_to 'cancel', 'javascript:void(0)', 'data-toggle' => 'collapse', 'data-target' => (extra.new_record? ? "#new_extra" : "#edit_extra_#{extra.id}")
