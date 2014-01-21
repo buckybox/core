@@ -40,13 +40,13 @@
     = f.input :notify_for_new_webstore_order
 
   %fieldset
-    %legend New orders
+    %legend New Orders
     = f.input :email_customer_on_new_webstore_order, label: "When customer makes an order send email"
     = f.input :email_customer_on_new_order, label: "When distributor creates an order also send email"
     = f.input :email_distributor_on_new_webstore_order, label: "Send a copy of email to distributor when customer makes order"
 
   %fieldset
-    %legend Webstore
+    %legend Web Store
     = f.input :active_webstore
     = f.input :payment_cash_on_delivery, label: 'Allow cash on delivery'
     = f.input :payment_bank_deposit, label: 'Allow bank deposit payments'
