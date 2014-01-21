@@ -12,7 +12,8 @@ describe ExtrasCsv do
           name: "Extra #{i}",
           distributor: distributor,
           price_cents: i*200+50,
-          unit: ['kg','l','each','g'][i]
+          unit: ['kg','l','each','g'][i],
+          hidden: i.zero?,
         )
       end
 
@@ -41,13 +42,20 @@ describe ExtrasCsv do
     end
 
     it "exports the header into the csv" do
-      @rows.first.should eq ["delivery date", "extra line item name", "extra line item unit", "extra line item unit price", "quantity"]
+      @rows.first.should eq [
+        "delivery date",
+        "extra line item name",
+        "extra line item unit",
+        "extra line item unit price",
+        "quantity",
+        "visible on web store",
+      ]
     end
 
-    specify { @rows[1].should eq [@date.iso8601, "Extra 0", "kg",   "0.50", "5"] }
-    specify { @rows[2].should eq [@date.iso8601, "Extra 1", "l",    "2.50", "2"] }
-    specify { @rows[3].should eq [@date.iso8601, "Extra 2", "each", "4.50", "3"] }
-    specify { @rows[4].should eq [@date.iso8601, "Extra 3", "g",    "6.50", "0"] }
+    specify { @rows[1].should eq [@date.iso8601, "Extra 0", "kg",   "0.50", "5", "no"] }
+    specify { @rows[2].should eq [@date.iso8601, "Extra 1", "l",    "2.50", "2", "yes"] }
+    specify { @rows[3].should eq [@date.iso8601, "Extra 2", "each", "4.50", "3", "yes"] }
+    specify { @rows[4].should eq [@date.iso8601, "Extra 3", "g",    "6.50", "0", "yes"] }
   end
 end
 
