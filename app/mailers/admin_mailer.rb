@@ -1,4 +1,6 @@
 class AdminMailer < ApplicationMailer
+  include ERB::Util # to get `html_escape` helper
+
   def preview_email(email, admin)
     @email = email
     @admin = admin
@@ -20,7 +22,7 @@ class AdminMailer < ApplicationMailer
 
     mail({ from: Figaro.env.support_email }.merge(options)) do |format|
       format.text { render text: body }
-      format.html { render text: simple_format(body) }
+      format.html { render text: simple_format(html_escape(body)) }
     end
   end
 
