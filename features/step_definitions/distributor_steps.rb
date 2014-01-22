@@ -23,6 +23,5 @@ Given /^a distributor looking at their dashboard$/ do
 end
 
 When /^I dismiss the intro screen$/ do
-  sleep 1 # ugly but the modal takes its time to show up sometimes
   find("#close-intro-tour").click if page.has_css? "#close-intro-tour"
 end
