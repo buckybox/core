@@ -7,7 +7,7 @@ Feature: Distributors are presented with a form to change customer contact detai
   Scenario: Updating your name
     Given I am a distributor
     When I am viewing a customers contact details form
-    Then I should see a "First name" field
+    Then I should see a "Name" field
 
   Scenario: Updating your email
     Given I am a distributor
@@ -17,13 +17,13 @@ Feature: Distributors are presented with a form to change customer contact detai
   Scenario: Updating your phone number
     Given I am a distributor that does not collect phone numbers
     When I am viewing a customers contact details form
-    Then PENDING: I should not see a "Mobile phone" field
+    Then I should not see a "Mobile phone" field
     And I should not see a "Home phone" field
     And I should not see a "Work phone" field
 
   Scenario: Updating your phone number
     Given I am a distributor that collects phone numbers
     When I am viewing a customers contact details form
-    Then PENDING: I should see a "Mobile phone" field
+    Then I should see a "Mobile phone" field
     And I should see a "Home phone" field
     And I should see a "Work phone" field

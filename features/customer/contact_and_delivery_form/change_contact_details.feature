@@ -9,46 +9,46 @@ Feature: Existing customer changes their contact details
     And I am viewing my dashboard
     And I click on "change my contact details"
     When I submit the form without a "Name"
-    Then I should get an error "First name can't be blank"
+    Then I should get an error "Oops there was an issue: name can't be blank"
 
   Scenario: Updating your email
     Given I am a customer
     And I am viewing my dashboard
     And I click on "change my contact details"
     When I submit the form without a "Email"
-    Then I should get an error "Email can't be blank"
+    Then I should get an error "Oops there was an issue: email can't be blank"
 
   Scenario: Updating a phone number
     Given I am a customer for a distributor that does not require phone numbers
     And I am viewing my dashboard
     And I click on "change my contact details"
     When I submit the form without a phone number
-    Then I should not get an error "Address phone number can't be blank"
+    Then I should not get an error "Oops there was an issue: phone number can't be blank"
 
   Scenario: Updating a phone number
     Given I am a customer for a distributor that requires phone numbers
     And I am viewing my dashboard
     And I click on "change my contact details"
     When I submit the form without a phone number
-    Then I should get an error "Address phone number can't be blank"
+    Then I should get an error "Oops there was an issue: mobile phone can't be blank, home phone can't be blank, work phone can't be blank"
 
   Scenario: Updating your mobile phone
     Given I am a customer for a distributor that requires phone numbers
     And I am viewing my dashboard
     And I click on "change my contact details"
     When I submit the form with a "Mobile phone" of "111-111-1111"
-    Then I should not get an error "Address phone number can't be blank"
+    Then I should not get an error "Oops there was an issue: mobile phone can't be blank, home phone can't be blank, work phone can't be blank"
 
   Scenario: Updating your home phone
     Given I am a customer for a distributor that requires phone numbers
     And I am viewing my dashboard
     And I click on "change my contact details"
     When I submit the form with a "Home phone" of "111-111-1111"
-    Then I should not get an error "Address phone number can't be blank"
+    Then I should not get an error "Oops there was an issue: mobile phone can't be blank, home phone can't be blank, work phone can't be blank"
 
   Scenario: Updating your work phone
     Given I am a customer for a distributor that requires phone numbers
     And I am viewing my dashboard
     And I click on "change my contact details"
     When I submit the form with a "Work phone" of "111-111-1111"
-    Then I should not get an error "Address phone number can't be blank"
+    Then I should not get an error "Oops there was an issue: mobile phone can't be blank, home phone can't be blank, work phone can't be blank"
