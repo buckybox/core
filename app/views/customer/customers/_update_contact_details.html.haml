@@ -1,4 +1,4 @@
-= simple_form_for(update_contact_details, url: customer_update_contact_details_path, html: { method: :put, novalidate: false }) do |f|
+= simple_form_for(update_contact_details, url: customer_update_contact_details_path, html: { method: :put, novalidate: Rails.env.test? }) do |f|
   .modal-body
     = f.error_notification
 
