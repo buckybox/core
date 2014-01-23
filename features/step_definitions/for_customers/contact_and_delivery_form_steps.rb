@@ -47,13 +47,8 @@ Given(/^I am viewing a customers delivery details form$/) do
 end
 
 When(/^I submit the form without a phone number$/) do
-  pending "Works when changing an existing phone number but not a new one. Fix with form object."
   fill_in "Mobile phone", with: ""
   fill_in "Home phone", with: ""
   fill_in "Work phone", with: ""
   step 'I click on "Update"'
-end
-
-Given(/^PENDING: /)do
-  pending
 end

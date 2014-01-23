@@ -21,6 +21,7 @@ module Distributor::Form::EditCustomerProfileFields
 
     def_delegators :distributor,
       :require_phone?,
+      :collect_phone?,
       :has_balance_threshold?
 
     validates_presence_of :name

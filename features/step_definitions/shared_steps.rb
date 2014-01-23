@@ -56,3 +56,7 @@ end
 Then(/^I should not get an error "(.*?)"$/) do |error_message|
   expect(page).to_not have_content error_message
 end
+
+Given(/^PENDING: /)do
+  pending
+end

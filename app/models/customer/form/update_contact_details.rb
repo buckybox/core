@@ -9,7 +9,8 @@ class Customer::Form::UpdateContactDetails < Customer::Form
   attribute :work_phone
 
   def_delegators :distributor,
-    :require_phone?
+    :require_phone?,
+    :collect_phone?
 
   validates_presence_of :name
   validates_presence_of :email
