@@ -116,6 +116,14 @@ class DataIntegrity
     end
   end
 
+  def all_accounts_have_customers
+    Account.find_each do |account|
+      if account.customer.nil?
+        error "Account ##{account.id}: customer with ID #{account.customer_id} does not exist"
+      end
+    end
+  end
+
 private
 
   def self.check
@@ -128,6 +136,7 @@ private
     checker.orders_are_valid
     checker.past_deliveries_are_not_pending
     checker.deduction_count_matches_delivery_count
+    checker.all_accounts_have_customers
 
     checker
   end
