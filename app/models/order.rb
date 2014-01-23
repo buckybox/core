@@ -57,7 +57,6 @@ class Order < ActiveRecord::Base
 
   default_scope order('created_at DESC')
 
-  delegate :local_time_zone, to: :distributor, allow_nil: true
   delegate :start, :recurs?, :pause!, :remove_pause!, :paused?, :pause_date, :resume_date, :next_occurrence, :next_occurrences, :remove_day, :occurrences_between, to: :schedule_rule
   delegate :halted?, to: :customer
 
@@ -127,10 +126,6 @@ class Order < ActiveRecord::Base
 
   def customer_can_edit?
     distributor.customer_can_edit_orders
-  end
-
-  def change_to_local_time_zone
-    distributor.change_to_local_time_zone
   end
 
   def use_local_time_zone
