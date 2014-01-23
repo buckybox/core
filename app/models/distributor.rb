@@ -79,7 +79,7 @@ class Distributor < ActiveRecord::Base
 
   accepts_nested_attributes_for :localised_address
 
-  validates_presence_of :country, :email, :name, :support_email
+  validates_presence_of :country, :email, :name, :support_email, :time_zone
   validates_uniqueness_of :email, :name
   validates_uniqueness_of :api_key, allow_nil: true
   validates_uniqueness_of :parameter_name, allow_nil: true
@@ -267,15 +267,8 @@ class Distributor < ActiveRecord::Base
     return successful
   end
 
-  # TODO: get rid of me
   def local_time_zone
-    [time_zone, BuckyBox::Application.config.time_zone].select(&:present?).first
-  end
-
-  # TODO: get rid of me
-  def change_to_local_time_zone
-    new_time_zone = local_time_zone
-    Time.zone = new_time_zone unless new_time_zone.blank?
+    time_zone
   end
 
   def use_local_time_zone
