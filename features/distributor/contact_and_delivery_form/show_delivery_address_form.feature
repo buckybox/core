@@ -37,4 +37,4 @@ Feature: Distributors are presented with a form to change customer delivery deta
   Scenario: Updating your delivery note
     Given I am a distributor that does not collect a delivery note
     When I am viewing a customers delivery details form
-    Then PENDING: I should not see a "Delivery note" field
+    Then I should not see a "Delivery note" field
