@@ -579,6 +579,39 @@ ALTER SEQUENCE boxes_id_seq OWNED BY boxes.id;
 
 
 --
+-- Name: copenhagen_demo_factory_persistences; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE copenhagen_demo_factory_persistences (
+    id integer NOT NULL,
+    distributor_id integer,
+    demo_model_id integer,
+    demo_model_type character varying(255),
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: copenhagen_demo_factory_persistences_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE copenhagen_demo_factory_persistences_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: copenhagen_demo_factory_persistences_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE copenhagen_demo_factory_persistences_id_seq OWNED BY copenhagen_demo_factory_persistences.id;
+
+
+--
 -- Name: countries; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -2245,6 +2278,13 @@ ALTER TABLE ONLY boxes ALTER COLUMN id SET DEFAULT nextval('boxes_id_seq'::regcl
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
+ALTER TABLE ONLY copenhagen_demo_factory_persistences ALTER COLUMN id SET DEFAULT nextval('copenhagen_demo_factory_persistences_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
 ALTER TABLE ONLY countries ALTER COLUMN id SET DEFAULT nextval('countries_id_seq'::regclass);
 
 
@@ -2604,6 +2644,14 @@ ALTER TABLE ONLY box_extras
 
 ALTER TABLE ONLY boxes
     ADD CONSTRAINT boxes_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: copenhagen_demo_factory_persistences_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY copenhagen_demo_factory_persistences
+    ADD CONSTRAINT copenhagen_demo_factory_persistences_pkey PRIMARY KEY (id);
 
 
 --
@@ -3018,6 +3066,20 @@ CREATE INDEX index_bank_statements_on_distributor_id ON bank_statements USING bt
 --
 
 CREATE INDEX index_boxes_on_distributor_id ON boxes USING btree (distributor_id);
+
+
+--
+-- Name: index_copenhagen_demo_factory_persistences_on_demo_model_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_copenhagen_demo_factory_persistences_on_demo_model_id ON copenhagen_demo_factory_persistences USING btree (demo_model_id);
+
+
+--
+-- Name: index_copenhagen_demo_factory_persistences_on_distributor_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_copenhagen_demo_factory_persistences_on_distributor_id ON copenhagen_demo_factory_persistences USING btree (distributor_id);
 
 
 --
@@ -3794,6 +3856,8 @@ INSERT INTO schema_migrations (version) VALUES ('20130827002646');
 
 INSERT INTO schema_migrations (version) VALUES ('20130910033818');
 
+INSERT INTO schema_migrations (version) VALUES ('20130918025642');
+
 INSERT INTO schema_migrations (version) VALUES ('20130923050455');
 
 INSERT INTO schema_migrations (version) VALUES ('20130926033607');
@@ -3816,6 +3880,8 @@ INSERT INTO schema_migrations (version) VALUES ('20131112025426');
 
 INSERT INTO schema_migrations (version) VALUES ('20131212220220');
 
-INSERT INTO schema_migrations (version) VALUES ('20131216225521');INSERT INTO schema_migrations (version) VALUES ('20140109004934');
+INSERT INTO schema_migrations (version) VALUES ('20131216225521');
+
+INSERT INTO schema_migrations (version) VALUES ('20140109004934');
 
 INSERT INTO schema_migrations (version) VALUES ('20140109032329');
