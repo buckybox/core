@@ -578,7 +578,7 @@ DEPENDENCIES
   terminal-notifier-guard
   therubyracer
   uglifier (~> 1.2.7)
-  virtus (~> 1.0.0)
+  virtus (~> 1.0.1)
   webrick
   whenever (~> 0.7.3)
   xray-rails

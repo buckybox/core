@@ -23,7 +23,7 @@ gem 'default_value_for',          '~> 2.0.1'
 gem 'fuzzy-string-match',         '~> 0.9.4', require: 'fuzzystringmatch' # This performs fuzzy matching on the import script
 gem 'state_machine',              '~> 1.1.2'
 gem 'figaro',                     '~> 0.6.4'
-gem 'virtus',                     '~> 1.0.0'
+gem 'virtus',                     '~> 1.0.1'
 gem 'draper',                     '~> 1.2.1'
 gem 'naught',                     '~> 0.0.2'
 gem 'premailer-rails',            '~> 1.4.0'
