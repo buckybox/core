@@ -194,26 +194,6 @@ describe Distributor do
   context 'time zone' do
     before { Time.zone = 'Paris' }
 
-    describe '.change_to_local_time_zone' do
-      context 'with no time_zone settings' do
-        before do
-          distributor = Fabricate(:distributor, time_zone: '')
-          distributor.change_to_local_time_zone
-        end
-
-        specify { Time.zone.name.should eq 'Wellington' }
-      end
-
-      context 'with time_zone set to Berlin' do
-        before do
-          distributor = Fabricate(:distributor, time_zone: 'Berlin')
-          distributor.change_to_local_time_zone
-        end
-
-        specify { Time.zone.name.should eq 'Berlin' }
-      end
-    end
-
     describe '.use_local_time_zone' do
       context 'with time_zone set to Berlin' do
         before { @distributor = Fabricate(:distributor, time_zone: 'Berlin') }
