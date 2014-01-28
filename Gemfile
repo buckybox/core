@@ -100,7 +100,6 @@ group :test do
   gem 'capybara-screenshot'
   gem 'poltergeist', require: false
   gem 'launchy'
-  gem 'fuubar'
   gem 'guard', '~> 1' # v2 is broken with a version mismatch issue
   gem 'guard-rspec'
 end
