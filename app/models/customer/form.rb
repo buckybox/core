@@ -21,7 +21,7 @@ class Customer::Form
     :distributor
 
   def initialize(attributes = {})
-    @customer = attributes.delete(:customer)
+    @customer = attributes.delete("customer")
     super
     assign_attributes(attributes)
   end
