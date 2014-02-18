@@ -143,7 +143,7 @@ class Customer < ActiveRecord::Base
     Activity.add(self, initiator, type, options)
   end
 
-  def recent_activities(limit = 5)
+  def recent_activities(limit = 12)
     activities.order("created_at DESC").first(limit)
   end
 
