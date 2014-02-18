@@ -39,9 +39,9 @@ feature "Manage an order", js: true do
     visit distributor_customer_path(id: @customer.id)
     @customer.should have(3).activities
     page.should have_content "RECENT ACTIVITY"
-    page.should have_content "Less than a minute ago - #{@customer.name} paused their order of #{order.box.name}"
-    page.should have_content "Less than a minute ago - #{@customer.name} updated their order of #{order.box.name} to resume on"
-    page.should have_content "Less than a minute ago - #{@customer.name} unpaused their order of #{order.box.name}"
+    page.should have_content "less than a minute ago - #{@customer.name} paused their order of #{order.box.name}"
+    page.should have_content "less than a minute ago - #{@customer.name} updated their order of #{order.box.name} to resume on"
+    page.should have_content "less than a minute ago - #{@customer.name} unpaused their order of #{order.box.name}"
   end
 end
 

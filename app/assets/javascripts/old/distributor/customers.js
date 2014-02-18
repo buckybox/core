@@ -151,6 +151,10 @@ $(function() {
     $.get("/distributor/customers/" + customer_id + "/activity", function(data) {
       $("#activities").html(data).
         closest("#activity-section").slideDown(); // make sure it is visible if first item
+
+      // we need to register setInterval() observers again since the DOM has been reloaded
+      // see https://github.com/jgraichen/rails-timeago/blob/master/vendor/assets/javascripts/jquery.timeago.js#L124
+      $("time[data-time-ago]").timeago();
     });
   }
 
