@@ -87,7 +87,7 @@ private
     options = {
       to: Figaro.env.signups_email,
       subject: "Sign up follow-up [#{Rails.env}]",
-      body: <<-BODY
+      body: <<-BODY.html_safe
         Organisation name: #{distributor[:name]}
         Email: #{distributor[:email]}
         Contact name: #{distributor[:contact_name]}
