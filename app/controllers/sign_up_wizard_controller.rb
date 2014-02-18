@@ -91,6 +91,7 @@ private
         Organisation name: #{distributor[:name]}
         Email: #{distributor[:email]}
         Contact name: #{distributor[:contact_name]}
+        Phone: #{distributor[:phone]}
         Accept bank deposit: #{distributor[:payment_bank_deposit]} - #{distributor[:bank_name]}
         Accept PayPal: #{distributor[:payment_paypal]}
         Accept cash on delivery: #{distributor[:payment_cash_on_delivery]}
