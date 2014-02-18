@@ -363,6 +363,9 @@ GEM
       activesupport (= 3.2.16)
       bundler (~> 1.0)
       railties (= 3.2.16)
+    rails-timeago (2.8.1)
+      actionpack (>= 3.1)
+      activesupport (>= 3.1)
     railties (3.2.16)
       actionpack (= 3.2.16)
       activesupport (= 3.2.16)
@@ -561,6 +564,7 @@ DEPENDENCIES
   quiet_assets
   rabl (~> 0.9.0)
   rails (~> 3.2.16)
+  rails-timeago (~> 2.8.1)
   rspec-rails
   ruby-prof
   sass-rails (~> 3.2.5)
