@@ -1,1 +1,1 @@
-//= require select2
+ // DO NOT USE THIS FILE - CODE HERE WON'T BE EXECUTED
