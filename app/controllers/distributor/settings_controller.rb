@@ -17,9 +17,10 @@ class Distributor::SettingsController < Distributor::BaseController
 
   def save_webstore
     form = SettingsWebstoreForm.new(params[:settings_webstore_form])
+    message = save_webstore_message(form)
 
     if form.save(current_distributor)
-      redirect_to distributor_settings_webstore_path, notice: "Web Store settings were successfully saved."
+      redirect_to distributor_settings_webstore_path, notice: message
     else
       flash.now[:alert] = "Web Store settings could not be saved, please check the errors displayed."
       webstore(form)
@@ -46,5 +47,17 @@ class Distributor::SettingsController < Distributor::BaseController
 
   def catch_cancel
     redirect_to :back if params[:commit] == 'cancel'
+  end
+
+private
+
+  def save_webstore_message form
+    newly_activated_webstore = !current_distributor.active_webstore && form.webstore_enabled.to_bool
+
+    if newly_activated_webstore
+      "Your #{view_context.link_to("Web Store", webstore_store_url(current_distributor.parameter_name), target: "_blank")} is now active.".html_safe
+    else
+      "Web Store settings were successfully saved."
+    end
   end
 end
