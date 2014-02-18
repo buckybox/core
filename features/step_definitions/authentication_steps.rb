@@ -4,7 +4,11 @@ end
 
 When /^I fill in valid (.*) credentials$/ do |auth_type|
   auth_object = send("create_#{auth_type}")
-  login_with(auth_object.email, auth_object.password, auth_type)
+  login_with(
+    auth_object.email.upcase, # email should be case-insensitive
+    auth_object.password,
+    auth_type
+  )
 end
 
 When /^I fill in invalid (.*) credentials$/ do |auth_type|
@@ -28,7 +32,7 @@ Then /^I should be viewing the webstore$/ do
   distributor = Distributor.last
   expected_path = "/webstore/#{distributor.parameter_name}"
   current_path.should eq(expected_path)
-end 
+end
 
 Given /^I am logged in as a (.*)$/ do |auth_type|
   step "I am viewing the #{auth_type} login page"
