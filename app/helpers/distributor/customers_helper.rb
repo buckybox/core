@@ -10,7 +10,7 @@ module Distributor::CustomersHelper
     elsif next_occurrence && (next_occurrence < (Date.current + 6.days))
       next_occurrence.to_s(:weekday)
     elsif next_occurrence
-      next_occurrence.to_s(:day_month_and_year)
+      next_occurrence.to_s(:date_short_month)
     end
   end
 
