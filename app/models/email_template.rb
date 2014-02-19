@@ -89,7 +89,7 @@ class EmailTemplate
 private
 
   def self.keywords
-    KEYWORDS.keys.map(&:to_s)
+    KEYWORDS.keys.map(&:to_s).sort
   end
 
   def self.methods
