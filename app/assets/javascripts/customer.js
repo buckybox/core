@@ -4,5 +4,5 @@
 //= require bootstrap
 //= require bootbox
 //= require select2
+//= require rails-timeago
 //= require_tree ./old
-

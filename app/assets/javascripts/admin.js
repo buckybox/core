@@ -3,6 +3,7 @@
 //= require jquery_ujs
 //= require bootstrap
 //= require select2
+//= require rails-timeago
 //= require ace/ace
 //= require ace/theme-chrome.js
 //= require ace/mode-yaml.js
