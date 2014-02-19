@@ -31,6 +31,8 @@ describe EmailTemplate do
         email: "joe@example.com",
         number: 7,
       )
+      customer.delivery_service.name = "My House"
+
       Fabricate(:account, customer: customer) # need an account to test `account_balance`
 
       template = EmailTemplate.new "Hi {first_name}", <<-BODY
@@ -52,7 +54,7 @@ describe EmailTemplate do
 
         Your balance is $0.00.
 
-        Delivery service: DeliveryService 0
+        Delivery service: My House
         Customer number: 0007
         Email address: joe@example.com
 
