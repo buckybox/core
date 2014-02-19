@@ -52,6 +52,7 @@ gem 'rabl',                       '~> 0.9.0'
 gem 'oj',                         '~> 2.1.7'
 gem 'apipie-rails',               '~> 0.0.24'
 gem 'strong_parameters',          '~> 0.2.1'
+gem 'rails-timeago',              '~> 2.8.1'
 
 group :assets do
   gem 'coffee-rails',   '~> 3.2.2'
