@@ -2,7 +2,7 @@
 
 <table width="90%" border="0" cellspacing="0" cellpadding="1" align="center" bgcolor="#333333"><tr><td>
 <table width="100%" border="0" cellspacing="0" cellpadding="16" align="center" bgcolor="#FFFFFF">
-  <tr><td align="right"><%= @distributor.name %></td></tr>
+  <tr><td align="right"><%= link_to(@distributor.name, webstore_store_url(@distributor.parameter_name), target: "_blank") %></td></tr>
   <tr><td>
 
 <strong>Thanks for your order <%= @customer.first_name %>!</strong><br>
