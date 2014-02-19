@@ -87,10 +87,10 @@ class Customer < ActiveRecord::Base
     customers = if warden_conditions[:email]
       if distributor_id.zero?
         # the login and lost_password (GET) forms without the distributor param
-        where(email: warden_conditions[:email])
+        where("email ILIKE ?", warden_conditions[:email])
       else
         # the login and lost_password (GET) forms with the distributor param
-        where(email: warden_conditions[:email], distributor_id: warden_conditions[:distributor_id])
+        where("email ILIKE ?", warden_conditions[:email]).where(distributor_id: warden_conditions[:distributor_id])
       end
     elsif warden_conditions[:reset_password_token]
       # the lost_password (POST) form which uses a token
