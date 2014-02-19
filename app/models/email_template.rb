@@ -8,6 +8,9 @@ class EmailTemplate
     account_balance:       :account_balance_with_currency,
     address:               :address,
     next_delivery_summary: :next_delivery_summary,
+    delivery_service:      :delivery_service_name,
+    customer_number:       :customer_number,
+    email_address:         :email,
   }
 
   # 2-array with left and right keyword delimiters
@@ -39,7 +42,7 @@ class EmailTemplate
   end
 
   def personalise customer
-    raise @errors unless valid?
+    raise ArgumentError, @errors unless valid?
 
     customer = customer.decorate unless customer.decorated?
 
@@ -86,7 +89,7 @@ class EmailTemplate
 private
 
   def self.keywords
-    KEYWORDS.keys.map(&:to_s)
+    KEYWORDS.keys.map(&:to_s).sort
   end
 
   def self.methods
