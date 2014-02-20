@@ -1,7 +1,7 @@
 %div.edit_row_match.hidden
   = simple_form_for(import_transaction, url: distributor_import_transaction_path(import_transaction), method: :put, remote: true) do |f|
     = f.input :customer_id, as: :select, collection: import_transaction.possible_customers, selected: import_transaction.match_id, label: false, input_html: { id: "import_transaction_customer_id_#{import_transaction.id}", class: 'chosen-payee-select not-draft-payment' }
-    = f.submit "update", class: "btn btn-primary btn-small"
+    = f.submit "update", class: "btn btn-primary btn-small", 'data-loading-text' => "Saving...", autocomplete: 'off'
     = f.input :id, as: :hidden
     = f.input :draft, as: :hidden, input_html: { value: false }
 %div.show_row_match
