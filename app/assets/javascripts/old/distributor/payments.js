@@ -69,12 +69,8 @@ $(function() {
         }
       });
 
-      $("div.edit_row_match input[type=submit]").unbind();
-
-      $("div.edit_row_match input[type=submit]").click(function(event) {
-        $(this).prop('disabled', 'disabled');
-
-        return $(this).closest('tr').find('form').submit();
+      $("div.edit_row_match input[type=submit]").unbind().click(function() {
+        $(this).button('loading');
       });
 
       $('.ajax_loader_hide').show();
