@@ -1,3 +1,5 @@
+# More info at https://trello.com/c/PiqmBRC2/339-upgrade-to-ruby-2
+
 package :ruby do
   description 'Ruby Virtual Machine'
   version '2.1.0'
@@ -9,23 +11,6 @@ package :ruby do
   requires :ruby_dependencies
   verify do
     binaries.each {|bin| has_executable bin}
-  end
-end
-
-package :ruby_tuned do
-  requires :ruby
-
-  ruby_file = "/usr/local/bin/ruby_tuned"
-  ruby_text = File.read(File.join(File.dirname(__FILE__), 'configs', 'ruby', 'ruby_tuned'))
-  tmp_file = "/tmp/ruby_tuned"
-
-  push_text(ruby_text, tmp_file) do
-    post :install, "mv #{tmp_file} #{ruby_file}"
-    post :install, "chmod +x #{ruby_file}"
-  end
-
-  verify do
-    matches_local(ruby_text, ruby_file)
   end
 end
 
