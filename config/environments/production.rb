@@ -80,5 +80,13 @@ BuckyBox::Application.configure do
   # config.active_record.auto_explain_threshold_in_seconds = 0.5
 
   config.middleware.use(Oink::Middleware)
+
+  config.middleware.use(StackProf::Middleware,
+    enabled: true,
+    mode: :wall,
+    interval: 1000,
+    save_every: 20,
+    path: "tmp"
+  )
 end
 
