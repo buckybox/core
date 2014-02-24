@@ -404,7 +404,7 @@ class Customer < ActiveRecord::Base
   def account_balance
     account = account(true) # force reload
 
-    account.present? ? account.balance : EasyMoney.zero
+    account.present? ? account.balance : CrazyMoney.zero
   end
 
   def negative_balance?
