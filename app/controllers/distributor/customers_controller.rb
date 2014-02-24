@@ -10,7 +10,7 @@ class Distributor::CustomersController < Distributor::ResourceController
       @show_tour = current_distributor.customers_index_intro
 
       amount = @customers.map(&:account).map(&:balance).sum
-      @customers_total_balance = EasyMoney.new(amount).with_currency(current_distributor.currency)
+      @customers_total_balance = CrazyMoney.new(amount).with_currency(current_distributor.currency)
     end
   end
 

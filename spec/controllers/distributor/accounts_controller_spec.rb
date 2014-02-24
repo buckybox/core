@@ -51,7 +51,7 @@ describe Distributor::AccountsController do
       customer.balance_threshold_cents = -100
       customer.save!
 
-      post :change_balance, id: customer.account.id, date: "22 Oct '13", delta: (EasyMoney.new(-5) - account.balance), note: 'hell pizza'
+      post :change_balance, id: customer.account.id, date: "22 Oct '13", delta: (CrazyMoney.new(-5) - account.balance), note: 'hell pizza'
       customer.reload.should be_halted
     end
   end

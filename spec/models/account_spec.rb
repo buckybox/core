@@ -25,7 +25,7 @@ describe Account do
 
   context 'when updating balance' do
     describe '#create_transaction' do
-      [-5, EasyMoney.new(0.01), 5].each do |value|
+      [-5, CrazyMoney.new(0.01), 5].each do |value|
         context "with #{value} of type #{value.class}" do
           before do
             account.save
@@ -45,7 +45,7 @@ describe Account do
             account.save
             account.create_transaction(250)
             account.save
-            account.add_to_balance(EasyMoney.new(value))
+            account.add_to_balance(CrazyMoney.new(value))
           end
 
           specify { account.balance.should eq (250 + value) }
@@ -61,7 +61,7 @@ describe Account do
             account.save
             account.create_transaction(250)
             account.save
-            account.subtract_from_balance(EasyMoney.new(value))
+            account.subtract_from_balance(CrazyMoney.new(value))
           end
 
           specify { account.balance.should eq (250 - value) }
@@ -77,7 +77,7 @@ describe Account do
             account.save
             account.create_transaction(250)
             account.save
-            account.change_balance_to!(EasyMoney.new(value))
+            account.change_balance_to!(CrazyMoney.new(value))
           end
 
           specify { account.balance.should eq value }

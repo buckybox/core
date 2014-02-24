@@ -34,7 +34,7 @@ class Distributor::AccountsController < Distributor::ResourceController
 
   def create_transaction(account, params)
     opts = {}
-    delta = EasyMoney.new(params[:delta])
+    delta = CrazyMoney.new(params[:delta])
 
     if delta.zero?
       flash[:error] = 'Change in balance must be a number and not zero.'
