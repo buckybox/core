@@ -1,6 +1,6 @@
 require "draper"
 
-class EasyMoneyDecorator < Draper::Decorator
+class CrazyMoneyDecorator < Draper::Decorator
   delegate_all
 
   def with_currency

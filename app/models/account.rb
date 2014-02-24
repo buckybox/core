@@ -30,7 +30,7 @@ class Account < ActiveRecord::Base
   # Likely somewhere a transaction is being created manually.
   # FIXME
   def calculate_balance(offset_size = 0)
-    EasyMoney.new(transactions.offset(offset_size).sum(&:amount))
+    CrazyMoney.new(transactions.offset(offset_size).sum(&:amount))
   end
 
   def balance_cents=(value)
@@ -52,7 +52,7 @@ class Account < ActiveRecord::Base
   def create_transaction(amount, options = {})
     raise "amount should not be a float as floats are inaccurate for currency" if amount.is_a? Float
 
-    amount = EasyMoney.new(amount)
+    amount = CrazyMoney.new(amount)
     transactionable = (options[:transactionable] ? options[:transactionable] : self)
     description = (options[:description] ? options[:description] : 'Manual Transaction')
     transaction_options = { amount: amount, transactionable: transactionable, description: description }
@@ -74,7 +74,7 @@ class Account < ActiveRecord::Base
   def change_balance_to!(amount, opts = {})
     raise "amount should not be a float as floats are unprecise for currency" if amount.is_a? Float
 
-    amount = EasyMoney.new(amount)
+    amount = CrazyMoney.new(amount)
     with_lock do
       create_transaction(amount - balance, opts)
     end

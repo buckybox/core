@@ -37,7 +37,7 @@ describe Deduction, :slow do
       @deduction.deductable = Fabricate(:delivery)
       @account_amount = @deduction.account.balance
       @amount = @deduction.amount
-      @fee = EasyMoney.new(0.25)
+      @fee = CrazyMoney.new(0.25)
       @deduction.stub_chain(:distributor, :separate_bucky_fee).and_return(true)
       @deduction.stub_chain(:distributor, :consumer_delivery_fee).and_return(@fee)
       @deduction.save!

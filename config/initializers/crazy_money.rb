@@ -5,16 +5,16 @@ class ActiveRecord::Base
       attribute = attribute_cents.to_s.sub(/_cents$/, "")
 
       define_method attribute do
-        EasyMoney.new(send(attribute_cents)) / 100.0
+        CrazyMoney.new(send(attribute_cents)) / 100
       end
 
       define_method "#{attribute}=" do |value|
-        send("#{attribute_cents}=", EasyMoney.new(value).cents.to_i)
+        send("#{attribute_cents}=", CrazyMoney.new(value).cents.to_i)
       end
     end
   end
 end
 
-# make EasyMoney objects decoratable with Draper
-EasyMoney.send(:include, Draper::Decoratable)
+# make CrazyMoney objects decoratable with Draper
+CrazyMoney.send(:include, Draper::Decoratable)
 
