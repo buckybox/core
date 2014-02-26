@@ -86,7 +86,7 @@ BuckyBox::Application.configure do
     mode: :wall,
     interval: 1000,
     save_every: 20,
-    path: "tmp"
+    path: Rails.root.join("tmp"),
   )
 end
 
