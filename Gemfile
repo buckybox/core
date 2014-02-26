@@ -53,6 +53,7 @@ gem 'oj',                         '~> 2.1.7'
 gem 'apipie-rails',               '~> 0.0.24'
 gem 'strong_parameters',          '~> 0.2.1'
 gem 'rails-timeago',              '~> 2.8.1'
+gem 'oink',                       '~> 0.10.1'
 
 group :assets do
   gem 'coffee-rails',   '~> 3.2.2'
@@ -114,10 +115,6 @@ group :development, :test do
   gem 'terminal-notifier-guard' # Mac 10.8 system notifications for Guard
   gem 'letter_opener'
   gem 'bundler-audit', require: false
-end
-
-group :development, :staging do
-  gem 'oink', require: 'oink'
 end
 
 group :development, :test, :staging do

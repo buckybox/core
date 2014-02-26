@@ -540,7 +540,7 @@ DEPENDENCIES
   naught (~> 0.0.2)
   newrelic_rpm (~> 3.6.1)
   nokogiri (~> 1.6.1)
-  oink
+  oink (~> 0.10.1)
   oj (~> 2.1.7)
   parallel_tests
   pg (~> 0.17.0)
