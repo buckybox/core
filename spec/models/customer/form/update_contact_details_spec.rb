@@ -10,8 +10,8 @@ describe Customer::Form::UpdateContactDetails do
     let(:form)     { Customer::Form::UpdateContactDetails.new(customer: customer) }
 
     it "gets the customer name" do
-      customer.should_receive(:name) { "name" }
-      expect(form.name).to eq("name")
+      customer.should_receive(:name) { "Sam Davis" }
+      expect(form.name).to eq("Sam Davis")
     end
 
     it "gets the email address" do
@@ -99,4 +99,3 @@ describe Customer::Form::UpdateContactDetails do
   end
 
 end
-
