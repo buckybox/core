@@ -196,8 +196,8 @@ private
 
     when "preview"
       customer = Customer.find recipient_ids.first
-      personalised_email = email_template.personalise(customer)
-      CustomerMailer.email_template(current_distributor, personalised_email).deliver
+      personalized_email = email_template.personalize(customer)
+      CustomerMailer.email_template(current_distributor, personalized_email).deliver
       message = "A preview email has been sent to #{current_distributor.email}."
 
     when "send"
@@ -214,12 +214,12 @@ private
   def send_email recipient_ids, email
     recipient_ids.each do |id|
       customer = Customer.find id
-      personalised_email = email.personalise(customer)
+      personalized_email = email.personalize(customer)
 
       CustomerMailer.delay(
         priority: Figaro.env.delayed_job_priority_high,
         queue: "#{__FILE__}:#{__LINE__}",
-      ).email_template(customer, personalised_email)
+      ).email_template(customer, personalized_email)
     end
 
     message = "Your email \"#{email.subject}\" is being sent to "

@@ -14,6 +14,11 @@ GIT
       capistrano (>= 2.5.5)
       highline (>= 1.4.0)
 
+PATH
+  remote: ../email_templator
+  specs:
+    email_templator (1.0.0)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -517,6 +522,7 @@ DEPENDENCIES
   delorean
   devise (~> 3.2.2)
   draper (~> 1.2.1)
+  email_templator (~> 1.0.0)!
   fabrication
   figaro (~> 0.6.4)
   fuubar
