@@ -1,10 +1,13 @@
 class Metrics
-  MUNIN_METRICS_FILE = Rails.root.join("log/munin_metrics")
-  MUNIN_METRICS_CONFIG_FILE = Rails.root.join("log/munin_metrics.config")
+  MUNIN_DAILY_METRICS_FILE = Rails.root.join("log/munin_daily_metrics")
+  MUNIN_DAILY_METRICS_CONFIG_FILE = Rails.root.join("log/munin_daily_metrics.config")
+
+  MUNIN_WEEKLY_METRICS_FILE = Rails.root.join("log/munin_weekly_metrics")
+  MUNIN_WEEKLY_METRICS_CONFIG_FILE = Rails.root.join("log/munin_weekly_metrics.config")
 
   def self.calculate_and_store
     count = 0
-    Distributor.all.each do |distributor|
+    Distributor.find_each do |distributor|
       begin
         metric = distributor.distributor_metrics.new
         metric.distributor_logins = distributor.distributor_logins.where(time_frame('distributor_logins')).count
@@ -30,12 +33,63 @@ class Metrics
   end
 
   def self.calculate_and_store_for_munin
+    calculate_and_store_for_munin_daily
+    calculate_and_store_for_munin_weekly
+  end
+
+private
+
+  def self.calculate_and_store_for_munin_daily
+    now = Time.zone.now
+    last_24_hours = (now - 24.hours)..now
+
+    classes = [Order, Delivery, Deduction, Payment, Transaction, Customer, Distributor, ImportTransactionList].inject({}) do |hash, klass|
+      hash.merge!(klass.name.pluralize.downcase => klass)
+    end
+
+    metrics = classes.inject({}) do |hash, (key,klass)|
+      metric_key = "new_#{key}_last_24_hours"
+
+      hash.merge!(metric_key => -> {
+        klass.where(created_at: last_24_hours).count
+      })
+    end
+
+    File.open(MUNIN_DAILY_METRICS_CONFIG_FILE, "w") do |file|
+      file.puts <<CONFIG
+graph_category Bucky
+graph_title daily stats
+graph_vlabel count
+graph_info This graph shows custom metrics about Bucky Box app.
+CONFIG
+      classes.each do |key, klass|
+        file.puts <<CONFIG
+new_#{key}_last_24_hours.label new #{key}
+new_#{key}_last_24_hours.draw LINE2
+new_#{key}_last_24_hours.info The number of new #{klass.name.pluralize} in the last 7 days.
+CONFIG
+      end
+    end
+
+    File.open(MUNIN_DAILY_METRICS_FILE, "w") do |file|
+      raw_metrics = metrics.map do |key, metric|
+        "#{key}.value #{metric.call}"
+      end.join("\n")
+
+      file.puts raw_metrics
+    end
+  end
+
+  def self.calculate_and_store_for_munin_weekly
+    now = Time.zone.now
+    last_7_days = (now - 7.days)..now
+
     metrics = {
       "new_distributors_last_7_days" => -> {
-        Distributor.where("created_at > ?", 7.day.ago).count
+        Distributor.where(created_at: last_7_days).count
       },
       "new_customers_last_7_days" => -> {
-        Customer.where("created_at > ?", 7.day.ago).count
+        Customer.where(created_at: last_7_days).count
       },
       "new_transactional_customers_last_7_days" => -> {
         Distributor.all.sum do |distributor|
@@ -43,14 +97,14 @@ class Metrics
         end
       },
       "delivered_deliveries_last_day" => -> {
-        Delivery.delivered.where("updated_at > ?", 1.day.ago).count
+        Delivery.delivered.where(updated_at: (now - 1.day)..now).count
       }
     }
 
-    File.open(MUNIN_METRICS_CONFIG_FILE, "w") do |file|
+    File.open(MUNIN_WEEKLY_METRICS_CONFIG_FILE, "w") do |file|
       file.puts <<CONFIG
 graph_category Bucky
-graph_title stats
+graph_title weekly stats
 graph_vlabel count
 graph_info This graph shows custom metrics about Bucky Box app.
 new_distributors_last_7_days.label new distributors
@@ -68,7 +122,7 @@ delivered_deliveries_last_day.info The number of delivered deliveries in the las
 CONFIG
     end
 
-    File.open(MUNIN_METRICS_FILE, "w") do |file|
+    File.open(MUNIN_WEEKLY_METRICS_FILE, "w") do |file|
       raw_metrics = metrics.map do |key, metric|
         "#{key}.value #{metric.call}"
       end.join("\n")
