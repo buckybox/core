@@ -198,6 +198,7 @@ GEM
       actionpack (>= 3.0)
       activesupport (>= 3.0)
       request_store (~> 1.0.3)
+    email_templator (1.0.0)
     encryptor2 (1.0.0)
     erubis (2.7.0)
     execjs (2.0.2)
@@ -517,6 +518,7 @@ DEPENDENCIES
   delorean
   devise (~> 3.2.2)
   draper (~> 1.2.1)
+  email_templator (~> 1.0.0)
   fabrication
   figaro (~> 0.6.4)
   fuubar
