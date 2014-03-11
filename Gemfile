@@ -54,6 +54,7 @@ gem 'apipie-rails',               '~> 0.0.24'
 gem 'strong_parameters',          '~> 0.2.1'
 gem 'rails-timeago',              '~> 2.8.1'
 gem 'oink',                       '~> 0.10.1'
+gem 'email_templator',            '~> 1.0.0'
 
 group :assets do
   gem 'coffee-rails',   '~> 3.2.2'
