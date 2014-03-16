@@ -348,6 +348,8 @@ EOF
             return RuleNegative.new(value, parent)
           when :merge
             return RuleMerge.new(value, parent)
+          when :if
+            return RuleCondition.new(value, parent)
           else
             return RuleDirect.new(key, parent)
           end
@@ -440,6 +442,41 @@ EOF
     class RuleMerge < Rule
       def process(row)
         rules.collect{|r| r.process(row)}.join(' ')
+      end
+    end
+
+    class RuleCondition < Rule
+      attr_accessor :column
+      def initialize(rhash, parent)
+        self.column = rhash
+        self.parent = parent
+        @matches = rhash.fetch(:match)
+
+        @then = rhash.fetch(:then)
+        @positive_matches = @matches.map { |match| Rule.create(@then, parent) }
+
+        @else = rhash[:else]
+        @negative_matches = if @else
+          @matches.map { |match| Rule.create(@else, parent) }
+        else
+          []
+        end
+      end
+
+      def process(row)
+        if matches_row?(row)
+          @positive_matches
+        else
+          @negative_matches
+        end.map { |rule| rule.process(row) }.compact.first
+      end
+
+      def matches_row?(row)
+        @matches.all? do |match|
+          match.all? do |column, text|
+            get(row, column) == text.to_s
+          end
+        end
       end
     end
 
