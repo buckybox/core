@@ -162,7 +162,7 @@ EOF
     def create_bucky_row(row, index, bank_name)
       date = row[:DATE]
       desc = row[:DESC]
-      amount = row[:AMOUNT].gsub(/[^\d.-]/,'')
+      amount = OmniImport.sanitize_amount(row[:AMOUNT])
       raw_data = row[:raw_data]
       Bucky::TransactionImports::Row.new(date, desc, amount, index, raw_data, self, bank_name)
     end
@@ -219,6 +219,10 @@ EOF
       else
         rules
       end
+    end
+
+    def self.sanitize_amount amount
+      amount.gsub(/[^\d.-]/, '')
     end
 
     class Rules
@@ -384,7 +388,9 @@ EOF
       end
 
       def process(row)
-        get(row, column)
+        value = get(row, column)
+        value = OmniImport.sanitize_amount(value) if column == :amount
+        value
       end
     end
 
