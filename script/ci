@@ -13,7 +13,9 @@ bundle exec bundle-audit check
 bundle exec rake generate_secret_token
 bundle exec rake db:drop db:create db:structure:load
 
-bundle exec rake
+# bundle exec rake # doesn't fail on non-zero exit since Ruby 2.1??
+bundle exec rspec
+bundle exec cucumber
 
 bundle exec brakeman -qz --no-progress -w3 || true # FIXME
 
