@@ -487,6 +487,10 @@ class Distributor < ActiveRecord::Base
     payment_options.first.last
   end
 
+  def total_customer_count
+    customers.count
+  end
+
   def transactional_customer_count
     Bucky::Sql.transactional_customer_count(self)
   end
@@ -496,7 +500,11 @@ class Distributor < ActiveRecord::Base
   end
 
   def new_customer_count
-    customers.where(["created_at >= ?", 1.week.ago]).count
+    customers.where("created_at > ?", 1.week.ago).count
+  end
+
+  def deliveries_last_7_days_count
+    deliveries.delivered.where("deliveries.updated_at > ?", 7.days.ago).count
   end
 
   def notify_address_changed(customer, notifier = Event)
