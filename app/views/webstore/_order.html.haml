@@ -53,7 +53,7 @@
             %td.description
               %h2 Delivery service
               = order.schedule
-            %td.price= order.delivery_fee
+            %td.price= order.delivery_service_fee
 
         - if order.has_bucky_fee?
           %tr#bucky-fee
@@ -65,15 +65,14 @@
               support local food and organic farming worldwide.
             %td.price= order.bucky_fee
 
-        - if order.has_total?
-          - if order.has_discount?
-            %tr#discount
-              %td.description
-                %h2 Your discount
-              %td.price= order.discount
-
-          %tr#total
+        - if order.has_discount?
+          %tr#discount
             %td.description
-              %h1 Total:
-            %td.price
-              %span= order.total
+              %h2 Your discount
+            %td.price= order.discount
+
+        %tr#total
+          %td.description
+            %h1 Total:
+          %td.price
+            %span= order.total

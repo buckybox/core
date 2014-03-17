@@ -3,30 +3,24 @@ module Distributor::BoxesHelper
     boxes = customer.distributor.boxes
 
     if options[:with_price]
-      delivery_service = customer.delivery_service
+      delivery_service_fee = customer.delivery_service.fee
       currency = customer.distributor.currency
 
       boxes = boxes.not_hidden if options[:no_hidden_boxes]
       boxes << options[:ensure_box] if options[:ensure_box] && !boxes.include?(options[:ensure_box])
       boxes = boxes.sort_by(&:name)
       boxes = boxes.map do |box|
-        element = []
+        box_price = OrderPrice.discounted(box.price, customer).with_currency(currency)
 
-        price = OrderPrice.individual(box, delivery_service, customer).with_currency(currency)
-        text = "#{box.name} - (#{price})"
+        text = "#{box.name} - #{box_price}"
+        text << " + #{delivery_service_fee.with_currency(currency)} delivery" if delivery_service_fee > 0
+        text << " + #{customer.consumer_delivery_fee.with_currency(currency)} fee" if customer.separate_bucky_fee?
 
-        if customer.separate_bucky_fee?
-          text << " + #{customer.consumer_delivery_fee} Fee)"
-        end
-
-        text << " (#{box.extras_limit})" if options[:with_extras_limit]
-        element << text
-        element << box.id
-        element
+        [text, box.id]
       end
     end
 
-    return boxes
+    boxes
   end
 
   def customers_box_collection(customer, order, options = {})
