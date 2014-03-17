@@ -12,9 +12,9 @@ class OrderPrice
     delivery_service_fee = delivery_service_fee.fee if delivery_service_fee.is_a?(DeliveryService)
     customer_discount = customer_discount.discount if customer_discount.is_a?(Customer)
 
-    total_price = box_price + delivery_service_fee
+    box_price = discounted(box_price, customer_discount)
 
-    customer_discount ? discounted(total_price, customer_discount) : total_price
+    box_price + delivery_service_fee
   end
 
   def self.extras_price(order_extras, customer_discount = nil)
@@ -32,7 +32,7 @@ class OrderPrice
       price * order_extra[:count]
     end.sum
 
-    customer_discount ? discounted(total_price, customer_discount) : total_price
+    discounted(total_price, customer_discount)
   end
 
   def self.without_delivery_fee(price, quantity, extras_price, has_extras)
