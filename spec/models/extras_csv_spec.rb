@@ -17,13 +17,13 @@ describe ExtrasCsv do
         )
       end
 
-      customers = 2.times.map { |i| Fabricate(:customer, distributor: distributor) }
+      @customers = 2.times.map { |i| Fabricate(:customer, distributor: distributor) }
 
       box = Fabricate(:box, distributor: distributor, extras_limit: 10)
 
       orders = 2.times.map do |i|
         Fabricate(:order,
-          account: customers[i].account,
+          account: @customers[i].account,
           box: box,
           schedule_rule: new_everyday_schedule(Date.current)
         )
@@ -49,13 +49,18 @@ describe ExtrasCsv do
         "extra line item unit price",
         "quantity",
         "web store visibility",
+        "customer names",
+        "customer emails",
       ]
     end
 
-    specify { @rows[1].should eq [@date.iso8601, "Extra 0", "kg",   "0.50", "5", "no"] }
-    specify { @rows[2].should eq [@date.iso8601, "Extra 1", "l",    "2.50", "2", "yes"] }
-    specify { @rows[3].should eq [@date.iso8601, "Extra 2", "each", "4.50", "3", "yes"] }
-    specify { @rows[4].should eq [@date.iso8601, "Extra 3", "g",    "6.50", "0", "yes"] }
+    let(:customer_names) { @customers.sort_by(&:name).map(&:name).join(", ") }
+    let(:customer_emails) { @customers.sort_by(&:name).map(&:email).join(", ") }
+
+    specify { @rows[1].should eq [@date.iso8601, "Extra 0", "kg",   "0.50", "5", "no", customer_names, customer_emails] }
+    specify { @rows[2].should eq [@date.iso8601, "Extra 1", "l",    "2.50", "2", "yes", @customers.second.name, @customers.second.email] }
+    specify { @rows[3].should eq [@date.iso8601, "Extra 2", "each", "4.50", "3", "yes", @customers.first.name, @customers.first.email] }
+    specify { @rows[4].should eq [@date.iso8601, "Extra 3", "g",    "6.50", "0", "yes", "", ""] }
   end
 end
 

@@ -3,11 +3,14 @@ class ExtrasCsv
 
   def self.generate(distributor, date)
     extras = distributor.extras.alphabetically
+    instance.extract_customers(distributor, date)
+
     instance.generate(date, extras, instance.extras_summary(distributor, date))
   end
 
   def generate(date, extras, extras_summary)
     sum_totals(extras_summary)
+
     CSV.generate do |csv|
       headers(csv)
       extras.each do |extra|
@@ -18,6 +21,8 @@ class ExtrasCsv
           extra.price,
           extras_count(extra, extras_summary),
           extra.visible ? "yes" : "no",
+          extras_customers(extra).sort_by(&:name).map(&:name).join(", "),
+          extras_customers(extra).sort_by(&:name).map(&:email).join(", "),
         ]
       end
     end
@@ -31,6 +36,8 @@ class ExtrasCsv
       "extra line item unit price",
       "quantity",
       "web store visibility",
+      "customer names",
+      "customer emails",
     ]
   end
 
@@ -38,9 +45,24 @@ class ExtrasCsv
     packages(distributor, date).map(&:extras_summary).flatten
   end
 
-  private
+  def extract_customers(distributor, date)
+    @extras_customers_store = {}
+    packages(distributor, date).each do |package|
+      package.extras_summary.each do |extra_summary|
+        @extras_customers_store[name_with_unit(extra_summary)] ||= []
+        @extras_customers_store[name_with_unit(extra_summary)] |= [package.customer]
+      end
+    end
+  end
+
+private
+
   def extras_count(extra, extras_summary)
     @extras_count_store[name_with_unit(extra)] || 0
+  end
+
+  def extras_customers(extra)
+    @extras_customers_store[name_with_unit(extra)] || []
   end
 
   def sum_totals(extras_summary)
@@ -54,7 +76,6 @@ class ExtrasCsv
   def packages(distributor, date)
     distributor.packing_list_by_date(date).ordered_packages
   end
-
 
   def name_with_unit(es)
     if es.is_a?(Hash)
