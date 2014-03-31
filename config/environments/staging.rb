@@ -9,4 +9,3 @@ BuckyBox::Application.configure do
   end
 end
 
-
