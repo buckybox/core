@@ -53,7 +53,6 @@ gem 'apipie-rails',                    '~> 0.0.24'
 gem 'strong_parameters',               '~> 0.2.1'
 gem 'rails-timeago',                   '~> 2.8.1'
 gem 'oink',                            '~> 0.10.1'
-gem 'stackprof',                       '~> 0.2.6'
 gem 'email_templator',                 '~> 1.0.0'
 gem 'simple_form-bank_account_number', '~> 1.0.0'
 
@@ -109,6 +108,7 @@ end
 
 group :staging do
   gem 'mail_safe'
+  gem 'stackprof',                       '~> 0.2.6'
 end
 
 group :development, :test do
