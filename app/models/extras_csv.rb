@@ -21,8 +21,8 @@ class ExtrasCsv
           extra.price,
           extras_count(extra, extras_summary),
           extra.visible ? "yes" : "no",
-          extras_customers(extra).sort_by(&:name).map(&:name).join(", "),
-          extras_customers(extra).sort_by(&:name).map(&:email).join(", "),
+          extras_customers(extra)[:names],
+          extras_customers(extra)[:emails],
         ]
       end
     end
@@ -49,8 +49,9 @@ class ExtrasCsv
     @extras_customers_store = {}
     packages(distributor, date).each do |package|
       package.extras_summary.each do |extra_summary|
-        @extras_customers_store[name_with_unit(extra_summary)] ||= []
-        @extras_customers_store[name_with_unit(extra_summary)] |= [package.customer]
+        extra_summary[:count].times do
+          (@extras_customers_store[name_with_unit(extra_summary)] ||= []) << package.customer
+        end
       end
     end
   end
@@ -62,7 +63,17 @@ private
   end
 
   def extras_customers(extra)
-    @extras_customers_store[name_with_unit(extra)] || []
+    customers = @extras_customers_store[name_with_unit(extra)] || []
+    customers.sort_by!(&:name)
+
+    names = customers.uniq.map do |customer|
+      count = customers.count(customer)
+      count > 1 ? "#{customer.name} (x#{count})" : customer.name
+    end.join(", ")
+
+    emails = customers.uniq.map(&:email).join(", ")
+
+    { names: names, emails: emails }
   end
 
   def sum_totals(extras_summary)
