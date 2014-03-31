@@ -37,7 +37,7 @@ describe CustomerDecorator do
       end
 
       specify do
-        expect(customer.next_delivery_summary).to eq "#{@date}\n#{@box.name}\n#{@box_with_extras.name} - 1x #{@extras.first.name} single, 1x #{@extras.second.name} single"
+        expect(customer.next_delivery_summary).to eq "#{@date}\n#{@box.name}\n#{@box_with_extras.name} - #{@extras.first.name} single, #{@extras.second.name} single"
       end
     end
   end

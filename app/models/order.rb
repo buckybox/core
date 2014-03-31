@@ -121,7 +121,11 @@ class Order < ActiveRecord::Base
 
   def self.extras_description(order_extras, join_with = ', ')
     order_extras = order_extras.map(&:to_hash) unless order_extras.is_a? Hash
-    order_extras.map{ |e| "#{e[:count]}x #{e[:name]} #{e[:unit]}" }.join(join_with)
+
+    order_extras.map do |extra|
+      description = "#{extra[:name]} #{extra[:unit]}"
+      extra[:count] > 1 ? "#{description} (x#{extra[:count]})" : description
+    end.join(join_with)
   end
 
   def customer_can_edit?
