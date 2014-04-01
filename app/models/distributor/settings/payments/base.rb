@@ -2,6 +2,7 @@ class Distributor::Settings::Payments::Base
   extend ActiveModel::Naming
   include ActiveModel::Conversion
 
+  # FIXME bank_information shouldn't be inherited to PayPal
   def initialize(args)
     @distributor = args.fetch(:distributor)
     @bank_information = distributor.bank_information || distributor.create_bank_information
