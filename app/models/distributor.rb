@@ -464,17 +464,21 @@ class Distributor < ActiveRecord::Base
     list
   end
 
-  def payment_paypal
-    true # FIXME
+  def self.all_payment_options
+    {
+      cash_on_delivery: "Cash on Delivery",
+      bank_deposit: "Bank Deposit",
+      paypal: "PayPal",
+    }
   end
 
   def payment_options
-    options = []
-    options << ["Bank Deposit", :bank_deposit] if payment_bank_deposit?
-    options << ["Cash on Delivery", :cash_on_delivery] if payment_cash_on_delivery?
-    # FIXME
-    options
+    self.class.all_payment_options.map do |key, label|
+      [label, key] if public_send("payment_#{key}")
+    end.compact
   end
+
+  def payment_paypal; true; end # FIXME
 
   def payment_options_string
     payment_options.map(&:first).join(', ')
