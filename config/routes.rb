@@ -49,15 +49,6 @@ BuckyBox::Application.routes.draw do
   namespace :distributor do
     root to: 'welcome#index'
 
-    namespace :wizard do
-      get 'business'
-      get 'boxes'
-      get 'delivery_services'
-      get 'payment'
-      get 'billing'
-      get 'success'
-    end
-
     namespace :settings do
       get 'organisation'
       get 'webstore'
