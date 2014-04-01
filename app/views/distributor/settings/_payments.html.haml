@@ -3,17 +3,13 @@
 
 #payments.tabbable.tabs-left
   %ul.nav.nav-tabs
-    %li{ class: "#{'active' if type == 'bank_deposit'}" }
-      = link_to distributor_settings_payments_bank_deposit_path do
-        Bank Deposit
-        - if current_distributor.payment_bank_deposit
-          %i.icon.icon-ok-sign.pull-right{title: 'Enabled'}
-
-    %li{ class: "#{'active' if type == 'cash_on_delivery'}" }
-      = link_to distributor_settings_payments_cash_on_delivery_path do
-        Cash on Delivery
-        - if current_distributor.payment_cash_on_delivery
-          %i.icon.icon-ok-sign.pull-right{title: 'Enabled'}
+    - %w(bank_deposit cash_on_delivery paypal).each do |current_type|
+      %li{ class: "#{'active' if type == current_type}" }
+        - path = public_send "distributor_settings_payments_#{current_type}_path"
+        = link_to path do
+          = current_type.titleize
+          - if current_distributor.public_send("payment_#{current_type}")
+            %i.icon.icon-ok-sign.pull-right{title: 'Enabled'}
 
   .tab-content
     = yield(:payment_type)
