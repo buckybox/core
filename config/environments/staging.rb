@@ -8,14 +8,14 @@ BuckyBox::Application.configure do
     ActiveMerchant::Billing::Base.mode = :test
   end
 
-  config.middleware.use(Oink::Middleware)
+  # config.middleware.use(Oink::Middleware)
 
-  config.middleware.use(StackProf::Middleware,
-    enabled: true,
-    mode: :wall,
-    interval: 1000,
-    save_every: 20,
-    path: Rails.root.join("tmp"),
-  )
+  # config.middleware.use(StackProf::Middleware,
+  #   enabled: true,
+  #   mode: :wall,
+  #   interval: 1000,
+  #   save_every: 20,
+  #   path: Rails.root.join("tmp"),
+  # )
 end
 
