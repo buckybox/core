@@ -229,8 +229,6 @@ BuckyBox::Application.routes.draw do
       end
 
       collection do
-        get 'send_email', action: :write_email
-        post 'send_email'
         get 'unimpersonate'
         get 'country_setting/:id', controller: 'distributors', action: 'country_setting'
         get 'tag/:tag', action: :index, as: 'tag'
