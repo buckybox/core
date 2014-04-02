@@ -34,6 +34,7 @@ describe CustomerDecorator do
         @date = order.next_occurrence.strftime("%A, %d %b %Y")
         @box = order.box
         @box_with_extras = order_with_extras.box
+        @box_with_extras.update_attributes(name: "Box 9999") # make sure it's the last box since boxes are sorted alphabetically
       end
 
       specify do

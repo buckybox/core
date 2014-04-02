@@ -7,9 +7,7 @@ class PaymentOption
 
   def initialize(option, distributor)
     option = Option.new(option, distributor)
-    if option.valid?
-      self.option = option
-    end
+    self.option = option if option.valid?
   end
 
   def apply(webstore_order)
