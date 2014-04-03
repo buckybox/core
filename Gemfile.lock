@@ -482,7 +482,7 @@ DEPENDENCIES
   biggs (~> 0.3.3)
   binding_of_caller
   bootbox-rails (~> 0.1.0)
-  bootstrap-sass (~> 2.3.2.0)
+  bootstrap-sass (~> 2.3.2.2)
   brakeman
   bullet
   bundler-audit
