@@ -1,7 +1,9 @@
 class Distributor::Settings::Payments::Paypal < Distributor::Settings::Payments::Base
   delegate :payment_paypal, to: :distributor
-  # delegate :business_email, to: :bank_information
-  def business_email; "joe@paypal.com"; end
+
+  def distributor_email
+    distributor.email
+  end
 
   def initialize(args)
     super
@@ -9,10 +11,7 @@ class Distributor::Settings::Payments::Paypal < Distributor::Settings::Payments:
   end
 
   def save
-    # @bank_information.distributor.update_attributes(
-    #   payment_paypal: @paypal.delete(:payment_paypal)
-    # ) && @bank_information.update_attributes(@paypal)
-    true
+    distributor.update_attributes(payment_paypal: @paypal[:payment_paypal])
   end
 end
 

@@ -17,18 +17,22 @@
     #paypal_details.row-fluid.collapse{ class: "#{'in' if current_distributor.payment_paypal}" }
       .span6
         %fieldset
-          %legend business email
-          = f.input_field :business_email, as: :email
+          %legend PayPal business email
+          = f.input_field :distributor_email, as: :email, disabled: true, class: 'span12', title: "Please contact us if you need to update this email"
 
       .span6.pull-right.preview
         %span.heading customer preview
         %p.muted This information is displayed to customers at the web store during the checkout process.
 
-        = render partial: 'partials/payments/paypal', locals: { form_object: NullObject.new }
+        -# NOTE: we don't display the full partial since it includes the PayPal form which interferes with our settings form
+        -# = render partial: 'partials/payments/paypal', locals: { form_object: NullObject.new }
+        .text-center
+          = simple_format(current_distributor.name)
+          = image_tag "https://www.paypalobjects.com/en_US/i/btn/btn_paynow_LG.gif", alt: "PayPal - The safer, easier way to pay online"
+
 
     .row-fluid
       = f.button :submit, 'Save', class: 'btn btn-primary pull-right'
 
 = render partial: 'distributor/settings/payments', locals: { type: :paypal }
-
 
