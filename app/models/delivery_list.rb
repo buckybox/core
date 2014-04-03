@@ -67,7 +67,7 @@ class DeliveryList < ActiveRecord::Base
     delivery_service_id = first_delivery.delivery_service_id
     day = first_delivery.delivery_list.date.wday
 
-    raise 'Your delivery ids do not match' if delivery_order.map(&:to_i).sort != deliveries.where(delivery_service_id: delivery_service_id).select(:id).map(&:id).sort
+    raise ArgumentError, "delivery ids do not match" if delivery_order.map(&:to_i).sort != deliveries.where(delivery_service_id: delivery_service_id).select(:id).map(&:id).sort
 
     # Don't know an easy way to preload like this in Rails, but load up all deliveries matching on id, PRESERVING the order of the ids thru to the deliveries array, VERY IMPORTANT
     deliveries_cache = Delivery.where(id: delivery_order).includes(:address).inject({}){|cache, d| cache.merge!(d.id => d)}
