@@ -96,9 +96,6 @@ CONFIG
           distributor.new_transactional_customer_count
         end
       },
-      "delivered_deliveries_last_day" => -> {
-        Delivery.delivered.where(updated_at: (now - 1.day)..now).count
-      }
     }
 
     File.open(MUNIN_WEEKLY_METRICS_CONFIG_FILE, "w") do |file|
@@ -116,9 +113,6 @@ new_customers_last_7_days.info The number of new customers in the last 7 days.
 new_transactional_customers_last_7_days.label new transactional customers
 new_transactional_customers_last_7_days.draw LINE2
 new_transactional_customers_last_7_days.info The number of new transactional customers in the last 7 days.
-delivered_deliveries_last_day.label delivered deliveries
-delivered_deliveries_last_day.draw LINE2
-delivered_deliveries_last_day.info The number of delivered deliveries in the last 24 hours.
 CONFIG
     end
 
