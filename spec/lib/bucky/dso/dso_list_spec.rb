@@ -84,7 +84,7 @@ describe Bucky::Dso::List do
   describe ".sort" do
     it "should sort the ordering into the master list" do
       master_list = List.new([[:a, 1], [:d, 2], [:c, 3], [:b, 4]])
-      ordered_list = List.ordered_list([:b, :c, :d, :z])
+      ordered_list = List.ordered_list([:b, :c, :d])
 
       List.sort(master_list, ordered_list).to_a.should eq([[:a, 1], [:b, 2], [:c, 3], [:d, 4]])
     end
