@@ -7,12 +7,6 @@ GIT
       capistrano (>= 2.5.5)
       highline (>= 1.4.0)
 
-GIT
-  remote: https://github.com/tmm1/stackprof.git
-  revision: 2ca4d8bcd9dafd536b5d86033d8aa047a0ce0c4b
-  specs:
-    stackprof (0.2.6)
-
 GEM
   remote: https://rubygems.org/
   specs:
@@ -561,7 +555,6 @@ DEPENDENCIES
   simple_form-bank_account_number (~> 1.0.0)
   simplecov
   sprinkle!
-  stackprof!
   state_machine (~> 1.1.2)
   strong_parameters (~> 0.2.1)
   term-ansicolor
