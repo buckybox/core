@@ -160,12 +160,12 @@ protected
     end
 
     if (tag = params[:tag]).present?
-      @customers = @customers.tagged_with(tag) unless tag.in?(Customer::DYNAMIC_TAGS)
+      @customers = @customers.tagged_with(tag) unless tag.in?(CustomerDecorator.all_dynamic_tags_as_a_list)
     end
 
     @customers = @customers.ordered_by_next_delivery.includes(account: {delivery_service: {}}, tags: {}, next_order: {box: {}})
 
-    if tag.in?(Customer::DYNAMIC_TAGS)
+    if tag.in?(CustomerDecorator.all_dynamic_tags_as_a_list)
       @customers = @customers.select { |customer| tag.in?(customer.dynamic_tags) }
     end
   end
