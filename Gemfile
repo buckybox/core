@@ -111,7 +111,7 @@ group :staging do
 end
 
 group :development, :staging do
-  gem 'stackprof', git: "https://github.com/tmm1/stackprof.git"
+  # gem 'stackprof', git: "https://github.com/tmm1/stackprof.git"
 end
 
 group :development, :test do
