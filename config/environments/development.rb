@@ -44,5 +44,14 @@ BuckyBox::Application.configure do
 
   # No more asset logging
   config.assets.logger = false
+
+  config.middleware.use(StackProf::Middleware,
+    enabled: true,
+    mode: :wall,
+    interval: 1000,
+    save_every: 20,
+    path: Rails.root.join("tmp"),
+    save_at_exit: true,
+  ) if ENV["STACKPROF"]
 end
 
