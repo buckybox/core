@@ -108,7 +108,10 @@ end
 group :staging do
   gem 'mail_safe'
   # gem 'oink',                            '~> 0.10.1'
-  # gem 'stackprof',                       '~> 0.2.6'
+end
+
+group :development, :staging do
+  gem 'stackprof', git: "https://github.com/tmm1/stackprof.git"
 end
 
 group :development, :test do
