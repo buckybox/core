@@ -1,22 +1,22 @@
 class CustomerDevisable < ActiveRecord::Migration
   def up
     add_column :customers, "encrypted_password", :string, :limit => 128, :default => "",     :null => false
-    add_column :customers, "reset_password_token", :string   
-    add_column :customers, "reset_password_sent_at", :datetime 
-    add_column :customers, "remember_created_at", :datetime 
+    add_column :customers, "reset_password_token", :string
+    add_column :customers, "reset_password_sent_at", :datetime
+    add_column :customers, "remember_created_at", :datetime
     add_column :customers, "sign_in_count", :integer, :default => 0
-    add_column :customers, "current_sign_in_at", :datetime 
-    add_column :customers, "last_sign_in_at", :datetime 
-    add_column :customers, "current_sign_in_ip", :string   
-    add_column :customers, "last_sign_in_ip", :string   
-    add_column :customers, "password_salt", :string   
-    add_column :customers, "confirmation_token", :string   
-    add_column :customers, "confirmed_at", :datetime 
-    add_column :customers, "confirmation_sent_at", :datetime 
+    add_column :customers, "current_sign_in_at", :datetime
+    add_column :customers, "last_sign_in_at", :datetime
+    add_column :customers, "current_sign_in_ip", :string
+    add_column :customers, "last_sign_in_ip", :string
+    add_column :customers, "password_salt", :string
+    add_column :customers, "confirmation_token", :string
+    add_column :customers, "confirmed_at", :datetime
+    add_column :customers, "confirmation_sent_at", :datetime
     add_column :customers, "failed_attempts", :integer, :default => 0
-    add_column :customers, "unlock_token", :string   
-    add_column :customers, "locked_at", :datetime 
-    add_column :customers, "authentication_token", :string   
+    add_column :customers, "unlock_token", :string
+    add_column :customers, "locked_at", :datetime
+    add_column :customers, "authentication_token", :string
 
     add_index :customers, :email,                :unique => true
     add_index :customers, :reset_password_token, :unique => true

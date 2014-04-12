@@ -62,13 +62,13 @@ describe Distributor::OrdersController do
       end
     end
   end
-  
+
   describe '#create' do
 
     before do
       Fabricate(:box, distributor: @distributor)
     end
-    
+
     it 'should create an order' do
       box = Fabricate(:box, distributor: @distributor)
       account = Fabricate(:account, customer: Fabricate(:customer, distributor: @distributor))
@@ -111,7 +111,7 @@ describe Distributor::OrdersController do
         order.reload.pause_date.should be_nil
       end
     end
-    
+
     describe "#resume" do
       it "should resume the order" do
         dates = order.next_occurrences(5, Date.current)

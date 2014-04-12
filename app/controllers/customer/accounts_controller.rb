@@ -4,9 +4,9 @@ class Customer::AccountsController < Customer::ResourceController
     offset_size = 0
     limit = params[:limit].to_i
     limit ||= 6
-    
+
     limit += 6 if params[:more].present?
-    
+
     @distributor = current_customer.distributor
     @currency    = @distributor.currency
     if current_customer.account.id == params[:account_id].to_i

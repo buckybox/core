@@ -18,7 +18,7 @@ class DeliveryService < ActiveRecord::Base
   default_scope order(:name)
 
   delegate :local_time_zone, to: :distributor, allow_nil: true
-  
+
   delegate :includes?, :delivery_day_numbers, :next_occurrences, :runs_on, :occurrences_between, to: :schedule_rule, allow_nil: true
   delegate :sun, :mon, :tue, :wed, :thu, :fri, :sat, to: :schedule_rule, allow_nil: true
 
@@ -29,7 +29,7 @@ class DeliveryService < ActiveRecord::Base
   end
   alias_method :schedule_rule_attributes_without_recur=, :schedule_rule_attributes=
   alias_method :schedule_rule_attributes=, :schedule_rule_attributes_with_recur=
-  
+
   def set_default_schedule_rule
     self.schedule_rule ||= ScheduleRule.weekly if new_record?
   end
@@ -63,7 +63,7 @@ class DeliveryService < ActiveRecord::Base
   def future_orders
     Order.for_delivery_service_read_only(self)
   end
-  
+
   def schedule_changed(schedule_rule)
     day_numbers = schedule_rule.deleted_day_numbers
     return if day_numbers.blank?

@@ -6,12 +6,12 @@ Capistrano::Configuration.instance(:must_exist).load do |config|
   end_times = {}
   order = []
 
-  on :before do 
+  on :before do
     order << [:start, current_task]
     start_times[current_task] = Time.now
   end
 
-  on :after do 
+  on :after do
     order << [:end, current_task]
     end_times[current_task] = Time.now
   end
@@ -24,7 +24,7 @@ Capistrano::Configuration.instance(:must_exist).load do |config|
     puts " Performance Report"
     puts "=========================================================="
 
-    indent = 0 
+    indent = 0
     (order + [nil]).each_cons(2) do |payload1, payload2|
       action, task = payload1
       if action == :start

@@ -12,7 +12,7 @@ describe Extra do
       order_extra = Fabricate(:order_extra, order: @order)
       customer = @order.customer
       @distributor = customer.distributor
-      
+
       @order.reload
       @date = Date.current
 

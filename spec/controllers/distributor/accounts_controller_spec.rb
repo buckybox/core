@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe Distributor::AccountsController do
   render_views
-  
+
   sign_in_as_distributor
   let(:distributor) { @distributor }
   let(:customer) { Fabricate(:customer, distributor: distributor) }

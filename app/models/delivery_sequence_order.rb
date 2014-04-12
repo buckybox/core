@@ -13,7 +13,7 @@ class DeliverySequenceOrder < ActiveRecord::Base
 
     Delivery.transaction do
       # Update the dso to have the new order
-      sql = ["UPDATE delivery_sequence_orders SET position = CASE address_hash 
+      sql = ["UPDATE delivery_sequence_orders SET position = CASE address_hash
         #{new_master_list.to_a.collect{|address_hash, index| "WHEN '#{address_hash}' THEN #{index}"}.join(' ')} END
         WHERE delivery_service_id = ?
         AND day = ?
@@ -36,7 +36,7 @@ class DeliverySequenceOrder < ActiveRecord::Base
 
   private
 
-  def self.execute_sql(sql_array)     
+  def self.execute_sql(sql_array)
     connection.execute(send(:sanitize_sql_array, sql_array))
   end
 
