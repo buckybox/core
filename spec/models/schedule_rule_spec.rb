@@ -37,7 +37,7 @@ describe ScheduleRule do
         end
       end
     end
-    
+
     context :fortnightly do
       let(:schedule){ ScheduleRule.fortnightly(start_date, [:wed, :thu, :fri, :sun])}
 
@@ -46,7 +46,7 @@ describe ScheduleRule do
 
         schedule.occurs_on?(first_occurrence).should be_true
       end
-      
+
       it 'should not occur on second wednesday' do
         first_occurrence = Date.parse('2012-08-29')
         schedule.occurs_on?(first_occurrence+7.days).should be_false
@@ -71,7 +71,7 @@ describe ScheduleRule do
         first_occurrence = Date.parse('2012-09-09')
         schedule.occurs_on?(first_occurrence).should be_true
       end
-      
+
       it 'should occur on 10th sunday' do
         first_occurrence = Date.parse('2012-09-09')
         schedule.occurs_on?(first_occurrence+10.weeks).should be_true
@@ -88,13 +88,13 @@ describe ScheduleRule do
 
       it 'should occur on the first week of the month after the start_date' do
         first_occurrence = Date.parse('2012-09-01') #Saturday
-        
+
         schedule.occurs_on?(first_occurrence).should be_true
       end
 
       it 'should not occur on the second week of the month after the start_date' do
         first_occurrence = Date.parse('2012-09-08') #Saturday
-        
+
         schedule.occurs_on?(first_occurrence).should be_false
       end
 
@@ -149,7 +149,7 @@ describe ScheduleRule do
             @sr.schedule_pause = @sp
             @sr.save!
           end
-          
+
           specify {@sr.next_occurrence(@start_date).should eq(@pause_end)}
           specify {@sr.next_occurrence(@pause_end).should eq(@pause_end)}
 
@@ -160,7 +160,7 @@ describe ScheduleRule do
           end
         end
       end
-      
+
       context :fortnightly do
         before do
           @start_date = Date.parse('2012-09-20') #Thursday
@@ -171,7 +171,7 @@ describe ScheduleRule do
         specify{@sr.next_occurrence(@start_date - 1.day).should eq(@start_date)}
         specify{@sr.next_occurrence(@start_date).should eq(@start_date)}
         specify{@sr.next_occurrence(@start_date + 1.day).should eq(@start_date + 1.day)}
-        
+
         specify{@sr.next_occurrence(Date.parse('2012-09-23')).should eq(Date.parse('2012-09-30'))}
         specify{@sr.next_occurrence(Date.parse('2012-09-24')).should eq(Date.parse('2012-09-30'))}
         specify{@sr.next_occurrence(Date.parse('2012-09-25')).should eq(Date.parse('2012-09-30'))}
@@ -180,7 +180,7 @@ describe ScheduleRule do
         specify{@sr.next_occurrence(Date.parse('2012-09-28')).should eq(Date.parse('2012-09-30'))}
         specify{@sr.next_occurrence(Date.parse('2012-09-29')).should eq(Date.parse('2012-09-30'))}
         specify{@sr.next_occurrence(Date.parse('2012-09-30')).should eq(Date.parse('2012-09-30'))}
-        
+
         specify{@sr.next_occurrence(Date.parse('2012-10-01')).should eq(Date.parse('2012-10-03'))}
         specify{@sr.next_occurrence(Date.parse('2012-10-02')).should eq(Date.parse('2012-10-03'))}
         specify{@sr.next_occurrence(Date.parse('2012-10-03')).should eq(Date.parse('2012-10-03'))}
@@ -189,7 +189,7 @@ describe ScheduleRule do
         specify{@sr.next_occurrence(Date.parse('2012-10-06')).should eq(Date.parse('2012-10-14'))}
         specify{@sr.next_occurrence(Date.parse('2012-10-07')).should eq(Date.parse('2012-10-14'))}
         specify{@sr.next_occurrence(Date.parse('2012-10-08')).should eq(Date.parse('2012-10-14'))}
-        
+
         specify{@sr.next_occurrence(Date.parse('2012-10-09')).should eq(Date.parse('2012-10-14'))}
         specify{@sr.next_occurrence(Date.parse('2012-10-10')).should eq(Date.parse('2012-10-14'))}
         specify{@sr.next_occurrence(Date.parse('2012-10-11')).should eq(Date.parse('2012-10-14'))}
@@ -198,7 +198,7 @@ describe ScheduleRule do
         specify{@sr.next_occurrence(Date.parse('2012-10-14')).should eq(Date.parse('2012-10-14'))}
         specify{@sr.next_occurrence(Date.parse('2012-10-15')).should eq(Date.parse('2012-10-17'))}
         specify{@sr.next_occurrence(Date.parse('2012-10-16')).should eq(Date.parse('2012-10-17'))}
-        
+
         specify{@sr.next_occurrence(Date.parse('2022-04-17')).should eq(Date.parse('2022-04-17'))}
         specify{@sr.next_occurrence(Date.parse('2022-04-18')).should eq(Date.parse('2022-04-20'))}
         specify{@sr.next_occurrence(Date.parse('2022-04-19')).should eq(Date.parse('2022-04-20'))}
@@ -216,7 +216,7 @@ describe ScheduleRule do
             @sr.schedule_pause = @sp
             @sr.save!
           end
-          
+
           specify {@sr.next_occurrence(@start_date).should eq(@pause_end)}
           specify {@sr.next_occurrence(@pause_end).should eq(@pause_end)}
         end
@@ -298,7 +298,7 @@ describe ScheduleRule do
       test_date = Date.parse('2012-10-05') #friday
       ScheduleRule.weekly(date, ScheduleRule::DAYS).includes?(ScheduleRule.one_off(test_date)).should be_true
     end
-    
+
     it 'should return false for schedules which start too soon' do
       test_date = Date.parse('2012-10-01') #monday
       ScheduleRule.weekly(date, ScheduleRule::DAYS).includes?(ScheduleRule.one_off(test_date)).should be_false
@@ -315,7 +315,7 @@ describe ScheduleRule do
       sr.pause('2012-10-01', '2012-11-01')
       sr.includes?(ScheduleRule.one_off(test_date)).should be_false
     end
-    
+
     it 'should return true if a pause doesnt occur within the given schedule_rule' do
       test_date = Date.parse('2012-10-05') #friday
       sr = ScheduleRule.weekly(date, ScheduleRule::DAYS)
@@ -326,7 +326,7 @@ describe ScheduleRule do
     specify {ScheduleRule.one_off(date).includes?(ScheduleRule.weekly(date, [:wed])).should be_false}
     specify {ScheduleRule.one_off(date).includes?(ScheduleRule.fortnightly(date, all_days)).should be_false}
     specify {ScheduleRule.one_off(date).includes?(ScheduleRule.monthly(date, all_days)).should be_false}
-    
+
     specify {ScheduleRule.weekly(date, all_days).includes?(ScheduleRule.fortnightly(date, all_days)).should be_true}
     specify {ScheduleRule.weekly(date, all_days).includes?(ScheduleRule.monthly(date, all_days)).should be_true}
 
@@ -354,7 +354,7 @@ describe ScheduleRule do
       expect{schedule_rule.save!}.to change{ScheduleTransaction.count}.by(1)
     end
   end
-  
+
   describe '.deleted_days' do
     let(:schedule_rule){ScheduleRule.weekly}
 
@@ -363,7 +363,7 @@ describe ScheduleRule do
       schedule_rule.attributes = {mon: false, tue: false, wed: false, thu: false, fri: false, sat: false, sun: false}
     end
     specify { schedule_rule.deleted_days.should eq(ScheduleRule::DAYS) }
-    specify { 
+    specify {
       schedule_rule.attributes = {tue: true}
       schedule_rule.deleted_days.should eq(ScheduleRule::DAYS - [:tue])
     }
@@ -377,7 +377,7 @@ describe ScheduleRule do
       schedule_rule.attributes = {mon: false, tue: false, wed: false, thu: false, fri: false, sat: false, sun: false}
     end
     specify { schedule_rule.deleted_day_numbers.should eq([0, 1, 2, 3, 4, 5, 6]) }
-    specify { 
+    specify {
       schedule_rule.attributes = {tue: true}
       schedule_rule.deleted_day_numbers.should eq([0, 1, 3, 4, 5, 6])
     }
@@ -469,7 +469,7 @@ describe ScheduleRule do
       sr.pause_expired?.should be_true
     end
   end
-  
+
   describe ".remove_day" do
     it "should remove that day from the schedule" do
       sr = ScheduleRule.weekly(Date.current, ScheduleRule::DAYS)

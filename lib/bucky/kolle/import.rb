@@ -43,7 +43,7 @@ class Bucky::Kolle::Import
     CSV.foreach(@file_name, headers: false) do |row|
       i += 1
       next if i < 5
-      
+
       process_row(row, i - 5)
     end
   end
@@ -110,7 +110,7 @@ class Bucky::Kolle::Import
       self.index = index
       self.t_notes = ""
     end
-    
+
     def method_missing(*args)
       get_column(args[0])
     end
@@ -203,7 +203,7 @@ class Bucky::Kolle::Import
         "Apotheker Vogels" => "Geraardsbergen",
         "Vollezele" => "Geraardsbergen",
         "Doornstraat" => "Kollebloem",
-        "Meerbeke" => "Meerbeke", 
+        "Meerbeke" => "Meerbeke",
         "Herbatheek Stef Mintiens" => "Gent"
       }.inject({}){|result, element| result.merge(element[0].downcase => element[1])}[delivery_service_name.downcase]
     end
@@ -269,6 +269,6 @@ Vollezele", :tue],
   ["geen afhaalpunt", "geen afhaalpunt", :tue]].each do |name, desc, day|
     d.delivery_services << DeliveryService.create!(name: name, distributor: d, area_of_service: desc, estimated_delivery_time: '16u00', schedule_rule: ScheduleRule.weekly(nil, [day]))
   end
-    
+
   end
 end

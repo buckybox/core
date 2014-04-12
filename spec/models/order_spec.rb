@@ -209,7 +209,7 @@ describe Order do
       specify { expect { Order.deactivate_finished}.to change(Order.active, :count).by(-2) }
 
       it 'should deactivate the correct orders' do
-        Order.deactivate_finished 
+        Order.deactivate_finished
 
         @order1.reload.active.should be_true
         @order2.reload.active.should be_true

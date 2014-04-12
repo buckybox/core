@@ -16,7 +16,7 @@ class LoadDistributorSettings < ActiveRecord::Migration
         country.save!
       end
     end
-    
+
     Distributor.reset_column_information
     Distributor.update_all({separate_bucky_fee: false, consumer_delivery_fee_cents: 10})
   end

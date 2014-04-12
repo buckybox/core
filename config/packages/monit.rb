@@ -4,7 +4,7 @@ MONIT_SCRIPT_PATH = File.expand_path(File.join(File.dirname(__FILE__), 'configs'
 package :monit, :provides => :monitoring do
   describe 'Monitor processes, files, devices and remote systems'
   apt 'monit'
-  
+
   tmp_file = "/tmp/monit"
 
   push_text File.read(MONIT_SCRIPT_PATH), tmp_file do

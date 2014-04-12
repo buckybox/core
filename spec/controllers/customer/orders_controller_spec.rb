@@ -61,7 +61,7 @@ describe Customer::OrdersController do
         order.reload.pause_date.should be_nil
       end
     end
-    
+
     describe "#resume" do
       it "should resume the order" do
         dates = order.next_occurrences(5, Date.current)

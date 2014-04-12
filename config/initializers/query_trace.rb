@@ -1,6 +1,6 @@
 if Rails.env.development?
   require 'term/ansicolor'
-  
+
   # yeilds a stacktrace for each SQL query
   # put this file in config/initializers
   class QueryTrace < ActiveSupport::LogSubscriber
@@ -75,7 +75,7 @@ if Rails.env.development?
   QueryTrace.attach_to :active_record
 
   trap('QUIT') do
-    # Sending 2 backspace characters removes the ^\ that is 
+    # Sending 2 backspace characters removes the ^\ that is
     # printed to the console.
     rm_noise = "\b\b"
 

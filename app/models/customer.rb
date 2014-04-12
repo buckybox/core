@@ -415,7 +415,7 @@ class Customer < ActiveRecord::Base
     last_payment = transactions.payments
     if r_ids.present?
       last_payment = last_payment.where(["transactions.id not in (?)", r_ids])
-    end  
+    end
     last_payment = last_payment.ordered_by_display_time.first
 
     last_payment.present? ? last_payment.display_time : nil

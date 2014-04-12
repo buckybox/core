@@ -129,7 +129,7 @@ EOF
     def self.test_paypal
       OmniImport.new(csv_read(test_file_paypal), YAML.load(test_yaml_paypal))
     end
-    
+
     attr_accessor :rows, :rules
     attr_accessor :column_names
 
@@ -355,7 +355,7 @@ EOF
           end
         end
       end
-      
+
       def initialize(rhash, parent)
         self.rules = []
         if rhash.is_a?(Array) || rhash.is_a?(Hash)
@@ -371,7 +371,7 @@ EOF
       def get(row, column_name_or_number)
         parent.get(row, column_name_or_number)
       end
-      
+
       # Assumes the rule only has one child
       def rule
         rules.first
@@ -504,7 +504,7 @@ EOF
       attr_accessor :blanks, :matches, :parent, :not_matches
 
       delegate :get, to: :parent
-      
+
       def initialize(shash, parent)
         self.blanks = shash[:blank] if shash[:blank].is_a?(Array)
         self.matches = shash[:match].inject({}){|result, element| result.merge(element)} unless shash[:match].blank?
