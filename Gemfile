@@ -54,6 +54,8 @@ gem 'strong_parameters',               '~> 0.2.1'
 gem 'rails-timeago',                   '~> 2.8.1'
 gem 'email_templator',                 '~> 1.0.0'
 gem 'simple_form-bank_account_number', '~> 1.0.0'
+gem 'discover-unused-partials',        '~> 0.3.0'
+gem 'cane',                            '~> 2.6.1'
 
 group :assets do
   gem 'coffee-rails',   '~> 3.2.2'
