@@ -1,6 +1,4 @@
 class OmniImporter < ActiveRecord::Base
-  PAYPAL_ID = 16
-
   attr_accessible :global, :country_id, :import_transaction_list, :name, :rules, :remove_import_transaction_list, :import_transaction_list_cache, :tag_list, :payment_type, :bank_name
 
   mount_uploader :import_transaction_list, ImportTransactionListUploader
@@ -16,6 +14,10 @@ class OmniImporter < ActiveRecord::Base
   scope :credit_card, -> { where(payment_type: "Credit Card") }
   scope :bank_deposit, -> { where(payment_type: "Bank Deposit") }
   scope :manual_processing, -> { where(payment_type: "Manual Processing") }
+
+  def self.generic_paypal
+    paypal.find_by(country_id: nil)
+  end
 
   # used to name the uploaded files
   def file_format

@@ -80,7 +80,6 @@ describe SignUpWizardController do
 
       context "with matching omni importer" do
         before do
-          pending "fails randomly because of hardcoded OmniImporter::PAYPAL_ID - re-enable this test once resolved"
           @omni_importer = Fabricate(:omni_importer_for_bank_deposit, country: @nz, bank_name: form_params["distributor"]["bank_name"])
         end
 
@@ -96,22 +95,44 @@ describe SignUpWizardController do
         let(:form_params_with_paypal) do
           form_params_with_paypal = form_params
           form_params_with_paypal["distributor"]["payment_paypal"] = "1"
+          form_params_with_paypal["distributor"]["country"] = "NZ"
           form_params_with_paypal
         end
 
         before do
-          pending "fails randomly because of hardcoded OmniImporter::PAYPAL_ID - re-enable this test once resolved"
-          @omni_importers = [
-            Fabricate(:paypal_omni_importer),
-            Fabricate(:omni_importer_for_bank_deposit, country: @nz, bank_name: form_params["distributor"]["bank_name"])
-          ]
+          # we assume there is a "generic" PayPal omni with no country in the DB
+          @generic_paypal = Fabricate(:paypal_omni_importer, country: nil)
         end
 
-        it "sets it up" do
-          post :sign_up, form_params_with_paypal
+        context "when the selected country has a PayPal omni importer" do
+          before do
+            @omni_importers = [
+              Fabricate(:paypal_omni_importer, country: @nz),
+              Fabricate(:omni_importer_for_bank_deposit, country: @nz, bank_name: form_params["distributor"]["bank_name"])
+            ]
+          end
 
-          distributor = Distributor.where(name: form_params["distributor"]["name"]).last
-          expect(distributor.omni_importers).to match_array @omni_importers
+          it "sets it up for the selected country" do
+            post :sign_up, form_params_with_paypal
+
+            distributor = Distributor.where(name: form_params["distributor"]["name"]).last
+            expect(distributor.omni_importers).to match_array @omni_importers
+          end
+        end
+
+        context "when the selected country does not have a PayPal omni importer" do
+          let(:form_params_with_paypal_fallback) do
+            form_params_with_paypal_fallback = form_params_with_paypal
+            form_params_with_paypal_fallback["distributor"]["country"] = "FR"
+            form_params_with_paypal_fallback
+          end
+
+          it "uses the generic paypal omni" do
+            post :sign_up, form_params_with_paypal
+
+            distributor = Distributor.where(name: form_params["distributor"]["name"]).last
+            expect(distributor.omni_importers).to match_array [OmniImporter.generic_paypal]
+          end
         end
       end
 
