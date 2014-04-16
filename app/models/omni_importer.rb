@@ -8,7 +8,7 @@ class OmniImporter < ActiveRecord::Base
   belongs_to :country
   has_and_belongs_to_many :distributors
 
-  scope :ordered, joins("LEFT JOIN countries ON countries.id = omni_importers.country_id").order('countries.alpha2, omni_importers.name')
+  scope :ordered, joins("LEFT JOIN countries ON countries.id = omni_importers.country_id").order('omni_importers.payment_type, countries.alpha2, omni_importers.name')
 
   scope :paypal, -> { where(payment_type: "PayPal") }
   scope :credit_card, -> { where(payment_type: "Credit Card") }
