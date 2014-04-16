@@ -49,8 +49,8 @@ class SignUpWizardController < ApplicationController
     )
 
     if payment_paypal.try(:to_bool)
-      # NOTE: using hardcoded PayPal omni until we get more formats
-      @distributor.omni_importers << OmniImporter.where(id: OmniImporter::PAYPAL_ID)
+      omni = OmniImporter.paypal.find_by(country_id: country.id) || OmniImporter.generic_paypal
+      @distributor.omni_importers << omni
     end
 
     unless bank_name.nil?
