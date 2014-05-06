@@ -7,7 +7,7 @@ class CustomerMailer < ApplicationMailer
     headers['X-MC-Tags'] = "customer,login_details,#{@distributor.name.parameterize}"
 
     mail to: @customer.email_to,
-         from: Figaro.env.support_email,
+         from: @distributor.email_from(email: Figaro.env.support_email),
          reply_to: @distributor.email_from,
          subject: "Your login details for #{@distributor.name}"
   end
@@ -20,7 +20,7 @@ class CustomerMailer < ApplicationMailer
     headers['X-MC-Tags'] = "customer,orders_halted,#{@distributor.name.parameterize}"
 
     mail to: @customer.email_to,
-         from: Figaro.env.support_email,
+         from: @distributor.email_from(email: Figaro.env.support_email),
          reply_to: @distributor.email_from,
          cc: @distributor.support_email,
          subject: "#{@oops}, your #{@distributor.name} deliveries have been put on hold"
@@ -34,7 +34,7 @@ class CustomerMailer < ApplicationMailer
     headers['X-MC-Tags'] = "customer,remind_orders_halted,#{@distributor.name.parameterize}"
 
     mail to: @customer.email_to,
-         from: Figaro.env.support_email,
+         from: @distributor.email_from(email: Figaro.env.support_email),
          reply_to: @distributor.email_from,
          cc: @distributor.support_email,
          subject: "#{@oops}, your #{@distributor.name} deliveries are on hold"
@@ -50,7 +50,7 @@ class CustomerMailer < ApplicationMailer
     headers['X-MC-Tags'] = "customer,email_template,#{distributor.name.parameterize}"
 
     mail to: recipient.email_to,
-         from: Figaro.env.support_email,
+         from: distributor.email_from(email: Figaro.env.support_email),
          reply_to: distributor.email_from,
          subject: email.subject do |format|
           format.text { render text: email.body }
@@ -68,7 +68,7 @@ class CustomerMailer < ApplicationMailer
     headers['X-MC-Tags'] = "customer,order_confirmation,#{@distributor.name.parameterize}"
 
     mail to: @customer.email_to,
-         from: Figaro.env.support_email,
+         from: @distributor.email_from(email: Figaro.env.support_email),
          reply_to: @distributor.email_from,
          cc: cc,
          subject: "Your #{@distributor.name} Order"
