@@ -24,6 +24,8 @@ class DeliveryService < ActiveRecord::Base
 
   after_initialize :set_default_schedule_rule
 
+  before_destroy :check_no_customers_left, prepend: true
+
   def schedule_rule_attributes_with_recur=(attrs)
     self.schedule_rule_attributes_without_recur = attrs.merge(recur: :weekly)
   end
@@ -70,6 +72,17 @@ class DeliveryService < ActiveRecord::Base
 
     future_orders.active.each do |order|
       order.deactivate_for_days!(day_numbers)
+    end
+  end
+
+private
+
+  def check_no_customers_left
+    if customers.present?
+      errors.add(:base, "Cannot delete delivery service with customers on it")
+      false
+    else
+      true
     end
   end
 end
