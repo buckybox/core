@@ -1,3 +1,9 @@
+:javascript
+  $(function(){
+    // Enable Bootstrap components
+    $('[data-toggle="tooltip"]').tooltip();
+  });
+
 .row-fluid
   .span12
     %table.table.table-bordered.table-striped.no-horizontal-dividers
@@ -28,3 +34,8 @@
             %td= delivery_service.fee
             %td
               = link_to 'Edit', edit_distributor_delivery_service_path(delivery_service)
+              |
+              - if delivery_service.customers.empty?
+                = link_to 'Delete', distributor_delivery_service_path(delivery_service), method: :delete, data: { confirm: "Are you sure? There is no going back." }
+              - else
+                = link_to 'Delete', 'javascript:void(0)', 'data-toggle' => 'tooltip', 'title' => "You must reassign #{pluralize(delivery_service.customers.count, "customer")} before deleting this delivery service"
