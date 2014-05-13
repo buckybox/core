@@ -478,8 +478,6 @@ class Distributor < ActiveRecord::Base
     end.compact
   end
 
-  def payment_paypal; true; end # FIXME
-
   def payment_options_string
     payment_options.map(&:first).join(', ')
   end

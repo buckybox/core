@@ -1229,6 +1229,7 @@ CREATE TABLE distributors (
     notes text,
     payment_cash_on_delivery boolean DEFAULT true,
     payment_bank_deposit boolean DEFAULT true,
+    payment_paypal boolean DEFAULT false NOT NULL,
     payment_credit_card boolean DEFAULT false,
     require_postcode boolean DEFAULT false NOT NULL,
     require_phone boolean DEFAULT false NOT NULL,
@@ -3817,3 +3818,5 @@ INSERT INTO schema_migrations (version) VALUES ('20131216225521');
 INSERT INTO schema_migrations (version) VALUES ('20140109004934');
 
 INSERT INTO schema_migrations (version) VALUES ('20140109032329');
+
+INSERT INTO schema_migrations (version) VALUES ('20140513204743');
