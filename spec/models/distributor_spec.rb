@@ -37,6 +37,7 @@ describe Distributor do
       )
 
       distributor.email_from.should eq "Garden City 2.0 FoodBag Delivery <support@example.net>"
+      distributor.email_from(email: "joe@i.com").should eq "Garden City 2.0 FoodBag Delivery <joe@i.com>"
     end
   end
 
