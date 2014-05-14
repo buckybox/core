@@ -187,8 +187,8 @@ class Distributor < ActiveRecord::Base
     touch(:last_seen_at) #No validations or callbacks are performed
   end
 
-  def email_from
-    sanitise_email_header "#{name} <#{support_email}>"
+  def email_from(email: support_email)
+    sanitise_email_header "#{name} <#{email}>"
   end
 
   def email_to
