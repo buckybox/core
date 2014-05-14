@@ -120,11 +120,11 @@ class Order < ActiveRecord::Base
   end
 
   def self.extras_description(order_extras, join_with = ', ')
+    extra_prefix = "&nbsp;&nbsp;&nbsp;- " if join_with.in?(["\n", "<br>", "<br/>", "<br />"])
     order_extras = order_extras.map(&:to_hash) unless order_extras.is_a? Hash
 
     order_extras.map do |extra|
-      description = "#{extra[:name]} #{extra[:unit]}"
-      extra[:count] > 1 ? "#{description} (x#{extra[:count]})" : description
+      "#{extra_prefix}#{extra[:count]}x #{extra[:name]} (#{extra[:unit]})"
     end.join(join_with)
   end
 

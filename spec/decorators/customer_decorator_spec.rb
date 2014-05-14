@@ -36,7 +36,7 @@ describe CustomerDecorator do
       end
 
       specify do
-        expect(customer.next_delivery_summary).to eq "#{@date}\n#{@box.name}"
+        expect(customer.next_delivery_summary).to eq "#{@date}\n* #{@box.name}"
       end
     end
 
@@ -44,7 +44,10 @@ describe CustomerDecorator do
       before do
         order = Fabricate(:order, customer: customer)
         order_with_extras = Fabricate(:order, customer: customer)
-        @extras = Fabricate.times(2, :order_extra, order: order_with_extras)
+        @extras = [
+          Fabricate(:order_extra, order: order_with_extras),
+          Fabricate(:order_extra, order: order_with_extras, count: 2),
+        ]
         customer.update_next_occurrence
 
         @date = order.next_occurrence.strftime("%A, %d %b %Y")
@@ -54,7 +57,7 @@ describe CustomerDecorator do
       end
 
       specify do
-        expect(customer.next_delivery_summary).to eq "#{@date}\n#{@box.name}\n#{@box_with_extras.name} - #{@extras.first.name} single, #{@extras.second.name} single"
+        expect(customer.next_delivery_summary).to eq "#{@date}\n* #{@box.name}\n* #{@box_with_extras.name} <em>with additional extra items of</em>:\n&nbsp;&nbsp;&nbsp;- 1x #{@extras.first.name} (single)\n&nbsp;&nbsp;&nbsp;- 2x #{@extras.second.name} (single)"
       end
     end
   end
