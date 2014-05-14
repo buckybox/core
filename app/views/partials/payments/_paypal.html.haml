@@ -2,8 +2,6 @@
   .span12.payment-message
     .row-fluid
       .span12
-        = simple_format(form_object.distributor.name, {class: "paypal_distributor_email"}, sanitize: false)
-
         -# https://developer.paypal.com/docs/classic/paypal-payments-standard/integration-guide/formbasics/
         %form{action: "https://www.paypal.com/cgi-bin/webscr", method: "post"}
           %input{type: "hidden", name: "cmd", value: "_xclick"}
