@@ -88,9 +88,6 @@ CONFIG
       "new_distributors_last_7_days" => -> {
         Distributor.where(created_at: last_7_days).count
       },
-      "new_customers_last_7_days" => -> {
-        Customer.where(created_at: last_7_days).count
-      },
       "new_transactional_customers_last_7_days" => -> {
         Distributor.all.sum do |distributor|
           distributor.new_transactional_customer_count
@@ -107,9 +104,6 @@ graph_info This graph shows custom metrics about Bucky Box app.
 new_distributors_last_7_days.label new distributors
 new_distributors_last_7_days.draw LINE2
 new_distributors_last_7_days.info The number of new distributors in the last 7 days.
-new_customers_last_7_days.label new customers
-new_customers_last_7_days.draw LINE2
-new_customers_last_7_days.info The number of new customers in the last 7 days.
 new_transactional_customers_last_7_days.label new transactional customers
 new_transactional_customers_last_7_days.draw LINE2
 new_transactional_customers_last_7_days.info The number of new transactional customers in the last 7 days.
