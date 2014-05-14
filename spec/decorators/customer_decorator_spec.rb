@@ -36,7 +36,7 @@ describe CustomerDecorator do
       end
 
       specify do
-        expect(customer.next_delivery_summary).to eq "#{@date}\n#{@box.name}"
+        expect(customer.next_delivery_summary).to eq "#{@date}\n* #{@box.name}"
       end
     end
 
@@ -57,7 +57,7 @@ describe CustomerDecorator do
       end
 
       specify do
-        expect(customer.next_delivery_summary).to eq "#{@date}\n#{@box.name}\n#{@box_with_extras.name} <em>with additional extra items of</em>:\n   - 1x #{@extras.first.name} single\n   - 2x #{@extras.second.name} single"
+        expect(customer.next_delivery_summary).to eq "#{@date}\n* #{@box.name}\n* #{@box_with_extras.name} <em>with additional extra items of</em>:\n&nbsp;&nbsp;&nbsp;- 1x #{@extras.first.name} (single)\n&nbsp;&nbsp;&nbsp;- 2x #{@extras.second.name} (single)"
       end
     end
   end

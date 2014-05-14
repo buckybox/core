@@ -8,7 +8,7 @@ class OrderDecorator < Draper::Decorator
   end
 
   def summary
-    summary = object.box.name
+    summary = "* #{object.box.name}"
     order_extras = object.order_extras
 
     if order_extras.present?
