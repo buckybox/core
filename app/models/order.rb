@@ -123,7 +123,7 @@ class Order < ActiveRecord::Base
     order_extras = order_extras.map(&:to_hash) unless order_extras.is_a? Hash
 
     order_extras.map do |extra|
-      "   - #{extra[:count]}x #{extra[:name]} #{extra[:unit]}"
+      "&nbsp;&nbsp;&nbsp;- #{extra[:count]}x #{extra[:name]} (#{extra[:unit]})"
     end.join(join_with)
   end
 
