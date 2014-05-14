@@ -1229,7 +1229,6 @@ CREATE TABLE distributors (
     notes text,
     payment_cash_on_delivery boolean DEFAULT true,
     payment_bank_deposit boolean DEFAULT true,
-    payment_paypal boolean DEFAULT false NOT NULL,
     payment_credit_card boolean DEFAULT false,
     require_postcode boolean DEFAULT false NOT NULL,
     require_phone boolean DEFAULT false NOT NULL,
@@ -1250,7 +1249,8 @@ CREATE TABLE distributors (
     email_customer_on_new_webstore_order boolean DEFAULT true NOT NULL,
     email_customer_on_new_order boolean DEFAULT false NOT NULL,
     email_distributor_on_new_webstore_order boolean DEFAULT false NOT NULL,
-    customer_can_edit_orders boolean DEFAULT true NOT NULL
+    customer_can_edit_orders boolean DEFAULT true NOT NULL,
+    payment_paypal boolean DEFAULT false NOT NULL
 );
 
 
