@@ -11,7 +11,6 @@ class Distributor::Defaults
   def populate_defaults
     populate_line_items
     populate_bank_information
-    # populate_paypal_information # FIXME
     populate_email_templates
     distributor.save
   end

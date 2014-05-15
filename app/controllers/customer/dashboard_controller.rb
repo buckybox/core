@@ -10,6 +10,7 @@ class Customer::DashboardController < Customer::BaseController
     @currency     = @distributor.currency
     @orders       = @customer.orders.active.decorate(context: { currency: @currency })
     @bank         = @distributor.bank_information.decorate(context: { customer: @customer }) if @distributor.bank_information
+    @paypal       = paypal_form if @distributor.payment_paypal
     @order        = @customer.orders.new
   end
 
@@ -24,5 +25,15 @@ class Customer::DashboardController < Customer::BaseController
         format.json { render json: nil, status: :unprocessable_entity }
       end
     end
+  end
+
+  def paypal_form
+    OpenStruct.new(
+      currency: @distributor.currency,
+      amount_due: "",
+      customer_email: @customer.email,
+      distributor_email: @distributor.email,
+      product_name: "Account top-up",
+    ).freeze
   end
 end
