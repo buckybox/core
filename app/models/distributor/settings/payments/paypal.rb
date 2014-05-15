@@ -11,7 +11,15 @@ class Distributor::Settings::Payments::Paypal < Distributor::Settings::Payments:
   end
 
   def save
-    distributor.update_attributes(payment_paypal: @paypal[:payment_paypal])
+    payment_paypal = @paypal[:payment_paypal].to_bool
+    updated = distributor.update_attributes(payment_paypal: payment_paypal)
+    return unless updated
+    return true unless payment_paypal
+
+    paypal_omni = OmniImporter.paypal.find_by(country_id: distributor.country.id) || OmniImporter.generic_paypal
+    new_omni_importers = distributor.omni_importers | [paypal_omni]
+    distributor.omni_importers = new_omni_importers
+    distributor.save
   end
 end
 
