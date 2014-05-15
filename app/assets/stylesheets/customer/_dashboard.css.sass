@@ -119,16 +119,19 @@
 .span12.no-indent
   margin-left: 0
 
-#bank_payment_details
+#payment_details
   display: none
   border: 1px solid #ddd
   background: white
-  >.row-fluid >.span12
+  > .row-fluid, > h4
     padding: 10px
+    margin: 0
   button.close
     position: relative
     right: 10px
     top: 10px
+  hr
+    margin: 0
   +single-box-shadow(rgba(0, 0, 0, .25), 0px, 15px, 20px, -6px)
 
 #make_a_payment a
