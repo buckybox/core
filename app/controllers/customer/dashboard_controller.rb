@@ -30,7 +30,7 @@ class Customer::DashboardController < Customer::BaseController
   def paypal_form
     OpenStruct.new(
       currency: @distributor.currency,
-      amount_due: "",
+      amount_due_without_symbol: "",
       customer_email: @customer.email,
       distributor_email: @distributor.email,
       product_name: "Account top-up",
