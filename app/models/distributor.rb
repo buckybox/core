@@ -468,7 +468,7 @@ class Distributor < ActiveRecord::Base
     {
       cash_on_delivery: "Cash on Delivery",
       bank_deposit: "Bank Deposit",
-      paypal: "PayPal",
+      paypal: "PayPal / Credit Card",
     }
   end
 
