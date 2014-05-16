@@ -21,5 +21,9 @@ class Distributor::Settings::Payments::Paypal < Distributor::Settings::Payments:
     distributor.omni_importers = new_omni_importers
     distributor.save
   end
+
+  def errors
+    distributor.errors.values.flatten
+  end
 end
 
