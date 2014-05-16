@@ -4,6 +4,7 @@
 #payments.tabbable.tabs-left
   %ul.nav.nav-tabs
     - Distributor.all_payment_options.each do |payment_option_key, payment_option_label|
+      - payment_option_label = "PayPal" if payment_option_key == :paypal # hack
       %li{ class: "#{'active' if type == payment_option_key}" }
         - path = public_send "distributor_settings_payments_#{payment_option_key}_path"
         = link_to path do
