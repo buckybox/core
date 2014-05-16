@@ -24,15 +24,16 @@
             %button.close
               %i.icon-remove
             - if @bank
-              %h4 Bank Deposit
-              = render partial: 'partials/payments/bank_deposit', locals: { form_object: @bank }
-
-            - if @bank && @paypal
-              %hr
+              .row-fluid
+                %h4.text-center Pay by Bank Deposit
+                .span8.offset2.payment-partial
+                  = render partial: 'partials/payments/bank_deposit', locals: { form_object: @bank }
 
             - if @paypal
-              %h4 PayPal
-              = render partial: 'partials/payments/paypal', locals: { form_object: @paypal }
+              .row-fluid
+                %h4.text-center Pay by PayPal
+                .span8.offset2.payment-partial
+                  = render partial: 'partials/payments/paypal', locals: { form_object: @paypal }
 
 - unless @transactions.empty?
   #sortable_transactions{data: {user: 'customer'}}

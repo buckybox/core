@@ -1,7 +1,7 @@
 .row-fluid
-  .span12.payment-message
+  .span12
     .row-fluid
-      .span12
+      .span12.text-center
         -# https://developer.paypal.com/docs/classic/paypal-payments-standard/integration-guide/formbasics/
         %form{action: "https://www.paypal.com/cgi-bin/webscr", method: "post"}
           %input{type: "hidden", name: "cmd", value: "_xclick"}

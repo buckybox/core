@@ -123,15 +123,23 @@
   display: none
   border: 1px solid #ddd
   background: white
-  > .row-fluid, > h4
-    padding: 10px
+  padding: 0 0 1em
+  > .row-fluid
     margin: 0
+  .payment-partial
+    border: 1px solid #FFCF41
+    background: #FFFFCF
+    +border-radius(6px)
+    padding: 10px 20px
+    margin-bottom: 2em
+    &.offset2
+      margin-left: 17% // a bit off otherwise :S
+    form
+      margin: 0
   button.close
     position: relative
     right: 10px
     top: 10px
-  hr
-    margin: 0
   +single-box-shadow(rgba(0, 0, 0, .25), 0px, 15px, 20px, -6px)
 
 #make_a_payment a
@@ -139,7 +147,7 @@
 
 .payment-message
   .note
-    margin: 1em
+    margin: 1em 1em 0
     color: #333
     font-style: italic
 
