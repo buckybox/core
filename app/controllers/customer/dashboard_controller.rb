@@ -9,7 +9,7 @@ class Customer::DashboardController < Customer::BaseController
     @distributor  = @customer.distributor
     @currency     = @distributor.currency
     @orders       = @customer.orders.active.decorate(context: { currency: @currency })
-    @bank         = @distributor.bank_information.decorate(context: { customer: @customer }) if @distributor.bank_information
+    @bank         = @distributor.bank_information.decorate(context: { customer: @customer }) if @distributor.bank_information && @distributor.payment_bank_deposit
     @paypal       = paypal_form if @distributor.payment_paypal
     @order        = @customer.orders.new
   end
