@@ -18,7 +18,7 @@
       .span6
         %fieldset
           %legend PayPal account
-          = f.input_field :distributor_email, as: :email, disabled: true, class: 'span12', title: "Please contact us if you need to update this email", placeholder: "PayPal email address"
+          = f.input_field :paypal_email, as: :email, class: 'span12', placeholder: "PayPal email address"
 
     .row-fluid
       = f.button :submit, 'Save', class: 'btn btn-primary pull-right'

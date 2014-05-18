@@ -1250,7 +1250,8 @@ CREATE TABLE distributors (
     email_customer_on_new_order boolean DEFAULT false NOT NULL,
     email_distributor_on_new_webstore_order boolean DEFAULT false NOT NULL,
     customer_can_edit_orders boolean DEFAULT true NOT NULL,
-    payment_paypal boolean DEFAULT false NOT NULL
+    payment_paypal boolean DEFAULT false NOT NULL,
+    paypal_email character varying(255)
 );
 
 
@@ -3820,3 +3821,5 @@ INSERT INTO schema_migrations (version) VALUES ('20140109004934');
 INSERT INTO schema_migrations (version) VALUES ('20140109032329');
 
 INSERT INTO schema_migrations (version) VALUES ('20140513204743');
+
+INSERT INTO schema_migrations (version) VALUES ('20140518211720');
