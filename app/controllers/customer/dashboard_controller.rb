@@ -32,7 +32,7 @@ class Customer::DashboardController < Customer::BaseController
       currency: @distributor.currency,
       amount_due_without_symbol: "",
       customer_email: @customer.email,
-      distributor_email: @distributor.email,
+      distributor_paypal_email: @distributor.paypal_email,
       product_name: "Account top-up",
     ).freeze
   end
