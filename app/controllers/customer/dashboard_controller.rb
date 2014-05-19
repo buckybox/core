@@ -34,6 +34,7 @@ class Customer::DashboardController < Customer::BaseController
       customer_email: @customer.email,
       distributor_paypal_email: @distributor.paypal_email,
       product_name: "Account top-up",
+      customer_number: @customer.formated_number,
     ).freeze
   end
 end
