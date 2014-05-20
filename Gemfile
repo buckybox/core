@@ -1,6 +1,10 @@
 source 'https://rubygems.org'
 
-ruby '2.1.2'
+if RUBY_VERSION != '2.1.2' # FIXME
+  warn "WARNING: You are not running the version of Ruby targeted for this application."
+else
+  ruby '2.1.2'
+end
 
 gem 'rails',                           '~> 3.2.18'
 gem 'pg',                              '~> 0.17.0'
