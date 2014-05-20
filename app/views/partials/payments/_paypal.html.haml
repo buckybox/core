@@ -14,8 +14,8 @@
           %input{type: "hidden", name: "quantity", value: 1}
           %input{type: "hidden", name: "return", value: customer_dashboard_url}
 
-          -# NOTE: to help reconciliation, must start with "item_number_" to be a custom variable allowed by PayPal
-          %input{type: "hidden", name: "item_number_customer_number", value: form_object.customer_number}
+          -# NOTE: to help reconciliation
+          %input{type: "hidden", name: "custom", value: form_object.customer_number}
 
           %input{type: "submit", name: "submit", class: "btn btn-default paypal-pay-now", value: "Pay Now"}
 
