@@ -568,6 +568,10 @@ class Distributor < ActiveRecord::Base
     update_attributes(api_key: nil, api_secret: nil)
   end
 
+  def currency_symbol
+    CurrencyData.find(currency).symbol
+  end
+
 private
 
   def self.human_attribute_name(attr, options = {})
