@@ -7,7 +7,6 @@
           %input{type: "hidden", name: "cmd", value: "_xclick"}
           %input{type: "hidden", name: "charset", value: "utf-8"}
           %input{type: "hidden", name: "currency_code", value: form_object.currency}
-          %input{type: "hidden", name: "amount", value: form_object.amount_due_without_symbol}
           %input{type: "hidden", name: "email", value: form_object.customer_email}
           %input{type: "hidden", name: "business", value: form_object.distributor_paypal_email}
           %input{type: "hidden", name: "item_name", value: form_object.product_name}
@@ -16,6 +15,13 @@
 
           -# NOTE: to help reconciliation
           %input{type: "hidden", name: "custom", value: form_object.customer_number}
+
+          - if form_object.top_up_amount
+            .input-prepend
+              %span.add-on= form_object.currency_symbol
+              %input{type: "text", name: "amount", value: form_object.top_up_amount, title: "Amount to top up", placeholder: "Amount", style: "width: 4.4em; text-align: right; margin-right: .5em"}
+          - else
+            %input{type: "hidden", name: "amount", value: form_object.amount_due_without_symbol}
 
           %input{type: "submit", name: "submit", class: "btn btn-default paypal-pay-now", value: "Pay Now"}
 

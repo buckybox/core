@@ -27,6 +27,8 @@ class Customer::DashboardController < Customer::BaseController
     end
   end
 
+private
+
   def paypal_form
     OpenStruct.new(
       currency: @distributor.currency,
@@ -35,6 +37,13 @@ class Customer::DashboardController < Customer::BaseController
       distributor_paypal_email: @distributor.paypal_email,
       product_name: "Account top-up",
       customer_number: @customer.formated_number,
+      top_up_amount: top_up_amount,
+      currency_symbol: @distributor.currency_symbol,
     ).freeze
+  end
+
+  def top_up_amount
+    balance = @customer.account_balance
+    balance.negative? ? balance.opposite : 25
   end
 end
