@@ -68,6 +68,7 @@ BuckyBox::Application.routes.draw do
       namespace :payments do
         resource :bank_deposit, controller: "bank_deposit", only: [:show, :update]
         resource :cash_on_delivery, controller: "cash_on_delivery", only: [:show, :update]
+        resource :paypal, controller: "paypal", only: [:show, :update]
       end
     end
 

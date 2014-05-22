@@ -12,7 +12,7 @@
 - else
   = render partial: 'customer/orders/order', collection: @orders
 
-- if @bank
+- if @bank || @paypal
   .row-fluid
     .span12
       %h3 Account Statement
@@ -20,10 +20,20 @@
       .row-fluid.dashboard-box
         .span12
           #make_a_payment.dash-boxed-link.span12= link_to 'Make a payment', 'javascript:void(0)'
-          #bank_payment_details
+          #payment_details
             %button.close
               %i.icon-remove
-            = render partial: 'partials/payments/bank_deposit', locals: { form_object: @bank }
+            - if @bank
+              .row-fluid
+                %h4.text-center Pay by Bank Deposit
+                .span8.offset2.payment-partial
+                  = render partial: 'partials/payments/bank_deposit', locals: { form_object: @bank }
+
+            - if @paypal
+              .row-fluid
+                %h4.text-center Pay by PayPal / Credit Card
+                .span8.offset2.payment-partial
+                  = render partial: 'partials/payments/paypal', locals: { form_object: @paypal }
 
 - unless @transactions.empty?
   #sortable_transactions{data: {user: 'customer'}}

@@ -1,0 +1,28 @@
+- content_for :payment_type do
+  .row-fluid
+    .span6
+      Activate this area if you plan to accept payments from customers by
+      %strong PayPal
+      #{link_to "(more info)", 'http://help.buckybox.com/user-manual/payments/accepting-payments-via-paypal/', target: '_blank'}.
+
+    .span6
+      %span.heading hint
+      Customer payments will not register against their account until you reconcile your PayPal transactions in the #{link_to "Payments", distributor_payments_path} section.
+
+  = simple_form_for(paypal, as: "paypal", url: distributor_settings_payments_paypal_path, method: "put", html: { class: 'form-horizontal', novalidate: false }) do |f|
+    .row-fluid
+      .span12
+        .important_action{class: current_distributor.payment_paypal ? 'green' : 'red'}
+          = f.input_field :payment_paypal, as: :boolean, inline_label: "Accept payments by <strong>PayPal</strong>".html_safe, label: false, 'data-toggle' => 'collapse', 'data-target' => '#paypal_details'
+
+    #paypal_details.row-fluid.collapse{ class: "#{'in' if current_distributor.payment_paypal}" }
+      .span6
+        %fieldset
+          %legend PayPal account
+          = f.input_field :paypal_email, as: :email, class: 'span12', placeholder: "PayPal email address"
+
+    .row-fluid
+      = f.button :submit, 'Save', class: 'btn btn-primary pull-right'
+
+= render partial: 'distributor/settings/payments', locals: { type: :paypal }
+

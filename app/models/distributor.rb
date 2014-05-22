@@ -73,9 +73,10 @@ class Distributor < ActiveRecord::Base
     :default_balance_threshold, :has_balance_threshold, :send_email, :send_halted_email,
     :collect_phone, :collect_delivery_note, :require_address_1, :require_address_2, :require_suburb,
     :require_postcode, :require_phone, :require_city, :require_delivery_note,
-    :payment_cash_on_delivery, :payment_bank_deposit, :payment_credit_card, :keep_me_updated,
-    :notify_address_change, :notify_for_new_webstore_order, :email_customer_on_new_webstore_order,
-    :email_customer_on_new_order, :email_distributor_on_new_webstore_order
+    :payment_cash_on_delivery, :payment_bank_deposit, :payment_paypal, :paypal_email,
+    :payment_credit_card, :keep_me_updated, :notify_address_change, :notify_for_new_webstore_order,
+    :email_customer_on_new_webstore_order, :email_customer_on_new_order,
+    :email_distributor_on_new_webstore_order
 
   accepts_nested_attributes_for :localised_address
 
@@ -464,11 +465,18 @@ class Distributor < ActiveRecord::Base
     list
   end
 
+  def self.all_payment_options
+    {
+      cash_on_delivery: "Cash on Delivery",
+      bank_deposit: "Bank Deposit",
+      paypal: "PayPal / Credit Card",
+    }
+  end
+
   def payment_options
-    options = []
-    options << ["Bank Deposit", :bank_deposit] if payment_bank_deposit?
-    options << ["Cash on Delivery", :cash_on_delivery] if payment_cash_on_delivery?
-    options
+    self.class.all_payment_options.map do |key, label|
+      [label, key] if public_send("payment_#{key}")
+    end.compact
   end
 
   def payment_options_string
@@ -558,6 +566,10 @@ class Distributor < ActiveRecord::Base
 
   def remove_api_key!
     update_attributes(api_key: nil, api_secret: nil)
+  end
+
+  def currency_symbol
+    CurrencyData.find(currency).symbol
   end
 
 private
