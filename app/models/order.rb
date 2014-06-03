@@ -203,6 +203,10 @@ class Order < ActiveRecord::Base
     delivery_service.name
   end
 
+  def delivery_service_fee
+    delivery_service.fee
+  end
+
   def has_exclusions?
     !exclusions.empty?
   end
