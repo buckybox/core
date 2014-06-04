@@ -21,14 +21,14 @@ describe DeliveryList, :slow do
     end
 
     it 'returns true if there are no deliveries' do
-      delivery_list.mark_all_as_auto_delivered.should be_true
+      delivery_list.mark_all_as_auto_delivered.should be true
     end
 
     it 'returns true if all deliveries return true' do
       @deliveries << delivery_auto_delivering
       @deliveries << delivery_auto_delivering
 
-      delivery_list.mark_all_as_auto_delivered.should be_true
+      delivery_list.mark_all_as_auto_delivered.should be true
     end
 
     it 'returns false if one delivery returns false' do
@@ -36,7 +36,7 @@ describe DeliveryList, :slow do
       @deliveries << delivery_auto_delivering(false)
       @deliveries << delivery_auto_delivering
 
-      delivery_list.mark_all_as_auto_delivered.should be_false
+      delivery_list.mark_all_as_auto_delivered.should be false
     end
   end
 
@@ -128,7 +128,7 @@ describe DeliveryList, :slow do
         Fabricate(:delivery, status: 'delivered', delivery_list: delivery_list)
       end
 
-      specify { delivery_list.all_finished?.should be_true }
+      specify { delivery_list.all_finished?.should be true }
     end
 
     context 'has deliveries that are pending' do
@@ -137,7 +137,7 @@ describe DeliveryList, :slow do
         Fabricate(:delivery, status: 'pending', delivery_list: delivery_list)
       end
 
-      specify { delivery_list.all_finished?.should_not be_true }
+      specify { delivery_list.all_finished?.should_not be true }
     end
   end
 

@@ -44,7 +44,7 @@ describe Payment, :slow do
 
     context 'after create' do
       specify { @payment.transaction.should_not be_nil }
-      specify { @payment.transaction.persisted?.should be_true }
+      specify { @payment.transaction.persisted?.should be true }
       specify { @payment.transaction.amount.should == @amount }
 
       specify { @payment.account.balance.should == @account_amount + @amount }
@@ -53,10 +53,10 @@ describe Payment, :slow do
     describe '#reverse_payment' do
       before { @payment.reverse_payment! }
 
-      specify { @payment.reversed.should be_true }
+      specify { @payment.reversed.should be true }
 
       specify { @payment.reversal_transaction.should_not be_nil }
-      specify { @payment.reversal_transaction.persisted?.should be_true }
+      specify { @payment.reversal_transaction.persisted?.should be true }
       specify { @payment.reversal_transaction.amount.should == @amount.opposite }
 
       specify { @payment.account.balance.should == @account_amount }

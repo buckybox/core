@@ -111,6 +111,7 @@ group :test do
   gem 'fuubar'
   gem 'guard', '~> 1' # v2 is broken with a version mismatch issue
   gem 'guard-rspec'
+  gem 'rspec-activemodel-mocks'
 end
 
 group :staging do

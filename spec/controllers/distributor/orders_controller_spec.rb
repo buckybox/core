@@ -73,7 +73,7 @@ describe Distributor::OrdersController do
       box = Fabricate(:box, distributor: @distributor)
       account = Fabricate(:account, customer: Fabricate(:customer, distributor: @distributor))
       post :create, account_id: account.id, order: {account_id: account.id, box_id: box.id, schedule_rule_attributes: {mon: '1', start: '2012-10-27'}}
-      assigns(:order).schedule_rule.mon.should be_true
+      assigns(:order).schedule_rule.mon.should be true
       assigns(:order).schedule_rule.start.should eq(Date.parse('2012-10-27'))
     end
 

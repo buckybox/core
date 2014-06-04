@@ -10,7 +10,7 @@ describe LineItem do
 
   describe '.from_list' do
     context :invalid do
-      specify { LineItem.from_list(distributor, '').should be_false }
+      specify { LineItem.from_list(distributor, '').should be false }
     end
 
     context :valid do
@@ -26,11 +26,11 @@ describe LineItem do
 
       specify { expect{ LineItem.from_list(distributor, @text) }.to change(distributor.line_items(true), :count).from(1).to(5) }
 
-      specify { LineItem.from_list(distributor, @text).map(&:name).include?(@old_item_name).should be_true }
-      specify { LineItem.from_list(distributor, @text).map(&:name).include?('Apples').should be_true }
-      specify { LineItem.from_list(distributor, @text).map(&:name).include?('Oranges').should be_true }
-      specify { LineItem.from_list(distributor, @text).map(&:name).include?('Pears').should be_true }
-      specify { LineItem.from_list(distributor, @text).map(&:name).include?('Kiwi Fruit').should be_true }
+      specify { LineItem.from_list(distributor, @text).map(&:name).include?(@old_item_name).should be true }
+      specify { LineItem.from_list(distributor, @text).map(&:name).include?('Apples').should be true }
+      specify { LineItem.from_list(distributor, @text).map(&:name).include?('Oranges').should be true }
+      specify { LineItem.from_list(distributor, @text).map(&:name).include?('Pears').should be true }
+      specify { LineItem.from_list(distributor, @text).map(&:name).include?('Kiwi Fruit').should be true }
     end
   end
 
@@ -67,7 +67,7 @@ describe LineItem do
       context 'same name' do
         before { LineItem.bulk_update(distributor, { line_item.id => {name: line_item.name} }) }
 
-        specify { line_item.reload.persisted?.should be_true }
+        specify { line_item.reload.persisted?.should be true }
         specify { line_item.id.should == exclusion.line_item_id }
         specify { line_item.id.should == substitution.line_item_id }
       end
