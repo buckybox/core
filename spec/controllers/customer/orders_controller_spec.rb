@@ -91,7 +91,7 @@ describe Customer::OrdersController do
       d.save
 
       put :deactivate, {id: order.id}
-      order.reload.active.should be_false
+      order.reload.active.should be false
     end
 
     it "should only allow deactivating your own orders" do
@@ -105,7 +105,7 @@ describe Customer::OrdersController do
       distributor.customer_can_remove_orders = false
       distributor.save!
       put :deactivate, {id: order.id}
-      order.reload.active.should be_true
+      order.reload.active.should be true
     end
   end
 end

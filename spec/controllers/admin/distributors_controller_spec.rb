@@ -129,7 +129,7 @@ describe Admin::DistributorsController do
 
     it 'should sign out as distributor' do
       get :unimpersonate
-      @controller.distributor_signed_in?.should be_false
+      @controller.distributor_signed_in?.should be false
     end
   end
 

@@ -211,12 +211,12 @@ describe Order do
       it 'should deactivate the correct orders' do
         Order.deactivate_finished
 
-        @order1.reload.active.should be_true
-        @order2.reload.active.should be_true
-        @order3.reload.active.should be_true
-        @order4.reload.active.should be_true
-        @order5.reload.active.should be_false
-        @order6.reload.active.should be_false
+        @order1.reload.active.should be true
+        @order2.reload.active.should be true
+        @order3.reload.active.should be true
+        @order4.reload.active.should be true
+        @order5.reload.active.should be false
+        @order6.reload.active.should be false
       end
     end
 

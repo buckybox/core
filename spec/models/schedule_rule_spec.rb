@@ -6,8 +6,8 @@ describe ScheduleRule do
     let(:date){ Date.parse('2012-08-20') } #monday
     let(:schedule){ ScheduleRule.one_off(date) }
 
-    specify { schedule.occurs_on?(date).should be_true }
-    specify { schedule.occurs_on?(Date.parse('2012-08-21')).should be_false }
+    specify { schedule.occurs_on?(date).should be true }
+    specify { schedule.occurs_on?(Date.parse('2012-08-21')).should be false }
   end
   context :recur do
     let(:start_date){ Date.parse('2012-08-27') } #monday
@@ -18,22 +18,22 @@ describe ScheduleRule do
 
         it 'should repeat on mondays matching start date' do
           next_monday = Date.parse('2012-08-27')
-          schedule.occurs_on?(next_monday).should be_true
+          schedule.occurs_on?(next_monday).should be true
         end
 
         it 'should repeat on mondays matching start date' do
           next_monday = Date.parse('2012-09-03')
-          schedule.occurs_on?(next_monday).should be_true
+          schedule.occurs_on?(next_monday).should be true
         end
 
         it 'should not repeat on tuesday' do
           next_tuesday = Date.parse('2012-08-28')
-          schedule.occurs_on?(next_tuesday).should be_false
+          schedule.occurs_on?(next_tuesday).should be false
         end
 
         it 'should not occur on dates before start_date' do
           previous_monday = Date.parse('2012-08-20')
-          schedule.occurs_on?(previous_monday).should be_false
+          schedule.occurs_on?(previous_monday).should be false
         end
       end
     end
@@ -44,42 +44,42 @@ describe ScheduleRule do
       it 'should occur on first wednesday' do
         first_occurrence = Date.parse('2012-08-29')
 
-        schedule.occurs_on?(first_occurrence).should be_true
+        schedule.occurs_on?(first_occurrence).should be true
       end
 
       it 'should not occur on second wednesday' do
         first_occurrence = Date.parse('2012-08-29')
-        schedule.occurs_on?(first_occurrence+7.days).should be_false
+        schedule.occurs_on?(first_occurrence+7.days).should be false
       end
 
       it 'should not occur before start date' do
         first_occurrence = Date.parse('2012-08-29')
-        schedule.occurs_on?(first_occurrence-7.days).should be_false
+        schedule.occurs_on?(first_occurrence-7.days).should be false
       end
 
       it 'should occur on third wednesday' do
         first_occurrence = Date.parse('2012-08-29')
-        schedule.occurs_on?(first_occurrence+14.days).should be_true
+        schedule.occurs_on?(first_occurrence+14.days).should be true
       end
 
       it 'should occur on first thursday' do
         first_occurrence = Date.parse('2012-08-30')
-        schedule.occurs_on?(first_occurrence).should be_true
+        schedule.occurs_on?(first_occurrence).should be true
       end
 
       it 'should occur on first sunday' do
         first_occurrence = Date.parse('2012-09-09')
-        schedule.occurs_on?(first_occurrence).should be_true
+        schedule.occurs_on?(first_occurrence).should be true
       end
 
       it 'should occur on 10th sunday' do
         first_occurrence = Date.parse('2012-09-09')
-        schedule.occurs_on?(first_occurrence+10.weeks).should be_true
+        schedule.occurs_on?(first_occurrence+10.weeks).should be true
       end
 
       it 'should occur on 1000th sunday' do
         first_occurrence = Date.parse('2012-09-09')
-        schedule.occurs_on?(first_occurrence+1000.weeks).should be_true
+        schedule.occurs_on?(first_occurrence+1000.weeks).should be true
       end
     end
 
@@ -89,13 +89,13 @@ describe ScheduleRule do
       it 'should occur on the first week of the month after the start_date' do
         first_occurrence = Date.parse('2012-09-01') #Saturday
 
-        schedule.occurs_on?(first_occurrence).should be_true
+        schedule.occurs_on?(first_occurrence).should be true
       end
 
       it 'should not occur on the second week of the month after the start_date' do
         first_occurrence = Date.parse('2012-09-08') #Saturday
 
-        schedule.occurs_on?(first_occurrence).should be_false
+        schedule.occurs_on?(first_occurrence).should be false
       end
 
       it 'should correctly predict the next 20 occurrences' do
@@ -288,63 +288,63 @@ describe ScheduleRule do
   context :includes do
     let(:date){Date.parse('2012-10-03')} #wednesday
 
-    specify{Fabricate(:schedule_rule).includes?(Fabricate(:schedule_rule)).should be_true}
+    specify{Fabricate(:schedule_rule).includes?(Fabricate(:schedule_rule)).should be true}
 
     it 'should return whether or not one schedule_rule occurs on the same days as another' do
-      ScheduleRule.one_off(date).includes?(ScheduleRule.one_off(date)).should be_true
+      ScheduleRule.one_off(date).includes?(ScheduleRule.one_off(date)).should be true
     end
 
     it 'should return whether or not one schedule_rule occurs on the same days as another' do
       test_date = Date.parse('2012-10-05') #friday
-      ScheduleRule.weekly(date, ScheduleRule::DAYS).includes?(ScheduleRule.one_off(test_date)).should be_true
+      ScheduleRule.weekly(date, ScheduleRule::DAYS).includes?(ScheduleRule.one_off(test_date)).should be true
     end
 
     it 'should return false for schedules which start too soon' do
       test_date = Date.parse('2012-10-01') #monday
-      ScheduleRule.weekly(date, ScheduleRule::DAYS).includes?(ScheduleRule.one_off(test_date)).should be_false
+      ScheduleRule.weekly(date, ScheduleRule::DAYS).includes?(ScheduleRule.one_off(test_date)).should be false
     end
 
     it 'should return whether or not one schedule_rule occurs on the same days as another' do
       test_date = Date.parse('2012-10-05') #friday
-      ScheduleRule.weekly(date, ScheduleRule::DAYS - [:fri]).includes?(ScheduleRule.one_off(test_date)).should be_false
+      ScheduleRule.weekly(date, ScheduleRule::DAYS - [:fri]).includes?(ScheduleRule.one_off(test_date)).should be false
     end
 
     it 'should return false if a pause makes it not occur on the required date of given schedule_rule' do
       test_date = Date.parse('2012-10-05') #friday
       sr = ScheduleRule.weekly(date, ScheduleRule::DAYS)
       sr.pause('2012-10-01', '2012-11-01')
-      sr.includes?(ScheduleRule.one_off(test_date)).should be_false
+      sr.includes?(ScheduleRule.one_off(test_date)).should be false
     end
 
     it 'should return true if a pause doesnt occur within the given schedule_rule' do
       test_date = Date.parse('2012-10-05') #friday
       sr = ScheduleRule.weekly(date, ScheduleRule::DAYS)
       sr.pause('2012-11-01', '2012-12-01')
-      sr.includes?(ScheduleRule.one_off(test_date)).should be_true
+      sr.includes?(ScheduleRule.one_off(test_date)).should be true
     end
 
-    specify {ScheduleRule.one_off(date).includes?(ScheduleRule.weekly(date, [:wed])).should be_false}
-    specify {ScheduleRule.one_off(date).includes?(ScheduleRule.fortnightly(date, all_days)).should be_false}
-    specify {ScheduleRule.one_off(date).includes?(ScheduleRule.monthly(date, all_days)).should be_false}
+    specify {ScheduleRule.one_off(date).includes?(ScheduleRule.weekly(date, [:wed])).should be false}
+    specify {ScheduleRule.one_off(date).includes?(ScheduleRule.fortnightly(date, all_days)).should be false}
+    specify {ScheduleRule.one_off(date).includes?(ScheduleRule.monthly(date, all_days)).should be false}
 
-    specify {ScheduleRule.weekly(date, all_days).includes?(ScheduleRule.fortnightly(date, all_days)).should be_true}
-    specify {ScheduleRule.weekly(date, all_days).includes?(ScheduleRule.monthly(date, all_days)).should be_true}
+    specify {ScheduleRule.weekly(date, all_days).includes?(ScheduleRule.fortnightly(date, all_days)).should be true}
+    specify {ScheduleRule.weekly(date, all_days).includes?(ScheduleRule.monthly(date, all_days)).should be true}
 
-    specify {ScheduleRule.fortnightly(date, all_days).includes?(ScheduleRule.weekly(date, all_days)).should be_false}
-    specify {ScheduleRule.fortnightly(date, all_days).includes?(ScheduleRule.weekly(date+3.days, all_days)).should be_false}
-    specify {ScheduleRule.fortnightly(date, all_days).includes?(ScheduleRule.weekly(date+4.days, all_days)).should be_false}
-    specify {ScheduleRule.fortnightly(date, all_days).includes?(ScheduleRule.weekly(date+7.days, all_days)).should be_false}
-    specify {ScheduleRule.fortnightly(date, all_days).includes?(ScheduleRule.weekly(date+11.days, all_days)).should be_false}
+    specify {ScheduleRule.fortnightly(date, all_days).includes?(ScheduleRule.weekly(date, all_days)).should be false}
+    specify {ScheduleRule.fortnightly(date, all_days).includes?(ScheduleRule.weekly(date+3.days, all_days)).should be false}
+    specify {ScheduleRule.fortnightly(date, all_days).includes?(ScheduleRule.weekly(date+4.days, all_days)).should be false}
+    specify {ScheduleRule.fortnightly(date, all_days).includes?(ScheduleRule.weekly(date+7.days, all_days)).should be false}
+    specify {ScheduleRule.fortnightly(date, all_days).includes?(ScheduleRule.weekly(date+11.days, all_days)).should be false}
 
-    specify {ScheduleRule.fortnightly(date, all_days).includes?(ScheduleRule.fortnightly(date, all_days)).should be_true}
-    specify {ScheduleRule.fortnightly(date, all_days).includes?(ScheduleRule.fortnightly(date+3.days, all_days)).should be_true}
-    specify {ScheduleRule.fortnightly(date, all_days).includes?(ScheduleRule.fortnightly(date+4.days, all_days)).should be_false}
-    specify {ScheduleRule.fortnightly(date, all_days).includes?(ScheduleRule.fortnightly(date+7.days, all_days)).should be_false}
-    specify {ScheduleRule.fortnightly(date, all_days).includes?(ScheduleRule.fortnightly(date+11.days, all_days)).should be_true}
-    specify {ScheduleRule.fortnightly(date, all_days).includes?(ScheduleRule.fortnightly(date + 14.days, all_days)).should be_true}
+    specify {ScheduleRule.fortnightly(date, all_days).includes?(ScheduleRule.fortnightly(date, all_days)).should be true}
+    specify {ScheduleRule.fortnightly(date, all_days).includes?(ScheduleRule.fortnightly(date+3.days, all_days)).should be true}
+    specify {ScheduleRule.fortnightly(date, all_days).includes?(ScheduleRule.fortnightly(date+4.days, all_days)).should be false}
+    specify {ScheduleRule.fortnightly(date, all_days).includes?(ScheduleRule.fortnightly(date+7.days, all_days)).should be false}
+    specify {ScheduleRule.fortnightly(date, all_days).includes?(ScheduleRule.fortnightly(date+11.days, all_days)).should be true}
+    specify {ScheduleRule.fortnightly(date, all_days).includes?(ScheduleRule.fortnightly(date + 14.days, all_days)).should be true}
 
-    specify {ScheduleRule.monthly(date, all_days).includes?(ScheduleRule.one_off(date)).should be_true}
-    specify {ScheduleRule.monthly(date, all_days).includes?(ScheduleRule.one_off(Date.parse('2012-10-08'))).should be_false}
+    specify {ScheduleRule.monthly(date, all_days).includes?(ScheduleRule.one_off(date)).should be true}
+    specify {ScheduleRule.monthly(date, all_days).includes?(ScheduleRule.one_off(Date.parse('2012-10-08'))).should be false}
   end
 
   context :schedule_transaction do
@@ -466,16 +466,16 @@ describe ScheduleRule do
     it "should return true if a pause has expired" do
       sr = ScheduleRule.weekly("2012-10-01", [:mon])
       sr.pause!("2012-09-01", "2012-09-29")
-      sr.pause_expired?.should be_true
+      sr.pause_expired?.should be true
     end
   end
 
   describe ".remove_day" do
     it "should remove that day from the schedule" do
       sr = ScheduleRule.weekly(Date.current, ScheduleRule::DAYS)
-      sr.mon.should be_true
+      sr.mon.should be true
       sr.remove_day!(:monday)
-      sr.mon.should be_false
+      sr.mon.should be false
     end
   end
 

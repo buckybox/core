@@ -39,20 +39,20 @@ describe Bucky::Dso::List do
   end
 
   it 'should return true for empty list' do
-    List.new.empty?.should be_true
+    List.new.empty?.should be true
   end
 
   it 'should return false for full list' do
-    list.empty?.should be_false
+    list.empty?.should be false
   end
 
   it 'should return false when not pointing at last element' do
-    list.finished?.should be_false
+    list.finished?.should be false
   end
 
   it 'should return true when pointing at last element' do
     4.times{list.next}
-    list.finished?.should be_true
+    list.finished?.should be true
   end
 
   it 'should return all sortables' do
