@@ -20,11 +20,6 @@ class Customer < ActiveRecord::Base
 
   acts_as_taggable
 
-  DYNAMIC_TAGS = {
-    'halted'           => 'important',
-    'negative-balance' => 'hidden'
-  }.freeze
-
   accepts_nested_attributes_for :address
 
   monetize :balance_threshold_cents
