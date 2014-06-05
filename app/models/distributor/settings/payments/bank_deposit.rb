@@ -1,4 +1,4 @@
-class Distributor::Settings::Payments::BankDeposit < Distributor::Settings::Payments::Base
+class Distributor::Settings::Payments::BankDeposit < Distributor::Settings::Payments::BankInformation
   delegate :payment_bank_deposit, to: :distributor
   delegate :name,
     :account_name,

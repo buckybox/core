@@ -1,7 +1,5 @@
 class Distributor::DeliveryServicesController < Distributor::ResourceController
-  actions :all, except: [:index, :destroy]
-
-  respond_to :html, :xml, :json
+  actions :all, except: [:index]
 
   def create
     create! { distributor_settings_delivery_services_url }
@@ -10,5 +8,9 @@ class Distributor::DeliveryServicesController < Distributor::ResourceController
 
   def update
     update! { distributor_settings_delivery_services_url }
+  end
+
+  def destroy
+    destroy! { distributor_settings_delivery_services_url }
   end
 end

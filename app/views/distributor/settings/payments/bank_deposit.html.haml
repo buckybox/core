@@ -33,12 +33,12 @@
 
       .span6.pull-right.preview
         %span.heading customer preview
-        %p.muted This information is displayed to customers at the webstore during the checkout process.
+        %p.muted This information is displayed to customers at the web store during the checkout process.
 
         = render partial: 'partials/payments/bank_deposit', locals: { form_object: NullObject.new }
 
     .row-fluid
       = f.button :submit, 'Save', class: 'btn btn-primary pull-right'
 
-= render partial: 'distributor/settings/payments', locals: { type: 'bank_deposit' }
+= render partial: 'distributor/settings/payments', locals: { type: :bank_deposit }
 

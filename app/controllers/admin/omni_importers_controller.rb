@@ -1,5 +1,5 @@
 class Admin::OmniImportersController < Admin::BaseController
-  
+
   def index
     @omni_importers = OmniImporter.ordered
     # Put those with blank countries on top

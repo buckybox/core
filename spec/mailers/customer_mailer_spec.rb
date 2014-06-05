@@ -8,7 +8,8 @@ describe CustomerMailer do
 
     it "renders the headers" do
       mail.subject.should include "login details"
-      mail.from.should eq [@customer.distributor.support_email]
+      mail.from.should eq [Figaro.env.no_reply_email]
+      mail.reply_to.should eq [@customer.distributor.support_email]
       mail.to.should eq [@customer.email]
       mail.header["X-Mailer"].value.should eq(Figaro.env.x_mailer)
     end

@@ -49,15 +49,6 @@ BuckyBox::Application.routes.draw do
   namespace :distributor do
     root to: 'welcome#index'
 
-    namespace :wizard do
-      get 'business'
-      get 'boxes'
-      get 'delivery_services'
-      get 'payment'
-      get 'billing'
-      get 'success'
-    end
-
     namespace :settings do
       get 'organisation'
       get 'webstore'
@@ -77,6 +68,7 @@ BuckyBox::Application.routes.draw do
       namespace :payments do
         resource :bank_deposit, controller: "bank_deposit", only: [:show, :update]
         resource :cash_on_delivery, controller: "cash_on_delivery", only: [:show, :update]
+        resource :paypal, controller: "paypal", only: [:show, :update]
       end
     end
 
@@ -240,8 +232,6 @@ BuckyBox::Application.routes.draw do
       end
 
       collection do
-        get 'send_email', action: :write_email
-        post 'send_email'
         get 'unimpersonate'
         get 'country_setting/:id', controller: 'distributors', action: 'country_setting'
         get 'tag/:tag', action: :index, as: 'tag'

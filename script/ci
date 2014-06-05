@@ -2,7 +2,7 @@
 
 export CI=1
 export RAILS_ENV=test
-export COVERAGE=1
+# export COVERAGE=1 # doesn't fail on non-zero exit since Ruby 2.1??
 export SPEC_OPTS="--format p"
 
 cp config/database.yml.example config/database.yml
@@ -15,5 +15,7 @@ bundle exec rake db:drop db:create db:structure:load
 
 bundle exec rake
 
+bundle exec discover-unused-partials || true
 bundle exec brakeman -qz --no-progress -w3 || true # FIXME
+bundle exec cane --no-doc --style-measure 160 --abc-max 30 || true # FIXME
 

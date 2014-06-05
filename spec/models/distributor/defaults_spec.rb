@@ -14,10 +14,12 @@ describe Distributor::Defaults do
     double("distributor",
            parameter_name: "veg-people",
            name: "Veg People",
+           email: "bob@example.net",
            save: true,
            bank_information: double.as_null_object,
            omni_importers: double.as_null_object,
            "email_templates=" => true,
+           "paypal_email=" => true,
           )
   end
 

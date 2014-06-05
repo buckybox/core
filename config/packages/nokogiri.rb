@@ -4,7 +4,7 @@ package :nokogiri do
   apt 'libxml2 libxml2-dev libxslt1-dev' do
     pre :install, 'apt-get -y update'
   end
-  
+
   verify do
     has_apt 'libxml2'
     has_apt 'libxml2-dev'

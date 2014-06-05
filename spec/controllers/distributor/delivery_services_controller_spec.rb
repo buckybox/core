@@ -41,7 +41,7 @@ describe Distributor::DeliveryServicesController do
       end
 
       specify { flash[:notice].should eq('Delivery service was successfully updated.') }
-      specify { assigns(:delivery_service).schedule_rule.tue.should be_true }
+      specify { assigns(:delivery_service).schedule_rule.tue.should be true }
       specify { response.should redirect_to(distributor_settings_delivery_services_url) }
     end
 

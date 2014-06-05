@@ -41,12 +41,12 @@ describe Bucky::TransactionImports::Row do
   end
 
   describe "#amount_valid?" do
-    specify { expect(new_row("12.34").amount_valid?).to be_true }
-    specify { expect(new_row("1000").amount_valid?).to be_true }
-    specify { expect(new_row("-1.2").amount_valid?).to be_true }
-    specify { expect(new_row("+1.2").amount_valid?).to be_true }
-    specify { expect(new_row(".19").amount_valid?).to be_true }
-    specify { expect(new_row("-.19").amount_valid?).to be_true }
+    specify { expect(new_row("12.34").amount_valid?).to be true }
+    specify { expect(new_row("1000").amount_valid?).to be true }
+    specify { expect(new_row("-1.2").amount_valid?).to be true }
+    specify { expect(new_row("+1.2").amount_valid?).to be true }
+    specify { expect(new_row(".19").amount_valid?).to be true }
+    specify { expect(new_row("-.19").amount_valid?).to be true }
   end
 end
 

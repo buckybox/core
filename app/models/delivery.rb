@@ -189,7 +189,7 @@ private
     source = 'manual'
 
     if self.status_change_type_changed? && self.status_change_type_change.last == 'auto'
-      source = 'auto' 
+      source = 'auto'
     end
 
     unless self.deducted?

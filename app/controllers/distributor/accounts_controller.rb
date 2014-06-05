@@ -27,7 +27,7 @@ class Distributor::AccountsController < Distributor::ResourceController
 
     @transactions_sum = @account.calculate_balance(offset_size)
 
-    render partial: 'distributor/transactions/index'   
+    render partial: 'distributor/transactions/index'
   end
 
   private

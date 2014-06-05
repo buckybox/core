@@ -45,7 +45,7 @@ describe Deduction, :slow do
 
     context 'after create' do
       specify { @deduction.transaction.should_not be_nil }
-      specify { @deduction.transaction.persisted?.should be_true }
+      specify { @deduction.transaction.persisted?.should be true }
       specify { @deduction.transaction.amount.should == @amount.opposite }
 
       specify { @deduction.account.balance.should == @account_amount - @amount - @fee}
@@ -55,10 +55,10 @@ describe Deduction, :slow do
     describe '#reverse_deduction' do
       before { @deduction.reverse_deduction! }
 
-      specify { @deduction.reversed.should be_true }
+      specify { @deduction.reversed.should be true }
 
       specify { @deduction.reversal_transaction.should_not be_nil }
-      specify { @deduction.reversal_transaction.persisted?.should be_true }
+      specify { @deduction.reversal_transaction.persisted?.should be true }
       specify { @deduction.reversal_transaction.amount.should == @amount }
       specify { @deduction.reversal_fee.should_not be_nil }
 

@@ -37,10 +37,10 @@ describe Address do
     it "skips the given validations" do
       address = Address.new
       address.distributor = mock_model(Distributor)
-      address.valid?.should be_false # requires a customer
+      address.valid?.should be false # requires a customer
 
       valid = address.skip_validations(:customer) { |address| address.valid? }
-      valid.should be_true
+      valid.should be true
     end
 
     it "skips the validation if address attributes have not been changed" do
@@ -53,11 +53,11 @@ describe Address do
       customer.distributor.require_phone = true
       customer.distributor.require_postcode = true
 
-      customer.address.postcode_changed?.should be_false
+      customer.address.postcode_changed?.should be false
       customer.address.should be_valid
 
       customer.address.postcode = "1234"
-      customer.address.postcode_changed?.should be_true
+      customer.address.postcode_changed?.should be true
 
       customer.address.should be_valid
       customer.save!

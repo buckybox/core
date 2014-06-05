@@ -129,7 +129,7 @@ EOF
     def self.test_paypal
       OmniImport.new(csv_read(test_file_paypal), YAML.load(test_yaml_paypal))
     end
-    
+
     attr_accessor :rows, :rules
     attr_accessor :column_names
 
@@ -162,7 +162,7 @@ EOF
     def create_bucky_row(row, index, bank_name)
       date = row[:DATE]
       desc = row[:DESC]
-      amount = row[:AMOUNT].gsub(/[^\d.-]/,'')
+      amount = OmniImport.sanitize_amount(row[:AMOUNT])
       raw_data = row[:raw_data]
       Bucky::TransactionImports::Row.new(date, desc, amount, index, raw_data, self, bank_name)
     end
@@ -219,6 +219,10 @@ EOF
       else
         rules
       end
+    end
+
+    def self.sanitize_amount amount
+      amount.gsub(/[^\d.-]/, '')
     end
 
     class Rules
@@ -344,12 +348,14 @@ EOF
             return RuleNegative.new(value, parent)
           when :merge
             return RuleMerge.new(value, parent)
+          when :if
+            return RuleCondition.new(value, parent)
           else
             return RuleDirect.new(key, parent)
           end
         end
       end
-      
+
       def initialize(rhash, parent)
         self.rules = []
         if rhash.is_a?(Array) || rhash.is_a?(Hash)
@@ -365,7 +371,7 @@ EOF
       def get(row, column_name_or_number)
         parent.get(row, column_name_or_number)
       end
-      
+
       # Assumes the rule only has one child
       def rule
         rules.first
@@ -384,7 +390,9 @@ EOF
       end
 
       def process(row)
-        get(row, column)
+        value = get(row, column)
+        value = OmniImport.sanitize_amount(value) if column == :amount
+        value
       end
     end
 
@@ -437,6 +445,41 @@ EOF
       end
     end
 
+    class RuleCondition < Rule
+      attr_accessor :column
+      def initialize(rhash, parent)
+        self.column = rhash
+        self.parent = parent
+        @matches = rhash.fetch(:match)
+
+        @then = rhash.fetch(:then)
+        @positive_matches = @matches.map { |match| Rule.create(@then, parent) }
+
+        @else = rhash[:else]
+        @negative_matches = if @else
+          @matches.map { |match| Rule.create(@else, parent) }
+        else
+          []
+        end
+      end
+
+      def process(row)
+        if matches_row?(row)
+          @positive_matches
+        else
+          @negative_matches
+        end.map { |rule| rule.process(row) }.compact.first
+      end
+
+      def matches_row?(row)
+        @matches.all? do |match|
+          match.all? do |column, text|
+            get(row, column) == text.to_s
+          end
+        end
+      end
+    end
+
     class RuleNegative < Rule
       def process(row)
         result = rule.process(row)
@@ -461,7 +504,7 @@ EOF
       attr_accessor :blanks, :matches, :parent, :not_matches
 
       delegate :get, to: :parent
-      
+
       def initialize(shash, parent)
         self.blanks = shash[:blank] if shash[:blank].is_a?(Array)
         self.matches = shash[:match].inject({}){|result, element| result.merge(element)} unless shash[:match].blank?

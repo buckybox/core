@@ -11,7 +11,7 @@ describe DeliveryService do
       delivery_service.save!
     end
 
-    specify { 
+    specify {
       schedule_rule = delivery_service.schedule_rule
       schedule_rule.should_receive(:record_schedule_transaction)
       delivery_service.schedule_rule.sun = !delivery_service.schedule_rule.sun

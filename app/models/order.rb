@@ -120,8 +120,12 @@ class Order < ActiveRecord::Base
   end
 
   def self.extras_description(order_extras, join_with = ', ')
+    extra_prefix = "&nbsp;&nbsp;&nbsp;- " if join_with.in?(["\n", "<br>", "<br/>", "<br />"])
     order_extras = order_extras.map(&:to_hash) unless order_extras.is_a? Hash
-    order_extras.map{ |e| "#{e[:count]}x #{e[:name]} #{e[:unit]}" }.join(join_with)
+
+    order_extras.map do |extra|
+      "#{extra_prefix}#{extra[:count]}x #{extra[:name]} (#{extra[:unit]})"
+    end.join(join_with)
   end
 
   def customer_can_edit?
@@ -197,6 +201,10 @@ class Order < ActiveRecord::Base
 
   def delivery_service_name
     delivery_service.name
+  end
+
+  def delivery_service_fee
+    delivery_service.fee
   end
 
   def has_exclusions?
@@ -375,7 +383,7 @@ class Order < ActiveRecord::Base
   def clear_extras
     self.extras = []
   end
-  
+
   def extras_summary
     Package.extras_summary(order_extras)
   end

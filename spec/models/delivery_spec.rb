@@ -26,8 +26,8 @@ describe Delivery, :slow do
     end
 
     describe '#future_status?' do
-      specify { Fabricate(:delivery, status: 'pending').future_status?.should be_true }
-      specify { Fabricate(:delivery, status: 'cancelled').future_status?.should be_false }
+      specify { Fabricate(:delivery, status: 'pending').future_status?.should be true }
+      specify { Fabricate(:delivery, status: 'cancelled').future_status?.should be false }
     end
   end
 
@@ -41,7 +41,7 @@ describe Delivery, :slow do
       context "to cancelled" do
         before { @delivery.cancel }
 
-        specify { @delivery.deducted?.should be_false }
+        specify { @delivery.deducted?.should be false }
         specify { @delivery.account(true).balance.should == @starting_balance }
       end
     end
@@ -54,7 +54,7 @@ describe Delivery, :slow do
           @delivery.deliver
         end
 
-        specify { @delivery.deducted?.should be_true }
+        specify { @delivery.deducted?.should be true }
         specify { @delivery.account(true).balance.should == @starting_balance - @price }
       end
 
@@ -79,7 +79,7 @@ describe Delivery, :slow do
       end
 
       shared_examples 'it adds to accounts' do
-        specify { @delivery.deducted?.should be_false }
+        specify { @delivery.deducted?.should be false }
         specify { @delivery.account(true).balance.should == @starting_balance }
       end
 
@@ -103,9 +103,9 @@ describe Delivery, :slow do
       @deliveries = [delivery]
     end
 
-    specify { Delivery.change_statuses(@deliveries, 'bad_status').should be_false }
-    specify { Delivery.change_statuses(@deliveries, 'cancel').should be_true }
-    specify { Delivery.change_statuses(@deliveries, 'deliver').should be_true }
+    specify { Delivery.change_statuses(@deliveries, 'bad_status').should be false }
+    specify { Delivery.change_statuses(@deliveries, 'cancel').should be true }
+    specify { Delivery.change_statuses(@deliveries, 'deliver').should be true }
 
     context 'batch change' do
       before do
@@ -119,12 +119,12 @@ describe Delivery, :slow do
 
       context 'all save' do
         before { @delivery1.stub(:save) { true } }
-        specify { Delivery.change_statuses(@deliveries, 'deliver').should be_true }
+        specify { Delivery.change_statuses(@deliveries, 'deliver').should be true }
       end
 
       context 'one save fails' do
         before { @delivery1.stub(:save) { false } }
-        specify { Delivery.change_statuses(@deliveries, 'deliver').should be_false }
+        specify { Delivery.change_statuses(@deliveries, 'deliver').should be false }
       end
     end
   end

@@ -37,7 +37,7 @@ feature "Manage an order", js: true do
     # distributor facing UI
     simulate_distributor_sign_in
     visit distributor_customer_path(id: @customer.id)
-    @customer.should have(3).activities
+    expect(@customer.activities.size).to eq(3)
     page.should have_content "RECENT ACTIVITY"
     page.should have_content "less than a minute ago - #{@customer.name} paused their order of #{order.box.name}"
     page.should have_content "less than a minute ago - #{@customer.name} updated their order of #{order.box.name} to resume on"
