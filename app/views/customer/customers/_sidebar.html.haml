@@ -12,7 +12,8 @@
       %br
       %small= link_to 'change my password', '#password-modal', data: { toggle: 'modal' }
 
-    .customer-information-section
-      = current_customer.address.join('<br/>')
-      %br
-      %small= link_to 'change my delivery address', '#address-modal', data: { toggle: 'modal' }
+    - unless customer.uses_pickup_point?
+      .customer-information-section.spacer
+        = current_customer.address.join('<br/>')
+        %br
+        %small= link_to 'change my delivery address', '#address-modal', data: { toggle: 'modal' }

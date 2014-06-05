@@ -438,6 +438,10 @@ class Customer < ActiveRecord::Base
     self.via_webstore = true
   end
 
+  def uses_pickup_point?
+    delivery_service.pickup_point?
+  end
+
 private
 
   def reversal_transaction_ids

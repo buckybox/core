@@ -111,6 +111,8 @@ private
 
   def validate_address
     ADDRESS_ATTRIBUTES.each do |attr|
+      next if customer && customer.uses_pickup_point?
+
       if distributor.public_send("require_#{attr}") && (
           customer && customer.new_record? ||
           send("#{attr}_changed?")
