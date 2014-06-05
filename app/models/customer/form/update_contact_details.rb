@@ -14,15 +14,13 @@ class Customer::Form::UpdateContactDetails < Customer::Form
 
   validates_presence_of :name
   validates_presence_of :email
-  validates_presence_of :mobile_phone,  if: -> { require_phone? }
-  validates_presence_of :home_phone,    if: -> { require_phone? }
-  validates_presence_of :work_phone,    if: -> { require_phone? }
+  validate :validate_phone
 
   def save
     return false unless self.valid?
-    result = customer.update_attributes!(customer_args)
-    result &&= address.update_attributes!(address_args)
-    result
+
+    customer.update_attributes(customer_args) &&
+    address.update_attributes(address_args)
   end
 
 protected
@@ -51,6 +49,12 @@ private
       home_phone:    home_phone,
       work_phone:    work_phone,
     }
+  end
+
+  def validate_phone
+    if distributor.require_phone && PhoneCollection.attributes.all? { |type| self[type].blank? }
+      errors[:phone_number] << "can't be blank"
+    end
   end
 
 end
