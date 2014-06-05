@@ -20,8 +20,8 @@ class Customer::Form::UpdateContactDetails < Customer::Form
 
   def save
     return false unless self.valid?
-    result = customer.update_attributes(customer_args)
-    result &&= address.update_attributes(address_args)
+    result = customer.update_attributes!(customer_args)
+    result &&= address.update_attributes!(address_args)
     result
   end
 
