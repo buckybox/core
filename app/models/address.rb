@@ -17,7 +17,7 @@ class Address < ActiveRecord::Base
 
   before_validation :update_phone
 
-  validates_presence_of :customer, unless: -> { skip_validations.include? :customer }
+  validates_presence_of :customer
   validate :validate_address_and_phone
 
   before_save :update_address_hash
@@ -77,34 +77,6 @@ class Address < ActiveRecord::Base
     phones.default_type
   end
 
-  # Without arguments, returns an array of validations to skip
-  #
-  # With a {Symbol}s or an {Array} of {Symbol}s, run the given block skipping
-  # these validations
-  #
-  # @params items Array|Symbol
-  #   :customer Do not validate the presence of a customer
-  #   :address  Do not validate address information (street, suburb, ...)
-  #   :phone    Do not validate phone numbers
-  def skip_validations(*items)
-    items = Array(items)
-    if items.empty?
-      return @skip_validations ||= []
-    end
-
-    valid_items = [:customer, :address, :phone]
-    unless (items - valid_items).empty?
-      raise "Only #{valid_items} are allowed"
-    end
-
-    @skip_validations = items
-
-    yield self
-
-  ensure
-    @skip_validations = [] unless items.empty?
-  end
-
   def update_with_notify(params, customer)
     self.attributes = params
 
@@ -122,8 +94,8 @@ private
 
   def validate_address_and_phone
     return unless distributor
-    validate_address unless skip_validations.include? :address
-    validate_phone unless skip_validations.include? :phone
+    validate_address
+    validate_phone
   end
 
   def validate_phone
@@ -149,7 +121,7 @@ private
     end
   end
 
-  # Handy helper to update a given number type (used in the webstore)
+  # Handy helper to update a given number type (used in the web store)
   def update_phone
     return unless phone
 

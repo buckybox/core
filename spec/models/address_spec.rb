@@ -33,50 +33,6 @@ describe Address do
     end
   end
 
-  describe "#skip_validations" do
-    it "skips the given validations" do
-      address = Address.new
-      address.distributor = mock_model(Distributor)
-      address.valid?.should be false # requires a customer
-
-      valid = address.skip_validations(:customer) { |address| address.valid? }
-      valid.should be true
-    end
-
-    it "skips the validation if address attributes have not been changed" do
-      # hairy long test but needed to test the expected behaviour
-      customer = Fabricate(:customer)
-      customer.address.postcode = nil
-      customer.save!
-      customer.should be_valid
-
-      customer.distributor.require_phone = true
-      customer.distributor.require_postcode = true
-
-      customer.address.postcode_changed?.should be false
-      customer.address.should be_valid
-
-      customer.address.postcode = "1234"
-      customer.address.postcode_changed?.should be true
-
-      customer.address.should be_valid
-      customer.save!
-    end
-
-    it "does not skip validation if the record is new" do
-      distributor = Fabricate(:distributor)
-      delivery_service = Fabricate(:delivery_service)
-      customer = Fabricate.build(:customer, distributor: distributor, delivery_service: delivery_service)
-      customer.address.postcode = nil
-      customer.distributor.require_postcode = true
-      customer.distributor.save!
-
-      customer.should be_new_record
-      customer.address.should_not be_valid
-      customer.address.errors.keys.should eq [:postcode]
-    end
-  end
-
   describe '#join' do
     let(:address) { Fabricate.build(:address, all_attrs) }
     let(:full_address) { Fabricate.build(:full_address, all_attrs) }
