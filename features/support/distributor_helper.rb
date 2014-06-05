@@ -5,7 +5,7 @@ module DistributorHelper
   }
 
   REQUIRE_BOOLEANS = {
-    "phone number"                => "require_phone",
+    "phone numbers"               => "require_phone",
     "a first line of an address"  => "require_address_1",
     "a second line of an address" => "require_address_2",
     "a suburb"                    => "require_suburb",
@@ -30,18 +30,18 @@ module DistributorHelper
   def require_options(human_name, value = true)
     hash = collect_options(human_name)
     require_attribute = require_boolean(human_name)
-    hash[require_attribute.to_sym] = value if require_attribute
+    hash[require_attribute.to_sym] = value
     hash
   end
 
 private
 
   def collect_boolean(human_name)
-    COLLECT_BOOLEANS[human_name]
+    COLLECT_BOOLEANS.fetch(human_name, nil)
   end
 
   def require_boolean(human_name)
-    REQUIRE_BOOLEANS[human_name]
+    REQUIRE_BOOLEANS.fetch(human_name)
   end
 
 end
