@@ -10,7 +10,7 @@ class Customer::Form::UpdatePassword < Customer::Form
 
   def save
     return false unless self.valid?
-    customer.update_attributes(customer_args)
+    customer.update_attributes!(customer_args)
   end
 
 private
