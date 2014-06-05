@@ -6,7 +6,7 @@ end
 
 When(/^I log out$/) do
   click_link "logout" if page.has_link? "logout"
-  page.should have_button "Login"
+  page.should have_button "Log in"
 end
 
 Then(/^I should be logged out$/) do

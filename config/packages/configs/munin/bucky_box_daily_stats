@@ -1,0 +1,10 @@
+#!/usr/local/bin/ruby
+
+Dir.chdir "/home/buckybox/#{Package.stage}/shared/log"
+
+if ARGV[0] == "config"
+  puts File.read "munin_daily_metrics.config"
+else
+  puts File.read "munin_daily_metrics"
+end
+

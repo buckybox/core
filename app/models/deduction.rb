@@ -76,7 +76,7 @@ class Deduction < ActiveRecord::Base
 
   def make_deduction!
     raise "This deduction has already been applied!" if self.transaction.present?
-    
+
     Deduction.transaction do
       if distributor.separate_bucky_fee
         self.transactions << account.subtract_from_balance(

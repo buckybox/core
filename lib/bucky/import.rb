@@ -117,7 +117,7 @@ module Bucky
       box.delivery_frequency = row[DELIVERY_FREQUENCY].downcase if row[DELIVERY_FREQUENCY].is_a?(String)
       box.delivery_days      = row[DELIVERY_DAYS]
       box.next_delivery_date = row[NEXT_DELIVERY_DATE]
-      
+
       extra_field = row[EXTRAS]
       if extra_field.present?
         recurring = extra_field.match(/#recurring/i)
@@ -140,7 +140,7 @@ module Bucky
       extras = extra_strings.collect{|string| extra_from_string(string)}
       extras
     end
-    
+
     COUNT_REGEX = /(\d)+ ?x/
     UNIT_REGEX = /\(.+\)/
     def self.extra_from_string(string)
@@ -166,7 +166,7 @@ module Bucky
             problems = []
 
             match = CSV_HEADERS.all? do |header|
-              pass = row.include? header 
+              pass = row.include? header
               problems << header unless pass
               pass
             end
@@ -264,7 +264,7 @@ module Bucky
 
       def uniqueness_of_number
         unless distributor.customers.where(number: number).count.zero?
-          errors.add(:number, "is not unique") 
+          errors.add(:number, "is not unique")
         end
       end
     end
@@ -311,7 +311,7 @@ module Bucky
         "#{count}x #{name} (#{unit})"
       end
     end
-    
+
     def self.log(text)
       puts text if @@verbosity != :none
     end

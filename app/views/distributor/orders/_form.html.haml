@@ -47,7 +47,7 @@
 
   .row-fluid
     .span12.form-actions
-      = f.button :submit, class: 'btn btn-primary'
+      = f.button :submit, class: 'btn btn-primary', 'data-loading-text' => "Creating order...", 'data-toggle' => 'button', onclick: '$(this).button("loading");'
       or
       = link_to 'cancel', distributor_customer_path(@account.customer)
 

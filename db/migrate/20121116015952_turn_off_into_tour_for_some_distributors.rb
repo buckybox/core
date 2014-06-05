@@ -10,10 +10,10 @@ class TurnOffIntoTourForSomeDistributors < ActiveRecord::Migration
 
       unless distributor.nil?
         distributor.update_attributes!(
-          customers_show_intro: false, 
-          deliveries_index_packing_intro: false, 
-          deliveries_index_deliveries_intro: false, 
-          payments_index_intro: false, 
+          customers_show_intro: false,
+          deliveries_index_packing_intro: false,
+          deliveries_index_deliveries_intro: false,
+          payments_index_intro: false,
           customers_index_intro: false
         )
       end

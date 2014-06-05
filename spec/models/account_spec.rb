@@ -91,7 +91,7 @@ describe Account do
       let(:distributor) { customer.distributor }
 
       it "updates halted status when balance changes" do
-        
+
         account.should_receive(:update_halted_status)
         account.change_balance_to!(-100)
       end

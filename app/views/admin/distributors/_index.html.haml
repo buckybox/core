@@ -11,18 +11,18 @@
       .span2
         %span.medium= distributor.location
       .span2.align-right.medium.bold
-        = distributor.customers.count
+        = distributor.total_customer_count
         = "(#{distributor.transactional_customer_count})"
         %i.icon-user(title="total customers (transactional customers)")
         %br
         = distributor.new_customer_count
         = "(#{distributor.new_transactional_customer_count})"
         %i.icon-plus(title="new customer in last 7 days (new transactions)")
-      .span1.align-right.medium.bold 
-        = distributor.orders.active.count 
+      .span1.align-right.medium.bold
+        = distributor.orders.active.count
         %i.icon-shopping-cart(title="Active orders")
         %br
-        = distributor.deliveries.delivered.where(["deliveries.updated_at > ?", 7.days.ago]).count
+        = distributor.deliveries_last_7_days_count
         %i.icon-road(title="Deliveries completed in last 7 days")
       .span3.align-right.medium
         = time_since(distributor.current_sign_in_at)

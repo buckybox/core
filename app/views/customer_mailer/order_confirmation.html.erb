@@ -77,7 +77,7 @@ Did you know you can view and edit your orders 24 hours a day? Visit <%= link_to
       schedule_rule = @order.schedule_rule.to_s
 
       if @order.recurs?
-        start = @order.schedule_rule.start
+        start = @order.schedule_rule.next_occurrence
         schedule_rule << ", starting #{start.strftime("%A #{start.day.ordinalize} %B")}"
       end
 

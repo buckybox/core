@@ -5,6 +5,7 @@
   @import 'sign_up_wizard/vendor/jquery-ui-custom'
   @import 'sign_up_wizard/combobox'
 
+  z-index: 100 // should be above pretty much everything else
   position: fixed
   top: 5%
   left: 50%
@@ -90,7 +91,10 @@
     text-align: center
     border-top: 1px solid #CCC
 
-  .hide
+  // cannot use .hide because it conflicts with Bootstrap 3
+  // which would override our class with `!important` and
+  // make JQuery's `show()` function useless
+  .invisible
     display: none
 
   fieldset

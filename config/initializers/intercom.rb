@@ -3,13 +3,13 @@ Intercom.api_key = Figaro.env.intercom_api_key
 
 IntercomRails.config do |config|
   # == Intercom app_id
-  # 
+  #
   config.app_id = ENV["INTERCOM_APP_ID"] || Intercom.app_id
 
-  # == Intercom secret key 
-  # This is required to enable secure mode, you can find it on your Intercom 
+  # == Intercom secret key
+  # This is required to enable secure mode, you can find it on your Intercom
   # "security" configuration page.
-  # 
+  #
   config.api_secret = Figaro.env.intercom_api_secret
 
   # == Intercom API Key
@@ -28,7 +28,7 @@ IntercomRails.config do |config|
   # If it is `current_user` or `@user`, then you can ignore this
   #
   config.user.current = Proc.new { Messaging::DistributorNameSwap.new(current_distributor) }
-  
+
   # == User model class
   # The class which defines your user model
   #
@@ -40,21 +40,23 @@ IntercomRails.config do |config|
   # user object, or a Proc which will be passed the current user.
   #
   config.user.custom_data = {
-    :transactional_customers => :transactional_customer_count,
     :business_name => :business_name,
     :needs_setup => :needs_setup?,
+    :transactional_customers => :transactional_customer_count,
+    :total_customers => :total_customer_count,
+    :deliveries_last_7_days => :deliveries_last_7_days_count,
   }
 
   # == User -> Company association
   # A Proc that given a user returns an array of companies
   # that the user belongs to.
-  # 
+  #
   # config.user.company_association = Proc.new { |user| user.companies.to_a }
   # config.user.company_association = Proc.new { |user| [user.company] }
 
   # == Current company name
   # The method/variable that contains the current company for the current user,
-  # in your controllers. 'Companies' are generic groupings of users, so this 
+  # in your controllers. 'Companies' are generic groupings of users, so this
   # could be a company, app or group.
   #
   # config.company.current = Proc.new { @app }
@@ -71,7 +73,7 @@ IntercomRails.config do |config|
   # == Company Plan name
   # This is the name of the plan a company is currently paying (or not paying) for.
   # e.g. Messaging, Free, Pro, etc.
-  #  
+  #
   # config.company.plan = Proc.new { |current_company| current_company.plan.name }
 
   # == Company Monthly Spend
@@ -80,16 +82,16 @@ IntercomRails.config do |config|
   #
   # config.company.monthly_spend = Proc.new { |current_company| current_company.plan.price }
   # config.company.monthly_spend = Proc.new { |current_company| (current_company.plan.price - current_company.subscription.discount) }
- 
+
   # == Inbox Style
   # This enables the Intercom inbox which allows your users to read their
-  # past conversations with your app, as well as start new ones. It is 
+  # past conversations with your app, as well as start new ones. It is
   # disabled by default.
   #   * :default shows a small tab with a question mark icon on it
   #   * :custom attaches the inbox open event to an anchor with an
   #             id of #Intercom.
   #
-  config.inbox.style = :default 
+  config.inbox.style = :default
   # config.inbox.style = :custom
 
   # == Inbox Counter

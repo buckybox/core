@@ -12,7 +12,7 @@ module AuthorisationHelper
   def login_with(auth_email, auth_password, auth_type)
     fill_in "#{auth_type}_email", with: auth_email
     fill_in "#{auth_type}_password", with: auth_password
-    click_button "Login"
+    find('input[type="submit"][name="commit"]').click
   end
 
   def create_customer

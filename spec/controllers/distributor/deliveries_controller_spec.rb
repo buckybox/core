@@ -3,7 +3,7 @@ require 'spec_helper'
 describe Distributor::DeliveriesController do
   sign_in_as_distributor
 
-  context :delivery_sequence_order do
+  describe "delivery sequence order" do
     before do
       @delivery_service = Fabricate(:delivery_service, distributor: @distributor)
       @date = Date.today

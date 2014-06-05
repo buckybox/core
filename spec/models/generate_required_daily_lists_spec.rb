@@ -55,12 +55,12 @@ describe GenerateRequiredDailyLists do
     subject { generate_required_daily_lists.generate }
 
     it 'works' do
-      should be_true
+      should be true
     end
 
     it 'has a start date equal to the end date' do
       window_start_from = Date.new(2012, 11, 9)
-      should be_true
+      should be true
     end
 
     context 'when there is a packing list and it has a date that is after the end date' do
@@ -70,27 +70,27 @@ describe GenerateRequiredDailyLists do
       end
 
       it 'works' do
-        should be_true
+        should be true
       end
 
       it 'could not find packing list' do
         packing_lists.stub(:find_by_date) { nil }
-        should be_true
+        should be true
       end
 
       it 'could not destroy a packing list' do
         packing_list.stub(:destroy) { false }
-        should be_false
+        should be false
       end
 
       it 'could not find a delivery list' do
         delivery_lists.stub(:find_by_date) { nil }
-        should be_true
+        should be true
       end
 
       it 'could not destroy a delivery list' do
         delivery_list.stub(:destroy) { false }
-        should be_false
+        should be false
       end
     end
 
@@ -101,17 +101,17 @@ describe GenerateRequiredDailyLists do
       end
 
       it 'works' do
-        should be_true
+        should be true
       end
 
       it 'has a packing list date that does not equal the requested date' do
         returned_packing_list.stub(:date) { Date.new(2012, 11, 13) }
-        should be_false
+        should be false
       end
 
       it 'has a packing list date that does not equal the requested date' do
         returned_delivery_list.stub(:date) { Date.new(2012, 11, 13) }
-        should be_false
+        should be false
       end
     end
   end

@@ -84,8 +84,8 @@ describe Order do
     context :price do
       # Default box price is $10
       ORDER_PRICE_PERMUTATIONS = [
-        { discount: 0.05, fee: 5, quantity: 5, individual_price: 14.25, price: 71.25 },
-        { discount: 0.05, fee: 5, quantity: 1, individual_price: 14.25, price: 14.25 },
+        { discount: 0.05, fee: 5, quantity: 5, individual_price: 14.50, price: 72.50 },
+        { discount: 0.05, fee: 5, quantity: 1, individual_price: 14.50, price: 14.50 },
         { discount: 0.05, fee: 0, quantity: 5, individual_price:  9.50, price: 47.50 },
         { discount: 0.05, fee: 0, quantity: 1, individual_price:  9.50, price:  9.50 },
         { discount: 0.00, fee: 5, quantity: 5, individual_price: 15.00, price: 75.00 },
@@ -209,14 +209,14 @@ describe Order do
       specify { expect { Order.deactivate_finished}.to change(Order.active, :count).by(-2) }
 
       it 'should deactivate the correct orders' do
-        Order.deactivate_finished 
+        Order.deactivate_finished
 
-        @order1.reload.active.should be_true
-        @order2.reload.active.should be_true
-        @order3.reload.active.should be_true
-        @order4.reload.active.should be_true
-        @order5.reload.active.should be_false
-        @order6.reload.active.should be_false
+        @order1.reload.active.should be true
+        @order2.reload.active.should be true
+        @order3.reload.active.should be true
+        @order4.reload.active.should be true
+        @order5.reload.active.should be false
+        @order6.reload.active.should be false
       end
     end
 

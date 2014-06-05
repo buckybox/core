@@ -25,6 +25,8 @@ class Customer < ActiveRecord::Base
     'negative-balance' => 'hidden'
   }.freeze
 
+  accepts_nested_attributes_for :address
+
   monetize :balance_threshold_cents
 
   attr_accessible :address_attributes, :first_name, :last_name, :email, :name, :distributor_id, :distributor,
@@ -241,12 +243,6 @@ class Customer < ActiveRecord::Base
     self.name <=> b.name
   end
 
-  def dynamic_tags
-    DYNAMIC_TAGS.select do |tag|
-      public_send(tag.questionize)
-    end
-  end
-
   def labels
     tag_list.sort.join(", ")
   end
@@ -398,14 +394,10 @@ class Customer < ActiveRecord::Base
     self.balance_threshold_cents = default_balance_threshold_cents unless balance_threshold_cents_changed?
   end
 
-  def account_balance
-    account = account(true) # force reload
+  def account_balance(reload: true)
+    account = account(reload)
 
     account.present? ? account.balance : CrazyMoney.zero
-  end
-
-  def negative_balance?
-    account_balance.negative?
   end
 
   def calculate_next_order(date = Date.current.to_s(:db))
@@ -427,7 +419,7 @@ class Customer < ActiveRecord::Base
     last_payment = transactions.payments
     if r_ids.present?
       last_payment = last_payment.where(["transactions.id not in (?)", r_ids])
-    end  
+    end
     last_payment = last_payment.ordered_by_display_time.first
 
     last_payment.present? ? last_payment.display_time : nil
