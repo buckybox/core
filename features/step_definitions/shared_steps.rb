@@ -1,7 +1,7 @@
 Given(/^I am unauthenticated$/) do
   find("#user-nav .distributor-name").click
   step "I log out"
-  expect(page).to have_button("Login")
+  expect(page).to have_button("Log in")
 end
 
 When(/^I log out$/) do
@@ -10,7 +10,7 @@ When(/^I log out$/) do
 end
 
 Then(/^I should be logged out$/) do
-  expect(page).to_not have_link("Login")
+  expect(page).to_not have_link("Log in")
 end
 
 Then(/^I should not see a message$/) do
