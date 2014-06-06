@@ -37,7 +37,7 @@ gem 'nokogiri',                        '~> 1.6.2' # premailer-rails dependency
 gem 'delayed_job',                     '~> 3.0.5' # send emails offline
 gem 'delayed_job_active_record',       '~> 0.4.4'
 gem 'delayed_job_web',                 '= 1.2.0' # version hardcoded in config/deploy.rb
-gem 'delayed-plugins-airbrake',        '~> 1.0.0' # Notify Airbrake when delayed_job has an error
+gem 'delayed-plugins-airbrake',        '~> 1.1.0' # Notify Airbrake when delayed_job has an error
 gem 'daemons',                         '~> 1.1.9' # able to monitor delayed_job via monit
 gem 'analytical',                      '~> 3.0.12'
 gem 'newrelic_rpm',                    '~> 3.6.1'
