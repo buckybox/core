@@ -70,7 +70,7 @@ describe Customer::Form::UpdateContactDetails do
 
   describe "saving" do
     let(:address)     { double("address") }
-    let(:distributor) { double("distributor", require_phone?: false, collect_phone?: false) }
+    let(:distributor) { double("distributor", require_phone: false, collect_phone: false) }
     let(:customer)    { double("customer", distributor: distributor, address: address) }
     let(:args) do
       {
