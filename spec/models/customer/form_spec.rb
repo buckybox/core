@@ -35,7 +35,7 @@ describe Customer::Form do
 
   it "considers the data already persisted as these are update form models" do
     form = Customer::Form.new
-    expect(form.persisted?).to be_true
+    expect(form.persisted?).to be true
   end
 
 end
