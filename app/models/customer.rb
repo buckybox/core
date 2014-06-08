@@ -166,7 +166,11 @@ class Customer < ActiveRecord::Base
   end
 
   def name=(name)
-    self.first_name, self.last_name = name.split(" ")
+    # TODO eventually migrate to a single "full name" and add a second "what should we call you" field
+    # http://www.w3.org/International/questions/qa-personal-names#singlefield
+    logger.warn "DEPRECATED: Customer#name= (called from #{caller_locations.first})"
+
+    self.first_name, self.last_name = name.split(" ", 2)
   end
 
   def randomize_password
