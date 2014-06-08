@@ -3,7 +3,8 @@
     - unless customer_profile.auto_assign_number?
       = f.input :number,  as: :integer,  input_html: { class: "input-block-level" }
 
-    = f.input :name,          input_html: { class: "input-block-level" }
+    = f.input :first_name,    input_html: { class: "input-block-level" }
+    = f.input :last_name,     input_html: { class: "input-block-level" }
     = f.input :tag_list,      label: "Tags",  placeholder: "E.g. west-end, coupon, discount",  input_html: { class: "input-block-level" }
     = f.input :email,         input_html: { class: "input-block-level" }
 

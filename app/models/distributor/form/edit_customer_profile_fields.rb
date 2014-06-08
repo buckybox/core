@@ -9,7 +9,8 @@ module Distributor::Form::EditCustomerProfileFields
   included do
 
     attribute :number,                    Integer
-    attribute :name,                      String
+    attribute :first_name,                String
+    attribute :last_name,                 String
     attribute :tag_list,                  String
     attribute :email,                     String
     attribute :mobile_phone,              String
@@ -24,7 +25,8 @@ module Distributor::Form::EditCustomerProfileFields
       :collect_phone?,
       :has_balance_threshold?
 
-    validates_presence_of :name
+    validates_presence_of :first_name
+    validates_presence_of :last_name
     validates_presence_of :email
     validates_presence_of :discount
     validates_presence_of :mobile_phone,  if: -> { require_phone? }
@@ -39,7 +41,7 @@ module Distributor::Form::EditCustomerProfileFields
 
     def assign_attributes(attributes)
       @number            = attributes["number"]            || customer.number
-      @name              = attributes["name"]              || customer.name
+      @first_name        = attributes["first_name"]        || customer.first_name
       @tag_list          = attributes["tag_list"]          || customer.tag_list
       @email             = attributes["email"]             || customer.email
       @balance_threshold = attributes["balance_threshold"] || customer.balance_threshold
@@ -52,8 +54,8 @@ module Distributor::Form::EditCustomerProfileFields
     def profile_customer_args
       {
         number:             number,
-        first_name:         name,
-        last_name:          nil,
+        first_name:         first_name,
+        last_name:          last_name,
         tag_list:           tag_list,
         email:              email,
         balance_threshold:  balance_threshold,
