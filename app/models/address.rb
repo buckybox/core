@@ -79,7 +79,7 @@ class Address < ActiveRecord::Base
   def update_with_notify(params, customer)
     self.attributes = params
 
-    return true unless changed? #nothing to save, nothing to notify
+    return true unless changed? # nothing to save, nothing to notify
 
     if save
       customer.send_address_change_notification
