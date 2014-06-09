@@ -18,7 +18,6 @@ class Address < ActiveRecord::Base
   before_validation :update_phone
 
   validates_presence_of :customer
-  validate :validate_address_and_phone
 
   before_save :update_address_hash
 
@@ -91,37 +90,6 @@ class Address < ActiveRecord::Base
   end
 
 private
-
-  def validate_address_and_phone
-    return unless distributor
-    validate_address
-    validate_phone
-  end
-
-  def validate_phone
-    if distributor.require_phone && (
-        customer && customer.new_record? ||
-        PhoneCollection.attributes.any? { |type| send("#{type}_changed?") }
-      ) &&
-      PhoneCollection.attributes.all? { |type| self[type].blank? }
-
-      errors[:phone_number] << "can't be blank"
-    end
-  end
-
-  def validate_address
-    ADDRESS_ATTRIBUTES.each do |attr|
-      next if customer && customer.uses_pickup_point?
-
-      if distributor.public_send("require_#{attr}") && (
-          customer && customer.new_record? ||
-          send("#{attr}_changed?")
-        )
-
-        validates_presence_of attr
-      end
-    end
-  end
 
   # Handy helper to update a given number type (used in the web store)
   def update_phone
