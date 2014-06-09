@@ -21,7 +21,7 @@ class Customer::CustomersController < Customer::BaseController
 private
 
   def form_args(param_key)
-    { customer: current_customer }.merge(params[param_key])
+    { customer: current_customer }.merge(params[param_key] || {})
   end
 
   def successful_update(submitted_changes, next_delivery = false)

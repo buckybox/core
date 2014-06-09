@@ -170,7 +170,7 @@ protected
 private
 
   def form_args(param_key)
-    pre_form_args.merge(params[param_key])
+    pre_form_args.merge(params[param_key] || {})
   end
 
   def pre_form_args
