@@ -2,7 +2,8 @@
   .modal-body
     = f.error_notification
 
-    = f.input :name
+    = f.input :first_name
+    = f.input :last_name
     = f.input :email,  hint: 'Please double check this email as it is also used as your login.'
     - if update_contact_details.collect_phone?
       - if update_contact_details.require_phone?

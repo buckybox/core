@@ -42,6 +42,7 @@ module Distributor::Form::EditCustomerProfileFields
     def assign_attributes(attributes)
       @number            = attributes["number"]            || customer.number
       @first_name        = attributes["first_name"]        || customer.first_name
+      @last_name         = attributes["last_name"]         || customer.last_name
       @tag_list          = attributes["tag_list"]          || customer.tag_list
       @email             = attributes["email"]             || customer.email
       @balance_threshold = attributes["balance_threshold"] || customer.balance_threshold

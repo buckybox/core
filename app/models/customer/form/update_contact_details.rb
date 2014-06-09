@@ -2,7 +2,8 @@ require_relative "../form"
 
 class Customer::Form::UpdateContactDetails < Customer::Form
 
-  attribute :name
+  attribute :first_name
+  attribute :last_name
   attribute :email
   attribute :mobile_phone
   attribute :home_phone
@@ -12,7 +13,7 @@ class Customer::Form::UpdateContactDetails < Customer::Form
     :require_phone?,
     :collect_phone?
 
-  validates_presence_of :name
+  validates_presence_of :first_name
   validates_presence_of :email
   validate :validate_phone
 
@@ -26,7 +27,8 @@ class Customer::Form::UpdateContactDetails < Customer::Form
 protected
 
   def assign_attributes(attributes)
-    @name         = attributes["name"]         || customer.name
+    @first_name   = attributes["first_name"]   || customer.first_name
+    @last_name    = attributes["last_name"]    || customer.last_name
     @email        = attributes["email"]        || customer.email
     @mobile_phone = attributes["mobile_phone"] || address.mobile_phone
     @home_phone   = attributes["home_phone"]   || address.home_phone
@@ -37,8 +39,8 @@ private
 
   def customer_args
     {
-      first_name:  name,
-      last_name:   nil,
+      first_name:  first_name,
+      last_name:   last_name,
       email:       email,
     }
   end
