@@ -91,8 +91,8 @@ def change_first_name(customer)
   @customer = customer
   customer_login
   get_via_redirect customer_dashboard_path
-  put_via_redirect customer_update_contact_details_path(customer), {name: modified_first_name}
-  response.body.should match 'Your details have successfully been updated.'
+  put_via_redirect customer_update_contact_details_path(customer), {first_name: modified_first_name}
+  response.body.should match 'Your contact details have been successfully updated.'
 end
 
 def distributor_should_not_include_notifications(distributor = nil)
