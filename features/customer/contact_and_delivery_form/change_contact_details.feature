@@ -8,7 +8,7 @@ Feature: Existing customer changes their contact details
     Given I am a customer
     And I am viewing my dashboard
     And I click on "change my contact details"
-    When I submit the form without a "Name"
+    When I submit the form without a "First name"
     Then I should get an error "Oops there was an issue:"
 
   Scenario: Updating your email

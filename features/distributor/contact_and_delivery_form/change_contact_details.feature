@@ -7,7 +7,7 @@ Feature: Distributor changes the customers contact details
   Scenario: Updating your name
     Given I am a distributor
     And I am viewing a customers contact details form
-    When I submit the form without a "Name"
+    When I submit the form without a "First name"
     Then I should get an error "Oops there was an issue:"
 
   Scenario: Updating your email

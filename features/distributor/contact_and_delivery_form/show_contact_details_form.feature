@@ -7,7 +7,7 @@ Feature: Distributors are presented with a form to change customer contact detai
   Scenario: Updating your name
     Given I am a distributor
     When I am viewing a customers contact details form
-    Then I should see a "Name" field
+    Then I should see a "First name" field
 
   Scenario: Updating your email
     Given I am a distributor
