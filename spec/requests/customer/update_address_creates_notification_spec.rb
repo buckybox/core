@@ -79,8 +79,8 @@ def change_address(customer)
     put_via_redirect customer_update_delivery_address_path, {customer_form_update_delivery_address: {suburb: modified_suburb}}
     response.body.should match 'Your delivery address have been successfully updated'
   else
-    put_via_redirect update_delivery_details_distributor_customer_path(customer), {customer: {distributor_form_edit_customer_delivery_details: {suburb: modified_suburb}}}
-    response.body.should match 'Customer was successfully updated.'
+    put_via_redirect update_delivery_details_distributor_customer_path(customer), {customer: {distributor_form_edit_customer_delivery_details: {suburb: modified_suburb, delivery_service: customer.delivery_service.id}}}
+    response.body.should match 'The customer delivery details have been successfully updated.'
   end
 end
 

@@ -19,6 +19,7 @@ module Distributor::Form::EditCustomerProfileFields
     attribute :balance_threshold,         Float,   default: ->(obj, attr) { obj.customer.balance_threshold }
     attribute :discount,                  Float,   default: ->(obj, attr) { obj.customer.discount }
     attribute :special_order_preference,  String
+    attribute :delivery_service,          Integer
 
     def_delegators :distributor,
       :require_phone?,
@@ -26,9 +27,9 @@ module Distributor::Form::EditCustomerProfileFields
       :has_balance_threshold?
 
     validates_presence_of :first_name
-    validates_presence_of :last_name
     validates_presence_of :email
     validates_presence_of :discount
+    validates_presence_of :delivery_service
     validates_presence_of :mobile_phone,  if: -> { require_phone? }
     validates_presence_of :home_phone,    if: -> { require_phone? }
     validates_presence_of :work_phone,    if: -> { require_phone? }
@@ -47,6 +48,7 @@ module Distributor::Form::EditCustomerProfileFields
       @email             = attributes["email"]             || customer.email
       @balance_threshold = attributes["balance_threshold"] || customer.balance_threshold
       @discount          = attributes["discount"]          || customer.discount
+      @delivery_service  = attributes["delivery_service"]  || customer.delivery_service
       @mobile_phone      = attributes["mobile_phone"]      || address.mobile_phone
       @home_phone        = attributes["home_phone"]        || address.home_phone
       @work_phone        = attributes["work_phone"]        || address.work_phone
@@ -61,6 +63,7 @@ module Distributor::Form::EditCustomerProfileFields
         email:              email,
         balance_threshold:  balance_threshold,
         discount:           discount,
+        delivery_service:   delivery_service,
       }
     end
 
