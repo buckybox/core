@@ -23,7 +23,7 @@ class Customer::Form::UpdateDeliveryAddress < Customer::Form
   def save
     return false unless valid?
 
-    address.update_attributes(address_args)
+    customer.update_address(address_args, notify_distributor: true)
   end
 
 protected
