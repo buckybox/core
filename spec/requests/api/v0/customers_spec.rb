@@ -150,7 +150,6 @@ describe "API v0" do
             email
             first_name
             delivery_service_id
-            address.address_1
           )
         end
       end
@@ -185,7 +184,6 @@ describe "API v0" do
               email
               first_name
               delivery_service_id
-              address.address_1
             )
           end
         end
