@@ -6,12 +6,12 @@ describe Customer::Form::UpdateContactDetails do
 
   describe "retrieving existing attributes" do
     let(:address)  { double("address", mobile_phone: nil, home_phone: nil, work_phone: nil) }
-    let(:customer) { double("customer", name: nil, email: nil, address: address) }
+    let(:customer) { double("customer", first_name: nil, last_name: nil, email: nil, address: address) }
     let(:form)     { Customer::Form::UpdateContactDetails.new(customer: customer) }
 
-    it "gets the customer name" do
-      customer.should_receive(:name) { "Sam Davis" }
-      expect(form.name).to eq("Sam Davis")
+    it "gets the customer first name" do
+      customer.should_receive(:first_name) { "Sam" }
+      expect(form.first_name).to eq("Sam")
     end
 
     it "gets the email address" do
@@ -38,7 +38,8 @@ describe Customer::Form::UpdateContactDetails do
   describe "storing new attributes" do
     let(:args) do
       {
-        "name"         => "name",
+        "first_name"   => "first_name",
+        "last_name"    => "last_name",
         "email"        => "customer@email.com",
         "mobile_phone" => "111-111-1111",
         "home_phone"   => "111-111-1111",
@@ -47,8 +48,8 @@ describe Customer::Form::UpdateContactDetails do
     end
     let(:form) { Customer::Form::UpdateContactDetails.new(args) }
 
-    it "stores a new customer name" do
-      expect(form.name).to eq("name")
+    it "stores a new customer first name" do
+      expect(form.first_name).to eq("first_name")
     end
 
     it "stores a new email address" do
@@ -74,7 +75,8 @@ describe Customer::Form::UpdateContactDetails do
     let(:customer)    { double("customer", distributor: distributor, address: address) }
     let(:args) do
       {
-        "name"         => "name",
+        "first_name"   => "first_name",
+        "last_name"    => "last_name",
         "email"        => "customer@email.com",
         "mobile_phone" => "111-111-1111",
         "home_phone"   => "111-111-1111",
@@ -85,7 +87,7 @@ describe Customer::Form::UpdateContactDetails do
     let(:form) { Customer::Form::UpdateContactDetails.new(args) }
 
     it "saves the customer attributes" do
-      customer_args = { first_name: args["name"], last_name: nil, email: args["email"] }
+      customer_args = { first_name: args["first_name"], last_name: args["last_name"], email: args["email"] }
       customer.should_receive(:update_attributes).with(customer_args)
       form.save
     end
