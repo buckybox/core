@@ -184,7 +184,7 @@ private
   end
 
   def successful_update(form, submitted_changes)
-    notice = "The customers #{submitted_changes} have been successfully updated."
+    notice = "The customer #{submitted_changes} have been successfully updated."
     successful_form_submission(form, notice)
   end
 
