@@ -8,7 +8,7 @@ Feature: Customers are presented with a form to change their contact details
     Given I am a customer
     And I am viewing my dashboard
     When I click on "change my contact details"
-    Then I should see a "Name" field
+    Then I should see a "First name" field
 
   Scenario: Updating your email
     Given I am a customer
