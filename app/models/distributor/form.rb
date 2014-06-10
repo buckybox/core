@@ -37,9 +37,9 @@ module Distributor::Form
 
     def save
       return false unless valid?
-      result = customer.update_attributes(customer_args)
-      result &&= address.update_attributes(address_args)
-      result
+
+      customer.update_attributes(customer_args) &&
+      address.update_attributes(address_args)
     end
 
   protected
