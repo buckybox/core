@@ -98,8 +98,8 @@ describe Customer::Form::UpdateDeliveryAddress do
 
     it "saves the address attributes" do
       address_args = { address_1: "1 Grove Dr.", address_2: "Apt 5", suburb: "Grandville", city: "city", postcode: "73628", delivery_note: "Put the box by the door." }
-      customer.stub(:update_attributes) { true }
-      address.should_receive(:update_attributes).with(address_args)
+      customer.stub(:update_address) { true }
+      customer.should_receive(:update_address).with(address_args, notify_distributor: true)
       form.save
     end
   end
