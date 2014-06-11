@@ -2,12 +2,11 @@ require_relative "../form"
 
 class Customer::Form::UpdateContactDetails < Customer::Form
 
+  include Customer::PhoneValidations
+
   attribute :first_name
   attribute :last_name
   attribute :email
-  attribute :mobile_phone
-  attribute :home_phone
-  attribute :work_phone
 
   def_delegators :distributor,
     :require_phone?,
@@ -15,7 +14,6 @@ class Customer::Form::UpdateContactDetails < Customer::Form
 
   validates_presence_of :first_name
   validates_presence_of :email
-  validate :validate_phone
 
   def save
     return false unless self.valid?
@@ -51,12 +49,6 @@ private
       home_phone:    home_phone,
       work_phone:    work_phone,
     }
-  end
-
-  def validate_phone
-    if distributor.require_phone && PhoneCollection.attributes.all? { |type| self[type].blank? }
-      errors[:phone_number] << "can't be blank"
-    end
   end
 
 end
