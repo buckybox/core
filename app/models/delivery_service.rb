@@ -45,7 +45,7 @@ class DeliveryService < ActiveRecord::Base
   end
 
   def name
-    name = read_attribute(:name)
+    name = read_attribute(:name).dup
     name << " (pickup)" if pickup_point
     name
   end
