@@ -45,7 +45,8 @@ class DeliveryService < ActiveRecord::Base
   end
 
   def name
-    name = read_attribute(:name).dup
+    name = read_attribute(:name) || ""
+    name = name.dup # avoid recursion with model attribute
     name << " (pickup)" if pickup_point
     name
   end
