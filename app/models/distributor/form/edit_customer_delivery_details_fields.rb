@@ -5,34 +5,17 @@ module Distributor::Form::EditCustomerDeliveryDetailsFields
 
   extend ActiveSupport::Concern
   include Distributor::Form
+  include Customer::AddressValidations
 
   included do
 
     attribute :delivery_service_id, Integer
-    attribute :address_1,           String
-    attribute :address_2,           String
-    attribute :suburb,              String
-    attribute :city,                String
-    attribute :postcode,            String
-    attribute :delivery_note,       String
 
     def_delegators :distributor,
-      :require_address_1?,
-      :require_address_2?,
-      :require_suburb?,
-      :require_city?,
-      :require_postcode?,
       :collect_delivery_note?,
-      :require_delivery_note?,
       :delivery_services
 
     validates_presence_of :delivery_service_id
-    validates_presence_of :address_1,      if: -> { require_address_1? }
-    validates_presence_of :address_2,      if: -> { require_address_2? }
-    validates_presence_of :suburb,         if: -> { require_suburb? }
-    validates_presence_of :city,           if: -> { require_city? }
-    validates_presence_of :postcode,       if: -> { require_postcode? }
-    validates_presence_of :delivery_note,  if: -> { require_delivery_note? }
 
   protected
 
