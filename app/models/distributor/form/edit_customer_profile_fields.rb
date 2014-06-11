@@ -5,6 +5,7 @@ module Distributor::Form::EditCustomerProfileFields
 
   extend ActiveSupport::Concern
   include Distributor::Form
+  include Customer::PhoneValidations
 
   included do
 
@@ -13,9 +14,6 @@ module Distributor::Form::EditCustomerProfileFields
     attribute :last_name,                 String
     attribute :tag_list,                  String
     attribute :email,                     String
-    attribute :mobile_phone,              String
-    attribute :home_phone,                String
-    attribute :work_phone,                String
     attribute :balance_threshold,         Float,   default: ->(obj, attr) { obj.customer.balance_threshold }
     attribute :discount,                  Float,   default: ->(obj, attr) { obj.customer.discount }
     attribute :special_order_preference,  String
@@ -28,9 +26,6 @@ module Distributor::Form::EditCustomerProfileFields
     validates_presence_of :first_name
     validates_presence_of :email
     validates_presence_of :discount
-    validates_presence_of :mobile_phone,  if: -> { require_phone? }
-    validates_presence_of :home_phone,    if: -> { require_phone? }
-    validates_presence_of :work_phone,    if: -> { require_phone? }
 
     def auto_assign_number?
       customer.new_record?
