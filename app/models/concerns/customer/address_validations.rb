@@ -25,7 +25,7 @@ module Customer::AddressValidations
     end
 
     def pickup_point?
-      delivery_service.pickup_point?
+      delivery_service && delivery_service.pickup_point?
     end
 
     def require_address_1
@@ -55,7 +55,9 @@ module Customer::AddressValidations
   private
 
     def new_delivery_service
-      self.respond_to?(:delivery_service_id) && DeliveryService.find(delivery_service_id)
+      return unless self.respond_to?(:delivery_service_id)
+
+      DeliveryService.find(delivery_service_id) if delivery_service_id
     end
 
   end
