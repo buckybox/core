@@ -1035,9 +1035,8 @@ CREATE TABLE delivery_services (
     created_at timestamp without time zone,
     updated_at timestamp without time zone,
     fee_cents integer DEFAULT 0 NOT NULL,
-    area_of_service text,
-    estimated_delivery_time text,
-    pickup_point boolean DEFAULT false NOT NULL
+    pickup_point boolean DEFAULT false NOT NULL,
+    instructions text
 );
 
 
@@ -3826,3 +3825,5 @@ INSERT INTO schema_migrations (version) VALUES ('20140109032329');
 INSERT INTO schema_migrations (version) VALUES ('20140513204743');
 
 INSERT INTO schema_migrations (version) VALUES ('20140518211720');
+
+INSERT INTO schema_migrations (version) VALUES ('20140612130409');
