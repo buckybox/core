@@ -6,11 +6,11 @@ class Distributor::Settings::DeliveryServicesController < Distributor::BaseContr
   def create
     delivery_service_params = params[:delivery_service]
 
-    delivery_service = delivery_service.new(delivery_service_params)
+    delivery_service = DeliveryService.new(delivery_service_params)
     delivery_service.distributor = current_distributor
 
     if delivery_service.save
-      flash.now[:notice] = "Your new delivery_service item has heen created."
+      flash.now[:notice] = "Your new delivery service has heen created."
 
       tracking.event(current_distributor, 'new_delivery_service')
     else
@@ -21,11 +21,27 @@ class Distributor::Settings::DeliveryServicesController < Distributor::BaseContr
   end
 
   def update
+    return destroy if params[:delivery_service][:delete].to_s.to_bool # XXX temporary ugly pseudo REST
+
     delivery_service_params = params[:delivery_service]
+    delivery_service_params.delete(:delete) # XXX see above
     delivery_service = current_distributor.delivery_services.find(delivery_service_params.delete(:id))
 
     if delivery_service.update_attributes(delivery_service_params)
-      flash.now[:notice] = "Your delivery_service item has heen updated."
+      flash.now[:notice] = "Your delivery service has heen updated."
+    else
+      flash.now[:error] = delivery_service.errors.full_messages.to_sentence
+    end
+
+    render_form
+  end
+
+  def destroy
+    delivery_service_params = params[:delivery_service]
+    delivery_service = current_distributor.delivery_services.find(delivery_service_params.delete(:id))
+
+    if delivery_service.destroy
+      flash.now[:notice] = "Your delivery service has heen deleted."
     else
       flash.now[:error] = delivery_service.errors.full_messages.to_sentence
     end

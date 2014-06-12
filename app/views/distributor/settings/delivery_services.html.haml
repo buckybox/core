@@ -24,26 +24,43 @@
       - delivery_services.each do |delivery_service|
         - if delivery_service.persisted?
           %tr{ 'data-toggle' => 'collapse', 'data-target' => "#edit_delivery_service_#{delivery_service.id}" }
-            %td
+            %td.name
               %strong= link_to delivery_service.name, 'javascript:void(0)'
-            %td
-              = delivery_service.name_days_and_fee
+            %td.days
+              = delivery_service.delivery_days
             %td.fee
-              %span= delivery_service.fee
+              %span= delivery_service.formatted_fee
 
         %tr.edit
           %td{colspan: 3}
             = simple_form_for(delivery_service, url: distributor_settings_delivery_services_path, html: { novalidate: false, class: 'collapse background-yellow' }) do |f|
               = f.hidden_field :id if delivery_service.id
+              = f.hidden_field :delete, value: 0
+
               .container-fluid
                 .line
                   = f.input_field :name, class: 'name', required: true, placeholder: 'Name'
-                  -# = f.input_field :days, class: 'days', required: true
-                  = f.input_field :fee, class: 'fee', required: true, placeholder: '0.00', title: 'Fee'
-                .line
-                  .field= f.input_field :instructions
 
-                  .form-actions.pull-right
-                    = link_to 'cancel', 'javascript:void(0)', 'data-toggle' => 'collapse', 'data-target' => (delivery_service.new_record? ? "#new_delivery_service" : "#edit_delivery_service_#{delivery_service.id}")
-                    = f.button :submit, 'Save', class: 'btn btn-primary'
+                  %span#weekdays.days.text-center
+                    = f.simple_fields_for(:schedule_rule) do |schedule_rule_form|
+                      - %i(mon tue wed thu fri sat sun).each do |day|
+                        = schedule_rule_form.input_field day, inline_label: true, label: "<br><span class='label label-default'>#{day}</span>".html_safe
+
+                  = f.input_field :fee, class: 'fee pull-right', required: true, placeholder: '0.00', title: 'Fee'
+                .line
+                  = f.input_field :instructions, class: 'instructions pull-left', required: true, placeholder: "i.e. instructions to customers including area of service for deliveries, estimated delivery or pickup times", rows: 8
+                  = f.input_field :pickup_point, inline_label: true, label: "<i class='icon-shopping-cart'></i> This is a pickup point".html_safe
+
+                .line.clearfix
+
+                .form-actions.pull-right
+                  = link_to 'cancel', 'javascript:void(0)', 'data-toggle' => 'collapse', 'data-target' => (delivery_service.new_record? ? "#new_delivery_service" : "#edit_delivery_service_#{delivery_service.id}")
+
+                  &nbsp;
+                  - if delivery_service.customers.empty?
+                    = link_to_function "delete", "$(this).closest('form').find('input[id=delivery_service_delete]').val(1).closest('form').submit()"
+                  - else
+                    = link_to 'delete', 'javascript:void(0)', onclick: "alert('You must reassign #{pluralize(delivery_service.customers.count, "customer")} before deleting this delivery service.');"
+
+                  = f.button :submit, 'Save', class: 'btn btn-primary'
 

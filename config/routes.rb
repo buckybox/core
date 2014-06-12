@@ -55,7 +55,7 @@ BuckyBox::Application.routes.draw do
       post 'webstore', action: 'save_webstore'
       post 'spend_limit_confirmation'
 
-      resource :delivery_services, only: [:show, :create, :update]
+      resource :delivery_services, only: [:show, :create, :update, :destroy]
 
       namespace :products do
         resource :boxes, only: [:show, :create, :update]
@@ -89,7 +89,6 @@ BuckyBox::Application.routes.draw do
     resource  :invoice_information, only: [:create, :update]
     resources :boxes,               except: [:index]
     resources :extras,              except: [:index, :show]
-    resources :delivery_services,   except: [:index, :show]
 
     resources :line_items, except: [:index, :show, :update] do
       collection do
