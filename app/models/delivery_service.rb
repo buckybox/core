@@ -44,13 +44,6 @@ class DeliveryService < ActiveRecord::Base
     distributor.delivery_services.find { |r| r.delivers_on?(time) }
   end
 
-  def name
-    name = read_attribute(:name) || ""
-    name = name.dup # avoid recursion with model attribute
-    name << " (pickup)" if pickup_point
-    name
-  end
-
   def name_days_and_fee
     days = schedule_rule.days.map { |d| d.to_s.titleize[0..2] }
 
