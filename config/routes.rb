@@ -54,10 +54,8 @@ BuckyBox::Application.routes.draw do
       get 'webstore'
       post 'webstore', action: 'save_webstore'
       post 'spend_limit_confirmation'
-      get 'delivery_services'
-      get 'routes'
-      get 'invoice_information'
-      get 'customer_preferences'
+
+      resource :delivery_services, only: [:show, :create, :update]
 
       namespace :products do
         resource :boxes, only: [:show, :create, :update]
