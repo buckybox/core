@@ -314,14 +314,29 @@
       &.edit
         #new_delivery_service .container-fluid
           border-top: none
-        .name
-          width: 71.9%
-        .field
-          display: inline-block
+        .name, .instructions
+          width: 46%
+        .instructions
+          margin-right: 3em // hack so the checkbox doesn't overlap
+        .days
+          width: 46%
+          label
+            display: inline-block
+          input
+            float: none
+            margin: auto
+          .label
+            text-transform: uppercase
+        .fee
+          width: 7%
         form .form-actions
-          margin: 0
+          margin-top: -30px
       &:not(.edit)
         height: 34px
+        .name
+          width: 46%
+        .days
+          width: 46%
         td.fee
           white-space: nowrap
           width: 1px
