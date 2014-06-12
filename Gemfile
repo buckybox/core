@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 
 if RUBY_VERSION != '2.1.2' # FIXME
-  warn "WARNING: You are not running the version of Ruby targeted for this application."
+  warn "WARNING: You are not running the version of Ruby targeted for this application (#{RUBY_VERSION} != 2.1.2)."
 else
   ruby '2.1.2'
 end
