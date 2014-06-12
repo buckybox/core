@@ -44,7 +44,7 @@
                   %span#weekdays.days.text-center
                     = f.simple_fields_for(:schedule_rule) do |schedule_rule_form|
                       - %i(mon tue wed thu fri sat sun).each do |day|
-                        = schedule_rule_form.input_field day, inline_label: true, label: "<br><span class='label label-default'>#{day}</span>".html_safe
+                        = schedule_rule_form.input_field day, inline_label: true, label: "<br><span class='label label-default'>#{day}</span>".html_safe, "data-original-checked" => (delivery_service.public_send(day) ? "checked" : "")
 
                   = f.input_field :fee, class: 'fee pull-right', required: true, placeholder: '0.00', title: 'Fee'
                 .line
@@ -62,5 +62,5 @@
                   - else
                     = link_to 'delete', 'javascript:void(0)', onclick: "alert('You must reassign #{pluralize(delivery_service.customers.count, "customer")} before deleting this delivery service.');"
 
-                  = f.button :submit, 'Save', class: 'btn btn-primary'
+                  = f.button :submit, 'Save', class: 'btn btn-primary', 'data-conditional-confirm' => "A day has been unchecked. Customer orders on this day will be DELETED. Are you sure?"
 
