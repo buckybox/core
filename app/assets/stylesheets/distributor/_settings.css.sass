@@ -261,7 +261,7 @@
     .input-append
       margin: 10px 0
 
-#products
+#delivery_services, #products
   table
     border-top: 1px solid #DDD
     color: #000
@@ -303,6 +303,23 @@
       margin: 1em 0 0 0
       input
         margin-left: 1em
+
+  > .delivery_services
+    tr
+      &.edit
+        #new_delivery_service .container-fluid
+          border-top: none
+        .name
+          width: 71.9%
+        .field
+          display: inline-block
+        form .form-actions
+          margin: 0
+      &:not(.edit)
+        height: 34px
+        td.fee
+          white-space: nowrap
+          width: 1px
 
   > .boxes
     tr

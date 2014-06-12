@@ -1,13 +1,49 @@
 - title 'Delivery Service Settings', false
 - show_settings_sub_nav
 
-.row-fluid.settings-information
-  .span6
-    Your organisation will use one or more Delivery Services to deliver to customers.  Each of your customers will be assigned to a Delivery Service that best services their location.
-  .span6
-    %span.heading hint
-    It's best to name your Delivery Service according to the geographic region it services.  For example: Inner City, Northern Suburbs, Regional Courier, National Courier, Packing Center Pickup
+#delivery_services
+  .delivery_services
+    .row-fluid
+      .span6
+        Your organisation will use one or more Delivery Services to deliver to customers.
+        Each of your customers will be assigned to a Delivery Service that best services their location.
+      .span6
+        %span.heading hint
+        It's best to name your Delivery Service according to the geographic region it services.
+        For example: Inner City, Northern Suburbs, Regional Courier, National Courier, Packing Center Pickup.
 
-= render partial: 'distributor/delivery_services/index'
-%h3 Add Delivery Service
-= render partial: 'distributor/delivery_services/form'
+    %table.table.table-condensed.spacer#delivery_services
+      %tr
+        %td{colspan: 3}
+          - first_delivery_service = delivery_services.one?
+          = link_to 'javascript:void(0)', class: (first_delivery_service ? 'required-action' : 'action'), 'data-toggle' => 'collapse', 'data-target' => '#new_delivery_service' do
+            Create
+            = first_delivery_service ? 'your first' : 'a new'
+            <strong>delivery service</strong>
+
+      - delivery_services.each do |delivery_service|
+        - if delivery_service.persisted?
+          %tr{ 'data-toggle' => 'collapse', 'data-target' => "#edit_delivery_service_#{delivery_service.id}" }
+            %td
+              %strong= link_to delivery_service.name, 'javascript:void(0)'
+            %td
+              = delivery_service.name_days_and_fee
+            %td.fee
+              %span= delivery_service.fee
+
+        %tr.edit
+          %td{colspan: 3}
+            = simple_form_for(delivery_service, url: distributor_settings_delivery_services_path, html: { novalidate: false, class: 'collapse background-yellow' }) do |f|
+              = f.hidden_field :id if delivery_service.id
+              .container-fluid
+                .line
+                  = f.input_field :name, class: 'name', required: true, placeholder: 'Name'
+                  -# = f.input_field :days, class: 'days', required: true
+                  = f.input_field :fee, class: 'fee', required: true, placeholder: '0.00', title: 'Fee'
+                .line
+                  .field= f.input_field :instructions
+
+                  .form-actions.pull-right
+                    = link_to 'cancel', 'javascript:void(0)', 'data-toggle' => 'collapse', 'data-target' => (delivery_service.new_record? ? "#new_delivery_service" : "#edit_delivery_service_#{delivery_service.id}")
+                    = f.button :submit, 'Save', class: 'btn btn-primary'
+
