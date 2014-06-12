@@ -81,6 +81,24 @@ $(function(){
       .on('hide', function() {
         $(this).closest('tr.edit').prev('tr').show();
       });
+
+    $("#delivery_services form input[type='submit']").click(function() {
+      var form = $(this).closest('form');
+      var deleted = false;
+
+      form.find(".days input[type='checkbox']").each(function(index, day) {
+        if (!$(day).prop('checked') && $(day).data("original-checked") == "checked") {
+          deleted = true;
+          return false;
+        }
+      });
+
+      if(deleted) {
+        return $.rails.confirm($(this).attr('data-conditional-confirm'));
+      } else {
+        return true;
+      }
+    });
   }
 
   if ($("#products").length) {
