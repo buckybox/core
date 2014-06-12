@@ -73,6 +73,16 @@ $(function(){
    });
   }
 
+  if ($("#delivery_services").length) {
+    $("tr.edit .collapse")
+      .on('show', function() {
+        $(this).closest('tr.edit').prev('tr').hide();
+      })
+      .on('hide', function() {
+        $(this).closest('tr.edit').prev('tr').show();
+      });
+  }
+
   if ($("#products").length) {
     // Enable Bootstrap components
     $('[data-toggle="tooltip"]').tooltip();
