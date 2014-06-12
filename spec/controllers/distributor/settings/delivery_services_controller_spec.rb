@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Distributor::DeliveryServicesController do
+describe Distributor::Settings::DeliveryServicesController do
   render_views
 
   sign_in_as_distributor
@@ -17,19 +17,7 @@ describe Distributor::DeliveryServicesController do
         }
       end
 
-      specify { flash[:notice].should eq('Delivery service was successfully created.') }
-      specify { assigns(:delivery_service).name.should eq('yoda') }
-      specify { response.should redirect_to(distributor_settings_delivery_services_url) }
-      specify { assigns(:delivery_service).schedule_rule.recur.should eq(:weekly)}
-    end
-
-    context 'with invalid params' do
-      before do
-        post :create, { delivery_service: { name: 'yoda', fee: '34' } }
-      end
-
-      specify { assigns(:delivery_service).name.should eq('yoda') }
-      specify { response.should render_template('delivery_services/new') }
+      specify { flash[:notice].should eq('Your new delivery service has heen created.') }
     end
   end
 
@@ -37,22 +25,10 @@ describe Distributor::DeliveryServicesController do
     context 'with valid params' do
       before do
         @delivery_service = Fabricate(:delivery_service, distributor: @distributor, schedule_rule_attributes: {tue: true})
-        put :update, { id: @delivery_service.id, delivery_service: { schedule_rule_attributes: {tue: '1' } } }
+        put :update, delivery_service: { id: @delivery_service.id, schedule_rule_attributes: {tue: '1' } }
       end
 
-      specify { flash[:notice].should eq('Delivery service was successfully updated.') }
-      specify { assigns(:delivery_service).schedule_rule.tue.should be true }
-      specify { response.should redirect_to(distributor_settings_delivery_services_url) }
-    end
-
-    context 'with invalid params' do
-      before do
-        @delivery_service = Fabricate(:delivery_service, distributor: @distributor, schedule_rule_attributes: {tue: true})
-        put :update, { id: @delivery_service.id, delivery_service: { schedule_rule_attributes: {mon: '0', tue: '0', wed: '0', thu: '0', fri: '0', sat: '0', sun: '0' } } }
-      end
-
-      specify { assigns(:delivery_service).schedule_rule.tue.should eq(false) }
-      specify { response.should render_template('delivery_services/edit') }
+      specify { flash[:notice].should eq('Your delivery service has heen updated.') }
     end
 
     context "with attached orders" do
@@ -74,13 +50,13 @@ describe Distributor::DeliveryServicesController do
       end
 
       it "deactivates linked orders" do
-        put :update, { id: @delivery_service.id, delivery_service: { schedule_rule_attributes: {mon: '0', tue: '0', wed: '0', thu: '1', fri: '0', sat: '0', sun: '0' } } }
+        put :update, delivery_service: { id: @delivery_service.id, schedule_rule_attributes: {mon: '0', tue: '0', wed: '0', thu: '1', fri: '0', sat: '0', sun: '0' } }
         @order.reload.should be_inactive
         @delivery_service.reload.schedule_rule.days.should eq [:thu]
       end
 
       it "removes days on order which have been removed from delivery service" do
-        put :update, { id: @delivery_service.id, delivery_service: { schedule_rule_attributes: {mon: '0', tue: '1', wed: '1', thu: '1', fri: '1', sat: '0', sun: '0' } } }
+        put :update, delivery_service: { id: @delivery_service.id, schedule_rule_attributes: {mon: '0', tue: '1', wed: '1', thu: '1', fri: '1', sat: '0', sun: '0' } }
         @order.reload.schedule_rule.days.should match_array [:tue, :wed, :fri]
         @order.should be_active
         @delivery_service.reload.schedule_rule.days.should match_array [:tue, :wed, :thu, :fri]
