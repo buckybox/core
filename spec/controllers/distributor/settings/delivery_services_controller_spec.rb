@@ -17,7 +17,7 @@ describe Distributor::Settings::DeliveryServicesController do
         }
       end
 
-      specify { flash[:notice].should eq('Your new delivery service has heen created.') }
+      specify { flash[:notice].should eq('Your new delivery service has been created.') }
     end
   end
 
@@ -28,7 +28,7 @@ describe Distributor::Settings::DeliveryServicesController do
         put :update, delivery_service: { id: @delivery_service.id, schedule_rule_attributes: {tue: '1' } }
       end
 
-      specify { flash[:notice].should eq('Your delivery service has heen updated.') }
+      specify { flash[:notice].should eq('Your delivery service has been updated.') }
     end
 
     context "with attached orders" do
