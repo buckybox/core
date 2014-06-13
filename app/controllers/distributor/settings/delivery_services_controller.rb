@@ -5,12 +5,13 @@ class Distributor::Settings::DeliveryServicesController < Distributor::BaseContr
 
   def create
     delivery_service_params = params[:delivery_service]
+    delivery_service_params.delete(:delete) # XXX
 
     delivery_service = DeliveryService.new(delivery_service_params)
     delivery_service.distributor = current_distributor
 
     if delivery_service.save
-      flash.now[:notice] = "Your new delivery service has heen created."
+      flash.now[:notice] = "Your new delivery service has been created."
 
       tracking.event(current_distributor, 'new_delivery_service')
     else
@@ -28,7 +29,7 @@ class Distributor::Settings::DeliveryServicesController < Distributor::BaseContr
     delivery_service = current_distributor.delivery_services.find(delivery_service_params.delete(:id))
 
     if delivery_service.update_attributes(delivery_service_params)
-      flash.now[:notice] = "Your delivery service has heen updated."
+      flash.now[:notice] = "Your delivery service has been updated."
     else
       flash.now[:error] = delivery_service.errors.full_messages.to_sentence
     end
@@ -41,7 +42,7 @@ class Distributor::Settings::DeliveryServicesController < Distributor::BaseContr
     delivery_service = current_distributor.delivery_services.find(delivery_service_params.delete(:id))
 
     if delivery_service.destroy
-      flash.now[:notice] = "Your delivery service has heen deleted."
+      flash.now[:notice] = "Your delivery service has been deleted."
     else
       flash.now[:error] = delivery_service.errors.full_messages.to_sentence
     end
