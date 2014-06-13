@@ -62,11 +62,12 @@
                 .form-actions.pull-right
                   = link_to 'cancel', 'javascript:void(0)', 'data-toggle' => 'collapse', 'data-target' => (delivery_service.new_record? ? "#new_delivery_service" : "#edit_delivery_service_#{delivery_service.id}")
 
-                  &nbsp;
-                  - if delivery_service.customers.empty?
-                    = link_to_function "delete", "$(this).closest('form').find('input[id=delivery_service_delete]').val(1).closest('form').submit()"
-                  - else
-                    = link_to 'delete', 'javascript:void(0)', onclick: "alert('You must reassign #{pluralize(delivery_service.customers.count, "customer")} before deleting this delivery service.');"
+                  - if delivery_service.persisted?
+                    &nbsp;
+                    - if delivery_service.customers.empty?
+                      = link_to_function "delete", "$(this).closest('form').find('input[id=delivery_service_delete]').val(1).closest('form').submit()"
+                    - else
+                      = link_to 'delete', 'javascript:void(0)', onclick: "alert('You must reassign #{pluralize(delivery_service.customers.count, "customer")} before deleting this delivery service.');"
 
                   = f.button :submit, 'Save', class: 'btn btn-primary', 'data-conditional-confirm' => "A day has been unchecked. Customer orders on this day will be DELETED. Are you sure?"
 
