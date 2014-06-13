@@ -9,8 +9,9 @@
         Each of your customers will be assigned to a Delivery Service that best services their location.
       .span6
         %span.heading hint
-        It's best to name your Delivery Service according to the geographic region it services.
-        For example: Inner City, Northern Suburbs, Regional Courier, National Courier, Packing Center Pickup.
+        It's best to name your Delivery Service according to the geographic region it services e.g. Inner City, Southern Suburbs.
+        Customers on Pickup Points will not be asked for their address
+        #{link_to "(more info)", 'http://help.buckybox.com/user-manual/setting-up/delivery-services/', target: '_blank'}.
 
     %table.table.table-condensed.spacer#delivery_services
       %tr
@@ -39,7 +40,7 @@
 
               .container-fluid
                 .line
-                  = f.input_field :name, class: 'name', required: true, placeholder: 'Name'
+                  = f.input_field :name, class: 'name', required: true, placeholder: 'Delivery Service Name'
 
                   %span#weekdays.days.text-center
                     = f.simple_fields_for(:schedule_rule) do |schedule_rule_form|
@@ -48,7 +49,7 @@
 
                   = f.input_field :fee, class: 'fee pull-right', required: true, placeholder: '0.00', title: 'Fee'
                 .line
-                  = f.input_field :instructions, class: 'instructions pull-left', required: true, placeholder: "i.e. instructions to customers including area of service for deliveries, estimated delivery or pickup times", rows: 8
+                  = f.input_field :instructions, class: 'instructions pull-left', required: true, placeholder: "Delivery Service Details i.e. instructions to customers including area of service for deliveries, estimated delivery or pickup times", rows: 8
                   = f.input_field :pickup_point, inline_label: true, label: "<i class='icon-shopping-cart'></i> This is a pickup point".html_safe
 
                 .line.clearfix
