@@ -49,8 +49,9 @@
 
                   = f.input_field :fee, class: 'fee pull-right', required: true, placeholder: '0.00', title: 'Fee'
                 .line
-                  = f.input_field :instructions, class: 'instructions pull-left', required: true, placeholder: "Delivery Service Details i.e. instructions to customers including area of service for deliveries, estimated delivery or pickup times", rows: 8
-                  = f.input_field :pickup_point, inline_label: true, label: "<i class='icon-shopping-cart'></i> This is a pickup point".html_safe
+                  = f.input_field :instructions, class: 'instructions', required: true, placeholder: "Delivery Service Details i.e. instructions to customers including area of service for deliveries, estimated delivery or pickup times", rows: 8
+                  %span.pickup_point
+                    = f.input_field :pickup_point, inline_label: true, label: "<i class='icon-map-marker'></i> This is a pickup point".html_safe
 
                 .line.clearfix
 
