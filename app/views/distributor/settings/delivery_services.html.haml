@@ -15,7 +15,7 @@
 
     %table.table.table-condensed.spacer#delivery_services
       %tr
-        %td{colspan: 3}
+        %td{colspan: 4}
           - first_delivery_service = delivery_services.one?
           = link_to 'javascript:void(0)', class: (first_delivery_service ? 'required-action' : 'action'), 'data-toggle' => 'collapse', 'data-target' => '#new_delivery_service' do
             Create
@@ -27,13 +27,17 @@
           %tr{ 'data-toggle' => 'collapse', 'data-target' => "#edit_delivery_service_#{delivery_service.id}" }
             %td.name
               %strong= link_to delivery_service.name, 'javascript:void(0)'
+              %span.muted= truncate(delivery_service.instructions, length: [70 - delivery_service.name.length, 10].max)
+            %td.pickup_point
+              - if delivery_service.pickup_point
+                %i.icon-map-marker.text-right{ title: "This is a pickup point" }
             %td.days
               = delivery_service.delivery_days
             %td.fee
               %span= delivery_service.formatted_fee
 
         %tr.edit
-          %td{colspan: 3}
+          %td{colspan: 4}
             = simple_form_for(delivery_service, url: distributor_settings_delivery_services_path, html: { novalidate: false, class: 'collapse background-yellow' }) do |f|
               = f.hidden_field :id if delivery_service.id
               = f.hidden_field :delete, value: 0
