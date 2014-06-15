@@ -27,7 +27,7 @@
           %tr{ 'data-toggle' => 'collapse', 'data-target' => "#edit_delivery_service_#{delivery_service.id}" }
             %td.name
               %strong= link_to delivery_service.name, 'javascript:void(0)'
-              %span.muted= truncate(delivery_service.instructions, length: [70 - delivery_service.name.length, 10].max)
+              %em.muted.instructions= truncate(delivery_service.instructions, length: [80 - delivery_service.name.length, 10].max)
             %td.pickup_point
               - if delivery_service.pickup_point
                 %i.icon-map-marker.text-right{ title: "This is a pickup point" }
