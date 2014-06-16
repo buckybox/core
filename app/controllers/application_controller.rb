@@ -1,6 +1,8 @@
 class ApplicationController < ActionController::Base
   protect_from_forgery
 
+  before_bugsnag_notify :add_user_info_to_bugsnag
+
   unless Rails.env.development?
     analytical modules: [:google], use_session_store: true
   else
@@ -157,5 +159,21 @@ private
     else
       Figaro.env.marketing_site_url # Shouldn't happen but better than nothing.
     end
+  end
+
+  def add_user_info_to_bugsnag(notification)
+    # Set the user that this bug affected
+    # Email, name and id are searchable on bugsnag.com
+    notification.user = {
+      distributor_id: current_distributor.try(:id),
+      customer_id: current_customer.try(:id),
+    }
+
+    # Add some app-specific data which will be displayed on a custom
+    # "Diagnostics" tab on each error page on bugsnag.com
+    notification.add_tab(:diagnostics, {
+      distributor_id: current_distributor.try(:id),
+      distributor_name: current_distributor.try(:name),
+    })
   end
 end
