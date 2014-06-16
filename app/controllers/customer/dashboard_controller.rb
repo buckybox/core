@@ -6,12 +6,12 @@ class Customer::DashboardController < Customer::BaseController
     @balance        = @customer.account.balance
     @transactions   = @customer.transactions.limit(6)
     @show_more_link = @transactions.size != @customer.transactions.count
-    @distributor  = @customer.distributor
-    @currency     = @distributor.currency
-    @orders       = @customer.orders.active.decorate(context: { currency: @currency })
-    @bank         = @distributor.bank_information.decorate(context: { customer: @customer }) if @distributor.bank_information && @distributor.payment_bank_deposit
-    @paypal       = paypal_form if @distributor.payment_paypal
-    @order        = @customer.orders.new
+    @distributor    = @customer.distributor
+    @currency       = @distributor.currency
+    @orders         = @customer.orders.active.decorate(context: { currency: @currency })
+    @bank           = @distributor.bank_information.decorate(context: { customer: @customer }) if @distributor.bank_information && @distributor.payment_bank_deposit
+    @paypal         = paypal_form if @distributor.payment_paypal
+    @order          = @customer.orders.new
 
     render "index", locals: {
       update_contact_details:  Customer::Form::UpdateContactDetails.new(customer: current_customer),
