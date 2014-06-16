@@ -4,12 +4,6 @@ class Distributor::CustomersController < Distributor::ResourceController
   before_filter :check_setup, only: [:index]
   before_filter :get_email_templates, only: [:index, :show]
 
-  def update
-    update! do |success, failure|
-      success.html { redirect_to distributor_customer_url(@customer) }
-    end
-  end
-
   def index
     index! do
       @show_tour = current_distributor.customers_index_intro
@@ -22,6 +16,19 @@ class Distributor::CustomersController < Distributor::ResourceController
   def new
     locals = { new_customer: Distributor::Form::NewCustomer.new(pre_form_args) }
     render "new", locals: locals
+  end
+
+  # just update customer notes
+  def update
+    customer = Customer.find(params[:id])
+
+    if customer.update_attributes(notes: params[:customer][:notes])
+      flash[:notice] = "The customer notes have been successfully updated."
+    else
+      flash[:error] = "Oops, there was an issue updating the customer notes."
+    end
+
+    redirect_to distributor_customer_url(customer)
   end
 
   def edit_profile
