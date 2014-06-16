@@ -137,7 +137,7 @@ BuckyBox::Application.routes.draw do
 
     resources :import_transaction_lists, only: [:destroy]
 
-    resources :customers, except: [ :edit, :update ] do
+    resources :customers, except: [ :edit ] do
       collection do
         get 'search',   action: :index, as: 'search'
         get 'tag/:tag', action: :index, as: 'tag'
