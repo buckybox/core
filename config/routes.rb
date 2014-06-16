@@ -54,10 +54,8 @@ BuckyBox::Application.routes.draw do
       get 'webstore'
       post 'webstore', action: 'save_webstore'
       post 'spend_limit_confirmation'
-      get 'delivery_services'
-      get 'routes'
-      get 'invoice_information'
-      get 'customer_preferences'
+
+      resource :delivery_services, only: [:show, :create, :update, :destroy]
 
       namespace :products do
         resource :boxes, only: [:show, :create, :update]
@@ -91,7 +89,6 @@ BuckyBox::Application.routes.draw do
     resource  :invoice_information, only: [:create, :update]
     resources :boxes,               except: [:index]
     resources :extras,              except: [:index, :show]
-    resources :delivery_services,   except: [:index, :show]
 
     resources :line_items, except: [:index, :show, :update] do
       collection do
@@ -140,7 +137,7 @@ BuckyBox::Application.routes.draw do
 
     resources :import_transaction_lists, only: [:destroy]
 
-    resources :customers do
+    resources :customers, except: [ :edit, :update ] do
       collection do
         get 'search',   action: :index, as: 'search'
         get 'tag/:tag', action: :index, as: 'tag'
@@ -152,6 +149,10 @@ BuckyBox::Application.routes.draw do
         get :send_login_details
         get 'impersonate'
         get 'activity'
+        get 'edit_profile',             action: 'edit_profile',             as: 'edit_profile'
+        put 'update_profile',           action: 'update_profile',           as: 'update_profile'
+        get 'edit_delivery_details',    action: 'edit_delivery_details',    as: 'edit_delivery_details'
+        put 'update_delivery_details',  action: 'update_delivery_details',  as: 'update_delivery_details'
       end
     end
 
@@ -183,16 +184,14 @@ BuckyBox::Application.routes.draw do
 
   namespace :customer do
     root to: 'dashboard#index'
+
     get 'dashboard',               controller: 'dashboard', action: 'index'
     get 'order/:order_id/box/:id', controller: 'dashboard', action: 'box'
 
-    resources :customers, only: :update do
-      member do
-        put 'update_password'
-      end
-    end
+    put 'update_contact_details',   controller: 'customers',  action: 'update_contact_details'
+    put 'update_delivery_address',  controller: 'customers',  action: 'update_delivery_address'
+    put 'update_password',          controller: 'customers',  action: 'update_password'
 
-    resource  :address, only: :update
     resources :boxes, only: [:show] do
       member do
         get 'extras'

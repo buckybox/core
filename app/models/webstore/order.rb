@@ -12,11 +12,11 @@ class Webstore::Order
   attr_reader :information
 
   def initialize(args = {})
-    @cart          = args.fetch(:cart)
-    @information   = args.fetch(:information, {})
-    @product_id    = args.fetch(:product_id, nil)
+    @cart                   = args.fetch(:cart)
+    @information            = args.fetch(:information, {})
+    @product_id             = args.fetch(:product_id, nil)
     @delivery_service_class = args.fetch(:delivery_service_class, ::DeliveryService)
-    @product_class = args.fetch(:product_class, ::Box)
+    @product_class          = args.fetch(:product_class, ::Box)
   end
 
   def add_product(product_id)
@@ -158,6 +158,18 @@ class Webstore::Order
     product.customisable?
   end
 
+  def delivery_service
+    delivery_service_class.find_by(id: delivery_service_id)
+  end
+
+  def pickup_point?
+    delivery_service.pickup_point
+  end
+
+  def delivery_service_name
+    delivery_service.name
+  end
+
   def customer
     cart ? cart.customer : Webstore::Customer.new
   end
@@ -172,10 +184,6 @@ private
 
   def distributor
     cart.distributor ? cart.distributor : ::Distributor.new
-  end
-
-  def delivery_service
-    delivery_service_class.where(id: delivery_service_id).first
   end
 
   def existing_customer
