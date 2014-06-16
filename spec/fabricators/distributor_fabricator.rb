@@ -31,9 +31,9 @@ Fabricator(:distributor_with_everything, from: :distributor_with_information) do
       Fabricate(:line_item, distributor: distributor, name: item)
     end
 
-    Fabricate(:customisable_box, distributor: distributor)
-    Fabricate(:delivery_service, distributor: distributor)
-    Fabricate(:customer, distributor: distributor)
+    Fabricate(:customisable_box,       distributor: distributor)
+    Fabricate(:delivery_service,       distributor: distributor)
+    Fabricate(:customer_with_address,  distributor: distributor)
 
     distributor.active_webstore = true
 

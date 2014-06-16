@@ -1,7 +1,10 @@
 - title(customer_and_number(current_customer), false)
+
 - content_for :sidebar do
   = render partial: 'customer/customers/sidebar', locals: { customer: current_customer }
-= render partial: 'customer/customers/forms'
+
+= render partial: 'customer/customers/forms', locals: { update_contact_details: update_contact_details, update_delivery_address: update_delivery_address, update_password: update_password }
+
 #account-information{data: {account_id: @account.id}}
 - if @distributor.active_webstore
   .row-fluid

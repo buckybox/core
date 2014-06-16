@@ -10,10 +10,10 @@ class DeliveryService < ActiveRecord::Base
 
   monetize :fee_cents
 
-  attr_accessible :distributor, :name, :fee, :area_of_service, :estimated_delivery_time, :schedule_rule_attributes, :schedule_rule
+  attr_accessible :distributor, :name, :fee, :instructions, :schedule_rule_attributes, :schedule_rule, :pickup_point
   accepts_nested_attributes_for :schedule_rule
 
-  validates_presence_of :distributor_id, :name, :fee, :area_of_service, :estimated_delivery_time, :schedule_rule
+  validates_presence_of :distributor_id, :name, :fee, :instructions, :schedule_rule
 
   default_scope order(:name)
 
