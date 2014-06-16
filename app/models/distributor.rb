@@ -452,7 +452,7 @@ class Distributor < ActiveRecord::Base
   end
 
   def location
-    [country.try(:full_name), city].reject(&:blank?).join(', ')
+    [country.full_name, city].reject(&:blank?).join(', ')
   end
 
   def packing_list_by_date(date)
