@@ -62,8 +62,4 @@
         = link_to 'Edit', edit_admin_distributor_path(distributor)
         |
         = link_to 'Impersonate', impersonate_admin_distributor_path(distributor)
-        |
-        = link_to 'Reset Intros', reset_intros_admin_distributor_path(distributor)
-    - if distributor.notes.present?
-      .row-fluid
-        .span5= simple_format(distributor.notes)
+
