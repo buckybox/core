@@ -4,6 +4,12 @@ class Distributor::CustomersController < Distributor::ResourceController
   before_filter :check_setup, only: [:index]
   before_filter :get_email_templates, only: [:index, :show]
 
+  def update
+    update! do |success, failure|
+      success.html { redirect_to distributor_customer_url(@customer) }
+    end
+  end
+
   def index
     index! do
       @show_tour = current_distributor.customers_index_intro
