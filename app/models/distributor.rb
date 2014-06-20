@@ -87,7 +87,6 @@ class Distributor < ActiveRecord::Base
   validates_numericality_of :advance_hour, greater_than_or_equal_to: 0
   validates_numericality_of :advance_days, greater_than_or_equal_to: 0
   validate :required_fields_for_webstore
-  validate :payment_options_valid
   validate :validate_parameter_name
   validate :validate_require_phone
   validate :validate_require_delivery_note
@@ -582,12 +581,6 @@ private
     if active_webstore_changed? && active_webstore?
       errors.add(:active_webstore, "Need to have a delivery service setup before enabling the webstore") if delivery_services.count.zero?
       errors.add(:active_webstore, "Need to have a box setup before enabling the webstore") if boxes.count.zero?
-    end
-  end
-
-  def payment_options_valid
-    if active_webstore && payment_options.empty?
-      errors.add(:payment_cash_on_delivery, "At least one payment method must be activated because your Web Store is on")
     end
   end
 
