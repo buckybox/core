@@ -8,7 +8,7 @@
 #account-information{data: {account_id: @account.id}}
 - if @distributor.active_webstore
   .row-fluid
-    #new-customer-order.dash-boxed-link.span12= link_to 'Order another box', webstore_store_path(@distributor.parameter_name)
+    #new-customer-order.dash-boxed-link.span12= link_to 'Order another item', webstore_store_path(@distributor.parameter_name)
 
 - if @orders.empty?
   .alert.alert-info You don't have any active orders.
