@@ -34,27 +34,29 @@ module Distributor::Form::EditCustomerProfileFields
   protected
 
     def assign_attributes(attributes)
-      @number            = attributes["number"]            || customer.number
-      @first_name        = attributes["first_name"]        || customer.first_name
-      @last_name         = attributes["last_name"]         || customer.last_name
-      @tag_list          = attributes["tag_list"]          || customer.tag_list
-      @email             = attributes["email"]             || customer.email
-      @balance_threshold = attributes["balance_threshold"] || customer.balance_threshold
-      @discount          = attributes["discount"]          || customer.discount
-      @mobile_phone      = attributes["mobile_phone"]      || address.mobile_phone
-      @home_phone        = attributes["home_phone"]        || address.home_phone
-      @work_phone        = attributes["work_phone"]        || address.work_phone
+      @number                   = attributes["number"]                   || customer.number
+      @first_name               = attributes["first_name"]               || customer.first_name
+      @last_name                = attributes["last_name"]                || customer.last_name
+      @tag_list                 = attributes["tag_list"]                 || customer.tag_list
+      @email                    = attributes["email"]                    || customer.email
+      @balance_threshold        = attributes["balance_threshold"]        || customer.balance_threshold
+      @discount                 = attributes["discount"]                 || customer.discount
+      @special_order_preference = attributes["special_order_preference"] || customer.special_order_preference
+      @mobile_phone             = attributes["mobile_phone"]             || address.mobile_phone
+      @home_phone               = attributes["home_phone"]               || address.home_phone
+      @work_phone               = attributes["work_phone"]               || address.work_phone
     end
 
     def profile_customer_args
       {
-        number:             number,
-        first_name:         first_name,
-        last_name:          last_name,
-        tag_list:           tag_list,
-        email:              email,
-        balance_threshold:  balance_threshold,
-        discount:           discount,
+        number:                   number,
+        first_name:               first_name,
+        last_name:                last_name,
+        tag_list:                 tag_list,
+        email:                    email,
+        balance_threshold:        balance_threshold,
+        discount:                 discount,
+        special_order_preference: special_order_preference,
       }
     end
 
