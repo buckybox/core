@@ -443,7 +443,7 @@ class Customer < ActiveRecord::Base
   end
 
   def uses_pickup_point?
-    delivery_service.try(:pickup_point?)
+    delivery_service.try(:pickup_point)
   end
 
 private
