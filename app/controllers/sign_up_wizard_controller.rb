@@ -70,11 +70,6 @@ class SignUpWizardController < ApplicationController
     else
       errors = @distributor.errors.full_messages
 
-      # NOTE: temporary until we accept no payment types
-      if @distributor.errors.has_key? :payment_cash_on_delivery
-        errors.unshift "You must select Bank Deposit and/or Cash on Delivery"
-      end
-
       render json: errors.first, status: :unprocessable_entity
     end
   end
