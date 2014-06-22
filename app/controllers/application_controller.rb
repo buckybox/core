@@ -165,8 +165,7 @@ private
     # Set the user that this bug affected
     # Email, name and id are searchable on bugsnag.com
     notification.user = {
-      distributor_id: current_distributor.try(:id),
-      customer_id: current_customer.try(:id),
+      number: current_customer.try(:number),
     }
 
     # Add some app-specific data which will be displayed on a custom
@@ -174,6 +173,9 @@ private
     notification.add_tab(:diagnostics, {
       distributor_id: current_distributor.try(:id),
       distributor_name: current_distributor.try(:name),
+      customer_id: current_customer.try(:id),
+      customer_name: current_customer.try(:name),
+      cart: current_cart,
     })
   end
 end
