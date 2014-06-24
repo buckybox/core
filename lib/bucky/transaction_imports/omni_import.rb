@@ -106,10 +106,23 @@ EOF
     def self.csv_read(path)
       file     = File.read(path)
       encoding = find_file_encoding(file)
-      CSV.read(path, encoding: encoding)
+      options  = { encoding: encoding }
+
+      rows = CSV.read(path, options)
+
+      if rows.first.one? # the first line is only one full string
+        options[:col_sep] = ";" # we try again with a semi-colon as separator
+        CSV.read(path, options)
+      else
+        rows
+      end
     rescue CSV::MalformedCSVError => e #Handle stupid windows \r instead of \r\n csv files.  STANDARDS!
       raise e unless e.message.include?("Unquoted fields do not allow \\r or \\n")
-      CSV.parse(file.force_encoding(encoding).encode("UTF-8").gsub(/\r(?!\n)/, "\r\n"))
+
+      CSV.parse(
+        file.force_encoding(encoding).encode("UTF-8").gsub(/\r(?!\n)/, "\r\n"),
+        options.except(:encoding)
+      )
     end
 
     def self.find_file_encoding(file, encoding_detector = CharlockHolmes::EncodingDetector)
