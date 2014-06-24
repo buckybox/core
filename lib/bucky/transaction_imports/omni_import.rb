@@ -563,6 +563,5 @@ EOF
     end
   end
 
-  class OmniError < StandardError
-  end
+  OmniError = Class.new(StandardError)
 end
