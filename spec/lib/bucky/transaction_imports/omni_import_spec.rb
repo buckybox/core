@@ -159,6 +159,14 @@ describe Bucky::TransactionImports::OmniImport do
     rows[1].should eq ["19/07/2013", "MR SIMON J MORLEY", "£5.00", nil]
   end
 
+  context "when the CSV separator is a semi-colon" do
+    it "parses the CSV properly" do
+      rows = Bucky::TransactionImports::OmniImport.csv_read(File.join(Rails.root, "spec/support/test_upload_files/transaction_imports/polynesie_semi-colon.csv"))
+      rows[0].should eq ["Date comptable", "Libelle", "Date valeur", "Montant", "Code operation"]
+      rows[1].should eq ["13/06/2014", "VIRT VIRT DE BRASSERIE DE TAHITI FC.02/06", "2014-06-13", "156870", "VIR"]
+    end
+  end
+
   describe ".find_file_endocing" do
     let(:file)              { double("file") }
     let(:encoding_detector) { double("encoding_detector") }
