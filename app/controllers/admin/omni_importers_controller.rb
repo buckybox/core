@@ -50,6 +50,8 @@ class Admin::OmniImportersController < Admin::BaseController
     render partial: 'admin/omni_importers/test'
   end
 
+private
+
   def get_test_importer(rules)
     @rules = rules
     begin
