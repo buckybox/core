@@ -1,6 +1,31 @@
 fr:
   c: # short-hand for "customer [area]"
     dashboard:
-      order_another_item: Commander un autre produit
+      # sidebar
       change_contact_details: modifier mes coordonées
+      change_password: modifier mon mot de passe
       change_delivery_address: modifier mon adresse de livraison
+      # main
+      order_another_item: Commander un autre produit
+      no_active_orders: Vous n'avez aucune commande active.
+      # payments
+      account_statement: Relevé de compte
+      make_payment: Effectuer un virement
+      pay_by:
+        bank_deposit: Payer par virement bancaire
+        paypal: Payer avec PayPal / carte bancaire
+      paypal:
+        pay_now: Payer maintenant
+    transactions:
+      processed_date: Date de relevé
+      transaction_date: Date valeur
+      details: Détails
+      amount: Montant
+      balance: Solde
+    contact_details:
+      change: Modifier vos coordonées
+    password:
+      change: Modifier votre mot de passe
+      update: Modifier le mot de passe
+    address:
+      change: Modifier votre adresse

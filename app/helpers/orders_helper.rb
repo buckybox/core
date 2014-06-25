@@ -17,7 +17,7 @@ module OrdersHelper
     if order.recurs?
       order.schedule_rule.to_s
     elsif order.next_occurrence
-      "Deliver on #{order.next_occurrence.strftime("%A")}"
+      "#{t('deliver_on')} #{l order.next_occurrence, format: "%A"}"
     else
       "No future delivery scheduled"
     end
@@ -28,7 +28,7 @@ module OrdersHelper
     options = { with_link: true }.merge(options)
 
     order_occurrences = order.next_occurrences(5, Date.current).map do |day|
-      formatted_day = day.to_s(:flux_cap)
+      formatted_day = l day, format: "%d %b"
 
       if options[:with_link] && day <= Order::FORCAST_RANGE_FORWARD.from_now.to_date
         link_to(formatted_day, date_distributor_deliveries_path(day, order.delivery_service))

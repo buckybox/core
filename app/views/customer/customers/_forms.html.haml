@@ -1,17 +1,18 @@
-#address-modal.modal.hide.fade
-  .modal-header
-    %button.close{ data: { dismiss: 'modal'} } &times;
-    %h3 Change Your Address
-  = render partial: 'customer/customers/update_delivery_address', object: update_delivery_address
-
 #details-modal.modal.hide.fade
   .modal-header
     %button.close{ data: { dismiss: 'modal'} } &times;
-    %h3 Change Your Contact Details
+    %h3= t('c.contact_details.change')
   = render partial: 'customer/customers/update_contact_details', object: update_contact_details
 
 #password-modal.modal.hide.fade
   .modal-header
     %button.close{ data: { dismiss: 'modal'} } &times;
-    %h3 Change Your Password
+    %h3= t('c.password.change')
   = render partial: 'customer/customers/update_password', object: update_password
+
+#address-modal.modal.hide.fade
+  .modal-header
+    %button.close{ data: { dismiss: 'modal'} } &times;
+    %h3= t('c.address.change')
+  = render partial: 'customer/customers/update_delivery_address', object: update_delivery_address
+

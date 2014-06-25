@@ -1,7 +1,7 @@
 = simple_form_for(@form_params, html: { id: 'order-form' }) do |f|
   = f.error_notification
   - if @order.has_yellow_deliveries?
-    .alert.alert-error This order has an impending delivery, changes made will only affect the deliveries on or after #{@distributor.beginning_of_green_zone.to_s(:day_date_month)}.
+    .alert.alert-error= t('models.order.impending_delivery', date: l(@distributor.beginning_of_green_zone, format: "%d %b"))
 
   .row-fluid
     .span4
@@ -56,5 +56,5 @@
 
   .row-fluid
     .span12.form-actions
-      = f.button :submit, class: 'btn btn-primary'
-      = link_to '&raquo; back'.html_safe, customer_dashboard_path(@account.customer)
+      = f.button :submit, t('models.order.edit'), class: 'btn btn-primary'
+      = link_to "&raquo; #{t('back')}".html_safe, customer_dashboard_path(@account.customer)

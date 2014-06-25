@@ -1,6 +1,31 @@
 en:
   c: # short-hand for "customer [area]"
     dashboard:
-      order_another_item: Order another item
+      # sidebar
       change_contact_details: change my contact details
+      change_password: change my password
       change_delivery_address: change my delivery address
+      # main
+      order_another_item: Order another item
+      no_active_orders: You don't have any active orders.
+      # payments
+      account_statement: Account Statement
+      make_payment: Make a payment
+      pay_by:
+        bank_deposit: Pay by Bank Deposit
+        paypal: Pay by PayPal / Credit Card
+      paypal:
+        pay_now: Pay now
+    transactions:
+      processed_date: Processed date
+      transaction_date: Transaction date
+      details: Details
+      amount: Amount
+      balance: Balance
+    contact_details:
+      change: Change your contact details
+    password:
+      change: Change your password
+      update: Update password
+    address:
+      change: Change your address

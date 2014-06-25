@@ -1,0 +1,13 @@
+fr:
+  models:
+    order:
+      edit: modifier cette commande
+      impending_delivery: Cette commande a une livraison en cours, les changements effectués ici n'affecteront que les livraisons à partir du %{date}.
+  activerecord:
+    models:
+      box: Produit
+      customer: Client
+      order: Commande
+    attributes:
+      customer:
+        formated_number: Numéro client
