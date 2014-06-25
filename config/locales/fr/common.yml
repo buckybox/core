@@ -1,0 +1,7 @@
+fr:
+  log_in: "Connexion"
+  log_out: "Déconnexion"
+  next: "Suivant"
+  password_forgotten?: "Mot de passe oublié ?"
+  delivery_service: Service de livraison
+  my_account: "Mon compte"
