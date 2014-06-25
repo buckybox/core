@@ -9,7 +9,7 @@
       #auth-controls.span6.text-right
         - if current_customer
           .btn-group
-            = link_to "My account (#{current_customer.name})", customer_root_path, class: 'btn btn-inverse'
+            = link_to "#{t('my_account')} (#{current_customer.name})", customer_root_path, class: 'btn btn-inverse'
             = link_to '#', { class: 'btn btn-inverse dropdown-toggle', "data-toggle" => "dropdown" } do
               %span.caret
             .account-dropdown.dropdown-menu.pull-right
@@ -21,7 +21,7 @@
                   %br
                   = current_customer.email
                 %p.logout.text-right
-                  = link_to 'Logout', destroy_customer_session_path, method: :delete
+                  = link_to t('log_out'), destroy_customer_session_path, method: :delete
 
               - other_accounts = current_customers(all: true, current: false)
               - if other_accounts.any?
@@ -35,7 +35,7 @@
                         = customer.distributor.name
 
         - else
-          = link_to 'Log in', new_customer_session_path(distributor: @distributor.parameter_name)
+          = link_to t('log_in'), new_customer_session_path(distributor: @distributor.parameter_name)
 
 #public-banner.containter-fluid
   .container

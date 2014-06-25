@@ -1,0 +1,6 @@
+en:
+  c: # short-hand for "customer [area]"
+    dashboard:
+      order_another_item: "Order another item"
+      change_contact_details: "Change my contact details"
+      change_delivery_address: Change my delivery address
