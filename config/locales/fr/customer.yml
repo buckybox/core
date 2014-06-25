@@ -1,6 +1,6 @@
 fr:
   c: # short-hand for "customer [area]"
     dashboard:
-      order_another_item: "Commander un autre produit"
-      change_contact_details: "Modifier mes coordonées"
-      change_delivery_address: Modifier mon adresse de livraison
+      order_another_item: Commander un autre produit
+      change_contact_details: modifier mes coordonées
+      change_delivery_address: modifier mon adresse de livraison
