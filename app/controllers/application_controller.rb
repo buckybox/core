@@ -18,7 +18,7 @@ class ApplicationController < ActionController::Base
 protected
 
   before_filter def set_locale
-    I18n.locale = params[:locale] || "fr" # || extract_locale_from_accept_language_header || I18n.default_locale # FIXME
+    I18n.locale = params[:locale] || extract_locale_from_accept_language_header || I18n.default_locale # FIXME
     I18n.exception_handler = lambda { |exception, locale, key, options| raise "Missing translation key for locale #{locale}: #{key}" } # FIXME
   end
 
@@ -189,6 +189,6 @@ private
   end
 
   def extract_locale_from_accept_language_header
-    request.env['HTTP_ACCEPT_LANGUAGE'].scan(/^[a-z]{2}/).first
+    request.env['HTTP_ACCEPT_LANGUAGE'].to_s.scan(/^[a-z]{2}/).first
   end
 end

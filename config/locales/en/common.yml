@@ -1,7 +1,8 @@
 en:
-  log_in: "Log in"
-  log_out: "Log out"
-  next: "Next"
-  password_forgotten?: "Lost your password?"
+  current_locale: English
+  log_in: Log in
+  log_out: Log out
+  next: Next
+  password_forgotten?: Lost your password?
   delivery_service: Delivery service
-  my_account: "My account"
+  my_account: My account
