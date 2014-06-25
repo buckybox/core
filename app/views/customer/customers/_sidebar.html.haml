@@ -2,7 +2,7 @@
   .span12
     .customer-information-section
       %p.name= customer.name
-      == Customer number: #{customer.formated_number}
+      = "#{t('activerecord.attributes.customer.formated_number')}#{t('colon')}#{customer.formated_number}"
       %br
       = customer.email
       %br
@@ -11,7 +11,7 @@
         %br
       %small= link_to t('c.dashboard.change_contact_details'), '#details-modal', data: { toggle: 'modal' }
       %br
-      %small= link_to 'change my password', '#password-modal', data: { toggle: 'modal' }
+      %small= link_to t('c.dashboard.change_password'), '#password-modal', data: { toggle: 'modal' }
 
     - unless customer.uses_pickup_point?
       .customer-information-section.spacer

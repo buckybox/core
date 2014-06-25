@@ -1,0 +1,14 @@
+en:
+  models:
+    order:
+      edit: edit this order
+      impending_delivery: This order has an impending delivery, changes made will only affect the deliveries on or after %{date}.
+  activerecord:
+    models:
+      box: Product
+      customer: Customer
+      order: Order
+    attributes:
+      customer:
+        formated_number: Customer number
+
