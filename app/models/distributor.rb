@@ -117,6 +117,10 @@ class Distributor < ActiveRecord::Base
 
   delegate :tracking_after_create, :tracking_after_save, :track, to: :messaging
 
+  def language
+    "en" # FIXME
+  end
+
   # Devise Override: Avoid validations on update or if now password provided
   def password_required?
     password.present? && password.size > 0 || new_record?
