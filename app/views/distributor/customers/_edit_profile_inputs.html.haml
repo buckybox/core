@@ -8,12 +8,11 @@
     = f.input :tag_list,      label: "Tags",  placeholder: "E.g. west-end, coupon, discount",  input_html: { class: "input-block-level" }
     = f.input :email,         input_html: { class: "input-block-level" }
 
-    - if customer_profile.collect_phone?
-      - if customer_profile.require_phone?
-        %p.muted At least one type of phone number is required
-      = f.input :mobile_phone,  input_html: { class: "input-block-level" }
-      = f.input :home_phone,    input_html: { class: "input-block-level" }
-      = f.input :work_phone,    input_html: { class: "input-block-level" }
+    - if customer_profile.require_phone?
+      %p.muted At least one type of phone number is required
+    = f.input :mobile_phone,  input_html: { class: "input-block-level" }
+    = f.input :home_phone,    input_html: { class: "input-block-level" }
+    = f.input :work_phone,    input_html: { class: "input-block-level" }
 
     - if customer_profile.has_balance_threshold?
       = f.input :balance_threshold,  as: :decimal,  label: "Minimum balance",  hint: "Deliveries will halt when their balance reaches the minimum balance.",  input_html: { class: "input-block-level",  step: 0.01 }

@@ -17,15 +17,7 @@ Feature: Customers are presented with a form to change their contact details
     Then I should see a "Email" field
 
   Scenario: Updating your phone number
-    Given I am a customer for a distributor that does not collect phone numbers
-    And I am viewing my dashboard
-    When I click on "change my contact details"
-    Then I should not see a "Mobile phone" field
-    And I should not see a "Home phone" field
-    And I should not see a "Work phone" field
-
-  Scenario: Updating your phone number
-    Given I am a customer for a distributor that collects phone numbers
+    Given I am a customer
     And I am viewing my dashboard
     When I click on "change my contact details"
     Then I should see a "Mobile phone" field

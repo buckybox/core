@@ -15,14 +15,7 @@ Feature: Distributors are presented with a form to change customer contact detai
     Then I should see a "Email" field
 
   Scenario: Updating your phone number
-    Given I am a distributor that does not collect phone numbers
-    When I am viewing a customers contact details form
-    Then I should not see a "Mobile phone" field
-    And I should not see a "Home phone" field
-    And I should not see a "Work phone" field
-
-  Scenario: Updating your phone number
-    Given I am a distributor that collects phone numbers
+    Given I am a distributor
     When I am viewing a customers contact details form
     Then I should see a "Mobile phone" field
     And I should see a "Home phone" field
