@@ -33,8 +33,3 @@ Feature: Distributors are presented with a form to change customer delivery deta
     Given I am a distributor that collects a delivery note
     When I am viewing a customers delivery details form
     Then I should see a "Delivery note" field
-
-  Scenario: Updating your delivery note
-    Given I am a distributor that does not collect a delivery note
-    When I am viewing a customers delivery details form
-    Then I should not see a "Delivery note" field
