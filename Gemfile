@@ -63,6 +63,7 @@ gem 'discover-unused-partials',        '~> 0.3.0'
 gem 'cane',                            '~> 2.6.1'
 gem 'airbrake',                        '~> 3.1.2'
 gem 'bugsnag',                         '~> 2.0.2'
+gem 'rack-mini-profiler',              '~> 0.9.2'
 
 group :assets do
   gem 'coffee-rails',   '~> 3.2.2'
