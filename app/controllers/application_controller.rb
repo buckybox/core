@@ -1,7 +1,11 @@
 class ApplicationController < ActionController::Base
   protect_from_forgery
 
+  before_filter :miniprofiler
   before_bugsnag_notify :add_user_info_to_bugsnag
+
+  before_filter :set_user_time_zone
+  before_filter :customer_smart_sign_in
 
   unless Rails.env.development?
     analytical modules: [:google], use_session_store: true
@@ -9,11 +13,7 @@ class ApplicationController < ActionController::Base
     analytical modules: [], use_session_store: true
   end
 
-  before_filter :set_user_time_zone
-  before_filter :customer_smart_sign_in
-
   layout :layout_by_resource
-
 
 protected
 
@@ -177,5 +177,9 @@ private
       customer_name: current_customer.try(:name),
       cart: current_cart,
     })
+  end
+
+  def miniprofiler
+    Rack::MiniProfiler.authorize_request if current_admin.present?
   end
 end
