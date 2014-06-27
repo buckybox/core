@@ -42,11 +42,6 @@ class Order < ActiveRecord::Base
 
   accepts_nested_attributes_for :schedule_rule
 
-  IS_ONE_OFF  = false
-  QUANTITY    = 1
-  FORCAST_RANGE_BACK = 9.weeks
-  FORCAST_RANGE_FORWARD = 6.weeks
-
   validates_presence_of :account_id, :box_id, :quantity, unless: :effectively_deactivated?
   validates_numericality_of :quantity, greater_than: 0, unless: :effectively_deactivated?
   validate :delivery_service_includes_schedule_rule, unless: :effectively_deactivated?
@@ -60,10 +55,16 @@ class Order < ActiveRecord::Base
   delegate :start, :recurs?, :pause!, :remove_pause!, :paused?, :pause_date, :resume_date, :next_occurrence, :next_occurrences, :remove_day, :occurrences_between, to: :schedule_rule
   delegate :halted?, to: :customer
 
+  after_initialize :set_default_schedule_rule
+
+  # 9 weeks so it covers the minimum needed to see the previous whole month of operations
+  FORCAST_RANGE_BACK = 9.weeks
+  FORCAST_RANGE_FORWARD = 6.weeks
+  IS_ONE_OFF  = false
+  QUANTITY    = 1
+
   default_value_for :extras_one_off, IS_ONE_OFF
   default_value_for :quantity, QUANTITY
-
-  after_initialize :set_default_schedule_rule
 
   def set_default_schedule_rule
     self.schedule_rule ||= ScheduleRule.one_off(Date.current) if new_record?
