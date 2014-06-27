@@ -85,6 +85,8 @@ after "deploy:update_code", "deploy:migrate"
 after "deploy:restart", "deploy:restart_workers"
 after "deploy:restart", "deploy:cleanup"
 
+after "deploy:restart", "newrelic:notice_deployment"
+
 after "deploy:setup", "setup_private_uploads"
 
 # This is here to provide support of capistrano variables in sprinkle
