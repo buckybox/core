@@ -29,3 +29,5 @@ en:
       update: Update password
     address:
       change: Change your address
+    order:
+      existing: Existing order

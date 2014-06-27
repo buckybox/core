@@ -29,3 +29,5 @@ fr:
       update: Modifier le mot de passe
     address:
       change: Modifier votre adresse
+    order:
+      existing: Commande existante
