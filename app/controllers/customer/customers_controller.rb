@@ -32,7 +32,7 @@ private
   end
 
   def failed_update(form)
-    flash[:alert] = "Oops there was an issue: #{formatted_error_messages(form)}"
+    flash[:alert] = "#{t('oops')}#{t('colon')}#{formatted_error_messages(form)}"
     redirect_to customer_root_url
   end
 

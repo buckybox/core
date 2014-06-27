@@ -3,6 +3,24 @@ fr:
     order:
       edit: modifier cette commande
       impending_delivery: Cette commande a une livraison en cours, les changements effectués ici n'affecteront que les livraisons à partir du %{date}.
+    phone_collection:
+      mobile_phone: Numéro mobile
+      work_phone: Numéro bureau
+      home_phone: Numéro domicile
+    customer:
+      form:
+        update_contact_details:
+          attributes:
+            first_name: Prénom
+            last_name: Nom
+            email: Email
+          hints:
+            email: Veuillez vérifier votre email car c'est aussi votre identifiant pour vous connecter.
+            phone: Au moins un numéro est requis.
+        update_password:
+          attributes:
+            password: Veuillez entrer votre mot de passe
+            password_confirmation: Veuillez enter votre mot de passe de nouveau
   activerecord:
     models:
       box: Produit

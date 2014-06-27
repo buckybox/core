@@ -4,8 +4,10 @@ fr:
   back: retour
   log_in: Connexion
   log_out: Déconnexion
+  update: Modifier
   next: Suivant
   password_forgotten?: Mot de passe oublié ?
   delivery_service: Service de livraison
   my_account: Mon compte
   deliver_on: Livraison le
+  oops: Oups, quelque chose ne va pas

@@ -4,8 +4,10 @@ en:
   back: back
   log_in: Log in
   log_out: Log out
+  update: Update
   next: Next
   password_forgotten?: Lost your password?
   delivery_service: Delivery service
   my_account: My account
   deliver_on: Deliver on
+  oops: Oops there was an issue
