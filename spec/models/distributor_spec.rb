@@ -8,7 +8,7 @@ describe Distributor do
     specify { distributor.time_zone.should == 'Wellington' }
     specify { distributor.currency.should == 'NZD' }
     specify { distributor.advance_days.should == 3 }
-    specify { distributor.customer_can_remove_orders.should be_true }
+    specify { distributor.customer_can_remove_orders.should be true }
 
     context 'after validation' do
       before do
@@ -37,6 +37,7 @@ describe Distributor do
       )
 
       distributor.email_from.should eq "Garden City 2.0 FoodBag Delivery <support@example.net>"
+      distributor.email_from(email: "joe@i.com").should eq "Garden City 2.0 FoodBag Delivery <joe@i.com>"
     end
   end
 
@@ -152,12 +153,12 @@ describe Distributor do
 
     it 'returns true if the daily list generator successfully performs the generation' do
       generator.stub(:generate) { true }
-      distributor.generate_required_daily_lists(generator_class).should be_true
+      distributor.generate_required_daily_lists(generator_class).should be true
     end
 
     it 'returns false if the daily list generator fails to performs the generation' do
       generator.stub(:generate) { true }
-      distributor.generate_required_daily_lists(generator_class).should be_true
+      distributor.generate_required_daily_lists(generator_class).should be true
     end
   end
 
@@ -183,8 +184,7 @@ describe Distributor do
 
     context '@distributor1 should generate daily lists' do
       before do
-        #FIXME See below reason for pending tests
-        pending 'These two tests fail randomly. Fix or remove soon'
+        skip 'These two tests fail randomly. Fix or remove soon'
       end
       specify { expect { Distributor.create_daily_lists }.to change(PackingList, :count).by(1) }
       specify { expect { Distributor.create_daily_lists }.to change(DeliveryList, :count).by(1) }
@@ -379,7 +379,7 @@ describe Distributor do
 
     it 'should update all customers spend limit' do
       Customer.any_instance.should_receive(:update_halted_status!).with(nil, Customer::EmailRule.only_pending_orders)
-      distributor.update_attributes({has_balance_threshold: true, default_balance_threshold: 200.00, spend_limit_on_all_customers: '0'}).should be_true
+      distributor.update_attributes({has_balance_threshold: true, default_balance_threshold: 200.00, spend_limit_on_all_customers: '0'}).should be true
     end
   end
 

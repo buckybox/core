@@ -10,11 +10,32 @@ class CustomerDecorator < Draper::Decorator
   end
 
   def account_balance
-    object.account.balance
+    object.account_balance(reload: false)
   end
 
   def account_balance_with_currency
     account_balance.with_currency(object.account.currency)
+  end
+
+  def negative_balance?
+    account_balance.negative?
+  end
+
+  def self.all_dynamic_tags
+    {
+      'halted'           => 'important',
+      'negative-balance' => 'hidden'
+    }.freeze
+  end
+
+  def self.all_dynamic_tags_as_a_list
+    all_dynamic_tags.keys.freeze
+  end
+
+  def dynamic_tags
+    self.class.all_dynamic_tags.select do |tag|
+      public_send(tag.questionize)
+    end
   end
 
   def next_delivery_summary

@@ -100,7 +100,7 @@ module Bucky::TransactionImports
     end
 
     # Return a number between 0.0 and 1.0
-    # to indicate how close a match the numbers 
+    # to indicate how close a match the numbers
     # amount & balance are.
     # Check tests for examples
     def self.amount_match(amount, balance)
@@ -195,7 +195,7 @@ module Bucky::TransactionImports
 
     # No other accounts match the amount
     def no_other_account_matches?(customer)
-      customer.distributor.accounts.where(["customers.id != ? AND accounts.balance_cents = ?", customer.id, BigDecimal.new(-100) * amount]).count.zero? 
+      customer.distributor.accounts.where(["customers.id != ? AND accounts.balance_cents = ?", customer.id, BigDecimal.new(-100) * amount]).count.zero?
     end
 
 

@@ -11,6 +11,7 @@ SimpleCov.start 'rails' do
   add_group "Webstore", "webstore"
 
   minimum_coverage 80
+  merge_timeout 3600
 end
 
 # vim: ft=ruby

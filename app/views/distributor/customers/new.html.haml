@@ -1,3 +1,14 @@
 - title('New Customer')
 
-= render 'form'
+= simple_form_for(new_customer, url: distributor_customers_path, html: { class: 'form-horizontal', method: :post }) do |f|
+  = f.error_notification
+
+  = render partial: "edit_profile_inputs", locals: { f: f, customer_profile: new_customer }
+  = render partial: "edit_delivery_details_inputs", locals: { f: f, delivery_details: new_customer }
+
+  .row-fluid
+    .span12.form-actions
+      = f.button :submit, 'Create Customer', class: 'btn btn-primary'
+      or
+      = link_to 'cancel', :back
+

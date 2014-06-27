@@ -40,11 +40,6 @@ class Distributor::SettingsController < Distributor::BaseController
     end
   end
 
-  def delivery_services
-    @delivery_service = DeliveryService.new
-    @delivery_services = current_distributor.delivery_services.decorate
-  end
-
   def catch_cancel
     redirect_to :back if params[:commit] == 'cancel'
   end

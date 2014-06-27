@@ -7,7 +7,7 @@ describe Event do
 
   describe "#dismiss!" do
     before { event.dismiss! }
-    specify { event.dismissed.should be_true }
+    specify { event.dismissed.should be true }
   end
 
   shared_examples_for "an event" do

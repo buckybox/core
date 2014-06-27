@@ -1,5 +1,5 @@
 class Admin::OmniImportersController < Admin::BaseController
-  
+
   def index
     @omni_importers = OmniImporter.ordered
     # Put those with blank countries on top
@@ -49,6 +49,8 @@ class Admin::OmniImportersController < Admin::BaseController
     get_test_importer(params[:rules])
     render partial: 'admin/omni_importers/test'
   end
+
+private
 
   def get_test_importer(rules)
     @rules = rules

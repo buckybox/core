@@ -10,7 +10,7 @@ protected
 
     opts.merge!(
       'X-Mailer' => Figaro.env.x_mailer,
-      'From'     => distributor.support_email,
+      'From'     => distributor.email_from(email: Figaro.env.no_reply_email),
       'Reply-To' => distributor.support_email,
     )
 

@@ -261,7 +261,7 @@
     .input-append
       margin: 10px 0
 
-#products
+#delivery_services, #products
   table
     border-top: 1px solid #DDD
     color: #000
@@ -270,6 +270,11 @@
         cursor: pointer
         &:hover
           background-color: #EEE
+        td
+          &:first-child > *
+            padding-left: 6px
+          &:last-child > *
+            padding-right: 6px
       &:first-child td
         line-height: 24px
         padding: 4px 0
@@ -303,6 +308,46 @@
       margin: 1em 0 0 0
       input
         margin-left: 1em
+
+  > .delivery_services
+    tr
+      &.edit
+        #new_delivery_service .container-fluid
+          border-top: none
+        .name, .instructions
+          width: 46%
+        .instructions
+          margin-right: 55px // hack so the checkbox is aligned with 'Mon'
+        .pickup_point > label
+          padding-top: .5em
+        .days
+          width: 46%
+          label
+            display: inline-block
+          input
+            float: none
+            margin: auto
+          .label
+            text-transform: uppercase
+        .fee
+          margin-top: 11px
+          width: 7%
+        form .form-actions
+          margin-top: -30px
+      &:not(.edit)
+        height: 34px
+        td
+          white-space: nowrap
+        .name
+          width: 56%
+        .instructions
+          font-size: 12px
+        .pickup_point
+          width: 2%
+        .days
+          width: 34%
+        .fee
+          width: 1px
 
   > .boxes
     tr

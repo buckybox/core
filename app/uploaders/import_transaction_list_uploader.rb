@@ -7,7 +7,7 @@ class ImportTransactionListUploader < CarrierWave::Uploader::Base
   def store_dir
     "#{Rails.root}/private_uploads/payments/csv/#{model.file_format}"
   end
-  
+
   def extension_white_list
     %w(csv)
   end
@@ -34,7 +34,7 @@ class ImportTransactionListUploader < CarrierWave::Uploader::Base
 
   def distributor_id
     if try(model, :distributor_id).present?
-      "/#{model.distributor_id}" 
+      "/#{model.distributor_id}"
     else
       ''
     end

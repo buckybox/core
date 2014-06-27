@@ -2,7 +2,7 @@ class CreditCard < Form
 
   ATTRS = :card_brand, :card_number, :name_on_card, :first_name, :last_name, :expiry_month, :expiry_year, :card_security_code, :store_for_future_use
   attr_accessor(*ATTRS)
-  
+
   def initialize(args={})
     ATTRS.each do |attr|
       self.send("#{attr.to_s}=", args[attr]) if args[attr].present?
@@ -23,12 +23,12 @@ class CreditCard < Form
   end
 
   def authorize!(webstore_order)
-    
+
   end
 
   def purchase!(webstore_order)
     return false if !valid?
-    
+
     gateway = ActiveMerchant::Billing::BraintreeGateway.new(
       login: 'demo',
       password: 'password'
@@ -66,7 +66,7 @@ class CreditCard < Form
   def name_on_card
     @name_on_card || ''
   end
-  
+
   def active_merchant_cc
     @active_merchant_cc ||= to_active_merchant_cc
   end

@@ -21,14 +21,14 @@ describe DeliveryList, :slow do
     end
 
     it 'returns true if there are no deliveries' do
-      delivery_list.mark_all_as_auto_delivered.should be_true
+      delivery_list.mark_all_as_auto_delivered.should be true
     end
 
     it 'returns true if all deliveries return true' do
       @deliveries << delivery_auto_delivering
       @deliveries << delivery_auto_delivering
 
-      delivery_list.mark_all_as_auto_delivered.should be_true
+      delivery_list.mark_all_as_auto_delivered.should be true
     end
 
     it 'returns false if one delivery returns false' do
@@ -36,7 +36,7 @@ describe DeliveryList, :slow do
       @deliveries << delivery_auto_delivering(false)
       @deliveries << delivery_auto_delivering
 
-      delivery_list.mark_all_as_auto_delivered.should be_false
+      delivery_list.mark_all_as_auto_delivered.should be false
     end
   end
 
@@ -128,7 +128,7 @@ describe DeliveryList, :slow do
         Fabricate(:delivery, status: 'delivered', delivery_list: delivery_list)
       end
 
-      specify { delivery_list.all_finished?.should be_true }
+      specify { delivery_list.all_finished?.should be true }
     end
 
     context 'has deliveries that are pending' do
@@ -137,7 +137,7 @@ describe DeliveryList, :slow do
         Fabricate(:delivery, status: 'pending', delivery_list: delivery_list)
       end
 
-      specify { delivery_list.all_finished?.should_not be_true }
+      specify { delivery_list.all_finished?.should_not be true }
     end
   end
 
@@ -150,7 +150,7 @@ describe DeliveryList, :slow do
         delivery_list.stub(:delivery_ids).and_return([delivery, @diff_delivery_service])
       end
 
-      specify { expect { delivery_list.reposition([@diff_delivery_service.id, delivery.id]) }.to raise_error(RuntimeError) }
+      specify { expect { delivery_list.reposition([@diff_delivery_service.id, delivery.id]) }.to raise_error(ArgumentError) }
     end
 
     context 'delivery ids must match' do
@@ -165,8 +165,7 @@ describe DeliveryList, :slow do
         delivery.stub(:reposition!).and_return(true)
       end
 
-      specify { expect { delivery_list.reposition([2, 1, 3]) }.to_not raise_error(RuntimeError) }
-      specify { expect { delivery_list.reposition([2, 5, 3]) }.to raise_error(RuntimeError) }
+      specify { expect { delivery_list.reposition([2, 5, 3]) }.to raise_error(ArgumentError) }
     end
 
     context 'should update delivery list positions' do
@@ -203,7 +202,7 @@ describe DeliveryList, :slow do
         date = delivery_list.date
         delivery_list.reposition(@new_ids)
         addresses = delivery_list.deliveries.ordered.collect(&:address)
-        
+
         box = Fabricate(:box, distributor: distributor)
         account = Fabricate(:account, customer: Fabricate(:customer, distributor: distributor, delivery_service: @delivery_service))
         account2 = Fabricate(:account, customer: Fabricate(:customer, distributor: distributor, delivery_service: @delivery_service))
@@ -225,7 +224,7 @@ describe DeliveryList, :slow do
         @d1 = fab_delivery(delivery_list, distributor, delivery_service)
         @d2 = fab_delivery(delivery_list, distributor, delivery_service)
         @d3 = fab_delivery(delivery_list, distributor, delivery_service)
-        
+
         d1_address = @d1.order.address
         address = Fabricate.build(:address, address_1: d1_address.address_1, address_2: d1_address.address_2, suburb: d1_address.suburb, city: d1_address.city, delivery_note: "Im different")
         @d4 = fab_delivery(delivery_list, distributor, delivery_service, address)

@@ -2,11 +2,8 @@
 
 #content-information
   .customer-information-section
-    margin-bottom: 28px
     .name
       font-size: 24px
-    &:last-child
-      margin-bottom: 0px
 
 //----- Dashboard
 
@@ -27,6 +24,7 @@
 .customer-order
   +order-frame
   margin-bottom: 25px
+  padding: 8px
   table.section-info
     width: 100%
     tbody
@@ -118,12 +116,25 @@
 .span12.no-indent
   margin-left: 0
 
-#bank_payment_details
+#payment_details
   display: none
   border: 1px solid #ddd
   background: white
-  >.row-fluid >.span12
-    padding: 10px
+  padding: 0 0 1em
+  > .row-fluid
+    margin: 0
+  .payment-partial
+    border: 1px solid #FFCF41
+    background: #FFFFCF
+    +border-radius(6px)
+    padding: 10px 20px
+    margin-bottom: 2em
+    &.offset2
+      margin-left: 17% // a bit off otherwise :S
+    form
+      margin: 0
+    .input-prepend
+      margin-top: 11px
   button.close
     position: relative
     right: 10px
@@ -135,7 +146,7 @@
 
 .payment-message
   .note
-    margin: 1em
+    margin: 1em 1em 0
     color: #333
     font-style: italic
 

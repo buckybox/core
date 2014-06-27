@@ -2,14 +2,15 @@ require './config/boot'
 require 'bundler/capistrano'
 require 'whenever/capistrano'
 require 'airbrake/capistrano'
+require 'new_relic/recipes'
 
 # Multistage deploy
 require 'capistrano/ext/multistage'
 set :stages, %w(production staging local)
 set :default_stage, "local"
 
-require File.expand_path('../../lib/capistrano_recipes/capistrano_database.rb', __FILE__) 
-require File.expand_path('../../lib/capistrano_recipes/performance.rb', __FILE__) 
+require File.expand_path('../../lib/capistrano_recipes/capistrano_database.rb', __FILE__)
+require File.expand_path('../../lib/capistrano_recipes/performance.rb', __FILE__)
 
 set :application, 'buckybox'
 
@@ -84,6 +85,8 @@ end
 after "deploy:update_code", "deploy:migrate"
 after "deploy:restart", "deploy:restart_workers"
 after "deploy:restart", "deploy:cleanup"
+
+after "deploy:restart", "newrelic:notice_deployment"
 
 after "deploy:setup", "setup_private_uploads"
 

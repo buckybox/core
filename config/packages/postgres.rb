@@ -49,7 +49,7 @@ package :configure_db do
   postgres_text = File.read(File.expand_path(File.join(File.dirname(__FILE__), 'configs', 'postgres', 'postgresql.conf')))
   tmp_file = '/tmp/postgresql.conf'
   remote_file = '/etc/postgresql/9.1/main/postgresql.conf'
-  
+
   push_text postgres_text, tmp_file do
     post :install, "mv #{tmp_file} #{remote_file}"
     post :install, "chown postgres:postgres #{remote_file}"

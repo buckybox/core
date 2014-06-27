@@ -1,17 +1,19 @@
 class ApplicationController < ActionController::Base
   protect_from_forgery
 
+  before_filter :miniprofiler
+  before_bugsnag_notify :add_user_info_to_bugsnag
+
+  before_filter :set_user_time_zone
+  before_filter :customer_smart_sign_in
+
   unless Rails.env.development?
     analytical modules: [:google], use_session_store: true
   else
     analytical modules: [], use_session_store: true
   end
 
-  before_filter :set_user_time_zone
-  before_filter :customer_smart_sign_in
-
   layout :layout_by_resource
-
 
 protected
 
@@ -157,5 +159,27 @@ private
     else
       Figaro.env.marketing_site_url # Shouldn't happen but better than nothing.
     end
+  end
+
+  def add_user_info_to_bugsnag(notification)
+    # Set the user that this bug affected
+    # Email, name and id are searchable on bugsnag.com
+    notification.user = {
+      number: current_customer.try(:number),
+    }
+
+    # Add some app-specific data which will be displayed on a custom
+    # "Diagnostics" tab on each error page on bugsnag.com
+    notification.add_tab(:diagnostics, {
+      distributor_id: current_distributor.try(:id),
+      distributor_name: current_distributor.try(:name),
+      customer_id: current_customer.try(:id),
+      customer_name: current_customer.try(:name),
+      cart: current_cart,
+    })
+  end
+
+  def miniprofiler
+    Rack::MiniProfiler.authorize_request if current_admin.present?
   end
 end

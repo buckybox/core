@@ -1,0 +1,11 @@
+.row-fluid
+  .span6
+    = f.input :delivery_service_id, collection: delivery_details.delivery_services, include_blank: false, input_html: { class: "input-block-level" }
+    = f.input :address_1,           required: delivery_details.require_address_1, input_html: { class: "input-block-level" }
+    = f.input :address_2,           required: delivery_details.require_address_2, input_html: { class: "input-block-level" }
+    = f.input :suburb,              required: delivery_details.require_suburb, input_html: { class: "input-block-level" }
+    = f.input :city,                required: delivery_details.require_city, input_html: { class: "input-block-level" }
+    = f.input :postcode,            required: delivery_details.require_postcode, input_html: { class: "input-block-level" }
+
+  .span6
+    = f.input :delivery_note, as: :text, placeholder: "Delivery instructions such as where to place the package, e.g. Place on back porch", input_html: { class: "input-block-level" }

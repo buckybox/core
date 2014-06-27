@@ -1,23 +1,18 @@
 require_relative "../../../app/models/webstore/order"
 
 describe Webstore::Order do
+  class DeliveryService; end
   class Box; end
   class Distributor; end
   class Customer; end
-  class DeliveryService; end
 
-  let(:product) { double("product") }
-  let(:cart)    { double("cart").as_null_object }
-  let(:args)    { { cart: cart } }
-  let(:order) do
-    order = Webstore::Order.new(args)
-
-    order.stub(:product_class) do
-      double("product_class", find: product)
-    end
-
-    order
-  end
+  let(:delivery_service)       { double("delivery_service") }
+  let(:delivery_service_class) { double("delivery_service_class") }
+  let(:product)                { double("product") }
+  let(:product_class)          { double("product_class", find: product) }
+  let(:cart)                   { double("cart").as_null_object }
+  let(:args)                   { { cart: cart, delivery_service_class: delivery_service_class, product_class: product_class } }
+  let(:order)                  { Webstore::Order.new(args) }
 
   describe "#product_image" do
     it "returns a product image" do
@@ -82,11 +77,10 @@ describe Webstore::Order do
     end
   end
 
-  describe "#delivery_fee" do
+  describe "#delivery_service_fee" do
     it "return the delivery fee" do
-      order_price_class = double("order_price_class", discounted: 5)
       order.stub(:delivery_service) { double("delivery_service", fee: 5) }
-      order.delivery_fee(order_price_class).should eq(5)
+      order.delivery_service_fee.should eq(5)
     end
   end
 
@@ -113,45 +107,26 @@ describe Webstore::Order do
 
   describe "#total" do
     before do
-      order.stub(:product_price)  { 1 }
-      order.stub(:extras_price)   { 1 }
-      order.stub(:delivery_fee)   { 1 }
+      order.stub(:product_price)  { 10 }
+      order.stub(:extras_price)   { 10 }
+      order.stub(:delivery_service_fee) { 5 }
       order.stub(:bucky_fee)      { 1 }
-      order.stub(:discount)       { 1 }
-      order.stub(:has_extras?)    { false }
-      order.stub(:is_scheduled?)  { false }
-      order.stub(:has_bucky_fee?) { false }
-      order.stub(:has_discount?)  { false }
     end
 
-    it "returns the total cost of the order with only product price" do
-      order.total.should eq(1)
+    it "returns the total cost of the order" do
+      order.total.should eq(10 + 10 + 5 + 1)
+    end
+  end
+
+  describe "#delivery_service" do
+    it "returns nil if there is no delivery service found" do
+      delivery_service_class.stub(:find_by) { nil }
+      expect(order.delivery_service).to be_nil
     end
 
-    it "returns the total cost of the order with only product price" do
-      order.stub(:has_extras?) { true }
-      order.total.should eq(2)
-    end
-
-    it "returns the total cost of the order with only product price" do
-      order.stub(:has_extras?)   { true }
-      order.stub(:is_scheduled?) { true }
-      order.total.should eq(3)
-    end
-
-    it "returns the total cost of the order with only product price" do
-      order.stub(:has_extras?)    { true }
-      order.stub(:is_scheduled?)  { true }
-      order.stub(:has_bucky_fee?) { true }
-      order.total.should eq(4)
-    end
-
-    it "returns the total cost of the order with only product price" do
-      order.stub(:has_extras?)    { true }
-      order.stub(:is_scheduled?)  { true }
-      order.stub(:has_bucky_fee?) { true }
-      order.stub(:has_discount?)     { true }
-      order.total.should eq(5)
+    it "returns a delivery service if one is found" do
+      delivery_service_class.stub(:find_by) { delivery_service }
+      expect(order.delivery_service).to eq(delivery_service)
     end
   end
 end

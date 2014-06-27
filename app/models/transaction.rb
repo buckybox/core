@@ -28,7 +28,7 @@ class Transaction < ActiveRecord::Base
   def self.dummy(amount, description, date)
     OpenStruct.new(
       description: description,
-      amount: EasyMoney.zero,
+      amount: CrazyMoney.zero,
       created_at: date,
       display_time: date,
       id: 999999999

@@ -1,6 +1,4 @@
 class OmniImporter < ActiveRecord::Base
-  PAYPAL_ID = 16
-
   attr_accessible :global, :country_id, :import_transaction_list, :name, :rules, :remove_import_transaction_list, :import_transaction_list_cache, :tag_list, :payment_type, :bank_name
 
   mount_uploader :import_transaction_list, ImportTransactionListUploader
@@ -10,12 +8,16 @@ class OmniImporter < ActiveRecord::Base
   belongs_to :country
   has_and_belongs_to_many :distributors
 
-  scope :ordered, joins("LEFT JOIN countries ON countries.id = omni_importers.country_id").order('countries.alpha2, omni_importers.name')
+  scope :ordered, joins("LEFT JOIN countries ON countries.id = omni_importers.country_id").order('omni_importers.payment_type, countries.alpha2, omni_importers.name')
 
   scope :paypal, -> { where(payment_type: "PayPal") }
   scope :credit_card, -> { where(payment_type: "Credit Card") }
   scope :bank_deposit, -> { where(payment_type: "Bank Deposit") }
   scope :manual_processing, -> { where(payment_type: "Manual Processing") }
+
+  def self.generic_paypal
+    paypal.find_by(country_id: nil)
+  end
 
   # used to name the uploaded files
   def file_format

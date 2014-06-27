@@ -2,13 +2,15 @@ require "spec_helper"
 
 describe CustomerMailer do
   before { @customer = Fabricate(:customer) }
+  let(:body) { mail.body.encoded }
 
   describe "#login_details" do
     let(:mail) { CustomerMailer.login_details(@customer)}
 
     it "renders the headers" do
       mail.subject.should include "login details"
-      mail.from.should eq [@customer.distributor.support_email]
+      mail.from.should eq [Figaro.env.no_reply_email]
+      mail.reply_to.should eq [@customer.distributor.support_email]
       mail.to.should eq [@customer.email]
       mail.header["X-Mailer"].value.should eq(Figaro.env.x_mailer)
     end
@@ -34,8 +36,7 @@ describe CustomerMailer do
   end
 
   describe "#order_confirmation" do
-    let(:customer) { Fabricate(:customer) }
-    let(:order) { Fabricate(:order, customer: customer) }
+    let(:order) { Fabricate(:order, customer: @customer) }
     let(:mail) { CustomerMailer.order_confirmation(order) }
 
     specify { expect(mail.to).to eq [order.customer.email] }
@@ -53,20 +54,26 @@ describe CustomerMailer do
       decorated_customer.stub(mobile_phone: "MOB", work_phone: "WORK")
       order.customer.stub(:decorate) { decorated_customer }
 
-      expect(mail.body.encoded).to include "Mobile Phone", "MOB"
-      expect(mail.body.encoded).to include "Work Phone", "WORK"
-      expect(mail.body.encoded).not_to include "Home Phone"
+      expect(body).to include "Mobile Phone", "MOB"
+      expect(body).to include "Work Phone", "WORK"
+      expect(body).not_to include "Home Phone"
     end
 
     it "includes line items if present" do
       order.stub(:exclusions_string) { "EXC" }
 
-      expect(mail.body.encoded).to include "Exclusions", "EXC"
-      expect(mail.body.encoded).not_to include "Substitutes"
+      expect(body).to include "Exclusions", "EXC"
+      expect(body).not_to include "Substitutes"
     end
 
     it "includes the schedule rule" do
-      expect(mail.body.encoded).to include "Deliver weekly", "starting"
+      expect(body).to include "Deliver weekly", "starting"
+    end
+
+    context "when the delivery service is not a pickup point" do
+      specify { expect(body).to include "Delivery Address:" }
+      specify { expect(body).to include @customer.name }
+      specify { expect(body).to include @customer.address.join("<br/>") }
     end
   end
 end

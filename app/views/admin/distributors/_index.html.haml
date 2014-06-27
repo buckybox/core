@@ -7,28 +7,27 @@
           %br
         %span.medium
           = mail_to(distributor.email, distributor.contact_name_for_email)
-          -# Display main contact name if available, else display email, open in new window
       .span2
         %span.medium= distributor.location
       .span2.align-right.medium.bold
-        = distributor.customers.count
+        = distributor.total_customer_count
         = "(#{distributor.transactional_customer_count})"
         %i.icon-user(title="total customers (transactional customers)")
         %br
         = distributor.new_customer_count
         = "(#{distributor.new_transactional_customer_count})"
         %i.icon-plus(title="new customer in last 7 days (new transactions)")
-      .span1.align-right.medium.bold 
-        = distributor.orders.active.count 
+      .span1.align-right.medium.bold
+        = distributor.orders.active.count
         %i.icon-shopping-cart(title="Active orders")
         %br
-        = distributor.deliveries.delivered.where(["deliveries.updated_at > ?", 7.days.ago]).count
+        = distributor.deliveries_last_7_days_count
         %i.icon-road(title="Deliveries completed in last 7 days")
       .span3.align-right.medium
         = time_since(distributor.current_sign_in_at)
         %a(href="http://www.infosniper.net/index.php?ip_address=#{distributor.current_sign_in_ip}" target="_blank")
           %i.icon-map-marker
-          -# open link to iplocator in new window
+
     .row-fluid
       .span4
         - distributor.tags.each do |tag|
@@ -45,25 +44,18 @@
           %span.label.label-inverse{title: 'Cash on Delivery'} cod
         - if distributor.payment_bank_deposit?
           %span.label.label-inverse bank-deposit
-        - if distributor.payment_credit_card?
-          %span.label.label-important credit-card
+        - if distributor.payment_paypal?
+          %span.label.label-important paypal
         - distributor.omni_importers.includes(:country).each do |omni_importer|
           %span.label.label-success{title: omni_importer.payment_type}= omni_importer.tag_name
-        - unless distributor.keep_me_updated?
-          %span.label dont-send-email-updates
       .span5
         %small
           Next delivery:
           %strong= distributors_next_delivery_date(distributor)
-        
       .span3.align-right.small
         = link_to 'Show', admin_distributor_path(distributor)
         |
         = link_to 'Edit', edit_admin_distributor_path(distributor)
         |
         = link_to 'Impersonate', impersonate_admin_distributor_path(distributor)
-        |
-        = link_to 'Reset Intros', reset_intros_admin_distributor_path(distributor)
-    - if distributor.notes.present?
-      .row-fluid
-        .span5= simple_format(distributor.notes)
+

@@ -18,6 +18,17 @@
     - else
       = favicon_link_tag '/favicon-red.ico'
 
+    - if Rails.env.test?
+      -# http://stackoverflow.com/questions/14488836/capybara-2-having-trouble-interacting-with-bootstrap-modals
+      :css
+        .modal.fade, .fade {
+          -webkit-transition: opacity 0.01s;
+          -moz-transition: opacity 0.01s;
+          -ms-transition: opacity 0.01s;
+          -o-transition: opacity 0.01s;
+          transition: opacity 0.01s;
+        }
+
     / Analytics
     - analytical.identify(current_distributor.id, email: current_distributor.email) if current_distributor
     = raw analytical.head_append_javascript

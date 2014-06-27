@@ -30,7 +30,7 @@
           %label{for: "distributor_time_zone"} Time zone
           = f.input_field :time_zone, as: :time_zone, priority: Regexp.new(time_zone)
 
-    %article.step.hide
+    %article.step.invisible
       %fieldset
         %legend address
         #address_fields
@@ -44,7 +44,7 @@
         %legend your bucky box webstore url
         = f.input_field :parameter_name, title: "(URL) e.g. farmville-organics", required: true, value: "my.buckybox.com/webstore/", pattern: "[a-z0-9/\.\-]+", title: "No special characters please"
 
-    %article.step.hide.submit
+    %article.step.invisible.submit
       %fieldset#payment_types
         %legend payment types
         %div
@@ -75,7 +75,7 @@
         %div
           = f.input_field :deliveries_per_week, label: false, placeholder: "How many boxes do you deliver per week?", type: "number", min: 0
 
-    %article.step.hide
+    %article.step.invisible
       %p
         Thanks!
         %br
@@ -84,7 +84,7 @@
         please check your email.
 
   %footer
-    %input#back.hide{type: "button", value: "Back"}
+    %input#back.invisible{type: "button", value: "Back"}
     %input#next.primary{type: "submit", value: "Next"}
 
 / Crafted with lots of love!

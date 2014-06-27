@@ -49,8 +49,8 @@ class SignUpWizardController < ApplicationController
     )
 
     if payment_paypal.try(:to_bool)
-      # NOTE: using hardcoded PayPal omni until we get more formats
-      @distributor.omni_importers << OmniImporter.where(id: OmniImporter::PAYPAL_ID)
+      omni = OmniImporter.paypal.find_by(country_id: country.id) || OmniImporter.generic_paypal
+      @distributor.omni_importers << omni
     end
 
     unless bank_name.nil?
@@ -69,11 +69,6 @@ class SignUpWizardController < ApplicationController
       Distributor::Defaults.populate_defaults(@distributor)
     else
       errors = @distributor.errors.full_messages
-
-      # NOTE: temporary until we accept no payment types
-      if @distributor.errors.has_key? :payment_cash_on_delivery
-        errors.unshift "You must select Bank Deposit and/or Cash on Delivery"
-      end
 
       render json: errors.first, status: :unprocessable_entity
     end

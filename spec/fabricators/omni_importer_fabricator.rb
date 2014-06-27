@@ -37,8 +37,7 @@ Fabricator(:omni_importer_for_bank_deposit, from: :omni_importer) do
 end
 
 Fabricator(:paypal_omni_importer, from: :omni_importer) do
-  id OmniImporter::PAYPAL_ID
   payment_type "PayPal"
-  country nil
+  country
 end
 

@@ -1,0 +1,23 @@
+.row-fluid
+  .span6
+    - unless customer_profile.auto_assign_number?
+      = f.input :number,  as: :integer,  input_html: { class: "input-block-level" }
+
+    = f.input :first_name,    input_html: { class: "input-block-level" }
+    = f.input :last_name,     input_html: { class: "input-block-level" }
+    = f.input :tag_list,      label: "Tags",  placeholder: "E.g. west-end, coupon, discount",  input_html: { class: "input-block-level" }
+    = f.input :email,         input_html: { class: "input-block-level" }
+
+    - if customer_profile.require_phone?
+      %p.muted At least one type of phone number is required
+    = f.input :mobile_phone,  input_html: { class: "input-block-level" }
+    = f.input :home_phone,    input_html: { class: "input-block-level" }
+    = f.input :work_phone,    input_html: { class: "input-block-level" }
+
+    - if customer_profile.has_balance_threshold?
+      = f.input :balance_threshold,  as: :decimal,  label: "Minimum balance",  hint: "Deliveries will halt when their balance reaches the minimum balance.",  input_html: { class: "input-block-level",  step: 0.01 }
+
+    = f.input :discount,  as: :decimal,  input_html: { class: "input-block-level",  step: 0.0001 }
+
+  .span6
+    = f.input :special_order_preference,  as: :text,  label: "Packing notes",  placeholder: "Special preferences for this customer, e.g. small potatoes only",  input_html: { class: "input-block-level" }
