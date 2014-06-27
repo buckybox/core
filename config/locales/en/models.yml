@@ -3,6 +3,24 @@ en:
     order:
       edit: edit this order
       impending_delivery: This order has an impending delivery, changes made will only affect the deliveries on or after %{date}.
+    phone_collection:
+      mobile_phone: Mobile phone
+      work_phone: Work phone
+      home_phone: Home phone
+    customer:
+      form:
+        update_contact_details:
+          attributes:
+            first_name: First name
+            last_name: Last name
+            email: Email
+          hints:
+            email: Please double check this email as it is also used as your login.
+            phone: At least one type of phone number is required.
+        update_password:
+          attributes:
+            password: Enter your new password
+            password_confirmation: Enter your new password again to confirm
   activerecord:
     models:
       box: Product

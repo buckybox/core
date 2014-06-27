@@ -2,15 +2,16 @@
   .modal-body
     = f.error_notification
 
-    = f.input :first_name
-    = f.input :last_name
-    = f.input :email,  hint: 'Please double check this email as it is also used as your login.'
+    = f.input :first_name, label: t('models.customer.form.update_contact_details.attributes.first_name')
+    = f.input :last_name, label: t('models.customer.form.update_contact_details.attributes.last_name')
+    = f.input :email, label: t('models.customer.form.update_contact_details.attributes.email'),
+      hint: t('models.customer.form.update_contact_details.hints.email')
 
     - if update_contact_details.require_phone?
-      %p.muted At least one type of phone number is required
-    = f.input :mobile_phone
-    = f.input :home_phone
-    = f.input :work_phone
+      %p.muted= t('models.customer.form.update_contact_details.hints.phone')
+    = f.input :mobile_phone, label: t('models.phone_collection.mobile_phone')
+    = f.input :home_phone, label: t('models.phone_collection.home_phone')
+    = f.input :work_phone, label: t('models.phone_collection.work_phone')
 
   .modal-footer
-    = f.button :submit, 'Update', class: 'btn btn-primary'
+    = f.button :submit, t('update'), class: 'btn btn-primary'
