@@ -16,12 +16,6 @@
         = f.input_field :time_zone, as: :time_zone, title: 'Timezone', class: 'span6'
 
       %fieldset
-        %legend language (only applies to web store and customers)
-        = f.input_field :language, include_blank: false, required: true,
-          disabled: true,
-          collection: I18n.available_locales.each_with_object({}) { |locale, hash| hash[I18n.t('current_locale', locale: locale)] = locale }
-
-      %fieldset
         %legend customer support email
         = f.input_field :support_email, placeholder: 'Emails to customers will be sent from this address', class: 'span12', required: true
 
