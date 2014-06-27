@@ -117,7 +117,7 @@ class Distributor < ActiveRecord::Base
 
   delegate :tracking_after_create, :tracking_after_save, :track, to: :messaging
 
-  def language
+  def locale
     "en" # FIXME
   end
 
