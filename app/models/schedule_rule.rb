@@ -325,11 +325,12 @@ class ScheduleRule < ActiveRecord::Base
   end
 
   def to_s
+    raise "GET RID OF ME"
     case recur
     when :one_off
-      "Deliver on #{start.to_s(:flux_cap)}"
+      "#{I18n.t('models.schedule_rule.deliver_on')} #{I18n.l start.to_s(:flux_cap)}"
     when :single
-      "Deliver on #{start.to_s(:flux_cap)}"
+      "#{I18n.t('models.schedule_rule.deliver_on')} #{I18n.l start.to_s(:flux_cap)}"
     when :weekly
       "Deliver weekly on #{delivery_days}"
     when :fortnightly
