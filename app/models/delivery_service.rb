@@ -10,26 +10,28 @@ class DeliveryService < ActiveRecord::Base
 
   monetize :fee_cents
 
-  attr_accessible :distributor, :name, :fee, :area_of_service, :estimated_delivery_time, :schedule_rule_attributes, :schedule_rule
+  attr_accessible :distributor, :name, :fee, :instructions, :schedule_rule_attributes, :schedule_rule, :pickup_point
   accepts_nested_attributes_for :schedule_rule
 
-  validates_presence_of :distributor_id, :name, :fee, :area_of_service, :estimated_delivery_time, :schedule_rule
+  validates_presence_of :distributor_id, :name, :fee, :instructions, :schedule_rule
 
   default_scope order(:name)
 
   delegate :local_time_zone, to: :distributor, allow_nil: true
-  
+
   delegate :includes?, :delivery_day_numbers, :next_occurrences, :runs_on, :occurrences_between, to: :schedule_rule, allow_nil: true
   delegate :sun, :mon, :tue, :wed, :thu, :fri, :sat, to: :schedule_rule, allow_nil: true
 
   after_initialize :set_default_schedule_rule
+
+  before_destroy :check_no_customers_left, prepend: true
 
   def schedule_rule_attributes_with_recur=(attrs)
     self.schedule_rule_attributes_without_recur = attrs.merge(recur: :weekly)
   end
   alias_method :schedule_rule_attributes_without_recur=, :schedule_rule_attributes=
   alias_method :schedule_rule_attributes=, :schedule_rule_attributes_with_recur=
-  
+
   def set_default_schedule_rule
     self.schedule_rule ||= ScheduleRule.weekly if new_record?
   end
@@ -63,13 +65,24 @@ class DeliveryService < ActiveRecord::Base
   def future_orders
     Order.for_delivery_service_read_only(self)
   end
-  
+
   def schedule_changed(schedule_rule)
     day_numbers = schedule_rule.deleted_day_numbers
     return if day_numbers.blank?
 
     future_orders.active.each do |order|
       order.deactivate_for_days!(day_numbers)
+    end
+  end
+
+private
+
+  def check_no_customers_left
+    if customers.present?
+      errors.add(:base, "Cannot delete delivery service with customers on it")
+      false
+    else
+      true
     end
   end
 end

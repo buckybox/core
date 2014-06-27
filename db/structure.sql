@@ -1035,8 +1035,8 @@ CREATE TABLE delivery_services (
     created_at timestamp without time zone,
     updated_at timestamp without time zone,
     fee_cents integer DEFAULT 0 NOT NULL,
-    area_of_service text,
-    estimated_delivery_time text
+    pickup_point boolean DEFAULT false NOT NULL,
+    instructions text
 );
 
 
@@ -1249,7 +1249,9 @@ CREATE TABLE distributors (
     email_customer_on_new_webstore_order boolean DEFAULT true NOT NULL,
     email_customer_on_new_order boolean DEFAULT false NOT NULL,
     email_distributor_on_new_webstore_order boolean DEFAULT false NOT NULL,
-    customer_can_edit_orders boolean DEFAULT true NOT NULL
+    customer_can_edit_orders boolean DEFAULT true NOT NULL,
+    payment_paypal boolean DEFAULT false NOT NULL,
+    paypal_email character varying(255)
 );
 
 
@@ -3808,6 +3810,8 @@ INSERT INTO schema_migrations (version) VALUES ('20131022015514');
 
 INSERT INTO schema_migrations (version) VALUES ('20131022025554');
 
+INSERT INTO schema_migrations (version) VALUES ('20131106103858');
+
 INSERT INTO schema_migrations (version) VALUES ('20131112025426');
 
 INSERT INTO schema_migrations (version) VALUES ('20131212220220');
@@ -3817,3 +3821,9 @@ INSERT INTO schema_migrations (version) VALUES ('20131216225521');
 INSERT INTO schema_migrations (version) VALUES ('20140109004934');
 
 INSERT INTO schema_migrations (version) VALUES ('20140109032329');
+
+INSERT INTO schema_migrations (version) VALUES ('20140513204743');
+
+INSERT INTO schema_migrations (version) VALUES ('20140518211720');
+
+INSERT INTO schema_migrations (version) VALUES ('20140612130409');

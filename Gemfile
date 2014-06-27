@@ -1,60 +1,71 @@
 source 'https://rubygems.org'
 
-ruby '2.1.1'
+if RUBY_VERSION != '2.1.2' # FIXME
+  warn "WARNING: You are not running the version of Ruby targeted for this application (#{RUBY_VERSION} != 2.1.2)."
+else
+  ruby '2.1.2'
+end
 
-gem 'rails',                      '~> 3.2.17'
-gem 'pg',                         '~> 0.17.0'
-gem 'haml-rails',                 '~> 0.3.4'
-gem 'jquery-rails',               '~> 3.0.4'
-gem 'jquery-ui-rails',            '~> 4.0.5'
-gem 'bootstrap-sass',             '~> 2.3.2.0'
-gem 'bootbox-rails',              '~> 0.1.0'
-gem 'select2-rails',              '~> 3.5.0'
-gem 'json',                       '~> 1.7.7'
-gem 'devise',                     '~> 3.2.2'
-gem 'multi_json',                 '~> 1.3.6'
-gem 'simple_form',                '~> 2.1.1'
-gem 'inherited_resources',        '~> 1.3.1'
-gem 'mini_magick',                '~> 3.4'
-gem 'carrierwave',                '~> 0.6.2'
-gem 'acts-as-taggable-on',        '~> 2.3.3'
-gem 'pg_search',                  '~> 0.5.1'
-gem 'whenever',                   '~> 0.7.3'
-gem 'acts_as_list',               '~> 0.1.8'
-gem 'default_value_for',          '~> 2.0.1'
-gem 'fuzzy-string-match',         '~> 0.9.4', require: 'fuzzystringmatch' # This performs fuzzy matching on the import script
-gem 'state_machine',              '~> 1.1.2'
-gem 'figaro',                     '~> 0.6.4'
-gem 'virtus',                     '~> 0.5.5'
-gem 'draper',                     '~> 1.2.1'
-gem 'naught',                     '~> 0.0.2'
-gem 'premailer-rails',            '~> 1.4.0'
-gem 'nokogiri',                   '~> 1.6.1' # premailer-rails dependency
-gem 'delayed_job',                '~> 3.0.5' # send emails offline
-gem 'delayed_job_active_record',  '~> 0.4.4'
-gem 'delayed_job_web',            '= 1.2.0' # version hardcoded in config/deploy.rb
-gem 'delayed-plugins-airbrake',   '~> 1.0.0' # Notify Airbrake when delayed_job has an error
-gem 'daemons',                    '~> 1.1.9' # able to monitor delayed_job via monit
-gem 'analytical',                 '~> 3.0.12'
-gem 'newrelic_rpm',               '~> 3.6.1'
-gem 'airbrake',                   '~> 3.1.2'
-gem 'intercom-rails',             '~> 0.2.24'
-gem 'intercom',                   '~> 0.1.16'
-gem 'ace-rails-ap',               '~> 2.0.0'
-gem 'activemerchant',             '~> 1.32.1'
-gem 'attr_encryptor',             '~> 1.0.2'
-gem 'countries',                  '~> 0.9.2', require: 'iso3166'
-gem 'country_select',             '~> 1.1.3'
-gem 'biggs',                      '~> 0.3.3'
-gem 'charlock_holmes',            '~> 0.6.9.4'
-gem 'easy_money',                 '~> 1.0.0', git: 'https://github.com/buckybox/easy_money.git'
-gem 'currency_data',              '~> 1.0.0', git: 'https://github.com/buckybox/currency_data.git'
-gem 'simple_form-bank_account_number', '~> 1.0.0', git: 'https://github.com/buckybox/simple_form-bank_account_number.git'
-gem 'rabl',                       '~> 0.9.0'
-gem 'oj',                         '~> 2.1.7'
-gem 'apipie-rails',               '~> 0.0.24'
-gem 'strong_parameters',          '~> 0.2.1'
-gem 'rails-timeago',              '~> 2.8.1'
+gem 'rails',                           '~> 3.2.18'
+gem 'pg',                              '~> 0.17.0'
+gem 'haml-rails',                      '~> 0.3.4'
+gem 'jquery-rails',                    '~> 3.0.4'
+gem 'jquery-ui-rails',                 '~> 4.0.5'
+gem 'bootstrap-sass',                  '~> 2.3.2.2'
+gem 'bootbox-rails',                   '~> 0.1.0'
+gem 'select2-rails',                   '~> 3.5.0'
+gem 'json',                            '~> 1.7.7'
+gem 'devise',                          '~> 3.2.2'
+gem 'multi_json',                      '~> 1.3.6'
+gem 'simple_form',                     '~> 2.1.1'
+gem 'inherited_resources',             '~> 1.3.1'
+gem 'mini_magick',                     '~> 3.4'
+gem 'carrierwave',                     '~> 0.6.2'
+gem 'acts-as-taggable-on',             '~> 2.3.3'
+gem 'pg_search',                       '~> 0.5.1'
+gem 'whenever',                        '~> 0.7.3'
+gem 'acts_as_list',                    '~> 0.1.8'
+gem 'default_value_for',               '~> 2.0.1'
+gem 'fuzzy-string-match',              '~> 0.9.4', require: 'fuzzystringmatch' # This performs fuzzy matching on the import script
+gem 'state_machine',                   '~> 1.1.2'
+gem 'figaro',                          '~> 0.6.4'
+gem 'virtus',                          '~> 1.0.1'
+gem 'draper',                          '~> 1.2.1'
+gem 'naught',                          '~> 0.0.2'
+gem 'premailer-rails',                 '~> 1.4.0'
+gem 'nokogiri',                        '~> 1.6.2' # premailer-rails dependency
+gem 'delayed_job',                     '~> 3.0.5' # send emails offline
+gem 'delayed_job_active_record',       '~> 0.4.4'
+gem 'delayed_job_web',                 '= 1.2.0' # version hardcoded in config/deploy.rb
+gem 'delayed-plugins-airbrake',        '~> 1.1.0' # Notify Airbrake when delayed_job has an error
+gem 'daemons',                         '~> 1.1.9' # able to monitor delayed_job via monit
+gem 'analytical',                      '~> 3.0.12'
+gem 'newrelic_rpm'
+gem 'intercom-rails',                  '~> 0.2.24'
+gem 'intercom',                        '~> 0.1.16'
+gem 'ace-rails-ap',                    '~> 2.0.0'
+gem 'activemerchant',                  '~> 1.32.1'
+gem 'attr_encryptor',                  '~> 1.0.2'
+gem 'countries',                       '~> 0.9.2', require: 'iso3166'
+gem 'country_select',                  '~> 1.1.3'
+gem 'biggs',                           '~> 0.3.3'
+gem 'charlock_holmes',                 '~> 0.6.9.4'
+gem 'crazy_money',                     '~> 1.1.1'
+gem 'currency_data',                   '~> 1.0.1'
+gem 'rabl',                            '~> 0.9.0'
+gem 'oj',                              '~> 2.1.7'
+gem 'apipie-rails',                    '~> 0.0.24'
+gem 'strong_parameters',               '~> 0.2.1'
+gem 'rails-timeago',                   '~> 2.8.1'
+gem 'email_templator',                 '~> 1.0.0'
+gem 'simple_form-bank_account_number', '~> 1.0.0'
+gem 'discover-unused-partials',        '~> 0.3.0'
+gem 'cane',                            '~> 2.6.1'
+gem 'airbrake',                        '~> 3.1.2'
+gem 'bugsnag',                         '~> 2.0.2'
+gem 'rack-mini-profiler',              '~> 0.9.2'
+gem 'flamegraph',                      '~> 0.0.5' # for rack-mini-profiler
+gem 'fast_blank',                      '~> 0.0.2'
 
 group :assets do
   gem 'coffee-rails',   '~> 3.2.2'
@@ -92,7 +103,7 @@ group :development do
 end
 
 group :test do
-  gem 'fabrication'
+  gem 'fabrication', '~> 2.9.8' # TODO upgrade and fix broken specs
   gem 'database_cleaner'
   gem 'therubyracer', require: false # embeded JS interpreter for our CI server
   gem 'simplecov', require: false
@@ -101,25 +112,26 @@ group :test do
   gem 'capybara-screenshot'
   gem 'poltergeist', require: false
   gem 'launchy'
-  gem 'fuubar'
   gem 'guard', '~> 1' # v2 is broken with a version mismatch issue
   gem 'guard-rspec'
+  gem 'rspec-activemodel-mocks'
 end
 
 group :staging do
   gem 'mail_safe'
+  # gem 'oink',                            '~> 0.10.1'
+end
+
+group :development, :staging do
+  # gem 'stackprof', git: "https://github.com/tmm1/stackprof.git"
 end
 
 group :development, :test do
-  gem 'rspec-rails'
+  gem 'rspec-rails', '~> 2' # TODO upgrade to RSpec 3
   gem 'listen'
   gem 'terminal-notifier-guard' # Mac 10.8 system notifications for Guard
   gem 'letter_opener'
   gem 'bundler-audit', require: false
-end
-
-group :development, :staging do
-  gem 'oink', require: 'oink'
 end
 
 group :development, :test, :staging do

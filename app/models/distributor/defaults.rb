@@ -11,6 +11,7 @@ class Distributor::Defaults
   def populate_defaults
     populate_line_items
     populate_bank_information
+    populate_paypal_information
     populate_email_templates
     distributor.save
   end
@@ -32,6 +33,10 @@ private
     bank_information.cod_payment_message = "Please place payment in your mailbox."
 
     bank_information.save(validate: false) # because model is missing account number
+  end
+
+  def populate_paypal_information
+    distributor.paypal_email = distributor.email
   end
 
   def populate_email_templates

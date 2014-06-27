@@ -20,11 +20,6 @@ class Customer < ActiveRecord::Base
 
   acts_as_taggable
 
-  DYNAMIC_TAGS = {
-    'halted'           => 'important',
-    'negative-balance' => 'hidden'
-  }.freeze
-
   accepts_nested_attributes_for :address
 
   monetize :balance_threshold_cents
@@ -33,12 +28,11 @@ class Customer < ActiveRecord::Base
     :delivery_service, :delivery_service_id, :password, :password_confirmation, :remember_me, :tag_list, :discount, :number, :notes,
     :special_order_preference, :balance_threshold, :via_webstore, :address
 
-  validates_presence_of :distributor_id, :delivery_service_id, :first_name, :email, :discount, :address
+  validates_presence_of :distributor_id, :delivery_service_id, :first_name, :email, :discount
   validates_uniqueness_of :number, scope: :distributor_id
   validates_numericality_of :number, greater_than: 0
   validates_numericality_of :discount, greater_than_or_equal_to: 0.0, less_than_or_equal_to: 1.0
   validates_associated :account
-  validates_associated :address
 
   before_validation :initialize_number, if: 'number.nil?'
   before_validation :random_password, unless: 'encrypted_password.present?'
@@ -172,7 +166,11 @@ class Customer < ActiveRecord::Base
   end
 
   def name=(name)
-    self.first_name, self.last_name = name.split(" ")
+    # TODO eventually migrate to a single "full name" and add a second "what should we call you" field
+    # http://www.w3.org/International/questions/qa-personal-names#singlefield
+    logger.warn "DEPRECATED: Customer#name= (called from #{caller_locations.first})"
+
+    self.first_name, self.last_name = name.split(" ", 2)
   end
 
   def randomize_password
@@ -242,12 +240,6 @@ class Customer < ActiveRecord::Base
 
   def <=>(b)
     self.name <=> b.name
-  end
-
-  def dynamic_tags
-    DYNAMIC_TAGS.select do |tag|
-      public_send(tag.questionize)
-    end
   end
 
   def labels
@@ -401,14 +393,10 @@ class Customer < ActiveRecord::Base
     self.balance_threshold_cents = default_balance_threshold_cents unless balance_threshold_cents_changed?
   end
 
-  def account_balance
-    account = account(true) # force reload
+  def account_balance(reload: true)
+    account = account(reload)
 
-    account.present? ? account.balance : EasyMoney.zero
-  end
-
-  def negative_balance?
-    account_balance.negative?
+    account.present? ? account.balance : CrazyMoney.zero
   end
 
   def calculate_next_order(date = Date.current.to_s(:db))
@@ -430,7 +418,7 @@ class Customer < ActiveRecord::Base
     last_payment = transactions.payments
     if r_ids.present?
       last_payment = last_payment.where(["transactions.id not in (?)", r_ids])
-    end  
+    end
     last_payment = last_payment.ordered_by_display_time.first
 
     last_payment.present? ? last_payment.display_time : nil
@@ -452,6 +440,10 @@ class Customer < ActiveRecord::Base
 
   def via_webstore!
     self.via_webstore = true
+  end
+
+  def uses_pickup_point?
+    delivery_service.try(:pickup_point)
   end
 
 private

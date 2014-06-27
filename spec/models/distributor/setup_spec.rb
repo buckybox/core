@@ -13,14 +13,14 @@ describe Distributor::Setup do
 
   describe "#finished?" do
     it "returns false if everything has been set up" do
-      expect(distributor_setup.finished?).to be_false
+      expect(distributor_setup.finished?).to be false
     end
 
     it "returns true if everything has been set up" do
       distributor.stub(:delivery_services) { [ double("delivery_service") ] }
       distributor.stub(:boxes)             { [ double("boxes") ] }
       distributor.stub(:customers)         { [ double("customers") ] }
-      expect(distributor_setup.finished?).to be_true
+      expect(distributor_setup.finished?).to be true
     end
   end
 
@@ -77,23 +77,23 @@ describe Distributor::Setup do
 
   describe "#finished_settings?" do
     it "returns false if no settings have been completed" do
-      expect(distributor_setup.finished_settings?).to be_false
+      expect(distributor_setup.finished_settings?).to be false
     end
 
     it "returns false if there are no delivery services" do
       distributor.stub(:boxes) { [ double("boxes") ] }
-      expect(distributor_setup.finished_settings?).to be_false
+      expect(distributor_setup.finished_settings?).to be false
     end
 
     it "returns false if there are no boxes" do
       distributor.stub(:delivery_services) { [ double("delivery_service") ] }
-      expect(distributor_setup.finished_settings?).to be_false
+      expect(distributor_setup.finished_settings?).to be false
     end
 
     it "returns true if the settings setup is done" do
       distributor.stub(:delivery_services) { [ double("delivery_service") ] }
       distributor.stub(:boxes)             { [ double("boxes") ] }
-      expect(distributor_setup.finished_settings?).to be_true
+      expect(distributor_setup.finished_settings?).to be true
     end
   end
 end

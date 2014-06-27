@@ -19,7 +19,7 @@ class ChangeScheduleRule < ActiveRecord::Migration
 
   def down
     add_column :schedule_rules, :order_id, :integer
-    
+
     ScheduleRule.reset_column_information
     Route.reset_column_information
 

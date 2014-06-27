@@ -30,8 +30,10 @@ module SalesCsv
         box_dislikes,
         box_extra_line_items,
         price,
+        delivery_fee,
         bucky_box_transaction_fee,
         total_price,
+        customer_account_balance,
         customer_payment_method,
         customer_email,
         customer_special_preferences,
@@ -149,8 +151,16 @@ module SalesCsv
       archived.archived_consumer_delivery_fee
     end
 
+    def delivery_fee
+      order.delivery_service_fee
+    end
+
     def total_price
       archived.total_price
+    end
+
+    def customer_account_balance
+      customer.account_balance
     end
 
     def customer_payment_method

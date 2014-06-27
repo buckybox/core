@@ -6,10 +6,10 @@ class PaymentOption
   delegate :valid?, to: :option, allow_nil: true
 
   def initialize(option, distributor)
+    raise "distributor is nil" unless distributor
+
     option = Option.new(option, distributor)
-    if option.valid?
-      self.option = option
-    end
+    self.option = option if option.valid?
   end
 
   def apply(webstore_order)

@@ -17,8 +17,7 @@ class Address < ActiveRecord::Base
 
   before_validation :update_phone
 
-  validates_presence_of :customer, unless: -> { skip_validations.include? :customer }
-  validate :validate_address_and_phone
+  validates_presence_of :customer
 
   before_save :update_address_hash
 
@@ -77,38 +76,10 @@ class Address < ActiveRecord::Base
     phones.default_type
   end
 
-  # Without arguments, returns an array of validations to skip
-  #
-  # With a {Symbol}s or an {Array} of {Symbol}s, run the given block skipping
-  # these validations
-  #
-  # @params items Array|Symbol
-  #   :customer Do not validate the presence of a customer
-  #   :address  Do not validate address information (street, suburb, ...)
-  #   :phone    Do not validate phone numbers
-  def skip_validations(*items)
-    items = Array(items)
-    if items.empty?
-      return @skip_validations ||= []
-    end
-
-    valid_items = [:customer, :address, :phone]
-    unless (items - valid_items).empty?
-      raise "Only #{valid_items} are allowed"
-    end
-
-    @skip_validations = items
-
-    yield self
-
-  ensure
-    @skip_validations = [] unless items.empty?
-  end
-
   def update_with_notify(params, customer)
     self.attributes = params
 
-    return true unless changed? #nothing to save, nothing to notify
+    return true unless changed? # nothing to save, nothing to notify
 
     if save
       customer.send_address_change_notification
@@ -120,36 +91,7 @@ class Address < ActiveRecord::Base
 
 private
 
-  def validate_address_and_phone
-    return unless distributor
-    validate_address unless skip_validations.include? :address
-    validate_phone unless skip_validations.include? :phone
-  end
-
-  def validate_phone
-    if distributor.require_phone && (
-        customer && customer.new_record? ||
-        PhoneCollection.attributes.any? { |type| send("#{type}_changed?") }
-      ) &&
-      PhoneCollection.attributes.all? { |type| self[type].blank? }
-
-      errors[:phone_number] << "can't be blank"
-    end
-  end
-
-  def validate_address
-    ADDRESS_ATTRIBUTES.each do |attr|
-      if distributor.public_send("require_#{attr}") && (
-          customer && customer.new_record? ||
-          send("#{attr}_changed?")
-        )
-
-        validates_presence_of attr
-      end
-    end
-  end
-
-  # Handy helper to update a given number type (used in the webstore)
+  # Handy helper to update a given number type (used in the web store)
   def update_phone
     return unless phone
 

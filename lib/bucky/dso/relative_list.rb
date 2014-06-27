@@ -1,6 +1,5 @@
 module Bucky::Dso
   class RelativeList < List
-    
     def self.build(list=[])
       if list.is_a?(List)
         RelativeList.new(list.to_a)

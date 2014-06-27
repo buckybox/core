@@ -3,7 +3,7 @@ module Bucky::Dso
 
     def self.sort_list(master_list, ordered_list)
       working_list = RelativeList.build(master_list)
-      
+
       ordered_list.each_with_index do |sortable, o_index|
         w_index = working_list.index(sortable)
 
@@ -21,7 +21,7 @@ module Bucky::Dso
     def self.lowest_index(working_list, ordered_list)
       ordered_list.collect{|s| working_list.index(s)}.min
     end
-    
+
     def self.highest_index(working_list, ordered_list)
       ordered_list.collect{|s| working_list.index(s)}.max
     end

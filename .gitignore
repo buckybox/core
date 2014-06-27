@@ -5,7 +5,6 @@
 #   git config --global core.excludesfile ~/.gitignore_global
 
 # Ignore RVM config
-/.ruby-version
 /.ruby-gemset
 /.rvmrc
 /.rbenv-version

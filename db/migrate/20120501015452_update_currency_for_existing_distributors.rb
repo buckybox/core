@@ -9,7 +9,7 @@ class UpdateCurrencyForExistingDistributors < ActiveRecord::Migration
   class Route < ActiveRecord::Base; end
   class Transaction < ActiveRecord::Base; end
 
-  # This is a one off migration specific to the distributors of the time 
+  # This is a one off migration specific to the distributors of the time
   # all future ones should be created with currencies
   def up
     Account.reset_column_information

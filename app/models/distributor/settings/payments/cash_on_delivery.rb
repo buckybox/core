@@ -1,4 +1,4 @@
-class Distributor::Settings::Payments::CashOnDelivery < Distributor::Settings::Payments::Base
+class Distributor::Settings::Payments::CashOnDelivery < Distributor::Settings::Payments::BankInformation
   delegate :payment_cash_on_delivery, to: :distributor
   delegate :cod_payment_message, to: :bank_information
 

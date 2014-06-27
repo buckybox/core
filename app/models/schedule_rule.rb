@@ -219,8 +219,8 @@ class ScheduleRule < ActiveRecord::Base
     return false if !opts[:ignore_start] && too_soon
 
     if schedule_pause
-      return false unless ((schedule_rule.one_off? && 
-          schedule_rule.start < schedule_pause.start) || 
+      return false unless ((schedule_rule.one_off? &&
+          schedule_rule.start < schedule_pause.start) ||
         schedule_pause.finish <= schedule_rule.start) ||
       schedule_pause.finish <= schedule_rule.start
     else
@@ -252,7 +252,7 @@ class ScheduleRule < ActiveRecord::Base
   def deleted_day_numbers
     DAYS.each_with_index.collect{|day, index| (self.send("#{day.to_s}_changed?".to_sym) && self.send(day) == false) ? index : nil}.compact
   end
-  
+
   def pause!(start, finish=nil)
     pause(start, finish)
     save!
@@ -392,7 +392,7 @@ class ScheduleRule < ActiveRecord::Base
     s.order = o
 
     unless o.schedule.extimes.empty?
-      sp = SchedulePause.from_ice_cube(o.schedule) 
+      sp = SchedulePause.from_ice_cube(o.schedule)
       sp.save!
       s.schedule_pause = sp
     end

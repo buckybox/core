@@ -4,41 +4,24 @@ require_relative '../webstore'
 class Webstore::PaymentOptions < Webstore::Form
   extend Forwardable
 
+  include Customer::AddressValidations
+
   attribute :name,            String
   attribute :phone_number,    String
   attribute :phone_type,      String
-  attribute :address_1,       String
-  attribute :address_2,       String
-  attribute :suburb,          String
-  attribute :city,            String
-  attribute :postcode,        String
-  attribute :delivery_note,   String
   attribute :payment_method,  String
   attribute :complete,        Boolean
 
-  validates_presence_of :name
-  validates_presence_of :phone_number,  if: -> { require_phone && !address.valid? }
-  validates_presence_of :phone_type,    if: :require_phone
-  validates_presence_of :address_1,     if: :require_address_1
-  validates_presence_of :address_2,     if: :require_address_2
-  validates_presence_of :suburb,        if: :require_suburb
-  validates_presence_of :city,          if: :require_city
-  validates_presence_of :postcode,      if: :require_postcode
-  validates_presence_of :delivery_note, if: :require_delivery_note
-  validates_presence_of :payment_method
+  validates_presence_of :name,           if: :require_name
+  validates_presence_of :phone_number,   if: :require_phone
+  validates_presence_of :phone_type,     if: :require_phone
+  validates_presence_of :payment_method, if: :has_payment_options?
 
   attr_reader :address
 
   def_delegators :distributor,
     :collect_phone,
-    :require_phone,
-    :require_address_1,
-    :require_address_2,
-    :require_suburb,
-    :require_city,
-    :require_postcode,
-    :collect_delivery_note,
-    :require_delivery_note
+    :collect_delivery_note
 
   def name
     super || customer.name
@@ -64,12 +47,20 @@ class Webstore::PaymentOptions < Webstore::Form
     phone_collection_class.types_as_options
   end
 
-  def payment_list(payment_options_class = ::PaymentOption)
-    payment_options_class.options(distributor)
+  def has_payment_options?
+    cart.has_payment_options?
   end
 
   def customer_address
     customer.address
+  end
+
+  def require_name
+    !pickup_point?
+  end
+
+  def require_phone
+    !pickup_point? && distributor.require_phone
   end
 
   # Returns whether the address is valid or not so we can hide the edit form when it is valid
@@ -148,5 +139,13 @@ private
 
   def customer
     cart.customer
+  end
+
+  def order
+    cart.order
+  end
+
+  def delivery_service
+    order.delivery_service
   end
 end

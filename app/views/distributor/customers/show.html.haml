@@ -39,7 +39,7 @@
       - unless @customer.special_order_preference.blank?
         %p.note-field= @customer.special_order_preference
 
-      %small= link_to 'edit profile', edit_distributor_customer_path(@customer)
+      %small= link_to 'edit profile', edit_profile_distributor_customer_path(@customer)
       \|
       %small= link_to 'send logins', send_login_details_distributor_customer_path(@customer), confirm: 'Are you sure? This will reset the users password.'
       - if current_admin.present?
@@ -54,7 +54,7 @@
       - unless @address.delivery_note.blank?
         %p.note-field= @address.delivery_note
 
-      %small= link_to 'edit delivery details', edit_distributor_customer_path(@customer, form_type: :delivery)
+      %small= link_to 'edit delivery details', edit_delivery_details_distributor_customer_path(@customer)
 
   #customer-associations.span8
     .row-fluid

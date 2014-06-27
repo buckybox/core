@@ -25,7 +25,7 @@ package :munin_passenger, :provides => :monitoring do
     post :install, 'chown -R root:root /usr/share/munin/plugins'
     post :install, 'restart munin-node'
   end
-  
+
   verify do
     has_symlink '/etc/munin/plugins/passenger_status'
     has_symlink '/etc/munin/plugins/passenger_memory_stats'

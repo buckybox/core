@@ -1,37 +1,43 @@
-class Customer::CustomersController < Customer::ResourceController
-  actions :update
+class Customer::CustomersController < Customer::BaseController
 
-  respond_to :html, :xml, :json
+  def update_contact_details
+    args = form_args(:customer_form_update_contact_details)
+    form = Customer::Form::UpdateContactDetails.new(args)
+    form.save ? successful_update('contact details') : failed_update(form)
+  end
 
-  def update
-    current_customer.address.skip_validations(:address) do
-      if current_customer.update_attributes(params[:customer])
-        redirect_to customer_root_url, notice: 'Your details have successfully been updated.'
-      else
-        redirect_to customer_root_url, flash: { error: current_customer.errors.full_messages.join('<br>').html_safe }
-      end
-    end
+  def update_delivery_address
+    args = form_args(:customer_form_update_delivery_address)
+    form = Customer::Form::UpdateDeliveryAddress.new(args)
+    form.save ? successful_update('delivery address', true) : failed_update(form)
   end
 
   def update_password
-    current_customer.address.skip_validations(:address, :phone) do
-      if current_customer.update_attributes(params[:customer])
-        sign_in current_customer, bypass: true
-
-        redirect_to customer_root_url, notice: 'Password successfully updated.'
-      else
-        redirect_to customer_root_url, flash: {error: "There was a problem changing your password. #{current_customer.errors.full_messages.join(', ')}"}
-      end
-    end
+    args = form_args(:customer_form_update_password)
+    form = Customer::Form::UpdatePassword.new(args)
+    form.save ? successful_update('password') : failed_update(form)
   end
 
-protected
+private
 
-  def resource
-    current_customer
+  def form_args(param_key)
+    { customer: current_customer }.merge(params[param_key] || {})
   end
 
-  def begin_of_association_chain
-    nil
+  def successful_update(submitted_changes, next_delivery = false)
+    notice = "Your #{submitted_changes} have been successfully updated."
+    notice += " This will take effect on your next delivery." if next_delivery
+    flash[:notice] = notice
+    redirect_to customer_root_url
   end
+
+  def failed_update(form)
+    flash[:alert] = "Oops there was an issue: #{formatted_error_messages(form)}"
+    redirect_to customer_root_url
+  end
+
+  def formatted_error_messages(form)
+    form.errors.full_messages.join(", ").downcase
+  end
+
 end
