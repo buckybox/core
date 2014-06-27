@@ -4,7 +4,7 @@
 
 package :ruby do
   description 'Ruby Virtual Machine'
-  version '2.1.1'
+  version '2.1.2'
   patchlevel '' # e.g. '353' or '' for none
   binaries = %w( ruby rdoc ri rake irb erb )
   source "ftp://ftp.ruby-lang.org/pub/ruby/#{version.split(".")[0..1].join(".")}/ruby-#{version}#{"-p#{patchlevel}" unless patchlevel.empty?}.tar.gz" do
@@ -33,7 +33,7 @@ end
 
 package :rubygems do
   description 'Ruby Gems Package Management System'
-  version '2.2.2'
+  version '2.3.0'
   binaries = %w( gem )
   source "http://production.cf.rubygems.org/rubygems/rubygems-#{version}.tgz" do
     custom_install 'ruby setup.rb'
