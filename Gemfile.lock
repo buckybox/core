@@ -209,11 +209,17 @@ GEM
     erubis (2.7.0)
     execjs (2.1.0)
     fabrication (2.9.8)
+    fast_blank (0.0.2)
+    fast_stack (0.1.0)
+      rake
+      rake-compiler
     fastercsv (1.5.5)
     ffi (1.9.3)
     figaro (0.6.4)
       bundler (~> 1.0)
       rails (>= 3, < 5)
+    flamegraph (0.0.5)
+      fast_stack
     formatador (0.2.5)
     fssm (0.2.10)
     fuzzy-string-match (0.9.6)
@@ -369,6 +375,8 @@ GEM
       rdoc (~> 3.4)
       thor (>= 0.14.6, < 2.0)
     rake (10.3.2)
+    rake-compiler (0.9.2)
+      rake
     rb-fsevent (0.9.4)
     rb-inotify (0.9.4)
       ffi (>= 0.5.0)
@@ -536,7 +544,9 @@ DEPENDENCIES
   draper (~> 1.2.1)
   email_templator (~> 1.0.0)
   fabrication (~> 2.9.8)
+  fast_blank (~> 0.0.2)
   figaro (~> 0.6.4)
+  flamegraph (~> 0.0.5)
   fuzzy-string-match (~> 0.9.4)
   guard (~> 1)
   guard-rspec
