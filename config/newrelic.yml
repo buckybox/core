@@ -183,8 +183,8 @@ common: &default_settings
 
 development:
   <<: *default_settings
-  # Turn on communication to New Relic service in development mode
-  monitor_mode: true
+  # Turn OFF communication to New Relic service in development mode
+  monitor_mode: false
   app_name: Bucky Box (Development)
 
   # Rails Only - when running in Developer Mode, the New Relic Agent will
