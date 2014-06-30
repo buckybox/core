@@ -1,31 +1,18 @@
+# More info at https://trello.com/c/PiqmBRC2/339-upgrade-to-ruby-2
+#
+# MAKE SURE YOU DON'T LEAVE REFERENCES TO OLD RUBIES WITH `ack 2.1.1 ./config ./Gemfile ./.ruby-version`
+
 package :ruby do
   description 'Ruby Virtual Machine'
-  version '2.0.0'
-  patchlevel '353'
+  version '2.1.2'
+  patchlevel '' # e.g. '353' or '' for none
   binaries = %w( ruby rdoc ri rake irb erb )
-  source "ftp://ftp.ruby-lang.org/pub/ruby/#{version.split(".")[0..1].join(".")}/ruby-#{version}-p#{patchlevel}.tar.gz" do
+  source "ftp://ftp.ruby-lang.org/pub/ruby/#{version.split(".")[0..1].join(".")}/ruby-#{version}#{"-p#{patchlevel}" unless patchlevel.empty?}.tar.gz" do
     binaries.each {|bin| post :install, "ln -sf usr/local/bin/#{bin} /usr/bin/#{bin}"}
   end
   requires :ruby_dependencies
   verify do
     binaries.each {|bin| has_executable bin}
-  end
-end
-
-package :ruby_tuned do
-  requires :ruby
-
-  ruby_file = "/usr/local/bin/ruby_tuned"
-  ruby_text = File.read(File.join(File.dirname(__FILE__), 'configs', 'ruby', 'ruby_tuned'))
-  tmp_file = "/tmp/ruby_tuned"
-
-  push_text(ruby_text, tmp_file) do
-    post :install, "mv #{tmp_file} #{ruby_file}"
-    post :install, "chmod +x #{ruby_file}"
-  end
-
-  verify do
-    matches_local(ruby_text, ruby_file)
   end
 end
 
@@ -46,7 +33,7 @@ end
 
 package :rubygems do
   description 'Ruby Gems Package Management System'
-  version '2.1.7'
+  version '2.3.0'
   binaries = %w( gem )
   source "http://production.cf.rubygems.org/rubygems/rubygems-#{version}.tgz" do
     custom_install 'ruby setup.rb'

@@ -56,8 +56,9 @@ namespace :deploy do
   end
 
   task :symlink_delayed_job_web do
+    # NOTE about "2.1.0" below: not necessarily the current Ruby version but should be the latest ABI version
     run %(
-      ln -nfs #{shared_path}/bundle/ruby/1.9.1/gems/delayed_job_web-1.2.0/lib/delayed_job_web/application/public #{release_path}/public/delayed_job
+      ln -nfs #{shared_path}/bundle/ruby/2.1.0/gems/delayed_job_web-1.2.0/lib/delayed_job_web/application/public #{release_path}/public/delayed_job
     )
   end
 
