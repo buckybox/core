@@ -1,6 +1,6 @@
 package :passenger, :provides => :appserver do
   description 'Phusion Passenger (mod_rails)'
-  version '4.0.37'
+  version '4.0.45'
   binaries = %w(passenger-config passenger-install-nginx-module passenger-install-apache2-module passenger-memory-stats passenger-status)
 
   gem 'passenger', :version => version do
