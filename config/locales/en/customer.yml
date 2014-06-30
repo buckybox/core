@@ -16,6 +16,7 @@ en:
         paypal: Pay by PayPal / Credit Card
       paypal:
         pay_now: Pay now
+        top_up: Account top-up
     transactions:
       processed_date: Processed date
       transaction_date: Transaction date
@@ -31,3 +32,13 @@ en:
       change: Change your address
     order:
       existing: Existing order
+      extras: Extras
+      include_extras: include extras
+      no_extras: No extras allowed for this box.
+      extras_limit: This box is limited to %{count} extras.
+      extras_one_off:
+        hint: Extras can be either a one off order or every delivery.
+        "false": include with every delivery
+        "true": include in the next delivery only
+      exclude_items: Exclude these items...
+      substitute_with_items: Substitute for these items...

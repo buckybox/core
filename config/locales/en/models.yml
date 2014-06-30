@@ -1,5 +1,11 @@
 en:
   models:
+    schedule_rule:
+      deliver_on: Deliver on
+      deliver_weekly_on: Deliver weekly on
+      deliver_fornightly_on: Deliver fortnightly on
+      deliver_monthly_on: Deliver monthly on
+      no_future_deliveries: No future deliveries scheduled
     order:
       edit: edit this order
       impending_delivery: This order has an impending delivery, changes made will only affect the deliveries on or after %{date}.
@@ -29,4 +35,6 @@ en:
     attributes:
       customer:
         formated_number: Customer number
-
+      order:
+        exclusions: Exclusions
+        substitutions: Substitutes
