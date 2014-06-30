@@ -1,6 +1,7 @@
 module HumanNumber
   module_function
 
+  # FIXME i18n me
   # Turn an integer into "first", "second", "third", ...
   # @param number Fixnum
   # @return String Ordinalised number

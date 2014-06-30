@@ -2,6 +2,7 @@ fr:
   current_locale: Français
   colon: " : "
   back: retour
+  cancel: annuler
   log_in: Connexion
   log_out: Déconnexion
   update: Modifier

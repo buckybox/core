@@ -184,7 +184,7 @@ class ScheduleRule < ActiveRecord::Base
   end
 
   def delivery_days
-    Date::DAYNAMES.select.each_with_index do |day, index|
+    I18n.t('date.day_names').select.each_with_index do |day, index|
       runs_on index
     end.join(', ')
   end
@@ -324,19 +324,23 @@ class ScheduleRule < ActiveRecord::Base
     end
   end
 
-  def to_s
-    raise "GET RID OF ME"
+  deprecate def to_s
+    raise # FIXME
+    deliver_on
+  end
+
+  def deliver_on#(localize: true)
     case recur
     when :one_off
       "#{I18n.t('models.schedule_rule.deliver_on')} #{I18n.l start.to_s(:flux_cap)}"
     when :single
       "#{I18n.t('models.schedule_rule.deliver_on')} #{I18n.l start.to_s(:flux_cap)}"
     when :weekly
-      "Deliver weekly on #{delivery_days}"
+      "#{I18n.t('models.schedule_rule.deliver_weekly_on')} #{delivery_days}"
     when :fortnightly
-      "Deliver fortnightly on #{delivery_days}"
+      "#{I18n.t('models.schedule_rule.deliver_fornightly_on')} #{delivery_days}"
     when :monthly
-      "Deliver monthly on the #{HumanNumber.ordinalise(week.succ)} #{delivery_days}"
+      "#{I18n.t('models.schedule_rule.deliver_monthly_on')} #{week.succ.ordinalize} #{delivery_days}"
     end
   end
 
