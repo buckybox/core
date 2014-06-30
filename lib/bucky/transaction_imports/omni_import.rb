@@ -1,5 +1,7 @@
 module Bucky::TransactionImports
   class OmniImport
+    CSV_SEPARATORS = [",", ";"].freeze
+
     def self.test_yaml
       <<EOY
         columns: date trans_type sort_code account_number description debt_amount credit_amount empty blank none
@@ -104,23 +106,16 @@ EOF
     end
 
     def self.csv_read(path)
-      file     = File.read(path)
-      encoding = find_file_encoding(file)
-      options  = { encoding: encoding }
+      file = File.read(path)
+      options = { encoding: find_file_encoding(file) }
+      options[:col_sep] = find_csv_separator(path, options)
 
-      rows = CSV.read(path, options)
-
-      if rows.first.one? # the first line is only one full string
-        options[:col_sep] = ";" # we try again with a semi-colon as separator
-        CSV.read(path, options)
-      else
-        rows
-      end
-    rescue CSV::MalformedCSVError => e #Handle stupid windows \r instead of \r\n csv files.  STANDARDS!
+      CSV.read(path, options)
+    rescue CSV::MalformedCSVError => e # Handle stupid windows \r instead of \r\n csv files. STANDARDS!
       raise e unless e.message.include?("Unquoted fields do not allow \\r or \\n")
 
       CSV.parse(
-        file.force_encoding(encoding).encode("UTF-8").gsub(/\r(?!\n)/, "\r\n"),
+        file.force_encoding(options[:encoding]).encode("UTF-8").gsub(/\r(?!\n)/, "\r\n"),
         options.except(:encoding)
       )
     end
@@ -129,6 +124,19 @@ EOF
       encoding = encoding_detector.detect_all(file)
       encoding = encoding.map { |hash| hash[:encoding] }
       encoding.compact.first
+    end
+
+    def self.find_csv_separator(path, options)
+      first_row = File.open(path, options) { |file| file.gets }
+      best_score = -1
+      best_separator = CSV_SEPARATORS.first
+
+      CSV_SEPARATORS.each do |separator|
+        score = first_row.count(separator)
+        best_separator, best_score = separator, score if score > best_score
+      end
+
+      best_separator
     end
 
     def self.test
