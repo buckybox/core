@@ -134,7 +134,7 @@ common: &default_settings
     # recorded. The recorder has three modes, "off" which sends no
     # SQL, "raw" which sends the SQL statement in its original form,
     # and "obfuscated", which strips out numeric and string literals.
-    record_sql: obfuscated
+    record_sql: raw
 
     # Threshold in seconds for when to collect stack trace for a SQL
     # call. In other words, when SQL statements exceed this threshold,
@@ -145,11 +145,11 @@ common: &default_settings
     # Determines whether the agent will capture query plans for slow
     # SQL queries.  Only supported in mysql and postgres.  Should be
     # set to false when using other adapters.
-    # explain_enabled: true
+    explain_enabled: true
 
     # Threshold for query execution time below which query plans will
     # not be captured.  Relevant only when `explain_enabled` is true.
-    # explain_threshold: 0.5
+    explain_threshold: 0.5
 
   # Error collector captures information about uncaught exceptions and
   # sends them to New Relic for viewing
