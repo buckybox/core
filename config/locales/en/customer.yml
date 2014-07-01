@@ -25,11 +25,16 @@ en:
       balance: Balance
     contact_details:
       change: Change your contact details
+      successful_update: Your contact details have been successfully updated.
+    delivery_address:
+      successful_update: Your delivery address has been successfully updated.
     password:
       change: Change your password
       update: Update password
+      successful_update: Your password has been successfully updated.
     address:
       change: Change your address
+    update_next_delivery: This will take effect on your next delivery.
     order:
       existing: Existing order
       extras: Extras
@@ -42,3 +47,14 @@ en:
         "true": include in the next delivery only
       exclude_items: Exclude these items...
       substitute_with_items: Substitute for these items...
+      update:
+        not_allowed: You are not allowed to edit this order.
+        oops: There was a problem editing this order.
+      deactivate:
+        success: Your order was successfully removed.
+        oops: Error while trying to remove your order.
+        not_allowed: You don't have permission to do this.
+        too_late:
+          one_off: We could not remove this order as the impending delivery is too late to cancel.
+          recurring: There is an impending delivery which is too late to cancel, however we have removed the order for future deliveries.'
+
