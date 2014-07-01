@@ -26,7 +26,7 @@ describe "Updates address" do
       it 'does not notify distributor when address is saved without update' do
         get_via_redirect customer_dashboard_path
         put_via_redirect customer_update_delivery_address_path, {}
-        response.body.should match 'Your delivery address have been successfully updated'
+        response.body.should match 'Your delivery address has been successfully updated'
 
 
         distributor_should_not_include_notifications distributor
@@ -77,7 +77,7 @@ def change_address(customer)
   get_via_redirect customer_dashboard_path
   if @last_login == :customer
     put_via_redirect customer_update_delivery_address_path, customer_form_update_delivery_address: {suburb: modified_suburb}
-    response.body.should match 'Your delivery address have been successfully updated'
+    response.body.should match 'Your delivery address has been successfully updated'
   else
     put_via_redirect update_delivery_details_distributor_customer_path(customer), distributor_form_edit_customer_delivery_details: {suburb: modified_suburb, delivery_service: customer.delivery_service.id}
     response.body.should match 'The customer delivery details have been successfully updated.'
