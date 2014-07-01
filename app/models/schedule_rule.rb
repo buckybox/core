@@ -136,7 +136,7 @@ class ScheduleRule < ActiveRecord::Base
     end
     result
   end
-  alias :occurrences :next_occurrences
+  alias_method :occurrences, :next_occurrences
 
   def occurrences_between(start, finish, opts={})
     start = start.to_date

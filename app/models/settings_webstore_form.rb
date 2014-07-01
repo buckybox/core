@@ -18,7 +18,7 @@ class SettingsWebstoreForm < Form
     phone: :phone,
   }
   attr_reader :errors
-  attr_accessor *(INTERFACE.keys)
+  attr_accessor(*INTERFACE.keys)
 
   def initialize(opts)
     opts.each do |k,v|

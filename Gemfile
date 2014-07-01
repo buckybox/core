@@ -136,6 +136,7 @@ group :development, :test do
   gem 'terminal-notifier-guard' # Mac 10.8 system notifications for Guard
   gem 'letter_opener'
   gem 'bundler-audit', require: false
+  gem 'rubocop'
 end
 
 group :development, :test, :staging do
