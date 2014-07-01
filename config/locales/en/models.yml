@@ -8,6 +8,8 @@ en:
       no_future_deliveries: No future deliveries scheduled
     order:
       edit: edit this order
+      remove: remove order
+      remove_confirmation: Are you sure you want to delete this order?
       impending_delivery: This order has an impending delivery, changes made will only affect the deliveries on or after %{date}.
     phone_collection:
       mobile_phone: Mobile phone

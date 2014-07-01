@@ -16,7 +16,7 @@ class Customer::OrdersController < Customer::ResourceController
     @order = current_customer.orders.find(params[:id])
 
     unless @order.customer_can_edit?
-      redirect_to customer_root_path, alert: 'You are not allowed to edit this order.' and return
+      redirect_to customer_root_path, alert: t('c.order.edit.not_allowed') and return
     end
 
     # keep references to old values for create_activities_from_changes
@@ -31,7 +31,7 @@ class Customer::OrdersController < Customer::ResourceController
 
       failure.html do
         load_form
-        flash[:error] = 'There was a problem creating this order.'
+        flash[:error] = t('c.order.update.oops')
         render 'edit'
       end
     end
@@ -77,24 +77,24 @@ class Customer::OrdersController < Customer::ResourceController
 
     respond_to do |format|
       if !current_customer.can_deactivate_orders?
-        format.html { redirect_to customer_root_path, notice: "You don't have permission to do this. Please contact #{current_customer.distributor.name}." }
+        format.html { redirect_to customer_root_path, notice: t('c.order.deactivate.not_allowed') }
 
       elsif !@order.recurs? && @order.has_yellow_deliveries?
-        format.html {redirect_to customer_root_path, alert: 'We could not remove this order as the impending delivery is too late to cancel.'}
+        format.html { redirect_to customer_root_path, alert: t('c.order.deactivate.too_late.one_off') }
 
       elsif current_customer.can_deactivate_orders? && @order.update_attribute(:active, false)
         @order.customer.add_activity(:order_remove, order: @order)
 
         format.html do
           if @order.recurs? && @order.has_yellow_deliveries?
-            flash[:alert] = 'WARNING: there is an impending delivery which is too late to cancel, however we have removed the order for future deliveries.'
+            flash[:alert] = t('c.order.deactivate.too_late.recurring')
           else
-            flash[:notice] = 'Your order was successfully removed.'
+            flash[:notice] = t('c.order.deactivate.success')
           end
           redirect_to customer_root_path
         end
       else
-        format.html { redirect_to customer_root_path, warning: 'Error while trying to remove your order.' }
+        format.html { redirect_to customer_root_path, warning: t('c.order.deactivate.oops') }
       end
     end
   end

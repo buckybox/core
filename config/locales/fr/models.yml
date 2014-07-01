@@ -8,6 +8,8 @@ fr:
       no_future_deliveries: Aucune future livraison planifiée
     order:
       edit: modifier cette commande
+      remove: supprimer
+      remove_confirmation: Êtes-vous certain de vouloir supprimer cette commande ?
       impending_delivery: Cette commande a une livraison en cours, les changements effectués ici n'affecteront que les livraisons à partir du %{date}.
     phone_collection:
       mobile_phone: Numéro mobile
