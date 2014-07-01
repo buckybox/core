@@ -4,7 +4,7 @@ en:
       deliver_on: Deliver on
       deliver_weekly_on: Deliver weekly on
       deliver_fornightly_on: Deliver fortnightly on
-      deliver_monthly_on: Deliver monthly on
+      deliver_monthly_on: Deliver monthly on the
       no_future_deliveries: No future deliveries scheduled
     order:
       edit: edit this order
