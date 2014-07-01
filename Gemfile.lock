@@ -578,6 +578,7 @@ DEPENDENCIES
   newrelic_rpm
   nokogiri (~> 1.6.2)
   oj (~> 2.1.7)
+  ordinalize_full (~> 1.0.0)
   parallel_tests
   pg (~> 0.17.0)
   pg_search (~> 0.5.1)
