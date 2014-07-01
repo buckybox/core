@@ -11,7 +11,7 @@ feature "Create an order for a customer", js: true do
     visit distributor_customer_path(id: customer.id)
     click_link "Create a new order"
     page.should_not have_content "Extras"
-    click_button "Create Order"
+    click_button "Save"
     page.should have_content "Order was successfully created"
   end
 
@@ -24,7 +24,7 @@ feature "Create an order for a customer", js: true do
     visit distributor_customer_path(id: customer.id)
     click_link "Create a new order"
     page.should have_content "Extras"
-    click_button "Create Order"
+    click_button "Save"
     page.should have_content "Order was successfully created"
   end
 end
