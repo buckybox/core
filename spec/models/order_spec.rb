@@ -129,7 +129,7 @@ describe Order do
         specify { order.schedule_rule.should_not be_nil }
         specify { order.schedule_rule.next_occurrence.should_not be_nil }
         specify { order.schedule_rule.next_occurrences(28, Date.current).should eq([order.schedule_rule.next_occurrence]) }
-        specify { order.schedule_rule.to_s.should == @schedule_rule.to_s }
+        specify { order.schedule_rule.deliver_on.should == @schedule_rule.deliver_on }
         specify { order.schedule_rule.next_occurrence == @schedule_rule.next_occurrence }
       end
 
@@ -146,7 +146,7 @@ describe Order do
         specify { order.schedule_rule.should_not be_nil }
         specify { order.schedule_rule.next_occurrence.should_not be_nil }
         specify { order.schedule_rule.next_occurrences(28, Time.current).size.should eq(28) }
-        specify { order.schedule_rule.to_s.should == @schedule_rule.to_s }
+        specify { order.schedule_rule.deliver_on.should == @schedule_rule.deliver_on }
         specify { order.schedule_rule.next_occurrence == @schedule_rule.next_occurrence }
       end
 
@@ -162,7 +162,7 @@ describe Order do
 
         specify { order.schedule_rule.should_not be_nil }
         specify { order.schedule_rule.next_occurrence.should_not be_nil }
-        specify { order.schedule_rule.to_s.should == @schedule_rule.to_s }
+        specify { order.schedule_rule.deliver_on.should == @schedule_rule.deliver_on }
         specify { order.schedule_rule.next_occurrence == @schedule_rule.next_occurrence }
       end
     end

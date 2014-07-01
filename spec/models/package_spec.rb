@@ -35,7 +35,7 @@ describe Package do
       it 'should not archive the fee' do
         Package.any_instance.stub_chain(:distributor, :separate_bucky_fee?).and_return(false)
         @package = Fabricate(:package, order: @order, packing_list: @package.packing_list)
-        @package.archived_consumer_delivery_fee_cents.should be zero
+        @package.archived_consumer_delivery_fee_cents.should eq(0)
         Package.any_instance.unstub(:distributor)
       end
     end

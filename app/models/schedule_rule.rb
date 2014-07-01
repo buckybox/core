@@ -320,12 +320,12 @@ class ScheduleRule < ActiveRecord::Base
     deliver_on
   end
 
-  def deliver_on#(localize: true)
+  def deliver_on#(localize: true) # FIXME
     case recur
     when :one_off
-      "#{I18n.t('models.schedule_rule.deliver_on')} #{I18n.l start.to_s(:flux_cap)}"
+      "#{I18n.t('models.schedule_rule.deliver_on')} #{start.to_s(:flux_cap)}"
     when :single
-      "#{I18n.t('models.schedule_rule.deliver_on')} #{I18n.l start.to_s(:flux_cap)}"
+      "#{I18n.t('models.schedule_rule.deliver_on')} #{start.to_s(:flux_cap)}"
     when :weekly
       "#{I18n.t('models.schedule_rule.deliver_weekly_on')} #{delivery_days}"
     when :fortnightly
