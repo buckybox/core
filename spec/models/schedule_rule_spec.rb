@@ -450,16 +450,16 @@ describe ScheduleRule do
     end
   end
 
-  describe ".to_s" do
+  describe "#deliver_on" do
     it "should return a natural language string representing the schedule" do
-      ScheduleRule.one_off(Date.parse("2012-10-15")).to_s.should eq("Deliver on 15 Oct")
+      ScheduleRule.one_off(Date.parse("2012-10-15")).deliver_on.should eq("Deliver on 15 Oct")
     end
 
-    specify {ScheduleRule.weekly(Date.parse("2012-10-16"), [:mon]).to_s.should eq("Deliver weekly on Monday")}
-    specify {ScheduleRule.fortnightly(Date.parse("2012-10-16"), [:mon]).to_s.should eq("Deliver fortnightly on Monday")}
-    specify {ScheduleRule.monthly(Date.parse("2012-10-16"), [:mon]).to_s.should eq("Deliver monthly on the first Monday")}
+    specify {ScheduleRule.weekly(Date.parse("2012-10-16"), [:mon]).deliver_on.should eq("Deliver weekly on Monday")}
+    specify {ScheduleRule.fortnightly(Date.parse("2012-10-16"), [:mon]).deliver_on.should eq("Deliver fortnightly on Monday")}
+    specify {ScheduleRule.monthly(Date.parse("2012-10-16"), [:mon]).deliver_on.should eq("Deliver monthly on the first Monday")}
 
-    specify {ScheduleRule.weekly(Date.parse("2012-10-17"), ScheduleRule::DAYS).to_s.should eq("Deliver weekly on Sunday, Monday, Tuesday, Wednesday, Thursday, Friday, and Saturday")}
+    specify {ScheduleRule.weekly(Date.parse("2012-10-17"), ScheduleRule::DAYS).deliver_on.should eq("Deliver weekly on Sunday, Monday, Tuesday, Wednesday, Thursday, Friday, and Saturday")}
   end
 
   describe ".pause_expired?" do
