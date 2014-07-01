@@ -4,11 +4,11 @@ describe Bucky::Import do
   context '#preprocess' do
     context 'should remove unneeded rows' do
       before(:all) do
-        csv = CSV.generate do |csv|
-          csv << Import::CSV_HEADERS
-          csv << ['rubbish','45','more rubbish']
-          csv << ['trash','65','more trash']
-          csv << ['you can see me','for sure']
+        csv = CSV.generate do |rows|
+          rows << Import::CSV_HEADERS
+          rows << ['rubbish','45','more rubbish']
+          rows << ['trash','65','more trash']
+          rows << ['you can see me','for sure']
         end
 
         @parsed_csv = Import.preprocess(csv)

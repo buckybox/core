@@ -144,7 +144,7 @@ private
 
   def find_key(args)
     found_key = nil
-    [:deliveries, :packages, :orders].each { |key| found_key = key if args.has_key?(key) }
+    [:deliveries, :packages, :orders].each { |key| found_key = key if args.key?(key) }
     found_key
   end
 
