@@ -340,11 +340,13 @@ class ScheduleRule < ActiveRecord::Base
   end
 
   def halt!
-    update_attributes!(halted: true)
+    self.halted = true
+    save!
   end
 
   def unhalt!
-    update_attributes!(halted: false)
+    self.halted = false
+    save!
   end
 
   def paused?
