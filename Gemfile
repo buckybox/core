@@ -68,6 +68,7 @@ gem 'bugsnag',                         '~> 2.0.2'
 gem 'rack-mini-profiler',              '~> 0.9.2'
 gem 'flamegraph',                      '~> 0.0.5' # for rack-mini-profiler
 gem 'fast_blank',                      '~> 0.0.2'
+gem 'ordinalize_full',                 '~> 1.0.0', require: 'ordinalize_full/integer'
 
 group :assets do
   gem 'coffee-rails',   '~> 3.2.2'
