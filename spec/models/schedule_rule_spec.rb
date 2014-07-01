@@ -459,7 +459,7 @@ describe ScheduleRule do
     specify {ScheduleRule.fortnightly(Date.parse("2012-10-16"), [:mon]).to_s.should eq("Deliver fortnightly on Monday")}
     specify {ScheduleRule.monthly(Date.parse("2012-10-16"), [:mon]).to_s.should eq("Deliver monthly on the first Monday")}
 
-    specify {ScheduleRule.weekly(Date.parse("2012-10-17"), ScheduleRule::DAYS).to_s.should eq("Deliver weekly on Sunday, Monday, Tuesday, Wednesday, Thursday, Friday, Saturday")}
+    specify {ScheduleRule.weekly(Date.parse("2012-10-17"), ScheduleRule::DAYS).to_s.should eq("Deliver weekly on Sunday, Monday, Tuesday, Wednesday, Thursday, Friday, and Saturday")}
   end
 
   describe ".pause_expired?" do

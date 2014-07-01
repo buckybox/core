@@ -331,7 +331,7 @@ class ScheduleRule < ActiveRecord::Base
     when :fortnightly
       "#{I18n.t('models.schedule_rule.deliver_fornightly_on')} #{delivery_days}"
     when :monthly
-      "#{I18n.locale} #{I18n.t('models.schedule_rule.deliver_monthly_on')} #{week.succ.ordinalize_in_full} #{delivery_days}"
+      "#{I18n.t('models.schedule_rule.deliver_monthly_on')} #{week.succ.ordinalize_in_full} #{delivery_days}"
     end
   end
 
