@@ -186,7 +186,7 @@ class ScheduleRule < ActiveRecord::Base
   def delivery_days
     I18n.t('date.day_names').select.each_with_index do |day, index|
       runs_on index
-    end.join(', ')
+    end.to_sentence
   end
 
   def runs_on(number)
@@ -299,20 +299,10 @@ class ScheduleRule < ActiveRecord::Base
   end
 
   def to_day(something)
-    translate = {sunday: 0,
-    monday: 1,
-    tuesday: 2,
-    wednesday: 3,
-    thursday: 4,
-    friday: 5,
-    saturday: 6,
-    sun: 0,
-    mon: 1,
-    tue: 2,
-    wed: 3,
-    thu: 4,
-    fri: 5,
-    sat: 6}
+    translate = {
+      sunday: 0, monday: 1, tuesday: 2, wednesday: 3, thursday: 4, friday: 5, saturday: 6,
+      sun: 0, mon: 1, tue: 2, wed: 3, thu: 4, fri: 5, sat: 6
+    }
 
     if something.is_a?(Symbol)
       raise "#{something} is not understood as a day of the week" unless translate.include?(something)
@@ -324,8 +314,9 @@ class ScheduleRule < ActiveRecord::Base
     end
   end
 
-  deprecate def to_s
-    raise # FIXME
+  def to_s
+    ActiveSupport::Deprecation.warn("ScheduleRule#to_s is deprecated")
+
     deliver_on
   end
 
@@ -349,13 +340,11 @@ class ScheduleRule < ActiveRecord::Base
   end
 
   def halt!
-    self.halted = true
-    save!
+    update_attributes!(halted: true)
   end
 
   def unhalt!
-    self.halted = false
-    save!
+    update_attributes!(halted: false)
   end
 
   def paused?
