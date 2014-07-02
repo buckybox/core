@@ -6,7 +6,7 @@ else
   ruby '2.1.2'
 end
 
-gem 'rails',                           '~> 3.2.18'
+gem 'rails',                           '~> 3.2.19'
 gem 'pg',                              '~> 0.17.0'
 gem 'haml-rails',                      '~> 0.3.4'
 gem 'jquery-rails',                    '~> 3.0.4'
