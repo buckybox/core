@@ -22,8 +22,6 @@ protected
     # I18n.locale = params[:locale]
     I18n.locale = :fr if request.path =~ /\A\/(customer|webstore)/ && !Rails.env.test?
     I18n.locale ||= I18n.default_locale
-
-    I18n.exception_handler = lambda { |exception, locale, key, options| raise "Missing translation key for locale #{locale}: #{key}" } # FIXME
   end
 
   def send_csv(filename, data)
