@@ -175,7 +175,11 @@ module Bucky::TransactionImports
 
     def row_is_valid
       unless date_valid? && amount_valid?
-        errors.add(:base, "Transaction line #{index.succ} looks suspect.")
+        invalid = []
+        invalid << "invalid date: #{date_string.inspect}" unless date_valid?
+        invalid << "invalid amount: #{amount_string.inspect}" unless amount_valid?
+
+        errors.add(:base, "Transaction line #{index.succ} looks suspect (#{invalid.to_sentence}).")
       end
     end
 
