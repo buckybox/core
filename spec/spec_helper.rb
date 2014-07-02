@@ -32,6 +32,7 @@ RSpec.configure do |config|
   config.filter_run_excluding :js, :slow unless ENV["CI"]
 
   config.include Delorean
+  config.include AbstractController::Translation # `t` instead of `I18n.t` in tests
   config.include Devise::TestHelpers,        type: :controller
 
   # FIXME: Changed to all use @vars as this is majority convention.
