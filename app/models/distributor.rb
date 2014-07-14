@@ -43,7 +43,8 @@ class Distributor < ActiveRecord::Base
     email: "Account login email"
   }
 
-  devise :database_authenticatable, :recoverable, :rememberable, :trackable, :validatable
+  devise :database_authenticatable, :recoverable, :rememberable, :trackable, :validatable,
+    :lockable, unlock_strategy: :none # don't let them unlock themselves for now
 
   acts_as_taggable
 
