@@ -16,7 +16,7 @@ class Customer::OrdersController < Customer::ResourceController
     @order = current_customer.orders.find(params[:id])
 
     unless @order.customer_can_edit?
-      redirect_to customer_root_path, alert: t('c.order.edit.not_allowed') and return
+      redirect_to customer_root_path, alert: t('c.order.update.not_allowed') and return
     end
 
     # keep references to old values for create_activities_from_changes
