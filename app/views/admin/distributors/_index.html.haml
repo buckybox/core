@@ -24,6 +24,8 @@
         = distributor.deliveries_last_7_days_count
         %i.icon-road(title="Deliveries completed in last 7 days")
       .span3.align-right.medium
+        - if distributor.access_locked?
+          %span{title: "Locked at #{distributor.locked_at}"} [LOCKED]
         = time_since(distributor.current_sign_in_at)
         %a(href="http://www.infosniper.net/index.php?ip_address=#{distributor.current_sign_in_ip}" target="_blank")
           %i.icon-map-marker
