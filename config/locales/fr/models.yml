@@ -29,6 +29,10 @@ fr:
           attributes:
             password: Veuillez entrer votre mot de passe
             password_confirmation: Veuillez enter votre mot de passe de nouveau
+    webstore:
+      authentication:
+        new_customer: I'm a new customer
+        existing_customer: I'm a returning customer
   activerecord:
     models:
       box: Produit
