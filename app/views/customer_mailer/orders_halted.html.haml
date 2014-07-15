@@ -1,20 +1,20 @@
-Hi #{@customer.first_name.strip},
+= t('hi') << @customer.first_name << ","
 %br
 %br
-#{@oops}, we've noticed your account has reached your minimum balance - your existing account balance is
-%strong= @customer.account.balance
-(your account should always be above your minimum balance of #{@customer.balance_threshold} in order to receive deliveries).
+= t('.intro_html', balance: @customer.account.balance, threashold: @customer.balance_threshold)
 %br
 %br
 %center
-  = link_to "Please make a payment", new_customer_session_url(distributor: @distributor.parameter_name)
-  or contact #{@distributor.name}.
+  = t('.pay_html',
+      link: link_to("Please make a payment", new_customer_session_url(distributor: @distributor.parameter_name)),
+      distributor: @distributor.name)
+    )
 %br
-If you've recently made a payment, it may not have shown up yet - take a look at your account statement in the next few days to check. 
+= t('.recent')
 %br
 %br
-Thanks.
+= t('thanks') << "."
 %br
-The #{@distributor.name} Team
+= t('.signature', distributor: @distributor.name)
 %br
 = link_to @distributor.name, webstore_store_url(@distributor.parameter_name)

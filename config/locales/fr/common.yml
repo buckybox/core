@@ -1,6 +1,8 @@
 fr:
   current_locale: Français
   colon: " : "
+  hi: Bonjour
+  thanks: Thanks
   back: retour
   cancel: annuler
   log_in: Connexion

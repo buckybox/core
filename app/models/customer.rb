@@ -49,7 +49,7 @@ class Customer < ActiveRecord::Base
 
   after_save :update_next_occurrence # This could be more specific about when it updates
 
-  delegate :separate_bucky_fee?, :consumer_delivery_fee, :default_balance_threshold_cents, :has_balance_threshold, to: :distributor
+  delegate :locale, :separate_bucky_fee?, :consumer_delivery_fee, :default_balance_threshold_cents, :has_balance_threshold, to: :distributor
   delegate :currency, :send_email?, to: :distributor, allow_nil: true
   delegate :name, to: :delivery_service, prefix: true
   delegate :balance_at, to: :account

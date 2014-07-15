@@ -15,7 +15,6 @@ class CustomerMailer < ApplicationMailer
   def orders_halted(customer)
     @distributor = customer.distributor
     @customer = customer
-    @oops = ['Uh-oh', 'Whoops', 'Oooops'].sample
 
     headers['X-MC-Tags'] = "customer,orders_halted,#{@distributor.name.parameterize}"
 
@@ -23,13 +22,12 @@ class CustomerMailer < ApplicationMailer
          from: @distributor.email_from(email: Figaro.env.no_reply_email),
          reply_to: @distributor.email_from,
          cc: @distributor.support_email,
-         subject: "#{@oops}, your #{@distributor.name} deliveries have been put on hold"
+         subject: "Your #{@distributor.name} deliveries have been put on hold"
   end
 
   def remind_orders_halted(customer)
     @distributor = customer.distributor
     @customer = customer
-    @oops = ['Uh-oh', 'Whoops', 'Oooops'].sample
 
     headers['X-MC-Tags'] = "customer,remind_orders_halted,#{@distributor.name.parameterize}"
 
@@ -37,7 +35,7 @@ class CustomerMailer < ApplicationMailer
          from: @distributor.email_from(email: Figaro.env.no_reply_email),
          reply_to: @distributor.email_from,
          cc: @distributor.support_email,
-         subject: "#{@oops}, your #{@distributor.name} deliveries are on hold"
+         subject: "Your #{@distributor.name} deliveries are on hold"
   end
 
   def email_template(recipient, email)

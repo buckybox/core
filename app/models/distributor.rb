@@ -118,7 +118,7 @@ class Distributor < ActiveRecord::Base
   delegate :tracking_after_create, :tracking_after_save, :track, to: :messaging
 
   def locale
-    "en" # FIXME
+    :fr # FIXME
   end
 
   # Devise Override: Avoid validations on update or if now password provided
