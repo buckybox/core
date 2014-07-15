@@ -57,4 +57,13 @@ en:
         too_late:
           one_off: We could not remove this order as the impending delivery is too late to cancel.
           recurring: There is an impending delivery which is too late to cancel, however we have removed the order for future deliveries.'
+    sign_in:
+      enter_email: enter your email
+      enter_password: enter your password
+      remember_me: remember me
+      lost_password: lost your password?
+    lost_password:
+      send_my_password: Send me my password
+      enter_email: enter your email
+      send: Send password
 

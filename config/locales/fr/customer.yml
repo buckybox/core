@@ -57,4 +57,13 @@ fr:
         too_late:
           one_off: Il n'est pas possible de supprimer cette commande car sa livraison est en cours.
           recurring: Il y a une livraison en cours et il est trop tard pour l'annuler mais les livraisons ultérieures ont été annulées.
+    sign_in:
+      enter_email: entrez votre email
+      enter_password: entrez votre mot de passe
+      remember_me: se souvenir de moi
+      lost_password: mot de passe perdu ?
+    lost_password:
+      send_my_password: Send me my password
+      enter_email: entrez votre email
+      send: Envoyer mot de passe
 

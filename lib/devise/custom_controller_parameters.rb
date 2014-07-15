@@ -26,16 +26,7 @@ private
       end
     end
 
-    if @distributor
-      @abort_url = webstore_store_path(@distributor.parameter_name)
-      @abort_text = "go to web store"
-      @link_args = { distributor: @distributor.parameter_name }
-    else
-      @abort_url = Figaro.env.marketing_site_url
-      @abort_text = "go to #{Figaro.env.marketing_site_url}"
-      @link_args = nil
-    end
-
+    @link_args = @distributor ? { distributor: @distributor.parameter_name } : nil
     @distributor_id = @distributor ? @distributor.id : 0
   end
 end
