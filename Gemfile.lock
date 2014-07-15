@@ -311,7 +311,7 @@ GEM
     nokogiri (1.6.2.1)
       mini_portile (= 0.6.0)
     oj (2.1.7)
-    ordinalize_full (1.0.0)
+    ordinalize_full (1.1.0)
       i18n (~> 0.5)
     orm_adapter (0.5.0)
     parallel (1.1.2)
@@ -593,7 +593,7 @@ DEPENDENCIES
   newrelic_rpm
   nokogiri (~> 1.6.2)
   oj (~> 2.1.7)
-  ordinalize_full (~> 1.0.0)
+  ordinalize_full (~> 1.1.0)
   parallel_tests
   pg (~> 0.17.0)
   pg_search (~> 0.5.1)
