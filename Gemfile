@@ -108,7 +108,7 @@ group :test do
   gem 'therubyracer', require: false # embeded JS interpreter for our CI server
   gem 'simplecov', require: false
   gem 'cucumber-rails', require: false
-  gem 'capybara', require: false
+  gem 'capybara', '~> 2.3.0', require: false # TODO: fix cukes for 2.4
   gem 'capybara-screenshot'
   gem 'poltergeist', require: false
   gem 'launchy'
