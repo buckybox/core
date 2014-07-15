@@ -75,7 +75,8 @@ class Order < ActiveRecord::Base
     days = []
     4.times do |week| # 4 first weeks of the month
       days << ScheduleRule::DAYS.map do |day|
-        [day.to_s.titleize, ScheduleRule::DAYS.index(day) + ScheduleRule::DAYS.size * week]
+        index = ScheduleRule::DAYS.index(day)
+        [I18n.t("date.abbr_day_names")[index], index + ScheduleRule::DAYS.size * week]
       end
     end
     days

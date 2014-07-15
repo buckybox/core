@@ -33,6 +33,17 @@ en:
       authentication:
         new_customer: I'm a new customer
         existing_customer: I'm a returning customer
+      delivery_options:
+        select_delivery_service: "- Select delivery service -"
+        order_frequencies:
+          select: "- Select delivery frequency -"
+          single: Deliver once
+          weekly: Deliver weekly on...
+          fortnightly: Deliver every 2 weeks on...
+          monthly: Deliver monthly
+        extra_frequencies:
+          always: Include Extra Items with EVERY delivery
+          once: Include Extra Items with NEXT delivery only
   activerecord:
     models:
       box: Product
