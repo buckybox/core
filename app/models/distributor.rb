@@ -471,9 +471,9 @@ class Distributor < ActiveRecord::Base
 
   def self.all_payment_options
     {
-      cash_on_delivery: "Cash on Delivery",
-      bank_deposit: "Bank Deposit",
-      paypal: "PayPal / Credit Card",
+      cash_on_delivery: I18n.t('cash_on_delivery'),
+      bank_deposit: I18n.t('bank_deposit'),
+      paypal: I18n.t('paypal_cc'),
     }
   end
 

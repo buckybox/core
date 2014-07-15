@@ -457,7 +457,7 @@ class Order < ActiveRecord::Base
     inactive? || (!new_record? && next_occurrence.nil?)
   end
 
-  protected
+protected
 
   def update_next_occurrence
     customer.update_next_occurrence.save!
