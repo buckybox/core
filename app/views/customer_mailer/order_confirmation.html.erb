@@ -23,23 +23,23 @@
                       <tr>
                         <td width="50%" valign="top">
                           <span style="font-size:14px">
-                            <b>Customer Number:</b>&nbsp;&nbsp;<%= @customer.formated_number %><br>
-                            <b>E-mail:</b>&nbsp;&nbsp;<%= @customer.email %><br>
-                            <%= "<b>Mobile Phone:</b>&nbsp;&nbsp;#{@customer.mobile_phone}<br>".html_safe if @customer.mobile_phone.present? %>
-                            <%= "<b>Home Phone:</b>&nbsp;&nbsp;#{@customer.home_phone}<br>".html_safe if @customer.home_phone.present? %>
-                            <%= "<b>Work Phone:</b>&nbsp;&nbsp;#{@customer.work_phone}<br>".html_safe if @customer.work_phone.present? %>
+                            <b><%= t('.customer_number') << t('colon') %></b>&nbsp;<%= @customer.formated_number %><br>
+                            <b><%= t('.email') << t('colon') %></b>&nbsp;<%= @customer.email %><br>
+                            <%= "<b>#{t('.mobile_phone') << t('colon')}</b>&nbsp;#{@customer.mobile_phone}<br>".html_safe if @customer.mobile_phone.present? %>
+                            <%= "<b>#{t('.home_phone') << t('colon')}</b>&nbsp;#{@customer.home_phone}<br>".html_safe if @customer.home_phone.present? %>
+                            <%= "<b>#{t('.work_phone') << t('colon')}</b>&nbsp;#{@customer.work_phone}<br>".html_safe if @customer.work_phone.present? %>
                           </span>
                         </td>
 
                         <td width="50%" valign="top">
                           <span style="font-size:14px">
                             <% if @customer.uses_pickup_point? %>
-                              <b>Pick up from:</b><br>
+                              <b><%= t('.pick_up_from') << t('colon') %></b><br>
                               <%= @customer.delivery_service.name %>
                               <br/>
                               <%= @customer.delivery_service.instructions %>
                             <% else %>
-                              <b>Delivery Address:</b><br>
+                              <b><%= t('.delivery_address') << t('colon') %></b><br>
                               <%= @customer.name %>
                               <br/>
                               <%= @customer.address.to_s("<br/>") %>
@@ -57,7 +57,7 @@
               <table width="100%" cellpadding="8" cellspacing="0" border="1" bordercolor="#555555">
                 <tr>
                   <td bgcolor="#555555" colspan="2">
-                    <font color="#FFFFFF" size="+1"><b>Order Summary:</b></font>
+                    <font color="#FFFFFF" size="+1"><b><%= t('.order_summary') << t('colon') %></b></font>
                   </td>
                 </tr>
 
