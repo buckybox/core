@@ -18,10 +18,7 @@ class ApplicationController < ActionController::Base
 protected
 
   before_filter def set_locale
-    # I18n.locale = params[:locale] || extract_locale_from_accept_language_header || I18n.default_locale # FIXME
-    # I18n.locale = params[:locale]
-    I18n.locale = :fr if request.path =~ /\A\/(customer|webstore)/ && !Rails.env.test?
-    I18n.locale ||= I18n.default_locale
+    I18n.locale = find_locale
   end
 
   def send_csv(filename, data)
@@ -190,7 +187,27 @@ private
     Rack::MiniProfiler.authorize_request if current_admin.present?
   end
 
-  def extract_locale_from_accept_language_header
-    request.env['HTTP_ACCEPT_LANGUAGE'].to_s.scan(/^[a-z]{2}/).first
+  def find_locale
+    return params[:locale] if params[:locale].present? # NOTE: for debugging purpose
+    return :en if Rails.env.test?
+    return current_customer.locale if current_customer
+
+    # Web store
+    if params[:controller].start_with?("webstore/")
+      return Distributor.find_by(
+        parameter_name: params[:distributor_parameter_name]
+      ).locale
+    end
+
+    # Devise pages
+    if params[:distributor]
+      if distributor = Distributor.find_by(parameter_name: params[:distributor])
+        return distributor.locale
+      else
+        raise #FIXME never happen?
+      end
+    end
+
+    I18n.default_locale # fallback
   end
 end

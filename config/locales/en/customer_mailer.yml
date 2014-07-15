@@ -1,0 +1,9 @@
+en:
+  customer_mailer:
+    login_details:
+      email: Email
+      password: Password
+    order_confirmation:
+      thanks: Thanks for your order %{name}!
+      update_order: Did you know you can view and edit your orders 24 hours a day? Visit %{link}.
+      order_information: Order Information

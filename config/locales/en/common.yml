@@ -1,6 +1,7 @@
 en:
   current_locale: English
   colon: ": "
+  hi: Hi
   back: back
   cancel: cancel
   log_in: Log in
@@ -10,6 +11,7 @@ en:
   password_forgotten?: Lost your password?
   delivery_service: Delivery service
   my_account: My account
+  your_account: Your account
   deliver_on: Deliver on
   oops: Oops there was an issue
   no_js: Oops! You must enable JavaScript in your browser to be able to order from this webstore.
