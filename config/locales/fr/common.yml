@@ -2,7 +2,7 @@ fr:
   current_locale: Français
   colon: " : "
   hi: Bonjour
-  thanks: Thanks
+  thanks: Merci
   back: retour
   cancel: annuler
   log_in: Connexion
@@ -12,6 +12,7 @@ fr:
   password_forgotten?: Mot de passe oublié ?
   delivery_service: Service de livraison
   my_account: Mon compte
+  your_account: Votre compte
   deliver_on: Livraison le
   oops: Oups, quelque chose ne va pas
   no_js: Oops! You must enable JavaScript in your browser to be able to order from this webstore.
