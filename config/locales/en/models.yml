@@ -11,6 +11,9 @@ en:
       remove: remove order
       remove_confirmation: Are you sure you want to delete this order?
       impending_delivery: This order has an impending delivery, changes made will only affect the deliveries on or after %{date}.
+      extra_frequencies:
+        always: include with every delivery
+        once: include in the next delivery only
     phone_collection:
       mobile_phone: Mobile phone
       work_phone: Work phone

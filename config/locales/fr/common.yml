@@ -9,6 +9,7 @@ fr:
   log_out: Déconnexion
   update: Modifier
   next: Suivant
+  or: ou
   password_forgotten?: Mot de passe oublié ?
   delivery_service: Service de livraison
   my_account: Mon compte

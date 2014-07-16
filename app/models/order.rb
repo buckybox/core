@@ -321,7 +321,7 @@ class Order < ActiveRecord::Base
     if schedule_rule.frequency.single? || !show_frequency
       extras_string
     else
-      extras_string + (extras_one_off? ? ", include in the next delivery only" : ", include with every delivery") if order_extras.count > 0
+      extras_string << ", " << (extras_one_off? ? I18n.t('models.order.extra_frequencies.once') : I18n.t('models.order.extra_frequencies.always')) if order_extras.count > 0
     end
   end
 

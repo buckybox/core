@@ -11,6 +11,9 @@ fr:
       remove: supprimer
       remove_confirmation: Êtes-vous certain de vouloir supprimer cette commande ?
       impending_delivery: Cette commande a une livraison en cours, les changements effectués ici n'affecteront que les livraisons à partir du %{date}.
+      extra_frequencies:
+        always: inclure avec chaque commande
+        once: inclure avec la commande prochaine seulement
     phone_collection:
       mobile_phone: Numéro mobile
       work_phone: Numéro bureau

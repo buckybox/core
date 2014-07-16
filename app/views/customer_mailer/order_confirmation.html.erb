@@ -65,8 +65,8 @@
                   <td width="80%" valign="top">
                     <b><%= @order.box.name %></b><br>
                     <span style="font-size:14px">
-                      <%= "Exclusions: #{@order.exclusions_string}<br>".html_safe if @order.exclusions_string.present? %>
-                      <%= "Substitutes: #{@order.substitutions_string}<br>".html_safe if @order.substitutions_string.present? %>
+                      <%= "#{t('.exclusiions') << t('colon')}#{@order.exclusions_string}<br>".html_safe if @order.exclusions_string.present? %>
+                      <%= "#{t('.substitutes') << t('colon')}#{@order.substitutions_string}<br>".html_safe if @order.substitutions_string.present? %>
                       <%=
                         extras = Order.extras_description(@order.order_extras, "<br>")
                         extras.html_safe if extras.present?
@@ -74,12 +74,12 @@
                       <br><br>
                       <i>
                         <%=
-                          schedule_rule = @order.schedule_rule.to_s
+                          schedule_rule = @order.schedule_rule.deliver_on
 
                           if @order.recurs?
                             start = @order.schedule_rule.next_occurrence
                             p start, @order.schedule_rule, @order.schedule_rule.next_occurrence
-                            schedule_rule << ", starting #{start.strftime("%A #{start.day.ordinalize} %B")}"
+                            schedule_rule << ", #{t('.starting')} #{l(start, format: "%A #{start.day.ordinalize} %B")}"
                           end
 
                           schedule_rule
@@ -97,9 +97,13 @@
 
               <br><br>
 
-              You can review your orders and your account statement at anytime by logging into <%= link_to "your account", new_customer_session_url(distributor: @distributor.parameter_name) %>.
+              <%= t('.review_html', link: link_to("your account", new_customer_session_url(distributor: @distributor.parameter_name))) %>
+
               <br><br>
-              If you have any questions or feel something is out of place, please get in touch at <%= mail_to(@distributor.support_email) %><%= " or #{@distributor.phone}" if @distributor.phone.present? %>.
+
+              <%= t('.contact_html', email: mail_to(@distributor.support_email)) %>
+              <%= " #{t('or')} #{@distributor.phone}" if @distributor.phone.present? %>
+              .
 
             </td>
           </tr>
@@ -110,6 +114,8 @@
 
   <br>
 
-  <center><font size="1">Powered by <a href="<%= Figaro.env.marketing_site_url %>">Bucky Box</a></font></center>
+  <center><font size="1">
+    <%= t('.powered_by_html', link: link_to("Bucky Box", Figaro.env.marketing_site_url)) %>
+  </font></center>
 </div>
 
