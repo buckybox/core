@@ -9,7 +9,7 @@ class CustomerMailer < ApplicationMailer
     mail to: @customer.email_to,
          from: @distributor.email_from(email: Figaro.env.no_reply_email),
          reply_to: @distributor.email_from,
-         subject: "Your login details for #{@distributor.name}"
+         subject: t('customer_mailer.login_details.subject', distributor: @distributor.name)
   end
 
   def orders_halted(customer)
@@ -22,7 +22,7 @@ class CustomerMailer < ApplicationMailer
          from: @distributor.email_from(email: Figaro.env.no_reply_email),
          reply_to: @distributor.email_from,
          cc: @distributor.support_email,
-         subject: "Your #{@distributor.name} deliveries have been put on hold"
+         subject: t('customer_mailer.orders_halted.subject', distributor: @distributor.name)
   end
 
   def remind_orders_halted(customer)
@@ -35,7 +35,7 @@ class CustomerMailer < ApplicationMailer
          from: @distributor.email_from(email: Figaro.env.no_reply_email),
          reply_to: @distributor.email_from,
          cc: @distributor.support_email,
-         subject: "Your #{@distributor.name} deliveries are on hold"
+         subject: t('customer_mailer.remind_orders_halted.subject', distributor: @distributor.name)
   end
 
   def email_template(recipient, email)
@@ -69,7 +69,7 @@ class CustomerMailer < ApplicationMailer
          from: @distributor.email_from(email: Figaro.env.no_reply_email),
          reply_to: @distributor.email_from,
          cc: cc,
-         subject: "Your #{@distributor.name} Order"
+         subject: t('customer_mailer.order_confirmation.subject', distributor: @distributor.name)
   end
 
 end
