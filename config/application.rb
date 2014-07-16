@@ -45,6 +45,9 @@ module BuckyBox
 
     config.i18n.default_locale = :en
 
+    # fall back to config.i18n.default_locale translation if key is missing
+    config.i18n.fallbacks = true
+
     # http://stackoverflow.com/questions/20361428/rails-i18n-validation-deprecation-warning
     config.i18n.enforce_available_locales = true
 
