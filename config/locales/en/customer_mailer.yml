@@ -40,4 +40,10 @@ en:
       pick_up_from: Pick up from
       delivery_address: Delivery Address
       order_summary: Order Summary
+      exclusions: Exclusions
+      substitutes: Substitutes
+      starting: starting
+      review_html: You can review your orders and your account statement at anytime by logging into %{link}.
+      contact_html: If you have any questions or feel something is out of place, please get in touch at %{email}
+      powered_by_html: Powered by %{link}.
 
