@@ -89,8 +89,8 @@ class Order < ActiveRecord::Base
     next_occurrences = delivery_service.occurrences_between(from_time, time_from_now)
     next_occurrences.map do |time|
       [
-        time.to_s(:delivery_service_dates),
-        time.to_date,
+        I18n.l(time, format: "%a - %b %-d, %Y"),
+        time.to_date.iso8601,
         { 'data-weekday' => time.strftime('%a').downcase }
       ]
     end

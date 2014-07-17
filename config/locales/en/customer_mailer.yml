@@ -23,7 +23,7 @@ en:
       recent: If you've recently made a payment, it may not have shown up yet - take a look at your account statement in the next few days to check.
       signature: The %{distributor} Team
     remind_orders_halted:
-       subject: Your %{distributor} deliveries are on hold
+      subject: Your %{distributor} deliveries are on hold
       intro_html: |
         Your recent order won't be fulfilled until your account is above your minimum balance - your existing account balance is
         <strong>%{balance}</strong>

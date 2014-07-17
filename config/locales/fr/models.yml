@@ -34,19 +34,19 @@ fr:
             password_confirmation: Veuillez enter votre mot de passe de nouveau
     webstore:
       authentication:
-        new_customer: I'm a new customer
-        existing_customer: I'm a returning customer
+        new_customer: Je n'ai pas de compte
+        existing_customer: J'ai déjà un compte
       delivery_options:
-        select_delivery_service: "- Select delivery service -"
+        select_delivery_service: "- Veuillez sélectionner un service de livraison -"
         order_frequencies:
-          select: "- Select delivery frequency -"
-          single: Deliver once
-          weekly: Deliver weekly on...
-          fortnightly: Deliver every 2 weeks on...
-          monthly: Deliver monthly
+          select: "- Veuillez sélectionner une fréquence de livraison -"
+          single: Livrer cette fois seulement
+          weekly: Livrer chaque semaine le...
+          fortnightly: Livrer toutes les deux semaines le...
+          monthly: Livrer mensuellement
         extra_frequencies:
-          always: Include Extra Items with EVERY delivery
-          once: Include Extra Items with NEXT delivery only
+          always: Inclure les extras avec chaque commande
+          once: Inclure les extras avec cette commande seulement
   activerecord:
     models:
       box: Produit
