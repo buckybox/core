@@ -2,52 +2,52 @@ fr:
   customer_mailer:
     login_details:
       subject: Vos identifiants pour %{distributor}
-      new_details: Here's your new login details for your account with us at %{distributor}.
+      new_details: Voici vos nouveaux identifiants pour votre compte chez %{distributor}.
       email: Email
       password: Mot de passe
       instructions_html: |
-        Use this account to:
+        Vous pouvez utilisez votre compte pour :
 
         <ul>
-          <li>change your orders
-          <li>pause your orders if you're away
-          <li>change your delivery address or contact details if you've moved
+          <li>modifier vos commandes
+          <li>susprendre vos commandes lorsque vous n'est pas chez vous
+          <li>mettre à jour vos coordonnées si vous déménager
         </ul>
     orders_halted:
       subject: Vos livraisons %{distributor} ont été suspendues
       intro_html: |
-        We've noticed your account has reached your minimum balance - your existing account balance is
+        Nous avons remarqué que votre solde est en dessous au montant minimum requis. Votre solde actuel est
         <strong>%{balance}</strong>
-        (your account should always be above your minimum balance of %{threshold} in order to receive deliveries).
-      pay_html: "%{link} or contact %{distributor}."
-      recent: If you've recently made a payment, it may not have shown up yet - take a look at your account statement in the next few days to check.
-      signature: The %{distributor} Team
+        (votre solde doit toujours être au-dessus du seuil minimum de %{threshold} afin de recevoir vos commandes).
+      pay_html: "%{link} ou contactez %{distributor}."
+      recent: Si vous avez payé recement, il se peut que votre paiement n'est pas encore été pris en compte. Merci de vérifier de nouveau dans quelques jours.
+      signature: %{distributor}
     remind_orders_halted:
       subject: Vos livraisons %{distributor} sont suspendues
       intro_html: |
-        Your recent order won't be fulfilled until your account is above your minimum balance - your existing account balance is
+        Votre récente commande ne sera pas prise en compte tant que votre solde est en dessous de seuil minimal. Votre solde actuel est
         <strong>%{balance}</strong>
-        (your account should always be above your minimum balance of %{threshold} in order to receive deliveries).
-      pay_html: "%{link} or contact %{distributor}."
-      recent: If you've recently made a payment, it may not have shown up yet - take a look at your account statement in the next few days to check.
-      signature: The %{distributor} Team
+        (votre solde doit toujours être au-dessus du seuil minimum de %{threshold} afin de recevoir vos commandes).
+      pay_html: "%{link} ou contactez %{distributor}."
+      recent: Si vous avez payé recement, il se peut que votre paiement n'est pas encore été pris en compte. Merci de vérifier de nouveau dans quelques jours.
+      signature: %{distributor}
     order_confirmation:
       subject: Votre commande chez %{distributor}
       thanks: Merci pour votre commande %{name}!
-      update_order: Did you know you can view and edit your orders 24 hours a day? Visit %{link}.
-      order_information: Order Information
-      customer_number: Customer Number
+      update_order: Saviez-vous que vous pouviez consulter et modifier vos commandes à tout moment en allant sur %{link} ?
+      order_information: Détails de la commande
+      customer_number: Numéro client
       email: Email
-      mobile_phone: Mobile Phone
-      home_phone: Home Phone
-      work_phone: Work Phone
-      pick_up_from: Pick up from
-      delivery_address: Delivery Address
-      order_summary: Order Summary
+      mobile_phone: Numéro mobile
+      home_phone: Numéro domicile
+      work_phone: Numéro bureau
+      pick_up_from: Aller chercher à
+      delivery_address: Adresse de livraison
+      order_summary: Récapitulatif de la commande
       exclusions: Exclusions
-      substitutes: Substitutes
+      substitutes: Substitutions
       starting: à partir de
-      review_html: You can review your orders and your account statement at anytime by logging into %{link}.
-      contact_html: If you have any questions or feel something is out of place, please get in touch at %{email}
-      powered_by_html: Powered by %{link}.
+      review_html: Vous pouvez consulter vos commandes à tout moment en allant sur %{link}.
+      contact_html: Si quelque chose vous parait incorrect, n'hésitez pas à nous contacter sur %{email}
+      powered_by_html: Généré par %{link}.
 
