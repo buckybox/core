@@ -194,18 +194,12 @@ private
 
     # Web store
     if params[:controller].start_with?("webstore/")
-      return Distributor.find_by(
-        parameter_name: params[:distributor_parameter_name]
-      ).locale
+      return Distributor.find_by(parameter_name: params[:distributor_parameter_name]).locale
     end
 
     # Devise pages
     if params[:distributor]
-      if distributor = Distributor.find_by(parameter_name: params[:distributor])
-        return distributor.locale
-      else
-        raise #FIXME never happen?
-      end
+      return Distributor.find_by(parameter_name: params[:distributor]).locale
     end
 
     I18n.default_locale # fallback

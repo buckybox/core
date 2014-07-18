@@ -5,9 +5,7 @@
     = raw analytical.head_prepend_javascript
     %meta{ charset: 'utf-8' }
 
-    %title
-      = content_for?(:title) ? "Bucky Box - #{yield(:title)}" : 'Bucky Box'
-      = "[#{I18n.locale}]" # FIXME
+    %title= content_for?(:title) ? "Bucky Box - #{yield(:title)}" : 'Bucky Box'
 
     = csrf_meta_tag
 
