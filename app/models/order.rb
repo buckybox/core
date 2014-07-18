@@ -306,6 +306,8 @@ class Order < ActiveRecord::Base
       end
     end
 
+    select_array ||= [] # we might have no dates
+
     select_array.map do |label, value|
       [ I18n.l(label, format: "%a %-d %b"), value.iso8601 ]
     end
