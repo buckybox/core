@@ -7,6 +7,7 @@ else
 end
 
 gem 'rails',                           '~> 3.2.19'
+# gem 'rails',                           path: "../../rails" # for debugging
 gem 'rails-i18n',                      '~> 3.0.0' # For Rails 3.x
 gem 'pg',                              '~> 0.17.0'
 gem 'haml-rails',                      '~> 0.3.4'
