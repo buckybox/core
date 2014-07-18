@@ -70,7 +70,7 @@ class Distributor < ActiveRecord::Base
     :deliveries_index_deliveries_intro, :payments_index_intro, :customers_index_intro
 
   # Settings
-  attr_accessible :customer_can_edit_orders, :customer_can_remove_orders,
+  attr_accessible :locale, :customer_can_edit_orders, :customer_can_remove_orders,
     :default_balance_threshold, :has_balance_threshold, :send_email, :send_halted_email,
     :collect_phone, :collect_delivery_note, :require_address_1, :require_address_2, :require_suburb,
     :require_postcode, :require_phone, :require_city, :require_delivery_note,
@@ -116,10 +116,6 @@ class Distributor < ActiveRecord::Base
   scope :keep_updated, where(keep_me_updated: true)
 
   delegate :tracking_after_create, :tracking_after_save, :track, to: :messaging
-
-  def locale
-    :fr # FIXME
-  end
 
   # Devise Override: Avoid validations on update or if now password provided
   def password_required?
