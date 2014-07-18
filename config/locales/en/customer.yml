@@ -26,13 +26,13 @@ en:
       paypal:
         pay_now: Pay now
         top_up: Account top-up
-        more: more...
     transactions:
       processed_date: Processed date
       transaction_date: Transaction date
       details: Details
       amount: Amount
       balance: Balance
+      more: more...
     contact_details:
       change: Change your contact details
       successful_update: Your contact details have been successfully updated.
