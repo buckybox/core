@@ -205,6 +205,12 @@ class Distributor < ActiveRecord::Base
     omnis.map(&:bank_name).uniq
   end
 
+  def separate_bucky_fee?
+    ActiveSupport::Deprecation.warn("Distributor#separate_bucky_fee? is deprecated")
+
+    read_attribute(:separate_bucky_fee)
+  end
+
   def consumer_delivery_fee_cents
     if separate_bucky_fee?
       read_attribute(:consumer_delivery_fee_cents)
