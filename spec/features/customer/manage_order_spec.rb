@@ -20,11 +20,11 @@ feature "Manage an order", js: true do
     visit customer_root_path
 
     click_link "pause"
-    click_button "Pause"
+    click_button "pause"
     page.should have_content "pausing starts"
 
     click_link "until further notice"
-    click_button "Resume"
+    click_button "resume"
     page.should have_content "resuming deliveries on"
 
     find(".pause > .resulting-link > a").click
