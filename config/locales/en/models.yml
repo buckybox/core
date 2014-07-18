@@ -58,7 +58,7 @@ en:
         address_2: Address 2
         suburb: Suburb
         city: City
-        postcode: Post code
+        postcode: Postcode
         delivery_note: Delivery note
         placeholders:
           delivery_note: "Delivery instructions such as where to place the package, e.g. \"Place on back porch\""
