@@ -65,4 +65,6 @@ en:
       customer/form/update_password:
         password: Enter your new password
         password_confirmation: Enter your new password again to confirm
+      webstore/payment_options:
+        payment_method: payment method
 
