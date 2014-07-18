@@ -2,11 +2,11 @@ fr:
   c: &customer # short-hand for "customer [area]"
     orders:
       pausing:
-        pause: pauser
+        pause: mettre en pause
         resume: recommencer
         remove: supprimer
         close: fermer
-        pause_start: pausé à partir du
+        pause_start: en pause à partir du
         resume_start: recommence le
         until_further_notice: jusqu'à nouvel ordre
     dashboard:
