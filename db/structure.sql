@@ -3,6 +3,7 @@
 --
 
 SET statement_timeout = 0;
+SET lock_timeout = 0;
 SET client_encoding = 'UTF8';
 SET standard_conforming_strings = on;
 SET check_function_bodies = false;
@@ -1251,7 +1252,8 @@ CREATE TABLE distributors (
     email_distributor_on_new_webstore_order boolean DEFAULT false NOT NULL,
     customer_can_edit_orders boolean DEFAULT true NOT NULL,
     payment_paypal boolean DEFAULT false NOT NULL,
-    paypal_email character varying(255)
+    paypal_email character varying(255),
+    locale character varying(255) DEFAULT 'en'::character varying NOT NULL
 );
 
 
@@ -3829,3 +3831,5 @@ INSERT INTO schema_migrations (version) VALUES ('20140518211720');
 INSERT INTO schema_migrations (version) VALUES ('20140612130409');
 
 INSERT INTO schema_migrations (version) VALUES ('20140713222406');
+
+INSERT INTO schema_migrations (version) VALUES ('20140718175650');
