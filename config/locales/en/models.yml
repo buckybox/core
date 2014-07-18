@@ -18,12 +18,6 @@ en:
       mobile_phone: Mobile phone
       work_phone: Work phone
       home_phone: Home phone
-    customer:
-      form:
-        update_password:
-          attributes:
-            password: Enter your new password
-            password_confirmation: Enter your new password again to confirm
     webstore:
       authentication:
         new_customer: I'm a new customer
@@ -59,4 +53,16 @@ en:
         hints:
           email: Please double check this email as it is also used as your login.
           phone: At least one type of phone number is required.
+      customer/form/update_delivery_address:
+        address_1: Address 1
+        address_2: Address 2
+        suburb: Suburb
+        city: City
+        postcode: Post code
+        delivery_note: Delivery note
+        placeholders:
+          delivery_note: "Delivery instructions such as where to place the package, e.g. \"Place on back porch\""
+      customer/form/update_password:
+        password: Enter your new password
+        password_confirmation: Enter your new password again to confirm
 
