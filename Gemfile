@@ -103,6 +103,7 @@ group :development do
   gem 'pry-rails'
   gem 'pry-coolline' # as-you-type syntax highlighting
   gem 'pry-stack_explorer'
+  gem 'i15r', require: false
 end
 
 group :test do
