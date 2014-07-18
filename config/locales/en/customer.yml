@@ -1,5 +1,14 @@
 en:
-  c: # short-hand for "customer [area]"
+  c: &customer # short-hand for "customer [area]"
+    orders:
+      pausing:
+        pause: pause
+        resume: resume
+        remove: remove
+        close: close
+        pause_start: pausing starts
+        resume_start: resuming deliveries on
+        until_further_notice: until further notice
     dashboard:
       # sidebar
       change_contact_details: change my contact details
@@ -17,6 +26,7 @@ en:
       paypal:
         pay_now: Pay now
         top_up: Account top-up
+        more: more...
     transactions:
       processed_date: Processed date
       transaction_date: Transaction date
@@ -66,4 +76,5 @@ en:
       send_my_password: Send me my password
       enter_email: enter your email
       send: Send password
+  customer: *customer
 
