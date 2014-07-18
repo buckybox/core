@@ -280,14 +280,16 @@ class Order < ActiveRecord::Base
     end_time            = start_time + look_ahead
     existing_pause_date = pause_date
 
-    select_array = self.schedule_rule.occurrences_between(start_time, end_time, {ignore_pauses: true, ignore_halts: true}).map { |s| [s.to_date.to_s(:pause), s.to_date] }
+    select_array = self.schedule_rule.occurrences_between(start_time, end_time, {ignore_pauses: true, ignore_halts: true}).map { |s| [s.to_date, s.to_date] }
 
-    if existing_pause_date && !select_array.index([existing_pause_date.to_s(:pause), existing_pause_date])
-      select_array << [existing_pause_date.to_s(:pause), existing_pause_date]
+    if existing_pause_date && !select_array.index([existing_pause_date, existing_pause_date])
+      select_array << [existing_pause_date, existing_pause_date]
       select_array.sort! { |a,b| a.second <=> b.second }
     end
 
-    return select_array
+    select_array.map do |label, value|
+      [ I18n.l(label, format: "%a %-d %b"), value.iso8601 ]
+    end
   end
 
   def possible_resume_dates(look_ahead = 12.weeks)
@@ -296,15 +298,17 @@ class Order < ActiveRecord::Base
       end_time             = start_time + look_ahead
       existing_resume_date = resume_date
 
-      select_array      = self.schedule_rule.occurrences_between(start_time, end_time, {ignore_pauses: true, ignore_halts: true}).map { |s| [s.to_date.to_s(:pause), s.to_date] }
+      select_array      = self.schedule_rule.occurrences_between(start_time, end_time, {ignore_pauses: true, ignore_halts: true}).map { |s| [s.to_date, s.to_date] }
 
-      if existing_resume_date && !select_array.index([existing_resume_date.to_s(:pause), existing_resume_date])
-        select_array << [existing_resume_date.to_s(:pause), existing_resume_date]
+      if existing_resume_date && !select_array.index([existing_resume_date, existing_resume_date])
+        select_array << [existing_resume_date, existing_resume_date]
         select_array.sort! { |a,b| a.second <=> b.second }
       end
     end
 
-    return select_array || []
+    select_array.map do |label, value|
+      [ I18n.l(label, format: "%a %-d %b"), value.iso8601 ]
+    end
   end
 
   def extra_string(extra)

@@ -1,5 +1,14 @@
 fr:
-  c: # short-hand for "customer [area]"
+  c: &customer # short-hand for "customer [area]"
+    orders:
+      pausing:
+        pause: pauser
+        resume: recommencer
+        remove: supprimer
+        close: fermer
+        pause_start: pausé à partir du
+        resume_start: recommence le
+        until_further_notice: jusqu'à nouvel ordre
     dashboard:
       # sidebar
       change_contact_details: modifier mes coordonées
@@ -23,6 +32,7 @@ fr:
       details: Détails
       amount: Montant
       balance: Solde
+      more: afficher plus de transactions
     contact_details:
       change: Modifier vos coordonées
       successful_update: Vos coordonées ont été modifiées avec succès.
@@ -66,4 +76,5 @@ fr:
       send_my_password: Send me my password
       enter_email: entrez votre email
       send: Envoyer mot de passe
+  customer: *customer
 
