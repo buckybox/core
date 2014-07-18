@@ -18,12 +18,6 @@ fr:
       mobile_phone: Numéro mobile
       work_phone: Numéro bureau
       home_phone: Numéro domicile
-    customer:
-      form:
-        update_password:
-          attributes:
-            password: Veuillez entrer votre mot de passe
-            password_confirmation: Veuillez enter votre mot de passe de nouveau
     webstore:
       authentication:
         new_customer: Je n'ai pas de compte
@@ -59,4 +53,16 @@ fr:
         hints:
           email: Veuillez vérifier votre email car c'est aussi votre identifiant pour vous connecter.
           phone: Au moins un numéro est requis.
+      customer/form/update_delivery_address:
+        address_1: Adresse 1
+        address_2: Adresse 2
+        suburb: Région
+        city: Ville
+        postcode: Code postal
+        delivery_note: Note pour la livraison
+        placeholders:
+          delivery_note: Instructions telles que où laisser la commande, par example « déposer dans la véranda »
+      customer/form/update_password:
+        password: Veuillez entrer votre mot de passe
+        password_confirmation: Veuillez enter votre mot de passe de nouveau
 
