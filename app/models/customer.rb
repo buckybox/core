@@ -168,7 +168,7 @@ class Customer < ActiveRecord::Base
   def name=(name)
     # TODO eventually migrate to a single "full name" and add a second "what should we call you" field
     # http://www.w3.org/International/questions/qa-personal-names#singlefield
-    ActiveSupport::Deprecation.warn("Customer#name= is deprecated")
+    ActiveSupport::Deprecation.warn("Customer#name= is deprecated", caller(2))
 
     self.first_name, self.last_name = name.split(" ", 2)
   end

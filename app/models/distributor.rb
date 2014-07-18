@@ -202,7 +202,7 @@ class Distributor < ActiveRecord::Base
   end
 
   def separate_bucky_fee?
-    ActiveSupport::Deprecation.warn("Distributor#separate_bucky_fee? is deprecated (#{caller_locations.first})")
+    ActiveSupport::Deprecation.warn("Distributor#separate_bucky_fee? is deprecated", caller(2))
 
     read_attribute(:separate_bucky_fee)
   end
