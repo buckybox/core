@@ -206,17 +206,13 @@ class Distributor < ActiveRecord::Base
   end
 
   def separate_bucky_fee?
-    ActiveSupport::Deprecation.warn("Distributor#separate_bucky_fee? is deprecated")
+    ActiveSupport::Deprecation.warn("Distributor#separate_bucky_fee? is deprecated (#{caller_locations.first})")
 
     read_attribute(:separate_bucky_fee)
   end
 
   def consumer_delivery_fee_cents
-    if separate_bucky_fee?
-      read_attribute(:consumer_delivery_fee_cents)
-    else
-      0
-    end
+    0 # NOTE: legacy, kept for future use
   end
 
   def update_next_occurrence_caches(date=nil)
