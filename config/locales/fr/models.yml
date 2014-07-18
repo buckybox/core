@@ -58,3 +58,8 @@ fr:
       order:
         exclusions: Exclusions
         substitutions: Remplacements
+  virtus:
+    attributes:
+      customer/form/update_contact_details:
+        first_name: Prénom
+

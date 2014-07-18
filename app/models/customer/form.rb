@@ -30,6 +30,10 @@ class Customer::Form
     true
   end
 
+  def self.i18n_scope
+    :virtus
+  end
+
 protected
 
   def assign_attributes(attributes)
