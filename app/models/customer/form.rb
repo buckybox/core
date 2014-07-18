@@ -38,7 +38,7 @@ class Customer::Form
 protected
 
   def assign_attributes(attributes)
-    #No Op
+    # just a NO OP hook
   end
 
 end
