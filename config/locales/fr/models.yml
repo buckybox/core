@@ -20,14 +20,6 @@ fr:
       home_phone: Numéro domicile
     customer:
       form:
-        update_contact_details:
-          attributes:
-            first_name: Prénom
-            last_name: Nom
-            email: Email
-          hints:
-            email: Veuillez vérifier votre email car c'est aussi votre identifiant pour vous connecter.
-            phone: Au moins un numéro est requis.
         update_password:
           attributes:
             password: Veuillez entrer votre mot de passe
@@ -62,4 +54,9 @@ fr:
     attributes:
       customer/form/update_contact_details:
         first_name: Prénom
+        last_name: Nom
+        email: Email
+        hints:
+          email: Veuillez vérifier votre email car c'est aussi votre identifiant pour vous connecter.
+          phone: Au moins un numéro est requis.
 

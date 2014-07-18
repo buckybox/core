@@ -20,14 +20,6 @@ en:
       home_phone: Home phone
     customer:
       form:
-        update_contact_details:
-          attributes:
-            first_name: First name
-            last_name: Last name
-            email: Email
-          hints:
-            email: Please double check this email as it is also used as your login.
-            phone: At least one type of phone number is required.
         update_password:
           attributes:
             password: Enter your new password
@@ -58,3 +50,13 @@ en:
       order:
         exclusions: Exclusions
         substitutions: Substitutes
+  virtus:
+    attributes:
+      customer/form/update_contact_details:
+        first_name: First name
+        last_name: Last name
+        email: Email
+        hints:
+          email: Please double check this email as it is also used as your login.
+          phone: At least one type of phone number is required.
+

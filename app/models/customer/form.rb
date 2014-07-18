@@ -30,6 +30,7 @@ class Customer::Form
     true
   end
 
+  # Overwrite i18n_scope from activemodel/lib/active_model/translation.rb
   def self.i18n_scope
     :virtus
   end

@@ -2,13 +2,12 @@
   .modal-body
     = f.error_notification
 
-    = f.input :first_name, label: t('models.customer.form.update_contact_details.attributes.first_name')
-    = f.input :last_name, label: t('models.customer.form.update_contact_details.attributes.last_name')
-    = f.input :email, label: t('models.customer.form.update_contact_details.attributes.email'),
-      hint: t('models.customer.form.update_contact_details.hints.email')
+    = f.input :first_name
+    = f.input :last_name
+    = f.input :email, hint: t('virtus.attributes.customer/form/update_contact_details.hints.email')
 
     - if update_contact_details.require_phone?
-      %p.muted= t('models.customer.form.update_contact_details.hints.phone')
+      %p.muted= t('virtus.attributes.customer/form/update_contact_details.hints.phone')
     = f.input :mobile_phone, label: t('models.phone_collection.mobile_phone')
     = f.input :home_phone, label: t('models.phone_collection.home_phone')
     = f.input :work_phone, label: t('models.phone_collection.work_phone')
