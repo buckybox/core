@@ -38,9 +38,9 @@ en:
       order_information: Order Information
       customer_number: Customer Number
       email: Email
-      mobile_phone: Mobile phone
-      home_phone: Home phone
-      work_phone: Work phone
+      mobile_phone: Mobile Phone
+      home_phone: Home Phone
+      work_phone: Work Phone
       pick_up_from: Pick up from
       delivery_address: Delivery Address
       order_summary: Order Summary

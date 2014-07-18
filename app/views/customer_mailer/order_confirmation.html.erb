@@ -65,7 +65,7 @@
                   <td width="80%" valign="top">
                     <b><%= @order.box.name %></b><br>
                     <span style="font-size:14px">
-                      <%= "#{t('.exclusiions') << t('colon')}#{@order.exclusions_string}<br>".html_safe if @order.exclusions_string.present? %>
+                      <%= "#{t('.exclusions') << t('colon')}#{@order.exclusions_string}<br>".html_safe if @order.exclusions_string.present? %>
                       <%= "#{t('.substitutes') << t('colon')}#{@order.substitutions_string}<br>".html_safe if @order.substitutions_string.present? %>
                       <%=
                         extras = Order.extras_description(@order.order_extras, "<br>")
@@ -78,7 +78,6 @@
 
                           if @order.recurs?
                             start = @order.schedule_rule.next_occurrence
-                            p start, @order.schedule_rule, @order.schedule_rule.next_occurrence
                             schedule_rule << ", #{t('.starting')} #{l(start, format: "%A #{start.day.ordinalize} %B")}"
                           end
 
