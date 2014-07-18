@@ -16,7 +16,7 @@ fr:
       intro_html: |
         We've noticed your account has reached your minimum balance - your existing account balance is
         <strong>%{balance}</strong>
-        (your account should always be above your minimum balance of %{threashold} in order to receive deliveries).
+        (your account should always be above your minimum balance of %{threshold} in order to receive deliveries).
       pay_html: "%{link} or contact %{distributor}."
       recent: If you've recently made a payment, it may not have shown up yet - take a look at your account statement in the next few days to check.
       signature: The %{distributor} Team
@@ -24,7 +24,7 @@ fr:
       intro_html: |
         Your recent order won't be fulfilled until your account is above your minimum balance - your existing account balance is
         <strong>%{balance}</strong>
-        (your account should always be above your minimum balance of %{threashold} in order to receive deliveries).
+        (your account should always be above your minimum balance of %{threshold} in order to receive deliveries).
       pay_html: "%{link} or contact %{distributor}."
       recent: If you've recently made a payment, it may not have shown up yet - take a look at your account statement in the next few days to check.
       signature: The %{distributor} Team
