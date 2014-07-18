@@ -1,6 +1,7 @@
 fr:
   customer_mailer:
     login_details:
+      subject: Vos identifiants pour %{distributor}
       new_details: Here's your new login details for your account with us at %{distributor}.
       email: Email
       password: Mot de passe
@@ -13,6 +14,7 @@ fr:
           <li>change your delivery address or contact details if you've moved
         </ul>
     orders_halted:
+      subject: Vos livraisons %{distributor} ont été suspendues
       intro_html: |
         We've noticed your account has reached your minimum balance - your existing account balance is
         <strong>%{balance}</strong>
@@ -21,6 +23,7 @@ fr:
       recent: If you've recently made a payment, it may not have shown up yet - take a look at your account statement in the next few days to check.
       signature: The %{distributor} Team
     remind_orders_halted:
+      subject: Vos livraisons %{distributor} sont suspendues
       intro_html: |
         Your recent order won't be fulfilled until your account is above your minimum balance - your existing account balance is
         <strong>%{balance}</strong>
@@ -29,6 +32,7 @@ fr:
       recent: If you've recently made a payment, it may not have shown up yet - take a look at your account statement in the next few days to check.
       signature: The %{distributor} Team
     order_confirmation:
+      subject: Votre commande chez %{distributor}
       thanks: Merci pour votre commande %{name}!
       update_order: Did you know you can view and edit your orders 24 hours a day? Visit %{link}.
       order_information: Order Information
