@@ -5,7 +5,7 @@
   #customer-details.span4
     #section-one
       = customer_title(@customer, class: 'important')
-      = render partial: 'customer_tags', locals: { customer: @customer }
+      = customer_tags(@customer)
 
       #account-information{data: {account_id: @account.id}}
         %span.balance{ class: "#{'negative' if @account.negative_balance?}" }= @account.balance

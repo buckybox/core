@@ -14,7 +14,7 @@
               = render partial: 'status_icons', locals: { status: package.status }
               .customer-holder
                 = customer_badge(package.customer, customer_name: package.archived_customer_name, short: true)
-              = render partial: 'distributor/customers/customer_tags', locals: { customer: package.customer }
+              = customer_tags(package.customer)
 
             .span6
               .row-fluid.address-description
@@ -36,7 +36,7 @@
               .label.state-label.staus-icon.status-unpacked{ title: 'UNPACKED package' }
                 %i.icon-time
               .customer-holder= customer_badge(order.account.customer)
-              = render partial: 'distributor/customers/customer_tags', locals: { customer: order.customer }
+              = customer_tags(order.customer)
 
             .span6
               .row-fluid.address-description

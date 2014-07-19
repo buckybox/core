@@ -17,7 +17,7 @@
                     = render partial: 'status_icons', locals: { status: delivery.status }
                     .customer-holder
                       = customer_badge(delivery.customer, customer_name: delivery.package.archived_customer_name)
-                    = render partial: 'distributor/customers/customer_tags', locals: { customer: delivery.customer }
+                    = customer_tags(delivery.customer)
 
                   .span1{class: "paid-label #{'paid' if delivery.paid?}"}
                     &nbsp;
@@ -38,7 +38,7 @@
             .label.state-label.staus-icon.status-pending{ title: 'PENDING delivery' }
               %i.icon-time
             .customer-holder= customer_badge(order.customer)
-            = render partial: 'distributor/customers/customer_tags', locals: { customer: order.customer }
+            = customer_tags(order.customer)
 
           .span6
             .row-fluid.address-description
