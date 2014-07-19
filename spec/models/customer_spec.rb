@@ -112,6 +112,22 @@ describe Customer do
       specify { @customer.number.should_not be_nil }
     end
 
+    describe "#dynamic_tags" do
+      specify { expect(@customer.dynamic_tags).to be_a Hash }
+
+      context "with a negative balance" do
+        before { @customer.stub(:account_balance) { CrazyMoney.new(-1) } }
+
+        specify { expect(@customer.dynamic_tags).to have_key "negative-balance" }
+      end
+
+      context "with a positive balance" do
+        before { @customer.stub(:account_balance) { CrazyMoney.new(1) } }
+
+        specify { expect(@customer.dynamic_tags).to_not have_key "negative-balance" }
+      end
+    end
+
     describe '#email' do
       before do
         @customer.email = ' BuckyBox@Example.com '
