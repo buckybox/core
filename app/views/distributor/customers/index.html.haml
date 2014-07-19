@@ -24,7 +24,7 @@
           %td= check_box_tag customer.id, 1, false, class: "select_one", 'data-customer-id' => customer.id
           %td= customer_badge(customer)
           %td
-            = render partial: 'customer_tags', locals: { customer: customer }
+            = customer_tags(customer)
           %td
             %small= next_customer_delivery_occurrence(customer)
           %td

@@ -132,6 +132,23 @@ class Customer < ActiveRecord::Base
     return result
   end
 
+  def self.all_dynamic_tags
+    {
+      'halted'           => 'important',
+      'negative-balance' => 'hidden'
+    }.freeze
+  end
+
+  def self.all_dynamic_tags_as_a_list
+    all_dynamic_tags.keys.freeze
+  end
+
+  def dynamic_tags
+    self.class.all_dynamic_tags.select do |tag|
+      public_send(tag.questionize)
+    end
+  end
+
   def add_activity(type, options = {})
     initiator = options.delete(:initiator) || self
     Activity.add(self, initiator, type, options)
@@ -397,6 +414,10 @@ class Customer < ActiveRecord::Base
     account = account(reload)
 
     account.present? ? account.balance : CrazyMoney.zero
+  end
+
+  def negative_balance?
+    account_balance(reload: false).negative?
   end
 
   def calculate_next_order(date = Date.current.to_s(:db))
