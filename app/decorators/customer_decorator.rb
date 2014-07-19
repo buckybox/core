@@ -17,27 +17,6 @@ class CustomerDecorator < Draper::Decorator
     account_balance.with_currency(object.account.currency)
   end
 
-  def negative_balance?
-    account_balance.negative?
-  end
-
-  def self.all_dynamic_tags
-    {
-      'halted'           => 'important',
-      'negative-balance' => 'hidden'
-    }.freeze
-  end
-
-  def self.all_dynamic_tags_as_a_list
-    all_dynamic_tags.keys.freeze
-  end
-
-  def dynamic_tags
-    self.class.all_dynamic_tags.select do |tag|
-      public_send(tag.questionize)
-    end
-  end
-
   def next_delivery_summary
     date = object.next_order_occurrence_date
     return "(no upcoming deliveries)" unless date

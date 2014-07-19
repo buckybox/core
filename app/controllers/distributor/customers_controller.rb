@@ -8,8 +8,8 @@ class Distributor::CustomersController < Distributor::ResourceController
     index! do
       @show_tour = current_distributor.customers_index_intro
 
-      amount = @customers.map(&:account).map(&:balance).sum
-      @customers_total_balance = CrazyMoney.new(amount).with_currency(current_distributor.currency)
+      balance = CrazyMoney.new(@customers.joins(:account).sum(:balance_cents)) / 100
+      @customers_total_balance = balance.with_currency(current_distributor.currency)
     end
   end
 
@@ -172,11 +172,14 @@ protected
     end
 
     @customers = @customers.ordered_by_next_delivery.includes(
-      account: {delivery_service: {}}, tags: {}, next_order: {box: {}}
-    ).decorate
+      :tags,
+      account: [:delivery_service],
+      next_order: [:box]
+    )
 
-    if tag.in?(CustomerDecorator.all_dynamic_tags_as_a_list)
-      @customers = @customers.select { |customer| tag.in?(customer.dynamic_tags) }
+    if tag.in?(Customer.all_dynamic_tags_as_a_list)
+      ids = @customers.select { |customer| tag.in?(customer.dynamic_tags) }.map(&:id)
+      @customers = Customer.where(id: ids)
     end
   end
 
