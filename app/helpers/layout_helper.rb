@@ -95,6 +95,24 @@ module LayoutHelper
     [ options[:before], badge, options[:after] ].join.html_safe
   end
 
+  def customer_tags(customer)
+    content = ""
+    customer = customer.decorate unless customer.decorated?
+
+    customer.dynamic_tags.each do |tag, label|
+      content << link_to(content_tag(:span, tag, class: "label label-status label-#{label}"), tag_distributor_customers_path(tag), class: 'link-label') << " "
+    end
+
+    tags = customer.tags.sort_by { |tag| tag.name.length }
+    tags_html = tags.map do |tag|
+      link_to(content_tag(:span, tag.name, class: 'label label-info'), tag_distributor_customers_path(tag.name), class: 'link-label') << " "
+    end.join.html_safe
+
+    content << content_tag(:span, tags_html, class: 'tag-links', data: {"toggle" => "tooltip", "placement" => "left", "title" => tags.join(' ') })
+
+    content.html_safe
+  end
+
   def intro_tour(show_tour)
     if controller_path =~ /^distributor/
       if controller_name == 'customers' && action_name == 'show'
