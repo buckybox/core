@@ -69,6 +69,16 @@ module LayoutHelper
   end
 
   def customer_badge(customer, options = {})
+    # keys = %i(id formated_number name email)
+    keys = %i(id updated_at)
+    cache_key = [
+      "customer_badge",
+      keys.map { |key| customer.public_send(key) },
+      options.hash
+    ].join(".")
+
+    redis.get(cache_key)
+    # return 'badge'
     customer_id = customer.formated_number.to_s
 
     content = case options[:link]
