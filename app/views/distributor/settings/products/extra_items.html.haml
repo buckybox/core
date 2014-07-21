@@ -37,7 +37,7 @@
               .line
                 = f.input_field :name, class: 'name', required: true, placeholder: 'Name'
                 = f.input_field :unit, class: 'unit', required: true, placeholder: 'Unit e.g. 1/2 doz.'
-                = f.input_field :price, class: 'amount', required: true, placeholder: '0.00', title: 'Price'
+                = f.input_field :price, class: 'amount', required: true, placeholder: CrazyMoney.zero, title: 'Price'
               .line
                 .field= f.input_field :visible, inline_label: true, label: "<i class='icon-shopping-cart'></i> Visible on web store".html_safe, as: :boolean
 
