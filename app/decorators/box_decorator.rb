@@ -6,7 +6,11 @@ class BoxDecorator < Draper::Decorator
   delegate_all
 
   def formatted_price
-    object.price.zero? ? "Free" : object.price
+    object.price.zero? ? "Free" : price_with_currency
+  end
+
+  def price_with_currency
+    object.price.with_currency(object.distributor.currency)
   end
 
   def extras
