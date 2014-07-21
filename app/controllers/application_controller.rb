@@ -4,6 +4,8 @@ class ApplicationController < ActionController::Base
   before_filter :miniprofiler
   before_bugsnag_notify :add_user_info_to_bugsnag
 
+  attr_reader :current_currency
+
   before_filter :set_user_time_zone
   before_filter :customer_smart_sign_in
 
@@ -19,6 +21,11 @@ protected
 
   before_filter def set_locale
     I18n.locale = find_locale
+  end
+
+  before_filter def set_currency
+    @current_currency = find_currency
+    CrazyMoney::Configuration.current_currency = current_currency
   end
 
   def send_csv(filename, data)
@@ -204,5 +211,13 @@ private
     end
 
     I18n.default_locale # fallback
+  end
+
+  def find_currency
+    CrazyMoney::Configuration.current_currency = if current_distributor
+      current_distributor.currency
+    elsif current_customer
+      current_customer.currency
+    end
   end
 end
