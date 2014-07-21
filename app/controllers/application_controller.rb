@@ -200,7 +200,8 @@ private
 
     # Devise pages
     if params[:controller].start_with?("customer/") && params[:distributor].is_a?(String)
-      return Distributor.find_by(parameter_name: params[:distributor]).locale
+      distributor = Distributor.find_by(parameter_name: params[:distributor])
+      return distributor.locale if distributor # NOTE: nasty bots send rubbish distributor param
     end
 
     I18n.default_locale # fallback
