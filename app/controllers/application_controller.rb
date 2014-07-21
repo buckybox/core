@@ -198,7 +198,7 @@ private
     end
 
     # Devise pages
-    if params[:distributor]
+    if params[:distributor].is_a?(String)
       return Distributor.find_by(parameter_name: params[:distributor]).locale
     end
 
