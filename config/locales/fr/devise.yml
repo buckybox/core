@@ -1,0 +1,10 @@
+fr:
+  devise_mailer:
+    reset_password_instructions:
+      change_password: Changer mon mot de passe
+      body: |
+        Bonjour %{email} !
+        Nous avons été informé d'une demande de changement de mot de passe, vous pouvez le faire en cliquant sur le lien ci-dessous.
+        %{link}
+        Si vous n'avez pas demandé cela, veuillez ignorer cet email.
+        Votre mot de passe ne sera pas changé tant que le lien ci-dessus n'est pas utilisé.

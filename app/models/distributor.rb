@@ -70,7 +70,7 @@ class Distributor < ActiveRecord::Base
     :deliveries_index_deliveries_intro, :payments_index_intro, :customers_index_intro
 
   # Settings
-  attr_accessible :customer_can_edit_orders, :customer_can_remove_orders,
+  attr_accessible :locale, :customer_can_edit_orders, :customer_can_remove_orders,
     :default_balance_threshold, :has_balance_threshold, :send_email, :send_halted_email,
     :collect_phone, :collect_delivery_note, :require_address_1, :require_address_2, :require_suburb,
     :require_postcode, :require_phone, :require_city, :require_delivery_note,
@@ -201,12 +201,14 @@ class Distributor < ActiveRecord::Base
     omnis.map(&:bank_name).uniq
   end
 
+  def separate_bucky_fee?
+    ActiveSupport::Deprecation.warn("Distributor#separate_bucky_fee? is deprecated", caller(2))
+
+    read_attribute(:separate_bucky_fee)
+  end
+
   def consumer_delivery_fee_cents
-    if separate_bucky_fee?
-      read_attribute(:consumer_delivery_fee_cents)
-    else
-      0
-    end
+    0 # NOTE: legacy, kept for future use
   end
 
   def update_next_occurrence_caches(date=nil)
@@ -313,7 +315,7 @@ class Distributor < ActiveRecord::Base
 
     matches = search_extras.select{|extra| extra.match_import_extra?(e)}.
       collect{|extra_match| [extra_match.fuzzy_match(e),extra_match]}.
-      select{|fuzzy_match| fuzzy_match.first > Extra::FUZZY_MATCH_THRESHOLD}. # Set a lower threashold which weeds out almost matches and force the data to be fixed.  Make the user go fix the csv file.
+      select{|fuzzy_match| fuzzy_match.first > Extra::FUZZY_MATCH_THRESHOLD}. # Set a lower threshold which weeds out almost matches and force the data to be fixed.  Make the user go fix the csv file.
       sort{|a,b| b.first <=> a.first}
 
     match = if matches.size > 1 && matches.first.first == matches[1].first
@@ -467,9 +469,9 @@ class Distributor < ActiveRecord::Base
 
   def self.all_payment_options
     {
-      cash_on_delivery: "Cash on Delivery",
-      bank_deposit: "Bank Deposit",
-      paypal: "PayPal / Credit Card",
+      cash_on_delivery: I18n.t('cash_on_delivery'),
+      bank_deposit: I18n.t('bank_deposit'),
+      paypal: I18n.t('paypal_cc'),
     }
   end
 

@@ -20,7 +20,12 @@ class PhoneCollection
   def all
     TYPES.each_value.map do |attribute|
       phone = @address.send(attribute)
-      "#{attribute.humanize}: #{phone}" unless phone.blank?
+
+      [
+        I18n.t("models.phone_collection.#{attribute}"),
+        I18n.t('colon'),
+        phone
+      ].join unless phone.blank?
     end.compact
   end
 
@@ -35,7 +40,7 @@ class PhoneCollection
 private
 
   def self.type_option(type)
-    [ type.capitalize, type ]
+    [ I18n.t("models.phone_collection.#{type}_phone"), type ]
   end
 
   def default

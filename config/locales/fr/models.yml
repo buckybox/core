@@ -1,0 +1,70 @@
+fr:
+  models:
+    schedule_rule:
+      deliver_on: Livraison le
+      deliver_weekly_on: Livraison hebdomadaire le
+      deliver_fornightly_on: Livraison bi-mensuelle le
+      deliver_monthly_on: Livraison mensuelle le
+      no_future_deliveries: Aucune future livraison planifiée
+    order:
+      edit: modifier cette commande
+      remove: supprimer
+      remove_confirmation: Êtes-vous certain de vouloir supprimer cette commande ?
+      impending_delivery: Cette commande a une livraison en cours, les changements effectués ici n'affecteront que les livraisons à partir du %{date}.
+      extra_frequencies:
+        always: inclure avec chaque commande
+        once: inclure avec la commande prochaine seulement
+    phone_collection:
+      mobile_phone: Numéro mobile
+      work_phone: Numéro bureau
+      home_phone: Numéro domicile
+    webstore:
+      authentication:
+        new_customer: Je n'ai pas de compte
+        existing_customer: J'ai déjà un compte
+      delivery_options:
+        select_delivery_service: "- Veuillez sélectionner un service de livraison -"
+        order_frequencies:
+          select: "- Veuillez sélectionner une fréquence de livraison -"
+          single: Livrer cette fois seulement
+          weekly: Livrer chaque semaine le...
+          fortnightly: Livrer toutes les deux semaines le...
+          monthly: Livrer mensuellement
+        extra_frequencies:
+          always: Inclure les extras avec chaque commande
+          once: Inclure les extras avec cette commande seulement
+  activerecord:
+    models:
+      box: Produit
+      customer: Client
+      order: Commande
+    attributes:
+      customer:
+        formated_number: Numéro client
+      order:
+        exclusions: Exclusions
+        substitutions: Remplacements
+  virtus:
+    attributes:
+      customer/form/update_contact_details:
+        first_name: Prénom
+        last_name: Nom
+        email: Email
+        hints:
+          email: Veuillez vérifier votre email car c'est aussi votre identifiant pour vous connecter.
+          phone: Au moins un numéro est requis.
+      customer/form/update_delivery_address:
+        address_1: Adresse 1
+        address_2: Adresse 2
+        suburb: Région
+        city: Ville
+        postcode: Code postal
+        delivery_note: Note pour la livraison
+        placeholders:
+          delivery_note: Instructions telles que où laisser la commande, par example « déposer dans la véranda »
+      customer/form/update_password:
+        password: Veuillez entrer votre mot de passe
+        password_confirmation: Veuillez enter votre mot de passe de nouveau
+      webstore/payment_options:
+        payment_method: moyen de paiement
+

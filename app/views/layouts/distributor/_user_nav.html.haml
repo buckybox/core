@@ -12,9 +12,9 @@
         %li.divider
         %li
           - if admin_signed_in?
-            = link_to 'logout', unimpersonate_admin_distributors_path
+            = link_to 'log out', unimpersonate_admin_distributors_path
           - else
-            = link_to 'logout', destroy_distributor_session_path, method: :delete
+            = link_to 'log out', destroy_distributor_session_path, method: :delete
     %li.dropdown.pull-right
       = render partial: 'distributor/notifications/index'
     - unless @distributor_setup.finished?

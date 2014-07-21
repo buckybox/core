@@ -1,0 +1,81 @@
+fr:
+  c: &customer # short-hand for "customer [area]"
+    orders:
+      pausing:
+        pause: mettre en pause
+        resume: recommencer
+        remove: supprimer
+        close: fermer
+        pause_start: en pause à partir du
+        resume_start: recommence le
+        until_further_notice: jusqu'à nouvel ordre
+    dashboard:
+      # sidebar
+      change_contact_details: modifier mes coordonées
+      change_password: modifier mon mot de passe
+      change_delivery_address: modifier mon adresse de livraison
+      # main
+      order_another_item: Commander un autre produit
+      no_active_orders: Vous n'avez aucune commande active.
+      # payments
+      account_statement: Relevé de compte
+      make_payment: Effectuer un virement
+      pay_by:
+        bank_deposit: Payer par virement bancaire
+        paypal: Payer avec PayPal / carte bancaire
+      paypal:
+        pay_now: Payer maintenant
+        top_up: Rechargement du compte # meh, better idea anyone?
+    transactions:
+      processed_date: Date de relevé
+      transaction_date: Date valeur
+      details: Détails
+      amount: Montant
+      balance: Solde
+      more: afficher plus de transactions
+    contact_details:
+      change: Modifier vos coordonées
+      successful_update: Vos coordonées ont été modifiées avec succès.
+    delivery_address:
+      successful_update: Votre adresse de livraison a été modifiée avec succès.
+    password:
+      change: Modifier votre mot de passe
+      update: Modifier le mot de passe
+      successful_update: Votre mot de passe a été modifié avec succès.
+    address:
+      change: Modifier votre adresse
+    update_next_delivery: Ceci prendra effet pour votre prochaine livraison.
+    order:
+      existing: Commande existante
+      extras: Extras
+      include_extras: inclure des extras
+      no_extras: Aucun extra n'est disponible avec ce produit.
+      extras_limit: Ce produit est limité à %{count} extras.
+      extras_one_off:
+        hint: Les extras peuvent être inclus soit pour la prochaine livraison seulement soit toutes les livraisons.
+        "false": inclus pour chaque livraison
+        "true": inclus pour la prochaine livraison seulement
+      exclude_items: Exclure ces éléments...
+      substitute_with_items: Et les remplacer par...
+      update:
+        success: Votre commande a été modifiée avec succès.
+        not_allowed: Vous n'êtes pas autorisé a modifier cette commande.
+        oops: Une erreur s'est produite lors de la modification de la commande.
+      deactivate:
+        success: Votre commande a été supprimée avec succès.
+        oops: Une erreur s'est produite lors de la suppression de la commande.
+        not_allowed: Vous n'êtes pas autorisé a supprimer cette commande.
+        too_late:
+          one_off: Il n'est pas possible de supprimer cette commande car sa livraison est en cours.
+          recurring: Il y a une livraison en cours et il est trop tard pour l'annuler mais les livraisons ultérieures ont été annulées.
+    sign_in:
+      enter_email: entrez votre email
+      enter_password: entrez votre mot de passe
+      remember_me: se souvenir de moi
+      lost_password: mot de passe perdu ?
+    lost_password:
+      send_my_password: Send me my password
+      enter_email: entrez votre email
+      send: Envoyer mot de passe
+  customer: *customer
+

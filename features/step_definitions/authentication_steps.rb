@@ -40,15 +40,15 @@ Given /^I am logged in as a (.*)$/ do |auth_type|
 end
 
 When /^I log out of the admin section$/ do
-  click_link "logout"
+  click_link "log out"
 end
 
 When /^I log out of the distributor section$/ do
   find("#user-nav .distributor-name").click
-  click_link "logout"
+  click_link "log out"
 end
 
 When /^I log out of the customer section$/ do
   find("#auth-controls .dropdown-toggle").click
-  click_link "Logout"
+  click_link "Log out"
 end

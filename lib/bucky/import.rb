@@ -211,7 +211,7 @@ module Bucky
         :delivery_address_line_2, :delivery_suburb, :delivery_city, :delivery_postcode,
         :delivery_service, :delivery_instructions]
 
-      attr_accessor *DATA_FIELDS
+      attr_accessor(*DATA_FIELDS)
       attr_accessor :distributor, :boxes, :tags
 
       validates_presence_of :number, :first_name, :email, :delivery_address_line_1,
@@ -276,7 +276,7 @@ module Bucky
 
       DATA_FIELDS =  [:box_type, :extras, :dislikes, :likes, :delivery_frequency, :delivery_days,
         :next_delivery_date, :extras_recurring]
-      attr_accessor *DATA_FIELDS
+      attr_accessor(*DATA_FIELDS)
 
       def add_delivery_day(day)
         self.delivery_days ||= []
@@ -305,7 +305,7 @@ module Bucky
       validates :count, numericality: {greater_than: 0}
 
       DATA_FIELDS = [:name, :count, :unit]
-      attr_accessor *DATA_FIELDS
+      attr_accessor(*DATA_FIELDS)
 
       def to_s
         "#{count}x #{name} (#{unit})"

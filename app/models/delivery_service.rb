@@ -45,7 +45,9 @@ class DeliveryService < ActiveRecord::Base
   end
 
   def name_days_and_fee
-    days = schedule_rule.days.map { |d| d.to_s.titleize[0..2] }
+    days = schedule_rule.days.map do |day_sym|
+      I18n.t('date.abbr_day_names')[ScheduleRule::DAYS.index(day_sym)]
+    end
 
     [
       name.titleize,

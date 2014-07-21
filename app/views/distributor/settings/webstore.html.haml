@@ -2,6 +2,12 @@
 - show_settings_sub_nav(:web_store)
 
 #webstore-settings
+  .row-fluid
+    .span12
+      Your web store is currently set up in #{I18n.t('current_locale_en', locale: current_distributor.locale)}, please
+      = mail_to "support@buckybox.com", "contact us", class: "intercom"
+      to change it.
+
   = simple_form_for(@form, url: distributor_settings_webstore_url) do |f|
     .important_action{class: @form.webstore_enabled ? 'green' : 'red'}
       = f.input :webstore_enabled, as: :boolean, inline_label: "Activate the <strong>Web Store</strong>".html_safe, label: false
@@ -114,7 +120,7 @@
               .blue-circle
                 .blue-inner-circle
                   4
-    
+
     .row-fluid.line-break
       .span12
         .pull-right

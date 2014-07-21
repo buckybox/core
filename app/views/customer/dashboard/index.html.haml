@@ -8,10 +8,10 @@
 #account-information{data: {account_id: @account.id}}
 - if @distributor.active_webstore
   .row-fluid
-    #new-customer-order.dash-boxed-link.span12= link_to 'Order another item', webstore_store_path(@distributor.parameter_name)
+    #new-customer-order.dash-boxed-link.span12= link_to t('c.dashboard.order_another_item'), webstore_store_path(@distributor.parameter_name)
 
 - if @orders.empty?
-  .alert.alert-info You don't have any active orders.
+  .alert.alert-info= t('c.dashboard.no_active_orders')
 - else
   = render partial: 'customer/orders/order', collection: @orders
 
@@ -19,24 +19,24 @@
 - if @transactions.present? || make_a_payment
   .row-fluid
     .span12
-      %h3 Account Statement
+      %h3= t('c.dashboard.account_statement')
 
       - if make_a_payment
         .row-fluid.dashboard-box
           .span12
-            #make_a_payment.dash-boxed-link.span12= link_to 'Make a payment', 'javascript:void(0)'
+            #make_a_payment.dash-boxed-link.span12= link_to t('c.dashboard.make_payment'), 'javascript:void(0)'
             #payment_details
               %button.close
                 %i.icon-remove
               - if @bank
                 .row-fluid
-                  %h4.text-center Pay by Bank Deposit
+                  %h4.text-center= t('c.dashboard.pay_by.bank_deposit')
                   .span8.offset2.payment-partial
                     = render partial: 'partials/payments/bank_deposit', locals: { form_object: @bank }
 
               - if @paypal
                 .row-fluid
-                  %h4.text-center Pay by PayPal / Credit Card
+                  %h4.text-center= t('c.dashboard.pay_by.paypal')
                   .span8.offset2.payment-partial
                     = render partial: 'partials/payments/paypal', locals: { form_object: @paypal }
 

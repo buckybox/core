@@ -7,6 +7,8 @@ else
 end
 
 gem 'rails',                           '~> 3.2.19'
+# gem 'rails',                           path: "../../rails" # for debugging
+gem 'rails-i18n',                      '~> 3.0.0' # For Rails 3.x
 gem 'pg',                              '~> 0.17.0'
 gem 'haml-rails',                      '~> 0.3.4'
 gem 'jquery-rails',                    '~> 3.0.4'
@@ -16,6 +18,7 @@ gem 'bootbox-rails',                   '~> 0.1.0'
 gem 'select2-rails',                   '~> 3.5.0'
 gem 'json',                            '~> 1.7.7'
 gem 'devise',                          '~> 3.2.2'
+gem 'devise-i18n',                     '~> 0.10.3'
 gem 'multi_json',                      '~> 1.3.6'
 gem 'simple_form',                     '~> 2.1.1'
 gem 'inherited_resources',             '~> 1.3.1'
@@ -66,6 +69,7 @@ gem 'bugsnag',                         '~> 2.0.2'
 gem 'rack-mini-profiler',              '~> 0.9.2'
 gem 'flamegraph',                      '~> 0.0.5' # for rack-mini-profiler
 gem 'fast_blank',                      '~> 0.0.2'
+gem 'ordinalize_full',                 '~> 1.1.0', require: 'ordinalize_full/integer'
 
 group :assets do
   gem 'coffee-rails',   '~> 3.2.2'
@@ -100,6 +104,7 @@ group :development do
   gem 'pry-rails'
   gem 'pry-coolline' # as-you-type syntax highlighting
   gem 'pry-stack_explorer'
+  gem 'i15r', require: false
 end
 
 group :test do
@@ -115,6 +120,7 @@ group :test do
   gem 'guard', '~> 1' # v2 is broken with a version mismatch issue
   gem 'guard-rspec'
   gem 'rspec-activemodel-mocks'
+  gem 'i18n-spec', require: false
 end
 
 group :staging do
@@ -132,6 +138,7 @@ group :development, :test do
   gem 'terminal-notifier-guard' # Mac 10.8 system notifications for Guard
   gem 'letter_opener'
   gem 'bundler-audit', require: false
+  gem 'rubocop'
 end
 
 group :development, :test, :staging do

@@ -31,7 +31,7 @@ module Bucky
       field_descriptions = {
         "street" => "Street and Number",
         "city"   => "City",
-        "zip"    => "Post code / Zip",
+        "zip"    => "Post code / ZIP code",
         "state"  => "Region / Province / State"
       }
 

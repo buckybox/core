@@ -37,7 +37,7 @@ class ImportTransactionList < ActiveRecord::Base
   def move_old_csv_file
     original_path = [nil, "omni_importer", "bnz", "kiwibank", "anz", "national", "paypal", "reo_uk", "st_george_au", "uk_coop_bank", "uk_lloyds_tsb"].collect{|f|
       ["#{Rails.root}/public/system/uploads/payments/csv", f, "#{read_attribute(:csv_file)}"].compact.join('/')
-    }.find{|path| File.exists?(path)}
+    }.find{|path| File.exist?(path)}
     unless original_path.blank?
       FileUtils.mkdir_p(File.dirname(csv_file.to_s))
       File.rename(original_path, csv_file.to_s)

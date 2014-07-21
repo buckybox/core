@@ -1,0 +1,70 @@
+en:
+  models:
+    schedule_rule:
+      deliver_on: Deliver on
+      deliver_weekly_on: Deliver weekly on
+      deliver_fornightly_on: Deliver fortnightly on
+      deliver_monthly_on: Deliver monthly on the
+      no_future_deliveries: No future deliveries scheduled
+    order:
+      edit: edit this order
+      remove: remove order
+      remove_confirmation: Are you sure you want to delete this order?
+      impending_delivery: This order has an impending delivery, changes made will only affect the deliveries on or after %{date}.
+      extra_frequencies:
+        always: include with every delivery
+        once: include in the next delivery only
+    phone_collection:
+      mobile_phone: Mobile phone
+      work_phone: Work phone
+      home_phone: Home phone
+    webstore:
+      authentication:
+        new_customer: I'm a new customer
+        existing_customer: I'm a returning customer
+      delivery_options:
+        select_delivery_service: "- Select delivery service -"
+        order_frequencies:
+          select: "- Select delivery frequency -"
+          single: Deliver once
+          weekly: Deliver weekly on...
+          fortnightly: Deliver every 2 weeks on...
+          monthly: Deliver monthly
+        extra_frequencies:
+          always: Include Extra Items with EVERY delivery
+          once: Include Extra Items with NEXT delivery only
+  activerecord:
+    models:
+      box: Product
+      customer: Customer
+      order: Order
+    attributes:
+      customer:
+        formated_number: Customer number
+      order:
+        exclusions: Exclusions
+        substitutions: Substitutes
+  virtus:
+    attributes:
+      customer/form/update_contact_details:
+        first_name: First name
+        last_name: Last name
+        email: Email
+        hints:
+          email: Please double check this email as it is also used as your login.
+          phone: At least one type of phone number is required.
+      customer/form/update_delivery_address:
+        address_1: Address 1
+        address_2: Address 2
+        suburb: Suburb
+        city: City
+        postcode: Postcode
+        delivery_note: Delivery note
+        placeholders:
+          delivery_note: "Delivery instructions such as where to place the package, e.g. \"Place on back porch\""
+      customer/form/update_password:
+        password: Enter your new password
+        password_confirmation: Enter your new password again to confirm
+      webstore/payment_options:
+        payment_method: payment method
+

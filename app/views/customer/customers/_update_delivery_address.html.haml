@@ -12,8 +12,7 @@
 
       .span6
         - if update_delivery_address.collect_delivery_note?
-          - note_placeholder = "Delivery instructions such as where to place the package, e.g. Place on back porch"
-          = f.input :delivery_note, as: :text, placeholder: note_placeholder, input_html: { rows: 16 }
+          = f.input :delivery_note, as: :text, placeholder: t('virtus.attributes.customer/form/update_delivery_address.placeholders.delivery_note'), input_html: { rows: 16 }
 
   .modal-footer
-    = f.button :submit, 'Update Address', class: 'btn btn-primary'
+    = f.button :submit, t('update'), class: 'btn btn-primary'

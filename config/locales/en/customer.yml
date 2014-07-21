@@ -1,0 +1,81 @@
+en:
+  c: &customer # short-hand for "customer [area]"
+    orders:
+      pausing:
+        pause: pause
+        resume: resume
+        remove: remove
+        close: close
+        pause_start: pausing starts
+        resume_start: resuming deliveries on
+        until_further_notice: until further notice
+    dashboard:
+      # sidebar
+      change_contact_details: change my contact details
+      change_password: change my password
+      change_delivery_address: change my delivery address
+      # main
+      order_another_item: Order another item
+      no_active_orders: You don't have any active orders.
+      # payments
+      account_statement: Account Statement
+      make_payment: Make a payment
+      pay_by:
+        bank_deposit: Pay by Bank Deposit
+        paypal: Pay by PayPal / Credit Card
+      paypal:
+        pay_now: Pay now
+        top_up: Account top-up
+    transactions:
+      processed_date: Processed date
+      transaction_date: Transaction date
+      details: Details
+      amount: Amount
+      balance: Balance
+      more: more...
+    contact_details:
+      change: Change your contact details
+      successful_update: Your contact details have been successfully updated.
+    delivery_address:
+      successful_update: Your delivery address has been successfully updated.
+    password:
+      change: Change your password
+      update: Update password
+      successful_update: Your password has been successfully updated.
+    address:
+      change: Change your address
+    update_next_delivery: This will take effect on your next delivery.
+    order:
+      existing: Existing order
+      extras: Extras
+      include_extras: include extras
+      no_extras: No extras allowed for this box.
+      extras_limit: This box is limited to %{count} extras.
+      extras_one_off:
+        hint: Extras can be either a one off order or every delivery.
+        "false": include with every delivery
+        "true": include in the next delivery only
+      exclude_items: Exclude these items...
+      substitute_with_items: Substitute for these items...
+      update:
+        success: Your order was successfully updated.
+        not_allowed: You are not allowed to edit this order.
+        oops: There was a problem editing this order.
+      deactivate:
+        success: Your order was successfully removed.
+        oops: Error while trying to remove your order.
+        not_allowed: You don't have permission to do this.
+        too_late:
+          one_off: We could not remove this order as the impending delivery is too late to cancel.
+          recurring: There is an impending delivery which is too late to cancel, however we have removed the order for future deliveries.'
+    sign_in:
+      enter_email: enter your email
+      enter_password: enter your password
+      remember_me: remember me
+      lost_password: lost your password?
+    lost_password:
+      send_my_password: Send me my password
+      enter_email: enter your email
+      send: Send password
+  customer: *customer
+

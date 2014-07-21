@@ -17,7 +17,7 @@ class Bucky::Frequency
     @frequency.nil? || @frequency == :single || @frequency == :one_off
   end
 
-  alias :single? :one_off?
+  alias_method :single?, :one_off?
 
   def to_s
     @frequency.to_s

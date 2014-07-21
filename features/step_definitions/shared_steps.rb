@@ -5,7 +5,7 @@ Given(/^I am unauthenticated$/) do
 end
 
 When(/^I log out$/) do
-  click_link "logout" if page.has_link? "logout"
+  click_link "log out" if page.has_link? "log out"
   page.should have_button "Log in"
 end
 

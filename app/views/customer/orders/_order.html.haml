@@ -31,12 +31,12 @@
                       %span.label= order.extra_count(extra_object)
             %br
             - if order.customer_can_edit?
-              %small= link_to 'edit this order', edit_customer_order_path(order)
+              %small= link_to t('models.order.edit'), edit_customer_order_path(order)
           %td.thumb{ rowspan: 2 }= image_tag(order.box.box_image.small_thumb.url)
           %td.total
             .price= order.price
             - if current_customer.can_deactivate_orders?
-              = link_to 'remove order', deactivate_customer_order_path(order), confirm: "Are you sure you want to delete this order?", method: :put, class: 'remove-order-link'
+              = link_to t('models.order.remove'), deactivate_customer_order_path(order), confirm: t('models.order.remove_confirmation'), method: :put, class: 'remove-order-link'
 
 
         %tr.bottom-section
