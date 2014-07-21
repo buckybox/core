@@ -1,0 +1,53 @@
+fr:
+  customer_mailer:
+    login_details:
+      subject: Vos identifiants pour %{distributor}
+      new_details: Voici vos nouveaux identifiants pour votre compte chez %{distributor}.
+      email: Email
+      password: Mot de passe
+      instructions_html: |
+        Vous pouvez utilisez votre compte pour :
+
+        <ul>
+          <li>modifier vos commandes
+          <li>susprendre vos commandes lorsque vous n'est pas chez vous
+          <li>mettre à jour vos coordonnées si vous déménager
+        </ul>
+    orders_halted:
+      subject: Vos livraisons %{distributor} ont été suspendues
+      intro_html: |
+        Nous avons remarqué que votre solde est en dessous au montant minimum requis. Votre solde actuel est
+        <strong>%{balance}</strong>
+        (votre solde doit toujours être au-dessus du seuil minimum de %{threshold} afin de recevoir vos commandes).
+      pay_html: "%{link} ou contactez %{distributor}."
+      recent: Si vous avez payé recement, il se peut que votre paiement n'est pas encore été pris en compte. Merci de vérifier de nouveau dans quelques jours.
+      signature: "%{distributor}"
+    remind_orders_halted:
+      subject: Vos livraisons %{distributor} sont suspendues
+      intro_html: |
+        Votre récente commande ne sera pas prise en compte tant que votre solde est en dessous de seuil minimal. Votre solde actuel est
+        <strong>%{balance}</strong>
+        (votre solde doit toujours être au-dessus du seuil minimum de %{threshold} afin de recevoir vos commandes).
+      pay_html: "%{link} ou contactez %{distributor}."
+      recent: Si vous avez payé recement, il se peut que votre paiement n'est pas encore été pris en compte. Merci de vérifier de nouveau dans quelques jours.
+      signature: "%{distributor}"
+    order_confirmation:
+      subject: Votre commande chez %{distributor}
+      thanks: Merci pour votre commande %{name} !
+      update_order: Saviez-vous que vous pouviez consulter et modifier vos commandes à tout moment en allant sur %{link} ?
+      order_information: Détails de la commande
+      customer_number: Numéro client
+      email: Email
+      mobile_phone: Numéro mobile
+      home_phone: Numéro domicile
+      work_phone: Numéro bureau
+      pick_up_from: Aller chercher à
+      delivery_address: Adresse de livraison
+      order_summary: Récapitulatif de la commande
+      exclusions: Exclusions
+      substitutes: Substitutions
+      starting: à partir de
+      review_html: Vous pouvez consulter vos commandes à tout moment en allant sur %{link}.
+      contact_html: Si quelque chose vous parait incorrect, n'hésitez pas à nous contacter à %{email}
+      powered_by_html: Généré par %{link}
+

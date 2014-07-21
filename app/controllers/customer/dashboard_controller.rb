@@ -41,7 +41,7 @@ private
       amount_due_without_symbol: "",
       customer_email: @customer.email,
       distributor_paypal_email: @distributor.paypal_email,
-      product_name: "Account top-up",
+      product_name: I18n.t('c.dashboard.paypal.top_up'),
       customer_number: @customer.formated_number,
       top_up_amount: top_up_amount,
       currency_symbol: @distributor.currency_symbol,

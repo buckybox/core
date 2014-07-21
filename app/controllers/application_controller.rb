@@ -17,6 +17,10 @@ class ApplicationController < ActionController::Base
 
 protected
 
+  before_filter def set_locale
+    I18n.locale = find_locale
+  end
+
   def send_csv(filename, data)
     type = 'text/csv; charset=utf-8; header=present'
 
@@ -181,5 +185,23 @@ private
 
   def miniprofiler
     Rack::MiniProfiler.authorize_request if current_admin.present?
+  end
+
+  def find_locale
+    return params[:locale] if params[:locale].present? # NOTE: for debugging purpose
+    return :en if Rails.env.test?
+    return current_customer.locale if current_customer
+
+    # Web store
+    if params[:controller].start_with?("webstore/")
+      return Distributor.find_by(parameter_name: params[:distributor_parameter_name]).locale
+    end
+
+    # Devise pages
+    if params[:distributor].is_a?(String)
+      return Distributor.find_by(parameter_name: params[:distributor]).locale
+    end
+
+    I18n.default_locale # fallback
   end
 end

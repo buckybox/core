@@ -136,7 +136,7 @@ class ScheduleRule < ActiveRecord::Base
     end
     result
   end
-  alias :occurrences :next_occurrences
+  alias_method :occurrences, :next_occurrences
 
   def occurrences_between(start, finish, opts={})
     start = start.to_date
@@ -184,9 +184,9 @@ class ScheduleRule < ActiveRecord::Base
   end
 
   def delivery_days
-    Date::DAYNAMES.select.each_with_index do |day, index|
+    I18n.t('date.day_names').select.each_with_index do |day, index|
       runs_on index
-    end.join(', ')
+    end.to_sentence
   end
 
   def runs_on(number)
@@ -299,20 +299,10 @@ class ScheduleRule < ActiveRecord::Base
   end
 
   def to_day(something)
-    translate = {sunday: 0,
-    monday: 1,
-    tuesday: 2,
-    wednesday: 3,
-    thursday: 4,
-    friday: 5,
-    saturday: 6,
-    sun: 0,
-    mon: 1,
-    tue: 2,
-    wed: 3,
-    thu: 4,
-    fri: 5,
-    sat: 6}
+    translate = {
+      sunday: 0, monday: 1, tuesday: 2, wednesday: 3, thursday: 4, friday: 5, saturday: 6,
+      sun: 0, mon: 1, tue: 2, wed: 3, thu: 4, fri: 5, sat: 6
+    }
 
     if something.is_a?(Symbol)
       raise "#{something} is not understood as a day of the week" unless translate.include?(something)
@@ -325,17 +315,23 @@ class ScheduleRule < ActiveRecord::Base
   end
 
   def to_s
+    ActiveSupport::Deprecation.warn("ScheduleRule#to_s is deprecated")
+
+    deliver_on
+  end
+
+  def deliver_on
     case recur
     when :one_off
-      "Deliver on #{start.to_s(:flux_cap)}"
+      "#{I18n.t('models.schedule_rule.deliver_on')} #{start.to_s(:flux_cap)}"
     when :single
-      "Deliver on #{start.to_s(:flux_cap)}"
+      "#{I18n.t('models.schedule_rule.deliver_on')} #{start.to_s(:flux_cap)}"
     when :weekly
-      "Deliver weekly on #{delivery_days}"
+      "#{I18n.t('models.schedule_rule.deliver_weekly_on')} #{delivery_days}"
     when :fortnightly
-      "Deliver fortnightly on #{delivery_days}"
+      "#{I18n.t('models.schedule_rule.deliver_fornightly_on')} #{delivery_days}"
     when :monthly
-      "Deliver monthly on the #{HumanNumber.ordinalise(week.succ)} #{delivery_days}"
+      "#{I18n.t('models.schedule_rule.deliver_monthly_on')} #{week.succ.ordinalize_in_full} #{delivery_days}"
     end
   end
 

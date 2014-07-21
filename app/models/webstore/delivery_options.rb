@@ -11,19 +11,6 @@ class Webstore::DeliveryOptions < Webstore::Form
   validates_presence_of :delivery_service, :start_date, :frequency
   validates_presence_of :days, if: -> { frequency != "single" }
 
-  ORDER_FREQUENCIES = [
-    ['- Select delivery frequency -', nil],
-    ['Deliver weekly on...',          :weekly],
-    ['Deliver every 2 weeks on...',   :fortnightly],
-    ['Deliver monthly',               :monthly],
-    ['Deliver once',                  :single]
-  ].freeze
-
-  EXTRA_FREQUENCIES = [
-    ['Include Extra Items with EVERY delivery',      false],
-    ['Include Extra Items with NEXT delivery only',  true]
-  ].freeze
-
   def existing_delivery_service_id
     customer.delivery_service_id
   end
@@ -38,7 +25,7 @@ class Webstore::DeliveryOptions < Webstore::Form
 
   def delivery_service_list
     delivery_services.map { |delivery_service| delivery_service_list_item(delivery_service) }. \
-      unshift(['- Select delivery service -', nil])
+      unshift([I18n.t('models.webstore.delivery_options.select_delivery_service'), nil])
   end
 
   def single_delivery_service?
@@ -50,11 +37,20 @@ class Webstore::DeliveryOptions < Webstore::Form
   end
 
   def order_frequencies
-    ORDER_FREQUENCIES
+    [
+      [I18n.t('models.webstore.delivery_options.order_frequencies.select'),      nil],
+      [I18n.t('models.webstore.delivery_options.order_frequencies.weekly'),      :weekly],
+      [I18n.t('models.webstore.delivery_options.order_frequencies.fortnightly'), :fortnightly],
+      [I18n.t('models.webstore.delivery_options.order_frequencies.monthly'),     :monthly],
+      [I18n.t('models.webstore.delivery_options.order_frequencies.single'),      :single]
+    ]
   end
 
   def extra_frequencies
-    EXTRA_FREQUENCIES
+    [
+      [I18n.t('models.webstore.delivery_options.extra_frequencies.always'), false],
+      [I18n.t('models.webstore.delivery_options.extra_frequencies.once'),   true],
+    ]
   end
 
   def dates_grid(delivery_dates_class = ::Order)

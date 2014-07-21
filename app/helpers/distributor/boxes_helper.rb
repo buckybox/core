@@ -14,7 +14,6 @@ module Distributor::BoxesHelper
 
         text = "#{box.name} - #{box_price}"
         text << " + #{delivery_service_fee.with_currency(currency)} delivery" if delivery_service_fee > 0
-        text << " + #{customer.consumer_delivery_fee.with_currency(currency)} fee" if customer.separate_bucky_fee?
 
         [text, box.id]
       end
@@ -24,6 +23,6 @@ module Distributor::BoxesHelper
   end
 
   def customers_box_collection(customer, order, options = {})
-    box_collection(customer, options.merge({no_hidden_boxes: true, ensure_box: @order.box}))
+    box_collection(customer, options.merge(no_hidden_boxes: true, ensure_box: @order.box))
   end
 end

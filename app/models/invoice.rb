@@ -95,6 +95,6 @@ class Invoice < ActiveRecord::Base
     return if number.present? || !account.present?
 
     last_invoice = account.invoices.order('number DESC').limit(1).first
-    self.number = last_invoice.nil? || last_invoice.number.nil? ? 1 : last_invoice.number + 1
+    self.number = (last_invoice.nil? || last_invoice.number.nil?) ? 1 : last_invoice.number + 1
   end
 end

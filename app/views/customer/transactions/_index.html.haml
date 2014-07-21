@@ -4,14 +4,14 @@
       %thead
         %tr
           %th.sort_header.date_processed
-            Processed Date
+            = t('c.transactions.processed_date')
             %i.icon-chevron-down
           %th.sort_header.transaction_date
-            Transaction Date
+            = t('c.transactions.transaction_date')
             %i.icon-chevron-down
-          %th Details
-          %th.text-right Amount
-          %th.text-right Balance
+          %th= t('c.transactions.details')
+          %th.text-right= t('c.transactions.amount')
+          %th.text-right= t('c.transactions.balance')
 
       %tbody
         - transaction_total = CrazyMoney.zero # manual calculation until we start storing historical balance
@@ -28,4 +28,4 @@
         - if @show_more_link
           %tr
             %td#more-transactions{ colspan: 5 }
-              = link_to 'more...', '#'
+              = link_to t('c.transactions.more'), 'javascript:void(0)'

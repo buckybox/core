@@ -1,11 +1,11 @@
 = simple_form_for(@form_params, html: { id: 'order-form' }) do |f|
   = f.error_notification
   - if @order.has_yellow_deliveries?
-    .alert.alert-error This order has an impending delivery, changes made will only affect the deliveries on or after #{@distributor.beginning_of_green_zone.to_s(:day_date_month)}.
+    .alert.alert-error= t('models.order.impending_delivery', date: l(@distributor.beginning_of_green_zone, format: "%e %B"))
 
   .row-fluid
     .span4
-      = f.association :box, collection: customers_box_collection(@customer, @order, with_price: true), include_blank: false, input_html: { class: 'box' }
+      = f.association :box, collection: customers_box_collection(@customer, @order, with_price: true), include_blank: false, input_html: { class: 'box' }, label: t('activerecord.models.box')
 
       - unless @order.persisted?
         = f.input :frequency, collection: order_frequencies, include_blank: false, input_html: { class: 'frequency' }
@@ -20,10 +20,10 @@
       #likes_dislikes_limits{data: {limits: @order.limits_data}}
       #dislikes-input
         = f.full_error(:exclusions)
-        = f.input :excluded_line_item_ids, label: 'Exclusions', collection: @stock_list, as: :select, :input_html => { :multiple => true }, placeholder: "Exclude these items..."
+        = f.input :excluded_line_item_ids, label: t('activerecord.attributes.order.exclusions'), collection: @stock_list, as: :select, :input_html => { :multiple => true }, placeholder: t('c.order.exclude_items')
       #likes-input
         = f.full_error(:substitutions)
-        = f.input :substituted_line_item_ids, label: 'Substitutes', collection: @stock_list, as: :select, :input_html => { :multiple => true}, placeholder: "Substitute for these items..."
+        = f.input :substituted_line_item_ids, label: t('activerecord.attributes.order.substitutions'), collection: @stock_list, as: :select, :input_html => { :multiple => true }, placeholder: t('c.order.substitute_with_items')
 
     .span4
       - unless @order.persisted?
@@ -56,5 +56,5 @@
 
   .row-fluid
     .span12.form-actions
-      = f.button :submit, class: 'btn btn-primary'
-      = link_to '&raquo; back'.html_safe, customer_dashboard_path(@account.customer)
+      = link_to t('cancel'), customer_dashboard_path(@account.customer), class: 'btn btn-default'
+      = f.button :submit, t('models.order.edit'), class: 'btn btn-primary'

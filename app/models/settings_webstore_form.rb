@@ -15,10 +15,10 @@ class SettingsWebstoreForm < Form
     team_photo_file_cache: :company_team_image_cache,
     sidebar_description: :sidebar_description,
     facebook: :facebook_url,
-    phone: :phone
+    phone: :phone,
   }
   attr_reader :errors
-  attr_accessor *(INTERFACE.keys)
+  attr_accessor(*INTERFACE.keys)
 
   def initialize(opts)
     opts.each do |k,v|

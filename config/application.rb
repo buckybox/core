@@ -36,8 +36,17 @@ module BuckyBox
     config.time_zone = 'Wellington'
 
     # The default locale is :en and all translations from config/locales/*.rb,yml are auto loaded.
-    # config.i18n.load_path += Dir[Rails.root.join('my', 'locales', '*.{rb,yml}').to_s]
-    # config.i18n.default_locale = :de
+    config.i18n.load_path += Dir[Rails.root.join('config', 'locales', '**', '*.{rb,yml}').to_s]
+
+    # https://github.com/svenfuchs/rails-i18n
+    config.i18n.available_locales = Dir[Rails.root.join("config", "locales", "*")].
+      select { |path| File.directory? path }.
+      map { |directory| File.basename directory }
+
+    config.i18n.default_locale = :en
+
+    # fall back to config.i18n.default_locale translation if key is missing
+    config.i18n.fallbacks = true
 
     # http://stackoverflow.com/questions/20361428/rails-i18n-validation-deprecation-warning
     config.i18n.enforce_available_locales = true

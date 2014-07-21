@@ -1,16 +1,11 @@
-%p== Here's your new login details for your account with us at #{@distributor.name}
+%p= t('.new_details', distributor: @distributor.name)
 
-%p== #{new_customer_session_url(distributor: @distributor.parameter_name)}
+%p= new_customer_session_url(distributor: @distributor.parameter_name)
 
 %p
-  == Email: #{@customer.email}
+  = t('.email') << t('colon') << @customer.email
   %br
-  == Password: #{@customer.password}
+  = t('.password') << t('colon') << @customer.password
 
 %p
-  Use this account to:
-
-  %ul
-    %li change your orders
-    %li pause your orders if you're away
-    %li change your delivery address or contact details if you've moved
+  = t('.instructions_html')

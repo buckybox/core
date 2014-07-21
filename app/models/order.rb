@@ -75,7 +75,8 @@ class Order < ActiveRecord::Base
     days = []
     4.times do |week| # 4 first weeks of the month
       days << ScheduleRule::DAYS.map do |day|
-        [day.to_s.titleize, ScheduleRule::DAYS.index(day) + ScheduleRule::DAYS.size * week]
+        index = ScheduleRule::DAYS.index(day)
+        [I18n.t("date.abbr_day_names")[index], index + ScheduleRule::DAYS.size * week]
       end
     end
     days
@@ -88,8 +89,8 @@ class Order < ActiveRecord::Base
     next_occurrences = delivery_service.occurrences_between(from_time, time_from_now)
     next_occurrences.map do |time|
       [
-        time.to_s(:delivery_service_dates),
-        time.to_date,
+        I18n.l(time, format: "%a - %b %-d, %Y"),
+        time.to_date.iso8601,
         { 'data-weekday' => time.strftime('%a').downcase }
       ]
     end
@@ -279,14 +280,16 @@ class Order < ActiveRecord::Base
     end_time            = start_time + look_ahead
     existing_pause_date = pause_date
 
-    select_array = self.schedule_rule.occurrences_between(start_time, end_time, {ignore_pauses: true, ignore_halts: true}).map { |s| [s.to_date.to_s(:pause), s.to_date] }
+    select_array = self.schedule_rule.occurrences_between(start_time, end_time, {ignore_pauses: true, ignore_halts: true}).map { |s| [s.to_date, s.to_date] }
 
-    if existing_pause_date && !select_array.index([existing_pause_date.to_s(:pause), existing_pause_date])
-      select_array << [existing_pause_date.to_s(:pause), existing_pause_date]
+    if existing_pause_date && !select_array.index([existing_pause_date, existing_pause_date])
+      select_array << [existing_pause_date, existing_pause_date]
       select_array.sort! { |a,b| a.second <=> b.second }
     end
 
-    return select_array
+    select_array.map do |label, value|
+      [ I18n.l(label, format: "%a %-d %b"), value.iso8601 ]
+    end
   end
 
   def possible_resume_dates(look_ahead = 12.weeks)
@@ -295,15 +298,19 @@ class Order < ActiveRecord::Base
       end_time             = start_time + look_ahead
       existing_resume_date = resume_date
 
-      select_array      = self.schedule_rule.occurrences_between(start_time, end_time, {ignore_pauses: true, ignore_halts: true}).map { |s| [s.to_date.to_s(:pause), s.to_date] }
+      select_array      = self.schedule_rule.occurrences_between(start_time, end_time, {ignore_pauses: true, ignore_halts: true}).map { |s| [s.to_date, s.to_date] }
 
-      if existing_resume_date && !select_array.index([existing_resume_date.to_s(:pause), existing_resume_date])
-        select_array << [existing_resume_date.to_s(:pause), existing_resume_date]
+      if existing_resume_date && !select_array.index([existing_resume_date, existing_resume_date])
+        select_array << [existing_resume_date, existing_resume_date]
         select_array.sort! { |a,b| a.second <=> b.second }
       end
     end
 
-    return select_array || []
+    select_array ||= [] # we might have no dates
+
+    select_array.map do |label, value|
+      [ I18n.l(label, format: "%a %-d %b"), value.iso8601 ]
+    end
   end
 
   def extra_string(extra)
@@ -320,7 +327,7 @@ class Order < ActiveRecord::Base
     if schedule_rule.frequency.single? || !show_frequency
       extras_string
     else
-      extras_string + (extras_one_off? ? ", include in the next delivery only" : ", include with every delivery") if order_extras.count > 0
+      extras_string << ", " << (extras_one_off? ? I18n.t('models.order.extra_frequencies.once') : I18n.t('models.order.extra_frequencies.always')) if order_extras.count > 0
     end
   end
 
@@ -456,7 +463,7 @@ class Order < ActiveRecord::Base
     inactive? || (!new_record? && next_occurrence.nil?)
   end
 
-  protected
+protected
 
   def update_next_occurrence
     customer.update_next_occurrence.save!

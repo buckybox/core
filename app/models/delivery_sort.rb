@@ -66,7 +66,7 @@ class DeliverySort
     def self.find_or_new(name)
       @boxes ||= {}
 
-      if @boxes.has_key?(name)
+      if @boxes.key?(name)
         return @boxes[name]
       else
         box = Box.new(name)

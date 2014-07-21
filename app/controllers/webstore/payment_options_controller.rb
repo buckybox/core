@@ -20,11 +20,11 @@ private
     webstore_factory = current_cart.run_factory
     customer_sign_in(webstore_factory.customer, no_track: current_admin.present?)
 
-    redirect_to next_step, notice: "Your order has been placed."
+    redirect_to next_step, notice: t('webstore.order_placed')
   end
 
   def failed_payment_options(payment_options)
-    flash[:alert] = "Oops there was an issue: " \
+    flash[:alert] = t('oops') << t('colon') \
       << payment_options.errors.full_messages.join(", ").downcase
 
     render "payment_options", locals: {

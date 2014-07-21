@@ -169,7 +169,7 @@ class Bucky::Kolle::Import
       auto_payment: 19,
       auto_payment_number: 20
       }[name]]
-    rescue Exception => e
+    rescue => e
       puts name
       raise e
     end

@@ -115,7 +115,7 @@ class Box < ActiveRecord::Base
       false
     end
   end
-  alias :all_extras :all_extras? # I prefer to have '?' on the end of methods but simple_form won't take it as an attribute
+  alias_method :all_extras, :all_extras? # I prefer to have '?' on the end of methods but simple_form won't take it as an attribute
 
   def limits_data
     {likes: substitutions_limit, dislikes: exclusions_limit}

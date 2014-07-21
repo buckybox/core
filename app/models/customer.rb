@@ -49,7 +49,7 @@ class Customer < ActiveRecord::Base
 
   after_save :update_next_occurrence # This could be more specific about when it updates
 
-  delegate :separate_bucky_fee?, :consumer_delivery_fee, :default_balance_threshold_cents, :has_balance_threshold, to: :distributor
+  delegate :locale, :separate_bucky_fee?, :consumer_delivery_fee, :default_balance_threshold_cents, :has_balance_threshold, to: :distributor
   delegate :currency, :send_email?, to: :distributor, allow_nil: true
   delegate :name, to: :delivery_service, prefix: true
   delegate :balance_at, to: :account
@@ -185,7 +185,7 @@ class Customer < ActiveRecord::Base
   def name=(name)
     # TODO eventually migrate to a single "full name" and add a second "what should we call you" field
     # http://www.w3.org/International/questions/qa-personal-names#singlefield
-    logger.warn "DEPRECATED: Customer#name= (called from #{caller_locations.first})"
+    ActiveSupport::Deprecation.warn("Customer#name= is deprecated", caller(2))
 
     self.first_name, self.last_name = name.split(" ", 2)
   end
