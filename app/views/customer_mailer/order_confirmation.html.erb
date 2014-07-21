@@ -13,7 +13,7 @@
               <table width="100%" cellpadding="8" cellspacing="0" border="1" bordercolor="#555555">
                 <tr>
                   <td bgcolor="#555555">
-                    <font color="#FFFFFF" size="+1"><b><%= t('.order_information') << t('colon') %></b></font>
+                    <font color="#FFFFFF" size="+1"><b><%= t('.order_information') %></b></font>
                   </td>
                 </tr>
 
@@ -23,11 +23,11 @@
                       <tr>
                         <td width="50%" valign="top">
                           <span style="font-size:14px">
-                            <b><%= t('.customer_number') << t('colon') %></b>&nbsp;<%= @customer.formated_number %><br>
-                            <b><%= t('.email') << t('colon') %></b>&nbsp;<%= @customer.email %><br>
-                            <%= "<b>#{t('.mobile_phone') << t('colon')}</b>&nbsp;#{@customer.mobile_phone}<br>".html_safe if @customer.mobile_phone.present? %>
-                            <%= "<b>#{t('.home_phone') << t('colon')}</b>&nbsp;#{@customer.home_phone}<br>".html_safe if @customer.home_phone.present? %>
-                            <%= "<b>#{t('.work_phone') << t('colon')}</b>&nbsp;#{@customer.work_phone}<br>".html_safe if @customer.work_phone.present? %>
+                            <b><%= t('.customer_number') << t('colon') %></b><%= @customer.formated_number %><br>
+                            <b><%= t('.email') << t('colon') %></b><%= @customer.email %><br>
+                            <%= "<b>#{t('.mobile_phone') << t('colon')}</b>#{@customer.mobile_phone}<br>".html_safe if @customer.mobile_phone.present? %>
+                            <%= "<b>#{t('.home_phone') << t('colon')}</b>#{@customer.home_phone}<br>".html_safe if @customer.home_phone.present? %>
+                            <%= "<b>#{t('.work_phone') << t('colon')}</b>#{@customer.work_phone}<br>".html_safe if @customer.work_phone.present? %>
                           </span>
                         </td>
 
@@ -57,7 +57,7 @@
               <table width="100%" cellpadding="8" cellspacing="0" border="1" bordercolor="#555555">
                 <tr>
                   <td bgcolor="#555555" colspan="2">
-                    <font color="#FFFFFF" size="+1"><b><%= t('.order_summary') << t('colon') %></b></font>
+                    <font color="#FFFFFF" size="+1"><b><%= t('.order_summary') %></b></font>
                   </td>
                 </tr>
 
@@ -78,7 +78,7 @@
 
                           if @order.recurs?
                             start = @order.schedule_rule.next_occurrence
-                            schedule_rule << ", #{t('.starting')} #{l(start, format: "%A #{start.day.ordinalize} %B")}"
+                            schedule_rule << ", #{t('.starting')} #{l(start, format: "%A #{start.day} %B")}"
                           end
 
                           schedule_rule
@@ -96,7 +96,7 @@
 
               <br><br>
 
-              <%= t('.review_html', link: link_to("your account", new_customer_session_url(distributor: @distributor.parameter_name))) %>
+              <%= t('.review_html', link: link_to(t('your_account').downcase, new_customer_session_url(distributor: @distributor.parameter_name))) %>
 
               <br><br>
 

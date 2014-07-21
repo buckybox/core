@@ -33,7 +33,7 @@ fr:
       signature: "%{distributor}"
     order_confirmation:
       subject: Votre commande chez %{distributor}
-      thanks: Merci pour votre commande %{name}!
+      thanks: Merci pour votre commande %{name} !
       update_order: Saviez-vous que vous pouviez consulter et modifier vos commandes à tout moment en allant sur %{link} ?
       order_information: Détails de la commande
       customer_number: Numéro client
@@ -48,6 +48,6 @@ fr:
       substitutes: Substitutions
       starting: à partir de
       review_html: Vous pouvez consulter vos commandes à tout moment en allant sur %{link}.
-      contact_html: Si quelque chose vous parait incorrect, n'hésitez pas à nous contacter sur %{email}
+      contact_html: Si quelque chose vous parait incorrect, n'hésitez pas à nous contacter à %{email}
       powered_by_html: Généré par %{link}.
 
