@@ -54,7 +54,7 @@ class Account < ActiveRecord::Base
 
     amount = CrazyMoney.new(amount)
     transactionable = (options[:transactionable] ? options[:transactionable] : self)
-    description = (options[:description] ? options[:description] : t('models.account.manual_transaction'))
+    description = (options[:description] ? options[:description] : I18n.t('models.account.manual_transaction'))
     transaction_options = { amount: amount, transactionable: transactionable, description: description }
     transaction_options.merge!(display_time: options[:display_time]) if options[:display_time]
     transaction = nil
