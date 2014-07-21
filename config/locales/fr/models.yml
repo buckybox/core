@@ -6,6 +6,11 @@ fr:
       deliver_fornightly_on: Livraison bi-mensuelle le
       deliver_monthly_on: Livraison mensuelle le
       no_future_deliveries: Aucune future livraison planifiée
+    account:
+      manual_transaction: Transaction manuelle
+    delivery:
+      delivery_of: Livraison de
+      payment_made_on_delivery: Paiement lors de la livraison
     order:
       edit: modifier cette commande
       remove: supprimer

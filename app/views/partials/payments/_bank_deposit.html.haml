@@ -3,18 +3,18 @@
     .row-fluid
       .span12
         %strong
-          Please deposit funds into
+          =t '.deposit_funds'
           %span.bank_deposit_name #{form_object.bank_name}
 
     .row-fluid
       .span12
-        Account Name:
+        =t('.account_name') << t('colon')
         %span.bank_deposit_account_name #{form_object.bank_account_name}
         %br
-        Account Number:
+        =t('.account_number') << t('colon')
         %span.bank_deposit_account_number #{form_object.bank_account_number}
         %br
-        Reference: #{form_object.customer_number || "0001"}
+        =t('.reference') << t('colon') << (form_object.customer_number || "0001")
 
     .row-fluid
       .span12.note

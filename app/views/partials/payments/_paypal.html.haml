@@ -19,9 +19,9 @@
           - if form_object.top_up_amount
             .input-prepend
               %span.add-on= form_object.currency_symbol
-              %input{type: "text", name: "amount", value: form_object.top_up_amount, title: "Amount to top up", placeholder: "Amount", style: "width: 4.4em; text-align: right; margin-right: .5em"}
+              %input{type: "text", name: "amount", value: form_object.top_up_amount, title: t('.amount_to_top_up'), placeholder: t('.amount'), style: "width: 4.4em; text-align: right; margin-right: .5em"}
           - else
             %input{type: "hidden", name: "amount", value: form_object.amount_due_without_symbol}
 
-          %input{type: "submit", name: "submit", class: "btn btn-default paypal-pay-now", value: t('c.dashboard.paypal.pay_now')}
+          %input{type: "submit", name: "submit", class: "btn btn-default paypal-pay-now", value: t('.pay_now')}
 
