@@ -190,6 +190,7 @@ private
   def find_locale
     return params[:locale] if params[:locale].present? # NOTE: for debugging purpose
     return :en if Rails.env.test?
+    return :en if current_admin && current_distributor && current_customer
     return current_customer.locale if current_customer
 
     # Web store
@@ -198,7 +199,7 @@ private
     end
 
     # Devise pages
-    if params[:distributor].is_a?(String)
+    if params[:controller].start_with?("customer/") && params[:distributor].is_a?(String)
       return Distributor.find_by(parameter_name: params[:distributor]).locale
     end
 
