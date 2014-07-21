@@ -89,7 +89,7 @@ class Delivery < ActiveRecord::Base
           amount: delivery.payment_amount,
           kind: 'delivery',
           source: 'manual',
-          description: t('models.delivery.payment_made_on_delivery'),
+          description: I18n.t('models.delivery.payment_made_on_delivery'),
           display_time: delivery.date.to_time_in_current_zone
         )
       end
@@ -199,7 +199,7 @@ private
         amount: package.price,
         kind: 'delivery',
         source: source,
-        description: t('models.delivery.delivery_of') << description,
+        description: I18n.t('models.delivery.delivery_of') << description,
         display_time: date.to_time_in_current_zone
       )
     end
