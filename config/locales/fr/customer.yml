@@ -23,9 +23,6 @@ fr:
       pay_by:
         bank_deposit: Payer par virement bancaire
         paypal: Payer avec PayPal / carte bancaire
-      paypal:
-        pay_now: Payer maintenant
-        top_up: Rechargement du compte # meh, better idea anyone?
     transactions:
       processed_date: Date de relevé
       transaction_date: Date valeur
@@ -74,7 +71,7 @@ fr:
       remember_me: se souvenir de moi
       lost_password: mot de passe perdu ?
     lost_password:
-      send_my_password: Send me my password
+      send_my_password: Envoyez moi mon mot de passe
       enter_email: entrez votre email
       send: Envoyer mot de passe
   customer: *customer

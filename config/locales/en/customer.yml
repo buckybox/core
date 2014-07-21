@@ -23,9 +23,6 @@ en:
       pay_by:
         bank_deposit: Pay by Bank Deposit
         paypal: Pay by PayPal / Credit Card
-      paypal:
-        pay_now: Pay now
-        top_up: Account top-up
     transactions:
       processed_date: Processed date
       transaction_date: Transaction date
