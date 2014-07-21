@@ -49,5 +49,5 @@ fr:
       starting: à partir de
       review_html: Vous pouvez consulter vos commandes à tout moment en allant sur %{link}.
       contact_html: Si quelque chose vous parait incorrect, n'hésitez pas à nous contacter à %{email}
-      powered_by_html: Généré par %{link}.
+      powered_by_html: Généré par %{link}
 
