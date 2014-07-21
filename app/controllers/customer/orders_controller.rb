@@ -26,6 +26,7 @@ class Customer::OrdersController < Customer::ResourceController
     update! do |success, failure|
       success.html do
         create_activities_from_changes
+        flash[:notice] = t('c.order.update.success')
         redirect_to customer_root_url
       end
 
