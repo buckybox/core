@@ -58,6 +58,7 @@ en:
       exclude_items: Exclude these items...
       substitute_with_items: Substitute for these items...
       update:
+        success: Your order was successfully updated.
         not_allowed: You are not allowed to edit this order.
         oops: There was a problem editing this order.
       deactivate:
