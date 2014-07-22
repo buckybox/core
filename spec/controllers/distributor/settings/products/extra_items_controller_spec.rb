@@ -15,7 +15,7 @@ describe Distributor::Settings::Products::ExtraItemsController do
         }
       end
 
-      specify { flash[:notice].should eq('Your new extra item has heen created.') }
+      specify { flash[:notice].should eq('Your new extra item has been created.') }
     end
 
     context 'with invalid params' do
@@ -34,7 +34,7 @@ describe Distributor::Settings::Products::ExtraItemsController do
         put :update, { extra: { id: @extra.id, price: 123 } }
       end
 
-      specify { flash[:notice].should eq('Your extra item has heen updated.') }
+      specify { flash[:notice].should eq('Your extra item has been updated.') }
     end
 
     context 'with invalid params' do

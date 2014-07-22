@@ -28,7 +28,7 @@ describe Distributor::Settings::Products::BoxesController do
         end.to change { @distributor.boxes.count }.by(1)
       end
 
-      specify { flash[:notice].should eq('Your new box has heen created.') }
+      specify { flash[:notice].should eq('Your new box has been created.') }
       specify { response.should be_success }
     end
 
@@ -43,7 +43,7 @@ describe Distributor::Settings::Products::BoxesController do
     context 'with valid params' do
       before { put :update, { box: { id: box.id, price: 123 } } }
 
-      specify { flash[:notice].should eq('Your box has heen updated.') }
+      specify { flash[:notice].should eq('Your box has been updated.') }
       specify { response.should be_success }
     end
 

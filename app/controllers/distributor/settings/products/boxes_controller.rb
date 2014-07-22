@@ -11,7 +11,7 @@ class Distributor::Settings::Products::BoxesController < Distributor::BaseContro
 
     if box.save
       tracking.event(current_distributor, 'new_box') unless current_admin.present?
-      flash.now[:notice] = "Your new box has heen created."
+      flash.now[:notice] = "Your new box has been created."
     else
       flash.now[:error] = box.errors.full_messages.to_sentence
     end
@@ -23,7 +23,7 @@ class Distributor::Settings::Products::BoxesController < Distributor::BaseContro
     box = current_distributor.boxes.find(params[:box][:id])
 
     if box.update_attributes(@box_params)
-      flash.now[:notice] = "Your box has heen updated."
+      flash.now[:notice] = "Your box has been updated."
     else
       flash.now[:error] = box.errors.full_messages.to_sentence
     end
