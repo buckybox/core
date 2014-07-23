@@ -2,7 +2,7 @@ fr:
   devise_mailer:
     reset_password_instructions:
       change_password: Changer mon mot de passe
-      body: |
+      body_html: |
         Bonjour %{email} !
         Nous avons été informé d'une demande de changement de mot de passe, vous pouvez le faire en cliquant sur le lien ci-dessous.
         %{link}
