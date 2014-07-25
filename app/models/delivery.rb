@@ -199,7 +199,7 @@ private
         amount: package.price,
         kind: 'delivery',
         source: source,
-        description: I18n.t('models.delivery.delivery_of') << description,
+        description: I18n.t('models.delivery.delivery_of') << " " << description,
         display_time: date.to_time_in_current_zone
       )
     end
