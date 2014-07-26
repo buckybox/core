@@ -45,7 +45,7 @@ gem 'daemons',                         '~> 1.1.9' # able to monitor delayed_job 
 gem 'analytical',                      '~> 3.0.12'
 gem 'newrelic_rpm'
 gem 'intercom-rails',                  '~> 0.2.24'
-gem 'intercom',                        '~> 0.1.16'
+gem 'intercom',                        '~> 2.1.3'
 gem 'ace-rails-ap',                    '~> 2.0.0'
 gem 'activemerchant',                  '~> 1.32.1'
 gem 'attr_encryptor',                  '~> 1.0.2'

@@ -1,5 +1,5 @@
 Intercom.app_id = Figaro.env.intercom_app_id
-Intercom.api_key = Figaro.env.intercom_api_key
+Intercom.app_api_key = Figaro.env.intercom_app_api_key
 
 IntercomRails.config do |config|
   # == Intercom app_id
@@ -16,7 +16,7 @@ IntercomRails.config do |config|
   # This is required for some Intercom rake tasks like importing your users;
   # you can generate one at https://www.intercom.io/apps/api_keys.
   #
-  config.api_key = Intercom.api_key
+  config.api_key = Intercom.app_api_key
 
   # == Enabled Environments
   # Which enviornments is auto inclusion of the Javascript enabled for
