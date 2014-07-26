@@ -68,7 +68,7 @@ module Messaging
       env != expected_env
     end
 
-    private
+  private
 
     def find_user(id)
       ::Intercom::User.find(user_id: id)
