@@ -1,8 +1,6 @@
-.row-fluid
-  .span12
-    - unless @distributors.blank?
-      = link_to 'Full Distributor List', admin_distributors_path
-      \|
-    = link_to 'New Distributor', new_admin_distributor_path, class: 'button radius'
-    |
-    = link_to 'Omni Importers', admin_omni_importers_path
+- unless @distributors.blank?
+  = link_to 'Full Distributor List', admin_distributors_path
+  \|
+= link_to 'New Distributor', new_admin_distributor_path, class: 'button radius'
+|
+= link_to 'Omni Importers', admin_omni_importers_path
