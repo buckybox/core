@@ -53,7 +53,7 @@ module Messaging
       return if skip? env
 
       user = ::Intercom::User.find_by_user_id(id)
-      user.custom_data["#{action_name}_at"] = occurred_at
+      user.custom_attributes["#{action_name}_at"] = occurred_at
       user.save
 
     rescue ::Intercom::AuthenticationError,
