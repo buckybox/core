@@ -5,7 +5,7 @@ export RAILS_ENV=test
 export COVERAGE=1
 export SPEC_OPTS="--format p"
 
-cp config/database.yml.example config/database.yml
+cp -n config/database.yml.example config/database.yml
 
 bundle exec bundle-audit update
 bundle exec bundle-audit check
