@@ -68,15 +68,17 @@ class Delivery < ActiveRecord::Base
 
   def self.change_statuses(deliveries, status_event)
     deliveries.all? do |delivery|
-      result = delivery.already_performed_event?(status_event)
+      delivery.with_lock do
+        result = delivery.already_performed_event?(status_event)
 
-      unless result
-        delivery.status_event = status_event
-        delivery.status_change_type = 'manual'
-        result = delivery.save
+        unless result
+          delivery.status_event = status_event
+          delivery.status_change_type = 'manual'
+          result = delivery.save
+        end
+
+        result
       end
-
-      result
     end
   end
 
