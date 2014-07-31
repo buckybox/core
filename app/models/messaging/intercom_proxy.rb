@@ -52,7 +52,7 @@ module Messaging
     def track(id, action_name, occurred_at = Time.current, env = nil)
       return if skip? env
 
-      user = ::Intercom::User.find_by_user_id(id)
+      user = ::Intercom::User.find(user_id: id)
       user.custom_attributes["#{action_name}_at"] = occurred_at
       user.save
 
@@ -102,7 +102,7 @@ module Messaging
     end
 
     def find_tag_by_name(name)
-      ::Intercom::Tag.find_by_name name
+      ::Intercom::Tag.find(name: name)
     rescue Intercom::ResourceNotFound
       return nil
     rescue ::Intercom::AuthenticationError,
