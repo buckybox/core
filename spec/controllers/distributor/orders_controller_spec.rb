@@ -20,7 +20,7 @@ describe Distributor::OrdersController do
       it 'should render new' do
         @account.stub_chain(:orders, :build).and_return(Order.new(account_id: @account.id))
         get :new, account_id: @account.id
-        response.should render_template('new')
+        expect(response).to render_template('new')
       end
     end
 
@@ -29,7 +29,7 @@ describe Distributor::OrdersController do
         @order = double('order').as_null_object
         @account.stub_chain(:orders, :find).and_return(@order)
         get :edit, account_id: @account.id, id: 7
-        response.should render_template('edit')
+        expect(response).to render_template('edit')
       end
     end
 
@@ -44,21 +44,21 @@ describe Distributor::OrdersController do
       end
 
       it 'should update order' do
-        @order.should_receive(:update_attributes).with('menu' => 'roast beef')
+        expect(@order).to receive(:update_attributes).with('menu' => 'roast beef')
         do_update
       end
 
       it 'should redirect' do
-        @order.stub(:update_attributes).and_return(true)
+        allow(@order).to receive(:update_attributes).and_return(true)
         do_update
-        response.should redirect_to('/distributor/customers/1')
+        expect(response).to redirect_to('/distributor/customers/1')
       end
 
       it 'should render edit' do
-        @order.stub(:update_attributes).and_return(false)
-        @order.stub(:errors).and_return(['error'])
+        allow(@order).to receive(:update_attributes).and_return(false)
+        allow(@order).to receive(:errors).and_return(['error'])
         do_update
-        response.should render_template('edit')
+        expect(response).to render_template('edit')
       end
     end
   end
@@ -73,8 +73,8 @@ describe Distributor::OrdersController do
       box = Fabricate(:box, distributor: @distributor)
       account = Fabricate(:account, customer: Fabricate(:customer, distributor: @distributor))
       post :create, account_id: account.id, order: {account_id: account.id, box_id: box.id, schedule_rule_attributes: {mon: '1', start: '2012-10-27'}}
-      assigns(:order).schedule_rule.mon.should be true
-      assigns(:order).schedule_rule.start.should eq(Date.parse('2012-10-27'))
+      expect(assigns(:order).schedule_rule.mon).to be true
+      expect(assigns(:order).schedule_rule.start).to eq(Date.parse('2012-10-27'))
     end
 
     it 'should create an order with exclusions and substitutions' do
@@ -82,14 +82,14 @@ describe Distributor::OrdersController do
       account = Fabricate(:account, customer: Fabricate(:customer, distributor: @distributor))
       item_ids = 2.times.collect{|i| Fabricate(:line_item, name: "Item #{i}").id}
       post :create, account_id: account.id, order: {account_id: account.id, box_id: box.id, schedule_rule_attributes: {mon: '1', start: '2012-10-27'},  excluded_line_item_ids: ["", "#{item_ids[0]}"], substituted_line_item_ids: ["", "#{item_ids[1]}"]}
-      ScheduleRule.any_instance.stub(:includes?).and_return(true)
-      response.should redirect_to([:distributor, account.customer]), assigns(:order).errors.full_messages.join(', ')
+      allow_any_instance_of(ScheduleRule).to receive(:includes?).and_return(true)
+      expect(response).to redirect_to([:distributor, account.customer]), assigns(:order).errors.full_messages.join(', ')
     end
 
     it 'should render new' do
       account = Fabricate(:account, customer: Fabricate(:customer, distributor: @distributor))
       get :new, account_id: account.id
-      response.should render_template('new')
+      expect(response).to render_template('new')
     end
   end
 
@@ -100,7 +100,7 @@ describe Distributor::OrdersController do
       it "should pause the order" do
         date = order.next_occurrences(2, Date.current).last
         put :pause, {id: order.id, account_id: order.account_id, date: date}
-        assigns(:order).pause_date.should eq(date)
+        expect(assigns(:order).pause_date).to eq(date)
       end
     end
 
@@ -108,7 +108,7 @@ describe Distributor::OrdersController do
       it "should remove the pause from an order" do
         order.pause!(Date.tomorrow)
         put :remove_pause, {id: order.id, account_id: order.account_id}
-        order.reload.pause_date.should be_nil
+        expect(order.reload.pause_date).to be_nil
       end
     end
 
@@ -118,8 +118,8 @@ describe Distributor::OrdersController do
         order.pause!(dates[2])
         put :resume, {id: order.id, account_id: order.account_id, date: dates[4]}
         order.reload
-        order.pause_date.should eq(dates[2])
-        order.resume_date.should eq(dates[4])
+        expect(order.pause_date).to eq(dates[2])
+        expect(order.resume_date).to eq(dates[4])
       end
     end
 

@@ -15,7 +15,7 @@ describe Distributor::Settings::Products::ExtraItemsController do
         }
       end
 
-      specify { flash[:notice].should eq('Your new extra item has been created.') }
+      specify { expect(flash[:notice]).to eq('Your new extra item has been created.') }
     end
 
     context 'with invalid params' do
@@ -23,7 +23,7 @@ describe Distributor::Settings::Products::ExtraItemsController do
         post :create, { extra: { name: 'yoda' } }
       end
 
-      specify { response.should be_success }
+      specify { expect(response).to be_success }
     end
   end
 
@@ -34,7 +34,7 @@ describe Distributor::Settings::Products::ExtraItemsController do
         put :update, { extra: { id: @extra.id, price: 123 } }
       end
 
-      specify { flash[:notice].should eq('Your extra item has been updated.') }
+      specify { expect(flash[:notice]).to eq('Your extra item has been updated.') }
     end
 
     context 'with invalid params' do
@@ -43,7 +43,7 @@ describe Distributor::Settings::Products::ExtraItemsController do
         put :update, { extra: { id: @extra.id, name: '' } }
       end
 
-      specify { response.should be_success }
+      specify { expect(response).to be_success }
     end
   end
 end

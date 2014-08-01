@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe PackingList, :slow do
-  specify { Fabricate(:packing_list).should be_valid }
+  specify { expect(Fabricate(:packing_list)).to be_valid }
 
   describe '#mark_all_as_auto_packed' do
     before do
@@ -29,7 +29,7 @@ describe PackingList, :slow do
       ((Date.current - 1.day)..Date.current).each { |date| PackingList.generate_list(@distributor, date) }
     end
 
-    specify { PackingList.collect_list(@distributor, Date.current - 1.day).should_not be_nil }
+    specify { expect(PackingList.collect_list(@distributor, Date.current - 1.day)).not_to be_nil }
 
     after { back_to_the_present }
   end

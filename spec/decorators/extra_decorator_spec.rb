@@ -11,9 +11,9 @@ describe ExtraDecorator do
 
   describe '#with_unit' do
     it 'returns a string with the extra name and unit' do
-      object.stub(:name) { 'Extra' }
-      object.stub(:unit) { 1 }
-      extra_decorator.with_unit.should { 'Extra (1)' }
+      allow(object).to receive(:name) { 'Extra' }
+      allow(object).to receive(:unit) { 1 }
+      expect(extra_decorator.with_unit).to eq 'Extra (1)'
     end
   end
 end

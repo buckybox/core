@@ -26,20 +26,20 @@ describe Bucky::Sql do
       end
 
       it "computes the expected next delivery date" do
-        @next_occurrence.should eq @expected_delivery_date
+        expect(@next_occurrence).to eq @expected_delivery_date
       end
 
       it "computes the expected second next delivery date" do
         second_next_occurrence = @order.schedule_rule.next_occurrence(@expected_delivery_date + 1.week)
 
-        second_next_occurrence.should be > @expected_delivery_date + 3.weeks
+        expect(second_next_occurrence).to be > @expected_delivery_date + 3.weeks
       end
 
       describe "#order_ids" do
         it "returns the orders" do
           order_ids = Bucky::Sql.order_ids(@distributor, @next_occurrence)
 
-          order_ids.should eq [@order.id]
+          expect(order_ids).to eq [@order.id]
         end
       end
 
@@ -47,7 +47,7 @@ describe Bucky::Sql do
         it "returns the order count" do
           order_count = Bucky::Sql.order_count(@distributor, @next_occurrence, @delivery_service.id)
 
-          order_count.should eq 1
+          expect(order_count).to eq 1
         end
       end
     end

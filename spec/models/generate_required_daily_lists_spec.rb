@@ -45,73 +45,73 @@ describe GenerateRequiredDailyLists do
         delivery_lists:     delivery_lists,
       )
 
-      returned_packing_list.stub(:date).and_return(Date.new(2012, 11, 8), Date.new(2012, 11, 9))
-      returned_delivery_list.stub(:date).and_return(Date.new(2012, 11, 8), Date.new(2012, 11, 9))
+      allow(returned_packing_list).to receive(:date).and_return(Date.new(2012, 11, 8), Date.new(2012, 11, 9))
+      allow(returned_delivery_list).to receive(:date).and_return(Date.new(2012, 11, 8), Date.new(2012, 11, 9))
 
-      PackingList.stub(:generate_list)  { returned_packing_list }
-      DeliveryList.stub(:generate_list) { returned_delivery_list }
+      allow(PackingList).to receive(:generate_list)  { returned_packing_list }
+      allow(DeliveryList).to receive(:generate_list) { returned_delivery_list }
     end
 
     subject { generate_required_daily_lists.generate }
 
     it 'works' do
-      should be true
+      is_expected.to be true
     end
 
     it 'has a start date equal to the end date' do
       window_start_from = Date.new(2012, 11, 9)
-      should be true
+      is_expected.to be true
     end
 
     context 'when there is a packing list and it has a date that is after the end date' do
       before do
-        packing_lists.stub(:last) { packing_list }
-        packing_list.stub(:date)  { Date.new(2012, 11, 10) }
+        allow(packing_lists).to receive(:last) { packing_list }
+        allow(packing_list).to receive(:date)  { Date.new(2012, 11, 10) }
       end
 
       it 'works' do
-        should be true
+        is_expected.to be true
       end
 
       it 'could not find packing list' do
-        packing_lists.stub(:find_by_date) { nil }
-        should be true
+        allow(packing_lists).to receive(:find_by_date) { nil }
+        is_expected.to be true
       end
 
       it 'could not destroy a packing list' do
-        packing_list.stub(:destroy) { false }
-        should be false
+        allow(packing_list).to receive(:destroy) { false }
+        is_expected.to be false
       end
 
       it 'could not find a delivery list' do
-        delivery_lists.stub(:find_by_date) { nil }
-        should be true
+        allow(delivery_lists).to receive(:find_by_date) { nil }
+        is_expected.to be true
       end
 
       it 'could not destroy a delivery list' do
-        delivery_list.stub(:destroy) { false }
-        should be false
+        allow(delivery_list).to receive(:destroy) { false }
+        is_expected.to be false
       end
     end
 
     context 'when there is no packing list or it is less than or equal to the end date' do
       before do
-        packing_lists.stub(:last) { packing_list }
-        packing_list.stub(:date)  { Date.new(2012, 11, 8) }
+        allow(packing_lists).to receive(:last) { packing_list }
+        allow(packing_list).to receive(:date)  { Date.new(2012, 11, 8) }
       end
 
       it 'works' do
-        should be true
+        is_expected.to be true
       end
 
       it 'has a packing list date that does not equal the requested date' do
-        returned_packing_list.stub(:date) { Date.new(2012, 11, 13) }
-        should be false
+        allow(returned_packing_list).to receive(:date) { Date.new(2012, 11, 13) }
+        is_expected.to be false
       end
 
       it 'has a packing list date that does not equal the requested date' do
-        returned_delivery_list.stub(:date) { Date.new(2012, 11, 13) }
-        should be false
+        allow(returned_delivery_list).to receive(:date) { Date.new(2012, 11, 13) }
+        is_expected.to be false
       end
     end
   end

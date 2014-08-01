@@ -9,7 +9,7 @@ describe Distributor::SessionsController do
     it "is successful" do
       get :new
 
-      response.should be_successful
+      expect(response).to be_successful
     end
   end
 end

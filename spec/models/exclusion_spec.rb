@@ -3,7 +3,7 @@ require 'spec_helper'
 describe Exclusion do
   let(:exclusion) { Fabricate(:exclusion) }
 
-  specify { exclusion.should be_valid }
+  specify { expect(exclusion).to be_valid }
 
   context 'active exclusions' do
     before do
@@ -14,8 +14,8 @@ describe Exclusion do
       inactive_exclusion.save
     end
 
-    specify { Exclusion.active.size.should == 1 }
-    specify { Exclusion.active.first.should == exclusion }
+    specify { expect(Exclusion.active.size).to eq 1 }
+    specify { expect(Exclusion.active.first).to eq exclusion }
   end
 
   describe '.change_line_items!' do
@@ -27,7 +27,7 @@ describe Exclusion do
       Exclusion.change_line_items!(@old_line_item, @new_line_item)
     end
 
-    specify { @old_line_item.exclusions(true).to_a.should == [] }
-    specify { @new_line_item.exclusions(true).to_a.should == [@exclusion_1, @exclusion_2] }
+    specify { expect(@old_line_item.exclusions(true).to_a).to eq [] }
+    specify { expect(@new_line_item.exclusions(true).to_a).to eq [@exclusion_1, @exclusion_2] }
   end
 end

@@ -11,11 +11,11 @@ describe SignUpWizardController do
     end
 
     it "sets the country" do
-      assigns[:country].should eq "NZ"
+      expect(assigns[:country]).to eq "NZ"
     end
 
     it "sets the time zone" do
-      assigns[:time_zone].should eq "Pacific/Auckland"
+      expect(assigns[:time_zone]).to eq "Pacific/Auckland"
     end
   end
 
@@ -25,7 +25,7 @@ describe SignUpWizardController do
     end
 
     it "sets the form fields" do
-      assigns[:fields].should include(*%w(street state city zip))
+      expect(assigns[:fields]).to include(*%w(street state city zip))
     end
   end
 
@@ -49,9 +49,9 @@ describe SignUpWizardController do
         post_form.call
 
         distributor = Distributor.where(name: form_params["distributor"]["name"]).last
-        distributor.parameter_name.should eq "my-new-org"
-        distributor.country.should eq Country.find_by_alpha2("NZ")
-        distributor.currency.should eq "NZD"
+        expect(distributor.parameter_name).to eq "my-new-org"
+        expect(distributor.country).to eq Country.find_by_alpha2("NZ")
+        expect(distributor.currency).to eq "NZD"
       end
 
       it 'adds default line items to distributor' do
@@ -63,17 +63,17 @@ describe SignUpWizardController do
       it "returns success response" do
         post_form.call
 
-        response.should be_success
+        expect(response).to be_success
       end
 
       it "sends the follow up email" do
-        AdminMailer.should_receive(:information_email) { double(deliver: nil) }
+        expect(AdminMailer).to receive(:information_email) { double(deliver: nil) }
 
         post_form.call
       end
 
       it "sends the welcome email" do
-        DistributorMailer.should_receive(:welcome) { double(deliver: nil) }
+        expect(DistributorMailer).to receive(:welcome) { double(deliver: nil) }
 
         post_form.call
       end
@@ -88,7 +88,7 @@ describe SignUpWizardController do
           sleep 1 # avoid random failure where the omni importer would be missing
 
           distributor = Distributor.where(name: form_params["distributor"]["name"]).last
-          distributor.omni_importers.should eq [@omni_importer]
+          expect(distributor.omni_importers).to eq [@omni_importer]
         end
       end
 
@@ -146,7 +146,7 @@ describe SignUpWizardController do
         end
 
         it "sends the bank setup email" do
-          DistributorMailer.should_receive(:bank_setup) { double(deliver: nil) }
+          expect(DistributorMailer).to receive(:bank_setup) { double(deliver: nil) }
 
           post :sign_up, form_params_with_new_bank
         end
@@ -170,8 +170,8 @@ describe SignUpWizardController do
         post_form.call
 
         distributor = Distributor.last
-        distributor.country.alpha2.should eq "GB"
-        distributor.currency.should eq "GBP"
+        expect(distributor.country.alpha2).to eq "GB"
+        expect(distributor.currency).to eq "GBP"
       end
     end
 
@@ -195,13 +195,13 @@ describe SignUpWizardController do
       it "returns failure response" do
         post_form.call
 
-        response.should_not be_success
+        expect(response).not_to be_success
       end
 
       it "mentions the invalid fields" do
         post_form.call
 
-        response.body.should include "street"
+        expect(response.body).to include "street"
       end
     end
 

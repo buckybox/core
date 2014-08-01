@@ -3,7 +3,7 @@ require 'spec_helper'
 describe Substitution do
   let(:substitution) { Fabricate(:substitution) }
 
-  specify { substitution.should be_valid }
+  specify { expect(substitution).to be_valid }
 
   context 'active substitution' do
     before do
@@ -14,8 +14,8 @@ describe Substitution do
       inactive_substitution.save
     end
 
-    specify { Substitution.active.size.should == 1 }
-    specify { Substitution.active.first.should == substitution }
+    specify { expect(Substitution.active.size).to eq 1 }
+    specify { expect(Substitution.active.first).to eq substitution }
   end
 
   describe '.change_line_items!' do
@@ -27,7 +27,7 @@ describe Substitution do
       Substitution.change_line_items!(@old_line_item, @new_line_item)
     end
 
-    specify { @old_line_item.substitutions(true).to_a.should == [] }
-    specify { @new_line_item.substitutions(true).to_a.should == [@substitution_1, @substitution_2] }
+    specify { expect(@old_line_item.substitutions(true).to_a).to eq [] }
+    specify { expect(@new_line_item.substitutions(true).to_a).to eq [@substitution_1, @substitution_2] }
   end
 end

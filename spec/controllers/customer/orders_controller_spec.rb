@@ -14,9 +14,9 @@ describe Customer::OrdersController do
     describe 'with valid params' do
       before { put :update, { id: @id, order: @order_params } }
 
-      specify { assigns(:order).should be_a(Order) }
-      specify { assigns(:order).should be_persisted }
-      specify { assigns(:order).quantity.should == 3 }
+      specify { expect(assigns(:order)).to be_a(Order) }
+      specify { expect(assigns(:order)).to be_persisted }
+      specify { expect(assigns(:order).quantity).to eq 3 }
     end
 
     describe 'with invalid params' do
@@ -25,8 +25,8 @@ describe Customer::OrdersController do
         put :update, { id: @id, order: @order_params }
       end
 
-      specify { Order.last.quantity.should == 1 }
-      specify { response.should render_template('edit') }
+      specify { expect(Order.last.quantity).to eq 1 }
+      specify { expect(response).to render_template('edit') }
     end
 
     context "with customer_can_edit_orders = false" do
@@ -50,7 +50,7 @@ describe Customer::OrdersController do
       it "should pause the order" do
         date = order.next_occurrences(2, Date.current).last
         put :pause, {id: order.id, account_id: order.account_id, date: date}
-        assigns(:order).pause_date.should eq(date)
+        expect(assigns(:order).pause_date).to eq(date)
       end
     end
 
@@ -58,7 +58,7 @@ describe Customer::OrdersController do
       it "should remove the pause from an order" do
         order.pause!(Date.tomorrow)
         put :remove_pause, {id: order.id, account_id: order.account_id}
-        order.reload.pause_date.should be_nil
+        expect(order.reload.pause_date).to be_nil
       end
     end
 
@@ -68,8 +68,8 @@ describe Customer::OrdersController do
         order.pause!(dates[2])
         put :resume, {id: order.id, account_id: order.account_id, date: dates[4]}
         order.reload
-        order.pause_date.should eq(dates[2])
-        order.resume_date.should eq(dates[4])
+        expect(order.pause_date).to eq(dates[2])
+        expect(order.resume_date).to eq(dates[4])
       end
     end
 
@@ -91,7 +91,7 @@ describe Customer::OrdersController do
       d.save
 
       put :deactivate, {id: order.id}
-      order.reload.active.should be false
+      expect(order.reload.active).to be false
     end
 
     it "should only allow deactivating your own orders" do
@@ -105,7 +105,7 @@ describe Customer::OrdersController do
       distributor.customer_can_remove_orders = false
       distributor.save!
       put :deactivate, {id: order.id}
-      order.reload.active.should be true
+      expect(order.reload.active).to be true
     end
   end
 end
