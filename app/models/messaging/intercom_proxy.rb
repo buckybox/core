@@ -83,17 +83,13 @@ module Messaging
 
     def add_user_to_tag(id, name)
       tag = find_or_create_tag(name)
-      tag.user_ids = [id.to_s]
-      tag.tag_or_untag = 'tag'
-      tag.save
+      ::Intercom::Tag.tag_users(tag, [id.to_s])
     end
 
 
     def remove_user_from_tag(id, name)
       tag = find_or_create_tag(name)
-      tag.user_ids = [id.to_s]
-      tag.tag_or_untag = 'untag'
-      tag.save
+      ::Intercom::Tag.untag_users(tag, [id.to_s])
     end
 
     def find_or_create_tag(name)
