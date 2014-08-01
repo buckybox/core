@@ -3,7 +3,7 @@ require 'spec_helper'
 describe Package do
   let(:package) { Fabricate(:package) }
 
-  specify { package.should be_valid }
+  specify { expect(package).to be_valid }
 
   context :archive_data do
     before do
@@ -16,27 +16,27 @@ describe Package do
       @package     = Fabricate(:package, order: @order)
     end
 
-    specify { @package.archived_address.should eq @address.join }
-    specify { @package.archived_address.should include @address.postcode }
-    specify { @package.archived_order_quantity.should eq @order.quantity }
-    specify { @package.archived_box_name.should eq @box.name }
-    specify { @package.archived_customer_name.should eq @address.customer.name }
+    specify { expect(@package.archived_address).to eq @address.join }
+    specify { expect(@package.archived_address).to include @address.postcode }
+    specify { expect(@package.archived_order_quantity).to eq @order.quantity }
+    specify { expect(@package.archived_box_name).to eq @box.name }
+    specify { expect(@package.archived_customer_name).to eq @address.customer.name }
 
     context :seperate_bucky_fee do
       it 'should archive the fee' do
         distributor = double('found_distributor')
-        distributor.stub(:separate_bucky_fee?) { true }
-        distributor.stub(:consumer_delivery_fee) { CrazyMoney.new(0.1) }
-        Distributor.stub(:find_by_id).and_return(distributor)
+        allow(distributor).to receive(:separate_bucky_fee?) { true }
+        allow(distributor).to receive(:consumer_delivery_fee) { CrazyMoney.new(0.1) }
+        allow(Distributor).to receive(:find_by_id).and_return(distributor)
         @package = Fabricate(:package, order: @order, packing_list: @package.packing_list)
-        @package.archived_consumer_delivery_fee_cents.should == 10
+        expect(@package.archived_consumer_delivery_fee_cents).to eq 10
       end
 
       it 'should not archive the fee' do
         Package.any_instance.stub_chain(:distributor, :separate_bucky_fee?).and_return(false)
         @package = Fabricate(:package, order: @order, packing_list: @package.packing_list)
-        @package.archived_consumer_delivery_fee_cents.should eq(0)
-        Package.any_instance.unstub(:distributor)
+        expect(@package.archived_consumer_delivery_fee_cents).to eq(0)
+        allow_any_instance_of(Package).to receive(:distributor).and_call_original
       end
     end
   end

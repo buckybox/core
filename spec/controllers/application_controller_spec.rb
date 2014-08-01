@@ -13,7 +13,7 @@ describe ApplicationController do
 
     before { get :index }
 
-    specify { Time.zone.name.should == time_zone }
+    specify { expect(Time.zone.name).to eq time_zone }
   end
 
   context 'as distributor' do
@@ -22,7 +22,7 @@ describe ApplicationController do
 
       before { get :index }
 
-      specify { Time.zone.name.should == time_zone }
+      specify { expect(Time.zone.name).to eq time_zone }
     end
 
     context 'in Hong Kong' do
@@ -32,7 +32,7 @@ describe ApplicationController do
         get :index
       end
 
-      specify { Time.zone.name.should == time_zone_hk }
+      specify { expect(Time.zone.name).to eq time_zone_hk }
     end
   end
 
@@ -42,7 +42,7 @@ describe ApplicationController do
 
       before { get :index }
 
-      specify { Time.zone.name.should == time_zone }
+      specify { expect(Time.zone.name).to eq time_zone }
     end
 
     context 'in Hong Kong' do
@@ -52,7 +52,7 @@ describe ApplicationController do
         get :index
       end
 
-      specify { Time.zone.name.should == time_zone_hk }
+      specify { expect(Time.zone.name).to eq time_zone_hk }
     end
   end
 

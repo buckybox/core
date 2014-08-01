@@ -26,13 +26,13 @@ describe SalesCsv::OrderExporter do
       end
 
       it 'returns the data for a csv export' do
-        @data.should == expected_array
+        expect(@data).to eq expected_array
       end
 
       it 'returns the arguments for a csv export' do
         type     = 'text/csv; charset=utf-8; header=present'
         filename = 'bucky-box-packing-export-2013-04-04.csv'
-        @file_args.should == { type: type, filename: filename }
+        expect(@file_args).to eq({ type: type, filename: filename })
       end
     end
   end
@@ -46,13 +46,13 @@ describe SalesCsv::OrderExporter do
       end
 
       it 'returns the data for a csv export' do
-        @data.should == expected_array
+        expect(@data).to eq expected_array
       end
 
       it 'returns the arguments for a csv export' do
         type     = 'text/csv; charset=utf-8; header=present'
         filename = 'bucky-box-delivery-export-2013-04-04.csv'
-        @file_args.should == { type: type, filename: filename }
+        expect(@file_args).to eq({ type: type, filename: filename })
       end
     end
   end

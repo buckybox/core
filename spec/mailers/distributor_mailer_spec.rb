@@ -13,8 +13,8 @@ describe DistributorMailer do
     let(:mail) { DistributorMailer.welcome(@distributor) }
 
     it "has the right headers" do
-      mail.to.should eq [@distributor.email]
-      mail.subject.should eq "#{@distributor.name}, welcome to Bucky Box!"
+      expect(mail.to).to eq [@distributor.email]
+      expect(mail.subject).to eq "#{@distributor.name}, welcome to Bucky Box!"
     end
 
     it_behaves_like "using GMail's SMTP"

@@ -18,17 +18,17 @@ describe Customer::Form do
     let(:form)     { Customer::Form.new(customer: customer) }
 
     it "calls customer id" do
-      customer.should_receive(:id)
+      expect(customer).to receive(:id)
       form.id
     end
 
     it "calls customer address" do
-      customer.should_receive(:address)
+      expect(customer).to receive(:address)
       form.address
     end
 
     it "calls customer distributor" do
-      customer.should_receive(:distributor)
+      expect(customer).to receive(:distributor)
       form.distributor
     end
   end

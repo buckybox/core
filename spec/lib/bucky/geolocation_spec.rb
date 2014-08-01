@@ -8,7 +8,7 @@ describe Bucky::Geolocation do
       "127.0.0.1" => "RD",
     }.each do |ip, country|
       it "returns the right country" do
-        Bucky::Geolocation.get_country(ip).should be_in [nil, country]
+        expect(Bucky::Geolocation.get_country(ip)).to be_in [nil, country]
       end
     end
   end
@@ -19,7 +19,7 @@ describe Bucky::Geolocation do
     end
 
     it "returns the right time zone" do
-      Bucky::Geolocation.get_time_zone("NZ").should eq "Pacific/Auckland"
+      expect(Bucky::Geolocation.get_time_zone("NZ")).to eq "Pacific/Auckland"
     end
   end
 
@@ -39,34 +39,34 @@ describe Bucky::Geolocation do
     it "returns the right address fields" do
       form = Bucky::Geolocation.get_address_form("NZ", resource)
 
-      form.should include(*fields)
+      expect(form).to include(*fields)
     end
 
     it "fallbacks to NZ if format not available for this country" do
       form = Bucky::Geolocation.get_address_form("KE", resource)
 
-      form.should include(*fields)
+      expect(form).to include(*fields)
     end
   end
 
   describe ".get_geoip_info" do
     it "doesn't take more than a second" do
-      Benchmark.realtime do
+      expect(Benchmark.realtime do
         Bucky::Geolocation.get_geoip_info "202.162.73.2"
-      end.should be < 2 # 2 because it can be 1.1-ish
+      end).to be < 2 # 2 because it can be 1.1-ish
     end
 
     it "returns nil when it times out" do
-      Net::HTTP::Get.stub(:new) { sleep 2 }
+      allow(Net::HTTP::Get).to receive(:new) { sleep 2 }
 
-      Bucky::Geolocation.get_geoip_info("202.162.73.2").should be_nil
+      expect(Bucky::Geolocation.get_geoip_info("202.162.73.2")).to be_nil
     end
 
     it "ignores bad responses" do
       http = double(request: double(body: "500 - Oops, not JSON"))
-      Net::HTTP.stub(:new) { http }
+      allow(Net::HTTP).to receive(:new) { http }
 
-      Bucky::Geolocation.get_geoip_info("202.162.73.2").should be_nil
+      expect(Bucky::Geolocation.get_geoip_info("202.162.73.2")).to be_nil
     end
   end
 end

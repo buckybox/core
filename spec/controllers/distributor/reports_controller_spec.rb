@@ -6,7 +6,7 @@ describe Distributor::ReportsController do
   describe '#index' do
     it 'renders the right template' do
       get :index, distributor_id: @distributor.id
-      response.should render_template 'distributor/reports/index'
+      expect(response).to render_template 'distributor/reports/index'
     end
   end
 
@@ -14,7 +14,7 @@ describe Distributor::ReportsController do
     let(:csv_object)  { double('csv_object', data: 'data', name: 'name') }
 
     before do
-      csv_generator.stub(:new) { csv_object }
+      allow(csv_generator).to receive(:new) { csv_object }
       post action
     end
 

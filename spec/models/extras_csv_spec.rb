@@ -45,7 +45,7 @@ describe ExtrasCsv do
     end
 
     it "exports the header into the csv" do
-      @rows.first.should eq [
+      expect(@rows.first).to eq [
         "delivery date",
         "extra line item name",
         "extra line item unit",
@@ -57,10 +57,10 @@ describe ExtrasCsv do
       ]
     end
 
-    specify { @rows[1].should eq [@date.iso8601, "Extra 0", "kg",   "0.50", "5", "no", "Bill, Joe (x4)", "bill@example.net, joe@example.net"] }
-    specify { @rows[2].should eq [@date.iso8601, "Extra 1", "l",    "2.50", "2", "yes", "Joe (x2)", "joe@example.net"] }
-    specify { @rows[3].should eq [@date.iso8601, "Extra 2", "each", "4.50", "3", "yes", "Bill (x3)", "bill@example.net"] }
-    specify { @rows[4].should eq [@date.iso8601, "Extra 3", "g",    "6.50", "0", "yes", "", ""] }
+    specify { expect(@rows[1]).to eq [@date.iso8601, "Extra 0", "kg",   "0.50", "5", "no", "Bill, Joe (x4)", "bill@example.net, joe@example.net"] }
+    specify { expect(@rows[2]).to eq [@date.iso8601, "Extra 1", "l",    "2.50", "2", "yes", "Joe (x2)", "joe@example.net"] }
+    specify { expect(@rows[3]).to eq [@date.iso8601, "Extra 2", "each", "4.50", "3", "yes", "Bill (x3)", "bill@example.net"] }
+    specify { expect(@rows[4]).to eq [@date.iso8601, "Extra 3", "g",    "6.50", "0", "yes", "", ""] }
   end
 end
 

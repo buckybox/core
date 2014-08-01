@@ -6,11 +6,11 @@ describe DeliveryList, :slow do
   let(:delivery_list) { Fabricate.build(:delivery_list, distributor: distributor) }
   let(:delivery) { Fabricate.build(:delivery, delivery_list: delivery_list) }
 
-  specify { delivery_list.should be_valid }
+  specify { expect(delivery_list).to be_valid }
 
   def delivery_auto_delivering(result = true)
     delivery = mock_model(Delivery)
-    Delivery.should_receive(:auto_deliver).with(delivery).and_return(result)
+    expect(Delivery).to receive(:auto_deliver).with(delivery).and_return(result)
     return delivery
   end
 
@@ -21,14 +21,14 @@ describe DeliveryList, :slow do
     end
 
     it 'returns true if there are no deliveries' do
-      delivery_list.mark_all_as_auto_delivered.should be true
+      expect(delivery_list.mark_all_as_auto_delivered).to be true
     end
 
     it 'returns true if all deliveries return true' do
       @deliveries << delivery_auto_delivering
       @deliveries << delivery_auto_delivering
 
-      delivery_list.mark_all_as_auto_delivered.should be true
+      expect(delivery_list.mark_all_as_auto_delivered).to be true
     end
 
     it 'returns false if one delivery returns false' do
@@ -36,7 +36,7 @@ describe DeliveryList, :slow do
       @deliveries << delivery_auto_delivering(false)
       @deliveries << delivery_auto_delivering
 
-      delivery_list.mark_all_as_auto_delivered.should be false
+      expect(delivery_list.mark_all_as_auto_delivered).to be false
     end
   end
 
@@ -56,24 +56,24 @@ describe DeliveryList, :slow do
     end
 
     it "is a delivery day today" do
-      @today.should eq @order.schedule_rule.next_occurrence
+      expect(@today).to eq @order.schedule_rule.next_occurrence
     end
 
     it "works with the first week day" do
       delivery_date = @order.schedule_rule.next_occurrence
       delivery_list = DeliveryList.collect_list(@distributor, delivery_date)
 
-      delivery_list.deliveries.should eq [@order]
+      expect(delivery_list.deliveries).to eq [@order]
     end
 
     it "works with the nth week day" do
       @order.schedule_rule.week = 2
       delivery_date = @order.schedule_rule.next_occurrence
-      delivery_date.should_not be > @today
+      expect(delivery_date).not_to be > @today
 
       delivery_list = DeliveryList.collect_list(@distributor, delivery_date)
 
-      delivery_list.deliveries.should eq [@order]
+      expect(delivery_list.deliveries).to eq [@order]
     end
 
     after { back_to_the_present }
@@ -104,7 +104,7 @@ describe DeliveryList, :slow do
         @dl2 = DeliveryList.generate_list(@distributor, @generate_date + 1.week)
       end
 
-      specify { @dl2.deliveries.ordered.map{|d| "#{d.customer.number}/#{d.position}"}.should == @dl1.deliveries.ordered.map{|d| "#{d.customer.number}/#{d.position}"} }
+      specify { expect(@dl2.deliveries.ordered.map{|d| "#{d.customer.number}/#{d.position}"}).to eq @dl1.deliveries.ordered.map{|d| "#{d.customer.number}/#{d.position}"} }
 
       context 'and the week after that' do
         before do
@@ -112,7 +112,7 @@ describe DeliveryList, :slow do
           @dl3 = DeliveryList.generate_list(@distributor, @generate_date + 2.week)
         end
 
-        specify { @dl3.deliveries.ordered.map{|d| "#{d.customer.number}/#{d.position}"}.should == @dl2.deliveries.ordered.map{|d| "#{d.customer.number}/#{d.position}"} }
+        specify { expect(@dl3.deliveries.ordered.map{|d| "#{d.customer.number}/#{d.position}"}).to eq @dl2.deliveries.ordered.map{|d| "#{d.customer.number}/#{d.position}"} }
       end
     end
 
@@ -128,7 +128,7 @@ describe DeliveryList, :slow do
         Fabricate(:delivery, status: 'delivered', delivery_list: delivery_list)
       end
 
-      specify { delivery_list.all_finished?.should be true }
+      specify { expect(delivery_list.all_finished?).to be true }
     end
 
     context 'has deliveries that are pending' do
@@ -137,7 +137,7 @@ describe DeliveryList, :slow do
         Fabricate(:delivery, status: 'pending', delivery_list: delivery_list)
       end
 
-      specify { delivery_list.all_finished?.should_not be true }
+      specify { expect(delivery_list.all_finished?).not_to be true }
     end
   end
 
@@ -147,7 +147,7 @@ describe DeliveryList, :slow do
         delivery_list.save
         delivery.save
         @diff_delivery_service = Fabricate(:delivery, delivery_list: delivery_list)
-        delivery_list.stub(:delivery_ids).and_return([delivery, @diff_delivery_service])
+        allow(delivery_list).to receive(:delivery_ids).and_return([delivery, @diff_delivery_service])
       end
 
       specify { expect { delivery_list.reposition([@diff_delivery_service.id, delivery.id]) }.to raise_error(ArgumentError) }
@@ -162,7 +162,7 @@ describe DeliveryList, :slow do
         delivery_list.stub_chain(:deliveries, :where, :select, :map).and_return(@ids)
 
         delivery_list.deliveries.stub_chain(:ordered, :find).and_return(delivery)
-        delivery.stub(:reposition!).and_return(true)
+        allow(delivery).to receive(:reposition!).and_return(true)
       end
 
       specify { expect { delivery_list.reposition([2, 5, 3]) }.to raise_error(ArgumentError) }
@@ -171,7 +171,7 @@ describe DeliveryList, :slow do
     context 'should update delivery list positions' do
       before do
         delivery_list.save
-        DeliveryList.any_instance.stub(:archived?).and_return(false)
+        allow_any_instance_of(DeliveryList).to receive(:archived?).and_return(false)
         d1 = fab_delivery(delivery_list, distributor)
         @delivery_service = d1.delivery_service
         d2 = fab_delivery(delivery_list, distributor, @delivery_service)
@@ -182,23 +182,23 @@ describe DeliveryList, :slow do
 
       it 'should change delivery order' do
         expect { delivery_list.reposition(@new_ids)}.to change{delivery_list.deliveries.ordered.collect(&:id)}.to(@new_ids)
-        delivery_list.reload.deliveries.ordered.collect(&:delivery_number).should eq([3,1,2])
+        expect(delivery_list.reload.deliveries.ordered.collect(&:delivery_number)).to eq([3,1,2])
       end
 
       it 'should update the delivery list for the next week' do
-        Distributor.any_instance.stub(:generate_required_daily_lists) #TODO remove this hack to get around the constant after_save callbacks
+        allow_any_instance_of(Distributor).to receive(:generate_required_daily_lists) #TODO remove this hack to get around the constant after_save callbacks
         delivery_list.reposition(@new_ids)
         addresses = delivery_list.deliveries.ordered.collect(&:address)
         next_packing_list = PackingList.generate_list(distributor, delivery_list.date+1.week)
         next_delivery_list = DeliveryList.generate_list(distributor, delivery_list.date+1.week)
-        Distributor.any_instance.unstub(:generate_required_daily_lists) #TODO remove this hack to get around the constant after_save callbacks
+        allow_any_instance_of(Distributor).to receive(:generate_required_daily_lists).and_call_original #TODO remove this hack to get around the constant after_save callbacks
 
-        next_delivery_list.deliveries.ordered.collect(&:address).should eq(addresses)
-        next_delivery_list.deliveries.ordered.collect(&:delivery_number).should eq([1,2,3])
+        expect(next_delivery_list.deliveries.ordered.collect(&:address)).to eq(addresses)
+        expect(next_delivery_list.deliveries.ordered.collect(&:delivery_number)).to eq([1,2,3])
       end
 
       it 'should put new deliveries at the top of the list' do
-        DeliveryList.any_instance.stub(:archived?).and_return(false)
+        allow_any_instance_of(DeliveryList).to receive(:archived?).and_return(false)
         date = delivery_list.date
         delivery_list.reposition(@new_ids)
         addresses = delivery_list.deliveries.ordered.collect(&:address)
@@ -212,8 +212,8 @@ describe DeliveryList, :slow do
         PackingList.generate_list(distributor, date)
         next_delivery_list = DeliveryList.generate_list(distributor, date)
 
-        next_delivery_list.deliveries.ordered.collect(&:address).should eq([account2.address, account.address]+addresses)
-        next_delivery_list.deliveries.ordered.collect(&:delivery_number).should eq([4,5,3,1,2])
+        expect(next_delivery_list.deliveries.ordered.collect(&:address)).to eq([account2.address, account.address]+addresses)
+        expect(next_delivery_list.deliveries.ordered.collect(&:delivery_number)).to eq([4,5,3,1,2])
       end
     end
 
@@ -233,19 +233,19 @@ describe DeliveryList, :slow do
       end
 
       it 'should order deliveries by default to be in order of creation' do
-        delivery_list.deliveries.ordered.collect(&:id).should eq(@ids)
+        expect(delivery_list.deliveries.ordered.collect(&:id)).to eq(@ids)
       end
 
       it 'should keep similiar addresses together' do
-        DeliveryList.any_instance.stub(:archived?).and_return(false)
+        allow_any_instance_of(DeliveryList).to receive(:archived?).and_return(false)
         delivery_list.reposition(@ids)
-        delivery_list.deliveries.ordered.collect(&:id).should eq([@d1.id, @d4.id, @d2.id, @d3.id])
+        expect(delivery_list.deliveries.ordered.collect(&:id)).to eq([@d1.id, @d4.id, @d2.id, @d3.id])
       end
 
       it 'should give similiar addresses the same delivery number' do
-        DeliveryList.any_instance.stub(:archived?).and_return(false)
+        allow_any_instance_of(DeliveryList).to receive(:archived?).and_return(false)
         delivery_list.reposition(@ids)
-        delivery_list.deliveries.ordered.collect(&:delivery_number).should eq([1, 1, 2, 3])
+        expect(delivery_list.deliveries.ordered.collect(&:delivery_number)).to eq([1, 1, 2, 3])
       end
     end
   end

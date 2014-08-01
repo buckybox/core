@@ -9,6 +9,6 @@ describe Distributor::SettingsController do
   describe '#organisation' do
     before { get :organisation, distributor_id: @distributor.id }
 
-    specify { response.should render_template 'distributor/settings/organisation' }
+    specify { expect(response).to render_template 'distributor/settings/organisation' }
   end
 end

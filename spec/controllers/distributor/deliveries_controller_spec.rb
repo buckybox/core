@@ -21,21 +21,21 @@ describe Distributor::DeliveriesController do
     it "should order deliveries based on the DSO" do
       get :index, {date: @date, view: @delivery_service.id.to_s}
 
-      assigns[:all_deliveries].should eq(@deliveries.sort_by(&:dso))
+      expect(assigns[:all_deliveries]).to eq(@deliveries.sort_by(&:dso))
     end
 
     it "should order future deliveries based on the DSO" do
       get :index, {date: @date+1.week, view: @delivery_service.id.to_s}
-      assigns[:all_deliveries].should eq(@deliveries.sort_by(&:dso).collect(&:order))
+      expect(assigns[:all_deliveries]).to eq(@deliveries.sort_by(&:dso).collect(&:order))
     end
 
     it "should update the position of a delivery when placed between two others" do
       delivery_list = mock_model(DeliveryList)
       delivery_ids = ['2', '1', '3']
-      delivery_list.should_receive(:reposition).with(delivery_ids)
+      expect(delivery_list).to receive(:reposition).with(delivery_ids)
       delivery_lists = double('DeliveryLists')
-      delivery_lists.stub(:find_by_date).with(@date_string).and_return(delivery_list)
-      Distributor.any_instance.stub(:delivery_lists).and_return(delivery_lists)
+      allow(delivery_lists).to receive(:find_by_date).with(@date_string).and_return(delivery_list)
+      allow_any_instance_of(Distributor).to receive(:delivery_lists).and_return(delivery_lists)
 
       post :reposition, {date: @date_string, delivery: delivery_ids}
     end
@@ -46,8 +46,8 @@ describe Distributor::DeliveriesController do
       before do
         csv = 'this,that,and,the,other'
         export = double('export', csv: csv)
-        controller.stub(:get_export) { export }
-        controller.should_receive(:send_data).with(csv) { controller.render nothing: true }
+        allow(controller).to receive(:get_export) { export }
+        expect(controller).to receive(:send_data).with(csv) { controller.render nothing: true }
       end
 
       after { post :export, @params }
@@ -67,9 +67,9 @@ describe Distributor::DeliveriesController do
 
     it 'redirects back to the last page if it can not export a CSV file' do
       request.env['HTTP_REFERER'] = 'where_i_came_from'
-      controller.stub(:get_export) { nil }
+      allow(controller).to receive(:get_export) { nil }
       post :export
-      response.should redirect_to 'where_i_came_from'
+      expect(response).to redirect_to 'where_i_came_from'
     end
   end
 
@@ -82,20 +82,20 @@ describe Distributor::DeliveriesController do
     end
 
     it "downloads a csv" do
-      ExtrasCsv.stub(:generate).and_return("")
+      allow(ExtrasCsv).to receive(:generate).and_return("")
       @post.call
-      response.headers['Content-Type'].should eq "text/csv; charset=utf-8; header=present"
+      expect(response.headers['Content-Type']).to eq "text/csv; charset=utf-8; header=present"
     end
 
     it "exports customer data into csv" do
-      ExtrasCsv.stub(:generate).and_return("I am the kind of csvs")
+      allow(ExtrasCsv).to receive(:generate).and_return("I am the kind of csvs")
       @post.call
-      response.body.should eq "I am the kind of csvs"
+      expect(response.body).to eq "I am the kind of csvs"
     end
 
     it "calls ExtrasCsv.generate" do
-      ExtrasCsv.stub(:generate)
-      ExtrasCsv.should_receive(:generate).with(@distributor, Date.parse(date))
+      allow(ExtrasCsv).to receive(:generate)
+      expect(ExtrasCsv).to receive(:generate).with(@distributor, Date.parse(date))
       @post.call
     end
   end

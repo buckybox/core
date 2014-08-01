@@ -7,12 +7,12 @@ describe Address do
   describe "#phones" do
     it "returns phone numbers" do
       address = Fabricate(:address, mobile_phone: '005')
-      address.mobile_phone.should eq '005'
+      expect(address.mobile_phone).to eq '005'
     end
 
     it "returns all phone numbers" do
       address = Fabricate(:address, mobile_phone: '005', work_phone: '123')
-      address.phones.all.should eq ["Mobile phone: 005", "Work phone: 123"]
+      expect(address.phones.all).to eq ["Mobile phone: 005", "Work phone: 123"]
     end
   end
 
@@ -20,7 +20,7 @@ describe Address do
     it "assigns the number" do
       address = Fabricate.build(:address, phone: {type: 'work', number: '007'})
       address.save!
-      address.reload.work_phone.should eq "007"
+      expect(address.reload.work_phone).to eq "007"
     end
   end
 
@@ -29,7 +29,7 @@ describe Address do
       address = Fabricate.build(:address)
       address.mobile_phone = "009"
       address.save!
-      address.reload.mobile_phone.should eq "009"
+      expect(address.reload.mobile_phone).to eq "009"
     end
   end
 
@@ -37,36 +37,36 @@ describe Address do
     let(:address) { Fabricate.build(:address, all_attrs) }
     let(:full_address) { Fabricate.build(:full_address, all_attrs) }
 
-    specify { address.should be_valid }
+    specify { expect(address).to be_valid }
 
-    specify { full_address.join.should == '1 Address St, Apartment 1, Suburb, City, 00000' }
-    specify { full_address.join('#').should == '1 Address St#Apartment 1#Suburb#City#00000' }
-    specify { full_address.join(', ').should == '1 Address St, Apartment 1, Suburb, City, 00000' }
-    specify { full_address.join(', ', with_phone: true).should == '1 Address St, Apartment 1, Suburb, City, 00000, Mobile phone: 11-111-111-1111, Home phone: 22-222-222-2222, Work phone: 33-333-333-3333' }
+    specify { expect(full_address.join).to eq '1 Address St, Apartment 1, Suburb, City, 00000' }
+    specify { expect(full_address.join('#')).to eq '1 Address St#Apartment 1#Suburb#City#00000' }
+    specify { expect(full_address.join(', ')).to eq '1 Address St, Apartment 1, Suburb, City, 00000' }
+    specify { expect(full_address.join(', ', with_phone: true)).to eq '1 Address St, Apartment 1, Suburb, City, 00000, Mobile phone: 11-111-111-1111, Home phone: 22-222-222-2222, Work phone: 33-333-333-3333' }
 
-    specify { Fabricate.build(:full_address, all_attrs.merge(home_phone: nil)).join(', ', with_phone: true).should == '1 Address St, Apartment 1, Suburb, City, 00000, Mobile phone: 11-111-111-1111, Work phone: 33-333-333-3333' }
+    specify { expect(Fabricate.build(:full_address, all_attrs.merge(home_phone: nil)).join(', ', with_phone: true)).to eq '1 Address St, Apartment 1, Suburb, City, 00000, Mobile phone: 11-111-111-1111, Work phone: 33-333-333-3333' }
   end
 
   describe '.==' do
     let(:address){ Fabricate.build(:address, attrs)}
 
     it 'should return true for matching address' do
-      address.should == Fabricate.build(:address, attrs)
+      expect(address).to eq Fabricate.build(:address, attrs)
     end
 
     it 'should return false for different addresses' do
       attrs.each do |key, value|
-        address.should_not eq(Fabricate.build(:address, attrs.merge(key => "Something different")))
+        expect(address).not_to eq(Fabricate.build(:address, attrs.merge(key => "Something different")))
       end
     end
 
     it 'should return the same hash for the same address' do
-      address.address_hash.should == Fabricate.build(:address, attrs).address_hash
+      expect(address.address_hash).to eq Fabricate.build(:address, attrs).address_hash
     end
 
     it 'should return a unique hash for unique addresses' do
       attrs.each do |key, value|
-        address.address_hash.should_not eq(Fabricate.build(:address, attrs.merge(key => "Something else")).address_hash)
+        expect(address.address_hash).not_to eq(Fabricate.build(:address, attrs.merge(key => "Something else")).address_hash)
       end
     end
   end
