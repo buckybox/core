@@ -44,7 +44,7 @@ describe Customer::OrdersController do
     end
   end
 
-  context :pausing do
+  context "pausing" do
     let(:order){Fabricate(:order)}
     describe "#pause" do
       it "should pause the order" do

@@ -3,7 +3,7 @@ require 'spec_helper'
 describe Distributor::OrdersController do
   sign_in_as_distributor
 
-  context :with_mocks do
+  context "with mocks" do
     before do
       Distributor.any_instance.stub_chain(:accounts, :find).and_return(
         @account = mock_model(Account, {
@@ -94,7 +94,7 @@ describe Distributor::OrdersController do
   end
 
 
-  context :pausing do
+  context "pausing" do
     let(:order){Fabricate(:order)}
     describe "#pause" do
       it "should pause the order" do
