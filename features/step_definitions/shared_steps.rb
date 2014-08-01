@@ -32,11 +32,11 @@ Given(/^I click on "(.*?)"$/) do |link_name|
 end
 
 Then(/^I should see an? "(.*?)" field$/) do |field_name|
-  expect(page.has_field? field_name).to be_true
+  expect(page.has_field? field_name).to be true
 end
 
 Then(/^I should not see an? "(.*?)" field$/) do |field_name|
-  expect(page.has_field? field_name).to be_false
+  expect(page.has_field? field_name).to be false
 end
 
 When(/^I submit the form with an? "(.*?)" of "(.*?)"$/) do |field_name, value|
