@@ -8,7 +8,6 @@ require "rails/application"
 
 require File.expand_path("../../config/environment", __FILE__)
 require "rspec/rails"
-require "rspec/autorun"
 
 require "capybara/rspec"
 require "capybara/rails"
@@ -23,7 +22,6 @@ Dir[Rails.root.join("spec/support/**/*.rb")].each { |f| require f }
 
 RSpec.configure do |config|
   config.raise_errors_for_deprecations!
-  config.treat_symbols_as_metadata_keys_with_true_values = true
   config.infer_spec_type_from_file_location!
   config.order = "random"
   config.mock_with :rspec
