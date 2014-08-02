@@ -70,8 +70,8 @@ module Messaging
 
   private
 
-    def find_user(id)
-      ::Intercom::User.find(user_id: id)
+    def find_user(user_id)
+      ::Intercom::User.find(user_id: user_id)
     rescue Intercom::ResourceNotFound
       return nil
     rescue ::Intercom::AuthenticationError,
@@ -81,41 +81,15 @@ module Messaging
       raise Bucky::NonFatalException.new(e)
     end
 
-    def add_user_to_tag(id, name)
-      ::Intercom::Tag.tag_users(name, [id.to_s])
+    def add_user_to_tag(user_id, name)
+      intercom_user = find_user(user_id)
+      ::Intercom::Tag.tag_users(name, [intercom_user.id])
     end
 
-
-    def remove_user_from_tag(id, name)
-      ::Intercom::Tag.untag_users(name, [id.to_s])
+    def remove_user_from_tag(user_id, name)
+      intercom_user = find_user(user_id)
+      ::Intercom::Tag.untag_users(name, [intercom_user.id])
     end
 
-    def find_or_create_tag(name)
-      tag = find_tag_by_name(name)
-      tag.present? ? tag : new_tag(name)
-    end
-
-    def find_tag_by_name(name)
-      ::Intercom::Tag.find(name: name)
-    rescue Intercom::ResourceNotFound
-      return nil
-    rescue ::Intercom::AuthenticationError,
-            ::Intercom::ServerError,
-            ::Intercom::BadGatewayError,
-            ::Intercom::ServiceUnavailableError => e
-      raise Bucky::NonFatalException.new(e)
-    end
-
-    def new_tag(name=nil)
-      tag = ::Intercom::Tag.new
-      tag.name = name unless name.nil?
-      tag
-    rescue ::Intercom::AuthenticationError,
-            ::Intercom::ServerError,
-            ::Intercom::BadGatewayError,
-            ::Intercom::ServiceUnavailableError,
-            ::Intercom::ResourceNotFound => e
-      raise Bucky::NonFatalException.new(e)
-    end
   end
 end
