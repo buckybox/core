@@ -10,32 +10,32 @@ describe Customer::Form::UpdateDeliveryAddress do
     let(:form)     { Customer::Form::UpdateDeliveryAddress.new(customer: customer) }
 
     it "gets the first line of the address" do
-      address.should_receive(:address_1) { "1 Grove Dr." }
+      expect(address).to receive(:address_1) { "1 Grove Dr." }
       expect(form.address_1).to eq("1 Grove Dr.")
     end
 
     it "gets the second line of the address" do
-      address.should_receive(:address_2) { "Apt 5" }
+      expect(address).to receive(:address_2) { "Apt 5" }
       expect(form.address_2).to eq("Apt 5")
     end
 
     it "gets the suburb" do
-      address.should_receive(:suburb) { "Grandville" }
+      expect(address).to receive(:suburb) { "Grandville" }
       expect(form.suburb).to eq("Grandville")
     end
 
     it "gets the city" do
-      address.should_receive(:city) { "city" }
+      expect(address).to receive(:city) { "city" }
       expect(form.city).to eq("city")
     end
 
     it "gets the postcode" do
-      address.should_receive(:postcode) { "73628" }
+      expect(address).to receive(:postcode) { "73628" }
       expect(form.postcode).to eq("73628")
     end
 
     it "gets the delivery note" do
-      address.should_receive(:delivery_note) { "Put the box by the door." }
+      expect(address).to receive(:delivery_note) { "Put the box by the door." }
       expect(form.delivery_note).to eq("Put the box by the door.")
     end
   end
@@ -98,8 +98,8 @@ describe Customer::Form::UpdateDeliveryAddress do
 
     it "saves the address attributes" do
       address_args = { address_1: "1 Grove Dr.", address_2: "Apt 5", suburb: "Grandville", city: "city", postcode: "73628", delivery_note: "Put the box by the door." }
-      customer.stub(:update_address) { true }
-      customer.should_receive(:update_address).with(address_args, notify_distributor: true)
+      allow(customer).to receive(:update_address) { true }
+      expect(customer).to receive(:update_address).with(address_args, notify_distributor: true)
       form.save
     end
   end

@@ -8,16 +8,16 @@ describe Delivery, :slow do
   let(:delivery_cancelled) { Fabricate(:delivery, status: 'cancelled') }
   let(:delivery_delivered) { Fabricate(:delivery, status: 'delivered') }
 
-  specify { delivery.should be_valid }
-  specify { delivery.status.should == 'pending' }
-  specify { delivery.status_change_type.should == 'auto' }
+  specify { expect(delivery).to be_valid }
+  specify { expect(delivery.status).to eq 'pending' }
+  specify { expect(delivery.status_change_type).to eq 'auto' }
 
   context :status do
     describe 'validity' do
       describe "for new record" do
         (Delivery.state_machines[:status].states.map(&:name) - [:delivered]).each do |s|
-          specify { Fabricate(:delivery, status: s).should be_valid }
-          specify { Fabricate(:delivery, status: s, status_change_type: 'manual').should be_valid }
+          specify { expect(Fabricate(:delivery, status: s)).to be_valid }
+          specify { expect(Fabricate(:delivery, status: s, status_change_type: 'manual')).to be_valid }
         end
       end
 
@@ -26,8 +26,8 @@ describe Delivery, :slow do
     end
 
     describe '#future_status?' do
-      specify { Fabricate(:delivery, status: 'pending').future_status?.should be true }
-      specify { Fabricate(:delivery, status: 'cancelled').future_status?.should be false }
+      specify { expect(Fabricate(:delivery, status: 'pending').future_status?).to be true }
+      specify { expect(Fabricate(:delivery, status: 'cancelled').future_status?).to be false }
     end
   end
 
@@ -41,8 +41,8 @@ describe Delivery, :slow do
       context "to cancelled" do
         before { @delivery.cancel }
 
-        specify { @delivery.deducted?.should be false }
-        specify { @delivery.account(true).balance.should == @starting_balance }
+        specify { expect(@delivery.deducted?).to be false }
+        specify { expect(@delivery.account(true).balance).to eq @starting_balance }
       end
     end
 
@@ -54,8 +54,8 @@ describe Delivery, :slow do
           @delivery.deliver
         end
 
-        specify { @delivery.deducted?.should be true }
-        specify { @delivery.account(true).balance.should == @starting_balance - @price }
+        specify { expect(@delivery.deducted?).to be true }
+        specify { expect(@delivery.account(true).balance).to eq @starting_balance - @price }
       end
 
       context 'from pending' do
@@ -79,8 +79,8 @@ describe Delivery, :slow do
       end
 
       shared_examples 'it adds to accounts' do
-        specify { @delivery.deducted?.should be false }
-        specify { @delivery.account(true).balance.should == @starting_balance }
+        specify { expect(@delivery.deducted?).to be false }
+        specify { expect(@delivery.account(true).balance).to eq @starting_balance }
       end
 
       context 'to pending' do
@@ -103,9 +103,9 @@ describe Delivery, :slow do
       @deliveries = [delivery]
     end
 
-    specify { Delivery.change_statuses(@deliveries, 'bad_status').should be false }
-    specify { Delivery.change_statuses(@deliveries, 'cancel').should be true }
-    specify { Delivery.change_statuses(@deliveries, 'deliver').should be true }
+    specify { expect(Delivery.change_statuses(@deliveries, 'bad_status')).to be false }
+    specify { expect(Delivery.change_statuses(@deliveries, 'cancel')).to be true }
+    specify { expect(Delivery.change_statuses(@deliveries, 'deliver')).to be true }
 
     context 'batch change' do
       before do
@@ -114,26 +114,26 @@ describe Delivery, :slow do
 
         @deliveries = [@delivery1, delivery, @delivery2]
 
-        delivery.stub(:save) { true }
+        allow(delivery).to receive(:save) { true }
       end
 
       context 'all save' do
-        before { @delivery1.stub(:save) { true } }
-        specify { Delivery.change_statuses(@deliveries, 'deliver').should be true }
+        before { allow(@delivery1).to receive(:save) { true } }
+        specify { expect(Delivery.change_statuses(@deliveries, 'deliver')).to be true }
       end
 
       context 'one save fails' do
-        before { @delivery1.stub(:save) { false } }
-        specify { Delivery.change_statuses(@deliveries, 'deliver').should be false }
+        before { allow(@delivery1).to receive(:save) { false } }
+        specify { expect(Delivery.change_statuses(@deliveries, 'deliver')).to be false }
       end
     end
   end
 
   describe '.auto_deliver' do
-    specify { expect { Fabricate(:delivery).should change(Delivery.last, :status).to('delivered') } }
-    specify { expect { Fabricate(:delivery, status_change_type: 'manual', status: 'delivered').should_not change(Delivery.last, :status_change_type).to('auto') } }
-    specify { expect { Fabricate(:delivery, status_change_type: 'manual', status: 'cancelled').should_not change(Delivery.last, :status).to('delivered') } }
-    specify { expect { Fabricate(:delivery, status_change_type: 'manual', status: 'pending').should_not change(Delivery.last, :status).to('delivered') } }
+    specify { expect { expect(Fabricate(:delivery)).to change(Delivery.last, :status).to('delivered') } }
+    specify { expect { expect(Fabricate(:delivery, status_change_type: 'manual', status: 'delivered')).not_to change(Delivery.last, :status_change_type).to('auto') } }
+    specify { expect { expect(Fabricate(:delivery, status_change_type: 'manual', status: 'cancelled')).not_to change(Delivery.last, :status).to('delivered') } }
+    specify { expect { expect(Fabricate(:delivery, status_change_type: 'manual', status: 'pending')).not_to change(Delivery.last, :status).to('delivered') } }
   end
 
   describe '#reposition!' do

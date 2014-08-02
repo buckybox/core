@@ -15,11 +15,11 @@ require_model 'credit_card'
 
 describe CreditCard do
   it 'should be invalid' do
-    invalid_credit_card.should_not be_valid
+    expect(invalid_credit_card).not_to be_valid
   end
 
   it 'should be valid' do
-    valid_credit_card.should be_valid, valid_credit_card.errors.full_messages.join(', ')
+    expect(valid_credit_card).to be_valid, valid_credit_card.errors.full_messages.join(', ')
   end
 end
 

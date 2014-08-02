@@ -7,7 +7,7 @@ feature "Manage an order", js: true do
     simulate_customer_sign_in
 
     visit customer_root_path
-    page.should have_content @customer.name
+    expect(page).to have_content @customer.name
   end
 
   scenario "sets a pause and resume date for an order" do
@@ -21,27 +21,27 @@ feature "Manage an order", js: true do
 
     click_link "pause"
     click_button "pause"
-    page.should have_content "pausing starts"
+    expect(page).to have_content "pausing starts"
 
     click_link "until further notice"
     click_button "resume"
-    page.should have_content "resuming deliveries on"
+    expect(page).to have_content "resuming deliveries on"
 
     find(".pause > .resulting-link > a").click
     click_link "remove"
-    page.should have_link "pause"
-    page.should_not have_content "pausing starts"
-    page.should_not have_content "resuming deliveries on"
+    expect(page).to have_link "pause"
+    expect(page).not_to have_content "pausing starts"
+    expect(page).not_to have_content "resuming deliveries on"
 
 
     # distributor facing UI
     simulate_distributor_sign_in
     visit distributor_customer_path(id: @customer.id)
     expect(@customer.activities.size).to eq(3)
-    page.should have_content "RECENT ACTIVITY"
-    page.should have_content "less than a minute ago - #{@customer.name} paused their order of #{order.box.name}"
-    page.should have_content "less than a minute ago - #{@customer.name} updated their order of #{order.box.name} to resume on"
-    page.should have_content "less than a minute ago - #{@customer.name} unpaused their order of #{order.box.name}"
+    expect(page).to have_content "RECENT ACTIVITY"
+    expect(page).to have_content "less than a minute ago - #{@customer.name} paused their order of #{order.box.name}"
+    expect(page).to have_content "less than a minute ago - #{@customer.name} updated their order of #{order.box.name} to resume on"
+    expect(page).to have_content "less than a minute ago - #{@customer.name} unpaused their order of #{order.box.name}"
   end
 end
 

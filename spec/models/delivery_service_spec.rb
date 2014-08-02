@@ -4,7 +4,7 @@ include Bucky
 describe DeliveryService do
   let(:delivery_service) { Fabricate(:delivery_service) }
 
-  specify { delivery_service.should be_valid }
+  specify { expect(delivery_service).to be_valid }
 
   context :schedule_transaction do
     before do
@@ -13,7 +13,7 @@ describe DeliveryService do
 
     specify {
       schedule_rule = delivery_service.schedule_rule
-      schedule_rule.should_receive(:record_schedule_transaction)
+      expect(schedule_rule).to receive(:record_schedule_transaction)
       delivery_service.schedule_rule.sun = !delivery_service.schedule_rule.sun
       delivery_service.save!
     }
@@ -22,11 +22,11 @@ describe DeliveryService do
   describe '#best_delivery_service' do
     before do
       @distributor = Fabricate(:distributor)
-      @distributor.delivery_services.stub(:first).and_return(delivery_service)
+      allow(@distributor.delivery_services).to receive(:first).and_return(delivery_service)
     end
 
     it 'should just return the first one for now' do
-      DeliveryService.default_delivery_service(@distributor).should == delivery_service
+      expect(DeliveryService.default_delivery_service(@distributor)).to eq delivery_service
     end
   end
 
@@ -38,9 +38,9 @@ describe DeliveryService do
       @account = @customer.account
       @box = Fabricate(:box, distributor: delivery_service.distributor)
       @order = Fabricate(:recurring_order, schedule: new_recurring_schedule(@schedule_start_time, DeliveryService::DAYS), account: @account, box: @box)
-      delivery_service.schedule.to_s.should match(/Weekly on Sundays, Mondays, Tuesdays, Wednesdays, Thursdays, Fridays, and Saturdays/)
-      @order.schedule.to_s.should match(/Weekly on Sundays, Mondays, Tuesdays, Wednesdays, Thursdays, Fridays, and Saturdays/)
-      delivery_service.future_orders.should include(@order)
+      expect(delivery_service.schedule.to_s).to match(/Weekly on Sundays, Mondays, Tuesdays, Wednesdays, Thursdays, Fridays, and Saturdays/)
+      expect(@order.schedule.to_s).to match(/Weekly on Sundays, Mondays, Tuesdays, Wednesdays, Thursdays, Fridays, and Saturdays/)
+      expect(delivery_service.future_orders).to include(@order)
 
       # [0, 1, ...] === [:sunday, :monday, ..], kinda
       @monthly_order = Fabricate(:recurring_order, schedule: new_monthly_schedule(@schedule_start_time, [0,1,2,3,4,5,6]), account: @account, box: @box)
@@ -68,9 +68,9 @@ describe DeliveryService do
 
     def stub_future_active_orders(delivery_service, orders)
       scope = double('scope')
-      Order.stub(:for_delivery_service_read_only).with(delivery_service).and_return(scope)
-      scope.stub(:active).and_return(scope)
-      scope.stub(:each).and_yield(*orders)
+      allow(Order).to receive(:for_delivery_service_read_only).with(delivery_service).and_return(scope)
+      allow(scope).to receive(:active).and_return(scope)
+      allow(scope).to receive(:each).and_yield(*orders)
     end
 
     context "when removing a day" do
@@ -79,7 +79,7 @@ describe DeliveryService do
         delivery_service.save!
         delivery_service.schedule_rule.wed = false
         stub_future_active_orders(delivery_service, [order])
-        order.should_receive(:deactivate_for_days!).with([3])
+        expect(order).to receive(:deactivate_for_days!).with([3])
 
         delivery_service.save
       end
@@ -89,7 +89,7 @@ describe DeliveryService do
   context :schedule_rule do
     it "should create a schedule_rule" do
       delivery_service = DeliveryService.new
-      delivery_service.schedule_rule.should_not == nil
+      expect(delivery_service.schedule_rule).not_to eq nil
     end
   end
 end

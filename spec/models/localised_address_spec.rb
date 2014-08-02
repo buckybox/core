@@ -14,7 +14,7 @@ describe LocalisedAddress do
         country: country,
       )
 
-      address.stub(:addressable) { addressable }
+      allow(address).to receive(:addressable) { addressable }
 
       address
     end
@@ -23,10 +23,10 @@ describe LocalisedAddress do
       nz = Fabricate(:country, alpha2: "NZ")
       de = Fabricate(:country, alpha2: "DE")
 
-      address(nz).postal_address.should eq \
+      expect(address(nz).postal_address).to eq \
         "Foodie\nCuba Street\nWellington 6011\nNew Zealand"
 
-      address(de).postal_address.should eq \
+      expect(address(de).postal_address).to eq \
         "Foodie\nCuba Street\n6011 Wellington\nGermany"
     end
   end

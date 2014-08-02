@@ -8,10 +8,10 @@ describe Messaging::Distributor do
   describe '#tracking_after_create' do
     it 'passes call to IntercomProxy' do
       tracking_data = double("tracking_data")
-      distributor_tracking.stub(:tracking_data).and_return(tracking_data)
+      allow(distributor_tracking).to receive(:tracking_data).and_return(tracking_data)
 
-      messaging.stub(:create_user).and_return(nil)
-      messaging.should_receive(:create_user).with(tracking_data, Rails.env)
+      allow(messaging).to receive(:create_user).and_return(nil)
+      expect(messaging).to receive(:create_user).with(tracking_data, Rails.env)
 
       distributor_tracking.tracking_after_create
     end

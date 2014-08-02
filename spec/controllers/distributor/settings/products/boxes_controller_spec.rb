@@ -13,7 +13,7 @@ describe Distributor::Settings::Products::BoxesController do
 
   describe '#show' do
     before { get :show }
-    specify { response.should be_success }
+    specify { expect(response).to be_success }
   end
 
   describe '#create' do
@@ -28,14 +28,14 @@ describe Distributor::Settings::Products::BoxesController do
         end.to change { @distributor.boxes.count }.by(1)
       end
 
-      specify { flash[:notice].should eq('Your new box has been created.') }
-      specify { response.should be_success }
+      specify { expect(flash[:notice]).to eq('Your new box has been created.') }
+      specify { expect(response).to be_success }
     end
 
     context 'with invalid params' do
       before { post :create, { box: { name: 'yoda' } } }
 
-      specify { response.should be_success }
+      specify { expect(response).to be_success }
     end
   end
 
@@ -43,14 +43,14 @@ describe Distributor::Settings::Products::BoxesController do
     context 'with valid params' do
       before { put :update, { box: { id: box.id, price: 123 } } }
 
-      specify { flash[:notice].should eq('Your box has been updated.') }
-      specify { response.should be_success }
+      specify { expect(flash[:notice]).to eq('Your box has been updated.') }
+      specify { expect(response).to be_success }
     end
 
     context 'with invalid params' do
       before { put :update, { box: { id: box.id, name: '' } } }
 
-      specify { response.should be_success }
+      specify { expect(response).to be_success }
     end
   end
 end

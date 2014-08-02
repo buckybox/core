@@ -10,27 +10,27 @@ describe Customer::Form::UpdateContactDetails do
     let(:form)     { Customer::Form::UpdateContactDetails.new(customer: customer) }
 
     it "gets the customer first name" do
-      customer.should_receive(:first_name) { "Sam" }
+      expect(customer).to receive(:first_name) { "Sam" }
       expect(form.first_name).to eq("Sam")
     end
 
     it "gets the email address" do
-      customer.should_receive(:email) { "customer@email.com" }
+      expect(customer).to receive(:email) { "customer@email.com" }
       expect(form.email).to eq("customer@email.com")
     end
 
     it "gets the mobile phone" do
-      address.should_receive(:mobile_phone) { "111-111-1111" }
+      expect(address).to receive(:mobile_phone) { "111-111-1111" }
       expect(form.mobile_phone).to eq("111-111-1111")
     end
 
     it "gets the home phone" do
-      address.should_receive(:home_phone) { "111-111-1111" }
+      expect(address).to receive(:home_phone) { "111-111-1111" }
       expect(form.home_phone).to eq("111-111-1111")
     end
 
     it "gets the work phone" do
-      address.should_receive(:work_phone) { "111-111-1111" }
+      expect(address).to receive(:work_phone) { "111-111-1111" }
       expect(form.work_phone).to eq("111-111-1111")
     end
   end
@@ -88,14 +88,14 @@ describe Customer::Form::UpdateContactDetails do
 
     it "saves the customer attributes" do
       customer_args = { first_name: args["first_name"], last_name: args["last_name"], email: args["email"] }
-      customer.should_receive(:update_attributes).with(customer_args)
+      expect(customer).to receive(:update_attributes).with(customer_args)
       form.save
     end
 
     it "saves the address attributes" do
       address_args = { mobile_phone: args["mobile_phone"], home_phone: args["home_phone"], work_phone: args["work_phone"] }
-      customer.stub(:update_attributes) { true }
-      address.should_receive(:update_attributes).with(address_args)
+      allow(customer).to receive(:update_attributes) { true }
+      expect(address).to receive(:update_attributes).with(address_args)
       form.save
     end
   end

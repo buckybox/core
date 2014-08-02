@@ -4,11 +4,11 @@ describe Distributor do
   let(:distributor) { Fabricate.build(:distributor) }
 
   context :initialize do
-    specify { distributor.should be_valid }
-    specify { distributor.time_zone.should == 'Wellington' }
-    specify { distributor.currency.should == 'NZD' }
-    specify { distributor.advance_days.should == 3 }
-    specify { distributor.customer_can_remove_orders.should be true }
+    specify { expect(distributor).to be_valid }
+    specify { expect(distributor.time_zone).to eq 'Wellington' }
+    specify { expect(distributor.currency).to eq 'NZD' }
+    specify { expect(distributor.advance_days).to eq 3 }
+    specify { expect(distributor.customer_can_remove_orders).to be true }
 
     context 'after validation' do
       before do
@@ -17,13 +17,13 @@ describe Distributor do
         distributor.valid?
       end
 
-      specify { distributor.email.should == 'buckybox@example.com' }
+      specify { expect(distributor.email).to eq 'buckybox@example.com' }
     end
   end
 
   describe "#send_welcome_email" do
     it "sends the welcome email upon creation" do
-      DistributorMailer.should_receive(:welcome) { double(deliver: nil) }
+      expect(DistributorMailer).to receive(:welcome) { double(deliver: nil) }
 
       Fabricate(:distributor)
     end
@@ -36,8 +36,8 @@ describe Distributor do
         support_email: "support@example.net"
       )
 
-      distributor.email_from.should eq "Garden City 2.0 FoodBag Delivery <support@example.net>"
-      distributor.email_from(email: "joe@i.com").should eq "Garden City 2.0 FoodBag Delivery <joe@i.com>"
+      expect(distributor.email_from).to eq "Garden City 2.0 FoodBag Delivery <support@example.net>"
+      expect(distributor.email_from(email: "joe@i.com")).to eq "Garden City 2.0 FoodBag Delivery <joe@i.com>"
     end
   end
 
@@ -48,7 +48,7 @@ describe Distributor do
         email: "contact@example.net"
       )
 
-      distributor.email_to.should eq "Nelle <contact@example.net>"
+      expect(distributor.email_to).to eq "Nelle <contact@example.net>"
     end
   end
 
@@ -86,7 +86,7 @@ describe Distributor do
         distributor.save
       end
 
-      specify { distributor.parameter_name.should == 'new-distributor' }
+      specify { expect(distributor.parameter_name).to eq 'new-distributor' }
 
       context "and an invalid parameter name is set" do
         before do
@@ -94,7 +94,7 @@ describe Distributor do
           distributor.parameter_name = "invalid/name/@)*&"
         end
 
-        specify { distributor.should_not be_valid }
+        specify { expect(distributor).not_to be_valid }
       end
     end
 
@@ -104,7 +104,7 @@ describe Distributor do
       context 'and there is no existing parameter name' do
         describe 'it will default from name' do
           before { distributor.save }
-          specify { distributor.parameter_name.should == 'saved-distributor' }
+          specify { expect(distributor.parameter_name).to eq 'saved-distributor' }
         end
 
         describe 'it will create from value' do
@@ -113,7 +113,7 @@ describe Distributor do
             distributor.save
           end
 
-          specify { distributor.parameter_name.should == 'great-veggie-box-delivery' }
+          specify { expect(distributor.parameter_name).to eq 'great-veggie-box-delivery' }
         end
       end
 
@@ -122,7 +122,7 @@ describe Distributor do
 
         describe 'it will not use parameterized name' do
           before { distributor.save }
-          specify { distributor.parameter_name.should == 'fruit-by-the-bucket' }
+          specify { expect(distributor.parameter_name).to eq 'fruit-by-the-bucket' }
         end
 
         describe 'it will create from value' do
@@ -131,20 +131,20 @@ describe Distributor do
             distributor.save
           end
 
-          specify { distributor.parameter_name.should == 'great-veggie-box-delivery' }
+          specify { expect(distributor.parameter_name).to eq 'great-veggie-box-delivery' }
         end
       end
     end
   end
 
   context 'delivery window parameters' do
-    specify { Fabricate.build(:distributor, advance_hour: -1).should_not be_valid }
-    specify { Fabricate.build(:distributor, advance_days: -1).should_not be_valid }
+    specify { expect(Fabricate.build(:distributor, advance_hour: -1)).not_to be_valid }
+    specify { expect(Fabricate.build(:distributor, advance_days: -1)).not_to be_valid }
   end
 
   context 'support email' do
-    specify { Fabricate(:distributor, email: 'buckybox@example.com').support_email.should == 'buckybox@example.com' }
-    specify { Fabricate(:distributor, support_email: 'support@example.com').support_email.should == 'support@example.com' }
+    specify { expect(Fabricate(:distributor, email: 'buckybox@example.com').support_email).to eq 'buckybox@example.com' }
+    specify { expect(Fabricate(:distributor, support_email: 'support@example.com').support_email).to eq 'support@example.com' }
   end
 
   describe '#generate_required_daily_lists' do
@@ -152,13 +152,13 @@ describe Distributor do
     let(:generator_class) { double('generator_class', new: generator) }
 
     it 'returns true if the daily list generator successfully performs the generation' do
-      generator.stub(:generate) { true }
-      distributor.generate_required_daily_lists(generator_class).should be true
+      allow(generator).to receive(:generate) { true }
+      expect(distributor.generate_required_daily_lists(generator_class)).to be true
     end
 
     it 'returns false if the daily list generator fails to performs the generation' do
-      generator.stub(:generate) { true }
-      distributor.generate_required_daily_lists(generator_class).should be true
+      allow(generator).to receive(:generate) { true }
+      expect(distributor.generate_required_daily_lists(generator_class)).to be true
     end
   end
 
@@ -199,8 +199,8 @@ describe Distributor do
         before { @distributor = Fabricate(:distributor, time_zone: 'Berlin') }
 
         it 'should temporarily change Time.now' do
-          @distributor.use_local_time_zone { Time.zone.name.should eq('Berlin') }
-          Time.zone.name.should eq('Paris')
+          @distributor.use_local_time_zone { expect(Time.zone.name).to eq('Berlin') }
+          expect(Time.zone.name).to eq('Paris')
         end
       end
     end
@@ -290,13 +290,13 @@ describe Distributor do
 
       2.times do |n|
         customer = double('Customer')
-        customer.stub(:import)
+        allow(customer).to receive(:import)
 
         import_customer = new_import_customer(n)
         distributor.stub_chain(:delivery_services, :find_by_name).and_return(delivery_service)
         distributor.stub_chain(:customers, :find_by_number).with(n).and_return(customer)
 
-        customer.should_receive(:import).with(import_customer, delivery_service)
+        expect(customer).to receive(:import).with(import_customer, delivery_service)
         import_customers << import_customer
       end
 
@@ -351,7 +351,7 @@ describe Distributor do
       ]
 
       EXTRAS_IMPORT_TESTS.each do |name, unit, match|
-        specify { @distributor.find_extra_from_import(double('Extra', { name: name, unit: unit })).should eq(@s[match]) }
+        specify { expect(@distributor.find_extra_from_import(double('Extra', { name: name, unit: unit }))).to eq(@s[match]) }
       end
     end
   end
@@ -359,9 +359,9 @@ describe Distributor do
   def new_import_customer(number = 1)
     import_customer = double('Bucky::Import::Customer')
 
-    import_customer.stub(:class).and_return(Bucky::Import::Customer)
-    import_customer.stub(:number).and_return(number)
-    import_customer.stub(:delivery_service)
+    allow(import_customer).to receive(:class).and_return(Bucky::Import::Customer)
+    allow(import_customer).to receive(:number).and_return(number)
+    allow(import_customer).to receive(:delivery_service)
 
     return import_customer
   end
@@ -378,8 +378,8 @@ describe Distributor do
     let(:distributor) { Fabricate(:distributor_with_a_customer) }
 
     it 'should update all customers spend limit' do
-      Customer.any_instance.should_receive(:update_halted_status!).with(nil, Customer::EmailRule.only_pending_orders)
-      distributor.update_attributes({has_balance_threshold: true, default_balance_threshold: 200.00, spend_limit_on_all_customers: '0'}).should be true
+      expect_any_instance_of(Customer).to receive(:update_halted_status!).with(nil, Customer::EmailRule.only_pending_orders)
+      expect(distributor.update_attributes({has_balance_threshold: true, default_balance_threshold: 200.00, spend_limit_on_all_customers: '0'})).to be true
     end
   end
 
@@ -394,12 +394,12 @@ describe Distributor do
       customer.update_column(:next_order_occurrence_date, nil)
       customer.update_column(:next_order_id, nil)
       customer.reload
-      customer.next_order_occurrence_date.should eq nil
+      expect(customer.next_order_occurrence_date).to eq nil
 
       distributor.update_next_occurrence_caches
 
       customer.reload
-      customer.next_order_occurrence_date.should eq order.next_occurrence(Time.current.hour >= Distributor::AUTOMATIC_DELIVERY_HOUR ? Date.current.tomorrow : Date.current)
+      expect(customer.next_order_occurrence_date).to eq order.next_occurrence(Time.current.hour >= Distributor::AUTOMATIC_DELIVERY_HOUR ? Date.current.tomorrow : Date.current)
     end
   end
 
@@ -410,14 +410,14 @@ describe Distributor do
 
     it "returns zero when no transactions on any customers" do
       customer
-      distributor.transactional_customer_count.should eq 0
+      expect(distributor.transactional_customer_count).to eq 0
     end
 
     it "counts the number of customers with transactions" do
       Fabricate(:transaction, account: customer.account)
       Fabricate(:customer, distributor: distributor)
       Fabricate(:transaction, account: Fabricate(:account))
-      distributor.transactional_customer_count.should eq 1
+      expect(distributor.transactional_customer_count).to eq 1
     end
   end
 
@@ -429,7 +429,7 @@ describe Distributor do
         customer = double('customer')
         notifier = double('Event', customer_address_changed: true)
 
-        distributor.notify_address_changed(customer, notifier).should eq true
+        expect(distributor.notify_address_changed(customer, notifier)).to eq true
       end
     end
 
@@ -438,13 +438,13 @@ describe Distributor do
         distributor.notify_address_change = false
         customer = double('customer')
         notifier = double('Event')
-        distributor.notify_address_changed(customer, notifier).should eq false
+        expect(distributor.notify_address_changed(customer, notifier)).to eq false
       end
 
       it "returns false if fails" do
         customer = double('customer')
         notifier = double('Event', customer_address_changed: false)
-        distributor.notify_address_changed(customer, notifier).should eq false
+        expect(distributor.notify_address_changed(customer, notifier)).to eq false
       end
     end
   end
@@ -454,15 +454,15 @@ describe Distributor do
       distributor.save
       customer_1 = Fabricate(:customer, distributor: distributor)
       customer_2 = Fabricate(:customer, distributor: distributor)
-      distributor.customers_for_export([customer_1.id]).should eq([customer_1])
+      expect(distributor.customers_for_export([customer_1.id])).to eq([customer_1])
     end
   end
 
   context "Messaging and tracking" do
     subject { distributor }
-    it { should delegate(:tracking_after_create).to(:messaging) }
-    it { should delegate(:tracking_after_save).to(:messaging) }
-    it { should delegate(:track).to(:messaging) }
+    it { is_expected.to delegate(:tracking_after_create).to(:messaging) }
+    it { is_expected.to delegate(:tracking_after_save).to(:messaging) }
+    it { is_expected.to delegate(:track).to(:messaging) }
   end
 
   describe '#transactions_for_export' do

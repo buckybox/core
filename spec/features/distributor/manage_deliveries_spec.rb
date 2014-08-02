@@ -19,21 +19,21 @@ feature "Manage deliveries", js: true do
 
   scenario "marks a delivery as delivered and paid" do
     # test "Mark as delivered" button
-    page.should_not have_selector(".state-label.status-delivered")
+    expect(page).not_to have_selector(".state-label.status-delivered")
     find(:xpath, '//button[@id="delivered"]').click
-    page.should have_selector(".state-label.status-delivered")
+    expect(page).to have_selector(".state-label.status-delivered")
 
     # test "Apply cash on delivery"
-    page.should_not have_selector(".paid-label.paid")
+    expect(page).not_to have_selector(".paid-label.paid")
     find(:xpath, '//button[@id="delivered"]/following-sibling::button').click # open dropdown
     click_link "Apply cash on delivery"
-    page.should have_selector(".paid-label.paid")
+    expect(page).to have_selector(".paid-label.paid")
 
     # reload the page and make sure the AJAX requests went through
     sleep 1
     visit current_path
-    page.should have_selector(".state-label.status-delivered")
-    page.should have_selector(".paid-label.paid")
+    expect(page).to have_selector(".state-label.status-delivered")
+    expect(page).to have_selector(".paid-label.paid")
   end
 
   scenario "exports delivery details" do

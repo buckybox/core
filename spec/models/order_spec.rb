@@ -14,7 +14,7 @@ describe Order do
         end
 
         it "should call pause on the schedule_rule" do
-          order.schedule_rule.should_receive(:pause!).with(@start_date, @end_date)
+          expect(order.schedule_rule).to receive(:pause!).with(@start_date, @end_date)
           order.pause!(@start_date, @end_date)
         end
       end
@@ -23,7 +23,7 @@ describe Order do
     describe '#remove_pause!' do
       it "should delegate to schedule_rule" do
         order.pause!(Date.current + 1.day, Date.current + 3.days)
-        order.schedule_rule.should_receive(:remove_pause!)
+        expect(order.schedule_rule).to receive(:remove_pause!)
         order.remove_pause!
       end
     end
@@ -31,7 +31,7 @@ describe Order do
     describe '#pause_date' do
       it "should delegate to schedule_rule" do
         order.pause!(Date.current + 1.day, Date.current + 3.days)
-        order.schedule_rule.should_receive(:pause_date)
+        expect(order.schedule_rule).to receive(:pause_date)
         order.pause_date
       end
     end
@@ -39,17 +39,17 @@ describe Order do
     describe '#resume_date' do
       it "should delegate to schedule_rule" do
         order.pause!(Date.current + 1.day, Date.current + 3.days)
-        order.schedule_rule.should_receive(:resume_date)
+        expect(order.schedule_rule).to receive(:resume_date)
         order.resume_date
       end
     end
 
     describe "#possible_resume_dates" do
       it "lists possible dates to resume" do
-        Distributor.any_instance.stub(:window_start_from).and_return(Date.parse("2012-10-01"))
-        Distributor.any_instance.stub(:advance_days).and_return(3)
+        allow_any_instance_of(Distributor).to receive(:window_start_from).and_return(Date.parse("2012-10-01"))
+        allow_any_instance_of(Distributor).to receive(:advance_days).and_return(3)
         everyday_order.pause!(Date.parse("2012-09-30"))
-        everyday_order.possible_resume_dates(1.week).collect(&:first).should eq ["Thu 4 Oct",
+        expect(everyday_order.possible_resume_dates(1.week).collect(&:first)).to eq ["Thu 4 Oct",
           "Fri 5 Oct",
           "Sat 6 Oct",
           "Sun 7 Oct",
@@ -68,13 +68,13 @@ describe Order do
     before { order_scheduling.stub(schedule_rule: schedule_rule) }
 
     it "should ask the schedule to remove rules and times for that day" do
-      schedule_rule.should_receive(:remove_day).with(:tuesday)
+      expect(schedule_rule).to receive(:remove_day).with(:tuesday)
       order.remove_day(:tuesday)
     end
   end
 
   context 'with default saved order' do
-    specify { order.should be_valid }
+    specify { expect(order).to be_valid }
 
     context :quantity do
       specify { expect { Fabricate(:order, quantity: 0)}.to raise_error(ActiveRecord::RecordInvalid, /Quantity must be greater than 0/)}
@@ -102,8 +102,8 @@ describe Order do
             @order = Fabricate(:order, quantity: pp[:quantity], account: customer.account)
           end
 
-          specify { @order.individual_price.should == pp[:individual_price] }
-          specify { @order.price.should == pp[:price] }
+          specify { expect(@order.individual_price).to eq pp[:individual_price] }
+          specify { expect(@order.price).to eq pp[:price] }
         end
       end
     end
@@ -126,10 +126,10 @@ describe Order do
           order.save
         end
 
-        specify { order.schedule_rule.should_not be_nil }
-        specify { order.schedule_rule.next_occurrence.should_not be_nil }
-        specify { order.schedule_rule.next_occurrences(28, Date.current).should eq([order.schedule_rule.next_occurrence]) }
-        specify { order.schedule_rule.deliver_on.should == @schedule_rule.deliver_on }
+        specify { expect(order.schedule_rule).not_to be_nil }
+        specify { expect(order.schedule_rule.next_occurrence).not_to be_nil }
+        specify { expect(order.schedule_rule.next_occurrences(28, Date.current)).to eq([order.schedule_rule.next_occurrence]) }
+        specify { expect(order.schedule_rule.deliver_on).to eq @schedule_rule.deliver_on }
         specify { order.schedule_rule.next_occurrence == @schedule_rule.next_occurrence }
       end
 
@@ -143,10 +143,10 @@ describe Order do
           order.save
         end
 
-        specify { order.schedule_rule.should_not be_nil }
-        specify { order.schedule_rule.next_occurrence.should_not be_nil }
-        specify { order.schedule_rule.next_occurrences(28, Time.current).size.should eq(28) }
-        specify { order.schedule_rule.deliver_on.should == @schedule_rule.deliver_on }
+        specify { expect(order.schedule_rule).not_to be_nil }
+        specify { expect(order.schedule_rule.next_occurrence).not_to be_nil }
+        specify { expect(order.schedule_rule.next_occurrences(28, Time.current).size).to eq(28) }
+        specify { expect(order.schedule_rule.deliver_on).to eq @schedule_rule.deliver_on }
         specify { order.schedule_rule.next_occurrence == @schedule_rule.next_occurrence }
       end
 
@@ -160,9 +160,9 @@ describe Order do
           order.save
         end
 
-        specify { order.schedule_rule.should_not be_nil }
-        specify { order.schedule_rule.next_occurrence.should_not be_nil }
-        specify { order.schedule_rule.deliver_on.should == @schedule_rule.deliver_on }
+        specify { expect(order.schedule_rule).not_to be_nil }
+        specify { expect(order.schedule_rule.next_occurrence).not_to be_nil }
+        specify { expect(order.schedule_rule.deliver_on).to eq @schedule_rule.deliver_on }
         specify { order.schedule_rule.next_occurrence == @schedule_rule.next_occurrence }
       end
     end
@@ -170,20 +170,20 @@ describe Order do
     describe '#string_pluralize' do
       context "when the quantity is 1" do
         before { order.quantity = 1 }
-        specify { order.string_pluralize.should == "1 #{order.box.name}" }
+        specify { expect(order.string_pluralize).to eq "1 #{order.box.name}" }
       end
 
       [0, 2].each do |q|
         context "when the quantity is #{q}" do
           before { order.quantity = q }
-          specify { order.string_pluralize.should == "#{q} #{order.box.name}s" }
+          specify { expect(order.string_pluralize).to eq "#{q} #{order.box.name}s" }
         end
       end
     end
 
     describe '#deactivate_finished' do
       before do
-        Order.any_instance.stub(:delivery_service_includes_schedule_rule).and_return(true)
+        allow_any_instance_of(Order).to receive(:delivery_service_includes_schedule_rule).and_return(true)
 
         rule_schedule = Fabricate(:schedule_rule, start: Date.current - 2.months)
         @order1 = Fabricate(:order, schedule_rule: rule_schedule)
@@ -211,12 +211,12 @@ describe Order do
       it 'should deactivate the correct orders' do
         Order.deactivate_finished
 
-        @order1.reload.active.should be true
-        @order2.reload.active.should be true
-        @order3.reload.active.should be true
-        @order4.reload.active.should be true
-        @order5.reload.active.should be false
-        @order6.reload.active.should be false
+        expect(@order1.reload.active).to be true
+        expect(@order2.reload.active).to be true
+        expect(@order3.reload.active).to be true
+        expect(@order4.reload.active).to be true
+        expect(@order5.reload.active).to be false
+        expect(@order6.reload.active).to be false
       end
     end
 
@@ -229,19 +229,19 @@ describe Order do
 
       it "returns a hash with date, price and description" do
         hash = @results.first
-        hash[:date].should >= Date.current
+        expect(hash[:date]).to be >= Date.current
       end
 
       it "includes deliveries within date range" do
-        @results.last[:date].should <= @end_date.to_date
+        expect(@results.last[:date]).to be <= @end_date.to_date
       end
     end
   end
 
   context 'order requests' do
     before do
-      Box.any_instance.stub(:likes?).and_return(true)
-      Box.any_instance.stub(:dislikes?).and_return(true)
+      allow_any_instance_of(Box).to receive(:likes?).and_return(true)
+      allow_any_instance_of(Box).to receive(:dislikes?).and_return(true)
     end
 
     describe '#update_exclusions' do
@@ -263,7 +263,7 @@ describe Order do
           order.save
         end
 
-        specify { order.exclusions.map(&:line_item_id).should == [@e1_id, @e4_id] }
+        specify { expect(order.exclusions.map(&:line_item_id)).to eq [@e1_id, @e4_id] }
       end
 
       context 'remove exlusions' do
@@ -272,7 +272,7 @@ describe Order do
           order.save
         end
 
-        specify { order.exclusions.map(&:line_item_ids).should == [] }
+        specify { expect(order.exclusions.map(&:line_item_ids)).to eq [] }
       end
     end
 
@@ -295,7 +295,7 @@ describe Order do
           order.save
         end
 
-        specify { order.substitutions.map(&:line_item_id).should == [@s1_id, @s4_id] }
+        specify { expect(order.substitutions.map(&:line_item_id)).to eq [@s1_id, @s4_id] }
       end
 
       context 'remove substitutions' do
@@ -304,7 +304,7 @@ describe Order do
           order.save
         end
 
-        specify { order.substitutions.map(&:line_item_ids).should == [] }
+        specify { expect(order.substitutions.map(&:line_item_ids)).to eq [] }
       end
     end
   end
@@ -327,54 +327,54 @@ describe Order do
 
     it "should create order_extras from extra_ids" do
       order = Order.create(@params)
-      order.should be_valid
-      order.order_extras.collect(&:extra_id).sort.should eq(@extra_ids.sort)
+      expect(order).to be_valid
+      expect(order.order_extras.collect(&:extra_id).sort).to eq(@extra_ids.sort)
 
-      order.extras_count.should eq(4)
-      order.order_extras.find_by_extra_id(@extra_ids.first).count.should eq(3)
-      order.order_extras.find_by_extra_id(@extra_ids.last).count.should eq(1)
+      expect(order.extras_count).to eq(4)
+      expect(order.order_extras.find_by_extra_id(@extra_ids.first).count).to eq(3)
+      expect(order.order_extras.find_by_extra_id(@extra_ids.last).count).to eq(1)
     end
 
     it "should validate extras limit" do
       Box.find(@params[:box_id]).update_attribute(:extras_limit, 3)
 
       order = Order.create(@params)
-      order.should_not be_valid
-      order.errors[:base].should include("There is more than 3 extras for this box")
+      expect(order).not_to be_valid
+      expect(order.errors[:base]).to include("There is more than 3 extras for this box")
     end
 
     it "should update extras and delete old ones" do
       order = Order.create(@params)
-      order.should be_valid
+      expect(order).to be_valid
 
       @order_extras[@extra_ids.first.to_s][:count] = 0
       new_extra = Fabricate(:extra, distributor: @distributor)
       @order_extras.merge!(new_extra.id => {count: 2})
 
       order.update_attributes(order_extras: @order_extras)
-      order.should be_valid
+      expect(order).to be_valid
 
-      order.order_extras.collect(&:extra_id).should_not include(@extra_ids.first)
-      order.extras_count.should eq(3)
+      expect(order.order_extras.collect(&:extra_id)).not_to include(@extra_ids.first)
+      expect(order.extras_count).to eq(3)
     end
 
     context "predicted_order_extras" do
       it "should not return extras if they don't recur and an order occurs before this one" do
         order = Order.create(@params.merge(extras_one_off: true))
-        order.predicted_order_extras.size.should eq(2)
-        order.predicted_order_extras(order.next_occurrences(2, Date.current)[1]).size.should eq(2)
+        expect(order.predicted_order_extras.size).to eq(2)
+        expect(order.predicted_order_extras(order.next_occurrences(2, Date.current)[1]).size).to eq(2)
       end
 
       it "should return extras if they don't recur and an order doesn't occur before this one" do
         order = Order.create(@params.merge(extras_one_off: true, "schedule_rule_attributes" => {"start" => Date.current + 1.week}))
-        order.predicted_order_extras.size.should eq(2)
-        order.predicted_order_extras(order.next_occurrence - 1.day).size.should eq(2)
+        expect(order.predicted_order_extras.size).to eq(2)
+        expect(order.predicted_order_extras(order.next_occurrence - 1.day).size).to eq(2)
       end
 
       it "should return extras if extras recur" do
         order = Order.create(@params)
-        order.predicted_order_extras.size.should eq(2)
-        order.predicted_order_extras(order.next_occurrences(2, Date.current)[1]).size.should eq(2)
+        expect(order.predicted_order_extras.size).to eq(2)
+        expect(order.predicted_order_extras(order.next_occurrences(2, Date.current)[1]).size).to eq(2)
       end
     end
   end

@@ -5,6 +5,6 @@ describe BankInformation do
     @bank_information = Fabricate.build(:bank_information)
   end
 
-  specify { @bank_information.should be_valid }
+  specify { expect(@bank_information).to be_valid }
 end
 

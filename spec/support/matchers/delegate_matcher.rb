@@ -30,7 +30,7 @@ RSpec::Matchers.define :delegate do |method|
       unless [0,-1].include?(@delegator.method(@to).arity)
         raise "#{@delegator}'s' #{@to} method does not have zero or -1 arity (it expects parameters)"
       end
-      @delegator.stub(@to).and_return receiver_double(method)
+      allow(@delegator).to receive(@to).and_return receiver_double(method)
       @delegator.send(@method) == :called
     else
       raise "#{@delegator} does not respond to #{@to}"
@@ -41,11 +41,11 @@ RSpec::Matchers.define :delegate do |method|
     "delegate :#{@method} to its #{@to}#{@prefix ? ' with prefix' : ''}"
   end
 
-  failure_message_for_should do |text|
+  failure_message do |text|
     "expected #{@delegator} to delegate :#{@method} to its #{@to}#{@prefix ? ' with prefix' : ''}"
   end
 
-  failure_message_for_should_not do |text|
+  failure_message_when_negated do |text|
     "expected #{@delegator} not to delegate :#{@method} to its #{@to}#{@prefix ? ' with prefix' : ''}"
   end
 
@@ -54,7 +54,7 @@ RSpec::Matchers.define :delegate do |method|
 
   def receiver_double(method)
     double('receiver').tap do |receiver|
-      receiver.stub(method).and_return :called
+      allow(receiver).to receive(method).and_return :called
     end
   end
 end

@@ -3,11 +3,11 @@ require "spec_helper"
 describe Event do
   let(:event) { Fabricate(:event) }
 
-  specify { event.should be_valid }
+  specify { expect(event).to be_valid }
 
   describe "#dismiss!" do
     before { event.dismiss! }
-    specify { event.dismissed.should be true }
+    specify { expect(event.dismissed).to be true }
   end
 
   shared_examples_for "an event" do
