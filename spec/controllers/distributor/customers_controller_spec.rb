@@ -9,7 +9,7 @@ describe Distributor::CustomersController do
     before { @customer = Fabricate(:customer, distributor: @distributor) }
 
     describe "#index" do
-      before { controller.stub(:check_setup) }
+      before { allow(controller).to receive(:check_setup) }
 
       context "with no customers" do
         before { get :index, query: "query_with_no_results" }
@@ -35,11 +35,11 @@ describe Distributor::CustomersController do
       end
 
       it "should reset password" do
-        assigns(:customer).password.should_not == @customer.password
+        expect(assigns(:customer).password).not_to eq @customer.password
       end
 
       it "should redirect correctly" do
-        response.should redirect_to(distributor_customer_path(@customer))
+        expect(response).to redirect_to(distributor_customer_path(@customer))
       end
     end
 
@@ -90,8 +90,8 @@ describe Distributor::CustomersController do
         it "updates the template" do
           post :email, params.merge(link_action: "update")
 
-          response.should be_successful
-          message.should eq "Your changes have been saved."
+          expect(response).to be_successful
+          expect(message).to eq "Your changes have been saved."
         end
       end
 
@@ -103,8 +103,8 @@ describe Distributor::CustomersController do
         it "deletes the template" do
           post :email, params.merge(link_action: "delete")
 
-          response.should be_successful
-          message.should eq "Email template <em>#{email_templates[1].subject}</em> has been deleted."
+          expect(response).to be_successful
+          expect(message).to eq "Email template <em>#{email_templates[1].subject}</em> has been deleted."
         end
       end
 
@@ -112,22 +112,22 @@ describe Distributor::CustomersController do
         it "saves the template" do
           post :email, params.merge(link_action: "save")
 
-          response.should be_successful
-          message.should eq "Your new email template <em>#{email_template["subject"]}</em> has been saved."
+          expect(response).to be_successful
+          expect(message).to eq "Your new email template <em>#{email_template["subject"]}</em> has been saved."
         end
       end
 
       context "previewing" do
         it "sends a preview email" do
-          CustomerMailer.should_receive(:email_template) do |recipient, email|
-            recipient.should eq @distributor
-            email.subject.should eq email_template["subject"]
-          end.and_call_original
+          expect(CustomerMailer).to receive(:email_template) { |recipient, email|
+            expect(recipient).to eq @distributor
+            expect(email.subject).to eq email_template["subject"]
+          }.and_call_original
 
           post :email, params.merge(link_action: "preview")
 
-          response.should be_successful
-          message.should eq "A preview email has been sent to #{@distributor.email}."
+          expect(response).to be_successful
+          expect(message).to eq "A preview email has been sent to #{@distributor.email}."
         end
       end
 
@@ -137,9 +137,9 @@ describe Distributor::CustomersController do
         end
 
         it "calls send_email with the right arguments" do
-          controller.should_receive(:send_email) do |ids, email|
-            ids.should eq recipient_ids
-            email.subject.should eq email_template["subject"]
+          expect(controller).to receive(:send_email) do |ids, email|
+            expect(ids).to eq recipient_ids
+            expect(email.subject).to eq email_template["subject"]
           end
 
           @post.call
@@ -148,13 +148,13 @@ describe Distributor::CustomersController do
         it "sets the flash message" do
           @post.call
 
-          flash[:notice].should_not be_nil
+          expect(flash[:notice]).not_to be_nil
         end
 
         it "sends emails" do
           mock_delay = double('mock_delay').as_null_object
-          CustomerMailer.stub(:delay).and_return(mock_delay)
-          mock_delay.should_receive(:email_template)
+          allow(CustomerMailer).to receive(:delay).and_return(mock_delay)
+          expect(mock_delay).to receive(:email_template)
 
           @post.call
         end
@@ -169,20 +169,20 @@ describe Distributor::CustomersController do
       end
 
       it "downloads a csv" do
-        CustomerCSV.stub(:generate).and_return("")
+        allow(CustomerCSV).to receive(:generate).and_return("")
         @post.call
-        response.headers['Content-Type'].should eq "text/csv; charset=utf-8; header=present"
+        expect(response.headers['Content-Type']).to eq "text/csv; charset=utf-8; header=present"
       end
 
       it "exports customer data into csv" do
-        CustomerCSV.stub(:generate).and_return("I am the kind of csvs")
+        allow(CustomerCSV).to receive(:generate).and_return("I am the kind of csvs")
         @post.call
-        response.body.should eq "I am the kind of csvs"
+        expect(response.body).to eq "I am the kind of csvs"
       end
 
       it "calls CustomerCSV.generate" do
-        CustomerCSV.stub(:generate)
-        CustomerCSV.should_receive(:generate).with(@distributor, [@customer.id])
+        allow(CustomerCSV).to receive(:generate)
+        expect(CustomerCSV).to receive(:generate).with(@distributor, [@customer.id])
         @post.call
       end
     end

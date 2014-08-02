@@ -10,25 +10,25 @@ describe Country do
 
     describe "#name" do
       it "returns New Zealand" do
-        @country.name.should eq "New Zealand"
+        expect(@country.name).to eq "New Zealand"
       end
     end
 
     describe "#full_name" do
       it "aliases #name" do
-        @country.full_name.should eq @country.name
+        expect(@country.full_name).to eq @country.name
       end
     end
 
     describe "#currency" do
       it "returns NZD" do
-        @country.currency.should eq "NZD"
+        expect(@country.currency).to eq "NZD"
       end
     end
 
     describe "#time_zone" do
       it "returns Pacific/Auckland" do
-        @country.time_zone.should eq "Pacific/Auckland"
+        expect(@country.time_zone).to eq "Pacific/Auckland"
       end
     end
   end

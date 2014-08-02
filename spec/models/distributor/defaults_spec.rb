@@ -25,8 +25,8 @@ describe Distributor::Defaults do
 
   # Gross I know but what has to be done right now with this class to have fast test and not to touch the DB
   before do
-    LineItem.stub(:add_defaults_to)
-    EmailTemplate.stub(:new)
+    allow(LineItem).to receive(:add_defaults_to)
+    allow(EmailTemplate).to receive(:new)
 
     url_helper = double("url_helper" , new_customer_session_url: true, new_customer_password_url: true)
     Rails.stub_chain(:application, :routes, :url_helpers) { url_helper }
@@ -36,11 +36,11 @@ describe Distributor::Defaults do
 
   shared_examples_for "a distributor with populated defaults" do
     it "creates the default line items for a distributor" do
-      LineItem.should_receive(:add_defaults_to).with(distributor)
+      expect(LineItem).to receive(:add_defaults_to).with(distributor)
     end
 
     it "creates the default email templates for a distributor" do
-      EmailTemplate.should_receive(:new)
+      expect(EmailTemplate).to receive(:new)
     end
   end
 

@@ -6,9 +6,9 @@ describe Distributor::Setup do
   let(:distributor_setup) { Distributor::Setup.new(distributor) }
 
   before do
-    distributor.stub(:delivery_services) { [] }
-    distributor.stub(:boxes)             { [] }
-    distributor.stub(:customers)         { [] }
+    allow(distributor).to receive(:delivery_services) { [] }
+    allow(distributor).to receive(:boxes)             { [] }
+    allow(distributor).to receive(:customers)         { [] }
   end
 
   describe "#finished?" do
@@ -17,9 +17,9 @@ describe Distributor::Setup do
     end
 
     it "returns true if everything has been set up" do
-      distributor.stub(:delivery_services) { [ double("delivery_service") ] }
-      distributor.stub(:boxes)             { [ double("boxes") ] }
-      distributor.stub(:customers)         { [ double("customers") ] }
+      allow(distributor).to receive(:delivery_services) { [ double("delivery_service") ] }
+      allow(distributor).to receive(:boxes)             { [ double("boxes") ] }
+      allow(distributor).to receive(:customers)         { [ double("customers") ] }
       expect(distributor_setup.finished?).to be true
     end
   end
@@ -34,13 +34,13 @@ describe Distributor::Setup do
     it "returns the steps completed so far" do
       expect(distributor_setup.steps_done).to eql(0)
 
-      distributor.stub(:delivery_services) { [ double("delivery_service") ] }
+      allow(distributor).to receive(:delivery_services) { [ double("delivery_service") ] }
       expect(distributor_setup.steps_done).to eql(1)
 
-      distributor.stub(:boxes) { [ double("boxes") ] }
+      allow(distributor).to receive(:boxes) { [ double("boxes") ] }
       expect(distributor_setup.steps_done).to eql(2)
 
-      distributor.stub(:customers) { [ double("customers") ] }
+      allow(distributor).to receive(:customers) { [ double("customers") ] }
       expect(distributor_setup.steps_done).to eql(3)
     end
   end
@@ -49,13 +49,13 @@ describe Distributor::Setup do
     it "returns a percentage of progress" do
       expect(distributor_setup.progress).to eql(0.0)
 
-      distributor.stub(:delivery_services) { [ double("delivery_service") ] }
+      allow(distributor).to receive(:delivery_services) { [ double("delivery_service") ] }
       expect(distributor_setup.progress).to eql(33.33333333333333)
 
-      distributor.stub(:boxes) { [ double("boxes") ] }
+      allow(distributor).to receive(:boxes) { [ double("boxes") ] }
       expect(distributor_setup.progress).to eql(66.66666666666666)
 
-      distributor.stub(:customers) { [ double("customers") ] }
+      allow(distributor).to receive(:customers) { [ double("customers") ] }
       expect(distributor_setup.progress).to eql(100.0)
     end
   end
@@ -64,13 +64,13 @@ describe Distributor::Setup do
     it "returns a percentage of progress" do
       expect(distributor_setup.progress_left).to eql(100.0)
 
-      distributor.stub(:delivery_services) { [ double("delivery_service") ] }
+      allow(distributor).to receive(:delivery_services) { [ double("delivery_service") ] }
       expect(distributor_setup.progress_left).to eql(66.66666666666667)
 
-      distributor.stub(:boxes) { [ double("boxes") ] }
+      allow(distributor).to receive(:boxes) { [ double("boxes") ] }
       expect(distributor_setup.progress_left).to eql(33.33333333333334)
 
-      distributor.stub(:customers) { [ double("customers") ] }
+      allow(distributor).to receive(:customers) { [ double("customers") ] }
       expect(distributor_setup.progress_left).to eql(0.0)
     end
   end
@@ -81,18 +81,18 @@ describe Distributor::Setup do
     end
 
     it "returns false if there are no delivery services" do
-      distributor.stub(:boxes) { [ double("boxes") ] }
+      allow(distributor).to receive(:boxes) { [ double("boxes") ] }
       expect(distributor_setup.finished_settings?).to be false
     end
 
     it "returns false if there are no boxes" do
-      distributor.stub(:delivery_services) { [ double("delivery_service") ] }
+      allow(distributor).to receive(:delivery_services) { [ double("delivery_service") ] }
       expect(distributor_setup.finished_settings?).to be false
     end
 
     it "returns true if the settings setup is done" do
-      distributor.stub(:delivery_services) { [ double("delivery_service") ] }
-      distributor.stub(:boxes)             { [ double("boxes") ] }
+      allow(distributor).to receive(:delivery_services) { [ double("delivery_service") ] }
+      allow(distributor).to receive(:boxes)             { [ double("boxes") ] }
       expect(distributor_setup.finished_settings?).to be true
     end
   end

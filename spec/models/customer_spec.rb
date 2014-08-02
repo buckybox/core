@@ -26,7 +26,7 @@ describe Customer do
     }.merge(opts)
     extras = { 'class'.to_sym => Bucky::Import::Customer }
     attrs.merge(extras).each do |key, value|
-      customer.stub(key).and_return(value)
+      allow(customer).to receive(key).and_return(value)
     end
 
     customer
@@ -48,7 +48,7 @@ describe Customer do
           }.merge(opts)
     extras = { 'class'.to_sym => Bucky::Import::Box }
     attrs.merge(extras).each do |key, value|
-      box.stub(key).and_return(value)
+      allow(box).to receive(key).and_return(value)
     end
 
     box
@@ -63,7 +63,7 @@ describe Customer do
           }.merge(opts)
     extras = { 'class'.to_sym => Bucky::Import::Extra }
     attrs.merge(extras).each do |key, value|
-      extra.stub(key).and_return(value)
+      allow(extra).to receive(key).and_return(value)
     end
 
     extra
@@ -71,34 +71,34 @@ describe Customer do
 
   let(:customer) { Fabricate(:customer) }
 
-  specify { customer.should be_valid }
+  specify { expect(customer).to be_valid }
 
   context :create_with_account_under_limit do
     let(:distributor) { Fabricate(:distributor, default_balance_threshold_cents: -50000, has_balance_threshold: true) }
 
     it 'should create a valid customer' do
       c = distributor.customers.create({"first_name"=>"Jordan", "last_name"=>"Carter", "tag_list"=>"", "email"=>"jordan+3@buckybox.com", "address_attributes"=>{"mobile_phone"=>"", "home_phone"=>"", "work_phone"=>"", "address_1"=>"43a Warwick St", "address_2"=>"Wilton", "suburb"=>"Wellington", "city"=>"Wellington", "postcode"=>"6012", "delivery_note"=>""}, "balance_threshold"=>"1.00", "discount"=>"0", "special_order_preference"=>"", "delivery_service_id"=>"68"})
-      c.should be_valid
+      expect(c).to be_valid
     end
   end
 
   it "enforce password minimum length requirement" do
     new_customer = Fabricate.build(:customer, password: 'a' * 5)
 
-    new_customer.should_not be_valid
-    new_customer.errors.get(:password).should include "is too short (minimum is 6 characters)"
+    expect(new_customer).not_to be_valid
+    expect(new_customer.errors.get(:password)).to include "is too short (minimum is 6 characters)"
   end
 
   context "when a customer is created" do
     it "does not send their login details" do
-      CustomerMailer.should_not_receive(:login_details)
+      expect(CustomerMailer).not_to receive(:login_details)
       Fabricate(:customer)
     end
   end
 
   context "when a customer is created via the webstore" do
     it "does send their login details" do
-      CustomerMailer.should_receive(:login_details).and_call_original
+      expect(CustomerMailer).to receive(:login_details).and_call_original
       Fabricate(:customer, via_webstore: true)
     end
   end
@@ -107,22 +107,22 @@ describe Customer do
     before { @customer = Fabricate(:customer) }
 
     context 'initializing' do
-      specify { @customer.address.should_not be_nil }
-      specify { @customer.account.should_not be_nil }
-      specify { @customer.number.should_not be_nil }
+      specify { expect(@customer.address).not_to be_nil }
+      specify { expect(@customer.account).not_to be_nil }
+      specify { expect(@customer.number).not_to be_nil }
     end
 
     describe "#dynamic_tags" do
       specify { expect(@customer.dynamic_tags).to be_a Hash }
 
       context "with a negative balance" do
-        before { @customer.stub(:account_balance) { CrazyMoney.new(-1) } }
+        before { allow(@customer).to receive(:account_balance) { CrazyMoney.new(-1) } }
 
         specify { expect(@customer.dynamic_tags).to have_key "negative-balance" }
       end
 
       context "with a positive balance" do
-        before { @customer.stub(:account_balance) { CrazyMoney.new(1) } }
+        before { allow(@customer).to receive(:account_balance) { CrazyMoney.new(1) } }
 
         specify { expect(@customer.dynamic_tags).to_not have_key "negative-balance" }
       end
@@ -134,7 +134,7 @@ describe Customer do
         @customer.save
       end
 
-      specify { @customer.email.should == 'buckybox@example.com' }
+      specify { expect(@customer.email).to eq 'buckybox@example.com' }
     end
 
     describe "#email_to" do
@@ -144,13 +144,13 @@ describe Customer do
           email: "will@example.net"
         )
 
-        customer.email_to.should eq "Will Lau <will@example.net>"
+        expect(customer.email_to).to eq "Will Lau <will@example.net>"
       end
     end
 
     describe '#number' do
       before { @customer.number = -1 }
-      specify { @customer.should_not be_valid }
+      specify { expect(@customer).not_to be_valid }
 
       it "enforces uniqueness per distributor at the DB level" do
         customer_1 = Fabricate(:customer)
@@ -170,26 +170,26 @@ describe Customer do
         @customer.save
       end
 
-      specify { @customer.password.should_not be_nil }
+      specify { expect(@customer.password).not_to be_nil }
       specify { @customer.randomize_password.length == 12 }
-      specify { Customer.generate_random_password.should_not == Customer.generate_random_password }
+      specify { expect(Customer.generate_random_password).not_to eq Customer.generate_random_password }
     end
 
     describe '#name' do
       describe 'with only first name' do
-        specify { @customer.name.should == @customer.first_name }
+        specify { expect(@customer.name).to eq @customer.first_name }
       end
 
       describe 'with both first and last name' do
         before { @customer.last_name = 'Lastname' }
-        specify { @customer.name.should == "#{@customer.first_name} #{@customer.last_name}" }
+        specify { expect(@customer.name).to eq "#{@customer.first_name} #{@customer.last_name}" }
       end
     end
 
     describe '#name=' do
       before { @customer.name = 'John Smith' }
-      specify { @customer.first_name.should == 'John' }
-      specify { @customer.last_name.should == 'Smith' }
+      specify { expect(@customer.first_name).to eq 'John' }
+      specify { expect(@customer.last_name).to eq 'Smith' }
     end
 
     context 'when using tags' do
@@ -198,8 +198,8 @@ describe Customer do
         @customer.save
       end
 
-      specify { @customer.tags.size.should == 3 }
-      specify { @customer.tag_list.sort.should == %w(cat dog rain) }
+      specify { expect(@customer.tags.size).to eq 3 }
+      specify { expect(@customer.tag_list.sort).to eq %w(cat dog rain) }
     end
   end
 
@@ -215,27 +215,27 @@ describe Customer do
       Fabricate(:customer, first_name: 'John', last_name: 'Smith')
     end
 
-    specify { Customer.search('Edinburgh').size.should == 2 }
-    specify { Customer.search('Smith').size.should == 3 }
-    specify { Customer.search('John').size.should == 1 }
+    specify { expect(Customer.search('Edinburgh').size).to eq 2 }
+    specify { expect(Customer.search('Smith').size).to eq 3 }
+    specify { expect(Customer.search('John').size).to eq 1 }
   end
 
   describe '#new?' do
     before { @customer = Fabricate(:customer) }
 
     context 'customer has 0 deliveries' do
-      before { @customer.deliveries.stub(:size).and_return(0) }
-      specify { @customer.new?.should be true }
+      before { allow(@customer.deliveries).to receive(:size).and_return(0) }
+      specify { expect(@customer.new?).to be true }
     end
 
     context 'customer has 1 delivery' do
-      before { @customer.deliveries.stub(:size).and_return(1) }
-      specify { @customer.new?.should be true }
+      before { allow(@customer.deliveries).to receive(:size).and_return(1) }
+      specify { expect(@customer.new?).to be true }
     end
 
     context 'customer has 2 deliveries' do
-      before { @customer.deliveries.stub(:size).and_return(2) }
-      specify { @customer.new?.should be false }
+      before { allow(@customer.deliveries).to receive(:size).and_return(2) }
+      specify { expect(@customer.new?).to be false }
     end
   end
 
@@ -248,7 +248,7 @@ describe Customer do
         customer.reload
       end
 
-      specify { customer.order_with_next_delivery.should == @o3 }
+      specify { expect(customer.order_with_next_delivery).to eq @o3 }
 
       context 'and order without next delivery' do
         before do
@@ -257,13 +257,13 @@ describe Customer do
           customer.stub_chain(:account, :active_orders).and_return([@o1, @o2, @o3])
         end
 
-        specify { customer.order_with_next_delivery.should == @o3 }
+        specify { expect(customer.order_with_next_delivery).to eq @o3 }
       end
     end
 
     context 'without orders' do
       before { customer.stub_chain(:account, :active_orders).and_return([]) }
-      specify { customer.order_with_next_delivery.should == nil }
+      specify { expect(customer.order_with_next_delivery).to eq nil }
     end
   end
 
@@ -273,7 +273,7 @@ describe Customer do
       customer.reload
     end
 
-    specify { customer.next_delivery_time.should == @order.schedule_rule.next_occurrence.to_date }
+    specify { expect(customer.next_delivery_time).to eq @order.schedule_rule.next_occurrence.to_date }
   end
 
   describe "balance_threshold" do
@@ -283,11 +283,11 @@ describe Customer do
         account = customer.account
         order = Fabricate(:active_recurring_order, account: account)
 
-        order.next_occurrence.should_not be_blank
+        expect(order.next_occurrence).not_to be_blank
 
         customer.halt!
 
-        order.next_occurrence.should be_blank
+        expect(order.next_occurrence).to be_blank
       end
 
       it 'should unhalt orders' do
@@ -296,17 +296,17 @@ describe Customer do
         account = customer.account
         order = Fabricate(:active_recurring_order, account: account)
         customer.reload
-        order.next_occurrence.should be_blank
+        expect(order.next_occurrence).to be_blank
 
         customer.unhalt!
-        order.next_occurrence.should_not be_blank
+        expect(order.next_occurrence).not_to be_blank
       end
     end
 
     context :halt_notifications do
       it 'should create a notification for the distributor when halted' do
         customer = Fabricate(:customer).reload
-        customer.should_receive(:create_halt_notifications)
+        expect(customer).to receive(:create_halt_notifications)
         customer.halt!
       end
     end
@@ -321,19 +321,19 @@ describe Customer do
       Fabricate(:payment, display_time: 2.weeks.ago, account: customer.account, amount_cents: 100, distributor: distributor)
       p.reverse_payment!
 
-      customer.last_paid.to_date.should eq 1.weeks.ago.to_date
+      expect(customer.last_paid.to_date).to eq 1.weeks.ago.to_date
     end
 
     it "returns nil when no payments" do
-      customer.last_paid.should be_nil
+      expect(customer.last_paid).to be_nil
     end
 
     it "includes COD payments" do
       delivery = Fabricate(:delivery)
-      delivery.stub(:account).and_return(customer.account)
-      delivery.stub(:distributor).and_return(customer.distributor)
+      allow(delivery).to receive(:account).and_return(customer.account)
+      allow(delivery).to receive(:distributor).and_return(customer.distributor)
       Delivery.pay_on_delivery([delivery])
-      customer.last_paid.should_not be_nil
+      expect(customer.last_paid).not_to be_nil
     end
   end
 
@@ -343,12 +343,12 @@ describe Customer do
     describe '#active?' do
       it 'with active orders returns true' do
         stub_active_orders(customer, [ double('orders') ])
-        customer.active?.should be true
+        expect(customer.active?).to be true
       end
 
       it 'without active orders returns false' do
         stub_active_orders(customer, [ ])
-        customer.active?.should be false
+        expect(customer.active?).to be false
       end
     end
 
@@ -356,13 +356,13 @@ describe Customer do
       it 'returns the customers orders that are active' do
         orders = [ double('orders') ]
         stub_active_orders(customer, orders)
-        customer.active_orders.should eq(orders)
+        expect(customer.active_orders).to eq(orders)
       end
     end
 
     def stub_active_orders(customer, orders)
       scoped = double('scoped', active: orders)
-      customer.stub(:orders) { scoped }
+      allow(customer).to receive(:orders) { scoped }
     end
   end
 end

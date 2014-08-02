@@ -3,11 +3,11 @@ require 'spec_helper'
 describe Payment, :slow do
   let(:payment) { Fabricate(:payment) }
 
-  specify { payment.should be_valid }
+  specify { expect(payment).to be_valid }
 
   context :kinds do
     %w(bank_transfer credit_card delivery unspecified).each do |k|
-      specify { Fabricate(:payment, kind: k).should be_valid }
+      specify { expect(Fabricate(:payment, kind: k)).to be_valid }
     end
 
     specify { expect { Fabricate(:payment, kind: 'trees')}.to raise_error(ActiveRecord::RecordInvalid, /Kind trees is not a valid kind of payment/)}
@@ -15,15 +15,15 @@ describe Payment, :slow do
 
   context :source do
     %w(manual import).each do |s|
-      specify { Fabricate(:payment, source: s).should be_valid }
+      specify { expect(Fabricate(:payment, source: s)).to be_valid }
     end
 
     specify { expect { Fabricate(:payment, source: 'orange')}.to raise_error(ActiveRecord::RecordInvalid, /Source orange is not a valid source of payment/)}
   end
 
   context :amount do
-    specify { Fabricate(:payment, amount: 1).should be_valid }
-    specify { Fabricate(:payment, amount: -1).should be_valid }
+    specify { expect(Fabricate(:payment, amount: 1)).to be_valid }
+    specify { expect(Fabricate(:payment, amount: -1)).to be_valid }
   end
 
   context 'affecting account balance' do
@@ -43,23 +43,23 @@ describe Payment, :slow do
     end
 
     context 'after create' do
-      specify { @payment.transaction.should_not be_nil }
-      specify { @payment.transaction.persisted?.should be true }
-      specify { @payment.transaction.amount.should == @amount }
+      specify { expect(@payment.transaction).not_to be_nil }
+      specify { expect(@payment.transaction.persisted?).to be true }
+      specify { expect(@payment.transaction.amount).to eq @amount }
 
-      specify { @payment.account.balance.should == @account_amount + @amount }
+      specify { expect(@payment.account.balance).to eq @account_amount + @amount }
     end
 
     describe '#reverse_payment' do
       before { @payment.reverse_payment! }
 
-      specify { @payment.reversed.should be true }
+      specify { expect(@payment.reversed).to be true }
 
-      specify { @payment.reversal_transaction.should_not be_nil }
-      specify { @payment.reversal_transaction.persisted?.should be true }
-      specify { @payment.reversal_transaction.amount.should == @amount.opposite }
+      specify { expect(@payment.reversal_transaction).not_to be_nil }
+      specify { expect(@payment.reversal_transaction.persisted?).to be true }
+      specify { expect(@payment.reversal_transaction.amount).to eq @amount.opposite }
 
-      specify { @payment.account.balance.should == @account_amount }
+      specify { expect(@payment.account.balance).to eq @account_amount }
     end
   end
 
@@ -69,7 +69,7 @@ describe Payment, :slow do
 
     it "should reduce account balance" do
       payment.save
-      account.reload.balance_cents.should eq(-1000)
+      expect(account.reload.balance_cents).to eq(-1000)
     end
   end
 end

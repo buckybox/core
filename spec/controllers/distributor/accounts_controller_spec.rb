@@ -28,20 +28,20 @@ describe Distributor::AccountsController do
     end
 
     it "creates a transaction" do
-      account.transactions.count.should eq 0
+      expect(account.transactions.count).to eq 0
       post :change_balance, id: customer.account.id, date: "20 Oct '13", delta: '-6.66', note: 'hell pizza'
       distributor.use_local_time_zone do
         transaction = account.reload.transactions.first
-        transaction.should be_present
-        transaction.display_time.should eq Date.parse("20 Oct '13").to_time_in_current_zone
-        transaction.amount_cents.should eq(-666)
-        transaction.description.should eq 'hell pizza'
+        expect(transaction).to be_present
+        expect(transaction.display_time).to eq Date.parse("20 Oct '13").to_time_in_current_zone
+        expect(transaction.amount_cents).to eq(-666)
+        expect(transaction.description).to eq 'hell pizza'
       end
     end
 
     it "returns error for zero amount" do
       post :change_balance, id: customer.account.id, date: "22 Oct '13", delta: '', note: 'hell pizza'
-      flash[:error].should eq "Change in balance must be a number and not zero."
+      expect(flash[:error]).to eq "Change in balance must be a number and not zero."
     end
 
     it "halts account" do
@@ -52,7 +52,7 @@ describe Distributor::AccountsController do
       customer.save!
 
       post :change_balance, id: customer.account.id, date: "22 Oct '13", delta: (CrazyMoney.new(-5) - account.balance), note: 'hell pizza'
-      customer.reload.should be_halted
+      expect(customer.reload).to be_halted
     end
   end
 end

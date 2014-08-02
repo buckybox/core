@@ -52,9 +52,9 @@ describe SalesCsv::OrderRowGenerator do
 
   describe '#generate' do
     it 'generates a array for conversion to csv row' do
-      Order.stub(:short_code) { 'sc' }
-      Order.stub(:extras_description) { 'exd' }
-      row_generator.generate.should == ["rname", nil, nil, 1, nil, nil, 1, "fname", "lname", 8888, "label1,label2", "NEW", "street 1", "apt 1", "sub", "city", 123, "note", "sc", "bname", "sub", "ex", "exd", 10.0, 1.23, 1.0, 11.0, 100.0, "Unknown", "em@ex.com", "pref", "waiting", "waiting"]
+      allow(Order).to receive(:short_code) { 'sc' }
+      allow(Order).to receive(:extras_description) { 'exd' }
+      expect(row_generator.generate).to eq ["rname", nil, nil, 1, nil, nil, 1, "fname", "lname", 8888, "label1,label2", "NEW", "street 1", "apt 1", "sub", "city", 123, "note", "sc", "bname", "sub", "ex", "exd", 10.0, 1.23, 1.0, 11.0, 100.0, "Unknown", "em@ex.com", "pref", "waiting", "waiting"]
     end
   end
 end

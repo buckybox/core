@@ -8,7 +8,7 @@ describe Distributor::BoxesController do
 
   describe '#show' do
     before { get :show, format: :json, id: box.id }
-    specify { response.should be_success }
+    specify { expect(response).to be_success }
   end
 end
 

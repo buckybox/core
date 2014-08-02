@@ -14,9 +14,9 @@ describe Bucky::Import do
         @parsed_csv = Import.preprocess(csv)
       end
 
-      specify { @parsed_csv.should_not match /(rubbish)|(45)/ }
-      specify { @parsed_csv.should_not match /(trash)|(65)/ }
-      specify { @parsed_csv.should match /you can see me/ }
+      specify { expect(@parsed_csv).not_to match /(rubbish)|(45)/ }
+      specify { expect(@parsed_csv).not_to match /(trash)|(65)/ }
+      specify { expect(@parsed_csv).to match /you can see me/ }
     end
 
     context 'check headers' do
@@ -58,51 +58,51 @@ describe Bucky::Import do
     before(:all) do
       @customers = Import.parse(File.read(Import::TEST_FILE), Distributor.new) # Bucky::Import::Customer
     end
-    specify { @customers.size.should eq(4) }
+    specify { expect(@customers.size).to eq(4) }
 
     context 'John' do
       before(:all) do
         @john = @customers.first
       end
       # values from Import::TEST_FILE, last check it is 'spec/support/test_upload_files/bucky_box.csv'
-      specify { @john.name.should eq('John Doe') }
-      specify { @john.number.should  eq('1121') }
-      specify { @john.email.should eq('jd@example.com') }
-      specify { @john.phone_1.should eq('0800 128 1231') }
-      specify { @john.phone_2.should eq('021 8167 7811') }
-      specify { @john.tags.should eq(['referral', 'discount2']) }
-      specify { @john.notes.should be_nil }
-      specify { @john.discount.should eq(0.2) }
-      specify { @john.account_balance.should eq(75.55) }
-      specify { @john.delivery_address_line_1.should eq('221 Old Porirua Rd') }
-      specify { @john.delivery_address_line_2.should be_nil }
-      specify { @john.delivery_suburb.should eq('Ngaio') }
-      specify { @john.delivery_city.should eq('Wellington') }
-      specify { @john.delivery_postcode.should be_nil }
-      specify { @john.delivery_service.should eq('CBD Van') }
-      specify { @john.delivery_instructions.should eq('Leave on deck, by door at side of house') }
+      specify { expect(@john.name).to eq('John Doe') }
+      specify { expect(@john.number).to  eq('1121') }
+      specify { expect(@john.email).to eq('jd@example.com') }
+      specify { expect(@john.phone_1).to eq('0800 128 1231') }
+      specify { expect(@john.phone_2).to eq('021 8167 7811') }
+      specify { expect(@john.tags).to eq(['referral', 'discount2']) }
+      specify { expect(@john.notes).to be_nil }
+      specify { expect(@john.discount).to eq(0.2) }
+      specify { expect(@john.account_balance).to eq(75.55) }
+      specify { expect(@john.delivery_address_line_1).to eq('221 Old Porirua Rd') }
+      specify { expect(@john.delivery_address_line_2).to be_nil }
+      specify { expect(@john.delivery_suburb).to eq('Ngaio') }
+      specify { expect(@john.delivery_city).to eq('Wellington') }
+      specify { expect(@john.delivery_postcode).to be_nil }
+      specify { expect(@john.delivery_service).to eq('CBD Van') }
+      specify { expect(@john.delivery_instructions).to eq('Leave on deck, by door at side of house') }
 
       context :boxes do
         before(:all) do
           @boxes = @john.boxes
         end
-        specify { @boxes.size.should eq(3) }
-        specify { @boxes.collect(&:box_type).should eq(['Standard Box', 'Medium Fruit Box', 'Large Mixed Box']) }
-        specify { @boxes.collect(&:dislikes).should eq(['Onions',nil,nil]) }
-        specify { @boxes.collect(&:likes).should eq([nil,nil,nil]) }
-        specify { @boxes.collect(&:delivery_frequency).should eq(['weekly', 'single', 'fortnightly']) }
-        specify { @boxes.collect(&:delivery_days).should eq(['Monday, Tuesday, Wednesday', '', 'Friday']) }
-        specify { @boxes.collect(&:next_delivery_date).should eq(["21-Mar-2012", "26-Mar-2012", "30-Mar-2012"]) }
-        specify { @boxes.collect(&:extras_recurring?).should eq([false, false, true]) }
+        specify { expect(@boxes.size).to eq(3) }
+        specify { expect(@boxes.collect(&:box_type)).to eq(['Standard Box', 'Medium Fruit Box', 'Large Mixed Box']) }
+        specify { expect(@boxes.collect(&:dislikes)).to eq(['Onions',nil,nil]) }
+        specify { expect(@boxes.collect(&:likes)).to eq([nil,nil,nil]) }
+        specify { expect(@boxes.collect(&:delivery_frequency)).to eq(['weekly', 'single', 'fortnightly']) }
+        specify { expect(@boxes.collect(&:delivery_days)).to eq(['Monday, Tuesday, Wednesday', '', 'Friday']) }
+        specify { expect(@boxes.collect(&:next_delivery_date)).to eq(["21-Mar-2012", "26-Mar-2012", "30-Mar-2012"]) }
+        specify { expect(@boxes.collect(&:extras_recurring?)).to eq([false, false, true]) }
 
         context :extras do
           before(:all) do
             @extras = @boxes.collect(&:extras).flatten.compact
           end
-          specify { @extras.size.should eq(6)}
-          specify { @extras.collect(&:name).should eq(["Oronge Juice", "orga nic sugar", "eggs", "Orange Juice", "Orange Juice", "Organic Sugar"]) }
-          specify { @extras.collect(&:unit).should eq(["600 ml", nil, nil, "600L", "1 L", nil]) }
-          specify { @extras.collect(&:count).should eq([1, 2, 1, 3, 1, 2]) }
+          specify { expect(@extras.size).to eq(6)}
+          specify { expect(@extras.collect(&:name)).to eq(["Oronge Juice", "orga nic sugar", "eggs", "Orange Juice", "Orange Juice", "Organic Sugar"]) }
+          specify { expect(@extras.collect(&:unit)).to eq(["600 ml", nil, nil, "600L", "1 L", nil]) }
+          specify { expect(@extras.collect(&:count)).to eq([1, 2, 1, 3, 1, 2]) }
         end
       end
     end
@@ -112,45 +112,45 @@ describe Bucky::Import do
         @mary = @customers[1]
       end
       # values from Import::TEST_FILE, last check it is 'spec/support/test_upload_files/bucky_box.csv'
-      specify { @mary.name.should eq('Mary Lamb') }
-      specify { @mary.number.should  eq('921') }
-      specify { @mary.email.should eq('ml@example.com') }
-      specify { @mary.phone_1.should eq('04 234 2342') }
-      specify { @mary.phone_2.should be_nil }
-      specify { @mary.tags.should eq([]) }
-      specify { @mary.notes.should be_nil }
-      specify { @mary.discount.should eq(0) }
-      specify { @mary.account_balance.should eq(0) }
-      specify { @mary.delivery_address_line_1.should eq('12 Hill Rd') }
-      specify { @mary.delivery_address_line_2.should be_nil }
-      specify { @mary.delivery_suburb.should eq('Aro Valley') }
-      specify { @mary.delivery_city.should eq('Wellington') }
-      specify { @mary.delivery_postcode.should be_nil }
-      specify { @mary.delivery_service.should eq('CBD Van') }
-      specify { @mary.delivery_instructions.should be_nil }
+      specify { expect(@mary.name).to eq('Mary Lamb') }
+      specify { expect(@mary.number).to  eq('921') }
+      specify { expect(@mary.email).to eq('ml@example.com') }
+      specify { expect(@mary.phone_1).to eq('04 234 2342') }
+      specify { expect(@mary.phone_2).to be_nil }
+      specify { expect(@mary.tags).to eq([]) }
+      specify { expect(@mary.notes).to be_nil }
+      specify { expect(@mary.discount).to eq(0) }
+      specify { expect(@mary.account_balance).to eq(0) }
+      specify { expect(@mary.delivery_address_line_1).to eq('12 Hill Rd') }
+      specify { expect(@mary.delivery_address_line_2).to be_nil }
+      specify { expect(@mary.delivery_suburb).to eq('Aro Valley') }
+      specify { expect(@mary.delivery_city).to eq('Wellington') }
+      specify { expect(@mary.delivery_postcode).to be_nil }
+      specify { expect(@mary.delivery_service).to eq('CBD Van') }
+      specify { expect(@mary.delivery_instructions).to be_nil }
 
       context :boxes do
         before(:all) do
           @boxes = @mary.boxes
         end
 
-        specify { @boxes.size.should eq(1) }
-        specify { @boxes.first.box_type.should eq('Standard Box') }
-        specify { @boxes.first.dislikes.should be_nil }
-        specify { @boxes.first.likes.should be_nil }
-        specify { @boxes.first.delivery_frequency.should eq('weekly') }
-        specify { @boxes.first.delivery_days.should eq('Thursday') }
-        specify { @boxes.first.next_delivery_date.should eq("22-Mar-2012") }
-        specify { @boxes.collect(&:extras_recurring?).should eq([false]) }
+        specify { expect(@boxes.size).to eq(1) }
+        specify { expect(@boxes.first.box_type).to eq('Standard Box') }
+        specify { expect(@boxes.first.dislikes).to be_nil }
+        specify { expect(@boxes.first.likes).to be_nil }
+        specify { expect(@boxes.first.delivery_frequency).to eq('weekly') }
+        specify { expect(@boxes.first.delivery_days).to eq('Thursday') }
+        specify { expect(@boxes.first.next_delivery_date).to eq("22-Mar-2012") }
+        specify { expect(@boxes.collect(&:extras_recurring?)).to eq([false]) }
 
         context :extras do
           before(:all) do
             @extras = @boxes.collect(&:extras).flatten.compact
           end
-          specify { @extras.size.should eq(0)}
-          specify { @extras.collect(&:name).should eq([]) }
-          specify { @extras.collect(&:unit).should eq([]) }
-          specify { @extras.collect(&:count).should eq([]) }
+          specify { expect(@extras.size).to eq(0)}
+          specify { expect(@extras.collect(&:name)).to eq([]) }
+          specify { expect(@extras.collect(&:unit)).to eq([]) }
+          specify { expect(@extras.collect(&:count)).to eq([]) }
         end
       end
     end
@@ -160,45 +160,45 @@ describe Bucky::Import do
         @will = @customers[2]
       end
       # values from Import::TEST_FILE, last check it is 'spec/support/test_upload_files/bucky_box.csv'
-      specify { @will.name.should eq('William Robberts') }
-      specify { @will.number.should  eq('321') }
-      specify { @will.email.should eq('wr@example.com') }
-      specify { @will.phone_1.should be_nil }
-      specify { @will.phone_2.should be_nil }
-      specify { @will.tags.should eq([]) }
-      specify { @will.notes.should eq('Very Touchy customer') }
-      specify { @will.discount.should eq(0.001) }
-      specify { @will.account_balance.should eq(0) }
-      specify { @will.delivery_address_line_1.should eq('89 Awarua St') }
-      specify { @will.delivery_address_line_2.should eq('Flat 3') }
-      specify { @will.delivery_suburb.should eq('Ngaio') }
-      specify { @will.delivery_city.should eq('Wellington') }
-      specify { @will.delivery_postcode.should eq('543') }
-      specify { @will.delivery_service.should eq('Rural Van') }
-      specify { @will.delivery_instructions.should eq('Door round back please.') }
+      specify { expect(@will.name).to eq('William Robberts') }
+      specify { expect(@will.number).to  eq('321') }
+      specify { expect(@will.email).to eq('wr@example.com') }
+      specify { expect(@will.phone_1).to be_nil }
+      specify { expect(@will.phone_2).to be_nil }
+      specify { expect(@will.tags).to eq([]) }
+      specify { expect(@will.notes).to eq('Very Touchy customer') }
+      specify { expect(@will.discount).to eq(0.001) }
+      specify { expect(@will.account_balance).to eq(0) }
+      specify { expect(@will.delivery_address_line_1).to eq('89 Awarua St') }
+      specify { expect(@will.delivery_address_line_2).to eq('Flat 3') }
+      specify { expect(@will.delivery_suburb).to eq('Ngaio') }
+      specify { expect(@will.delivery_city).to eq('Wellington') }
+      specify { expect(@will.delivery_postcode).to eq('543') }
+      specify { expect(@will.delivery_service).to eq('Rural Van') }
+      specify { expect(@will.delivery_instructions).to eq('Door round back please.') }
 
       context :boxes do
         before(:all) do
           @boxes = @will.boxes
         end
 
-        specify { @boxes.size.should eq(1) }
-        specify { @boxes.first.box_type.should eq('Medium Fruit Box') }
-        specify { @boxes.first.dislikes.should eq('Carrots') }
-        specify { @boxes.first.likes.should eq('Apples') }
-        specify { @boxes.first.delivery_frequency.should eq('single') }
-        specify { @boxes.first.delivery_days.should eq('') }
-        specify { @boxes.first.next_delivery_date.should eq("21-Apr-2012") }
-        specify { @boxes.collect(&:extras_recurring?).should eq([true]) }
+        specify { expect(@boxes.size).to eq(1) }
+        specify { expect(@boxes.first.box_type).to eq('Medium Fruit Box') }
+        specify { expect(@boxes.first.dislikes).to eq('Carrots') }
+        specify { expect(@boxes.first.likes).to eq('Apples') }
+        specify { expect(@boxes.first.delivery_frequency).to eq('single') }
+        specify { expect(@boxes.first.delivery_days).to eq('') }
+        specify { expect(@boxes.first.next_delivery_date).to eq("21-Apr-2012") }
+        specify { expect(@boxes.collect(&:extras_recurring?)).to eq([true]) }
 
         context :extras do
           before(:all) do
             @extras = @boxes.collect(&:extras).flatten.compact
           end
-          specify { @extras.size.should eq(1)}
-          specify { @extras.collect(&:name).should eq(["Orgonic Sugar"]) }
-          specify { @extras.collect(&:unit).should eq([nil]) }
-          specify { @extras.collect(&:count).should eq([2]) }
+          specify { expect(@extras.size).to eq(1)}
+          specify { expect(@extras.collect(&:name)).to eq(["Orgonic Sugar"]) }
+          specify { expect(@extras.collect(&:unit)).to eq([nil]) }
+          specify { expect(@extras.collect(&:count)).to eq([2]) }
         end
       end
     end

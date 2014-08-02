@@ -13,17 +13,17 @@ describe SalesCsv::PackageGenerator do
   describe '#generate' do
     after do
       package_generator = SalesCsv::PackageGenerator.new(@args, row_generator: row_generator)
-      package_generator.generate.should == @expected_result
+      expect(package_generator.generate).to eq @expected_result
     end
 
     it 'generates a csv without data' do
-      csv_row.stub(:generate) { empty_data }
+      allow(csv_row).to receive(:generate) { empty_data }
       @args = []
       @expected_result = expected_csv_header
     end
 
     it 'generates a csv with data' do
-      csv_row.stub(:generate) { some_data }
+      allow(csv_row).to receive(:generate) { some_data }
       @args = [ double('item1') ]
       @expected_result = expected_csv_header + "1,2,3,4,5,6,7,8,9,10\n"
     end

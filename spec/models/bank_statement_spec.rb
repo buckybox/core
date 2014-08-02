@@ -18,11 +18,11 @@ describe BankStatement do
     end
   end
 
-  specify {@statement.should be_valid}
+  specify {expect(@statement).to be_valid}
 
   describe '#process_statement!' do
     it 'creates payments from a csv file'  do
-      @statement.should_receive('create_payment!').exactly(@customers_ids.length).times
+      expect(@statement).to receive('create_payment!').exactly(@customers_ids.length).times
       @statement.process_statement! @customers_ids
     end
 
@@ -34,7 +34,7 @@ describe BankStatement do
       end
 
       it 'sets a statement_id to the payments' do
-        Payment.last.payable_id.should == @statement.id
+        expect(Payment.last.payable_id).to eq @statement.id
       end
     end
   end
@@ -46,6 +46,6 @@ describe BankStatement do
       @remembers = @statement2.customer_remembers
     end
 
-    specify {@remembers.should_not be_nil}
+    specify {expect(@remembers).not_to be_nil}
   end
 end

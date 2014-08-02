@@ -37,7 +37,7 @@ describe Customer::Form::UpdatePassword do
 
     it "save the customer password" do
       customer_args = { password: "cluedo", password_confirmation: "cluedo" }
-      customer.should_receive(:update_attributes).with(customer_args)
+      expect(customer).to receive(:update_attributes).with(customer_args)
       form.save
     end
   end

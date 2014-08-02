@@ -6,11 +6,11 @@ describe LineItem do
   let(:exclusion)    { Fabricate(:exclusion, line_item: line_item) }
   let(:substitution) { Fabricate(:substitution, line_item: line_item) }
 
-  specify { line_item.should be_valid }
+  specify { expect(line_item).to be_valid }
 
   describe '.from_list' do
     context :invalid do
-      specify { LineItem.from_list(distributor, '').should be false }
+      specify { expect(LineItem.from_list(distributor, '')).to be false }
     end
 
     context :valid do
@@ -26,11 +26,11 @@ describe LineItem do
 
       specify { expect{ LineItem.from_list(distributor, @text) }.to change(distributor.line_items(true), :count).from(1).to(5) }
 
-      specify { LineItem.from_list(distributor, @text).map(&:name).include?(@old_item_name).should be true }
-      specify { LineItem.from_list(distributor, @text).map(&:name).include?('Apples').should be true }
-      specify { LineItem.from_list(distributor, @text).map(&:name).include?('Oranges').should be true }
-      specify { LineItem.from_list(distributor, @text).map(&:name).include?('Pears').should be true }
-      specify { LineItem.from_list(distributor, @text).map(&:name).include?('Kiwi Fruit').should be true }
+      specify { expect(LineItem.from_list(distributor, @text).map(&:name).include?(@old_item_name)).to be true }
+      specify { expect(LineItem.from_list(distributor, @text).map(&:name).include?('Apples')).to be true }
+      specify { expect(LineItem.from_list(distributor, @text).map(&:name).include?('Oranges')).to be true }
+      specify { expect(LineItem.from_list(distributor, @text).map(&:name).include?('Pears')).to be true }
+      specify { expect(LineItem.from_list(distributor, @text).map(&:name).include?('Kiwi Fruit')).to be true }
     end
   end
 
@@ -45,31 +45,31 @@ describe LineItem do
       context 'blank name' do
         before { LineItem.bulk_update(distributor, { line_item.id => {name: ''} }) }
 
-        specify { LineItem.find_by_id(line_item.id).should be_nil }
-        specify { Exclusion.find_by_id(exclusion.id).should be_nil }
-        specify { Substitution.find_by_id(substitution.id).should be_nil }
+        specify { expect(LineItem.find_by_id(line_item.id)).to be_nil }
+        specify { expect(Exclusion.find_by_id(exclusion.id)).to be_nil }
+        specify { expect(Substitution.find_by_id(substitution.id)).to be_nil }
       end
 
       context 'changed name' do
         before do
           @new_name = 'Chinese gooseberry'
           @new_line_item = Fabricate(:line_item, name: @new_name)
-          LineItem.stub(:where) { double(first_or_create: @new_line_item) } # FIXME brittle stubbing
+          allow(LineItem).to receive(:where) { double(first_or_create: @new_line_item) } # FIXME brittle stubbing
 
           LineItem.bulk_update(distributor, { line_item.id => {name: @new_name} })
         end
 
-        specify { @new_line_item.name.should == @new_name.titleize }
-        specify { @new_line_item.id.should == exclusion.reload.line_item_id }
-        specify { @new_line_item.id.should == substitution.reload.line_item_id }
+        specify { expect(@new_line_item.name).to eq @new_name.titleize }
+        specify { expect(@new_line_item.id).to eq exclusion.reload.line_item_id }
+        specify { expect(@new_line_item.id).to eq substitution.reload.line_item_id }
       end
 
       context 'same name' do
         before { LineItem.bulk_update(distributor, { line_item.id => {name: line_item.name} }) }
 
-        specify { line_item.reload.persisted?.should be true }
-        specify { line_item.id.should == exclusion.line_item_id }
-        specify { line_item.id.should == substitution.line_item_id }
+        specify { expect(line_item.reload.persisted?).to be true }
+        specify { expect(line_item.id).to eq exclusion.line_item_id }
+        specify { expect(line_item.id).to eq substitution.line_item_id }
       end
 
       specify { expect{LineItem.bulk_update(distributor, nil)}.to_not raise_error}
@@ -81,9 +81,9 @@ describe LineItem do
         LineItem.move_exclustions_and_substitutions!(line_item, @new_line_item)
       end
 
-      specify { LineItem.find_by_id(line_item.id).should be_nil }
-      specify { @new_line_item.exclusions(true).to_a.should == [exclusion] }
-      specify { @new_line_item.substitutions(true).to_a.should == [substitution] }
+      specify { expect(LineItem.find_by_id(line_item.id)).to be_nil }
+      specify { expect(@new_line_item.exclusions(true).to_a).to eq [exclusion] }
+      specify { expect(@new_line_item.substitutions(true).to_a).to eq [substitution] }
     end
   end
 
@@ -100,7 +100,7 @@ describe LineItem do
         line_item.stub_chain(:exclusions, :active).and_return([e1, e2, e3])
       end
 
-      specify { line_item.exclusions_count_by_customer.should == 2 }
+      specify { expect(line_item.exclusions_count_by_customer).to eq 2 }
     end
 
     describe '#substitution_count_by_customer' do
@@ -115,7 +115,7 @@ describe LineItem do
         line_item.stub_chain(:substitutions, :active).and_return([s1, s2, s3])
       end
 
-      specify { line_item.substitution_count_by_customer.should == 2 }
+      specify { expect(line_item.substitution_count_by_customer).to eq 2 }
     end
   end
 end

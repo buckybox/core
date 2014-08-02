@@ -6,7 +6,7 @@ include Bucky::TransactionImports
 
 describe Bucky::TransactionImports::OmniImport do
   it 'should import the correct rows' do
-    Bucky::TransactionImports::OmniImport.test.process.should eq([{:DATE=>"15/01/2014",
+    expect(Bucky::TransactionImports::OmniImport.test.process).to eq([{:DATE=>"15/01/2014",
   :DESC=>"DEB '77-22-08 26108268 WWW.WELSHFRUITSTOC CD 7115 ",
   :AMOUNT=>"27.5",
   :raw_data=>
@@ -136,34 +136,34 @@ describe Bucky::TransactionImports::OmniImport do
 
   it 'should skip the correct rows' do
     Bucky::TransactionImports::OmniImport.test2.process.each do |row|
-      row[:DESC].should_not eq("Opening Balance")
-      row[:DESC].should_not eq("Closing Balance")
+      expect(row[:DESC]).not_to eq("Opening Balance")
+      expect(row[:DESC]).not_to eq("Closing Balance")
     end
   end
 
   it 'should skip all but Completed rows' do
     Bucky::TransactionImports::OmniImport.test_paypal.process.each do |row|
-      row[:raw_data][:status].should eq("Completed")
+      expect(row[:raw_data][:status]).to eq("Completed")
     end
   end
 
   it 'should handle ISO8859-1 encoding' do
     rows = Bucky::TransactionImports::OmniImport.csv_read(File.join(Rails.root, "spec/support/test_upload_files/transaction_imports/TLVB-Accounts02Aug13.csv"))
-    rows[0].should eq ["Date", "Transaction", "Deposits", "Withdrawals"]
-    rows[1].should eq ["02/08/13", "MR SIMON J MORLEY", "£5.00", " "]
+    expect(rows[0]).to eq ["Date", "Transaction", "Deposits", "Withdrawals"]
+    expect(rows[1]).to eq ["02/08/13", "MR SIMON J MORLEY", "£5.00", " "]
   end
 
   it 'should handle shitty windows excel csv format' do
     rows = Bucky::TransactionImports::OmniImport.csv_read(File.join(Rails.root, "spec/support/test_upload_files/transaction_imports/TheLocalVegBoxBank19Jul13.csv"))
-    rows[0].should eq ["Date", "Transaction", "Deposits", "Withdrawals"]
-    rows[1].should eq ["19/07/2013", "MR SIMON J MORLEY", "£5.00", nil]
+    expect(rows[0]).to eq ["Date", "Transaction", "Deposits", "Withdrawals"]
+    expect(rows[1]).to eq ["19/07/2013", "MR SIMON J MORLEY", "£5.00", nil]
   end
 
   context "when the CSV separator is a semi-colon" do
     it "parses the CSV properly" do
       rows = Bucky::TransactionImports::OmniImport.csv_read(File.join(Rails.root, "spec/support/test_upload_files/transaction_imports/polynesie_semi-colon.csv"))
-      rows[0].should eq ["Date comptable", "Libelle", "Date valeur", "Montant", "Code operation"]
-      rows[1].should eq ["13/06/2014", "VIRT VIRT DE BRASSERIE DE TAHITI FC.02/06", "2014-06-13", "156870", "VIR"]
+      expect(rows[0]).to eq ["Date comptable", "Libelle", "Date valeur", "Montant", "Code operation"]
+      expect(rows[1]).to eq ["13/06/2014", "VIRT VIRT DE BRASSERIE DE TAHITI FC.02/06", "2014-06-13", "156870", "VIR"]
     end
   end
 
@@ -176,7 +176,7 @@ describe Bucky::TransactionImports::OmniImport do
       result_hash = [
         { type: :text, encoding: "windows-1252", confidence: 100, language: "en" },
       ]
-      encoding_detector.stub(:detect_all) { result_hash }
+      allow(encoding_detector).to receive(:detect_all) { result_hash }
       expect(omni_import.find_file_encoding(file, encoding_detector)).to eq("windows-1252")
     end
 
@@ -185,7 +185,7 @@ describe Bucky::TransactionImports::OmniImport do
         { type: :binary, confidence: 100 },
         { type: :text, encoding: "windows-1252", confidence: 36, language: "en" }
       ]
-      encoding_detector.stub(:detect_all) { result_hash }
+      allow(encoding_detector).to receive(:detect_all) { result_hash }
       expect(omni_import.find_file_encoding(file, encoding_detector)).to eq("windows-1252")
     end
 
@@ -193,13 +193,13 @@ describe Bucky::TransactionImports::OmniImport do
       result_hash = [
         { type: :binary, confidence: 100 },
       ]
-      encoding_detector.stub(:detect_all) { result_hash }
+      allow(encoding_detector).to receive(:detect_all) { result_hash }
       expect(omni_import.find_file_encoding(file, encoding_detector)).to eq(nil)
     end
 
     it "returns nil if there were no results found" do
       result_hash = []
-      encoding_detector.stub(:detect_all) { result_hash }
+      allow(encoding_detector).to receive(:detect_all) { result_hash }
       expect(omni_import.find_file_encoding(file, encoding_detector)).to eq(nil)
     end
   end

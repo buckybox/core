@@ -26,7 +26,7 @@ describe "Updates address" do
       it 'does not notify distributor when address is saved without update' do
         get_via_redirect customer_dashboard_path
         put_via_redirect customer_update_delivery_address_path, {}
-        response.body.should match 'Your delivery address has been successfully updated'
+        expect(response.body).to match 'Your delivery address has been successfully updated'
 
 
         distributor_should_not_include_notifications distributor
@@ -77,10 +77,10 @@ def change_address(customer)
   get_via_redirect customer_dashboard_path
   if @last_login == :customer
     put_via_redirect customer_update_delivery_address_path, customer_form_update_delivery_address: {suburb: modified_suburb}
-    response.body.should match 'Your delivery address has been successfully updated'
+    expect(response.body).to match 'Your delivery address has been successfully updated'
   else
     put_via_redirect update_delivery_details_distributor_customer_path(customer), distributor_form_edit_customer_delivery_details: {suburb: modified_suburb, delivery_service: customer.delivery_service.id}
-    response.body.should match 'The customer delivery details have been successfully updated.'
+    expect(response.body).to match 'The customer delivery details have been successfully updated.'
   end
 end
 
@@ -92,23 +92,23 @@ def change_first_name(customer)
   customer_login
   get_via_redirect customer_dashboard_path
   put_via_redirect customer_update_contact_details_path(customer), first_name: modified_first_name
-  response.body.should match 'Your contact details have been successfully updated.'
+  expect(response.body).to match 'Your contact details have been successfully updated.'
 end
 
 def distributor_should_not_include_notifications(distributor = nil)
   @distributor = distributor
   distributor_login unless distributor.nil?
   get_via_redirect distributor_root_path
-  response.body.should match 'No new notifications'
-  response.body.should_not match 'has updated their address'
+  expect(response.body).to match 'No new notifications'
+  expect(response.body).not_to match 'has updated their address'
 end
 
 def distributor_should_include_notifications(distributor)
   @distributor = distributor
   distributor_login unless distributor.nil?
   get_via_redirect distributor_root_path
-  response.body.should_not match 'No new notifications'
-  response.body.should match 'has updated their address'
+  expect(response.body).not_to match 'No new notifications'
+  expect(response.body).to match 'has updated their address'
 end
 
 def clear_notifications

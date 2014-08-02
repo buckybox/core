@@ -17,7 +17,7 @@ describe Distributor::Settings::DeliveryServicesController do
         }
       end
 
-      specify { flash[:notice].should eq('Your new delivery service has been created.') }
+      specify { expect(flash[:notice]).to eq('Your new delivery service has been created.') }
     end
   end
 
@@ -28,7 +28,7 @@ describe Distributor::Settings::DeliveryServicesController do
         put :update, delivery_service: { id: @delivery_service.id, schedule_rule_attributes: {tue: '1' } }
       end
 
-      specify { flash[:notice].should eq('Your delivery service has been updated.') }
+      specify { expect(flash[:notice]).to eq('Your delivery service has been updated.') }
     end
 
     context "with attached orders" do
@@ -51,15 +51,15 @@ describe Distributor::Settings::DeliveryServicesController do
 
       it "deactivates linked orders" do
         put :update, delivery_service: { id: @delivery_service.id, schedule_rule_attributes: {mon: '0', tue: '0', wed: '0', thu: '1', fri: '0', sat: '0', sun: '0' } }
-        @order.reload.should be_inactive
-        @delivery_service.reload.schedule_rule.days.should eq [:thu]
+        expect(@order.reload).to be_inactive
+        expect(@delivery_service.reload.schedule_rule.days).to eq [:thu]
       end
 
       it "removes days on order which have been removed from delivery service" do
         put :update, delivery_service: { id: @delivery_service.id, schedule_rule_attributes: {mon: '0', tue: '1', wed: '1', thu: '1', fri: '1', sat: '0', sun: '0' } }
-        @order.reload.schedule_rule.days.should match_array [:tue, :wed, :fri]
-        @order.should be_active
-        @delivery_service.reload.schedule_rule.days.should match_array [:tue, :wed, :thu, :fri]
+        expect(@order.reload.schedule_rule.days).to match_array [:tue, :wed, :fri]
+        expect(@order).to be_active
+        expect(@delivery_service.reload.schedule_rule.days).to match_array [:tue, :wed, :thu, :fri]
       end
     end
   end

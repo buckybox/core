@@ -12,17 +12,17 @@ describe CustomerCSV do
     context "with the field '#{field}' and value '#{value}'" do
       let(:fields) { [ field ] }
 
-      before { customer.stub(field) { value } }
+      before { allow(customer).to receive(field) { value } }
 
       describe '.generate' do
         before do
-          customers.stub(:decorate) { customers }
-          distributor.stub(:customers_for_export) { customers }
+          allow(customers).to receive(:decorate) { customers }
+          allow(distributor).to receive(:customers_for_export) { customers }
         end
 
         it 'returns a csv based on the distributor and customer ids' do
           csv = CustomerCSV.generate(distributor, customer_ids, fields)
-          csv.should eq("#{field}\n#{value}\n")
+          expect(csv).to eq("#{field}\n#{value}\n")
         end
       end
 
@@ -30,7 +30,7 @@ describe CustomerCSV do
         it 'returns a csv based on customers' do
           customer_csv = CustomerCSV.instance
           csv = customer_csv.generate(customers, fields)
-          csv.should eq("#{field}\n#{value}\n")
+          expect(csv).to eq("#{field}\n#{value}\n")
         end
       end
     end

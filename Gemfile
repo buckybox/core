@@ -15,10 +15,8 @@ gem 'jquery-ui-rails',                 '~> 4.0.5'
 gem 'bootstrap-sass',                  '~> 2.3.2.2'
 gem 'bootbox-rails',                   '~> 0.1.0'
 gem 'select2-rails',                   '~> 3.5.0'
-gem 'json',                            '~> 1.7.7'
 gem 'devise',                          '~> 3.2.2'
 gem 'devise-i18n',                     '~> 0.10.3'
-gem 'multi_json',                      '~> 1.3.6'
 gem 'simple_form',                     '~> 2.1.1'
 gem 'inherited_resources',             '~> 1.3.1'
 gem 'mini_magick',                     '~> 3.4'
@@ -116,10 +114,10 @@ group :test do
   gem 'capybara-screenshot'
   gem 'poltergeist', require: false
   gem 'launchy'
-  gem 'guard', '~> 1' # v2 is broken with a version mismatch issue
-  gem 'guard-rspec'
+  gem 'guard', '>= 2'
+  gem 'guard-rspec', '>= 4'
   gem 'rspec-activemodel-mocks'
-  gem 'i18n-spec', require: false
+  gem 'i18n-spec', '>= 0.5.1', require: false, git: "https://github.com/tigrish/i18n-spec.git" # TODO: update to ">= 0.5.2" when released - https://github.com/tigrish/i18n-spec/pull/13
 end
 
 group :staging do
@@ -132,7 +130,7 @@ group :development, :staging do
 end
 
 group :development, :test do
-  gem 'rspec-rails', '~> 2' # TODO upgrade to RSpec 3
+  gem 'rspec-rails', '>= 3'
   gem 'listen'
   gem 'terminal-notifier-guard' # Mac 10.8 system notifications for Guard
   gem 'letter_opener'
