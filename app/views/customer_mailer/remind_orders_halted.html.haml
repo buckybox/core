@@ -1,4 +1,4 @@
-= t('hi') << @customer.first_name << ","
+= t('hi') << " " << @customer.first_name << ","
 %br
 %br
 = t('.intro_html', balance: @customer.account.balance, threshold: @customer.balance_threshold)
