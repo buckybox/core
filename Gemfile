@@ -117,7 +117,7 @@ group :test do
   gem 'guard', '>= 2'
   gem 'guard-rspec', '>= 4'
   gem 'rspec-activemodel-mocks'
-  gem 'i18n-spec', '>= 0.5.1', require: false, git: "https://github.com/tigrish/i18n-spec.git" # TODO: update to ">= 0.5.2" when released - https://github.com/tigrish/i18n-spec/pull/13
+  gem 'i18n-spec', '>= 0.5.2', require: false
 end
 
 group :staging do
