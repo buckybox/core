@@ -8,7 +8,7 @@ en:
         reference: Reference
       paypal:
         pay_now: Pay now
-        top_up: Account top-up
+        top_up: Add credit to my account
         amount: Amount
         amount_to_top_up: Amount to top up
 
