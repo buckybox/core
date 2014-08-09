@@ -49,7 +49,7 @@ private
   end
 
   def top_up_amount
-    balance = @customer.account_balance
-    balance.negative? ? balance.opposite : 25
+    amount = @customer.orders.active.map(&:total_price).sum - @customer.account_balance
+    amount.positive? ? amount : 25
   end
 end
