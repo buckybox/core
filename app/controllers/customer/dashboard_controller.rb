@@ -49,7 +49,8 @@ private
   end
 
   def top_up_amount
-    amount = @customer.orders.active.map(&:total_price).sum - @customer.account_balance
+    owing = CrazyMoney.new(@customer.orders.active.map(&:total_price).sum)
+    amount = owing - @customer.account_balance
     amount.positive? ? amount : 25
   end
 end
