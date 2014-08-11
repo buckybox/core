@@ -7,6 +7,8 @@ export SPEC_OPTS="--format p"
 
 cp -n config/database.yml.example config/database.yml
 
+bundle install
+
 bundle exec bundle-audit update
 bundle exec bundle-audit check
 
