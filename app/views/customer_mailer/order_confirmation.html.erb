@@ -78,7 +78,7 @@
 
                           if @order.recurs?
                             start = @order.schedule_rule.next_occurrence
-                            schedule_rule << ", #{t('.starting')} #{l(start, format: "%A #{start.day} %B")}"
+                            schedule_rule << ", #{t('.starting')} #{l(start, format: "%A #{start.day} %B")}" if start
                           end
 
                           schedule_rule
