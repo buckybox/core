@@ -26,7 +26,7 @@
           %td.text-right
             - if extra.visible
               %i.icon-shopping-cart{'data-toggle' => 'tooltip', 'title' => 'Visible on web store'}
-          %td.amount
+          %td.amount{class: ('negative' if extra.price.negative?)}
             %span= extra.formatted_price
 
       %tr.edit

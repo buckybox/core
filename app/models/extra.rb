@@ -8,7 +8,7 @@ class Extra < ActiveRecord::Base
 
   validates_presence_of :distributor, :name, :unit, :price
   validates :unit, :name, length: {maximum: 80}
-  validates :price_cents, numericality: { greater_than_or_equal_to: 0, less_than: 1E8 }
+  validates :price_cents, numericality: { greater_than_or_equal_to: -1E8, less_than: 1E8 }
 
   attr_accessible :distributor, :name, :unit, :price, :hidden, :visible
 
