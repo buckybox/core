@@ -17,6 +17,16 @@ describe SignUpWizardController do
     it "sets the time zone" do
       expect(assigns[:time_zone]).to eq "Pacific/Auckland"
     end
+
+    context "rendering views" do
+      render_views
+
+      it "doesn't crash when geolocation fails" do
+        allow(request).to receive(:remote_ip).and_return "78.157.23.190" # unknown country
+
+        expect { get :form }.not_to raise_error
+      end
+    end
   end
 
   describe "#country" do
