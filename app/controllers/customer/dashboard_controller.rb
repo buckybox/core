@@ -53,4 +53,9 @@ private
     amount = owing - @customer.account_balance
     amount.positive? ? amount : 25
   end
+
+  def payment_recurring?
+    false # payments from the dashboard are just one-off top-ups
+  end
+
 end
