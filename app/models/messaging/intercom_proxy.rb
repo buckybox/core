@@ -1,5 +1,12 @@
 module Messaging
   class IntercomProxy
+    NON_FATAL_EXCEPTIONS = [
+      ::Intercom::ServerError,
+      ::Intercom::BadGatewayError,
+      ::Intercom::ServiceUnavailableError,
+      Errno::ECONNRESET,
+    ].freeze
+
     def self.instance
       @instance ||= Messaging::IntercomProxy.new
     end
@@ -10,23 +17,16 @@ module Messaging
       user = find_user(id)
       return if user.blank?
 
-      attrs.each do |key, value|
-        user.send("#{key.to_s}=", value)
-      end
+      attrs.each { |key, value| user.send("#{key.to_s}=", value) }
       user.save
     end
 
     def create_user(attrs, env = nil)
       return if skip? env
 
-      ::Intercom::User.create(attrs)
-
-    rescue ::Intercom::AuthenticationError,
-            ::Intercom::ServerError,
-            ::Intercom::BadGatewayError,
-            ::Intercom::ServiceUnavailableError,
-            ::Intercom::ResourceNotFound => e
-      raise Bucky::NonFatalException.new(e)
+      retryable(retryable_options) do
+        ::Intercom::User.create(attrs)
+      end
     end
 
     def add_tag(user_id, tag, env = nil)
@@ -52,16 +52,11 @@ module Messaging
     def track(id, action_name, occurred_at = Time.current, env = nil)
       return if skip? env
 
-      user = ::Intercom::User.find(user_id: id)
-      user.custom_attributes["#{action_name}_at"] = occurred_at
-      user.save
-
-    rescue ::Intercom::AuthenticationError,
-            ::Intercom::ServerError,
-            ::Intercom::BadGatewayError,
-            ::Intercom::ServiceUnavailableError,
-            ::Intercom::ResourceNotFound => e
-      raise Bucky::NonFatalException.new(e)
+      retryable(retryable_options) do
+        user = ::Intercom::User.find(user_id: id)
+        user.custom_attributes["#{action_name}_at"] = occurred_at
+        user.save
+      end
     end
 
     def skip?(env, expected_env = 'production')
@@ -71,14 +66,11 @@ module Messaging
   private
 
     def find_user(user_id)
-      ::Intercom::User.find(user_id: user_id)
+      retryable(retryable_options) do
+        ::Intercom::User.find(user_id: user_id)
+      end
     rescue Intercom::ResourceNotFound
-      return nil
-    rescue ::Intercom::AuthenticationError,
-            ::Intercom::ServerError,
-            ::Intercom::BadGatewayError,
-            ::Intercom::ServiceUnavailableError => e
-      raise Bucky::NonFatalException.new(e)
+      nil
     end
 
     def add_user_to_tag(user_id, name)
@@ -91,5 +83,14 @@ module Messaging
       ::Intercom::Tag.untag_users(name, [intercom_user.id])
     end
 
+   private
+
+    def retryable_options
+      {
+        tries: 3,
+        sleep: 0,
+        on: NON_FATAL_EXCEPTIONS
+      }.freeze
+    end
   end
 end
