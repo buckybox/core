@@ -63,6 +63,22 @@ $(function() {
     form.submit();
   });
 
+  $('#delivery-listings #export-exclusions-substitutions').click(function () {
+    var date = $('#list_type').data('date');
+    var checked_packages = $('#delivery-listings .data-listings input[type=checkbox]:checked');
+    var ckbx_ids = $.map(checked_packages, function(ckbx) { return $(ckbx).data('orders'); });
+
+    var form = $('#export-exclusions-substitutions-form');
+
+    $("<input type='hidden'>").attr('name', 'date').attr('value', date).appendTo(form);
+
+    $.each(ckbx_ids, function(index, order_id) {
+      $("<input type='hidden'>").attr('name', 'orders[]').attr('value', order_id).appendTo(form);
+    });
+
+    form.submit();
+  });
+
   $('#delivery-listings .export-details').click(function() {
     prepare_csv_export(this);
   });

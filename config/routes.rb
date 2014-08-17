@@ -105,6 +105,7 @@ BuckyBox::Application.routes.draw do
         post 'master_packing_sheet',  action: :master_packing_sheet, as: 'master_packing_sheet'
         post 'export',                action: :export,               as: 'export'
         post 'export_extras',         action: :export_extras,        as: 'export_extras'
+        post 'export_exclusions_substitutions', action: :export_exclusions_substitutions, as: 'export_exclusions_substitutions'
       end
     end
 

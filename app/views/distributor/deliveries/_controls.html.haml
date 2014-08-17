@@ -53,6 +53,11 @@
           %li
             = link_to "Print packing summary", "javascript:void(0)", id: 'master-print'
           %li.divider
+          -# %li
+          -#   = link_to "Export extras summary", "javascript:void(0)" # NOTE: eventually move it here
+          %li
+            = link_to "Export excludes and substitutes summary", "javascript:void(0)", id: 'export-exclusions-substitutions'
+          %li.divider
         %li
           = link_to "Send email", "#distributor_send_email", "data-toggle" => "modal"
         %li
@@ -63,6 +68,9 @@
       = token_tag(nil)
 
     %form{action: export_distributor_deliveries_path, method: 'post', id: 'export-details-form'}
+      = token_tag(nil)
+
+    %form{action: export_exclusions_substitutions_distributor_deliveries_path, method: 'post', id: 'export-exclusions-substitutions-form'}
       = token_tag(nil)
 
 = render partial: "distributor/shared/email_templates"
