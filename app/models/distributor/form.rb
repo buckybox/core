@@ -38,11 +38,22 @@ module Distributor::Form
     def save
       return false unless valid?
 
-      customer.update_attributes(customer_args) &&
-      address.update_attributes(address_args)
+      success = customer.update_attributes(customer_args) &&
+        address.update_attributes(address_args)
+
+      forward_errors_to_form customer
+      forward_errors_to_form address
+
+      success
     end
 
   protected
+
+    def forward_errors_to_form model
+      model.errors.each do |attribute, message|
+        errors.add(attribute, message)
+      end
+    end
 
     def address
       @address ||= begin
