@@ -61,6 +61,7 @@ $(function() {
     });
 
     form.submit();
+    form.find("input[name!='authenticity_token']").remove(); // clean the form for future usages
   });
 
   $('#delivery-listings #export-exclusions-substitutions').click(function () {
@@ -78,6 +79,7 @@ $(function() {
     });
 
     form.submit();
+    form.find("input[name!='authenticity_token']").remove(); // clean the form for future usages
   });
 
   $('#delivery-listings .export-details').click(function() {
@@ -179,5 +181,6 @@ function prepare_csv_export(el) {
   $("<input type='hidden'>").attr('name', 'screen').attr('value', screen).appendTo(form);
 
   form.submit();
+  form.find("input[name!='authenticity_token']").remove(); // clean the form for future usages
 }
 
