@@ -125,8 +125,9 @@ class Distributor::DeliveriesController < Distributor::ResourceController
 
   def export_exclusions_substitutions
     date = Date.parse(params[:date])
-    orders = current_distributor.orders.where(id: params[:orders])
-    csv_string = ExclusionsSubstitutionsCsv.generate(date, orders)
+    key = find_key(params)
+    packages_or_orders = current_distributor.public_send(key).where(id: params[key])
+    csv_string = ExclusionsSubstitutionsCsv.generate(date, packages_or_orders)
 
     send_csv("bucky-box-excludes-substitutes-export-#{date.iso8601}", csv_string)
   end
