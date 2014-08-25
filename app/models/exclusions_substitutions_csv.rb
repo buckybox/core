@@ -1,15 +1,15 @@
 class ExclusionsSubstitutionsCsv
   include Singleton
 
-  def self.generate(date, orders)
-    instance.generate(date, orders)
+  def self.generate(date, packages_or_orders)
+    instance.generate(date, packages_or_orders)
   end
 
-  def generate(date, orders)
-    exclusions_substitutions = count_exclusions_substitutions(orders)
+  def generate(date, packages_or_orders)
+    exclusions_substitutions = count_exclusions_substitutions(packages_or_orders)
 
     CSV.generate do |csv|
-      headers(csv, orders)
+      headers(csv, packages_or_orders)
 
       exclusions_substitutions.map do |line_item, boxes|
         boxes_exclusions_substitutions = boxes.sort_by(&:first).map do |_box, e_s|
@@ -27,42 +27,42 @@ class ExclusionsSubstitutionsCsv
     end
   end
 
-  def headers(csv, orders)
+  def headers(csv, packages_or_orders)
     csv << [
-      "",
+      "box item",
       "delivery date",
       "total excludes",
       "total substitutes",
-      *box_headers(orders)
+      *box_headers(packages_or_orders)
     ]
   end
 
 private
 
-  def box_headers(orders)
-    orders.map(&:box).uniq.sort_by(&:name).map do |box|
+  def box_headers(packages_or_orders)
+    packages_or_orders.map(&:box).uniq.sort_by(&:name).map do |box|
       %i(excludes substitutes).map do |line_item_type|
         "#{box.name} #{line_item_type}"
       end
     end.flatten
   end
 
-  def count_exclusions_substitutions(orders)
-    orders = orders.includes(:box, :exclusions, :substitutions)
+  def count_exclusions_substitutions(packages_or_orders)
+    packages_or_orders = packages_or_orders.includes(:box)#, :exclusions, :substitutions)
     exclusions_substitutions = {}
-    line_items = orders.first.distributor.line_items
+    line_items = packages_or_orders.first.distributor.line_items
 
     line_items.each do |line_item|
       line_item_name = line_item.name
       exclusions_substitutions[line_item_name] ||= {}
 
-      orders.each do |order|
-        box_name = order.box.name
+      packages_or_orders.each do |package_or_order|
+        box_name = package_or_order.box.name
         exclusions_substitutions[line_item_name][box_name] ||= {}
 
         %i(exclusions substitutions).each do |line_item_type|
-          order_exclusions_substitutions = order.public_send(line_item_type)
-          count = order_exclusions_substitutions.where(line_item_id: line_item.id).size
+          package_or_order_exclusions_substitutions = package_or_order.public_send(line_item_type)
+          count = package_or_order_exclusions_substitutions.select { |i| i.line_item_id == line_item.id }.size
 
           # oh yeah that's ugly!
           exclusions_substitutions[line_item_name][box_name][line_item_type] ||= 0
