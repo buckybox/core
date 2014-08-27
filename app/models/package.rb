@@ -111,8 +111,20 @@ class Package < ActiveRecord::Base
     read_attribute(:archived_substitutions) || order.substitutions_string
   end
 
+  def substitutions
+    names = archived_substitutions.split(", ")
+    ids = distributor.line_items.where(name: names).pluck(:id)
+    ids.map { |id| Substitution.new(line_item_id: id) }
+  end
+
   def archived_exclusions
     read_attribute(:archived_exclusions) || order.exclusions_string
+  end
+
+  def exclusions
+    names = archived_exclusions.split(", ")
+    ids = distributor.line_items.where(name: names).pluck(:id)
+    ids.map { |id| Exclusion.new(line_item_id: id) }
   end
 
   def archived_address
