@@ -61,6 +61,25 @@ $(function() {
     });
 
     form.submit();
+    form.find("input[name!='authenticity_token']").remove(); // clean the form for future usages
+  });
+
+  $('#delivery-listings #export-exclusions-substitutions').click(function () {
+    var date = $('#list_type').data('date');
+    var data_property = $('#list_type').data('type');
+    var checked_packages = $('#delivery-listings .data-listings input[type=checkbox]:checked');
+    var ckbx_ids = $.map(checked_packages, function(ckbx) { return $(ckbx).data(data_property); });
+
+    var form = $('#export-exclusions-substitutions-form');
+
+    $("<input type='hidden'>").attr('name', 'date').attr('value', date).appendTo(form);
+
+    $.each(ckbx_ids, function(index, order_id) {
+      $("<input type='hidden'>").attr('name', data_property + '[]').attr('value', order_id).appendTo(form);
+    });
+
+    form.submit();
+    form.find("input[name!='authenticity_token']").remove(); // clean the form for future usages
   });
 
   $('#delivery-listings .export-details').click(function() {
@@ -162,5 +181,6 @@ function prepare_csv_export(el) {
   $("<input type='hidden'>").attr('name', 'screen').attr('value', screen).appendTo(form);
 
   form.submit();
+  form.find("input[name!='authenticity_token']").remove(); // clean the form for future usages
 }
 
