@@ -12,6 +12,10 @@ SYSALERTS_EMAIL: sysalerts@buckybox.com
 MAIL_SAFE: crashtestdummy@buckybox.com
 TEAM_EMAILS: will@buckybox.com, sam@buckybox.com, jordan@buckybox.com, samson@buckybox.com, ced@buckybox.com
 
+# API
+API_MASTER_KEY: "yo"
+API_MASTER_SECRET: "plait"
+
 # Airbrake
 AIRBRAKE_HOST: "api.airbrake.io"
 AIRBRAKE_API_KEY: "e4145e68bb8f78c4380f502c3cddc339"

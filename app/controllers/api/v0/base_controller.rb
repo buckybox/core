@@ -12,11 +12,33 @@ private
     request.headers['API-Secret']
   end
 
+  def webstore_id
+    request.headers['Webstore-ID']
+  end
+
   def authenticate
     return unauthorized if api_key.nil? || api_secret.nil?
 
-    @distributor = Distributor.find_by(api_key: api_key, api_secret: api_secret)
-    return unauthorized if @distributor.nil?
+    if webstore_id
+      if api_key == Figaro.env.api_master_key && api_secret == Figaro.env.api_master_secret
+        @distributor = Distributor.find_by(parameter_name: webstore_id)
+      end
+    else
+      @distributor = Distributor.find_by(api_key: api_key, api_secret: api_secret)
+    end
+
+    unless @distributor
+      send_alert_email
+      return unauthorized
+    end
+  end
+
+  def send_alert_email
+    AdminMailer.information_email(
+      to: "sysalerts@buckybox.com",
+      subject: "[URGENT] Hacking attempt!",
+      body: "Hacking attempt detected on the API!"
+    ).deliver
   end
 
   # hash parameters (2nd+ level json is only provided when requested via ?embed={object} )
