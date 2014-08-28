@@ -60,8 +60,8 @@ GEM
       builder
       multi_json
     analytical (3.0.12)
-    apipie-rails (0.0.24)
-      rails (>= 3.0.10)
+    apipie-rails (0.2.5)
+      json
     arel (3.0.3)
     ast (2.0.0)
     attr_encryptor (1.0.2)
@@ -536,7 +536,7 @@ DEPENDENCIES
   acts_as_list (~> 0.1.8)
   airbrake (~> 3.1.2)
   analytical (~> 3.0.12)
-  apipie-rails (~> 0.0.24)
+  apipie-rails (~> 0.2.5)
   attr_encryptor (~> 1.0.2)
   better_errors
   biggs (~> 0.3.3)
