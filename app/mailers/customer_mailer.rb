@@ -1,5 +1,7 @@
 class CustomerMailer < ApplicationMailer
 
+  helper ApplicationHelper # to get webstore_store_path
+
   def login_details(customer)
     @distributor = customer.distributor
     @customer = customer
