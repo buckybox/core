@@ -10,7 +10,7 @@ $btnProcessBackgroundHighlight: darken($btnProcessBackground, 10%) !default
 
 $tableBackground: $white
 
-=webstore-divider($type: 'line')
+=divider($type: 'line')
   border-color: $grayLight
   border-style: dashed
   border-image: image-url('customer-dashed-border.png') 8% repeat
@@ -58,7 +58,7 @@ $tableBackground: $white
       text-align: right
 
 body
-  background: $white url('webstore-background.png') repeat
+  background: $white url('background.png') repeat
   >.container-fluid
     background-color: $black
     margin-bottom: 28px
@@ -158,5 +158,3 @@ table
 .btn-process
   +buttonBackground($btnProcessBackground, $btnProcessBackgroundHighlight)
 
-.webstore-section
-  +webstore-divider('line')
