@@ -148,25 +148,13 @@ private
   end
 
   def after_sign_out_path_for(resource_or_scope)
-    # Clear? No? Oh, that's weird for this app. :S
-
-    if resource_or_scope == :admin
+    case resource_or_scope
+    when :admin
       admin_root_url
-    elsif resource_or_scope == :distributor
+    when :distributor
       distributor_root_url
-    elsif resource_or_scope == :customer
-      if current_customer
-        distributor_param_name = current_customer.distributor.parameter_name
-      else
-        request.referer =~ /\/webstore\/([^\/]+).*/
-        distributor_param_name = $1
-      end
-
-      if distributor_param_name.blank?
-        customer_root_url
-      else
-        webstore_store_url(distributor_param_name)
-      end
+    when :customer
+      customer_root_url
     else
       Figaro.env.marketing_site_url # Shouldn't happen but better than nothing.
     end
