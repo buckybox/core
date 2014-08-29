@@ -68,6 +68,7 @@ gem 'flamegraph',                      '~> 0.0.5' # for rack-mini-profiler
 gem 'fast_blank',                      '~> 0.0.2'
 gem 'ordinalize_full',                 '~> 1.1.0', require: 'ordinalize_full/integer'
 gem 'retryable',                       '~> 1.3.5'
+gem 'geokit',                          '~> 1.8.5', require: false
 
 group :assets do
   gem 'coffee-rails',   '~> 3.2.2'
