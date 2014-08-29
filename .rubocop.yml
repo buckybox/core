@@ -163,7 +163,8 @@ Style/ClassAndModuleChildren:
 # Offense count: 29
 # Configuration parameters: CountComments.
 Style/ClassLength:
-  Max: 504
+  Max: 500
+  Enabled: false
 
 # Offense count: 6
 Style/ClassVars:
