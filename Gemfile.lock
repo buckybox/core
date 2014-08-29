@@ -7,6 +7,14 @@ GIT
       capistrano (>= 2.5.5)
       highline (>= 1.4.0)
 
+GIT
+  remote: https://github.com/iNecas/apipie-rails.git
+  revision: efebab6877340d9286e9f54abe1edd304d81bb2b
+  branch: more-input-validations
+  specs:
+    apipie-rails (0.2.5)
+      json
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -60,8 +68,6 @@ GEM
       builder
       multi_json
     analytical (3.0.12)
-    apipie-rails (0.2.5)
-      json
     arel (3.0.3)
     ast (2.0.0)
     attr_encryptor (1.0.2)
@@ -536,7 +542,7 @@ DEPENDENCIES
   acts_as_list (~> 0.1.8)
   airbrake (~> 3.1.2)
   analytical (~> 3.0.12)
-  apipie-rails (~> 0.2.5)
+  apipie-rails (~> 0.2.5)!
   attr_encryptor (~> 1.0.2)
   better_errors
   biggs (~> 0.3.3)

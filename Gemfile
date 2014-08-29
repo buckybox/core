@@ -54,7 +54,7 @@ gem 'crazy_money',                     '~> 1.2.0'
 gem 'currency_data',                   '~> 1.1.0'
 gem 'rabl',                            '~> 0.9.0'
 gem 'oj',                              '~> 2.1.7'
-gem 'apipie-rails',                    '~> 0.2.5'
+gem 'apipie-rails',                    '~> 0.2.5', git: "https://github.com/iNecas/apipie-rails.git", branch: "more-input-validations"
 gem 'strong_parameters',               '~> 0.2.1'
 gem 'rails-timeago',                   '~> 2.8.1'
 gem 'email_templator',                 '~> 1.0.0'
