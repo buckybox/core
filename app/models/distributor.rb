@@ -115,6 +115,13 @@ class Distributor < ActiveRecord::Base
 
   scope :keep_updated, where(keep_me_updated: true)
 
+  scope :active, -> {
+    where("current_sign_in_at > ?", 22.days.ago).
+    where("sign_in_count > ?", 4).
+    select { |d| d.transactional_customer_count > 9}.
+    sort_by(&:transactional_customer_count).reverse
+  }
+
   delegate :tracking_after_create, :tracking_after_save, :track, to: :messaging
 
   # Devise Override: Avoid validations on update or if now password provided

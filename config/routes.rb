@@ -12,6 +12,8 @@ BuckyBox::Application.routes.draw do
 
   root to: 'distributor/customers#index'
 
+  get "/directory" => "directory#index"
+
   namespace :sign_up_wizard do
     get 'form'
     get 'country'
