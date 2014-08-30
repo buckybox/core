@@ -33,12 +33,32 @@ class Api::V0::CustomersController < Api::V0::BaseController
   param :embed, String, desc: "Children available: address"
   example "/customers/?email=will@buckybox.com&embed=address"
   def index
-    cust_email = params[:email]
-    if cust_email.nil?
-      @customers = @distributor.customers
+    @customers = if params[:email].nil?
+      @distributor.customers
     else
-      @customers = @distributor.customers.find_by(email: cust_email)
+      @distributor.customers.where(email: params[:email])
     end
+  end
+
+  api :POST, '/customers/sign_in'
+  param :email, String, desc: "TODO"
+  param :password, String, desc: "TODO"
+  param :embed, String, desc: "Children available: address"
+  def sign_in
+    unless params[:email] && params[:password]
+      return unprocessable_entity "Missing email or password"
+    end
+
+    @customers = []
+    current_customer = @distributor.customers.find_by(email: params[:email])
+
+    if current_customer.present? && current_customer.valid_password?(params[:password])
+      @customers = Customer.where(email: params[:email]).sort_by do |customer|
+        customer.id == current_customer.id ? 1 : 0 # make sure the current customer is first
+      end
+    end
+
+    render 'api/v0/customers/index'
   end
 
   api :GET, '/customers/:id',  "Get single customer"

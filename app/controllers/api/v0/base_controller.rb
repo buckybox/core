@@ -1,6 +1,6 @@
 class Api::V0::BaseController < ApplicationController
   layout false
-  before_filter :authenticate, :embed_options
+  before_filter :authenticate, :set_locale, :embed_options
 
 private
 
@@ -31,6 +31,10 @@ private
       send_alert_email
       return unauthorized
     end
+  end
+
+  def set_locale
+    I18n.locale = @distributor.locale
   end
 
   def send_alert_email

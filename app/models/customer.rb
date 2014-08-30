@@ -336,7 +336,7 @@ class Customer < ActiveRecord::Base
     end
   end
 
-  def halted?
+  alias_method :halted, def halted?
     status_halted
   end
 
