@@ -45,7 +45,6 @@ class Api::V0::OrdersController < Api::V0::BaseController
     @customer_id = account.customer_id
   end
 
-
   api :POST, '/orders',  "Create a new order"
   description 'Currently all orders are quantity of 1 for only 1 box. For now, post a new order for every box and every quantity.'
   example '{

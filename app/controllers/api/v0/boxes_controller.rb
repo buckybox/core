@@ -4,12 +4,7 @@ class Api::V0::BoxesController < Api::V0::BaseController
   example '/v0/boxes?embed=extras,images,box_items'
   def index
     @boxes = @distributor.boxes.all
-    @items = @distributor.line_items
-    @box_images = @boxes.each_with_object({}) do |box, hash|
-      hash[box.id] = box.box_image.versions.each_with_object({}) do |(version, image), images|
-        images[version] = ["//", request.host_with_port, image.url].join
-      end
-    end
+    fetch_children
   end
 
   api :GET, '/boxes/:id', "Returns single box"
@@ -17,13 +12,22 @@ class Api::V0::BoxesController < Api::V0::BaseController
   param :embed, String, desc: "Children available: extras, images, box_items"
   example '/v0/boxes/123?embed=extras,images,box_items'
   def show
-    box_id = params[:id]
-    return not_found if box_id.nil?
-    @box = @distributor.boxes.find_by(id: box_id)
+    @box = @distributor.boxes.find_by(id: params[:id])
     return not_found if @box.nil?
+    fetch_children
+  end
+
+private
+
+  # TODO: don't fetch all those if @embed is false!
+  def fetch_children
     @items = @distributor.line_items
-    @box_images = @box.box_image.versions.each_with_object({}) do |(version, image), images|
-      images[version] = "//"+request.host_with_port+image.url
+
+    boxes = @boxes || [@box]
+    @box_images = boxes.each_with_object({}) do |box, hash|
+      hash[box.id] = box.box_image.versions.each_with_object({}) do |(version, image), images|
+        images[version] = ["//", request.host_with_port, image.url].join
+      end
     end
   end
 end

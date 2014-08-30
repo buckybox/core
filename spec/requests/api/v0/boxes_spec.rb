@@ -33,7 +33,7 @@ describe "API v0" do
 
     describe "GET /boxes" do
       let(:url) { "#{base_url}/boxes" }
-      let(:json_box) { json_response.first["box"] }
+      let(:json_box) { json_response.first }
 
       before do
         json_request :get, url, nil, headers
@@ -51,7 +51,7 @@ describe "API v0" do
     describe "GET /boxes/:id" do
       let(:url) { "#{base_url}/boxes/#{box.id}" }
       let(:box) { @boxes.first }
-      let(:json_box) { json_response["box"] }
+      let(:json_box) { json_response }
 
       before do
         json_request :get, url, nil, headers
@@ -62,8 +62,7 @@ describe "API v0" do
       it_behaves_like "a box"
 
       it "returns the box" do
-        expect(json_response.size).to eq 1
-        expect(json_response["box"]["id"]).to eq box.id
+        expect(json_response["id"]).to eq box.id
       end
 
       context "with a unknown ID" do

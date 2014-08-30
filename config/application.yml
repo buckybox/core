@@ -10,11 +10,11 @@ NO_REPLY_EMAIL: no-reply@buckybox.com
 SIGNUPS_EMAIL: signups@buckybox.com
 SYSALERTS_EMAIL: sysalerts@buckybox.com
 MAIL_SAFE: crashtestdummy@buckybox.com
-TEAM_EMAILS: will@buckybox.com, sam@buckybox.com, jordan@buckybox.com, samson@buckybox.com, ced@buckybox.com
+TEAM_EMAILS: will@buckybox.com, ced@buckybox.com
 
 # API
-API_MASTER_KEY: "yo"
-API_MASTER_SECRET: "plait"
+API_MASTER_KEY: "d78d3fe0047fb14105cf65742fe0dd0b"
+API_MASTER_SECRET: "8ec1e2559e22e739a45e7815557284cf"
 
 # Airbrake
 AIRBRAKE_HOST: "api.airbrake.io"

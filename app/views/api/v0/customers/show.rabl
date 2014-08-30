@@ -1,9 +1,13 @@
-# app/views/api/v0/customers/show.rabl
 object @customer
-attributes :id, :first_name, :last_name, :email, :delivery_service_id
+
+attributes :id, :first_name, :last_name, :name, :email, :delivery_service_id, :halted?, :discount?, :discount
+
+node(:account_balance) { |customer| customer.account.balance.to_s }
+node(:webstore_id) { |customer| customer.distributor.parameter_name }
 
 unless @embed['address'].nil?
-	child :address do
-	  attributes :address_1, :address_2, :suburb, :city, :delivery_note, :home_phone, :mobile_phone, :post_code, :work_phone
-	end
+  child :address do
+    attributes :address_1, :address_2, :suburb, :city, :postcode, :delivery_note,
+      :home_phone, :mobile_phone, :work_phone
+  end
 end
