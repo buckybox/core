@@ -10,7 +10,6 @@ node(:webstore_name) { |customer| customer.distributor.name }
 
 unless @embed['address'].nil?
   child :address do
-    attributes :address_1, :address_2, :suburb, :city, :postcode, :delivery_note,
-      :home_phone, :mobile_phone, :work_phone
+    attributes :address_1, :address_2, :suburb, :city, :postcode, :delivery_note, :home_phone, :mobile_phone, :work_phone
   end
 end
