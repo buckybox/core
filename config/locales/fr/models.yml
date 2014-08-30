@@ -23,21 +23,6 @@ fr:
       mobile_phone: Numéro mobile
       work_phone: Numéro bureau
       home_phone: Numéro domicile
-    webstore:
-      authentication:
-        new_customer: Je n'ai pas de compte
-        existing_customer: J'ai déjà un compte
-      delivery_options:
-        select_delivery_service: "- Veuillez sélectionner un service de livraison -"
-        order_frequencies:
-          select: "- Veuillez sélectionner une fréquence de livraison -"
-          single: Livrer cette fois seulement
-          weekly: Livrer chaque semaine le...
-          fortnightly: Livrer toutes les deux semaines le...
-          monthly: Livrer mensuellement
-        extra_frequencies:
-          always: Inclure les extras avec chaque commande
-          once: Inclure les extras avec cette commande seulement
   activerecord:
     models:
       box: Produit
@@ -70,6 +55,4 @@ fr:
       customer/form/update_password:
         password: Veuillez entrer votre mot de passe
         password_confirmation: Veuillez enter votre mot de passe de nouveau
-      webstore/payment_options:
-        payment_method: moyen de paiement
 
