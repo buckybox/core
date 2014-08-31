@@ -8,11 +8,15 @@ class DirectoryController < ApplicationController
   def index
     distributors = Distributor.active.select(&:active_webstore)
 
-    list = distributors.map do |distributor|
+    list = distributors.map.each_with_index do |distributor, index|
       address = distributor.localised_address
       next unless address
 
       full_address = [address.street, address.city, address.zip, address.country].join(" ")
+
+      # NOTE: Google allows up to 10 requests per second
+      # https://developers.google.com/maps/documentation/geocoding/?csw=1#Limits
+      sleep 1 if index % 9 == 0
 
       geocoded_address = Geokit::Geocoders::GoogleGeocoder.geocode full_address
 
