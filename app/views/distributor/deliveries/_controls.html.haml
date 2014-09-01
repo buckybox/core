@@ -49,15 +49,18 @@
       = button_tag class: "btn btn-primary dropdown-toggle", data: { toggle: 'dropdown' } do
         %span.caret
       %ul.dropdown-menu{ role: 'menu' }
-        - if @real_list && params[:view] == 'packing'
-          %li
-            = link_to "Print packing summary", "javascript:void(0)", id: 'master-print'
-          %li.divider
+        - if params[:view] == 'packing'
+          - if @real_list
+            %li
+              = link_to "Print packing summary", "javascript:void(0)", id: 'master-print'
+            %li.divider
+
           -# %li
           -#   = link_to "Export extras summary", "javascript:void(0)" # NOTE: eventually move it here
           %li
             = link_to "Export excludes and substitutes summary", "javascript:void(0)", id: 'export-exclusions-substitutions'
           %li.divider
+
         %li
           = link_to "Send email", "#distributor_send_email", "data-toggle" => "modal"
         %li
