@@ -16,9 +16,13 @@ class DirectoryController < ApplicationController
 
       # NOTE: Google allows up to 10 requests per second
       # https://developers.google.com/maps/documentation/geocoding/?csw=1#Limits
-      sleep 1 if index % 9 == 0
+      sleep 2 if index % 9 == 0
 
-      geocoded_address = Geokit::Geocoders::GoogleGeocoder.geocode full_address
+      begin
+        geocoded_address = Geokit::Geocoders::GoogleGeocoder.geocode full_address
+      rescue Geokit::Geocoders::TooManyQueriesError
+        sleep 1
+      end
 
       OpenStruct.new(
         name: distributor.name,
