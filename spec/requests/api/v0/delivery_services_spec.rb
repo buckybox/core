@@ -18,7 +18,7 @@ describe "API v0" do
 
     describe "GET /delivery_services" do
       let(:url) { "#{base_url}/delivery_services" }
-      let(:json_delivery_service) { json_response.first["delivery_service"] }
+      let(:json_delivery_service) { json_response.first }
 
       before do
         json_request :get, url, nil, headers

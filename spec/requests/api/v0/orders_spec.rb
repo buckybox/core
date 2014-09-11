@@ -23,7 +23,7 @@ describe "API v0" do
 
     describe "GET /orders" do
       let(:url) { "#{base_url}/orders" }
-      let(:json_order) { json_response.first["order"] }
+      let(:json_order) { json_response.first }
 
       before do
         json_request :get, url, nil, headers
@@ -59,7 +59,7 @@ describe "API v0" do
     describe "GET /orders/:id" do
       let(:url) { "#{base_url}/orders/#{order.id}" }
       let(:order) { @orders.first }
-      let(:json_order) { json_response["order"] }
+      let(:json_order) { json_response }
 
       before do
         json_request :get, url, nil, headers
@@ -71,7 +71,7 @@ describe "API v0" do
 
       it "returns the order" do
         expect(json_response.size).to eq 1
-        expect(json_response["order"]["id"]).to eq order.id
+        expect(json_response["id"]).to eq order.id
       end
 
       context "with a unknown ID" do
@@ -91,7 +91,7 @@ describe "API v0" do
 
     describe "POST /orders" do
       let(:url) { "#{base_url}/orders" }
-      let(:json_order) { json_response["order"] }
+      let(:json_order) { json_response }
       let(:substitutes) { Fabricate.times(2, :line_item, distributor: api_distributor) }
       let(:exclusions) { Fabricate.times(2, :line_item, distributor: api_distributor) }
       let(:params) do <<-JSON
@@ -134,15 +134,15 @@ describe "API v0" do
         expect(json_response.size).to eq 1
 
         expected_response = JSON.parse(params)
-        expected_response["order"]["id"] = Order.maximum(:id)
-        expected_response["order"]["active"] = false
+        expected_response["id"] = Order.maximum(:id)
+        expected_response["active"] = false
         expect(json_response).to eq expected_response
       end
 
       it "creates the order properly" do
         json_request :post, url, params, headers
 
-        new_order = Order.find(json_response["order"]["id"])
+        new_order = Order.find(json_response["id"])
         expect(new_order.extras.size).to eq 2
         expect(new_order.extras_count).to eq 4
         expect(new_order.extras_one_off).to be true
@@ -191,7 +191,7 @@ describe "API v0" do
         context "without missing attributes" do
           it "filters out the extra attributes" do
             extra_params = JSON.parse(params)
-            extra_params["order"]["admin_with_super_powers"] = true
+            extra_params["admin_with_super_powers"] = true
 
             json_request :post, url, extra_params.to_json, headers
             expect(response).to be_success
@@ -200,7 +200,7 @@ describe "API v0" do
           it "validates the box ID" do
             box = Fabricate(:box, distributor: Fabricate(:distributor))
             invalid_params = JSON.parse(params)
-            invalid_params["order"]["box_id"] = box.id
+            invalid_params["box_id"] = box.id
 
             json_request :post, url, invalid_params.to_json, headers
             expect(response.status).to eq 422
@@ -210,7 +210,7 @@ describe "API v0" do
           it "validates the customer ID" do
             customer = Fabricate(:customer, distributor: Fabricate(:distributor))
             invalid_params = JSON.parse(params)
-            invalid_params["order"]["customer_id"] = customer.id
+            invalid_params["customer_id"] = customer.id
 
             json_request :post, url, invalid_params.to_json, headers
             expect(response.status).to eq 422
@@ -221,7 +221,7 @@ describe "API v0" do
             # don't allow monthly for now because we'd need to handle the week of the month
             %w(monthy every_single_day).each do |frequency|
               invalid_params = JSON.parse(params)
-              invalid_params["order"]["frequency"] = frequency
+              invalid_params["frequency"] = frequency
 
               json_request :post, url, invalid_params.to_json, headers
               expect(response.status).to eq 422
