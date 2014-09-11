@@ -1,5 +1,5 @@
 class Api::V0::CustomersController < Api::V0::BaseController
-  before_filter :fetch_json_body, only: :create
+  before_filter :fetch_json_body, only: [:create, :update]
 
   def_param_group :address do
     # :nocov:
@@ -75,57 +75,90 @@ class Api::V0::CustomersController < Api::V0::BaseController
 
   api :POST, '/customers',  "Create a new customer"
   description 'A JSON object representing the new customer'
-  example '{
-    "customer": {
-        "first_name": "Will",
-        "last_name": "Lau",
-        "email": "will@buckybox.com",
-        "delivery_service_id": 56,
-        "address": {
-            "address_1": "12 Bucky Lane",
-            "address_2": "",
-            "suburb": "Boxville",
-            "city": "Wellington",
-            "delivery_note": "Just slip it through the catflap",
-            "home_phone": "01 234 5678",
-            "mobile_phone": "012 345 6789",
-            "work_phone": "98 765 4321"
-        }
-    }
-}'
-
   param_group :customer
+  example '{
+      "first_name": "Will",
+      "last_name": "Lau",
+      "email": "will@buckybox.com",
+      "delivery_service_id": 56,
+      "address": {
+          "address_1": "12 Bucky Lane",
+          "address_2": "",
+          "suburb": "Boxville",
+          "city": "Wellington",
+          "postcode": "007",
+          "delivery_note": "Just slip it through the catflap",
+          "home_phone": "01 234 5678",
+          "mobile_phone": "012 345 6789",
+          "work_phone": "98 765 4321"
+      }
+}'
   def create
-    raise
-    customer_json = @json_body["customer"] || {}
+    create_or_update
+  end
+
+  api :PATCH, '/customers/:id',  "Update an existing customer"
+  description 'A JSON object representing the customer'
+  param_group :customer
+  example '{
+      "first_name": "Will",
+      "last_name": "Lau",
+      "email": "will@buckybox.com",
+      "delivery_service_id": 56,
+      "address": {
+          "address_1": "12 Bucky Lane",
+          "address_2": "",
+          "suburb": "Boxville",
+          "city": "Wellington",
+          "postcode": "007",
+          "delivery_note": "Just slip it through the catflap",
+          "home_phone": "01 234 5678",
+          "mobile_phone": "012 345 6789",
+          "work_phone": "98 765 4321"
+      }
+}'
+  def update
+    create_or_update
+  end
+
+  private def create_or_update
+    existing_customer = params[:id] ? @distributor.customers.find_by(id: params[:id]) : nil
+
+    customer_json = @json_body || {}
     delivery_service_id = customer_json.delete("delivery_service_id")
     address_json = customer_json.delete("address")
 
     customer_parameters = ActionController::Parameters.new(customer_json)
-    @customer = Customer.new(customer_parameters.permit(
-      :first_name,
-      :last_name,
-      :email
-    ))
+    customer_attributes = customer_parameters.permit(*%i(first_name last_name email))
+
+    if existing_customer
+      existing_customer.update_attributes(customer_attributes)
+    else
+      @customer = Customer.new(customer_attributes)
+    end
 
     address_parameters = ActionController::Parameters.new(address_json)
-    @customer.build_address(address_parameters.permit(
-      :address_1,
-      :address_2,
-      :suburb,
-      :city,
-      :delivery_note,
-      :home_phone,
-      :mobile_phone,
-      :work_phone
-    ))
+    address_attributes = address_parameters.permit(
+      *%i(address_1 address_2 suburb city postcode delivery_note home_phone mobile_phone work_phone via_webstore)
+    )
 
-    @customer.distributor_id = @distributor.id
-    @customer.delivery_service = @distributor.delivery_services.find_by(id: delivery_service_id)
-    @customer.number = Customer.next_number(@distributor)
+    if existing_customer
+      existing_customer.update_attributes(address_attributes: address_attributes)
+    else
+      @customer.build_address(address_attributes)
+    end
+
+    unless existing_customer
+      @customer.distributor_id = @distributor.id
+      @customer.delivery_service = @distributor.delivery_services.find_by(id: delivery_service_id)
+      @customer.number = Customer.next_number(@distributor)
+    end
+
+    @customer = existing_customer if existing_customer
 
     if @customer.save
-      render 'api/v0/customers/create', status: :created, location: api_v0_customer_url(id: @customer.id)
+      status = existing_customer ? :ok : :created
+      render 'api/v0/customers/create', status: status, location: api_v0_customer_url(id: @customer.id)
     else
       unprocessable_entity @customer.errors
     end
