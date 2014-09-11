@@ -247,7 +247,7 @@ BuckyBox::Application.routes.draw do
   namespace :api, path: "", defaults: { format: :json }, constraints: API_SUBDOMAIN do
     namespace :v0 do
       post '/customers/sign_in'
-      resources :customers,         only: [:index, :show, :create]
+      resources :customers,         only: [:index, :show, :create, :update]
 
       resources :boxes,             only: [:index, :show]
       resources :delivery_services, only: [:index, :show]
