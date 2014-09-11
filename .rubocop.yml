@@ -566,3 +566,6 @@ Style/UnneededPercentQ:
 # Cop supports --auto-correct.
 Style/WordArray:
   MinSize: 4
+
+Lint/UnreachableCode:
+  Enabled: false
