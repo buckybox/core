@@ -28,7 +28,7 @@ describe "API v0" do
 
     describe "GET /customers" do
       let(:url) { "#{base_url}/customers" }
-      let(:json_customer) { json_response.first["customer"] }
+      let(:json_customer) { json_response.first }
 
       before do
         json_request :get, url, nil, headers
@@ -48,14 +48,14 @@ describe "API v0" do
         json_request :get, "#{url}?email=#{customer.email}", nil, headers
         expect(response).to be_success
         expect(json_response.size).to eq 1
-        expect(json_response.first["customer"]["id"]).to eq customer.id
+        expect(json_response.first["id"]).to eq customer.id
       end
     end
 
     describe "GET /customers/:id" do
       let(:url) { "#{base_url}/customers/#{customer.id}" }
       let(:customer) { @customers.first }
-      let(:json_customer) { json_response["customer"] }
+      let(:json_customer) { json_response }
 
       before do
         json_request :get, url, nil, headers
@@ -66,8 +66,7 @@ describe "API v0" do
       it_behaves_like "a customer"
 
       it "returns the customer" do
-        expect(json_response.size).to eq 1
-        expect(json_response["customer"]["id"]).to eq customer.id
+        expect(json_response["id"]).to eq customer.id
       end
 
       context "with a unknown ID" do
@@ -118,10 +117,8 @@ describe "API v0" do
         json_request :post, url, params, headers
         expect(response.status).to eq 201
 
-        expect(json_response.size).to eq 1
-
         expected_response = JSON.parse(params)
-        expected_response["customer"]["id"] = customer.id
+        expected_response["id"] = customer.id
         expect(json_response).to eq expected_response
       end
 
@@ -158,7 +155,7 @@ describe "API v0" do
         context "without missing attributes" do
           it "filters out the extra attributes" do
             extra_params = JSON.parse(params)
-            extra_params["customer"]["admin_with_super_powers"] = true
+            extra_params["admin_with_super_powers"] = true
 
             json_request :post, url, extra_params.to_json, headers
             expect(response).to be_success
@@ -167,7 +164,7 @@ describe "API v0" do
           it "validates the delivery service ID" do
             delivery_service = Fabricate(:delivery_service, distributor: Fabricate(:distributor))
             invalid_params = JSON.parse(params)
-            invalid_params["customer"]["delivery_service_id"] = delivery_service.id
+            invalid_params["delivery_service_id"] = delivery_service.id
 
             json_request :post, url, invalid_params.to_json, headers
             expect(response.status).to eq 422
