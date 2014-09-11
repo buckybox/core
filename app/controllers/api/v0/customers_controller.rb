@@ -96,6 +96,7 @@ class Api::V0::CustomersController < Api::V0::BaseController
 
   param_group :customer
   def create
+    raise
     customer_json = @json_body["customer"] || {}
     delivery_service_id = customer_json.delete("delivery_service_id")
     address_json = customer_json.delete("address")
