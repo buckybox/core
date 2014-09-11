@@ -82,6 +82,7 @@ class Api::V0::OrdersController < Api::V0::BaseController
 }'
   param_group :order
   def create
+    raise
     new_order = @json_body["order"] || {}
     @order = Order.new
 
