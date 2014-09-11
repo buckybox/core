@@ -48,42 +48,39 @@ class Api::V0::OrdersController < Api::V0::BaseController
   api :POST, '/orders',  "Create a new order"
   description 'Currently all orders are quantity of 1 for only 1 box. For now, post a new order for every box and every quantity.'
   example '{
-    "order": {
-        "box_id": 12,
-        "customer_id": 123,
-        "frequency": "weekly",
-        "substitutes": [
-          23,
-          54,
-          3
-        ],
-        "exclusions": [
-          17,
-          98,
-          345,
-          7
-        ],
-        "extras_one_off": false,
-        "extras": [
-          {
-            "extra": {
-                "id": 11,
-                "quantity": 1
-            }
-          },
-          {
-            "extra": {
-                "id": 14,
-                "quantity": 2
-            }
+      "box_id": 12,
+      "customer_id": 123,
+      "frequency": "weekly",
+      "substitutes": [
+        23,
+        54,
+        3
+      ],
+      "exclusions": [
+        17,
+        98,
+        345,
+        7
+      ],
+      "extras_one_off": false,
+      "extras": [
+        {
+          "extra": {
+              "id": 11,
+              "quantity": 1
           }
-        ]
-    }
+        },
+        {
+          "extra": {
+              "id": 14,
+              "quantity": 2
+          }
+        }
+      ]
 }'
   param_group :order
   def create
-    raise
-    new_order = @json_body["order"] || {}
+    new_order = @json_body || {}
     @order = Order.new
 
     if customer = @distributor.customers.find_by(id: new_order['customer_id'])
@@ -98,12 +95,25 @@ class Api::V0::OrdersController < Api::V0::BaseController
       @order.errors.add(:box_id, "can't be blank")
     end
 
-    frequency_white_list = %w(single weekly fortnightly)
-    if customer && new_order['frequency'].in?(frequency_white_list)
-      schedule_days = customer.delivery_service.schedule_rule.days
-      @order.schedule_rule = ScheduleRule.recur_on(Date.today, schedule_days, new_order['frequency'].to_sym)
-    else
-      @order.errors.add(:frequency, "must be one of #{frequency_white_list.join(',')}")
+    if frequency = new_order['frequency']
+      frequency = frequency.to_sym
+
+      if frequency == :monthly
+        week = new_order['week']
+        @order.errors.add(:week, "can't be blank") unless week
+      end
+    end
+
+    start_date = new_order['start_date'] or @order.errors.add(:start_date, "can't be blank")
+    week_days  = new_order['week_days']  or @order.errors.add(:week_days, "can't be blank")
+
+    days = week_days && week_days.map { |index| I18n.t('date.abbr_day_names', locale: :en)[index].downcase.to_sym }
+
+    frequency_valid = frequency.in?(%i(single weekly fortnightly monthly))
+    @order.errors.add(:frequency, "is invalid") unless frequency_valid
+
+    if start_date && days && frequency_valid
+      @order.schedule_rule = ScheduleRule.recur_on(start_date, days, frequency, week || 0)
     end
 
     begin

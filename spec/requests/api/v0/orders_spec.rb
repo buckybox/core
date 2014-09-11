@@ -17,8 +17,7 @@ describe "API v0" do
     let(:customer) { Fabricate(:customer, distributor: api_distributor) }
     let(:extras) { Fabricate.times(2, :extra, distributor: api_distributor) }
     let(:box) { Fabricate(:box, distributor: api_distributor, extras: extras) }
-    let(:model_attributes) { %w(id box_id customer_id active frequency) }
-    let(:model_attributes_post) { model_attributes + %w(extras extras_one_off exclusions substitutes) }
+    let(:model_attributes) { %w(id box_id customer_id active frequency start_date week_days extras extras_one_off exclusions substitutes) }
     let(:embedable_attributes) { %w() }
 
     describe "GET /orders" do
@@ -89,7 +88,6 @@ describe "API v0" do
     end
 
     describe "POST /orders" do
-      before { pending; fail }
       let(:url) { "#{base_url}/orders" }
       let(:json_order) { json_response }
       let(:substitutes) { Fabricate.times(2, :line_item, distributor: api_distributor) }
@@ -99,6 +97,8 @@ describe "API v0" do
           "box_id": #{box.id},
           "customer_id": #{customer.id},
           "frequency": "weekly",
+          "week_days": [0, 3],
+          "start_date": "#{Date.today}",
           "substitutes": [
             #{substitutes.map(&:id).join(',')}
           ],
@@ -152,7 +152,7 @@ describe "API v0" do
         json_request :post, url, params, headers
         expect(response.status).to eq 201
 
-        expect(json_order.keys).to match_array(model_attributes_post)
+        expect(json_order.keys).to match_array(model_attributes)
       end
 
       it "returns the location of the newly created resource" do
@@ -180,6 +180,8 @@ describe "API v0" do
             box_id
             customer_id
             frequency
+            week_days
+            start_date
           )
         end
       end
@@ -211,19 +213,16 @@ describe "API v0" do
 
             json_request :post, url, invalid_params.to_json, headers
             expect(response.status).to eq 422
-            expect(json_response["errors"].keys).to match_array %w(customer_id frequency)
+            expect(json_response["errors"].keys).to match_array %w(customer_id)
           end
 
           it "validates the frequency" do
-            # don't allow monthly for now because we'd need to handle the week of the month
-            %w(monthy every_single_day).each do |frequency|
-              invalid_params = JSON.parse(params)
-              invalid_params["frequency"] = frequency
+            invalid_params = JSON.parse(params)
+            invalid_params["frequency"] = "every_single_day"
 
-              json_request :post, url, invalid_params.to_json, headers
-              expect(response.status).to eq 422
-              expect(json_response["errors"].keys).to match_array %w(frequency)
-            end
+            json_request :post, url, invalid_params.to_json, headers
+            expect(response.status).to eq 422
+            expect(json_response["errors"].keys).to match_array %w(frequency)
           end
         end
 
@@ -236,6 +235,8 @@ describe "API v0" do
               box_id
               customer_id
               frequency
+              week_days
+              start_date
             )
           end
         end
