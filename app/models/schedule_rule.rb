@@ -180,7 +180,11 @@ class ScheduleRule < ActiveRecord::Base
   def monthly?; recur == :monthly;end
 
   def days
-    DAYS.select{|d| on_day?(d)}
+    DAYS.select { |day| on_day?(day) }
+  end
+
+  def days_as_indexes
+    DAYS.map.each_with_index { |day, index| index if on_day?(day) }.compact
   end
 
   def delivery_days

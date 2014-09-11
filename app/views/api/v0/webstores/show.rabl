@@ -1,6 +1,6 @@
 object @webstore => :webstore
 attributes :name, :currency, :time_zone, :city, :sidebar_description, :facebook_url, :phone, :email, :company_logo, :line_items
-attributes :payment_options
+attributes :payment_options, :email_customer_on_new_webstore_order
 
 attributes :require_phone, :require_address_1, :require_address_2, :require_suburb, :require_city, :require_postcode, :require_delivery_note
 attributes :collect_phone, :collect_delivery_note
