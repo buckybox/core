@@ -18,10 +18,8 @@ class DirectoryController < ApplicationController
       # https://developers.google.com/maps/documentation/geocoding/?csw=1#Limits
       sleep 2 if index % 9 == 0
 
-      begin
+      retryable(tries: 3, sleep: 1, on: Geokit::Geocoders::TooManyQueriesError) do
         geocoded_address = Geokit::Geocoders::GoogleGeocoder.geocode full_address
-      rescue Geokit::Geocoders::TooManyQueriesError
-        sleep 1
       end
 
       OpenStruct.new(
