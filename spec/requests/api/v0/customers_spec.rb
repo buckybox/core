@@ -32,7 +32,10 @@ describe "API v0" do
 
         expected_response = JSON.parse(params)
         expected_response["id"] = customer.id
-        expect(json_response).to eq expected_response
+        expected_response.each do |attribute, value|
+          next if attribute.in? embedable_attributes
+          expect(json_response.fetch(attribute)).to eq value
+        end
       end
 
       it "returns the location of the newly created resource" do
@@ -66,7 +69,7 @@ describe "API v0" do
       @customers ||= Fabricate.times(2, :customer, distributor: api_distributor)
     end
 
-    let(:model_attributes) { %w(id first_name last_name email delivery_service_id account_balance discount discount? halted? name webstore_id) }
+    let(:model_attributes) { %w(id first_name last_name email delivery_service_id account_balance discount discount? halted? name number webstore_id) }
     let(:embedable_attributes) { %w(address) }
 
     describe "GET /customers" do

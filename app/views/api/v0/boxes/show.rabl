@@ -32,6 +32,6 @@ end
 unless @embed['box_items'].nil?
   node :box_items do
     @items.select('id, name')
-  end  
+  end
 end
 
