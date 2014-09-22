@@ -1,0 +1,74 @@
+it:
+  models:
+    schedule_rule:
+      deliver_on: Consegna il
+      deliver_weekly_on: Consegna settimanale il
+      deliver_fornightly_on: Consegna ogni due settimane il
+      deliver_monthly_on: Consegna una volta al mese il
+      no_future_deliveries: Non ci sono consegne programmate
+    account:
+      manual_transaction: Transazione manuale
+    delivery:
+      delivery_of: Consegna di
+      payment_made_on_delivery: Pagamento alla consegna
+    order:
+      edit: modifica l'ordine
+      remove: rimuovi
+      remove_confirmation: Sei sicuro di voler rimuovere l'ordine?
+      impending_delivery: Quest'ordine ha una consegna in corso, le modifiche avranno effetto a partire dalla consegna del %{date}.
+      extra_frequencies:
+        always: aggiungi ad ogni consegna
+        once: aggiungi solo alla prossima consegna
+    phone_collection:
+      mobile_phone: Cellulare
+      work_phone: Lavoro
+      home_phone: Casa
+    webstore:
+      authentication:
+        new_customer: Nuovo cliente
+        existing_customer: Sono già registrato
+      delivery_options:
+        select_delivery_service: "- Seleziona il giro di consegna -"
+        order_frequencies:
+          select: "- Seleziona la frequenza delle consegne -"
+          single: Consegna singola
+          weekly: Consegna una volta a settimana ogni...
+          fortnightly: Consegna una volta ogni 2 settimane il...
+          monthly: Consegna mensile
+        extra_frequencies:
+          always: Aggiungi i prodotti A TUTTE LE CONSEGNE
+          once: Aggiungi i prodotti SOLO ALLA PROSSIMA CONSEGNA
+  activerecord:
+    models:
+      box: Prodotto
+      customer: Cliente
+      order: Ordine
+    attributes:
+      customer:
+        formated_number: Numero cliente
+      order:
+        exclusions: Esclusioni
+        substitutions: Sostituzioni
+  virtus:
+    attributes:
+      customer/form/update_contact_details:
+        first_name: Nome
+        last_name: Cognome
+        email: Email
+        hints:
+          email: Controlla perfavore l'indirizzo email perchè viene utilizzato come tuo login.
+          phone: E' richiesto almeno un numero di telefono.
+      customer/form/update_delivery_address:
+        address_1: Indirizzo 1
+        address_2: Indirizzo 2
+        suburb: Località
+        city: Comune
+        postcode: CAP
+        delivery_note: Note di consegna
+        placeholders:
+          delivery_note: "Istruzioni per la consegna, per esempio: \"lasciare sul pianerottolo\""
+      customer/form/update_password:
+        password: Inserisci la tua nuova password
+        password_confirmation: Reinserisci la tua nuova password per confermare
+      webstore/payment_options:
+        payment_method: Metodo di pagamento
