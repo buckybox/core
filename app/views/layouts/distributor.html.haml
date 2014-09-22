@@ -6,6 +6,10 @@
 
 - content_for :body do
   .container
+    - if current_distributor.overdue.present? && flash.empty?
+      %div{style: "position: fixed; top: 0; left: 0; right: 0; text-align: center; z-index: 100"}
+        = flash_bar("Uh-oh! Your billing is now #{current_distributor.overdue} overdue.<br>If you paid recently, your payment may take some time to appear.".html_safe, kind: :error, close: false)
+
     #flash-messages
       = render_site_messages(flash, container: false)
 

@@ -41,7 +41,7 @@ module LayoutHelper
     classes = 'alert'
     classes += " #{FLASH_CLASSES[options[:kind]]}" if options[:kind]
 
-    message = button_tag('&times;'.html_safe, type: 'button', class: 'close', data: { dismiss: 'alert' }) + message
+    message = button_tag('&times;'.html_safe, type: 'button', class: 'close', data: { dismiss: 'alert' }) + message if options.fetch(:close, true)
 
     content_tag(:div, message.html_safe, class: classes)
   end
