@@ -1,0 +1,78 @@
+it:
+  c: &customer # short-hand for "customer [area]"
+    orders:
+      pausing:
+        pause: sospendi
+        resume: riprendi
+        remove: rimuovi
+        close: chiudi
+        pause_start: sospendi a partire dal
+        resume_start: riprendi le consegne dal
+        until_further_notice: fino a nuovo avviso
+    dashboard:
+      # sidebar
+      change_contact_details: modifica i tuoi dati
+      change_password: modifica la tua password
+      change_delivery_address: modifica il tuo indirizzo di consegna
+      # main
+      order_another_item: Ordina una cassetta
+      no_active_orders: Non hai nessun ordine attivo.
+      # payments
+      account_statement: Storico consegne
+      make_payment: Effettua un pagamento
+      pay_by:
+        bank_deposit: Pagamento con bonifico bancario
+        paypal: Pagamento con PayPal / Carta di credito
+    transactions:
+      processed_date: Data esecuzione
+      transaction_date: Data valuta
+      details: Dettagli
+      amount: Importo
+      balance: Saldo
+      more: altro...
+    contact_details:
+      change: Modifica i tuoi dati
+      successful_update: Le tue modifiche sono state salvate.
+    delivery_address:
+      successful_update: Le tue modifiche sono state salvate.
+    password:
+      change: Modifica la tua password
+      update: Modifica password
+      successful_update: Le tue modifiche sono state salvate.
+    address:
+      change: Modifica il tuo indirizzo
+    update_next_delivery: Il nuovo indirizzo sarà valido dalla prossima consegna.
+    order:
+      existing: Il tuo ordine
+      extras: Prodotti
+      include_extras: Aggiungi prodotti
+      no_extras: Non sono permessi prodotti aggiuntivi con questa cassetta.
+      extras_limit: C'è un limite di %{count} prodotti aggiuntivi.
+      extras_one_off:
+        hint: I prodotti aggiuntivi possono essere acquistati una tantum oppure ripetutamente.
+        "false": aggiungi ad ogni consegna
+        "true": aggiungi solo a questa consegna
+      exclude_items: Escludere questi prodotti...
+      substitute_with_items: Sostituire con questi prodotti...
+      update:
+        success: Il tuo ordine è stato salvato correttamente.
+        not_allowed: Non è possibile modificare questo ordine.
+        oops: Oops! Qualcosa è andato storto con la modifica dell'ordine.
+      deactivate:
+        success: Il tuo ordine è stato rimosso correttamente.
+        oops: Errore nel rimuovere il tuo ordine.
+        not_allowed: Non hai il permesso di modificare l'ordine.
+        too_late:
+          one_off: Non siamo riusciti a rimuovere l'ordine perchè troppo tardi per sospendere la consegna in corso.
+          recurring: E' troppo tardi per sospendere la consegna in corso, abbiamo però rimosso l'ordine per le prossime consegne.'
+    sign_in:
+      enter_email: inserisci la tua email
+      enter_password: inserisci la tua password
+      remember_me: ricordami
+      lost_password: hai dimenticato la tua password?
+    lost_password:
+      send_my_password: Richiedi la tua password
+      enter_email: inserisci la tua email
+      send: Invia password
+  customer: *customer
+

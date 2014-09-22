@@ -1,0 +1,10 @@
+it:
+  devise_mailer:
+    reset_password_instructions:
+      change_password: Cambia la password
+      body: |
+        Ciao %{email}!
+        Abbiamo ricevuto una richiesta di modifica della password, clicca sul link qui sotto.
+        %{link}
+        Se non l'hai richiesto, perfavore ignora questa email.
+        La tua password non viene modificata finchè non accedi al link qui sopra e ne inserisci una nuova.
