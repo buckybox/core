@@ -13,7 +13,6 @@ it:
       extras: Prodotti
       discount: Il tuo sconto
       total: Totale
-      completed: Ordine completo
     sidebar:
       find_us_on_facebook: Seguici su Facebook
     customise_order:
