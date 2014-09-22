@@ -90,7 +90,7 @@ Metrics/ParameterLists:
 
 # Offense count: 29
 Metrics/PerceivedComplexity:
-  Max: 23
+  Max: 30
 
 # Offense count: 38
 # Cop supports --auto-correct.
