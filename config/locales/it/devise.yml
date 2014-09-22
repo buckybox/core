@@ -2,7 +2,7 @@ it:
   devise_mailer:
     reset_password_instructions:
       change_password: Cambia la password
-      body: |
+      body_html: |
         Ciao %{email}!
         Abbiamo ricevuto una richiesta di modifica della password, clicca sul link qui sotto.
         %{link}
