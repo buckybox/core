@@ -16,38 +16,37 @@ it:
     orders_halted:
       subject: Le tue consegne di %{distributor} sono state sospese
       intro_html: |
-        Abbiamo notato che il tuo conto ha raggiunto il saldo minimo We've noticed your account has reached your minimum balance - your existing account balance is
+        Abbiamo notato che il tuo conto ha raggiunto il saldo minimo - Il tuo saldo attuale è
         <strong>%{balance}</strong>
-        (your account should always be above your minimum balance of %{threshold} in order to receive deliveries).
-      pay_html: "%{link} or contact %{distributor}."
-      recent: If you've recently made a payment, it may not have shown up yet - take a look at your account statement in the next few days to check.
-      signature: The %{distributor} Team
+        (il tuo conto deve sempre avere un minimo di %{threshold} per poter ricevere le consegne).
+      pay_html: "%{link} o contatta %{distributor}."
+      recent: Se hai recentemente effettuato un pagamento, potremmo non averlo ancora visto - controlla il tuo conto nei prossimi giorni.
+      signature: Il Team %{distributor}
     remind_orders_halted:
-      subject: Your %{distributor} deliveries are on hold
+      subject: Le tue consegne di %{distributor} sono sospese
       intro_html: |
-        Your recent order won't be fulfilled until your account is above your minimum balance - your existing account balance is
+        Il tuo ordine non verrà preparato finchè il tuo conto non raggiungerà il saldo minimo - il tuo saldo è
         <strong>%{balance}</strong>
-        (your account should always be above your minimum balance of %{threshold} in order to receive deliveries).
-      pay_html: "%{link} or contact %{distributor}."
-      recent: If you've recently made a payment, it may not have shown up yet - take a look at your account statement in the next few days to check.
-      signature: The %{distributor} Team
+        (il tuo conto deve sempre avere un saldo minimo di %{threshold} per poter ricevere le consegne).
+      pay_html: "%{link} o contatta %{distributor}."
+      recent: Se hai recentemente effettuato un pagamento, potremmo non averlo ancora visto - controlla il tuo conto nei prossimi giorni.
+      signature: Il Team %{distributor}
     order_confirmation:
-      subject: Your %{distributor} Order
-      thanks: Thanks for your order %{name}!
-      update_order: Did you know you can view and edit your orders 24 hours a day? Visit %{link}.
-      order_information: Order Information
-      customer_number: Customer Number
+      subject: Il tuo ordine %{distributor}
+      thanks: Grazie per l'ordine %{name}!
+      update_order: Lo sai che puoi visionare e modificare l'ordine 24 ore al giorno? Visita %{link}.
+      order_information: Informazioni ordine
+      customer_number: numero cliente
       email: Email
-      mobile_phone: Mobile Phone
-      home_phone: Home Phone
-      work_phone: Work Phone
-      pick_up_from: Pick up from
-      delivery_address: Delivery Address
-      order_summary: Order Summary
-      exclusions: Exclusions
-      substitutes: Substitutes
-      starting: starting
-      review_html: You can review your orders and your account statement at anytime by logging into %{link}.
-      contact_html: If you have any questions or feel something is out of place, please get in touch at %{email}
+      mobile_phone: Cellulare
+      home_phone: Casa
+      work_phone: Lavoro
+      pick_up_from: Ritiro da
+      delivery_address: Indirizzo di consegna
+      order_summary: Sommario ordine
+      exclusions: Esclusioni
+      substitutes: Sostituzioni
+      starting: con inizio
+      review_html: Puoi rivedere i tuoi ordini e il tuo account quando desideri accedendo a %{link}.
+      contact_html: Per qualsiasi domanda e suggerimento, perfavore contattaci %{email}
       powered_by_html: Powered by %{link}
-
