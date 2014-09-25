@@ -139,7 +139,7 @@ class Api::V0::OrdersController < Api::V0::BaseController
       end
     end
 
-    unless new_order.has_key?('payment_method')
+    unless new_order.key?('payment_method')
       @order.errors.add(:payment_method, "can't be blank")
     end
 
