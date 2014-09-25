@@ -99,6 +99,7 @@ describe "API v0" do
           "frequency": "weekly",
           "week_days": [0, 3],
           "start_date": "#{Date.today}",
+          "payment_method": "bank_deposit",
           "substitutes": [
             #{substitutes.map(&:id).join(',')}
           ],
@@ -133,6 +134,7 @@ describe "API v0" do
         expected_response = JSON.parse(params)
         expected_response["id"] = Order.maximum(:id)
         expected_response["active"] = false
+        expected_response.delete "payment_method"
         expect(json_response).to eq expected_response
       end
 
@@ -182,6 +184,7 @@ describe "API v0" do
             frequency
             week_days
             start_date
+            payment_method
           )
         end
       end
@@ -237,6 +240,7 @@ describe "API v0" do
               frequency
               week_days
               start_date
+              payment_method
             )
           end
         end

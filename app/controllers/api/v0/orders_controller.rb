@@ -139,7 +139,14 @@ class Api::V0::OrdersController < Api::V0::BaseController
       end
     end
 
+    unless new_order.has_key?('payment_method')
+      @order.errors.add(:payment_method, "can't be blank")
+    end
+
     if @order.errors.empty? && @order.save
+      @order.account.update_attributes!(default_payment_method: new_order['payment_method'])
+      Event.new_webstore_order(@order) if @order.account.distributor.notify_for_new_webstore_order
+
       @customer_id = customer.id
       render 'api/v0/orders/create', status: :created, location: api_v0_order_url(id: @order.id) and return
     else
