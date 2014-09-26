@@ -15,7 +15,7 @@ describe "API v0" do
       @bank_information ||= Fabricate(:bank_information, distributor: @distributor)
     end
 
-    let(:model_attributes) { %w(active bank_information city cod_payment_message collect_delivery_note collect_phone company_logo company_team_image currency email email_customer_on_new_webstore_order facebook_url id line_items name payment_options phone require_address_1 require_address_2 require_city require_delivery_note require_phone require_postcode require_suburb sidebar_description time_zone) }
+    let(:model_attributes) { %w(active bank_information city cod_payment_message collect_delivery_note collect_phone company_logo company_team_image currency email email_customer_on_new_webstore_order facebook_url id line_items name payment_options phone require_address_1 require_address_2 require_city require_delivery_note require_phone require_postcode require_suburb sidebar_description time_zone paypal_email) }
 
     describe "GET /webstore" do
       let(:url) { "#{base_url}/webstore" }
