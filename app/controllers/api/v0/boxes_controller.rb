@@ -26,7 +26,7 @@ private
     boxes = @boxes || [@box]
     @box_images = boxes.each_with_object({}) do |box, hash|
       hash[box.id] = box.box_image.versions.each_with_object({}) do |(version, image), images|
-        images[version] = ["//", request.host_with_port, image.url].join
+        images[version] = ["//", Figaro.env.host, view_context.image_path(image.url)].join
       end
     end
   end
