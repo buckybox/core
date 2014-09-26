@@ -133,7 +133,7 @@ describe "API v0" do
 
         expected_response = JSON.parse(params)
         expected_response["id"] = Order.maximum(:id)
-        expected_response["active"] = false
+        expected_response["active"] = true
         expected_response.delete "payment_method"
         expect(json_response).to eq expected_response
       end
