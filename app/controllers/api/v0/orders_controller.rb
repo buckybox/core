@@ -144,6 +144,7 @@ class Api::V0::OrdersController < Api::V0::BaseController
     end
 
     if @order.errors.empty? && @order.save
+      @order.activate!
       @order.account.update_attributes!(default_payment_method: new_order['payment_method'])
       Event.new_webstore_order(@order) if @order.account.distributor.notify_for_new_webstore_order
       customer.add_activity(:order_create, order: @order)
