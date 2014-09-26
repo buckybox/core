@@ -9,8 +9,15 @@ attribute :active_webstore => :active
 
 node(:id) { |webstore| webstore.parameter_name }
 
-node(:company_logo) { |webstore| webstore.company_logo.banner.url }
-node(:company_team_image) { |webstore| webstore.company_team_image.photo.url }
+node(:company_logo) do |webstore|
+  ["//", Figaro.env.host, image_path(webstore.company_logo.banner.url)].join
+end
+
+node(:company_team_image) do |webstore|
+  ["//", Figaro.env.host, image_path(webstore.company_team_image.photo.url)].join
+end
+
+node(:cod_payment_message) { |webstore| webstore.bank_information.cod_payment_message }
 
 child(:bank_information) do |bank_information|
   {
@@ -22,5 +29,3 @@ child(:bank_information) do |bank_information|
     node(attr) { |bank_information| bank_information.decorate.public_send(method) }
   end
 end
-
-node(:cod_payment_message) { |webstore| webstore.bank_information.cod_payment_message }
