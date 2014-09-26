@@ -10,13 +10,11 @@ attribute :active_webstore => :active
 node(:id) { |webstore| webstore.parameter_name }
 
 node(:company_logo) do |webstore|
-  return if webstore.company_logo.banner.url.nil?
-  ["//", Figaro.env.host, image_path(webstore.company_logo.banner.url)].join
+  webstore.company_logo.banner.url.present? ? ["//", Figaro.env.host, image_path(webstore.company_logo.banner.url)].join : nil
 end
 
 node(:company_team_image) do |webstore|
-  return if webstore.company_team_image.photo.url.nil?
-  ["//", Figaro.env.host, image_path(webstore.company_team_image.photo.url)].join
+  webstore.company_team_image.photo.url.present? ? ["//", Figaro.env.host, image_path(webstore.company_team_image.photo.url)].join : nil
 end
 
 node(:cod_payment_message) { |webstore| webstore.bank_information.cod_payment_message }
