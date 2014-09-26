@@ -147,11 +147,19 @@ class Api::V0::OrdersController < Api::V0::BaseController
       @order.account.update_attributes!(default_payment_method: new_order['payment_method'])
       Event.new_webstore_order(@order) if @order.account.distributor.notify_for_new_webstore_order
       customer.add_activity(:order_create, order: @order)
+      send_confirmation_email(@order) if @order.account.distributor.email_customer_on_new_webstore_order
 
       @customer_id = customer.id
       render 'api/v0/orders/create', status: :created, location: api_v0_order_url(id: @order.id) and return
     else
       return unprocessable_entity @order.errors
     end
+  end
+
+  private def send_confirmation_email(order)
+    CustomerMailer.delay(
+      priority: Figaro.env.delayed_job_priority_high,
+      queue: "#{__FILE__}:#{__LINE__}",
+    ).order_confirmation(order)
   end
 end
