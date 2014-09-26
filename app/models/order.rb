@@ -401,6 +401,11 @@ class Order < ActiveRecord::Base
     self.active = true
   end
 
+  def activate!
+    activate
+    save!
+  end
+
   def include_extras
     new_record? || !order_extras.count.zero?
   end
