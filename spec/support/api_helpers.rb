@@ -1,6 +1,6 @@
 module ApiHelpers
   def base_url
-    "http://api.test.dev/v0"
+    "http://api.test.dev/v1"
   end
 
   def api_distributor

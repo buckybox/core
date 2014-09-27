@@ -1,4 +1,4 @@
-class Api::V0::OrdersController < Api::V0::BaseController
+class Api::V1::OrdersController < Api::V1::BaseController
   before_filter :fetch_json_body, only: :create
 
   def_param_group :extra do
@@ -34,7 +34,7 @@ class Api::V0::OrdersController < Api::V0::BaseController
 
   api :GET, '/orders/:id', "Get single order"
   param :id, Integer, desc: "Order's id"
-  example "api.buckybox.com/v0/orders/12"
+  example "api.buckybox.com/v1/orders/12"
   def show
     order_id = params[:id]
     @order = @distributor.orders.find_by(id: order_id)
@@ -151,7 +151,7 @@ class Api::V0::OrdersController < Api::V0::BaseController
       send_confirmation_email(@order) if @order.account.distributor.email_customer_on_new_webstore_order
 
       @customer_id = customer.id
-      render 'api/v0/orders/create', status: :created, location: api_v0_order_url(id: @order.id) and return
+      render 'api/v1/orders/create', status: :created, location: api_v1_order_url(id: @order.id) and return
     else
       return unprocessable_entity @order.errors
     end

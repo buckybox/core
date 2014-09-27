@@ -2,7 +2,7 @@ require "spec_helper"
 
 include ApiHelpers
 
-describe "API v0" do
+describe "API v1" do
   let(:delivery_service) { Fabricate(:delivery_service, distributor: api_distributor) }
 
   describe "customers" do
@@ -42,7 +42,7 @@ describe "API v0" do
         json_request method, url, params, headers
         expect(response.status).to eq valid_http_code
 
-        expect(response.headers["Location"]).to eq api_v0_customer_url(id: customer.id)
+        expect(response.headers["Location"]).to eq api_v1_customer_url(id: customer.id)
       end
 
       context "with an empty body" do

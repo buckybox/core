@@ -2,7 +2,7 @@ require "spec_helper"
 
 include ApiHelpers
 
-describe "API v0" do
+describe "API v1" do
   describe "orders" do
     shared_examples_for "an order" do
       it "returns the expected attributes" do
@@ -161,7 +161,7 @@ describe "API v0" do
         json_request :post, url, params, headers
         expect(response.status).to eq 201
 
-        expect(response.headers["Location"]).to eq api_v0_order_url(id: json_order["id"])
+        expect(response.headers["Location"]).to eq api_v1_order_url(id: json_order["id"])
       end
 
       context "with an empty body" do

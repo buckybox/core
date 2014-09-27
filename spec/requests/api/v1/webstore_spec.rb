@@ -2,7 +2,7 @@ require "spec_helper"
 
 include ApiHelpers
 
-describe "API v0" do
+describe "API v1" do
   describe "webstore" do
     shared_examples_for "a webstore" do
       it "returns the expected attributes" do
