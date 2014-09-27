@@ -7,7 +7,7 @@ module Rack
     def call(env)
       response = @app.call(env)
 
-      %w(X-Request-Id X-Runtime X-Rack-Cache X-Powered-By Server).each do |header|
+      %w(X-Request-Id X-Runtime X-Rack-Cache X-Powered-By).each do |header|
         response[1].delete header # second item is the headers
       end
 
