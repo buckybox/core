@@ -1,4 +1,4 @@
-class Api::V0::CustomersController < Api::V0::BaseController
+class Api::V1::CustomersController < Api::V1::BaseController
   before_filter :fetch_json_body, only: [:create, :update]
 
   def_param_group :address do
@@ -58,7 +58,7 @@ class Api::V0::CustomersController < Api::V0::BaseController
       end
     end
 
-    render 'api/v0/customers/index'
+    render 'api/v1/customers/index'
   end
 
   api :GET, '/customers/:id',  "Get single customer"
@@ -158,7 +158,7 @@ class Api::V0::CustomersController < Api::V0::BaseController
 
     if @customer.save
       status = existing_customer ? :ok : :created
-      render 'api/v0/customers/create', status: status, location: api_v0_customer_url(id: @customer.id)
+      render 'api/v1/customers/create', status: status, location: api_v1_customer_url(id: @customer.id)
     else
       unprocessable_entity @customer.errors
     end

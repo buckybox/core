@@ -2,7 +2,7 @@ require "spec_helper"
 
 include ApiHelpers
 
-describe "API v0" do
+describe "API v1" do
   describe "delivery services" do
     shared_examples_for "a delivery service" do
       it "returns the expected attributes" do

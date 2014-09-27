@@ -1,4 +1,4 @@
-class Api::V0::BaseController < ApplicationController
+class Api::V1::BaseController < ApplicationController
   layout false
   before_filter :authenticate, :set_locale, :embed_options
 
