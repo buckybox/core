@@ -231,7 +231,7 @@ class Distributor < ActiveRecord::Base
 
   def window_start_from
     # If we have missed the cutoff point add a day so we start generation from tomorrow
-    Date.current + ( advance_hour < Time.current.hour ? 1 : 0 ).days
+    Date.current + ( advance_hour <= Time.current.hour ? 1 : 0 ).days
   end
 
   def beginning_of_green_zone
