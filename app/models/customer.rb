@@ -121,15 +121,8 @@ class Customer < ActiveRecord::Base
   end
 
   def self.next_number(distributor)
-    existing_customers = distributor.customers
-    result = 1
-
-    unless existing_customers.count == 0
-      max_number = distributor.customers.maximum(:number)
-      result = max_number + 1
-    end
-
-    return result
+    max_number = distributor.customers.maximum(:number) || 0
+    max_number + 1
   end
 
   def self.all_dynamic_tags

@@ -124,6 +124,18 @@ class DataIntegrity
     end
   end
 
+  # NOTE: not used but useful for debugging purposes
+  def customer_numbers_have_no_gaps
+    Distributor.find_each do |distributor|
+      max_number = distributor.customers.maximum(:number) || 0
+      missing_numbers = 1.upto(max_number).to_a - distributor.customers.map(&:number)
+
+      if missing_numbers.present?
+        error "Distributor ##{distributor.id}: #{missing_numbers.size} customer numbers are missing out: #{missing_numbers.join(', ')} (max assigned number = #{max_number})"
+      end
+    end
+  end
+
 private
 
   def self.check
