@@ -17,17 +17,20 @@ module ApiHelpers
   end
 
   shared_examples_for "an authenticated API" do |method|
-    it "requires authentication" do
-      [
-        {},
-        {"API-Key" => "fuck", "API-Secret" => "off"}
-      ].each do |headers|
-        json_request(method, url, nil, headers)
+    it "returns 401 with no credentials" do
+      headers = {}
+      json_request(method, url, nil, headers)
 
-        expect(response.status).to eq 401
-        expect(json_response).to have_key "message"
-      end
+      expect(response.status).to eq 401
+      expect(json_response).to have_key "message"
+    end
+
+    it "returns 404 with invalid credentials" do
+      headers = {"API-Key" => "fuck", "API-Secret" => "off"}
+      json_request(method, url, nil, headers)
+
+      expect(response.status).to eq 404
+      expect(json_response).to have_key "message"
     end
   end
-
 end

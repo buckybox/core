@@ -17,19 +17,24 @@ private
   end
 
   def authenticate
-    return unauthorized if api_key.nil? || api_secret.nil?
+    if api_key.blank? || api_secret.blank?
+      send_alert_email
+      render json: { message: "Could not authenticate. You must set the API-Key and API-Secret headers." }, status: :unauthorized and return
+    end
 
     if webstore_id
       if api_key == Figaro.env.api_master_key && api_secret == Figaro.env.api_master_secret
         @distributor = Distributor.find_by(parameter_name: webstore_id)
+      else
+        send_alert_email
+        render json: { message: "Could not authenticate. Invalid master API-Key or API-Secret headers." }, status: :unauthorized and return
       end
     else
       @distributor = Distributor.find_by(api_key: api_key, api_secret: api_secret)
     end
 
-    unless @distributor
-      send_alert_email
-      return unauthorized
+    if !@distributor
+      return not_found
     end
   end
 
@@ -59,11 +64,6 @@ private
     rescue JSON::ParserError
       render json: { message: "Invalid JSON" }, status: :unprocessable_entity and return
     end
-  end
-
-  # 401
-  def unauthorized
-    render json: { message: "Could not authenticate. You must set the API-Key and API-Secret headers." }, status: :unauthorized and return
   end
 
   # 404
