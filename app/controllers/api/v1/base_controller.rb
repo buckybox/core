@@ -1,6 +1,6 @@
 class Api::V1::BaseController < ApplicationController
   layout false
-  before_filter :authenticate, :set_locale, :embed_options
+  before_filter :log_request, :authenticate, :set_locale, :embed_options
 
 private
 
@@ -14,6 +14,19 @@ private
 
   def webstore_id
     request.headers['Webstore-ID']
+  end
+
+  def log_request
+    info = {
+      api_key: api_key,
+      webstore_id: webstore_id,
+      method: request.method,
+      request_path: request.fullpath,
+      params: request.request_parameters,
+      ip: request.remote_ip,
+    }.to_json
+
+    logger.info "API request: #{info}"
   end
 
   def authenticate
