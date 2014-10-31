@@ -256,11 +256,6 @@ Style/EmptyLineBetweenDefs:
 Style/EmptyLines:
   Enabled: false
 
-# Offense count: 84
-# Cop supports --auto-correct.
-Style/EmptyLinesAroundBody:
-  Enabled: false
-
 # Offense count: 2
 # Configuration parameters: Exclude.
 Style/FileName:
@@ -568,4 +563,42 @@ Style/WordArray:
   MinSize: 4
 
 Lint/UnreachableCode:
+  Enabled: false
+
+# Offense count: 176
+Metrics/AbcSize:
+  Max: 85
+
+# Offense count: 16
+# Cop supports --auto-correct.
+Style/ElseAlignment:
+  Enabled: false
+
+# Offense count: 64
+# Cop supports --auto-correct.
+# Configuration parameters: EnforcedStyle, SupportedStyles.
+Style/EmptyLinesAroundClassBody:
+  Enabled: false
+
+# Offense count: 6
+# Cop supports --auto-correct.
+Style/EmptyLinesAroundMethodBody:
+  Enabled: false
+
+# Offense count: 13
+# Cop supports --auto-correct.
+# Configuration parameters: EnforcedStyle, SupportedStyles.
+Style/EmptyLinesAroundModuleBody:
+  Enabled: false
+
+# Offense count: 25
+# Cop supports --auto-correct.
+# Configuration parameters: EnforcedStyle, SupportedStyles.
+Style/MultilineOperationIndentation:
+  Enabled: false
+
+# Offense count: 18
+# Cop supports --auto-correct.
+# Configuration parameters: EnforcedStyle, SupportedStyles.
+Style/StringLiteralsInInterpolation:
   Enabled: false
