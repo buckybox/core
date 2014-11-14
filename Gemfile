@@ -62,7 +62,6 @@ gem 'cane',                            '~> 2.6.1'
 gem 'airbrake',                        '~> 3.1.2'
 gem 'bugsnag',                         '~> 2.0.2'
 gem 'rack-mini-profiler',              '~> 0.9.2'
-gem 'flamegraph',                      '~> 0.0.5' # for rack-mini-profiler
 gem 'fast_blank',                      '~> 0.0.2'
 gem 'ordinalize_full',                 '~> 1.2.0', require: 'ordinalize_full/integer'
 gem 'retryable',                       '~> 1.3.5'
