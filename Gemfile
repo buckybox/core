@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 
-if RUBY_VERSION != '2.1.4'
-  warn "WARNING: You are not running the version of Ruby targeted for this application (#{RUBY_VERSION} != 2.1.4)."
+if RUBY_VERSION != '2.1.5'
+  warn "WARNING: You are not running the version of Ruby targeted for this application (#{RUBY_VERSION} != 2.1.5)."
 end
 
 gem 'rails',                           '~> 3.2.20'
