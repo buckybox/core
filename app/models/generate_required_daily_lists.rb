@@ -20,7 +20,7 @@ class GenerateRequiredDailyLists
     @successful
   end
 
-  private
+private
 
   def last_list
     @last_list ||= packing_lists.last
@@ -30,26 +30,20 @@ class GenerateRequiredDailyLists
     @last_list_date ||= last_list.date if last_list
   end
 
-  def packing_list_is_longer?
-    @packing_list_is_longer ||= last_list_date && (last_list_date > window_end_at)
-  end
-
   def start_date
-    @start_date ||= begin
-      if packing_list_is_longer?
-        window_end_at + 1
-      else
-        last_list_date ? last_list_date : window_start_from
-      end
-    end
+    @start_date ||= window_start_from
   end
 
   def end_date
-    @end_date ||= packing_list_is_longer? ? last_list_date : window_end_at
+    @end_date ||= [last_list_date, window_end_at].compact.max
   end
 
   def update_lists(date)
-    packing_list_is_longer? ? destroy_unneeded_lists(date) : create_needed_lists(date)
+    if date > window_end_at
+      destroy_unneeded_lists(date)
+    else
+      create_needed_lists(date)
+    end
   end
 
   def destroy_unneeded_lists(date)

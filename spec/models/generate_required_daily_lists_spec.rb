@@ -93,26 +93,5 @@ describe GenerateRequiredDailyLists do
         is_expected.to be false
       end
     end
-
-    context 'when there is no packing list or it is less than or equal to the end date' do
-      before do
-        allow(packing_lists).to receive(:last) { packing_list }
-        allow(packing_list).to receive(:date)  { Date.new(2012, 11, 8) }
-      end
-
-      it 'works' do
-        is_expected.to be true
-      end
-
-      it 'has a packing list date that does not equal the requested date' do
-        allow(returned_packing_list).to receive(:date) { Date.new(2012, 11, 13) }
-        is_expected.to be false
-      end
-
-      it 'has a packing list date that does not equal the requested date' do
-        allow(returned_delivery_list).to receive(:date) { Date.new(2012, 11, 13) }
-        is_expected.to be false
-      end
-    end
   end
 end

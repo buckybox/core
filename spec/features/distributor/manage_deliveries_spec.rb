@@ -13,7 +13,7 @@ feature "Manage deliveries", js: true do
     visit distributor_deliveries_path
 
     # go to the first yellow day
-    find(:xpath, '//a[@title="pending deliveries"]').click
+    first(:xpath, '//a[@title="pending deliveries"]').click
     click_link order.delivery_service.name
   end
 
