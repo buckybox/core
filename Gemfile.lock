@@ -227,16 +227,11 @@ GEM
     execjs (2.2.2)
     fabrication (2.9.8)
     fast_blank (0.0.2)
-    fast_stack (0.1.0)
-      rake
-      rake-compiler
     fastercsv (1.5.5)
     ffi (1.9.6)
     figaro (0.6.4)
       bundler (~> 1.0)
       rails (>= 3, < 5)
-    flamegraph (0.0.8)
-      fast_stack
     foreman (0.75.0)
       dotenv (~> 0.11.1)
       thor (~> 0.19.1)
@@ -413,8 +408,6 @@ GEM
       thor (>= 0.14.6, < 2.0)
     rainbow (2.0.0)
     rake (10.3.2)
-    rake-compiler (0.9.3)
-      rake
     rb-fsevent (0.9.4)
     rb-inotify (0.9.5)
       ffi (>= 0.5.0)
@@ -595,7 +588,6 @@ DEPENDENCIES
   fabrication (~> 2.9.8)
   fast_blank (~> 0.0.2)
   figaro (~> 0.6.4)
-  flamegraph (~> 0.0.5)
   foreman (~> 0.75.0)
   fuzzy-string-match (~> 0.9.4)
   geokit (~> 1.8.5)
