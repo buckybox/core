@@ -8,19 +8,34 @@ class DirectoryController < ApplicationController
   def index
     distributors = Distributor.active.select(&:active_webstore)
 
-    list = distributors.map.each_with_index do |distributor, index|
+    list = distributors.map do |distributor|
       address = distributor.localised_address
       next unless address
 
-      full_address = [address.street, address.city, address.zip, address.country].join(" ")
+      geocoded_address = nil
 
-      # NOTE: Google allows up to 10 requests per second
-      # https://developers.google.com/maps/documentation/geocoding/?csw=1#Limits
-      sleep 2 if index % 9 == 0
+      [
 
-      geocoded_address = retryable(tries: 3, sleep: 1, on: Geokit::Geocoders::TooManyQueriesError) do
-        Geokit::Geocoders::GoogleGeocoder.geocode full_address
+        [address.street, address.city, address.zip, address.state, address.country],
+        [address.city, address.zip, address.country],
+        [address.country],
+
+      ].each do |address_parts|
+
+        full_address = address_parts.join(" ").squeeze(" ")
+        geocoded_address = geocode_address(full_address)
+
+        if geocoded_address.success
+          break
+        else
+          geocoded_address = nil
+        end
+
       end
+
+      raise "Cannot geocode address" unless geocoded_address
+
+      full_address = [address.street, address.city, address.zip, address.state, address.country].join(" ").squeeze(" ")
 
       OpenStruct.new(
         name: distributor.name,
@@ -31,5 +46,15 @@ class DirectoryController < ApplicationController
     end.compact
 
     render locals: { list: list }
+  end
+
+private
+
+  def geocode_address(address)
+    # NOTE: Google allows up to 10 requests per second
+    # https://developers.google.com/maps/documentation/geocoding/?csw=1#Limits
+    retryable(tries: 3, sleep: 2, on: Geokit::Geocoders::TooManyQueriesError) do
+      Geokit::Geocoders::GoogleGeocoder.geocode address
+    end
   end
 end
