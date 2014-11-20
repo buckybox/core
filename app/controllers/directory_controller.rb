@@ -35,7 +35,7 @@ class DirectoryController < ApplicationController
 
       raise "Cannot geocode address" unless geocoded_address
 
-      full_address = [address.street, address.city, address.zip, address.state, address.country].join(" ").squeeze(" ")
+      full_address = [address.street, address.city, address.zip, address.country].join(" ").squeeze(" ")
 
       OpenStruct.new(
         name: distributor.name,
