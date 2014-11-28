@@ -4,6 +4,7 @@ if RUBY_VERSION != '2.1.5'
   warn "WARNING: You are not running the version of Ruby targeted for this application (#{RUBY_VERSION} != 2.1.5)."
 end
 
+gem 'rake',                            '~> 10.3.2' # i18n-spec breaks with 10.4 :/
 gem 'rails',                           '~> 3.2.21'
 gem 'rails-i18n',                      '~> 3.0.0' # For Rails 3.x
 gem 'pg',                              '~> 0.17.0'
