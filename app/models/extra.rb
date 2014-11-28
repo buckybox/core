@@ -7,6 +7,7 @@ class Extra < ActiveRecord::Base
   belongs_to :distributor
 
   validates_presence_of :distributor, :name, :unit, :price
+  validates_uniqueness_of :name, scope: [:distributor_id, :unit]
   validates :unit, :name, length: {maximum: 80}
   validates :price_cents, numericality: { greater_than_or_equal_to: -1E8, less_than: 1E8 }
 
