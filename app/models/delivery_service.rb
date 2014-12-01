@@ -51,9 +51,9 @@ class DeliveryService < ActiveRecord::Base
 
     [
       name.titleize,
-      "(#{days.join(', ')})",
+      days.join(', '),
       fee.with_currency(distributor.currency),
-    ].join(" ")
+    ].join(" - ")
   end
 
   def next_run
