@@ -17,4 +17,4 @@ Scenario: Log in with invalid credentials
 Scenario: Log out
   Given I am logged in as a customer
   When I log out of the customer section
-  Then I should be viewing the customer login page
+  Then I should be viewing the webstore

@@ -154,7 +154,15 @@ private
     when :distributor
       distributor_root_url
     when :customer
-      customer_root_url
+      if current_customer && distributor = current_customer.distributor
+        if distributor.active_webstore?
+          webstore_store_url(distributor.parameter_name)
+        else
+          new_customer_session_url(distributor: distributor.parameter_name)
+        end
+      else
+        customer_root_url
+      end
     else
       Figaro.env.marketing_site_url # Shouldn't happen but better than nothing.
     end
