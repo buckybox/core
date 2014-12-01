@@ -21,7 +21,8 @@ class Webstore::PaymentOptions < Webstore::Form
 
   def_delegators :distributor,
     :collect_phone,
-    :collect_delivery_note
+    :collect_delivery_note,
+    :require_phone
 
   def name
     super || customer.name
@@ -57,10 +58,6 @@ class Webstore::PaymentOptions < Webstore::Form
 
   def require_name
     !pickup_point?
-  end
-
-  def require_phone
-    !pickup_point? && distributor.require_phone
   end
 
   # Returns whether the address is valid or not so we can hide the edit form when it is valid
