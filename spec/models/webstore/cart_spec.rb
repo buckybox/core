@@ -70,7 +70,6 @@ describe Webstore::Cart do
   end
 
   describe '#save' do
-
     context 'saving a new cart' do
       before do
         allow(persistence).to receive(:id) { nil }

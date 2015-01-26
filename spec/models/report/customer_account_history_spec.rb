@@ -1,7 +1,6 @@
 require_relative '../../../app/models/report/customer_account_history'
 
 describe Report::CustomerAccountHistory do
-
   let(:customer) do
     double('customer',
       formated_number:  '012',
@@ -31,5 +30,4 @@ describe Report::CustomerAccountHistory do
       expect(customer_account_history.data).to eq(expected_result)
     end
   end
-
 end

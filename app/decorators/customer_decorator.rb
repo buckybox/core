@@ -62,11 +62,8 @@ class CustomerDecorator < Draper::Decorator
 
   def last_paid_date
     time = object.last_paid
-    if time.present?
-      time.to_date.iso8601
-    else
-      nil
-    end
+
+    time.to_date.iso8601 if time.present?
   end
 
   def customer_packing_notes

@@ -2,7 +2,6 @@ require "spec_helper"
 
 describe Admin::DistributorsController do
   describe "routing" do
-
     it "delivery_services to #index" do
       expect(get("/admin/distributors")).to route_to("admin/distributors#index")
     end
@@ -30,6 +29,5 @@ describe Admin::DistributorsController do
     it "delivery_services to #destroy" do
       expect(delete("/admin/distributors/1")).to route_to("admin/distributors#destroy", :id => "1")
     end
-
   end
 end

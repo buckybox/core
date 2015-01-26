@@ -29,5 +29,4 @@ package :certs do
     has_file "#{certs_remote}#{cert_name}"
     has_file "/etc/ssl/private/#{key_name}.key"
   end
-
 end

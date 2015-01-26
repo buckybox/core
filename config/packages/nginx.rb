@@ -1,5 +1,4 @@
 package :nginx_config do
-
   config_file = "/usr/local/nginx/conf/nginx.conf"
   config_text = Package.preprocess_stage(File.read(File.join(File.dirname(__FILE__), 'configs', 'nginx', 'nginx.conf')))
   init_file = "/etc/init.d/nginx"
@@ -19,7 +18,6 @@ package :nginx_config do
 end
 
 package :nginx_initd do
-
   init_text = File.read(File.join(File.dirname(__FILE__), 'configs', 'nginx', 'init.d'))
   init_file = "/etc/init.d/nginx"
   tmp_file = "/tmp/nginx"

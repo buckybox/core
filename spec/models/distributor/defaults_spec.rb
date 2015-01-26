@@ -9,7 +9,6 @@ class Figaro; end unless defined? Figaro
 require_relative "../../../app/models/distributor/defaults"
 
 describe Distributor::Defaults do
-
   let(:distributor) do
     double("distributor",
            parameter_name: "veg-people",
@@ -58,6 +57,5 @@ describe Distributor::Defaults do
 
     it_behaves_like "a distributor with populated defaults"
   end
-
 end
 

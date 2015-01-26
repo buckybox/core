@@ -3,7 +3,6 @@ class Customer; end # So an AR model doesn't have to be included
 require_relative "../../../../app/models/customer/form/update_delivery_address"
 
 describe Customer::Form::UpdateDeliveryAddress do
-
   describe "retrieving existing attributes" do
     let(:address)  { double("address", address_1: nil, address_2: nil, suburb: nil, city: nil, postcode: nil, delivery_note: nil) }
     let(:customer) { double("customer", address: address) }
@@ -103,5 +102,4 @@ describe Customer::Form::UpdateDeliveryAddress do
       form.save
     end
   end
-
 end

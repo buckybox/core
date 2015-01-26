@@ -51,6 +51,5 @@ describe PackingList, :slow do
 
     specify { expect { PackingList.generate_list(@distributor, @generate_date) }.to change(@distributor.packing_lists, :count).from(@advance_days).to(@advance_days + 1) }
     specify { expect { PackingList.generate_list(@distributor, @generate_date) }.to change(@distributor.packages, :count).from(0).to(3) }
-
   end
 end

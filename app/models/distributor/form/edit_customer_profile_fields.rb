@@ -8,7 +8,6 @@ module Distributor::Form::EditCustomerProfileFields
   include Customer::PhoneValidations
 
   included do
-
     attribute :number,                    Integer
     attribute :first_name,                String
     attribute :last_name,                 String
@@ -67,7 +66,6 @@ module Distributor::Form::EditCustomerProfileFields
         work_phone:    work_phone,
       }
     end
-
   end
 
 end

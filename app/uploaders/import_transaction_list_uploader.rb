@@ -19,8 +19,6 @@ class ImportTransactionListUploader < CarrierWave::Uploader::Base
       path << distributor_id
       path << "/#{secure_token}-#{original_filename_without_format}.#{file.extension}"
       path
-    else
-      nil
     end
   end
 

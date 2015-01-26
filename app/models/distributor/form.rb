@@ -10,7 +10,6 @@ module Distributor::Form
   extend ActiveSupport::Concern
 
   included do
-
     extend Forwardable
     extend ActiveModel::Naming
 
@@ -72,7 +71,6 @@ module Distributor::Form
     def address_args
       {}
     end
-
   end
 
 end

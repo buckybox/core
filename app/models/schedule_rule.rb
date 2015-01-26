@@ -227,7 +227,6 @@ class ScheduleRule < ActiveRecord::Base
           schedule_rule.start < schedule_pause.start) ||
         schedule_pause.finish <= schedule_rule.start) ||
       schedule_pause.finish <= schedule_rule.start
-    else
     end
 
     schedule_rule.days.all?{|day| on_day?(day)}

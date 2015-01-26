@@ -191,7 +191,6 @@ module Bucky
 
           row_number += 1
         end
-
       end
 
       log csv_string
