@@ -281,7 +281,6 @@ describe ScheduleRule do
           specify {expect(@sr.next_occurrence(Date.parse('2012-10-08'))).to eq(Date.parse('2012-11-01'))}
         end
       end
-
     end
   end
 

@@ -255,5 +255,4 @@ BuckyBox::Application.routes.draw do
       resource  :webstore,          only: [:show]
     end
   end
-
 end

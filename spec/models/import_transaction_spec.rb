@@ -2,7 +2,6 @@ require 'spec_helper'
 
 describe ImportTransaction do
   context :process_negative_transactions do
-
     let(:import_transaction){ import_transaction = Fabricate(:import_transaction, amount_cents: -1423, customer_id: nil, match: ImportTransaction::MATCH_NOT_A_CUSTOMER )}
     let(:account) do
       a = mock_model(Account)

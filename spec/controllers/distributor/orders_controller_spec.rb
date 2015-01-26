@@ -64,7 +64,6 @@ describe Distributor::OrdersController do
   end
 
   describe '#create' do
-
     before do
       Fabricate(:box, distributor: @distributor)
     end

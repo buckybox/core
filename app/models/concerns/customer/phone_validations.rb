@@ -5,7 +5,6 @@ module Customer::PhoneValidations
   extend ActiveSupport::Concern
 
   included do
-
     attribute :mobile_phone
     attribute :home_phone
     attribute :work_phone
@@ -19,7 +18,6 @@ module Customer::PhoneValidations
         errors[:phone_number] << "can't be blank"
       end
     end
-
   end
 end
 

@@ -5,7 +5,6 @@ module Customer::AddressValidations
   extend ActiveSupport::Concern
 
   included do
-
     attribute :address_1,           String
     attribute :address_2,           String
     attribute :suburb,              String
@@ -59,6 +58,5 @@ module Customer::AddressValidations
 
       DeliveryService.find(delivery_service_id) if delivery_service_id
     end
-
   end
 end

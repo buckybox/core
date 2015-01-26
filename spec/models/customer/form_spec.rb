@@ -3,7 +3,6 @@ class Customer; end # So an AR model doesn't have to be included
 require_relative "../../../app/models/customer/form"
 
 describe Customer::Form do
-
   describe "attributes" do
     let(:customer) { double("customer") }
     let(:form)     { Customer::Form.new(customer: customer) }
@@ -37,5 +36,4 @@ describe Customer::Form do
     form = Customer::Form.new
     expect(form.persisted?).to be true
   end
-
 end

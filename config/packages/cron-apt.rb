@@ -1,5 +1,4 @@
 package :cron_apt do
-
   apt "cron-apt"
 
   local = File.join(File.dirname(__FILE__), 'configs', 'cron-apt', 'config')
@@ -12,6 +11,5 @@ package :cron_apt do
   verify do
     has_apt "cron-apt"
   end
-
 end
 

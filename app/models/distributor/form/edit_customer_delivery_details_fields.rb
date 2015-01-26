@@ -8,7 +8,6 @@ module Distributor::Form::EditCustomerDeliveryDetailsFields
   include Customer::AddressValidations
 
   included do
-
     attribute :delivery_service_id, Integer
 
     def_delegators :distributor,
@@ -45,7 +44,6 @@ module Distributor::Form::EditCustomerDeliveryDetailsFields
         delivery_note:  delivery_note,
       }
     end
-
   end
 
 end

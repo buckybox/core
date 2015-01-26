@@ -91,7 +91,6 @@ describe Account do
       let(:distributor) { customer.distributor }
 
       it "updates halted status when balance changes" do
-
         expect(account).to receive(:update_halted_status)
         account.change_balance_to!(-100)
       end

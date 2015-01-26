@@ -1,7 +1,6 @@
 require 'spec_helper'
 
 describe Country do
-
   context "NZ" do
     before do
       Fabricate(:country, alpha2: "NZ")

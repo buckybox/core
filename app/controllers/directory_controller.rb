@@ -21,7 +21,6 @@ class DirectoryController < ApplicationController
         [address.country],
 
       ].each do |address_parts|
-
         full_address = address_parts.join(" ").squeeze(" ")
         geocoded_address = geocode_address(full_address)
 
@@ -30,7 +29,6 @@ class DirectoryController < ApplicationController
         else
           geocoded_address = nil
         end
-
       end
 
       raise "Cannot geocode address" unless geocoded_address

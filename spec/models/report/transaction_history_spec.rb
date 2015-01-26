@@ -2,7 +2,6 @@ require_relative '../../../app/models/report/transaction_history'
 require 'date'
 
 describe Report::TransactionHistory do
-
   let(:customer) do
     double('customer',
       first_name: 'Joe',
@@ -42,5 +41,4 @@ describe Report::TransactionHistory do
       expect(transaction_history.data.lines.last).to eq(expected_result)
     end
   end
-
 end

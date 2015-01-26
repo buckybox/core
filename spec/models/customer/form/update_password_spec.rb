@@ -3,7 +3,6 @@ class Customer; end # So an AR model doesn't have to be included
 require_relative "../../../../app/models/customer/form/update_password"
 
 describe Customer::Form::UpdatePassword do
-
   describe "storing new attributes" do
     let(:args) do
       {
@@ -41,5 +40,4 @@ describe Customer::Form::UpdatePassword do
       form.save
     end
   end
-
 end

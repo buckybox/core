@@ -404,7 +404,6 @@ describe Distributor do
   end
 
   describe ".transactional_customer_count" do
-
     let(:distributor) { Fabricate(:distributor) }
     let(:customer){ customer = Fabricate(:customer, distributor: distributor) }
 
