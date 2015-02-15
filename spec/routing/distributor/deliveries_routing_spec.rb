@@ -1,35 +1,51 @@
 require "spec_helper"
 
-RSpec.describe "routes for Deliveries", :type => :routing do
+RSpec.describe "routes for Deliveries", type: :routing do
 
   describe "RESTful routes" do
 
-    it "routes to /distributor/deliveries" do
-      expect(get: "/distributor/deliveries").to be_routable
+    describe "create" do
+
+      it "routes to /distributor/deliveries/new", broken_or_unused: true do
+        expect(get: "/distributor/deliveries/new").to be_routable
+      end
+
+      it "routes to /distributor/deliveries" do
+        expect(post: "/distributor/deliveries").to be_routable
+      end
+
     end
 
-    it "routes to /distributor/deliveries" do
-      expect(post: "/distributor/deliveries").to be_routable
+    describe "read" do
+
+      it "routes to /distributor/deliveries" do
+        expect(get: "/distributor/deliveries").to be_routable
+      end
+
+      it "routes to /distributor/deliveries/2", broken_or_unused: true do
+        expect(get: "/distributor/deliveries/2").to be_routable
+      end
+
     end
 
-    it "routes to /distributor/deliveries/new" do
-      expect(get: "/distributor/deliveries/new").to be_routable
+    describe "update" do
+
+      it "routes to /distributor/deliveries/2/edit", broken_or_unused: true do
+        expect(get: "/distributor/deliveries/2/edit").to be_routable
+      end
+
+      it "routes to /distributor/deliveries/2" do
+        expect(put: "/distributor/deliveries/2").to be_routable
+      end
+
     end
 
-    it "routes to /distributor/deliveries/2/edit" do
-      expect(get: "/distributor/deliveries/2/edit").to be_routable
-    end
+    describe "delete" do
 
-    it "routes to /distributor/deliveries/2" do
-      expect(get: "/distributor/deliveries/2").to be_routable
-    end
+      it "routes to /distributor/deliveries/2" do
+        expect(delete: "/distributor/deliveries/2").to be_routable
+      end
 
-    it "routes to /distributor/deliveries/2" do
-      expect(put: "/distributor/deliveries/2").to be_routable
-    end
-
-    it "routes to /distributor/deliveries/2" do
-      expect(delete: "/distributor/deliveries/2").to be_routable
     end
 
   end
