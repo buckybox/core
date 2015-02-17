@@ -77,10 +77,16 @@ class DeliveryList < ActiveRecord::Base
     end
 
     master = DeliverySequenceOrder.where(delivery_service_id: delivery_service_id, day: day).ordered.collect(&:address_hash).uniq
-    new_master_list = Bucky::Dso::List.sort(master, ordered_address_hashes.uniq) #Assuming .uniq is stable to the order
-    DeliverySequenceOrder.update_ordering(new_master_list, delivery_service_id, day)
 
-    return true
+    begin
+      new_master_list = Bucky::Dso::List.sort(master, ordered_address_hashes.uniq) #Assuming .uniq is stable to the order
+      DeliverySequenceOrder.update_ordering(new_master_list, delivery_service_id, day)
+
+    rescue ArgumentError
+      return false
+    end
+
+    true
   end
 
   def mark_all_as_auto_delivered
