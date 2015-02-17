@@ -1,11 +1,9 @@
 module Bucky::Dso
   class IRelativeSort < RelativeSort
     def self.sort_list(master_list, ordered_list)
-      working_list = IRelativeList.build(master_list)
+      raise ArgumentError unless (ordered_list - master_list).empty?
 
-      unless (ordered_list - master_list).empty?
-        raise "Something is seriously wrong! #{ordered_list.inspect} does not include #{master_list.inspect}"
-      end
+      working_list = IRelativeList.build(master_list)
 
       ordered_list.each_with_index do |sortable, o_index|
         w_index = working_list.index(sortable)

@@ -24,7 +24,12 @@ $(function() {
         dataType: 'json',
         url: '/distributor/deliveries/date/' +
           $('#delivery-listings').data('date') +
-          '/reposition'
+          '/reposition',
+        statusCode: {
+            400: function() {
+              bootbox.alert("Oops, that didn't work! Please refresh the page and try again.");
+            }
+        }
       })
     }
   });
