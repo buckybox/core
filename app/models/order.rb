@@ -84,10 +84,12 @@ class Order < ActiveRecord::Base
 
   # TODO: move to decorator
   def self.start_dates(delivery_service, time_from_now = nil)
-    time_from_now ||= 12.weeks.from_now
-    from_time = delivery_service.distributor.window_end_at + 1.day #next_occurrence includes the start date, so choose the next day
-    next_occurrences = delivery_service.occurrences_between(from_time, time_from_now)
-    next_occurrences.map do |time|
+    time_from_now ||= 6.months.from_now # NOTE: has to be that big for CSAs
+
+    # NOTE: next_occurrence includes the start date, so choose the next day
+    from_time = delivery_service.distributor.window_end_at + 1.day
+
+    delivery_service.occurrences_between(from_time, time_from_now).map do |time|
       [
         I18n.l(time, format: "%a - %b %-d, %Y"),
         time.to_date.iso8601,
