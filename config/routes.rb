@@ -98,18 +98,7 @@ BuckyBox::Application.routes.draw do
       end
     end
 
-    resources :deliveries do
-      collection do
-        get 'date/:date/view/:view',  action: :index,                as: 'date'
-        post 'date/:date/reposition', action: :reposition,           as: 'reposition'
-        post 'update_status',         action: :update_status,        as: 'update_status'
-        post 'make_payment',          action: :make_payment,         as: 'make_payment'
-        post 'master_packing_sheet',  action: :master_packing_sheet, as: 'master_packing_sheet'
-        post 'export',                action: :export,               as: 'export'
-        post 'export_extras',         action: :export_extras,        as: 'export_extras'
-        post 'export_exclusions_substitutions', action: :export_exclusions_substitutions, as: 'export_exclusions_substitutions'
-      end
-    end
+    resources :deliveries
 
     resources :invoices do
       collection do
@@ -255,4 +244,14 @@ BuckyBox::Application.routes.draw do
       resource  :webstore,          only: [:show]
     end
   end
+
+  # Legacy routes. As we move to all RESTful routes these should be removed.
+  get  "/distributor/deliveries/date/:date/view/:view",           controller: "distributor/deliveries", action: :index,                           as: "date_distributor_deliveries"
+  post "/distributor/deliveries/date/:date/reposition",           controller: "distributor/deliveries", action: :reposition,                      as: "reposition_distributor_deliveries"
+  post "/distributor/deliveries/update_status",                   controller: "distributor/deliveries", action: :update_status,                   as: "update_status_distributor_deliveries"
+  post "/distributor/deliveries/make_payment",                    controller: "distributor/deliveries", action: :make_payment,                    as: "make_payment_distributor_deliveries"
+  post "/distributor/deliveries/master_packing_sheet",            controller: "distributor/deliveries", action: :master_packing_sheet,            as: "master_packing_sheet_distributor_deliveries"
+  post "/distributor/deliveries/export",                          controller: "distributor/deliveries", action: :export,                          as: "export_distributor_deliveries"
+  post "/distributor/deliveries/export_extras",                   controller: "distributor/deliveries", action: :export_extras,                   as: "export_extras_distributor_deliveries"
+  post "/distributor/deliveries/export_exclusions_substitutions", controller: "distributor/deliveries", action: :export_exclusions_substitutions, as: "export_exclusions_substitutions_distributor_deliveries"
 end
