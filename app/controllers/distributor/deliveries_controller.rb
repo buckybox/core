@@ -73,19 +73,6 @@ class Distributor::DeliveriesController < Distributor::ResourceController
     end
   end
 
-  def export
-    export = get_export(params)
-
-    if export
-      screen = params[:screen] # delivery or packing
-      tracking.event(current_distributor, "export_#{screen}_list") unless current_admin.present?
-
-      send_data(*export.csv)
-    else
-      redirect_to :back
-    end
-  end
-
   def master_packing_sheet
     redirect_to :back and return unless params[:packages]
 
@@ -114,22 +101,6 @@ class Distributor::DeliveriesController < Distributor::ResourceController
     end
   end
 
-  def export_extras
-    date = Date.parse(params[:export_extras][:date])
-    csv_string = ExtrasCsv.generate(current_distributor, date)
-
-    send_csv("bucky-box-extra-line-items-export-#{date.iso8601}", csv_string)
-  end
-
-  def export_exclusions_substitutions
-    date = Date.parse(params[:date])
-    key = find_key(params)
-    packages_or_orders = current_distributor.public_send(key).where(id: params[key])
-    csv_string = ExclusionsSubstitutionsCsv.generate(date, packages_or_orders)
-
-    send_csv("bucky-box-excludes-substitutes-export-#{date.iso8601}", csv_string)
-  end
-
   def nav_start_date
     Date.current - Order::FORCAST_RANGE_BACK
   end
@@ -138,26 +109,4 @@ class Distributor::DeliveriesController < Distributor::ResourceController
     Date.current + Order::FORCAST_RANGE_FORWARD
   end
 
-private
-
-  #NOTE: These methods are used to clean up the export input. When the UI gets better we should be able to remove
-  # most if not all of the code.
-  def get_export(args)
-    found_key = find_key(args)
-    csv_exporter, ids = make_sales_args(found_key, args[found_key]) if found_key
-    export_args = { distributor: current_distributor, ids: ids, date: Date.parse(args[:date]), screen: args[:screen] }
-    csv_exporter.new(export_args) if csv_exporter
-  end
-
-  def find_key(args)
-    found_key = nil
-    [:deliveries, :packages, :orders].each { |key| found_key = key if args.key?(key) }
-    found_key
-  end
-
-  def make_sales_args(key, value)
-    key = "SalesCsv::#{key.to_s.singularize.titleize.constantize}Exporter"
-    key = key.constantize
-    [ key, value ]
-  end
 end
