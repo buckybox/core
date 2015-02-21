@@ -1,5 +1,8 @@
 require "spec_helper"
 
+# According to the RSpec docs you don't really need to test RESTful routes
+# so this group of tests should only last as long as we have to move the
+# non-RESTful routes and deal with the legacy named routes as a result. 
 RSpec.describe "routes for Deliveries", type: :routing do
 
   describe "RESTful routes" do
@@ -75,15 +78,15 @@ RSpec.describe "routes for Deliveries", type: :routing do
       end
 
       it "routes to /distributor/deliveries/export" do
-        expect(post: "/distributor/deliveries/export").to route_to(controller: "distributor/deliveries", action: "export")
+        expect(post: "/distributor/deliveries/export").to route_to(controller: "distributor/export/deliveries", action: "index")
       end
 
       it "routes to /distributor/deliveries/export_extras" do
-        expect(post: "/distributor/deliveries/export_extras").to route_to(controller: "distributor/deliveries", action: "export_extras")
+        expect(post: "/distributor/deliveries/export_extras").to route_to(controller: "distributor/export/extras", action: "index")
       end
 
       it "routes to /distributor/deliveries/export_exclusions_substitutions" do
-        expect(post: "/distributor/deliveries/export_exclusions_substitutions").to route_to(controller: "distributor/deliveries", action: "export_exclusions_substitutions")
+        expect(post: "/distributor/deliveries/export_exclusions_substitutions").to route_to(controller: "distributor/export/exclusions_substitutions", action: "index")
       end
 
     end
@@ -111,19 +114,19 @@ RSpec.describe "routes for Deliveries", type: :routing do
       end
 
       it "has the named route export_distributor_deliveries" do
-        expect(post: export_distributor_deliveries_path).to route_to(controller: "distributor/deliveries", action: "export")
+        expect(post: export_distributor_deliveries_path).to route_to(controller: "distributor/export/deliveries", action: "index")
       end
 
       it "has the named route export_extras_distributor_deliveries" do
-        expect(post: export_extras_distributor_deliveries_path).to route_to(controller: "distributor/deliveries", action: "export_extras")
+        expect(post: export_extras_distributor_deliveries_path).to route_to(controller: "distributor/export/extras", action: "index")
       end
 
       it "has the named route export_exclusions_substitutions_distributor_deliveries" do
-        expect(post: export_exclusions_substitutions_distributor_deliveries_path).to route_to(controller: "distributor/deliveries", action: "export_exclusions_substitutions")
+        expect(post: export_exclusions_substitutions_distributor_deliveries_path).to route_to(controller: "distributor/export/exclusions_substitutions", action: "index")
       end
 
     end
 
   end
-  
+
 end
