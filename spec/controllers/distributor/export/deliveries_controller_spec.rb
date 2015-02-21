@@ -7,7 +7,7 @@ describe Distributor::Export::DeliveriesController do
     before do
       csv = 'this,that,and,the,other'
       export = double('export', csv: csv)
-      allow(controller).to receive(:get_export) { export }
+      allow(Distributor::Export::Utils).to receive(:get_export) { export }
       expect(controller).to receive(:send_data).with(csv) { controller.render nothing: true }
     end
 
