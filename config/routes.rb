@@ -251,7 +251,8 @@ BuckyBox::Application.routes.draw do
   post "/distributor/deliveries/update_status",                   controller: "distributor/deliveries", action: :update_status,                   as: "update_status_distributor_deliveries"
   post "/distributor/deliveries/make_payment",                    controller: "distributor/deliveries", action: :make_payment,                    as: "make_payment_distributor_deliveries"
   post "/distributor/deliveries/master_packing_sheet",            controller: "distributor/deliveries", action: :master_packing_sheet,            as: "master_packing_sheet_distributor_deliveries"
-  post "/distributor/deliveries/export",                          controller: "distributor/deliveries", action: :export,                          as: "export_distributor_deliveries"
-  post "/distributor/deliveries/export_extras",                   controller: "distributor/deliveries", action: :export_extras,                   as: "export_extras_distributor_deliveries"
-  post "/distributor/deliveries/export_exclusions_substitutions", controller: "distributor/deliveries", action: :export_exclusions_substitutions, as: "export_exclusions_substitutions_distributor_deliveries"
+
+  post "/distributor/deliveries/export",                          controller: "distributor/export/deliveries",               action: :index, as: "export_distributor_deliveries"
+  post "/distributor/deliveries/export_extras",                   controller: "distributor/export/extras",                   action: :index, as: "export_extras_distributor_deliveries"
+  post "/distributor/deliveries/export_exclusions_substitutions", controller: "distributor/export/exclusions_substitutions", action: :index, as: "export_exclusions_substitutions_distributor_deliveries"
 end
