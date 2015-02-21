@@ -1,7 +1,5 @@
 #FIXME: Too much code in this controller!
 
-require 'csv'
-
 class Distributor::DeliveriesController < Distributor::ResourceController
   custom_actions collection: [:update_status, :master_packing_sheet, :export]
 
