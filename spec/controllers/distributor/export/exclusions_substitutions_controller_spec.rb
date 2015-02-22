@@ -26,5 +26,4 @@ describe Distributor::Export::ExclusionsSubstitutionsController do
     expect(ExclusionsSubstitutionsCsv).to receive(:generate).with(Date.parse(date), [])
     post :index, date: date, deliveries: true
   end
-
 end

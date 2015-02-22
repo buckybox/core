@@ -4,11 +4,8 @@ require "spec_helper"
 # so this group of tests should only last as long as we have to move the
 # non-RESTful routes and deal with the legacy named routes as a result. 
 RSpec.describe "routes for Deliveries", type: :routing do
-
   describe "RESTful routes" do
-
     describe "create" do
-
       it "routes to /distributor/deliveries/new", broken_or_unused: true do
         expect(get: "/distributor/deliveries/new").to be_routable
       end
@@ -16,11 +13,9 @@ RSpec.describe "routes for Deliveries", type: :routing do
       it "routes to /distributor/deliveries" do
         expect(post: "/distributor/deliveries").to be_routable
       end
-
     end
 
     describe "read" do
-
       it "routes to /distributor/deliveries" do
         expect(get: "/distributor/deliveries").to be_routable
       end
@@ -28,11 +23,9 @@ RSpec.describe "routes for Deliveries", type: :routing do
       it "routes to /distributor/deliveries/2", broken_or_unused: true do
         expect(get: "/distributor/deliveries/2").to be_routable
       end
-
     end
 
     describe "update" do
-
       it "routes to /distributor/deliveries/2/edit", broken_or_unused: true do
         expect(get: "/distributor/deliveries/2/edit").to be_routable
       end
@@ -40,23 +33,17 @@ RSpec.describe "routes for Deliveries", type: :routing do
       it "routes to /distributor/deliveries/2" do
         expect(put: "/distributor/deliveries/2").to be_routable
       end
-
     end
 
     describe "delete" do
-
       it "routes to /distributor/deliveries/2" do
         expect(delete: "/distributor/deliveries/2").to be_routable
       end
-
     end
-
   end
 
   describe "non-RESTful routes" do
-
     describe "by url" do
-
       it "routes to /distributor/deliveries/date/2015-02-15/view/2" do
         expect(get: "/distributor/deliveries/date/2015-02-15/view/2").to route_to(controller: "distributor/deliveries", action: "index", date: "2015-02-15", view: "2")
       end
@@ -88,11 +75,9 @@ RSpec.describe "routes for Deliveries", type: :routing do
       it "routes to /distributor/deliveries/export_exclusions_substitutions" do
         expect(post: "/distributor/deliveries/export_exclusions_substitutions").to route_to(controller: "distributor/export/exclusions_substitutions", action: "index")
       end
-
     end
 
     describe "by named route" do
-
       it "has the named route date_distributor_deliveries" do
         expect(get: date_distributor_deliveries_path('2015-02-15', 2)).to route_to(controller: "distributor/deliveries", action: "index", date: "2015-02-15", view: "2")
       end
@@ -124,9 +109,6 @@ RSpec.describe "routes for Deliveries", type: :routing do
       it "has the named route export_exclusions_substitutions_distributor_deliveries" do
         expect(post: export_exclusions_substitutions_distributor_deliveries_path).to route_to(controller: "distributor/export/exclusions_substitutions", action: "index")
       end
-
     end
-
   end
-
 end

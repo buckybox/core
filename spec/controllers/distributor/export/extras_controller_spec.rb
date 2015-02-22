@@ -27,5 +27,4 @@ describe Distributor::Export::ExtrasController do
     expect(ExtrasCsv).to receive(:generate).with(@distributor, Date.parse(date))
     @post.call
   end
-
 end

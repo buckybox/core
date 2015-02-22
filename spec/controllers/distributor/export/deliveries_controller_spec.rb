@@ -32,5 +32,4 @@ describe Distributor::Export::DeliveriesController do
     post :index
     expect(response).to redirect_to 'where_i_came_from'
   end
-
 end
