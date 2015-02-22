@@ -8,7 +8,7 @@ describe Bucky::Geolocation do
       "127.0.0.1" => "RD",
     }.each do |ip, country|
       it "returns the right country" do
-        expect(Bucky::Geolocation.get_country(ip)).to be_in [nil, country]
+        expect(Bucky::Geolocation.get_country(ip)).to be_in [nil, "", country]
       end
     end
   end
