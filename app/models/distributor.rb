@@ -114,6 +114,7 @@ class Distributor < ActiveRecord::Base
   default_value_for :notify_address_change, true
 
   scope :keep_updated, where(keep_me_updated: true)
+  scope :active_webstore, where(active_webstore: true)
 
   delegate :tracking_after_create, :tracking_after_save, :track, to: :messaging
 
