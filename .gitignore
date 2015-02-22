@@ -6,6 +6,7 @@
 
 # Ignore RVM config
 /.ruby-gemset
+/.ruby-version
 /.rvmrc
 /.rbenv-version
 
