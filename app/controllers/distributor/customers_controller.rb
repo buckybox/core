@@ -1,3 +1,5 @@
+require "csv"
+
 class Distributor::CustomersController < Distributor::ResourceController
   respond_to :html, :xml, :json
 

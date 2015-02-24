@@ -1,4 +1,5 @@
 require 'spec_helper'
+require 'csv'
 
 describe Bucky::Import do
   context '#preprocess' do

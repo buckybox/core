@@ -1,4 +1,5 @@
 require 'spec_helper'
+require 'csv'
 
 describe ExtrasCsv do
   describe "#generate" do
