@@ -19,7 +19,7 @@ describe Distributor::Export::Utils do
       expect(utils.determine_type(hash)).to eq(:orders)
     end
 
-    it "determines if no know key exists" do
+    it "determines if no known key exists" do
       hash = { unknown_type: [] }
       expect(utils.determine_type(hash)).to eq(nil)
     end
