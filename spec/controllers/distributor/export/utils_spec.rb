@@ -34,9 +34,9 @@ describe Distributor::Export::Utils do
       { distributor: "Vegies", ids: [1], date: Date.parse("2015-02-22"), screen: true }
     end
 
-    describe ".build_the_csv_exporter_constant" do
+    describe ".build_csv_exporter_constant" do
       it "creates an export constant" do
-        expect(utils.build_the_csv_exporter_constant(type)).to eq(SalesCsv::DeliveryExporter)
+        expect(utils.build_csv_exporter_constant(type)).to eq(SalesCsv::DeliveryExporter)
       end
     end
 
