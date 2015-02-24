@@ -27,7 +27,7 @@ module Distributor::Export::Utils
   end
 
   def get_export(distributor, args)
-    args = args.merge(distributor: distributor)
+    args.merge!(distributor: distributor)
     found_type = determine_type(args)
     build_csv(found_type, args) if found_type
   end
