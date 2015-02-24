@@ -6,7 +6,7 @@ module Distributor::Export::Utils
     [:deliveries, :packages, :orders].find { |key| args.key?(key) }
   end
 
-  def build_the_csv_exporter_constant(type)
+  def build_csv_exporter_constant(type)
     type_constant = type.to_s.singularize.titleize.constantize
     "SalesCsv::#{type_constant}Exporter".constantize
   end
@@ -21,7 +21,7 @@ module Distributor::Export::Utils
   end
 
   def build_csv(type, args)
-    csv_exporter = build_the_csv_exporter_constant(type)
+    csv_exporter = build_csv_exporter_constant(type)
     csv_args     = build_csv_args(type, args)
     csv_exporter.new(csv_args)
   end
