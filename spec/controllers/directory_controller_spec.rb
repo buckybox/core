@@ -1,12 +1,11 @@
 require "spec_helper"
 
 RSpec.describe DirectoryController, type: :controller do
-
   describe "#index" do
     render_views
 
-    # Brittle test but for now just to make sure I didn't break anything
-    it "works" do
+    # NOTE: Brittle test but for now just to make sure I didn't break anything
+    it "renders the expected HTML" do
       distributor = Fabricate(:existing_distributor_with_everything, name: "Local Veg")
       allow(Distributor).to receive(:active).and_return([ distributor ])
       Fabricate(:localised_address, addressable: distributor)
@@ -18,7 +17,5 @@ RSpec.describe DirectoryController, type: :controller do
       get :index
       expect(response.body).to eq(result)
     end
-
   end
-
 end
