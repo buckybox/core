@@ -1,3 +1,5 @@
+require "csv"
+
 class Distributor < ActiveRecord::Base
   include Bucky::Email
 

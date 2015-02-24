@@ -1,3 +1,5 @@
+require "csv"
+
 class ExtrasCsv
   include Singleton
 

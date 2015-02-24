@@ -1,3 +1,5 @@
+require "csv"
+
 module Bucky::TransactionImports
   class OmniImport
     CSV_SEPARATORS = [",", ";"].freeze
