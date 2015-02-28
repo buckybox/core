@@ -10,9 +10,8 @@ class Import::Extra
   end
 
   def find
-    found_box = find_box
-    extras    = get_extras(found_box)
-    matcher   = Import::Extra::Matcher.new(match: extra, from: extras)
+    extras  = get_extras(find_box)
+    matcher = Import::Extra::Matcher.new(match: extra, from: extras)
     matcher.closest_match
   end
 
