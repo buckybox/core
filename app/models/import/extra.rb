@@ -14,7 +14,7 @@ class Import::Extra
   def find
     search_extras = []
     box = find_box
-    search_extras = get_extras
+    search_extras = get_extras(box)
     matches = get_matches(search_extras)
     get_match(matches)
   end
@@ -40,13 +40,13 @@ private
       sort{|a,b| b.first <=> a.first}
   end
 
-  def get_extras
+  def get_extras(box)
     if box.blank?
       distributor.extras.alphabetically
-    elsif box.extras_not_allowed?
-      []
-    else
+    elsif box.extras_allowed?
       box.extras.alphabetically
+    else
+      []
     end
   end
 
