@@ -13,22 +13,16 @@ class Import::Extra
 
   def find
     search_extras = []
-    box = box.present? ? find_box_from_import(box) : nil
+    box = find_box
+    search_extras = get_extras
+    matches = get_matches(search_extras)
+    get_match(matches)
+  end
 
-    if box.blank?
-      search_extras = distributor.extras.alphabetically
-    elsif box.extras_not_allowed?
-      []
-    else
-      search_extras = box.extras.alphabetically
-    end
+private
 
-    matches = search_extras.select{|current_extra| current_extra.match_import_extra?(extra)}.
-      collect{|extra_match| [extra_match.fuzzy_match(extra),extra_match]}.
-      select{|fuzzy_match| fuzzy_match.first > Extra::FUZZY_MATCH_THRESHOLD}. # Set a lower threshold which weeds out almost matches and force the data to be fixed.  Make the user go fix the csv file.
-      sort{|a,b| b.first <=> a.first}
-
-    match = if matches.size > 1 && matches.first.first == matches[1].first
+  def get_match(matches)
+    if matches.size > 1 && matches.first.first == matches[1].first
       # At-least the first two matches have the same fuzzy_match (probably no unit set)
       # So return the first one alphabetically so that it is consistent
       matches.select{ |m| m.first == matches.first.first }. #Select those which have the same fuzzy_match
@@ -37,8 +31,27 @@ class Import::Extra
     else
       matches.first.last if matches.first.present?
     end
+  end
 
-    match
+  def get_matches(search_extras)
+    search_extras.select{|current_extra| current_extra.match_import_extra?(extra)}.
+      collect{|extra_match| [extra_match.fuzzy_match(extra),extra_match]}.
+      select{|fuzzy_match| fuzzy_match.first > Extra::FUZZY_MATCH_THRESHOLD}. # Set a lower threshold which weeds out almost matches and force the data to be fixed.  Make the user go fix the csv file.
+      sort{|a,b| b.first <=> a.first}
+  end
+
+  def get_extras
+    if box.blank?
+      distributor.extras.alphabetically
+    elsif box.extras_not_allowed?
+      []
+    else
+      box.extras.alphabetically
+    end
+  end
+
+  def find_box
+    box.present? ? distributor.find_box_from_import(box) : nil
   end
 
 end
