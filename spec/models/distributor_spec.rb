@@ -529,4 +529,30 @@ describe Distributor do
       end
     end
   end
+
+  describe "#transaction_history_report" do
+
+    it "works" do
+      # Pause time
+      allow(Time).to receive(:now).and_return(Time.parse('2013-02-28'))
+
+      from        = DateTime.current
+      to          = from + 1.month
+      distributor = Fabricate(:distributor_with_a_customer)
+      account     = distributor.customers.first.account
+
+      # In list
+      Fabricate(:transaction, account: account, display_time: from + 1.day)
+      Fabricate(:transaction_deduction, account: account, display_time: from + 1.day)
+
+      # Not in list
+      Fabricate(:transaction, account: account, display_time: from)
+      Fabricate(:transaction_deduction, account: account, display_time: from)
+      Fabricate(:transaction, account: account, display_time: to)
+      Fabricate(:transaction_deduction, account: account, display_time: to)
+
+      expect(distributor.transaction_history_report(from, to)).to eq("Date Transaction Occurred,Date Transaction Processed,Amount,Description,Customer Name,Customer Number,Customer Email,Customer City,Customer Suburb,Customer Tags,Discount\n28/Feb/2013,01/Mar/2013,10.00,deduction transaction,First Name 0,1,customer0@example.com,City,Suburb,\"\",0.0\n28/Feb/2013,01/Mar/2013,10.00,payment transaction,First Name 0,1,customer0@example.com,City,Suburb,\"\",0.0\n28/Feb/2013,28/Feb/2013,10.00,deduction transaction,First Name 0,1,customer0@example.com,City,Suburb,\"\",0.0\n28/Feb/2013,28/Feb/2013,10.00,payment transaction,First Name 0,1,customer0@example.com,City,Suburb,\"\",0.0\n")
+    end
+
+  end
 end
