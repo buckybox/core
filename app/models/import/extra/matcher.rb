@@ -17,6 +17,12 @@ class Import::Extra::Matcher
 private
 
   attr_reader :extra, :extras, :matches
+  
+  def preprocess
+    results = extras.select(&first_filter)
+    results = results.map(&fuzzy_match).select(&fuzzy_filter)
+    results.sort { |a,b| b.first <=> a.first }
+  end
 
   def same_two_matches
     matches.size > 1 && matches[0].first == matches[1].first
@@ -28,12 +34,6 @@ private
 
   def name_and_unit
     Proc.new { |current_extra| "#{current_extra.name} #{current_extra.unit}" }
-  end
-
-  def preprocess
-    results = extras.select(&first_filter)
-    results = results.map(&fuzzy_match).select(&fuzzy_filter)
-    results.sort { |a,b| b.first <=> a.first }
   end
 
   def first_filter
