@@ -1,3 +1,6 @@
+# Find extra from import script, if given a box, limit it
+# to the boxes allowed extras
+
 class Import::Extra
 
   attr_reader :distributor, :extra, :box
