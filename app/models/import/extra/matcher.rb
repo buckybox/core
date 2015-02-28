@@ -7,14 +7,10 @@ class Import::Extra::Matcher
   end
 
   def closest_match
-    if matches.size > 1 && matches.first.first == matches[1].first
-      # At-least the first two matches have the same fuzzy_match (probably no unit set)
-      # So return the first one alphabetically so that it is consistent
-      matches.select{ |m| m.first == matches.first.first }. #Select those which have the same fuzzy_match
-        collect(&:last). # discard the fuzzy_match number
-        sort_by{|current_extra| "#{current_extra.name} #{current_extra.unit}"}.first # Sort alphabeticaly
-    else
-      matches.first.last if matches.first.present?
+    if same_two_matches
+      matches.select(&same_fuzzy_match).map(&:last).sort_by(&name_and_unit).first
+    elsif matches.first.present?
+      matches.first.last
     end
   end
 
@@ -22,11 +18,34 @@ private
 
   attr_reader :extra, :extras, :matches
 
+  def same_two_matches
+    matches.size > 1 && matches[0].first == matches[1].first
+  end
+
+  def same_fuzzy_match
+    Proc.new { |match| match.first == matches.first.first }
+  end
+
+  def name_and_unit
+    Proc.new { |current_extra| "#{current_extra.name} #{current_extra.unit}" }
+  end
+
   def preprocess
-    extras.select{|current_extra| current_extra.match_import_extra?(extra)}.
-      collect{|extra_match| [extra_match.fuzzy_match(extra),extra_match]}.
-      select{|fuzzy_match| fuzzy_match.first > Extra::FUZZY_MATCH_THRESHOLD}. # Set a lower threshold which weeds out almost matches and force the data to be fixed.  Make the user go fix the csv file.
-      sort{|a,b| b.first <=> a.first}
+    results = extras.select(&first_filter)
+    results = results.map(&fuzzy_match).select(&fuzzy_filter)
+    results.sort { |a,b| b.first <=> a.first }
+  end
+
+  def first_filter
+    Proc.new { |current_extra| current_extra.match_import_extra?(extra) }
+  end
+
+  def fuzzy_match
+    Proc.new { |extra_match| [ extra_match.fuzzy_match(extra), extra_match ] }
+  end
+
+  def fuzzy_filter
+    Proc.new { |fuzzy_match| fuzzy_match.first > Extra::FUZZY_MATCH_THRESHOLD }
   end
 
 end
