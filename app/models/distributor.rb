@@ -309,8 +309,6 @@ class Distributor < ActiveRecord::Base
     end
   end
 
-  # Find extra from import script, if given a box, limit it
-  # to the boxes allowed extras
   def find_extra_from_import(extra, box = nil)
     from_import = Import::Extra.new(distributor: self, extra: extra, box: box)
     from_import.find
