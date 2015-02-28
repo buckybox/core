@@ -377,7 +377,6 @@ class Distributor < ActiveRecord::Base
     @cache_key ||= "#{id}/#{name}/#{updated_at}"
   end
 
-  require 'csv'
   def transaction_history_report(from, to)
     csv_string = CSV.generate do |csv|
       csv << ["Date Transaction Occurred", "Date Transaction Processed", "Amount", "Description", "Customer Name", "Customer Number", "Customer Email", "Customer City", "Customer Suburb", "Customer Tags", "Discount"]
