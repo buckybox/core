@@ -4,10 +4,9 @@
 class Import::Extra
 
   def initialize(args)
-    @distributor  = args.fetch(:distributor)
-    @extra        = args.fetch(:extra)
-    passed_in_box = args[:box]
-    @box          = matched_box(passed_in_box)
+    @distributor = args.fetch(:distributor)
+    @extra       = args.fetch(:extra)
+    @box         = matched_box(args[:box])
   end
 
   def find
