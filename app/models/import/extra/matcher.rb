@@ -6,7 +6,7 @@ class Import::Extra::Matcher
   end
 
   def closest_match
-    if same_fuzzy_match
+    if has_same_fuzzy_match
       matches.select(&same_fuzzy_match)
         .map(&discard_fuzzy_match_number)
         .sort_by(&name_and_unit)
@@ -20,7 +20,7 @@ private
 
   attr_reader :extra, :matches
 
-  def same_fuzzy_match
+  def has_same_fuzzy_match
     matches.size > 1 && first_match.first == second_match.first
   end
 
@@ -41,7 +41,7 @@ private
   end
 
   def second_match
-    @second_match ||= matches.to_a[0]
+    @second_match ||= matches.to_a[1]
   end
 
 end
