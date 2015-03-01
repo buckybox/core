@@ -4,14 +4,14 @@
 class Import::Extra
 
   def initialize(args)
-    @distributor = args.fetch(:distributor)
-    @extra       = args.fetch(:extra)
-    @box         = args.fetch(:box, nil)
+    @distributor  = args.fetch(:distributor)
+    @extra        = args.fetch(:extra)
+    passed_in_box = args[:box]
+    @box          = matched_box(passed_in_box)
   end
 
   def find
-    extras  = get_extras(find_box)
-    matcher = Import::Extra::Matcher.new(match: extra, from: extras)
+    matcher = Import::Extra::Matcher.new(match: extra, from: matches)
     matcher.closest_match
   end
 
@@ -19,18 +19,16 @@ private
 
   attr_reader :distributor, :extra, :box
 
-  def get_extras(found_box)
-    if found_box.blank?
-      distributor.extras.alphabetically
-    elsif found_box.extras_allowed?
-      found_box.extras.alphabetically
-    else
-      []
-    end
+  def matched_box(find_box)
+    distributor.find_box_from_import(find_box) if find_box && find_box.present?
   end
 
-  def find_box
-    box.present? ? distributor.find_box_from_import(box) : nil
+  def matches
+    Import::Extra::Matches.by_fuzzy_match(
+      distributor: distributor,
+      box: box,
+      extra: extra
+    )
   end
 
 end
