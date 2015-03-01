@@ -6,8 +6,11 @@ class Import::Extra::Matcher
   end
 
   def closest_match
-    if same_two_matches
-      matches.select(&same_fuzzy_match).map(&:last).sort_by(&name_and_unit).first
+    if same_fuzzy_match
+      matches.select(&same_fuzzy_match)
+        .map(&discard_fuzzy_match_number)
+        .sort_by(&name_and_unit)
+        .first
     elsif first_match.present?
       first_match.last
     end
@@ -17,12 +20,16 @@ private
 
   attr_reader :extra, :matches
 
-  def same_two_matches
+  def same_fuzzy_match
     matches.size > 1 && first_match.first == second_match.first
   end
 
   def same_fuzzy_match
     Proc.new { |match| match.first == first_match.first }
+  end
+
+  def discard_fuzzy_match_number
+    Proc.new { |set| set.last }
   end
 
   def name_and_unit
