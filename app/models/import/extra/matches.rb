@@ -15,7 +15,7 @@ class Import::Extra::Matches
     extras.select(&with_import_filter)
       .map(&as_fuzzy_matches)
       .select(&with_fuzzy_filter)
-      .sort(&alphabetically)
+      .sort(&by_score)
   end
 
   def extras
@@ -44,8 +44,8 @@ private
     Proc.new { |fuzzy_match| fuzzy_match.first > Extra::FUZZY_MATCH_THRESHOLD }
   end
 
-  def alphabetically
-    Proc.new { |a,b| b.first <=> a.first }
+  def by_score
+    Proc.new { |a, b| b.first <=> a.first }
   end
 
 end
