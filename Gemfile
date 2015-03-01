@@ -97,11 +97,6 @@ group :development do
   gem 'binding_of_caller'
   gem 'quiet_assets'
   gem 'meta_request'
-  gem 'byebug'
-  gem 'pry-byebug'
-  gem 'pry-rails'
-  gem 'pry-coolline' # as-you-type syntax highlighting
-  gem 'pry-stack_explorer'
   gem 'i15r', require: false
 end
 
@@ -137,6 +132,11 @@ group :development, :test do
   gem 'letter_opener'
   gem 'bundler-audit', require: false
   gem 'rubocop'
+  gem 'byebug'
+  gem 'pry-byebug'
+  gem 'pry-rails'
+  gem 'pry-coolline' # as-you-type syntax highlighting
+  gem 'pry-stack_explorer'
 end
 
 group :development, :test, :staging do
