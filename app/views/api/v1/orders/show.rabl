@@ -9,5 +9,5 @@ node :week_days do |order| order.schedule_rule.days_as_indexes; end
 node :start_date do |order| order.schedule_rule.start; end
 
 node :exclusions do |order| order.excluded_line_item_ids; end
-node :substitutes do |order| order.substituted_line_item_ids; end
+node :substitutions do |order| order.substituted_line_item_ids; end
 

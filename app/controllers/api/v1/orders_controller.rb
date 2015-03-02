@@ -12,7 +12,7 @@ class Api::V1::OrdersController < Api::V1::BaseController
       param :box_id, Integer, "ID of the box", required: true
       param :extras_one_off, [ :boolean ], 'True or false determining whether the extras should match the frequency of the box (false), or be a one off (true)'
       param :extras, [ :extra ], 'Array of extras, refer to above example'
-      param :substitutes, [ :id ], 'Array of integers representing box_item ids that can be substituted for exclusions'
+      param :substitutions, [ :id ], 'Array of integers representing box_item ids that can be substituted for exclusions'
       param :exclusions, [ :id ], 'Array of integers representing box_item ids that should be excluded'
       param :frequency, String, "Indicates how often the order should be delivered. Acceptable values are 'single', 'weekly', or 'fortnightly'"
     end
@@ -51,7 +51,7 @@ class Api::V1::OrdersController < Api::V1::BaseController
       "box_id": 12,
       "customer_id": 123,
       "frequency": "weekly",
-      "substitutes": [
+      "substitutions": [
         23,
         54,
         3
@@ -123,9 +123,9 @@ class Api::V1::OrdersController < Api::V1::BaseController
     end
 
     begin
-      @order.substituted_line_item_ids = new_order['substitutes']
+      @order.substituted_line_item_ids = new_order['substitutions']
     rescue ActiveRecord::RecordNotFound
-      @order.errors.add(:substitutes, "one or more substitute ID are not valid")
+      @order.errors.add(:substitutions, "one or more substitution ID are not valid")
     end
 
     @order.extras_one_off = new_order['extras_one_off']
