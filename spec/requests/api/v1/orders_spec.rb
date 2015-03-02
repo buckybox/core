@@ -17,7 +17,7 @@ describe "API v1" do
     let(:customer) { Fabricate(:customer, distributor: api_distributor) }
     let(:extras) { Fabricate.times(2, :extra, distributor: api_distributor) }
     let(:box) { Fabricate(:box, distributor: api_distributor, extras: extras) }
-    let(:model_attributes) { %w(id box_id customer_id active frequency start_date week_days extras extras_one_off exclusions substitutes) }
+    let(:model_attributes) { %w(id box_id customer_id active frequency start_date week_days extras extras_one_off exclusions substitutions) }
     let(:embedable_attributes) { %w() }
 
     describe "GET /orders" do
@@ -90,7 +90,7 @@ describe "API v1" do
     describe "POST /orders" do
       let(:url) { "#{base_url}/orders" }
       let(:json_order) { json_response }
-      let(:substitutes) { Fabricate.times(2, :line_item, distributor: api_distributor) }
+      let(:substitutions) { Fabricate.times(2, :line_item, distributor: api_distributor) }
       let(:exclusions) { Fabricate.times(2, :line_item, distributor: api_distributor) }
       let(:params) do <<-JSON
         {
@@ -100,8 +100,8 @@ describe "API v1" do
           "week_days": [0, 3],
           "start_date": "#{Date.today}",
           "payment_method": "bank_deposit",
-          "substitutes": [
-            #{substitutes.map(&:id).join(',')}
+          "substitutions": [
+            #{substitutions.map(&:id).join(',')}
           ],
           "exclusions": [
             #{exclusions.map(&:id).join(',')}
@@ -146,7 +146,7 @@ describe "API v1" do
         expect(new_order.extras_count).to eq 4
         expect(new_order.extras_one_off).to be true
         expect(new_order.schedule_rule.frequency.to_s).to eq "weekly"
-        expect(new_order.substitutions.map(&:line_item_id)).to eq substitutes.map(&:id)
+        expect(new_order.substitutions.map(&:line_item_id)).to eq substitutions.map(&:id)
         expect(new_order.exclusions.map(&:line_item_id)).to eq exclusions.map(&:id)
       end
 
