@@ -65,16 +65,12 @@ class Api::V1::OrdersController < Api::V1::BaseController
       "extras_one_off": false,
       "extras": [
         {
-          "extra": {
-              "id": 11,
-              "quantity": 1
-          }
+          "id": 11,
+          "quantity": 1
         },
         {
-          "extra": {
-              "id": 14,
-              "quantity": 2
-          }
+          "id": 14,
+          "quantity": 2
         }
       ]
 }'
@@ -133,8 +129,8 @@ class Api::V1::OrdersController < Api::V1::BaseController
     @extras = new_order['extras']
     unless @extras.nil?
       @order.order_extras = @extras.each_with_object({}) do |extra, hash|
-        id = extra["extra"]["id"]
-        count = extra["extra"]["quantity"]
+        id = extra["id"]
+        count = extra["quantity"]
         hash[id] = { count: count }
       end
     end

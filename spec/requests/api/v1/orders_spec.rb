@@ -109,16 +109,12 @@ describe "API v1" do
           "extras_one_off": true,
           "extras": [
             {
-              "extra": {
-                "id": #{extras.first.id},
-                "quantity": 1
-              }
+              "id": #{extras.first.id},
+              "quantity": 1
             },
             {
-              "extra": {
-                "id": #{extras.last.id},
-                "quantity": 3
-              }
+              "id": #{extras.last.id},
+              "quantity": 3
             }
           ]
         }
