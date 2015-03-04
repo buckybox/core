@@ -129,7 +129,7 @@ class Order < ActiveRecord::Base
 
     order_extras.map do |extra|
       "#{extra_prefix}#{extra[:count]}x #{extra[:name]} (#{extra[:unit]})"
-    end.join(join_with)
+    end.join(join_with).html_safe
   end
 
   def customer_can_edit?
