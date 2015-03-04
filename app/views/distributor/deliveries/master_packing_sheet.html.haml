@@ -1,18 +1,34 @@
-- title("Master Packing Sheet - #{@date.strftime("%A %d %B")}")
+- title("Master Packing Sheet")
 
 .row-fluid
+  .span8
+    %strong= @date.strftime("%A")
+    %br
+    = @date.strftime("%d %B")
+
+.row-fluid#master-packing-sheet
   .span12
     - DeliverySort.new(@packages).grouped_by_boxes.each do |box, array|
-      %table#master-packing-sheet.table.table-bordered
-        %thead
-          %tr
-            %th{ colspan: 5 }= box.name
+      .row-fluid
+        .span12
+          %hr
 
-        %tbody
-          - array.reverse.each do |package|
-            %tr
-              %td.check-space
-              %td= package.id
-              %td= customer_badge(package.customer, customer_name: package.archived_customer_name, link: false)
-              %td= package.archived_address
-              %td== #{package.contents_description}
+      - array.reverse.each do |package|
+        .row-fluid.spacer
+          .span3
+            %strong= "[#{package.customer.formated_number}] #{package.archived_customer_name}"
+          .span3
+            %strong= package.customer.delivery_service.name
+            %br
+            = package.archived_address unless package.customer.delivery_service.pickup_point?
+            %br
+            %small
+              %em= package.archived_address_details.delivery_note
+          .span3
+            %strong= package.archived_box_name
+            %br
+            = package.archived_exclusions.split(", ").map { |exclusion| "<li>&#x2718; #{exclusion}" }.join.html_safe
+            = package.archived_substitutions.split(", ").map { |substitution| "<li>&#x2714; #{substitution}" }.join.html_safe
+          .span3
+            = Order.extras_description(package.archived_extras, "<li>")
+
