@@ -3,7 +3,7 @@ class Api::V1::BoxesController < Api::V1::BaseController
   param :embed, String, desc: "Children available: extras, images, box_items"
   example '/v1/boxes?embed=extras,images,box_items'
   def index
-    @boxes = @distributor.boxes.all
+    @boxes = @distributor.boxes.not_hidden.all
     fetch_children
   end
 
@@ -12,7 +12,7 @@ class Api::V1::BoxesController < Api::V1::BaseController
   param :embed, String, desc: "Children available: extras, images, box_items"
   example '/v1/boxes/123?embed=extras,images,box_items'
   def show
-    @box = @distributor.boxes.find_by(id: params[:id])
+    @box = @distributor.boxes.not_hidden.find_by(id: params[:id])
     return not_found if @box.nil?
     fetch_children
   end
