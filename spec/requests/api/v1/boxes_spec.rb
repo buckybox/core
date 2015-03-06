@@ -46,6 +46,13 @@ describe "API v1" do
       it "returns the list of boxes" do
         expect(json_response.size).to eq @boxes.size
       end
+
+      it "does not return hidden boxes" do
+        Fabricate(:box, distributor: api_distributor, hidden: true)
+
+        json_request :get, url, nil, headers
+        expect(json_response.size).to eq @boxes.size
+      end
     end
 
     describe "GET /boxes/:id" do
@@ -74,6 +81,15 @@ describe "API v1" do
         before do
           new_distributor = Fabricate(:distributor)
           box = Fabricate(:box, distributor: new_distributor)
+          json_request :get, "#{base_url}/boxes/#{box.id}", nil, headers
+        end
+
+        specify { expect(response).to be_not_found }
+      end
+
+      context "with a hidden box" do
+        before do
+          box = Fabricate(:box, distributor: api_distributor, hidden: true)
           json_request :get, "#{base_url}/boxes/#{box.id}", nil, headers
         end
 
