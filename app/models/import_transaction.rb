@@ -87,6 +87,8 @@ class ImportTransaction < ActiveRecord::Base
   def possible_customers
     result = customer.present? ? [[customer.badge, customer.id]] : []
     result += draft? ? MATCH_SELECT : [[MATCH_NOT_A_CUSTOMER.humanize, MATCH_NOT_A_CUSTOMER]]
+
+    # TODO: optimise, this is really slow - maybe move this method call into AJAX query?
     result += distributor.customers.reject{|c| c.id == customer_id}.collect { |c| [c.badge, c.id] }
 
     return result
@@ -175,7 +177,7 @@ class ImportTransaction < ActiveRecord::Base
     !confidence_high && !confidence_low
   end
 
-  private
+private
 
   def distributor_customer_ids
     distributor.customer_ids
