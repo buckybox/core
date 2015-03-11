@@ -518,6 +518,10 @@ class Distributor < ActiveRecord::Base
     ).ordered.where(id: customer_ids)
   end
 
+  def customer_badges
+    @customer_badges ||= customers.map { |customer| [customer.badge, customer.id] }
+  end
+
   def transactions_for_export(from, to)
     from = from.to_time_in_current_zone
     to = to.to_time_in_current_zone

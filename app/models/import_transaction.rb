@@ -84,14 +84,10 @@ class ImportTransaction < ActiveRecord::Base
     Bucky::TransactionImports::Row.new(transaction_date, description, amount_cents)
   end
 
-  def possible_customers
+  def possible_customers(customer_badges)
     result = customer.present? ? [[customer.badge, customer.id]] : []
     result += draft? ? MATCH_SELECT : [[MATCH_NOT_A_CUSTOMER.humanize, MATCH_NOT_A_CUSTOMER]]
-
-    # TODO: optimise, this is really slow - maybe move this method call into AJAX query?
-    result += distributor.customers.reject{|c| c.id == customer_id}.collect { |c| [c.badge, c.id] }
-
-    return result
+    result += customer_badges.reject { |_, id| id == customer_id }
   end
 
   def confidence
