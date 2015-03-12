@@ -21,7 +21,6 @@ require "capybara-screenshot/rspec"
 Dir[Rails.root.join("spec/support/**/*.rb")].each { |f| require f }
 
 RSpec.configure do |config|
-  config.raise_errors_for_deprecations!
   config.infer_spec_type_from_file_location!
   config.order = "random"
   config.mock_with :rspec
