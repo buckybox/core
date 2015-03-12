@@ -57,8 +57,7 @@ class Order < ActiveRecord::Base
 
   after_initialize :set_default_schedule_rule
 
-  # 9 weeks so it covers the minimum needed to see the previous whole month of operations
-  FORCAST_RANGE_BACK = 9.weeks
+  FORCAST_RANGE_BACK = 6.weeks
   FORCAST_RANGE_FORWARD = 6.weeks
   IS_ONE_OFF  = false
   QUANTITY    = 1
