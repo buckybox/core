@@ -6,13 +6,13 @@ describe Bucky::Import do
     context 'should remove unneeded rows' do
       before(:all) do
         csv = CSV.generate do |rows|
-          rows << Import::CSV_HEADERS
+          rows << Bucky::Import::CSV_HEADERS
           rows << ['rubbish','45','more rubbish']
           rows << ['trash','65','more trash']
           rows << ['you can see me','for sure']
         end
 
-        @parsed_csv = Import.preprocess(csv)
+        @parsed_csv = Bucky::Import.preprocess(csv)
       end
 
       specify { expect(@parsed_csv).not_to match /(rubbish)|(45)/ }
@@ -23,7 +23,7 @@ describe Bucky::Import do
     context 'check headers' do
       let(:csv_with_less_headers) do
         CSV.generate do |csv|
-          csv << Import::CSV_HEADERS[0..-2]
+          csv << Bucky::Import::CSV_HEADERS[0..-2]
           csv << ['rubbish','45','more rubbish']
           csv << ['trash','65','more trash']
           csv << ['you can see me','for sure']
@@ -33,7 +33,7 @@ describe Bucky::Import do
 
       let(:csv_with_more_headers) do
         CSV.generate do |csv|
-          csv << (Import::CSV_HEADERS + ["Im not meant to be here"])
+          csv << (Bucky::Import::CSV_HEADERS + ["Im not meant to be here"])
           csv << ['rubbish','45','more rubbish']
           csv << ['trash','65','more trash']
           csv << ['you can see me','for sure']
@@ -43,7 +43,7 @@ describe Bucky::Import do
 
       let(:csv_with_wrong_headers) do
         CSV.generate do |csv|
-          headers = Import::CSV_HEADERS.clone
+          headers = Bucky::Import::CSV_HEADERS.clone
           headers[3] = "Wrong Header"
           csv << headers
           csv << ['rubbish','45','more rubbish']
@@ -51,13 +51,13 @@ describe Bucky::Import do
           csv << ['you can see me','for sure']
         end
       end
-      specify { expect{ Import.preprocess(csv_with_wrong_headers)}.to raise_error }
+      specify { expect{ Bucky::Import.preprocess(csv_with_wrong_headers)}.to raise_error }
     end
   end
 
   context '#parse' do
     before(:all) do
-      @customers = Import.parse(File.read(Import::TEST_FILE), Distributor.new) # Bucky::Import::Customer
+      @customers = Bucky::Import.parse(File.read(Bucky::Import::TEST_FILE), Distributor.new) # Bucky::Import::Customer
     end
     specify { expect(@customers.size).to eq(4) }
 

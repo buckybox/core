@@ -110,8 +110,7 @@ group :test do
   gem "capybara-screenshot"
   gem "poltergeist", require: false
   gem "launchy"
-  gem "guard", ">= 2"
-  gem "guard-rspec", ">= 4"
+  gem "guard-rspec"
   gem "rspec-activemodel-mocks"
   gem "i18n-spec", ">= 0.5.2", require: false
 end
@@ -126,7 +125,7 @@ group :development, :staging do
 end
 
 group :development, :test do
-  gem "rspec-rails", ">= 3"
+  gem "rspec-rails"
   gem "listen"
   gem "terminal-notifier-guard" # Mac 10.8 system notifications for Guard
   gem "letter_opener"
