@@ -1,4 +1,5 @@
 production:
   user: "sysadmins@buckybox.com"
   token: "ca1994daba88a9188e554ada354027d40b28827c8ecd79a3ca1537be1f472f09"
+  source: "core"
 
