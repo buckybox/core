@@ -27,6 +27,8 @@ private
     }.to_json
 
     logger.info "API request: #{info}"
+
+    Librato.increment "api_hit"
   end
 
   def authenticate
