@@ -48,9 +48,7 @@ class Metrics
 
     queue.add "bucky.distributor.active" => Distributor.active.count
     queue.add "bucky.webstore.active" => Distributor.active_webstore.count
-    queue.add "bucky.customer.transactional.new_last_7_days" => Distributor.all.sum do |distributor|
-      distributor.new_transactional_customer_count
-    end
+    queue.add "bucky.customer.transactional.new_last_7_days" => Distributor.all.sum(&:new_transactional_customer_count)
 
     queue.submit
   end
