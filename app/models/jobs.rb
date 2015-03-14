@@ -16,7 +16,7 @@ class Jobs
     Metrics.calculate_and_store_for_munin
 
     CronLog.log("Running metrics for Librato.")
-    Librato.measure "bucky.distributor.active", Distributor.active.count
+    Metrics.calculate_and_push_to_librato
   end
 
   def self.run_daily

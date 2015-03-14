@@ -37,6 +37,24 @@ class Metrics
     calculate_and_store_for_munin_weekly
   end
 
+  def self.calculate_and_push_to_librato
+    return unless Rails.env.production?
+
+    config = YAML.load_file(Rails.root.join("config/librato.yml"))["production"]
+
+    Librato::Metrics.authenticate config.fetch("user"), config.fetch("token")
+
+    queue = Librato::Metrics::Queue.new(source: config.fetch("source"))
+
+    queue.add "bucky.distributor.active" => Distributor.active.count
+    queue.add "bucky.webstore.active" => Distributor.active_webstore.count
+    queue.add "bucky.customer.transactional.new_last_7_days" => Distributor.all.sum do |distributor|
+      distributor.new_transactional_customer_count
+    end
+
+    queue.submit
+  end
+
 private
 
   def self.calculate_and_store_for_munin_daily
