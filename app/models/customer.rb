@@ -46,6 +46,7 @@ class Customer < ActiveRecord::Base
   before_create :setup_address
 
   after_create :via_webstore_notifications, if: :via_webstore?
+  after_create :librato_track
 
   after_save :update_next_occurrence # This could be more specific about when it updates
 
@@ -527,6 +528,10 @@ class Customer
     end
 
   private
+
+    def librato_track
+      Librato.increment "bucky.customer.create"
+    end
 
     def type
       @type

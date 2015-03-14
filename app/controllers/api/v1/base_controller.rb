@@ -28,7 +28,7 @@ private
 
     logger.info "API request: #{info}"
 
-    Librato.increment "api_hit"
+    Librato.increment "bucky.api.hit"
   end
 
   def authenticate
