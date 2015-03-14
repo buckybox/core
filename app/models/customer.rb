@@ -463,6 +463,10 @@ class Customer < ActiveRecord::Base
 
 private
 
+  def librato_track
+    Librato.increment "bucky.customer.create"
+  end
+
   def reversal_transaction_ids
     reversed = payments.reversed
     reversed.pluck(:transaction_id) + reversed.pluck(:reversal_transaction_id)
@@ -528,10 +532,6 @@ class Customer
     end
 
   private
-
-    def librato_track
-      Librato.increment "bucky.customer.create"
-    end
 
     def type
       @type
