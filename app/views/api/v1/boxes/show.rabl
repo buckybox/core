@@ -25,13 +25,13 @@ end
 
 unless @embed['images'].nil?
   node :images do |box|
-    @box_images[box.id]
+    @images[box.id]
   end
 end
 
 unless @embed['box_items'].nil?
   node :box_items do
-    @items.select('id, name')
+    @distributor.line_items.select('id, name')
   end
 end
 
