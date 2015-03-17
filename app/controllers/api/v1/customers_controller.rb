@@ -60,7 +60,7 @@ class Api::V1::CustomersController < Api::V1::BaseController
 
     info = params
     info[:password_hash] = Digest::SHA1.hexdigest info.delete(:password)
-    send_alert_email(info) if @customers.empty?
+    send_login_failure_email(info) if @customers.empty?
 
     render 'api/v1/customers/index'
   end
@@ -170,7 +170,7 @@ class Api::V1::CustomersController < Api::V1::BaseController
 
 private
 
-  def send_alert_email info
+  def send_login_failure_email info
     AdminMailer.delay(
       priority: Figaro.env.delayed_job_priority_low,
       queue: "#{__FILE__}:#{__LINE__}",

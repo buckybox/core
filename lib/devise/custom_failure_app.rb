@@ -5,7 +5,7 @@ class Devise::CustomFailureApp < Devise::FailureApp
       info = params[:customer]
       info[:password_hash] = Digest::SHA1.hexdigest info.delete(:password)
 
-      send_alert_email info
+      send_login_failure_email info
     end
 
     super
@@ -13,7 +13,7 @@ class Devise::CustomFailureApp < Devise::FailureApp
 
 private
 
-  def send_alert_email info
+  def send_login_failure_email info
     AdminMailer.delay(
       priority: Figaro.env.delayed_job_priority_low,
       queue: "#{__FILE__}:#{__LINE__}",
