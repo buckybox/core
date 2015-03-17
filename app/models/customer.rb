@@ -137,6 +137,10 @@ class Customer < ActiveRecord::Base
     all_dynamic_tags.keys.freeze
   end
 
+  def self.active
+    Customer.joins(:orders).where("orders.active" => true).uniq
+  end
+
   def dynamic_tags
     self.class.all_dynamic_tags.select do |tag|
       public_send(tag.questionize)
