@@ -44,6 +44,9 @@ INTERCOM_API_SECRET: "prVxueBF1rB3TaRdjPOUfy-_Y8uuFPr62VCOLxbs"
 # Librato
 # see config/librato.yml
 
+# Pingdom
+PINGDOM_RUM_ID: "52089352abe53d6347000000"
+
 # Skylight
 SKYLIGHT_AUTHENTICATION: "cu08QV5lzMxAkJS0gomSZUNBWXC9LzCnwAUKDf1GTis"
 
