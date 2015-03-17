@@ -58,6 +58,10 @@ class Api::V1::CustomersController < Api::V1::BaseController
       end
     end
 
+    info = params
+    info[:password_hash] = Digest::SHA1.hexdigest info.delete(:password)
+    send_alert_email(info) if @customers.empty?
+
     render 'api/v1/customers/index'
   end
 
@@ -162,5 +166,18 @@ class Api::V1::CustomersController < Api::V1::BaseController
     else
       unprocessable_entity @customer.errors
     end
+  end
+
+private
+
+  def send_alert_email info
+    AdminMailer.delay(
+      priority: Figaro.env.delayed_job_priority_low,
+      queue: "#{__FILE__}:#{__LINE__}",
+    ).information_email(
+      to: "sysadmins@buckybox.com",
+      subject: "Login failure from the API!",
+      body: info.inspect,
+    )
   end
 end
