@@ -220,6 +220,10 @@ Devise.setup do |config|
   #   manager.default_strategies(:scope => :user).unshift :some_external_strategy
   # end
 
+  config.warden do |manager|
+    manager.failure_app = Devise::CustomFailureApp
+  end
+
   Warden::Manager.after_set_user do |user, auth, opts|
     if opts.fetch(:scope) == :customer
       cookie = auth.cookies.signed[:current_customers] || []
