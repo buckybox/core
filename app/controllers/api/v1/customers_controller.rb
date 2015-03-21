@@ -62,6 +62,14 @@ class Api::V1::CustomersController < Api::V1::BaseController
     info[:password_hash] = Digest::SHA1.hexdigest info.delete(:password)
     send_login_failure_email(info) if @customers.empty?
 
+    if @customers.empty?
+      Librato.increment "bucky.customer.sign_in.failure.from_api"
+      Librato.increment "bucky.customer.sign_in.failure.total"
+    else
+      Librato.increment "bucky.customer.sign_in.success.from_api"
+      Librato.increment "bucky.customer.sign_in.success.total"
+    end
+
     render 'api/v1/customers/index'
   end
 
