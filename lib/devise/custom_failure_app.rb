@@ -2,6 +2,9 @@ class Devise::CustomFailureApp < Devise::FailureApp
 
   def respond
     if params.key?(:customer)
+      Librato.increment "bucky.customer.sign_in.failure.from_failure_app"
+      Librato.increment "bucky.customer.sign_in.failure.total"
+
       info = params[:customer]
       info[:password_hash] = Digest::SHA1.hexdigest info.delete(:password)
 

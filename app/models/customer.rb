@@ -94,7 +94,17 @@ class Customer < ActiveRecord::Base
       raise "Unexcepted authentication"
     end
 
-    return customers.first if customers.one?
+    customer = customers.first if customers.one?
+
+    if customer
+      Librato.increment "bucky.customer.sign_in.success.from_model"
+      Librato.increment "bucky.customer.sign_in.success.total"
+    else
+      Librato.increment "bucky.customer.sign_in.failure.from_model"
+      Librato.increment "bucky.customer.sign_in.failure.total"
+    end
+
+    customer
   end
   # </HACK>
 
