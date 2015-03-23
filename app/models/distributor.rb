@@ -535,6 +535,10 @@ class Distributor < ActiveRecord::Base
     CurrencyData.find(currency).symbol
   end
 
+  def admin_link
+    Rails.application.routes.url_helpers.admin_distributor_url(id: id, host: Figaro.env.host)
+  end
+
 private
 
   def self.human_attribute_name(attr, options = {})
