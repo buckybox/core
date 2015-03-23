@@ -1,0 +1,13 @@
+%h2 Change your password
+
+= simple_form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :put, class: 'form-inline' }) do |f|
+  = f.hidden_field :reset_password_token
+
+  = f.input :password, required: true, label: false, placeholder: "New password", input_html: { class: 'span12', autofocus: true, autocomplete: false }
+  = f.input :password_confirmation, required: true, label: false, placeholder: "Confirm new password", input_html: { class: 'span12', autofocus: true, autocomplete: false }
+
+  #form-controls.clearfix
+    #controls-right.pull-right
+      = link_to t('cancel'), new_session_path(resource_name)
+      = f.button :submit, "Change my password", class: 'btn btn-process'
+
