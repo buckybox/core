@@ -40,14 +40,13 @@ IntercomRails.config do |config|
   # user object, or a Proc which will be passed the current user.
   #
   config.user.custom_data = {
-    business_name:           :business_name,
-    needs_setup:             :needs_setup?,
-    transactional_customers: :transactional_customer_count,
-    total_customers:         :total_customer_count,
-    deliveries_last_7_days:  :deliveries_last_7_days_count,
     business_name:           :name,
     phone:                   :phone,
     admin_link:              :admin_link,
+    # needs_setup:             :needs_setup?,
+    # transactional_customers: :transactional_customer_count,
+    # total_customers:         :total_customer_count,
+    # deliveries_last_7_days:  :deliveries_last_7_days_count,
   }
 
   # == User -> Company association
