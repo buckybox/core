@@ -35,7 +35,7 @@ class Customer < ActiveRecord::Base
   validates_associated :account
 
   before_validation :initialize_number, if: 'number.nil?'
-  before_validation :random_password, unless: 'encrypted_password.present?'
+  before_validation :randomize_password, unless: 'encrypted_password.present?'
   before_validation :discount_percentage
   before_validation :format_email
 
@@ -124,13 +124,6 @@ class Customer < ActiveRecord::Base
     },
     using: { tsearch: { prefix: true } }
 
-  def self.generate_random_password(length = 12)
-    chars = ("a".."z").to_a + ("A".."Z").to_a + ("0".."9").to_a
-    newpass = ""
-    1.upto(length) { |i| newpass << chars[rand(chars.size - 1)] }
-    return newpass
-  end
-
   def self.next_number(distributor)
     max_number = distributor.customers.maximum(:number) || 0
     max_number + 1
@@ -199,7 +192,7 @@ class Customer < ActiveRecord::Base
   end
 
   def randomize_password
-    self.password = Customer.generate_random_password
+    self.password = Devise.friendly_token.first(8)
     self.password_confirmation = self.password
   end
 
@@ -488,10 +481,6 @@ private
 
   def initialize_number
     self.number = Customer.next_number(self.distributor) unless self.distributor.nil?
-  end
-
-  def random_password
-    randomize_password
   end
 
   def discount_percentage
