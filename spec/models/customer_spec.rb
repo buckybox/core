@@ -82,7 +82,7 @@ describe Customer do
     end
   end
 
-  it "enforce password minimum length requirement" do
+  it "enforces password minimum length requirement" do
     new_customer = Fabricate.build(:customer, password: 'a' * 5)
 
     expect(new_customer).not_to be_valid
@@ -171,8 +171,6 @@ describe Customer do
       end
 
       specify { expect(@customer.password).not_to be_nil }
-      specify { @customer.randomize_password.length == 12 }
-      specify { expect(Customer.generate_random_password).not_to eq Customer.generate_random_password }
     end
 
     describe '#name' do
