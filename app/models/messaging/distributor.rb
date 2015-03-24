@@ -55,9 +55,6 @@ module Messaging
         email:       distributor.email,
         name:        distributor.contact_name,
         created_at:  distributor.created_at,
-        custom_data: {
-          # FIXME: stuff here never gets sent to Intercom?
-        }
       }
     end
 

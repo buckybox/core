@@ -509,11 +509,6 @@ class Distributor < ActiveRecord::Base
     messaging.skip?(env)
   end
 
-  # sent to intercom
-  def needs_setup?
-    delivery_services.count.zero? || boxes.count.zero?
-  end
-
   def webstore_status_changed?
     active_webstore_changed?
   end
