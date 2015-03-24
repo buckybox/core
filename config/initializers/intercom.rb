@@ -43,10 +43,8 @@ IntercomRails.config do |config|
     business_name:           :name,
     phone:                   :phone,
     admin_link:              :admin_link,
-    # needs_setup:             :needs_setup?,
-    # transactional_customers: :transactional_customer_count,
-    # total_customers:         :total_customer_count,
-    # deliveries_last_7_days:  :deliveries_last_7_days_count,
+    transactional_customers: :transactional_customer_count,
+    total_customers:         :total_customer_count,
   }
 
   # == User -> Company association
