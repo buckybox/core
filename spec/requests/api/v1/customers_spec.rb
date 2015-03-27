@@ -69,7 +69,7 @@ describe "API v1" do
       @customers ||= Fabricate.times(2, :customer, distributor: api_distributor)
     end
 
-    let(:model_attributes) { %w(id first_name last_name email delivery_service_id account_balance discount discount? halted? name number webstore_id) }
+    let(:model_attributes) { %w(id first_name last_name email delivery_service_id account_balance discount discount? halted? name number webstore_id webstore_name) }
     let(:embedable_attributes) { %w(address) }
 
     describe "GET /customers" do
