@@ -6,6 +6,7 @@ attribute :formated_number => :number
 
 node(:account_balance) { |customer| customer.account.balance.to_s }
 node(:webstore_id) { |customer| customer.distributor.parameter_name }
+node(:webstore_name) { |customer| customer.distributor.name }
 
 unless @embed['address'].nil?
   child :address do
