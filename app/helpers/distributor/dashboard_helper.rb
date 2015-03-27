@@ -70,10 +70,15 @@ module Distributor::DashboardHelper
 
   def time_since(timestamp)
     return "Never" if timestamp.blank?
-    if days_between(timestamp.to_date, Date.today) > 4
+
+    days = days_between(timestamp.to_date, Date.today)
+
+    if days > 180
+      timestamp.to_s(:day_month_and_year)
+    elsif days > 4
       timestamp.to_s(:date_short_month)
     else
-      distance_of_time_in_words_to_now(timestamp) + " ago"
+      time_ago_in_words(timestamp) + " ago"
     end
   end
 
