@@ -5,13 +5,14 @@
     %legend Profile
     = f.input :name
     = f.input :contact_name
-    = f.input :tag_list, label: 'Tags', placeholder: 'E.g. challenge, delete-me, paying'
+    = f.input :tag_list, label: 'Tags', placeholder: 'e.g. challenge, delete-me, paying'
     = f.input :overdue, placeholder: "e.g. 2 months"
     = f.input :notes, row: 2
     = f.input :parameter_name, label: "BB.com/webstore/"
     = f.input :url
     = f.input :email
     = f.input :support_email
+    = f.input :ga_tracking_id, label: "GA tracking ID", placeholder: "e.g. UA-21417656-5"
     = f.input :country_id, collection: Country.all, include_blank: false, input_html: { disabled: !@distributor.new_record? }
     = f.input :time_zone, as: :time_zone, input_html: { disabled: !@distributor.new_record? }
     = f.input :currency, collection: select_currencies, include_blank: false, input_html: { disabled: !@distributor.new_record? }
