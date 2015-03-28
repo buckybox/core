@@ -1,6 +1,7 @@
 object @webstore => :webstore
-attributes :name, :locale, :currency, :time_zone, :city, :sidebar_description, :facebook_url, :phone, :email, :line_items, :paypal_email
-attributes :payment_options, :email_customer_on_new_webstore_order
+attributes :name, :locale, :currency, :time_zone, :city, :sidebar_description, :facebook_url, :phone, :email
+attributes :line_items, :payment_options, :email_customer_on_new_webstore_order
+attributes :paypal_email, :ga_tracking_id
 
 attributes :require_phone, :require_address_1, :require_address_2, :require_suburb, :require_city, :require_postcode, :require_delivery_note
 attributes :collect_phone, :collect_delivery_note
