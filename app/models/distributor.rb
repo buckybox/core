@@ -79,7 +79,7 @@ class Distributor < ActiveRecord::Base
     :payment_cash_on_delivery, :payment_bank_deposit, :payment_paypal, :paypal_email,
     :payment_credit_card, :keep_me_updated, :notify_address_change, :notify_for_new_webstore_order,
     :email_customer_on_new_webstore_order, :email_customer_on_new_order,
-    :email_distributor_on_new_webstore_order
+    :email_distributor_on_new_webstore_order, :ga_tracking_id
 
   accepts_nested_attributes_for :localised_address
 
