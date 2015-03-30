@@ -24,7 +24,7 @@
                   = link_to t('log_out'), destroy_customer_session_path, method: :delete
 
               - other_accounts = current_customers(all: true, current: false)
-              - if other_accounts.any?
+              - if other_accounts.any? && !current_distributor
                 .switch-accounts.text-left
                   %p
                     %strong Switch Accounts
