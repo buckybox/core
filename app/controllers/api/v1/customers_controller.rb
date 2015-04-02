@@ -141,7 +141,7 @@ class Api::V1::CustomersController < Api::V1::BaseController
     address_json = customer_json.delete("address")
 
     customer_parameters = ActionController::Parameters.new(customer_json)
-    customer_attributes = customer_parameters.permit(*%i(first_name last_name email))
+    customer_attributes = customer_parameters.permit(*%i(first_name last_name email via_webstore))
 
     if existing_customer
       existing_customer.update_attributes(customer_attributes)
@@ -151,7 +151,7 @@ class Api::V1::CustomersController < Api::V1::BaseController
 
     address_parameters = ActionController::Parameters.new(address_json)
     address_attributes = address_parameters.permit(
-      *%i(address_1 address_2 suburb city postcode delivery_note home_phone mobile_phone work_phone via_webstore)
+      *%i(address_1 address_2 suburb city postcode delivery_note home_phone mobile_phone work_phone)
     )
 
     if existing_customer
