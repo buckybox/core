@@ -1,4 +1,4 @@
-%tr
+%tr{ class: ('recent' if distributor.last_seen_at > 30.minutes.ago) }
   %td
     .row-fluid
       .span4
@@ -26,9 +26,7 @@
       .span3.align-right.medium
         - if distributor.access_locked?
           %span{title: "Locked at #{distributor.locked_at}"} [LOCKED]
-        = time_since(distributor.current_sign_in_at)
-        %a(href="http://www.infosniper.net/index.php?ip_address=#{distributor.current_sign_in_ip}" target="_blank")
-          %i.icon-map-marker
+        = time_since(distributor.last_seen_at)
 
     .row-fluid
       .span4
