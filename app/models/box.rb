@@ -122,7 +122,7 @@ class Box < ActiveRecord::Base
   end
 
   def available_extras
-    extras.not_hidden.alphabetically
+    extras_allowed? ? extras.not_hidden.alphabetically : self.class.none
   end
 
 private
