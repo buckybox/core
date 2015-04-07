@@ -20,3 +20,9 @@
     - unless @distributor_setup.finished?
       %li#welcome-guide-indicator.pull-right
         = render partial: 'distributor/welcome/guide'
+    - if current_admin && current_customer
+      %li.impersonate.pull-right
+        = link_to customer_dashboard_url do
+          %i.icon-exclamation-sign
+          Impersonating
+          = current_customer.name
