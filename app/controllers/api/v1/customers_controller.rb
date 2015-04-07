@@ -58,11 +58,11 @@ class Api::V1::CustomersController < Api::V1::BaseController
       end
     end
 
-    info = params
-    info[:password_hash] = Digest::SHA1.hexdigest info.delete(:password)
-    send_login_failure_email(info) if @customers.empty?
-
     if @customers.empty?
+      details = params.dup
+      details[:password_hash] = Digest::SHA1.hexdigest details.delete(:password)
+      CronLog.log("Login failure for #{details[:email]}", details.inspect)
+
       Librato.increment "bucky.customer.sign_in.failure.from_api"
       Librato.increment "bucky.customer.sign_in.failure.total"
     else
@@ -174,18 +174,5 @@ class Api::V1::CustomersController < Api::V1::BaseController
     else
       unprocessable_entity @customer.errors
     end
-  end
-
-private
-
-  def send_login_failure_email info
-    AdminMailer.delay(
-      priority: Figaro.env.delayed_job_priority_low,
-      queue: "#{__FILE__}:#{__LINE__}",
-    ).information_email(
-      to: "sysadmins@buckybox.com",
-      subject: "Login failure from the API!",
-      body: info.inspect,
-    )
   end
 end
