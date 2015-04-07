@@ -1,5 +1,5 @@
 class BankInformation < ActiveRecord::Base
-  belongs_to :distributor
+  belongs_to :distributor, touch: true
 
   attr_accessible :distributor, :name, :account_name, :account_number, :customer_message, :cod_payment_message
 

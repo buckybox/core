@@ -1,4 +1,7 @@
 object @webstore => :webstore
+
+cache [@webstore, @webstore.line_items.hash]
+
 attributes :name, :locale, :currency, :time_zone, :city, :sidebar_description, :facebook_url, :phone, :email
 attributes :line_items, :payment_options, :email_customer_on_new_webstore_order
 attributes :paypal_email, :ga_tracking_id
