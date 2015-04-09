@@ -1,6 +1,6 @@
 class Api::V1::BaseController < ApplicationController
   layout false
-  before_filter :log_request, :authenticate, :set_locale, :embed_options
+  before_filter :log_request, :authenticate, :set_time_zone, :set_locale, :embed_options
   skip_before_filter :authenticate, :set_locale, :embed_options, only: :ping
 
   def ping
@@ -56,6 +56,10 @@ private
     if !@distributor
       return not_found
     end
+  end
+
+  def set_time_zone
+    Time.zone = @distributor.time_zone
   end
 
   def set_locale
