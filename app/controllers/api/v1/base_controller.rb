@@ -1,7 +1,7 @@
 class Api::V1::BaseController < ApplicationController
   layout false
   before_filter :log_request, :authenticate, :set_time_zone, :set_locale, :embed_options
-  skip_before_filter :authenticate, :set_locale, :embed_options, only: :ping
+  skip_before_filter :authenticate, :set_time_zone, :set_locale, :embed_options, only: :ping
 
   def ping
     render text: "Pong!"
