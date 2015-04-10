@@ -49,11 +49,7 @@ class CustomerDecorator < Draper::Decorator
 
   def next_delivery_date
     date = object.next_order_occurrence_date
-    if date
-      date.to_date.iso8601
-    else
-      ""
-    end
+    date ? date.to_date.iso8601 : ""
   end
 
   def customer_creation_date
@@ -62,7 +58,6 @@ class CustomerDecorator < Draper::Decorator
 
   def last_paid_date
     time = object.last_paid
-
     time.to_date.iso8601 if time.present?
   end
 
@@ -75,11 +70,7 @@ class CustomerDecorator < Draper::Decorator
   end
 
   def customer_creation_method
-    if object.via_webstore?
-      "Webstore"
-    else
-      "Manual"
-    end
+    object.via_webstore? ? "Webstore" : "Manual"
   end
 
   def customer_note
