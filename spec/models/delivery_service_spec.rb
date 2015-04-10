@@ -11,12 +11,12 @@ describe DeliveryService do
       delivery_service.save!
     end
 
-    specify {
+    specify do
       schedule_rule = delivery_service.schedule_rule
       expect(schedule_rule).to receive(:record_schedule_transaction)
       delivery_service.schedule_rule.sun = !delivery_service.schedule_rule.sun
       delivery_service.save!
-    }
+    end
   end
 
   describe '#best_delivery_service' do

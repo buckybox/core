@@ -83,7 +83,7 @@ class Account < ActiveRecord::Base
   #all accounts that need invoicing
   def self.need_invoicing
     accounts = []
-    Account.all.each { |account| accounts << account if account.needs_invoicing? }
+    Account.all.find_each { |account| accounts << account if account.needs_invoicing? }
     accounts
   end
 

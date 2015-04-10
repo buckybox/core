@@ -50,9 +50,9 @@ describe SignUpWizardController do
       end
 
       it "saves the new distributor" do
-        expect {
+        expect do
           post_form.call
-        }.to change{Distributor.count}.by(1)
+        end.to change{Distributor.count}.by(1)
       end
 
       it "saves the new distributor attributes" do
@@ -65,9 +65,9 @@ describe SignUpWizardController do
       end
 
       it 'adds default line items to distributor' do
-        expect {
+        expect do
           post_form.call
-        }.to change(LineItem, :count).by(LineItem::DEFAULT_LIST.split(",").size)
+        end.to change(LineItem, :count).by(LineItem::DEFAULT_LIST.split(",").size)
       end
 
       it "returns success response" do
@@ -199,9 +199,9 @@ describe SignUpWizardController do
       end
 
       it "does not create a distributor" do
-        expect {
+        expect do
           post_form.call
-        }.to_not change{Distributor.count}
+        end.to_not change{Distributor.count}
       end
 
       it "returns failure response" do
@@ -229,9 +229,9 @@ describe SignUpWizardController do
       end
 
       it "crashes!" do
-        expect {
+        expect do
           post_form.call
-        }.to raise_error RuntimeError
+        end.to raise_error RuntimeError
       end
     end
   end

@@ -19,10 +19,6 @@ Lint/AssignmentInCondition:
 Lint/BlockAlignment:
   Enabled: false
 
-# Offense count: 1
-Lint/Debugger:
-  Enabled: false
-
 # Offense count: 3
 # Configuration parameters: AlignWith, SupportedStyles.
 Lint/DefEndAlignment:
@@ -63,22 +59,6 @@ Lint/UnusedBlockArgument:
 # Cop supports --auto-correct.
 Lint/UnusedMethodArgument:
   Enabled: false
-
-# Offense count: 5
-Lint/UselessAccessModifier:
-  Enabled: false
-
-# Offense count: 24
-Lint/UselessAssignment:
-  Enabled: false
-
-# Offense count: 174
-Metrics/AbcSize:
-  Max: 85
-
-# Offense count: 2
-Metrics/BlockNesting:
-  Max: 5
 
 # Offense count: 28
 # Configuration parameters: CountComments.
@@ -183,10 +163,6 @@ Style/AlignParameters:
 Style/AndOr:
   Enabled: false
 
-# Offense count: 1
-Style/AsciiComments:
-  Enabled: false
-
 # Offense count: 7
 # Cop supports --auto-correct.
 # Configuration parameters: EnforcedStyle, SupportedStyles.
@@ -196,11 +172,6 @@ Style/BarePercentLiterals:
 # Offense count: 1
 # Cop supports --auto-correct.
 Style/BlockEndNewline:
-  Enabled: false
-
-# Offense count: 52
-# Cop supports --auto-correct.
-Style/Blocks:
   Enabled: false
 
 # Offense count: 93
@@ -313,12 +284,6 @@ Style/FormatString:
 # Offense count: 48
 # Configuration parameters: MinBodyLength.
 Style/GuardClause:
-  Enabled: false
-
-# Offense count: 363
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle, SupportedStyles.
-Style/HashSyntax:
   Enabled: false
 
 # Offense count: 12
@@ -445,27 +410,6 @@ Style/RedundantSelf:
 Style/RegexpLiteral:
   Enabled: false
 
-# Offense count: 4
-Style/RescueModifier:
-  Enabled: false
-
-# Offense count: 5
-# Cop supports --auto-correct.
-Style/SelfAssignment:
-  Enabled: false
-
-# Offense count: 6
-# Cop supports --auto-correct.
-# Configuration parameters: AllowAsExpressionSeparator.
-Style/Semicolon:
-  Enabled: false
-
-# Offense count: 63
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle, SupportedStyles.
-Style/SignalException:
-  Enabled: false
-
 # Offense count: 13
 # Configuration parameters: Methods.
 Style/SingleLineBlockParams:
@@ -573,11 +517,6 @@ Style/StructInheritance:
 Style/SymbolProc:
   Enabled: false
 
-# Offense count: 3
-# Cop supports --auto-correct.
-Style/Tab:
-  Enabled: false
-
 # Offense count: 102
 # Cop supports --auto-correct.
 # Configuration parameters: EnforcedStyle, SupportedStyles.
@@ -620,3 +559,49 @@ Style/UnneededPercentQ:
 # Configuration parameters: WordRegex.
 Style/WordArray:
   MinSize: 4
+
+Rails/Date:
+  Enabled: false # FIXME
+
+Rails/TimeZone:
+  Enabled: false # FIXME
+
+Metrics/AbcSize:
+  Enabled: false
+
+Style/RescueModifier:
+  Enabled: false
+
+Lint/Debugger:
+  Enabled: false
+
+Metrics/BlockNesting:
+  Enabled: false
+
+Style/Semicolon:
+  Enabled: false
+
+Style/HashSyntax:
+  Enabled: false
+
+Style/SignalException:
+  Enabled: false
+
+Style/ClosingParenthesisIndentation:
+  Enabled: false
+
+Performance/Detect:
+  Enabled: false
+
+Lint/UselessAssignment:
+  Enabled: false
+
+Lint/LiteralInInterpolation:
+  Enabled: false
+
+Lint/UselessAccessModifier:
+  Enabled: false
+
+Style/BlockDelimiters:
+  Enabled: false
+

@@ -122,7 +122,7 @@ module Distributor::DeliveriesHelper
   end
 
   def map_link(address)
-    address = address + ", #{[current_distributor.city, current_distributor.country.full_name].reject(&:blank?).join(", ")}"
+    address += ", #{[current_distributor.city, current_distributor.country.full_name].reject(&:blank?).join(", ")}"
     "http://maps.google.com/maps?q=#{Rack::Utils.escape(address)}"
   end
 end

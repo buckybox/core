@@ -170,7 +170,7 @@ describe Distributor do
       @distributor1 = Fabricate(:distributor, advance_hour: 18, advance_days: 3)
       daily_orders(@distributor1)
 
-      @current_time = @current_time + 1.day
+      @current_time += 1.day
       Delorean.time_travel_to(@current_time)
 
       @distributor2 = Fabricate(:distributor, advance_hour: 12, advance_days: 4)
@@ -384,10 +384,10 @@ describe Distributor do
   end
 
   describe ".update_next_occurrence_caches" do
-    let(:customer){
+    let(:customer) do
       distributor.save!
       Fabricate(:customer, distributor: distributor)
-    }
+    end
     let(:order){Fabricate(:order, account: customer.account)}
     it 'updates cached value of next order' do
       order

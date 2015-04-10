@@ -1,7 +1,7 @@
 autoload :Benchmark, 'benchmark'
 
 RSpec::Matchers.define :take_less_than do |expected|
-  chain :seconds do; end
+  chain :seconds, -> {}
 
   match do |block|
     @elapsed = Benchmark.realtime do

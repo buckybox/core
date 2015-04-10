@@ -11,11 +11,11 @@ describe Distributor::DeliveriesController do
       @box = Fabricate(:box, distributor: @distributor)
       @deliveries = []
       @packages = []
-      [3, 1, 2].collect { |position|
+      [3, 1, 2].collect do |position|
         result = delivery_and_package_for_distributor(@distributor, @delivery_service, @box, @date, position)
         @deliveries << result.delivery
         @packages << result.package
-      }
+      end
     end
 
     it "should order deliveries based on the DSO" do

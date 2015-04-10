@@ -9,9 +9,9 @@ class UpdateRouteSchedules < ActiveRecord::Migration
       route.update_column(:estimated_delivery_time, ".") if route.estimated_delivery_time.blank?
 
       day_booleans = [route.sunday, route.monday, route.tuesday, route.wednesday, route.thursday, route.friday, route.saturday]
-      days = day_booleans.each_with_index.collect { |bool, index|
+      days = day_booleans.each_with_index.collect do |bool, index|
         bool ? ScheduleRule::DAYS[index] : nil
-      }.compact
+      end.compact
 
       route.distributor.use_local_time_zone do
         sr = ScheduleRule.weekly(route.created_at.to_date, days)

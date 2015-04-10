@@ -11,18 +11,18 @@ describe Distributor::AccountsController do
   describe "#change_balance" do
     it "updates customer balance" do
       balance_before = account.balance_cents
-      expect{
+      expect do
         post :change_balance, id: customer.account.id, date: "22 Oct '13", delta: '6.66', note: 'hell pizza'
-      }.to change{
+      end.to change{
         account.reload.balance_cents
       }.from(balance_before).to(balance_before + 666)
     end
 
     it "decreases customer balance" do
       balance_before = customer.account.balance_cents
-      expect{
+      expect do
         post :change_balance, id: customer.account.id, date: "22 Oct '13", delta: '-6.66'
-      }.to change{
+      end.to change{
         account.reload.balance_cents
       }.from(balance_before).to(balance_before - 666)
     end

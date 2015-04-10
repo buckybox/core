@@ -29,9 +29,9 @@ describe Distributor::CustomersController do
       end
 
       it "should send an email" do
-        expect {
+        expect do
           @send_login_details.call
-        }.to change{ActionMailer::Base.deliveries.size}.by(1)
+        end.to change{ActionMailer::Base.deliveries.size}.by(1)
       end
 
       it "should reset password" do
@@ -56,27 +56,27 @@ describe Distributor::CustomersController do
 
     describe "#email" do
       let(:recipient_ids) { [@customer.id] }
-      let(:email_template) {
+      let(:email_template) do
         {
           "subject" => "Hey!",
           "body" => "Hi [first_name],\r\n\r\nCheers"
         }
-      }
-      let(:params) {
+      end
+      let(:params) do
         {
           recipient_ids: recipient_ids.join(','),
           selected_email_template_id: "1",
           email_template: email_template,
           link_action: ""
         }
-      }
+      end
 
-      let(:email_templates) {
+      let(:email_templates) do
         [
           Fabricate(:email_template),
           Fabricate(:email_template)
         ]
-      }
+      end
 
       def message
         JSON.parse(response.body)["message"]
