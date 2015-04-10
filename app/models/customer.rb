@@ -309,11 +309,7 @@ class Customer < ActiveRecord::Base
   end
 
   def send_login_details
-    if send_email?
-      CustomerMailer.login_details(self).deliver
-    else
-      false
-    end
+    send_email? ? CustomerMailer.login_details(self).deliver : false
   end
 
   def via_webstore_notifications
