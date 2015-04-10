@@ -29,9 +29,9 @@ class SettingsWebstoreForm < Form
 
   def self.for_distributor(distributor)
     SettingsWebstoreForm.new(
-      SettingsWebstoreForm::INTERFACE.inject({}) { |result, element|
+      SettingsWebstoreForm::INTERFACE.inject({}) do |result, element|
         result.merge(element.first => distributor.send(element.last))
-      }
+      end
     )
   end
 
@@ -47,10 +47,10 @@ class SettingsWebstoreForm < Form
   end
 
   def set_errors(errors)
-    INTERFACE.each { |k,v|
+    INTERFACE.each do |k,v|
       errors[v].each do |error|
         self.errors.add(k, error)
       end
-    }
+    end
   end
 end

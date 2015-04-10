@@ -381,7 +381,7 @@ class Order < ActiveRecord::Base
   end
 
   def extras_delivered?
-    extras_packing_list.present? && extras_packing_list.packages.where(order_id:self.id).first.deliveries.any?(&:delivered?)
+    extras_packing_list.present? && extras_packing_list.packages.find_by(order_id:self.id).deliveries.any?(&:delivered?)
   end
 
   def set_extras_package!(package)

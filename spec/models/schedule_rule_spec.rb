@@ -362,10 +362,10 @@ describe ScheduleRule do
       schedule_rule.attributes = {mon: false, tue: false, wed: false, thu: false, fri: false, sat: false, sun: false}
     end
     specify { expect(schedule_rule.deleted_days).to eq(ScheduleRule::DAYS) }
-    specify {
+    specify do
       schedule_rule.attributes = {tue: true}
       expect(schedule_rule.deleted_days).to eq(ScheduleRule::DAYS - [:tue])
-    }
+    end
   end
 
   describe '.deleted_day_numbers' do
@@ -376,10 +376,10 @@ describe ScheduleRule do
       schedule_rule.attributes = {mon: false, tue: false, wed: false, thu: false, fri: false, sat: false, sun: false}
     end
     specify { expect(schedule_rule.deleted_day_numbers).to eq([0, 1, 2, 3, 4, 5, 6]) }
-    specify {
+    specify do
       schedule_rule.attributes = {tue: true}
       expect(schedule_rule.deleted_day_numbers).to eq([0, 1, 3, 4, 5, 6])
-    }
+    end
   end
 
   describe ".pause" do

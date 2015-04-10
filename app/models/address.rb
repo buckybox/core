@@ -42,9 +42,9 @@ class Address < ActiveRecord::Base
   alias_method :join, :to_s
 
   def ==(address)
-    address.is_a?(Address) && [:address_1, :address_2, :suburb, :city, :postcode].all?{ |a|
+    address.is_a?(Address) && [:address_1, :address_2, :suburb, :city, :postcode].all? do |a|
       send(a) == address.send(a)
-    }
+    end
   end
 
   def address_hash

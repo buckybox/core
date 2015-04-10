@@ -43,15 +43,15 @@ describe Admin::DistributorsController do
   describe 'POST create' do
     describe 'with valid params' do
       it 'creates a new distributor' do
-        expect {
+        expect do
           post :create, { distributor: Fabricate.attributes_for(:distributor) }
-        }.to change(Distributor, :count).by(1)
+        end.to change(Distributor, :count).by(1)
       end
 
       it 'adds default line items to distributor' do
-        expect {
+        expect do
           post :create, { distributor: Fabricate.attributes_for(:distributor) }
-        }.to change(LineItem, :count).by(LineItem::DEFAULT_LIST.split(",").size)
+        end.to change(LineItem, :count).by(LineItem::DEFAULT_LIST.split(",").size)
       end
 
       it 'assigns a newly created admin_distributor as @admin_distributor' do
@@ -103,9 +103,9 @@ describe Admin::DistributorsController do
   describe 'DELETE destroy' do
     it 'destroys the requested admin_distributor' do
       distributor = Fabricate(:distributor)
-      expect {
+      expect do
         delete :destroy, { id: distributor.to_param }
-      }.to change(Distributor, :count).by(-1)
+      end.to change(Distributor, :count).by(-1)
     end
 
     it 'redirects to the distributors list' do

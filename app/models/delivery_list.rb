@@ -11,17 +11,16 @@ class DeliveryList < ActiveRecord::Base
   default_scope order(:date)
 
   def self.collect_list(distributor, date, options = {})
-    date_orders = []
     wday = date.wday
 
     order_ids = options[:order_ids] || Bucky::Sql.order_ids(distributor, date)
     date_orders = distributor.orders.active.where(id: order_ids).includes({ account: {customer: {address:{}, deliveries: {delivery_list: {}}}}, order_extras: {}, box: {}})
 
     # This emulates the ordering when lists are actually created
-    FutureDeliveryList.new(date, date_orders.sort { |a,b|
+    FutureDeliveryList.new(date, date_orders.sort do |a,b|
       comp = a.dso(wday) <=> b.dso(wday)
       comp.zero? ? (b.created_at <=> a.created_at) : comp
-    })
+    end)
   end
 
   def ordered_deliveries(ids = nil)
@@ -106,7 +105,7 @@ class DeliveryList < ActiveRecord::Base
   def get_delivery_number(delivery)
     raise "This isn't my delivery" if delivery.delivery_list_id != self.id
 
-    delivery_to_same_address = deliveries(true).select{|d| d.address_hash == delivery.address_hash && d.id != delivery.id}.first
+    delivery_to_same_address = deliveries(true).find{|d| d.address_hash == delivery.address_hash && d.id != delivery.id}
 
     if delivery_to_same_address
       delivery_to_same_address.delivery_number

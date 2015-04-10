@@ -24,12 +24,12 @@ EOY
 
   name "UK Lloyds"
 
-  import_transaction_list{
+  import_transaction_list do
     ActionDispatch::Http::UploadedFile.new(
       :tempfile => File.new(Rails.root.join('spec','support','test_upload_files','transaction_imports','uk_lloyds_tsb.csv')),
       :filename => File.basename(File.new(Rails.root.join('spec','support','test_upload_files','transaction_imports','uk_lloyds_tsb.csv')))
     )
-  }
+  end
 end
 
 Fabricator(:omni_importer_for_bank_deposit, from: :omni_importer) do

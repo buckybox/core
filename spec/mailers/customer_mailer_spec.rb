@@ -25,9 +25,9 @@ describe CustomerMailer do
   end
 
   describe "#email_template" do
-    let(:email_template) {
+    let(:email_template) do
       Fabricate.build(:email_template)
-    }
+    end
     let(:mail) { CustomerMailer.email_template(@customer, email_template) }
 
     specify { expect(mail.to).to eq [@customer.email] }

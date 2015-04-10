@@ -37,7 +37,7 @@ class OrderPrice
 
   def self.without_delivery_fee(price, quantity, extras_price, has_extras)
     result = price
-    result = result * quantity if quantity
+    result *= quantity if quantity
     result += extras_price if has_extras
     result
   end

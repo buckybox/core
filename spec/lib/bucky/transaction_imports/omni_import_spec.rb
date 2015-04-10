@@ -1,5 +1,4 @@
 # encoding: utf-8
-# Using the £ symbol
 require 'spec_helper'
 
 include Bucky::TransactionImports

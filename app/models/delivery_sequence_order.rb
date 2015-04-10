@@ -56,13 +56,13 @@ class DeliverySequenceOrder < ActiveRecord::Base
 
   def self.for_delivery(delivery)
     attrs = {delivery_service_id: delivery.delivery_service_id, address_hash: delivery.address.address_hash, day: delivery.delivery_list.date.wday}
-    dso = DeliverySequenceOrder.where(attrs).first
+    dso = DeliverySequenceOrder.find_by(attrs)
     dso ||= DeliverySequenceOrder.create(attrs)
     dso
   end
 
   def self.position_for(address_hash, wday, delivery_service_id)
-    dso = DeliverySequenceOrder.where(address_hash: address_hash, day: wday, delivery_service_id: delivery_service_id).first
+    dso = DeliverySequenceOrder.find_by(address_hash: address_hash, day: wday, delivery_service_id: delivery_service_id)
     dso && dso.position
   end
 end

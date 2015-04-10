@@ -6,9 +6,9 @@ describe Bucky::Tracking do
     let(:tracking) { subject }
 
     it "raises if the identity is nil" do
-      expect {
+      expect do
         tracking.event(nil, 'test')
-      }.to raise_error TypeError
+      end.to raise_error TypeError
     end
   end
 end

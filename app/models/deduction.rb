@@ -65,11 +65,11 @@ class Deduction < ActiveRecord::Base
   end
 
   def bucky_fee
-    transactions.where(['transactions.id != ?', transaction.id]).first
+    transactions.find_by(['transactions.id != ?', transaction.id])
   end
 
   def reversal_fee
-    reversal_transactions.where(['transactions.id != ?', reversal_transaction.id]).first
+    reversal_transactions.find_by(['transactions.id != ?', reversal_transaction.id])
   end
 
   private

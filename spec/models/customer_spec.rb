@@ -158,9 +158,9 @@ describe Customer do
 
         customer_2.number = customer_1.number
 
-        expect {
+        expect do
           customer_2.save(validate: false)
-        }.to raise_error ActiveRecord::RecordNotUnique
+        end.to raise_error ActiveRecord::RecordNotUnique
       end
     end
 
