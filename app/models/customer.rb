@@ -196,66 +196,6 @@ class Customer < ActiveRecord::Base
     self.password_confirmation = self.password
   end
 
-  def import(c, c_delivery_service)
-    self.update_attributes({
-      first_name: c.first_name,
-      last_name: c.last_name,
-      email: c.email,
-      delivery_service: c_delivery_service,
-      discount: c.discount,
-      number: c.number,
-      notes: c.notes,
-      address_attributes: {
-        address_1: c.delivery_address_line_1,
-        address_2: c.delivery_address_line_2,
-        suburb: c.delivery_suburb,
-        city: c.delivery_city,
-        postcode: c.delivery_postcode,
-        delivery_note: c.delivery_instructions,
-        mobile_phone: c.mobile_phone,
-        home_phone: c.home_phone,
-        work_phone: c.work_phone
-      }
-    })
-
-    self.tag_list = c.tags.join(", ")
-    self.save! # Blow up on error so transaction is aborted
-
-    self.account.currency = self.currency
-    self.account.create_transaction(c.account_balance, {description: "Inital CSV Import"})
-    self.account.save! # Blow up on error so transaction is aborted
-
-    self.import_boxes(c.boxes)
-  end
-
-  def import_boxes(c_boxes)
-    c_boxes.each do |b|
-      box = distributor.boxes.find_by_name(b.box_type)
-      raise "Can't find Box '#{b.box_type}' for distributor with id #{id}" if box.blank?
-
-      delivery_date = Time.zone.parse(b.next_delivery_date.to_s)
-      raise "Date couldn't be parsed from '#{b.delivery_date}'" if delivery_date.blank?
-
-      order = self.orders.build({
-        box: box,
-        quantity: 1,
-        account: self.account,
-        extras_one_off: b.extras_recurring?
-      })
-      account.delivery_service = self.delivery_service
-      order.schedule_rule = if b.delivery_frequency == 'single'
-                              ScheduleRule.one_off(delivery_date, ScheduleRule::DAYS.select{|day| b.delivery_days =~ /#{day.to_s}/i})
-                            else
-                              ScheduleRule.recur_on(delivery_date, ScheduleRule::DAYS.select{|day| b.delivery_days =~ /#{day.to_s}/i}, b.delivery_frequency.to_sym)
-                            end
-
-      order.activate
-
-      order.import_extras(b.extras) unless b.extras.blank?
-      order.save! # Blow up on error so transaction is aborted
-    end
-  end
-
   def <=>(b)
     self.name <=> b.name
   end
