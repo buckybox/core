@@ -26,11 +26,11 @@ class PackingList < ActiveRecord::Base
   def self.generate_list(distributor, date)
     packing_list = get(distributor, date)
 
-    distributor.orders.active.where(id: Bucky::Sql.order_ids(distributor, date)).find_each do |order|
+    distributor.orders.active.where(id: Bucky::Sql.order_ids(distributor, date)).map do |order|
       packing_list.packages.originals.find_or_create_by_order_id(order.id)
     end
 
-    return packing_list
+    packing_list
   end
 
   def ordered_packages(ids = nil)

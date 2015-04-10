@@ -40,6 +40,7 @@ gem "delayed-plugins-airbrake",        "~> 1.1.0" # Notify Airbrake when delayed
 gem "daemons",                         "~> 1.1.9" # able to monitor delayed_job via monit
 gem "analytical",                      "~> 3.0.12"
 gem "ace-rails-ap",                    "~> 2.0.0"
+gem "active_utils",                    "< 3" # uninitialized constant ActiveMerchant::Billing::CreditCard::Validateable
 gem "activemerchant",                  "~> 1.32.1"
 gem "attr_encryptor",                  "~> 1.0.2"
 gem "countries",                       "~> 0.9.2", require: "iso3166"
