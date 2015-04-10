@@ -14,7 +14,7 @@ class Customer::SessionsController < Devise::SessionsController
   end
 
   def destroy
-    cookies.delete :current_customers
+    cookies.delete :current_customers, domain: :all
     super
   end
 end

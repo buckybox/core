@@ -14,7 +14,7 @@ gem "jquery-ui-rails",                 "~> 4.0.5"
 gem "bootstrap-sass",                  "~> 2.3.2.2"
 gem "bootbox-rails",                   "~> 0.1.0"
 gem "select2-rails",                   "~> 3.5.0"
-gem "devise",                          "~> 3.2.2"
+gem "devise",                          "~> 3.2.2" # FIXME
 gem "devise-i18n",                     "~> 0.10.3"
 gem "simple_form",                     "~> 2.1.1"
 gem "inherited_resources",             "~> 1.3.1"

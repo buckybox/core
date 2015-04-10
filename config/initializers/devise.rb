@@ -231,7 +231,10 @@ Devise.setup do |config|
         cookie = []
       end
 
-      auth.cookies.signed[:current_customers] = cookie | [user.id]
+      auth.cookies.signed[:current_customers] = {
+        value: cookie | [user.id],
+        domain: :all,
+      }
     end
   end
 

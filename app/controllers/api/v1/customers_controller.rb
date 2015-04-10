@@ -53,9 +53,7 @@ class Api::V1::CustomersController < Api::V1::BaseController
     current_customer = @distributor.customers.find_by(email: params[:email])
 
     if current_customer.present? && current_customer.valid_password?(params[:password])
-      @customers = Customer.where(email: params[:email]).sort_by do |customer|
-        customer.id == current_customer.id ? 1 : 0 # make sure the current customer is first
-      end
+      @customers = Customer.where(email: params[:email])
     end
 
     if @customers.empty?
