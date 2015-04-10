@@ -125,51 +125,5 @@ describe Account do
       expect(account.amount_with_bucky_fee(100)).to eq 100
     end
   end
-
-  describe "create_invoice" do
-    it "does nothing if an outstanding invoice exists" do
-      account.save
-      Fabricate(:invoice, account: account)
-      allow(account).to receive(:next_invoice_date).and_return(Date.current)
-      expect(Invoice).not_to receive(:create)
-      account.create_invoice
-    end
-
-    it "does nothing if invoice_date is nil" do
-      account.save
-      Fabricate(:invoice, account: account)
-      allow(account).to receive(:next_invoice_date).and_return(nil)
-      expect(Invoice).not_to receive(:create)
-      account.create_invoice
-    end
-
-    it "does nothing if next invoice date is after today" do
-      allow(account).to receive(:next_invoice_date).and_return(1.day.from_now(Time.current))
-      expect(Invoice).not_to receive(:create)
-      account.create_invoice
-    end
-
-    it "creates invoice if next invoice date is <= today" do
-      allow(order_account).to receive(:next_invoice_date).and_return(Date.current)
-      expect(Invoice).to receive(:create_for_account)
-      order_account.create_invoice
-    end
-  end
-
-  describe "#need_invoicing" do
-    before do
-      @a1 = Fabricate.build(:account)
-      allow(@a1).to receive(:needs_invoicing?).and_return(true)
-      @a2 = Fabricate.build(:account)
-      allow(@a2).to receive(:needs_invoicing?).and_return(false)
-
-      allow(Account).to receive(:all).and_return [@a1, @a2]
-
-      @accounts = Account.need_invoicing
-    end
-
-    specify { expect(@accounts).to include(@a1) }
-    specify { expect(@accounts).not_to include(@a2) }
-  end
 end
 

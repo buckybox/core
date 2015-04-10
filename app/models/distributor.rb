@@ -133,7 +133,7 @@ class Distributor < ActiveRecord::Base
   end
 
   def self.create_daily_lists(time = Time.current)
-    all.find_each do |distributor|
+    find_each do |distributor|
       distributor.use_local_time_zone do
         local_time = time.in_time_zone
 
@@ -179,7 +179,7 @@ class Distributor < ActiveRecord::Base
   end
 
   def self.update_next_occurrence_caches
-    all.find_each do |distributor|
+    find_each do |distributor|
       distributor.use_local_time_zone do
         if Time.current.hour == AUTOMATIC_DELIVERY_HOUR
           CronLog.log("Updated next order caches for #{distributor.id} at local time #{Time.current.to_s(:pretty)}.")
