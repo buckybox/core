@@ -1,7 +1,7 @@
 source "https://rubygems.org"
 
-if RUBY_VERSION != "2.1.5"
-  warn "WARNING: You are not running the version of Ruby targeted for this application (#{RUBY_VERSION} != 2.1.5)."
+if RUBY_VERSION != "2.1.6"
+  warn "WARNING: You are not running the version of Ruby targeted for this application (#{RUBY_VERSION} != 2.1.6)."
 end
 
 gem "rake",                            "~> 10.3.2" # i18n-spec breaks with 10.4 :/
