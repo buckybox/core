@@ -72,6 +72,7 @@ gem "simple_form-bank_account_number", ">= 1.0.0"
 gem "ordinalize_full",                 ">= 1.2.1", require: "ordinalize_full/integer"
 gem "skylight",                        ">= 0.6.0"
 gem "librato-rails",                   ">= 0.11.1"
+gem "rbtrace",                         ">= 0.4.7"
 
 group :assets do
   gem "coffee-rails",   "~> 3.2.2"
