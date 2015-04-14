@@ -111,19 +111,5 @@ describe Account do
   describe "#all_occurrences" do
     specify { expect(order_account.all_occurrences(4.weeks.from_now).size).to eq 20 }
   end
-
-  describe "#amount_with_bucky_fee" do
-    it "returns amount if bucky fee is not separate" do
-      allow(account.distributor).to receive(:separate_bucky_fee).and_return(true)
-      allow(account.distributor).to receive(:bucky_box_percentage).and_return(0.02) #%
-      expect(account.amount_with_bucky_fee(100)).to eq 102
-    end
-
-    it "includes bucky fee if bucky fee is separate" do
-      allow(account.distributor).to receive(:separate_bucky_fee).and_return(false)
-      allow(account.distributor).to receive(:bucky_box_percentage).and_return(0.02) #%
-      expect(account.amount_with_bucky_fee(100)).to eq 100
-    end
-  end
 end
 

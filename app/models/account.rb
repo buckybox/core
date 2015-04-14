@@ -9,7 +9,6 @@ class Account < ActiveRecord::Base
   has_many :active_orders,   class_name: 'Order', conditions: { active: true }
   has_many :transactions,    dependent: :destroy, autosave: true
   has_many :deliveries,      through: :orders
-  has_many :invoices
 
   has_one :delivery_service, through: :customer
   has_one :address,          through: :customer
@@ -98,62 +97,6 @@ class Account < ActiveRecord::Base
     end
 
     occurrences.sort { |a,b| a[:date] <=> b[:date] }
-  end
-
-  # This holds the core logic for when an invoice should be raised
-  def next_invoice_date
-    total = balance
-    invoice_date = nil
-    occurrences = all_occurrences(4.weeks.from_now)
-
-    if total < distributor.invoice_threshold
-      # No matter what if the account is below the threshold send out an invoice
-      return Date.current
-    else
-      occurrences.each do |occurrence|
-        total -= amount_with_bucky_fee(occurrence[:price])
-
-        if total < distributor.invoice_threshold
-          invoice_date = occurrence[:date] - 12.days
-          break
-        end
-      end
-    end
-
-    if invoice_date
-      invoice_date = Date.current if invoice_date < Date.current
-
-      # After talking to @joshuavial the + 2.days is because of the buisness requirement:
-      # it never send an invoice before 2 days after the first delivery
-      if deliveries.size > 0 && deliveries.ordered.first.date.present? && deliveries.ordered.first.date >= invoice_date
-        invoice_date = deliveries.ordered.first.date + 2.days
-      elsif deliveries.size == 0 && occurrences.first && occurrences.first[:date] >= invoice_date
-        invoice_date = occurrences.first[:date] + 2.days
-      end
-
-      invoice_date = Date.current if invoice_date < Date.current
-    end
-
-    invoice_date
-  end
-
-  # Used internally for calculating invoice totals
-  # if distributor charges bucky fee in addition to box price return price + bucky fee
-  def self.amount_with_bucky_fee(amount, distributor)
-    bucky_fee_multiple = distributor.separate_bucky_fee ? (1 + distributor.bucky_box_percentage) : 1
-    amount * bucky_fee_multiple
-  end
-
-  def amount_with_bucky_fee(amount)
-    Account.amount_with_bucky_fee(amount, distributor)
-  end
-
-  def needs_invoicing?
-    next_invoice_date.present? && next_invoice_date <= Date.current && invoices.outstanding.count == 0
-  end
-
-  def create_invoice
-    Invoice.create_for_account(self) if needs_invoicing?
   end
 
   def update_halted_status

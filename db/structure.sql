@@ -1197,7 +1197,6 @@ CREATE TABLE distributors (
     company_logo character varying(255),
     completed_wizard boolean DEFAULT false NOT NULL,
     parameter_name character varying(255),
-    invoice_threshold_cents integer DEFAULT 0 NOT NULL,
     bucky_box_percentage numeric NOT NULL,
     separate_bucky_fee boolean DEFAULT false,
     support_email character varying(255),
@@ -1521,84 +1520,6 @@ CREATE SEQUENCE import_transactions_id_seq
 --
 
 ALTER SEQUENCE import_transactions_id_seq OWNED BY import_transactions.id;
-
-
---
--- Name: invoice_information; Type: TABLE; Schema: public; Owner: -; Tablespace: 
---
-
-CREATE TABLE invoice_information (
-    id integer NOT NULL,
-    distributor_id integer,
-    gst_number character varying(255),
-    billing_address_1 character varying(255),
-    billing_address_2 character varying(255),
-    billing_suburb character varying(255),
-    billing_city character varying(255),
-    billing_postcode character varying(255),
-    created_at timestamp without time zone,
-    updated_at timestamp without time zone,
-    phone character varying(255)
-);
-
-
---
--- Name: invoice_information_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE invoice_information_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: invoice_information_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE invoice_information_id_seq OWNED BY invoice_information.id;
-
-
---
--- Name: invoices; Type: TABLE; Schema: public; Owner: -; Tablespace: 
---
-
-CREATE TABLE invoices (
-    id integer NOT NULL,
-    account_id integer,
-    number integer,
-    amount_cents integer DEFAULT 0 NOT NULL,
-    balance_cents integer DEFAULT 0 NOT NULL,
-    date date,
-    start_date date,
-    end_date date,
-    transactions text,
-    deliveries text,
-    paid boolean DEFAULT false,
-    created_at timestamp without time zone,
-    updated_at timestamp without time zone
-);
-
-
---
--- Name: invoices_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE invoices_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: invoices_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE invoices_id_seq OWNED BY invoices.id;
 
 
 --
@@ -2417,20 +2338,6 @@ ALTER TABLE ONLY import_transactions ALTER COLUMN id SET DEFAULT nextval('import
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY invoice_information ALTER COLUMN id SET DEFAULT nextval('invoice_information_id_seq'::regclass);
-
-
---
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY invoices ALTER COLUMN id SET DEFAULT nextval('invoices_id_seq'::regclass);
-
-
---
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
---
-
 ALTER TABLE ONLY line_items ALTER COLUMN id SET DEFAULT nextval('line_items_id_seq'::regclass);
 
 
@@ -2800,22 +2707,6 @@ ALTER TABLE ONLY import_transaction_lists
 
 ALTER TABLE ONLY import_transactions
     ADD CONSTRAINT import_transactions_pkey PRIMARY KEY (id);
-
-
---
--- Name: invoice_information_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
---
-
-ALTER TABLE ONLY invoice_information
-    ADD CONSTRAINT invoice_information_pkey PRIMARY KEY (id);
-
-
---
--- Name: invoices_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
---
-
-ALTER TABLE ONLY invoices
-    ADD CONSTRAINT invoices_pkey PRIMARY KEY (id);
 
 
 --
@@ -3232,13 +3123,6 @@ CREATE INDEX index_import_transaction_lists_on_distributor_id_and_draft ON impor
 --
 
 CREATE INDEX index_import_transactions_on_import_transaction_list_id ON import_transactions USING btree (import_transaction_list_id);
-
-
---
--- Name: index_invoice_information_on_distributor_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
---
-
-CREATE INDEX index_invoice_information_on_distributor_id ON invoice_information USING btree (distributor_id);
 
 
 --
@@ -3839,3 +3723,5 @@ INSERT INTO schema_migrations (version) VALUES ('20140718175650');
 INSERT INTO schema_migrations (version) VALUES ('20140922105032');
 
 INSERT INTO schema_migrations (version) VALUES ('20150328193017');
+
+INSERT INTO schema_migrations (version) VALUES ('20150414181412');
