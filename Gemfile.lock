@@ -587,7 +587,7 @@ DEPENDENCIES
   bullet
   bundler-audit
   byebug
-  cane (~> 2.6.1)
+  cane
   capistrano (~> 2)
   capybara (~> 2.3.0)
   capybara-screenshot
