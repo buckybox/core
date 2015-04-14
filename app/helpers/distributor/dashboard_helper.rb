@@ -28,12 +28,6 @@ module Distributor::DashboardHelper
         customer = notification.customer
         "Payment overdue for #{link_to_customer customer}".html_safe
 
-      when Event::EVENT_TYPES[:invoice_reminder]
-        "#{link_to_invoice notification.invoice_id} will be sent tomorrow, please #{link_to_reconciliation notification.reconciliation_id} (payments overdue)".html_safe
-
-      when Event::EVENT_TYPES[:invoice_mail_sent]
-        "#{link_to_invoice notification.invoice_id} has been sent by email".html_safe
-
       when Event::EVENT_TYPES[:transaction_success]
         transaction = notification.transaction
         "#{link_to_transaction transaction.id} was successfully made (#{transaction.amount})".html_safe
@@ -50,10 +44,6 @@ module Distributor::DashboardHelper
 
   def link_to_delivery delivery_id
     link_to  "delivery", distributor_delivery_path(delivery_id)
-  end
-
-  def link_to_invoice invoice_id
-    "An invoice"
   end
 
   def link_to_transaction transaction_id

@@ -4,7 +4,6 @@ class Distributor < ActiveRecord::Base
   include Bucky::Email
 
   has_one :bank_information,          dependent: :destroy
-  has_one :invoice_information,       dependent: :destroy
   has_one :localised_address,         dependent: :destroy, as: :addressable, autosave: true
 
   has_many :extras,                   dependent: :destroy
@@ -16,7 +15,6 @@ class Distributor < ActiveRecord::Base
   has_many :deductions,               dependent: :destroy
   has_many :customers,                dependent: :destroy
   has_many :accounts,                 dependent: :destroy, through: :customers
-  has_many :invoices,                 dependent: :destroy, through: :accounts
   has_many :transactions,             dependent: :destroy, through: :accounts
   has_many :events,                   dependent: :destroy
   has_many :delivery_lists,           dependent: :destroy
@@ -53,7 +51,6 @@ class Distributor < ActiveRecord::Base
   mount_uploader :company_logo, CompanyLogoUploader
   mount_uploader :company_team_image, CompanyTeamImageUploader
 
-  monetize :invoice_threshold_cents
   monetize :consumer_delivery_fee_cents
   monetize :default_balance_threshold_cents
 
@@ -61,7 +58,7 @@ class Distributor < ActiveRecord::Base
   attr_accessible :email, :password, :password_confirmation, :remember_me, :name, :url,
     :company_logo, :company_logo_cache, :remove_company_logo, :company_team_image,
     :company_team_image_cache, :remove_company_team_image, :completed_wizard, :support_email,
-    :invoice_threshold, :separate_bucky_fee, :advance_hour, :advance_days, :time_zone, :currency,
+    :separate_bucky_fee, :advance_hour, :advance_days, :time_zone, :currency,
     :country_id, :consumer_delivery_fee, :consumer_delivery_fee_cents, :active_webstore, :about,
     :details, :facebook_url, :city, :parameter_name, :spend_limit_on_all_customers,
     :feature_spend_limit, :contact_name, :tag_list, :omni_importer_ids, :notes, :email_templates,
@@ -111,7 +108,6 @@ class Distributor < ActiveRecord::Base
   default_value_for :advance_hour,            DEFAULT_ADVANCED_HOURS
   default_value_for :advance_days,            DEFAULT_ADVANCED_DAYS
 
-  default_value_for :invoice_threshold_cents, -500
   default_value_for :bucky_box_percentage, 0.0175
   default_value_for :notify_address_change, true
 

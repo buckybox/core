@@ -88,7 +88,6 @@ BuckyBox::Application.routes.draw do
 
     resources :distributors,        only: :update
     resource  :bank_information,    only: :update
-    resource  :invoice_information, only: [:create, :update]
     resources :boxes,               except: [:index]
     resources :extras,              except: [:index, :show]
 
@@ -99,13 +98,6 @@ BuckyBox::Application.routes.draw do
     end
 
     resources :deliveries
-
-    resources :invoices do
-      collection do
-        get 'to_send',  action: 'to_send', as: 'to_send'
-        post 'do_send', action: 'do_send', as: 'do_send'
-      end
-    end
 
     resources :payments, only: [:create, :index, :show, :destroy] do
       collection do

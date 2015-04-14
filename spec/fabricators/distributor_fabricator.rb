@@ -17,7 +17,6 @@ Fabricator(:distributor) do
 end
 
 Fabricator(:distributor_with_information, from: :distributor) do
-  invoice_information
   bank_information
 end
 
