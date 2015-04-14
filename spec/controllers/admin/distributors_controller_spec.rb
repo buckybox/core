@@ -17,14 +17,6 @@ describe Admin::DistributorsController do
     end
   end
 
-  describe 'GET show' do
-    it 'assigns the requested admin_distributor as @admin_distributor' do
-      distributor = Fabricate(:distributor)
-      get :show, { id: distributor.to_param }
-      expect(assigns(:distributor)).to eq(distributor)
-    end
-  end
-
   describe 'GET new' do
     it 'assigns a new admin_distributor as @admin_distributor' do
       get :new, {}
@@ -59,11 +51,6 @@ describe Admin::DistributorsController do
         expect(assigns(:distributor)).to be_a(Distributor)
         expect(assigns(:distributor)).to be_persisted
       end
-
-      it 'redirects to the created admin_distributor' do
-        post :create, { distributor: Fabricate.attributes_for(:distributor) }
-        expect(response).to redirect_to(admin_distributor_path(Distributor.last))
-      end
     end
 
     describe 'with invalid params' do
@@ -83,12 +70,6 @@ describe Admin::DistributorsController do
         put :update, { id: distributor.to_param, distributor: Fabricate.attributes_for(:distributor) }
         expect(assigns(:distributor)).to eq(distributor)
       end
-
-      it 'redirects to the admin_distributor' do
-        distributor = Fabricate(:distributor)
-        put :update, { id: distributor.to_param, distributor: Fabricate.attributes_for(:distributor) }
-        expect(response).to redirect_to(admin_distributor_path(distributor))
-      end
     end
 
     describe 'with invalid params' do
@@ -97,21 +78,6 @@ describe Admin::DistributorsController do
         put :update, { id: distributor.to_param, distributor: {} }
         expect(assigns(:distributor)).to eq(distributor)
       end
-    end
-  end
-
-  describe 'DELETE destroy' do
-    it 'destroys the requested admin_distributor' do
-      distributor = Fabricate(:distributor)
-      expect do
-        delete :destroy, { id: distributor.to_param }
-      end.to change(Distributor, :count).by(-1)
-    end
-
-    it 'redirects to the distributors list' do
-      distributor = Fabricate(:distributor)
-      delete :destroy, { id: distributor.to_param }
-      expect(response).to redirect_to(admin_distributors_url)
     end
   end
 

@@ -14,7 +14,7 @@ class Distributor < ActiveRecord::Base
   has_many :deliveries,               dependent: :destroy, through: :orders
   has_many :payments,                 dependent: :destroy
   has_many :deductions,               dependent: :destroy
-  has_many :customers,                dependent: :destroy, autosave: true # Want to save those customers added via import_customers
+  has_many :customers,                dependent: :destroy
   has_many :accounts,                 dependent: :destroy, through: :customers
   has_many :invoices,                 dependent: :destroy, through: :accounts
   has_many :transactions,             dependent: :destroy, through: :accounts
@@ -290,40 +290,6 @@ class Distributor < ActiveRecord::Base
     end
   end
 
-  def import_customers(loaded_customers)
-    Distributor.transaction do
-      use_local_time_zone do
-        raise "No customers" if loaded_customers.blank?
-
-        expected = Bucky::Import::Customer
-        raise "Expecting #{expected} but was #{loaded_customers.first.class}" unless loaded_customers.first.class == expected
-
-        loaded_customers.each do |c|
-          customer = customers.find_by_number(c.number) || self.customers.build({number: c.number})
-
-          c_delivery_service = delivery_services.find_by_name(c.delivery_service)
-          raise "DeliveryService #{c.delivery_service} not found for distributor with id #{id}" if c_delivery_service.blank?
-          customer.import(c, c_delivery_service)
-        end
-      end
-    end
-  end
-
-  def find_extra_from_import(extra, box = nil)
-    from_import = Import::Extra.new(distributor: self, extra: extra, box: box)
-    from_import.find
-  end
-
-  def find_box_from_import(box)
-    if box.is_a?(Box) && box_ids.include?(box.id)
-      box
-    elsif box.is_a?(Bucky::Import::Box)
-      boxes.find_by_name(box.box_type)
-    else
-      raise "Couldn't find the box #{box.inspect} for this distributor #{distributor.inspect}"
-    end
-  end
-
   def find_duplicate_import_transactions(date, description, amount)
     import_transactions.processed.not_duplicate.not_removed.where(transaction_date: date, description: description, amount_cents: (amount * 100).to_i)
   end
@@ -532,6 +498,10 @@ class Distributor < ActiveRecord::Base
 
   def admin_link
     Rails.application.routes.url_helpers.admin_distributor_url(id: id, host: Figaro.env.host)
+  end
+
+  def seen_recently?
+    last_seen_at && last_seen_at > 30.minutes.ago
   end
 
 private
