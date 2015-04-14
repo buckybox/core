@@ -6,8 +6,5 @@ class DistributorLogin < ActiveRecord::Base
 
   def self.track(distributor)
     DistributorLogin.create!(distributor: distributor)
-  rescue StandardError => ex
-    Airbrake.notify(ex)
-    raise ex unless Rails.env.production?
   end
 end

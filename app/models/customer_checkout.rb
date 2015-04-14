@@ -6,8 +6,5 @@ class CustomerCheckout < ActiveRecord::Base
 
   def self.track(customer)
     CustomerCheckout.create!(customer: customer, distributor_id: customer.distributor_id)
-  rescue StandardError => ex
-    Airbrake.notify(ex)
-    raise ex unless Rails.env.production?
   end
 end

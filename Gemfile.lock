@@ -57,9 +57,6 @@ GEM
     acts_as_list (0.1.9)
     addressable (2.3.8)
     aggregate (0.2.2)
-    airbrake (3.1.17)
-      builder
-      multi_json
     analytical (3.0.12)
     apipie-rails (0.2.6)
       json
@@ -97,8 +94,7 @@ GEM
       sass (~> 3.0)
       slim (~> 1.3.6)
       terminal-table (~> 1.4)
-    bugsnag (2.0.3)
-      httparty (>= 0.6, < 1.0)
+    bugsnag (2.8.4)
       multi_json (~> 1.0)
     builder (3.0.4)
     bullet (4.14.4)
@@ -181,9 +177,6 @@ GEM
     database_cleaner (1.4.1)
     debug_inspector (0.0.2)
     default_value_for (2.0.3)
-    delayed-plugins-airbrake (1.1.0)
-      airbrake
-      delayed_job
     delayed_job (3.0.5)
       activesupport (~> 3.0)
     delayed_job_active_record (0.4.4)
@@ -262,9 +255,6 @@ GEM
     hike (1.2.3)
     hitimes (1.2.2)
     htmlentities (4.3.3)
-    httparty (0.13.3)
-      json (~> 1.8)
-      multi_xml (>= 0.5.2)
     i15r (0.5.3)
     i18n (0.7.0)
     i18n-spec (0.6.0)
@@ -325,7 +315,6 @@ GEM
     msgpack (0.5.11)
     multi_json (1.11.0)
     multi_test (0.1.2)
-    multi_xml (0.5.5)
     multipart-post (2.0.0)
     naught (0.0.3)
     nenv (0.2.0)
@@ -573,7 +562,6 @@ DEPENDENCIES
   activemerchant (~> 1.32.1)
   acts-as-taggable-on (~> 2.3.3)
   acts_as_list (~> 0.1.8)
-  airbrake (~> 3.1.2)
   analytical (~> 3.0.12)
   apipie-rails (~> 0.2.6)
   attr_encryptor (~> 1.0.2)
@@ -583,7 +571,7 @@ DEPENDENCIES
   bootbox-rails (~> 0.1.0)
   bootstrap-sass (~> 2.3.2.2)
   brakeman
-  bugsnag (~> 2.0.2)
+  bugsnag (>= 2.8.4)
   bullet
   bundler-audit
   byebug
@@ -603,7 +591,6 @@ DEPENDENCIES
   daemons (~> 1.1.9)
   database_cleaner
   default_value_for (~> 2.0.1)
-  delayed-plugins-airbrake (~> 1.1.0)
   delayed_job (~> 3.0.5)
   delayed_job_active_record (~> 0.4.4)
   delayed_job_web (= 1.2.0)

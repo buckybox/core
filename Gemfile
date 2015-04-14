@@ -37,7 +37,6 @@ group :default do # XXX: all environments, think twice before adding Gems here
   gem "delayed_job",                     "~> 3.0.5" # send emails offline
   gem "delayed_job_active_record",       "~> 0.4.4"
   gem "delayed_job_web",                 "= 1.2.0" # version hardcoded in config/deploy.rb
-  gem "delayed-plugins-airbrake",        "~> 1.1.0" # Notify Airbrake when delayed_job has an error
   gem "daemons",                         "~> 1.1.9" # able to monitor delayed_job via monit
   gem "analytical",                      "~> 3.0.12"
   gem "ace-rails-ap",                    "~> 2.0.0"
@@ -111,8 +110,7 @@ end
 
 group :staging, :production do
   gem "newrelic_rpm",                    ">= 3.9.7.266"
-  gem "airbrake",                        "~> 3.1.2"
-  gem "bugsnag",                         "~> 2.0.2"
+  gem "bugsnag",                         ">= 2.8.4"
   gem "skylight",                        ">= 0.6.0"
 end
 
