@@ -1,4 +1,4 @@
-%tr{ class: ('recent' if distributor.last_seen_at > 30.minutes.ago) }
+%tr{ class: ('recent' if distributor.seen_recently?) }
   %td
     .row-fluid
       .span4
@@ -53,8 +53,6 @@
           Next delivery:
           %strong= distributors_next_delivery_date(distributor)
       .span3.align-right.small
-        = link_to 'Show', admin_distributor_path(distributor)
-        |
         = link_to 'Edit', edit_admin_distributor_path(distributor)
         |
         = link_to 'Impersonate', impersonate_admin_distributor_path(distributor)

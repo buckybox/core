@@ -211,12 +211,9 @@ BuckyBox::Application.routes.draw do
     resources :cron_logs, only: :index
     resources :style_sheet, only: :index
 
-    resources :distributors do
+    resources :distributors, only: [:index, :new, :create, :edit, :update] do
       member do
         get 'impersonate'
-        get 'customer_import'
-        put 'validate_customer_import'
-        post 'customer_import_upload'
       end
 
       collection do

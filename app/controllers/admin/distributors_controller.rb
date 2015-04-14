@@ -13,7 +13,15 @@ class Admin::DistributorsController < Admin::ResourceController
     create! do |success, failure|
       success.html do
         Distributor::Defaults.populate_defaults(@distributor)
-        redirect_to admin_distributor_path(@distributor)
+        redirect_to admin_root_url
+      end
+    end
+  end
+
+  def update
+    update! do |success, failure|
+      success.html do
+        redirect_to admin_root_url
       end
     end
   end
@@ -29,28 +37,6 @@ class Admin::DistributorsController < Admin::ResourceController
     sign_out(:distributor)
 
     redirect_to admin_root_url
-  end
-
-  def customer_import
-  end
-
-  def validate_customer_import
-    parse_csv
-
-    @customer_data_fields = Bucky::Import::Customer::DATA_FIELDS + [:tags]
-    @group_count = (@customer_data_fields.size / 3.0).ceil
-    @order_data_fields = Bucky::Import::Box::DATA_FIELDS
-  end
-
-  def customer_import_upload
-    parse_csv
-
-    if @distributor.import_customers(@customers)
-      redirect_to admin_root_url, notice: 'Customers successfully added'
-    else
-      flash[:error] = 'There was a problem, no customers were added. Please let Jordan or Samson know.'
-      render :validate_customer_import
-    end
   end
 
   def country_setting
@@ -75,12 +61,5 @@ private
       parameterized_name = Distributor.parameterize_name(params[:distributor][:parameter_name])
       params[:distributor][:parameter_name] = parameterized_name
     end
-  end
-
-  def parse_csv
-    @distributor = Distributor.find(params[:id])
-    csv = params[:customer_import][:csv].read
-
-    @customers = Bucky::Import.parse(csv, @distributor)
   end
 end

@@ -10,10 +10,6 @@ describe Admin::DistributorsController do
       expect(get("/admin/distributors/new")).to route_to("admin/distributors#new")
     end
 
-    it "delivery_services to #show" do
-      expect(get("/admin/distributors/1")).to route_to("admin/distributors#show", :id => "1")
-    end
-
     it "delivery_services to #edit" do
       expect(get("/admin/distributors/1/edit")).to route_to("admin/distributors#edit", :id => "1")
     end
@@ -24,10 +20,6 @@ describe Admin::DistributorsController do
 
     it "delivery_services to #update" do
       expect(put("/admin/distributors/1")).to route_to("admin/distributors#update", :id => "1")
-    end
-
-    it "delivery_services to #destroy" do
-      expect(delete("/admin/distributors/1")).to route_to("admin/distributors#destroy", :id => "1")
     end
   end
 end
