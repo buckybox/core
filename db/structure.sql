@@ -470,38 +470,6 @@ ALTER SEQUENCE bank_information_id_seq OWNED BY bank_information.id;
 
 
 --
--- Name: bank_statements; Type: TABLE; Schema: public; Owner: -; Tablespace: 
---
-
-CREATE TABLE bank_statements (
-    id integer NOT NULL,
-    distributor_id integer,
-    statement_file character varying(255),
-    created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
-);
-
-
---
--- Name: bank_statements_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE bank_statements_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: bank_statements_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE bank_statements_id_seq OWNED BY bank_statements.id;
-
-
---
 -- Name: box_extras; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -2149,13 +2117,6 @@ ALTER TABLE ONLY bank_information ALTER COLUMN id SET DEFAULT nextval('bank_info
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY bank_statements ALTER COLUMN id SET DEFAULT nextval('bank_statements_id_seq'::regclass);
-
-
---
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
---
-
 ALTER TABLE ONLY box_extras ALTER COLUMN id SET DEFAULT nextval('box_extras_id_seq'::regclass);
 
 
@@ -2491,14 +2452,6 @@ ALTER TABLE ONLY admins
 
 ALTER TABLE ONLY bank_information
     ADD CONSTRAINT bank_information_pkey PRIMARY KEY (id);
-
-
---
--- Name: bank_statements_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
---
-
-ALTER TABLE ONLY bank_statements
-    ADD CONSTRAINT bank_statements_pkey PRIMARY KEY (id);
 
 
 --
@@ -2899,13 +2852,6 @@ CREATE UNIQUE INDEX index_admins_on_reset_password_token ON admins USING btree (
 --
 
 CREATE INDEX index_bank_information_on_distributor_id ON bank_information USING btree (distributor_id);
-
-
---
--- Name: index_bank_statements_on_distributor_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
---
-
-CREATE INDEX index_bank_statements_on_distributor_id ON bank_statements USING btree (distributor_id);
 
 
 --
@@ -3725,3 +3671,5 @@ INSERT INTO schema_migrations (version) VALUES ('20140922105032');
 INSERT INTO schema_migrations (version) VALUES ('20150328193017');
 
 INSERT INTO schema_migrations (version) VALUES ('20150414181412');
+
+INSERT INTO schema_migrations (version) VALUES ('20150414184421');
