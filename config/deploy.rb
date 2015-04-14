@@ -1,7 +1,6 @@
 require './config/boot'
 require 'bundler/capistrano'
 require 'whenever/capistrano'
-require 'airbrake/capistrano'
 require 'new_relic/recipes'
 
 # Multistage deploy

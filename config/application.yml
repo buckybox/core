@@ -16,9 +16,8 @@ TEAM_EMAILS: will@buckybox.com, ced@buckybox.com
 API_MASTER_KEY: "d78d3fe0047fb14105cf65742fe0dd0b"
 API_MASTER_SECRET: "8ec1e2559e22e739a45e7815557284cf"
 
-# Airbrake
-AIRBRAKE_HOST: "api.airbrake.io"
-AIRBRAKE_API_KEY: "e4145e68bb8f78c4380f502c3cddc339"
+# Bugsnag
+BUGSNAG_API_KEY: "258d4e3e5765dc450140bf47f56ae7fd"
 
 # GMail SMTP
 GMAIL_SMTP_HOST: smtp.gmail.com

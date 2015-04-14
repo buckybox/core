@@ -148,7 +148,7 @@ class Distributor < ActiveRecord::Base
             message = "FAILURE: Create daily list for #{distributor.id} at local time #{local_time.to_s(:pretty)}."
 
             CronLog.log(message, details)
-            Airbrake.notify(RuntimeError.new("#{message} #{details}"))
+            Bugsnag.notify(RuntimeError.new("#{message} #{details}"))
           end
         end
       end
@@ -171,7 +171,7 @@ class Distributor < ActiveRecord::Base
             message = "FAILURE: Automated completion for #{distributor.id} at local time #{local_time.to_s(:pretty)}."
 
             CronLog.log(message, details)
-            Airbrake.notify(RuntimeError.new("#{message} #{details}"))
+            Bugsnag.notify(RuntimeError.new("#{message} #{details}"))
           end
         end
       end

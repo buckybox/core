@@ -7,8 +7,5 @@ class CustomerLogin < ActiveRecord::Base
 
   def self.track(customer)
     CustomerLogin.create!(customer: customer, distributor_id: customer.distributor_id)
-  rescue StandardError => ex
-    Airbrake.notify(ex)
-    raise ex unless Rails.env.production?
   end
 end

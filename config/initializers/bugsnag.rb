@@ -1,6 +1,6 @@
-if defined? Bugsnag
+if defined?(Bugsnag) && Figaro.env.bugsnag_api_key.present?
   Bugsnag.configure do |config|
-    config.api_key = "258d4e3e5765dc450140bf47f56ae7fd"
+    config.api_key = Figaro.env.bugsnag_api_key
     config.use_ssl = true
     config.notify_release_stages = %w(production staging)
   end
