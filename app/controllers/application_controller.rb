@@ -2,7 +2,10 @@ class ApplicationController < ActionController::Base
   protect_from_forgery
 
   before_filter :miniprofiler
-  before_bugsnag_notify :add_user_info_to_bugsnag
+
+  if Rails.env.production? || Rails.env.staging?
+    before_bugsnag_notify :add_user_info_to_bugsnag
+  end
 
   attr_reader :current_currency
 
