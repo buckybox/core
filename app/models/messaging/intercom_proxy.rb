@@ -24,7 +24,7 @@ module Messaging
     def create_user(attrs, env = nil)
       return if skip? env
 
-      retryable(retryable_options) do
+      Retryable.retryable(retryable_options) do
         ::Intercom::User.create(attrs)
       end
     end
@@ -52,7 +52,7 @@ module Messaging
     def track(id, action_name, occurred_at = Time.current, env = nil)
       return if skip? env
 
-      retryable(retryable_options) do
+      Retryable.retryable(retryable_options) do
         user = ::Intercom::User.find(user_id: id)
         user.custom_attributes["#{action_name}_at"] = occurred_at
         user.save
@@ -66,7 +66,7 @@ module Messaging
   private
 
     def find_user(user_id)
-      retryable(retryable_options) do
+      Retryable.retryable(retryable_options) do
         ::Intercom::User.find(user_id: user_id)
       end
     rescue Intercom::ResourceNotFound
