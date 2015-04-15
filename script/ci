@@ -1,4 +1,4 @@
-#!/bin/bash -eu
+#!/bin/bash -e
 
 export CI=1
 export RAILS_ENV=test
@@ -7,7 +7,7 @@ export SPEC_OPTS="--format p"
 
 cp -n config/database.yml.example config/database.yml
 
-bundle install
+[ -n "$SNAP_CI" ] && bundle install --jobs=3 --retry=3 --deployment || bundle install
 
 bundle exec bundle-audit update
 bundle exec bundle-audit check
