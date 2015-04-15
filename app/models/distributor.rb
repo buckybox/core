@@ -493,7 +493,7 @@ class Distributor < ActiveRecord::Base
   end
 
   def admin_link
-    Rails.application.routes.url_helpers.admin_distributor_url(id: id, host: Figaro.env.host)
+    Rails.application.routes.url_helpers.edit_admin_distributor_url(id: id, host: Figaro.env.host)
   end
 
   def seen_recently?
