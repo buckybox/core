@@ -6,68 +6,68 @@ end
 
 group :default do # XXX: all environments, think twice before adding Gems here
   gem "rake",                            "~> 10.3.2" # i18n-spec breaks with 10.4 :/
-  gem "rails",                           "~> 3.2.21"
+  gem "rails",                           "< 4"
   gem "rails-i18n",                      "~> 3.0.0" # For Rails 3.x
-  gem "pg",                              "~> 0.17.0"
-  gem "haml-rails",                      "~> 0.3.4"
-  gem "jquery-rails",                    "~> 3.0.4"
-  gem "jquery-ui-rails",                 "~> 4.0.5"
-  gem "bootstrap-sass",                  "~> 2.3.2.2"
-  gem "bootbox-rails",                   "~> 0.1.0"
-  gem "select2-rails",                   "~> 3.5.0"
-  gem "devise",                          "~> 3.2.2"
-  gem "devise-i18n",                     "~> 0.10.3"
-  gem "simple_form",                     "~> 2.1.1"
-  gem "inherited_resources",             "~> 1.3.1"
-  gem "mini_magick",                     "~> 3.4"
-  gem "carrierwave",                     "~> 0.6.2"
-  gem "acts-as-taggable-on",             "~> 2.3.3"
-  gem "pg_search",                       "~> 0.5.1"
-  gem "whenever",                        "~> 0.7.3"
-  gem "acts_as_list",                    "~> 0.1.8"
-  gem "default_value_for",               "~> 2.0.1"
-  gem "fuzzy-string-match",              "~> 0.9.4", require: "fuzzystringmatch" # This performs fuzzy matching on the import script
-  gem "state_machine",                   "~> 1.1.2"
-  gem "figaro",                          "~> 0.6.4"
-  gem "virtus",                          "~> 1.0.1"
-  gem "draper",                          "~> 1.2.1"
-  gem "naught",                          "~> 0.0.2"
-  gem "premailer-rails",                 "~> 1.4.0"
-  gem "nokogiri",                        "~> 1.6.2" # premailer-rails dependency
-  gem "delayed_job",                     "~> 3.0.5" # send emails offline
-  gem "delayed_job_active_record",       "~> 0.4.4"
+  gem "pg"
+  gem "haml-rails"
+  gem "jquery-rails"
+  gem "jquery-ui-rails",                 "< 5" # TODO: make sure JQuery UI 1.11 works fine
+  gem "bootstrap-sass",                  "< 3"
+  gem "bootbox-rails"
+  gem "select2-rails"
+  gem "devise"
+  gem "devise-i18n"
+  gem "simple_form",                     "< 3"
+  gem "inherited_resources"
+  gem "mini_magick",                     "< 4"
+  gem "carrierwave"
+  gem "acts-as-taggable-on",             "< 3"
+  gem "pg_search"
+  gem "whenever"
+  gem "acts_as_list"
+  gem "default_value_for"
+  gem "fuzzy-string-match", require: "fuzzystringmatch"
+  gem "state_machine"
+  gem "figaro"
+  gem "virtus"
+  gem "draper",                          "< 2" # Rails 3.2 not supported with v2
+  gem "naught"
+  gem "premailer-rails"
+  gem "nokogiri" # premailer-rails dependency
+  gem "delayed_job",                     "< 4"
+  gem "delayed_job_active_record"
   gem "delayed_job_web",                 "= 1.2.0" # version hardcoded in config/deploy.rb
-  gem "daemons",                         "~> 1.1.9" # able to monitor delayed_job via monit
-  gem "analytical",                      "~> 3.0.12"
-  gem "ace-rails-ap",                    "~> 2.0.0"
-  gem "active_utils",                    "< 3" # uninitialized constant ActiveMerchant::Billing::CreditCard::Validateable
-  gem "activemerchant",                  "~> 1.32.1"
-  gem "attr_encryptor",                  "~> 1.0.2"
-  gem "countries",                       "~> 0.9.2", require: "iso3166"
-  gem "country_select",                  "~> 1.1.3"
-  gem "biggs",                           "~> 0.3.3"
-  gem "charlock_holmes",                 "~> 0.6.9.4"
-  gem "rabl",                            "~> 0.9.0"
-  gem "apipie-rails",                    "~> 0.2.6"
-  gem "strong_parameters",               "~> 0.2.1"
-  gem "rails-timeago",                   "~> 2.8.1"
-  gem "discover-unused-partials",        "~> 0.3.0"
-  gem "rack-mini-profiler",              "~> 0.9.2"
-  gem "fast_blank",                      "~> 0.0.2"
-  gem "retryable",                       "~> 1.3.5"
-  gem "geokit",                          "~> 1.8.5", require: false
-  gem "foreman",                         ">= 0.78.0"
-  gem "rails-patch-json-encode",         ">= 0.1.1"
-  gem "oj",                              ">= 2.12.1"
-  gem "intercom-rails",                  ">= 0.2.27"
-  gem "intercom",                        ">= 2.4.4"
-  gem "crazy_money",                     ">= 1.2.1"
-  gem "currency_data",                   ">= 1.1.0"
-  gem "email_templator",                 ">= 1.0.0"
-  gem "simple_form-bank_account_number", ">= 1.0.0"
-  gem "ordinalize_full",                 ">= 1.2.1", require: "ordinalize_full/integer"
-  gem "librato-rails",                   ">= 0.11.1"
-  gem "rbtrace",                         ">= 0.4.7"
+  gem "daemons" # able to monitor delayed_job via monit
+  gem "analytical"
+  gem "ace-rails-ap"
+  gem "active_utils"
+  gem "activemerchant"
+  gem "attr_encryptor",                  "< 2"
+  gem "countries", require: "iso3166"
+  gem "country_select",                  "~> 1.1.3" # TODO: https://github.com/stefanpenner/country_select/blob/master/UPGRADING.md
+  gem "biggs"
+  gem "charlock_holmes"
+  gem "rabl"
+  gem "apipie-rails"
+  gem "strong_parameters"
+  gem "rails-timeago"
+  gem "discover-unused-partials"
+  gem "rack-mini-profiler"
+  gem "fast_blank"
+  gem "retryable"
+  gem "foreman"
+  gem "rails-patch-json-encode"
+  gem "oj"
+  gem "intercom-rails"
+  gem "intercom"
+  gem "crazy_money"
+  gem "currency_data"
+  gem "email_templator"
+  gem "simple_form-bank_account_number"
+  gem "ordinalize_full", require: "ordinalize_full/integer"
+  gem "librato-rails"
+  gem "rbtrace"
+  gem "geokit", require: false
 end
 
 group :development do
@@ -100,18 +100,18 @@ group :test do
   gem "launchy"
   gem "guard-rspec"
   gem "rspec-activemodel-mocks"
-  gem "i18n-spec", ">= 0.5.2", require: false
+  gem "i18n-spec", require: false
 end
 
 group :staging do
   gem "mail_safe"
-  # gem "oink",                            "~> 0.10.1"
+  # gem "oink"
 end
 
 group :staging, :production do
-  gem "newrelic_rpm",                    ">= 3.9.7.266"
-  gem "bugsnag",                         ">= 2.8.4"
-  gem "skylight",                        ">= 0.6.0"
+  gem "newrelic_rpm"
+  gem "bugsnag"
+  gem "skylight"
 end
 
 group :development, :staging do
@@ -138,10 +138,10 @@ group :development, :test, :staging do
 end
 
 group :assets do
-  gem "coffee-rails",   "~> 3.2.2"
-  gem "uglifier",       "~> 1.2.7"
-  gem "sass-rails",     "~> 3.2.5"
-  gem "compass-rails",  "~> 1.0.3"
+  gem "coffee-rails"
+  gem "uglifier"
+  gem "sass-rails"
+  gem "compass-rails"
 end
 
 group :install do
