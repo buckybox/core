@@ -1,7 +1,7 @@
 class Distributor::PaymentsController < Distributor::ResourceController
   actions :create
 
-  respond_to :html, :xml, :json
+  respond_to :html, :json
 
   before_filter :check_setup, only: [:index]
   before_filter :load_import_transaction_list, only: [:process_payments, :show]
@@ -68,7 +68,7 @@ class Distributor::PaymentsController < Distributor::ResourceController
     end
   end
 
-  private
+private
 
   def load_index
     @import_transactions = current_distributor.import_transactions.processed.not_removed.not_duplicate.ordered.limit(50).includes(:customer)

@@ -1,5 +1,5 @@
 class Distributor::AccountsController < Distributor::ResourceController
-  respond_to :html, :xml, :json
+  respond_to :html, :json
 
   def change_balance
     @account = Account.find(params[:id])
@@ -30,7 +30,7 @@ class Distributor::AccountsController < Distributor::ResourceController
     render partial: 'distributor/transactions/index'
   end
 
-  private
+private
 
   def create_transaction(account, params)
     opts = {}

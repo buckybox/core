@@ -1,7 +1,7 @@
 class Distributor::DistributorsController < Distributor::ResourceController
   actions :update
 
-  respond_to :html, :xml, :json
+  respond_to :html, :json
 
   def update
     update! do |success, failure|

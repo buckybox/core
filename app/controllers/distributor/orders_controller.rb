@@ -2,7 +2,7 @@ class Distributor::OrdersController < Distributor::ResourceController
   belongs_to :account
   actions :all, except: [:index, :show, :destroy]
 
-  respond_to :html, :xml, :json
+  respond_to :html, :json
 
   before_filter :filter_params, only: [:create, :update]
   before_filter :get_order, only: [:pause, :remove_pause, :resume, :remove_resume, :pause_dates, :resume_dates]
@@ -124,7 +124,7 @@ class Distributor::OrdersController < Distributor::ResourceController
     render partial: 'distributor/orders/details', locals: { order: @order }
   end
 
-  private
+private
 
   def check_for_boxes
     redirect_to distributor_settings_boxes_path, alert: "You must create a box before creating any orders." if current_distributor.boxes.count.zero?
