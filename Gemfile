@@ -144,7 +144,3 @@ group :assets do
   gem "compass-rails"
 end
 
-group :install do
-  gem "sprinkle",  git: "https://github.com/jordandcarter/sprinkle.git" # patched to be awesome.. added more verifiers and updated some installers
-end
-
