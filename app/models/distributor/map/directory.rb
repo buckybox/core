@@ -41,7 +41,7 @@ private
   def geocode_address(address)
     # NOTE: Google allows up to 10 requests per second
     # https://developers.google.com/maps/documentation/geocoding/?csw=1#Limits
-    retryable(tries: 3, sleep: 2, on: Geokit::Geocoders::TooManyQueriesError) do
+    Retryable.retryable(tries: 3, sleep: 2, on: Geokit::Geocoders::TooManyQueriesError) do
       Geokit::Geocoders::GoogleGeocoder.geocode address
     end
   end

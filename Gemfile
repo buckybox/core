@@ -11,7 +11,7 @@ group :default do # XXX: all environments, think twice before adding Gems here
   gem "pg"
   gem "haml-rails"
   gem "jquery-rails"
-  gem "jquery-ui-rails"
+  gem "jquery-ui-rails",                 "< 5" # TODO: make sure JQuery UI 1.11 works fine
   gem "bootstrap-sass",                  "< 3"
   gem "bootbox-rails"
   gem "select2-rails"
@@ -19,9 +19,9 @@ group :default do # XXX: all environments, think twice before adding Gems here
   gem "devise-i18n"
   gem "simple_form",                     "< 3"
   gem "inherited_resources"
-  gem "mini_magick"
+  gem "mini_magick",                     "< 4"
   gem "carrierwave"
-  gem "acts-as-taggable-on"
+  gem "acts-as-taggable-on",             "< 3"
   gem "pg_search"
   gem "whenever"
   gem "acts_as_list"
@@ -30,7 +30,7 @@ group :default do # XXX: all environments, think twice before adding Gems here
   gem "state_machine"
   gem "figaro"
   gem "virtus"
-  gem "draper"
+  gem "draper",                          "< 2" # Rails 3.2 not supported with v2
   gem "naught"
   gem "premailer-rails"
   gem "nokogiri" # premailer-rails dependency
@@ -40,11 +40,11 @@ group :default do # XXX: all environments, think twice before adding Gems here
   gem "daemons" # able to monitor delayed_job via monit
   gem "analytical"
   gem "ace-rails-ap"
-  gem "active_utils",                    "< 3" # uninitialized constant ActiveMerchant::Billing::CreditCard::Validateable
+  gem "active_utils"
   gem "activemerchant"
-  gem "attr_encryptor"
+  gem "attr_encryptor",                  "< 2"
   gem "countries", require: "iso3166"
-  gem "country_select"
+  gem "country_select",                  "~> 1.1.3" # TODO: https://github.com/stefanpenner/country_select/blob/master/UPGRADING.md
   gem "biggs"
   gem "charlock_holmes"
   gem "rabl"
