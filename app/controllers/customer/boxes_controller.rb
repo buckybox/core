@@ -1,7 +1,7 @@
 class Customer::BoxesController < Customer::ResourceController
   actions :show
 
-  respond_to :html, :xml, :json
+  respond_to :html, :json
 
   def extras
     order = Order.new
@@ -10,7 +10,7 @@ class Customer::BoxesController < Customer::ResourceController
     render partial: 'customer/orders/extras', locals: { account: current_customer.account, order: order, box: box }
   end
 
-  protected
+protected
 
   def begin_of_association_chain
     current_customer.distributor

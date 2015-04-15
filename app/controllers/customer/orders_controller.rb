@@ -1,7 +1,7 @@
 class Customer::OrdersController < Customer::ResourceController
   actions :edit, :update
 
-  respond_to :html, :xml, :json
+  respond_to :html, :json
 
   before_filter :filter_params, only: [:update]
   before_filter :get_order, only: [:pause, :remove_pause, :resume, :remove_resume, :pause_dates, :resume_dates]
@@ -100,13 +100,13 @@ class Customer::OrdersController < Customer::ResourceController
     end
   end
 
-  protected
+protected
 
   def collection
     @orders ||= end_of_association_chain.active
   end
 
-  private
+private
 
   def filter_params
     params[:order] = params[:order].slice!(:include_extras)

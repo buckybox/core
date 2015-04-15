@@ -6,7 +6,7 @@ class Distributor::DeliveriesController < Distributor::ResourceController
   before_filter :check_setup, only: [:index]
   before_filter :get_email_templates, only: [:index]
 
-  respond_to :html, :xml, except: [:update_status, :export]
+  respond_to :html, except: [:update_status, :export]
   respond_to :json, except: [:master_packing_sheet, :export]
   respond_to :csv, only: :export
 
@@ -108,5 +108,4 @@ class Distributor::DeliveriesController < Distributor::ResourceController
   def nav_end_date
     Date.current + Order::FORCAST_RANGE_FORWARD
   end
-
 end

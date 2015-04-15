@@ -1,7 +1,5 @@
-require "csv"
-
 class Distributor::CustomersController < Distributor::ResourceController
-  respond_to :html, :xml, :json
+  respond_to :html, :json
 
   before_filter :check_setup, only: [:index]
   before_filter :get_email_templates, only: [:index, :show]
