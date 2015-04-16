@@ -57,14 +57,14 @@ describe Bucky::Geolocation do
     end
 
     it "returns nil when it times out" do
-      allow(Net::HTTP::Get).to receive(:new) { sleep 2 }
+      allow(Geokit::Geocoders::FreeGeoIpGeocoder).to receive(:do_geocode) { sleep 2 }
 
       expect(Bucky::Geolocation.get_geoip_info("202.162.73.2")).to be_nil
     end
 
     it "ignores bad responses" do
-      http = double(request: double(body: "500 - Oops, not JSON"))
-      allow(Net::HTTP).to receive(:new) { http }
+      geoloc = double(success: false)
+      allow(Geokit::Geocoders::FreeGeoIpGeocoder).to receive(:do_geocode) { geoloc }
 
       expect(Bucky::Geolocation.get_geoip_info("202.162.73.2")).to be_nil
     end

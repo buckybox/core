@@ -67,7 +67,7 @@ group :default do # XXX: all environments, think twice before adding Gems here
   gem "ordinalize_full", require: "ordinalize_full/integer"
   gem "librato-rails"
   gem "rbtrace"
-  gem "geokit", require: false
+  gem "geokit"
 end
 
 group :development do
