@@ -111,7 +111,7 @@ end
 group :staging, :production do
   gem "newrelic_rpm"
   gem "bugsnag"
-  gem "skylight"
+  # gem "skylight"
 end
 
 group :development, :staging do
