@@ -36,7 +36,7 @@ group :default do # XXX: all environments, think twice before adding Gems here
   gem "nokogiri" # premailer-rails dependency
   gem "delayed_job",                     "< 4"
   gem "delayed_job_active_record"
-  gem "delayed_job_web",                 "= 1.2.0" # version hardcoded in config/deploy.rb
+  gem "delayed_job_web",                 "1.2.0" # version hardcoded in config/deploy.rb
   gem "daemons" # able to monitor delayed_job via monit
   gem "analytical"
   gem "ace-rails-ap"
@@ -48,7 +48,7 @@ group :default do # XXX: all environments, think twice before adding Gems here
   gem "biggs"
   gem "charlock_holmes"
   gem "rabl"
-  gem "apipie-rails"
+  gem "apipie-rails",                    "0.3.3" # 0.3.4 is broken https://github.com/Apipie/apipie-rails/pull/350
   gem "strong_parameters"
   gem "rails-timeago"
   gem "discover-unused-partials"

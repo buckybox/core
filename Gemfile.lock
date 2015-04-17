@@ -47,7 +47,7 @@ GEM
     addressable (2.3.8)
     aggregate (0.2.2)
     analytical (3.0.12)
-    apipie-rails (0.3.4)
+    apipie-rails (0.3.3)
       json
     arel (3.0.3)
     ast (2.0.0)
@@ -565,7 +565,7 @@ DEPENDENCIES
   acts-as-taggable-on (< 3)
   acts_as_list
   analytical
-  apipie-rails
+  apipie-rails (= 0.3.3)
   attr_encryptor (< 2)
   better_errors
   biggs
