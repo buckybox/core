@@ -28,7 +28,7 @@ describe "API v1" do
       @boxes ||= Fabricate.times(2, :box, distributor: api_distributor)
     end
 
-    let(:model_attributes) { %w(id name description price extras_limit exclusions_limit substitutions_limit customizable dislikes exclusions_unlimited extras_allowed extras_unlimited likes substitutions_unlimited) }
+    let(:model_attributes) { %w(id updated_at name description price extras_limit exclusions_limit substitutions_limit customizable dislikes exclusions_unlimited extras_allowed extras_unlimited likes substitutions_unlimited) }
     let(:embedable_attributes) { %w(images box_items extras) }
 
     describe "GET /boxes" do
