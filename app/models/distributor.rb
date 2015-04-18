@@ -147,9 +147,13 @@ class Distributor < ActiveRecord::Base
       end
 
       hydra.run # this is a blocking call that returns once all requests are complete
+    end.round
+
+    if duration > 45
+      Bugsnag.notify(RuntimeError.new("Refreshing caches took too long (#{duration}s)"))
     end
 
-    CronLog.log("Refreshed web store caches in #{duration.round(1)}s.")
+    CronLog.log("Refreshed web store caches in #{duration}s.")
   end
 
   def self.create_daily_lists(time = Time.current)
