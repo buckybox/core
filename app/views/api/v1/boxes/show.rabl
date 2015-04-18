@@ -12,6 +12,7 @@ attribute :exclusions_unlimited? => :exclusions_unlimited
 attribute :substitutions_unlimited? => :substitutions_unlimited
 
 node(:price) { |box| box.price.to_s }
+node(:updated_at) { |box| box.updated_at.to_i }
 
 unless @embed['extras'].nil?
   child :available_extras => :extras do
