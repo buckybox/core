@@ -97,11 +97,11 @@ class Customer < ActiveRecord::Base
     customer = customers.first if customers.one?
 
     if customer
-      Librato.increment_async "bucky.customer.sign_in.success.from_model"
-      Librato.increment_async "bucky.customer.sign_in.success.total"
+      Librato.increment "bucky.customer.sign_in.success.from_model"
+      Librato.increment "bucky.customer.sign_in.success.total"
     else
-      Librato.increment_async "bucky.customer.sign_in.failure.from_model"
-      Librato.increment_async "bucky.customer.sign_in.failure.total"
+      Librato.increment "bucky.customer.sign_in.failure.from_model"
+      Librato.increment "bucky.customer.sign_in.failure.total"
     end
 
     customer
@@ -407,7 +407,7 @@ class Customer < ActiveRecord::Base
 private
 
   def librato_track
-    Librato.increment_async "bucky.customer.create"
+    Librato.increment "bucky.customer.create"
   end
 
   def reversal_transaction_ids

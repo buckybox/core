@@ -63,11 +63,11 @@ class Api::V1::CustomersController < Api::V1::BaseController
       details[:password_hash] = Digest::SHA1.hexdigest details.delete(:password)
       CronLog.log("Login failure for #{details[:email]}", details.inspect)
 
-      Librato.increment_async "bucky.customer.sign_in.failure.from_api"
-      Librato.increment_async "bucky.customer.sign_in.failure.total"
+      Librato.increment "bucky.customer.sign_in.failure.from_api"
+      Librato.increment "bucky.customer.sign_in.failure.total"
     else
-      Librato.increment_async "bucky.customer.sign_in.success.from_api"
-      Librato.increment_async "bucky.customer.sign_in.success.total"
+      Librato.increment "bucky.customer.sign_in.success.from_api"
+      Librato.increment "bucky.customer.sign_in.success.total"
     end
 
     render 'api/v1/customers/index'
@@ -133,9 +133,7 @@ class Api::V1::CustomersController < Api::V1::BaseController
     create_or_update
   end
 
-private
-
-  def create_or_update
+  private def create_or_update
     existing_customer = params[:id] ? @distributor.customers.find_by(id: params[:id]) : nil
 
     customer_json = @json_body || {}
