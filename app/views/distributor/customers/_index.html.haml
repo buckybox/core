@@ -1,0 +1,34 @@
+-# XXX: `cache_if` so we don't cache search and tag sub-routes
+- cache_if(request.fullpath == distributor_customers_path, [request.fullpath, current_distributor.id, customers.maximum(:updated_at)]) do
+  %table#customers.table.table-striped
+    %thead
+      %tr
+        %th{ colspan: 3 }
+          %span#transactional_customer_count{title: "Total customers: #{current_distributor.customers.count}<br />Transactional customers: #{current_distributor.transactional_customer_count}"}
+            %i.icon-user
+            = pluralize(customers.count, "customer")
+        %th{ colspan: 3 }
+          Next Delivery
+        %th
+          Total:
+          = customers_total_balance
+
+    %tbody
+      %tr.new-row
+        %td{ colspan: 7 }= link_to 'Create a new customer', new_distributor_customer_path
+
+        - customers.each do |customer|
+          %tr.customer-row
+            %td= check_box_tag customer.id, 1, false, class: "select_one", 'data-customer-id' => customer.id
+            %td= customer_badge(customer)
+            %td
+              = customer_tags(customer)
+            %td
+              %small= next_customer_delivery_occurrence(customer)
+            %td
+              %small= next_customer_delivery_box_name(customer)
+            %td
+              %small= customer.account.delivery_service.name
+            %td
+              %span.balance{ class: "#{'negative' if customer.account.balance.negative?}" }= customer.account.balance
+

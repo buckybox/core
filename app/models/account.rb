@@ -1,5 +1,5 @@
 class Account < ActiveRecord::Base
-  belongs_to :customer
+  belongs_to :customer, touch: true
 
   has_one :distributor, through: :customer
 
@@ -60,6 +60,7 @@ class Account < ActiveRecord::Base
 
     with_lock do
       Account.update_counters(self.id, balance_cents: amount.cents)
+      touch # XXX: Account.update_counters doesn't touch `updated_at`
       transaction = transactions.create(transaction_options)
     end
 
