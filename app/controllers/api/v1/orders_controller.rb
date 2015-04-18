@@ -22,14 +22,10 @@ class Api::V1::OrdersController < Api::V1::BaseController
   param :customer_id, String, desc: "Customer's id. Selects orders for that customer.", required: true
   example "/orders/?customer_id=123"
   def index
-    cust_id = params[:customer_id]
-    if cust_id.nil?
-      @orders = @distributor.orders
-    else
-      customer = @distributor.customers.find_by(id: cust_id)
-      return unprocessable_entity(customer_id: "can't be blank") if customer.nil?
-      @orders = customer.orders
-    end
+    customer = @distributor.customers.find_by(id: params[:customer_id])
+    return unprocessable_entity(customer_id: "is invalid") unless customer
+
+    @orders = customer.orders.active
   end
 
   api :GET, '/orders/:id', "Get single order"
