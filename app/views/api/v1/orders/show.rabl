@@ -1,8 +1,10 @@
 object @order
-attributes :id, :box_id, :active, :extras_one_off
 
-node :customer_id do @customer_id; end
+attributes :id, :box_id, :extras_one_off
+
 node :extras do @extras; end
+
+node :customer_id do |order| order.customer.id; end
 
 node :frequency do |order| order.schedule_rule.frequency.to_s; end
 node :week_days do |order| order.schedule_rule.days_as_indexes; end
