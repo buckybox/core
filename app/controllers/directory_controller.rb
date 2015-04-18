@@ -1,5 +1,3 @@
-require "geokit"
-
 class DirectoryController < ApplicationController
   layout false
 
@@ -9,5 +7,4 @@ class DirectoryController < ApplicationController
     list = Distributor::Map::Directory.generate
     render locals: { list: list }
   end
-
 end
