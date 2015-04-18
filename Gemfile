@@ -68,6 +68,7 @@ group :default do # XXX: all environments, think twice before adding Gems here
   gem "librato-rails"
   gem "rbtrace"
   gem "geokit"
+  gem "typhoeus"
 end
 
 group :development do

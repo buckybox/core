@@ -128,6 +128,30 @@ class Distributor < ActiveRecord::Base
     sort_by(&:transactional_customer_count).reverse
   end
 
+  def self.refresh_webstore_caches
+    duration = Benchmark.realtime do
+      hydra = Typhoeus::Hydra.hydra
+
+      active_webstore.active.each do |distributor|
+        # TODO: don't hardcode URL once we migrate the web store to other app
+        url = "https://store.buckybox.com/#{distributor.parameter_name}"
+
+        request = Typhoeus::Request.new(url, timeout: 30)
+        request.on_complete do |response|
+          unless response.success?
+            error = "Could not refresh #{response.request.url}: #{response.return_message}"
+            Bugsnag.notify(RuntimeError.new(error))
+          end
+        end
+        hydra.queue request
+      end
+
+      hydra.run # this is a blocking call that returns once all requests are complete
+    end
+
+    CronLog.log("Refreshed web store caches in #{duration.round(1)}s.")
+  end
+
   def self.create_daily_lists(time = Time.current)
     find_each do |distributor|
       distributor.use_local_time_zone do
