@@ -9,6 +9,9 @@
 
     = csrf_meta_tag
 
+    - if Rails.env.production? || Rails.env.staging?
+      = javascript_include_tag "https://d2wy8f7a9ursnm.cloudfront.net/bugsnag-2.min.js", "data-apikey" => Figaro.env.bugsnag_api_key
+
     = yield(:head)
 
     - if Rails.env.production?
