@@ -136,7 +136,7 @@ class Distributor < ActiveRecord::Base
         # TODO: don't hardcode URL once we migrate the web store to other app
         url = "https://store.buckybox.com/#{distributor.parameter_name}"
 
-        request = Typhoeus::Request.new(url, timeout: 30)
+        request = Typhoeus::Request.new(url, timeout: 45)
         request.on_complete do |response|
           unless response.success?
             error = "Could not refresh #{response.request.url}: #{response.return_message}"
@@ -149,7 +149,7 @@ class Distributor < ActiveRecord::Base
       hydra.run # this is a blocking call that returns once all requests are complete
     end.round
 
-    if duration > 45
+    if duration > 60
       Bugsnag.notify(RuntimeError.new("Refreshing caches took too long (#{duration}s)"))
     end
 
