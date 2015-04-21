@@ -130,26 +130,29 @@ class Distributor < ActiveRecord::Base
 
   def self.refresh_webstore_caches
     duration = Benchmark.realtime do
-      hydra = Typhoeus::Hydra.hydra
+      active_webstore.active.each_slice(5) do |distributors|
+        hydra = Typhoeus::Hydra.hydra
 
-      active_webstore.active.each do |distributor|
-        # TODO: don't hardcode URL once we migrate the web store to other app
-        url = "https://store.buckybox.com/#{distributor.parameter_name}"
+        distributors.each do |distributor|
+          # TODO: don't hardcode URL once we migrate the web store to other app
+          url = "https://store.buckybox.com/#{distributor.parameter_name}"
 
-        request = Typhoeus::Request.new(url, timeout: 45)
-        request.on_complete do |response|
-          unless response.success?
-            error = "Could not refresh #{response.request.url}: #{response.return_message}"
-            Bugsnag.notify(RuntimeError.new(error))
+          request = Typhoeus::Request.new(url, timeout: 45)
+          request.on_complete do |response|
+            unless response.success?
+              error = "Could not refresh #{response.request.url}: #{response.return_message}"
+              Bugsnag.notify(RuntimeError.new(error))
+            end
           end
+          hydra.queue request
         end
-        hydra.queue request
-      end
 
-      hydra.run # this is a blocking call that returns once all requests are complete
+        hydra.run # this is a blocking call that returns once all requests are complete
+        sleep 5
+      end
     end.round
 
-    if duration > 60
+    if duration > 4.minutes
       Bugsnag.notify(RuntimeError.new("Refreshing caches took too long (#{duration}s)"))
     end
 
