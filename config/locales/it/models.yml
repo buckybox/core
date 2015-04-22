@@ -23,21 +23,6 @@ it:
       mobile_phone: Cellulare
       work_phone: Lavoro
       home_phone: Casa
-    webstore:
-      authentication:
-        new_customer: Nuovo cliente
-        existing_customer: Sono già registrato
-      delivery_options:
-        select_delivery_service: "- Seleziona il giro di consegna -"
-        order_frequencies:
-          select: "- Seleziona la frequenza delle consegne -"
-          single: Consegna singola
-          weekly: Consegna una volta a settimana ogni...
-          fortnightly: Consegna una volta ogni 2 settimane il...
-          monthly: Consegna mensile
-        extra_frequencies:
-          always: Aggiungi i prodotti A TUTTE LE CONSEGNE
-          once: Aggiungi i prodotti SOLO ALLA PROSSIMA CONSEGNA
   activerecord:
     models:
       box: Prodotto
@@ -70,5 +55,3 @@ it:
       customer/form/update_password:
         password: Inserisci la tua nuova password
         password_confirmation: Reinserisci la tua nuova password per confermare
-      webstore/payment_options:
-        payment_method: Metodo di pagamento
