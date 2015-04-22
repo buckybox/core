@@ -13,6 +13,6 @@
 
     #controls-right.pull-right
       - if @distributor
-        = link_to t('cancel'), webstore_store_path(@distributor.parameter_name)
+        = link_to t('cancel'), @distributor.webstore_url
 
       = f.button :submit, t('log_in'), class: 'btn btn-process'

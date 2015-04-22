@@ -3,7 +3,7 @@
     .row-fluid
       .span4
         %span.big.bold
-          = link_to_unless !distributor.active_webstore?, distributor.name, webstore_store_path(distributor.parameter_name)
+          = link_to_unless !distributor.active_webstore?, distributor.name, distributor.webstore_url
           %br
         %span.medium
           = mail_to(distributor.email, distributor.contact_name_for_email)

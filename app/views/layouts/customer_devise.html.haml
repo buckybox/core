@@ -13,7 +13,7 @@
         - if @distributor
           .row
             #distributor-logo.span6
-              = link_to webstore_store_path(@distributor.parameter_name) do
+              = link_to @distributor.webstore_url do
                 - if @distributor.company_logo?
                   = image_tag @distributor.company_logo.frame_banner.url
                 - else

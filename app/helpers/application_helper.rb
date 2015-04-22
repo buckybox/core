@@ -20,12 +20,4 @@ module ApplicationHelper
     currencies += hash.invert.to_a
     currencies.collect{|a,b| [a, b.to_s.upcase]}
   end
-
-  def webstore_store_path(parameter_name)
-    "/webstore/#{parameter_name}"
-  end
-
-  def webstore_store_url(parameter_name)
-    "https://my.buckybox.com#{webstore_store_path(parameter_name)}"
-  end
 end

@@ -16,4 +16,4 @@
 %br
 = t('.signature', distributor: @distributor.name)
 %br
-= link_to @distributor.name, webstore_store_url(@distributor.parameter_name)
+= link_to @distributor.name, @distributor.webstore_url

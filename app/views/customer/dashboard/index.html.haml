@@ -8,7 +8,7 @@
 #account-information{data: {account_id: @account.id}}
 - if @distributor.active_webstore
   .row-fluid
-    #new-customer-order.dash-boxed-link.span12= link_to t('c.dashboard.order_another_item'), webstore_store_path(@distributor.parameter_name)
+    #new-customer-order.dash-boxed-link.span12= link_to t('c.dashboard.order_another_item'), @distributor.webstore_url
 
 - if @orders.empty?
   .alert.alert-info= t('c.dashboard.no_active_orders')
