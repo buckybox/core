@@ -30,7 +30,7 @@ class SignUpWizardController < ApplicationController
     end
 
     # remove URL prefix
-    details[:parameter_name].sub! "my.buckybox.com/webstore/", ""
+    details[:parameter_name].sub! "store.buckybox.com/", ""
 
     # fetch country ID from ISO code
     country = Country.find_by(alpha2: details.delete(:country))

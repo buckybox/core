@@ -199,12 +199,6 @@ private
     return :en if current_admin && current_distributor && current_customer
     return current_customer.locale if current_customer
 
-    # Web store
-    if params[:controller].start_with?("webstore/")
-      distributor = Distributor.find_by(parameter_name: params[:distributor_parameter_name])
-      return distributor.locale if distributor # NOTE: nasty bots send rubbish distributor param
-    end
-
     # Devise pages
     if params[:controller].start_with?("customer/") && params[:distributor].is_a?(String)
       distributor = Distributor.find_by(parameter_name: params[:distributor])

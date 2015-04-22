@@ -28,12 +28,6 @@ Then /^I should be viewing the distributor customer list page$/ do
   current_path.should eq(send("distributor_customers_path"))
 end
 
-Then /^I should be viewing the webstore$/ do
-  distributor = Distributor.last
-  expected_path = "/webstore/#{distributor.parameter_name}"
-  current_path.should eq(expected_path)
-end
-
 Given /^I am logged in as a (.*)$/ do |auth_type|
   step "I am viewing the #{auth_type} login page"
   step "I fill in valid #{auth_type} credentials"
