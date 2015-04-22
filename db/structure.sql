@@ -579,45 +579,6 @@ ALTER SEQUENCE countries_id_seq OWNED BY countries.id;
 
 
 --
--- Name: credit_card_transactions; Type: TABLE; Schema: public; Owner: -; Tablespace: 
---
-
-CREATE TABLE credit_card_transactions (
-    id integer NOT NULL,
-    amount integer,
-    success boolean,
-    reference character varying(255),
-    message character varying(255),
-    action character varying(255),
-    params text,
-    test boolean,
-    distributor_id integer,
-    account_id integer,
-    created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
-);
-
-
---
--- Name: credit_card_transactions_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE credit_card_transactions_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: credit_card_transactions_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE credit_card_transactions_id_seq OWNED BY credit_card_transactions.id;
-
-
---
 -- Name: cron_logs; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -2138,13 +2099,6 @@ ALTER TABLE ONLY countries ALTER COLUMN id SET DEFAULT nextval('countries_id_seq
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY credit_card_transactions ALTER COLUMN id SET DEFAULT nextval('credit_card_transactions_id_seq'::regclass);
-
-
---
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
---
-
 ALTER TABLE ONLY cron_logs ALTER COLUMN id SET DEFAULT nextval('cron_logs_id_seq'::regclass);
 
 
@@ -2476,14 +2430,6 @@ ALTER TABLE ONLY boxes
 
 ALTER TABLE ONLY countries
     ADD CONSTRAINT countries_pkey PRIMARY KEY (id);
-
-
---
--- Name: credit_card_transactions_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
---
-
-ALTER TABLE ONLY credit_card_transactions
-    ADD CONSTRAINT credit_card_transactions_pkey PRIMARY KEY (id);
 
 
 --
@@ -3673,3 +3619,5 @@ INSERT INTO schema_migrations (version) VALUES ('20150328193017');
 INSERT INTO schema_migrations (version) VALUES ('20150414181412');
 
 INSERT INTO schema_migrations (version) VALUES ('20150414184421');
+
+INSERT INTO schema_migrations (version) VALUES ('20150422185555');
