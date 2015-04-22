@@ -30,7 +30,7 @@ class Distributor::Map::Directory
         name:     distributor.name,
         address:  full_address,
         ll:       geocoded_address.ll.split(","),
-        webstore: "https://my.buckybox.com/webstore/#{distributor.parameter_name}",
+        webstore: distributor.webstore_url,
       }
       Distributor::Map::Pin.new(args)
     end.compact
