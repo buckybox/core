@@ -9,7 +9,7 @@
     #controls-left.pull-left
       - if @distributor
         %i.icon-home
-        = link_to @distributor.name, webstore_store_path(@distributor.parameter_name)
+        = link_to @distributor.name, @distributor.webstore_url
 
     #controls-right.pull-right
       = link_to t('cancel'), new_session_path(resource_name, @link_args)

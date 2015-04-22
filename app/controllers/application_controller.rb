@@ -159,7 +159,7 @@ private
     when :customer
       if current_customer && distributor = current_customer.distributor
         if distributor.active_webstore?
-          webstore_store_url(distributor.parameter_name)
+          distributor.webstore_url
         else
           new_customer_session_url(distributor: distributor.parameter_name)
         end

@@ -41,7 +41,7 @@
   .container
     .row
       - if @distributor.active_webstore
-        = link_to webstore_store_path(@distributor.parameter_name) do
+        = link_to @distributor.webstore_url do
           - render partial: 'customer/dashboard/logo'
       - else
         = render partial: 'customer/dashboard/logo'

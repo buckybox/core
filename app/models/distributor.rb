@@ -221,6 +221,10 @@ class Distributor < ActiveRecord::Base
     distributor.mark_as_seen!
   end
 
+  def webstore_url
+    "https://store.buckybox.com/#{parameter_name}".freeze
+  end
+
   def mark_as_seen!
     touch(:last_seen_at) #No validations or callbacks are performed
   end
