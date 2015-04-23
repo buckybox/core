@@ -139,8 +139,8 @@ class ScheduleRule < ActiveRecord::Base
   alias_method :occurrences, :next_occurrences
 
   def occurrences_between(start, finish, opts={})
-    start = start.to_date
-    finish = finish.to_date
+    raise ArgumentError unless start.is_a?(Date) && finish.is_a?(Date)
+
     opts = {max: 200, ignore_pauses: false, ignore_halts: false}.merge(opts)
     start, finish = [start, finish].reverse if start > finish
 

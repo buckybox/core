@@ -9,7 +9,7 @@
 
       - unless @order.persisted?
         = f.simple_fields_for(:schedule_rule) do |sf|
-          = sf.input :start, label: 'Start date', collection: Order.start_dates(@delivery_service), include_blank: false
+          = sf.input :start, label: 'Start date', collection: @delivery_service.start_dates, include_blank: false
 
           = sf.input :recur, label: 'Frequency', collection: order_frequencies, include_blank: false, input_html: { class: 'frequency' }
 
