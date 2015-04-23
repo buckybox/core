@@ -7,4 +7,6 @@
 //= require ace/ace
 //= require ace/theme-chrome.js
 //= require ace/mode-yaml.js
-//= require_tree ./old
+//= require_tree ./old/vendor
+//= require ./old/forms.js
+//= require_tree ./old/admin
