@@ -56,6 +56,21 @@ class DeliveryService < ActiveRecord::Base
     ].join(" - ")
   end
 
+  def start_dates
+    end_date = Date.current + 6.months # NOTE: has to be that big for CSAs
+
+    # NOTE: next_occurrence includes the start date, so choose the next day
+    start_date = distributor.window_end_at + 1.day
+
+    occurrences_between(start_date, end_date).map do |time|
+      [
+        I18n.l(time, format: "%a - %b %-d, %Y"),
+        time.to_date.iso8601,
+        { 'data-weekday' => time.strftime('%a').downcase }
+      ]
+    end
+  end
+
   def next_run
     schedule_rule.next_occurrence
   end
@@ -75,6 +90,13 @@ class DeliveryService < ActiveRecord::Base
     future_orders.active.each do |order|
       order.deactivate_for_days!(day_numbers)
     end
+  end
+
+  def cache_key
+    [
+      super,
+      start_dates.hash,
+    ].join("-").freeze
   end
 
 private

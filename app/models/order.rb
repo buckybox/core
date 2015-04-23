@@ -81,22 +81,6 @@ class Order < ActiveRecord::Base
     days
   end
 
-  # TODO: move to decorator
-  def self.start_dates(delivery_service, time_from_now = nil)
-    time_from_now ||= 6.months.from_now # NOTE: has to be that big for CSAs
-
-    # NOTE: next_occurrence includes the start date, so choose the next day
-    from_time = delivery_service.distributor.window_end_at + 1.day
-
-    delivery_service.occurrences_between(from_time, time_from_now).map do |time|
-      [
-        I18n.l(time, format: "%a - %b %-d, %Y"),
-        time.to_date.iso8601,
-        { 'data-weekday' => time.strftime('%a').downcase }
-      ]
-    end
-  end
-
   def self.deactivate_finished
     active.each do |order|
       order.use_local_time_zone do
@@ -172,7 +156,7 @@ class Order < ActiveRecord::Base
   def future_deliveries(end_date)
     results = []
 
-    schedule_rule.occurrences_between(Time.current, end_date).each do |occurence|
+    schedule_rule.occurrences_between(Date.current, end_date).each do |occurence|
       results << { date: occurence.to_date, price: self.price, description: "Delivery for order ##{id}"}
     end
 
@@ -277,11 +261,11 @@ class Order < ActiveRecord::Base
   end
 
   def possible_pause_dates(look_ahead = 8.weeks)
-    start_time          = [distributor.window_end_at.to_time_in_current_zone.to_date + 1.day, start].max
-    end_time            = start_time + look_ahead
+    start_date          = [distributor.window_end_at.to_time_in_current_zone.to_date + 1.day, start].max
+    end_date            = start_date + look_ahead
     existing_pause_date = pause_date
 
-    select_array = self.schedule_rule.occurrences_between(start_time, end_time, {ignore_pauses: true, ignore_halts: true}).map { |s| [s.to_date, s.to_date] }
+    select_array = self.schedule_rule.occurrences_between(start_date, end_date, {ignore_pauses: true, ignore_halts: true}).map { |s| [s.to_date, s.to_date] }
 
     if existing_pause_date && !select_array.index([existing_pause_date, existing_pause_date])
       select_array << [existing_pause_date, existing_pause_date]
@@ -295,11 +279,11 @@ class Order < ActiveRecord::Base
 
   def possible_resume_dates(look_ahead = 12.weeks)
     if pause_date
-      start_time           = [(pause_date + 1.day).to_time_in_current_zone, distributor.window_end_at.to_time_in_current_zone + 1.day].max
-      end_time             = start_time + look_ahead
+      start_date           = [(pause_date + 1.day).to_time_in_current_zone, distributor.window_end_at.to_time_in_current_zone + 1.day].max
+      end_date             = start_date + look_ahead
       existing_resume_date = resume_date
 
-      select_array      = self.schedule_rule.occurrences_between(start_time, end_time, {ignore_pauses: true, ignore_halts: true}).map { |s| [s.to_date, s.to_date] }
+      select_array      = self.schedule_rule.occurrences_between(start_date, end_date, {ignore_pauses: true, ignore_halts: true}).map { |s| [s.to_date, s.to_date] }
 
       if existing_resume_date && !select_array.index([existing_resume_date, existing_resume_date])
         select_array << [existing_resume_date, existing_resume_date]
