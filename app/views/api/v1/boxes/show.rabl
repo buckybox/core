@@ -1,5 +1,7 @@
 object @box
 
+cache @box
+
 attributes :id, :name, :description, :extras_limit
 attribute :exclusions_limit => :exclusions_limit
 attribute :dislikes? => :dislikes
@@ -13,6 +15,7 @@ attribute :substitutions_unlimited? => :substitutions_unlimited
 
 node(:price) { |box| box.price.to_s }
 node(:updated_at) { |box| box.updated_at.to_i }
+node(:cache_key) { |box| Digest::SHA256.hexdigest(box.cache_key) }
 
 unless @embed['extras'].nil?
   child :available_extras => :extras do

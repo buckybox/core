@@ -125,6 +125,16 @@ class Box < ActiveRecord::Base
     extras_allowed? ? extras.not_hidden.alphabetically : self.class.none
   end
 
+  def cache_key
+    [
+      super,
+      available_extras.map(&:id).hash,
+      available_extras.map(&:updated_at).hash,
+      distributor.line_items.map(&:id).hash,
+      distributor.line_items.map(&:updated_at).hash,
+    ].join("-").freeze
+  end
+
 private
 
   def self.human_attribute_name(attr, options = {})
