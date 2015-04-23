@@ -6,5 +6,3 @@
 //= require_tree ./templates
 //= require_tree ./delivery_services
 //= require_self
-
-//BuckyBox.initialize();
