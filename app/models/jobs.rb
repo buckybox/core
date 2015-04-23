@@ -1,7 +1,7 @@
 class Jobs
   # XXX: keep this method short for obvious reasons...
   def self.run_five_minutely
-    Distributor.refresh_webstore_caches
+    # NOOP at the moment
   end
 
   def self.run_hourly
@@ -22,6 +22,8 @@ class Jobs
 
     CronLog.log("Running metrics for Librato.")
     Metrics.calculate_and_push_to_librato
+
+    Distributor.refresh_webstore_caches
   end
 
   def self.run_daily
