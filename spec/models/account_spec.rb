@@ -109,7 +109,7 @@ describe Account do
   end
 
   describe "#all_occurrences" do
-    specify { expect(order_account.all_occurrences(4.weeks.from_now).size).to eq 20 }
+    specify { expect(order_account.all_occurrences(4.weeks.from_now.to_date).size).to eq 20 }
   end
 end
 
