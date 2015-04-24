@@ -1,6 +1,6 @@
 object @box
 
-cache root_object.cache_key(@embed)
+cache [:box, root_object.cache_key(@embed)]
 
 attributes :id, :name, :description, :extras_limit
 attribute :exclusions_limit => :exclusions_limit
