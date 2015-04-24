@@ -76,8 +76,7 @@ private
 
   # hash parameters (2nd+ level json is only provided when requested via ?embed={object} )
   def embed_options
-    @embed = params[:embed]
-    @embed = "" if @embed.nil?
+    @embed = params[:embed].to_s.split(",").to_set.freeze
   end
 
   def fetch_json_body

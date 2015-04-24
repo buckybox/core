@@ -125,14 +125,20 @@ class Box < ActiveRecord::Base
     extras_allowed? ? extras.not_hidden.alphabetically : self.class.none
   end
 
-  def cache_key
-    [
-      super,
+  def cache_key(embed = Set.new)
+    keys = [ super() ]
+
+    keys += [
       available_extras.map(&:id).hash,
       available_extras.map(&:updated_at).hash,
+    ] if embed.include?("extras")
+
+    keys += [
       distributor.line_items.map(&:id).hash,
       distributor.line_items.map(&:updated_at).hash,
-    ].join("-").freeze
+    ] if embed.include?("box_items")
+
+    keys.join("-").freeze
   end
 
 private

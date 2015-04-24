@@ -31,6 +31,6 @@ private
   end
 
   def with_images?
-    !@embed["images"].nil?
+    @embed.include? "images"
   end
 end

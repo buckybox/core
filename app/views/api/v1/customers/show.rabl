@@ -8,7 +8,7 @@ node(:account_balance) { |customer| customer.account.balance.to_s }
 node(:webstore_id) { |customer| customer.distributor.parameter_name }
 node(:webstore_name) { |customer| customer.distributor.name }
 
-unless @embed['address'].nil?
+if @embed.include?("address")
   child :address do
     attributes :address_1, :address_2, :suburb, :city, :postcode, :delivery_note, :home_phone, :mobile_phone, :work_phone
   end

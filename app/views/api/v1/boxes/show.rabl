@@ -1,6 +1,6 @@
 object @box
 
-cache @box
+cache root_object.cache_key(@embed)
 
 attributes :id, :name, :description, :extras_limit
 attribute :exclusions_limit => :exclusions_limit
@@ -15,9 +15,9 @@ attribute :substitutions_unlimited? => :substitutions_unlimited
 
 node(:price) { |box| box.price.to_s }
 node(:updated_at) { |box| box.updated_at.to_i }
-node(:cache_key) { |box| Digest::SHA256.hexdigest(box.cache_key) }
+node(:cache_key) { |box| Digest::SHA256.hexdigest(box.cache_key(@embed)) }
 
-unless @embed['extras'].nil?
+if @embed.include?("extras")
   child :available_extras => :extras do
     attributes :id, :name, :unit
     node(:price) { |extra| extra.price.to_s }
@@ -27,13 +27,13 @@ unless @embed['extras'].nil?
   end
 end
 
-unless @embed['images'].nil?
+if @embed.include?("images")
   node :images do |box|
     @images[box.id]
   end
 end
 
-unless @embed['box_items'].nil?
+if @embed.include?("box_items")
   node :box_items do
     @distributor.line_items.select('id, name')
   end
