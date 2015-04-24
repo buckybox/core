@@ -363,8 +363,4 @@ class ScheduleRule < ActiveRecord::Base
   def includes_dow_if_not_one_off
     errors.add(:base, "Must include at least one day of the week") if !one_off? && days.blank?
   end
-
-  def clone_attributes
-    attributes.slice('start', 'recur', 'week', 'sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat')
-  end
 end
