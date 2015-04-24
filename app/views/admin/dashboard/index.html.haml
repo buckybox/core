@@ -17,8 +17,9 @@
       = @distributors.count - 1 # minus 1 for demo@buckybox.com
       active distributors
 
-- unless @distributors.empty?
-  = render 'admin/dashboard/index'
+  %table#distributors.table.table-bordered
+    - @distributors.each do |distributor|
+      = render partial: 'admin/distributors/index', locals: {distributor: distributor}
 
 - unless @cron_logs.empty?
   .row-fluid

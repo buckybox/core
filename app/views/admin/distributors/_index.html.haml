@@ -1,59 +1,61 @@
-%tr{ class: ('recent' if distributor.seen_recently?) }
-  %td
-    .row-fluid
-      .span4
-        %span.big.bold
-          = link_to_unless !distributor.active_webstore?, distributor.name, distributor.webstore_url
-          %br
-        %span.medium
-          = mail_to(distributor.email, distributor.contact_name_for_email)
-      .span2
-        %span.medium= distributor.location
-      .span2.align-right.medium.bold
-        = distributor.total_customer_count
-        = "(#{distributor.transactional_customer_count})"
-        %i.icon-user(title="total customers (transactional customers)")
-        %br
-        = distributor.new_customer_count
-        = "(#{distributor.new_transactional_customer_count})"
-        %i.icon-plus(title="new customer in last 7 days (new transactions)")
-      .span1.align-right.medium.bold
-        = distributor.orders.active.count
-        %i.icon-shopping-cart(title="Active orders")
-        %br
-        = distributor.deliveries_last_7_days_count
-        %i.icon-road(title="Deliveries completed in last 7 days")
-      .span3.align-right.medium
-        - if distributor.access_locked?
-          %span{title: "Locked at #{distributor.locked_at}"} [LOCKED]
-        = time_since(distributor.last_seen_at)
+- cache [request.fullpath, :distributor, distributor.id, distributor.updated_at, distributor.last_seen_at], expires_in: 1.hour do
 
-    .row-fluid
-      .span4
-        - distributor.tags.each do |tag|
-          %span.label.label-info= link_to tag.name, tag_admin_distributors_path(tag.name)
-        - if distributor.send_email?
-          %span.label emails
-        - if distributor.separate_bucky_fee?
-          %span.label fee
-        - if distributor.feature_spend_limit?
-          %span.label halt
-        - if distributor.active_webstore?
-          %span.label webstore
-        - if distributor.payment_cash_on_delivery?
-          %span.label.label-inverse{title: 'Cash on Delivery'} cod
-        - if distributor.payment_bank_deposit?
-          %span.label.label-inverse bank-deposit
-        - if distributor.payment_paypal?
-          %span.label.label-important paypal
-        - distributor.omni_importers.includes(:country).each do |omni_importer|
-          %span.label.label-success{title: omni_importer.payment_type}= omni_importer.tag_name
-      .span5
-        %small
-          Next delivery:
-          %strong= distributors_next_delivery_date(distributor)
-      .span3.align-right.small
-        = link_to 'Edit', edit_admin_distributor_path(distributor)
-        |
-        = link_to 'Impersonate', impersonate_admin_distributor_path(distributor)
+  %tr{ class: ('recent' if distributor.seen_recently?) }
+    %td
+      .row-fluid
+        .span4
+          %span.big.bold
+            = link_to_unless !distributor.active_webstore?, distributor.name, distributor.webstore_url
+            %br
+          %span.medium
+            = mail_to(distributor.email, distributor.contact_name_for_email)
+        .span2
+          %span.medium= distributor.location
+        .span2.align-right.medium.bold
+          = distributor.total_customer_count
+          = "(#{distributor.transactional_customer_count})"
+          %i.icon-user(title="total customers (transactional customers)")
+          %br
+          = distributor.new_customer_count
+          = "(#{distributor.new_transactional_customer_count})"
+          %i.icon-plus(title="new customer in last 7 days (new transactions)")
+        .span1.align-right.medium.bold
+          = distributor.orders.active.count
+          %i.icon-shopping-cart(title="Active orders")
+          %br
+          = distributor.deliveries_last_7_days_count
+          %i.icon-road(title="Deliveries completed in last 7 days")
+        .span3.align-right.medium
+          - if distributor.access_locked?
+            %span{title: "Locked at #{distributor.locked_at}"} [LOCKED]
+          = time_since(distributor.last_seen_at)
+
+      .row-fluid
+        .span4
+          - distributor.tags.each do |tag|
+            %span.label.label-info= link_to tag.name, tag_admin_distributors_path(tag.name)
+          - if distributor.send_email?
+            %span.label emails
+          - if distributor.separate_bucky_fee?
+            %span.label fee
+          - if distributor.feature_spend_limit?
+            %span.label halt
+          - if distributor.active_webstore?
+            %span.label webstore
+          - if distributor.payment_cash_on_delivery?
+            %span.label.label-inverse{title: 'Cash on Delivery'} cod
+          - if distributor.payment_bank_deposit?
+            %span.label.label-inverse bank-deposit
+          - if distributor.payment_paypal?
+            %span.label.label-important paypal
+          - distributor.omni_importers.includes(:country).each do |omni_importer|
+            %span.label.label-success{title: omni_importer.payment_type}= omni_importer.tag_name
+        .span5
+          %small
+            Next delivery:
+            %strong= distributors_next_delivery_date(distributor)
+        .span3.align-right.small
+          = link_to 'Edit', edit_admin_distributor_path(distributor)
+          |
+          = link_to 'Impersonate', impersonate_admin_distributor_path(distributor)
 
