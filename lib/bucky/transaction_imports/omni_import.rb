@@ -245,7 +245,7 @@ EOF
     end
 
     def self.sanitize_amount amount
-      amount.gsub(/[^\d.-]/, '')
+      amount && amount.gsub(/[^\d.-]/, '')
     end
 
     class Rules
@@ -436,6 +436,8 @@ EOF
 
       def process(row)
         date_string = rule.process(row)
+        return "" unless date_string
+
         if format.present?
           Date.strptime(date_string, format).strftime('%d/%m/%Y')
         else
