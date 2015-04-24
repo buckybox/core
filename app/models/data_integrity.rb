@@ -116,11 +116,21 @@ class DataIntegrity
     end
   end
 
-  def all_accounts_are_valid
+  def accounts_are_valid
     Account.find_each do |account|
       if account.invalid?
         error "Account ##{account.id} is invalid: #{account.errors.full_messages.to_sentence}"
       end
+    end
+  end
+
+  def order_extras_have_valid_foreign_keys
+    all_ids = OrderExtra.pluck('id')
+    ids_with_valid_foreign_keys =  OrderExtra.joins(:extra).joins(:order).pluck('order_extras.id')
+    diff = all_ids - ids_with_valid_foreign_keys
+
+    diff.each do |id|
+      error "OrderExtra ##{id} has invalid foreign keys"
     end
   end
 
@@ -148,7 +158,8 @@ private
     checker.orders_are_valid
     checker.past_deliveries_are_not_pending
     checker.deduction_count_matches_delivery_count
-    checker.all_accounts_are_valid
+    checker.accounts_are_valid
+    checker.order_extras_have_valid_foreign_keys
 
     checker
   end
