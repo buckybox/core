@@ -32,6 +32,39 @@ describe "API v1" do
         expect(json_response.size).to eq @delivery_services.size
       end
     end
+
+    describe "GET /delivery_services/:id" do
+      let(:url) { "#{base_url}/delivery_services/#{delivery_service.id}" }
+      let(:delivery_service) { @delivery_services.first }
+      let(:json_delivery_service) { json_response }
+
+      before do
+        json_request :get, url, nil, headers
+        expect(response).to be_success
+      end
+
+      it_behaves_like "an authenticated API", :get
+      it_behaves_like "a delivery service"
+
+      it "returns the delivery service" do
+        expect(json_response["id"]).to eq delivery_service.id
+      end
+
+      context "with a unknown ID" do
+        before { json_request :get, "#{url}0000", nil, headers }
+        specify { expect(response).to be_not_found }
+      end
+
+      context "with a delivery service of another distributor" do
+        before do
+          new_distributor = Fabricate(:distributor)
+          delivery_service = Fabricate(:delivery_service, distributor: new_distributor)
+          json_request :get, "#{base_url}/delivery_services/#{delivery_service.id}", nil, headers
+        end
+
+        specify { expect(response).to be_not_found }
+      end
+    end
   end
 end
 
