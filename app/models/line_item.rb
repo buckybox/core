@@ -12,7 +12,7 @@ class LineItem < ActiveRecord::Base
 
   before_validation :cleanup_name
 
-  default_scope order(:name)
+  default_scope { order(:name) }
 
   DEFAULT_LIST = "Beetroot, Broccoli, Cabbage, Carrots, Cauliflower, Celery, Courgette, Cucumber, Fennel, Kale, Leeks, Lettuce, Onions, Parsnips, Peppers, Potatoes, Red Cabbage, Red Onions, Rhubarb, Spinach, Spring Greens, Sprouts, Squash, Swede, Tomatoes, Turnips"
 
@@ -24,7 +24,7 @@ class LineItem < ActiveRecord::Base
       result
     end
 
-    return all.blank? ? nil : all
+    all.blank? ? nil : all
   end
 
   def self.bulk_update(distributor, line_item_hash)
@@ -61,7 +61,7 @@ class LineItem < ActiveRecord::Base
     from_list(distributor, DEFAULT_LIST)
   end
 
-  private
+private
 
   def cleanup_name
     self.name = self.name.titleize

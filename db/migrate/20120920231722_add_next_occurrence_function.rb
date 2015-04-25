@@ -5,9 +5,9 @@ class AddNextOccurrenceFunction < ActiveRecord::Migration
 
   def down
     # Create drop statements from above file
-    execute File.read(File.join(Bucky::Sql::PATH, 'next_occurrence.pgsql')).
-      scan(/CREATE OR REPLACE FUNCTION [a-z_]+\([^\)]+\)/).collect{|block|
+    execute File.read(File.join(Bucky::Sql::PATH, 'next_occurrence.pgsql'))
+      .scan(/CREATE OR REPLACE FUNCTION [a-z_]+\([^\)]+\)/).collect do |block|
       block.gsub(/CREATE OR REPLACE FUNCTION/i, "DROP FUNCTION IF EXISTS")
-    }.join(";")
+    end.join(";")
   end
 end

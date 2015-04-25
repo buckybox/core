@@ -79,7 +79,7 @@ private
     Rails.application.routes.url_helpers
   end
 
-  #TODO: Figure out the best way to move the email content below into a config file
+  # TODO: Figure out the best way to move the email content below into a config file
 
   def account_overdue_email
     {
@@ -165,5 +165,4 @@ CONTACT DETAILS
       BODY
     }
   end
-
 end

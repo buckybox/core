@@ -1,12 +1,7 @@
 class Distributor::Setup
+  STEPS = %w(delivery_services boxes customers).freeze
 
-  STEPS = [
-    "delivery_services",
-    "boxes",
-    "customers",
-  ].freeze
-
-  def initialize(distributor, args = {})
+  def initialize(distributor, _args = {})
     @distributor = distributor
   end
 

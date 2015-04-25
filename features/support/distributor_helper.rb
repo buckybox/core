@@ -43,7 +43,6 @@ private
   def require_boolean(human_name)
     REQUIRE_BOOLEANS.fetch(human_name)
   end
-
 end
 
 World(DistributorHelper)

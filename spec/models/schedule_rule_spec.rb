@@ -3,14 +3,14 @@ require 'spec_helper'
 describe ScheduleRule do
   let(:all_days){ScheduleRule::DAYS}
   context :one_off do
-    let(:date){ Date.parse('2012-08-20') } #monday
+    let(:date){ Date.parse('2012-08-20') } # monday
     let(:schedule){ ScheduleRule.one_off(date) }
 
     specify { expect(schedule.occurs_on?(date)).to be true }
     specify { expect(schedule.occurs_on?(Date.parse('2012-08-21'))).to be false }
   end
   context :recur do
-    let(:start_date){ Date.parse('2012-08-27') } #monday
+    let(:start_date){ Date.parse('2012-08-27') } # monday
 
     context :weekly do
       context :monday do
@@ -87,13 +87,13 @@ describe ScheduleRule do
       let(:schedule){ ScheduleRule.monthly(start_date, [:sun, :tue, :sat])}
 
       it 'should occur on the first week of the month after the start_date' do
-        first_occurrence = Date.parse('2012-09-01') #Saturday
+        first_occurrence = Date.parse('2012-09-01') # Saturday
 
         expect(schedule.occurs_on?(first_occurrence)).to be true
       end
 
       it 'should not occur on the second week of the month after the start_date' do
-        first_occurrence = Date.parse('2012-09-08') #Saturday
+        first_occurrence = Date.parse('2012-09-08') # Saturday
 
         expect(schedule.occurs_on?(first_occurrence)).to be false
       end
@@ -132,7 +132,7 @@ describe ScheduleRule do
 
       context :weekly do
         before do
-          @start_date = Date.parse('2012-09-20') #Thursday
+          @start_date = Date.parse('2012-09-20') # Thursday
           @sr = ScheduleRule.weekly(@start_date, [:sun, :wed, :thu, :fri])
           @sr.save!
         end
@@ -163,7 +163,7 @@ describe ScheduleRule do
 
       context :fortnightly do
         before do
-          @start_date = Date.parse('2012-09-20') #Thursday
+          @start_date = Date.parse('2012-09-20') # Thursday
           @sr = ScheduleRule.fortnightly(@start_date, [:sun, :wed, :thu, :fri])
           @sr.save!
         end
@@ -224,7 +224,7 @@ describe ScheduleRule do
 
       context :monthly do
         before do
-          @start_date = Date.parse('2012-09-20') #Thursday
+          @start_date = Date.parse('2012-09-20') # Thursday
           @sr = ScheduleRule.monthly(@start_date, [:sun, :wed, :thu, :fri])
           @sr.save!
         end
@@ -285,7 +285,7 @@ describe ScheduleRule do
   end
 
   context :includes do
-    let(:date){Date.parse('2012-10-03')} #wednesday
+    let(:date){Date.parse('2012-10-03')} # wednesday
 
     specify{expect(Fabricate(:schedule_rule).includes?(Fabricate(:schedule_rule))).to be true}
 
@@ -294,29 +294,29 @@ describe ScheduleRule do
     end
 
     it 'should return whether or not one schedule_rule occurs on the same days as another' do
-      test_date = Date.parse('2012-10-05') #friday
+      test_date = Date.parse('2012-10-05') # friday
       expect(ScheduleRule.weekly(date, ScheduleRule::DAYS).includes?(ScheduleRule.one_off(test_date))).to be true
     end
 
     it 'should return false for schedules which start too soon' do
-      test_date = Date.parse('2012-10-01') #monday
+      test_date = Date.parse('2012-10-01') # monday
       expect(ScheduleRule.weekly(date, ScheduleRule::DAYS).includes?(ScheduleRule.one_off(test_date))).to be false
     end
 
     it 'should return whether or not one schedule_rule occurs on the same days as another' do
-      test_date = Date.parse('2012-10-05') #friday
+      test_date = Date.parse('2012-10-05') # friday
       expect(ScheduleRule.weekly(date, ScheduleRule::DAYS - [:fri]).includes?(ScheduleRule.one_off(test_date))).to be false
     end
 
     it 'should return false if a pause makes it not occur on the required date of given schedule_rule' do
-      test_date = Date.parse('2012-10-05') #friday
+      test_date = Date.parse('2012-10-05') # friday
       sr = ScheduleRule.weekly(date, ScheduleRule::DAYS)
       sr.pause('2012-10-01', '2012-11-01')
       expect(sr.includes?(ScheduleRule.one_off(test_date))).to be false
     end
 
     it 'should return true if a pause doesnt occur within the given schedule_rule' do
-      test_date = Date.parse('2012-10-05') #friday
+      test_date = Date.parse('2012-10-05') # friday
       sr = ScheduleRule.weekly(date, ScheduleRule::DAYS)
       sr.pause('2012-11-01', '2012-12-01')
       expect(sr.includes?(ScheduleRule.one_off(test_date))).to be true

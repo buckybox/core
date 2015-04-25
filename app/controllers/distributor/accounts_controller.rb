@@ -42,9 +42,7 @@ private
       opts[:delta] = delta
     end
 
-    if params[:note].present?
-      opts[:description] = params[:note]
-    end
+    opts[:description] = params[:note] if params[:note].present?
 
     if params[:date].present?
       opts[:display_time] = Date.parse(params[:date]).to_time_in_current_zone

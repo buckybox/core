@@ -25,5 +25,4 @@ class AdminMailer < ApplicationMailer
       format.html { render text: simple_format(html_escape(body)) }
     end
   end
-
 end

@@ -92,7 +92,6 @@ describe Distributor::OrdersController do
     end
   end
 
-
   context "pausing" do
     let(:order){Fabricate(:order)}
     describe "#pause" do

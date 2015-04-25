@@ -2,7 +2,6 @@
 # to the boxes allowed extras
 
 class Import::Extra
-
   def initialize(args)
     @distributor = args.fetch(:distributor)
     @extra       = args.fetch(:extra)
@@ -29,5 +28,4 @@ private
       extra: extra
     )
   end
-
 end

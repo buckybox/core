@@ -20,7 +20,7 @@ module Bucky::Dso
     def next
       n = peek
       self.pointer += 1
-      return n
+      n
     end
 
     def reset
@@ -39,9 +39,7 @@ module Bucky::Dso
       end
     end
 
-    def empty?
-      list.empty?
-    end
+    delegate :empty?, to: :list
 
     def finished?
       empty? || pointer == list.size
@@ -73,7 +71,7 @@ module Bucky::Dso
     def match_before(sortable, possible_next)
       match = possible_next.blank? ? nil : before(possible_next.sortable)
 
-      return !match.blank? && match == sortable
+      !match.blank? && match == sortable
     end
 
     def update_positions

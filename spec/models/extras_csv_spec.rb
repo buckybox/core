@@ -13,7 +13,7 @@ describe ExtrasCsv do
           name: "Extra #{i}",
           distributor: distributor,
           price_cents: i*200+50,
-          unit: ['kg','l','each','g'][i],
+          unit: %w(kg l each g)[i],
           hidden: i.zero?,
         )
       end

@@ -60,7 +60,7 @@ class ExtrasCsv
 
 private
 
-  def extras_count(extra, extras_summary)
+  def extras_count(extra, _extras_summary)
     @extras_count_store[name_with_unit(extra)] || 0
   end
 

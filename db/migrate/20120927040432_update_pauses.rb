@@ -5,7 +5,8 @@ class UpdatePauses < ActiveRecord::Migration
     SchedulePause.delete_all
 
     ScheduleRule.copy_from_ice
-  rescue #if the models have changed, don't freak out
+  rescue
+    nil # if the models have changed, don't freak out
   end
 
   def down

@@ -50,7 +50,7 @@ private
   end
 
   def count_exclusions_substitutions(packages_or_orders)
-    packages_or_orders = packages_or_orders.includes(:box)#, :exclusions, :substitutions)
+    packages_or_orders = packages_or_orders.includes(:box) # , :exclusions, :substitutions)
     exclusions_substitutions = {}
     line_items = packages_or_orders.first.distributor.line_items
 

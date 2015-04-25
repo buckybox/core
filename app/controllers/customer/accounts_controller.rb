@@ -1,5 +1,4 @@
 class Customer::AccountsController < Customer::ResourceController
-
   def transactions
     offset_size = 0
     limit = params[:limit].to_i
@@ -20,5 +19,4 @@ class Customer::AccountsController < Customer::ResourceController
 
     render partial: 'customer/transactions/index'
   end
-
 end

@@ -17,7 +17,7 @@ class Country < ActiveRecord::Base
     begin
       time_zones = TZInfo::Country.get(alpha2).zone_names
     rescue TZInfo::InvalidCountryCode
-      # noop
+      nil # noop
     end
 
     time_zones = ["Etc/UTC"] if time_zones.blank?

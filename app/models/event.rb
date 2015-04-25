@@ -8,7 +8,7 @@ class Event < ActiveRecord::Base
   scope :active, where(dismissed: false)
   scope :current, -> { where('trigger_on <= ?', Time.current) }
 
-  default_scope order('trigger_on DESC')
+  default_scope { order('trigger_on DESC') }
 
   def dismiss!
     update_attributes!(dismissed: true)

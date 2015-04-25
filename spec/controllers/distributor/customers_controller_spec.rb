@@ -24,7 +24,7 @@ describe Distributor::CustomersController do
 
     describe "#send_login_details" do
       before do
-        @send_login_details = lambda { get :send_login_details, id: @customer.id }
+        @send_login_details = -> { get :send_login_details, id: @customer.id }
         @send_login_details.call
       end
 
@@ -133,7 +133,7 @@ describe Distributor::CustomersController do
 
       context "sending" do
         before do
-          @post = lambda { post :email, params.merge(commit: "", link_action: "") }
+          @post = -> { post :email, params.merge(commit: "", link_action: "") }
         end
 
         it "calls send_email with the right arguments" do
@@ -165,7 +165,7 @@ describe Distributor::CustomersController do
       let(:recipient_ids) { [@customer.id] }
 
       before do
-        @post = lambda { post :export, export: {recipient_ids: recipient_ids.join(',') }}
+        @post = -> { post :export, export: {recipient_ids: recipient_ids.join(',') }}
       end
 
       it "downloads a csv" do

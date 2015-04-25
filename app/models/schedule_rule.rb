@@ -2,7 +2,7 @@ class ScheduleRule < ActiveRecord::Base
   attr_accessible :fri, :mon, :recur, :sat, :start, :sun, :thu, :tue, :wed, :order_id, :week
   attr_accessor :next_occurrence
 
-  DAYS = [:sun, :mon, :tue, :wed, :thu, :fri, :sat] #Order of this is important, it matches sunday: 0, monday: 1 as is standard
+  DAYS = [:sun, :mon, :tue, :wed, :thu, :fri, :sat] # Order of this is important, it matches sunday: 0, monday: 1 as is standard
   RECUR = [:single, :weekly, :fortnightly, :monthly]
 
   belongs_to :scheduleable, polymorphic: true, inverse_of: :schedule_rule
@@ -64,7 +64,7 @@ class ScheduleRule < ActiveRecord::Base
   end
 
   def recur
-    r = read_attribute(:recur)
+    r = self[:recur]
     if r.nil?
       :one_off
     else
@@ -129,7 +129,7 @@ class ScheduleRule < ActiveRecord::Base
 
       if current.present?
         result << current
-        current += 1.day #otherwise it will get stuck in a loop
+        current += 1.day # otherwise it will get stuck in a loop
       else
         return result
       end
@@ -152,7 +152,7 @@ class ScheduleRule < ActiveRecord::Base
 
       if current.present? && current <= finish
         result << current
-        current += 1.day #otherwise it will get stuck in a loop
+        current += 1.day # otherwise it will get stuck in a loop
       else
         return result
       end
@@ -174,9 +174,13 @@ class ScheduleRule < ActiveRecord::Base
   end
 
   def one_off?; recur == :one_off || recur == :single || recur == nil;end
+
   def single?; recur == :single;end
+
   def weekly?; recur == :weekly;end
+
   def fortnightly?; recur == :fortnightly;end
+
   def monthly?; recur == :monthly;end
 
   def days
@@ -188,7 +192,7 @@ class ScheduleRule < ActiveRecord::Base
   end
 
   def delivery_days
-    I18n.t('date.day_names').select.each_with_index do |day, index|
+    I18n.t('date.day_names').select.each_with_index do |_day, index|
       runs_on index
     end.to_sentence
   end
@@ -249,11 +253,11 @@ class ScheduleRule < ActiveRecord::Base
   end
 
   def deleted_days
-    DAYS.select{|day| self.send("#{day.to_s}_changed?".to_sym) && self.send(day) == false}
+    DAYS.select{|day| self.send("#{day}_changed?".to_sym) && self.send(day) == false}
   end
 
   def deleted_day_numbers
-    DAYS.each_with_index.collect{|day, index| (self.send("#{day.to_s}_changed?".to_sym) && self.send(day) == false) ? index : nil}.compact
+    DAYS.each_with_index.collect{|day, index| (self.send("#{day}_changed?".to_sym) && self.send(day) == false) ? index : nil}.compact
   end
 
   def pause!(start, finish=nil)
@@ -293,7 +297,7 @@ class ScheduleRule < ActiveRecord::Base
   end
 
   def remove_day(day)
-    self.send("#{to_day(day).to_s}=", false)
+    self.send("#{to_day(day)}=", false)
   end
 
   def remove_day!(day)
@@ -310,7 +314,7 @@ class ScheduleRule < ActiveRecord::Base
     if something.is_a?(Symbol)
       raise "#{something} is not understood as a day of the week" unless translate.include?(something)
       return DAYS[translate[something]]
-    elsif something.is_a?(Fixnum) and (0..6).include?(something)
+    elsif something.is_a?(Fixnum) && (0..6).include?(something)
       return DAYS[something]
     else
       raise "Couldn't turn #{something} into a day, sorry! ;)"
@@ -338,9 +342,7 @@ class ScheduleRule < ActiveRecord::Base
     end
   end
 
-  def recurs?
-    frequency.recurs?
-  end
+  delegate :recurs?, to: :frequency
 
   def halt!
     self.halted = true

@@ -1,6 +1,5 @@
 module Bucky::Dso
   class RelativeSort < Sort
-
     def self.sort_list(master_list, ordered_list)
       working_list = RelativeList.build(master_list)
 
@@ -25,6 +24,5 @@ module Bucky::Dso
     def self.highest_index(working_list, ordered_list)
       ordered_list.collect{|s| working_list.index(s)}.max
     end
-
   end
 end

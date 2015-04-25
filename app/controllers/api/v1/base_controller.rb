@@ -1,7 +1,7 @@
 class Api::V1::BaseController < ApplicationController
   layout false
-  before_filter :log_request, :authenticate, :set_time_zone, :set_locale, :embed_options
-  skip_before_filter :authenticate, :set_time_zone, :set_locale, :embed_options, only: :ping
+  before_action :log_request, :authenticate, :set_time_zone, :set_locale, :embed_options
+  skip_before_action :authenticate, :set_time_zone, :set_locale, :embed_options, only: :ping
 
   def ping
     render text: "Pong!"
@@ -53,9 +53,7 @@ private
       @distributor = Distributor.find_by(api_key: api_key, api_secret: api_secret)
     end
 
-    if !@distributor
-      return not_found
-    end
+    return not_found if !@distributor
   end
 
   def set_time_zone

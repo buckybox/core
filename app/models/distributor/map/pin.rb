@@ -1,5 +1,4 @@
 class Distributor::Map::Pin
-
   attr_reader :name, :address, :ll, :webstore
 
   def initialize(args)
@@ -8,5 +7,4 @@ class Distributor::Map::Pin
     @ll       = args[:ll]
     @webstore = args[:webstore]
   end
-
 end

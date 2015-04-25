@@ -48,7 +48,7 @@ describe Account do
             account.add_to_balance(CrazyMoney.new(value))
           end
 
-          specify { expect(account.balance).to eq (250 + value) }
+          specify { expect(account.balance).to eq(250 + value) }
           specify { expect(account.transactions.last.amount).to eq value }
         end
       end
@@ -64,8 +64,8 @@ describe Account do
             account.subtract_from_balance(CrazyMoney.new(value))
           end
 
-          specify { expect(account.balance).to eq (250 - value) }
-          specify { expect(account.transactions.last.amount).to eq (-1 * value) }
+          specify { expect(account.balance).to eq(250 - value) }
+          specify { expect(account.transactions.last.amount).to eq(-1 * value) }
         end
       end
     end
@@ -81,7 +81,7 @@ describe Account do
           end
 
           specify { expect(account.balance).to eq value }
-          specify { expect(account.transactions.last.amount).to eq (value - 250)}
+          specify { expect(account.transactions.last.amount).to eq(value - 250)}
         end
       end
     end

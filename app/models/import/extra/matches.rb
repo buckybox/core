@@ -1,5 +1,4 @@
 class Import::Extra::Matches
-
   def self.by_fuzzy_match(args)
     matches = new(args)
     matches.by_fuzzy_match
@@ -47,5 +46,4 @@ private
   def by_score
     Proc.new { |a, b| b.first <=> a.first }
   end
-
 end

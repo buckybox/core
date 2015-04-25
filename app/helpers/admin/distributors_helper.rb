@@ -6,10 +6,6 @@ module Admin::DistributorsHelper
     delivery_service.blank? ? ERROR_CLASS : PASS_CLASS
   end
 
-  def order_status(delivery_service, box)
-    raise "Need to complete this method"
-  end
-
   def box_type_status(distributor, box)
     distributor.boxes.find_by_name(box.box_type).blank? ? ERROR_CLASS : PASS_CLASS
   end

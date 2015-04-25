@@ -1,5 +1,5 @@
 class Distributor::Settings::Payments::CashOnDeliveryController < Distributor::Settings::Payments::BaseController
-  before_filter do
+  before_action do
     @cash_on_delivery = Distributor::Settings::Payments::CashOnDelivery.new(
       params.merge(distributor: current_distributor)
     )

@@ -3,8 +3,8 @@ class Distributor::PaymentsController < Distributor::ResourceController
 
   respond_to :html, :json
 
-  before_filter :check_setup, only: [:index]
-  before_filter :load_import_transaction_list, only: [:process_payments, :show]
+  before_action :check_setup, only: [:index]
+  before_action :load_import_transaction_list, only: [:process_payments, :show]
 
   def index
     @import_transaction_list = current_distributor.import_transaction_lists.new

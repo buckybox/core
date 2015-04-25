@@ -1,7 +1,6 @@
 require_relative "../form"
 
 class Customer::Form::UpdateContactDetails < Customer::Form
-
   include Customer::PhoneValidations
 
   attribute :first_name
@@ -50,5 +49,4 @@ private
       work_phone:    work_phone,
     }
   end
-
 end

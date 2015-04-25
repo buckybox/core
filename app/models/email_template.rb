@@ -1,6 +1,5 @@
 # An email template which can be personalized for a given customer
 class EmailTemplate < EmailTemplator
-
   # white-list of special keywords to be replaced
   KEYWORDS = {
     first_name:            :first_name,
@@ -16,5 +15,4 @@ class EmailTemplate < EmailTemplator
   def pre_personalize_hook customer
     customer.decorate unless customer.decorated?
   end
-
 end

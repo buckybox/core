@@ -1,7 +1,6 @@
 require_relative "../form"
 
 class Customer::Form::UpdatePassword < Customer::Form
-
   attribute :password
   attribute :password_confirmation
 
@@ -21,5 +20,4 @@ private
       password_confirmation:  password_confirmation,
     }
   end
-
 end

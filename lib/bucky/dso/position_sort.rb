@@ -1,6 +1,5 @@
 module Bucky::Dso
   class PositionSort < Sort
-
     def self.sort_list(master_list, ordered_list)
       last_insert = nil
 
@@ -20,6 +19,5 @@ module Bucky::Dso
 
       List.new(new_master_list.each_with_index.collect{|s, index| [s.first, index+1]})
     end
-
   end
 end

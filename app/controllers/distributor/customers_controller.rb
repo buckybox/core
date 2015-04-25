@@ -1,8 +1,8 @@
 class Distributor::CustomersController < Distributor::ResourceController
   respond_to :html, :json
 
-  before_filter :check_setup, only: [:index]
-  before_filter :get_email_templates, only: [:index, :show]
+  before_action :check_setup, only: [:index]
+  before_action :get_email_templates, only: [:index, :show]
 
   def index
     index! do
@@ -110,9 +110,7 @@ class Distributor::CustomersController < Distributor::ResourceController
         params[:email_template][:body]
       )
 
-      if !email_template.valid?
-        return error(email_template.errors.join('<br>'))
-      end
+      return error(email_template.errors.join('<br>')) if !email_template.valid?
 
       email_templates_update(link_action, email_template)
     end

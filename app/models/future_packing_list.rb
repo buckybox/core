@@ -3,7 +3,7 @@ class FuturePackingList
   attr_reader :packages
   attr_reader :all_finished
 
-  def initialize(date, packages, all_finished)
+  def initialize(date, packages, _all_finished)
     @date         = date
     @packages     = packages
     @all_finished = false

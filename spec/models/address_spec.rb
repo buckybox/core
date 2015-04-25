@@ -55,7 +55,7 @@ describe Address do
     end
 
     it 'should return false for different addresses' do
-      attrs.each do |key, value|
+      attrs.each do |key, _value|
         expect(address).not_to eq(Fabricate.build(:address, attrs.merge(key => "Something different")))
       end
     end
@@ -65,7 +65,7 @@ describe Address do
     end
 
     it 'should return a unique hash for unique addresses' do
-      attrs.each do |key, value|
+      attrs.each do |key, _value|
         expect(address.address_hash).not_to eq(Fabricate.build(:address, attrs.merge(key => "Something else")).address_hash)
       end
     end

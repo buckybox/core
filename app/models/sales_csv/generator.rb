@@ -2,7 +2,7 @@ require "csv"
 
 module SalesCsv
   class Generator
-    def initialize(data, options = {})
+    def initialize(data, _options = {})
       @data = data
     end
 

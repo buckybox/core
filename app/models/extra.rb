@@ -23,7 +23,7 @@ class Extra < ActiveRecord::Base
   def visible; !hidden; end
 
   def visible=(value)
-    write_attribute(:hidden, !value.to_bool)
+    self[:hidden] = !value.to_bool
   end
 
   def to_hash
@@ -69,7 +69,7 @@ class Extra < ActiveRecord::Base
       match *= (0.9+(unit_match*0.1)) # Reduce impact of a poor unit match
     end
 
-    return match
+    match
   end
 
   # Add this newly created extra onto all boxes which look like they are following
@@ -77,9 +77,7 @@ class Extra < ActiveRecord::Base
   # all the extras available set on each particular box
   def update_distributors_boxes
     distributor.boxes.each do |box|
-      if box.extras_allowed? && box.has_all_extras?(self)
-        box.extras << self
-      end
+      box.extras << self if box.extras_allowed? && box.has_all_extras?(self)
     end
   end
 

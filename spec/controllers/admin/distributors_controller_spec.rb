@@ -103,8 +103,8 @@ describe Admin::DistributorsController do
     sign_in_as_distributor
     before do
       c = double(Country, time_zone: "Pacific/Auckland",
-                currency: "NZD",
-                default_consumer_fee_cents: 20)
+                          currency: "NZD",
+                          default_consumer_fee_cents: 20)
       expect(Country).to receive(:find).with("32").and_return(c)
     end
 

@@ -54,7 +54,7 @@ describe LineItem do
         before do
           @new_name = 'Chinese gooseberry'
           @new_line_item = Fabricate(:line_item, name: @new_name)
-          allow(LineItem).to receive(:where) { double(first_or_create: @new_line_item) } # FIXME brittle stubbing
+          allow(LineItem).to receive(:where) { double(first_or_create: @new_line_item) } # FIXME: brittle stubbing
 
           LineItem.bulk_update(distributor, { line_item.id => {name: @new_name} })
         end

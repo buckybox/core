@@ -32,11 +32,11 @@ class Account < ActiveRecord::Base
     CrazyMoney.new(transactions.offset(offset_size).sum(&:amount))
   end
 
-  def balance_cents=(value)
+  def balance_cents=(_value)
     raise(ArgumentError, "The balance can not be updated this way. Please use one of the model balance methods that create transactions.")
   end
 
-  def balance=(value)
+  def balance=(_value)
     raise(ArgumentError, "The balance can not be updated this way. Please use one of the model balance methods that create transactions.")
   end
 
@@ -80,14 +80,14 @@ class Account < ActiveRecord::Base
     end
   end
 
-  #all accounts that need invoicing
+  # all accounts that need invoicing
   def self.need_invoicing
     accounts = []
     Account.find_each { |account| accounts << account if account.needs_invoicing? }
     accounts
   end
 
-  #future occurrences for all orders on account
+  # future occurrences for all orders on account
   def all_occurrences(end_date)
     occurrences = []
 
@@ -111,8 +111,8 @@ class Account < ActiveRecord::Base
 private
 
   def default_balance_and_currency
-    write_attribute(:balance_cents, 0) if balance_cents.blank?
-    write_attribute(:currency, customer.currency) if currency.blank?
+    self[:balance_cents] = 0 if balance_cents.blank?
+    self[:currency] = customer.currency if currency.blank?
   end
 
   def validates_default_payment_method

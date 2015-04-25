@@ -57,5 +57,4 @@ private
   def payment_recurring?
     false # payments from the dashboard are just one-off top-ups
   end
-
 end

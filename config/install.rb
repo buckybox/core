@@ -2,7 +2,7 @@ require 'yaml'
 stage = ARGV.first || 'local'
 
 # Load DB config
-db_config = YAML::load(IO.read(File.expand_path("../deploy/database.yml", __FILE__)))
+db_config = YAML.load(IO.read(File.expand_path("../deploy/database.yml", __FILE__)))
 Sprinkle::Package::Package.add_db(stage, db_config)
 Sprinkle::Package::Package.stage = stage
 

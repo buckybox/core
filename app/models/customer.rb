@@ -55,7 +55,7 @@ class Customer < ActiveRecord::Base
   delegate :name, to: :delivery_service, prefix: true
   delegate :balance_at, to: :account
 
-  scope :ordered_by_next_delivery, lambda { order("CASE WHEN next_order_occurrence_date IS NULL THEN '9999-01-01' WHEN next_order_occurrence_date < '#{Date.current.to_s(:db)}' THEN '9999-01-01' ELSE next_order_occurrence_date END ASC, lower(customers.first_name) ASC, lower(customers.last_name) ASC") }
+  scope :ordered_by_next_delivery, -> { order("CASE WHEN next_order_occurrence_date IS NULL THEN '9999-01-01' WHEN next_order_occurrence_date < '#{Date.current.to_s(:db)}' THEN '9999-01-01' ELSE next_order_occurrence_date END ASC, lower(customers.first_name) ASC, lower(customers.last_name) ASC") }
   scope :ordered, order("lower(customers.first_name) ASC, lower(customers.last_name) ASC")
 
   # <HACK>
@@ -184,7 +184,7 @@ class Customer < ActiveRecord::Base
   end
 
   def name=(name)
-    # TODO eventually migrate to a single "full name" and add a second "what should we call you" field
+    # TODO: eventually migrate to a single "full name" and add a second "what should we call you" field
     # http://www.w3.org/International/questions/qa-personal-names#singlefield
     ActiveSupport::Deprecation.warn("Customer#name= is deprecated", caller(2))
 
@@ -363,8 +363,8 @@ class Customer < ActiveRecord::Base
 
   # next orders scheduled on `date` and later
   def calculate_next_orders(date = Date.current.to_s(:db))
-    orders.active.select("orders.*, next_occurrence('#{date}', false, false, schedule_rules.*)").
-      joins(:schedule_rule).reject { |sr| sr.next_occurrence.blank? }.sort_by(&:next_occurrence)
+    orders.active.select("orders.*, next_occurrence('#{date}', false, false, schedule_rules.*)")
+      .joins(:schedule_rule).reject { |sr| sr.next_occurrence.blank? }.sort_by(&:next_occurrence)
   end
 
   def has_yellow_deliveries?

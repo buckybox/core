@@ -1,5 +1,4 @@
 class Admin::OmniImportersController < Admin::BaseController
-
   def index
     @omni_importers = OmniImporter.ordered
     # Put those with blank countries on top
@@ -57,7 +56,7 @@ private
     begin
       @test_importer = Bucky::TransactionImports::OmniImport.new(@omni_importer.test_rows, YAML.load(@rules))
     rescue StandardError => ex
-      @error_message = "#{ex.to_s}\n#{ex.backtrace}"
+      @error_message = "#{ex}\n#{ex.backtrace}"
     rescue Psych::SyntaxError => ex
       @error_message = "YAML syntax is wrong
 #{ex.message}"

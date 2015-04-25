@@ -1,6 +1,5 @@
 class Admin::DistributorsController < Admin::ResourceController
-
-  before_filter :parameterize_name, only: [:create, :update]
+  before_action :parameterize_name, only: [:create, :update]
 
   def index
     @distributors = Distributor.scoped
@@ -10,7 +9,7 @@ class Admin::DistributorsController < Admin::ResourceController
   end
 
   def create
-    create! do |success, failure|
+    create! do |success, _failure|
       success.html do
         Distributor::Defaults.populate_defaults(@distributor)
         redirect_to admin_root_url
@@ -19,7 +18,7 @@ class Admin::DistributorsController < Admin::ResourceController
   end
 
   def update
-    update! do |success, failure|
+    update! do |success, _failure|
       success.html do
         redirect_to admin_root_url
       end

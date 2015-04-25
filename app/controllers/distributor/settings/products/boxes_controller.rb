@@ -1,5 +1,5 @@
 class Distributor::Settings::Products::BoxesController < Distributor::BaseController
-  before_filter :fetch_box_params, only: [:create, :update]
+  before_action :fetch_box_params, only: [:create, :update]
 
   def show
     render_form

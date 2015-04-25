@@ -1,5 +1,5 @@
 class ActionMailer::Base
-  def self.raise_errors(&block)
+  def self.raise_errors
     original_value = ActionMailer::Base.raise_delivery_errors
     ActionMailer::Base.raise_delivery_errors = true
     begin

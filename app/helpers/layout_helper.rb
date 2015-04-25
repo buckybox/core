@@ -65,13 +65,14 @@ module LayoutHelper
   end
 
   def customer_and_number(customer)
-    "##{customer.formated_number.to_s} #{customer.name}"
+    "##{customer.formated_number} #{customer.name}"
   end
 
   def customer_badge(customer, options = {})
     customer_id = customer.formated_number.to_s
 
-    content = case options[:link]
+    content = \
+    case options[:link]
     when false
       content_tag(:span, customer_id, class: 'customer-id')
     when Hash

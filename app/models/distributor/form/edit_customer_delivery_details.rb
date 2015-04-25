@@ -1,7 +1,6 @@
 require_relative "edit_customer_delivery_details_fields"
 
 class Distributor::Form::EditCustomerDeliveryDetails
-
   include Distributor::Form::EditCustomerDeliveryDetailsFields
 
 protected
@@ -13,5 +12,4 @@ protected
   def address_args
     delivery_details_address_args
   end
-
 end

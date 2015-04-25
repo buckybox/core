@@ -1,7 +1,6 @@
 # encoding: utf-8
 
 class ImportTransactionListUploader < CarrierWave::Uploader::Base
-
   storage :file
 
   def store_dir
@@ -49,7 +48,7 @@ class ImportTransactionListUploader < CarrierWave::Uploader::Base
     original_filename.gsub(/\.csv$/, '')
   end
 
-  protected
+protected
 
   def secure_token
     var = :"@#{mounted_as}_secure_token"

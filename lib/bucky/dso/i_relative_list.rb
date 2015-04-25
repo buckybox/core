@@ -1,6 +1,5 @@
 module Bucky::Dso
   class IRelativeList < RelativeList
-
     def index(key)
       key = key.sortable if key.is_a?(Sortable)
 
@@ -31,6 +30,5 @@ module Bucky::Dso
       @last_scan_index = nil
       insert(to, delete_at(from))
     end
-
   end
 end

@@ -1,5 +1,5 @@
 class Customer::BaseController < ApplicationController
-  before_filter :authenticate_customer!
+  before_action :authenticate_customer!
   layout 'customer'
 
 protected

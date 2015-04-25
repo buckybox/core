@@ -1,5 +1,4 @@
 class Distributor::Export::DeliveriesController < Distributor::BaseController
-
   def index
     export = Distributor::Export::Utils.get_export(current_distributor, params)
 
@@ -12,5 +11,4 @@ class Distributor::Export::DeliveriesController < Distributor::BaseController
       redirect_to :back
     end
   end
-
 end

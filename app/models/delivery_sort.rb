@@ -6,7 +6,7 @@ class DeliverySort
     delivery_sort.grouped_by_boxes
   end
 
-  #FIXME: Checking by class is a code smell this can be done better but it is the current standard in this class so using if for now.
+  # FIXME: Checking by class is a code smell this can be done better but it is the current standard in this class so using if for now.
   def self.by_dso(items, distributor, date)
     if items.all? { |i| i.is_a?(Delivery) }
       by_real_dso(items)

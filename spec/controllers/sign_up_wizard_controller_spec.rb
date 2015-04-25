@@ -46,7 +46,7 @@ describe SignUpWizardController do
 
     context "with valid params" do
       let(:post_form) do
-        lambda { post :sign_up, form_params }
+        -> { post :sign_up, form_params }
       end
 
       it "saves the new distributor" do
@@ -98,8 +98,8 @@ describe SignUpWizardController do
 
           pending "fails randomly"
           fail
-          distributor = Distributor.where(name: form_params["distributor"]["name"]).last
-          expect(distributor.omni_importers).to eq [@omni_importer]
+          # distributor = Distributor.where(name: form_params["distributor"]["name"]).last
+          # expect(distributor.omni_importers).to eq [@omni_importer]
         end
       end
 
@@ -129,8 +129,8 @@ describe SignUpWizardController do
 
             pending "fails randomly"
             fail
-            distributor = Distributor.where(name: form_params["distributor"]["name"]).last
-            expect(distributor.omni_importers).to match_array @omni_importers
+            # distributor = Distributor.where(name: form_params["distributor"]["name"]).last
+            # expect(distributor.omni_importers).to match_array @omni_importers
           end
         end
 
@@ -175,7 +175,7 @@ describe SignUpWizardController do
       end
 
       let(:post_form) do
-        lambda { post :sign_up, gb_form_params }
+        -> { post :sign_up, gb_form_params }
       end
 
       it "sets it up correctly" do
@@ -195,7 +195,7 @@ describe SignUpWizardController do
       end
 
       let(:post_form) do
-        lambda { post :sign_up, invalid_form_params }
+        -> { post :sign_up, invalid_form_params }
       end
 
       it "does not create a distributor" do
@@ -225,7 +225,7 @@ describe SignUpWizardController do
       end
 
       let(:post_form) do
-        lambda { post :sign_up, unknown_country_form_params }
+        -> { post :sign_up, unknown_country_form_params }
       end
 
       it "crashes!" do

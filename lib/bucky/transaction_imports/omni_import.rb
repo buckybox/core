@@ -304,8 +304,8 @@ EOF
         c = column_name_or_number
         if lookup(c).present?
           row[lookup(column_name_or_number)]
-        elsif (match_data = c.to_s.match(/^c([01-9]+)$/)).present?# Expecting column numbers to be c0, c1, c999, etc.
-          row[match_data[1].to_i] #Get column by integer
+        elsif (match_data = c.to_s.match(/^c([01-9]+)$/)).present? # Expecting column numbers to be c0, c1, c999, etc.
+          row[match_data[1].to_i] # Get column by integer
         else
           raise OmniError.new('Expecting a column name or cX where X is the row number')
         end
@@ -391,18 +391,14 @@ EOF
         self.parent = parent
       end
 
-      def get(row, column_name_or_number)
-        parent.get(row, column_name_or_number)
-      end
+      delegate :get, to: :parent
 
       # Assumes the rule only has one child
       def rule
         rules.first
       end
 
-      def to_s
-        rules.to_s
-      end
+      delegate :to_s, to: :rules
     end
 
     class RuleDirect < Rule
@@ -441,7 +437,7 @@ EOF
         if format.present?
           Date.strptime(date_string, format).strftime('%d/%m/%Y')
         else
-          Date.parse(date_string).strftime('%d/%m/%Y') #Throws error if invalid
+          Date.parse(date_string).strftime('%d/%m/%Y') # Throws error if invalid
         end
       end
 
@@ -478,11 +474,11 @@ EOF
         @matches = rhash.fetch(:match)
 
         @then = rhash.fetch(:then)
-        @positive_matches = @matches.map { |match| Rule.create(@then, parent) }
+        @positive_matches = @matches.map { |_match| Rule.create(@then, parent) }
 
         @else = rhash[:else]
         @negative_matches = if @else
-          @matches.map { |match| Rule.create(@else, parent) }
+          @matches.map { |_match| Rule.create(@else, parent) }
         else
           []
         end
@@ -520,7 +516,7 @@ EOF
       def initialize
       end
 
-      def process(row)
+      def process(_row)
         ""
       end
     end
@@ -537,9 +533,7 @@ EOF
         self.parent = parent
       end
 
-      def get(row, column_name_or_number)
-        parent.get(row, column_name_or_number)
-      end
+      delegate :get, to: :parent
 
       def to_s
         {blanks: blanks, matches: matches, not_matches: not_matches}.inspect

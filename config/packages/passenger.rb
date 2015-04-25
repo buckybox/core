@@ -5,7 +5,7 @@ package :passenger, :provides => :appserver do
 
   gem 'passenger', :version => version do
     # Install nginx and the module
-    #binaries.each {|bin| post :install, "ln -s usr/local/ruby/bin/#{bin} /usr/local/bin/#{bin}"}
+    # binaries.each {|bin| post :install, "ln -s usr/local/ruby/bin/#{bin} /usr/local/bin/#{bin}"}
     post :install, "sudo passenger-install-nginx-module --auto --auto-download --prefix=/usr/local/nginx"
     post :install, "echo ** Nginx installed by passenger gem **"
   end

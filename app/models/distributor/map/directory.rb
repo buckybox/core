@@ -1,5 +1,4 @@
 class Distributor::Map::Directory
-
   def self.generate
     directory = new
     directory.generate
@@ -59,5 +58,4 @@ private
 
     ]
   end
-
 end

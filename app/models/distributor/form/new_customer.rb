@@ -1,7 +1,6 @@
 require_relative "edit_customer_profile_fields"
 
 class Distributor::Form::NewCustomer
-
   include Distributor::Form::EditCustomerProfileFields
   include Distributor::Form::EditCustomerDeliveryDetailsFields
 
@@ -16,5 +15,4 @@ protected
     args = profile_address_args.merge(delivery_details_address_args)
     args.merge(customer: customer)
   end
-
 end

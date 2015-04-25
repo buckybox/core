@@ -22,6 +22,6 @@ Time::DATE_FORMATS[:date_short_month] = "%d %b"
 Time::DATE_FORMATS[:day_month_date_year] = "%A, %B %d, %Y"
 Time::DATE_FORMATS[:transaction] = "%d %b '%y"
 Time::DATE_FORMATS[:bank] = "%Y%m%d%H%M%S"
-Time::DATE_FORMATS[:pretty] = lambda { |time| time.strftime("%a, %b %e at %l:%M") + time.strftime("%p").downcase }
+Time::DATE_FORMATS[:pretty] = ->(time) { time.strftime("%a, %b %e at %l:%M") + time.strftime("%p").downcase }
 Time::DATE_FORMATS[:csv_output] = '%d/%b/%Y'
 Time::DATE_FORMATS[:date_picker] = "%d %b '%y"

@@ -10,7 +10,7 @@ class Distributor::DistributorsController < Distributor::ResourceController
     end
   end
 
-  protected
+protected
 
   def resource
     current_distributor

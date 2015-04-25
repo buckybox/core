@@ -2,7 +2,6 @@ require 'active_support/concern'
 require_relative "../form"
 
 module Distributor::Form::EditCustomerDeliveryDetailsFields
-
   extend ActiveSupport::Concern
   include Distributor::Form
   include Customer::AddressValidations
@@ -45,5 +44,4 @@ module Distributor::Form::EditCustomerDeliveryDetailsFields
       }
     end
   end
-
 end

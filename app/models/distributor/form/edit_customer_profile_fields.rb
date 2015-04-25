@@ -2,7 +2,6 @@ require 'active_support/concern'
 require_relative "../form"
 
 module Distributor::Form::EditCustomerProfileFields
-
   extend ActiveSupport::Concern
   include Distributor::Form
   include Customer::PhoneValidations
@@ -13,8 +12,8 @@ module Distributor::Form::EditCustomerProfileFields
     attribute :last_name,                 String
     attribute :tag_list,                  String
     attribute :email,                     String
-    attribute :balance_threshold,         Float,   default: ->(obj, attr) { obj.customer.balance_threshold }
-    attribute :discount,                  Float,   default: ->(obj, attr) { obj.customer.discount }
+    attribute :balance_threshold,         Float,   default: ->(obj, _attr) { obj.customer.balance_threshold }
+    attribute :discount,                  Float,   default: ->(obj, _attr) { obj.customer.discount }
     attribute :special_order_preference,  String
 
     def_delegators :distributor,
@@ -67,5 +66,4 @@ module Distributor::Form::EditCustomerProfileFields
       }
     end
   end
-
 end

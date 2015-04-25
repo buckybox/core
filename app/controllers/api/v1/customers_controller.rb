@@ -1,5 +1,5 @@
 class Api::V1::CustomersController < Api::V1::BaseController
-  before_filter :fetch_json_body, only: [:create, :update]
+  before_action :fetch_json_body, only: [:create, :update]
 
   def_param_group :address do
     # :nocov:
@@ -80,9 +80,7 @@ class Api::V1::CustomersController < Api::V1::BaseController
   def show
     cust_id = params[:id]
     @customer = @distributor.customers.find_by(id: cust_id)
-    if @customer.nil?
-      not_found
-    end
+    not_found if @customer.nil?
   end
 
   api :POST, '/customers',  "Create a new customer"

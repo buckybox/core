@@ -122,10 +122,10 @@ class Distributor < ActiveRecord::Base
   end
 
   def self.active
-    where("current_sign_in_at > ?", 22.days.ago).
-    where("sign_in_count > ?", 4).
-    select { |d| d.transactional_customer_count > 9}.
-    sort_by(&:transactional_customer_count).reverse
+    where("current_sign_in_at > ?", 22.days.ago)
+    .where("sign_in_count > ?", 4)
+    .select { |d| d.transactional_customer_count > 9}
+    .sort_by(&:transactional_customer_count).reverse
   end
 
   def self.refresh_webstore_caches
@@ -226,7 +226,7 @@ class Distributor < ActiveRecord::Base
   end
 
   def mark_as_seen!
-    touch(:last_seen_at) #No validations or callbacks are performed
+    touch(:last_seen_at) # No validations or callbacks are performed
   end
 
   def email_from(email: support_email)
@@ -245,7 +245,7 @@ class Distributor < ActiveRecord::Base
   def separate_bucky_fee?
     ActiveSupport::Deprecation.warn("Distributor#separate_bucky_fee? is deprecated", caller(2))
 
-    read_attribute(:separate_bucky_fee)
+    self[:separate_bucky_fee]
   end
 
   def consumer_delivery_fee_cents
@@ -308,7 +308,7 @@ class Distributor < ActiveRecord::Base
     successful &= dates_packing_lists.mark_all_as_auto_packed     if dates_packing_lists
     successful &= dates_delivery_lists.mark_all_as_auto_delivered if dates_delivery_lists
 
-    return successful
+    successful
   end
 
   def local_time_zone
@@ -561,7 +561,6 @@ private
       self.email.strip!
       self.email.downcase!
     end
-
 
     self.support_email = self.email if self.support_email.blank?
   end

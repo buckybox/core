@@ -8,7 +8,7 @@ class PackingList < ActiveRecord::Base
   validates_presence_of :distributor_id, :date
   validates_uniqueness_of :date, scope: :distributor_id
 
-  default_scope order(:date)
+  default_scope { order(:date) }
 
   scope :packed, where(status: 'packed')
 
@@ -54,6 +54,6 @@ class PackingList < ActiveRecord::Base
       result &= package.save
     end
 
-    return result
+    result
   end
 end

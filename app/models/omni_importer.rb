@@ -41,7 +41,7 @@ class OmniImporter < ActiveRecord::Base
     rows =  Bucky::TransactionImports::OmniImport.csv_read(csv_path)
     @omni_import = Bucky::TransactionImports::OmniImport.new(rows, YAML.load(rules))
 
-    return self
+    self
   end
 
   def rows
@@ -67,5 +67,4 @@ class OmniImporter < ActiveRecord::Base
   def header?
     Bucky::TransactionImports::OmniImport.new([], YAML.load(rules)).header?
   end
-
 end

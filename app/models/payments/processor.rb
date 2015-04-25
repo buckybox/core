@@ -9,7 +9,7 @@ class Payments::Processor
     if import_transaction_list.can_process?
       ImportTransactionList.transaction do
         processed_data = @import_transaction_list.process_import_transactions_attributes(attributes)
-        @import_transaction_list.process_attributes(processed_data) #returns true if saved
+        @import_transaction_list.process_attributes(processed_data) # returns true if saved
       end
     else
       false
