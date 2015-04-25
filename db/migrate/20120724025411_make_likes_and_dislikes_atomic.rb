@@ -111,7 +111,7 @@ class MakeLikesAndDislikesAtomic < ActiveRecord::Migration
     items = items.map { |s| remove_common_non_item_words_and_format(s) }
     items = items.reject { |s| s.empty? || s.scan(/\w+/).size > 2 }
 
-    return items
+    items
   end
 
   def remove_common_non_item_words_and_format(string)
@@ -151,7 +151,7 @@ class MakeLikesAndDislikesAtomic < ActiveRecord::Migration
 
     string = string.squeeze(' ').strip.singularize.titleize
 
-    return string
+    string
   end
 end
 

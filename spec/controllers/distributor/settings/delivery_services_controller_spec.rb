@@ -12,7 +12,7 @@ describe Distributor::Settings::DeliveryServicesController do
         post :create, {
           delivery_service: {
             name: 'yoda', fee: '34', schedule_rule_attributes: {mon: '1', tue: '1', wed: '0', thu: '0',
-            fri: '0', sat: '0', sun: '0'}, instructions: 'instructions'
+                                                                fri: '0', sat: '0', sun: '0'}, instructions: 'instructions'
           }
         }
       end
@@ -34,18 +34,18 @@ describe Distributor::Settings::DeliveryServicesController do
     context "with attached orders" do
       before do
         @delivery_service = Fabricate(:delivery_service,
-                                        distributor: @distributor,
-                                        schedule_rule:
-                                          Fabricate(:schedule_rule_weekly, thu: false)
+          distributor: @distributor,
+          schedule_rule:
+            Fabricate(:schedule_rule_weekly, thu: false)
                                      )
         @order = Fabricate(:recurring_order,
-                            schedule_rule:
-                              Fabricate(:schedule_rule_weekly, thu: false),
-                            account:
-                              Fabricate(:customer,
-                                        distributor: @delivery_service.distributor,
-                                        delivery_service: @delivery_service
-                                        ).account
+          schedule_rule:
+            Fabricate(:schedule_rule_weekly, thu: false),
+          account:
+            Fabricate(:customer,
+              distributor: @delivery_service.distributor,
+              delivery_service: @delivery_service
+                      ).account
                          )
       end
 

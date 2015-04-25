@@ -18,7 +18,6 @@ class Order < ActiveRecord::Base
   has_many :excluded_line_items, through: :exclusions, source: :line_item
   has_many :substituted_line_items, through: :substitutions, source: :line_item
 
-
   has_many :extras, through: :order_extras
 
   belongs_to :extras_packing_list, class_name: PackingList
@@ -30,7 +29,7 @@ class Order < ActiveRecord::Base
   scope :inactive, where(active: false)
 
   after_save :check_halted_status
-  after_save :update_next_occurrence #This is an after call because it works at the database level and requires the information to be commited
+  after_save :update_next_occurrence # This is an after call because it works at the database level and requires the information to be commited
   after_destroy :update_next_occurrence
   after_create :remind_customer_if_halted
 
@@ -50,10 +49,14 @@ class Order < ActiveRecord::Base
 
   before_validation :activate, if: :just_completed?
 
-  default_scope order('created_at DESC')
+  default_scope { order('created_at DESC') }
 
   delegate :start, :recurs?, :pause!, :remove_pause!, :paused?, :pause_date, :resume_date, :next_occurrence, :next_occurrences, :remove_day, :occurrences_between, to: :schedule_rule
   delegate :halted?, to: :customer
+  delegate :consumer_delivery_fee, to: :distributor
+  delegate :name, to: :box, prefix: true
+  delegate :name, to: :delivery_service, prefix: true
+  delegate :fee, to: :delivery_service, prefix: true
 
   after_initialize :set_default_schedule_rule
 
@@ -129,10 +132,6 @@ class Order < ActiveRecord::Base
     OrderPrice.without_delivery_fee(individual_price, quantity, extras_price, extras.present?)
   end
 
-  def consumer_delivery_fee
-    distributor.consumer_delivery_fee
-  end
-
   def total_price
     OrderPrice.with_delivery_fee(price, consumer_delivery_fee)
   end
@@ -160,7 +159,7 @@ class Order < ActiveRecord::Base
       results << { date: occurence.to_date, price: self.price, description: "Delivery for order ##{id}"}
     end
 
-    return results
+    results
   end
 
   def deactivate_for_days!(days)
@@ -182,18 +181,6 @@ class Order < ActiveRecord::Base
     schedule_rule.blank? || schedule_rule.next_occurrence.blank? || !schedule_rule.has_at_least_one_day?
   end
 
-  def box_name
-    box.name
-  end
-
-  def delivery_service_name
-    delivery_service.name
-  end
-
-  def delivery_service_fee
-    delivery_service.fee
-  end
-
   def has_exclusions?
     !exclusions.empty?
   end
@@ -211,7 +198,7 @@ class Order < ActiveRecord::Base
     result += '+L' if has_exclusions?
     result += '+D' if has_substitutions?
 
-    return result.upcase
+    result.upcase
   end
 
   def deactivate
@@ -330,7 +317,7 @@ class Order < ActiveRecord::Base
       result_string << " / Substitute #{substitutions_string}" unless substitutions_string.blank?
     end
 
-    return result_string
+    result_string
   end
 
   alias_method :original_order_extras, :order_extras
@@ -357,7 +344,7 @@ class Order < ActiveRecord::Base
     packed_extras = original_order_extras.collect(&:to_hash)
     package.set_one_off_extra_order(self) if extras_one_off?
 
-    return packed_extras
+    packed_extras
   end
 
   def extras_processed?
@@ -422,7 +409,7 @@ class Order < ActiveRecord::Base
     end
   end
 
-  def schedule_changed(schedule_rule)
+  def schedule_changed(_schedule_rule)
     update_next_occurrence
   end
 

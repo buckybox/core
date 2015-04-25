@@ -5,7 +5,6 @@ require 'active_model/validations'
 require 'active_model/translation'
 
 class Customer::Form
-
   extend Forwardable
   extend ActiveModel::Naming
 
@@ -37,8 +36,7 @@ class Customer::Form
 
 protected
 
-  def assign_attributes(attributes)
+  def assign_attributes(_attributes)
     # just a NO OP hook
   end
-
 end

@@ -6,7 +6,6 @@ require 'active_model/validations'
 require 'active_model/translation'
 
 module Distributor::Form
-
   extend ActiveSupport::Concern
 
   included do
@@ -60,8 +59,8 @@ module Distributor::Form
       end
     end
 
-    def assign_attributes(attributes)
-      #No Op
+    def assign_attributes(_attributes)
+      # No Op
     end
 
     def customer_args
@@ -72,5 +71,4 @@ module Distributor::Form
       {}
     end
   end
-
 end

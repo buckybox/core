@@ -1,5 +1,4 @@
 class Import::Extra::Matcher
-
   def initialize(args)
     @extra   = args.fetch(:match)
     @matches = args.fetch(:from)
@@ -43,5 +42,4 @@ private
   def second_match
     @second_match ||= matches.to_a[1]
   end
-
 end

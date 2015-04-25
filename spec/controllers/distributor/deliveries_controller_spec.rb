@@ -31,7 +31,7 @@ describe Distributor::DeliveriesController do
 
     it "should update the position of a delivery when placed between two others" do
       delivery_list = mock_model(DeliveryList)
-      delivery_ids = ['2', '1', '3']
+      delivery_ids = %w(2 1 3)
       expect(delivery_list).to receive(:reposition).with(delivery_ids)
       delivery_lists = double('DeliveryLists')
       allow(delivery_lists).to receive(:find_by_date).with(@date_string).and_return(delivery_list)
@@ -40,5 +40,4 @@ describe Distributor::DeliveriesController do
       post :reposition, {date: @date_string, delivery: delivery_ids}
     end
   end
-  
 end

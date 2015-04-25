@@ -58,7 +58,7 @@ module SalesCsv
       delivery.formated_delivery_number if delivery
     end
 
-    #NOTE: Keeping this due to legacy CSV convention but nothing in system for it yet
+    # NOTE: Keeping this due to legacy CSV convention but nothing in system for it yet
     def delivery_pickup_point_name
       nil
     end

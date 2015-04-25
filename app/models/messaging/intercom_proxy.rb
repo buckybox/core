@@ -17,7 +17,7 @@ module Messaging
       user = find_user(id)
       return if user.blank?
 
-      attrs.each { |key, value| user.send("#{key.to_s}=", value) }
+      attrs.each { |key, value| user.send("#{key}=", value) }
       user.save
     end
 
@@ -83,7 +83,7 @@ module Messaging
       ::Intercom::Tag.untag_users(name, [intercom_user.id])
     end
 
-   private
+  private
 
     def retryable_options
       {

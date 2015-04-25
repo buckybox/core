@@ -4,7 +4,7 @@ class UpdateRouteSchedules < ActiveRecord::Migration
     ScheduleRule.reset_column_information
 
     Route.all.each do |route|
-      #Make route valid if it isn't
+      # Make route valid if it isn't
       route.update_column(:area_of_service, ".") if route.area_of_service.blank?
       route.update_column(:estimated_delivery_time, ".") if route.estimated_delivery_time.blank?
 

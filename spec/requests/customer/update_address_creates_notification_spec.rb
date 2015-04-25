@@ -28,7 +28,6 @@ describe "Updates address" do
         put_via_redirect customer_update_delivery_address_path, {}
         expect(response.body).to match 'Your delivery address has been successfully updated'
 
-
         distributor_should_not_include_notifications distributor
       end
     end

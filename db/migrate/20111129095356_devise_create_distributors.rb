@@ -1,6 +1,6 @@
 class DeviseCreateDistributors < ActiveRecord::Migration
   def change
-    create_table(:distributors) do |t|## Database authenticatable
+    create_table(:distributors) do |t| ## Database authenticatable
       t.string :email,              :null => false, :default => ""
       t.string :encrypted_password, :null => false, :default => ""
 
@@ -47,5 +47,4 @@ class DeviseCreateDistributors < ActiveRecord::Migration
     add_index :distributors, :unlock_token,         :unique => true
     add_index :distributors, :authentication_token, :unique => true
   end
-
 end

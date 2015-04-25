@@ -48,7 +48,7 @@ module SalesCsv
     end
 
     def sorted_and_grouped
-      sorter.grouped_by_boxes(items).flat_map { |box, array| array }
+      sorter.grouped_by_boxes(items).flat_map { |_box, array| array }
     end
 
     def sorted_by_dso

@@ -156,7 +156,7 @@ class Delivery < ActiveRecord::Base
     desc_str = (quantity > 1 ? "(#{quantity}x) " : '')
     desc_str += package.contents_description
 
-    return desc_str
+    desc_str
   end
 
   def self.matching_dso(delivery_sequence_order)
@@ -220,9 +220,7 @@ private
       errors.add(:base, 'The delivery could not be destroyed.')
     end
 
-    unless order.save
-      errors.add(:base, 'The order could not be saved.')
-    end
+    errors.add(:base, 'The order could not be saved.') unless order.save
   end
 
   def add_to_schedule
@@ -230,9 +228,7 @@ private
       errors.add(:base, 'There is no "new delivery" to add to the schedule so this status change can not be completed.')
     end
 
-    unless order.save
-      errors.add(:base, 'The order could not be saved.')
-    end
+    errors.add(:base, 'The order could not be saved.') unless order.save
   end
 
   def tracking

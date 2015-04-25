@@ -1,5 +1,4 @@
 class ImportTransactionList < ActiveRecord::Base
-
   belongs_to :distributor
   has_many :import_transactions, autosave: true, validate: true, dependent: :destroy
   belongs_to :omni_importer
@@ -36,7 +35,7 @@ class ImportTransactionList < ActiveRecord::Base
   # Used to move the csv_files to the new directory private_uploads
   def move_old_csv_file
     original_path = [nil, "omni_importer", "bnz", "kiwibank", "anz", "national", "paypal", "reo_uk", "st_george_au", "uk_coop_bank", "uk_lloyds_tsb"].collect do|f|
-      ["#{Rails.root}/public/system/uploads/payments/csv", f, "#{read_attribute(:csv_file)}"].compact.join('/')
+      ["#{Rails.root}/public/system/uploads/payments/csv", f, "#{self[:csv_file]}"].compact.join('/')
     end.find{|path| File.exist?(path)}
     unless original_path.blank?
       FileUtils.mkdir_p(File.dirname(csv_file.to_s))
@@ -69,7 +68,7 @@ class ImportTransactionList < ActiveRecord::Base
       import_transactions << ImportTransaction.new_from_row(row, self, distributor)
     end
 
-    return import_transactions
+    import_transactions
   end
 
   def csv_parser
@@ -78,7 +77,7 @@ class ImportTransactionList < ActiveRecord::Base
 
     @parser = omni_importer.import(csv_file.current_path)
 
-    return @parser
+    @parser
   end
 
   def file_format
@@ -91,17 +90,17 @@ class ImportTransactionList < ActiveRecord::Base
     transactions_attributes = import_transaction_list_attributes[:import_transactions_attributes]
 
     # Pull out the non customer_ids (duplicate, not_a_customer, etc..)
-    transactions_attributes.each do |id, transaction_attributes|
+    transactions_attributes.each do |_id, transaction_attributes|
       ImportTransaction.process_attributes(transaction_attributes)
     end
 
     # Remove any customers which shouldn't be here
     hash_customer_ids = distributor.customer_ids.inject({}) { |hash, element| hash.merge(element.to_s => true) }
-    transactions_attributes = transactions_attributes.select do |id, transaction_attributes|
+    transactions_attributes = transactions_attributes.select do |_id, transaction_attributes|
       hash_customer_ids.key?(transaction_attributes[:customer_id])
     end
 
-    return import_transaction_list_attributes
+    import_transaction_list_attributes
   end
 
   def process_attributes(attr)

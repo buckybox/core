@@ -1,5 +1,4 @@
 class ImportTransaction < ActiveRecord::Base
-
   belongs_to :import_transaction_list
   has_one :distributor, through: :import_transaction_list
   belongs_to :customer
@@ -19,7 +18,7 @@ class ImportTransaction < ActiveRecord::Base
                  MATCH_NOT_A_CUSTOMER => 1,
                  MATCH_DUPLICATE => 2,
                  MATCH_UNABLE_TO_MATCH => 3}
-  MATCH_SELECT = MATCH_TYPES.except(MATCH_MATCHED).collect{|symbol, index| [symbol.humanize, symbol]}
+  MATCH_SELECT = MATCH_TYPES.except(MATCH_MATCHED).collect{|symbol, _index| [symbol.humanize, symbol]}
 
   scope :ordered, order("transaction_date DESC, created_at DESC")
   scope :draft, where(['import_transactions.draft = ?', true])
@@ -46,7 +45,6 @@ class ImportTransaction < ActiveRecord::Base
 
   delegate :account, to: :import_transaction_list
   delegate :currency, to: :distributor
-
 
   def self.new_from_row(row, import_transaction_list, distributor)
     match_result = row.single_customer_match(distributor)
@@ -96,11 +94,11 @@ class ImportTransaction < ActiveRecord::Base
 
   def match=(m)
     raise "#{m} was not in #{MATCH_TYPES}" unless MATCH_TYPES.include?(m)
-    write_attribute :match, MATCH_TYPES[m]
+    self[:match] = MATCH_TYPES[m]
   end
 
   def match
-    MATCH_TYPES.key(read_attribute(:match))
+    MATCH_TYPES.key(self[:match])
   end
 
   def match_id
@@ -124,7 +122,7 @@ class ImportTransaction < ActiveRecord::Base
   end
 
   def raw_data
-    read_attribute(:raw_data) || {}
+    self[:raw_data] || {}
   end
 
   def remove!
@@ -145,7 +143,7 @@ class ImportTransaction < ActiveRecord::Base
       transaction_attributes['match'] = ImportTransaction::MATCH_MATCHED
     end
 
-    return transaction_attributes
+    transaction_attributes
   end
 
   def payment_type
@@ -211,5 +209,4 @@ private
       "Refund made by #{payment_type}"
     end
   end
-
 end

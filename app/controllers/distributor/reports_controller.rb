@@ -1,5 +1,4 @@
 class Distributor::ReportsController < Distributor::BaseController
-
   def index
   end
 
@@ -14,5 +13,4 @@ class Distributor::ReportsController < Distributor::BaseController
     tracking.event(current_distributor, "exported_account_history") unless current_admin.present?
     send_csv(report.name, report.data)
   end
-
 end

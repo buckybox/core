@@ -5,7 +5,8 @@ describe Metrics do
     let(:keys) do %w(
       new_distributors_last_7_days
       new_transactional_customers_last_7_days
-    ) end
+    )
+    end
 
     it "dumps the metrics" do
       Metrics.calculate_and_store_for_munin

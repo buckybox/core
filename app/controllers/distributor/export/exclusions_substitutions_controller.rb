@@ -1,5 +1,4 @@
 class Distributor::Export::ExclusionsSubstitutionsController < Distributor::BaseController
-
   def index
     date = Date.parse(params[:date])
     key = Distributor::Export::Utils.determine_type(params)
@@ -8,5 +7,4 @@ class Distributor::Export::ExclusionsSubstitutionsController < Distributor::Base
 
     send_csv("bucky-box-excludes-substitutes-export-#{date.iso8601}", csv_string)
   end
-
 end

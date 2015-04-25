@@ -1,7 +1,7 @@
 class SignUpWizardController < ApplicationController
   layout 'sign_up_wizard'
 
-  before_filter :set_cors_headers
+  before_action :set_cors_headers
 
   def form
     @country = Bucky::Geolocation.get_country(request.remote_ip)

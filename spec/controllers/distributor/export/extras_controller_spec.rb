@@ -7,7 +7,7 @@ describe Distributor::Export::ExtrasController do
 
   before do
     @distributor.save!
-    @post = lambda { post :index, export_extras: {date: date}}
+    @post = -> { post :index, export_extras: {date: date}}
   end
 
   it "downloads a csv" do

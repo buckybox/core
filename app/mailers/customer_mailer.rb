@@ -1,5 +1,4 @@
 class CustomerMailer < ApplicationMailer
-
   def login_details(customer)
     @distributor = customer.distributor
     @customer = customer
@@ -81,5 +80,4 @@ private
   def set_locale(customer)
     I18n.locale = customer.locale
   end
-
 end

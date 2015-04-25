@@ -63,7 +63,7 @@ private
     metrics = classes.inject({}) do |hash, (key,klass)|
       metric_key = "new_#{key}_last_24_hours"
 
-      hash.merge!(metric_key => -> {
+      hash.merge!(metric_key => lambda {
         klass.where(created_at: last_24_hours).count
       })
     end
@@ -98,10 +98,10 @@ CONFIG
     last_7_days = (now - 7.days)..now
 
     metrics = {
-      "new_distributors_last_7_days" => -> {
+      "new_distributors_last_7_days" => lambda {
         Distributor.where(created_at: last_7_days).count
       },
-      "new_transactional_customers_last_7_days" => -> {
+      "new_transactional_customers_last_7_days" => lambda {
         Distributor.all.sum do |distributor|
           distributor.new_transactional_customer_count
         end

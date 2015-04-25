@@ -35,15 +35,17 @@ class Box < ActiveRecord::Base
   default_value_for :substitutions_limit, 0
   default_value_for :exclusions_limit, 0
 
-  default_scope order(:name)
+  default_scope { order(:name) }
   scope :not_hidden, where(hidden: false)
 
   def exclusions?; dislikes?; end
+
   def substitutions?; likes?; end
+
   def visible; !hidden; end
 
   def visible=(value)
-    write_attribute(:hidden, !value.to_bool)
+    self[:hidden] = !value.to_bool
   end
 
   def extras_allowed?
@@ -84,7 +86,7 @@ class Box < ActiveRecord::Base
   end
 
   def substitutions_limit
-    read_attribute(:substitutions_limit) || 0
+    self[:substitutions_limit] || 0
   end
 
   def substitutions_unlimited?
@@ -92,7 +94,7 @@ class Box < ActiveRecord::Base
   end
 
   def exclusions_limit
-    read_attribute(:exclusions_limit) || 0
+    self[:exclusions_limit] || 0
   end
 
   def exclusions_unlimited?

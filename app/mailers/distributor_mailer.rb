@@ -1,13 +1,12 @@
 class DistributorMailer < ApplicationMailer
-
   def welcome(distributor)
     @distributor = distributor
 
     headers['X-MC-Tags'] = "distributor,welcome"
 
     send_via_gmail mail to: @distributor.email_to,
-         from: "Will Lau <#{Figaro.env.support_email}>",
-         subject: "#{@distributor.name}, welcome to Bucky Box!"
+                        from: "Will Lau <#{Figaro.env.support_email}>",
+                        subject: "#{@distributor.name}, welcome to Bucky Box!"
   end
 
   def bank_setup(distributor, bank_name)
@@ -17,8 +16,8 @@ class DistributorMailer < ApplicationMailer
     headers['X-MC-Tags'] = "distributor,bank_setup"
 
     send_via_gmail mail to: @distributor.email_to,
-         from: "Bucky Box Support <#{Figaro.env.support_email}>",
-         subject: "[Bucky Box] Setting up your bank feed"
+                        from: "Bucky Box Support <#{Figaro.env.support_email}>",
+                        subject: "[Bucky Box] Setting up your bank feed"
   end
 
 private
@@ -35,5 +34,4 @@ private
 
     email
   end
-
 end

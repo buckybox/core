@@ -21,11 +21,9 @@ class Transaction < ActiveRecord::Base
     transactionable_type == 'Account' || transactionable.manual? if transactionable
   end
 
-  def customer
-    account.customer
-  end
+  delegate :customer, to: :account
 
-  def self.dummy(amount, description, date)
+  def self.dummy(_amount, description, date)
     OpenStruct.new(
       description: description,
       amount: CrazyMoney.zero,

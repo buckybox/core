@@ -15,7 +15,7 @@ class DeliveryService < ActiveRecord::Base
 
   validates_presence_of :distributor_id, :name, :fee, :instructions, :schedule_rule
 
-  default_scope order(:name)
+  default_scope { order(:name) }
 
   delegate :local_time_zone, to: :distributor, allow_nil: true
 

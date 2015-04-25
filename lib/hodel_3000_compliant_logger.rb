@@ -6,21 +6,20 @@ require 'English'
 # A logger for use with pl_analyze and other tools that expect syslog-style log output.
 
 class Hodel3000CompliantLogger < Logger
-
   ##
   # Note: If you are using FastCGI you may need to hard-code the hostname here instead of using Socket.gethostname
 
-  def format_message(severity, timestamp, progname, msg)
+  def format_message(_severity, timestamp, _progname, msg)
     "#{timestamp.strftime("%b %d %H:%M:%S")} #{hostname} rails[#{$PID}]: #{msg2str(msg).gsub(/\n/, '').lstrip}\n"
   end
 
-  # original method, pre-patch for Exception handling:
-  #
-  # def format_message(severity, timestamp, msg, progname)
-  #   "#{timestamp.strftime("%b %d %H:%M:%S")} #{Socket.gethostname.split('.').first} rails[#{$PID}]: #{progname.gsub(/\n/, '').lstrip}\n"
-  # end
+# original method, pre-patch for Exception handling:
+#
+# def format_message(severity, timestamp, msg, progname)
+#   "#{timestamp.strftime("%b %d %H:%M:%S")} #{Socket.gethostname.split('.').first} rails[#{$PID}]: #{progname.gsub(/\n/, '').lstrip}\n"
+# end
 
-  private
+private
 
   def hostname
     @parsed_hostname ||= Socket.gethostname.split('.').first
@@ -37,5 +36,4 @@ class Hodel3000CompliantLogger < Logger
       msg.inspect
     end
   end
-
 end

@@ -20,7 +20,7 @@ package :certs do
   end
 
   noop do
-    post :install, lambda{Capistrano::CLI.ui.ask("Please log into the server and decrypt #{certs_remote}certs.tar.gzip.gpg with this command 'sudo gpg #{certs_remote}certs.tar.gzip.gpg' then continue here. (Press enter)"); "echo noop"}
+    post :install, -> { Capistrano::CLI.ui.ask("Please log into the server and decrypt #{certs_remote}certs.tar.gzip.gpg with this command 'sudo gpg #{certs_remote}certs.tar.gzip.gpg' then continue here. (Press enter)"); "echo noop" }
     post :install, "tar -zxf #{certs_remote}certs.tar.gzip -C #{certs_remote}"
     post :install, "cp #{certs_remote}#{key_name}.key /etc/ssl/private/"
   end

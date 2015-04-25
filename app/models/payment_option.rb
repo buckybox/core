@@ -26,9 +26,7 @@ class PaymentOption
       option.to_sym
     end
 
-    def to_s
-      option.to_s
-    end
+    delegate :to_s, to: :option
 
     def description
       distributor.payment_options.each do |description, symbol|

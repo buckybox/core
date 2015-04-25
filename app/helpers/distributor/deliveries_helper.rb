@@ -4,7 +4,7 @@ module Distributor::DeliveriesHelper
   def calendar_nav_length(dates, months)
     nav_length = dates.size + months.size
 
-    return "width:#{nav_length * CALENDAR_DATE_SIZE}px;"
+    "width:#{nav_length * CALENDAR_DATE_SIZE}px;"
   end
 
   def date_class(date)
@@ -23,7 +23,7 @@ module Distributor::DeliveriesHelper
       element_id = 'scroll-to'
     end
 
-    return element_id
+    element_id
   end
 
   def count_class(current_distributor, date)
@@ -55,7 +55,7 @@ module Distributor::DeliveriesHelper
   end
 
   def order_delivery_count(calendar_array, date, delivery_service = nil)
-    data = calendar_array.select{|cdate, cdata| cdate == date}[0][1]
+    data = calendar_array.select{|cdate, _cdata| cdate == date}[0][1]
 
     if delivery_service
       Order.find(data[:order_ids]).select{|o| o.delivery_service(date) == delivery_service}.size
@@ -86,7 +86,7 @@ module Distributor::DeliveriesHelper
     end
   end
 
-  #TODO: Move the following address methods into a mapping module that is included in orders, deliveries, and packages (or something like that)
+  # TODO: Move the following address methods into a mapping module that is included in orders, deliveries, and packages (or something like that)
   def item_address(item)
     if item.is_a?(Order)
       item.account.customer.address.join
@@ -110,7 +110,7 @@ module Distributor::DeliveriesHelper
   end
 
   def map_pin(item)
-    pin = %q(<i class='icon-map-marker'></i>)
+    pin = "<i class='icon-map-marker'></i>"
     link_to_google_maps(item_address(item), link_text: pin, link_class: 'map-pin')
   end
 

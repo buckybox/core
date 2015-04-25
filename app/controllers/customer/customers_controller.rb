@@ -1,5 +1,4 @@
 class Customer::CustomersController < Customer::BaseController
-
   def update_contact_details
     args = form_args(:customer_form_update_contact_details)
     form = Customer::Form::UpdateContactDetails.new(args)
@@ -40,5 +39,4 @@ private
   def formatted_error_messages(form)
     form.errors.full_messages.join(", ").downcase
   end
-
 end

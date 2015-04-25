@@ -4,10 +4,10 @@ class Distributor::OrdersController < Distributor::ResourceController
 
   respond_to :html, :json
 
-  before_filter :filter_params, only: [:create, :update]
-  before_filter :get_order, only: [:pause, :remove_pause, :resume, :remove_resume, :pause_dates, :resume_dates]
+  before_action :filter_params, only: [:create, :update]
+  before_action :get_order, only: [:pause, :remove_pause, :resume, :remove_resume, :pause_dates, :resume_dates]
 
-  before_filter :check_for_boxes, only: [:new]
+  before_action :check_for_boxes, only: [:new]
 
   def new
     new! do

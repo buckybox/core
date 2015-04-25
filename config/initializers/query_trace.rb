@@ -7,7 +7,7 @@ if Rails.env.development?
     include Term::ANSIColor
     attr_accessor :trace_queries
 
-    def sql(event)  #:nodoc:
+    def sql(_event)  #:nodoc:
       return unless QueryTrace.enabled? && logger.debug? && Rails.env.development?
       stack = Rails.backtrace_cleaner.clean(caller)
       first_line = stack.shift
@@ -83,5 +83,5 @@ if Rails.env.development?
     puts "#{rm_noise}=> QueryTrace #{QueryTrace.status}"
   end
 
-  #QueryTrace.enable!
+  # QueryTrace.enable!
 end

@@ -1,7 +1,7 @@
 class ApplicationController < ActionController::Base
   protect_from_forgery
 
-  before_filter :miniprofiler
+  before_action :miniprofiler
 
   if Rails.env.production? || Rails.env.staging?
     before_bugsnag_notify :add_user_info_to_bugsnag
@@ -9,8 +9,8 @@ class ApplicationController < ActionController::Base
 
   attr_reader :current_currency
 
-  before_filter :set_user_time_zone
-  before_filter :customer_smart_sign_in
+  before_action :set_user_time_zone
+  before_action :customer_smart_sign_in
 
   unless Rails.env.development?
     analytical modules: [:google], use_session_store: true
@@ -22,11 +22,11 @@ class ApplicationController < ActionController::Base
 
 protected
 
-  before_filter def set_locale
+  before_action def set_locale
     I18n.locale = find_locale
   end
 
-  before_filter def set_currency
+  before_action def set_currency
     @current_currency = find_currency
     CrazyMoney::Configuration.current_currency = current_currency
   end

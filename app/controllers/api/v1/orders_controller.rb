@@ -1,5 +1,5 @@
 class Api::V1::OrdersController < Api::V1::BaseController
-  before_filter :fetch_json_body, only: :create
+  before_action :fetch_json_body, only: :create
 
   def_param_group :extra do
     param :id

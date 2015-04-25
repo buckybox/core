@@ -10,9 +10,9 @@ class LoadDistributorSettings < ActiveRecord::Migration
       CSV.parse(csv, headers: true) do |row|
         country = Country.find_by_name(row['Country Name']) || Country.new
         country.attributes = {name: row['Country Name'],
-                      default_currency: row['Currency'],
-                      default_time_zone: row['Default Time Zone'],
-                      default_consumer_fee_cents: row['Default Consumer Fee'].to_f * 100}
+                              default_currency: row['Currency'],
+                              default_time_zone: row['Default Time Zone'],
+                              default_consumer_fee_cents: row['Default Consumer Fee'].to_f * 100}
         country.save!
       end
     end

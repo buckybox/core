@@ -90,7 +90,7 @@ group :development do
 end
 
 group :test do
-  gem "fabrication", "~> 2.9.8" # TODO upgrade and fix broken specs
+  gem "fabrication", "~> 2.9.8" # TODO: upgrade and fix broken specs
   gem "database_cleaner"
   gem "therubyracer", require: false # embeded JS interpreter for our CI server
   gem "simplecov", require: false

@@ -1,6 +1,5 @@
 module Messaging
   class Distributor
-
     AUTO_MESSAGE_TAG = "[[auto-messages]]"
     WEBSTORE_ENABLED_TAG = "[webstore]-on"
     WEBSTORE_DISABLED_TAG = "[webstore]-off"

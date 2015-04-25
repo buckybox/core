@@ -104,10 +104,10 @@ class DataIntegrity
         delivery_lists = distributor.delivery_lists.find_by_date(local_date)
         delivery_count = delivery_lists ? delivery_lists.deliveries.count : 0
 
-        deduction_count = distributor.transactions.
-          where(transactionable_type: "Deduction").
-          where("display_time::date = ?", utc_date). # display_time is UTC
-          count
+        deduction_count = distributor.transactions
+          .where(transactionable_type: "Deduction")
+          .where("display_time::date = ?", utc_date) # display_time is UTC
+          .count
 
         if delivery_count != deduction_count
           error "Distributor ##{distributor.id}: #{delivery_count} deliveries on #{local_date} but #{deduction_count} deductions"

@@ -39,7 +39,7 @@ module Bucky
 
         html = fields.map do |field|
           value = resource.localised_address && resource.localised_address.public_send(field)
-          %Q{
+          %{
             <input id="#{model_name}_localised_address_#{field}" name="#{model_name}[localised_address_attributes][#{field}]" placeholder="#{field_descriptions[field]}" #{'required="required"' if field.in? required_fields} type="text" style="width: #{width}%" value="#{value}">
           }.strip
         end.join
@@ -49,7 +49,7 @@ module Bucky
     end
 
     def get_geoip_info ip_address
-      Timeout::timeout(1) do
+      Timeout.timeout(1) do
         info = Geokit::Geocoders::FreeGeoIpGeocoder.do_geocode(ip_address)
         info.success ? info : nil
       end

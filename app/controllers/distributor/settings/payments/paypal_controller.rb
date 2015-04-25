@@ -1,5 +1,5 @@
 class Distributor::Settings::Payments::PaypalController < Distributor::Settings::Payments::BaseController
-  before_filter do
+  before_action do
     @paypal = Distributor::Settings::Payments::Paypal.new(
       params.merge(distributor: current_distributor)
     )

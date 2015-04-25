@@ -33,7 +33,6 @@ feature "Manage an order", js: true do
     expect(page).not_to have_content "pausing starts"
     expect(page).not_to have_content "resuming deliveries on"
 
-
     # distributor facing UI
     simulate_distributor_sign_in
     visit distributor_customer_path(id: @customer.id)

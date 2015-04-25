@@ -1,5 +1,4 @@
 module Distributor::PaymentsHelper
-
   def show_draft_import_transaction_list(import_transaction, import_transaction_lists)
     return [] if import_transaction.blank?
     @already_shown ||= []

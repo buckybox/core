@@ -64,5 +64,4 @@ private
   def new_delivery_service
     DeliveryService.new(distributor: current_distributor).decorate
   end
-
 end

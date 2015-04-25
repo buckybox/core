@@ -1,7 +1,6 @@
 require_relative "../form"
 
 class Customer::Form::UpdateDeliveryAddress < Customer::Form
-
   include Customer::AddressValidations
 
   def_delegators :distributor,
@@ -36,5 +35,4 @@ private
       delivery_note:  delivery_note,
     }
   end
-
 end

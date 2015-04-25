@@ -1,7 +1,7 @@
 class Distributor::ResourceController < Distributor::BaseController
   inherit_resources
 
-  protected
+protected
 
   def begin_of_association_chain
     current_distributor

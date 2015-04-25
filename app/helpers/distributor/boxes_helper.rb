@@ -23,6 +23,6 @@ module Distributor::BoxesHelper
   end
 
   def customers_box_collection(customer, order, options = {})
-    box_collection(customer, options.merge(no_hidden_boxes: true, ensure_box: @order.box))
+    box_collection(customer, options.merge(no_hidden_boxes: true, ensure_box: order.box))
   end
 end

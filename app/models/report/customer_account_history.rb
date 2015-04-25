@@ -3,7 +3,6 @@ require 'csv'
 require_relative '../report'
 
 class Report::CustomerAccountHistory
-
   NAME_PREFIX = 'bucky-box-customer-account-balance-export'
 
   def initialize(args = {})
@@ -13,7 +12,7 @@ class Report::CustomerAccountHistory
   end
 
   def name
-    "#{NAME_PREFIX}-#{Report::format_date(date)}"
+    "#{NAME_PREFIX}-#{Report.format_date(date)}"
   end
 
   def data
@@ -54,6 +53,5 @@ private
   def get_customers
     distributor.customers.ordered
   end
-
 end
 

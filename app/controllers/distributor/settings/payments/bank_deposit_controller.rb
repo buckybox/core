@@ -1,5 +1,5 @@
 class Distributor::Settings::Payments::BankDepositController < Distributor::Settings::Payments::BaseController
-  before_filter do
+  before_action do
     @bank_deposit = Distributor::Settings::Payments::BankDeposit.new(
       params.merge(distributor: current_distributor)
     )

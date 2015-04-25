@@ -1,11 +1,10 @@
 class Distributor::BaseController < ApplicationController
-
   layout 'distributor'
 
-  before_filter :authenticate_distributor!
-  before_filter :mark_as_seen
-  before_filter :notifications
-  before_filter :distributor_setup
+  before_action :authenticate_distributor!
+  before_action :mark_as_seen
+  before_action :notifications
+  before_action :distributor_setup
 
   skip_after_filter :intercom_rails_auto_include
 
@@ -26,5 +25,4 @@ private
   def check_setup
     redirect_to distributor_root_url and return unless distributor_setup.finished_settings?
   end
-
 end

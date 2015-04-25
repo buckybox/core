@@ -21,7 +21,7 @@ class Package < ActiveRecord::Base
 
   attr_accessible :order, :order_id, :packing_list, :status, :position
 
-  STATUS = %w(unpacked packed) #TODO: change to state_machine next time this is touched
+  STATUS = %w(unpacked packed) # TODO: change to state_machine next time this is touched
   PACKING_METHOD = %w(manual auto)
 
   validates_presence_of :order, :packing_list_id, :status
@@ -96,7 +96,7 @@ class Package < ActiveRecord::Base
     result = "#{box_name}"
     result << ", #{Order.extras_description(order_extras)}" if order_extras.present?
 
-    return result
+    result
   end
 
   def contents_description
@@ -108,7 +108,7 @@ class Package < ActiveRecord::Base
   end
 
   def archived_substitutions
-    read_attribute(:archived_substitutions) || order.substitutions_string
+    self[:archived_substitutions] || order.substitutions_string
   end
 
   def substitutions
@@ -118,7 +118,7 @@ class Package < ActiveRecord::Base
   end
 
   def archived_exclusions
-    read_attribute(:archived_exclusions) || order.exclusions_string
+    self[:archived_exclusions] || order.exclusions_string
   end
 
   def exclusions
@@ -129,7 +129,7 @@ class Package < ActiveRecord::Base
 
   def archived_address
     if has_archived_address_details?
-      read_attribute(:archived_address)
+      self[:archived_address]
     else
       archived_address_details.join
     end

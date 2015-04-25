@@ -1,5 +1,4 @@
 class Devise::CustomFailureApp < Devise::FailureApp
-
   def respond
     if params.key?(:customer)
       details = params[:customer].dup
@@ -12,5 +11,4 @@ class Devise::CustomFailureApp < Devise::FailureApp
 
     super
   end
-
 end

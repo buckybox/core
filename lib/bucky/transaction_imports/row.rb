@@ -1,6 +1,5 @@
 module Bucky::TransactionImports
   class Row
-
     include ActiveModel::Validations
 
     attr_accessor :date_string, :amount_string, :description, :index, :raw_data, :parser, :bank_name
@@ -201,7 +200,6 @@ module Bucky::TransactionImports
     def no_other_account_matches?(customer)
       customer.distributor.accounts.where(["customers.id != ? AND accounts.balance_cents = ?", customer.id, BigDecimal.new(-100) * amount]).count.zero?
     end
-
 
     def fuzzy_match(a, b)
       Bucky::Util.fuzzy_match(a, b)

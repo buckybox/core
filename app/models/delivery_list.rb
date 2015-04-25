@@ -8,7 +8,7 @@ class DeliveryList < ActiveRecord::Base
   validates_presence_of :distributor, :date
   validates_uniqueness_of :date, scope: :distributor_id
 
-  default_scope order(:date)
+  default_scope { order(:date) }
 
   def self.collect_list(distributor, date, options = {})
     wday = date.wday
@@ -44,7 +44,7 @@ class DeliveryList < ActiveRecord::Base
       packages[position] << package
     end
 
-    packages = packages.sort.map{ |key, value| value }.flatten
+    packages = packages.sort.map{ |_key, value| value }.flatten
 
     packages.each do |package|
       order = package.order
@@ -57,7 +57,7 @@ class DeliveryList < ActiveRecord::Base
       delivery.save! if delivery.changed?
     end
 
-    return delivery_list
+    delivery_list
   end
 
   def reposition(delivery_order)
@@ -78,7 +78,7 @@ class DeliveryList < ActiveRecord::Base
     master = DeliverySequenceOrder.where(delivery_service_id: delivery_service_id, day: day).ordered.collect(&:address_hash).uniq
 
     begin
-      new_master_list = Bucky::Dso::List.sort(master, ordered_address_hashes.uniq) #Assuming .uniq is stable to the order
+      new_master_list = Bucky::Dso::List.sort(master, ordered_address_hashes.uniq) # Assuming .uniq is stable to the order
       DeliverySequenceOrder.update_ordering(new_master_list, delivery_service_id, day)
 
     rescue ArgumentError
@@ -91,7 +91,7 @@ class DeliveryList < ActiveRecord::Base
   def mark_all_as_auto_delivered
     result = true
     deliveries.ordered.each { |delivery| result &= Delivery.auto_deliver(delivery) }
-    return result
+    result
   end
 
   def has_deliveries?

@@ -2,7 +2,7 @@ require "spec_helper"
 
 # According to the RSpec docs you don't really need to test RESTful routes
 # so this group of tests should only last as long as we have to move the
-# non-RESTful routes and deal with the legacy named routes as a result. 
+# non-RESTful routes and deal with the legacy named routes as a result.
 RSpec.describe "routes for Deliveries", type: :routing do
   describe "RESTful routes" do
     describe "create" do

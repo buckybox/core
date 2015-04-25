@@ -8,7 +8,7 @@ class Bucky::Frequency
 
   [:weekly, :fortnightly, :monthly].each do |f|
     # define single?, weekly?, fortnightly? & monthly?
-    define_method "#{f.to_s}?" do
+    define_method "#{f}?" do
       @frequency == f
     end
   end

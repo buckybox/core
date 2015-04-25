@@ -45,7 +45,7 @@ class UpdateCurrencyForExistingDistributors < ActiveRecord::Migration
     # Could roll back this data but not worth it
   end
 
-  private
+private
 
   def convert_currency_to(currency, distributor_email)
     #----- Distributor model itself

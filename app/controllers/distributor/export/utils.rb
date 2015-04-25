@@ -1,6 +1,5 @@
 module Distributor::Export::Utils
-
-  module_function
+module_function
 
   def determine_type(args)
     [:deliveries, :packages, :orders].find { |key| args.key?(key) }
@@ -31,5 +30,4 @@ module Distributor::Export::Utils
     found_type = determine_type(args)
     build_csv(found_type, args) if found_type
   end
-
 end

@@ -1,7 +1,6 @@
 require 'active_support/concern'
 
 module Customer::PhoneValidations
-
   extend ActiveSupport::Concern
 
   included do

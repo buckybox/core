@@ -11,7 +11,7 @@ describe DeliveryList, :slow do
   def delivery_auto_delivering(result = true)
     delivery = mock_model(Delivery)
     expect(Delivery).to receive(:auto_deliver).with(delivery).and_return(result)
-    return delivery
+    delivery
   end
 
   describe 'when marking all as auto delivered' do
@@ -186,12 +186,12 @@ describe DeliveryList, :slow do
       end
 
       it 'should update the delivery list for the next week' do
-        allow_any_instance_of(Distributor).to receive(:generate_required_daily_lists) #TODO remove this hack to get around the constant after_save callbacks
+        allow_any_instance_of(Distributor).to receive(:generate_required_daily_lists) # TODO: remove this hack to get around the constant after_save callbacks
         delivery_list.reposition(@new_ids)
         addresses = delivery_list.deliveries.ordered.collect(&:address)
         next_packing_list = PackingList.generate_list(distributor, delivery_list.date+1.week)
         next_delivery_list = DeliveryList.generate_list(distributor, delivery_list.date+1.week)
-        allow_any_instance_of(Distributor).to receive(:generate_required_daily_lists).and_call_original #TODO remove this hack to get around the constant after_save callbacks
+        allow_any_instance_of(Distributor).to receive(:generate_required_daily_lists).and_call_original # TODO: remove this hack to get around the constant after_save callbacks
 
         expect(next_delivery_list.deliveries.ordered.collect(&:address)).to eq(addresses)
         expect(next_delivery_list.deliveries.ordered.collect(&:delivery_number)).to eq([1,2,3])

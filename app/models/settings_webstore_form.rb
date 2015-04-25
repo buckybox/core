@@ -37,7 +37,7 @@ class SettingsWebstoreForm < Form
 
   def save(distributor)
     INTERFACE.each do |k,v|
-      distributor.send("#{v.to_s}=", self.send(k))
+      distributor.send("#{v}=", self.send(k))
     end
 
     saved = distributor.save

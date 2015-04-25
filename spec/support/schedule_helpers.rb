@@ -46,7 +46,7 @@ class Time
       result = original_date
       result += one_day until result > original_date && result.wday == day
 
-      return result
+      result
     end
   end
 end

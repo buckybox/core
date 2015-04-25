@@ -16,7 +16,7 @@ class Deduction < ActiveRecord::Base
     :display_time, :deductable, :deductable_id, :deductable_type
 
   KINDS = %w(delivery unspecified)
-  SOURCES = %W(manual auto) # delivery uses both manual and auto
+  SOURCES = %w(manual auto) # delivery uses both manual and auto
 
   validates_presence_of :distributor_id, :account_id, :amount, :kind, :description, :deductable_id, :deductable_type
   validates_inclusion_of :kind, in: KINDS, message: "%{value} is not a valid kind of payment"
@@ -57,7 +57,7 @@ class Deduction < ActiveRecord::Base
       self.save
     end
 
-    return self.reversal_transaction
+    self.reversal_transaction
   end
 
   def manual?
@@ -72,7 +72,7 @@ class Deduction < ActiveRecord::Base
     reversal_transactions.find_by(['transactions.id != ?', reversal_transaction.id])
   end
 
-  private
+private
 
   def make_deduction!
     raise "This deduction has already been applied!" if self.transaction.present?
@@ -93,10 +93,9 @@ class Deduction < ActiveRecord::Base
         display_time: display_time
       )
 
-
       self.save!
     end
 
-    return self.transaction
+    self.transaction
   end
 end

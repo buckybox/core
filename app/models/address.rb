@@ -32,9 +32,7 @@ class Address < ActiveRecord::Base
     result << city unless city.blank?
     result << postcode unless postcode.blank?
 
-    if options[:with_phone]
-      result << phones.all.join(join_with)
-    end
+    result << phones.all.join(join_with) if options[:with_phone]
 
     result.join(join_with).html_safe
   end

@@ -3,7 +3,6 @@ require 'csv'
 require_relative '../report'
 
 class Report::TransactionHistory
-
   NAME_PREFIX = 'bucky-box-transaction-history-export'
   DATE_FORMAT = '%d/%b/%Y'
 
@@ -15,7 +14,7 @@ class Report::TransactionHistory
   end
 
   def name
-    "#{NAME_PREFIX}-#{Report::format_date(from)}-to-#{Report::format_date(to)}"
+    "#{NAME_PREFIX}-#{Report.format_date(from)}-to-#{Report.format_date(to)}"
   end
 
   def data
@@ -78,5 +77,4 @@ private
   def transaction_customer(transaction)
     transaction.customer
   end
-
 end

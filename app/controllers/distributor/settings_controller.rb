@@ -1,7 +1,7 @@
 class Distributor::SettingsController < Distributor::BaseController
   respond_to :html, :json
 
-  before_filter :catch_cancel
+  before_action :catch_cancel
 
   def organisation
     time = Time.new

@@ -7,9 +7,7 @@ class UpdateNullDeliveryMethods < ActiveRecord::Migration
     Delivery.all.each do |delivery|
       value = delivery.read_attribute(:delivery_method)
 
-      if value.nil?
-        delivery.update_attribute(:delivery_method, 'auto')
-      end
+      delivery.update_attribute(:delivery_method, 'auto') if value.nil?
     end
 
     rename_column :deliveries, :delivery_method, :status_change_type

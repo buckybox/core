@@ -50,13 +50,13 @@ describe Order do
         allow_any_instance_of(Distributor).to receive(:advance_days).and_return(3)
         everyday_order.pause!(Date.parse("2012-09-30"))
         expect(everyday_order.possible_resume_dates(1.week).collect(&:first)).to eq ["Thu 4 Oct",
-          "Fri 5 Oct",
-          "Sat 6 Oct",
-          "Sun 7 Oct",
-          "Mon 8 Oct",
-          "Tue 9 Oct",
-          "Wed 10 Oct",
-          "Thu 11 Oct"]
+                                                                                     "Fri 5 Oct",
+                                                                                     "Sat 6 Oct",
+                                                                                     "Sun 7 Oct",
+                                                                                     "Mon 8 Oct",
+                                                                                     "Tue 9 Oct",
+                                                                                     "Wed 10 Oct",
+                                                                                     "Thu 11 Oct"]
       end
     end
   end
@@ -316,7 +316,7 @@ describe Order do
       @extra_ids = @extras.collect(&:id)
 
       @order_extras = {@extra_ids.first.to_s => {count: 3},
-                      @extra_ids.last.to_s => {count: 1}}
+                       @extra_ids.last.to_s => {count: 1}}
 
       @box = Fabricate(:box, extras_limit: 5, distributor: @distributor)
 

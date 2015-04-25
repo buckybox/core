@@ -20,7 +20,6 @@ class UpdateScheduleHashes < ActiveRecord::Migration
       distributor_id = customer.read_attribute(:distributor_id) if customer
       distributor    = Distributor.find_by_id(distributor_id)
 
-
       convert_schedule_days_to_utc(order, distributor)
     end
 
@@ -38,7 +37,7 @@ class UpdateScheduleHashes < ActiveRecord::Migration
     # Could roll back this data but not worth it
   end
 
-  private
+private
 
   def convert_schedule_days_to_utc(object, distributor)
     if distributor
@@ -47,7 +46,7 @@ class UpdateScheduleHashes < ActiveRecord::Migration
       before_utc = (Time.zone.utc_offset > 0)
     end
 
-    schedule_hash  = YAML::load(object.read_attribute(:schedule))
+    schedule_hash  = YAML.load(object.read_attribute(:schedule))
     schedule_rules = schedule_hash[:rrules] if schedule_hash
 
     # Only need to convert rules as time are already stored in UTC time
