@@ -7,15 +7,21 @@
     %li
       %strong No new notifications
   - else
-    - @notifications.each do |notification|
+    - max_shown_notifications = 30
+    - shown_notifications = @notifications.first(max_shown_notifications)
+    - shown_notifications.each do |notification|
       %li.notification
         .message
           = notification.message.html_safe
         .date
           = time_since(notification.trigger_on)
 
+    - if @notifications.count > max_shown_notifications
+      %li
+        %strong #{@notifications.count - max_shown_notifications} more notifications not shown...
+
     %li.clear-notifications
       = form_tag(distributor_notifications_dismiss_all_path, id: 'dismiss-notifications') do
-        - @notifications.each do |notification|
+        - shown_notifications.each do |notification|
           = hidden_field_tag 'notification_ids[]', notification.id
         = link_to_function 'clear notifications', "$(this).closest('form').submit();" , {:class => 'submit_me'}
