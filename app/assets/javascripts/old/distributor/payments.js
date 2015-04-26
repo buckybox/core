@@ -1,7 +1,7 @@
 $(function() {
   window.payments = {
     load: function() {
-      $("#upload_btn").click(function(event){
+      $("#upload_btn").click(function(){
         $("#import_transaction_list_csv_file").trigger('click');
         return false;
       });
@@ -17,11 +17,8 @@ $(function() {
         return $(this).closest('form').submit();
       });
 
-      $("#upload_more_transactions_link").click(function(event) {
+      $("#upload_more_transactions_link").click(function() {
         $('#upload_error_messages').hide();
-        $("#upload_more_transactions").reveal();
-
-        return false;
       });
 
       return $("select.chosen-payee-select").change(function(event) {
