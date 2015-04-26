@@ -6,7 +6,7 @@ class Distributor::BaseController < ApplicationController
   before_action :notifications
   before_action :distributor_setup
 
-  skip_after_filter :intercom_rails_auto_include
+  skip_after_action :intercom_rails_auto_include
 
 private
 

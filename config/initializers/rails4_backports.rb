@@ -11,3 +11,9 @@ class ActiveRecord::Base
     end
   end
 end
+
+module AbstractController::Callbacks::ClassMethods
+  alias_method :before_action, :before_filter
+  alias_method :skip_before_action, :skip_before_filter
+  alias_method :skip_after_action, :skip_after_filter
+end
