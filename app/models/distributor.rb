@@ -38,6 +38,7 @@ class Distributor < ActiveRecord::Base
   DEFAULT_CURRENCY        = 'NZD'
   DEFAULT_ADVANCED_HOURS  = 18
   DEFAULT_ADVANCED_DAYS   = 3
+  MAX_ADVANCED_DAYS       = 14
   AUTOMATIC_DELIVERY_HOUR = 23
   HUMANIZED_ATTRIBUTES    = {
     email: "Account login email"
@@ -264,8 +265,10 @@ class Distributor < ActiveRecord::Base
   end
 
   def window_start_from
-    # If we have missed the cutoff point add a day so we start generation from tomorrow
-    Date.current + ( advance_hour <= Time.current.hour ? 1 : 0 ).days
+    use_local_time_zone do
+      # If we have missed the cutoff point add a day so we start generation from tomorrow
+      Date.current + ( advance_hour <= Time.current.hour ? 1 : 0 ).days
+    end
   end
 
   def beginning_of_green_zone
