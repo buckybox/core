@@ -47,26 +47,6 @@ module Distributor::DeliveriesHelper
     title.join(", ").freeze
   end
 
-  def reschedule_dates(delivery_service)
-    dates = delivery_service.schedule.next_occurrences(5, Time.current)
-    options_from_collection_for_select(dates, 'to_date', 'to_date')
-  end
-
-  def order_delivery_service_name(order, date)
-    delivery = order.delivery_for_date(date)
-    delivery.delivery_service.name if delivery
-  end
-
-  def order_delivery_count(calendar_array, date, delivery_service = nil)
-    data = calendar_array.select{|cdate, _cdata| cdate == date}[0][1]
-
-    if delivery_service
-      Order.find(data[:order_ids]).select{|o| o.delivery_service(date) == delivery_service}.size
-    else
-      data[:order_ids].size
-    end
-  end
-
   def icon_display(status, icon_status)
     'display:none;' unless status == icon_status
   end
