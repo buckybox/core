@@ -266,7 +266,7 @@ describe Distributor do
 
           specify { expect { Distributor.create_daily_lists }.to change { @d_welly.packing_lists.count + @d_welly.delivery_lists.count }.by 0 }
           specify { expect { Distributor.create_daily_lists }.to change { @d_perth.packing_lists.count + @d_perth.delivery_lists.count }.by 0 }
-          specify { expect { Distributor.create_daily_lists }.to change { @d_london.packing_lists.count + @d_london.delivery_lists.count }.by 4 }
+          specify { expect { Distributor.create_daily_lists }.to change { @d_london.packing_lists.count + @d_london.delivery_lists.count }.by 6 }
         end
 
         context 'time set to London end of day' do

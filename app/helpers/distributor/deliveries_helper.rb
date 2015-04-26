@@ -7,10 +7,6 @@ module Distributor::DeliveriesHelper
     "width:#{nav_length * CALENDAR_DATE_SIZE}px;"
   end
 
-  def date_class(date)
-    'today' if date.today?
-  end
-
   def count_selected(start_date, date_list, date)
     date = Date.parse(date) unless date.is_a?(Date)
 
@@ -26,22 +22,29 @@ module Distributor::DeliveriesHelper
     element_id
   end
 
-  def count_class(current_distributor, date)
-    delivery_list = current_distributor.delivery_lists.where(date: date).first
-    if delivery_list.blank?
-      'out_of_range'
-    elsif !delivery_list.all_finished?
-      'has_pending'
+  def date_class(distributor, date)
+    if date > distributor.window_end_at
+      return "out_of_range"
+    else
+      delivery_list = distributor.delivery_lists.find_by(date: date)
+      return "has_pending" unless delivery_list.all_finished?
     end
   end
 
-  def count_title(current_distributor, date)
-    delivery_list = current_distributor.delivery_lists.where(date: date).first
-    if delivery_list.blank?
-      'open for new orders'
-    elsif !delivery_list.all_finished?
-      'pending deliveries'
+  def date_title(distributor, date)
+    title = []
+
+    if date > distributor.window_end_at
+      title << "open for new orders"
+    else
+      delivery_list = distributor.delivery_lists.find_by(date: date)
+
+      title << (delivery_list.all_finished? ? "all delivered" : "pending deliveries")
+
+      title << "closed for new orders" if date >= distributor.window_start_from
     end
+
+    title.join(", ").freeze
   end
 
   def reschedule_dates(delivery_service)
