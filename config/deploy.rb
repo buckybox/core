@@ -40,7 +40,10 @@ namespace :deploy do
     run %( cd #{release_path} &&
       ln -nfs #{shared_path}/config/initializers/secret_token.rb #{release_path}/config/initializers/secret_token.rb &&
       ln -nfs #{shared_path}/config/database.yml #{release_path}/config/database.yml &&
-      ln -nfs #{shared_path}/log/ #{release_path}/log/
+      ln -nfs #{shared_path}/log/ #{release_path}/log/ &&
+      mkdir -p #{shared_path}/tmp/cache/ &&
+      mkdir #{release_path}/tmp/ &&
+      ln -nfs #{shared_path}/tmp/cache #{release_path}/tmp/cache
     )
   end
 
