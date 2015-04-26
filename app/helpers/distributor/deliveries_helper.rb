@@ -27,7 +27,7 @@ module Distributor::DeliveriesHelper
       return "out_of_range"
     else
       delivery_list = distributor.delivery_lists.find_by(date: date)
-      return "has_pending" unless delivery_list.all_finished?
+      return "has_pending" if delivery_list && !delivery_list.all_finished?
     end
   end
 
@@ -38,8 +38,9 @@ module Distributor::DeliveriesHelper
       title << "open for new orders"
     else
       delivery_list = distributor.delivery_lists.find_by(date: date)
+      all_delivered = delivery_list && delivery_list.all_finished?
 
-      title << (delivery_list.all_finished? ? "all delivered" : "pending deliveries")
+      title << (all_delivered ? "all delivered" : "pending deliveries")
 
       title << "closed for new orders" if date >= distributor.window_start_from
     end
