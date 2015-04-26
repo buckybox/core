@@ -175,7 +175,7 @@ $(function(){
           var limit = $(this).val();
           var select = $(this).closest(".extra-items").find(".box-extras select");
 
-          if (limit > 0) { // strip any extra extra items
+          if (limit > 0 && select.val()) { // strip any extra extra items
             select.val(select.val().slice(0, limit));
           }
 
