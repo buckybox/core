@@ -1,6 +1,6 @@
 object @delivery_service
 
-cache [:delivery_service, @delivery_service]
+cache [:delivery_service, root_object.cache_key]
 
 attributes :id, :name, :instructions, :name_days_and_fee, :pickup_point, :start_dates
 attributes :sun, :mon, :tue, :wed, :thu, :fri, :sat
