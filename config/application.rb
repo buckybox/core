@@ -89,10 +89,10 @@ module BuckyBox
         origins(/^https?:\/\/.*\.buckybox\.(com|local)(:[0-9]+)?$/)
 
         resource("*",
-          if: ->(env) {
+          if: lambda do |env|
             env["SERVER_NAME"] =~ /^my\.buckybox\.(com|local)$/ &&
             env["PATH_INFO"] =~ /^\/sign_up_wizard\//
-          },
+          end,
           headers: nil,
           methods: %i(get post),
           credentials: true,
