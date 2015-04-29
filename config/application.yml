@@ -54,11 +54,11 @@ X_MAILER: "Bucky Box Mailer (1.0.0) www.buckybox.com"
 
 # Environment-dependant configuration
 development:
-  HOST: "buckybox.dev"
+  HOST: "buckybox.local"
   PORT: "3000"
 
 test:
-  HOST: "buckybox.dev"
+  HOST: "buckybox.local"
   PORT: "3000"
 
 staging:
