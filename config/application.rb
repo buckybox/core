@@ -93,7 +93,7 @@ module BuckyBox
             env["SERVER_NAME"] =~ /^my\.buckybox\.(com|local)$/ &&
             env["PATH_INFO"] =~ /^\/sign_up_wizard\//
           },
-          headers: nil, # FIXME: accept "Accept" for Chrome?
+          headers: nil,
           methods: %i(get post),
           credentials: true,
           max_age: 0,
