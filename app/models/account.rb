@@ -80,13 +80,6 @@ class Account < ActiveRecord::Base
     end
   end
 
-  # all accounts that need invoicing
-  def self.need_invoicing
-    accounts = []
-    Account.find_each { |account| accounts << account if account.needs_invoicing? }
-    accounts
-  end
-
   # future occurrences for all orders on account
   def all_occurrences(end_date)
     occurrences = []
