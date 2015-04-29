@@ -233,7 +233,7 @@ $(function(){
     return false;
   });
 
-  if ($("#payments").length) {
+  if ($("#payments").length && $(".payment-message").length) {
     var update_preview = function() {
       var klass = this.id;
       if (!klass) return;
