@@ -1,8 +1,6 @@
 class SignUpWizardController < ApplicationController
   layout 'sign_up_wizard'
 
-  before_action :set_cors_headers
-
   def form
     @country = Bucky::Geolocation.get_country(request.remote_ip)
     @country = "NZ" if @country.blank? || @country == "RD" # Reserved
@@ -110,15 +108,6 @@ private
       run_at: 5.minutes.from_now,
       queue: "#{__FILE__}:#{__LINE__}",
     ).bank_setup(@distributor, bank_name)
-  end
-
-  def set_cors_headers
-    origin = request.headers["HTTP_ORIGIN"]
-
-    if origin && origin =~ /^https?:\/\/.*\.buckybox\.com$/
-      headers['Access-Control-Allow-Origin'] = origin
-      headers['Access-Control-Allow-Credentials'] = 'true'
-    end
   end
 end
 

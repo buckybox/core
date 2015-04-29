@@ -69,6 +69,7 @@ group :default do # XXX: all environments, think twice before adding Gems here
   gem "rbtrace"
   gem "geokit"
   gem "typhoeus"
+  gem "rack-cors"
 end
 
 group :development do
