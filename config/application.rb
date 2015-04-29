@@ -82,5 +82,31 @@ module BuckyBox
 
     # Dump database functions into the schema
     config.active_record.schema_format = :sql
+
+    # CORS setup (including handling of preflight OPTIONS requests)
+    config.middleware.insert_before 0, "Rack::Cors", debug: Rails.env.development? do
+      allow do
+        origins(/^https?:\/\/.*\.buckybox\.(com|local)(:[0-9]+)?$/)
+
+        resource("*",
+          if: ->(env) {
+            env["SERVER_NAME"] =~ /^my\.buckybox\.(com|local)$/ &&
+            env["PATH_INFO"] =~ /^\/sign_up_wizard\//
+          },
+          headers: nil, # FIXME: accept "Accept" for Chrome?
+          methods: %i(get post),
+          credentials: true,
+          max_age: 0,
+        )
+
+        resource("*",
+          if: ->(env) { env["SERVER_NAME"] =~ /^api\.buckybox\.(com|local)$/ },
+          headers: %w(API-Key API-Secret Webstore-ID Accept), # "Accept" is needed for Chrome
+          methods: :any,
+          credentials: true,
+          max_age: 0,
+        )
+      end
+    end
   end
 end
