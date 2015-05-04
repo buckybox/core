@@ -41,4 +41,5 @@
   %body
     = raw analytical.body_prepend_javascript
     = yield(:body)
+    = yield(:body_append)
     = raw analytical.body_append_javascript
