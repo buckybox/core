@@ -3,43 +3,6 @@ require 'spec_helper'
 include Bucky::TransactionImports
 
 describe Bucky::TransactionImports::Row do
-  describe ".amount_match" do
-    specify { expect(Row.amount_match(0, -100)).to eq(0.0)}
-    specify { expect(Row.amount_match(0, -450)).to eq(0.0)}
-    specify { expect(Row.amount_match(100, -100)).to eq(1.0)}
-    specify { expect(Row.amount_match(450, -450)).to eq(1.0)}
-    specify { expect(Row.amount_match(149.99, -100)).to eq(0.5001)}
-    specify { expect(Row.amount_match(150, -200)).to eq(0.75)}
-    specify { expect(Row.amount_match(97, -100)).to eq(0.97)}
-    specify { expect(Row.amount_match(150, -100)).to eq(0.5)}
-    specify { expect(Row.amount_match(0, -100)).to eq(0.0)}
-    specify { expect(Row.amount_match(200, -100)).to eq(0.0)}
-    specify { expect(Row.amount_match(250, -100)).to eq(0.0)}
-    specify { expect(Row.amount_match(350, -100)).to eq(0.0)}
-    specify { expect(Row.amount_match(125, -100)).to eq(0.75)}
-    specify { expect(Row.amount_match(175, -100)).to eq(0.25)}
-    specify { expect(Row.amount_match(100, -100)).to eq(1.00)}
-    specify { expect(Row.amount_match(100, 100)).to eq(0)}
-    specify { expect(Row.amount_match(10, 2)).to eq(0)}
-  end
-
-  describe "#amount_cents" do
-    it "converts string to cents integer" do
-      row = new_row("17.9")
-      expect(row.amount_cents).to eq 1790
-    end
-  end
-
-  describe "#account_match" do
-    it "matches row to customers account based on account balance and row amount" do
-      row = new_row("20.01")
-      customer = double("customer")
-      customer.stub_chain(:account, :balance_cents).and_return(-2001)
-      allow(row).to receive(:no_other_account_matches?).and_return(true)
-      expect(row.account_match(customer)).to eq 1.0
-    end
-  end
-
   describe "#amount_valid?" do
     specify { expect(new_row("12.34").amount_valid?).to be true }
     specify { expect(new_row("1000").amount_valid?).to be true }

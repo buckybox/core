@@ -26,7 +26,6 @@ group :default do # XXX: all environments, think twice before adding Gems here
   gem "whenever"
   gem "acts_as_list"
   gem "default_value_for"
-  gem "fuzzy-string-match", require: "fuzzystringmatch"
   gem "state_machine"
   gem "figaro"
   gem "virtus"
