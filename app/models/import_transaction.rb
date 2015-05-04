@@ -10,15 +10,19 @@ class ImportTransaction < ActiveRecord::Base
 
   serialize :raw_data
 
-  MATCH_MATCHED = "matched"
-  MATCH_UNABLE_TO_MATCH = "unable_to_match"
-  MATCH_DUPLICATE = "don't import (duplicate detected)"
-  MATCH_NOT_A_CUSTOMER = "not_a_customer / match_later"
-  MATCH_TYPES = {MATCH_MATCHED => 0,
-                 MATCH_NOT_A_CUSTOMER => 1,
-                 MATCH_DUPLICATE => 2,
-                 MATCH_UNABLE_TO_MATCH => 3}
-  MATCH_SELECT = MATCH_TYPES.except(MATCH_MATCHED).collect{|symbol, _index| [symbol.humanize, symbol]}
+  MATCH_MATCHED = "matched".freeze
+  MATCH_UNABLE_TO_MATCH = "unable_to_match".freeze
+  MATCH_DUPLICATE = "don't import (duplicate detected)".freeze
+  MATCH_NOT_A_CUSTOMER = "not_a_customer / match_later".freeze
+  MATCH_TYPES = {
+    MATCH_MATCHED => 0,
+    MATCH_NOT_A_CUSTOMER => 1,
+    MATCH_DUPLICATE => 2,
+    MATCH_UNABLE_TO_MATCH => 3
+  }.freeze
+  MATCH_SELECT = (MATCH_TYPES.keys - [MATCH_MATCHED]).map do |symbol|
+    [symbol.humanize, symbol]
+  end.freeze
 
   scope :ordered, order("transaction_date DESC, created_at DESC")
   scope :draft, where(['import_transactions.draft = ?', true])
@@ -165,10 +169,6 @@ class ImportTransaction < ActiveRecord::Base
 
   def confidence_high?
     confidence >= 0.75
-  end
-
-  def confidence_middle?
-    !confidence_high && !confidence_low
   end
 
 private
