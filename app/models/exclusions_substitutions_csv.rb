@@ -50,10 +50,10 @@ private
   end
 
   def count_exclusions_substitutions(packages_or_orders)
+    raise ArgumentError if packages_or_orders.empty?
+
     packages_or_orders = packages_or_orders.includes(:box)
     exclusions_substitutions = {}
-
-    return exclusions_substitutions if packages_or_orders.empty?
 
     packages_or_orders.first.distributor.line_items.each do |line_item|
       line_item_name = line_item.name
