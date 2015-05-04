@@ -52,7 +52,7 @@ class ImportTransaction < ActiveRecord::Base
     ImportTransaction.new(
       customer: match_result.customer,
       transaction_date: row.date,
-      amount_cents: row.amount_cents,
+      amount_cents: row.amount.cents,
       removed: false,
       description: row.description,
       confidence: match_result.confidence,
