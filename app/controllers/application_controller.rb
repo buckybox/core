@@ -95,15 +95,6 @@ protected
     redirect_to url_for(params)
   end
 
-  def customer_has_incomplete_cart?
-    !!session[:cart_id]
-  end
-
-  def customer_can_swith_account?
-    !customer_has_incomplete_cart?
-  end
-  helper_method :customer_can_swith_account?
-
   def attempt_customer_sign_in(email, password, options = {})
     customer = Customer.find_by(email: email, distributor_id: current_distributor.id)
     return if !customer || !customer.valid_password?(password)
@@ -185,7 +176,6 @@ private
       distributor_name: current_distributor.try(:name),
       customer_id: current_customer.try(:id),
       customer_name: current_customer.try(:name),
-      cart: current_cart,
     })
   end
 
