@@ -88,30 +88,6 @@ module Bucky::TransactionImports
       @possible_references ||= description.scan(NUMBER_REFERENCE_REGEX).to_a.flatten
     end
 
-    # Return a number between 0.0 and 1.0
-    # to indicate how close a match the numbers
-    # amount & balance are.
-    # Check tests for examples
-    def self.amount_match(amount, balance)
-      result = if balance < 0
-        balance *= -1
-        if amount <= balance
-          amount.to_f / balance.to_f
-        else
-          [0.0, 1.0 - (amount - balance).to_f / balance.to_f].max # make sure it doesn't go below 0
-        end
-      else
-        0
-      end
-      if result < 0 || result > 1
-        puts "======= WTF ======="
-        puts "That shouldn't be #{result}"
-        puts "#{amount}, #{balance}"
-      else
-        result
-      end
-    end
-
     def customers_match_with_confidence(customers)
       if not_customer? # Don't search for customers that match if we know its not going to match
         []
@@ -182,12 +158,6 @@ module Bucky::TransactionImports
     AMOUNT_REGEX = /\A[+-]?\d*\.?\d+\Z/
     def amount_valid?
       amount_string.present? && amount_string.match(AMOUNT_REGEX).present?
-    end
-
-  private
-
-    def fuzzy_match(a, b)
-      Bucky::Util.fuzzy_match(a, b)
     end
   end
 

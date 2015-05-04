@@ -14,9 +14,4 @@ module Bucky::Util
 
     @recorded_schedules.clone
   end
-
-  def self.fuzzy_match(a, b)
-    @@fuzzy ||= FuzzyStringMatch::JaroWinkler.create(:native)
-    @@fuzzy.getDistance(a.downcase.strip, b.downcase.strip)
-  end
 end
