@@ -30,8 +30,7 @@ module Bucky::TransactionImports
 
     MATCH_STRATEGY = [[:email_match, 1.0],
                       [:number_match, 0.8],
-                      [:name_match, 0.8],
-                      [:account_match, 0.5]]
+                      [:name_match, 0.8]]
 
     # Returns a number 0.0 -> 1.0 indicating how confident we
     # are that this payment comes from customer
@@ -79,15 +78,6 @@ module Bucky::TransactionImports
         # Match first inital and last name
         regex = Regexp.new("#{Regexp.escape(customer.first_name.first)} #{Regexp.escape(customer.last_name)}".gsub(/\W+/, ".{0,3}"), true)
         description.match(regex).present? ? 0.9 : 0
-      else
-        0
-      end
-    end
-
-    def account_match(customer)
-      if amount == (BigDecimal.new(customer.account.balance_cents / BigDecimal.new(-100))) && # Account matches amount (account must be negative)
-          no_other_account_matches?(customer)
-        1.0
       else
         0
       end
@@ -195,11 +185,6 @@ module Bucky::TransactionImports
     end
 
   private
-
-    # No other accounts match the amount
-    def no_other_account_matches?(customer)
-      customer.distributor.accounts.where(["customers.id != ? AND accounts.balance_cents = ?", customer.id, BigDecimal.new(-100) * amount]).count.zero?
-    end
 
     def fuzzy_match(a, b)
       Bucky::Util.fuzzy_match(a, b)
