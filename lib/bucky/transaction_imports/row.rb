@@ -21,11 +21,7 @@ module Bucky::TransactionImports
     end
 
     def amount
-      BigDecimal.new(@amount_string)
-    end
-
-    def amount_cents
-      (amount * 100).to_i
+      CrazyMoney.new(@amount_string)
     end
 
     MATCH_STRATEGY = [[:email_match, 1.0],
