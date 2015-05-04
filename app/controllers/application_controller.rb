@@ -69,7 +69,7 @@ protected
 
   def customer_smart_sign_in
     # guess distributor
-    guessed_distributor = if params[:switch_to_distributor] && customer_can_swith_account?
+    guessed_distributor = if params[:switch_to_distributor]
       Distributor.find_by(parameter_name: params[:switch_to_distributor])
     end
     return unless guessed_distributor
