@@ -41,4 +41,3 @@ class LineItemDecorator < Draper::Decorator
     content_tag(:span, label_text, class: 'label label-warning warning') if count > 0
   end
 end
-

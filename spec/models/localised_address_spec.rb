@@ -31,4 +31,3 @@ describe LocalisedAddress do
     end
   end
 end
-

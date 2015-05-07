@@ -12,4 +12,3 @@ package :cron_apt do
     has_apt "cron-apt"
   end
 end
-

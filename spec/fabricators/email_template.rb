@@ -3,4 +3,3 @@ Fabricator(:email_template) do
     init_with "Hi customer!", "What's up [first_name]?"
   end
 end
-

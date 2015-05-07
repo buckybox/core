@@ -37,7 +37,7 @@ module Distributor::Form
       return false unless valid?
 
       success = customer.update_attributes(customer_args) &&
-        address.update_attributes(address_args)
+                address.update_attributes(address_args)
 
       forward_errors_to_form customer
       forward_errors_to_form address
@@ -47,7 +47,7 @@ module Distributor::Form
 
   protected
 
-    def forward_errors_to_form model
+    def forward_errors_to_form(model)
       model.errors.each do |attribute, message|
         errors.add(attribute, message)
       end

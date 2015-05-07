@@ -66,4 +66,3 @@ describe Deduction, :slow do
     end
   end
 end
-

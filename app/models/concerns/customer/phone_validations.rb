@@ -19,4 +19,3 @@ module Customer::PhoneValidations
     end
   end
 end
-

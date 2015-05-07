@@ -9,4 +9,3 @@ class CrazyMoneyDecorator < Draper::Decorator
     object.with_currency(currency)
   end
 end
-

@@ -12,4 +12,3 @@ end
 
 Fabricator(:schedule_rule, from: :schedule_rule_weekly) do
 end
-

@@ -43,4 +43,3 @@ feature "Manage an order", js: true do
     expect(page).to have_content "less than a minute ago - #{@customer.name} unpaused their order of #{order.box.name}"
   end
 end
-

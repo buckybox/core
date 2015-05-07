@@ -5,4 +5,3 @@ class Api::V1::WebstoresController < Api::V1::BaseController
     @webstore = @distributor
   end
 end
-

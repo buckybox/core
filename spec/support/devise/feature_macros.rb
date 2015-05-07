@@ -11,4 +11,3 @@ module Devise::FeatureMacros
     before { simulate_customer_sign_in }
   end
 end
-

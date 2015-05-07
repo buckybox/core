@@ -12,4 +12,3 @@ BuckyBox::Application.configure do
   config.assets.precompile += %w( admin.js admin.css distributor.js distributor.css customer.js customer.css print.js print.css sign_up_wizard.js sign_up_wizard.css )
   config.assets.precompile += %w( leaflet.js leaflet.css )
 end
-

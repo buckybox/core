@@ -16,11 +16,11 @@ private
 
       elsif customers.count > 1
         message = "You must use one of these links:<ul><li>" <<
-          customers.map do |customer|
-            distributor = customer.distributor
+                  customers.map do |customer|
+                    distributor = customer.distributor
 
-            view_context.link_to distributor.name, new_customer_session_url(distributor: distributor.parameter_name)
-          end.join("<li>") << "</ul>"
+                    view_context.link_to distributor.name, new_customer_session_url(distributor: distributor.parameter_name)
+                  end.join("<li>") << "</ul>"
 
         flash.now[:alert] = message.html_safe
       end

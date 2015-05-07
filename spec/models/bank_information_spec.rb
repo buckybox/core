@@ -7,4 +7,3 @@ describe BankInformation do
 
   specify { expect(@bank_information).to be_valid }
 end
-

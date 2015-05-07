@@ -64,4 +64,3 @@ describe Distributor::Settings::DeliveryServicesController do
     end
   end
 end
-

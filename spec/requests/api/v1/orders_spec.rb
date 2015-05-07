@@ -93,7 +93,8 @@ describe "API v1" do
       let(:json_order) { json_response }
       let(:substitutions) { Fabricate.times(2, :line_item, distributor: api_distributor) }
       let(:exclusions) { Fabricate.times(2, :line_item, distributor: api_distributor) }
-      let(:params) do <<-JSON
+      let(:params) do
+        <<-JSON
         {
           "box_id": #{box.id},
           "customer_id": #{customer.id},
@@ -244,4 +245,3 @@ describe "API v1" do
     end
   end
 end
-

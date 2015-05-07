@@ -18,4 +18,3 @@ BuckyBox::Application.configure do
   #   path: Rails.root.join("tmp"),
   # )
 end
-

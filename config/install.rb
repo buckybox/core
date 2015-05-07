@@ -45,4 +45,3 @@ policy :myapp, :roles => :app do
   requires :redis
   requires :nokogiri
 end
-

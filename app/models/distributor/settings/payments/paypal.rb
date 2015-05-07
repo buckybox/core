@@ -20,4 +20,3 @@ class Distributor::Settings::Payments::Paypal < Distributor::Settings::Payments:
     distributor.errors.values.flatten
   end
 end
-

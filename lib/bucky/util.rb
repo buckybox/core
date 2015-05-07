@@ -8,7 +8,7 @@ module Bucky::Util
 
   def self.schedules
     # Load all models so they can initialize and set up schedules
-    (ActiveRecord::Base.connection.tables - %w[schema_migrations]).each do |table|
+    (ActiveRecord::Base.connection.tables - %w(schema_migrations)).each do |table|
       table.classify.constantize rescue nil
     end
 

@@ -11,4 +11,3 @@ protected
     @email_templates = current_distributor.email_templates
   end
 end
-

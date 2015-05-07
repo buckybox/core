@@ -23,4 +23,3 @@ class AddDefaultsToSomeCentColumns < ActiveRecord::Migration
     change_column :deductions, :amount_cents, :integer, null: true
   end
 end
-

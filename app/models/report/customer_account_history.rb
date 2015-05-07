@@ -54,4 +54,3 @@ private
     distributor.customers.ordered
   end
 end
-

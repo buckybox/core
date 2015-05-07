@@ -7,4 +7,3 @@ Rabl.configure do |config|
   config.cache_sources = true
   config.view_paths = [Rails.root.join("app/views/api")]
 end
-

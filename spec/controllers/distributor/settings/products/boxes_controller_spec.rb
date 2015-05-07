@@ -54,5 +54,3 @@ describe Distributor::Settings::Products::BoxesController do
     end
   end
 end
-
-

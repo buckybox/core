@@ -58,4 +58,3 @@ describe Distributor::Defaults do
     it_behaves_like "a distributor with populated defaults"
   end
 end
-

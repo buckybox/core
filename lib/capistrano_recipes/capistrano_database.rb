@@ -123,4 +123,3 @@ Capistrano::Configuration.instance.load do
     after "deploy:setup", "deploy:db:setup" unless fetch(:skip_db_setup, false)
   end
 end
-

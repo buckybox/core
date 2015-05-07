@@ -32,4 +32,3 @@ describe Country do
     end
   end
 end
-

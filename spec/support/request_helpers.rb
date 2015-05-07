@@ -1,6 +1,6 @@
 module Requests
   module JsonHelpers
-    def json_request method, *args
+    def json_request(method, *args)
       public_send(method, *args) # send the request
 
       expect(response.headers["Content-Type"]).to eq "application/json; charset=utf-8"

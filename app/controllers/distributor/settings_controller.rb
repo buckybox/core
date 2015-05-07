@@ -46,7 +46,7 @@ class Distributor::SettingsController < Distributor::BaseController
 
 private
 
-  def save_webstore_message form
+  def save_webstore_message(form)
     newly_activated_webstore = !current_distributor.active_webstore && form.webstore_enabled.to_bool
 
     if newly_activated_webstore

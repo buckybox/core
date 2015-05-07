@@ -26,4 +26,3 @@ describe DistributorMailer do
     it_behaves_like "using GMail's SMTP"
   end
 end
-

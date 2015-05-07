@@ -124,9 +124,9 @@ class Distributor < ActiveRecord::Base
 
   def self.active
     where("current_sign_in_at > ?", 22.days.ago)
-    .where("sign_in_count > ?", 4)
-    .select { |d| d.transactional_customer_count > 9}
-    .sort_by(&:transactional_customer_count).reverse
+      .where("sign_in_count > ?", 4)
+      .select { |d| d.transactional_customer_count > 9}
+      .sort_by(&:transactional_customer_count).reverse
   end
 
   def self.refresh_webstore_caches
@@ -541,8 +541,8 @@ class Distributor < ActiveRecord::Base
   def sales_last_30_days
     @sales_last_30_days ||= begin
       amount = deductions.where("created_at > ?", 30.days.ago) \
-        .where(deductable_type: "Delivery") \
-        .sum(&:amount).round.to_s(decimal_places: 0)
+               .where(deductable_type: "Delivery") \
+               .sum(&:amount).round.to_s(decimal_places: 0)
 
       "#{amount} #{currency}".freeze
     end

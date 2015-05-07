@@ -196,8 +196,8 @@ class Customer < ActiveRecord::Base
     self.password_confirmation = self.password
   end
 
-  def <=>(b)
-    self.name <=> b.name
+  def <=>(other)
+    self.name <=> other.name
   end
 
   def labels

@@ -94,4 +94,3 @@ class CustomerDecorator < Draper::Decorator
     address_2
   end
 end
-

@@ -16,4 +16,3 @@ end
 every '0 1 * * *' do
   runner 'Jobs.run_daily'
 end
-

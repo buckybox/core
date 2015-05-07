@@ -3,4 +3,3 @@ class Distributor::PasswordsController < Devise::PasswordsController
     super
   end
 end
-

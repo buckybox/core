@@ -50,7 +50,7 @@ private
     schedule_rules = schedule_hash[:rrules] if schedule_hash
 
     # Only need to convert rules as time are already stored in UTC time
-    if !schedule_rules.blank?
+    unless schedule_rules.blank?
       schedule_rules.each_with_index do |schedule_rule, index|
         rule_type = schedule_rule[:rule_type]
 

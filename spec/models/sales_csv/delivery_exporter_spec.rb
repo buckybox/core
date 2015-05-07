@@ -34,4 +34,3 @@ describe SalesCsv::DeliveryExporter do
     end
   end
 end
-

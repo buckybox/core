@@ -15,4 +15,3 @@ class Distributor::BoxesController < Distributor::BaseController
     render partial: 'distributor/orders/extras', locals: { account: account, order: order, box: box }
   end
 end
-

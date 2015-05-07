@@ -23,4 +23,3 @@ module Devise::FeatureHelpers
     click_button 'Log in'
   end
 end
-

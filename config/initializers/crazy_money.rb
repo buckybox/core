@@ -1,7 +1,7 @@
 # define Money Gem drop-in `monetize` helper
 class ActiveRecord::Base
   class << self
-    def monetize attribute_cents
+    def monetize(attribute_cents)
       attribute = attribute_cents.to_s.sub(/_cents$/, "")
 
       define_method attribute do
@@ -17,4 +17,3 @@ end
 
 # make CrazyMoney objects decoratable with Draper
 CrazyMoney.send(:include, Draper::Decoratable)
-

@@ -31,7 +31,7 @@ private
       msg
     when ::Exception
       "#{ msg.message } (#{ msg.class }): " <<
-      (msg.backtrace || []).join(" | ")
+        (msg.backtrace || []).join(" | ")
     else
       msg.inspect
     end

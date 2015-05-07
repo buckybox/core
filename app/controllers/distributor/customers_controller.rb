@@ -110,7 +110,7 @@ class Distributor::CustomersController < Distributor::ResourceController
         params[:email_template][:body]
       )
 
-      return error(email_template.errors.join('<br>')) if !email_template.valid?
+      return error(email_template.errors.join('<br>')) unless email_template.valid?
 
       email_templates_update(link_action, email_template)
     end
@@ -212,11 +212,11 @@ private
     form.errors.full_messages.join(", ").downcase
   end
 
-  def error message
+  def error(message)
     render json: { message: message }, status: :unprocessable_entity
   end
 
-  def email_templates_update action, email_template = nil
+  def email_templates_update(action, email_template = nil)
     selected_email_template_id = params[:selected_email_template_id].to_i
     recipient_ids = params[:recipient_ids].split(',').map(&:to_i)
     message = nil
@@ -251,7 +251,7 @@ private
     message
   end
 
-  def send_email recipient_ids, email
+  def send_email(recipient_ids, email)
     recipient_ids.each do |id|
       customer = Customer.find id
       personalized_email = email.personalize(customer)

@@ -10,7 +10,7 @@ class DataIntegrity
     email(errors) unless errors.empty?
   end
 
-  def self.email errors
+  def self.email(errors)
     options = {
       to: Figaro.env.sysalerts_email,
       subject: "Data integrity tests failed [#{Rails.env}]",
@@ -105,9 +105,9 @@ class DataIntegrity
         delivery_count = delivery_lists ? delivery_lists.deliveries.count : 0
 
         deduction_count = distributor.transactions
-          .where(transactionable_type: "Deduction")
-          .where("display_time::date = ?", utc_date) # display_time is UTC
-          .count
+                          .where(transactionable_type: "Deduction")
+                          .where("display_time::date = ?", utc_date) # display_time is UTC
+                          .count
 
         if delivery_count != deduction_count
           error "Distributor ##{distributor.id}: #{delivery_count} deliveries on #{local_date} but #{deduction_count} deductions"
@@ -164,8 +164,7 @@ private
     checker
   end
 
-  def error message
+  def error(message)
     @errors << message
   end
 end
-

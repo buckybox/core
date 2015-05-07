@@ -18,4 +18,3 @@ class Customer::SessionsController < Devise::SessionsController
     super
   end
 end
-

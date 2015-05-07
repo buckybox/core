@@ -7,4 +7,3 @@ class RemoveBuckyBoxPercentageDefault < ActiveRecord::Migration
     change_column_default :distributors, :bucky_box_percentage, 0.0175
   end
 end
-
