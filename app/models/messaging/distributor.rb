@@ -58,7 +58,7 @@ module Messaging
     end
 
     def update_tags
-      messaging_proxy.update_tags({id: distributor.id, tag_list: distributor.tag_list}, Rails.env)
+      messaging_proxy.update_tags({ id: distributor.id, tag_list: distributor.tag_list }, Rails.env)
     end
 
     def delayed_toggle_webstore_tag

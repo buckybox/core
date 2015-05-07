@@ -7,7 +7,7 @@ RSpec.describe DirectoryController, type: :controller do
     # NOTE: Brittle test but for now just to make sure I didn't break anything
     it "renders the expected HTML" do
       distributor = Fabricate(:existing_distributor_with_everything, name: "Local Veg")
-      allow(Distributor).to receive(:active).and_return([ distributor ])
+      allow(Distributor).to receive(:active).and_return([distributor])
       Fabricate(:localised_address, addressable: distributor)
 
       result = <<-RESULT

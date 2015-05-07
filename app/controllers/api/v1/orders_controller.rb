@@ -10,10 +10,10 @@ class Api::V1::OrdersController < Api::V1::BaseController
     param :order, Hash, "Json object representing the new order", required: true do
       param :customer_id, String, "The customer's ID. If you don't have this refer to customer API."
       param :box_id, Integer, "ID of the box", required: true
-      param :extras_one_off, [ :boolean ], 'True or false determining whether the extras should match the frequency of the box (false), or be a one off (true)'
-      param :extras, [ :extra ], 'Array of extras, refer to above example'
-      param :substitutions, [ :id ], 'Array of integers representing box_item ids that can be substituted for exclusions'
-      param :exclusions, [ :id ], 'Array of integers representing box_item ids that should be excluded'
+      param :extras_one_off, [:boolean], 'True or false determining whether the extras should match the frequency of the box (false), or be a one off (true)'
+      param :extras, [:extra], 'Array of extras, refer to above example'
+      param :substitutions, [:id], 'Array of integers representing box_item ids that can be substituted for exclusions'
+      param :exclusions, [:id], 'Array of integers representing box_item ids that should be excluded'
       param :frequency, String, "Indicates how often the order should be delivered. Acceptable values are 'single', 'weekly', or 'fortnightly'"
     end
   end
@@ -97,7 +97,7 @@ class Api::V1::OrdersController < Api::V1::BaseController
     end
 
     start_date = new_order['start_date'] or @order.errors.add(:start_date, "can't be blank")
-    week_days  = new_order['week_days']  or @order.errors.add(:week_days, "can't be blank")
+    week_days  = new_order['week_days'] or @order.errors.add(:week_days, "can't be blank")
 
     days = week_days && week_days.map { |index| I18n.t('date.abbr_day_names', locale: :en)[index].downcase.to_sym }
 

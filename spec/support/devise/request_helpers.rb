@@ -25,7 +25,7 @@ module Devise::RequestHelpers
   end
 
   def pretty_html(html)
-    File.open('test_dump.html', 'w') {|f| f.write(html) }
+    File.open('test_dump.html', 'w') { |f| f.write(html) }
     `lynx -dump -width 120 test_dump.html > output.txt`
     puts `cat output.txt`
   ensure

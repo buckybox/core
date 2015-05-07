@@ -10,7 +10,7 @@ class DeliverySort
   def self.by_dso(items, distributor, date)
     if items.all? { |i| i.is_a?(Delivery) }
       by_real_dso(items)
-    elsif items.all?{ |i| i.is_a?(Order) }
+    elsif items.all? { |i| i.is_a?(Order) }
       by_predicted_dso(items, distributor, date)
     else
       raise 'Was expecting all Deliveries or all Orders.'
@@ -29,11 +29,11 @@ class DeliverySort
   end
 
   def initialize(items)
-    if items.all?{|i| i.is_a? Package}
+    if items.all? { |i| i.is_a? Package }
       self.type = Type.packages
-    elsif items.all?{|i| i.is_a? Delivery}
+    elsif items.all? { |i| i.is_a? Delivery }
       self.type = Type.deliveries
-    elsif items.all?{|i| i.is_a? Order}
+    elsif items.all? { |i| i.is_a? Order }
       self.type = Type.orders
     else
       raise 'Was expecting all Packages, all Deliveries, or all Orders.'
@@ -43,18 +43,18 @@ class DeliverySort
 
   def grouped_by_boxes
     if type.packages?
-      items.group_by{|p| Box.find_or_new(p.archived_box_name)}.sort{ |a,b| a.first.name <=> b.first.name}
+      items.group_by { |p| Box.find_or_new(p.archived_box_name) }.sort { |a, b| a.first.name <=> b.first.name }
     elsif type.deliveries?
-      items.group_by{|p| Box.find_or_new(p.package.archived_box_name)}.sort{ |a,b| a.first.name <=> b.first.name}
+      items.group_by { |p| Box.find_or_new(p.package.archived_box_name) }.sort { |a, b| a.first.name <=> b.first.name }
     elsif type.orders?
-      items.group_by{|p| Box.find_or_new(p.box.name)}.sort{ |a,b| a.first.name <=> b.first.name}
+      items.group_by { |p| Box.find_or_new(p.box.name) }.sort { |a, b| a.first.name <=> b.first.name }
     else
       raise "Shouldn't have reached this part - #{type.inspect}"
     end
   end
 
   def grouped_by_addresses
-    items.group_by{ |delivery| delivery.package.address_hash }
+    items.group_by { |delivery| delivery.package.address_hash }
   end
 
   class Box

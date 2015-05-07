@@ -19,8 +19,8 @@ describe Account do
 
   context :balance do
     specify { expect(account.balance.cents).to eq 0 }
-    specify { expect { account.balance_cents=(10) }.to raise_error(ArgumentError) }
-    specify { expect { account.balance=(10) }.to raise_error(ArgumentError) }
+    specify { expect { account.balance_cents = (10) }.to raise_error(ArgumentError) }
+    specify { expect { account.balance = (10) }.to raise_error(ArgumentError) }
   end
 
   context 'when updating balance' do
@@ -81,7 +81,7 @@ describe Account do
           end
 
           specify { expect(account.balance).to eq value }
-          specify { expect(account.transactions.last.amount).to eq(value - 250)}
+          specify { expect(account.transactions.last.amount).to eq(value - 250) }
         end
       end
     end

@@ -125,7 +125,7 @@ class Distributor < ActiveRecord::Base
   def self.active
     where("current_sign_in_at > ?", 22.days.ago)
       .where("sign_in_count > ?", 4)
-      .select { |d| d.transactional_customer_count > 9}
+      .select { |d| d.transactional_customer_count > 9 }
       .sort_by(&:transactional_customer_count).reverse
   end
 
@@ -253,7 +253,7 @@ class Distributor < ActiveRecord::Base
     0 # NOTE: legacy, kept for future use
   end
 
-  def update_next_occurrence_caches(date=nil)
+  def update_next_occurrence_caches(date = nil)
     use_local_time_zone do
       if Time.current.hour >= AUTOMATIC_DELIVERY_HOUR
         date ||= Date.current.tomorrow
@@ -267,7 +267,7 @@ class Distributor < ActiveRecord::Base
   def window_start_from
     use_local_time_zone do
       # If we have missed the cutoff point add a day so we start generation from tomorrow
-      Date.current + ( advance_hour <= Time.current.hour ? 1 : 0 ).days
+      Date.current + (advance_hour <= Time.current.hour ? 1 : 0).days
     end
   end
 
@@ -332,7 +332,7 @@ class Distributor < ActiveRecord::Base
     import_transactions.processed.matched.not_removed.where(description: description).ordered.last
   end
 
-  def last_used_omni_importer(prefered=nil)
+  def last_used_omni_importer(prefered = nil)
     prefered ||
       import_transaction_lists.order('created_at DESC').first.try(:omni_importer) ||
       omni_importers.ordered.first
@@ -392,9 +392,9 @@ class Distributor < ActiveRecord::Base
 
   def number_of_customers_emailed_after_update(spend_limit, update_existing)
     if update_existing
-      customers.joins(:account).where(["accounts.balance_cents <= ? and customers.status_halted = 'f'", spend_limit]).count{|c| c.orders_pending_package_creation?}
+      customers.joins(:account).where(["accounts.balance_cents <= ? and customers.status_halted = 'f'", spend_limit]).count { |c| c.orders_pending_package_creation? }
     else
-      customers.joins(:account).where("accounts.balance_cents <= customers.balance_threshold_cents and customers.status_halted = 'f'").count{|c| c.orders_pending_package_creation?}
+      customers.joins(:account).where("accounts.balance_cents <= customers.balance_threshold_cents and customers.status_halted = 'f'").count { |c| c.orders_pending_package_creation? }
     end
   end
 
@@ -605,14 +605,14 @@ private
   # This is meant to be run within console for dev work via Distributor.send(:travel_forward_a_day)
   # This will simulate the cron jobs each hour and move the time forward 1 day. It is designed to
   # be run repeatedly to move forward a day at a time
-  def self.travel_forward_a_day(day=1)
+  def self.travel_forward_a_day(day = 1)
     # :nocov:
     @@original_time ||= Time.current
     @@advanced ||= 0
     (24 * day).times.each do |h|
       h += 1 # start at 1, not 0
 
-      Delorean.time_travel_to(@@original_time + (@@advanced*day.days) + h.hours)
+      Delorean.time_travel_to(@@original_time + (@@advanced * day.days) + h.hours)
       Jobs.run_hourly
     end
     @@advanced += day

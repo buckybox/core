@@ -45,11 +45,11 @@ describe Customer::OrdersController do
   end
 
   context "pausing" do
-    let(:order){Fabricate(:order)}
+    let(:order) { Fabricate(:order) }
     describe "#pause" do
       it "should pause the order" do
         date = order.next_occurrences(2, Date.current).last
-        put :pause, {id: order.id, account_id: order.account_id, date: date}
+        put :pause, { id: order.id, account_id: order.account_id, date: date }
         expect(assigns(:order).pause_date).to eq(date)
       end
     end
@@ -57,7 +57,7 @@ describe Customer::OrdersController do
     describe "#remove_pause" do
       it "should remove the pause from an order" do
         order.pause!(Date.tomorrow)
-        put :remove_pause, {id: order.id, account_id: order.account_id}
+        put :remove_pause, { id: order.id, account_id: order.account_id }
         expect(order.reload.pause_date).to be_nil
       end
     end
@@ -66,7 +66,7 @@ describe Customer::OrdersController do
       it "should resume the order" do
         dates = order.next_occurrences(5, Date.current)
         order.pause!(dates[2])
-        put :resume, {id: order.id, account_id: order.account_id, date: dates[4]}
+        put :resume, { id: order.id, account_id: order.account_id, date: dates[4] }
         order.reload
         expect(order.pause_date).to eq(dates[2])
         expect(order.resume_date).to eq(dates[4])
@@ -77,34 +77,34 @@ describe Customer::OrdersController do
       it "should resume the order" do
         dates = order.next_occurrences(5, Date.current)
         order.pause!(dates[4], dates[5])
-        post :remove_resume, {id: order.id, account_id: order.account_id}
+        post :remove_resume, { id: order.id, account_id: order.account_id }
       end
     end
   end
 
   describe "#deactivate" do
-    let(:order){ Fabricate(:order, account: @customer.account)}
+    let(:order) { Fabricate(:order, account: @customer.account) }
 
     it "should deactivate the order" do
       d = @customer.distributor
       d.customer_can_remove_orders = true
       d.save
 
-      put :deactivate, {id: order.id}
+      put :deactivate, { id: order.id }
       expect(order.reload.active).to be false
     end
 
     it "should only allow deactivating your own orders" do
       other_customer = Fabricate(:customer)
       other_order = Fabricate(:order, account: other_customer.account)
-      expect{put :deactivate, {id: other_order.id}}.to raise_error(ActiveRecord::RecordNotFound)
+      expect { put :deactivate, { id: other_order.id } }.to raise_error(ActiveRecord::RecordNotFound)
     end
 
     it "should only deactivate if enabled via admin's distributor settings" do
       distributor = @customer.distributor
       distributor.customer_can_remove_orders = false
       distributor.save!
-      put :deactivate, {id: order.id}
+      put :deactivate, { id: order.id }
       expect(order.reload.active).to be true
     end
   end

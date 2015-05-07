@@ -10,7 +10,7 @@ describe Report::CustomerAccountHistory do
       balance_at:       10,
     )
   end
-  let(:customers)   { double('customers', ordered: [ customer ]) }
+  let(:customers)   { double('customers', ordered: [customer]) }
   let(:distributor) { double('distributor', customers: customers) }
   let(:args)        { { distributor: distributor, customers: customers, date: '2013-04-23' } }
 

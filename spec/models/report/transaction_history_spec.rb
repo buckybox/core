@@ -22,7 +22,7 @@ describe Report::TransactionHistory do
       customer:      customer,
     )
   end
-  let(:transactions) { [ transaction ] }
+  let(:transactions) { [transaction] }
   let(:distributor) { double('distributor', transactions_for_export: transactions) }
   let(:args)        { { distributor: distributor, from: '2013-08-04', to: '2013-08-05' } }
 

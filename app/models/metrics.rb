@@ -22,8 +22,8 @@ class Metrics
   end
 
   def self.time_frame(table)
-    beginning_of_yesterday = (Time.current-24.hours).beginning_of_day
-    end_of_yesterday = (Time.current-24.hours).end_of_day
+    beginning_of_yesterday = (Time.current - 24.hours).beginning_of_day
+    end_of_yesterday = (Time.current - 24.hours).end_of_day
     ["#{table}.created_at > ? AND #{table}.created_at <= ?", beginning_of_yesterday, end_of_yesterday]
   end
 
@@ -60,7 +60,7 @@ private
       hash.merge!(klass.name.pluralize.downcase => klass)
     end
 
-    metrics = classes.inject({}) do |hash, (key,klass)|
+    metrics = classes.inject({}) do |hash, (key, klass)|
       metric_key = "new_#{key}_last_24_hours"
 
       hash.merge!(metric_key => lambda {

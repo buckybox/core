@@ -77,8 +77,8 @@ describe Order do
     specify { expect(order).to be_valid }
 
     context :quantity do
-      specify { expect { Fabricate(:order, quantity: 0)}.to raise_error(ActiveRecord::RecordInvalid, /Quantity must be greater than 0/)}
-      specify { expect { Fabricate(:order, quantity: -1)}.to raise_error(ActiveRecord::RecordInvalid, /Quantity must be greater than 0/)}
+      specify { expect { Fabricate(:order, quantity: 0) }.to raise_error(ActiveRecord::RecordInvalid, /Quantity must be greater than 0/) }
+      specify { expect { Fabricate(:order, quantity: -1) }.to raise_error(ActiveRecord::RecordInvalid, /Quantity must be greater than 0/) }
     end
 
     context :price do
@@ -206,7 +206,7 @@ describe Order do
         @order6 = Fabricate(:order, schedule_rule: rule_schedule)
       end
 
-      specify { expect { Order.deactivate_finished}.to change(Order.active, :count).by(-2) }
+      specify { expect { Order.deactivate_finished }.to change(Order.active, :count).by(-2) }
 
       it 'should deactivate the correct orders' do
         Order.deactivate_finished
@@ -291,7 +291,7 @@ describe Order do
           @s3_id = @s3.line_item_id
           @s4_id = Fabricate(:line_item).id
 
-          order.substituted_line_item_ids =[ @s1_id, @s4_id]
+          order.substituted_line_item_ids = [@s1_id, @s4_id]
           order.save
         end
 
@@ -312,11 +312,11 @@ describe Order do
   context "with extras" do
     before do
       @distributor = Fabricate(:distributor)
-      @extras = 2.times.collect{Fabricate(:extra, distributor: @distributor)}
+      @extras = 2.times.collect { Fabricate(:extra, distributor: @distributor) }
       @extra_ids = @extras.collect(&:id)
 
-      @order_extras = {@extra_ids.first.to_s => {count: 3},
-                       @extra_ids.last.to_s => {count: 1}}
+      @order_extras = { @extra_ids.first.to_s => { count: 3 },
+                        @extra_ids.last.to_s => { count: 1 } }
 
       @box = Fabricate(:box, extras_limit: 5, distributor: @distributor)
 
@@ -349,7 +349,7 @@ describe Order do
 
       @order_extras[@extra_ids.first.to_s][:count] = 0
       new_extra = Fabricate(:extra, distributor: @distributor)
-      @order_extras.merge!(new_extra.id => {count: 2})
+      @order_extras.merge!(new_extra.id => { count: 2 })
 
       order.update_attributes(order_extras: @order_extras)
       expect(order).to be_valid
@@ -366,7 +366,7 @@ describe Order do
       end
 
       it "should return extras if they don't recur and an order doesn't occur before this one" do
-        order = Order.create(@params.merge(extras_one_off: true, "schedule_rule_attributes" => {"start" => Date.current + 1.week}))
+        order = Order.create(@params.merge(extras_one_off: true, "schedule_rule_attributes" => { "start" => Date.current + 1.week }))
         expect(order.predicted_order_extras.size).to eq(2)
         expect(order.predicted_order_extras(order.next_occurrence - 1.day).size).to eq(2)
       end

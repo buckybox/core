@@ -1,6 +1,6 @@
 Fabricator(:omni_importer) do
   country
-  rules    <<EOY
+  rules <<EOY
         columns: date trans_type sort_code account_number description debt_amount credit_amount empty blank none
         DATE:
           date_parse:
@@ -26,8 +26,8 @@ EOY
 
   import_transaction_list do
     ActionDispatch::Http::UploadedFile.new(
-      :tempfile => File.new(Rails.root.join('spec','support','test_upload_files','transaction_imports','uk_lloyds_tsb.csv')),
-      :filename => File.basename(File.new(Rails.root.join('spec','support','test_upload_files','transaction_imports','uk_lloyds_tsb.csv')))
+      :tempfile => File.new(Rails.root.join('spec', 'support', 'test_upload_files', 'transaction_imports', 'uk_lloyds_tsb.csv')),
+      :filename => File.basename(File.new(Rails.root.join('spec', 'support', 'test_upload_files', 'transaction_imports', 'uk_lloyds_tsb.csv')))
     )
   end
 end

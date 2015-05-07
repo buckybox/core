@@ -118,9 +118,9 @@ class Customer < ActiveRecord::Base
   end
 
   pg_search_scope :search,
-    against: [ :first_name, :last_name, :email ],
+    against: [:first_name, :last_name, :email],
     associated_against: {
-      address: [ :address_1, :address_2, :suburb, :city, :postcode, :delivery_note ]
+      address: [:address_1, :address_2, :suburb, :city, :postcode, :delivery_note]
     },
     using: { tsearch: { prefix: true } }
 
@@ -290,12 +290,12 @@ class Customer < ActiveRecord::Base
   end
 
   def halt_orders!
-    ScheduleRule.update_all({halted: true}, ["scheduleable_id IN (?) AND scheduleable_type = 'Order'", orders.collect(&:id)])
+    ScheduleRule.update_all({ halted: true }, ["scheduleable_id IN (?) AND scheduleable_type = 'Order'", orders.collect(&:id)])
     update_next_occurrence!
   end
 
   def unhalt_orders!
-    ScheduleRule.update_all({halted: false}, ["scheduleable_id IN (?) AND scheduleable_type = 'Order'", orders.collect(&:id)])
+    ScheduleRule.update_all({ halted: false }, ["scheduleable_id IN (?) AND scheduleable_type = 'Order'", orders.collect(&:id)])
     update_next_occurrence!
   end
 
@@ -305,7 +305,7 @@ class Customer < ActiveRecord::Base
   end
 
   def orders_pending_package_creation?
-    orders.any?{|o| o.pending_package_creation?}
+    orders.any? { |o| o.pending_package_creation? }
   end
 
   def send_login_details
@@ -387,7 +387,7 @@ class Customer < ActiveRecord::Base
   end
 
   def update_address(address_params, opts = {})
-    opts.reverse_update({notify_distributor: false})
+    opts.reverse_update({ notify_distributor: false })
 
     if opts[:notify_distributor]
       address.update_with_notify(address_params, self)

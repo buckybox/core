@@ -43,7 +43,7 @@ describe DeliveryService do
       expect(delivery_service.future_orders).to include(@order)
 
       # [0, 1, ...] === [:sunday, :monday, ..], kinda
-      @monthly_order = Fabricate(:recurring_order, schedule: new_monthly_schedule(@schedule_start_time, [0,1,2,3,4,5,6]), account: @account, box: @box)
+      @monthly_order = Fabricate(:recurring_order, schedule: new_monthly_schedule(@schedule_start_time, [0, 1, 2, 3, 4, 5, 6]), account: @account, box: @box)
 
       @order_times = {}
       @next_times = {}

@@ -39,7 +39,7 @@ class Delivery < ActiveRecord::Base
   delegate :address_hash, to: :address
   delegate :archived?, to: :delivery_list, allow_nil: true
 
-  STATUS_TO_EVENT = {'pending' => 'pend', 'cancelled' => 'cancel', 'delivered' => 'deliver'}
+  STATUS_TO_EVENT = { 'pending' => 'pend', 'cancelled' => 'cancel', 'delivered' => 'deliver' }
 
   state_machine :status, initial: :pending do
     before_transition on: :deliver, do: :deduct_account
@@ -160,7 +160,7 @@ class Delivery < ActiveRecord::Base
   end
 
   def self.matching_dso(delivery_sequence_order)
-    delivery_ids = Delivery.joins({delivery_list:{}, account: {customer: {address: {}}}}).where(['deliveries.delivery_service_id = ? AND addresses.address_hash = ? AND EXTRACT(DOW FROM delivery_lists.date) = ?', delivery_sequence_order.delivery_service_id, delivery_sequence_order.address_hash, delivery_sequence_order.day]).collect(&:id)
+    delivery_ids = Delivery.joins({ delivery_list: {}, account: { customer: { address: {} } } }).where(['deliveries.delivery_service_id = ? AND addresses.address_hash = ? AND EXTRACT(DOW FROM delivery_lists.date) = ?', delivery_sequence_order.delivery_service_id, delivery_sequence_order.address_hash, delivery_sequence_order.day]).collect(&:id)
     Delivery.where(['id in (?)', delivery_ids])
   end
 

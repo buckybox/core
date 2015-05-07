@@ -31,7 +31,7 @@ describe Distributor::CustomersController do
       it "should send an email" do
         expect do
           @send_login_details.call
-        end.to change{ActionMailer::Base.deliveries.size}.by(1)
+        end.to change { ActionMailer::Base.deliveries.size }.by(1)
       end
 
       it "should reset password" do
@@ -165,7 +165,7 @@ describe Distributor::CustomersController do
       let(:recipient_ids) { [@customer.id] }
 
       before do
-        @post = -> { post :export, export: {recipient_ids: recipient_ids.join(',') }}
+        @post = -> { post :export, export: { recipient_ids: recipient_ids.join(',') } }
       end
 
       it "downloads a csv" do

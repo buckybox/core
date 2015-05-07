@@ -16,7 +16,7 @@ module Bucky::Dso
       i = 0
       @last_scan_index ||= i
 
-      for i in @last_scan_index..(list.size-1)
+      for i in @last_scan_index..(list.size - 1)
         s = list[j]
         @index_lookup[s.sortable] = i
         break if s.sortable == key

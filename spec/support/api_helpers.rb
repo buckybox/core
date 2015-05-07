@@ -26,7 +26,7 @@ module ApiHelpers
     end
 
     it "returns 404 with invalid credentials" do
-      headers = {"API-Key" => "fuck", "API-Secret" => "off"}
+      headers = { "API-Key" => "fuck", "API-Secret" => "off" }
       json_request(method, url, nil, headers)
 
       expect(response.status).to eq 404

@@ -15,11 +15,11 @@ class Customer::Form::UpdateDeliveryAddress < Customer::Form
 protected
 
   def assign_attributes(attributes)
-    @address_1     = attributes["address_1"]     || address.address_1
-    @address_2     = attributes["address_2"]     || address.address_2
-    @suburb        = attributes["suburb"]        || address.suburb
-    @city          = attributes["city"]          || address.city
-    @postcode      = attributes["postcode"]      || address.postcode
+    @address_1     = attributes["address_1"] || address.address_1
+    @address_2     = attributes["address_2"] || address.address_2
+    @suburb        = attributes["suburb"] || address.suburb
+    @city          = attributes["city"] || address.city
+    @postcode      = attributes["postcode"] || address.postcode
     @delivery_note = attributes["delivery_note"] || address.delivery_note
   end
 

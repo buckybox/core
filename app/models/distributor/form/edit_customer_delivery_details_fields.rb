@@ -19,12 +19,12 @@ module Distributor::Form::EditCustomerDeliveryDetailsFields
 
     def assign_attributes(attributes)
       @delivery_service_id = attributes["delivery_service_id"] || customer.delivery_service_id
-      @address_1           = attributes["address_1"]           || address.address_1
-      @address_2           = attributes["address_2"]           || address.address_2
-      @suburb              = attributes["suburb"]              || address.suburb
-      @city                = attributes["city"]                || address.city
-      @postcode            = attributes["postcode"]            || address.postcode
-      @delivery_note       = attributes["delivery_note"]       || address.delivery_note
+      @address_1           = attributes["address_1"] || address.address_1
+      @address_2           = attributes["address_2"] || address.address_2
+      @suburb              = attributes["suburb"] || address.suburb
+      @city                = attributes["city"] || address.city
+      @postcode            = attributes["postcode"] || address.postcode
+      @delivery_note       = attributes["delivery_note"] || address.delivery_note
     end
 
     def delivery_details_customer_args

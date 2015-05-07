@@ -27,7 +27,7 @@ RSpec::Matchers.define :delegate do |method|
         @delegator.instance_variable_set(@to, old_value)
       end
     elsif @delegator.respond_to?(@to, true)
-      unless [0,-1].include?(@delegator.method(@to).arity)
+      unless [0, -1].include?(@delegator.method(@to).arity)
         raise "#{@delegator}'s' #{@to} method does not have zero or -1 arity (it expects parameters)"
       end
       allow(@delegator).to receive(@to).and_return receiver_double(method)

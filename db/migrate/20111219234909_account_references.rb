@@ -27,7 +27,7 @@ class AccountReferences < ActiveRecord::Migration
         customer = Customer.find_by_id(account.customer_id)
 
         if customer
-          order.update_attributes!(customer_id:customer.id, distributor_id:customer.distributor_id)
+          order.update_attributes!(customer_id: customer.id, distributor_id: customer.distributor_id)
         end
       end
     end

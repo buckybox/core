@@ -21,7 +21,7 @@ class SettingsWebstoreForm < Form
   attr_accessor(*INTERFACE.keys)
 
   def initialize(opts)
-    opts.each do |k,v|
+    opts.each do |k, v|
       instance_variable_set("@#{k}", v)
     end
     @errors = ActiveModel::Errors.new(self)
@@ -36,7 +36,7 @@ class SettingsWebstoreForm < Form
   end
 
   def save(distributor)
-    INTERFACE.each do |k,v|
+    INTERFACE.each do |k, v|
       distributor.send("#{v}=", self.send(k))
     end
 
@@ -47,7 +47,7 @@ class SettingsWebstoreForm < Form
   end
 
   def set_errors(errors)
-    INTERFACE.each do |k,v|
+    INTERFACE.each do |k, v|
       errors[v].each do |error|
         self.errors.add(k, error)
       end

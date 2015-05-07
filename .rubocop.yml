@@ -98,104 +98,19 @@ Style/MultilineBlockChain:
 Style/Next:
   Enabled: false # TODO
 
-# Offense count: 28
-# Configuration parameters: NamePrefix, NamePrefixBlacklist.
 Style/PredicateName:
-  Enabled: false
+  Enabled: false # TODO
 
-# Offense count: 10
-# Cop supports --auto-correct.
-Style/Proc:
-  Enabled: false
-
-# Offense count: 4
-# Configuration parameters: EnforcedStyle, SupportedStyles.
-Style/RaiseArgs:
-  Enabled: false
-
-# Offense count: 106
-# Cop supports --auto-correct.
 Style/RedundantSelf:
   Enabled: false
 
-# Offense count: 5
-# Configuration parameters: MaxSlashes.
 Style/RegexpLiteral:
   Enabled: false
 
-# Offense count: 13
-# Configuration parameters: Methods.
 Style/SingleLineBlockParams:
   Enabled: false
 
-# Offense count: 10
-# Cop supports --auto-correct.
-# Configuration parameters: AllowIfMethodIsEmpty.
 Style/SingleLineMethods:
-  Enabled: false
-
-# Offense count: 59
-# Cop supports --auto-correct.
-Style/SingleSpaceBeforeFirstArg:
-  Enabled: false
-
-# Offense count: 15
-# Cop supports --auto-correct.
-Style/SpaceAfterColon:
-  Enabled: false
-
-# Offense count: 110
-# Cop supports --auto-correct.
-Style/SpaceAfterComma:
-  Enabled: false
-
-# Offense count: 5
-# Cop supports --auto-correct.
-Style/SpaceAfterSemicolon:
-  Enabled: false
-
-# Offense count: 50
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle, SupportedStyles.
-Style/SpaceAroundEqualsInParameterDefault:
-  Enabled: false
-
-# Offense count: 226
-# Cop supports --auto-correct.
-Style/SpaceAroundOperators:
-  Enabled: false
-
-# Offense count: 199
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle, SupportedStyles.
-Style/SpaceBeforeBlockBraces:
-  Enabled: false
-
-# Offense count: 2
-# Cop supports --auto-correct.
-Style/SpaceBeforeComma:
-  Enabled: false
-
-# Offense count: 506
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle, SupportedStyles, EnforcedStyleForEmptyBraces, SpaceBeforeBlockParameters.
-Style/SpaceInsideBlockBraces:
-  Enabled: false
-
-# Offense count: 120
-# Cop supports --auto-correct.
-Style/SpaceInsideBrackets:
-  Enabled: false
-
-# Offense count: 269
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle, EnforcedStyleForEmptyBraces, SupportedStyles.
-Style/SpaceInsideHashLiteralBraces:
-  Enabled: false
-
-# Offense count: 14
-# Cop supports --auto-correct.
-Style/SpaceInsideParens:
   Enabled: false
 
 # Offense count: 2

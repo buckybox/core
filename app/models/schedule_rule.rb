@@ -31,8 +31,8 @@ class ScheduleRule < ActiveRecord::Base
 
   def self.recur_on(start, days, recur, week = 0)
     days &= DAYS # whitelist
-    days = days.inject({}){|h, i| h.merge(i => true)} # Turn array into hash
-    days = DAYS.inject({}){|h, i| h.merge(i => false)}.merge(days) # Fill out the rest with false
+    days = days.inject({}) { |h, i| h.merge(i => true) } # Turn array into hash
+    days = DAYS.inject({}) { |h, i| h.merge(i => false) }.merge(days) # Fill out the rest with false
 
     valid_recur = RECUR
     raise "recur '#{recur}' is not part of #{valid_recur}" unless recur.in? valid_recur
@@ -43,7 +43,7 @@ class ScheduleRule < ActiveRecord::Base
     ScheduleRule.new(params)
   end
 
-  def self.weekly(start=nil, days=[])
+  def self.weekly(start = nil, days = [])
     recur_on(start, days, :weekly)
   end
 
@@ -102,9 +102,9 @@ class ScheduleRule < ActiveRecord::Base
     weekly_occurs_on?(datetime) && ((datetime.day - 1) / 7).to_i == week
   end
 
-  def next_occurrence(date=nil, opts={})
-    opts = {ignore_pauses: false,
-            ignore_halts: false}.merge(opts)
+  def next_occurrence(date = nil, opts = {})
+    opts = { ignore_pauses: false,
+             ignore_halts: false }.merge(opts)
 
     date ||= Date.current
 
@@ -117,15 +117,15 @@ class ScheduleRule < ActiveRecord::Base
     end
   end
 
-  def next_occurrences(num, start, opts={})
-    opts = {ignore_pauses: false,
-            ignore_halts: false}.merge(opts)
+  def next_occurrences(num, start, opts = {})
+    opts = { ignore_pauses: false,
+             ignore_halts: false }.merge(opts)
     result = []
     current = start.to_date
 
-    0.upto(num-1).each do
-      current = next_occurrence(current, {ignore_pauses: opts[:ignore_pauses],
-                                          ignore_halts: opts[:ignore_halts]})
+    0.upto(num - 1).each do
+      current = next_occurrence(current, { ignore_pauses: opts[:ignore_pauses],
+                                           ignore_halts: opts[:ignore_halts] })
 
       if current.present?
         result << current
@@ -138,17 +138,17 @@ class ScheduleRule < ActiveRecord::Base
   end
   alias_method :occurrences, :next_occurrences
 
-  def occurrences_between(start, finish, opts={})
+  def occurrences_between(start, finish, opts = {})
     raise ArgumentError unless start.is_a?(Date) && finish.is_a?(Date)
 
-    opts = {max: 200, ignore_pauses: false, ignore_halts: false}.merge(opts)
+    opts = { max: 200, ignore_pauses: false, ignore_halts: false }.merge(opts)
     start, finish = [start, finish].reverse if start > finish
 
     result = []
     current = start
     0.upto(opts[:max]).each do
-      current = next_occurrence(current, {ignore_pauses: opts[:ignore_pauses],
-                                          ignore_halts: opts[:ignore_pauses]})
+      current = next_occurrence(current, { ignore_pauses: opts[:ignore_pauses],
+                                           ignore_halts: opts[:ignore_pauses] })
 
       if current.present? && current <= finish
         result << current
@@ -173,15 +173,15 @@ class ScheduleRule < ActiveRecord::Base
     end
   end
 
-  def one_off?; recur == :one_off || recur == :single || recur.nil?;end
+  def one_off?; recur == :one_off || recur == :single || recur.nil?; end
 
-  def single?; recur == :single;end
+  def single?; recur == :single; end
 
-  def weekly?; recur == :weekly;end
+  def weekly?; recur == :weekly; end
 
-  def fortnightly?; recur == :fortnightly;end
+  def fortnightly?; recur == :fortnightly; end
 
-  def monthly?; recur == :monthly;end
+  def monthly?; recur == :monthly; end
 
   def days
     DAYS.select { |day| on_day?(day) }
@@ -203,8 +203,8 @@ class ScheduleRule < ActiveRecord::Base
 
   # returns true if the given schedule_rule occurs on a subset of this schedule_rule's occurrences
   # Only tests pauses in a basic manner, so might return false negatives
-  def includes?(schedule_rule, opts={})
-    opts = {ignore_start: false}.merge(opts)
+  def includes?(schedule_rule, opts = {})
+    opts = { ignore_start: false }.merge(opts)
 
     raise "Expecting a ScheduleRule, not #{schedule_rule.class}" unless schedule_rule.is_a?(ScheduleRule)
     case recur
@@ -233,11 +233,11 @@ class ScheduleRule < ActiveRecord::Base
                           schedule_pause.finish <= schedule_rule.start
     end
 
-    schedule_rule.days.all?{|day| on_day?(day)}
+    schedule_rule.days.all? { |day| on_day?(day) }
   end
 
   def has_at_least_one_day?
-    DAYS.collect{|day| self.send(day)}.any?
+    DAYS.collect { |day| self.send(day) }.any?
   end
 
   def json
@@ -253,19 +253,19 @@ class ScheduleRule < ActiveRecord::Base
   end
 
   def deleted_days
-    DAYS.select{|day| self.send("#{day}_changed?".to_sym) && self.send(day) == false}
+    DAYS.select { |day| self.send("#{day}_changed?".to_sym) && self.send(day) == false }
   end
 
   def deleted_day_numbers
-    DAYS.each_with_index.collect{|day, index| (self.send("#{day}_changed?".to_sym) && self.send(day) == false) ? index : nil}.compact
+    DAYS.each_with_index.collect { |day, index| (self.send("#{day}_changed?".to_sym) && self.send(day) == false) ? index : nil }.compact
   end
 
-  def pause!(start, finish=nil)
+  def pause!(start, finish = nil)
     pause(start, finish)
     save!
   end
 
-  def pause(start, finish=nil)
+  def pause(start, finish = nil)
     start = Date.parse(start.to_s) unless start.is_a?(Date)
     finish = Date.parse(finish.to_s) unless finish.blank? || finish.is_a?(Date)
     start, finish = finish, start if finish && start > finish

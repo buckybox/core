@@ -15,7 +15,7 @@ class ExclusionsSubstitutionsCsv
 
       exclusions_substitutions.map do |line_item, boxes|
         boxes_exclusions_substitutions = boxes.sort_by(&:first).map do |_box, e_s|
-          [ e_s[:exclusions], e_s[:substitutions] ]
+          [e_s[:exclusions], e_s[:substitutions]]
         end.flatten
 
         csv << [

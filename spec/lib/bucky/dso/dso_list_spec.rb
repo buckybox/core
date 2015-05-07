@@ -3,7 +3,7 @@ require 'spec_helper'
 include Bucky::Dso
 
 describe Bucky::Dso::List do
-  let(:list){ List.new([[:a, 1], [:b, 2], [:c, 3], [:d, 4]]) }
+  let(:list) { List.new([[:a, 1], [:b, 2], [:c, 3], [:d, 4]]) }
 
   it 'should make a new list' do
     expect(list.to_a).to eq([[:a, 1], [:b, 2], [:c, 3], [:d, 4]])
@@ -17,12 +17,12 @@ describe Bucky::Dso::List do
   end
 
   it 'should return nil when at end of list' do
-    4.times{list.next}
+    4.times { list.next }
     expect(list.next).to eq(nil)
   end
 
   it 'should reset pointer' do
-    5.times{list.next}
+    5.times { list.next }
     list.reset
     expect(list.next.to_a).to eq([:a, 1])
   end
@@ -51,7 +51,7 @@ describe Bucky::Dso::List do
   end
 
   it 'should return true when pointing at last element' do
-    4.times{list.next}
+    4.times { list.next }
     expect(list.finished?).to be true
   end
 

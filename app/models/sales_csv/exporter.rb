@@ -9,7 +9,7 @@ module SalesCsv
     end
 
     def csv
-      [ data, file_args ]
+      [data, file_args]
     end
 
   protected
@@ -44,7 +44,7 @@ module SalesCsv
     end
 
     def csv_data
-      @csv_data ||= ( packing_screen? ? sorted_and_grouped : sorted_by_dso )
+      @csv_data ||= (packing_screen? ? sorted_and_grouped : sorted_by_dso)
     end
 
     def sorted_and_grouped

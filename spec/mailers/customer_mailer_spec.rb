@@ -5,7 +5,7 @@ describe CustomerMailer do
   let(:body) { mail.body.encoded }
 
   describe "#login_details" do
-    let(:mail) { CustomerMailer.login_details(@customer)}
+    let(:mail) { CustomerMailer.login_details(@customer) }
 
     it "renders the headers" do
       expect(mail.subject).to include "login details"
@@ -17,7 +17,7 @@ describe CustomerMailer do
   end
 
   describe "#halt" do
-    let(:mail){ CustomerMailer.orders_halted(@customer) }
+    let(:mail) { CustomerMailer.orders_halted(@customer) }
 
     it "cc's distributor" do
       expect(mail.cc).to eq [@customer.distributor.support_email]
@@ -32,7 +32,7 @@ describe CustomerMailer do
 
     specify { expect(mail.to).to eq [@customer.email] }
     specify { expect(mail.subject).to eq email_template.subject }
-    specify { expect(mail.body.parts.find{|p| p.content_type.match(/plain/)}.body.raw_source).to eq(email_template.body)}
+    specify { expect(mail.body.parts.find { |p| p.content_type.match(/plain/) }.body.raw_source).to eq(email_template.body) }
   end
 
   describe "#order_confirmation" do

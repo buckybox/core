@@ -14,7 +14,7 @@ package :passenger, :provides => :appserver do
 
   verify do
     has_gem "passenger", version
-    binaries.each {|bin| has_file "/usr/local/bin/#{bin}" }
+    binaries.each { |bin| has_file "/usr/local/bin/#{bin}" }
   end
 end
 

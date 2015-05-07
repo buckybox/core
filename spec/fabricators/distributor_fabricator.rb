@@ -21,7 +21,7 @@ Fabricator(:distributor_with_information, from: :distributor) do
 end
 
 Fabricator(:distributor_with_a_customer, from: :distributor) do
-  after_create {|distributor| distributor.customers << Fabricate(:customer, distributor: distributor)}
+  after_create { |distributor| distributor.customers << Fabricate(:customer, distributor: distributor) }
 end
 
 Fabricator(:distributor_with_everything, from: :distributor_with_information) do

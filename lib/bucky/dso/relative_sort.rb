@@ -6,7 +6,7 @@ module Bucky::Dso
       ordered_list.each_with_index do |sortable, o_index|
         w_index = working_list.index(sortable)
 
-        test_index = lowest_index(working_list, ordered_list[(o_index+1)..-1])
+        test_index = lowest_index(working_list, ordered_list[(o_index + 1)..-1])
         working_list.move(w_index, test_index) if !test_index.nil? && w_index > test_index
 
         w_index = working_list.index(sortable)
@@ -18,11 +18,11 @@ module Bucky::Dso
     end
 
     def self.lowest_index(working_list, ordered_list)
-      ordered_list.collect{|s| working_list.index(s)}.min
+      ordered_list.collect { |s| working_list.index(s) }.min
     end
 
     def self.highest_index(working_list, ordered_list)
-      ordered_list.collect{|s| working_list.index(s)}.max
+      ordered_list.collect { |s| working_list.index(s) }.max
     end
   end
 end

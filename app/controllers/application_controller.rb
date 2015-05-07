@@ -118,7 +118,7 @@ protected
     end
   end
 
-  def account_transactions(account, offset=0, limit=6, dummy=true)
+  def account_transactions(account, offset = 0, limit = 6, dummy = true)
     transactions = []
     if cookies["transaction_order"].blank? || cookies["transaction_order"] == 'date_processed'
       transactions = account.transactions.ordered_by_created_at.limit(limit).offset(offset)

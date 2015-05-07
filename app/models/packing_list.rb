@@ -14,10 +14,10 @@ class PackingList < ActiveRecord::Base
 
   def self.collect_list(distributor, date)
     if distributor.packing_lists.where(date: date).count > 0
-      distributor.packing_lists.where(date: date).includes({ packages: {}}).first
+      distributor.packing_lists.where(date: date).includes({ packages: {} }).first
     else
       order_ids = Bucky::Sql.order_ids(distributor, date)
-      orders = distributor.orders.active.where(id: order_ids).includes({ account: {customer: {address:{}, deliveries: {delivery_list: {}}}}, order_extras: {}, box: {}})
+      orders = distributor.orders.active.where(id: order_ids).includes({ account: { customer: { address: {}, deliveries: { delivery_list: {} } } }, order_extras: {}, box: {} })
 
       FuturePackingList.new(date, orders, false)
     end
@@ -41,7 +41,7 @@ class PackingList < ActiveRecord::Base
 
   def self.get(distributor, date)
     packing_list = PackingList.find_by_distributor_id_and_date(distributor.id, date)
-    packing_list ||= PackingList.create!({distributor: distributor, date: date})
+    packing_list ||= PackingList.create!({ distributor: distributor, date: date })
     packing_list
   end
 

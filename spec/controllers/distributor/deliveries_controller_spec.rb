@@ -19,13 +19,13 @@ describe Distributor::DeliveriesController do
     end
 
     it "should order deliveries based on the DSO" do
-      get :index, {date: @date, view: @delivery_service.id.to_s}
+      get :index, { date: @date, view: @delivery_service.id.to_s }
 
       expect(assigns[:all_deliveries]).to eq(@deliveries.sort_by(&:dso))
     end
 
     it "should order future deliveries based on the DSO" do
-      get :index, {date: @date+1.week, view: @delivery_service.id.to_s}
+      get :index, { date: @date + 1.week, view: @delivery_service.id.to_s }
       expect(assigns[:all_deliveries]).to eq(@deliveries.sort_by(&:dso).collect(&:order))
     end
 
@@ -37,7 +37,7 @@ describe Distributor::DeliveriesController do
       allow(delivery_lists).to receive(:find_by_date).with(@date_string).and_return(delivery_list)
       allow_any_instance_of(Distributor).to receive(:delivery_lists).and_return(delivery_lists)
 
-      post :reposition, {date: @date_string, delivery: delivery_ids}
+      post :reposition, { date: @date_string, delivery: delivery_ids }
     end
   end
 end
