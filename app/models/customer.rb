@@ -305,7 +305,7 @@ class Customer < ActiveRecord::Base
   end
 
   def orders_pending_package_creation?
-    orders.any? { |o| o.pending_package_creation? }
+    orders.any?(&:pending_package_creation?)
   end
 
   def send_login_details
@@ -472,8 +472,6 @@ class Customer
 
   private
 
-    def type
-      @type
-    end
+    attr_reader :type
   end
 end

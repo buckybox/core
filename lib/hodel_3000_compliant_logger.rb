@@ -10,7 +10,7 @@ class Hodel3000CompliantLogger < Logger
   # Note: If you are using FastCGI you may need to hard-code the hostname here instead of using Socket.gethostname
 
   def format_message(_severity, timestamp, _progname, msg)
-    "#{timestamp.strftime("%b %d %H:%M:%S")} #{hostname} rails[#{$PID}]: #{msg2str(msg).gsub(/\n/, '').lstrip}\n"
+    "#{timestamp.strftime('%b %d %H:%M:%S')} #{hostname} rails[#{$PID}]: #{msg2str(msg).gsub(/\n/, '').lstrip}\n"
   end
 
 # original method, pre-patch for Exception handling:

@@ -113,7 +113,7 @@ describe Distributor::CustomersController do
           post :email, params.merge(link_action: "save")
 
           expect(response).to be_successful
-          expect(message).to eq "Your new email template <em>#{email_template["subject"]}</em> has been saved."
+          expect(message).to eq "Your new email template <em>#{email_template['subject']}</em> has been saved."
         end
       end
 

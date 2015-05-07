@@ -4,9 +4,7 @@ class AddNextOrderToCustomers < ActiveRecord::Migration
     add_column :customers, :next_order_occurrence_date, :date
 
     Customer.reset_column_information
-    Distributor.find_each do |distributor|
-      distributor.update_next_occurrence_caches
-    end
+    Distributor.find_each(&:update_next_occurrence_caches)
   end
 
   def down

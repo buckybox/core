@@ -2,6 +2,4 @@
 
 NullObject = Naught.build
 
-BlackHole = Naught.build do |config|
-  config.black_hole
-end
+BlackHole = Naught.build(&:black_hole)

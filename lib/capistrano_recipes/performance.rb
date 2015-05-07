@@ -28,11 +28,11 @@ Capistrano::Configuration.instance(:must_exist).load do |config|
     (order + [nil]).each_cons(2) do |payload1, payload2|
       action, task = payload1
       if action == :start
-        puts "#{".." * indent}#{task.fully_qualified_name}" unless task == payload2.last
+        puts "#{'..' * indent}#{task.fully_qualified_name}" unless task == payload2.last
         indent += 1
       else
         indent -= 1
-        puts "#{".." * indent}#{task.fully_qualified_name} #{(end_times[task] - start_times[task]).to_i}s"
+        puts "#{'..' * indent}#{task.fully_qualified_name} #{(end_times[task] - start_times[task]).to_i}s"
       end
     end
 
