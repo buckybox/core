@@ -536,13 +536,13 @@ class Distributor < ActiveRecord::Base
     last_seen_at && last_seen_at > 30.minutes.ago
   end
 
-  def sales_last_30_days(with_currency: true)
+  def sales_last_30_days
     @sales_last_30_days ||= begin
       amount = deductions.where("created_at > ?", 30.days.ago) \
                .where(deductable_type: "Delivery") \
                .sum(&:amount)
 
-      with_currency ? "#{amount} #{currency}" : CrazyMoney.new(amount)
+      CrazyMoney.new(amount)
     end
   end
 
