@@ -1,15 +1,13 @@
 class ImportTransactionList < ActiveRecord::Base
   belongs_to :distributor
-  has_many :import_transactions, autosave: true, validate: true, dependent: :destroy
   belongs_to :omni_importer
-
+  has_many :import_transactions, autosave: true, validate: true, dependent: :destroy
   accepts_nested_attributes_for :import_transactions
 
-  mount_uploader :csv_file, ImportTransactionListUploader
-
   validates_presence_of :csv_file
-
   validate :csv_ready, on: :create
+
+  mount_uploader :csv_file, ImportTransactionListUploader
 
   before_create :import_rows
 
@@ -32,23 +30,12 @@ class ImportTransactionList < ActiveRecord::Base
     end
   end
 
-  # Used to move the csv_files to the new directory private_uploads
-  def move_old_csv_file
-    original_path = [nil, "omni_importer", "bnz", "kiwibank", "anz", "national", "paypal", "reo_uk", "st_george_au", "uk_coop_bank", "uk_lloyds_tsb"].collect do|f|
-      ["#{Rails.root}/public/system/uploads/payments/csv", f, "#{self[:csv_file]}"].compact.join('/')
-    end.find{|path| File.exist?(path)}
-    unless original_path.blank?
-      FileUtils.mkdir_p(File.dirname(csv_file.to_s))
-      File.rename(original_path, csv_file.to_s)
-    end
-  end
-
   def account
     omni_importer.name if omni_importer.present?
   end
 
   def has_failed?
-    errors.size > 0 || (csv_parser.present? && !csv_parser.rows.reject(&:valid?).size.zero?)
+    errors.size > 0 || (csv_parser && csv_parser.rows.any?(&:invalid?))
   end
 
   def error_messages
@@ -76,8 +63,6 @@ class ImportTransactionList < ActiveRecord::Base
     return nil unless errors.blank? && csv_file.present?
 
     @parser = omni_importer.import(csv_file.current_path)
-
-    @parser
   end
 
   def file_format
