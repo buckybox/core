@@ -377,9 +377,7 @@ class Distributor < ActiveRecord::Base
     @spend_limit_on_all_customers = val.to_bool
   end
 
-  def spend_limit_on_all_customers
-    @spend_limit_on_all_customers
-  end
+  attr_reader :spend_limit_on_all_customers
   alias_method :spend_limit_on_all_customers?, :spend_limit_on_all_customers
 
   def send_email?
@@ -392,9 +390,9 @@ class Distributor < ActiveRecord::Base
 
   def number_of_customers_emailed_after_update(spend_limit, update_existing)
     if update_existing
-      customers.joins(:account).where(["accounts.balance_cents <= ? and customers.status_halted = 'f'", spend_limit]).count { |c| c.orders_pending_package_creation? }
+      customers.joins(:account).where(["accounts.balance_cents <= ? and customers.status_halted = 'f'", spend_limit]).count(&:orders_pending_package_creation?)
     else
-      customers.joins(:account).where("accounts.balance_cents <= customers.balance_threshold_cents and customers.status_halted = 'f'").count { |c| c.orders_pending_package_creation? }
+      customers.joins(:account).where("accounts.balance_cents <= customers.balance_threshold_cents and customers.status_halted = 'f'").count(&:orders_pending_package_creation?)
     end
   end
 

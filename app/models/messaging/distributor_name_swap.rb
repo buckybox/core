@@ -24,8 +24,6 @@ module Messaging
 
   private
 
-    def distributor
-      @distributor
-    end
+    attr_reader :distributor
   end
 end

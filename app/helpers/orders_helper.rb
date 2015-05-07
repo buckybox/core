@@ -17,7 +17,7 @@ module OrdersHelper
     if order.recurs?
       order.schedule_rule.deliver_on
     elsif order.next_occurrence
-      "#{t('deliver_on')} #{l order.next_occurrence, format: "%A"}"
+      "#{t('deliver_on')} #{l order.next_occurrence, format: '%A'}"
     else
       t('models.schedule_rule.no_future_deliveries')
     end

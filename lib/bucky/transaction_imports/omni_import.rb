@@ -211,7 +211,7 @@ EOF
     end
 
     def longest_row_length
-      rows.collect { |r| r.size }.max
+      rows.collect(&:size).max
     end
 
     def empty_column_count

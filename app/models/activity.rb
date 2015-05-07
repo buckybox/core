@@ -1,13 +1,13 @@
 class Activity < ActiveRecord::Base
   ACTIONS = {
     order_pause: lambda do |params|
-      "#{params.initiator} paused their order of #{params.order.box.name} starting #{params.order.pause_date.strftime("%a %d %b")}"
+      "#{params.initiator} paused their order of #{params.order.box.name} starting #{params.order.pause_date.strftime('%a %d %b')}"
     end,
     order_remove_pause: lambda do |params|
       "#{params.initiator} unpaused their order of #{params.order.box.name}"
     end,
     order_resume: lambda do |params|
-      "#{params.initiator} updated their order of #{params.order.box.name} to resume on #{params.order.resume_date.strftime("%a %d %b")}"
+      "#{params.initiator} updated their order of #{params.order.box.name} to resume on #{params.order.resume_date.strftime('%a %d %b')}"
     end,
     order_remove_resume: lambda do |params|
       "#{params.initiator} updated their order of #{params.order.box.name} to no longer resume"

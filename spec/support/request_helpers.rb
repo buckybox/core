@@ -7,8 +7,6 @@ module Requests
       @json_response = JSON.parse(response.body) # will raise with invalid JSON
     end
 
-    def json_response
-      @json_response
-    end
+    attr_reader :json_response
   end
 end

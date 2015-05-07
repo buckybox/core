@@ -7,7 +7,7 @@ package :ruby do
   version '2.1.2'
   patchlevel '' # e.g. '353' or '' for none
   binaries = %w( ruby rdoc ri rake irb erb )
-  source "ftp://ftp.ruby-lang.org/pub/ruby/#{version.split(".")[0..1].join(".")}/ruby-#{version}#{"-p#{patchlevel}" unless patchlevel.empty?}.tar.gz" do
+  source "ftp://ftp.ruby-lang.org/pub/ruby/#{version.split('.')[0..1].join('.')}/ruby-#{version}#{"-p#{patchlevel}" unless patchlevel.empty?}.tar.gz" do
     binaries.each { |bin| post :install, "ln -sf usr/local/bin/#{bin} /usr/bin/#{bin}" }
   end
   requires :ruby_dependencies
