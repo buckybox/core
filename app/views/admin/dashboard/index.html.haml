@@ -3,11 +3,10 @@
 .row-fluid
   .span12
     .text-center.muted
-      Latest deployment:
+      Version:
       - commit = Rails.application.config.version.split.first
       - link = "https://github.com/enspiral/bucky_box/commit/#{commit}"
       = link_to Rails.application.config.version, link, target: "_blank"
-      running Ruby #{RUBY_VERSION}
 
 .row-fluid
   .span6
