@@ -52,7 +52,6 @@ private
     distributor = Distributor.find_by_email(distributor_email)
     return if distributor.blank?
 
-    distributor_id = distributor.read_attribute(:id) if distributor
     distributor.update_attributes(currency: currency, invoice_threshold_currency: currency)
 
     if distributor

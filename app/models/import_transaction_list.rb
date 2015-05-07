@@ -79,12 +79,6 @@ class ImportTransactionList < ActiveRecord::Base
       ImportTransaction.process_attributes(transaction_attributes)
     end
 
-    # Remove any customers which shouldn't be here
-    hash_customer_ids = distributor.customer_ids.inject({}) { |hash, element| hash.merge(element.to_s => true) }
-    transactions_attributes = transactions_attributes.select do |_id, transaction_attributes|
-      hash_customer_ids.key?(transaction_attributes[:customer_id])
-    end
-
     import_transaction_list_attributes
   end
 

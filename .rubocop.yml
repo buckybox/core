@@ -125,10 +125,6 @@ Style/StructInheritance:
 Style/TrailingComma:
   Enabled: false
 
-# Offense count: 1
-Style/UnlessElse:
-  Enabled: false
-
 Rails/Date:
   Enabled: false # FIXME
 
@@ -162,14 +158,11 @@ Style/SignalException:
 Style/ClosingParenthesisIndentation:
   Enabled: false
 
-Performance/Detect:
-  Enabled: false
-
 Performance/ParallelAssignment:
   Enabled: false
 
 Lint/UselessAssignment:
-  Enabled: false
+  Exclude: ["config/compass.rb", "spec/**/*"]
 
 Lint/LiteralInInterpolation:
   Enabled: false
