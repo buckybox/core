@@ -55,7 +55,7 @@
             Next delivery:
             %strong= distributors_next_delivery_date(distributor)
         .span2.align-right.medium.bold
-          = "#{distributor.sales_last_30_days(with_currency: false).decorate.to_human} #{distributor.currency}"
+          = "#{distributor.sales_last_30_days.to_k} #{distributor.currency}"
           %i.icon-book(title="sales in last 30 days")
         .span3.align-right.small
           = link_to 'Edit', edit_admin_distributor_path(distributor)
