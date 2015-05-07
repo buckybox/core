@@ -74,7 +74,7 @@ describe Customer do
   specify { expect(customer).to be_valid }
 
   context :create_with_account_under_limit do
-    let(:distributor) { Fabricate(:distributor, default_balance_threshold_cents: -50000, has_balance_threshold: true) }
+    let(:distributor) { Fabricate(:distributor, default_balance_threshold_cents: -50_000, has_balance_threshold: true) }
 
     it 'should create a valid customer' do
       c = distributor.customers.create({"first_name"=>"Jordan", "last_name"=>"Carter", "tag_list"=>"", "email"=>"jordan+3@buckybox.com", "address_attributes"=>{"mobile_phone"=>"", "home_phone"=>"", "work_phone"=>"", "address_1"=>"43a Warwick St", "address_2"=>"Wilton", "suburb"=>"Wellington", "city"=>"Wellington", "postcode"=>"6012", "delivery_note"=>""}, "balance_threshold"=>"1.00", "discount"=>"0", "special_order_preference"=>"", "delivery_service_id"=>"68"})

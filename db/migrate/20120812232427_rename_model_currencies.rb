@@ -11,4 +11,3 @@ class RenameModelCurrencies < ActiveRecord::Migration
     rename_column :packages, :currency, :archived_price_currency
   end
 end
-

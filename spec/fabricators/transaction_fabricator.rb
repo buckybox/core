@@ -9,4 +9,3 @@ Fabricator(:transaction_deduction, from: :transaction) do
   transactionable { Fabricate(:deduction) }
   description 'deduction transaction'
 end
-

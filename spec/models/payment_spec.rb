@@ -73,4 +73,3 @@ describe Payment, :slow do
     end
   end
 end
-

@@ -21,4 +21,3 @@ class BankInformationDecorator < Draper::Decorator
     object
   end
 end
-

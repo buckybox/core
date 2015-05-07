@@ -36,4 +36,3 @@ describe CustomerCSV do
     end
   end
 end
-

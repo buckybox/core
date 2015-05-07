@@ -144,4 +144,3 @@ group :assets do
   gem "sass-rails"
   gem "compass-rails"
 end
-

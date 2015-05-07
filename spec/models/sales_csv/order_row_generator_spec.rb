@@ -58,5 +58,3 @@ describe SalesCsv::OrderRowGenerator do
     end
   end
 end
-
-

@@ -7,4 +7,3 @@ if ARGV[0] == "config"
 else
   puts File.read "munin_weekly_metrics"
 end
-

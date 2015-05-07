@@ -11,4 +11,3 @@ describe Distributor::BoxesController do
     specify { expect(response).to be_success }
   end
 end
-

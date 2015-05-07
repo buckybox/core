@@ -81,4 +81,3 @@ BuckyBox::Application.configure do
 
   config.middleware.insert(0, Rack::CleanHeaders)
 end
-

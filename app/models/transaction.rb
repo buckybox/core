@@ -29,7 +29,7 @@ class Transaction < ActiveRecord::Base
       amount: CrazyMoney.zero,
       created_at: date,
       display_time: date,
-      id: 999999999
+      id: 999_999_999
     )
   end
 end

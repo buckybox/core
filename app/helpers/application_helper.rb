@@ -1,7 +1,7 @@
 module ApplicationHelper
   FEATURED_CURRENCIES = [:gbp, :aud, :hkd, :usd, :nzd]
 
-  def asset_url asset
+  def asset_url(asset)
     [request.protocol, request.host_with_port, asset_path(asset)].join
   end
 

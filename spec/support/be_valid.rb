@@ -15,4 +15,3 @@ RSpec::Matchers.define :be_valid do
     "be valid"
   end
 end
-

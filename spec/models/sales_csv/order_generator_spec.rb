@@ -67,4 +67,3 @@ describe SalesCsv::OrderGenerator do
     ].to_csv
   end
 end
-

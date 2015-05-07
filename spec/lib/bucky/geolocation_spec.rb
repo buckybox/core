@@ -70,4 +70,3 @@ describe Bucky::Geolocation do
     end
   end
 end
-

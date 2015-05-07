@@ -64,4 +64,3 @@ describe ExtrasCsv do
     specify { expect(@rows[4]).to eq [@date.iso8601, "Extra 3", "g",    "6.50", "0", "yes", "", ""] }
   end
 end
-

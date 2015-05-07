@@ -447,7 +447,7 @@ protected
   end
 
   def delivery_service_includes_schedule_rule
-    if !account.delivery_service.includes?(schedule_rule, {ignore_start: true})
+    unless account.delivery_service.includes?(schedule_rule, {ignore_start: true})
       errors.add(:schedule_rule, "DeliveryService #{account.delivery_service.name}'s schedule '#{account.delivery_service.schedule_rule.inspect} doesn't include this order's schedule of '#{schedule_rule.inspect}'")
     end
   end

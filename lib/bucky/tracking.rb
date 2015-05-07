@@ -15,4 +15,3 @@ module Bucky
     end
   end
 end
-

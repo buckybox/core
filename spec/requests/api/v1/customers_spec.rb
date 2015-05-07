@@ -133,7 +133,8 @@ describe "API v1" do
 
     describe "POST /customers" do
       let(:url) { "#{base_url}/customers" }
-      let(:params) do <<-JSON
+      let(:params) do
+        <<-JSON
         {
             "first_name": "Will",
             "last_name": "Lau",
@@ -187,7 +188,8 @@ describe "API v1" do
     describe "PUT /customers/:id" do
       let(:customer) { @customers.first }
       let(:url) { "#{base_url}/customers/#{customer.id}" }
-      let(:params) do <<-JSON
+      let(:params) do
+        <<-JSON
         {
             "first_name": "Will",
             "last_name": "Lau",

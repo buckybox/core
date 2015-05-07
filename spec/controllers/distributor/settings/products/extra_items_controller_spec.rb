@@ -47,4 +47,3 @@ describe Distributor::Settings::Products::ExtraItemsController do
     end
   end
 end
-

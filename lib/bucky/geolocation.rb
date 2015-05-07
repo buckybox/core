@@ -4,18 +4,18 @@ module Bucky
   module Geolocation
   module_function
 
-    def get_country ip_address
+    def get_country(ip_address)
       info = Geolocation.get_geoip_info ip_address
       info.country_code if info
     end
 
-    def get_time_zone country_code
+    def get_time_zone(country_code)
       country = Country.find_by(alpha2: country_code)
       country.time_zone if country
     end
 
     # TODO: this is terribly filthy
-    def get_address_form country_code, resource
+    def get_address_form(country_code, resource)
       model_name = resource.class.model_name.downcase
       format = Biggs::Format.new(country_code).format_string
 
@@ -39,16 +39,16 @@ module Bucky
 
         html = fields.map do |field|
           value = resource.localised_address && resource.localised_address.public_send(field)
-          %{
+          %(
             <input id="#{model_name}_localised_address_#{field}" name="#{model_name}[localised_address_attributes][#{field}]" placeholder="#{field_descriptions[field]}" #{'required="required"' if field.in? required_fields} type="text" style="width: #{width}%" value="#{value}">
-          }.strip
+                    ).strip
         end.join
 
         "<div>#{html}</div>" if html.present?
       end.join.html_safe
     end
 
-    def get_geoip_info ip_address
+    def get_geoip_info(ip_address)
       Timeout.timeout(1) do
         info = Geokit::Geocoders::FreeGeoIpGeocoder.do_geocode(ip_address)
         info.success ? info : nil
@@ -58,4 +58,3 @@ module Bucky
     end
   end
 end
-

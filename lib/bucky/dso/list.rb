@@ -45,8 +45,8 @@ module Bucky::Dso
       empty? || pointer == list.size
     end
 
-    def -(list)
-      hash = list.sortables.inject({}){|h, key| h.merge(key => true)}
+    def -(other)
+      hash = other.sortables.inject({}){|h, key| h.merge(key => true)}
       List.new(to_a.reject{|s| hash.key?(s.first)})
     end
 

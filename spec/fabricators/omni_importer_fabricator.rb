@@ -40,4 +40,3 @@ Fabricator(:paypal_omni_importer, from: :omni_importer) do
   payment_type "PayPal"
   country
 end
-

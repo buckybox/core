@@ -7,4 +7,3 @@ protected
     current_customer
   end
 end
-

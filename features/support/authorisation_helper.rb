@@ -29,4 +29,3 @@ module AuthorisationHelper
 end
 
 World(AuthorisationHelper)
-

@@ -11,4 +11,3 @@ class AccountDecorator < Draper::Decorator
     object.balance.negative?
   end
 end
-

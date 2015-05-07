@@ -15,4 +15,3 @@ class DeliveryServiceDecorator < Draper::Decorator
     object.schedule_rule.days.map(&:capitalize).join(", ")
   end
 end
-

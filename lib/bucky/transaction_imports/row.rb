@@ -182,11 +182,11 @@ module Bucky::TransactionImports
       MatchResult.new(nil, 0.0, :unable_to_match)
     end
 
-    def <=>(b)
-      if self.confidence == b.confidence
-        self.customer <=> b.customer
+    def <=>(other)
+      if self.confidence == other.confidence
+        self.customer <=> other.customer
       else
-        self.confidence <=> b.confidence
+        self.confidence <=> other.confidence
       end
     end
   end

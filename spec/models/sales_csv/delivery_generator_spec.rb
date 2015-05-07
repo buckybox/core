@@ -67,4 +67,3 @@ describe SalesCsv::DeliveryGenerator do
     ].to_csv
   end
 end
-

@@ -13,4 +13,3 @@ describe Distributor::SessionsController do
     end
   end
 end
-

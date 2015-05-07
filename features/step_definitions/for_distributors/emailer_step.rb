@@ -23,4 +23,3 @@ Then "I should be able to send an email" do
     page.should have_content "Your email", "is being sent" # wait for the page to be reloaded
     step "I should be viewing the dashboard"
 end
-

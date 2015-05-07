@@ -6,4 +6,3 @@ package :munin, :provides => :reporting do
     has_file '/etc/munin/munin.conf'
   end
 end
-

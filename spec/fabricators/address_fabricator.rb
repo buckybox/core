@@ -17,4 +17,3 @@ Fabricator(:full_address, from: :address) do
   home_phone { '22-222-222-2222' }
   work_phone { '33-333-333-3333' }
 end
-

@@ -18,7 +18,7 @@ class Customer::Form::UpdateContactDetails < Customer::Form
     return false unless self.valid?
 
     customer.update_attributes(customer_args) &&
-    address.update_attributes(address_args)
+      address.update_attributes(address_args)
   end
 
 protected

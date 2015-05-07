@@ -14,4 +14,3 @@ class Distributor::SessionsController < Devise::SessionsController
     result
   end
 end
-

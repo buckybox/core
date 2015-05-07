@@ -1,6 +1,6 @@
 module Distributor::DashboardHelper
   # NOTE: Events will be cleaned up eventually likely moving this case statement into a more OO design.
-  def notification_message_for notification
+  def notification_message_for(notification)
     case notification.event_type
     when Event::EVENT_TYPES[:customer_new]
       customer = notification.customer
@@ -38,19 +38,19 @@ module Distributor::DashboardHelper
     end
   end
 
-  def link_to_customer customer
+  def link_to_customer(customer)
     link_to "#{customer.name} (ID:#{customer.id})", distributor_customer_path(customer.id)
   end
 
-  def link_to_delivery delivery_id
+  def link_to_delivery(delivery_id)
     link_to  "delivery", distributor_delivery_path(delivery_id)
   end
 
-  def link_to_transaction transaction_id
+  def link_to_transaction(transaction_id)
     link_to "Transaction ##{transaction_id}", distributor_transaction_path(transaction_id)
   end
 
-  def date_for notification
+  def date_for(notification)
     notification.created_at.to_s(:date_month)
   end
 

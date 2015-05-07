@@ -6,4 +6,3 @@ package :htop do
     has_file '/usr/bin/htop'
   end
 end
-

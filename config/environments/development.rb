@@ -54,4 +54,3 @@ BuckyBox::Application.configure do
     save_at_exit: true,
   ) if ENV["STACKPROF"]
 end
-

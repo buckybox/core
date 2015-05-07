@@ -71,4 +71,3 @@ describe SalesCsv::DeliveryRowGenerator do
     end
   end
 end
-

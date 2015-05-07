@@ -13,4 +13,3 @@ protected
 
   attr_reader :bank_information
 end
-

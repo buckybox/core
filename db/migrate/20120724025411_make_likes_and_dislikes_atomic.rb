@@ -154,4 +154,3 @@ class MakeLikesAndDislikesAtomic < ActiveRecord::Migration
     string
   end
 end
-

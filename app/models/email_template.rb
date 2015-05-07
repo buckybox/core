@@ -12,7 +12,7 @@ class EmailTemplate < EmailTemplator
     email_address:         :email,
   }
 
-  def pre_personalize_hook customer
+  def pre_personalize_hook(customer)
     customer.decorate unless customer.decorated?
   end
 end

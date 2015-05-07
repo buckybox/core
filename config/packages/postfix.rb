@@ -7,4 +7,3 @@ package :postfix do
     has_file '/etc/init.d/postfix'
   end
 end
-

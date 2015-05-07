@@ -18,7 +18,7 @@ def output_values
     exit 1
   end
   status =~ /(\d+\.\d+)/
-  puts "memory.value #{$1}"
+  puts "memory.value #{Regexp.last_match(1)}"
 end
 
 if ARGV[0] == "config"

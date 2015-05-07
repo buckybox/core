@@ -244,7 +244,7 @@ EOF
       end
     end
 
-    def self.sanitize_amount amount
+    def self.sanitize_amount(amount)
       amount && amount.gsub(/[^\d.-]/, '')
     end
 

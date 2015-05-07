@@ -98,4 +98,3 @@ describe "API v1" do
     end
   end
 end
-

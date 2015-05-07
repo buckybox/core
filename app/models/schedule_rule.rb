@@ -173,7 +173,7 @@ class ScheduleRule < ActiveRecord::Base
     end
   end
 
-  def one_off?; recur == :one_off || recur == :single || recur == nil;end
+  def one_off?; recur == :one_off || recur == :single || recur.nil?;end
 
   def single?; recur == :single;end
 
@@ -209,13 +209,13 @@ class ScheduleRule < ActiveRecord::Base
     raise "Expecting a ScheduleRule, not #{schedule_rule.class}" unless schedule_rule.is_a?(ScheduleRule)
     case recur
     when :one_off
-      return false if !schedule_rule.one_off?
+      return false unless schedule_rule.one_off?
     when :single
-      return false if !schedule_rule.one_off?
+      return false unless schedule_rule.one_off?
     when :fortnightly
       return false if schedule_rule.weekly? || schedule_rule.monthly?
       if schedule_rule.fortnightly?
-        return false if !((schedule_rule.start - (start - start.wday)) / 7).to_i.even?
+        return false unless ((schedule_rule.start - (start - start.wday)) / 7).to_i.even?
       end
     when :monthly
       return false unless schedule_rule.monthly? || (schedule_rule.one_off? && schedule_rule.start.day < 8)
@@ -230,7 +230,7 @@ class ScheduleRule < ActiveRecord::Base
       return false unless ((schedule_rule.one_off? &&
           schedule_rule.start < schedule_pause.start) ||
         schedule_pause.finish <= schedule_rule.start) ||
-      schedule_pause.finish <= schedule_rule.start
+                          schedule_pause.finish <= schedule_rule.start
     end
 
     schedule_rule.days.all?{|day| on_day?(day)}

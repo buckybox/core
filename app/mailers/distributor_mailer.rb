@@ -22,7 +22,7 @@ class DistributorMailer < ApplicationMailer
 
 private
 
-  def send_via_gmail email
+  def send_via_gmail(email)
     email.delivery_method.settings.merge!(
       address:              Figaro.env.gmail_smtp_host,
       port:                 Figaro.env.gmail_smtp_port,

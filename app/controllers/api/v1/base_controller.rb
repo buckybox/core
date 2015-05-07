@@ -53,7 +53,7 @@ private
       @distributor = Distributor.find_by(api_key: api_key, api_secret: api_secret)
     end
 
-    return not_found if !@distributor
+    return not_found unless @distributor
   end
 
   def set_time_zone
@@ -93,7 +93,7 @@ private
   end
 
   # 422
-  def unprocessable_entity errors
+  def unprocessable_entity(errors)
     render json: { errors: errors }, status: :unprocessable_entity and return
   end
 end
