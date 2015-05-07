@@ -538,6 +538,16 @@ class Distributor < ActiveRecord::Base
     last_seen_at && last_seen_at > 30.minutes.ago
   end
 
+  def sales_last_30_days
+    @sales_last_30_days ||= begin
+      amount = deductions.where("created_at > ?", 30.days.ago) \
+        .where(deductable_type: "Delivery") \
+        .sum(&:amount).round.to_s(decimal_places: 0)
+
+      "#{amount} #{currency}".freeze
+    end
+  end
+
 private
 
   def self.human_attribute_name(attr, options = {})
