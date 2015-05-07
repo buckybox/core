@@ -65,7 +65,7 @@ private
 
         %i(exclusions substitutions).each do |line_item_type|
           package_or_order_exclusions_substitutions = package_or_order.public_send(line_item_type)
-          count = package_or_order_exclusions_substitutions.select { |i| i.line_item_id == line_item.id }.size
+          count = package_or_order_exclusions_substitutions.count { |i| i.line_item_id == line_item.id }
 
           # oh yeah that's ugly!
           exclusions_substitutions[line_item_name][box_name][line_item_type] ||= 0
