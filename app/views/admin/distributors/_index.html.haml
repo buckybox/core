@@ -18,16 +18,16 @@
           %br
           = distributor.new_customer_count
           = "(#{distributor.new_transactional_customer_count})"
-          %i.icon-plus(title="new customer in last 7 days (new transactions)")
+          %i.icon-plus(title="new customers in last 7 days (new transactional customers)")
         .span1.align-right.medium.bold
           = distributor.orders.active.count
-          %i.icon-shopping-cart(title="Active orders")
+          %i.icon-shopping-cart(title="active orders")
           %br
           = distributor.deliveries_last_7_days_count
-          %i.icon-road(title="Deliveries completed in last 7 days")
+          %i.icon-road(title="deliveries completed in last 7 days")
         .span3.align-right.medium
           - if distributor.access_locked?
-            %span{title: "Locked at #{distributor.locked_at}"} [LOCKED]
+            %span{title: "locked at #{distributor.locked_at}"} [LOCKED]
           = time_since(distributor.last_seen_at)
 
       .row-fluid
@@ -50,10 +50,13 @@
             %span.label.label-important paypal
           - distributor.omni_importers.includes(:country).each do |omni_importer|
             %span.label.label-success{title: omni_importer.payment_type}= omni_importer.tag_name
-        .span5
+        .span3
           %small
             Next delivery:
             %strong= distributors_next_delivery_date(distributor)
+        .span2.align-right.medium.bold
+          = "#{distributor.sales_last_30_days(with_currency: false).decorate.to_human} #{distributor.currency}"
+          %i.icon-book(title="sales in last 30 days")
         .span3.align-right.small
           = link_to 'Edit', edit_admin_distributor_path(distributor)
           |
