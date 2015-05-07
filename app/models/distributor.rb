@@ -392,9 +392,9 @@ class Distributor < ActiveRecord::Base
 
   def number_of_customers_emailed_after_update(spend_limit, update_existing)
     if update_existing
-      customers.joins(:account).where(["accounts.balance_cents <= ? and customers.status_halted = 'f'", spend_limit]).select{|c| c.orders_pending_package_creation?}.size
+      customers.joins(:account).where(["accounts.balance_cents <= ? and customers.status_halted = 'f'", spend_limit]).count{|c| c.orders_pending_package_creation?}
     else
-      customers.joins(:account).where("accounts.balance_cents <= customers.balance_threshold_cents and customers.status_halted = 'f'").select{|c| c.orders_pending_package_creation?}.size
+      customers.joins(:account).where("accounts.balance_cents <= customers.balance_threshold_cents and customers.status_halted = 'f'").count{|c| c.orders_pending_package_creation?}
     end
   end
 

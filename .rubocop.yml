@@ -306,6 +306,9 @@ Rails/TimeZone:
 Metrics/AbcSize:
   Enabled: false
 
+Metrics/ModuleLength:
+  Enabled: false
+
 Style/RescueModifier:
   Enabled: false
 
@@ -328,6 +331,9 @@ Style/ClosingParenthesisIndentation:
   Enabled: false
 
 Performance/Detect:
+  Enabled: false
+
+Performance/ParallelAssignment:
   Enabled: false
 
 Lint/UselessAssignment:
