@@ -538,11 +538,11 @@ class Distributor < ActiveRecord::Base
 
   def sales_last_30_days
     @sales_last_30_days ||= begin
-      amount = deductions.where("created_at > ?", 30.days.ago) \
+      amount = CrazyMoney.new(deductions.where("created_at > ?", 30.days.ago) \
                .where(deductable_type: "Delivery") \
-               .sum(&:amount).round.to_s(decimal_places: 0)
+               .sum(&:amount))
 
-      "#{amount} #{currency}".freeze
+      "#{amount.round.to_s(decimal_places: 0)} #{currency}".freeze
     end
   end
 
