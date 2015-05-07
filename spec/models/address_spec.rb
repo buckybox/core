@@ -1,8 +1,8 @@
 require 'spec_helper'
 
 describe Address do
-  let(:attrs){ {address_1: "1 Address St", address_2: "Apartment 1", suburb: "Suburb", city: "City"} }
-  let(:all_attrs){ attrs.merge({postcode: "00000", mobile_phone: "11-111-111-1111", home_phone: "22-222-222-2222", work_phone: "33-333-333-3333"})}
+  let(:attrs) { { address_1: "1 Address St", address_2: "Apartment 1", suburb: "Suburb", city: "City" } }
+  let(:all_attrs) { attrs.merge({ postcode: "00000", mobile_phone: "11-111-111-1111", home_phone: "22-222-222-2222", work_phone: "33-333-333-3333" }) }
 
   describe "#phones" do
     it "returns phone numbers" do
@@ -18,7 +18,7 @@ describe Address do
 
   describe "#phone=" do
     it "assigns the number" do
-      address = Fabricate.build(:address, phone: {type: 'work', number: '007'})
+      address = Fabricate.build(:address, phone: { type: 'work', number: '007' })
       address.save!
       expect(address.reload.work_phone).to eq "007"
     end
@@ -48,7 +48,7 @@ describe Address do
   end
 
   describe '.==' do
-    let(:address){ Fabricate.build(:address, attrs)}
+    let(:address) { Fabricate.build(:address, attrs) }
 
     it 'should return true for matching address' do
       expect(address).to eq Fabricate.build(:address, attrs)

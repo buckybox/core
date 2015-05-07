@@ -14,7 +14,7 @@ class MoveTagsFromAccountsToCustomers < ActiveRecord::Migration
         customer = Customer.find_by_id(account.customer_id) if account
 
         if account && customer
-          tagging.update_attributes!(taggable_type:'Customer', taggable_id:customer.id)
+          tagging.update_attributes!(taggable_type: 'Customer', taggable_id: customer.id)
         end
       end
     end
@@ -31,7 +31,7 @@ class MoveTagsFromAccountsToCustomers < ActiveRecord::Migration
         account = Account.find_by_customer_id(customer.id) if customer
 
         if customer && account
-          tagging.update_attributes!(taggable_type:'Account', taggable_id:account.id)
+          tagging.update_attributes!(taggable_type: 'Account', taggable_id: account.id)
         end
       end
     end

@@ -1,4 +1,4 @@
-def customer_with(args={})
+def customer_with(args = {})
   distributor = Fabricate(:distributor)
   delivery_service = Fabricate(:delivery_service, name: args[:delivery_service], distributor: distributor)
   customer = Fabricate(:customer,

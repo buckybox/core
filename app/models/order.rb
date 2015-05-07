@@ -11,8 +11,8 @@ class Order < ActiveRecord::Base
 
   has_many :packages
   has_many :deliveries
-  has_many :exclusions,    autosave: true, after_add: Proc.new {|o, s| s.order = o}
-  has_many :substitutions, autosave: true, after_add: Proc.new {|o, s| s.order = o}
+  has_many :exclusions,    autosave: true, after_add: proc { |o, s| s.order = o }
+  has_many :substitutions, autosave: true, after_add: proc { |o, s| s.order = o }
   has_many :order_extras,  autosave: true
 
   has_many :excluded_line_items, through: :exclusions, source: :line_item
@@ -156,7 +156,7 @@ class Order < ActiveRecord::Base
     results = []
 
     schedule_rule.occurrences_between(Date.current, end_date).each do |occurence|
-      results << { date: occurence.to_date, price: self.price, description: "Delivery for order ##{id}"}
+      results << { date: occurence.to_date, price: self.price, description: "Delivery for order ##{id}" }
     end
 
     results
@@ -174,7 +174,7 @@ class Order < ActiveRecord::Base
   end
 
   def deactived_after_removed_days?(days)
-    (schedule_rule.days - days.collect{|i| ScheduleRule::DAYS[i]}).blank?
+    (schedule_rule.days - days.collect { |i| ScheduleRule::DAYS[i] }).blank?
   end
 
   def schedule_empty?
@@ -252,15 +252,15 @@ class Order < ActiveRecord::Base
     end_date            = start_date + look_ahead
     existing_pause_date = pause_date
 
-    select_array = self.schedule_rule.occurrences_between(start_date, end_date, {ignore_pauses: true, ignore_halts: true}).map { |s| [s.to_date, s.to_date] }
+    select_array = self.schedule_rule.occurrences_between(start_date, end_date, { ignore_pauses: true, ignore_halts: true }).map { |s| [s.to_date, s.to_date] }
 
     if existing_pause_date && !select_array.index([existing_pause_date, existing_pause_date])
       select_array << [existing_pause_date, existing_pause_date]
-      select_array.sort! { |a,b| a.second <=> b.second }
+      select_array.sort! { |a, b| a.second <=> b.second }
     end
 
     select_array.map do |label, value|
-      [ I18n.l(label, format: "%a %-d %b"), value.iso8601 ]
+      [I18n.l(label, format: "%a %-d %b"), value.iso8601]
     end
   end
 
@@ -270,18 +270,18 @@ class Order < ActiveRecord::Base
       end_date             = start_date + look_ahead
       existing_resume_date = resume_date
 
-      select_array      = self.schedule_rule.occurrences_between(start_date, end_date, {ignore_pauses: true, ignore_halts: true}).map { |s| [s.to_date, s.to_date] }
+      select_array      = self.schedule_rule.occurrences_between(start_date, end_date, { ignore_pauses: true, ignore_halts: true }).map { |s| [s.to_date, s.to_date] }
 
       if existing_resume_date && !select_array.index([existing_resume_date, existing_resume_date])
         select_array << [existing_resume_date, existing_resume_date]
-        select_array.sort! { |a,b| a.second <=> b.second }
+        select_array.sort! { |a, b| a.second <=> b.second }
       end
     end
 
     select_array ||= [] # we might have no dates
 
     select_array.map do |label, value|
-      [ I18n.l(label, format: "%a %-d %b"), value.iso8601 ]
+      [I18n.l(label, format: "%a %-d %b"), value.iso8601]
     end
   end
 
@@ -352,7 +352,7 @@ class Order < ActiveRecord::Base
   end
 
   def extras_delivered?
-    extras_packing_list.present? && extras_packing_list.packages.find_by(order_id:self.id).deliveries.any?(&:delivered?)
+    extras_packing_list.present? && extras_packing_list.packages.find_by(order_id: self.id).deliveries.any?(&:delivered?)
   end
 
   def set_extras_package!(package)
@@ -390,7 +390,7 @@ class Order < ActiveRecord::Base
     self.order_extras = b_extras.inject({}) do |params, extra|
       found_extra = distributor.find_extra_from_import(extra, box)
       raise "Didn't find an extra to import" if found_extra.blank?
-      params.merge(found_extra.id.to_s => {count: extra.count})
+      params.merge(found_extra.id.to_s => { count: extra.count })
     end
   end
 
@@ -403,7 +403,7 @@ class Order < ActiveRecord::Base
     account.customer.delivery_service_id
   end
 
-  def self.order_count(distributor, date, delivery_service_id=nil)
+  def self.order_count(distributor, date, delivery_service_id = nil)
     distributor.use_local_time_zone do
       Bucky::Sql.order_count(distributor, date, delivery_service_id)
     end
@@ -447,7 +447,7 @@ protected
   end
 
   def delivery_service_includes_schedule_rule
-    unless account.delivery_service.includes?(schedule_rule, {ignore_start: true})
+    unless account.delivery_service.includes?(schedule_rule, { ignore_start: true })
       errors.add(:schedule_rule, "DeliveryService #{account.delivery_service.name}'s schedule '#{account.delivery_service.schedule_rule.inspect} doesn't include this order's schedule of '#{schedule_rule.inspect}'")
     end
   end

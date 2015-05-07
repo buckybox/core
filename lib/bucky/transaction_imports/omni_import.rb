@@ -167,7 +167,7 @@ EOF
         begin
           rules.process(row)
         rescue StandardError => e
-          raise OmniError.new("Issue on row: (#{row}) | #{e.message}")
+          raise OmniError, "Issue on row: (#{row}) | #{e.message}"
         end
       end
     end
@@ -177,7 +177,7 @@ EOF
         begin
           create_bucky_row(rules.process(row), index, bank_name)
         rescue StandardError => e
-          raise OmniError.new("Issue on row: (#{row}) | #{e.message}")
+          raise OmniError, "Issue on row: (#{row}) | #{e.message}"
         end
       end
     end
@@ -192,14 +192,14 @@ EOF
 
     def header_row
       result = header? ? rows[0] : []
-      (longest_row_length - result.size).times{ result << ''}
+      (longest_row_length - result.size).times { result << '' }
       result
     end
 
     def not_header_rows
       start = header? ? 1 : 0
       start += option_value(:skip) if rules.has_option?(:skip)
-      rows[start..-1].reject{|row| rules.skip?(row)}
+      rows[start..-1].reject { |row| rules.skip?(row) }
     end
 
     def cleaned_rows
@@ -211,14 +211,14 @@ EOF
     end
 
     def longest_row_length
-      rows.collect{|r| r.size}.max
+      rows.collect { |r| r.size }.max
     end
 
     def empty_column_count
       longest_row_length - column_names.size
     end
 
-    def process_row(row, keys=[])
+    def process_row(row, keys = [])
       if keys.blank?
         rules.process(row)
       else
@@ -234,9 +234,9 @@ EOF
     # Recursively symbolize keys unless the string is broken with spaces
     def self.convert_to_symbols(rules)
       if rules.is_a?(Hash)
-        rules.inject({}){|memo,(k,v)| memo[k.to_sym] = convert_to_symbols(v); memo}
+        rules.inject({}) { |memo, (k, v)| memo[k.to_sym] = convert_to_symbols(v); memo }
       elsif rules.is_a?(Array)
-        rules.collect{|v| convert_to_symbols(v)}
+        rules.collect { |v| convert_to_symbols(v) }
       elsif rules.is_a?(String) && !rules.include?(' ')
         rules.to_sym
       else
@@ -278,15 +278,15 @@ EOF
       end
 
       def skip?(row)
-        skip_rules.present? && skip_rules.any?{|r| r.skip?(row)} rescue false
+        skip_rules.present? && skip_rules.any? { |r| r.skip?(row) } rescue false
       end
 
       def process(row)
-        responses.inject({}){|result, (k,v)| result[k] = v.process(row); result}.merge(raw_data: raw_data(row))
+        responses.inject({}) { |result, (k, v)| result[k] = v.process(row); result }.merge(raw_data: raw_data(row))
       end
 
       def raw_data(row)
-        column_names.reject{|cn| [:blank, :empty, :none].include?(cn)}.inject({}){|result, element| result.merge(element => get(row, element))}
+        column_names.reject { |cn| [:blank, :empty, :none].include?(cn) }.inject({}) { |result, element| result.merge(element => get(row, element)) }
       end
 
       def get(row, column_name_or_number)
@@ -296,7 +296,7 @@ EOF
         elsif c.is_a?(Fixnum)
           row[column_name_or_number]
         else
-          raise OmniError.new('Expecting a number or column name as described by column_names:')
+          raise OmniError, 'Expecting a number or column name as described by column_names:'
         end
       end
 
@@ -307,12 +307,12 @@ EOF
         elsif (match_data = c.to_s.match(/^c([01-9]+)$/)).present? # Expecting column numbers to be c0, c1, c999, etc.
           row[match_data[1].to_i] # Get column by integer
         else
-          raise OmniError.new('Expecting a column name or cX where X is the row number')
+          raise OmniError, 'Expecting a column name or cX where X is the row number'
         end
       end
 
       def lookup(column_name)
-        @lookup_table ||= column_names.inject({}){|result, element| result.merge(element => result.size)}
+        @lookup_table ||= column_names.inject({}) { |result, element| result.merge(element => result.size) }
         @lookup_table[column_name]
       end
 
@@ -462,7 +462,7 @@ EOF
 
     class RuleMerge < Rule
       def process(row)
-        rules.collect{|r| r.process(row)}.join(' ')
+        rules.collect { |r| r.process(row) }.join(' ')
       end
     end
 
@@ -528,15 +528,15 @@ EOF
 
       def initialize(shash, parent)
         self.blanks = shash[:blank] if shash[:blank].is_a?(Array)
-        self.matches = shash[:match].inject({}){|result, element| result.merge(element)} unless shash[:match].blank?
-        self.not_matches = shash[:not_match].inject({}){|result, element| result.merge(element)} unless shash[:not_match].blank?
+        self.matches = shash[:match].inject({}) { |result, element| result.merge(element) } unless shash[:match].blank?
+        self.not_matches = shash[:not_match].inject({}) { |result, element| result.merge(element) } unless shash[:not_match].blank?
         self.parent = parent
       end
 
       delegate :get, to: :parent
 
       def to_s
-        {blanks: blanks, matches: matches, not_matches: not_matches}.inspect
+        { blanks: blanks, matches: matches, not_matches: not_matches }.inspect
       end
 
       def skip?(row)
@@ -549,7 +549,7 @@ EOF
         if blanks.blank?
           false
         else
-          blanks.all?{|column| get(row, column).blank?}
+          blanks.all? { |column| get(row, column).blank? }
         end
       end
 

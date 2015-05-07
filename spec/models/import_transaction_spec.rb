@@ -2,14 +2,14 @@ require 'spec_helper'
 
 describe ImportTransaction do
   context :process_negative_transactions do
-    let(:import_transaction){ import_transaction = Fabricate(:import_transaction, amount_cents: -1423, customer_id: nil, match: ImportTransaction::MATCH_NOT_A_CUSTOMER )}
+    let(:import_transaction) { import_transaction = Fabricate(:import_transaction, amount_cents: -1423, customer_id: nil, match: ImportTransaction::MATCH_NOT_A_CUSTOMER) }
     let(:account) do
       a = mock_model(Account)
       allow(a).to receive(:changed_for_autosave?).and_return(false)
       allow(a).to receive(:add_to_balance)
       a
     end
-    let(:customer){mock_model(Customer, account: account)}
+    let(:customer) { mock_model(Customer, account: account) }
 
     before do
       allow(import_transaction).to receive(:account).and_return(account)

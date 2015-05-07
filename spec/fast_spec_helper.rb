@@ -34,7 +34,7 @@ def require_resource(name, opts = {})
 end
 
 def construct_path(name, opts = {})
-  app_path_to_file = [ opts[:app_path] ]
+  app_path_to_file = [opts[:app_path]]
   app_path_to_file << opts[:sub_dir] if opts[:sub_dir]
   app_path_to_file << name
   app_path_to_file = app_path_to_file.join('/') + '.rb'

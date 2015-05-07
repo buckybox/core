@@ -50,7 +50,7 @@ class Address < ActiveRecord::Base
   end
 
   def compute_address_hash
-    Digest::SHA1.hexdigest([:address_1, :address_2, :suburb, :city, :postcode].collect{|a| send(a).downcase.strip rescue ''}.join(''))
+    Digest::SHA1.hexdigest([:address_1, :address_2, :suburb, :city, :postcode].collect { |a| send(a).downcase.strip rescue '' }.join(''))
   end
 
   def update_address_hash

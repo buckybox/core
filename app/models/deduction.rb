@@ -51,7 +51,7 @@ class Deduction < ActiveRecord::Base
       self.reversal_transactions << reversal_transaction
 
       if bucky_fee
-        self.reversal_transactions << self.account.add_to_balance(bucky_fee.amount.opposite, {description: "[REVERSED] Bucky Box Fee", display_time: self.display_time})
+        self.reversal_transactions << self.account.add_to_balance(bucky_fee.amount.opposite, { description: "[REVERSED] Bucky Box Fee", display_time: self.display_time })
       end
 
       self.save

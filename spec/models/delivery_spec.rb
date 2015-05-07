@@ -21,8 +21,8 @@ describe Delivery, :slow do
         end
       end
 
-      specify { expect {Fabricate(:delivery, status: 'lame')}.to raise_error(ActiveRecord::RecordInvalid, /Status is invalid/) }
-      specify { expect {Fabricate(:delivery, status_change_type: 'lame')}.to raise_error(ActiveRecord::RecordInvalid, /Status change type lame is not a valid status change type/)}
+      specify { expect { Fabricate(:delivery, status: 'lame') }.to raise_error(ActiveRecord::RecordInvalid, /Status is invalid/) }
+      specify { expect { Fabricate(:delivery, status_change_type: 'lame') }.to raise_error(ActiveRecord::RecordInvalid, /Status change type lame is not a valid status change type/) }
     end
 
     describe '#future_status?' do

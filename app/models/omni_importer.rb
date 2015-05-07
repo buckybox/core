@@ -25,7 +25,7 @@ class OmniImporter < ActiveRecord::Base
   end
 
   def test_rows
-    @rows ||=  Bucky::TransactionImports::OmniImport.csv_read(import_transaction_list.path)
+    @rows ||= Bucky::TransactionImports::OmniImport.csv_read(import_transaction_list.path)
   rescue StandardError => ex
     errors.add(:import_transaction_list, ex.message)
     @rows ||= [[]]

@@ -41,7 +41,7 @@ describe SignUpWizardController do
 
   describe "#sign_up" do
     let(:form_params) do
-      {"distributor"=>{"name"=>"My new org", "contact_name"=>"Name", "email"=>"email@example.net", "password"=>"password", "password_confirmation"=>"password", "country"=>"NZ", "time_zone"=>"Auckland", "localised_address_attributes"=>{"street"=>"Street", "state"=>"State", "city"=>"City", "zip"=>"Zip"}, "phone"=>"000", "support_email"=>"support@example.net", "parameter_name"=>"store.buckybox.com/my-new-org", "payment_bank_deposit"=>"1", "bank_name"=>"Kiwibank", "payment_cash_on_delivery"=>"0", "payment_credit_card"=>"1", "payment_direct_debit"=>"0", "payment_bitcoin"=>"0", "source"=>"Word of mouth"}}
+      { "distributor" => { "name" => "My new org", "contact_name" => "Name", "email" => "email@example.net", "password" => "password", "password_confirmation" => "password", "country" => "NZ", "time_zone" => "Auckland", "localised_address_attributes" => { "street" => "Street", "state" => "State", "city" => "City", "zip" => "Zip" }, "phone" => "000", "support_email" => "support@example.net", "parameter_name" => "store.buckybox.com/my-new-org", "payment_bank_deposit" => "1", "bank_name" => "Kiwibank", "payment_cash_on_delivery" => "0", "payment_credit_card" => "1", "payment_direct_debit" => "0", "payment_bitcoin" => "0", "source" => "Word of mouth" } }
     end
 
     context "with valid params" do
@@ -52,7 +52,7 @@ describe SignUpWizardController do
       it "saves the new distributor" do
         expect do
           post_form.call
-        end.to change{Distributor.count}.by(1)
+        end.to change { Distributor.count }.by(1)
       end
 
       it "saves the new distributor attributes" do
@@ -201,7 +201,7 @@ describe SignUpWizardController do
       it "does not create a distributor" do
         expect do
           post_form.call
-        end.to_not change{Distributor.count}
+        end.to_not change { Distributor.count }
       end
 
       it "returns failure response" do

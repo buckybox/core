@@ -37,7 +37,7 @@ class Distributor::DeliveriesController < Distributor::ResourceController
         @delivery_list  = current_distributor.delivery_list_by_date(@selected_date)
         @all_deliveries = @delivery_list.ordered_deliveries
 
-        @items     = @all_deliveries.select{ |delivery| delivery.delivery_service_id  == @delivery_service_id }
+        @items     = @all_deliveries.select { |delivery| delivery.delivery_service_id == @delivery_service_id }
         @real_list = @items.all? { |i| i.is_a?(Delivery) }
         @delivery_service = @delivery_services.find(@delivery_service_id)
         @show_tour = current_distributor.deliveries_index_deliveries_intro

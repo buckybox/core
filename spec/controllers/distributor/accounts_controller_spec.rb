@@ -13,7 +13,7 @@ describe Distributor::AccountsController do
       balance_before = account.balance_cents
       expect do
         post :change_balance, id: customer.account.id, date: "22 Oct '13", delta: '6.66', note: 'hell pizza'
-      end.to change{
+      end.to change {
         account.reload.balance_cents
       }.from(balance_before).to(balance_before + 666)
     end
@@ -22,7 +22,7 @@ describe Distributor::AccountsController do
       balance_before = customer.account.balance_cents
       expect do
         post :change_balance, id: customer.account.id, date: "22 Oct '13", delta: '-6.66'
-      end.to change{
+      end.to change {
         account.reload.balance_cents
       }.from(balance_before).to(balance_before - 666)
     end

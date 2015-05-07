@@ -5,7 +5,7 @@ describe Distributor::Settings::Products::BoxesController do
   sign_in_as_distributor
 
   before do
-    @extras = 2.times.collect{Fabricate(:extra, distributor: @distributor)}
+    @extras = 2.times.collect { Fabricate(:extra, distributor: @distributor) }
     @extra_ids = @extras.collect(&:id)
     @customer = Fabricate(:customer, distributor: @distributor)
   end

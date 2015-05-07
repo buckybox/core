@@ -4,12 +4,12 @@ module Bucky::Dso
 
     delegate :each, :each_with_index, :collect, :insert, :delete_at, :[], to: :list
 
-    def initialize(list=[])
+    def initialize(list = [])
       self.pointer = 0
       if list.first.is_a?(Array) || list.blank?
-        self.list = list.collect{|sortable, position| Sortable.new(sortable, position)}
+        self.list = list.collect { |sortable, position| Sortable.new(sortable, position) }
       else
-        self.list = list.each_with_index.collect{|sortable, position| Sortable.new(sortable, position + 1)}
+        self.list = list.each_with_index.collect { |sortable, position| Sortable.new(sortable, position + 1) }
       end
     end
 
@@ -46,8 +46,8 @@ module Bucky::Dso
     end
 
     def -(other)
-      hash = other.sortables.inject({}){|h, key| h.merge(key => true)}
-      List.new(to_a.reject{|s| hash.key?(s.first)})
+      hash = other.sortables.inject({}) { |h, key| h.merge(key => true) }
+      List.new(to_a.reject { |s| hash.key?(s.first) })
     end
 
     def index(key)
@@ -84,12 +84,12 @@ module Bucky::Dso
       list.collect(&:sortable)
     end
 
-    def self.sort(master, ordered, sorter=Bucky::Dso::IRelativeSort)
+    def self.sort(master, ordered, sorter = Bucky::Dso::IRelativeSort)
       sorter.sort(master, ordered)
     end
 
     def self.ordered_list(list)
-      List.new(list.each_with_index.collect{|i, index| [i, index+1.5]})
+      List.new(list.each_with_index.collect { |i, index| [i, index + 1.5] })
     end
 
     def merged_uniques(list)

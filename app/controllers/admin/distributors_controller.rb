@@ -4,7 +4,7 @@ class Admin::DistributorsController < Admin::ResourceController
   def index
     @distributors = Distributor.scoped
     @distributors = @distributors.tagged_with(params[:tag]) if params[:tag].present?
-    @distributors = @distributors.sort { |a,b| b.orders.active.size <=> a.orders.active.size }
+    @distributors = @distributors.sort { |a, b| b.orders.active.size <=> a.orders.active.size }
     index!
   end
 

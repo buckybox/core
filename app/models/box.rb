@@ -9,7 +9,7 @@ class Box < ActiveRecord::Base
   # [["disable extras", 0], ["allow any number of extra items", -1],
   # ["allow 1 extra items", 1], ["allow 2 extra items", 2], ... ["allow n extra items, n]]
   SPECIAL_EXTRA_OPTIONS = ['disable extras', 'allow any number of extra items'].zip([EXTRAS_DISABLED, EXTRAS_UNLIMITED])
-  COUNT_EXTRA_OPTIONS = 1.upto(10).map{ |i| "allow #{i} extra items" }.zip(1.upto(10).to_a)
+  COUNT_EXTRA_OPTIONS = 1.upto(10).map { |i| "allow #{i} extra items" }.zip(1.upto(10).to_a)
   EXTRA_OPTIONS = (SPECIAL_EXTRA_OPTIONS + COUNT_EXTRA_OPTIONS)
 
   belongs_to :distributor
@@ -26,7 +26,7 @@ class Box < ActiveRecord::Base
 
   validates_presence_of :distributor, :name, :description, :price
   validates :extras_limit, numericality: { greater_than: -2 }
-  validates :name, length: {maximum: 80}
+  validates :name, length: { maximum: 80 }
   validates :price_cents, numericality: { greater_than_or_equal_to: 0, less_than: 1E8 }
 
   monetize :price_cents
@@ -101,7 +101,7 @@ class Box < ActiveRecord::Base
     exclusions_limit == 0
   end
 
-  def has_all_extras?(exclude=[])
+  def has_all_extras?(exclude = [])
     exclude = [exclude] unless exclude.is_a?(Array)
     (distributor.extras - exclude).sort == extras.sort
   end
@@ -120,7 +120,7 @@ class Box < ActiveRecord::Base
   alias_method :all_extras, :all_extras? # I prefer to have '?' on the end of methods but simple_form won't take it as an attribute
 
   def limits_data
-    {likes: substitutions_limit, dislikes: exclusions_limit}
+    { likes: substitutions_limit, dislikes: exclusions_limit }
   end
 
   def available_extras
@@ -128,7 +128,7 @@ class Box < ActiveRecord::Base
   end
 
   def cache_key(embed = Set.new)
-    keys = [ super() ]
+    keys = [super()]
 
     keys += [
       available_extras.map(&:id).hash,

@@ -246,7 +246,7 @@ describe Distributor do
         end
 
         context 'time set to Perth start of day' do
-          before { Delorean.time_travel_to(Time.use_zone('Perth'){ Time.zone.local(*(@tomorrow + @schedule_start)) }.in_time_zone('Wellington') ) }
+          before { Delorean.time_travel_to(Time.use_zone('Perth') { Time.zone.local(*(@tomorrow + @schedule_start)) }.in_time_zone('Wellington')) }
 
           specify { expect { Distributor.create_daily_lists }.to change { @d_welly.packing_lists.count + @d_welly.delivery_lists.count }.by 0 }
           specify { expect { Distributor.create_daily_lists }.to change { @d_perth.packing_lists.count + @d_perth.delivery_lists.count }.by 4 }
@@ -254,7 +254,7 @@ describe Distributor do
         end
 
         context 'time set to Perth end of day' do
-          before { Delorean.time_travel_to(Time.use_zone('Perth'){ Time.zone.local(*(@tomorrow + @schedule_end)) }.in_time_zone('Wellington') ) }
+          before { Delorean.time_travel_to(Time.use_zone('Perth') { Time.zone.local(*(@tomorrow + @schedule_end)) }.in_time_zone('Wellington')) }
 
           specify { expect { Distributor.create_daily_lists }.to change { @d_welly.packing_lists.count + @d_welly.delivery_lists.count }.by 0 }
           specify { expect { Distributor.create_daily_lists }.to change { @d_perth.packing_lists.count + @d_perth.delivery_lists.count }.by 0 }
@@ -262,7 +262,7 @@ describe Distributor do
         end
 
         context 'time set to London start of day' do
-          before { Delorean.time_travel_to(Time.use_zone('London'){ Time.zone.local(*(@tomorrow + @schedule_start)) }.in_time_zone('Wellington') ) }
+          before { Delorean.time_travel_to(Time.use_zone('London') { Time.zone.local(*(@tomorrow + @schedule_start)) }.in_time_zone('Wellington')) }
 
           specify { expect { Distributor.create_daily_lists }.to change { @d_welly.packing_lists.count + @d_welly.delivery_lists.count }.by 0 }
           specify { expect { Distributor.create_daily_lists }.to change { @d_perth.packing_lists.count + @d_perth.delivery_lists.count }.by 0 }
@@ -270,7 +270,7 @@ describe Distributor do
         end
 
         context 'time set to London end of day' do
-          before { Delorean.time_travel_to(Time.use_zone('London'){ Time.zone.local(*(@tomorrow + @schedule_end)) }.in_time_zone('Wellington') ) }
+          before { Delorean.time_travel_to(Time.use_zone('London') { Time.zone.local(*(@tomorrow + @schedule_end)) }.in_time_zone('Wellington')) }
 
           specify { expect { Distributor.create_daily_lists }.to change { @d_welly.packing_lists.count + @d_welly.delivery_lists.count }.by 0 }
           specify { expect { Distributor.create_daily_lists }.to change { @d_perth.packing_lists.count + @d_perth.delivery_lists.count }.by 0 }
@@ -285,7 +285,7 @@ describe Distributor do
 
     it 'should update all customers spend limit' do
       expect_any_instance_of(Customer).to receive(:update_halted_status!).with(nil, Customer::EmailRule.only_pending_orders)
-      expect(distributor.update_attributes({has_balance_threshold: true, default_balance_threshold: 200.00, spend_limit_on_all_customers: '0'})).to be true
+      expect(distributor.update_attributes({ has_balance_threshold: true, default_balance_threshold: 200.00, spend_limit_on_all_customers: '0' })).to be true
     end
   end
 
@@ -294,7 +294,7 @@ describe Distributor do
       distributor.save!
       Fabricate(:customer, distributor: distributor)
     end
-    let(:order){Fabricate(:order, account: customer.account)}
+    let(:order) { Fabricate(:order, account: customer.account) }
     it 'updates cached value of next order' do
       order
       customer.update_column(:next_order_occurrence_date, nil)
@@ -311,7 +311,7 @@ describe Distributor do
 
   describe ".transactional_customer_count" do
     let(:distributor) { Fabricate(:distributor) }
-    let(:customer){ customer = Fabricate(:customer, distributor: distributor) }
+    let(:customer) { customer = Fabricate(:customer, distributor: distributor) }
 
     it "returns zero when no transactions on any customers" do
       customer
@@ -328,7 +328,7 @@ describe Distributor do
 
   describe "#notify_of_address_change" do
     context "notify_address_change is true" do
-      let(:distributor){ Fabricate.build(:distributor, notify_address_change: true) }
+      let(:distributor) { Fabricate.build(:distributor, notify_address_change: true) }
 
       it "retruns true if successful" do
         customer = double('customer')
@@ -417,21 +417,21 @@ describe Distributor do
 
     describe "#mark_as_seen!" do
       it "changes the last seen timestamp of the distributor" do
-        expect{ distributor.mark_as_seen! }.to change{ distributor.last_seen_at }
+        expect { distributor.mark_as_seen! }.to change { distributor.last_seen_at }
       end
     end
 
     describe ".mark_as_seen!" do
       it "changes nothing if there is no distributor" do
-        expect{ Distributor.mark_as_seen!(nil) }.not_to change{ distributor.last_seen_at }
+        expect { Distributor.mark_as_seen!(nil) }.not_to change { distributor.last_seen_at }
       end
 
       it "changes nothing if no tracking option is passed in" do
-        expect{ Distributor.mark_as_seen!(distributor, no_track: true) }.not_to change{ distributor.last_seen_at }
+        expect { Distributor.mark_as_seen!(distributor, no_track: true) }.not_to change { distributor.last_seen_at }
       end
 
       it "changes the last seen timestap of the distributor" do
-        expect{ Distributor.mark_as_seen!(distributor) }.to change{ distributor.last_seen_at }
+        expect { Distributor.mark_as_seen!(distributor) }.to change { distributor.last_seen_at }
       end
     end
   end

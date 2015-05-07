@@ -43,7 +43,7 @@ module Distributor::DashboardHelper
   end
 
   def link_to_delivery(delivery_id)
-    link_to  "delivery", distributor_delivery_path(delivery_id)
+    link_to "delivery", distributor_delivery_path(delivery_id)
   end
 
   def link_to_transaction(transaction_id)

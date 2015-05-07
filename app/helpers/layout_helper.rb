@@ -93,7 +93,7 @@ module LayoutHelper
 
     badge = content_tag(:span, content.html_safe, class: 'customer-badge')
 
-    [ options[:before], badge, options[:after] ].join.html_safe
+    [options[:before], badge, options[:after]].join.html_safe
   end
 
   def customer_tags(customer)
@@ -109,7 +109,7 @@ module LayoutHelper
       link_to(content_tag(:span, tag.name, class: 'label label-info'), tag_distributor_customers_path(tag.name), class: 'link-label') << " "
     end.join.html_safe
 
-    content << content_tag(:span, tags_html, class: 'tag-links', data: {"toggle" => "tooltip", "placement" => "left", "title" => tags.join(' ') })
+    content << content_tag(:span, tags_html, class: 'tag-links', data: { "toggle" => "tooltip", "placement" => "left", "title" => tags.join(' ') })
 
     content.html_safe
   end

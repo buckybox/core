@@ -48,7 +48,7 @@ describe Deduction, :slow do
       specify { expect(@deduction.transaction.persisted?).to be true }
       specify { expect(@deduction.transaction.amount).to eq @amount.opposite }
 
-      specify { expect(@deduction.account.balance).to eq @account_amount - @amount - @fee}
+      specify { expect(@deduction.account.balance).to eq @account_amount - @amount - @fee }
       specify { expect(@deduction.bucky_fee.amount).to eq @fee.opposite }
     end
 

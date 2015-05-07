@@ -3,7 +3,7 @@ require 'spec_helper'
 describe "Updates address" do
   context 'as customer' do
     context 'with notify address is set to true' do
-      let(:distributor){ Fabricate(:distributor_with_information, notify_address_change: true) }
+      let(:distributor) { Fabricate(:distributor_with_information, notify_address_change: true) }
       let(:customer) { Fabricate(:customer, distributor: distributor) }
 
       before do
@@ -33,7 +33,7 @@ describe "Updates address" do
     end
 
     context 'with notify address is set to false' do
-      let(:distributor){ Fabricate(:distributor_with_information, notify_address_change: false) }
+      let(:distributor) { Fabricate(:distributor_with_information, notify_address_change: false) }
       let(:customer) { Fabricate(:customer, distributor: distributor) }
 
       before do
@@ -51,7 +51,7 @@ describe "Updates address" do
 
   context 'as distributor' do
     context 'with notify address is set to true' do
-      let(:distributor){ Fabricate(:distributor_with_information, notify_address_change: true) }
+      let(:distributor) { Fabricate(:distributor_with_information, notify_address_change: true) }
       let(:customer) { customer = Fabricate(:customer, distributor: distributor) }
 
       before do
@@ -75,10 +75,10 @@ def change_address(customer)
 
   get_via_redirect customer_dashboard_path
   if @last_login == :customer
-    put_via_redirect customer_update_delivery_address_path, customer_form_update_delivery_address: {suburb: modified_suburb}
+    put_via_redirect customer_update_delivery_address_path, customer_form_update_delivery_address: { suburb: modified_suburb }
     expect(response.body).to match 'Your delivery address has been successfully updated'
   else
-    put_via_redirect update_delivery_details_distributor_customer_path(customer), distributor_form_edit_customer_delivery_details: {suburb: modified_suburb, delivery_service: customer.delivery_service.id}
+    put_via_redirect update_delivery_details_distributor_customer_path(customer), distributor_form_edit_customer_delivery_details: { suburb: modified_suburb, delivery_service: customer.delivery_service.id }
     expect(response.body).to match 'The customer delivery details have been successfully updated.'
   end
 end
@@ -111,5 +111,5 @@ def distributor_should_include_notifications(distributor)
 end
 
 def clear_notifications
-  post_via_redirect distributor_notifications_dismiss_all_path, {}, {"HTTP_REFERER" => distributor_root_path}
+  post_via_redirect distributor_notifications_dismiss_all_path, {}, { "HTTP_REFERER" => distributor_root_path }
 end

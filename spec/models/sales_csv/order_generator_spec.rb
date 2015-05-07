@@ -24,7 +24,7 @@ describe SalesCsv::OrderGenerator do
 
     it 'generates a csv with data' do
       allow(csv_row).to receive(:generate) { some_data }
-      @args = [ double('item1') ]
+      @args = [double('item1')]
       @expected_result = expected_csv_header + "1,2,3,4,5,6,7,8,9,10\n"
     end
   end

@@ -27,7 +27,7 @@ describe Distributor::Defaults do
     allow(LineItem).to receive(:add_defaults_to)
     allow(EmailTemplate).to receive(:new)
 
-    url_helper = double("url_helper" , new_customer_session_url: true, new_customer_password_url: true)
+    url_helper = double("url_helper", new_customer_session_url: true, new_customer_password_url: true)
     Rails.stub_chain(:application, :routes, :url_helpers) { url_helper }
 
     Figaro.stub_chain(:env, :host)

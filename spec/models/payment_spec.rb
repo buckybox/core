@@ -10,7 +10,7 @@ describe Payment, :slow do
       specify { expect(Fabricate(:payment, kind: k)).to be_valid }
     end
 
-    specify { expect { Fabricate(:payment, kind: 'trees')}.to raise_error(ActiveRecord::RecordInvalid, /Kind trees is not a valid kind of payment/)}
+    specify { expect { Fabricate(:payment, kind: 'trees') }.to raise_error(ActiveRecord::RecordInvalid, /Kind trees is not a valid kind of payment/) }
   end
 
   context :source do
@@ -18,7 +18,7 @@ describe Payment, :slow do
       specify { expect(Fabricate(:payment, source: s)).to be_valid }
     end
 
-    specify { expect { Fabricate(:payment, source: 'orange')}.to raise_error(ActiveRecord::RecordInvalid, /Source orange is not a valid source of payment/)}
+    specify { expect { Fabricate(:payment, source: 'orange') }.to raise_error(ActiveRecord::RecordInvalid, /Source orange is not a valid source of payment/) }
   end
 
   context :amount do
@@ -64,8 +64,8 @@ describe Payment, :slow do
   end
 
   context 'negative payment reducing account' do
-    let(:account){Fabricate(:account)}
-    let(:payment){Fabricate(:payment, amount: -10, account: account)}
+    let(:account) { Fabricate(:account) }
+    let(:payment) { Fabricate(:payment, amount: -10, account: account) }
 
     it "should reduce account balance" do
       payment.save

@@ -14,7 +14,7 @@ class DeliverySequenceOrder < ActiveRecord::Base
     Delivery.transaction do
       # Update the dso to have the new order
       sql = ["UPDATE delivery_sequence_orders SET position = CASE address_hash
-        #{new_master_list.to_a.collect{|address_hash, index| "WHEN '#{address_hash}' THEN #{index}"}.join(' ')} END
+        #{new_master_list.to_a.collect { |address_hash, index| "WHEN '#{address_hash}' THEN #{index}" }.join(' ')} END
         WHERE delivery_service_id = ?
         AND day = ?
         AND delivery_sequence_orders.address_hash in (?);", delivery_service_id, day, new_address_hashes]
@@ -55,7 +55,7 @@ private
   end
 
   def self.for_delivery(delivery)
-    attrs = {delivery_service_id: delivery.delivery_service_id, address_hash: delivery.address.address_hash, day: delivery.delivery_list.date.wday}
+    attrs = { delivery_service_id: delivery.delivery_service_id, address_hash: delivery.address.address_hash, day: delivery.delivery_list.date.wday }
     dso = DeliverySequenceOrder.find_by(attrs)
     dso ||= DeliverySequenceOrder.create(attrs)
     dso

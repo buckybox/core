@@ -3,11 +3,11 @@ require 'spec_helper'
 describe Distributor::Export::ExtrasController do
   sign_in_as_distributor
 
-  let(:date){Date.current.to_s(:db)}
+  let(:date) { Date.current.to_s(:db) }
 
   before do
     @distributor.save!
-    @post = -> { post :index, export_extras: {date: date}}
+    @post = -> { post :index, export_extras: { date: date } }
   end
 
   it "downloads a csv" do

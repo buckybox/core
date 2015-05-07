@@ -17,7 +17,7 @@ module Bucky::Dso
         new_master_list << insert
       end
 
-      List.new(new_master_list.each_with_index.collect{|s, index| [s.first, index+1]})
+      List.new(new_master_list.each_with_index.collect { |s, index| [s.first, index + 1] })
     end
   end
 end

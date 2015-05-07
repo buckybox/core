@@ -12,7 +12,7 @@ describe ExtrasCsv do
         Fabricate(:extra,
           name: "Extra #{i}",
           distributor: distributor,
-          price_cents: i*200+50,
+          price_cents: i * 200 + 50,
           unit: %w(kg l each g)[i],
           hidden: i.zero?,
         )
@@ -34,7 +34,7 @@ describe ExtrasCsv do
       end
 
       4.times.map do |i|
-        Fabricate(:order_extra, order: orders[i%2], extra: extras[i%3], count: i+1)
+        Fabricate(:order_extra, order: orders[i % 2], extra: extras[i % 3], count: i + 1)
       end
 
       distributor.packing_lists.destroy_all

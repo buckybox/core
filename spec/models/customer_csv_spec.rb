@@ -2,15 +2,15 @@ require_relative '../../app/models/customer_csv'
 
 describe CustomerCSV do
   let(:distributor)  { double('distributor') }
-  let(:customer_ids) { [ 1, 2, 3 ] }
+  let(:customer_ids) { [1, 2, 3] }
   let(:customer)     { double('customer') }
   let(:customers)    { [customer] }
 
-  [ %w(city Wellington), [ 'email', 'test@example.com' ] ].each do |field, value|
+  [%w(city Wellington), ['email', 'test@example.com']].each do |field, value|
     def field.titleize; self; end # needed by CustomerCSV#headers
 
     context "with the field '#{field}' and value '#{value}'" do
-      let(:fields) { [ field ] }
+      let(:fields) { [field] }
 
       before { allow(customer).to receive(field) { value } }
 

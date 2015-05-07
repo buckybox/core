@@ -90,7 +90,7 @@ class Account < ActiveRecord::Base
       end
     end
 
-    occurrences.sort { |a,b| a[:date] <=> b[:date] }
+    occurrences.sort { |a, b| a[:date] <=> b[:date] }
   end
 
   def update_halted_status

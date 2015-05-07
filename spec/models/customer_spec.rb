@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe Customer do
-  def customer_mock(opts={})
+  def customer_mock(opts = {})
     customer = double("Bucky::Import::Customer")
     attrs = {
       first_name: 'Jordan',
@@ -22,7 +22,7 @@ describe Customer do
       mobile_phone: '0800 999 666 333',
       home_phone: '0800 BOWIES IN SPACE',
       tags: ["Flight of the concords", "rock"],
-      boxes: 2.times.collect{box_mock},
+      boxes: 2.times.collect { box_mock },
     }.merge(opts)
     extras = { 'class'.to_sym => Bucky::Import::Customer }
     attrs.merge(extras).each do |key, value|
@@ -32,7 +32,7 @@ describe Customer do
     customer
   end
 
-  def box_mock(opts={})
+  def box_mock(opts = {})
     box = double("Bucky::Import::Box")
     attrs = {
       box_type: "Rural Van",
@@ -44,7 +44,7 @@ describe Customer do
       extras_limit: 3,
       extras_unlimited?: false,
       extras_recurring?: true,
-      extras: 2.times.collect{extra_mock}
+      extras: 2.times.collect { extra_mock }
           }.merge(opts)
     extras = { 'class'.to_sym => Bucky::Import::Box }
     attrs.merge(extras).each do |key, value|
@@ -54,7 +54,7 @@ describe Customer do
     box
   end
 
-  def extra_mock(opts={})
+  def extra_mock(opts = {})
     extra = double("Bucky::Import::Extra")
     attrs = {
       count: 1,
@@ -77,7 +77,7 @@ describe Customer do
     let(:distributor) { Fabricate(:distributor, default_balance_threshold_cents: -50_000, has_balance_threshold: true) }
 
     it 'should create a valid customer' do
-      c = distributor.customers.create({"first_name"=>"Jordan", "last_name"=>"Carter", "tag_list"=>"", "email"=>"jordan+3@buckybox.com", "address_attributes"=>{"mobile_phone"=>"", "home_phone"=>"", "work_phone"=>"", "address_1"=>"43a Warwick St", "address_2"=>"Wilton", "suburb"=>"Wellington", "city"=>"Wellington", "postcode"=>"6012", "delivery_note"=>""}, "balance_threshold"=>"1.00", "discount"=>"0", "special_order_preference"=>"", "delivery_service_id"=>"68"})
+      c = distributor.customers.create({ "first_name" => "Jordan", "last_name" => "Carter", "tag_list" => "", "email" => "jordan+3@buckybox.com", "address_attributes" => { "mobile_phone" => "", "home_phone" => "", "work_phone" => "", "address_1" => "43a Warwick St", "address_2" => "Wilton", "suburb" => "Wellington", "city" => "Wellington", "postcode" => "6012", "delivery_note" => "" }, "balance_threshold" => "1.00", "discount" => "0", "special_order_preference" => "", "delivery_service_id" => "68" })
       expect(c).to be_valid
     end
   end
@@ -340,19 +340,19 @@ describe Customer do
 
     describe '#active?' do
       it 'with active orders returns true' do
-        stub_active_orders(customer, [ double('orders') ])
+        stub_active_orders(customer, [double('orders')])
         expect(customer.active?).to be true
       end
 
       it 'without active orders returns false' do
-        stub_active_orders(customer, [ ])
+        stub_active_orders(customer, [])
         expect(customer.active?).to be false
       end
     end
 
     describe '#active_orders' do
       it 'returns the customers orders that are active' do
-        orders = [ double('orders') ]
+        orders = [double('orders')]
         stub_active_orders(customer, orders)
         expect(customer.active_orders).to eq(orders)
       end

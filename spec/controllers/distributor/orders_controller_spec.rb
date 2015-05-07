@@ -71,7 +71,7 @@ describe Distributor::OrdersController do
     it 'should create an order' do
       box = Fabricate(:box, distributor: @distributor)
       account = Fabricate(:account, customer: Fabricate(:customer, distributor: @distributor))
-      post :create, account_id: account.id, order: {account_id: account.id, box_id: box.id, schedule_rule_attributes: {mon: '1', start: '2012-10-27'}}
+      post :create, account_id: account.id, order: { account_id: account.id, box_id: box.id, schedule_rule_attributes: { mon: '1', start: '2012-10-27' } }
       expect(assigns(:order).schedule_rule.mon).to be true
       expect(assigns(:order).schedule_rule.start).to eq(Date.parse('2012-10-27'))
     end
@@ -79,8 +79,8 @@ describe Distributor::OrdersController do
     it 'should create an order with exclusions and substitutions' do
       box = Fabricate(:box, distributor: @distributor, likes: true, dislikes: true, substitutions_limit: 2, exclusions_limit: 2)
       account = Fabricate(:account, customer: Fabricate(:customer, distributor: @distributor))
-      item_ids = 2.times.collect{|i| Fabricate(:line_item, name: "Item #{i}").id}
-      post :create, account_id: account.id, order: {account_id: account.id, box_id: box.id, schedule_rule_attributes: {mon: '1', start: '2012-10-27'},  excluded_line_item_ids: ["", "#{item_ids[0]}"], substituted_line_item_ids: ["", "#{item_ids[1]}"]}
+      item_ids = 2.times.collect { |i| Fabricate(:line_item, name: "Item #{i}").id }
+      post :create, account_id: account.id, order: { account_id: account.id, box_id: box.id, schedule_rule_attributes: { mon: '1', start: '2012-10-27' },  excluded_line_item_ids: ["", "#{item_ids[0]}"], substituted_line_item_ids: ["", "#{item_ids[1]}"] }
       allow_any_instance_of(ScheduleRule).to receive(:includes?).and_return(true)
       expect(response).to redirect_to([:distributor, account.customer]), assigns(:order).errors.full_messages.join(', ')
     end
@@ -93,11 +93,11 @@ describe Distributor::OrdersController do
   end
 
   context "pausing" do
-    let(:order){Fabricate(:order)}
+    let(:order) { Fabricate(:order) }
     describe "#pause" do
       it "should pause the order" do
         date = order.next_occurrences(2, Date.current).last
-        put :pause, {id: order.id, account_id: order.account_id, date: date}
+        put :pause, { id: order.id, account_id: order.account_id, date: date }
         expect(assigns(:order).pause_date).to eq(date)
       end
     end
@@ -105,7 +105,7 @@ describe Distributor::OrdersController do
     describe "#remove_pause" do
       it "should remove the pause from an order" do
         order.pause!(Date.tomorrow)
-        put :remove_pause, {id: order.id, account_id: order.account_id}
+        put :remove_pause, { id: order.id, account_id: order.account_id }
         expect(order.reload.pause_date).to be_nil
       end
     end
@@ -114,7 +114,7 @@ describe Distributor::OrdersController do
       it "should resume the order" do
         dates = order.next_occurrences(5, Date.current)
         order.pause!(dates[2])
-        put :resume, {id: order.id, account_id: order.account_id, date: dates[4]}
+        put :resume, { id: order.id, account_id: order.account_id, date: dates[4] }
         order.reload
         expect(order.pause_date).to eq(dates[2])
         expect(order.resume_date).to eq(dates[4])
@@ -125,7 +125,7 @@ describe Distributor::OrdersController do
       it "should resume the order" do
         dates = order.next_occurrences(5, Date.current)
         order.pause!(dates[4], dates[5])
-        post :remove_resume, {id: order.id, account_id: order.account_id}
+        post :remove_resume, { id: order.id, account_id: order.account_id }
       end
     end
   end
@@ -134,7 +134,7 @@ describe Distributor::OrdersController do
     render_views
     it "should show the form" do
       order = Fabricate(:order, account: Fabricate(:account, customer: Fabricate(:customer, distributor: @distributor)))
-      get :new, {account_id: order.account_id}
+      get :new, { account_id: order.account_id }
     end
   end
 end

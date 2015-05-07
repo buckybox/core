@@ -8,11 +8,11 @@ package :ruby do
   patchlevel '' # e.g. '353' or '' for none
   binaries = %w( ruby rdoc ri rake irb erb )
   source "ftp://ftp.ruby-lang.org/pub/ruby/#{version.split(".")[0..1].join(".")}/ruby-#{version}#{"-p#{patchlevel}" unless patchlevel.empty?}.tar.gz" do
-    binaries.each {|bin| post :install, "ln -sf usr/local/bin/#{bin} /usr/bin/#{bin}"}
+    binaries.each { |bin| post :install, "ln -sf usr/local/bin/#{bin} /usr/bin/#{bin}" }
   end
   requires :ruby_dependencies
   verify do
-    binaries.each {|bin| has_executable bin}
+    binaries.each { |bin| has_executable bin }
   end
 end
 
@@ -37,7 +37,7 @@ package :rubygems do
   binaries = %w( gem )
   source "http://production.cf.rubygems.org/rubygems/rubygems-#{version}.tgz" do
     custom_install 'ruby setup.rb'
-    binaries.each {|bin| post :install, "ln -sf usr/local/bin/#{bin} /usr/bin/#{bin}"}
+    binaries.each { |bin| post :install, "ln -sf usr/local/bin/#{bin} /usr/bin/#{bin}" }
   end
   requires :ruby
   verify do

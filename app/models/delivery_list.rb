@@ -14,10 +14,10 @@ class DeliveryList < ActiveRecord::Base
     wday = date.wday
 
     order_ids = options[:order_ids] || Bucky::Sql.order_ids(distributor, date)
-    date_orders = distributor.orders.active.where(id: order_ids).includes({ account: {customer: {address:{}, deliveries: {delivery_list: {}}}}, order_extras: {}, box: {}})
+    date_orders = distributor.orders.active.where(id: order_ids).includes({ account: { customer: { address: {}, deliveries: { delivery_list: {} } } }, order_extras: {}, box: {} })
 
     # This emulates the ordering when lists are actually created
-    FutureDeliveryList.new(date, date_orders.sort do |a,b|
+    FutureDeliveryList.new(date, date_orders.sort do |a, b|
       comp = a.dso(wday) <=> b.dso(wday)
       comp.zero? ? (b.created_at <=> a.created_at) : comp
     end)
@@ -44,7 +44,7 @@ class DeliveryList < ActiveRecord::Base
       packages[position] << package
     end
 
-    packages = packages.sort.map{ |_key, value| value }.flatten
+    packages = packages.sort.map { |_key, value| value }.flatten
 
     packages.each do |package|
       order = package.order
@@ -69,7 +69,7 @@ class DeliveryList < ActiveRecord::Base
     raise ArgumentError, "delivery ids do not match" if delivery_order.map(&:to_i).sort != deliveries.where(delivery_service_id: delivery_service_id).select(:id).map(&:id).sort
 
     # Don't know an easy way to preload like this in Rails, but load up all deliveries matching on id, PRESERVING the order of the ids thru to the deliveries array, VERY IMPORTANT
-    deliveries_cache = Delivery.where(id: delivery_order).includes(:address).inject({}){|cache, d| cache.merge!(d.id => d)}
+    deliveries_cache = Delivery.where(id: delivery_order).includes(:address).inject({}) { |cache, d| cache.merge!(d.id => d) }
     ordered_address_hashes = []
     delivery_order.each do |id|
       ordered_address_hashes << deliveries_cache[id.to_i].address.address_hash if deliveries_cache[id.to_i]
@@ -105,7 +105,7 @@ class DeliveryList < ActiveRecord::Base
   def get_delivery_number(delivery)
     raise "This isn't my delivery" if delivery.delivery_list_id != self.id
 
-    delivery_to_same_address = deliveries(true).find{|d| d.address_hash == delivery.address_hash && d.id != delivery.id}
+    delivery_to_same_address = deliveries(true).find { |d| d.address_hash == delivery.address_hash && d.id != delivery.id }
 
     if delivery_to_same_address
       delivery_to_same_address.delivery_number
@@ -124,9 +124,9 @@ class DeliveryList < ActiveRecord::Base
 
   def quantity_for(delivery_service_id)
     if delivery_service_id.nil?
-      Package.sum(:archived_order_quantity, joins: :deliveries, conditions: {deliveries: {delivery_list_id: id}})
+      Package.sum(:archived_order_quantity, joins: :deliveries, conditions: { deliveries: { delivery_list_id: id } })
     else
-      Package.sum(:archived_order_quantity, joins: :deliveries, conditions: {deliveries: {delivery_list_id: id, delivery_service_id: delivery_service_id}})
+      Package.sum(:archived_order_quantity, joins: :deliveries, conditions: { deliveries: { delivery_list_id: id, delivery_service_id: delivery_service_id } })
     end
   end
 end

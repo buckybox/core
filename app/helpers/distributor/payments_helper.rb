@@ -4,7 +4,7 @@ module Distributor::PaymentsHelper
     @already_shown ||= []
 
     result = if @last_import_transaction.blank? || @last_import_transaction.transaction_date != import_transaction.transaction_date
-               show_now = import_transaction_lists.select{|tl| tl.import_transactions.ordered.first.transaction_date >= import_transaction.transaction_date && !@already_shown.include?(tl) rescue false}
+               show_now = import_transaction_lists.select { |tl| tl.import_transactions.ordered.first.transaction_date >= import_transaction.transaction_date && !@already_shown.include?(tl) rescue false }
                @already_shown = (@already_shown + show_now).uniq
                show_now
              else
@@ -32,7 +32,7 @@ module Distributor::PaymentsHelper
     end
   end
 
-  def import_modal_link(import_transactions, modal_id, id=nil)
+  def import_modal_link(import_transactions, modal_id, id = nil)
     name = import_transactions.blank? ? 'Import transactions' : 'Import more transactions'
     link_to(name, modal_id, id: id, data: { toggle: 'modal' })
   end

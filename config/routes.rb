@@ -59,7 +59,7 @@ BuckyBox::Application.routes.draw do
     end
 
     resources :distributors,        only: :update
-    resource  :bank_information,    only: :update
+    resource :bank_information,    only: :update
     resources :boxes,               except: [:index]
     resources :extras,              except: [:index, :show]
 
@@ -93,7 +93,7 @@ BuckyBox::Application.routes.draw do
 
     resources :import_transaction_lists, only: [:destroy]
 
-    resources :customers, except: [ :edit ] do
+    resources :customers, except: [:edit] do
       collection do
         get 'search',   action: :index, as: 'search'
         get 'tag/:tag', action: :index, as: 'tag'
@@ -113,7 +113,7 @@ BuckyBox::Application.routes.draw do
     end
 
     resources :accounts, only: :edit do
-      resources :orders, except: [ :index, :show, :destroy ] do
+      resources :orders, except: [:index, :show, :destroy] do
         member do
           put 'deactivate'
           put 'pause'
@@ -164,7 +164,7 @@ BuckyBox::Application.routes.draw do
       end
     end
 
-    resources :accounts, only:[] do
+    resources :accounts, only: [] do
       get 'transactions/:limit(/:more)', action: :transactions, as: 'transactions'
     end
   end
@@ -203,12 +203,12 @@ BuckyBox::Application.routes.draw do
       resources :boxes,             only: [:index, :show]
       resources :delivery_services, only: [:index, :show]
       resources :orders,            only: [:index, :show, :create]
-      resource  :webstore,          only: [:show]
+      resource :webstore,          only: [:show]
     end
   end
 
   # TODO: Legacy routes. As we move to all RESTful routes these should be removed.
-  get  "/distributor/deliveries/date/:date/view/:view",           controller: "distributor/deliveries", action: :index,                           as: "date_distributor_deliveries"
+  get "/distributor/deliveries/date/:date/view/:view",           controller: "distributor/deliveries", action: :index,                           as: "date_distributor_deliveries"
   post "/distributor/deliveries/date/:date/reposition",           controller: "distributor/deliveries", action: :reposition,                      as: "reposition_distributor_deliveries"
   post "/distributor/deliveries/update_status",                   controller: "distributor/deliveries", action: :update_status,                   as: "update_status_distributor_deliveries"
   post "/distributor/deliveries/make_payment",                    controller: "distributor/deliveries", action: :make_payment,                    as: "make_payment_distributor_deliveries"

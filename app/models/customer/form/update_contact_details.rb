@@ -24,12 +24,12 @@ class Customer::Form::UpdateContactDetails < Customer::Form
 protected
 
   def assign_attributes(attributes)
-    @first_name   = attributes["first_name"]   || customer.first_name
-    @last_name    = attributes["last_name"]    || customer.last_name
-    @email        = attributes["email"]        || customer.email
+    @first_name   = attributes["first_name"] || customer.first_name
+    @last_name    = attributes["last_name"] || customer.last_name
+    @email        = attributes["email"] || customer.email
     @mobile_phone = attributes["mobile_phone"] || address.mobile_phone
-    @home_phone   = attributes["home_phone"]   || address.home_phone
-    @work_phone   = attributes["work_phone"]   || address.work_phone
+    @home_phone   = attributes["home_phone"] || address.home_phone
+    @work_phone   = attributes["work_phone"] || address.work_phone
   end
 
 private

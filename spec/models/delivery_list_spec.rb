@@ -104,7 +104,7 @@ describe DeliveryList, :slow do
         @dl2 = DeliveryList.generate_list(@distributor, @generate_date + 1.week)
       end
 
-      specify { expect(@dl2.deliveries.ordered.map{|d| "#{d.customer.number}/#{d.position}"}).to eq @dl1.deliveries.ordered.map{|d| "#{d.customer.number}/#{d.position}"} }
+      specify { expect(@dl2.deliveries.ordered.map { |d| "#{d.customer.number}/#{d.position}" }).to eq @dl1.deliveries.ordered.map { |d| "#{d.customer.number}/#{d.position}" } }
 
       context 'and the week after that' do
         before do
@@ -112,7 +112,7 @@ describe DeliveryList, :slow do
           @dl3 = DeliveryList.generate_list(@distributor, @generate_date + 2.week)
         end
 
-        specify { expect(@dl3.deliveries.ordered.map{|d| "#{d.customer.number}/#{d.position}"}).to eq @dl2.deliveries.ordered.map{|d| "#{d.customer.number}/#{d.position}"} }
+        specify { expect(@dl3.deliveries.ordered.map { |d| "#{d.customer.number}/#{d.position}" }).to eq @dl2.deliveries.ordered.map { |d| "#{d.customer.number}/#{d.position}" } }
       end
     end
 
@@ -181,20 +181,20 @@ describe DeliveryList, :slow do
       end
 
       it 'should change delivery order' do
-        expect { delivery_list.reposition(@new_ids)}.to change{delivery_list.deliveries.ordered.collect(&:id)}.to(@new_ids)
-        expect(delivery_list.reload.deliveries.ordered.collect(&:delivery_number)).to eq([3,1,2])
+        expect { delivery_list.reposition(@new_ids) }.to change { delivery_list.deliveries.ordered.collect(&:id) }.to(@new_ids)
+        expect(delivery_list.reload.deliveries.ordered.collect(&:delivery_number)).to eq([3, 1, 2])
       end
 
       it 'should update the delivery list for the next week' do
         allow_any_instance_of(Distributor).to receive(:generate_required_daily_lists) # TODO: remove this hack to get around the constant after_save callbacks
         delivery_list.reposition(@new_ids)
         addresses = delivery_list.deliveries.ordered.collect(&:address)
-        next_packing_list = PackingList.generate_list(distributor, delivery_list.date+1.week)
-        next_delivery_list = DeliveryList.generate_list(distributor, delivery_list.date+1.week)
+        next_packing_list = PackingList.generate_list(distributor, delivery_list.date + 1.week)
+        next_delivery_list = DeliveryList.generate_list(distributor, delivery_list.date + 1.week)
         allow_any_instance_of(Distributor).to receive(:generate_required_daily_lists).and_call_original # TODO: remove this hack to get around the constant after_save callbacks
 
         expect(next_delivery_list.deliveries.ordered.collect(&:address)).to eq(addresses)
-        expect(next_delivery_list.deliveries.ordered.collect(&:delivery_number)).to eq([1,2,3])
+        expect(next_delivery_list.deliveries.ordered.collect(&:delivery_number)).to eq([1, 2, 3])
       end
 
       it 'should put new deliveries at the top of the list' do
@@ -212,8 +212,8 @@ describe DeliveryList, :slow do
         PackingList.generate_list(distributor, date)
         next_delivery_list = DeliveryList.generate_list(distributor, date)
 
-        expect(next_delivery_list.deliveries.ordered.collect(&:address)).to eq([account2.address, account.address]+addresses)
-        expect(next_delivery_list.deliveries.ordered.collect(&:delivery_number)).to eq([4,5,3,1,2])
+        expect(next_delivery_list.deliveries.ordered.collect(&:address)).to eq([account2.address, account.address] + addresses)
+        expect(next_delivery_list.deliveries.ordered.collect(&:delivery_number)).to eq([4, 5, 3, 1, 2])
       end
     end
 
@@ -251,7 +251,7 @@ describe DeliveryList, :slow do
   end
 end
 
-def fab_delivery(delivery_list, distributor, delivery_service=nil, address=nil)
+def fab_delivery(delivery_list, distributor, delivery_service = nil, address = nil)
   delivery_service ||= Fabricate(:delivery_service, distributor: distributor, schedule_rule: Fabricate(:schedule_rule, start: Date.current.yesterday))
 
   customer = Fabricate(:customer, distributor: distributor, delivery_service: delivery_service)

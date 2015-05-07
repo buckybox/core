@@ -61,7 +61,7 @@ private
           schedule_hash[:rrules][index][:validations][:day] = utc_day_array
         elsif rule_type == 'IceCube::MonthlyRule'
           day_hash = schedule_rule[:validations][:day_of_week]
-          utc_day_hash = day_hash.inject({}) { |h,(k,v)| h[(k - 1) % 7] = v; h }
+          utc_day_hash = day_hash.inject({}) { |h, (k, v)| h[(k - 1) % 7] = v; h }
 
           schedule_hash[:rrules][index][:validations][:day_of_week] = utc_day_hash
         end

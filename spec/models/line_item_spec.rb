@@ -24,7 +24,7 @@ describe LineItem do
         @text = "oranges\nKiwi fruit\napples\npears\nApples"
       end
 
-      specify { expect{ LineItem.from_list(distributor, @text) }.to change(distributor.line_items(true), :count).from(1).to(5) }
+      specify { expect { LineItem.from_list(distributor, @text) }.to change(distributor.line_items(true), :count).from(1).to(5) }
 
       specify { expect(LineItem.from_list(distributor, @text).map(&:name).include?(@old_item_name)).to be true }
       specify { expect(LineItem.from_list(distributor, @text).map(&:name).include?('Apples')).to be true }
@@ -43,7 +43,7 @@ describe LineItem do
 
     describe '.bulk_update' do
       context 'blank name' do
-        before { LineItem.bulk_update(distributor, { line_item.id => {name: ''} }) }
+        before { LineItem.bulk_update(distributor, { line_item.id => { name: '' } }) }
 
         specify { expect(LineItem.find_by_id(line_item.id)).to be_nil }
         specify { expect(Exclusion.find_by_id(exclusion.id)).to be_nil }
@@ -56,7 +56,7 @@ describe LineItem do
           @new_line_item = Fabricate(:line_item, name: @new_name)
           allow(LineItem).to receive(:where) { double(first_or_create: @new_line_item) } # FIXME: brittle stubbing
 
-          LineItem.bulk_update(distributor, { line_item.id => {name: @new_name} })
+          LineItem.bulk_update(distributor, { line_item.id => { name: @new_name } })
         end
 
         specify { expect(@new_line_item.name).to eq @new_name.titleize }
@@ -65,14 +65,14 @@ describe LineItem do
       end
 
       context 'same name' do
-        before { LineItem.bulk_update(distributor, { line_item.id => {name: line_item.name} }) }
+        before { LineItem.bulk_update(distributor, { line_item.id => { name: line_item.name } }) }
 
         specify { expect(line_item.reload.persisted?).to be true }
         specify { expect(line_item.id).to eq exclusion.line_item_id }
         specify { expect(line_item.id).to eq substitution.line_item_id }
       end
 
-      specify { expect{LineItem.bulk_update(distributor, nil)}.to_not raise_error}
+      specify { expect { LineItem.bulk_update(distributor, nil) }.to_not raise_error }
     end
 
     describe '.move_exclustions_and_substitutions!' do

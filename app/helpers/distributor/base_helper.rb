@@ -3,7 +3,7 @@ module Distributor::BaseHelper
   # will make the 'DeliveryServices' sub_nav title show as highlighted
   def show_settings_sub_nav(force_highlighted = nil)
     content_for :sub_nav do
-      render partial: 'distributor/settings/sub_nav', locals: {force_highlighted: force_highlighted}
+      render partial: 'distributor/settings/sub_nav', locals: { force_highlighted: force_highlighted }
     end
   end
 

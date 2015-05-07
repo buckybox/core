@@ -19,11 +19,11 @@ module Admin::DistributorsHelper
     end
   end
 
-  def extra_status(distributor, extra, box=nil)
+  def extra_status(distributor, extra, box = nil)
     distributor.find_extra_from_import(extra, box).blank? ? ERROR_CLASS : PASS_CLASS
   end
 
-  def show_extra(distributor, extra, box=nil)
+  def show_extra(distributor, extra, box = nil)
     (found_extra = distributor.find_extra_from_import(extra, box)).present? ? "#{extra.count}x #{found_extra.name_with_price(0)}" : extra.to_s
   end
 end
