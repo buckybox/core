@@ -51,7 +51,7 @@ private
   end
 
   def address=(address)
-    address_hash = address.address_hash
+    self.address_hash = address.address_hash
   end
 
   def self.for_delivery(delivery)

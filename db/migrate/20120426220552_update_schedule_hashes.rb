@@ -43,7 +43,6 @@ private
     if distributor
       time_zone  = distributor.read_attribute(:time_zone)
       Time.zone  = time_zone if time_zone
-      before_utc = (Time.zone.utc_offset > 0)
     end
 
     schedule_hash  = YAML.load(object.read_attribute(:schedule))

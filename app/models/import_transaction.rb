@@ -90,6 +90,7 @@ class ImportTransaction < ActiveRecord::Base
     result = customer.present? ? [[customer.badge, customer.id]] : []
     result += draft? ? MATCH_SELECT : [[MATCH_NOT_A_CUSTOMER.humanize, MATCH_NOT_A_CUSTOMER]]
     result += customer_badges.reject { |_, id| id == customer_id }
+    result
   end
 
   def confidence

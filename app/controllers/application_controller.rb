@@ -12,10 +12,10 @@ class ApplicationController < ActionController::Base
   before_action :set_user_time_zone
   before_action :customer_smart_sign_in
 
-  unless Rails.env.development?
-    analytical modules: [:google], use_session_store: true
-  else
+  if Rails.env.development?
     analytical modules: [], use_session_store: true
+  else
+    analytical modules: [:google], use_session_store: true
   end
 
   layout :layout_by_resource
