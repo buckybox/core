@@ -379,7 +379,7 @@ class Order < ActiveRecord::Base
   end
 
   def include_extras
-    new_record? || !order_extras.count.zero?
+    new_record? || !order_extras.empty?
   end
 
   def extras_count
@@ -387,8 +387,8 @@ class Order < ActiveRecord::Base
   end
 
   def dso(wday)
-    dso_position = DeliverySequenceOrder.position_for(address.address_hash, wday, delivery_service.id)
-    dso_position || -1
+    @dso ||= {}
+    @dso[wday] ||= (DeliverySequenceOrder.position_for(address.address_hash, wday, delivery_service.id) || -1)
   end
 
   def delivery_service_id
