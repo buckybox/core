@@ -1,5 +1,4 @@
-- title("Admin - Distributors (#{@distributors.size})")
-= render partial: 'admin/distributors/nav', locals: { distributor: false }
+= render partial: 'admin/nav'
 
 %table#distributors.table.table-bordered
   - @distributors.each do |distributor|

@@ -1,0 +1,31 @@
+.row-fluid
+  .span6
+    - if defined?(@distributor)
+      = link_to 'Impersonate', impersonate_admin_distributor_path(@distributor)
+      |
+    = link_to_unless_current 'Dashboard', admin_root_path
+    |
+    = link_to_unless_current 'Recent Distributors', admin_distributors_path
+    - if request.path == admin_distributors_path
+      |
+      = link_to_unless_current 'New Distributor', new_admin_distributor_path
+    |
+    = link_to_unless_current 'Omni Importers', admin_omni_importers_path
+    - if request.path == admin_omni_importers_path
+      |
+      = link_to "New Omni Importer", new_admin_omni_importer_path
+
+  .span6.text-right
+    - if request.path == admin_root_path
+      = link_to "https://app.intercom.io/a/apps/b3e72f90ddcc230dea36a8e35ec7e4dd65860b61/users/segments/active", target: "_blank" do
+        = @distributors.count - 1 # minus 1 for demo@buckybox.com
+        active distributors
+      |
+
+    - if admin_signed_in?
+      = link_to 'log out', destroy_admin_session_path, method: :delete
+    - else
+      = link_to 'log in', new_admin_session_path
+
+= render_site_messages(flash)
+
