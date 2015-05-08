@@ -1,6 +1,6 @@
 .row-fluid
   .span6
-    - if defined?(@distributor)
+    - if defined?(@distributor) && @distributor.persisted?
       = link_to 'Impersonate', impersonate_admin_distributor_path(@distributor)
       |
     = link_to_unless_current 'Dashboard', admin_root_path
