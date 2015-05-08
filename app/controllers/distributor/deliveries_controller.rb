@@ -27,18 +27,18 @@ class Distributor::DeliveriesController < Distributor::ResourceController
 
       if @delivery_service_id.zero?
         @packing_list = current_distributor.packing_list_by_date(@selected_date)
-        @all_packages = @packing_list.ordered_packages
+        @all_items = @packing_list.ordered_packages
 
-        @items     = @all_packages
-        @real_list = @items.all? { |i| i.is_a?(Package) }
+        @items     = @all_items
+        @real_list = @items.first.is_a?(Package)
         @delivery_service = @delivery_services.first
         @show_tour = current_distributor.deliveries_index_packing_intro
       else
         @delivery_list  = current_distributor.delivery_list_by_date(@selected_date)
-        @all_deliveries = @delivery_list.ordered_deliveries
+        @all_items = @delivery_list.ordered_deliveries
 
-        @items     = @all_deliveries.select { |delivery| delivery.delivery_service_id == @delivery_service_id }
-        @real_list = @items.all? { |i| i.is_a?(Delivery) }
+        @items     = @all_items.select { |delivery| delivery.delivery_service_id == @delivery_service_id }
+        @real_list = @items.first.is_a?(Delivery)
         @delivery_service = @delivery_services.find(@delivery_service_id)
         @show_tour = current_distributor.deliveries_index_deliveries_intro
       end
