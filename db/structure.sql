@@ -1126,7 +1126,6 @@ CREATE TABLE distributors (
     company_logo character varying(255),
     completed_wizard boolean DEFAULT false NOT NULL,
     parameter_name character varying(255),
-    bucky_box_percentage numeric NOT NULL,
     separate_bucky_fee boolean DEFAULT false,
     support_email character varying(255),
     time_zone character varying(255),
@@ -3577,3 +3576,5 @@ INSERT INTO schema_migrations (version) VALUES ('20150414184421');
 INSERT INTO schema_migrations (version) VALUES ('20150422185555');
 
 INSERT INTO schema_migrations (version) VALUES ('20150504072003');
+
+INSERT INTO schema_migrations (version) VALUES ('20150508150013');
