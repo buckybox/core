@@ -34,7 +34,7 @@ Given /^I am logged in as a (.*)$/ do |auth_type|
 end
 
 When /^I log out of the admin section$/ do
-  click_link "log out"
+  click_link "Log Out"
 end
 
 When /^I log out of the distributor section$/ do
