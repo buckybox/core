@@ -61,7 +61,7 @@ class Order < ActiveRecord::Base
   after_initialize :set_default_schedule_rule
 
   FORCAST_RANGE_BACK = 6.weeks
-  FORCAST_RANGE_FORWARD = 6.weeks
+  FORCAST_RANGE_FORWARD = 1.week
   IS_ONE_OFF  = false
   QUANTITY    = 1
 
