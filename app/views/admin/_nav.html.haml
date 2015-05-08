@@ -23,9 +23,9 @@
       |
 
     - if admin_signed_in?
-      = link_to 'log out', destroy_admin_session_path, method: :delete
+      = link_to 'Log Out', destroy_admin_session_path, method: :delete
     - else
-      = link_to 'log in', new_admin_session_path
+      = link_to 'Log In', new_admin_session_path
 
 = render_site_messages(flash)
 
