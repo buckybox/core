@@ -383,15 +383,7 @@ class Order < ActiveRecord::Base
   end
 
   def extras_count
-    order_extras.collect(&:count).sum
-  end
-
-  def import_extras(b_extras)
-    self.order_extras = b_extras.inject({}) do |params, extra|
-      found_extra = distributor.find_extra_from_import(extra, box)
-      raise "Didn't find an extra to import" if found_extra.blank?
-      params.merge(found_extra.id.to_s => { count: extra.count })
-    end
+    order_extras.sum(&:count)
   end
 
   def dso(wday)

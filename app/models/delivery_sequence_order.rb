@@ -40,7 +40,6 @@ private
     connection.execute(send(:sanitize_sql_array, sql_array))
   end
 
-  # DSO stands for DeliverySequenceOrder
   def update_dso
     Delivery.matching_dso(self).each do |delivery|
       next if delivery.dso == position
@@ -48,10 +47,6 @@ private
       delivery.dso = position
       delivery.save!
     end
-  end
-
-  def address=(address)
-    self.address_hash = address.address_hash
   end
 
   def self.for_delivery(delivery)
