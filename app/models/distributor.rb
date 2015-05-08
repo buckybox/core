@@ -115,6 +115,9 @@ class Distributor < ActiveRecord::Base
 
   delegate :tracking_after_create, :tracking_after_save, :track, to: :messaging
 
+  attr_reader :spend_limit_on_all_customers
+  alias_method :spend_limit_on_all_customers?, :spend_limit_on_all_customers
+
   # Devise Override: Avoid validations on update or if now password provided
   def password_required?
     password.present? && password.size > 0 || new_record?
@@ -374,9 +377,6 @@ class Distributor < ActiveRecord::Base
   def spend_limit_on_all_customers=(val)
     @spend_limit_on_all_customers = val.to_bool
   end
-
-  attr_reader :spend_limit_on_all_customers
-  alias_method :spend_limit_on_all_customers?, :spend_limit_on_all_customers
 
   def send_email?
     send_email
