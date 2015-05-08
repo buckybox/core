@@ -383,7 +383,7 @@ class Order < ActiveRecord::Base
   end
 
   def extras_count
-    order_extras.sum(&:count)
+    order_extras.map(&:count).sum
   end
 
   def dso(wday)

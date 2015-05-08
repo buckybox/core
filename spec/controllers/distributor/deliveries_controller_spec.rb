@@ -21,12 +21,12 @@ describe Distributor::DeliveriesController do
     it "should order deliveries based on the DSO" do
       get :index, { date: @date, view: @delivery_service.id.to_s }
 
-      expect(assigns[:all_deliveries]).to eq(@deliveries.sort_by(&:dso))
+      expect(assigns[:all_items]).to eq(@deliveries.sort_by(&:dso))
     end
 
     it "should order future deliveries based on the DSO" do
       get :index, { date: @date + 1.week, view: @delivery_service.id.to_s }
-      expect(assigns[:all_deliveries]).to eq(@deliveries.sort_by(&:dso).collect(&:order))
+      expect(assigns[:all_items]).to eq(@deliveries.sort_by(&:dso).collect(&:order))
     end
 
     it "should update the position of a delivery when placed between two others" do
