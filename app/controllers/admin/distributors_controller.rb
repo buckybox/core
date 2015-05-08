@@ -4,6 +4,7 @@ class Admin::DistributorsController < Admin::ResourceController
   def index
     @distributors = Distributor.where("updated_at > ?", 6.months.ago).order("updated_at DESC")
     @distributors = @distributors.tagged_with(params[:tag]) if params[:tag].present?
+    @hidden_distributors = Distributor.count - @distributors.count
     index!
   end
 

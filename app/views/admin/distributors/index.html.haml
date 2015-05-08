@@ -3,3 +3,10 @@
 %table#distributors.table.table-bordered
   - @distributors.each do |distributor|
     = render partial: 'admin/distributors/index', locals: {distributor: distributor}
+
+- if @hidden_distributors > 0
+  .row
+    .span12.text-center
+      %strong
+        Only the #{@distributors.count} distributors who were active in the last six months are shown,
+        #{@hidden_distributors} inactive distributors are not shown.
