@@ -69,49 +69,66 @@ module LayoutHelper
   end
 
   def customer_badge(customer, options = {})
-    customer_id = customer.formated_number.to_s
+    cache_key = [
+      :customer_badge,
+      customer.id,
+      customer.updated_at,
+      options.hash,
+    ].join("/")
 
-    content = \
-    case options[:link]
-    when false
-      content_tag(:span, customer_id, class: 'customer-id')
-    when Hash
-      link_to(customer_id, url_for(options[:link]), class: 'customer-id')
-    when String
-      link_to(customer_id, options[:link], class: 'customer-id')
-    else
-      link_to(customer_id, [:distributor, customer], class: 'customer-id')
+    Rails.cache.fetch(cache_key) do
+      customer_id = customer.formated_number.to_s
+
+      content = \
+      case options[:link]
+      when false
+        content_tag(:span, customer_id, class: 'customer-id')
+      when Hash
+        link_to(customer_id, url_for(options[:link]), class: 'customer-id')
+      when String
+        link_to(customer_id, options[:link], class: 'customer-id')
+      else
+        link_to(customer_id, [:distributor, customer], class: 'customer-id')
+      end
+
+      customer_name = options[:customer_name] || customer.name
+      customer_name = truncate(customer_name, length: 18) if options[:short]
+      content += content_tag(:span, customer_name,
+        class: 'customer-name', title: customer_name,
+        'data-customer-id' => customer.id,
+        'data-customer-email' => customer.email
+      )
+
+      badge = content_tag(:span, content.html_safe, class: 'customer-badge')
+
+      [options[:before], badge, options[:after]].join.html_safe
     end
-
-    customer_name = options[:customer_name] || customer.name
-    customer_name = truncate(customer_name, length: 18) if options[:short]
-    content += content_tag(:span, customer_name,
-      class: 'customer-name', title: customer_name,
-      'data-customer-id' => customer.id,
-      'data-customer-email' => customer.email
-    )
-
-    badge = content_tag(:span, content.html_safe, class: 'customer-badge')
-
-    [options[:before], badge, options[:after]].join.html_safe
   end
 
   def customer_tags(customer)
-    content = ""
-    customer = customer.decorate unless customer.decorated?
+    cache_key = [
+      :customer_tags,
+      customer.id,
+      customer.updated_at,
+    ].join("/")
 
-    customer.dynamic_tags.each do |tag, label|
-      content << link_to(content_tag(:span, tag, class: "label label-status label-#{label}"), tag_distributor_customers_path(tag), class: 'link-label') << " "
+    Rails.cache.fetch(cache_key) do
+      content = ""
+      customer = customer.decorate unless customer.decorated?
+
+      customer.dynamic_tags.each do |tag, label|
+        content << link_to(content_tag(:span, tag, class: "label label-status label-#{label}"), tag_distributor_customers_path(tag), class: 'link-label') << " "
+      end
+
+      tags = customer.tags.sort_by { |tag| tag.name.length }
+      tags_html = tags.map do |tag|
+        link_to(content_tag(:span, tag.name, class: 'label label-info'), tag_distributor_customers_path(tag.name), class: 'link-label') << " "
+      end.join.html_safe
+
+      content << content_tag(:span, tags_html, class: 'tag-links', data: { "toggle" => "tooltip", "placement" => "left", "title" => tags.join(' ') })
+
+      content.html_safe
     end
-
-    tags = customer.tags.sort_by { |tag| tag.name.length }
-    tags_html = tags.map do |tag|
-      link_to(content_tag(:span, tag.name, class: 'label label-info'), tag_distributor_customers_path(tag.name), class: 'link-label') << " "
-    end.join.html_safe
-
-    content << content_tag(:span, tags_html, class: 'tag-links', data: { "toggle" => "tooltip", "placement" => "left", "title" => tags.join(' ') })
-
-    content.html_safe
   end
 
   def intro_tour(show_tour)
