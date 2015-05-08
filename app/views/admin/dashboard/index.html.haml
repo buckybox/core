@@ -1,24 +1,8 @@
-- title('Admin - Dashboard')
+= render partial: 'admin/nav'
 
-.row-fluid
-  .span12
-    .text-center.muted
-      Version:
-      - commit = Rails.application.config.version.split.first
-      - link = "https://github.com/enspiral/bucky_box/commit/#{commit}"
-      = link_to Rails.application.config.version, link, target: "_blank"
-
-.row-fluid
-  .span6
-    = render partial: 'admin/dashboard/nav'
-  .span6.text-right
-    = link_to "https://app.intercom.io/a/apps/b3e72f90ddcc230dea36a8e35ec7e4dd65860b61/users/segments/active", target: "_blank" do
-      = @distributors.count - 1 # minus 1 for demo@buckybox.com
-      active distributors
-
-  %table#distributors.table.table-bordered
-    - @distributors.each do |distributor|
-      = render partial: 'admin/distributors/index', locals: {distributor: distributor}
+%table#distributors.table.table-bordered
+  - @distributors.each do |distributor|
+    = render partial: 'admin/distributors/index', locals: {distributor: distributor}
 
 - unless @cron_logs.empty?
   .row-fluid
@@ -28,3 +12,12 @@
   .row-fluid
     .span12
       = render 'admin/cron_logs/index'
+
+.row-fluid
+  .span12
+    .text-center.muted
+      Version:
+      - commit = Rails.application.config.version.split.first
+      - link = "https://github.com/enspiral/bucky_box/commit/#{commit}"
+      = link_to Rails.application.config.version, link, target: "_blank"
+

@@ -3,18 +3,6 @@
 
 - content_for :body do
   .container
-    .row
-      .span12.text-right
-        - if admin_signed_in?
-          Signed in as
-          %strong= current_admin.email
-          \|
-          = link_to 'log out', destroy_admin_session_path, method: :delete
-        - else
-          = link_to 'log in', new_admin_session_path
-
-    = render_site_messages(flash)
-
     - if show_title?
       .row
         .span12

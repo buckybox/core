@@ -1,4 +1,4 @@
-- cache [request.fullpath, :distributor, distributor.id, distributor.updated_at, distributor.last_seen_at], expires_in: 1.hour do
+- cache [:admin, :distributor, distributor.id, distributor.updated_at, distributor.last_seen_at], expires_in: 1.hour do
 
   %tr{ class: ('recent' if distributor.seen_recently?) }
     %td
