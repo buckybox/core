@@ -20,7 +20,7 @@ class Distributor::CustomersController < Distributor::ResourceController
 
   # just update customer notes
   def update
-    customer = Customer.find(params[:id])
+    customer = current_distributor.customers.find(params[:id])
 
     if customer.update_attributes(notes: params[:customer][:notes])
       flash[:notice] = "The customer notes have been successfully updated."
@@ -64,20 +64,19 @@ class Distributor::CustomersController < Distributor::ResourceController
   end
 
   def show
-    show! do
-      @address          = @customer.address
-      @account          = @customer.account.decorate
-      @orders           = @account.orders.active.decorate
-      @deliveries       = @account.deliveries.ordered
-      @transactions     = account_transactions(@account)
-      @show_more_link   = (@transactions.size != @account.transactions.count)
-      @transactions_sum = @account.calculate_balance
-      @show_tour        = current_distributor.customers_show_intro
-    end
+    @customer         = current_distributor.customers.find(params[:id])
+    @address          = @customer.address
+    @account          = @customer.account.decorate
+    @orders           = @account.orders.active.decorate
+    @deliveries       = @account.deliveries.ordered
+    @transactions     = account_transactions(@account)
+    @show_more_link   = (@transactions.size != @account.transactions.count)
+    @transactions_sum = @account.calculate_balance
+    @show_tour        = current_distributor.customers_show_intro
   end
 
   def send_login_details
-    @customer = Customer.find(params[:id])
+    @customer = current_distributor.customers.find(params[:id])
 
     @customer.randomize_password
     @customer.save
@@ -184,7 +183,7 @@ private
   end
 
   def pre_form_args
-    customer = Customer.find_by(id: params[:id]) || Customer.new
+    customer = current_distributor.customers.find_by(id: params[:id]) || Customer.new
     { distributor: current_distributor, customer: customer }
   end
 
@@ -235,7 +234,7 @@ private
       message = "Your new email template <em>#{email_template.subject}</em> has been saved."
 
     when "preview"
-      customer = Customer.find recipient_ids.first
+      customer = current_distributor.customers.find recipient_ids.first
       personalized_email = email_template.personalize(customer)
       CustomerMailer.email_template(current_distributor, personalized_email).deliver
       message = "A preview email has been sent to #{current_distributor.email}."
@@ -253,7 +252,7 @@ private
 
   def send_email(recipient_ids, email)
     recipient_ids.each do |id|
-      customer = Customer.find id
+      customer = current_distributor.customers.find id
       personalized_email = email.personalize(customer)
 
       CustomerMailer.delay(
@@ -264,7 +263,7 @@ private
 
     message = "Your email \"#{email.subject}\" is being sent to "
     message << if recipient_ids.size == 1
-      Customer.find(recipient_ids.first).name
+      current_distributor.customers.find(recipient_ids.first).name
     else
       "#{recipient_ids.size} customers"
     end
