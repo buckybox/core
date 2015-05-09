@@ -339,12 +339,12 @@ class Distributor < ActiveRecord::Base
       omni_importers.ordered.first
   end
 
-  def show_payments_tab?
-    !omni_importers.count.zero?
+  def omni_importers?
+    omni_importers.any?
   end
 
   def can_upload_payments?
-    show_payments_tab? && import_transaction_lists.draft.count.zero?
+    omni_importers? && import_transaction_lists.draft.empty?
   end
 
   def self.parameterize_name(value)
