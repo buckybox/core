@@ -74,7 +74,6 @@ end
 group :development do
   gem "webrick" # Included explicitly so #chunked warnings no longer show up in the dev log
   gem "yard",       require: false
-  gem "bullet",     require: false
   gem "brakeman",   require: false
   gem "xray-rails", require: false
   gem "ruby-prof",  require: false # profiling with /newrelic
@@ -125,6 +124,7 @@ group :development, :test do
   gem "terminal-notifier-guard" # Mac 10.8 system notifications for Guard
   gem "letter_opener"
   gem "bundler-audit", require: false
+  gem "bullet"
   gem "rubocop"
   gem "byebug"
   gem "cane"
