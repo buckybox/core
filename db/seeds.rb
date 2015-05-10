@@ -1,7 +1,7 @@
 require "fabrication"
 require "faker"
 
-RANDOM_BALANCE = Random.new
+RANDOM_BALANCE = Random.new(123456789)
 
 TAG_GROUPS = [
   ["cbd", "rural", ""],
