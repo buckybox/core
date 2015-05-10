@@ -15,11 +15,9 @@ end
 
 distributor = Fabricate(:distributor_with_everything, name: "Local Veggie Group", email: "fake@distributor.com")
 
-delivery_services = [
-  Fabricate(:delivery_service, distributor: distributor, name: Faker::Company.name),
-  Fabricate(:delivery_service, distributor: distributor, name: Faker::Company.name),
-  Fabricate(:delivery_service, distributor: distributor, name: Faker::Company.name)
-]
+delivery_services = Fabricate.times(3, :delivery_service, distributor: distributor) do
+  name Faker::Company.name
+end
 
 100.times do
   customer = Fabricate(:customer_with_address,
