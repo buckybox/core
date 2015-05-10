@@ -86,10 +86,10 @@ group :development do
   gem "quiet_assets"
   gem "meta_request"
   gem "i15r", require: false
+  gem "faker"
 end
 
 group :test do
-  gem "fabrication", "~> 2.9.8" # TODO: upgrade and fix broken specs
   gem "database_cleaner"
   gem "therubyracer", require: false # embeded JS interpreter for our CI server
   gem "simplecov", require: false
@@ -119,6 +119,7 @@ group :development, :staging do
 end
 
 group :development, :test do
+  gem "fabrication", "~> 2.9.8" # TODO: upgrade and fix broken specs
   gem "rspec-rails"
   gem "listen"
   gem "terminal-notifier-guard" # Mac 10.8 system notifications for Guard
