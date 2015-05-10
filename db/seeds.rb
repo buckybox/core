@@ -1,7 +1,7 @@
 require "fabrication"
 require "faker"
 
-RANDOM_BALANCE = Random.new(123456789)
+RANDOM_BALANCE = Random.new
 
 TAG_GROUPS = [
   ["cbd", "rural", ""],
@@ -28,8 +28,8 @@ delivery_services = [
                        first_name: Faker::Name.name
                       )
   customer.tag_list = random_tag_list
-  customer.save
+  customer.save!
   account = customer.account
   account.change_balance_to!(RANDOM_BALANCE.rand(-999..999))
-  account.save
+  account.save!
 end
