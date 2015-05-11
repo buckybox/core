@@ -2,8 +2,8 @@ class ScheduleRule < ActiveRecord::Base
   attr_accessible :fri, :mon, :recur, :sat, :start, :sun, :thu, :tue, :wed, :order_id, :week
   attr_accessor :next_occurrence
 
-  DAYS = [:sun, :mon, :tue, :wed, :thu, :fri, :sat] # Order of this is important, it matches sunday: 0, monday: 1 as is standard
-  RECUR = [:single, :weekly, :fortnightly, :monthly]
+  DAYS = [:sun, :mon, :tue, :wed, :thu, :fri, :sat].freeze # Order of this is important, it matches sunday: 0, monday: 1 as is standard
+  RECUR = [:single, :weekly, :fortnightly, :monthly].freeze
 
   belongs_to :scheduleable, polymorphic: true, inverse_of: :schedule_rule
   belongs_to :schedule_pause, dependent: :destroy
@@ -17,13 +17,10 @@ class ScheduleRule < ActiveRecord::Base
 
   validate :includes_dow_if_not_one_off
   delegate :local_time_zone, to: :scheduleable, allow_nil: true
+  delegate :recurs?, to: :frequency
 
-  DAYS.each do |day|
-    default_value_for day, false
-  end
-  default_value_for :start do
-    Date.current
-  end
+  DAYS.each { |day| default_value_for day, false }
+  default_value_for :start do Date.current; end
 
   def self.one_off(datetime)
     ScheduleRule.new(start: datetime)
@@ -65,11 +62,7 @@ class ScheduleRule < ActiveRecord::Base
 
   def recur
     r = self[:recur]
-    if r.nil?
-      :one_off
-    else
-      r.to_sym
-    end
+    r.nil? ? :one_off : r.to_sym
   end
 
   def occurs_on?(datetime)
@@ -202,15 +195,15 @@ class ScheduleRule < ActiveRecord::Base
   end
 
   # returns true if the given schedule_rule occurs on a subset of this schedule_rule's occurrences
-  # Only tests pauses in a basic manner, so might return false negatives
   def includes?(schedule_rule, opts = {})
     opts = { ignore_start: false }.merge(opts)
 
-    raise "Expecting a ScheduleRule, not #{schedule_rule.class}" unless schedule_rule.is_a?(ScheduleRule)
+    unless schedule_rule.is_a?(ScheduleRule)
+      raise ArgumentError, "Expecting a ScheduleRule, not #{schedule_rule.class}"
+    end
+
     case recur
-    when :one_off
-      return false unless schedule_rule.one_off?
-    when :single
+    when :one_off, :single
       return false unless schedule_rule.one_off?
     when :fortnightly
       return false if schedule_rule.weekly? || schedule_rule.monthly?
@@ -219,8 +212,6 @@ class ScheduleRule < ActiveRecord::Base
       end
     when :monthly
       return false unless schedule_rule.monthly? || (schedule_rule.one_off? && schedule_rule.start.day < 8)
-    else
-      true
     end
 
     too_soon = (local_time_zone.present? ? start.to_datetime.in_time_zone(local_time_zone) : start) > schedule_rule.start
@@ -228,7 +219,7 @@ class ScheduleRule < ActiveRecord::Base
 
     if schedule_pause
       return false unless ((schedule_rule.one_off? &&
-          schedule_rule.start < schedule_pause.start) ||
+        schedule_rule.start < schedule_pause.start) ||
         schedule_pause.finish <= schedule_rule.start) ||
                           schedule_pause.finish <= schedule_rule.start
     end
@@ -237,7 +228,7 @@ class ScheduleRule < ActiveRecord::Base
   end
 
   def has_at_least_one_day?
-    DAYS.collect { |day| self.send(day) }.any?
+    DAYS.map { |day| self.send(day) }.any?
   end
 
   def json
@@ -257,7 +248,7 @@ class ScheduleRule < ActiveRecord::Base
   end
 
   def deleted_day_numbers
-    DAYS.each_with_index.collect { |day, index| (self.send("#{day}_changed?".to_sym) && self.send(day) == false) ? index : nil }.compact
+    DAYS.each_with_index.map { |day, index| (self.send("#{day}_changed?".to_sym) && self.send(day) == false) ? index : nil }.compact
   end
 
   def pause!(start, finish = nil)
@@ -342,8 +333,6 @@ class ScheduleRule < ActiveRecord::Base
     end
   end
 
-  delegate :recurs?, to: :frequency
-
   def halt!
     self.halted = true
     save!
@@ -361,6 +350,8 @@ class ScheduleRule < ActiveRecord::Base
   def no_occurrences?
     next_occurrence.nil?
   end
+
+private
 
   def includes_dow_if_not_one_off
     errors.add(:base, "Must include at least one day of the week") if !one_off? && days.blank?
