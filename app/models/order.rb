@@ -189,18 +189,6 @@ class Order < ActiveRecord::Base
     !substitutions.empty?
   end
 
-  def string_pluralize
-    "#{quantity || 0} " + ((quantity == 1 || quantity =~ /^1(\.0+)?$/) ? box_name : box_name.pluralize)
-  end
-
-  def string_sort_code
-    result = box_name
-    result += '+L' if has_exclusions?
-    result += '+D' if has_substitutions?
-
-    result.upcase
-  end
-
   def deactivate
     self.active = false
   end

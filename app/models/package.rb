@@ -72,12 +72,6 @@ class Package < ActiveRecord::Base
     archived_order_quantity
   end
 
-  def string_pluralize
-    quantity = archived_order_quantity
-    box_name = archived_box_name
-    "#{quantity || 0} " + ((quantity == 1 || quantity =~ /^1(\.0+)?$/) ? box_name : box_name.pluralize)
-  end
-
   def extras_description
     Order.extras_description(archived_extras)
   end

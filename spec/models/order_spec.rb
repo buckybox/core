@@ -167,20 +167,6 @@ describe Order do
       end
     end
 
-    describe '#string_pluralize' do
-      context "when the quantity is 1" do
-        before { order.quantity = 1 }
-        specify { expect(order.string_pluralize).to eq "1 #{order.box.name}" }
-      end
-
-      [0, 2].each do |q|
-        context "when the quantity is #{q}" do
-          before { order.quantity = q }
-          specify { expect(order.string_pluralize).to eq "#{q} #{order.box.name}s" }
-        end
-      end
-    end
-
     describe '#deactivate_finished' do
       before do
         allow_any_instance_of(Order).to receive(:delivery_service_includes_schedule_rule).and_return(true)
