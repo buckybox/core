@@ -18,8 +18,7 @@
               %li{ class: "#{'active' if @delivery_service_id == delivery_service.id}" }
                 = link_to date_distributor_deliveries_path(@selected_date, delivery_service.id) do
                   = delivery_service.name
-                  - if @delivery_service_id == delivery_service.id
-                    %span.badge= @items.count
+                  %span.badge= @all_item_counts_by_delivery_service_id[delivery_service.id] || 0
 
       - if params[:view] == 'packing' && !@items.blank?
         %fieldset
