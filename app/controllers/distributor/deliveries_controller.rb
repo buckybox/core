@@ -41,6 +41,11 @@ class Distributor::DeliveriesController < Distributor::ResourceController
         @delivery_service = @delivery_services.find(@delivery_service_id)
         @show_tour = current_distributor.deliveries_index_deliveries_intro
       end
+
+      # XXX: count deliveries without triggering more (slow) SQL queries
+      @all_item_counts_by_delivery_service_id = @all_items.group_by do |item|
+        item.delivery_service.id
+      end.each_with_object({}) { |(id, items), hash| hash[id] = items.count }
     end
   end
 
