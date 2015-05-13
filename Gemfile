@@ -10,6 +10,7 @@ end
 
 group :default do # XXX: all environments, think twice before adding Gems here
   gem "rake",                            "~> 10.3.2" # i18n-spec breaks with 10.4 :/
+  gem "unicorn"
   gem "rails",                           "< 4"
   gem "rails-i18n",                      "~> 3.0.0" # For Rails 3.x
   gem "pg"
