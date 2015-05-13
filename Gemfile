@@ -13,6 +13,7 @@ group :default do # XXX: all environments, think twice before adding Gems here
   gem "rails",                           "< 4"
   gem "rails-i18n",                      "~> 3.0.0" # For Rails 3.x
   gem "pg"
+  gem "therubyracer"
   gem "haml-rails"
   gem "jquery-rails"
   gem "jquery-ui-rails",                 "< 5" # TODO: make sure JQuery UI 1.11 works fine
@@ -95,7 +96,6 @@ end
 
 group :test do
   gem "database_cleaner"
-  gem "therubyracer", require: false # embeded JS interpreter for our CI server
   gem "simplecov", require: false
   gem "cucumber-rails", require: false
   gem "capybara", "~> 2.3.0", require: false # TODO: fix cukes for 2.4
