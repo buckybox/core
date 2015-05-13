@@ -63,11 +63,13 @@ test:
 
 staging:
   HOST: "staging.buckybox.com"
+  SECRET_TOKEN: "0ce3394fc7b12efba69326374f079c3c9cd7bd2bf8df023d18c1327d900fcae0b65765316f115cb593b350abd0738cb80be1b2caf228ae534db9c0f3abea415e"
   MANDRILL_PASSWORD: "B44y6SC4tEhaQMLKMfIvdA"
   MANDRILL_EMAIL: "sysadmins@buckybox.com"
 
 production:
   HOST: "my.buckybox.com"
+  SECRET_TOKEN: "6953cf6a82431fc4d98a110e19f12f9728f968009fc8a30178e1e7f8ec946ea57faf3aff9462294bf71b2cbe3b760c63f2334908fcc5dd00f2e295e24edaa8b4"
   MANDRILL_PASSWORD: "Tw231I6mhCW5ZJTs2KG8NA"
   MANDRILL_EMAIL: "sysadmins+prod@buckybox.com"
 
