@@ -27,7 +27,7 @@ IntercomRails.config do |config|
   # The method/variable that contains the logged in user in your controllers.
   # If it is `current_user` or `@user`, then you can ignore this
   #
-  config.user.current = proc { Messaging::DistributorNameSwap.new(current_distributor) }
+  config.user.current = proc { current_distributor }
 
   # == User model class
   # The class which defines your user model
@@ -40,6 +40,7 @@ IntercomRails.config do |config|
   # user object, or a Proc which will be passed the current user.
   #
   config.user.custom_data = {
+    name:                    :contact_name,
     business_name:           :name,
     phone:                   :phone,
     admin_link:              :admin_link,
