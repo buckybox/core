@@ -31,7 +31,7 @@ group :default do # XXX: all environments, think twice before adding Gems here
   gem "pg_search"
   gem "whenever"
   gem "acts_as_list"
-  gem "default_value_for"
+  gem "default_value_for",               "~> 3"
   gem "state_machine"
   gem "figaro"
   gem "virtus"
