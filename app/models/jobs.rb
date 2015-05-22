@@ -1,9 +1,4 @@
 class Jobs
-  # XXX: keep this method short for obvious reasons...
-  def self.run_five_minutely
-    # NOOP at the moment
-  end
-
   def self.run_hourly
     CronLog.log("Checking distributors for automatic daily list creation.")
     Distributor.create_daily_lists

@@ -5,10 +5,6 @@
 
 set :output, { :error => 'log/cron_error.log', :standard => 'log/cron.log' }
 
-every '*/5 * * * *' do
-  runner 'Jobs.run_five_minutely'
-end
-
 every '0 * * * *' do
   runner 'Jobs.run_hourly'
 end
