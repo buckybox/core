@@ -27,9 +27,10 @@ class Jobs
   end
 
   def self.run_daily
-    CronLog.log("Running metrics.")
-    count = Metrics.calculate_and_store
-    CronLog.log("#{count} metrics calculated and stored.")
+    CronLog.where("created_at < ?", 1.year.ago).delete_all
+
+    metrics_count = Metrics.calculate_and_store
+    CronLog.log("#{metrics_count} metrics calculated and stored.")
 
     DataIntegrity.delay(
       # - servers are using NZ time
