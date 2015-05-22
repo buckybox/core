@@ -180,7 +180,7 @@ private
   end
 
   def miniprofiler
-    Rack::MiniProfiler.authorize_request if current_admin.present?
+    Rack::MiniProfiler.authorize_request if current_admin.present? && params.key?(:profile)
   end
 
   def find_locale
