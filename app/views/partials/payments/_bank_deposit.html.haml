@@ -11,7 +11,6 @@
         =t('.account_name') << t('colon')
         %span.bank_deposit_account_name #{form_object.bank_account_name}
         %br
-        =t('.account_number') << t('colon')
         %span.bank_deposit_account_number #{form_object.bank_account_number}
         %br
         =t('.reference') << t('colon') << (form_object.customer_number || "0001")
@@ -19,5 +18,4 @@
     .row-fluid
       .span12.note
         = simple_format(form_object.note, { class: "bank_deposit_customer_message" }, sanitize: false)
-
 

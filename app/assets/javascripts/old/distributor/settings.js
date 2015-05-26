@@ -6,7 +6,7 @@ $(function(){
       reader.readAsDataURL(input.files[0]);
       reader.onload = function (e) {
         console.log(target);
-        $(target).attr('src', e.target.result); 
+        $(target).attr('src', e.target.result);
       }
     }
   }
@@ -60,7 +60,7 @@ $(function(){
       readURL(this, target);
       $(target).parent().siblings("img").css("opacity",0);
   });
-  
+
   $("#settings_webstore_form_team_photo_file").change(function(){
       var update = "team_photo_file_upload";
       if($("img#"+update).length==0){
@@ -241,8 +241,18 @@ $(function(){
       var inputs = $('form [id="' + klass + '"]');
       var text = '';
       inputs.each(function() {
-        if (text !== '') text += '-';
-        text += this.value;
+        if ($(this).hasClass("bank_account_number")) {
+          if ($(this).data("multiline")) {
+            text += $(this).data("label") + ": " + this.value + "<br>";
+          } else {
+            if (text == '') text += 'Account Number: ';
+            else text += '-';
+
+            text += this.value;
+          }
+        } else {
+          text += this.value;
+        }
       });
 
       text = text.replace(/(\n|\r|\r\n)/g, '<br>');
@@ -259,7 +269,6 @@ $(function(){
 
     fields.filter('[data-toggle="tooltip"]').tooltip({ 'trigger': 'focus', 'container': 'body' });
   }
-
 
   $(".important_action").click(function(event){
     if(event.target === this){
