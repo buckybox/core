@@ -26,12 +26,12 @@ node(:cod_payment_message) { |webstore| webstore.bank_information.cod_payment_me
 child(:bank_information) do |bank_information|
   if @webstore.payment_bank_deposit
     {
-      bank_name: :name,
-      account_name: :account_name,
-      account_number: :account_number,
+      bank_name: :bank_name,
+      account_name: :bank_account_name,
+      account_number: :bank_account_number,
       customer_message: :customer_message
     }.each do |attr, method|
-      node(attr) { |bank_information| bank_information.decorate.public_send(method) }
+      node(attr) { |bank_information| bank_information.decorate.public_send(method).to_s }
     end
   end
 end
