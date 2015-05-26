@@ -3,9 +3,6 @@
 # .NET, PHP, Python and Node applications with deep visibility and low
 # overhead.  For more information, visit www.newrelic.com.
 #
-# Generated June 27, 2014
-#
-# This configuration file is custom generated for Bucky Box_1
 
 
 # Here are the settings that are common to all environments
@@ -185,14 +182,6 @@ development:
   <<: *default_settings
   # Turn OFF communication to New Relic service in development mode
   monitor_mode: false
-  app_name: Bucky Box (Development)
-
-  # Rails Only - when running in Developer Mode, the New Relic Agent will
-  # present performance information on the last 100 transactions you have
-  # executed since starting the mongrel.
-  # NOTE: There is substantial overhead when running in developer mode.
-  # Do not use for production or load testing.
-  developer_mode: true
 
 test:
   <<: *default_settings
@@ -207,7 +196,7 @@ test:
 production:
   <<: *default_settings
   monitor_mode: true
-  app_name: Bucky Box (Production)
+  app_name: Core (Production)
 
 # Many applications have a staging environment which behaves
 # identically to production. Support for that environment is provided
@@ -215,4 +204,4 @@ production:
 staging:
   <<: *default_settings
   monitor_mode: true
-  app_name: Bucky Box (Staging)
+  app_name: Core (Staging)
