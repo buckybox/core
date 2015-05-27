@@ -131,6 +131,8 @@ class Distributor < ActiveRecord::Base
   end
 
   def self.refresh_webstore_caches
+    return unless Rails.env.production?
+
     duration = Benchmark.realtime do
       active_webstore.active.each_slice(5) do |distributors|
         hydra = Typhoeus::Hydra.hydra
