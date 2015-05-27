@@ -6,6 +6,10 @@
         .span4
           %span.big.bold
             = link_to_unless !distributor.active_webstore?, distributor.name, distributor.webstore_url
+            - if distributor.overdue.present?
+              %span{title: distributor.overdue, style: "color: red"} [OVERDUE]
+            - if distributor.access_locked?
+              %span{title: "locked at #{distributor.locked_at}", style: "color: orange"} [LOCKED]
             %br
           %span.medium
             = mail_to(distributor.email, distributor.contact_name_for_email)
@@ -26,8 +30,6 @@
           = distributor.deliveries_last_7_days_count
           %i.icon-road(title="deliveries completed in last 7 days")
         .span3.align-right.medium
-          - if distributor.access_locked?
-            %span{title: "locked at #{distributor.locked_at}"} [LOCKED]
           = time_since(distributor.last_seen_at)
 
       .row-fluid
