@@ -100,7 +100,8 @@
 
               <br><br>
 
-              <%= t('.contact_html', email: mail_to(@distributor.support_email)) << " #{t('or')} #{@distributor.phone}" if @distributor.phone.present? %>.
+              <%= t('.contact_html', email: mail_to(@distributor.support_email)) %>
+              <%= " #{t('or')} #{@distributor.phone}" if @distributor.phone.present? %>
 
             </td>
           </tr>
