@@ -32,12 +32,13 @@ describe Distributor do
   describe "#email_from" do
     it "returns the expected sender" do
       distributor = Fabricate.build(:distributor,
-        name: "Garden City 2.0: FoodBag Delivery",
+        name: "Garden City 2.0: FoodBag Delivery, LLC",
         support_email: "support@example.net"
       )
+      encoded_name = "Garden City 2.0=?UTF-8?Q?=3A?= FoodBag Delivery=?UTF-8?Q?=2C?= LLC"
 
-      expect(distributor.email_from).to eq "Garden City 2.0 FoodBag Delivery <support@example.net>"
-      expect(distributor.email_from(email: "joe@i.com")).to eq "Garden City 2.0 FoodBag Delivery <joe@i.com>"
+      expect(distributor.email_from).to eq "#{encoded_name} <support@example.net>"
+      expect(distributor.email_from(email: "joe@i.com")).to eq "#{encoded_name} <joe@i.com>"
     end
   end
 
