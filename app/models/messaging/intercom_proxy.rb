@@ -19,6 +19,9 @@ module Messaging
 
       attrs.each { |key, value| user.send("#{key}=", value) }
       user.save
+
+    rescue *NON_FATAL_EXCEPTIONS => e
+      Bugsnag.notify(e)
     end
 
     def create_user(attrs, env = nil)
@@ -57,6 +60,9 @@ module Messaging
         user.custom_attributes["#{action_name}_at"] = occurred_at
         user.save
       end
+
+    rescue *NON_FATAL_EXCEPTIONS => e
+      Bugsnag.notify(e)
     end
 
     def skip?(env, expected_env = 'production')
