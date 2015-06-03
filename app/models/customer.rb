@@ -176,7 +176,7 @@ class Customer < ActiveRecord::Base
   end
 
   def email_to
-    sanitise_email_header "#{name} <#{email}>"
+    sanitize_email_header "#{name} <#{email}>"
   end
 
   def name
