@@ -83,8 +83,6 @@ module Messaging
       ::Intercom::Tag.untag_users(name, [intercom_user.id])
     end
 
-  private
-
     def retryable_options
       {
         tries: 3,
