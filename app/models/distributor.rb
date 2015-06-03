@@ -234,11 +234,11 @@ class Distributor < ActiveRecord::Base
   end
 
   def email_from(email: support_email)
-    sanitise_email_header "#{name} <#{email}>"
+    sanitize_email_header "#{name} <#{email}>"
   end
 
   def email_to
-    sanitise_email_header "#{contact_name} <#{email}>"
+    sanitize_email_header "#{contact_name} <#{email}>"
   end
 
   def banks
