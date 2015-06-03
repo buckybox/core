@@ -39,7 +39,7 @@
                   - distributor.omni_importers.ordered.each do |omni_importer|
                     %li{data:{id: omni_importer.id, label: "Upload #{omni_importer.name} Transactions"}}= link_to omni_importer.name, '#', style: 'text-align:left'
 
-          %input#import_transaction_list_csv_file{name: 'import_transaction_list[csv_file]', type:'file', style: 'display:none', class: 'auto_submit'}
+          %input#import_transaction_list_csv_file{name: 'import_transaction_list[csv_file]', type: 'file', accept: 'text/csv', style: 'display: none', class: 'auto_submit'}
 
         .processing
           Please be patient, this might take up to a few minutes...
