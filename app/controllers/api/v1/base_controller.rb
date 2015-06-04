@@ -45,15 +45,15 @@ private
     if webstore_id
       if api_key == Figaro.env.api_master_key && api_secret == Figaro.env.api_master_secret && request.remote_ip.in?(Figaro.env.api_master_ips)
         @distributor = Distributor.find_by(parameter_name: webstore_id)
-      else
-        send_alert_email
-        render json: { message: "Could not authenticate. Invalid master API-Key or API-Secret headers." }, status: :unauthorized and return
       end
     else
       @distributor = Distributor.find_by(api_key: api_key, api_secret: api_secret)
     end
 
-    return not_found unless @distributor
+    unless @distributor
+      send_alert_email
+      render json: { message: "Could not authenticate. Invalid API-Key or API-Secret headers." }, status: :unauthorized and return
+    end
   end
 
   def set_time_zone
