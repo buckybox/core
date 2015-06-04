@@ -25,11 +25,11 @@ module ApiHelpers
       expect(json_response).to have_key "message"
     end
 
-    it "returns 404 with invalid credentials" do
+    it "returns 401 with invalid credentials" do
       headers = { "API-Key" => "fuck", "API-Secret" => "off" }
       json_request(method, url, nil, headers)
 
-      expect(response.status).to eq 404
+      expect(response.status).to eq 401
       expect(json_response).to have_key "message"
     end
 
