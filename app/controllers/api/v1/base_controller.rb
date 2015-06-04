@@ -43,7 +43,7 @@ private
     end
 
     if webstore_id
-      if api_key == Figaro.env.api_master_key && api_secret == Figaro.env.api_master_secret
+      if api_key == Figaro.env.api_master_key && api_secret == Figaro.env.api_master_secret && request.remote_ip.in?(Figaro.env.api_master_ips)
         @distributor = Distributor.find_by(parameter_name: webstore_id)
       else
         send_alert_email
@@ -68,7 +68,7 @@ private
     AdminMailer.information_email(
       to: "sysalerts@buckybox.com",
       subject: "[URGENT] Hacking attempt!",
-      body: "Hacking attempt detected on the API!"
+      body: "Hacking attempt detected on the API from #{request.remote_ip}!"
     ).deliver
   end
 
