@@ -15,6 +15,7 @@ set :application, 'buckybox'
 
 set :user, application
 set :repository, "git@github.com:enspiral/bucky_box.git"
+set :git_enable_submodules, true
 set :keep_releases, 4
 set :deploy_via, :remote_cache
 
