@@ -11,7 +11,7 @@ describe Admin::DistributorsController do
       # wiped out by DatabaseCleaner
       Distributor.delete_all
 
-      distributor = Fabricate(:distributor)
+      distributor = Fabricate(:distributor, last_seen_at: Time.now)
       get :index, {}
       expect(assigns(:distributors)).to eq([distributor])
     end
