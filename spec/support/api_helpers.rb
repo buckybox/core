@@ -40,12 +40,12 @@ module ApiHelpers
         "Webstore-ID" => api_distributor.parameter_name
       }
 
-      expect(Figaro.env.api_master_ips).not_to include "127.0.0.1"
+      expect(Figaro.env.api_master_allowed_ips).not_to include "127.0.0.1"
       json_request(method, url, nil, headers)
       expect(response.status).to eq 401
       expect(json_response).to have_key "message"
 
-      allow(Figaro.env).to receive(:api_master_ips).and_return %w(127.0.0.1)
+      allow(Figaro.env).to receive(:api_master_allowed_ips).and_return %w(127.0.0.1)
       json_request(method, url, nil, headers)
       expect(response.status).not_to eq 401
     end
