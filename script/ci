@@ -5,6 +5,10 @@ export RAILS_ENV=test
 export COVERAGE=1
 export SPEC_OPTS="--format p"
 
+output="$(git submodule update --remote)"
+echo -n "$output"
+test -z "$output"
+
 cp -n config/database.yml.example config/database.yml
 
 [ -n "$SNAP_CI" ] && bundle install --jobs=3 --retry=3 --deployment || bundle install
