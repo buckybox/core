@@ -24,6 +24,10 @@ class Jobs
   def self.run_daily
     CronLog.where("created_at < ?", 1.year.ago).delete_all
 
+    Distributor.where("last_seen_at < ?", 6.months.ago).map do |distributor|
+      distributor.lock_access!(send_instructions: false)
+    end
+
     metrics_count = Metrics.calculate_and_store
     CronLog.log("#{metrics_count} metrics calculated and stored.")
 
