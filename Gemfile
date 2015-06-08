@@ -64,7 +64,7 @@ group :default do # XXX: all environments, think twice before adding Gems here
   gem "rails-patch-json-encode"
   gem "oj"
   gem "intercom-rails"
-  gem "intercom"
+  gem "intercom",                        "~> 2"
   gem "crazy_money"
   gem "currency_data"
   gem "email_templator"
