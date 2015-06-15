@@ -124,8 +124,7 @@ class Distributor < ActiveRecord::Base
   end
 
   def self.active
-    where("current_sign_in_at > ?", 22.days.ago)
-      .where("sign_in_count > ?", 4)
+    where("last_seen_at > ?", 30.days.ago)
       .select { |d| d.transactional_customer_count > 9 }
       .sort_by(&:transactional_customer_count).reverse
   end
