@@ -1,4 +1,6 @@
 class Activity < ActiveRecord::Base
+  attr_accessible :customer_id, :action
+
   ACTIONS = {
     order_pause: lambda do |params|
       "#{params.initiator} paused their order of #{params.order.box.name} starting #{params.order.pause_date.strftime('%a %d %b')}"
