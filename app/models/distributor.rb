@@ -535,7 +535,7 @@ class Distributor < ActiveRecord::Base
     @sales_last_30_days ||= begin
       amount = deductions.where("created_at > ?", 30.days.ago) \
                .where(deductable_type: "Delivery") \
-               .sum(&:amount)
+               .map(&:amount).sum
 
       CrazyMoney.new(amount)
     end

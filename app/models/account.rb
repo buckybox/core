@@ -29,7 +29,7 @@ class Account < ActiveRecord::Base
   # Likely somewhere a transaction is being created manually.
   # FIXME
   def calculate_balance(offset_size = 0)
-    CrazyMoney.new(transactions.offset(offset_size).sum(&:amount))
+    CrazyMoney.new(transactions.offset(offset_size).map(&:amount).sum)
   end
 
   def balance_cents=(_value)
