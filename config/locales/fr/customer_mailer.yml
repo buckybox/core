@@ -21,7 +21,7 @@ fr:
         (votre solde doit toujours être au-dessus du seuil minimum de %{threshold} afin de recevoir vos commandes).
       pay_html: "%{link} ou contactez %{distributor}."
       recent: Si vous avez payé recement, il se peut que votre paiement n'est pas encore été pris en compte. Merci de vérifier de nouveau dans quelques jours.
-      signature: "%{distributor}"
+      signature: '%{distributor}'
     remind_orders_halted:
       subject: Vos livraisons %{distributor} sont suspendues
       intro_html: |
@@ -30,7 +30,7 @@ fr:
         (votre solde doit toujours être au-dessus du seuil minimum de %{threshold} afin de recevoir vos commandes).
       pay_html: "%{link} ou contactez %{distributor}."
       recent: Si vous avez payé recement, il se peut que votre paiement n'est pas encore été pris en compte. Merci de vérifier de nouveau dans quelques jours.
-      signature: "%{distributor}"
+      signature: '%{distributor}'
     order_confirmation:
       subject: Votre commande chez %{distributor}
       thanks: Merci pour votre commande %{name} !
@@ -50,4 +50,3 @@ fr:
       review_html: Vous pouvez consulter vos commandes à tout moment en allant sur %{link}.
       contact_html: Si quelque chose vous parait incorrect, n'hésitez pas à nous contacter à %{email}
       powered_by_html: Généré par %{link}
-
