@@ -51,8 +51,7 @@ fr:
         postcode: Code postal
         delivery_note: Note pour la livraison
         placeholders:
-          delivery_note: Instructions telles que où laisser la commande, par example « déposer dans la véranda »
+          delivery_note: "Instructions telles que où laisser la commande, par example « déposer dans la véranda »"
       customer/form/update_password:
         password: Veuillez entrer votre mot de passe
         password_confirmation: Veuillez enter votre mot de passe de nouveau
-

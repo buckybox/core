@@ -8,7 +8,6 @@ fr:
         reference: Référence
       paypal:
         pay_now: Payer maintenant
-        top_up: Rechargement du compte # meh, better idea anyone?
+        top_up: Rechargement du compte
         amount: Montant
         amount_to_top_up: Montant à créditer
-

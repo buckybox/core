@@ -1,5 +1,5 @@
 fr:
-  c: &customer # short-hand for "customer [area]"
+  c:
     orders:
       pausing:
         pause: mettre en pause
@@ -10,14 +10,11 @@ fr:
         resume_start: recommence le
         until_further_notice: jusqu'à nouvel ordre
     dashboard:
-      # sidebar
       change_contact_details: modifier mes coordonées
       change_password: modifier mon mot de passe
       change_delivery_address: modifier mon adresse de livraison
-      # main
       order_another_item: Commander un autre produit
       no_active_orders: Vous n'avez aucune commande active.
-      # payments
       account_statement: Relevé de compte
       make_payment: Effectuer un virement
       pay_by:
@@ -50,8 +47,8 @@ fr:
       extras_limit: Ce produit est limité à %{count} extras.
       extras_one_off:
         hint: Les extras peuvent être inclus soit pour la prochaine livraison seulement soit toutes les livraisons.
-        "false": inclus pour chaque livraison
-        "true": inclus pour la prochaine livraison seulement
+        'false': inclus pour chaque livraison
+        'true': inclus pour la prochaine livraison seulement
       exclude_items: Exclure ces éléments...
       substitute_with_items: Et les remplacer par...
       update:
@@ -74,5 +71,3 @@ fr:
       send_my_password: Envoyez moi mon mot de passe
       enter_email: entrez votre email
       send: Envoyer mot de passe
-  customer: *customer
-

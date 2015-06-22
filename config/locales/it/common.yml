@@ -11,12 +11,13 @@ it:
   update: Modifica
   next: Seguente
   or: o
-  password_forgotten?:  Hai dimenticato la tua password?
+  password_forgotten?: Hai dimenticato la tua password?
   delivery_service: Servizio di consegna
   my_account: Il mio account
   your_account: Il tuo account
   deliver_on: Consegna il
   oops: Oops qualcosa è andato storto
+  no_js: Oops! Devi abilitare JavaScript nel tuo browser.
   cash_on_delivery: Pagamento alla consegna
   bank_deposit: Bonifico bancario
   paypal_cc: PayPal / Carta di credito

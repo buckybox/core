@@ -1,5 +1,5 @@
 it:
-  c: &customer # short-hand for "customer [area]"
+  c:
     orders:
       pausing:
         pause: sospendi
@@ -10,14 +10,11 @@ it:
         resume_start: riprendi le consegne dal
         until_further_notice: fino a nuovo avviso
     dashboard:
-      # sidebar
       change_contact_details: modifica i tuoi dati
       change_password: modifica la tua password
       change_delivery_address: modifica il tuo indirizzo di consegna
-      # main
       order_another_item: Ordina una cassetta
       no_active_orders: Non hai nessun ordine attivo.
-      # payments
       account_statement: Storico consegne
       make_payment: Effettua un pagamento
       pay_by:
@@ -50,8 +47,8 @@ it:
       extras_limit: C'è un limite di %{count} prodotti aggiuntivi.
       extras_one_off:
         hint: I prodotti aggiuntivi possono essere acquistati una tantum oppure ripetutamente.
-        "false": aggiungi ad ogni consegna
-        "true": aggiungi solo a questa consegna
+        'false': aggiungi ad ogni consegna
+        'true': aggiungi solo a questa consegna
       exclude_items: Escludere questi prodotti...
       substitute_with_items: Sostituire con questi prodotti...
       update:
@@ -74,5 +71,3 @@ it:
       send_my_password: Richiedi la tua password
       enter_email: inserisci la tua email
       send: Invia password
-  customer: *customer
-
