@@ -20,9 +20,9 @@ class ImportTransaction < ActiveRecord::Base
     MATCH_DUPLICATE => 2,
     MATCH_UNABLE_TO_MATCH => 3
   }.freeze
-  MATCH_SELECT = (MATCH_TYPES.keys - [MATCH_MATCHED]).map do |symbol|
+  MATCH_SELECT = (MATCH_TYPES.keys - [MATCH_MATCHED]).map { |symbol|
     [symbol.humanize, symbol]
-  end.freeze
+  }.freeze
 
   scope :ordered,   -> { order("transaction_date DESC, created_at DESC") }
   scope :draft,     -> { where(['import_transactions.draft = ?', true]) }
@@ -40,8 +40,8 @@ class ImportTransaction < ActiveRecord::Base
   scope :not_a_customer,     -> { where(["match = ?", MATCH_TYPES[MATCH_NOT_A_CUSTOMER]]) }
   scope :not_not_a_customer, -> { where(["match != ?", MATCH_TYPES[MATCH_NOT_A_CUSTOMER]]) }
 
-  scope :removed,     -> { where(removed: true)
-  scope :not_removed, -> { where(removed: false)
+  scope :removed,     -> { where(removed: true) }
+  scope :not_removed, -> { where(removed: false) }
 
   validate :customer_belongs_to_distributor
 
