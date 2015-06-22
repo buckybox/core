@@ -19,6 +19,12 @@ source_file = config/locales/en/customer_mailer.yml
 source_lang = en
 type = YML
 
+[buckybox-core.date_time]
+file_filter = config/locales/<lang>/date_time.yml
+source_file = config/locales/en/date_time.yml
+source_lang = en
+type = YML
+
 [buckybox-core.devise]
 file_filter = config/locales/<lang>/devise.yml
 source_file = config/locales/en/devise.yml
