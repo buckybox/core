@@ -16,10 +16,7 @@ module Distributor::Form::EditCustomerProfileFields
     attribute :discount,                  Float,   default: ->(obj, _attr) { obj.customer.discount }
     attribute :special_order_preference,  String
 
-    def_delegators :distributor,
-      :require_phone?,
-      :collect_phone?,
-      :has_balance_threshold?
+    delegate :require_phone?, :collect_phone?, :has_balance_threshold?, to: :distributor
 
     validates_presence_of :first_name
     validates_presence_of :email

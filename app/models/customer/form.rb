@@ -5,7 +5,6 @@ require 'active_model/validations'
 require 'active_model/translation'
 
 class Customer::Form
-  extend Forwardable
   extend ActiveModel::Naming
 
   include Virtus.model
@@ -14,10 +13,7 @@ class Customer::Form
 
   attribute :customer
 
-  def_delegators :customer,
-    :id,
-    :address,
-    :distributor
+  delegate :id, :address, :distributor, to: :customer
 
   def initialize(attributes = {})
     @customer = attributes.delete("customer")
