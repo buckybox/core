@@ -16,7 +16,7 @@ module Bucky
 
     # TODO: this is terribly filthy
     def get_address_form(country_code, resource)
-      model_name = resource.class.model_name.downcase
+      model_name = resource.class.model_name.to_s.downcase
       format = Biggs::Format.new(country_code).format_string
 
       unless format
