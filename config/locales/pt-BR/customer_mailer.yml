@@ -1,53 +1,15 @@
 pt-BR:
   customer_mailer:
-    login_details:
-      subject: Your login details for %{distributor}
-      new_details: Here's your new login details for your account with us at %{distributor}.
-      email: Email
-      password: Password
-      instructions_html: |
-        Use this account to:
-
-        <ul>
-          <li>change your orders
-          <li>pause your orders if you're away
-          <li>change your delivery address or contact details if you've moved
-        </ul>
     orders_halted:
-      subject: Your %{distributor} deliveries have been put on hold
+      subject: A confirmação de seus pedidos na %{distributor} está pendente
       intro_html: |
-        We've noticed your account has reached your minimum balance - your existing account balance is
+        Verificamos que o saldo mínimo vigente para sua conta conosco foi ultrapassado. Ele hoje é de
         <strong>%{balance}</strong>
-        (your account should always be above your minimum balance of %{threshold} in order to receive deliveries).
-      pay_html: "%{link} or contact %{distributor}."
-      recent: If you've recently made a payment, it may not have shown up yet - take a look at your account statement in the next few days to check.
-      signature: The %{distributor} Team
+        (para que você possa continuar a receber os seus pedidos é preciso que este saldo não vá além do mínimo acertado para sua conta, que é de %{threshold}).
+      pay_html: "%{link} ou contacte a %{distributor}."
+      recent: Pode ser que você tenha feito um pagamento recente que ainda não aparece para nós. Por gentileza, dê uma olhada no extrato de sua conta nos próximos dias para confirmá-lo.
+      signature: Equipe %{distributor}
     remind_orders_halted:
-      subject: Your %{distributor} deliveries are on hold
-      intro_html: |
-        Your recent order won't be fulfilled until your account is above your minimum balance - your existing account balance is
-        <strong>%{balance}</strong>
-        (your account should always be above your minimum balance of %{threshold} in order to receive deliveries).
-      pay_html: "%{link} or contact %{distributor}."
-      recent: If you've recently made a payment, it may not have shown up yet - take a look at your account statement in the next few days to check.
-      signature: The %{distributor} Team
-    order_confirmation:
-      subject: Your %{distributor} Order
-      thanks: Thanks for your order %{name}!
-      update_order: Did you know you can view and edit your orders 24 hours a day? Visit %{link}.
-      order_information: Order Information
-      customer_number: Customer Number
-      email: Email
-      mobile_phone: Mobile Phone
-      home_phone: Home Phone
-      work_phone: Work Phone
-      pick_up_from: Pick up from
-      delivery_address: Delivery Address
-      order_summary: Order Summary
-      exclusions: Exclusions
-      substitutes: Substitutes
-      starting: starting
-      review_html: You can review your orders and your account statement at anytime by logging into %{link}.
-      contact_html: If you have any questions or feel something is out of place, please get in touch at %{email}
-      powered_by_html: Powered by %{link}
-
+      pay_html: "%{link} ou contacte a %{distributor}."
+      recent: Pode ser que você tenha feito um pagamento recente que ainda não aparece para nós. Por gentileza, dê uma olhada no extrato de sua conta nos próximos dias para confirmá-lo.
+      signature: Equipe %{distributor}
