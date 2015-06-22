@@ -1,4 +1,4 @@
-pt_BR:
+pt-BR:
   c: &customer # short-hand for "customer [area]"
     orders:
       pausing:

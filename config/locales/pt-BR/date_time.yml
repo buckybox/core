@@ -1,4 +1,4 @@
-pt_BR:
+pt-BR:
   time:
     formats:
       transaction: "%d %b '%y"

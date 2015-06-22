@@ -1,4 +1,4 @@
-pt_BR:
+pt-BR:
   customer_mailer:
     login_details:
       subject: Your login details for %{distributor}
