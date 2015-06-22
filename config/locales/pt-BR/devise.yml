@@ -1,11 +1,1 @@
-pt-BR:
-  devise_mailer:
-    reset_password_instructions:
-      change_password: Change my password
-      body_html: |
-        Hello %{email}!
-        Someone has requested a link to change your password, and you can do this through the link below.
-        %{link}
-        If you didn't request this, please ignore this email.
-        Your password won't change until you access the link above and create a new one.
-
+pt-BR: {}
