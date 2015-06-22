@@ -1,1 +1,8 @@
-pt-BR: {}
+pt-BR:
+  partials:
+    payments:
+      bank_deposit:
+        deposit_funds: Por faça o depósito
+        account_name: Favorecido
+        account_number: Número da conta
+        reference: Identlificador

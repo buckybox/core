@@ -4,6 +4,8 @@ pt-BR:
       pausing:
         pause: suspender temporariamente
     dashboard:
+      change_contact_details: alterar meus dados de contato
+      change_password: trocar minha senha
       order_another_item: Acrescente outro pedido
       account_statement: Conta corrente para seus pagamentos
       pay_by:

@@ -8,3 +8,7 @@ pt-BR:
       extra_frequencies:
         always: incluir em todas as entregas
         once: incluir apenas na próxima entrega
+  activerecord:
+    attributes:
+      customer:
+        formated_number: Meu número de cliente
