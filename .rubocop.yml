@@ -158,7 +158,7 @@ Style/SignalException:
 Style/ClosingParenthesisIndentation:
   Enabled: false
 
-Performance/ParallelAssignment:
+Style/ParallelAssignment:
   Enabled: false
 
 Lint/UselessAssignment:
