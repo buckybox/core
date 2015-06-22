@@ -1,6 +1,6 @@
 class Distributor::NotificationsController < Distributor::BaseController
   def dismiss_all
-    notifications = Event.find_all_by_id(params[:notification_ids])
+    current_distributor.events.where(id: params[:notification_ids])
     notifications.each(&:dismiss!)
 
     redirect_to :back
