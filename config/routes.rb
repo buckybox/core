@@ -208,7 +208,7 @@ BuckyBox::Application.routes.draw do
   end
 
   # TODO: Legacy routes. As we move to all RESTful routes these should be removed.
-  get "/distributor/deliveries/date/:date/view/:view",           controller: "distributor/deliveries", action: :index,                           as: "date_distributor_deliveries"
+  get "/distributor/deliveries/date/:date/view/:view",            controller: "distributor/deliveries", action: :index,                           as: "date_distributor_deliveries"
   post "/distributor/deliveries/date/:date/reposition",           controller: "distributor/deliveries", action: :reposition,                      as: "reposition_distributor_deliveries"
   post "/distributor/deliveries/update_status",                   controller: "distributor/deliveries", action: :update_status,                   as: "update_status_distributor_deliveries"
   post "/distributor/deliveries/make_payment",                    controller: "distributor/deliveries", action: :make_payment,                    as: "make_payment_distributor_deliveries"

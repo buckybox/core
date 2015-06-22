@@ -8,6 +8,6 @@
           - dates.each do |date|
             %li{ id: count_selected(@date_navigation.first, date, params[:date]) }
               = cache_if(date < current_distributor.window_end_at - Distributor::MAX_ADVANCED_DAYS, [:date_navigation, current_distributor.id, date]) do
-                = link_to date_distributor_deliveries_path(date), title: date_title(current_distributor, date) do
+                = link_to date_distributor_deliveries_path(date, params[:view]), title: date_title(current_distributor, date) do
                   .date= date.strftime("%d %a").upcase
                   .count{ class: date_class(current_distributor, date) }= delivery_quantity(current_distributor, date)
