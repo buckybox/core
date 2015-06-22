@@ -92,7 +92,7 @@ class Delivery < ActiveRecord::Base
           kind: 'delivery',
           source: 'manual',
           description: I18n.t('models.delivery.payment_made_on_delivery'),
-          display_time: delivery.date.to_time_in_current_zone
+          display_time: delivery.date.in_time_zone
         )
       end
     end
@@ -202,7 +202,7 @@ private
         kind: 'delivery',
         source: source,
         description: I18n.t('models.delivery.delivery_of') << " " << description,
-        display_time: date.to_time_in_current_zone
+        display_time: date.in_time_zone
       )
     end
   end

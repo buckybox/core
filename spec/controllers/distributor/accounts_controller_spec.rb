@@ -33,7 +33,7 @@ describe Distributor::AccountsController do
       distributor.use_local_time_zone do
         transaction = account.reload.transactions.first
         expect(transaction).to be_present
-        expect(transaction.display_time).to eq Date.parse("20 Oct '13").to_time_in_current_zone
+        expect(transaction.display_time).to eq Date.parse("20 Oct '13").in_time_zone
         expect(transaction.amount_cents).to eq(-666)
         expect(transaction.description).to eq 'hell pizza'
       end

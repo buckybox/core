@@ -488,8 +488,8 @@ class Distributor < ActiveRecord::Base
   end
 
   def transactions_for_export(from, to)
-    from = from.to_time_in_current_zone
-    to = to.to_time_in_current_zone
+    from = from.in_time_zone
+    to = to.in_time_zone
     transactions.includes(account: { customer: { address: {} } })  \
       .where("display_time >= ?", from)                            \
       .where("display_time < ?", to)                               \

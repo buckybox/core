@@ -193,7 +193,7 @@ private
         kind: 'unspecified',
         source: 'import',
         description: payment_description(payment_type, amount),
-        display_time: transaction_date.to_time_in_current_zone,
+        display_time: transaction_date.in_time_zone,
         payable: self
       )
     end

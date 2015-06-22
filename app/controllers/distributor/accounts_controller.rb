@@ -45,7 +45,7 @@ private
     opts[:description] = params[:note] if params[:note].present?
 
     if params[:date].present?
-      opts[:display_time] = Date.parse(params[:date]).to_time_in_current_zone
+      opts[:display_time] = Date.parse(params[:date]).in_time_zone
     end
 
     !delta.zero? && account.create_transaction(delta, opts)
