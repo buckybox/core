@@ -1,4 +1,5 @@
 require "csv"
+require "email_template"
 
 class Distributor < ActiveRecord::Base
   include Bucky::Email
