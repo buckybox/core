@@ -1,7 +1,7 @@
 class PackingList < ActiveRecord::Base
   belongs_to :distributor
 
-  has_many :packages, dependent: :destroy, order: :position
+  has_many :packages, -> { order "position" }, dependent: :destroy
 
   attr_accessible :distributor, :date
 
