@@ -95,6 +95,7 @@ group :development do
 end
 
 group :test do
+  gem "test-unit" if RUBY_VERSION >= "2.2.0"
   gem "database_cleaner"
   gem "simplecov", require: false
   gem "cucumber-rails", require: false
