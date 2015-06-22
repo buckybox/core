@@ -1,5 +1,5 @@
 en:
-  c: &customer # short-hand for "customer [area]"
+  c:
     orders:
       pausing:
         pause: pause
@@ -74,5 +74,3 @@ en:
       send_my_password: Send me my password
       enter_email: enter your email
       send: Send password
-  customer: *customer
-
