@@ -51,7 +51,7 @@ class DeliveryList < ActiveRecord::Base
       delivery_service = order.delivery_service
 
       # need to pass delivery service as well or the position scope for this delivery list is not set properly
-      delivery = delivery_list.deliveries.find_or_create_by_package_id(package.id, order: order, delivery_service: delivery_service)
+      delivery = delivery_list.deliveries.find_or_create_by(package_id: package.id, order: order, delivery_service: delivery_service)
 
       delivery.update_dso
       delivery.save! if delivery.changed?

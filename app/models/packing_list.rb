@@ -27,7 +27,7 @@ class PackingList < ActiveRecord::Base
     packing_list = get(distributor, date)
 
     distributor.orders.active.where(id: Bucky::Sql.order_ids(distributor, date)).map do |order|
-      packing_list.packages.originals.find_or_create_by_order_id(order.id)
+      packing_list.packages.originals.find_or_create_by(order_id: order.id)
     end
 
     packing_list
