@@ -2,4 +2,3 @@ it:
   time:
     formats:
       transaction: "%d %b '%y"
-
