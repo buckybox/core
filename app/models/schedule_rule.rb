@@ -106,7 +106,7 @@ class ScheduleRule < ActiveRecord::Base
       occurrence = occurrence.with_next_occurrence(date, opts[:ignore_pauses], opts[:ignore_halts])
       occurrence = occurrence.first.attributes["next_occurrence"]
 
-      Date.parse occurrence unless occurrence.nil?
+      occurrence.is_a?(String) ? Date.parse(occurrence) : occurrence
     end
   end
 
