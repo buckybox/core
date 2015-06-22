@@ -555,6 +555,7 @@ PLATFORMS
 
 DEPENDENCIES
   ace-rails-ap
+  actionpack-action_caching
   active_utils
   activemerchant
   acts-as-taggable-on

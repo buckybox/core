@@ -7,6 +7,7 @@ group :default do # XXX: all environments, think twice before adding Gems here
   gem "rails",                           "~> 3.2.22"
   gem "sprockets",                       "~> 2.2.3" # https://groups.google.com/forum/#!topic/rubyonrails-security/doAVp0YaTqY
   gem "rails-i18n",                      "~> 3.0.0" # For Rails 3.x
+  gem "actionpack-action_caching" # until we remove `caches_action`
   gem "pg"
   gem "therubyracer"
   gem "haml-rails"
