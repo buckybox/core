@@ -3,8 +3,7 @@ require_relative "../form"
 class Customer::Form::UpdateDeliveryAddress < Customer::Form
   include Customer::AddressValidations
 
-  def_delegators :distributor,
-    :collect_delivery_note?
+  delegate :collect_delivery_note?, to: :distributor
 
   def save
     return false unless valid?

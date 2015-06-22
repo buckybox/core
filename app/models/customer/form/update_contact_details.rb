@@ -7,9 +7,7 @@ class Customer::Form::UpdateContactDetails < Customer::Form
   attribute :last_name
   attribute :email
 
-  def_delegators :distributor,
-    :require_phone?,
-    :collect_phone?
+  delegate :require_phone?, :collect_phone?, to: :distributor
 
   validates_presence_of :first_name
   validates_presence_of :email

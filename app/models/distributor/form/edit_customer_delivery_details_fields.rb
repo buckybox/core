@@ -9,9 +9,7 @@ module Distributor::Form::EditCustomerDeliveryDetailsFields
   included do
     attribute :delivery_service_id, Integer
 
-    def_delegators :distributor,
-      :collect_delivery_note?,
-      :delivery_services
+    delegate :collect_delivery_note?, :delivery_services, to: :distributor
 
     validates_presence_of :delivery_service_id
 

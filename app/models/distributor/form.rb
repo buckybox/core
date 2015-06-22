@@ -19,8 +19,7 @@ module Distributor::Form
     attribute :distributor,  Integer
     attribute :customer,     Integer
 
-    def_delegators :customer,
-      :id
+    delegate :id, to: :customer
 
     def initialize(attributes = {})
       @distributor = attributes.delete(:distributor)
