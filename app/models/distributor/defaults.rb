@@ -102,22 +102,25 @@ Cheers
 
   def login_for_ordering_email
     {
-      subject: "Using your login for ordering at #{distributor_name}",
+      subject: "Accessing your account on our new online ordering system",
       body: <<-BODY
 Hi {first_name},
 
-you can keep up to date with your orders by logging into your account with us here:
-#{customer_login_url}
+We've migrated onto a new online ordering system called Bucky Box.
 
-Use this account to:
-- Make or change orders
+In order to access your account on Bucky Box please follow the steps below to set up your password.
+
+1) Click this link: #{customer_reset_password_url}
+
+2) Enter your email address we have on record: {email_address}
+
+3) An email message will be sent to you with a "Change my password" link. Clicking this will let you assign yourself a password and you'll be able to access your dashboard immediately.
+
+You can log into your account at anytime to:
 - Check your transaction history
+- Make or change orders
 - Pause your deliveries
 - Update your delivery address
-
-SETTING UP A PASSWORD
-If you do not have a password or have forgotten it, you can request a new password by using this link below:
-#{customer_reset_password_url}
 
 Cheers
 -The team at #{distributor_name}
