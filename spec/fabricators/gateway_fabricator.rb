@@ -1,2 +1,0 @@
-Fabricator(:gateway) do
-end
