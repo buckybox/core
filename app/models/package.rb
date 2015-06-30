@@ -123,22 +123,25 @@ class Package < ActiveRecord::Base
 
   def archived_address
     if has_archived_address_details?
-      self[:archived_address]
-    else
       archived_address_details.join
+    else
+      self[:archived_address]
     end
   end
 
   def address_hash
     if has_archived_address_details?
-      archived_address
-    else
       archived_address_details.address_hash
+    else
+      Bugsnag.notify(RuntimeError.new("code called from #{caller.inspect}"))
+      archived_address # TODO: shouldn't we call `#hash` here?!
     end
   end
 
   def has_archived_address_details?
-    !archived_address_details.id.nil?
+    archived_address_details.is_a?(Address)
+  rescue Delayed::DeserializationError
+    false
   end
 
   def short_code
