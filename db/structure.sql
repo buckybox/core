@@ -1303,38 +1303,6 @@ ALTER SEQUENCE extras_id_seq OWNED BY extras.id;
 
 
 --
--- Name: gateways; Type: TABLE; Schema: public; Owner: -; Tablespace: 
---
-
-CREATE TABLE gateways (
-    id integer NOT NULL,
-    name character varying(255),
-    klass character varying(255),
-    created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
-);
-
-
---
--- Name: gateways_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE gateways_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: gateways_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE gateways_id_seq OWNED BY gateways.id;
-
-
---
 -- Name: import_transaction_lists; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -2155,13 +2123,6 @@ ALTER TABLE ONLY extras ALTER COLUMN id SET DEFAULT nextval('extras_id_seq'::reg
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY gateways ALTER COLUMN id SET DEFAULT nextval('gateways_id_seq'::regclass);
-
-
---
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
---
-
 ALTER TABLE ONLY import_transaction_lists ALTER COLUMN id SET DEFAULT nextval('import_transaction_lists_id_seq'::regclass);
 
 
@@ -2490,14 +2451,6 @@ ALTER TABLE ONLY exclusions
 
 ALTER TABLE ONLY extras
     ADD CONSTRAINT extras_pkey PRIMARY KEY (id);
-
-
---
--- Name: gateways_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
---
-
-ALTER TABLE ONLY gateways
-    ADD CONSTRAINT gateways_pkey PRIMARY KEY (id);
 
 
 --
@@ -3527,3 +3480,5 @@ INSERT INTO schema_migrations (version) VALUES ('20150504072003');
 INSERT INTO schema_migrations (version) VALUES ('20150508150013');
 
 INSERT INTO schema_migrations (version) VALUES ('20150622122103');
+
+INSERT INTO schema_migrations (version) VALUES ('20150630195411');
