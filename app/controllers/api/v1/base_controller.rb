@@ -3,6 +3,9 @@ class Api::V1::BaseController < ApplicationController
   before_action :log_request, :authenticate, :set_time_zone, :set_locale, :embed_options
   skip_before_action :authenticate, :set_time_zone, :set_locale, :embed_options, only: :ping
 
+  # rescue_from ActionController::RoutingError, with: :not_found # TODO: enable with Rails 4
+  # rescue_from Exception, with: :server_error # TODO: enable with Rails 4
+
   def ping
     render text: "Pong!"
   end
