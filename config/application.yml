@@ -2,7 +2,6 @@
 
 # URLs
 MARKETING_SITE_URL: "http://www.buckybox.com/"
-MISSION_SITE_URL: "http://www.buckybox.org/"
 
 # Emails
 SUPPORT_EMAIL: "support@buckybox.com"
