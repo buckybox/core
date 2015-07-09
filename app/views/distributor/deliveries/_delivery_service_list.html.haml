@@ -3,7 +3,7 @@
 - if @real_list
   #list_type{ data: { type: 'deliveries', date: @selected_date, screen: 'delivery' } }
     %ul#delivery_list.unstyled{ class: (@delivery_list.date.past? ? '' : 'sortable') }
-      - DeliverySort.new(@items).grouped_by_addresses.each do |addressh_hash, deliveries|
+      - DeliverySort.new(@items).grouped_by_addresses.each_value do |deliveries|
         %li.row-fluid
           .span12
             %ul.unstyled

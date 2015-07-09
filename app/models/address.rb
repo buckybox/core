@@ -40,8 +40,8 @@ class Address < ActiveRecord::Base
   alias_method :join, :to_s
 
   def ==(other)
-    other.is_a?(Address) && [:address_1, :address_2, :suburb, :city, :postcode].all? do |a|
-      send(a) == other.send(a)
+    other.is_a?(Address) && [:address_1, :address_2, :suburb, :city, :postcode].all? do |part|
+      send(part) == other.send(part)
     end
   end
 
@@ -50,7 +50,11 @@ class Address < ActiveRecord::Base
   end
 
   def compute_address_hash
-    Digest::SHA1.hexdigest([:address_1, :address_2, :suburb, :city, :postcode].collect { |a| send(a).downcase.strip rescue '' }.join(''))
+    string = [:address_1, :address_2, :suburb, :city, :postcode].map do |part|
+      send(part).downcase.strip rescue ""
+    end.join
+
+    Digest::SHA1.hexdigest(string)
   end
 
   def update_address_hash

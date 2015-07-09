@@ -133,8 +133,7 @@ class Package < ActiveRecord::Base
     if has_archived_address_details?
       archived_address_details.address_hash
     else
-      Bugsnag.notify(RuntimeError.new("code called from #{caller.inspect}"))
-      archived_address # TODO: shouldn't we call `#hash` here?!
+      archived_address # address is a String, return it as-is
     end
   end
 
