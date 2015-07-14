@@ -3,20 +3,71 @@ pt-BR:
     orders:
       pausing:
         pause: suspender temporariamente
+        resume: reiniciar
+        remove: excluir
+        close: fechar
+        pause_start: suspensão começa em
+        resume_start: reiniciar entregas em
+        until_further_notice: até nova comunicação
     dashboard:
       change_contact_details: alterar meus dados de contato
       change_password: trocar minha senha
-      order_another_item: Acrescente outro pedido
-      account_statement: Conta corrente para seus pagamentos
+      change_delivery_address: alterar meu endereço para entregas
+      order_another_item: Peça outro item
+      no_active_orders: Você não tem nenhum pedido em andamento.
+      account_statement: Extrato da conta corrente
+      make_payment: Faça um pagamento
       pay_by:
         bank_deposit: Pagar através de depósito bancário
+        paypal: Pagar através do PayPal ou do Cartão de Crédito
+    transactions:
+      processed_date: Data de processamento
+      transaction_date: Data da operação
+      details: Detalhes
+      amount: Montante
+      balance: Saldo
+      more: mais...
     contact_details:
-      change: Alterar meus dados de contato
+      change: Alterar seus detalhes de contato
+      successful_update: Seus detalhes de contato foram atualizados com sucesso.
+    delivery_address:
+      successful_update: Seu endereço para entregas foi atualizado com sucesso.
     password:
-      change: Trocar minha senha
+      change: Trocar sua senha
+      update: Atualizar a senha
+      successful_update: Sua senha foi atualizada com sucesso.
+    address:
+      change: Atualizar seu endereço
+    update_next_delivery: Sua solicitação será atendida na próxima entrega
     order:
+      existing: Pedido existente
+      extras: Extras
       include_extras: incluir itens extras
+      no_extras: Não é possível acrescentar itens extras nesta cesta
+      extras_limit: Nesta cesta o limite é de %{count} itens extras.
       extras_one_off:
-        hint: Itens extras podem ser incluídos para um pedido ou para todos eles.
+        hint: Os itens extras podem ser incluídos em uma entrega apenas ou em todas elas
         'false': incluir em todas as entregas
         'true': incluir apenas na próxima entrega
+      exclude_items: Excluir estes itens...
+      substitute_with_items: Substituir estes itens por...
+      update:
+        success: Seu pedido foi atualizado com sucesso.
+        not_allowed: Este pedido não pode ser alterado.
+        oops: Houve um problema na alteração deste pedido.
+      deactivate:
+        success: Seu pedido foi excluido com sucesso.
+        oops: Houve um erro ao tentar excluir seu pedido.
+        not_allowed: Esta ação não é permitida.
+        too_late:
+          one_off: Nós não podemos excluir este pedido porque a sua entrega já foi programada, e não há mais prazo suficiente para cancela-la.
+          recurring: Não há prazo suficiente para cancelar a próxima entrega programada relativa ao seu pedido . Entretanto, nós já providenciamos a exclusão das demais entregas programadas para ele.
+    sign_in:
+      enter_email: Digite seu email
+      enter_password: Digite sua senha
+      remember_me: guardar meus dados
+      lost_password: Esqueceu sua senha?
+    lost_password:
+      send_my_password: Favor enviar-me minha senha
+      enter_email: digite seu email
+      send: Favor enviar uma senha

@@ -1,14 +1,57 @@
 pt-BR:
   models:
     schedule_rule:
+      deliver_on: Entregar na
       deliver_weekly_on: Entregar semanalmente na
+      deliver_fornightly_on: Entregar a cada duas semanas às
+      deliver_monthly_on: Entregar mensalmente na primeira
+      no_future_deliveries: Nenhuma entrega futura programada
+    account:
+      manual_transaction: Transação manual
+    delivery:
+      delivery_of: Entrega de
+      payment_made_on_delivery: Pagamento contra entrega
     order:
       edit: alterar este pedido
+      remove: Excluir pedido
       remove_confirmation: Você tem certeza de que deseja cancelar este pedido?
+      impending_delivery: A próxima entrega se seu pedido já está programada. Assim, alterações solicitadas somente poderão ser efetivadas a partir de %{date}.
       extra_frequencies:
         always: incluir em todas as entregas
         once: incluir apenas na próxima entrega
+    phone_collection:
+      mobile_phone: Telefone celular
+      work_phone: Telefone no trabalho
+      home_phone: Telefone residencial
   activerecord:
+    models:
+      box: Produto
+      customer: Cliente
+      order: Pedido
     attributes:
       customer:
         formated_number: Meu número de cliente
+      order:
+        exclusions: Exclusões
+        substitutions: Substituições
+  virtus:
+    attributes:
+      customer/form/update_contact_details:
+        first_name: Primeiro nome
+        last_name: Último nome
+        email: Email
+        hints:
+          email: Por favor verifique se este é o email que você usa para seu login
+          phone: É necessário informar pelo menos um numero de telefone
+      customer/form/update_delivery_address:
+        address_1: Endereço 1
+        address_2: Endereço 2
+        suburb: Bairro
+        city: Cidade
+        postcode: CEP
+        delivery_note: Nota para entrega
+        placeholders:
+          delivery_note: "Instruções para entrega. Por exemplo, \"deixar na entrada de serviço\""
+      customer/form/update_password:
+        password: Digite sua nova senha
+        password_confirmation: Digite sua nova senha novamente para confirmá-la

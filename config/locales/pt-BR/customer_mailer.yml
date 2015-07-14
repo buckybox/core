@@ -1,15 +1,51 @@
 pt-BR:
   customer_mailer:
+    login_details:
+      subject: Seus dados de acesso para %{distributor}
+      new_details: Aqui estão os dados para você acessar sua conta conosco %{distributor}
+      email: Email
+      password: Senha
+      instructions_html: |
+        Utilize esta conta para:
+
+        <ul>
+        <li>alterar seus pedidos
+        <li>suspender seus pedidos quando você estiver fora
+        <li>alterar seu endereço para entregas ou os seus detalhes de contato se você mudou de endereço
+        </ul>
     orders_halted:
-      subject: A confirmação de seus pedidos na %{distributor} está pendente
+      subject: Suas entregas pelo %{distributor} estão temporariamente suspensas
       intro_html: |
         Verificamos que o saldo mínimo vigente para sua conta conosco foi ultrapassado. Ele hoje é de
         <strong>%{balance}</strong>
         (para que você possa continuar a receber os seus pedidos é preciso que este saldo não vá além do mínimo acertado para sua conta, que é de %{threshold}).
       pay_html: "%{link} ou contacte a %{distributor}."
-      recent: Pode ser que você tenha feito um pagamento recente que ainda não aparece para nós. Por gentileza, dê uma olhada no extrato de sua conta nos próximos dias para confirmá-lo.
+      recent: Pode ser que você tenha feito um pagamento recente que ainda não aparece para nós. Por gentileza, dê uma olhada no extrato de sua conta conosco nos próximos dias para confirmá-lo.
       signature: Equipe %{distributor}
     remind_orders_halted:
+      subject: Suas entregas pela %{distribuidor} estão temporariamente suspensas
+      intro_html: |
+        Seu último pedido não poderá ser efetivado até que o saldo de sua conta seja regularizado (lembre-se de que para continuar a receber normalmente seus pedidos seu limite de crédito conosco, que é de %{threshold}, não deve ser ultrapassado). Seu saldo atual é de
+        <strong>%{balance}<strong>
       pay_html: "%{link} ou contacte a %{distributor}."
-      recent: Pode ser que você tenha feito um pagamento recente que ainda não aparece para nós. Por gentileza, dê uma olhada no extrato de sua conta nos próximos dias para confirmá-lo.
-      signature: Equipe %{distributor}
+      recent: Pode ser que você tenha feito um pagamento recente que ainda não aparece para nós. Por gentileza, dê uma olhada no extrato de sua conta conosco nos próximos dias para confirmá-lo.
+      signature: A Equipe %{distributor}
+    order_confirmation:
+      subject: Seu pedido na %{distributor}
+      thanks: '%{nome}, obrigado por seu pedido!'
+      update_order: Você sabia que pode verificar e alterar seus pedidos 24 horas por dia? Visite %{link}.
+      order_information: Informações do pedido
+      customer_number: Número do Cliente
+      email: Email
+      mobile_phone: Telefone celular
+      home_phone: Telefone Residencial
+      work_phone: Telefone no trabalho
+      pick_up_from: 'Apanhar:'
+      delivery_address: Endereço para entrega
+      order_summary: Sumário do pedido
+      exclusions: Exclusões
+      substitutes: Substituições
+      starting: 'Começando em '
+      review_html: A qualquer tempo, 24 horas por dia, você pode conferir seus pedidos e o extrato de sua conta conosco fazendo seu login em %{link}.
+      contact_html: Se você precisar de qualquer esclarecimento, julgar que alguma coisa não está indo bem e deseja conversar a respeito, por favor entre em contato conosco em %{link}
+      powered_by_html: Operado por %{link}

@@ -1,1 +1,10 @@
-pt-BR: {}
+pt-BR:
+  devise_mailer:
+    reset_password_instructions:
+      change_password: Favor trocar minha senha
+      body_html: |
+        Olá %{link}
+        Alguém solicitou a alteração de sua senha, e você poderá fazê-lo clicando no link abaixo:
+        %{link}
+        Se não foi você quem fez esta solicitação, por favor ignore esta mensagem.
+        Sua senha não será alterada até que você deseje fazê-lo, clicando no link acima e criando sua nova senha.

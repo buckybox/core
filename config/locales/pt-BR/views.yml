@@ -2,7 +2,12 @@ pt-BR:
   partials:
     payments:
       bank_deposit:
-        deposit_funds: Por faça o depósito
+        deposit_funds: Por favor faça o depósito no
         account_name: Favorecido
         account_number: Número da conta
         reference: Identlificador
+      paypal:
+        pay_now: Pague agora
+        top_up: Favor adicionar crédito à minha conta
+        amount: Montante
+        amount_to_top_up: Montante máximo
