@@ -32,7 +32,7 @@ pt-BR:
       signature: A Equipe %{distributor}
     order_confirmation:
       subject: Seu pedido na %{distributor}
-      thanks: '%{nome}, obrigado por seu pedido!'
+      thanks: '%{name}, obrigado por seu pedido!'
       update_order: Você sabia que pode verificar e alterar seus pedidos 24 horas por dia? Visite %{link}.
       order_information: Informações do pedido
       customer_number: Número do Cliente
