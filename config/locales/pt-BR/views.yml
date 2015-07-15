@@ -2,7 +2,7 @@ pt-BR:
   partials:
     payments:
       bank_deposit:
-        deposit_funds: Por favor faça o depósito no
+        deposit_funds: Por favor faça o seu depósito no
         account_name: Favorecido
         account_number: Número da conta
         reference: Identlificador

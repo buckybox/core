@@ -1,7 +1,7 @@
 pt-BR:
   customer_mailer:
     login_details:
-      subject: Seus dados de acesso para %{distributor}
+      subject: Seus dados de acesso na %{distributor}
       new_details: Aqui estão os dados para você acessar sua conta conosco %{distributor}
       email: Email
       password: Senha
@@ -23,19 +23,19 @@ pt-BR:
       recent: Pode ser que você tenha feito um pagamento recente que ainda não aparece para nós. Por gentileza, dê uma olhada no extrato de sua conta conosco nos próximos dias para confirmá-lo.
       signature: Equipe %{distributor}
     remind_orders_halted:
-      subject: Suas entregas pela %{distribuidor} estão temporariamente suspensas
+      subject: A entrega de seus pedidos na %{distributor} estão temporariamente suspensas
       intro_html: |
         Seu último pedido não poderá ser efetivado até que o saldo de sua conta seja regularizado (lembre-se de que para continuar a receber normalmente seus pedidos seu limite de crédito conosco, que é de %{threshold}, não deve ser ultrapassado). Seu saldo atual é de
         <strong>%{balance}<strong>
       pay_html: "%{link} ou contacte a %{distributor}."
-      recent: Pode ser que você tenha feito um pagamento recente que ainda não aparece para nós. Por gentileza, dê uma olhada no extrato de sua conta conosco nos próximos dias para confirmá-lo.
+      recent: Pode ser que você tenha feito um pagamento recente que ainda não aparece para nós. Por gentileza, dê uma olhada no extrato de suas contas no Banco e conosco nos próximos dias para confirmá-lo.
       signature: A Equipe %{distributor}
     order_confirmation:
       subject: Seu pedido na %{distributor}
       thanks: '%{name}, obrigado por seu pedido!'
       update_order: Você sabia que pode verificar e alterar seus pedidos 24 horas por dia? Visite %{link}.
       order_information: Informações do pedido
-      customer_number: Número do Cliente
+      customer_number: Número de Cliente
       email: Email
       mobile_phone: Telefone celular
       home_phone: Telefone Residencial
@@ -46,6 +46,6 @@ pt-BR:
       exclusions: Exclusões
       substitutes: Substituições
       starting: 'Começando em '
-      review_html: A qualquer tempo, 24 horas por dia, você pode conferir seus pedidos e o extrato de sua conta conosco fazendo seu login em %{link}.
-      contact_html: Se você precisar de qualquer esclarecimento, julgar que alguma coisa não está indo bem e deseja conversar a respeito, por favor entre em contato conosco em %{link}
+      review_html: A qualquer tempo, 24 horas por dia, você pode conferir seus pedidos e o extrato de sua conta conosco acessando %{link}.
+      contact_html: Se você precisar de qualquer esclarecimento, julgar que alguma coisa não está indo bem e deseja conversar a respeito, por favor entre em contato conosco em %{email}
       powered_by_html: Operado por %{link}
