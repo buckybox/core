@@ -41,7 +41,7 @@ pt-BR:
         last_name: Último nome
         email: Email
         hints:
-          email: Por favor verifique se este é o email que você usa para seu login
+          email: Por favor verifique se este é o email que você usa para seu acesso
           phone: É necessário informar pelo menos um numero de telefone
       customer/form/update_delivery_address:
         address_1: Endereço 1
