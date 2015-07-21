@@ -134,6 +134,14 @@ class DataIntegrity
     end
   end
 
+  def deliveries_have_valid_packages
+    diff = Delivery.pluck(:id) - Delivery.joins(:package).pluck(:id)
+
+    diff.each do |id|
+      error "Delivery ##{id} has missing package"
+    end
+  end
+
   # NOTE: not used but useful for debugging purposes
   def customer_numbers_have_no_gaps
     Distributor.find_each do |distributor|
@@ -160,6 +168,7 @@ private
     checker.deduction_count_matches_delivery_count
     checker.accounts_are_valid
     checker.order_extras_have_valid_foreign_keys
+    checker.deliveries_have_valid_packages
 
     checker
   end
