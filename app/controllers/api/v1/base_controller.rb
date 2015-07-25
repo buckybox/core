@@ -24,6 +24,12 @@ private
     request.headers['Webstore-ID']
   end
 
+  def api_master_allowed_ips
+    ips = Figaro.env.api_master_allowed_ips.dup
+    ips << "127.0.0.1" if Rails.env.development?
+    ips
+  end
+
   def log_request
     info = {
       api_key: api_key,
@@ -46,7 +52,7 @@ private
     end
 
     if webstore_id
-      if api_key == Figaro.env.api_master_key && api_secret == Figaro.env.api_master_secret && request.remote_ip.in?(Figaro.env.api_master_allowed_ips)
+      if api_key == Figaro.env.api_master_key && api_secret == Figaro.env.api_master_secret && request.remote_ip.in?(api_master_allowed_ips)
         @distributor = Distributor.find_by(parameter_name: webstore_id)
       end
     else
