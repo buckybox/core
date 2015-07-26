@@ -1,5 +1,5 @@
 -# XXX: `cache_if` so we don't cache search and tag sub-routes
-- cache_if(request.fullpath == distributor_customers_path, [request.fullpath, current_distributor.id, customers.map(&:id), customers.maximum(:updated_at)]) do
+- cache_if(request.fullpath == distributor_customers_path, [request.fullpath, current_distributor.id, customers.map(&:id).hash, customers.maximum(:updated_at)]) do
   %table#customers.table.table-striped
     %thead
       %tr
