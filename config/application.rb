@@ -75,6 +75,15 @@ module BuckyBox
     # Version of your assets, change this if you want to expire all your assets
     config.assets.version = '1.0'
 
+    # Use Redis as cache store
+    config.cache_store = :readthis_store, "redis://localhost:6379/", {
+      driver: :hiredis,
+      expires_in: 2.weeks.to_i,
+      namespace: 'core-cache',
+      compress: false,
+      marshal: Marshal, # XXX: cannot use Oj because it doesn't deserialize ActiveSupport::SafeBuffer objects properly
+    }
+
     config.generators do |g|
       g.test_framework :rspec, fixture: true
       g.fixture_replacement :fabrication

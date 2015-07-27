@@ -21,6 +21,8 @@ group :default do # XXX: all environments, think twice before adding Gems here
   gem "bootstrap-sass",                  "< 3"
   gem "bootbox-rails"
   gem "select2-rails"
+  gem "hiredis"
+  gem "readthis"
   gem "devise"
   gem "devise-i18n"
   gem "simple_form",                     "< 3"
