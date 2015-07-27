@@ -15,17 +15,21 @@
 /.bundle
 /bin
 
-# Ignore the default SQLite database.
-/db/*.sqlite3
-
-# Iganore the config files
+# Ignore the config files
 /config/database.yml
 
-# Ignore all logfiles and tempfiles.
+# Ignore the default SQLite database
+/db/*.sqlite3
+
+# Ignore the schema file as we now use a structure file instead
+/db/schema.rb
+
+# Ignore all logfiles and tempfiles
 /log
 /tmp
 /doc
 /.yardoc
+/dump.rdb
 *.swp
 *.swo
 .~lock*
@@ -42,9 +46,6 @@ coverage/
 
 # Ignore uploads
 /private_uploads/
-
-#Ignore the schema file as we now use a structure file instead
-/db/schema.rb
 
 # Ignore ctags
 /tags
