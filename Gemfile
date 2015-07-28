@@ -53,7 +53,7 @@ group :default do # XXX: all environments, think twice before adding Gems here
   gem "country_select",                  "~> 1.1.3" # TODO: https://github.com/stefanpenner/country_select/blob/master/UPGRADING.md
   gem "biggs"
   gem "charlock_holmes"
-  gem "rabl"
+  gem "rabl", git: "https://github.com/nesquena/rabl.git" # TODO: remove when https://github.com/nesquena/rabl/commit/e07c83d41caf1ccbbe952cbe817734af68613c4e is released
   gem "apipie-rails",                    "0.3.3" # 0.3.4 is broken https://github.com/Apipie/apipie-rails/pull/350
   gem "strong_parameters"
   gem "rails-timeago"
