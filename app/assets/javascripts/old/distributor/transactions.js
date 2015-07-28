@@ -15,7 +15,7 @@ $(function(){
 
     $('th.sort_header.date_processed').click(function(){
       var clicked = $(this);
-      var account_id = $('#account-information').data('account_id');
+      var account_id = $('#account-information').data('account-id');
       if(clicked.hasClass('disabled')){
         $.cookie("transaction_order", 'date_processed', {path: '/' });
         $.get("/" + $("#sortable_transactions").data("user") + "/accounts/" + account_id + "/transactions/" + $('#sortable_transactions table tr.transaction-data').size(), function(data){
@@ -27,7 +27,7 @@ $(function(){
 
     $('th.sort_header.transaction_date').click(function(){
       var clicked = $(this);
-      var account_id = $('#account-information').data('account_id');
+      var account_id = $('#account-information').data('account-id');
       if(clicked.hasClass('disabled')){
         $.cookie("transaction_order", 'transaction_date', {path: '/' });
         $.get("/" + $("#sortable_transactions").data("user") + "/accounts/" + account_id + "/transactions/" + $('#sortable_transactions table tr.transaction-data').size(), function(data){
