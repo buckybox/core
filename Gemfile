@@ -2,6 +2,7 @@ source "https://rubygems.org"
 
 group :default do # XXX: all environments, think twice before adding Gems here
   gem "rake",                            "~> 10.3.2" # i18n-spec breaks with 10.4 :/
+  gem "test-unit" # for Ruby 2.2
   gem "unicorn"
   gem "rails",                           "~> 3.2.22"
   gem "rails-i18n",                      "~> 3.0.0" # For Rails 3.x
@@ -89,7 +90,6 @@ group :development do
 end
 
 group :test do
-  gem "test-unit" if RUBY_VERSION >= "2.2.0"
   gem "database_cleaner"
   gem "simplecov", require: false
   gem "cucumber-rails", require: false
