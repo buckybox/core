@@ -1,13 +1,5 @@
 source "https://rubygems.org"
 
-if ["development", "test", nil].include?(ENV["RAILS_ENV"])
-  if RUBY_VERSION != "2.1.6"
-    warn "WARNING: You are not running the version of Ruby targeted for this application (#{RUBY_VERSION} != 2.1.6)."
-  end
-else
-  ruby "2.1.6"
-end
-
 group :default do # XXX: all environments, think twice before adding Gems here
   gem "rake",                            "~> 10.3.2" # i18n-spec breaks with 10.4 :/
   gem "unicorn"
