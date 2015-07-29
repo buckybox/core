@@ -17,3 +17,9 @@ module AbstractController::Callbacks::ClassMethods
   alias_method :skip_before_action, :skip_before_filter
   alias_method :skip_after_action, :skip_after_filter
 end
+
+class ActiveRecord::Associations::HasManyAssociation
+  def has_cached_counter?(*)
+    false
+  end
+end
