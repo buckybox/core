@@ -7,20 +7,19 @@ class Api::V1::OrdersController < Api::V1::BaseController
   end
 
   def_param_group :order do
-    param :order, Hash, "Json object representing the new order", required: true do
-      param :customer_id, String, "The customer's ID. If you don't have this refer to customer API."
+    param :order, Hash, "JSON object representing the new order", required: true do
+      param :customer_id, String, "The customer ID. If you don't have this refer to customer API."
       param :box_id, Integer, "ID of the box", required: true
       param :extras_one_off, [:boolean], 'True or false determining whether the extras should match the frequency of the box (false), or be a one off (true)'
       param :extras, [:extra], 'Array of extras, refer to above example'
-      param :substitutions, [:id], 'Array of integers representing box_item ids that can be substituted for exclusions'
-      param :exclusions, [:id], 'Array of integers representing box_item ids that should be excluded'
+      param :substitutions, [:id], 'Array of integers representing box_item IDs that can be substituted for exclusions'
+      param :exclusions, [:id], 'Array of integers representing box_item IDs that should be excluded'
       param :frequency, String, "Indicates how often the order should be delivered. Acceptable values are 'single', 'weekly', or 'fortnightly'"
     end
   end
 
   api :GET, '/orders',  "Get list of orders"
-  param :customer_id, String, desc: "Customer's id. Selects orders for that customer.", required: true
-  example "/orders/?customer_id=123"
+  param :customer_id, String, desc: "Customer ID. Selects orders for that customer.", required: true
   def index
     customer = @distributor.customers.find_by(id: params[:customer_id])
     return unprocessable_entity(customer_id: "is invalid") unless customer
@@ -29,16 +28,13 @@ class Api::V1::OrdersController < Api::V1::BaseController
   end
 
   api :GET, '/orders/:id', "Get single order"
-  param :id, Integer, desc: "Order's id"
-  example "api.buckybox.com/v1/orders/12"
+  param :id, Integer, desc: "Order ID"
   def show
     order_id = params[:id]
     @order = @distributor.orders.find_by(id: order_id)
-
     return not_found if @order.nil?
-    account = Account.find(@order.account_id)
-    return not_found if account.nil?
-    @customer_id = account.customer_id
+
+    @customer_id = @order.customer.id
   end
 
   api :POST, '/orders',  "Create a new order"
