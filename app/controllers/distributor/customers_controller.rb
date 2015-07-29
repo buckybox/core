@@ -1,4 +1,4 @@
-class Distributor::CustomersController < Distributor::ResourceController
+class Distributor::CustomersController < Distributor::BaseController
   respond_to :html, :json
 
   before_action :check_setup, only: [:index]

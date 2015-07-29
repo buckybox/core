@@ -1,4 +1,4 @@
-class Distributor::AccountsController < Distributor::ResourceController
+class Distributor::AccountsController < Distributor::BaseController
   respond_to :html, :json
 
   def change_balance

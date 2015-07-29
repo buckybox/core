@@ -1,4 +1,4 @@
-class Distributor::PaymentsController < Distributor::ResourceController
+class Distributor::PaymentsController < Distributor::BaseController
   actions :create
 
   respond_to :html, :json

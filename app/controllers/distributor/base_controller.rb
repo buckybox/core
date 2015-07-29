@@ -5,6 +5,7 @@ class Distributor::BaseController < ApplicationController
   before_action :mark_as_seen
   before_action :notifications
   before_action :distributor_setup
+  before_action :get_email_templates
 
   skip_after_action :intercom_rails_auto_include
 
@@ -24,5 +25,9 @@ private
 
   def check_setup
     redirect_to distributor_root_url and return unless distributor_setup.finished_settings?
+  end
+
+  def get_email_templates
+    @email_templates = current_distributor.email_templates
   end
 end

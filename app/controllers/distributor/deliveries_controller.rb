@@ -1,6 +1,6 @@
 # FIXME: Too much code in this controller!
 
-class Distributor::DeliveriesController < Distributor::ResourceController
+class Distributor::DeliveriesController < Distributor::BaseController
   custom_actions collection: [:update_status, :master_packing_sheet, :export]
 
   before_action :check_setup, only: [:index]

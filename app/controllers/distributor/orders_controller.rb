@@ -1,4 +1,4 @@
-class Distributor::OrdersController < Distributor::ResourceController
+class Distributor::OrdersController < Distributor::BaseController
   belongs_to :account
   actions :all, except: [:index, :show, :destroy]
 

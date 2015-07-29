@@ -1,4 +1,4 @@
-class Admin::DistributorsController < Admin::ResourceController
+class Admin::DistributorsController < Admin::BaseController
   before_action :parameterize_name, only: [:create, :update]
 
   def index
