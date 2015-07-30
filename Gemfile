@@ -98,6 +98,7 @@ group :test do
   gem "poltergeist", require: false
   gem "launchy"
   gem "guard-rspec"
+  gem "i18n-spec"
   gem "rspec-activemodel-mocks"
 end
 
