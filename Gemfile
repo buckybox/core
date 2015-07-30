@@ -77,7 +77,6 @@ group :development do
   gem "brakeman",   require: false
   gem "xray-rails", require: false
   gem "ruby-prof",  require: false # profiling with /newrelic
-  gem "capistrano", "~> 2" # v3 is broken with `undefined local variable or method `tasks_without_stage_dependency"` atm
   gem "term-ansicolor"
   gem "parallel_tests"
   gem "sextant"
