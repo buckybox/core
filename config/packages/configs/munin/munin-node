@@ -1,4 +1,0 @@
-
-[passenger_*]
-user root
-command ruby %c
