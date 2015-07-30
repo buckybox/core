@@ -25,7 +25,7 @@ class Distributor::PaymentsController < Distributor::ResourceController
       @selected_omni_importer = current_distributor.last_used_omni_importer(@import_transaction_list.omni_importer)
     end
 
-    tracking.event(current_distributor, "payment_csv_uploaded") unless current_admin.present?
+    current_distributor.track("payment_csv_uploaded") unless current_admin.present?
 
     load_index
 
@@ -52,7 +52,7 @@ class Distributor::PaymentsController < Distributor::ResourceController
   def process_payments
     processor = Payments::Processor.new(@import_transaction_list)
     if processor.process(params[:import_transaction_list])
-      tracking.event(current_distributor, "payment_csv_commited") unless current_admin.present?
+      current_distributor.track("payment_csv_commited") unless current_admin.present?
 
       redirect_to distributor_payments_url, notice: "Payments processed successfully"
     else

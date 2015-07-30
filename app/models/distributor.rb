@@ -498,10 +498,6 @@ class Distributor < ActiveRecord::Base
       .order('created_at DESC')
   end
 
-  def skip_tracking?(env = Rails.env)
-    messaging.skip?(env)
-  end
-
   def webstore_status_changed?
     active_webstore_changed?
   end
@@ -541,6 +537,14 @@ class Distributor < ActiveRecord::Base
     end
   end
 
+  def messaging
+    @messaging ||= Distributor.messaging_class.new(self)
+  end
+
+  def self.messaging_class
+    Messaging::Distributor
+  end
+
 private
 
   def self.human_attribute_name(attr, options = {})
@@ -573,14 +577,6 @@ private
 
   def send_welcome_email
     DistributorMailer.welcome(self).deliver
-  end
-
-  def messaging
-    @messaging ||= Distributor.messaging_class.new(self)
-  end
-
-  def self.messaging_class
-    Messaging::Distributor
   end
 
   def validate_require_phone

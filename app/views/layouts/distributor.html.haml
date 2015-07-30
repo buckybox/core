@@ -32,6 +32,6 @@
           .row-fluid
             .span12= yield
 
-  = intercom_script_tag unless current_distributor.skip_tracking?(Rails.env) || current_admin.present?
+  = intercom_script_tag if current_distributor.messaging.track_env? && !current_admin
 
 = render 'layouts/base'

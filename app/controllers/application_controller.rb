@@ -37,10 +37,6 @@ protected
     send_data(data, type: type, filename: "#{filename}.csv")
   end
 
-  def tracking
-    @tracking ||= Bucky::Tracking.instance
-  end
-
   # @param options
   #   current: Include current_customer
   #   all: Include signed off accounts

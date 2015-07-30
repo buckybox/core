@@ -25,7 +25,7 @@ class Distributor::OrdersController < Distributor::ResourceController
 
     create!  do |success, failure|
       success.html do
-        tracking.event(current_distributor, "new_order") unless current_admin.present?
+        current_distributor.track("new_order") unless current_admin.present?
         @order.customer.add_activity(:order_create, order: @order, initiator: current_distributor)
         send_confirmation_email(@order) if current_distributor.email_customer_on_new_order
 

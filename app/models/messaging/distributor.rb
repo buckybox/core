@@ -1,52 +1,45 @@
 module Messaging
   class Distributor
-    AUTO_MESSAGE_TAG = "[[auto-messages]]"
-    WEBSTORE_ENABLED_TAG = "[webstore]-on"
-    WEBSTORE_DISABLED_TAG = "[webstore]-off"
+    AUTO_MESSAGE_TAG = "[[auto-messages]]".freeze
 
     def initialize(distributor)
       @distributor = distributor
     end
 
     def tracking_after_create
-      messaging_proxy.create_user(tracking_data, Rails.env)
-      messaging_proxy.add_tag(distributor.id, AUTO_MESSAGE_TAG, Rails.env)
+      return unless track_env?
+
+      messaging_proxy.create_user(tracking_data)
+      messaging_proxy.add_tag(distributor.id, AUTO_MESSAGE_TAG)
     end
 
     def tracking_after_save
-      update
-      toggle_webstore_tag if distributor.webstore_status_changed?
+      return unless track_env?
+
+      messaging_proxy.delay(delayed_job_options).update_user(
+        distributor.id, tracking_data
+      )
     end
 
-    def toggle_webstore_tag
-      delay(
-        priority: Figaro.env.delayed_job_priority_low,
-        queue: "#{__FILE__}:#{__LINE__}",
-      ).delayed_toggle_webstore_tag
+    def track(action_name, occurred_at = Time.current)
+      return unless track_env?
+
+      messaging_proxy.delay(delayed_job_options).track(
+        distributor.id, action_name, occurred_at
+      )
     end
 
-    def update
-      delay(
-        priority: Figaro.env.delayed_job_priority_low,
-        queue: "#{__FILE__}:#{__LINE__}",
-      ).delayed_update
-    end
-
-    def delayed_update
-      messaging_proxy.update_user(distributor.id, tracking_data, Rails.env)
-    end
-
-    def track(action_name, occurred_at = Time.current, env = Rails.env)
-      messaging_proxy.track(distributor.id, action_name, occurred_at, env)
-    end
-
-    def skip?(env = Rails.env)
-      messaging_proxy.skip?(env)
+    def track_env?
+      @track_env ||= Rails.env.production?
     end
 
   private
 
     attr_reader :distributor
+
+    def messaging_proxy
+      @messaging_proxy ||= Messaging::IntercomProxy.instance
+    end
 
     def tracking_data
       {
@@ -57,22 +50,11 @@ module Messaging
       }
     end
 
-    def update_tags
-      messaging_proxy.update_tags({ id: distributor.id, tag_list: distributor.tag_list }, Rails.env)
-    end
-
-    def delayed_toggle_webstore_tag
-      if distributor.active_webstore?
-        messaging_proxy.add_tag(distributor.id, WEBSTORE_ENABLED_TAG, Rails.env)
-        messaging_proxy.remove_tag(distributor.id, WEBSTORE_DISABLED_TAG, Rails.env)
-      else
-        messaging_proxy.add_tag(distributor.id, WEBSTORE_DISABLED_TAG, Rails.env)
-        messaging_proxy.remove_tag(distributor.id, WEBSTORE_ENABLED_TAG, Rails.env)
-      end
-    end
-
-    def messaging_proxy
-      Messaging::IntercomProxy.instance
+    def delayed_job_options
+      @delayed_job_options ||= {
+        priority: Figaro.env.delayed_job_priority_low,
+        queue: "#{__FILE__}:#{__LINE__}",
+      }.freeze
     end
   end
 end

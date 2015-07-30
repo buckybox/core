@@ -45,7 +45,7 @@ class Distributor::CustomersController < Distributor::ResourceController
     args   = form_args(:distributor_form_new_customer)
     form   = Distributor::Form::NewCustomer.new(args)
     locals = { new_customer: form }
-    tracking.event(current_distributor, "new_customer") if form.save && !current_admin.present?
+    current_distributor.track("new_customer") if form.save && !current_admin.present?
     form.save ? successful_create(form) : failed_form_submission(form, "new", locals)
   end
 
@@ -89,7 +89,7 @@ class Distributor::CustomersController < Distributor::ResourceController
       end
     end
 
-    tracking.event(current_distributor, "sent_login_details") unless current_admin.present?
+    current_distributor.track("sent_login_details") unless current_admin.present?
 
     redirect_to distributor_customer_url(@customer)
   end
@@ -126,7 +126,7 @@ class Distributor::CustomersController < Distributor::ResourceController
     recipient_ids = params[:export][:recipient_ids].split(',').map(&:to_i)
     csv_string    = CustomerCSV.generate(current_distributor, recipient_ids)
 
-    tracking.event(current_distributor, "export_csv_customer_list") unless current_admin.present?
+    current_distributor.track("export_csv_customer_list") unless current_admin.present?
 
     send_csv("customer_export", csv_string)
   end
@@ -157,7 +157,7 @@ protected
         @customers = current_distributor.customers.where(number: query.to_i)
       end
 
-      tracking.event(current_distributor, "search_customer_list") unless current_admin.present?
+      current_distributor.track("search_customer_list") unless current_admin.present?
     end
 
     if (tag = params[:tag]).present?
@@ -243,7 +243,7 @@ private
       if params[:commit]
         message = send_email recipient_ids, email_template
 
-        tracking.event(current_distributor, "sent_group_email") unless current_admin.present?
+        current_distributor.track("sent_group_email") unless current_admin.present?
       end
     end
 

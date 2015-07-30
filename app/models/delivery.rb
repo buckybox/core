@@ -233,8 +233,8 @@ private
 
   def tracking
     if status_changed? && status == 'delivered'
-      Bucky::Tracking.instance.event(distributor, "distributor_delivered_order")
-      Bucky::Tracking.instance.event(distributor, "engaged")
+      distributor.track("distributor_delivered_order")
+      distributor.track("engaged")
     end
   end
 end

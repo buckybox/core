@@ -13,7 +13,7 @@ class Distributor::Settings::DeliveryServicesController < Distributor::BaseContr
     if delivery_service.save
       flash.now[:notice] = "Your new delivery service has been created."
 
-      tracking.event(current_distributor, 'new_delivery_service')
+      current_distributor.track('new_delivery_service')
     else
       flash.now[:error] = delivery_service.errors.full_messages.to_sentence
     end
