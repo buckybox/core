@@ -28,6 +28,7 @@ describe Distributor::Defaults do
     allow(EmailTemplate).to receive(:new)
 
     url_helper = double("url_helper", new_customer_session_url: true, new_customer_password_url: true)
+    Rails.stub_chain(:application, :config, :root) # prevent bug with marginalia Gem calling `config.root`
     Rails.stub_chain(:application, :routes, :url_helpers) { url_helper }
 
     Figaro.stub_chain(:env, :host)
