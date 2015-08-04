@@ -24,16 +24,16 @@ class Payment < ActiveRecord::Base
 
   after_create :make_payment!
 
-  scope :bank_transfer, where(kind: 'bank_transfer')
-  scope :credit_card,   where(kind: 'credit_card')
-  scope :cash,          where(kind: 'cash')
-  scope :unspecified,   where(kind: 'unspecified')
+  scope :bank_transfer, -> { where(kind: 'bank_transfer') }
+  scope :credit_card,   -> { where(kind: 'credit_card') }
+  scope :cash,          -> { where(kind: 'cash') }
+  scope :unspecified,   -> { where(kind: 'unspecified') }
 
-  scope :manual,          where(source: 'manual')
-  scope :import,          where(source: 'import')
-  scope :pay_on_delivery, where(source: 'pay_on_delivery')
+  scope :manual,          -> { where(source: 'manual') }
+  scope :import,          -> { where(source: 'import') }
+  scope :pay_on_delivery, -> { where(source: 'pay_on_delivery') }
 
-  scope :reversed, where(reversed: true)
+  scope :reversed, -> { where(reversed: true) }
 
   default_value_for :reversed, false
   default_value_for :kind,     'unspecified'

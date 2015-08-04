@@ -28,10 +28,10 @@ class Delivery < ActiveRecord::Base
   before_create :set_delivery_number
   after_save :tracking
 
-  scope :pending,   where(status: 'pending')
-  scope :delivered, where(status: 'delivered')
-  scope :cancelled, where(status: 'cancelled')
-  scope :ordered, order('dso ASC, created_at ASC')
+  scope :pending,   -> { where(status: 'pending') }
+  scope :delivered, -> { where(status: 'delivered') }
+  scope :cancelled, -> { where(status: 'cancelled') }
+  scope :ordered,   -> { order('dso ASC, created_at ASC') }
 
   default_value_for :status_change_type, 'auto'
 

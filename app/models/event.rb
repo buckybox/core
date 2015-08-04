@@ -5,7 +5,7 @@ class Event < ActiveRecord::Base
 
   before_save :set_trigger_on
 
-  scope :active, where(dismissed: false)
+  scope :active,  -> { where(dismissed: false) }
   scope :current, -> { where('trigger_on <= ?', Time.current) }
 
   default_scope { order('trigger_on DESC') }

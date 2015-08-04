@@ -25,11 +25,9 @@ class Deduction < ActiveRecord::Base
 
   after_create :make_deduction!
 
-  scope :unspecified, where(kind: 'unspecified')
-
-  scope :manual,   where(source: 'manual')
-
-  scope :reversed, where(reversed: true)
+  scope :unspecified, -> { where(kind: 'unspecified') }
+  scope :manual,      -> { where(source: 'manual') }
+  scope :reversed,    -> { where(reversed: true) }
 
   default_value_for :reversed, false
   default_value_for :kind,     'unspecified'

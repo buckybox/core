@@ -6,7 +6,7 @@ class DeliverySequenceOrder < ActiveRecord::Base
   after_save :update_dso # cache results on delivery model
   default_value_for :position, -1
 
-  scope :ordered, order('position ASC')
+  scope :ordered, -> { order('position ASC') }
 
   def self.update_ordering(new_master_list, delivery_service_id, day)
     new_address_hashes = new_master_list.sortables

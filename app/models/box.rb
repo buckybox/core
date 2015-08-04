@@ -36,7 +36,7 @@ class Box < ActiveRecord::Base
   default_value_for :exclusions_limit, 0
 
   default_scope { order(:name) }
-  scope :not_hidden, where(hidden: false)
+  scope :not_hidden, -> { where(hidden: false) }
 
   def exclusions?; dislikes?; end
 

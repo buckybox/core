@@ -13,9 +13,9 @@ class ImportTransactionList < ActiveRecord::Base
 
   default_value_for :draft, true
 
-  scope :ordered, order("created_at DESC")
-  scope :draft, where(['import_transaction_lists.draft = ?', true])
-  scope :processed, where(['import_transaction_lists.draft = ?', false])
+  scope :ordered, -> { order("created_at DESC") }
+  scope :draft, -> { where(['import_transaction_lists.draft = ?', true]) }
+  scope :processed, -> { where(['import_transaction_lists.draft = ?', false]) }
 
   attr_accessible :csv_file, :import_transactions_attributes, :draft, :omni_importer_id
   delegate :payment_type, to: :omni_importer, allow_nil: true
