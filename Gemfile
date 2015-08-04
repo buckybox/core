@@ -69,6 +69,7 @@ group :default do # XXX: all environments, think twice before adding Gems here
   gem "geokit"
   gem "typhoeus"
   gem "rack-cors"
+  gem "marginalia"
 end
 
 group :development do
