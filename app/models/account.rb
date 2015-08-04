@@ -6,7 +6,7 @@ class Account < ActiveRecord::Base
   has_many :orders,          dependent: :destroy
   has_many :payments,        dependent: :destroy
   has_many :deductions,      dependent: :destroy
-  has_many :active_orders,   -> { where(active: true) }, class_name: 'Order'
+  has_many :active_orders,   class_name: 'Order', conditions: { active: true }
   has_many :transactions,    dependent: :destroy, autosave: true
   has_many :deliveries,      through: :orders
 

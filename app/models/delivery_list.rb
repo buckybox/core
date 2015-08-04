@@ -30,7 +30,7 @@ class DeliveryList < ActiveRecord::Base
   end
 
   def self.generate_list(distributor, date)
-    packing_list  = PackingList.find_or_create_by(distributor_id: distributor.id, date: date)
+    packing_list  = PackingList.find_or_create_by_distributor_id_and_date(distributor.id, date)
     delivery_list = DeliveryList.find_or_create_by(distributor_id: distributor.id, date: date)
 
     # Collecting via packing list rather than orders so that delivery generation is explicitly
@@ -51,7 +51,7 @@ class DeliveryList < ActiveRecord::Base
       delivery_service = order.delivery_service
 
       # need to pass delivery service as well or the position scope for this delivery list is not set properly
-      delivery = delivery_list.deliveries.find_or_create_by(package_id: package.id, order: order, delivery_service: delivery_service)
+      delivery = delivery_list.deliveries.find_or_create_by_package_id(package.id, order: order, delivery_service: delivery_service)
 
       delivery.update_dso
       delivery.save! if delivery.changed?
