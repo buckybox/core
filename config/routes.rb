@@ -8,7 +8,7 @@ BuckyBox::Application.routes.draw do
   devise_for :customers,    controllers: { sessions: "customer/sessions", passwords: "customer/passwords" }
 
   get "/delayed_job" => DelayedJobWeb, anchor: false
-  get '/' => 'api#index', constraints: API_SUBDOMAIN
+  get "/" => "api#index", constraints: API_SUBDOMAIN
 
   root to: "distributor/customers#index"
 
