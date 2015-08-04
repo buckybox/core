@@ -43,10 +43,6 @@ class Payment < ActiveRecord::Base
   end
 
   def reverse_payment!
-    logger.info("REVERSE PAYMENT: #{self.to_yaml}")
-    logger.info("CALLED FROM:")
-    logger.info(caller.select { |l| l =~ /bucky_box/ }.join("\n"))
-    logger.info
     raise "This payment has already been reversed." if self.reversal_transaction.present?
 
     self.reversed = true
