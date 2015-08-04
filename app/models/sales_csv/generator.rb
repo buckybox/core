@@ -33,7 +33,6 @@ module SalesCsv
       [
         'Delivery Service',
         'Delivery Sequence Number',
-        'Delivery Pickup Point Name',
         'Order Number',
         'Package Number',
         'Delivery Date',

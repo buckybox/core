@@ -8,7 +8,6 @@ module SalesCsv
       [
         delivery_service,
         delivery_sequence_number,
-        delivery_pickup_point_name,
         order_number,
         package_number,
         delivery_date,
@@ -56,11 +55,6 @@ module SalesCsv
 
     def delivery_sequence_number
       delivery.formated_delivery_number if delivery
-    end
-
-    # NOTE: Keeping this due to legacy CSV convention but nothing in system for it yet
-    def delivery_pickup_point_name
-      nil
     end
 
     def order_number
