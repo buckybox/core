@@ -54,7 +54,7 @@ describe SalesCsv::OrderRowGenerator do
     it 'generates a array for conversion to csv row' do
       allow(Order).to receive(:short_code) { 'sc' }
       allow(Order).to receive(:extras_description) { 'exd' }
-      expect(row_generator.generate).to eq ["rname", nil, nil, 1, nil, nil, 1, "fname", "lname", 8888, "label1,label2", "NEW", "street 1", "apt 1", "sub", "city", 123, "note", "sc", "bname", "sub", "ex", "exd", 10.0, 1.23, 1.0, 11.0, 100.0, "Unknown", "em@ex.com", "pref", "waiting", "waiting"]
+      expect(row_generator.generate).to eq ["rname", nil, 1, nil, nil, 1, "fname", "lname", 8888, "label1,label2", "NEW", "street 1", "apt 1", "sub", "city", 123, "note", "sc", "bname", "sub", "ex", "exd", 10.0, 1.23, 1.0, 11.0, 100.0, "Unknown", "em@ex.com", "pref", "waiting", "waiting"]
     end
   end
 end

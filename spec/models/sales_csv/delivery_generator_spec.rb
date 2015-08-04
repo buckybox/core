@@ -33,7 +33,6 @@ describe SalesCsv::DeliveryGenerator do
     [
       'Delivery Service',
       'Delivery Sequence Number',
-      'Delivery Pickup Point Name',
       'Order Number',
       'Package Number',
       'Delivery Date',
