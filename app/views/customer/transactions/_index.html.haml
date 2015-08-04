@@ -3,12 +3,8 @@
     %table.table.table-bordered.no-rounded-corners.no-horizontal-dividers.table-striped
       %thead
         %tr
-          %th.sort_header.date_processed
-            = t('c.transactions.processed_date')
-            %i.icon-chevron-down
-          %th.sort_header.transaction_date
-            = t('c.transactions.transaction_date')
-            %i.icon-chevron-down
+          %th.sort_header.date_processed= t('c.transactions.processed_date')
+          %th.sort_header.transaction_date= t('c.transactions.transaction_date')
           %th= t('c.transactions.details')
           %th.text-right= t('c.transactions.amount')
           %th.text-right= t('c.transactions.balance')
