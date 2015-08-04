@@ -4,7 +4,7 @@ class Customer::DashboardController < Customer::BaseController
     @account        = @customer.account
     @address        = @customer.address
     @balance        = @customer.account.balance
-    @transactions   = @customer.transactions.limit(6)
+    @transactions   = account_transactions(@account)
     @show_more_link = @transactions.size != @customer.transactions.count
     @distributor    = @customer.distributor
     @currency       = @distributor.currency
