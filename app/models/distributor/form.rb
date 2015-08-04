@@ -9,7 +9,6 @@ module Distributor::Form
   extend ActiveSupport::Concern
 
   included do
-    extend Forwardable
     extend ActiveModel::Naming
 
     include Virtus.model

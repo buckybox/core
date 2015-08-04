@@ -6,6 +6,10 @@ class ActiveRecord::Base
       where(*args).first
     end
 
+    def find_or_create_by(attributes, &block)
+      find_by(attributes) || create(attributes, &block)
+    end
+
     def none
       where("1=0")
     end
