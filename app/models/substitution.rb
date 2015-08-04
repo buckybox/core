@@ -9,7 +9,7 @@ class Substitution < ActiveRecord::Base
   validates_presence_of :order, :line_item
   validates_uniqueness_of :line_item_id, scope: :order_id
 
-  scope :active, includes(:order).where("orders.active = ?", true)
+  scope :active, -> { includes(:order).where("orders.active = ?", true) }
 
   delegate :name, to: :line_item
 

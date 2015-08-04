@@ -24,24 +24,24 @@ class ImportTransaction < ActiveRecord::Base
     [symbol.humanize, symbol]
   end.freeze
 
-  scope :ordered, order("transaction_date DESC, created_at DESC")
-  scope :draft, where(['import_transactions.draft = ?', true])
-  scope :processed, where(['import_transactions.draft = ?', false])
+  scope :ordered,   -> { order("transaction_date DESC, created_at DESC") }
+  scope :draft,     -> { where(['import_transactions.draft = ?', true]) }
+  scope :processed, -> { where(['import_transactions.draft = ?', false]) }
 
-  scope :matched, where(["match = ?", MATCH_TYPES[MATCH_MATCHED]])
-  scope :not_matched, where(["match != ?", MATCH_TYPES[MATCH_MATCHED]])
+  scope :matched,     -> { where(["match = ?", MATCH_TYPES[MATCH_MATCHED]]) }
+  scope :not_matched, -> { where(["match != ?", MATCH_TYPES[MATCH_MATCHED]]) }
 
-  scope :unable_to_match, where(["match = ?", MATCH_TYPES[MATCH_UNABLE_TO_MATCH]])
-  scope :not_unable_to_match, where(["match != ?", MATCH_TYPES[MATCH_UNABLE_TO_MATCH]])
+  scope :unable_to_match,     -> { where(["match = ?", MATCH_TYPES[MATCH_UNABLE_TO_MATCH]]) }
+  scope :not_unable_to_match, -> { where(["match != ?", MATCH_TYPES[MATCH_UNABLE_TO_MATCH]]) }
 
-  scope :duplicate, where(["match = ?", MATCH_TYPES[MATCH_DUPLICATE]])
-  scope :not_duplicate, where(["match != ?", MATCH_TYPES[MATCH_DUPLICATE]])
+  scope :duplicate,     -> { where(["match = ?", MATCH_TYPES[MATCH_DUPLICATE]]) }
+  scope :not_duplicate, -> { where(["match != ?", MATCH_TYPES[MATCH_DUPLICATE]]) }
 
-  scope :not_a_customer, where(["match = ?", MATCH_TYPES[MATCH_NOT_A_CUSTOMER]])
-  scope :not_not_a_customer, where(["match != ?", MATCH_TYPES[MATCH_NOT_A_CUSTOMER]])
+  scope :not_a_customer,     -> { where(["match = ?", MATCH_TYPES[MATCH_NOT_A_CUSTOMER]]) }
+  scope :not_not_a_customer, -> { where(["match != ?", MATCH_TYPES[MATCH_NOT_A_CUSTOMER]]) }
 
-  scope :removed, where(removed: true)
-  scope :not_removed, where(removed: false)
+  scope :removed,     -> { where(removed: true)
+  scope :not_removed, -> { where(removed: false)
 
   validate :customer_belongs_to_distributor
 

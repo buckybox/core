@@ -24,10 +24,6 @@ class Order < ActiveRecord::Base
 
   has_one :schedule_rule, as: :scheduleable, inverse_of: :scheduleable, autosave: true, dependent: :destroy
 
-  scope :completed, where(completed: true)
-  scope :active, where(active: true)
-  scope :inactive, where(active: false)
-
   after_save :check_halted_status
   after_save :update_next_occurrence # This is an after call because it works at the database level and requires the information to be commited
   after_destroy :update_next_occurrence
@@ -49,6 +45,9 @@ class Order < ActiveRecord::Base
 
   before_validation :activate, if: :just_completed?
 
+  scope :completed, -> { where(completed: true) }
+  scope :active,    -> { where(active: true) }
+  scope :inactive,  -> { where(active: false) }
   default_scope { order('created_at DESC') }
 
   delegate :start, :recurs?, :pause!, :remove_pause!, :paused?, :pause_date, :resume_date, :next_occurrence, :next_occurrences, :remove_day, :occurrences_between, to: :schedule_rule

@@ -56,7 +56,7 @@ class Customer < ActiveRecord::Base
   delegate :balance_at, to: :account
 
   scope :ordered_by_next_delivery, -> { order("CASE WHEN next_order_occurrence_date IS NULL THEN '9999-01-01' WHEN next_order_occurrence_date < '#{Date.current.to_s(:db)}' THEN '9999-01-01' ELSE next_order_occurrence_date END ASC, lower(customers.first_name) ASC, lower(customers.last_name) ASC") }
-  scope :ordered, order("lower(customers.first_name) ASC, lower(customers.last_name) ASC")
+  scope :ordered, -> { order("lower(customers.first_name) ASC, lower(customers.last_name) ASC") }
 
   # <HACK>
   # Scope authentication by distributor ID

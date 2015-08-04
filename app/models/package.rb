@@ -34,10 +34,10 @@ class Package < ActiveRecord::Base
   before_save :archive_data
   after_save :save_one_off_extra_order
 
-  scope :originals, where(original_package_id: nil)
+  scope :originals, -> { where(original_package_id: nil) }
 
-  scope :unpacked, where(status: 'unpacked')
-  scope :packed, where(status: 'packed')
+  scope :unpacked, -> { where(status: 'unpacked') }
+  scope :packed,   -> { where(status: 'packed') }
 
   serialize :archived_extras
   serialize :archived_address_details, Address

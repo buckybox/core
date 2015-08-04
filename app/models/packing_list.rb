@@ -10,7 +10,7 @@ class PackingList < ActiveRecord::Base
 
   default_scope { order(:date) }
 
-  scope :packed, where(status: 'packed')
+  scope :packed, -> { where(status: 'packed') }
 
   def self.collect_list(distributor, date)
     if distributor.packing_lists.where(date: date).count > 0
