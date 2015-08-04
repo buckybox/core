@@ -18,7 +18,6 @@ class Extra < ActiveRecord::Base
 
   scope :alphabetically, -> { order('name ASC, unit ASC') }
   scope :not_hidden,     -> { where(hidden: false) }
-  scope :none,           -> { where("1 = 0") }
 
   def visible; !hidden; end
 
