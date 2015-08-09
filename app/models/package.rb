@@ -139,7 +139,8 @@ class Package < ActiveRecord::Base
 
   def has_archived_address_details?
     archived_address_details.is_a?(Address)
-  rescue Delayed::DeserializationError
+  rescue ActiveRecord::SerializationTypeMismatch
+    # sometimes Address objects are dezerialized as Hash for some reason...
     false
   end
 
