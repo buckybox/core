@@ -34,9 +34,9 @@ group :default do # XXX: all environments, think twice before adding Gems here
   gem "naught"
   gem "premailer-rails"
   gem "nokogiri" # premailer-rails dependency
-  gem "delayed_job",                     "< 4"
+  gem "delayed_job"
   gem "delayed_job_active_record"
-  gem "delayed_job_web",                 "1.2.0" # version hardcoded in config/deploy.rb
+  gem "delayed_job_web",                 "1.2.10" # version hardcoded in Chef repo
   gem "daemons" # able to monitor delayed_job via monit
   gem "analytical"
   gem "ace-rails-ap"
