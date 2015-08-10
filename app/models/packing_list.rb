@@ -41,19 +41,15 @@ class PackingList < ActiveRecord::Base
 
   def self.get(distributor, date)
     packing_list = PackingList.find_by_distributor_id_and_date(distributor.id, date)
-    packing_list ||= PackingList.create!({ distributor: distributor, date: date })
+    packing_list ||= PackingList.create!(distributor: distributor, date: date)
     packing_list
   end
 
   def mark_all_as_auto_packed
-    result = true
-
-    packages.each do |package|
+    packages.all? do |package|
       package.status = 'packed'
       package.packing_method = 'auto'
-      result &= package.save
+      package.save
     end
-
-    result
   end
 end
