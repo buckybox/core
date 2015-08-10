@@ -71,13 +71,9 @@ BuckyBox::Application.routes.draw do
 
     resources :deliveries
 
-    resources :payments, only: [:create, :index, :show, :destroy] do
+    resources :payments, only: [:index, :destroy] do
       collection do
-        get "upload_transactions", action: "upload_transactions", as: "upload_transactions"
-        post "commit_upload",      action: "commit_upload",       as: "commit_upload"
-        post "create_from_csv",    action: "create_from_csv",     as: "create_from_csv"
-        post "process_upload",     action: "process_upload",      as: "process_upload"
-        post "index",              action: "match_payments",      as: "match_payments"
+        post "match_payments", action: "match_payments", as: "match_payments"
       end
 
       member do
