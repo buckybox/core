@@ -1,10 +1,5 @@
-class Distributor::PaymentsController < Distributor::ResourceController
-  actions :create
-
-  respond_to :html, :json
-
-  before_action :check_setup, only: [:index]
-  before_action :load_import_transaction_list, only: [:process_payments, :show]
+class Distributor::PaymentsController < Distributor::BaseController
+  before_action :check_setup, only: :index
 
   def index
     @import_transaction_list = current_distributor.import_transaction_lists.new
@@ -25,35 +20,19 @@ class Distributor::PaymentsController < Distributor::ResourceController
       @selected_omni_importer = current_distributor.last_used_omni_importer(@import_transaction_list.omni_importer)
     end
 
-    tracking.event(current_distributor, "payment_csv_uploaded") unless current_admin.present?
-
     load_index
+
+    tracking.event(current_distributor, "payment_csv_uploaded") unless current_admin.present?
 
     render :index, locals: { distributor: current_distributor.decorate }
   end
 
-  def create
-    create! do |success, failure|
-      success.html { redirect_to distributor_dashboard_url }
-
-      failure.html do
-        if params[:payment][:account_id].blank?
-          flash[:error] = 'Please, select a customer for this payment.'
-        elsif BigDecimal.new(params[:payment][:amount]) <= 0
-          flash[:error] = 'Please, enter in a positive amount for the payment.'
-        elsif params[:payment][:description].blank?
-          flash[:error] = 'Please, include a description for this payment.'
-        end
-        redirect_to distributor_dashboard_url
-      end
-    end
-  end
-
   def process_payments
+    @import_transaction_list = current_distributor.import_transaction_lists.find(params[:id])
     processor = Payments::Processor.new(@import_transaction_list)
+
     if processor.process(params[:import_transaction_list])
       tracking.event(current_distributor, "payment_csv_commited") unless current_admin.present?
-
       redirect_to distributor_payments_url, notice: "Payments processed successfully"
     else
       redirect_to distributor_payments_url, alert: "There was a problem"
@@ -73,9 +52,5 @@ private
   def load_index
     @import_transactions = current_distributor.import_transactions.processed.not_removed.not_duplicate.ordered.limit(50).includes(:customer)
     @import_transaction_lists = current_distributor.import_transaction_lists.draft
-  end
-
-  def load_import_transaction_list
-    @import_transaction_list = current_distributor.import_transaction_lists.find(params[:id])
   end
 end
