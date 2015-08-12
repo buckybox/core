@@ -4,24 +4,27 @@ group :default do # XXX: all environments, think twice before adding Gems here
   gem "rake"
   gem "test-unit" # for Ruby 2.2
   gem "unicorn"
-  gem "rails",                           "~> 3.2.22"
-  gem "sprockets",                       "~> 2.2.3" # https://groups.google.com/forum/#!topic/rubyonrails-security/doAVp0YaTqY
-  gem "rails-i18n",                      "~> 3.0.0" # For Rails 3.x
+  gem "rails", "~> 4.2"
+  gem "coffee-rails"
+  gem "uglifier"
+  gem "sass-rails"
+  gem "compass-rails"
+  gem "rails-i18n"
   gem "actionpack-action_caching" # until we remove `caches_action`
   gem "protected_attributes" # until we remove all `attr_accessible`
   gem "pg"
   gem "therubyracer"
   gem "haml-rails"
   gem "jquery-rails"
-  gem "jquery-ui-rails",                 "< 5" # TODO: make sure JQuery UI 1.11 works fine
-  gem "bootstrap-sass",                  "< 3"
+  gem "jquery-ui-rails", "< 5" # TODO: make sure JQuery UI 1.11 works fine
+  gem "bootstrap-sass",  "< 3"
   gem "bootbox-rails"
   gem "select2-rails"
   gem "hiredis"
   gem "readthis"
   gem "devise"
   gem "devise-i18n"
-  gem "simple_form", "< 3"
+  gem "simple_form"
   gem "inherited_resources"
   gem "mini_magick", "< 4"
   gem "carrierwave"
@@ -51,7 +54,6 @@ group :default do # XXX: all environments, think twice before adding Gems here
   gem "charlock_holmes"
   gem "rabl", git: "https://github.com/nesquena/rabl.git" # TODO: remove when https://github.com/nesquena/rabl/commit/e07c83d41caf1ccbbe952cbe817734af68613c4e is released
   gem "apipie-rails", "0.3.3" # 0.3.4 is broken https://github.com/Apipie/apipie-rails/pull/350
-  gem "strong_parameters"
   gem "rails-timeago"
   gem "discover-unused-partials"
   gem "rack-mini-profiler"
@@ -139,11 +141,4 @@ end
 
 group :development, :test, :staging do
   gem "delorean"
-end
-
-group :assets do
-  gem "coffee-rails"
-  gem "uglifier"
-  gem "sass-rails"
-  gem "compass-rails"
 end
