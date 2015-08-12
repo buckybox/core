@@ -1,6 +1,9 @@
 API_SUBDOMAIN = { subdomain: /\Aapi(-staging)?\Z/ }.freeze unless defined? API_SUBDOMAIN
 
-BuckyBox::Application.routes.draw do
+Rails.application.routes.draw do
+  # The priority is based upon order of creation: first created -> highest priority.
+  # See how all your routes lay out with "rake routes".
+
   apipie
 
   devise_for :admins,       controllers: { sessions: "admin/sessions" }
