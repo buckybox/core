@@ -660,6 +660,7 @@ DEPENDENCIES
   simple_form (< 3)
   simple_form-bank_account_number
   simplecov
+  sprockets (~> 2.2.3)
   state_machine
   strong_parameters
   term-ansicolor
