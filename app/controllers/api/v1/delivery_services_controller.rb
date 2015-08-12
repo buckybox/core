@@ -1,5 +1,5 @@
 class Api::V1::DeliveryServicesController < Api::V1::BaseController
-  api :GET, '/delivery_services',  "Get list of delivery services"
+  api :GET, '/delivery_services', "Get list of delivery services"
   example "v1/delivery_services"
   def index
     @delivery_services = @distributor.delivery_services

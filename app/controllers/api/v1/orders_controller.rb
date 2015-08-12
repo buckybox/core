@@ -18,7 +18,7 @@ class Api::V1::OrdersController < Api::V1::BaseController
     end
   end
 
-  api :GET, '/orders',  "Get list of orders"
+  api :GET, '/orders', "Get list of orders"
   param :customer_id, String, desc: "Customer ID. Selects orders for that customer.", required: true
   def index
     customer = @distributor.customers.find_by(id: params[:customer_id])

@@ -170,6 +170,14 @@ Lint/LiteralInInterpolation:
 Lint/UselessAccessModifier:
   Enabled: false
 
+Lint/FormatParameterMismatch:
+  Enabled: false
+
 Style/BlockDelimiters:
   Enabled: false
 
+Style/ExtraSpacing:
+  AllowForAlignment: true
+
+Style/SingleSpaceBeforeFirstArg:
+  Enabled: false

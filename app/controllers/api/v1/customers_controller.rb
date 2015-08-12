@@ -28,7 +28,7 @@ class Api::V1::CustomersController < Api::V1::BaseController
     # :nocov:
   end
 
-  api :GET, '/customers',  "Get list of customers"
+  api :GET, '/customers', "Get list of customers"
   param :email, String, desc: "Customer's Email Address. Returns array of single customer"
   param :embed, String, desc: "Children available: address"
   example "/customers/?email=will@buckybox.com&embed=address"
@@ -73,7 +73,7 @@ class Api::V1::CustomersController < Api::V1::BaseController
     render 'api/v1/customers/index'
   end
 
-  api :GET, '/customers/:id',  "Get single customer"
+  api :GET, '/customers/:id', "Get single customer"
   param :id, Integer, desc: "Customer ID", required: true
   param :embed, String, desc: "Children available: address"
   example "/customers/123?embed=address"
@@ -83,7 +83,7 @@ class Api::V1::CustomersController < Api::V1::BaseController
     not_found if @customer.nil?
   end
 
-  api :POST, '/customers',  "Create a new customer"
+  api :POST, '/customers', "Create a new customer"
   description 'A JSON object representing the new customer'
   param_group :customer
   example '{
@@ -107,7 +107,7 @@ class Api::V1::CustomersController < Api::V1::BaseController
     create_or_update
   end
 
-  api :PATCH, '/customers/:id',  "Update an existing customer"
+  api :PATCH, '/customers/:id', "Update an existing customer"
   description 'A JSON object representing the customer'
   param_group :customer
   example '{

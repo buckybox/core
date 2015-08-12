@@ -4,8 +4,8 @@ class RenameRouteToDeliveryService < ActiveRecord::Migration
     rename_column :deliveries,                             :route_id,                                      :delivery_service_id
     rename_column :delivery_sequence_orders,               :route_id,                                      :delivery_service_id
     rename_column :packages,                               :archived_route_fee_cents,                      :archived_delivery_service_fee_cents
-    rename_table :route_schedule_transactions,            :delivery_service_schedule_transactions
-    rename_column :delivery_service_schedule_transactions, :route_id,                                      :delivery_service_id
+    rename_table :route_schedule_transactions, :delivery_service_schedule_transactions
+    rename_column :delivery_service_schedule_transactions, :route_id, :delivery_service_id
     rename_table :routes,                                 :delivery_services
     rename_index :customers,                              :index_customers_on_route_id,                   :index_customers_on_delivery_service_id
     rename_index :deliveries,                             :index_deliveries_on_route_id,                  :index_deliveries_on_delivery_service_id

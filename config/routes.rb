@@ -59,7 +59,7 @@ BuckyBox::Application.routes.draw do
     end
 
     resources :distributors,        only: :update
-    resource :bank_information,    only: :update
+    resource  :bank_information,    only: :update
     resources :boxes,               except: [:index]
     resources :extras,              except: [:index, :show]
 
@@ -195,11 +195,10 @@ BuckyBox::Application.routes.draw do
       get "ping" => "base#ping"
       post "/customers/sign_in"
       resources :customers,         only: [:index, :show, :create, :update]
-
       resources :boxes,             only: [:index, :show]
       resources :delivery_services, only: [:index, :show]
       resources :orders,            only: [:index, :show, :create]
-      resource :webstore,          only: [:show]
+      resource  :webstore,          only: [:show]
     end
   end
 

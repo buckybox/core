@@ -63,7 +63,7 @@ describe Order do
 
   context 'when removing a day' do
     let(:order_scheduling) { order }
-    let(:schedule_rule)         { double("schedule_rule", to_hash: { a: 'b' }) }
+    let(:schedule_rule) { double("schedule_rule", to_hash: { a: 'b' }) }
 
     before { order_scheduling.stub(schedule_rule: schedule_rule) }
 
@@ -86,8 +86,8 @@ describe Order do
       ORDER_PRICE_PERMUTATIONS = [
         { discount: 0.05, fee: 5, quantity: 5, individual_price: 14.50, price: 72.50 },
         { discount: 0.05, fee: 5, quantity: 1, individual_price: 14.50, price: 14.50 },
-        { discount: 0.05, fee: 0, quantity: 5, individual_price:  9.50, price: 47.50 },
-        { discount: 0.05, fee: 0, quantity: 1, individual_price:  9.50, price:  9.50 },
+        { discount: 0.05, fee: 0, quantity: 5, individual_price: 9.50, price: 47.50 },
+        { discount: 0.05, fee: 0, quantity: 1, individual_price: 9.50, price: 9.50 },
         { discount: 0.00, fee: 5, quantity: 5, individual_price: 15.00, price: 75.00 },
         { discount: 0.00, fee: 5, quantity: 1, individual_price: 15.00, price: 15.00 },
         { discount: 0.00, fee: 0, quantity: 5, individual_price: 10.00, price: 50.00 },

@@ -7,7 +7,7 @@ if Rails.env.development?
     include Term::ANSIColor
     attr_accessor :trace_queries
 
-    def sql(_event)  #:nodoc:
+    def sql(_event) #:nodoc:
       return unless QueryTrace.enabled? && logger.debug? && Rails.env.development?
       stack = Rails.backtrace_cleaner.clean(caller)
       first_line = stack.shift
@@ -67,7 +67,7 @@ if Rails.env.development?
 
   protected
 
-    def prefix  #:nodoc:
+    def prefix #:nodoc:
       bold(magenta('Called from: ')) + reset
     end
   end

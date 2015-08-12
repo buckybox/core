@@ -18,36 +18,36 @@ group :default do # XXX: all environments, think twice before adding Gems here
   gem "readthis"
   gem "devise"
   gem "devise-i18n"
-  gem "simple_form",                     "< 3"
+  gem "simple_form", "< 3"
   gem "inherited_resources"
-  gem "mini_magick",                     "< 4"
+  gem "mini_magick", "< 4"
   gem "carrierwave"
-  gem "acts-as-taggable-on",             "< 3"
+  gem "acts-as-taggable-on", "< 3"
   gem "pg_search"
   gem "whenever"
   gem "acts_as_list"
-  gem "default_value_for",               "~> 3"
+  gem "default_value_for", "~> 3"
   gem "state_machine"
   gem "figaro"
   gem "virtus"
-  gem "draper",                          "< 2" # Rails 3.2 not supported with v2
+  gem "draper", "< 2" # Rails 3.2 not supported with v2
   gem "naught"
   gem "premailer-rails"
   gem "nokogiri" # premailer-rails dependency
   gem "delayed_job"
   gem "delayed_job_active_record"
-  gem "delayed_job_web",                 "1.2.10" # version hardcoded in Chef repo
+  gem "delayed_job_web", "1.2.10" # version hardcoded in Chef repo
   gem "daemons" # able to monitor delayed_job via monit
   gem "analytical"
   gem "ace-rails-ap"
   gem "active_utils"
   gem "activemerchant"
   gem "countries", require: "iso3166"
-  gem "country_select",                  "~> 1.1.3" # TODO: https://github.com/stefanpenner/country_select/blob/master/UPGRADING.md
+  gem "country_select", "~> 1.1.3" # TODO: https://github.com/stefanpenner/country_select/blob/master/UPGRADING.md
   gem "biggs"
   gem "charlock_holmes"
   gem "rabl", git: "https://github.com/nesquena/rabl.git" # TODO: remove when https://github.com/nesquena/rabl/commit/e07c83d41caf1ccbbe952cbe817734af68613c4e is released
-  gem "apipie-rails",                    "0.3.3" # 0.3.4 is broken https://github.com/Apipie/apipie-rails/pull/350
+  gem "apipie-rails", "0.3.3" # 0.3.4 is broken https://github.com/Apipie/apipie-rails/pull/350
   gem "strong_parameters"
   gem "rails-timeago"
   gem "discover-unused-partials"
@@ -58,7 +58,7 @@ group :default do # XXX: all environments, think twice before adding Gems here
   gem "rails-patch-json-encode"
   gem "oj"
   gem "intercom-rails"
-  gem "intercom",                        "~> 2"
+  gem "intercom", "~> 2"
   gem "crazy_money"
   gem "currency_data"
   gem "email_templator"

@@ -257,7 +257,7 @@ class Order < ActiveRecord::Base
       end_date             = start_date + look_ahead
       existing_resume_date = resume_date
 
-      select_array      = self.schedule_rule.occurrences_between(start_date, end_date, { ignore_pauses: true, ignore_halts: true }).map { |s| [s.to_date, s.to_date] }
+      select_array = self.schedule_rule.occurrences_between(start_date, end_date, { ignore_pauses: true, ignore_halts: true }).map { |s| [s.to_date, s.to_date] }
 
       if existing_resume_date && !select_array.index([existing_resume_date, existing_resume_date])
         select_array << [existing_resume_date, existing_resume_date]

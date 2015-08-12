@@ -38,7 +38,7 @@ class OmniImporter < ActiveRecord::Base
   def import(csv_path)
     return @omni_import unless @omni_import.blank?
 
-    rows =  Bucky::TransactionImports::OmniImport.csv_read(csv_path)
+    rows = Bucky::TransactionImports::OmniImport.csv_read(csv_path)
     @omni_import = Bucky::TransactionImports::OmniImport.new(rows, YAML.load(rules))
 
     self
