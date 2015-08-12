@@ -11,7 +11,7 @@ describe Distributor::ReportsController do
   end
 
   shared_examples 'a csv export' do |action, csv_generator|
-    let(:csv_object)  { double('csv_object', data: 'data', name: 'name') }
+    let(:csv_object) { double('csv_object', data: 'data', name: 'name') }
 
     before do
       allow(csv_generator).to receive(:new) { csv_object }

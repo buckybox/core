@@ -10,7 +10,7 @@ class Distributor::ImportTransactionsController < Distributor::ResourceControlle
     @import_transactions     = import_transactions_arel.limit(50).where(["import_transactions.transaction_date < :transaction_date OR import_transactions.transaction_date = :transaction_date AND import_transactions.created_at < :created_at", { transaction_date: @import_transaction.transaction_date, created_at: @import_transaction.created_at }])
 
     if @import_transactions.present?
-      end_date   = @import_transactions.last.transaction_date
+      end_date = @import_transactions.last.transaction_date
       @import_transaction_lists = current_distributor.import_transaction_lists.draft.select("import_transaction_lists.id").joins(:import_transactions).group("import_transaction_lists.id").having(["max(import_transactions.transaction_date) > ?", end_date]).order("max(import_transactions.transaction_date)")
     else
       @import_transaction_lists = []

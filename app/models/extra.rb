@@ -1,5 +1,5 @@
 class Extra < ActiveRecord::Base
-  HUMANIZED_ATTRIBUTES  = {
+  HUMANIZED_ATTRIBUTES = {
     price_cents: "Price"
   }
 

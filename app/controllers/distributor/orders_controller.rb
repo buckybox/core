@@ -58,7 +58,7 @@ class Distributor::OrdersController < Distributor::ResourceController
     @old_box = @order.box
     @old_order_extras = @order.order_extras.dup
 
-    update!  do |success, failure|
+    update! do |success, failure|
       success.html do
         create_activities_from_changes
         redirect_to [:distributor, @account.customer]

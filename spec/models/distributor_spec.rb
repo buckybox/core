@@ -379,7 +379,7 @@ describe Distributor do
     before do
       @pay1   = Fabricate(:transaction, display_time: day1)
       account = @pay1.account
-      @dist    = account.distributor
+      @dist = account.distributor
       @pay2   = Fabricate(:transaction, display_time: day2, account: account)
       @pay3   = Fabricate(:transaction, display_time: day3, account: account)
     end

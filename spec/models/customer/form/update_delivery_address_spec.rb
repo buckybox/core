@@ -81,7 +81,7 @@ describe Customer::Form::UpdateDeliveryAddress do
     let(:address)     { double("address") }
     let(:distributor) { double("distributor", require_address_1?: false, require_address_2?: false, require_suburb?: false, require_city?: false, require_postcode?: false, require_delivery_note?: false) }
     let(:delivery_service) { double.as_null_object }
-    let(:customer)    { double("customer", distributor: distributor, address: address, delivery_service: delivery_service) }
+    let(:customer) { double("customer", distributor: distributor, address: address, delivery_service: delivery_service) }
     let(:args) do
       {
         "address_1"     => "1 Grove Dr.",

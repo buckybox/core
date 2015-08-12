@@ -33,7 +33,7 @@ class Distributor::DeliveriesController < Distributor::ResourceController
         @delivery_service = @delivery_services.first
         @show_tour = current_distributor.deliveries_index_packing_intro
       else
-        @delivery_list  = current_distributor.delivery_list_by_date(@selected_date)
+        @delivery_list = current_distributor.delivery_list_by_date(@selected_date)
         @all_items = @delivery_list.ordered_deliveries
         @real_list = @all_items.first.is_a?(Delivery)
         @items     = @real_list ? @all_items.includes(:customer) : @all_items

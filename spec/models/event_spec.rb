@@ -64,7 +64,7 @@ describe Event do
     end
 
     it "returns only the distributor's events" do
-      event = Fabricate(:event,  distributor: distributor)
+      event = Fabricate(:event, distributor: distributor)
       Fabricate(:event)
 
       expect(Event.all_for_distributor(distributor)).to eq [event]

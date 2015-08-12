@@ -126,7 +126,7 @@ class DataIntegrity
 
   def order_extras_have_valid_foreign_keys
     all_ids = OrderExtra.pluck('id')
-    ids_with_valid_foreign_keys =  OrderExtra.joins(:extra).joins(:order).pluck('order_extras.id')
+    ids_with_valid_foreign_keys = OrderExtra.joins(:extra).joins(:order).pluck('order_extras.id')
     diff = all_ids - ids_with_valid_foreign_keys
 
     diff.each do |id|
