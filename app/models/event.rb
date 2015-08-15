@@ -55,7 +55,7 @@ class Event < ActiveRecord::Base
   end
 
   def self.all_for_distributor(distributor)
-    distributor.events.active.current.scoped
+    distributor.events.active.current
   end
 
   def set_key(resource)
