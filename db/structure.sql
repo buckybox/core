@@ -1876,7 +1876,8 @@ ALTER SEQUENCE taggings_id_seq OWNED BY taggings.id;
 
 CREATE TABLE tags (
     id integer NOT NULL,
-    name character varying(255)
+    name character varying(255),
+    taggings_count integer DEFAULT 0
 );
 
 
@@ -2962,13 +2963,6 @@ CREATE INDEX index_substitutions_on_order_id ON substitutions USING btree (order
 
 
 --
--- Name: index_taggings_on_tag_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
---
-
-CREATE INDEX index_taggings_on_tag_id ON taggings USING btree (tag_id);
-
-
---
 -- Name: index_taggings_on_taggable_id_and_taggable_type_and_context; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -2976,10 +2970,24 @@ CREATE INDEX index_taggings_on_taggable_id_and_taggable_type_and_context ON tagg
 
 
 --
+-- Name: index_tags_on_name; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE UNIQUE INDEX index_tags_on_name ON tags USING btree (name);
+
+
+--
 -- Name: index_transactions_on_account_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE INDEX index_transactions_on_account_id ON transactions USING btree (account_id);
+
+
+--
+-- Name: taggings_idx; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE UNIQUE INDEX taggings_idx ON taggings USING btree (tag_id, taggable_id, taggable_type, context, tagger_id, tagger_type);
 
 
 --
@@ -3482,3 +3490,11 @@ INSERT INTO schema_migrations (version) VALUES ('20150508150013');
 INSERT INTO schema_migrations (version) VALUES ('20150622122103');
 
 INSERT INTO schema_migrations (version) VALUES ('20150630195411');
+
+INSERT INTO schema_migrations (version) VALUES ('20150815161649');
+
+INSERT INTO schema_migrations (version) VALUES ('20150815161650');
+
+INSERT INTO schema_migrations (version) VALUES ('20150815161651');
+
+INSERT INTO schema_migrations (version) VALUES ('20150815161652');
