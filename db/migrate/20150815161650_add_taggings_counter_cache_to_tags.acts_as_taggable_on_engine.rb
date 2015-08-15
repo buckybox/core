@@ -5,7 +5,7 @@ class AddTaggingsCounterCacheToTags < ActiveRecord::Migration
 
     ActsAsTaggableOn::Tag.reset_column_information
     ActsAsTaggableOn::Tag.find_each do |tag|
-      ActsAsTaggableOn::Tag.reset_counters(tag.id, :taggings)
+      ActsAsTaggableOn::Tag.reset_counters(tag.id, :taggings) rescue nil # undefined method `counter_cache_column' for nil:NilClass
     end
   end
 
