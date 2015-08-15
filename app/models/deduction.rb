@@ -2,13 +2,13 @@ class Deduction < ActiveRecord::Base
   belongs_to :distributor
   belongs_to :account, autosave: true
   belongs_to :deductable, polymorphic: true
-  belongs_to :transaction
-  belongs_to :reversal_transaction, class_name: 'Transaction'
+  belongs_to :tx, class_name: "Transaction", foreign_key: "transaction_id"
+  belongs_to :reversal_transaction, class_name: "Transaction"
 
   has_one :customer, through: :account
 
   has_many :transactions, as: :transactionable
-  has_many :reversal_transactions, as: :reverse_transactionable, class_name: 'Transaction'
+  has_many :reversal_transactions, as: :reverse_transactionable, class_name: "Transaction"
 
   monetize :amount_cents
 
@@ -45,7 +45,7 @@ class Deduction < ActiveRecord::Base
     options = { description: "[REVERSED] " + self.description, display_time: self.display_time }
 
     Deduction.transaction do
-      self.reversal_transaction = self.account.add_to_balance(transaction.amount.opposite, options)
+      self.reversal_transaction = self.account.add_to_balance(tx.amount.opposite, options)
       self.reversal_transactions << reversal_transaction
 
       if bucky_fee
@@ -63,7 +63,7 @@ class Deduction < ActiveRecord::Base
   end
 
   def bucky_fee
-    transactions.find_by(['transactions.id != ?', transaction.id])
+    transactions.find_by(['transactions.id != ?', tx.id])
   end
 
   def reversal_fee
@@ -73,7 +73,7 @@ class Deduction < ActiveRecord::Base
 private
 
   def make_deduction!
-    raise "This deduction has already been applied!" if self.transaction.present?
+    raise "This deduction has already been applied!" if self.tx.present?
 
     Deduction.transaction do
       if distributor.separate_bucky_fee
@@ -84,7 +84,7 @@ private
           display_time: display_time
         )
       end
-      self.transaction = account.subtract_from_balance(
+      self.tx = account.subtract_from_balance(
         amount,
         transactionable: self,
         description: description,
@@ -94,6 +94,6 @@ private
       self.save!
     end
 
-    self.transaction
+    self.tx
   end
 end

@@ -44,9 +44,9 @@ describe Deduction, :slow do
     end
 
     context 'after create' do
-      specify { expect(@deduction.transaction).not_to be_nil }
-      specify { expect(@deduction.transaction.persisted?).to be true }
-      specify { expect(@deduction.transaction.amount).to eq @amount.opposite }
+      specify { expect(@deduction.tx).not_to be_nil }
+      specify { expect(@deduction.tx.persisted?).to be true }
+      specify { expect(@deduction.tx.amount).to eq @amount.opposite }
 
       specify { expect(@deduction.account.balance).to eq @account_amount - @amount - @fee }
       specify { expect(@deduction.bucky_fee.amount).to eq @fee.opposite }
