@@ -2,7 +2,7 @@ class Payment < ActiveRecord::Base
   belongs_to :distributor
   belongs_to :account, autosave: true
   belongs_to :payable, polymorphic: true
-  belongs_to :transaction
+  belongs_to :tx, class_name: "Transaction", foreign_key: "transaction_id"
   belongs_to :reversal_transaction, class_name: 'Transaction'
 
   has_one :customer, through: :account
@@ -63,9 +63,9 @@ class Payment < ActiveRecord::Base
 private
 
   def make_payment!
-    raise "This payment has already been applied!" if self.transaction.present?
+    raise "This payment has already been applied!" if self.tx.present?
 
-    self.transaction = account.add_to_balance(
+    self.tx = account.add_to_balance(
       amount,
       transactionable: self,
       description: description,
@@ -74,6 +74,6 @@ private
 
     self.save!
 
-    self.transaction
+    self.tx
   end
 end

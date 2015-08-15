@@ -43,9 +43,9 @@ describe Payment, :slow do
     end
 
     context 'after create' do
-      specify { expect(@payment.transaction).not_to be_nil }
-      specify { expect(@payment.transaction.persisted?).to be true }
-      specify { expect(@payment.transaction.amount).to eq @amount }
+      specify { expect(@payment.tx).not_to be_nil }
+      specify { expect(@payment.tx.persisted?).to be true }
+      specify { expect(@payment.tx.amount).to eq @amount }
 
       specify { expect(@payment.account.balance).to eq @account_amount + @amount }
     end
