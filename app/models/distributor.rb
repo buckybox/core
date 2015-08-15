@@ -99,7 +99,7 @@ class Distributor < ActiveRecord::Base
 
   after_create :tracking_after_create
 
-  after_save :generate_required_daily_lists
+  after_save :generate_required_daily_lists # TODO: should trigger only when YZ is changed, not all the fucking time!!!
   after_save :update_halted_statuses
   after_save :tracking_after_save
 
