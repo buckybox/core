@@ -23,7 +23,7 @@ group :default do # XXX: all environments, think twice before adding Gems here
   gem "inherited_resources"
   gem "mini_magick", "< 4"
   gem "carrierwave"
-  gem "acts-as-taggable-on", "< 3"
+  gem "acts-as-taggable-on"
   gem "pg_search"
   gem "whenever"
   gem "acts_as_list"
