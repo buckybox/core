@@ -2,7 +2,10 @@ class Admin::DistributorsController < Admin::ResourceController
   before_action :parameterize_name, only: [:create, :update]
 
   def index
-    @distributors = Distributor.where("last_seen_at > ?", 6.months.ago).order("last_seen_at DESC")
+    recent_delay = 6.months.ago
+    @distributors = Distributor.where(
+      "last_seen_at > ? OR created_at > ?", recent_delay, recent_delay
+    ).order("last_seen_at DESC, created_at DESC")
     @distributors = @distributors.tagged_with(params[:tag]) if params[:tag].present?
     @hidden_distributors = Distributor.count - @distributors.count
     index!
