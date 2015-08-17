@@ -20,9 +20,5 @@ describe AdminMailer do
         expect(mail.body.parts.find { |p| p.content_type.match(type) }.body.raw_source).to include "Doh!"
       end
     end
-
-    it "uses GMail's SMTP server" do
-      expect(mail.delivery_method.settings[:address]).to eq Figaro.env.gmail_smtp_host
-    end
   end
 end
