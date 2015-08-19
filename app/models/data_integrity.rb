@@ -124,6 +124,16 @@ class DataIntegrity
     end
   end
 
+  def orders_have_valid_accounts
+    all_ids = Order.pluck('id')
+    ids_with_valid_accounts = Order.joins(:account).reorder('').pluck('orders.id')
+    diff = all_ids - ids_with_valid_accounts
+
+    diff.each do |id|
+      error "Order ##{id} has invalid account"
+    end
+  end
+
   def order_extras_have_valid_foreign_keys
     all_ids = OrderExtra.pluck('id')
     ids_with_valid_foreign_keys = OrderExtra.joins(:extra).joins(:order).pluck('order_extras.id')
@@ -167,6 +177,7 @@ private
     checker.past_deliveries_are_not_pending
     checker.deduction_count_matches_delivery_count
     checker.accounts_are_valid
+    checker.orders_have_valid_accounts
     checker.order_extras_have_valid_foreign_keys
     checker.deliveries_have_valid_packages
 
