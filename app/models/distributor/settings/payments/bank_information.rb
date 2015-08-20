@@ -6,7 +6,13 @@ class Distributor::Settings::Payments::BankInformation < Distributor::Settings::
   end
 
   def errors
-    (@bank_information.distributor.errors.values | @bank_information.errors.values).flatten
+    distributor_errors = @bank_information.distributor.errors
+    distributor_errors.empty? or return distributor_errors
+
+    bank_information_errors = @bank_information.errors
+    bank_information_errors.empty? or return bank_information_errors
+
+    super
   end
 
 protected

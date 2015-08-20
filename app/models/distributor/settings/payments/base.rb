@@ -7,7 +7,7 @@ class Distributor::Settings::Payments::Base
   end
 
   def errors
-    [] # may be overridden by other classes
+    @errors = ActiveModel::Errors.new(self)
   end
 
   def persisted?
