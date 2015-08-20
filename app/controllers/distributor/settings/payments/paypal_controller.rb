@@ -16,7 +16,7 @@ class Distributor::Settings::Payments::PaypalController < Distributor::Settings:
       redirect_to distributor_settings_payments_paypal_path,
         notice: "Your PayPal settings were successfully updated."
     else
-      flash.now[:error] = @paypal.errors.to_sentence
+      flash.now[:error] = @paypal.errors.full_messages.to_sentence
 
       render_form
     end
