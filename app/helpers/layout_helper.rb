@@ -1,4 +1,12 @@
 module LayoutHelper
+  FLASH_CLASSES = {
+    notice:   'alert-success',
+    warning:  'info-warning',
+    error:    'alert-error',
+    alert:    'alert-error',
+    info:     'alert-info',
+  }.freeze
+
   def title(page_title, show_title = true)
     content_for(:title) { h(page_title.to_s) }
     @show_title = show_title
@@ -16,14 +24,6 @@ module LayoutHelper
     content_for(:head) { javascript_include_tag(*args) }
   end
 
-  FLASH_CLASSES = {
-    notice:   'alert-success',
-    warning:  'info-warning',
-    error:    'alert-error',
-    alert:    'alert-error',
-    info:     'alert-info',
-  }
-
   def render_site_messages(flash, options = {})
     unless flash.empty?
       content = flash.map { |kind, message| flash_bar(message, kind: kind) }
@@ -39,7 +39,7 @@ module LayoutHelper
 
   def flash_bar(message, options = {})
     classes = 'alert'
-    classes += " #{FLASH_CLASSES[options[:kind]]}" if options[:kind]
+    classes += " #{FLASH_CLASSES.fetch(options[:kind].to_sym)}" if options[:kind]
 
     message = button_tag('&times;'.html_safe, type: 'button', class: 'close', data: { dismiss: 'alert' }) + message if options.fetch(:close, true)
 
