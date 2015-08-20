@@ -4,25 +4,33 @@ class ExtrasCsv
   include Singleton
 
   def self.generate(distributor, date)
-    extras = distributor.extras.alphabetically
+    instance.dump_current_extras(distributor)
     instance.extract_customers(distributor, date)
-
-    instance.generate(date, extras, instance.extras_summary(distributor, date))
+    extras_summary = instance.extras_summary(distributor, date)
+    instance.generate(date, extras_summary)
   end
 
-  def generate(date, extras, extras_summary)
+  def generate(date, extras_summary)
     sum_totals(extras_summary)
 
     CSV.generate do |csv|
       headers(csv)
+
+      # use shitty data structures and this is the kind of insanity you end up with...
+      extras = extras_summary.group_by { |e| e.fetch(:name) } \
+        .values.map(&:first).sort_by { |e| e.fetch(:name).downcase }
+
       extras.each do |extra|
+        name = extra.fetch(:name)
+        visible = @current_extras.find_by(name: name).try(:visible)
+
         csv << [
           date.iso8601,
-          extra.name,
-          extra.unit,
-          extra.price,
+          name,
+          extra.fetch(:unit),
+          extra.fetch(:price),
           extras_count(extra, extras_summary),
-          extra.visible ? "yes" : "no",
+          visible.nil? ? "N/A" : (visible ? "yes" : "no"),
           extras_customers(extra)[:names],
           extras_customers(extra)[:emails],
         ]
@@ -56,6 +64,10 @@ class ExtrasCsv
         end
       end
     end
+  end
+
+  def dump_current_extras(distributor)
+    @current_extras ||= distributor.extras
   end
 
 private
