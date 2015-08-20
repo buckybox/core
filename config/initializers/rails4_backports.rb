@@ -27,3 +27,9 @@ class ActiveRecord::Associations::HasManyAssociation
     false
   end
 end
+
+module Mail
+  class Message
+    alias_method :deliver_now, :deliver
+  end
+end

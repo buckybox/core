@@ -573,7 +573,7 @@ private
   end
 
   def send_welcome_email
-    DistributorMailer.welcome(self).deliver
+    DistributorMailer.welcome(self).deliver_now
   end
 
   def messaging
