@@ -12,7 +12,7 @@ describe CustomerDecorator do
 
     context "with one box without extras" do
       before do
-        order = Fabricate(:order, customer: customer)
+        order = Fabricate(:order, account: customer.account)
         customer.update_next_occurrence
 
         @date = order.next_occurrence.strftime("%A, %d %b %Y")
@@ -26,8 +26,8 @@ describe CustomerDecorator do
 
     context "with two boxes with extras" do
       before do
-        order = Fabricate(:order, customer: customer)
-        order_with_extras = Fabricate(:order, customer: customer)
+        order = Fabricate(:order, account: customer.account)
+        order_with_extras = Fabricate(:order, account: customer.account)
         @extras = [
           Fabricate(:order_extra, order: order_with_extras),
           Fabricate(:order_extra, order: order_with_extras, count: 2),

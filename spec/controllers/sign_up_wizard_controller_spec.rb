@@ -83,7 +83,7 @@ describe SignUpWizardController do
       end
 
       it "sends the welcome email" do
-        expect(DistributorMailer).to receive(:welcome) { double(deliver: nil) }
+        expect(DistributorMailer).to receive(:welcome) { double(deliver_now: nil) }
 
         post_form.call
       end

@@ -140,7 +140,8 @@ describe Customer do
     describe "#email_to" do
       it "returns the expected recipient" do
         customer = Fabricate.build(:customer,
-          name: "Will Lau",
+          first_name: "Will",
+          last_name: "Lau",
           email: "will@example.net"
         )
 

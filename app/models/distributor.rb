@@ -96,9 +96,7 @@ class Distributor < ActiveRecord::Base
   before_validation :check_emails
   before_create :parameterize_name, if: 'parameter_name.nil?'
   after_create :send_welcome_email
-
   after_create :tracking_after_create
-
   after_save :generate_required_daily_lists # TODO: should trigger only when YZ is changed, not all the fucking time!!!
   after_save :update_halted_statuses
   after_save :tracking_after_save

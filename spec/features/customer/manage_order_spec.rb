@@ -13,7 +13,7 @@ feature "Manage an order", js: true do
   scenario "sets a pause and resume date for an order" do
     @distributor = Fabricate(:distributor)
     @customer = Fabricate(:customer, distributor: @distributor)
-    order = Fabricate(:order, customer: @customer)
+    order = Fabricate(:order, account: @customer.account)
 
     # customer facing UI
     simulate_customer_sign_in

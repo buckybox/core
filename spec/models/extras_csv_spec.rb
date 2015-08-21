@@ -19,8 +19,8 @@ describe ExtrasCsv do
       end
 
       @customers = [
-        Fabricate(:customer, distributor: distributor, name: "Bill", email: "bill@example.net"),
-        Fabricate(:customer, distributor: distributor, name: "Joe", email: "joe@example.net"),
+        Fabricate(:customer, distributor: distributor, first_name: "Bill", email: "bill@example.net"),
+        Fabricate(:customer, distributor: distributor, first_name: "Joe", email: "joe@example.net"),
       ]
 
       box = Fabricate(:box, distributor: distributor, extras_limit: 10)
