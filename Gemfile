@@ -94,7 +94,7 @@ group :test do
   gem "database_cleaner"
   gem "simplecov", require: false
   gem "cucumber-rails", require: false
-  gem "capybara", "~> 2.3.0", require: false # TODO: fix cukes for 2.4
+  gem "capybara", require: false
   gem "capybara-screenshot"
   gem "poltergeist", require: false
   gem "launchy"
@@ -119,7 +119,7 @@ group :development, :staging do
 end
 
 group :development, :test do
-  gem "fabrication", "~> 2.9.8" # TODO: upgrade and fix broken specs
+  gem "fabrication"
   gem "rspec-rails"
   gem "listen"
   gem "terminal-notifier-guard" # Mac 10.8 system notifications for Guard

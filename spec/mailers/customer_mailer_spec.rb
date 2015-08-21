@@ -36,7 +36,7 @@ describe CustomerMailer do
   end
 
   describe "#order_confirmation" do
-    let(:order) { Fabricate(:order, customer: @customer) }
+    let(:order) { Fabricate(:order, account: @customer.account) }
     let(:mail) { CustomerMailer.order_confirmation(order) }
 
     specify { expect(mail.to).to eq [order.customer.email] }

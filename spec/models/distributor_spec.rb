@@ -23,7 +23,7 @@ describe Distributor do
 
   describe "#send_welcome_email" do
     it "sends the welcome email upon creation" do
-      expect(DistributorMailer).to receive(:welcome) { double(deliver: nil) }
+      expect(DistributorMailer).to receive(:welcome) { double(deliver_now: nil) }
 
       Fabricate(:distributor)
     end

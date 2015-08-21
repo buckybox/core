@@ -306,8 +306,8 @@ describe Order do
 
       @box = Fabricate(:box, extras_limit: 5, distributor: @distributor)
 
-      @params = Fabricate.attributes_for(:order, box_id: @box.id)
-      @params.merge!(order_extras: @order_extras, schedule_rule_attributes: Fabricate.attributes_for(:schedule_rule_weekly))
+      @params = Fabricate.attributes_for(:order)
+      @params.merge!(box_id: @box.id, order_extras: @order_extras, schedule_rule_attributes: Fabricate.attributes_for(:schedule_rule_weekly))
       @params.except!(:schedule_rule_id)
     end
 

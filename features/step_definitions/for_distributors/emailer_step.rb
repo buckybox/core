@@ -20,6 +20,6 @@ Then "I should be able to send an email" do
 
     click_button "Send"
     sleep 1 # wait for the page reload from JS
-    page.should have_content "Your email", "is being sent" # wait for the page to be reloaded
+    page.should have_content "is being sent" # wait for the page to be reloaded
     step "I should be viewing the dashboard"
 end
