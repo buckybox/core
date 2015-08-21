@@ -1,38 +1,7 @@
-# TODO: Someday ehter split up this Defaults class into other clases or modules, add better
-# dependancy injecton or both. Until then, I'm doing this.
-class Distributor; end
-class LineItem; end
-class EmailTemplate; end
-class Rails; end unless defined? Rails
-class Figaro; end unless defined? Figaro
-
-require_relative "../../../app/models/distributor/defaults"
+require "spec_helper"
 
 describe Distributor::Defaults do
-  let(:distributor) do
-    double("distributor",
-      parameter_name: "veg-people",
-      name: "Veg People",
-      email: "bob@example.net",
-      save: true,
-      bank_information: double.as_null_object,
-      omni_importers: double.as_null_object,
-      "email_templates=" => true,
-      "paypal_email=" => true,
-          )
-  end
-
-  # Gross I know but what has to be done right now with this class to have fast test and not to touch the DB
-  before do
-    allow(LineItem).to receive(:add_defaults_to)
-    allow(EmailTemplate).to receive(:new)
-
-    url_helper = double("url_helper", new_customer_session_url: true, new_customer_password_url: true)
-    Rails.stub_chain(:application, :config, :root) # prevent bug with marginalia Gem calling `config.root`
-    Rails.stub_chain(:application, :routes, :url_helpers) { url_helper }
-
-    Figaro.stub_chain(:env, :host)
-  end
+  let(:distributor) { Fabricate(:distributor) }
 
   shared_examples_for "a distributor with populated defaults" do
     it "creates the default line items for a distributor" do
@@ -40,7 +9,7 @@ describe Distributor::Defaults do
     end
 
     it "creates the default email templates for a distributor" do
-      expect(EmailTemplate).to receive(:new)
+      expect(EmailTemplate).to receive(:new).at_least(1).times
     end
   end
 
