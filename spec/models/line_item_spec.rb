@@ -86,36 +86,4 @@ describe LineItem do
       specify { expect(@new_line_item.substitutions(true).to_a).to eq [substitution] }
     end
   end
-
-  context 'line item customer counts' do
-    describe '#exclusions_count_by_customer' do
-      before do
-        e1 = Fabricate(:exclusion)
-        e1.stub_chain(:customer, :id).and_return(1)
-        e2 = Fabricate(:exclusion)
-        e2.stub_chain(:customer, :id).and_return(2)
-        e3 = Fabricate(:exclusion)
-        e3.stub_chain(:customer, :id).and_return(1)
-
-        line_item.stub_chain(:exclusions, :active).and_return([e1, e2, e3])
-      end
-
-      specify { expect(line_item.exclusions_count_by_customer).to eq 2 }
-    end
-
-    describe '#substitution_count_by_customer' do
-      before do
-        s1 = Fabricate(:substitution)
-        s1.stub_chain(:customer, :id).and_return(1)
-        s2 = Fabricate(:substitution)
-        s2.stub_chain(:customer, :id).and_return(2)
-        s3 = Fabricate(:substitution)
-        s3.stub_chain(:customer, :id).and_return(1)
-
-        line_item.stub_chain(:substitutions, :active).and_return([s1, s2, s3])
-      end
-
-      specify { expect(line_item.substitution_count_by_customer).to eq 2 }
-    end
-  end
 end
