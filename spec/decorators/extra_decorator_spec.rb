@@ -1,11 +1,6 @@
-require 'fast_spec_helper'
-stub_constants %w(Extra)
-require_relative '../../app/decorators/extra_decorator'
-Draper::ViewContext.test_strategy :fast
+require 'spec_helper'
 
 describe ExtraDecorator do
-  include Draper::ViewHelpers
-
   let(:object) { double('object') }
   let(:extra_decorator) { ExtraDecorator.new(object) }
 

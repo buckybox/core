@@ -5,14 +5,16 @@ describe Distributor::OrdersController do
 
   context "with mocks" do
     before do
-      Distributor.any_instance.stub_chain(:accounts, :find).and_return(
-        @account = mock_model(Account, {
-          customer: mock_model(Customer, {
-            id: 1, delivery_service: @delivery_service = mock_model(DeliveryService)
-          }),
-          delivery_service: @delivery_service,
-          id: 675
-      }))
+      @delivery_service = mock_model(DeliveryService)
+      @account = mock_model(Account, {
+        customer: mock_model(Customer, {
+          id: 1, delivery_service: @delivery_service
+        }),
+        delivery_service: @delivery_service,
+        id: 675
+      })
+
+      Distributor.any_instance.stub_chain(:accounts, :find).and_return(@account)
       Distributor.any_instance.stub_chain(:boxes, :count, :zero?).and_return(false)
     end
 
