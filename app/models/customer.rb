@@ -290,12 +290,12 @@ class Customer < ActiveRecord::Base
   end
 
   def halt_orders!
-    ScheduleRule.update_all({ halted: true }, ["scheduleable_id IN (?) AND scheduleable_type = 'Order'", orders.collect(&:id)])
+    ScheduleRule.where("scheduleable_id IN (?) AND scheduleable_type = 'Order'", orders.map(&:id)).update_all(halted: true)
     update_next_occurrence!
   end
 
   def unhalt_orders!
-    ScheduleRule.update_all({ halted: false }, ["scheduleable_id IN (?) AND scheduleable_type = 'Order'", orders.collect(&:id)])
+    ScheduleRule.where("scheduleable_id IN (?) AND scheduleable_type = 'Order'", orders.map(&:id)).update_all(halted: false)
     update_next_occurrence!
   end
 
