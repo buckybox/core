@@ -20,7 +20,7 @@ class LineItem < ActiveRecord::Base
     return false if text.blank?
 
     text.split(/\r\n?|\r?\n|\s*,\s*/).inject([]) do |result, name|
-      result << distributor.line_items.find_or_create_by_name(name)
+      result << distributor.line_items.find_or_create_by(name: name)
       result
     end
 

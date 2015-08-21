@@ -102,7 +102,7 @@ CONFIG
         Distributor.where(created_at: last_7_days).count
       },
       "new_transactional_customers_last_7_days" => lambda {
-        Distributor.all.sum(&:new_transactional_customer_count)
+        Distributor.all.map(&:new_transactional_customer_count).sum
       },
     }
 
