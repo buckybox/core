@@ -590,7 +590,7 @@ DEPENDENCIES
   currency_data
   daemons
   database_cleaner
-  default_value_for (~> 3)
+  default_value_for
   delayed_job
   delayed_job_active_record
   delayed_job_web (= 1.2.10)
