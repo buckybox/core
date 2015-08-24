@@ -51,6 +51,14 @@ private
 
   def load_index
     @import_transactions = current_distributor.import_transactions.processed.not_removed.not_duplicate.ordered.limit(50).includes(:customer)
-    @import_transaction_lists = current_distributor.import_transaction_lists.draft
+    @import_transaction_lists = current_distributor.import_transaction_lists.draft.select do |itl|
+      if itl.import_transactions.empty?
+        itl.destroy
+        flash.now[:error] = "Could not find any valid transactions in that file."
+        false
+      else
+        true
+      end
+    end
   end
 end
