@@ -121,6 +121,8 @@ class ImportTransactionList < ActiveRecord::Base
 private
 
   def csv_ready
-    errors.add(:csv_file, "Seems to be a problem with the csv file.") unless csv_valid?
+    unless csv_valid?
+      errors.add(:base, "Seems to be a problem with that CSV file.")
+    end
   end
 end
