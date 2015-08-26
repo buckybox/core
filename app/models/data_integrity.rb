@@ -152,6 +152,24 @@ class DataIntegrity
     end
   end
 
+  def orders_have_generated_valid_packages_and_deliveries
+    Distributor.find_each do |distributor|
+      (distributor.window_start_from..(distributor.window_end_at - 1)).each do |date|
+        distributor.packing_list_by_date(date).packages.group_by(&:order_id).each do |order_id, packages|
+          if packages.count != 1
+            error "Distributor ##{distributor.id}: PackingList for #{date} has Order ##{order_id} with #{packages.count} packages"
+          end
+        end
+
+        distributor.delivery_list_by_date(date).deliveries.group_by(&:order_id).each do |order_id, deliveries|
+          if deliveries.count != 1
+            error "Distributor ##{distributor.id}: DeliveryList for #{date} has Order ##{order_id} with #{deliveries.count} deliveries"
+          end
+        end
+      end
+    end
+  end
+
   # NOTE: not used but useful for debugging purposes
   def customer_numbers_have_no_gaps
     Distributor.find_each do |distributor|
@@ -179,6 +197,7 @@ private
     checker.accounts_are_valid
     checker.orders_have_valid_accounts
     checker.order_extras_have_valid_foreign_keys
+    checker.orders_have_generated_valid_packages_and_deliveries
     checker.deliveries_have_valid_packages
 
     checker
