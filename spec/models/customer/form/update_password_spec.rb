@@ -24,7 +24,7 @@ describe Customer::Form::UpdatePassword do
   describe "saving" do
     let(:address)     { double("address") }
     let(:distributor) { double("distributor") }
-    let(:customer)    { double("customer", distributor: distributor, address: address) }
+    let(:customer)    { double("customer", distributor: distributor, address: address, errors: nil) }
     let(:args) do
       {
         "password"              => "cluedo",

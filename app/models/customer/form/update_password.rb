@@ -9,7 +9,13 @@ class Customer::Form::UpdatePassword < Customer::Form
 
   def save
     return false unless self.valid?
-    customer.update_attributes(customer_args)
+
+    if customer.update_attributes(customer_args)
+      true
+    else
+      @errors = customer.errors
+      false
+    end
   end
 
 private
