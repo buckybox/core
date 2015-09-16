@@ -5,6 +5,13 @@ describe Order do
   let(:order) { Fabricate(:order) }
   let(:everyday_order) { Fabricate(:recurring_order_everyday, schedule_rule: new_everyday_schedule(Date.parse("2012-09-24"))) }
 
+  describe ".short_code" do
+    specify { expect(Order.short_code("box", true, false)).to eq "BOX+D" }
+    specify { expect(Order.short_code("box", true, true)).to eq "BOX+D+L" }
+    specify { expect(Order.short_code("box", false, true)).to eq "BOX+L" }
+    specify { expect(Order.short_code("box", false, false)).to eq "BOX" }
+  end
+
   context 'pausing' do
     describe '#pause!' do
       context 'should create a pause' do

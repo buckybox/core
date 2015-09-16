@@ -102,10 +102,12 @@ class Order < ActiveRecord::Base
   end
 
   def self.short_code(box_name, has_exclusions, has_substitutions)
-    result = box_name || ''
-    result += '+L' if has_exclusions
-    result += '+D' if has_substitutions
-    result.upcase
+    raise ArgumentError unless box_name
+
+    code = box_name.upcase || ''
+    code += '+D' if has_exclusions
+    code += '+L' if has_substitutions
+    code
   end
 
   def self.extras_description(order_extras, join_with = ', ')
