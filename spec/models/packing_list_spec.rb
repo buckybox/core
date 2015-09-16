@@ -49,7 +49,12 @@ describe PackingList, :slow do
 
     after { back_to_the_present }
 
-    specify { expect { PackingList.generate_list(@distributor, @generate_date) }.to change(@distributor.packing_lists, :count).from(@advance_days).to(@advance_days + 1) }
-    specify { expect { PackingList.generate_list(@distributor, @generate_date) }.to change(@distributor.packages, :count).from(0).to(3) }
+    it "generates packing lists" do
+      expect { PackingList.generate_list(@distributor, @generate_date) }.to change(@distributor.packing_lists, :count).by(1)
+    end
+
+    it "generates packages" do
+      expect { PackingList.generate_list(@distributor, @generate_date) }.to change(@distributor.packages, :count).by(3)
+    end
   end
 end
