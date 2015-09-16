@@ -94,10 +94,10 @@ class Distributor < ActiveRecord::Base
   validate :validate_require_delivery_note
 
   before_validation :check_emails
-  before_create :parameterize_name, if: 'parameter_name.nil?'
+  before_create :parameterize_name, if: "parameter_name.nil?"
   after_create :send_welcome_email
   after_create :tracking_after_create
-  after_save :generate_required_daily_lists # TODO: should trigger only when YZ is changed, not all the fucking time!!!
+  after_save :generate_required_daily_lists, if: "advance_days_changed? || advance_hour_changed? || time_zone_changed?"
   after_save :update_halted_statuses
   after_save :tracking_after_save
 
@@ -326,10 +326,12 @@ class Distributor < ActiveRecord::Base
   end
 
   def find_duplicate_import_transactions(date, description, amount)
+    # OPTIMIZE: try to use SQL view or similar
     import_transactions.processed.not_duplicate.not_removed.where(transaction_date: date, description: description, amount_cents: amount.cents)
   end
 
   def find_previous_match(description)
+    # OPTIMIZE: try to use SQL view or similar
     import_transactions.processed.matched.not_removed.where(description: description).ordered.last
   end
 
