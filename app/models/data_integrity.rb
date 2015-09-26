@@ -69,7 +69,7 @@ class DataIntegrity
 
   def orders_are_valid
     Order.find_each do |order|
-      if order.invalid?
+      if order.invalid? && order.errors.keys != [:schedule_rule] # ignore schedule rule inclusion in delivery service for now
         error "Order ##{order.id} is invalid: #{order.errors.full_messages.to_sentence}"
       end
     end
