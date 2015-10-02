@@ -49,5 +49,18 @@ module ApiHelpers
       json_request(method, url, nil, headers)
       expect(response.status).not_to eq 401
     end
+
+    it "returns 404 with master key from a good IP for inexistent web stores" do
+      headers = {
+        "API-Key" => Figaro.env.api_master_key,
+        "API-Secret" => Figaro.env.api_master_secret,
+        "Webstore-ID" => "inexistent_webstore",
+      }
+
+      allow(Figaro.env).to receive(:api_master_allowed_ips).and_return %w(127.0.0.1)
+      json_request(method, url, nil, headers)
+      expect(response.status).to eq 404
+      expect(json_response).to have_key "message"
+    end
   end
 end
