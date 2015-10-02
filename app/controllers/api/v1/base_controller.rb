@@ -54,6 +54,7 @@ private
     if webstore_id
       if api_key == Figaro.env.api_master_key && api_secret == Figaro.env.api_master_secret && request.remote_ip.in?(api_master_allowed_ips)
         @distributor = Distributor.find_by(parameter_name: webstore_id)
+        return not_found unless @distributor
       end
     else
       @distributor = Distributor.find_by(api_key: api_key, api_secret: api_secret)
