@@ -4,19 +4,19 @@ group :default do # XXX: all environments, think twice before adding Gems here
   gem "rake"
   gem "test-unit" # for Ruby 2.2
   gem "unicorn"
-  gem "rails",                           "~> 3.2.22"
-  gem "sprockets",                       "~> 2.2.3" # https://groups.google.com/forum/#!topic/rubyonrails-security/doAVp0YaTqY
-  gem "rails-i18n",                      "~> 3.0.0" # For Rails 3.x
+  gem "rails", "~> 3.2.22"
+  gem "sprockets", "~> 2.2.3" # https://groups.google.com/forum/#!topic/rubyonrails-security/doAVp0YaTqY
+  gem "rails-i18n", "~> 3.0.0" # For Rails 3.x
   gem "pg"
   gem "therubyracer"
   gem "haml-rails"
   gem "jquery-rails"
-  gem "jquery-ui-rails",                 "< 5" # TODO: make sure JQuery UI 1.11 works fine
-  gem "bootstrap-sass",                  "< 3"
+  gem "jquery-ui-rails", "< 5" # TODO: make sure JQuery UI 1.11 works fine
+  gem "bootstrap-sass",  "< 3"
   gem "bootbox-rails"
-  gem "select2-rails"
+  gem "select2-rails", "< 4" # TODO: upgrade? https://select2.github.io/announcements-4.0.html
   gem "hiredis"
-  gem "readthis"
+  gem "readthis", "< 1" # TODO: upgrade when 1.0.0 is stable
   gem "devise"
   gem "devise-i18n"
   gem "simple_form", "< 3"
