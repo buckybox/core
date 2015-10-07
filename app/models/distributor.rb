@@ -132,14 +132,14 @@ class Distributor < ActiveRecord::Base
     return unless Rails.env.production?
 
     duration = Benchmark.realtime do
-      active_webstore.active.each_slice(5) do |distributors|
+      active_webstore.active.each_slice(3) do |distributors|
         hydra = Typhoeus::Hydra.hydra
 
         distributors.each do |distributor|
           # TODO: don't hardcode URL once we migrate the web store to other app
           url = "https://store.buckybox.com/#{distributor.parameter_name}"
 
-          request = Typhoeus::Request.new(url, timeout: 45)
+          request = Typhoeus::Request.new(url, timeout: 30)
           request.on_complete do |response|
             unless response.success?
               error = "Could not refresh #{response.request.url}: #{response.return_message}"
