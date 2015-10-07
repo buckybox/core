@@ -129,7 +129,7 @@ EOF
     end
 
     def self.find_csv_separator(path, options)
-      first_row = File.open(path, options) { |file| file.gets }
+      first_row = File.open(path, options, &:gets)
       best_score = -1
       best_separator = CSV_SEPARATORS.first
 

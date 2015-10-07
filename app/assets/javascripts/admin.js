@@ -4,7 +4,7 @@
 //= require bootstrap
 //= require select2
 //= require rails-timeago
-//= require ace/ace
+//= require ace-rails-ap
 //= require ace/theme-chrome.js
 //= require ace/mode-yaml.js
 //= require_tree ./old/vendor
