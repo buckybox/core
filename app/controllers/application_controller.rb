@@ -1,4 +1,5 @@
 class ApplicationController < ActionController::Base
+  ensure_security_headers # secure_headers Gem
   protect_from_forgery
 
   before_action :miniprofiler
