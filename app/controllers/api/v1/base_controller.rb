@@ -1,13 +1,19 @@
 class Api::V1::BaseController < ApplicationController
   layout false
   before_action :log_request, :authenticate, :set_time_zone, :set_locale, :embed_options
-  skip_before_action :authenticate, :set_time_zone, :set_locale, :embed_options, only: :ping
+  skip_before_action :authenticate, :set_time_zone, :set_locale, :embed_options, only: [:ping, :csp_report]
 
   # rescue_from ActionController::RoutingError, with: :not_found # TODO: enable with Rails 4
   # rescue_from Exception, with: :server_error # TODO: enable with Rails 4
 
   def ping
     render text: "Pong!"
+  end
+
+  def csp_report
+    send_alert_email request.raw_post
+
+    render text: nil, status: :no_content
   end
 
 private
@@ -47,7 +53,7 @@ private
 
   def authenticate
     if api_key.blank? || api_secret.blank?
-      send_alert_email
+      send_alert_email "Hacking attempt detected on the API from #{request.remote_ip}!"
       render json: { message: "Could not authenticate. You must set the API-Key and API-Secret headers." }, status: :unauthorized and return
     end
 
@@ -61,7 +67,7 @@ private
     end
 
     unless @distributor
-      send_alert_email
+      send_alert_email "Hacking attempt detected on the API from #{request.remote_ip}!"
       render json: { message: "Could not authenticate. Invalid API-Key or API-Secret headers." }, status: :unauthorized and return
     end
   end
@@ -74,11 +80,11 @@ private
     I18n.locale = @distributor.locale
   end
 
-  def send_alert_email
+  def send_alert_email(body)
     AdminMailer.information_email(
       to: "sysalerts@buckybox.com",
       subject: "[URGENT] Hacking attempt!",
-      body: "Hacking attempt detected on the API from #{request.remote_ip}!"
+      body: body,
     ).deliver
   end
 
