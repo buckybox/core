@@ -71,6 +71,7 @@ group :default do # XXX: all environments, think twice before adding Gems here
   gem "typhoeus"
   gem "rack-cors"
   gem "marginalia"
+  gem "secure_headers"
 end
 
 group :development do
