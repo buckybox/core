@@ -192,7 +192,9 @@ BuckyBox::Application.routes.draw do
 
   namespace :api, path: "", defaults: { format: :json }, constraints: API_SUBDOMAIN do
     namespace :v1 do
-      get "ping" => "base#ping"
+      get  "ping"       => "base#ping"
+      post "csp-report" => "base#csp_report"
+
       post "/customers/sign_in"
       resources :customers,         only: [:index, :show, :create, :update]
       resources :boxes,             only: [:index, :show]
