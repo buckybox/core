@@ -11,7 +11,11 @@ class Api::V1::BaseController < ApplicationController
   end
 
   def csp_report
-    send_alert_email request.raw_post
+    body = ["CSP report: #{request.raw_post}"]
+    body << "User agent: #{request.user_agent}"
+    body << "IP: #{request.remote_ip}"
+
+    send_alert_email body.join("\n\n")
 
     render text: nil, status: :no_content
   end
