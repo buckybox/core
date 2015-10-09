@@ -11,11 +11,24 @@ class Api::V1::BaseController < ApplicationController
   end
 
   def csp_report
-    body = ["CSP report: #{request.raw_post}"]
-    body << "User agent: #{request.user_agent}"
-    body << "IP: #{request.remote_ip}"
+    report = request.raw_post
 
-    send_alert_email body.join("\n\n")
+    # XXX: maybe parse JSON down the road...
+    blacklist = %w(
+      "blocked-uri":"https://nikkomsgchannel
+      "blocked-uri":"https://i_sgbfbsjs_info.tlscdn.com
+      "blocked-uri":"https://foxi69.tlscdn.com
+      "blocked-uri":"webviewprogressproxy://
+      "source-file":"https://i_sgbfbsjs_info.tlscdn.com
+    ).freeze
+
+    if blacklist.none? { |pattern| report.include?(pattern) }
+      body = ["CSP report: #{report}"]
+      body << "User agent: #{request.user_agent}"
+      body << "IP: #{request.remote_ip}"
+
+      send_alert_email body.join("\n\n")
+    end
 
     render text: nil, status: :no_content
   end
