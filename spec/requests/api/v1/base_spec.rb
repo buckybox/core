@@ -39,5 +39,11 @@ describe "API v1" do
       expect(response.code).to eq "204"
       expect(response.body).to be_empty
     end
+
+    it "ignores reports from malwares" do
+      expect_any_instance_of(Api::V1::BaseController).not_to receive(:send_alert_email)
+
+      post url, '{..."blocked-uri":"https://nikkomsgchannel...}'
+    end
   end
 end
