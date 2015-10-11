@@ -15,11 +15,10 @@ class Api::V1::BaseController < ApplicationController
 
     # XXX: maybe parse JSON down the road...
     blacklist = %w(
+      .tlscdn.com
       "blocked-uri":"https://nikkomsgchannel
-      "blocked-uri":"https://i_sgbfbsjs_info.tlscdn.com
-      "blocked-uri":"https://foxi69.tlscdn.com
       "blocked-uri":"webviewprogressproxy://
-      "source-file":"https://i_sgbfbsjs_info.tlscdn.com
+      "blocked-uri":"safari-extension://
     ).freeze
 
     if blacklist.none? { |pattern| report.include?(pattern) }
