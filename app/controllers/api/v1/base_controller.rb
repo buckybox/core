@@ -20,6 +20,7 @@ class Api::V1::BaseController < ApplicationController
       https://nikkomsgchannel
       webviewprogressproxy://
       safari-extension://
+      "blocked-uri":""
     ).freeze
 
     if blacklist.none? { |pattern| report.include?(pattern) }
