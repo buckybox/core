@@ -16,7 +16,7 @@
 
   <script>
     var map = L.map('map').setView([20, 40], 2);
-    L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png').addTo(map);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
 
     var locations = <%= list.map(&:ll).inspect.html_safe %>;
     var addresses = <%= list.map(&:address).inspect.html_safe %>;
