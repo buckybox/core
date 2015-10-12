@@ -16,7 +16,7 @@ class Api::V1::BaseController < ApplicationController
     # XXX: maybe parse JSON down the road...
     blacklist = %w(
       .tlscdn.com
-      s.apollocdn.com
+      .apollocdn.com
       https://nikkomsgchannel
       webviewprogressproxy://
       safari-extension://
