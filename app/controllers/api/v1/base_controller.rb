@@ -21,6 +21,7 @@ class Api::V1::BaseController < ApplicationController
       webviewprogressproxy://
       safari-extension://
       "blocked-uri":""
+      "blocked-uri":"data
     ).freeze
 
     if blacklist.none? { |pattern| report.include?(pattern) }
