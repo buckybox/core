@@ -435,9 +435,9 @@ EOF
         return "" unless date_string
 
         if format.present?
-          Date.strptime(date_string, format).strftime('%d/%m/%Y')
+          Date.strptime(date_string, format).strftime('%F')
         else
-          Date.parse(date_string).strftime('%d/%m/%Y') # Throws error if invalid
+          Date.parse(date_string).strftime('%F') # Throws error if invalid
         end
       end
 
