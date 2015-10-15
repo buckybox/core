@@ -4,7 +4,7 @@ SecureHeaders::Configuration.configure do |config|
   config.x_frame_options = "DENY"
   config.x_xss_protection = { value: 1, mode: "block" }
   config.csp = {
-    enforce: false,
+    enforce: true,
     default_src: "'none'",
     img_src: "'self' *.google-analytics.com *.pingdom.net *.intercomcdn.com *.intercom.io notify.bugsnag.com *.tile.openstreetmap.org",
     script_src: "'self' 'unsafe-inline' *.google-analytics.com *.pingdom.net js-agent.newrelic.com bam.nr-data.net *.intercomcdn.com *.intercom.io https://d2wy8f7a9ursnm.cloudfront.net/bugsnag-2.min.js",
