@@ -1,6 +1,11 @@
 # Be sure to restart your server when you modify this file.
 
-BuckyBox::Application.config.session_store :cookie_store, key: '_bucky_box_session', domain: :all
+BuckyBox::Application.config.session_store :cookie_store, {
+  key: '_bucky_box_session',
+  secure: !Rails.env.development? && !Rails.env.test?,
+  httponly: true,
+  domain: :all,
+}
 
 # Use the database for sessions instead of the cookie-based default,
 # which shouldn't be used to store highly confidential information
