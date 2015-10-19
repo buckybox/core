@@ -72,6 +72,7 @@ group :default do # XXX: all environments, think twice before adding Gems here
   gem "rack-cors"
   gem "marginalia"
   gem "secure_headers"
+  gem "bugsnag"
 end
 
 group :development do
@@ -111,7 +112,6 @@ end
 
 group :staging, :production do
   gem "newrelic_rpm"
-  gem "bugsnag"
   # gem "skylight"
 end
 
