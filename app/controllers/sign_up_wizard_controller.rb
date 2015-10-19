@@ -42,6 +42,7 @@ class SignUpWizardController < ApplicationController
     @distributor = Distributor.new(details)
     @distributor.tag_list.add source
     @distributor.currency = country.currency
+    @distributor.locale = (country.languages.map(&:to_sym) & I18n.available_locales).first || :en
     @distributor.omni_importers = OmniImporter.bank_deposit.where(
       country_id: country.id, bank_name: bank_name
     )

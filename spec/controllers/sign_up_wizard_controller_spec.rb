@@ -62,6 +62,7 @@ describe SignUpWizardController do
         expect(distributor.parameter_name).to eq "my-new-org"
         expect(distributor.country).to eq Country.find_by_alpha2("NZ")
         expect(distributor.currency).to eq "NZD"
+        expect(distributor.locale).to eq "en"
       end
 
       it 'adds default line items to distributor' do
