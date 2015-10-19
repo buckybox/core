@@ -130,7 +130,14 @@ class Order < ActiveRecord::Base
   end
 
   def price
-    OrderPrice.without_delivery_fee(individual_price, quantity, extras_price, extras.present?)
+    p = OrderPrice.without_delivery_fee(individual_price, quantity, extras_price, extras.present?)
+
+    # FIXME: try to debug huge order price bug
+    if p > 1000
+      Bugsnag.notify(RuntimeError.new([p, individual_price, quantity, extras_price].map(&:inspect).join(":")))
+    end
+
+    p
   end
 
   def total_price
