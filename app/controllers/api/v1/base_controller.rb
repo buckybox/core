@@ -17,9 +17,11 @@ class Api::V1::BaseController < ApplicationController
     blacklist = %w(
       .tlscdn.com
       .apollocdn.com
+      .akamaihd.net
       https://nikkomsgchannel
       webviewprogressproxy://
       safari-extension://
+      chrome-extension://
       "blocked-uri":""
       "blocked-uri":"data
       eval()
