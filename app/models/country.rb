@@ -4,7 +4,7 @@ class Country < ActiveRecord::Base
   validates_presence_of :alpha2
   validate :validate_currency_and_time_zone
 
-  delegate :name, to: :iso3166
+  delegate :name, :languages, to: :iso3166
   alias_method :full_name, :name
 
   def currency
