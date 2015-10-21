@@ -4,6 +4,7 @@ Fabricator(:address) do
   suburb { 'Suburb' }
   city { 'City' }
   postcode { '12345' }
+  mobile_phone { '007' }
 end
 
 Fabricator(:address_with_associations, from: :address) do
