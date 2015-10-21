@@ -18,6 +18,7 @@ class Api::V1::BaseController < ApplicationController
       .tlscdn.com
       .apollocdn.com
       .akamaihd.net
+      .cloudfront.net
       https://nikkomsgchannel
       webviewprogressproxy://
       safari-extension://
