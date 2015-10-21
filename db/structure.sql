@@ -1114,14 +1114,14 @@ CREATE TABLE distributors (
     feature_spend_limit boolean DEFAULT true,
     contact_name character varying(255),
     customer_can_remove_orders boolean DEFAULT true,
-    collect_phone boolean,
+    collect_phone boolean DEFAULT true NOT NULL,
     last_seen_at timestamp without time zone,
     notes text,
     payment_cash_on_delivery boolean DEFAULT true,
     payment_bank_deposit boolean DEFAULT true,
     payment_credit_card boolean DEFAULT false,
     require_postcode boolean DEFAULT false NOT NULL,
-    require_phone boolean DEFAULT false NOT NULL,
+    require_phone boolean DEFAULT true NOT NULL,
     require_address_1 boolean DEFAULT true NOT NULL,
     require_address_2 boolean DEFAULT false NOT NULL,
     require_suburb boolean DEFAULT false NOT NULL,
@@ -3498,3 +3498,5 @@ INSERT INTO schema_migrations (version) VALUES ('20150815161650');
 INSERT INTO schema_migrations (version) VALUES ('20150815161651');
 
 INSERT INTO schema_migrations (version) VALUES ('20150815161652');
+
+INSERT INTO schema_migrations (version) VALUES ('20151021130722');

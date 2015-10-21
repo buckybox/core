@@ -20,6 +20,7 @@ When /^I fill in valid customer details$/ do
   fill_in "Address 1", with: "1 Bag End"
   fill_in "Suburb", with: "Hobbiton"
   fill_in "City", with: "The Water"
+  fill_in "Mobile phone", with: "007"
 end
 
 Then /^I should be viewing the customer$/ do
