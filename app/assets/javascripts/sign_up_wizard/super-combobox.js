@@ -1,11 +1,13 @@
+// Super Combobox v1.0.1
+
 (function( $ ) {
-  $.widget( "custom.combobox", {
+  $.widget( "custom.super_combobox", {
     _create: function() {
       this.wrapper = $( "<span>" )
-        .addClass( "custom-combobox" )
+        .addClass( "super-combobox" )
         .insertAfter( this.element );
 
-      this.element.hide();
+      this.element.css({ "position": "absolute", "visibility": "hidden" });
       this._createAutocomplete();
       this._createShowAllButton();
     },
@@ -18,10 +20,7 @@
         .attr( "name", this.element.attr("name") )
         .attr( "placeholder", this.element.attr("placeholder") )
         .appendTo( this.wrapper )
-        .addClass( "custom-combobox-input ui-widget ui-widget-content ui-state-default ui-corner-left" )
-        .tooltip({
-          tooltipClass: "ui-state-highlight"
-        })
+        .addClass( "super-combobox-input ui-widget ui-widget-content ui-state-default ui-corner-left" )
         .autocomplete({
           delay: 0,
           minLength: 0,
@@ -53,7 +52,7 @@
           text: false
         })
         .removeClass( "ui-corner-all" )
-        .addClass( "custom-combobox-toggle ui-corner-right" )
+        .addClass( "super-combobox-toggle ui-corner-right" )
         .mousedown(function() {
           wasOpen = input.autocomplete( "widget" ).is( ":visible" );
         })
@@ -81,6 +80,11 @@
             option: this
           };
       }) );
+    },
+
+    _destroy: function() {
+      this.wrapper.remove();
+      this.element.show();
     }
   });
 })( jQuery );

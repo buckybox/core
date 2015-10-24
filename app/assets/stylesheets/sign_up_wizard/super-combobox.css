@@ -1,0 +1,28 @@
+.super-combobox {
+  position: relative;
+  display: inline-block;
+  margin: 1px 0; }
+
+.super-combobox-toggle {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  margin-left: -1px;
+  padding: 0;
+  width: 1em;
+  *height: 1.7em;
+  *top: 0.1em; }
+
+.super-combobox-input {
+  background: none;
+  width: 100%;
+  margin: 0;
+  padding: 6px; }
+
+/* Custom code to set proper font */
+.ui-widget {
+  font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+  font-size: 14px;
+}
+
+/*# sourceMappingURL=super-combobox.css.map */

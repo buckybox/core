@@ -118,8 +118,8 @@ var BuckyBoxSignUpWizard = function() {
           });
 
           // turn those dropdowns into neat custom comboboxes
-          sign_up_wizard("#distributor_bank_name").combobox();
-          sign_up_wizard("#distributor_source").combobox();
+          sign_up_wizard("#distributor_bank_name").super_combobox();
+          sign_up_wizard("#distributor_source").super_combobox();
 
           var update_country = function() {
             $.ajax({
