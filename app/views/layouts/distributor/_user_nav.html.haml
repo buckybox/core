@@ -10,6 +10,8 @@
           %li= link_to 'view web store', current_distributor.webstore_url, target: '_blank'
         %li= link_to 'reporting', distributor_reports_path
         %li.divider
+        %li= link_to 'community forum', 'https://community.buckybox.com/', target: '_blank'
+        %li.divider
         %li
           - if admin_signed_in?
             = link_to 'log out', unimpersonate_admin_distributors_path
