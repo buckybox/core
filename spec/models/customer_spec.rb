@@ -314,13 +314,13 @@ describe Customer do
   describe ".last_paid" do
     it "returns the last payment transaction date" do
       distributor = customer.distributor
-      Fabricate(:payment, display_time: 1.weeks.ago, account: customer.account, amount_cents: 100, distributor: distributor)
+      Fabricate(:payment, display_time: 1.week.ago, account: customer.account, amount_cents: 100, distributor: distributor)
       p = Fabricate(:payment, display_time: 1.day.ago, account: customer.account, amount_cents: 100, distributor: distributor)
       Fabricate(:payment, display_time: 3.days.ago, account: customer.account, amount_cents: -100, distributor: distributor)
       Fabricate(:payment, display_time: 2.weeks.ago, account: customer.account, amount_cents: 100, distributor: distributor)
       p.reverse_payment!
 
-      expect(customer.last_paid.to_date).to eq 1.weeks.ago.to_date
+      expect(customer.last_paid.to_date).to eq 1.week.ago.to_date
     end
 
     it "returns nil when no payments" do

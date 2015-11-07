@@ -98,7 +98,7 @@ class Distributor::CustomersController < Distributor::ResourceController
     link_action = params[:link_action]
     link_action = "send" if link_action.empty?
 
-    message = if (link_action == "delete")
+    message = if link_action == "delete"
       email_templates_update(link_action)
 
     else

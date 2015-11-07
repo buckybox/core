@@ -12,7 +12,7 @@ group :default do # XXX: all environments, think twice before adding Gems here
   gem "haml-rails"
   gem "jquery-rails"
   gem "jquery-ui-rails"
-  gem "bootstrap-sass",  "< 3"
+  gem "bootstrap-sass", "< 3"
   gem "bootbox-rails"
   gem "select2-rails", "< 4" # TODO: upgrade? https://select2.github.io/announcements-4.0.html
   gem "hiredis"
