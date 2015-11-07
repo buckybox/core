@@ -7,7 +7,7 @@ SecureHeaders::Configuration.configure do |config|
     enforce: true,
     default_src: "'none'",
     img_src: "'self' *.google-analytics.com *.pingdom.net *.intercomcdn.com *.intercom.io notify.bugsnag.com *.tile.openstreetmap.org",
-    script_src: "'self' 'unsafe-inline' *.google-analytics.com *.pingdom.net js-agent.newrelic.com bam.nr-data.net *.intercomcdn.com *.intercom.io https://d2wy8f7a9ursnm.cloudfront.net/bugsnag-2.min.js",
+    script_src: "'self' 'unsafe-inline' 'unsafe-eval' *.google-analytics.com *.pingdom.net js-agent.newrelic.com bam.nr-data.net *.intercomcdn.com *.intercom.io https://d2wy8f7a9ursnm.cloudfront.net/bugsnag-2.min.js",
     style_src: "'self' 'unsafe-inline'",
     form_action: "'self' www.paypal.com",
     connect_src: "'self' *.google-analytics.com *.intercomcdn.com *.intercom.io wss://*.intercom.io",
