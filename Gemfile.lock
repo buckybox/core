@@ -380,8 +380,6 @@ GEM
       git-version-bump (~> 0.15)
       rack (~> 1.4)
     rack-cors (0.4.0)
-    rack-mini-profiler (0.9.7)
-      rack (>= 1.1.3)
     rack-protection (1.5.3)
       rack
     rack-ssl (1.3.4)
@@ -650,7 +648,6 @@ DEPENDENCIES
   quiet_assets
   rabl!
   rack-cors
-  rack-mini-profiler
   rails (~> 3.2.22)
   rails-i18n (~> 3.0.0)
   rails-patch-json-encode

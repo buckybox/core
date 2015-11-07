@@ -2,8 +2,6 @@ class ApplicationController < ActionController::Base
   ensure_security_headers # secure_headers Gem
   protect_from_forgery
 
-  before_action :miniprofiler
-
   if Rails.env.production? || Rails.env.staging?
     before_bugsnag_notify :add_user_info_to_bugsnag
   end
@@ -178,10 +176,6 @@ private
       customer_id: current_customer.try(:id),
       customer_name: current_customer.try(:name),
     })
-  end
-
-  def miniprofiler
-    Rack::MiniProfiler.authorize_request if current_admin.present? && params.key?(:profile)
   end
 
   def find_locale
