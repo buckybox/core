@@ -52,7 +52,6 @@ group :default do # XXX: all environments, think twice before adding Gems here
   gem "strong_parameters"
   gem "rails-timeago"
   gem "discover-unused-partials"
-  gem "rack-mini-profiler"
   gem "fast_blank"
   gem "retryable"
   gem "foreman"
