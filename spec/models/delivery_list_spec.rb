@@ -116,8 +116,8 @@ describe DeliveryList, :slow do
 
       context 'and the week after that' do
         before do
-          PackingList.generate_list(@distributor, @generate_date + 2.week)
-          @dl3 = DeliveryList.generate_list(@distributor, @generate_date + 2.week)
+          PackingList.generate_list(@distributor, @generate_date + 2.weeks)
+          @dl3 = DeliveryList.generate_list(@distributor, @generate_date + 2.weeks)
         end
 
         specify { expect(@dl3.deliveries.ordered.map { |d| "#{d.customer.number}/#{d.position}" }).to eq @dl2.deliveries.ordered.map { |d| "#{d.customer.number}/#{d.position}" } }
