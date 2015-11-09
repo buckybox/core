@@ -10,7 +10,7 @@ module Admin::DashboardHelper
     elsif next_occurrence && (next_occurrence < (Date.current + 6.days))
       next_occurrence.to_s(:weekday)
     elsif next_occurrence
-      next_occurrence.to_s(:day_month_and_year)
+      next_occurrence.iso8601
     end
   end
 end

@@ -404,10 +404,6 @@ class Distributor < ActiveRecord::Base
     contact_name.present? ? contact_name : email
   end
 
-  def location
-    [country.full_name, city].reject(&:blank?).join(', ')
-  end
-
   def packing_list_by_date(date)
     PackingList.collect_list(self, date)
   end
