@@ -1,7 +1,10 @@
-%table#cron_log.table.table-striped
+%table#cron_log.table.table-bordered.table-hover.table-condensed
   %thead
     %tr
-      %th Log
+      %th
+        Log
+        &mdash;
+        = link_to 'Longer Log', admin_cron_logs_path
       %th Occurred At
 
   %tbody

@@ -1,14 +1,10 @@
 = render partial: 'admin/nav'
 
-%table#distributors.table.table-bordered
+%table#distributors.table.table-bordered.table-hover
   - @distributors.each do |distributor|
     = render partial: 'admin/distributors/index', locals: {distributor: distributor}
 
 - unless @cron_logs.empty?
-  .row-fluid
-    .span12
-      = link_to 'Longer Log', admin_cron_logs_path
-
   .row-fluid
     .span12
       = render 'admin/cron_logs/index'
