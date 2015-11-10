@@ -24,6 +24,7 @@ class Api::V1::BaseController < ApplicationController
       safari-extension://
       chrome-extension://
       chrome://
+      none://
       "blocked-uri":""
       "blocked-uri":"data
     ).freeze
