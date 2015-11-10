@@ -20,11 +20,11 @@ class Api::V1::StatsController < Api::V1::BaseController
 
     stats = {
       converted: converted_distributors.count,
-      over_6_months: not_converted_distributors.where("last_seen_at BETWEEN ? AND ?", six_months_ago, three_months_ago).count,
-      over_3_months: not_converted_distributors.where("last_seen_at BETWEEN ? AND ?", three_months_ago, one_month_ago).count,
-      over_1_month: not_converted_distributors.where("last_seen_at BETWEEN ? AND ?", one_month_ago, one_week_ago).count,
-      over_1_week: not_converted_distributors.where("last_seen_at > ?", one_week_ago).count,
-      logged_in: not_converted_distributors.where("last_seen_at IS NOT NULL AND last_seen_at < ?", six_months_ago).count,
+      over_6_months: not_converted_distributors.where("last_seen_at < ?", six_months_ago).count,
+      over_3_months: not_converted_distributors.where("last_seen_at BETWEEN ? AND ?", six_months_ago, three_months_ago).count,
+      over_1_month: not_converted_distributors.where("last_seen_at BETWEEN ? AND ?", three_months_ago, one_month_ago).count,
+      over_1_week: not_converted_distributors.where("last_seen_at BETWEEN ? AND ?", one_month_ago, one_week_ago).count,
+      logged_in: not_converted_distributors.where("last_seen_at > ?", one_week_ago).count,
       not_logged_in: not_converted_distributors.where("last_seen_at IS NULL").count,
       total: distributors.count,
     }
