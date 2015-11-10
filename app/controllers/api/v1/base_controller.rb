@@ -23,6 +23,7 @@ class Api::V1::BaseController < ApplicationController
       webviewprogressproxy://
       safari-extension://
       chrome-extension://
+      chrome://
       "blocked-uri":""
       "blocked-uri":"data
     ).freeze
