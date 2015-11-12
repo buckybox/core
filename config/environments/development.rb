@@ -45,6 +45,9 @@ BuckyBox::Application.configure do
   # No more asset logging
   config.assets.logger = false
 
+  # Don't use precompiled assets locally
+  config.assets.prefix = "/dev-assets"
+
   config.middleware.use(StackProf::Middleware,
     enabled: true,
     mode: :wall,

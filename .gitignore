@@ -37,14 +37,10 @@
 .sass-cache/
 Session.vim
 coverage/
+/public/uploads/tmp/
+/public/assets/**/*.gz
 
-# Ignore some public sub-directories
-/public/system/
-/public/uploads/
-/public/assets/
-/public/stylesheets/
-
-# Ignore uploads
+# Ignore private uploads
 /private_uploads/
 
 # Ignore ctags
