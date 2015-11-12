@@ -1,0 +1,15 @@
+!!! 5
+
+%html
+  %head
+    %meta{ charset: 'utf-8' }
+    %title= "Bucky Box Metrics"
+    -# = csrf_meta_tag
+    = favicon_link_tag
+
+  %body
+    %h1 Conversion Pipeline
+
+    = javascript_include_tag "conversion_pipeline_elm"
+    :javascript
+      Elm.fullscreen(Elm.ConversionPipeline)
