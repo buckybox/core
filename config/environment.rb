@@ -5,7 +5,8 @@ require File.expand_path('../application', __FILE__)
 BuckyBox::Application.initialize!
 
 BuckyBox::Application.configure do
-  # Precompile additional assets (application.js, application.css, and all non-JS/CSS are already added)
-  config.assets.precompile += %w( admin.js admin.css distributor.js distributor.css customer.js customer.css print.js print.css sign_up_wizard.js sign_up_wizard.css )
+  # Precompile additional assets
+  config.assets.precompile += %w( admin.js admin.css distributor.js distributor.css customer.js customer.css print.js print.css )
+  config.assets.precompile += %w( sign_up_wizard.js sign_up_wizard.css conversion_pipeline_elm.js )
   config.assets.precompile += %w( leaflet.js leaflet.css )
 end
