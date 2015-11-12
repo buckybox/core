@@ -171,6 +171,12 @@ BuckyBox::Application.routes.draw do
     resources :cron_logs, only: :index
     resources :style_sheet, only: :index
 
+    resources :metrics, only: [:index] do
+      collection do
+        get "conversion_pipeline"
+      end
+    end
+
     resources :distributors, only: [:index, :new, :create, :edit, :update] do
       member do
         get "impersonate"
