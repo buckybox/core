@@ -10,7 +10,7 @@ SecureHeaders::Configuration.configure do |config|
     script_src: "'self' 'unsafe-inline' 'unsafe-eval' *.google-analytics.com *.pingdom.net js-agent.newrelic.com bam.nr-data.net *.intercomcdn.com *.intercom.io https://d2wy8f7a9ursnm.cloudfront.net/bugsnag-2.min.js",
     style_src: "'self' 'unsafe-inline'",
     form_action: "'self' www.paypal.com",
-    connect_src: "'self' *.google-analytics.com *.intercomcdn.com *.intercom.io wss://*.intercom.io",
+    connect_src: "'self' api.buckybox.com *.google-analytics.com *.intercomcdn.com *.intercom.io wss://*.intercom.io",
     frame_ancestors: "'none'",
     block_all_mixed_content: "",
     report_uri: "https://api.buckybox.com/v1/csp-report",
