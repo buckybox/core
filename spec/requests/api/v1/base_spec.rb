@@ -32,7 +32,7 @@ describe "API v1" do
     }
 
     it "processes the report successfully" do
-      expect_any_instance_of(Api::V1::BaseController).to receive(:send_alert_email)
+      expect(Bugsnag).to receive(:notify)
 
       post url, csp_report
 
@@ -41,7 +41,7 @@ describe "API v1" do
     end
 
     it "ignores reports from malwares" do
-      expect_any_instance_of(Api::V1::BaseController).not_to receive(:send_alert_email)
+      expect(Bugsnag).not_to receive(:notify)
 
       post url, '{..."blocked-uri":"https://nikkomsgchannel...}'
     end

@@ -30,11 +30,11 @@ class Api::V1::BaseController < ApplicationController
     ).freeze
 
     if blacklist.none? { |pattern| report.include?(pattern) }
-      body = ["CSP report: #{report}"]
-      body << "User agent: #{request.user_agent}"
-      body << "IP: #{request.remote_ip}"
-
-      send_alert_email body.join("\n\n")
+      Bugsnag.notify(RuntimeError.new("CSP violation"), {
+        report: report,
+        user_agent: request.user_agent,
+        ip_address: request.remote_ip,
+      })
     end
 
     render text: nil, status: :no_content
