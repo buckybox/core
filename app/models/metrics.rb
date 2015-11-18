@@ -21,17 +21,6 @@ class Metrics
     count
   end
 
-  def self.time_frame(table)
-    beginning_of_yesterday = (Time.current - 24.hours).beginning_of_day
-    end_of_yesterday = (Time.current - 24.hours).end_of_day
-    ["#{table}.created_at > ? AND #{table}.created_at <= ?", beginning_of_yesterday, end_of_yesterday]
-  end
-
-  def self.calculate_and_store_for_munin
-    calculate_and_store_for_munin_daily
-    calculate_and_store_for_munin_weekly
-  end
-
   def self.calculate_and_push_to_librato
     return unless Rails.env.production?
 
@@ -50,13 +39,11 @@ class Metrics
     queue.submit
   end
 
-private
-
   def self.calculate_and_store_for_munin_daily
     now = Time.zone.now
     last_24_hours = (now - 24.hours)..now
 
-    classes = [Order, Delivery, Deduction, Payment, Transaction, Customer, Distributor, ImportTransactionList].inject({}) do |hash, klass|
+    classes = [Order, Customer, Distributor, ImportTransactionList].inject({}) do |hash, klass|
       hash.merge!(klass.name.pluralize.downcase => klass)
     end
 
@@ -94,13 +81,7 @@ CONFIG
   end
 
   def self.calculate_and_store_for_munin_weekly
-    now = Time.zone.now
-    last_7_days = (now - 7.days)..now
-
     metrics = {
-      "new_distributors_last_7_days" => lambda {
-        Distributor.where(created_at: last_7_days).count
-      },
       "new_transactional_customers_last_7_days" => lambda {
         Distributor.all.map(&:new_transactional_customer_count).sum
       },
@@ -112,9 +93,6 @@ graph_category Bucky
 graph_title weekly stats
 graph_vlabel count
 graph_info This graph shows custom metrics about Bucky Box app.
-new_distributors_last_7_days.label new distributors
-new_distributors_last_7_days.draw LINE2
-new_distributors_last_7_days.info The number of new distributors in the last 7 days.
 new_transactional_customers_last_7_days.label new transactional customers
 new_transactional_customers_last_7_days.draw LINE2
 new_transactional_customers_last_7_days.info The number of new transactional customers in the last 7 days.
@@ -129,4 +107,13 @@ CONFIG
       file.puts raw_metrics
     end
   end
+
+private
+
+  def self.time_frame(table)
+    beginning_of_yesterday = (Time.current - 24.hours).beginning_of_day
+    end_of_yesterday = (Time.current - 24.hours).end_of_day
+    ["#{table}.created_at > ? AND #{table}.created_at <= ?", beginning_of_yesterday, end_of_yesterday]
+  end
+
 end
