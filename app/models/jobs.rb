@@ -12,9 +12,6 @@ class Jobs
     CronLog.log("Checking distributors if next order cache needs updating.")
     Distributor.update_next_occurrence_caches
 
-    CronLog.log("Running metrics for Munin graphs.")
-    Metrics.calculate_and_store_for_munin
-
     CronLog.log("Running metrics for Librato.")
     Metrics.calculate_and_push_to_librato
 
@@ -31,6 +28,9 @@ class Jobs
     metrics_count = Metrics.calculate_and_store
     CronLog.log("#{metrics_count} metrics calculated and stored.")
 
+    CronLog.log("Running metrics for daily Munin graphs.")
+    Metrics.calculate_and_store_for_munin_daily
+
     DataIntegrity.delay(
       # - server is using UTC TZ
       # - 1am to 2am UTC is the calmest window for us (little visits) --> +1
@@ -39,5 +39,10 @@ class Jobs
       run_at: DateTime.tomorrow + 1.5.hours,
       queue: "#{__FILE__}:#{__LINE__}",
     ).check_and_email
+  end
+
+  def self.run_weekly
+    CronLog.log("Running metrics for weekly Munin graphs.")
+    Metrics.calculate_and_store_for_munin_weekly
   end
 end
