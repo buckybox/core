@@ -10,6 +10,9 @@
   %body
     %h1 Conversion Pipeline
 
+    %p
+      = link_to "Back to Metrics", admin_metrics_path
+
     = javascript_include_tag "conversion_pipeline_elm"
     :javascript
       Elm.fullscreen(Elm.ConversionPipeline)

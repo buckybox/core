@@ -109,6 +109,8 @@ print.js: print-71fad10951794a24966227e1f6b71509.js
 print/index.js: print-71fad10951794a24966227e1f6b71509.js
 sign_up_wizard.js: sign_up_wizard-285e7d66c76ee1ef2352ab19375a731c.js
 sign_up_wizard/index.js: sign_up_wizard-285e7d66c76ee1ef2352ab19375a731c.js
+vendor/Chart.min.js: vendor/Chart.min-417f74e8f8ff00d5ca7833dfd9d69953.js
+vendor/Chart/index.min.js: vendor/Chart.min-417f74e8f8ff00d5ca7833dfd9d69953.js
 admin.css: admin-92bf7b3c8a638c11bd293d79512a9eca.css
 admin/index.css: admin-92bf7b3c8a638c11bd293d79512a9eca.css
 application.css: application-f27df64658287d0013e48d9dd37bf172.css

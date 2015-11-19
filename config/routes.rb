@@ -174,6 +174,7 @@ BuckyBox::Application.routes.draw do
     resources :metrics, only: [:index] do
       collection do
         get "conversion_pipeline"
+        get "transactional_customers"
       end
     end
 
