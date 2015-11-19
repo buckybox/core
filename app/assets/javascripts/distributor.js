@@ -5,7 +5,7 @@
 //= require bootbox
 //= require select2
 //= require rails-timeago
-//= require_tree ./old/vendor
-//= require ./old/forms.js
-//= require ./old/orders.js
-//= require_tree ./old/distributor
+//= require_tree ./vendor
+//= require ./forms.js
+//= require ./orders.js
+//= require_tree ./distributor

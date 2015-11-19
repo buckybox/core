@@ -5,8 +5,7 @@
 //= require select2
 //= require rails-timeago
 //= require ace-rails-ap
-//= require ace/theme-chrome.js
-//= require ace/mode-yaml.js
-//= require_tree ./old/vendor
-//= require ./old/forms.js
-//= require_tree ./old/admin
+//= require ace/theme-chrome
+//= require ace/mode-yaml
+//= require_tree ./vendor
+//= require_tree ./admin
