@@ -15,6 +15,9 @@
   <div id="map"></div>
 
   <script>
+    // fix path to play nice with asset pipeline
+    L.Icon.Default.imagePath = L.Icon.Default.imagePath.replace("/vendor", "");
+
     var map = L.map('map').setView([20, 40], 2);
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
 
