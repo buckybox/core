@@ -13,7 +13,7 @@ class Admin::MetricsController < Admin::BaseController
     period = ((yesterday - beginning) / 7).floor
 
     period.times do |week|
-      date = yesterday - (week+1).weeks
+      date = yesterday - (week + 1).weeks
 
       cumulative_count = Bucky::Sql.transactional_customer_count(nil, date)
       current_count = cumulative_count - previous_cumulative_count
