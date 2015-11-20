@@ -21,7 +21,7 @@ describe SignUpWizardController do
     context "rendering views" do
       render_views
 
-      it "doesn't crash when geolocation fails" do
+      it "doesn't crash when geolocation fails", :internet do
         allow(request).to receive(:remote_ip).and_return "78.157.23.190" # unknown country
 
         expect { get :form }.not_to raise_error

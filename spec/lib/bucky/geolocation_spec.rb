@@ -7,7 +7,7 @@ describe Bucky::Geolocation do
       "67.205.28.58" => "US", # one of our box
       "127.0.0.1" => "RD",
     }.each do |ip, country|
-      it "returns the right country" do
+      it "returns the right country", :internet do
         expect(Bucky::Geolocation.get_country(ip)).to be_in [nil, "", country]
       end
     end
@@ -50,7 +50,7 @@ describe Bucky::Geolocation do
   end
 
   describe ".get_geoip_info" do
-    it "doesn't take more than a second" do
+    it "doesn't take more than a second", :internet do
       expect(Benchmark.realtime do
         Bucky::Geolocation.get_geoip_info "202.162.73.2"
       end).to be < 2 # 2 because it can be 1.1-ish
