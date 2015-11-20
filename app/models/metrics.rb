@@ -115,5 +115,4 @@ private
     end_of_yesterday = (Time.current - 24.hours).end_of_day
     ["#{table}.created_at > ? AND #{table}.created_at <= ?", beginning_of_yesterday, end_of_yesterday]
   end
-
 end
