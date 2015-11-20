@@ -28,6 +28,13 @@ RSpec.configure do |config|
   config.infer_base_class_for_anonymous_controllers = false
   config.filter_run_excluding :js, :slow unless ENV["CI"]
 
+  begin
+    Addrinfo.getaddrinfo("ruby-lang.org", 80)
+  rescue SocketError
+    warn "Cannot reach Internet, excluding tests requiring an Internet connection"
+    config.filter_run_excluding :internet
+  end
+
   config.include Delorean
   config.include AbstractController::Translation # `t` instead of `I18n.t` in tests
   config.include Devise::TestHelpers,        type: :controller
