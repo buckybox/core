@@ -28,11 +28,14 @@
       };
 
       var options = {
-        responsive: true,
-        maintainAspectRatio: false,
-        barValueSpacing: 1
+        pointDot: false,
+        tooltipTemplate: "<%= value %>",
+        tooltipFontSize: 10,
+        tooltipYPadding: 2,
+        tooltipXPadding: 2,
+        tooltipCaretSize: 2
       };
 
       var ctx = document.getElementById("chart").getContext("2d");
-      var chart = new Chart(ctx).Bar(data, options)
+      var chart = new Chart(ctx).Line(data, options)
 
