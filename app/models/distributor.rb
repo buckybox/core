@@ -28,7 +28,6 @@ class Distributor < ActiveRecord::Base
   has_many :omni_importers, through: :distributors_omni_importers
 
   # Metrics
-  has_many :distributor_metrics
   has_many :distributor_logins
   has_many :customer_logins
   has_many :customer_checkouts

@@ -25,9 +25,6 @@ class Jobs
       distributor.lock_access!(send_instructions: false)
     end
 
-    metrics_count = Metrics.calculate_and_store
-    CronLog.log("#{metrics_count} metrics calculated and stored.")
-
     CronLog.log("Running metrics for daily Munin graphs.")
     Metrics.calculate_and_store_for_munin_daily
 
