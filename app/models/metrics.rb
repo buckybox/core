@@ -5,22 +5,6 @@ class Metrics
   MUNIN_WEEKLY_METRICS_FILE = Rails.root.join("log/munin_weekly_metrics")
   MUNIN_WEEKLY_METRICS_CONFIG_FILE = Rails.root.join("log/munin_weekly_metrics.config")
 
-  def self.calculate_and_store
-    count = 0
-    Distributor.find_each do |distributor|
-      metric = distributor.distributor_metrics.new
-      metric.distributor_logins = distributor.distributor_logins.where(time_frame('distributor_logins')).count
-      metric.new_customers = distributor.customers.where(time_frame('customers')).count
-      metric.deliveries_completed = distributor.deliveries.delivered.where(time_frame('deliveries')).count
-      metric.customer_payments = distributor.payments.import.where(time_frame('payments')).count
-      metric.webstore_checkouts = distributor.customer_checkouts.where(time_frame('customer_checkouts')).count
-      metric.customer_logins = distributor.customer_logins.where(time_frame('customer_logins')).count
-      metric.save!
-      count += 1
-    end
-    count
-  end
-
   def self.calculate_and_push_to_librato
     return unless Rails.env.production?
 
@@ -106,13 +90,5 @@ CONFIG
 
       file.puts raw_metrics
     end
-  end
-
-private
-
-  def self.time_frame(table)
-    beginning_of_yesterday = (Time.current - 24.hours).beginning_of_day
-    end_of_yesterday = (Time.current - 24.hours).end_of_day
-    ["#{table}.created_at > ? AND #{table}.created_at <= ?", beginning_of_yesterday, end_of_yesterday]
   end
 end
