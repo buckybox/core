@@ -9,15 +9,6 @@
 
     = csrf_meta_tag
 
-    - if Rails.env.production? || Rails.env.staging?
-      = javascript_include_tag "https://d2wy8f7a9ursnm.cloudfront.net/bugsnag-2.min.js", "data-apikey" => Figaro.env.bugsnag_api_key
-      :javascript
-        if (typeof Bugsnag !== 'undefined') {
-          Bugsnag.beforeNotify = function(payload) {
-            return (navigator.userAgent.match(/MSIE|Mobile/i) === null);
-          }
-        }
-
     = yield(:head)
 
     - if Rails.env.production?
