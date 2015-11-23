@@ -97,10 +97,8 @@ describe SignUpWizardController do
         it "sets up omni importers for the bank" do
           post_form.call
 
-          pending "fails randomly"
-          fail
-          # distributor = Distributor.where(name: form_params["distributor"]["name"]).last
-          # expect(distributor.omni_importers).to eq [@omni_importer]
+          distributor = Distributor.where(name: form_params["distributor"]["name"]).last
+          expect(distributor.omni_importers).to eq [@omni_importer]
         end
       end
 
@@ -128,10 +126,8 @@ describe SignUpWizardController do
           it "sets it up for the selected country" do
             post :sign_up, form_params_with_paypal
 
-            pending "fails randomly"
-            fail
-            # distributor = Distributor.where(name: form_params["distributor"]["name"]).last
-            # expect(distributor.omni_importers).to match_array @omni_importers
+            distributor = Distributor.where(name: form_params["distributor"]["name"]).last
+            expect(distributor.omni_importers).to match_array @omni_importers
           end
         end
 
