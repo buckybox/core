@@ -78,9 +78,15 @@ private
   def send_follow_up_email
     distributor = params[:distributor]
 
+    deliveries_per_week = if distributor[:deliveries_per_week].blank?
+      ""
+    else
+      "(#{distributor[:deliveries_per_week]}) "
+    end
+
     options = {
       to: Figaro.env.signups_email,
-      subject: "Sign up follow-up [#{Rails.env}]",
+      subject: "Signup: #{distributor[:country]} #{deliveries_per_week}- #{distributor[:name]}",
       body: <<-BODY.html_safe
         Organisation name: #{distributor[:name]}
         Email: #{distributor[:email]}
@@ -92,7 +98,7 @@ private
         Accept credit card: #{distributor[:payment_credit_card]}
         Accept direct debit: #{distributor[:payment_direct_debit]}
         Accept Bitcoins: #{distributor[:payment_bitcoin]}
-        Source: #{distributor[:source]}
+        Referral: #{distributor[:source]}
         Deliveries per week: #{distributor[:deliveries_per_week]}
         Country: #{distributor[:country]}
 
