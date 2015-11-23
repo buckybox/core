@@ -9,7 +9,7 @@ RSpec.describe DirectoryController, type: :controller do
       allow(Distributor).to receive(:active).and_return([distributor])
       Fabricate(:localised_address, addressable: distributor, street: "89 Courtenay Place", city: "Wellington")
 
-      result = <<-RESULT
+      result = <<-RESULT.strip
         var locations = [["-41.2930368", "174.7794396"]];\n    var addresses = ["89 Courtenay Place Wellington NZ"];\n    var names = [\"Local Veg\"];\n    var webstores = [\"https://store.buckybox.com/local-veg\"];
       RESULT
 
