@@ -75,6 +75,13 @@ module BuckyBox
     # Version of your assets, change this if you want to expire all your assets
     config.assets.version = '1.0'
 
+    # Compress JavaScripts and CSS
+    config.assets.compress = true
+
+    # Don't mangle variable names to be idempotent and avoid noise in commits
+    # config.assets.js_compressor = :uglifier
+    config.assets.js_compressor = Uglifier.new(mangle: false)
+
     # Use Redis as cache store
     config.cache_store = :readthis_store, {
       redis: { url: "redis://localhost:6379/", driver: :hiredis },

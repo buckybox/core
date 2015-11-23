@@ -11,9 +11,6 @@ BuckyBox::Application.configure do
   # Disable Rails's static asset server (Apache or nginx will already do this)
   config.serve_static_assets = false
 
-  # Compress JavaScripts and CSS
-  config.assets.compress = true
-
   # Don't fallback to assets pipeline if a precompiled asset is missed
   config.assets.compile = false
 
@@ -54,7 +51,7 @@ BuckyBox::Application.configure do
   config.action_mailer.raise_delivery_errors = false
   config.action_mailer.default_url_options = { host: Figaro.env.host }
 
-  # postmark settings
+  # Mandrill settings
   config.action_mailer.delivery_method = :smtp
   config.action_mailer.smtp_settings = {
     :address   => "smtp.mandrillapp.com",
@@ -65,6 +62,7 @@ BuckyBox::Application.configure do
     :authentication => 'login', # Mandrill supports 'plain' or 'login'
     :domain => 'my.buckybox.com', # your domain to identify your server when connecting
   }
+
   # Enable threaded mode
   # config.threadsafe!
 
