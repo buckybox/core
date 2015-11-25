@@ -17,11 +17,19 @@ BuckyBox::Application.configure do
   # Generate digests for assets URLs
   config.assets.digest = true
 
-  # Don't store credit card details
-  config.filter_parameters << :credit_card
+  # Compress JavaScripts and CSS
+  config.assets.compress = true
+
+  # Don't mangle variable names to be idempotent and avoid noise in commits
+  # config.assets.js_compressor = :uglifier
+  require 'uglifier'
+  config.assets.js_compressor = Uglifier.new(mangle: false)
 
   # Defaults to Rails.root.join("public/assets")
   # config.assets.manifest = YOUR_PATH
+
+  # Don't store credit card details
+  config.filter_parameters << :credit_card
 
   # Specifies the header that your server uses for sending files
   # config.action_dispatch.x_sendfile_header = "X-Sendfile" # for apache
