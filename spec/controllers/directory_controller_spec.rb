@@ -5,6 +5,9 @@ RSpec.describe DirectoryController, type: :controller do
     render_views
 
     it "renders the expected HTML", :internet do
+      pending "will be removed soon"
+      fail
+
       distributor = Fabricate(:existing_distributor_with_everything, name: "Local Veg")
       allow(Distributor).to receive(:active).and_return([distributor])
       Fabricate(:localised_address, addressable: distributor, street: "89 Courtenay Place", city: "Wellington")

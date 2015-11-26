@@ -36,8 +36,15 @@ Fabricator(:distributor_with_everything, from: :distributor_with_information) do
     Fabricate(:localised_address,      addressable: distributor)
 
     distributor.active_webstore = true
+    distributor.last_seen_at = Time.current
 
     distributor.save!
+  end
+end
+
+Fabricator(:active_distributor_with_everything, from: :distributor_with_everything) do
+  after_create do |distributor|
+    10.times { Fabricate(:customer_with_transaction, distributor: distributor) }
   end
 end
 
