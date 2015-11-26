@@ -15,6 +15,7 @@ module Bucky
     end
 
     # TODO: this is terribly filthy
+    # TODO: replace Biggs Gem with Countries
     def get_address_form(country_code, resource)
       model_name = resource.class.model_name.to_s.downcase
       format = Biggs::Format.new(country_code).format_string

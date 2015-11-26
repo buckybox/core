@@ -1388,7 +1388,9 @@ CREATE TABLE localised_addresses (
     zip character varying(255),
     state character varying(255),
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    updated_at timestamp without time zone NOT NULL,
+    lat numeric(15,10),
+    lng numeric(15,10)
 );
 
 
@@ -3450,3 +3452,5 @@ INSERT INTO schema_migrations (version) VALUES ('20150815161652');
 INSERT INTO schema_migrations (version) VALUES ('20151021130722');
 
 INSERT INTO schema_migrations (version) VALUES ('20151120191928');
+
+INSERT INTO schema_migrations (version) VALUES ('20151126143915');
