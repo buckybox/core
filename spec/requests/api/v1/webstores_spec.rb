@@ -39,7 +39,9 @@ describe "API v1" do
       let(:webstores) { json_response }
 
       before do
-        @distributor = Fabricate(:distributor_with_everything)
+        # XXX: This is terribly slow as we create a huge fucking bunch of stuff
+        # to satisfy the Distributor.active scope
+        @distributor = Fabricate(:active_distributor_with_everything)
 
         json_request :get, url
         expect(response).to be_success

@@ -122,7 +122,8 @@ class Distributor < ActiveRecord::Base
   end
 
   def self.active
-    where("last_seen_at > ?", 30.days.ago)
+    where("email != ?", "demo@buckybox.com")
+      .where("last_seen_at > ?", 30.days.ago)
       .select { |d| d.transactional_customer_count > 9 }
       .sort_by(&:transactional_customer_count).reverse
   end

@@ -11,6 +11,12 @@ Fabricator(:customer) do
   end
 end
 
+Fabricator(:customer_with_transaction, from: :customer) do
+  after_build do |customer|
+    Fabricate(:transaction, account: customer.account)
+  end
+end
+
 Fabricator(:customer_with_address, class_name: :customer) do
   distributor { Fabricate(:distributor_with_information) }
   delivery_service { |attrs| Fabricate(:delivery_service, distributor: attrs[:distributor]) }
