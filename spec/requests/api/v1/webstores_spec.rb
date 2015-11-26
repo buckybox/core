@@ -39,7 +39,7 @@ describe "API v1" do
       let(:webstores) { json_response }
 
       before do
-        @distributor2 ||= Fabricate(:distributor_with_everything)
+        @distributor = Fabricate(:distributor_with_everything)
 
         json_request :get, url
         expect(response).to be_success
@@ -48,8 +48,9 @@ describe "API v1" do
       it_behaves_like "an unauthenticated API", :get
 
       it "returns webstores" do
-        p json_response
-        expect(json_response.map { |w| w.fetch("name") }).to match_array [@distributor, @distributor2].map(&:name)
+        expect(json_response.count).to eq 1
+        expect(json_response.first.fetch("name")).to eq @distributor.name
+        expect(json_response.first.keys).to match_array %w(name webstore_url ll postal_address)
       end
     end
   end
