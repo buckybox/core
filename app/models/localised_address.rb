@@ -5,7 +5,7 @@ class LocalisedAddress < ActiveRecord::Base
 
   biggs :postal_address
 
-  after_save :geocode_async, unless: -> { lat_changed? || lng_changed? }
+  after_save :geocode_async, if: "changed?"
 
   def recipient
     addressable.name
@@ -22,6 +22,10 @@ class LocalisedAddress < ActiveRecord::Base
   def postal_address_without_recipient
     biggs_values = biggs_values_without([:recipient])
     Biggs::Formatter.new.format(country, biggs_values).strip
+  end
+
+  def ll
+    [lat, lng]
   end
 
 private
@@ -44,9 +48,9 @@ private
 
     return unless geocoded_address
 
-    self.lat = geocoded_address.lat
-    self.lng = geocoded_address.lng
-    save!
+    # bypass callbacks to avoid infinite loop
+    update_column(:lat, geocoded_address.lat)
+    update_column(:lng, geocoded_address.lng)
   end
 
   def address_in_sections
