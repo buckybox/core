@@ -3,7 +3,7 @@ require "spec_helper"
 include ApiHelpers
 
 describe "API v1" do
-  describe "webstore" do
+  describe "webstores" do
     shared_examples_for "a webstore" do
       it "returns the expected attributes" do
         expect(webstore.keys).to match_array model_attributes
@@ -31,6 +31,25 @@ describe "API v1" do
 
       it "returns the webstore" do
         expect(json_response["id"]).to eq @distributor.parameter_name
+      end
+    end
+
+    describe "GET /webstores" do
+      let(:url) { "#{base_url}/webstores" }
+      let(:webstores) { json_response }
+
+      before do
+        @distributor2 ||= Fabricate(:distributor_with_everything)
+
+        json_request :get, url
+        expect(response).to be_success
+      end
+
+      it_behaves_like "an unauthenticated API", :get
+
+      it "returns webstores" do
+        p json_response
+        expect(json_response.map { |w| w.fetch("name") }).to match_array [@distributor, @distributor2].map(&:name)
       end
     end
   end
