@@ -63,4 +63,13 @@ module ApiHelpers
       expect(json_response).to have_key "message"
     end
   end
+
+  shared_examples_for "an unauthenticated API" do |method|
+    it "does NOT return 401 with no credentials" do
+      headers = {}
+      json_request(method, url, nil, headers)
+
+      expect(response.status).not_to eq 401
+    end
+  end
 end

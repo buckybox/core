@@ -11,6 +11,8 @@ describe "API v1" do
         Fabricate.times(2, :distributor, created_at: Time.now, last_seen_at: Time.now)
       end
 
+      it_behaves_like "an unauthenticated API", :get
+
       it "returns some JSON" do
         json_request :get, url, nil, headers
 

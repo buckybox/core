@@ -1,13 +1,13 @@
 class Api::V1::BaseController < ApplicationController
   layout false
   before_action :log_request, :authenticate, :set_time_zone, :set_locale, :embed_options
-  skip_before_action :authenticate, :set_time_zone, :set_locale, :embed_options, only: [:ping, :csp_report]
+  skip_before_action :authenticate, only: [:ping, :csp_report]
 
   # rescue_from ActionController::RoutingError, with: :not_found # TODO: enable with Rails 4
   # rescue_from Exception, with: :server_error # TODO: enable with Rails 4
 
   def ping
-    render text: "Pong!"
+    render text: nil, status: :no_content
   end
 
   def csp_report
@@ -41,24 +41,6 @@ class Api::V1::BaseController < ApplicationController
   end
 
 private
-
-  def api_key
-    request.headers['API-Key']
-  end
-
-  def api_secret
-    request.headers['API-Secret']
-  end
-
-  def webstore_id
-    request.headers['Webstore-ID']
-  end
-
-  def api_master_allowed_ips
-    ips = Figaro.env.api_master_allowed_ips.dup
-    ips << "127.0.0.1" if Rails.env.development?
-    ips
-  end
 
   def log_request
     info = {
@@ -97,11 +79,34 @@ private
   end
 
   def set_time_zone
-    Time.zone = @distributor.time_zone
+    Time.zone = @distributor.time_zone if @distributor
   end
 
   def set_locale
-    I18n.locale = @distributor.locale
+    I18n.locale = @distributor.locale if @distributor
+  end
+
+  # hash parameters (2nd+ level json is only provided when requested via ?embed={object} )
+  def embed_options
+    @embed = params[:embed].to_s.split(",").to_set.freeze
+  end
+
+  def api_key
+    request.headers['API-Key']
+  end
+
+  def api_secret
+    request.headers['API-Secret']
+  end
+
+  def webstore_id
+    request.headers['Webstore-ID']
+  end
+
+  def api_master_allowed_ips
+    ips = Figaro.env.api_master_allowed_ips.dup
+    ips << "127.0.0.1" if Rails.env.development?
+    ips
   end
 
   def send_alert_email(body)
@@ -110,11 +115,6 @@ private
       subject: "[URGENT] Hacking attempt!",
       body: body,
     ).deliver
-  end
-
-  # hash parameters (2nd+ level json is only provided when requested via ?embed={object} )
-  def embed_options
-    @embed = params[:embed].to_s.split(",").to_set.freeze
   end
 
   def fetch_json_body

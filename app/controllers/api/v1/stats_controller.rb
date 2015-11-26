@@ -1,5 +1,5 @@
 class Api::V1::StatsController < Api::V1::BaseController
-  skip_before_action :authenticate, :set_time_zone, :set_locale, :embed_options, only: [:conversion_pipeline]
+  skip_before_action :authenticate, only: :conversion_pipeline
 
   def conversion_pipeline
     Time.zone = "UTC"
