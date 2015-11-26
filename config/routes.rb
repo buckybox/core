@@ -208,7 +208,8 @@ BuckyBox::Application.routes.draw do
       resources :boxes,             only: [:index, :show]
       resources :delivery_services, only: [:index, :show]
       resources :orders,            only: [:index, :show, :create]
-      resource  :webstore,          only: [:show]
+      resources :webstores,         only: [:index] # all webstores
+      resource  :webstore,          only: [:show] # current webstore
     end
   end
 
