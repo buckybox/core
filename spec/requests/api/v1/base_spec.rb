@@ -6,11 +6,13 @@ describe "API v1" do
   describe "GET /ping" do
     let(:url) { "#{base_url}/ping" }
 
+    it_behaves_like "an unauthenticated API", :get
+
     it "pongs!" do
       get url
 
-      expect(response.code).to eq "200"
-      expect(response.body).to eq "Pong!"
+      expect(response.code).to eq "204"
+      expect(response.body).to be_empty
     end
   end
 
@@ -30,6 +32,8 @@ describe "API v1" do
 }
       JSON
     }
+
+    it_behaves_like "an unauthenticated API", :post
 
     it "processes the report successfully" do
       expect(Bugsnag).to receive(:notify)
