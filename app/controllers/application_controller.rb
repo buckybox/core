@@ -157,7 +157,7 @@ private
         customer_root_url
       end
     else
-      Figaro.env.marketing_site_url # Shouldn't happen but better than nothing.
+      raise "should not happen"
     end
   end
 

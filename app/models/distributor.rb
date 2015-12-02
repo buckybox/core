@@ -136,10 +136,7 @@ class Distributor < ActiveRecord::Base
         hydra = Typhoeus::Hydra.hydra
 
         distributors.each do |distributor|
-          # TODO: don't hardcode URL once we migrate the web store to other app
-          url = "https://store.buckybox.com/#{distributor.parameter_name}"
-
-          request = Typhoeus::Request.new(url, timeout: 30)
+          request = Typhoeus::Request.new(distributor.webstore_url, timeout: 30)
           request.on_complete do |response|
             unless response.success?
               error = "Could not refresh #{response.request.url}: #{response.return_message}"
@@ -224,7 +221,7 @@ class Distributor < ActiveRecord::Base
   end
 
   def webstore_url
-    "https://store.buckybox.com/#{parameter_name}".freeze
+    [Figaro.env.consumer_site_url, parameter_name].join.freeze
   end
 
   def mark_as_seen!

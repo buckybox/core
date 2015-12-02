@@ -2,6 +2,7 @@
 
 # URLs
 MARKETING_SITE_URL: "http://www.buckybox.com/"
+CONSUMER_SITE_URL: "https://store.buckybox.com/"
 
 # Emails
 SUPPORT_EMAIL: "support@buckybox.com"
