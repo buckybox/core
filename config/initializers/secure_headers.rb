@@ -6,7 +6,7 @@ SecureHeaders::Configuration.configure do |config|
   config.csp = {
     enforce: true,
     default_src: "'none'",
-    img_src: "'self' *.google-analytics.com *.pingdom.net *.pingdom.com *.intercomcdn.com *.intercom.io *.tile.openstreetmap.org",
+    img_src: "'self' *.google-analytics.com *.pingdom.net *.pingdom.com *.intercomcdn.com *.intercomassets.com *.intercom.io *.tile.openstreetmap.org",
     script_src: "'self' 'unsafe-inline' 'unsafe-eval' *.google-analytics.com *.pingdom.net js-agent.newrelic.com bam.nr-data.net *.intercomcdn.com *.intercom.io",
     style_src: "'self' 'unsafe-inline'",
     form_action: "'self' www.paypal.com",
