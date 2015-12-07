@@ -5,7 +5,7 @@ group :default do # XXX: all environments, think twice before adding Gems here
   gem "test-unit" # for Ruby 2.2
   gem "unicorn"
   gem "rails", "~> 3.2.22"
-  gem "sprockets", "~> 2.2.3" # https://groups.google.com/forum/#!topic/rubyonrails-security/doAVp0YaTqY
+  gem "sprockets"
   gem "rails-i18n", "~> 3.0.0" # For Rails 3.x
   gem "pg"
   gem "therubyracer"
@@ -47,8 +47,8 @@ group :default do # XXX: all environments, think twice before adding Gems here
   gem "country_select", "~> 1.1.3" # TODO: https://github.com/stefanpenner/country_select/blob/master/UPGRADING.md
   gem "biggs"
   gem "charlock_holmes"
-  gem "rabl", git: "https://github.com/nesquena/rabl.git" # TODO: remove when https://github.com/nesquena/rabl/commit/e07c83d41caf1ccbbe952cbe817734af68613c4e is released
-  gem "apipie-rails", "0.3.3" # 0.3.4 is broken https://github.com/Apipie/apipie-rails/pull/350
+  gem "rabl"
+  gem "apipie-rails"
   gem "strong_parameters"
   gem "rails-timeago"
   gem "discover-unused-partials"
