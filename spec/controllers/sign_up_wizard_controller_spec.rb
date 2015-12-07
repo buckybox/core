@@ -89,19 +89,6 @@ describe SignUpWizardController do
         post_form.call
       end
 
-      context "with matching omni importer" do
-        before do
-          @omni_importer = Fabricate(:omni_importer_for_bank_deposit, country: @nz, bank_name: form_params["distributor"]["bank_name"])
-        end
-
-        it "sets up omni importers for the bank" do
-          post_form.call
-
-          distributor = Distributor.where(name: form_params["distributor"]["name"]).last
-          expect(distributor.omni_importers).to eq [@omni_importer]
-        end
-      end
-
       context "when PayPal is selected" do
         let(:form_params_with_paypal) do
           form_params_with_paypal = form_params
@@ -111,24 +98,8 @@ describe SignUpWizardController do
         end
 
         before do
-          # we assume there is a "generic" PayPal omni with no country in the DB
+          # XXX: we assume there is a "generic" PayPal omni with no country in the DB
           @generic_paypal = Fabricate(:paypal_omni_importer, country: nil)
-        end
-
-        context "when the selected country has a PayPal omni importer" do
-          before do
-            @omni_importers = [
-              Fabricate(:paypal_omni_importer, country: @nz),
-              Fabricate(:omni_importer_for_bank_deposit, country: @nz, bank_name: form_params["distributor"]["bank_name"])
-            ]
-          end
-
-          it "sets it up for the selected country" do
-            post :sign_up, form_params_with_paypal
-
-            distributor = Distributor.where(name: form_params["distributor"]["name"]).last
-            expect(distributor.omni_importers).to match_array @omni_importers
-          end
         end
 
         context "when the selected country does not have a PayPal omni importer" do
