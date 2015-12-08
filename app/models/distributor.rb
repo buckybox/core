@@ -535,6 +535,18 @@ class Distributor < ActiveRecord::Base
     end
   end
 
+  def age_in_days
+    (Date.current - created_at.to_date + 1).to_i
+  end
+
+  def sign_in_count_per_week
+    (sign_in_count / (age_in_days.to_f / 7)).round(2).to_f
+  end
+
+  def converted?
+    sign_in_count_per_week > 0.5 && transactional_customer_count > 9
+  end
+
 private
 
   def self.human_attribute_name(attr, options = {})
