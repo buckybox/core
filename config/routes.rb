@@ -199,7 +199,7 @@ BuckyBox::Application.routes.draw do
     namespace :v1 do
       get  "ping"                => "base#ping"
       post "csp-report"          => "base#csp_report"
-      get  "geoip/:ip"           => "base#geoip", constraints: { ip: /[^\/]+/ } # accept IP including dots
+      get  "geoip(/:ip)"         => "base#geoip", constraints: { ip: /[^\/]+/ } # accept IP including dots
       get  "conversion-pipeline" => "stats#conversion_pipeline"
 
       post "/customers/sign_in"

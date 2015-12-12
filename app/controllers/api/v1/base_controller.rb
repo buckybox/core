@@ -41,7 +41,7 @@ class Api::V1::BaseController < ApplicationController
   end
 
   def geoip
-    ip = params.fetch(:ip)
+    ip = params.fetch(:ip, request.remote_ip)
     geoip = Typhoeus.get("http://127.0.0.1:9999/json/#{ip}").request.response
 
     return unprocessable_entity("unknown error") if geoip.code != 200
