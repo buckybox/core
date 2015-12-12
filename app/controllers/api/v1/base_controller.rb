@@ -1,7 +1,7 @@
 class Api::V1::BaseController < ApplicationController
   layout false
   before_action :log_request, :authenticate, :set_time_zone, :set_locale, :embed_options
-  skip_before_action :authenticate, only: [:ping, :csp_report]
+  skip_before_action :authenticate, only: [:ping, :csp_report, :geoip]
 
   # rescue_from ActionController::RoutingError, with: :not_found # TODO: enable with Rails 4
   # rescue_from Exception, with: :server_error # TODO: enable with Rails 4
@@ -38,6 +38,21 @@ class Api::V1::BaseController < ApplicationController
     end
 
     render text: nil, status: :no_content
+  end
+
+  def geoip
+    ip = params.fetch(:ip)
+    geoip = Typhoeus.get("http://127.0.0.1:9999/json/#{ip}").request.response
+
+    return unprocessable_entity("unknown error") if geoip.code != 200
+
+    json = JSON.parse(geoip.body)
+    country_code = json.fetch("country_code")
+
+    country = Country.find_by(alpha2: country_code)
+    new_json = json.merge!(currency: country.currency)
+
+    render json: new_json
   end
 
 private

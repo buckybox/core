@@ -197,9 +197,10 @@ BuckyBox::Application.routes.draw do
 
   namespace :api, path: "", defaults: { format: :json }, constraints: API_SUBDOMAIN do
     namespace :v1 do
-      get  "ping"       => "base#ping"
-      post "csp-report" => "base#csp_report"
-      get "conversion-pipeline" => "stats#conversion_pipeline"
+      get  "ping"                => "base#ping"
+      post "csp-report"          => "base#csp_report"
+      get  "geoip/:ip"           => "base#geoip", constraints: { ip: /[^\/]+/ } # accept IP including dots
+      get  "conversion-pipeline" => "stats#conversion_pipeline"
 
       post "/customers/sign_in"
       resources :customers,         only: [:index, :show, :create, :update]
