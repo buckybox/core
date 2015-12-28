@@ -21,9 +21,12 @@
 
   .span6.text-right
     - if request.path == admin_root_path
+      = number_with_delimiter(@customer_count)
+      Active Customers
+      |
       = link_to "https://app.intercom.io/a/apps/b3e72f90ddcc230dea36a8e35ec7e4dd65860b61/users/segments/active", target: "_blank" do
-        = @distributors.count - 1 # minus 1 for demo@buckybox.com
-        active distributors
+        = @distributors.count
+        Active Distributors
       |
 
     = link_to 'Log Out', destroy_admin_session_path, method: :delete

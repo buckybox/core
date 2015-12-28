@@ -121,8 +121,12 @@ class Distributor < ActiveRecord::Base
     password.present? && password.size > 0 || new_record?
   end
 
+  def self.demo
+    find_by(email: "demo@buckybox.com")
+  end
+
   def self.active
-    where("email != ?", "demo@buckybox.com")
+    where("email != ?", demo.email)
       .where("last_seen_at > ?", 30.days.ago)
       .select { |d| d.transactional_customer_count > 9 }
       .sort_by(&:transactional_customer_count).reverse
