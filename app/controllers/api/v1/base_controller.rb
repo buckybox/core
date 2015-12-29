@@ -49,7 +49,7 @@ class Api::V1::BaseController < ApplicationController
     json = JSON.parse(geoip.body)
     country_code = json.fetch("country_code")
 
-    country = Country.find_by(alpha2: country_code)
+    country = Country.find_by!(alpha2: country_code)
     new_json = json.merge!(currency: country.currency)
 
     render json: new_json

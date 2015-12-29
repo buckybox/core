@@ -6,6 +6,10 @@ class ActiveRecord::Base
       where(*args).first
     end
 
+    def find_by!(*args)
+      find_by(*args) or raise ActiveRecord::RecordNotFound.new("Couldn't find record with #{args}")
+    end
+
     def find_or_create_by(attributes, &block)
       find_by(attributes) || create(attributes, &block)
     end
