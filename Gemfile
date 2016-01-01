@@ -4,9 +4,9 @@ group :default do # XXX: all environments, think twice before adding Gems here
   gem "rake"
   gem "test-unit" # for Ruby 2.2
   gem "unicorn"
-  gem "rails", "~> 3.2.22"
+  gem "rails", git: "https://github.com/infertux/rails.git", branch: "3-2-stable" # use our own 3.2 fork with backported patches...
   gem "sprockets"
-  gem "rails-i18n", "~> 3.0.0" # For Rails 3.x
+  gem "rails-i18n", "~> 3.0.0" # for Rails 3.x
   gem "pg"
   gem "therubyracer"
   gem "haml-rails"
@@ -75,7 +75,7 @@ group :default do # XXX: all environments, think twice before adding Gems here
 end
 
 group :development do
-  gem "webrick" # Included explicitly so #chunked warnings no longer show up in the dev log
+  gem "webrick" # included explicitly so #chunked warnings no longer show up in the dev log
   gem "yard",       require: false
   gem "brakeman",   require: false
   gem "xray-rails", require: false
