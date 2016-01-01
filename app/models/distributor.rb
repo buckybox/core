@@ -40,6 +40,7 @@ class Distributor < ActiveRecord::Base
   DEFAULT_ADVANCED_DAYS   = 3
   MAX_ADVANCED_DAYS       = 14
   AUTOMATIC_DELIVERY_HOUR = 23
+  DEMO_EMAIL              = 'demo@buckybox.com'
   HUMANIZED_ATTRIBUTES    = {
     email: "Account login email"
   }
@@ -122,11 +123,11 @@ class Distributor < ActiveRecord::Base
   end
 
   def self.demo
-    find_by(email: "demo@buckybox.com")
+    find_by(email: DEMO_EMAIL)
   end
 
   def self.active
-    where("email != ?", demo.email)
+    where("email != ?", DEMO_EMAIL)
       .where("last_seen_at > ?", 30.days.ago)
       .select { |d| d.transactional_customer_count > 9 }
       .sort_by(&:transactional_customer_count).reverse

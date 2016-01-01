@@ -7,7 +7,7 @@ class ActiveRecord::Base
     end
 
     def find_by!(*args)
-      find_by(*args) or raise ActiveRecord::RecordNotFound.new("Couldn't find record with #{args}")
+      find_by(*args) or raise ActiveRecord::RecordNotFound, "Couldn't find record with #{args}"
     end
 
     def find_or_create_by(attributes, &block)
