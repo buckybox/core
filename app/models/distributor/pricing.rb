@@ -6,6 +6,43 @@ class Distributor::Pricing < ActiveRecord::Base
   monetize :flat_fee_cents
   monetize :percentage_fee_max_cents
 
+  def account_balance
+    CrazyMoney.zero # FIXME
+  end
+
+  def current_balance
+    account_balance - current_usage
+  end
+
+  def current_usage
+    delivery_cut + flat_fee
+  end
+
+  def delivery_cut
+    deductions = distributor.deductions \
+      .where("created_at >= ?", last_billing_date) \
+      .where(deductable_type: "Delivery")
+
+    deductions.sum do |deduction|
+      [deduction.amount * percentage_fee, percentage_fee_max].min
+    end
+  end
+
+  def billing_day_of_the_month
+    20
+  end
+
+  def last_billing_date
+    distributor.use_local_time_zone do
+      yesterday = Date.yesterday
+
+      date = Date.new(yesterday.year, yesterday.month, billing_day_of_the_month)
+      date -= 1.month if yesterday.day < billing_day_of_the_month
+
+      date
+    end
+  end
+
   def description
     parts = []
 
