@@ -1,0 +1,38 @@
+.row
+  .span12.text-center
+    %h1 Billing
+
+%hr
+.row
+  .span1
+  %strong.span2 Current Plan
+  .span9
+    %strong= pricing.name
+    %p= pricing.description
+
+- unless pricing.discount_percentage.zero?
+  %hr
+  .row
+    .span1
+    %strong.span2 Discount
+    .span9= number_to_percentage(pricing.discount_percentage, precision: 0)
+
+%hr
+.row
+  .span1
+  %strong.span2 Account Balance
+  .span9 $0.00
+
+%hr
+.row
+  .span1
+  %strong.span2 Current usage
+  .span9 2 since 2015-12-10
+
+%hr
+.row
+  .span1
+  %strong.span2 Current Balance
+  .span9 ac_bal - cur_usage
+
+%hr

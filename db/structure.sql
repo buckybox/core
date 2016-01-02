@@ -1021,6 +1021,43 @@ ALTER SEQUENCE distributor_logins_id_seq OWNED BY distributor_logins.id;
 
 
 --
+-- Name: distributor_pricings; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE distributor_pricings (
+    id integer NOT NULL,
+    distributor_id integer,
+    name character varying(255) NOT NULL,
+    flat_fee_cents integer DEFAULT 0 NOT NULL,
+    percentage_fee numeric DEFAULT 0 NOT NULL,
+    percentage_fee_max_cents integer DEFAULT 0 NOT NULL,
+    discount_percentage numeric DEFAULT 0 NOT NULL,
+    currency character varying(255) NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: distributor_pricings_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE distributor_pricings_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: distributor_pricings_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE distributor_pricings_id_seq OWNED BY distributor_pricings.id;
+
+
+--
 -- Name: distributors; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -2047,6 +2084,13 @@ ALTER TABLE ONLY distributor_logins ALTER COLUMN id SET DEFAULT nextval('distrib
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
+ALTER TABLE ONLY distributor_pricings ALTER COLUMN id SET DEFAULT nextval('distributor_pricings_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
 ALTER TABLE ONLY distributors ALTER COLUMN id SET DEFAULT nextval('distributors_id_seq'::regclass);
 
 
@@ -2362,6 +2406,14 @@ ALTER TABLE ONLY delivery_services
 
 ALTER TABLE ONLY distributor_logins
     ADD CONSTRAINT distributor_logins_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: distributor_pricings_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY distributor_pricings
+    ADD CONSTRAINT distributor_pricings_pkey PRIMARY KEY (id);
 
 
 --
@@ -3454,3 +3506,5 @@ INSERT INTO schema_migrations (version) VALUES ('20151021130722');
 INSERT INTO schema_migrations (version) VALUES ('20151120191928');
 
 INSERT INTO schema_migrations (version) VALUES ('20151126143915');
+
+INSERT INTO schema_migrations (version) VALUES ('20160102123920');

@@ -56,6 +56,8 @@ BuckyBox::Application.routes.draw do
       get "customer_account_history/:to",    action: :customer_account_history,  as: "customer_account_history"
     end
 
+    resource :billing, only: :show, controller: "billing"
+
     resources :distributors,        only: :update
     resource  :bank_information,    only: :update
     resources :boxes,               except: [:index]

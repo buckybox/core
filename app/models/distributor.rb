@@ -6,6 +6,7 @@ class Distributor < ActiveRecord::Base
 
   has_one :bank_information,          dependent: :destroy
   has_one :localised_address,         dependent: :destroy, as: :addressable, autosave: true
+  has_one :pricing,                   dependent: :destroy
 
   has_many :extras,                   dependent: :destroy
   has_many :boxes,                    dependent: :destroy

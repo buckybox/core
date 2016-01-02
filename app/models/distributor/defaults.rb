@@ -9,6 +9,7 @@ class Distributor::Defaults
   end
 
   def populate_defaults
+    populate_pricing
     populate_line_items
     populate_bank_information
     populate_paypal_information
@@ -19,6 +20,12 @@ class Distributor::Defaults
 private
 
   attr_accessor :distributor
+
+  def populate_pricing
+    pricing = Distributor::Pricing.default_for_currency(distributor.currency)
+    pricing.distributor = distributor
+    pricing.save!
+  end
 
   def populate_line_items
     LineItem.add_defaults_to(distributor)
