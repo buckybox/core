@@ -14,26 +14,32 @@ class Distributor::Pricing < ActiveRecord::Base
     account_balance - current_usage
   end
 
-  def current_usage
-    delivery_cut + flat_fee
-  end
+  def usage_between(from, to)
+    raise ArgumentError unless from.is_a?(Date) && to.is_a?(Date)
 
-  def delivery_cut
     deductions = distributor.deductions \
-      .where("created_at >= ?", last_billing_date) \
+      .where("created_at >= ? AND created_at <= ?", from, to) \
       .where(deductable_type: "Delivery")
 
-    deductions.sum do |deduction|
+    total = deductions.sum do |deduction|
       [deduction.amount * percentage_fee, percentage_fee_max].min
     end
+
+    CrazyMoney.new(total) + flat_fee
   end
 
-  def billing_day_of_the_month
-    20
+  def current_usage
+    distributor.use_local_time_zone do
+      usage_between last_billing_date, Date.current
+    end
   end
 
   def last_billing_date
     distributor.use_local_time_zone do
+      last_invoice = distributor.invoices.last
+      return last_invoice.to if last_invoice
+
+      # otherwise we assume it was billing_day_of_the_month
       yesterday = Date.yesterday
 
       date = Date.new(yesterday.year, yesterday.month, billing_day_of_the_month)
@@ -55,6 +61,10 @@ class Distributor::Pricing < ActiveRecord::Base
     end
 
     parts.join(" + ")
+  end
+
+  def billing_day_of_the_month
+    20
   end
 
   def self.default_for_currency(currency)

@@ -38,7 +38,7 @@
   %strong.span2 Current Usage
   .span9
     = pricing.current_usage.with_currency(pricing.currency)
-    = "(since #{pricing.last_billing_date} to #{Date.current})"
+    = "(since #{pricing.last_billing_date})"
 
 %hr
 .row
@@ -48,3 +48,27 @@
     = pricing.current_balance.with_currency(pricing.currency)
 
 %hr
+
+
+- if invoices.present?
+  .row{style: "padding-top: 4em"}
+    .span12.text-center
+      %h4 Recent Invoices
+
+  .row
+    .span12
+      %table.table.table-striped
+        %thead
+          %tr
+            %th From
+            %th To
+            %th Description
+            %th Amount
+        %tbody
+          - invoices.each do |invoice|
+            %tr
+              %td= invoice.from
+              %td= invoice.to
+              %td= invoice.description
+              %td= invoice.amount.with_currency(invoice.currency)
+

@@ -1,5 +1,10 @@
 class Distributor::BillingController < Distributor::BaseController
   def show
-    render locals: { pricing: current_distributor.pricing }
+    last_invoices = current_distributor.invoices.order('distributor_invoices.to').last(5).reverse
+
+    render locals: {
+      pricing: current_distributor.pricing,
+      invoices: last_invoices,
+    }
   end
 end
