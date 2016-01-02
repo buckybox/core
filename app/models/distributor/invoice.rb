@@ -28,5 +28,4 @@ class Distributor::Invoice < ActiveRecord::Base
       )
     end
   end
-
 end

@@ -18,8 +18,8 @@ class Distributor::Pricing < ActiveRecord::Base
     raise ArgumentError unless from.is_a?(Date) && to.is_a?(Date)
 
     deductions = distributor.deductions \
-      .where("created_at >= ? AND created_at <= ?", from, to) \
-      .where(deductable_type: "Delivery")
+                 .where("created_at >= ? AND created_at <= ?", from, to) \
+                 .where(deductable_type: "Delivery")
 
     cut = deductions.sum do |deduction|
       [deduction.amount * percentage_fee, percentage_fee_max].min
@@ -27,7 +27,7 @@ class Distributor::Pricing < ActiveRecord::Base
 
     total = CrazyMoney.new(cut) + flat_fee
 
-    total * ((100-discount_percentage) / 100)
+    total * ((100 - discount_percentage) / 100)
   end
 
   def current_usage
@@ -38,13 +38,13 @@ class Distributor::Pricing < ActiveRecord::Base
 
   def last_billed_date
     distributor.use_local_time_zone do
-      last_invoice = distributor.invoices.last
+      last_invoice = distributor.invoices.last # FIXME: order by 'to'?
       return last_invoice.to if last_invoice
 
       # otherwise we assume it was invoicing_day_of_the_month
       yesterday = Date.yesterday
 
-      date = Date.new(yesterday.year, yesterday.month, invoicing_day_of_the_month-1)
+      date = Date.new(yesterday.year, yesterday.month, invoicing_day_of_the_month - 1)
       date -= 1.month if yesterday.day < invoicing_day_of_the_month
 
       date
