@@ -21,32 +21,42 @@ class Distributor::Pricing < ActiveRecord::Base
       .where("created_at >= ? AND created_at <= ?", from, to) \
       .where(deductable_type: "Delivery")
 
-    total = deductions.sum do |deduction|
+    cut = deductions.sum do |deduction|
       [deduction.amount * percentage_fee, percentage_fee_max].min
     end
 
-    CrazyMoney.new(total) + flat_fee
+    total = CrazyMoney.new(cut) + flat_fee
+
+    total * ((100-discount_percentage) / 100)
   end
 
   def current_usage
     distributor.use_local_time_zone do
-      usage_between last_billing_date, Date.current
+      usage_between last_invoiced_date, Date.current
     end
   end
 
-  def last_billing_date
+  def last_billed_date
     distributor.use_local_time_zone do
       last_invoice = distributor.invoices.last
       return last_invoice.to if last_invoice
 
-      # otherwise we assume it was billing_day_of_the_month
+      # otherwise we assume it was invoicing_day_of_the_month
       yesterday = Date.yesterday
 
-      date = Date.new(yesterday.year, yesterday.month, billing_day_of_the_month)
-      date -= 1.month if yesterday.day < billing_day_of_the_month
+      date = Date.new(yesterday.year, yesterday.month, invoicing_day_of_the_month-1)
+      date -= 1.month if yesterday.day < invoicing_day_of_the_month
 
       date
     end
+  end
+
+  def last_invoiced_date
+    last_billed_date + 1.day
+  end
+
+  def invoicing_day_of_the_month
+    10
   end
 
   def description
@@ -61,10 +71,6 @@ class Distributor::Pricing < ActiveRecord::Base
     end
 
     parts.join(" + ")
-  end
-
-  def billing_day_of_the_month
-    20
   end
 
   def self.default_for_currency(currency)

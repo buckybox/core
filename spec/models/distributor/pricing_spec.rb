@@ -6,9 +6,10 @@ describe Distributor::Pricing do
       @pricing = Distributor::Pricing.new(
         name: "Test",
         discount_percentage: 10,
+        currency: "NZD",
       )
 
-      @pricing.distributor = mock_model("Distributor", currency: "NZD")
+      @pricing.distributor = mock_model("Distributor")
     end
 
     specify do
