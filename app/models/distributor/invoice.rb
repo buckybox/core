@@ -16,13 +16,14 @@ class Distributor::Invoice < ActiveRecord::Base
 
       usage = pricing.usage_between(from, to)
       due = [usage - pricing.account_balance, CrazyMoney.zero].max
+      description = "#{pricing.name} plan: #{pricing.description}"
 
       create!(
         distributor: distributor,
         from: from,
         to: to,
         amount: due,
-        description: pricing.description,
+        description: description,
         currency: pricing.currency,
       )
     end

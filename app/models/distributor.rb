@@ -165,6 +165,12 @@ class Distributor < ActiveRecord::Base
     CronLog.log("Refreshed web store caches in #{duration}s.")
   end
 
+  def self.create_missing_invoices
+    active.each do |distributor|
+      Distributor::Invoice.create_invoice!(distributor)
+    end
+  end
+
   def self.create_daily_lists(time = Time.current)
     find_each do |distributor|
       distributor.use_local_time_zone do

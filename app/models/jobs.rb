@@ -25,6 +25,9 @@ class Jobs
       distributor.lock_access!(send_instructions: false)
     end
 
+    CronLog.log("Creating missing invoices.")
+    Distributor.create_missing_invoices
+
     CronLog.log("Running metrics for daily Munin graphs.")
     Metrics.calculate_and_store_for_munin_daily
 
