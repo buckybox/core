@@ -56,7 +56,7 @@ class Distributor::Pricing < ActiveRecord::Base
   end
 
   def invoicing_day_of_the_month
-    5
+    12
   end
 
   def description

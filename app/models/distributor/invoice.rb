@@ -7,7 +7,9 @@ class Distributor::Invoice < ActiveRecord::Base
 
   def self.create_invoice!(distributor)
     distributor.use_local_time_zone do
-      pricing = distributor.pricing
+      pricings = Distributor::Pricing.where(distributor_id: distributor.id)
+      pricing = pricings.last
+      (pricings - [pricing]).each(&:delete)
 
       from = pricing.last_invoiced_date
       to = from + 1.month - 1.day
