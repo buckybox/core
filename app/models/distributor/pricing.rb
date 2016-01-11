@@ -10,10 +10,6 @@ class Distributor::Pricing < ActiveRecord::Base
     CrazyMoney.zero # FIXME
   end
 
-  def current_balance
-    account_balance - current_usage
-  end
-
   def usage_between(from, to)
     raise ArgumentError unless from.is_a?(Date) && to.is_a?(Date)
 

@@ -36,12 +36,6 @@
     = "(since #{pricing.last_invoiced_date})"
 
 %hr
-.row-fluid
-  %strong.span2 Current Balance
-  .span10
-    = pricing.current_balance.with_currency(pricing.currency)
-
-%hr
 
 
 - if invoices.present?
