@@ -69,24 +69,68 @@ class Distributor::Pricing < ActiveRecord::Base
     parts.join(" + ")
   end
 
-  def self.default_for_currency(currency)
-    default_pricings = {
-      "USD" => { flat_fee:  70, percentage_fee_max: 0.20 },
-      "NZD" => { flat_fee: 100, percentage_fee_max: 0.30 },
-      "AUD" => { flat_fee:  95, percentage_fee_max: 0.30 },
-      "CAD" => { flat_fee:  95, percentage_fee_max: 0.30 },
-      "EUR" => { flat_fee:  60, percentage_fee_max: 0.20 },
-      "GBP" => { flat_fee:  45, percentage_fee_max: 0.15 },
+  def ==(other)
+    return false unless other.is_a?(self.class)
+
+    %i(
+      name
+      flat_fee_cents
+      percentage_fee
+      percentage_fee_max_cents
+      currency
+    ).all? do |attr|
+      other.public_send(attr) == public_send(attr)
+    end
+  end
+
+  def self.plans_for_currency(currency)
+    pricings = {
+      "USD" => {
+        "Casual"    => { flat_fee:   0, percentage_fee: 2.0, percentage_fee_max: 0.40 },
+        "Standard"  => { flat_fee:  70, percentage_fee: 0.5, percentage_fee_max: 0.20 },
+        "Unlimited" => { flat_fee: 275, percentage_fee: 0.0, percentage_fee_max: 0.00 },
+      },
+      "NZD" => {
+        "Casual"    => { flat_fee:   0, percentage_fee: 2.0, percentage_fee_max: 0.55 },
+        "Standard"  => { flat_fee: 100, percentage_fee: 0.5, percentage_fee_max: 0.30 },
+        "Unlimited" => { flat_fee: 400, percentage_fee: 0.0, percentage_fee_max: 0.00 },
+      },
+      "AUD" => {
+        "Casual"    => { flat_fee:   0, percentage_fee: 2.0, percentage_fee_max: 0.55 },
+        "Standard"  => { flat_fee:  95, percentage_fee: 0.5, percentage_fee_max: 0.30 },
+        "Unlimited" => { flat_fee: 375, percentage_fee: 0.0, percentage_fee_max: 0.00 },
+      },
+      "CAD" => {
+        "Casual"    => { flat_fee:   0, percentage_fee: 2.0, percentage_fee_max: 0.55 },
+        "Standard"  => { flat_fee:  95, percentage_fee: 0.5, percentage_fee_max: 0.30 },
+        "Unlimited" => { flat_fee: 375, percentage_fee: 0.0, percentage_fee_max: 0.00 },
+      },
+      "EUR" => {
+        "Casual"    => { flat_fee:   0, percentage_fee: 2.0, percentage_fee_max: 0.35 },
+        "Standard"  => { flat_fee:  60, percentage_fee: 0.5, percentage_fee_max: 0.20 },
+        "Unlimited" => { flat_fee: 250, percentage_fee: 0.0, percentage_fee_max: 0.00 },
+      },
+      "GBP" => {
+        "Casual"    => { flat_fee:   0, percentage_fee: 2.0, percentage_fee_max: 0.25 },
+        "Standard"  => { flat_fee:  45, percentage_fee: 0.5, percentage_fee_max: 0.15 },
+        "Unlimited" => { flat_fee: 175, percentage_fee: 0.0, percentage_fee_max: 0.00 },
+      },
     }.freeze
 
-    pricing = default_pricings.fetch(currency, default_pricings.fetch("USD"))
+    currency = pricings.key?(currency) ? currency : "USD"
+    plans = pricings.fetch(currency).dup
 
-    pricing.merge!(
-      percentage_fee: 0.5,
-      name: "Standard",
-      currency: currency,
-    )
+    plans.map do |plan_name, plan_details|
+      plan_details.merge!(
+        name: plan_name,
+        currency: currency,
+      )
 
-    new(pricing)
+      new(plan_details)
+    end
+  end
+
+  def self.default_plan_for_currency(currency)
+    plans_for_currency(currency).fetch("Standard")
   end
 end

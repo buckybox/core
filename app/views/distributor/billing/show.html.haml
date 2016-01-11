@@ -5,35 +5,46 @@
 %hr
 .row-fluid
   %strong.span2 Current Plan
-  .span10
-    %strong= pricing.name
-    %p= pricing.description
+  .span6
+    %strong= current_pricing.name
+    %p= current_pricing.description
+  .span4
+    .btn-group.pull-right
+      = link_to 'javascript:void(0)', class: 'btn dropdown-toggle', 'data-toggle' => 'dropdown' do
+        change plan
+        %span.caret
+      %ul.dropdown-menu
+        - other_pricings.each do |pricing|
+          %li
+            = link_to "#" do
+              %strong= pricing.name
+              %p= pricing.description
 
 %hr
 .row-fluid
   %strong.span2 Billing Date
   .span10
-    = pricing.invoicing_day_of_the_month.ordinalize
+    = current_pricing.invoicing_day_of_the_month.ordinalize
     of the month
 
-- unless pricing.discount_percentage.zero?
+- unless current_pricing.discount_percentage.zero?
   %hr
   .row-fluid
     %strong.span2 Discount
-    .span10= number_to_percentage(pricing.discount_percentage, precision: 0)
+    .span10= number_to_percentage(current_pricing.discount_percentage, precision: 0)
 
 %hr
 .row-fluid
   %strong.span2 Account Balance
   .span10
-    = pricing.account_balance.with_currency(pricing.currency)
+    = current_pricing.account_balance.with_currency(current_pricing.currency)
 
 %hr
 .row-fluid
   %strong.span2 Current Usage
   .span10
-    = pricing.current_usage.with_currency(pricing.currency)
-    = "(since #{pricing.last_invoiced_date})"
+    = current_pricing.current_usage.with_currency(current_pricing.currency)
+    = "(since #{current_pricing.last_invoiced_date})"
 
 %hr
 
