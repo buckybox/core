@@ -22,7 +22,7 @@ private
   attr_accessor :distributor
 
   def populate_pricing
-    pricing = Distributor::Pricing.default_plan_for_currency(distributor.currency)
+    pricing = Distributor::Pricing.default_pricing_for_currency(distributor.currency)
     pricing.distributor = distributor
     pricing.save!
   end

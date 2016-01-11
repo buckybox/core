@@ -51,6 +51,10 @@ class Distributor::Pricing < ActiveRecord::Base
     last_billed_date + 1.day
   end
 
+  def next_invoicing_date
+    last_invoiced_date + 1.month
+  end
+
   def invoicing_day_of_the_month
     5
   end
@@ -83,7 +87,15 @@ class Distributor::Pricing < ActiveRecord::Base
     end
   end
 
-  def self.plans_for_currency(currency)
+  def pricings_for_currency
+    self.class.pricings_for_currency(currency)
+  end
+
+  def self.default_pricing_for_currency(currency)
+    pricings_for_currency(currency).detect { |p| p.name == "Standard" }
+  end
+
+  def self.pricings_for_currency(currency)
     pricings = {
       "USD" => {
         "Casual"    => { flat_fee:   0, percentage_fee: 2.0, percentage_fee_max: 0.40 },
@@ -118,19 +130,15 @@ class Distributor::Pricing < ActiveRecord::Base
     }.freeze
 
     currency = pricings.key?(currency) ? currency : "USD"
-    plans = pricings.fetch(currency).dup
+    pricings = pricings.fetch(currency).dup
 
-    plans.map do |plan_name, plan_details|
-      plan_details.merge!(
-        name: plan_name,
+    pricings.map do |pricing_name, pricing_details|
+      pricing_details.merge!(
+        name: pricing_name,
         currency: currency,
       )
 
-      new(plan_details)
+      new(pricing_details)
     end
-  end
-
-  def self.default_plan_for_currency(currency)
-    plans_for_currency(currency).fetch("Standard")
   end
 end

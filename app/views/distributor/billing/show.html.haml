@@ -2,23 +2,32 @@
   .span12.text-center
     %h1 Billing
 
-%hr
-.row-fluid
-  %strong.span2 Current Plan
-  .span6
-    %strong= current_pricing.name
-    %p= current_pricing.description
-  .span4
-    .btn-group.pull-right
-      = link_to 'javascript:void(0)', class: 'btn dropdown-toggle', 'data-toggle' => 'dropdown' do
-        change plan
-        %span.caret
-      %ul.dropdown-menu
-        - other_pricings.each do |pricing|
-          %li
-            = link_to "#" do
-              %strong= pricing.name
-              %p= pricing.description
+= simple_form_for(current_pricing, url: distributor_pricing_path, html: { method: :put }) do |f|
+  = hidden_field_tag :link_action
+
+  %hr
+  .row-fluid
+    %strong.span2 Current Plan
+    .span6
+      %strong= current_pricing.name
+      %p= current_pricing.description
+
+      - if next_pricing != current_pricing
+        %span.alert{style: "padding: 4px; margin-top: 1em; display: block-inline"}
+          You will be changing to the #{next_pricing.name} plan on
+          = current_pricing.next_invoicing_date
+
+    .span4
+      .btn-group.pull-right
+        = link_to 'javascript:void(0)', class: 'btn dropdown-toggle', 'data-toggle' => 'dropdown' do
+          change plan
+          %span.caret
+        %ul.dropdown-menu
+          - other_pricings.each do |pricing|
+            %li
+              = link_to_submit 'data-link-action' => pricing.name do
+                %strong= pricing.name
+                %p= pricing.description
 
 %hr
 .row-fluid

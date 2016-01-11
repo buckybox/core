@@ -57,6 +57,7 @@ BuckyBox::Application.routes.draw do
     end
 
     resource :billing, only: :show, controller: "billing"
+    resource :pricing, only: :update, controller: "pricing"
 
     resources :distributors,        only: :update
     resource  :bank_information,    only: :update
