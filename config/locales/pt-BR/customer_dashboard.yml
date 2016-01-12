@@ -7,7 +7,7 @@ pt-BR:
         remove: excluir
         close: fechar
         pause_start: suspensão começa em
-        resume_start: reiniciar entregas em
+        resume_start: reiniciando entregas em
         until_further_notice: até nova comunicação
     dashboard:
       change_contact_details: alterar meus dados de contato
@@ -42,7 +42,7 @@ pt-BR:
     order:
       existing: Pedido existente
       extras: Extras
-      include_extras: incluir itens extras
+      include_extras: Incluir itens extras
       no_extras: Não é possível acrescentar itens extras nesta cesta
       extras_limit: Nesta cesta o limite é de %{count} itens extras.
       extras_one_off:
@@ -60,8 +60,8 @@ pt-BR:
         oops: Houve um erro ao tentar excluir seu pedido.
         not_allowed: Esta ação não é permitida.
         too_late:
-          one_off: Nós não podemos excluir este pedido porque a sua entrega já foi programada, e não há mais prazo suficiente para cancela-la.
-          recurring: Não há prazo suficiente para cancelar a próxima entrega programada relativa ao seu pedido . Entretanto, nós já providenciamos a exclusão das demais entregas programadas para ele.
+          one_off: Nós não podemos excluir este pedido porque a sua entrega já foi programada, e não dá mais tempo de cancela-la.
+          recurring: Não dá mais tempo de cancelar a próxima entrega programada relativa à sua encomenda. No entanto, nós já providenciamos a exclusão das demais entregas programadas para ela.
     sign_in:
       enter_email: Digite seu email
       enter_password: Digite sua senha

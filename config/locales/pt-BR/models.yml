@@ -1,9 +1,9 @@
 pt-BR:
   models:
     schedule_rule:
-      deliver_on: Entregar na
-      deliver_weekly_on: Entregar semanalmente na
-      deliver_fornightly_on: Entregar a cada duas semanas às
+      deliver_on: 'Dia para entrega:'
+      deliver_weekly_on: 'Dia para entrega semanal:'
+      deliver_fornightly_on: 'Dia para entrega a cada duas semanas:'
       deliver_monthly_on: Entregar mensalmente na primeira
       no_future_deliveries: Nenhuma entrega futura programada
     account:
@@ -12,10 +12,10 @@ pt-BR:
       delivery_of: Entrega de
       payment_made_on_delivery: Pagamento contra entrega
     order:
-      edit: alterar este pedido
+      edit: alterar esta encomenda
       remove: Excluir pedido
-      remove_confirmation: Você tem certeza de que deseja cancelar este pedido?
-      impending_delivery: A próxima entrega se seu pedido já está programada. Assim, alterações solicitadas somente poderão ser efetivadas a partir de %{date}.
+      remove_confirmation: Você tem certeza de que deseja cancelar esta encomenda?
+      impending_delivery: A próxima entrega de sua encomenda já está programada. Assim, as alterações solicitadas somente poderão ser efetivadas a partir de %{date}.
       extra_frequencies:
         always: incluir em todas as entregas
         once: incluir apenas na próxima entrega
@@ -27,7 +27,7 @@ pt-BR:
     models:
       box: Produto
       customer: Cliente
-      order: Pedido
+      order: Encomenda
     attributes:
       customer:
         formated_number: Meu número de cliente
