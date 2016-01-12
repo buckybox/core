@@ -1,0 +1,4 @@
+de:
+  time:
+    formats:
+      transaction: "%d %b '%y"

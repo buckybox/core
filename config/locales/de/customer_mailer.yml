@@ -1,0 +1,51 @@
+de:
+  customer_mailer:
+    login_details:
+      subject: Ihre Login Daten für %{distributor}
+      new_details: Hier sind Ihre neuen Logindaten für Ihren Account mit uns bei %{ditributor}.
+      email: Email
+      password: Passwort
+      instructions_html: |
+        Benutze dieses Konto um:
+        <ul>
+        <li>Bestellungen zu ändern
+        <li>Deine Bestellungen anzuhalten, wenn Du nicht da bist
+        <li>Deine Lieferadresse oder Kontaktdaten zu ändern, wenn Du umgezogen bist
+        </ul>
+    orders_halted:
+      subject: Deine %{distributor} Lieferungen wurden angehalten
+      intro_html: |
+        Wir haben bemerkt, dass Dein Konto Deinen Mindestbetrag erreicht hat - Dein derzeitiges Guthaben beträgt
+        <strong>%{balance}</strong>
+        (Dein Konto sollte immer über Deinem Mindestbetrag von %{threshold}, um Lieferungen zu erhalten).
+      pay_html: "%{link} oder kontaktiere %{distributor}."
+      recent: 'Wenn Du gerade eine Zahlung ausgeführt hast, wird dies wohlmöglich noch nicht angezeigt - Schaue in den nächsten Tagen nochmal in Deinem Kontoauszug nach. '
+      signature: Das %{distributor} Team
+    remind_orders_halted:
+      subject: Deine %{distributor} Lieferung wurde angehalten
+      intro_html: |
+        Deine momentante Bestellung wird nicht ausgeführt solange bis Dein Konto mehr als einen Mindestbetrag aufweist - Dein derzeitiges Guthaben beträgt
+        <strong>%{balance}</strong>
+        (Dein Konto sollte immer einen Betrag über Deinem Mindestbetrag von %{threshold}, um Lieferungen zu erhalten).
+      pay_html: "%{link} oder kontaktieren %{distributor}."
+      recent: Wenn Du gerade eine Zahlung vorgenommen hast, wird dies wohlmöglich noch nicht anzeigt - schaue in den nächsten tagen in Deinem Kontoauszug nach.
+      signature: Das %{distributor} Team
+    order_confirmation:
+      subject: Deine %{distributor} Bestellung
+      thanks: Danke für Deine Bestellung %{name}!
+      update_order: 'Wusstest Du, dass Du Deine Bestellungen 24 Stunden pro Tag ansehen und ändern kannst? Hier %{link}. '
+      order_information: Bestellinformation
+      customer_number: Kundennummer
+      email: Email
+      mobile_phone: Handynummer
+      home_phone: Festnetz
+      work_phone: Arbeit
+      pick_up_from: Abholung von
+      delivery_address: Lieferadresse
+      order_summary: Bestellzusammenfassung
+      exclusions: Ausschlüsse
+      substitutes: Ersatz
+      starting: beginnen
+      review_html: Du kannst Deine Bestellungen und Kontoauszüge jederzeit abrufen. Hier geht es zum Login %{link}.
+      contact_html: Wenn Du Fragen haben solltest oder denkst, dass etwas nicht stimmt, nimm Kontakt auf über %{email}
+      powered_by_html: Powered by %{link}

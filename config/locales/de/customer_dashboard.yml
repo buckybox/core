@@ -1,0 +1,73 @@
+de:
+  c:
+    orders:
+      pausing:
+        pause: Pause
+        resume: fortsetzen
+        remove: entfernen
+        close: schliessen
+        pause_start: pausieren startet
+        resume_start: Alle Lieferungen an
+        until_further_notice: Bis zur nächsten Benachrichtigung
+    dashboard:
+      change_contact_details: Meine Kontaktinformationen ändern
+      change_password: Mein Passwort ändern
+      change_delivery_address: Meine Lieferadresse ändern
+      order_another_item: Einen weiteren Artikel bestellen
+      no_active_orders: Sie haben keine aktiven Bestellungen
+      account_statement: Kontoauszug
+      make_payment: Eine Zahlung ausführen
+      pay_by:
+        bank_deposit: Zahlen per Bankdepot
+        paypal: Mit PayPal / Kreditkarte zahlen
+    transactions:
+      processed_date: Bearbeitungsdatum
+      transaction_date: Ausführungsdatum
+      details: Details
+      amount: Betrag
+      balance: Restbetrag
+      more: mehr
+    contact_details:
+      change: Ändere Deine Kontaktinformationen
+      successful_update: Deine Kontaktinformationen wurden erfolgreich geändert
+    delivery_address:
+      successful_update: Deine Lieferadresse wurde erfolgreich geändert
+    password:
+      change: Ändere Dein Passwort
+      update: Aktualisiere Dein Passwort
+      successful_update: Dein Passwort wurde erfolgreich geändert
+    address:
+      change: Ändere Deine Adresse
+    update_next_delivery: Dies wird Auswirkungen auf Deine nächste Bestellung haben
+    order:
+      existing: Aktuelle Bestellung
+      extras: Extras
+      include_extras: Extras einbeziehen
+      no_extras: Keine Extras für diese Box erhältlich
+      extras_limit: Diese Box ist beschränkt auf %{count} Extras.
+      extras_one_off:
+        hint: Extras können eine einmalige Bestellung oder bei jeder Lieferung bestellt werden
+        'false': Bei jeder Lieferung enthalten
+        'true': Nur in der nächsten Lieferung enthalten
+      exclude_items: Diese Artikel ausschliessen
+      substitute_with_items: Für diesen Artikel ersetzen
+      update:
+        success: Ihre Bestellung wurde erfolgreich aktualisiert
+        not_allowed: Sie können diese Bestellung nicht ändern
+        oops: Es ist ein Problem bei dieser Bestellung aufgetreten
+      deactivate:
+        success: Ihre Bestellung wurde erfolgreich entfernt
+        oops: Bei der Entfernung Ihrer Bestellung ist ein Fehler ist aufgetreten.
+        not_allowed: Sie haben keine Berechtigung dies zu tun.
+        too_late:
+          one_off: Wir konnten diese Bestellung nicht entfernen, da die ausgeführte Lieferung nicht mehr abgebrochen werden kann.
+          recurring: Die ausgeführte Lieferung kann nicht mehr abgebrochen werden, aber wir haben die Bestellung für zukünftige Lieferungen entfernt.
+    sign_in:
+      enter_email: Geben Sie Ihrer Emailadresse ein
+      enter_password: Geben Sie Ihr Passwort ein
+      remember_me: Passwort speichern
+      lost_password: Haben Sie Ihr Passwort vergessen?
+    lost_password:
+      send_my_password: Sende mir mein Passwort
+      enter_email: Geben Sie Ihre Emailadresse ein
+      send: Sende Passwort
