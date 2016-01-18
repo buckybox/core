@@ -38,6 +38,9 @@ private
   end
 
   def geocode
+    # XXX: the record might no longer exist when DJ runs this
+    return unless self.class.exists?(id)
+
     geocoded_address = nil
 
     address_in_sections.detect do |address_parts|
