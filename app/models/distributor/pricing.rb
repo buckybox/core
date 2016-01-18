@@ -18,7 +18,7 @@ class Distributor::Pricing < ActiveRecord::Base
                  .where(deductable_type: "Delivery")
 
     cut = deductions.sum do |deduction|
-      [deduction.amount * percentage_fee, percentage_fee_max].min
+      [deduction.amount * percentage_fee / 100, percentage_fee_max].min
     end
 
     total = CrazyMoney.new(cut) + flat_fee
