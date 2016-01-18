@@ -56,7 +56,7 @@ class Distributor::Pricing < ActiveRecord::Base
   end
 
   def invoicing_day_of_the_month
-    12
+    10
   end
 
   def description
@@ -98,32 +98,32 @@ class Distributor::Pricing < ActiveRecord::Base
   def self.pricings_for_currency(currency)
     pricings = {
       "USD" => {
-        "Casual"    => { flat_fee:   0, percentage_fee: 2.0, percentage_fee_max: 0.40 },
+        "Casual"    => { flat_fee:   0, percentage_fee: 1.5, percentage_fee_max: 0.40 },
         "Standard"  => { flat_fee:  70, percentage_fee: 0.5, percentage_fee_max: 0.20 },
         "Unlimited" => { flat_fee: 275, percentage_fee: 0.0, percentage_fee_max: 0.00 },
       },
       "NZD" => {
-        "Casual"    => { flat_fee:   0, percentage_fee: 2.0, percentage_fee_max: 0.55 },
+        "Casual"    => { flat_fee:   0, percentage_fee: 1.5, percentage_fee_max: 0.55 },
         "Standard"  => { flat_fee: 100, percentage_fee: 0.5, percentage_fee_max: 0.30 },
         "Unlimited" => { flat_fee: 400, percentage_fee: 0.0, percentage_fee_max: 0.00 },
       },
       "AUD" => {
-        "Casual"    => { flat_fee:   0, percentage_fee: 2.0, percentage_fee_max: 0.55 },
+        "Casual"    => { flat_fee:   0, percentage_fee: 1.5, percentage_fee_max: 0.55 },
         "Standard"  => { flat_fee:  95, percentage_fee: 0.5, percentage_fee_max: 0.30 },
         "Unlimited" => { flat_fee: 375, percentage_fee: 0.0, percentage_fee_max: 0.00 },
       },
       "CAD" => {
-        "Casual"    => { flat_fee:   0, percentage_fee: 2.0, percentage_fee_max: 0.55 },
+        "Casual"    => { flat_fee:   0, percentage_fee: 1.5, percentage_fee_max: 0.55 },
         "Standard"  => { flat_fee:  95, percentage_fee: 0.5, percentage_fee_max: 0.30 },
         "Unlimited" => { flat_fee: 375, percentage_fee: 0.0, percentage_fee_max: 0.00 },
       },
       "EUR" => {
-        "Casual"    => { flat_fee:   0, percentage_fee: 2.0, percentage_fee_max: 0.35 },
+        "Casual"    => { flat_fee:   0, percentage_fee: 1.5, percentage_fee_max: 0.35 },
         "Standard"  => { flat_fee:  60, percentage_fee: 0.5, percentage_fee_max: 0.20 },
         "Unlimited" => { flat_fee: 250, percentage_fee: 0.0, percentage_fee_max: 0.00 },
       },
       "GBP" => {
-        "Casual"    => { flat_fee:   0, percentage_fee: 2.0, percentage_fee_max: 0.25 },
+        "Casual"    => { flat_fee:   0, percentage_fee: 1.5, percentage_fee_max: 0.25 },
         "Standard"  => { flat_fee:  45, percentage_fee: 0.5, percentage_fee_max: 0.15 },
         "Unlimited" => { flat_fee: 175, percentage_fee: 0.0, percentage_fee_max: 0.00 },
       },
