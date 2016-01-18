@@ -1,1 +1,57 @@
-de: {}
+de:
+  models:
+    schedule_rule:
+      deliver_on: Liefern am
+      deliver_weekly_on: Wöchentlich liefern am
+      deliver_fornightly_on: Alle zwei Wochen liefern am
+      deliver_monthly_on: Monatlich liefern am
+      no_future_deliveries: Keine zukünftigen Lieferungen geplant
+    account:
+      manual_transaction: Manuelle Transaktion
+    delivery:
+      delivery_of: Lieferung von
+      payment_made_on_delivery: 'Zahlung bei Lieferung '
+    order:
+      edit: Diese Bestellung ändern
+      remove: Bestellung löschen
+      remove_confirmation: Bist Du sicher, dass Du diese Bestellung löschen möchtest?
+      impending_delivery: Diese Bestellung hat eine bevorstehende Lieferung, Änderungen werden nur für Lieferung nach dem %{date} ausgeführt.
+      extra_frequencies:
+        always: Bei jeder Lieferung enthalten
+        once: Nur in der nächsten Lieferung enthalten
+    phone_collection:
+      mobile_phone: Handynummer
+      work_phone: Arbeit
+      home_phone: Festnetz
+  activerecord:
+    models:
+      box: Produkt
+      customer: Kunde
+      order: Bestellung
+    attributes:
+      customer:
+        formated_number: Kundennummer
+      order:
+        exclusions: Ausschlüsse
+        substitutions: Ersatz
+  virtus:
+    attributes:
+      customer/form/update_contact_details:
+        first_name: Vorname
+        last_name: Nachname
+        email: Email
+        hints:
+          email: Bitte überprüfe noch einmal diese Email, da diese auch Dein Login ist.
+          phone: Es muss mindestens eine Telefonnummer angegeben werden.
+      customer/form/update_delivery_address:
+        address_1: Adresse 1
+        address_2: Adresse 2
+        suburb: Stadtteil
+        city: Stadt
+        postcode: PLZ
+        delivery_note: Lieferungsmitteilung
+        placeholders:
+          delivery_note: "Lieferanweisungen wie z.B. wo die Pakete abgelegt werden,  z.B. \"Anbau hinter dem Haus\""
+      customer/form/update_password:
+        password: Gebe Dein neues Passwort ein.
+        password_confirmation: Gebe zur Bestätigung noch einmal Dein Passwort ein.

@@ -1,1 +1,10 @@
-de: {}
+de:
+  devise_mailer:
+    reset_password_instructions:
+      change_password: Mein Passwort ändern
+      body_html: |
+        Hallo %{email}!
+        Jemand hat einen Link angefragt, um Dein Passwort zu ändern, und Du kannst das über den unteren Link tun.
+        %{link}
+        Wenn Du dies nicht angefragt hast, ignoriere bitte diese Email.
+        Dein Passwort wird nicht geändert bis Du den Link oben aktiviert hast und ein neues Passwort erstellt hast.

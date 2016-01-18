@@ -1,1 +1,13 @@
-de: {}
+de:
+  partials:
+    payments:
+      bank_deposit:
+        deposit_funds: Bitte zahle Beträge ein in
+        account_name: Kontoname
+        account_number: Kontonummer
+        reference: Referenz
+      paypal:
+        pay_now: Jetzt zahlen
+        top_up: Lade Guthaben auf mein Konto
+        amount: Betrag
+        amount_to_top_up: 'Aufzuladender Betrag '
