@@ -1,0 +1,82 @@
+.row-fluid
+  .span12.text-center
+    %h1 Billing
+
+= simple_form_for(current_pricing, url: distributor_pricing_path, html: { method: :put }) do |f|
+  = hidden_field_tag :link_action
+
+  %hr
+  .row-fluid
+    %strong.span2 Current Plan
+    .span6
+      %strong= current_pricing.name
+      %p= current_pricing.description
+
+      - if next_pricing != current_pricing
+        %span.alert{style: "padding: 4px; margin-top: 1em; display: block-inline"}
+          You will be changing to the #{next_pricing.name} plan on
+          = current_pricing.next_invoicing_date
+
+    .span4
+      .btn-group.pull-right
+        = link_to 'javascript:void(0)', class: 'btn dropdown-toggle', 'data-toggle' => 'dropdown' do
+          change plan
+          %span.caret
+        %ul.dropdown-menu
+          - other_pricings.each do |pricing|
+            %li
+              = link_to_submit 'data-link-action' => pricing.name do
+                %strong= pricing.name
+                %p= pricing.description
+
+%hr
+.row-fluid
+  %strong.span2 Billing Date
+  .span10
+    = current_pricing.invoicing_day_of_the_month.ordinalize
+    of the month
+
+- unless current_pricing.discount_percentage.zero?
+  %hr
+  .row-fluid
+    %strong.span2 Discount
+    .span10= number_to_percentage(current_pricing.discount_percentage, precision: 0)
+
+%hr
+.row-fluid
+  %strong.span2 Account Balance
+  .span10
+    = current_pricing.account_balance.with_currency(current_pricing.currency)
+
+%hr
+.row-fluid
+  %strong.span2 Current Usage
+  .span10
+    = current_pricing.current_usage.with_currency(current_pricing.currency)
+    = "(since #{current_pricing.last_invoiced_date})"
+
+%hr
+
+
+- if invoices.present?
+  .row-fluid{style: "padding-top: 4em"}
+    .span12.text-center
+      %h4 Recent Invoices
+
+  .row-fluid
+    .span12
+      %table.table.table-hover
+        %thead
+          %tr
+            %th From
+            %th To
+            %th Description
+            %th Amount
+        %tbody
+          - invoices.each do |invoice|
+            %tr
+              %td= invoice.from
+              %td= invoice.to
+              %td= invoice.description
+              %td= invoice.amount.with_currency(invoice.currency)
+

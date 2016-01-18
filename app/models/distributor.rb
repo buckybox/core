@@ -6,7 +6,9 @@ class Distributor < ActiveRecord::Base
 
   has_one :bank_information,          dependent: :destroy
   has_one :localised_address,         dependent: :destroy, as: :addressable, autosave: true
+  has_one :pricing,                   dependent: :destroy
 
+  has_many :invoices,                 dependent: :destroy
   has_many :extras,                   dependent: :destroy
   has_many :boxes,                    dependent: :destroy
   has_many :delivery_services,        dependent: :destroy
@@ -161,6 +163,12 @@ class Distributor < ActiveRecord::Base
     end
 
     CronLog.log("Refreshed web store caches in #{duration}s.")
+  end
+
+  def self.create_missing_invoices
+    active.each do |distributor|
+      Distributor::Invoice.create_invoice!(distributor)
+    end
   end
 
   def self.create_daily_lists(time = Time.current)
