@@ -10,6 +10,21 @@ Lint/DefEndAlignment:
 Lint/EndAlignment:
   Enabled: false
 
+Lint/UselessAssignment:
+  Exclude: ["config/compass.rb", "spec/**/*"]
+
+Lint/LiteralInInterpolation:
+  Enabled: false
+
+Lint/UselessAccessModifier:
+  Enabled: false
+
+Lint/FormatParameterMismatch:
+  Enabled: false
+
+Lint/IneffectiveAccessModifier:
+  Enabled: false # TODO
+
 Metrics/ClassLength:
   Enabled: false
 
@@ -28,21 +43,17 @@ Metrics/PerceivedComplexity:
 Metrics/ParameterLists:
   Enabled: false
 
-Rails/HasAndBelongsToMany:
+Metrics/AbcSize:
   Enabled: false
 
-Rails/Output:
+Metrics/ModuleLength:
   Enabled: false
 
-# TODO: remove when Rails 4
-Rails/ScopeArgs:
-  Enabled: false
-
-Rails/Validation:
+Metrics/BlockNesting:
   Enabled: false
 
 Style/AccessModifierIndentation:
-  EnforcedStyle: outdent # nice :)
+  EnforcedStyle: outdent
 
 Style/AccessorMethodName:
   Enabled: false
@@ -77,9 +88,6 @@ Style/ElseAlignment:
 Style/FileName:
   Enabled: false
 
-Style/For:
-  Enabled: false # TODO
-
 Style/FormatString:
   Enabled: false
 
@@ -107,6 +115,18 @@ Style/RedundantSelf:
 Style/RegexpLiteral:
   Enabled: false
 
+Style/RescueModifier:
+  Enabled: false
+
+Style/IfInsideElse:
+  Enabled: false
+
+Style/Semicolon:
+  Enabled: false
+
+Style/For:
+  Enabled: false # TODO
+
 Style/SingleLineBlockParams:
   Enabled: false
 
@@ -122,34 +142,10 @@ Style/StringLiterals:
 Style/StructInheritance:
   Enabled: false
 
-Style/TrailingComma:
-  Enabled: false
+Style/TrailingCommaInLiteral:
+  EnforcedStyleForMultiline: comma
 
-Rails/Date:
-  Enabled: false # FIXME
-
-Rails/TimeZone:
-  Enabled: false # FIXME
-
-Metrics/AbcSize:
-  Enabled: false
-
-Metrics/ModuleLength:
-  Enabled: false
-
-Style/RescueModifier:
-  Enabled: false
-
-Lint/Debugger:
-  Enabled: false
-
-Metrics/BlockNesting:
-  Enabled: false
-
-Style/Semicolon:
-  Enabled: false
-
-Style/HashSyntax:
+Style/TrailingCommaInArguments:
   Enabled: false
 
 Style/SignalException:
@@ -161,23 +157,40 @@ Style/ClosingParenthesisIndentation:
 Style/ParallelAssignment:
   Enabled: false
 
-Lint/UselessAssignment:
-  Exclude: ["config/compass.rb", "spec/**/*"]
-
-Lint/LiteralInInterpolation:
-  Enabled: false
-
-Lint/UselessAccessModifier:
-  Enabled: false
-
-Lint/FormatParameterMismatch:
-  Enabled: false
-
 Style/BlockDelimiters:
   Enabled: false
 
 Style/ExtraSpacing:
   AllowForAlignment: true
 
-Style/SingleSpaceBeforeFirstArg:
+Style/Alias:
+  EnforcedStyle: prefer_alias_method
+
+Performance/TimesMap:
+  Exclude: ["spec/**/*"]
+
+Performance/RedundantMerge:
   Enabled: false
+
+Rails:
+  Enabled: true
+
+Rails/Date:
+  Enabled: false # FIXME
+
+Rails/TimeZone:
+  Enabled: false # FIXME
+
+Rails/HasAndBelongsToMany:
+  Enabled: false
+
+Rails/Output:
+  Enabled: false
+
+# TODO: remove when Rails 4
+Rails/ScopeArgs:
+  Enabled: false
+
+Rails/Validation:
+  Enabled: false
+

@@ -4,7 +4,7 @@ class CreatePayments < ActiveRecord::Migration
       t.references :distributor
       t.references :customer
       t.references :account
-      t.integer :amount_cents, :default => 0, :null => false
+      t.integer :amount_cents, default: 0, null: false
       t.string :currency
       t.string :kind
       t.text :description

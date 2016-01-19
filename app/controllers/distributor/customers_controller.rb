@@ -150,11 +150,11 @@ protected
     @customers = end_of_association_chain
 
     if params[:query].present?
-      query = params[:query].gsub(/\./, '')
-      if params[:query].to_i == 0
-        @customers = current_distributor.customers.search(query)
+      query = params[:query].delete('.')
+      @customers = if params[:query].to_i == 0
+        current_distributor.customers.search(query)
       else
-        @customers = current_distributor.customers.where(number: query.to_i)
+        current_distributor.customers.where(number: query.to_i)
       end
 
       tracking.event(current_distributor, "search_customer_list") unless current_admin.present?

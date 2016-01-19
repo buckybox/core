@@ -1,7 +1,7 @@
 class Extra < ActiveRecord::Base
   HUMANIZED_ATTRIBUTES = {
-    price_cents: "Price"
-  }
+    price_cents: "Price",
+  }.freeze
 
   belongs_to :distributor
 

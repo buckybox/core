@@ -3,7 +3,7 @@ require 'csv'
 require_relative '../report'
 
 class Report::CustomerAccountHistory
-  NAME_PREFIX = 'bucky-box-customer-account-balance-export'
+  NAME_PREFIX = 'bucky-box-customer-account-balance-export'.freeze
 
   def initialize(args = {})
     @distributor = args[:distributor]

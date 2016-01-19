@@ -4,7 +4,7 @@ class UsercycleTriggerAcquisitionEvents < ActiveRecord::Migration
       properties = {
         company: distributor.name,
         email: distributor.email,
-        first_name: distributor.contact_name
+        first_name: distributor.contact_name,
       }
 
       Bucky::Usercycle.instance.event(distributor, 'signed_up', properties, distributor.created_at)

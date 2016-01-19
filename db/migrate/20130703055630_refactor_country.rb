@@ -29,7 +29,7 @@ class RefactorCountry < ActiveRecord::Migration
       "UK" => "GB",
       "US" => "US",
       "France" => "FR",
-      "Lithuania" => "LT"
+      "Lithuania" => "LT",
     }.each do |country, code|
       country = Country.where(name: country).first
       country.alpha2 = code

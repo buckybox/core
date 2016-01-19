@@ -120,7 +120,7 @@ class Customer < ActiveRecord::Base
   pg_search_scope :search,
     against: [:first_name, :last_name, :email],
     associated_against: {
-      address: [:address_1, :address_2, :suburb, :city, :postcode, :delivery_note]
+      address: [:address_1, :address_2, :suburb, :city, :postcode, :delivery_note],
     },
     using: { tsearch: { prefix: true } }
 
@@ -132,7 +132,7 @@ class Customer < ActiveRecord::Base
   def self.all_dynamic_tags
     {
       'halted'           => 'important',
-      'negative-balance' => 'hidden'
+      'negative-balance' => 'hidden',
     }.freeze
   end
 
@@ -366,7 +366,7 @@ class Customer < ActiveRecord::Base
   # next orders scheduled on `date` and later
   def calculate_next_orders(date = Date.current.to_s(:db))
     orders.active.select("orders.*, next_occurrence('#{date}', false, false, schedule_rules.*)")
-      .joins(:schedule_rule).reject { |sr| sr.next_occurrence.blank? }.sort_by(&:next_occurrence)
+          .joins(:schedule_rule).reject { |sr| sr.next_occurrence.blank? }.sort_by(&:next_occurrence)
   end
 
   def has_yellow_deliveries?

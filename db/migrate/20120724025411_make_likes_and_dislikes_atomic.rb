@@ -118,7 +118,7 @@ class MakeLikesAndDislikesAtomic < ActiveRecord::Migration
     string.downcase!
 
     string.gsub!(/\s*-\s*/, ' ')
-    string.gsub!(/\+/, '')
+    string.delete!('+')
     string.gsub!(/:\)/, '')
     string.gsub!(/\(|\)/, '')
     string.gsub!(/no\s+/, '')

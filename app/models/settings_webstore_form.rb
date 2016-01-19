@@ -16,7 +16,7 @@ class SettingsWebstoreForm < Form
     sidebar_description: :sidebar_description,
     facebook: :facebook_url,
     phone: :phone,
-  }
+  }.freeze
   attr_reader :errors
   attr_accessor(*INTERFACE.keys)
 

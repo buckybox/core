@@ -2,7 +2,7 @@ class CreateDeductions < ActiveRecord::Migration
   def change
     create_table :deductions do |t|
       t.references :distributor
-      t.references :account, :default => 0, :null => false
+      t.references :account, default: 0, null: false
       t.integer :amount_cents
       t.string :currency
       t.string :kind

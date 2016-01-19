@@ -26,7 +26,7 @@ module Bucky::TransactionImports
 
     MATCH_STRATEGY = [[:email_match, 1.0],
                       [:number_match, 0.8],
-                      [:name_match, 0.8]]
+                      [:name_match, 0.8]].freeze
 
     # Returns a number 0.0 -> 1.0 indicating how confident we
     # are that this payment comes from customer

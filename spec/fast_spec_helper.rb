@@ -19,10 +19,10 @@ def required_constants(class_names)
   end
 end
 
-APP_ROOT       = '../..'
-APP_MODEL_PATH = 'app/models'
-LIB_MODEL_PATH = 'lib/models'
-DECORATOR_PATH = 'app/decorators'
+APP_ROOT       = '../..'.freeze
+APP_MODEL_PATH = 'app/models'.freeze
+LIB_MODEL_PATH = 'lib/models'.freeze
+DECORATOR_PATH = 'app/decorators'.freeze
 
 def defaults
   { app_path: APP_MODEL_PATH }

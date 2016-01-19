@@ -36,16 +36,16 @@ class Distributor < ActiveRecord::Base
 
   belongs_to :country
 
-  DEFAULT_TIME_ZONE       = 'Wellington'
-  DEFAULT_CURRENCY        = 'NZD'
+  DEFAULT_TIME_ZONE       = 'Wellington'.freeze
+  DEFAULT_CURRENCY        = 'NZD'.freeze
   DEFAULT_ADVANCED_HOURS  = 18
   DEFAULT_ADVANCED_DAYS   = 3
   MAX_ADVANCED_DAYS       = 14
   AUTOMATIC_DELIVERY_HOUR = 23
-  DEMO_EMAIL              = 'demo@buckybox.com'
+  DEMO_EMAIL              = 'demo@buckybox.com'.freeze
   HUMANIZED_ATTRIBUTES    = {
-    email: "Account login email"
-  }
+    email: "Account login email",
+  }.freeze
 
   devise :database_authenticatable, :recoverable, :rememberable, :trackable, :validatable,
     :lockable, unlock_strategy: :none # don't let them unlock themselves for now
@@ -179,7 +179,7 @@ class Distributor < ActiveRecord::Base
         if local_time.hour == distributor.advance_hour
           successful = distributor.generate_required_daily_lists
 
-          details = ["#{distributor.name}", "TZ #{distributor.time_zone} #{Time.current}"].join("\n")
+          details = [distributor.name.to_s, "TZ #{distributor.time_zone} #{Time.current}"].join("\n")
 
           if successful
             CronLog.log("Create daily list for #{distributor.id} at local time #{local_time.to_s(:pretty)} successful.", details)
@@ -202,7 +202,7 @@ class Distributor < ActiveRecord::Base
         if local_time.hour == AUTOMATIC_DELIVERY_HOUR
           successful = distributor.automate_completed_status
 
-          details = ["#{distributor.name}", "TZ #{distributor.time_zone} #{Time.current}"].join("\n")
+          details = [distributor.name.to_s, "TZ #{distributor.time_zone} #{Time.current}"].join("\n")
 
           if successful
             CronLog.log("Automated completion for #{distributor.id} at local time #{local_time.to_s(:pretty)} successful.", details)
@@ -266,10 +266,10 @@ class Distributor < ActiveRecord::Base
 
   def update_next_occurrence_caches(date = nil)
     use_local_time_zone do
-      if Time.current.hour >= AUTOMATIC_DELIVERY_HOUR
-        date ||= Date.current.tomorrow
+      date ||= if Time.current.hour >= AUTOMATIC_DELIVERY_HOUR
+        Date.current.tomorrow
       else
-        date ||= Date.current
+        Date.current
       end
       Bucky::Sql.update_next_occurrence_caches(self, date)
     end
@@ -499,10 +499,10 @@ class Distributor < ActiveRecord::Base
     from = from.to_time_in_current_zone
     to = to.to_time_in_current_zone
     transactions.includes(account: { customer: { address: {} } })  \
-      .where("display_time >= ?", from)                            \
-      .where("display_time < ?", to)                               \
-      .order('display_time DESC')                                  \
-      .order('created_at DESC')
+                .where("display_time >= ?", from)                            \
+                .where("display_time < ?", to)                               \
+                .order('display_time DESC')                                  \
+                .order('created_at DESC')
   end
 
   def skip_tracking?(env = Rails.env)
@@ -541,8 +541,8 @@ class Distributor < ActiveRecord::Base
   def sales_last_30_days
     @sales_last_30_days ||= begin
       amount = deductions.where("created_at > ?", 30.days.ago) \
-               .where(deductable_type: "Delivery") \
-               .map(&:amount).sum
+                         .where(deductable_type: "Delivery") \
+                         .map(&:amount).sum
 
       CrazyMoney.new(amount)
     end

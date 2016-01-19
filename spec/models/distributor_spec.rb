@@ -217,7 +217,7 @@ describe Distributor do
           @schedule_start = [Distributor::DEFAULT_ADVANCED_HOURS, 0]
           @schedule_end = [Distributor::DEFAULT_ADVANCED_HOURS - 1, 1]
 
-          Delorean.time_travel_to Time.zone.local(*(@today))
+          Delorean.time_travel_to Time.zone.local(*@today)
 
           @d_welly = Fabricate(:distributor, time_zone: 'Wellington')
           @d_perth = Fabricate(:distributor, time_zone: 'Perth')

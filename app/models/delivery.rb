@@ -17,7 +17,7 @@ class Delivery < ActiveRecord::Base
 
   attr_accessible :order, :order_id, :delivery_service, :status, :status_change_type, :delivery_list, :package, :package_id, :account
 
-  STATUS_CHANGE_TYPE = %w(manual auto)
+  STATUS_CHANGE_TYPE = %w(manual auto).freeze
 
   validates_presence_of :order_id, :delivery_list_id, :delivery_service_id, :package_id, :status, :status_change_type
   validates_inclusion_of :status_change_type, in: STATUS_CHANGE_TYPE, message: "%{value} is not a valid status change type"
@@ -39,7 +39,7 @@ class Delivery < ActiveRecord::Base
   delegate :address_hash, to: :address
   delegate :archived?, to: :delivery_list, allow_nil: true
 
-  STATUS_TO_EVENT = { 'pending' => 'pend', 'cancelled' => 'cancel', 'delivered' => 'deliver' }
+  STATUS_TO_EVENT = { 'pending' => 'pend', 'cancelled' => 'cancel', 'delivered' => 'deliver' }.freeze
 
   state_machine :status, initial: :pending do
     before_transition on: :deliver, do: :deduct_account

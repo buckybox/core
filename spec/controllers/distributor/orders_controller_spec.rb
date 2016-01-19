@@ -11,7 +11,7 @@ describe Distributor::OrdersController do
           id: 1, delivery_service: @delivery_service
         }),
         delivery_service: @delivery_service,
-        id: 675
+        id: 675,
       })
 
       Distributor.any_instance.stub_chain(:accounts, :find).and_return(@account)
@@ -82,7 +82,7 @@ describe Distributor::OrdersController do
       box = Fabricate(:box, distributor: @distributor, likes: true, dislikes: true, substitutions_limit: 2, exclusions_limit: 2)
       account = Fabricate(:account, customer: Fabricate(:customer, distributor: @distributor))
       item_ids = 2.times.collect { |i| Fabricate(:line_item, name: "Item #{i}").id }
-      post :create, account_id: account.id, order: { account_id: account.id, box_id: box.id, schedule_rule_attributes: { mon: '1', start: '2012-10-27' }, excluded_line_item_ids: ["", "#{item_ids[0]}"], substituted_line_item_ids: ["", "#{item_ids[1]}"] }
+      post :create, account_id: account.id, order: { account_id: account.id, box_id: box.id, schedule_rule_attributes: { mon: '1', start: '2012-10-27' }, excluded_line_item_ids: ["", (item_ids[0]).to_s], substituted_line_item_ids: ["", (item_ids[1]).to_s] }
       allow_any_instance_of(ScheduleRule).to receive(:includes?).and_return(true)
       expect(response).to redirect_to([:distributor, account.customer]), assigns(:order).errors.full_messages.join(', ')
     end

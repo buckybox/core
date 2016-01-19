@@ -23,7 +23,7 @@ describe Distributor::Settings::Products::BoxesController do
           post :create, {
             box: {
               "name" => "Yoda", "price" => "234.00", "description" => "Nom nom nom", "visible" => "1", "dislikes" => "1", "exclusions_limit" => "3", "likes" => "1", "substitutions_limit" => "1", "extras_allowed" => "1", "extras_limit" => "4", "all_extras" => "0", "extra_ids" => @extra_ids
-            }
+            },
           }
         end.to change { @distributor.boxes.count }.by(1)
       end

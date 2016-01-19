@@ -305,7 +305,7 @@ class ScheduleRule < ActiveRecord::Base
     if something.is_a?(Symbol)
       raise "#{something} is not understood as a day of the week" unless translate.include?(something)
       return DAYS[translate[something]]
-    elsif something.is_a?(Fixnum) && (0..6).include?(something)
+    elsif something.is_a?(Fixnum) && (0..6).cover?(something)
       return DAYS[something]
     else
       raise "Couldn't turn #{something} into a day, sorry! ;)"

@@ -15,7 +15,7 @@ module_function
       distributor:  args[:distributor],
       ids:          args[type],
       date:         Date.parse(args[:date]),
-      screen:       args[:screen]
+      screen:       args[:screen],
     }
   end
 

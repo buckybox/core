@@ -6,8 +6,8 @@ RANDOM_BALANCE = Random.new(123_456_789)
 TAG_GROUPS = [
   ["cbd", "rural", ""],
   ["new", "beta", ""],
-  ["coupon", "subscription", ""]
-]
+  ["coupon", "subscription", ""],
+].freeze
 
 def random_tag_list
   TAG_GROUPS.map(&:sample).join(", ")

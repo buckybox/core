@@ -1,7 +1,7 @@
 class Box < ActiveRecord::Base
   HUMANIZED_ATTRIBUTES = {
-    price_cents: "Price"
-  }
+    price_cents: "Price",
+  }.freeze
 
   EXTRAS_UNLIMITED = -1
   EXTRAS_DISABLED = 0

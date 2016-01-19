@@ -80,16 +80,16 @@ module LayoutHelper
       customer_id = customer.formated_number.to_s
 
       content = \
-      case options[:link]
-      when false
-        content_tag(:span, customer_id, class: 'customer-id')
-      when Hash
-        link_to(customer_id, url_for(options[:link]), class: 'customer-id')
-      when String
-        link_to(customer_id, options[:link], class: 'customer-id')
-      else
-        link_to(customer_id, [:distributor, customer], class: 'customer-id')
-      end
+        case options[:link]
+        when false
+          content_tag(:span, customer_id, class: 'customer-id')
+        when Hash
+          link_to(customer_id, url_for(options[:link]), class: 'customer-id')
+        when String
+          link_to(customer_id, options[:link], class: 'customer-id')
+        else
+          link_to(customer_id, [:distributor, customer], class: 'customer-id')
+        end
 
       customer_name = options[:customer_name] || customer.name
       customer_name = truncate(customer_name, length: 18) if options[:short]
@@ -138,10 +138,10 @@ module LayoutHelper
       elsif controller_name == 'customers' && action_name == 'index'
         tour_type = 'customers_index'
       elsif controller_name == 'deliveries' && action_name == 'index'
-        if params[:view] == 'packing'
-          tour_type = 'deliveries_index_packing'
+        tour_type = if params[:view] == 'packing'
+          'deliveries_index_packing'
         else
-          tour_type = 'deliveries_index_deliveries'
+          'deliveries_index_deliveries'
         end
       elsif controller_name == 'payments' && action_name == 'index'
         tour_type = 'payments_index'

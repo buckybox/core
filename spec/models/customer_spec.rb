@@ -44,7 +44,7 @@ describe Customer do
       extras_limit: 3,
       extras_unlimited?: false,
       extras_recurring?: true,
-      extras: 2.times.collect { extra_mock }
+      extras: 2.times.collect { extra_mock },
           }.merge(opts)
     extras = { 'class'.to_sym => Bucky::Import::Box }
     attrs.merge(extras).each do |key, value|
@@ -59,7 +59,7 @@ describe Customer do
     attrs = {
       count: 1,
       name: "Bacon",
-      unit: "7 slices"
+      unit: "7 slices",
           }.merge(opts)
     extras = { 'class'.to_sym => Bucky::Import::Extra }
     attrs.merge(extras).each do |key, value|

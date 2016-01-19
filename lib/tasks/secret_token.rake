@@ -19,4 +19,4 @@ BuckyBox::Application.config.secret_token = '#{secret}'
 end
 
 desc 'Generates a secret token for the application'
-task :generate_secret_token => ['config/initializers/secret_token.rb']
+task generate_secret_token: ['config/initializers/secret_token.rb']

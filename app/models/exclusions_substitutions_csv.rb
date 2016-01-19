@@ -23,7 +23,7 @@ class ExclusionsSubstitutionsCsv
           date.iso8601,
           total_exclusions_substitutions(boxes, :exclusions),
           total_exclusions_substitutions(boxes, :substitutions),
-          *boxes_exclusions_substitutions
+          *boxes_exclusions_substitutions,
         ]
       end
     end
@@ -35,7 +35,7 @@ class ExclusionsSubstitutionsCsv
       "delivery date",
       "total excludes",
       "total substitutes",
-      *box_headers(packages_or_orders)
+      *box_headers(packages_or_orders),
     ]
   end
 

@@ -2,7 +2,7 @@ module DistributorHelper
   COLLECT_BOOLEANS = {
     "phone numbers"    => "collect_phone",
     "a delivery note"  => "collect_delivery_note",
-  }
+  }.freeze
 
   REQUIRE_BOOLEANS = {
     "phone numbers"               => "require_phone",
@@ -12,7 +12,7 @@ module DistributorHelper
     "a city"                      => "require_city",
     "a postcode"                  => "require_postcode",
     "a delivery note"             => "require_delivery_note",
-  }
+  }.freeze
 
   def customer_login_with_distributor(distributor)
     customer = distributor.customers.last

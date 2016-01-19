@@ -13,7 +13,7 @@ describe Distributor::Settings::DeliveryServicesController do
           delivery_service: {
             name: 'yoda', fee: '34', schedule_rule_attributes: { mon: '1', tue: '1', wed: '0', thu: '0',
                                                                  fri: '0', sat: '0', sun: '0' }, instructions: 'instructions'
-          }
+          },
         }
       end
 

@@ -6,7 +6,7 @@ class Address < ActiveRecord::Base
     city
     postcode
     delivery_note
-  )
+  ).freeze
 
   belongs_to :customer, inverse_of: :address
 

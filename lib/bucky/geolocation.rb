@@ -31,7 +31,7 @@ module Bucky
         "street" => "Street and Number",
         "city"   => "City",
         "zip"    => "Post code / ZIP code",
-        "state"  => "Region / Province / State"
+        "state"  => "Region / Province / State",
       }
 
       format.split("\n").map do |line|

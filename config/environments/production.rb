@@ -60,13 +60,13 @@ BuckyBox::Application.configure do
   # Mandrill settings
   config.action_mailer.delivery_method = :smtp
   config.action_mailer.smtp_settings = {
-    :address   => "smtp.mandrillapp.com",
-    :port      => 587,
-    :enable_starttls_auto => true, # detects and uses STARTTLS
-    :user_name => Figaro.env.mandrill_email,
-    :password  => Figaro.env.mandrill_password,
-    :authentication => 'login', # Mandrill supports 'plain' or 'login'
-    :domain => 'my.buckybox.com', # your domain to identify your server when connecting
+    address: "smtp.mandrillapp.com",
+    port: 587,
+    enable_starttls_auto: true, # detects and uses STARTTLS
+    user_name: Figaro.env.mandrill_email,
+    password: Figaro.env.mandrill_password,
+    authentication: 'login', # Mandrill supports 'plain' or 'login'
+    domain: 'my.buckybox.com', # your domain to identify your server when connecting
   }
 
   # Enable threaded mode

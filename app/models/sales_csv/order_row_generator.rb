@@ -1,7 +1,7 @@
 module SalesCsv
   class SalesCsv::OrderRowGenerator < SalesCsv::RowGenerator
     DOES_NOT_EXIST = nil
-    FUTURE_STATUS = 'waiting'
+    FUTURE_STATUS = 'waiting'.freeze
 
   private
 

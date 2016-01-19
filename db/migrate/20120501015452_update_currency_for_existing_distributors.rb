@@ -35,7 +35,7 @@ class UpdateCurrencyForExistingDistributors < ActiveRecord::Migration
       [:gbp, 'info@redearthorganics.co.uk'],
       [:gbp, 'ritawild@communitybuyingni.com'],
       [:usd, 'john@organicfood2you.com'],
-      [:usd, 'marshall@farmtobabynyc.com']
+      [:usd, 'marshall@farmtobabynyc.com'],
     ]
 
     distributor_currencies.each { |currency, email| convert_currency_to(currency, email) }

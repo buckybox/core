@@ -6,10 +6,10 @@ module Bucky::Dso
 
     def initialize(list = [])
       self.pointer = 0
-      if list.first.is_a?(Array) || list.blank?
-        self.list = list.collect { |sortable, position| Sortable.new(sortable, position) }
+      self.list = if list.first.is_a?(Array) || list.blank?
+        list.collect { |sortable, position| Sortable.new(sortable, position) }
       else
-        self.list = list.each_with_index.collect { |sortable, position| Sortable.new(sortable, position + 1) }
+        list.each_with_index.collect { |sortable, position| Sortable.new(sortable, position + 1) }
       end
     end
 

@@ -48,7 +48,7 @@ IntercomRails.config do |config|
     total_customers:         :total_customer_count,
     sales_last_30_days:      lambda do |distributor|
       [distributor.sales_last_30_days, distributor.currency].join(" ")
-    end
+    end,
   }
 
   # == User -> Company association

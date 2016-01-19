@@ -14,8 +14,8 @@ class Distributor::Pricing < ActiveRecord::Base
     raise ArgumentError unless from.is_a?(Date) && to.is_a?(Date)
 
     deductions = distributor.deductions \
-                 .where("created_at >= ? AND created_at <= ?", from, to) \
-                 .where(deductable_type: "Delivery")
+                            .where("created_at >= ? AND created_at <= ?", from, to) \
+                            .where(deductable_type: "Delivery")
 
     cut = deductions.sum do |deduction|
       [deduction.amount * percentage_fee / 100, percentage_fee_max].min

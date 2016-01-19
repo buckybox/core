@@ -1,8 +1,8 @@
 module Messaging
   class Distributor
-    AUTO_MESSAGE_TAG = "[[auto-messages]]"
-    WEBSTORE_ENABLED_TAG = "[webstore]-on"
-    WEBSTORE_DISABLED_TAG = "[webstore]-off"
+    AUTO_MESSAGE_TAG = "[[auto-messages]]".freeze
+    WEBSTORE_ENABLED_TAG = "[webstore]-on".freeze
+    WEBSTORE_DISABLED_TAG = "[webstore]-off".freeze
 
     def initialize(distributor)
       @distributor = distributor

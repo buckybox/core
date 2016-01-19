@@ -20,7 +20,7 @@ cp -n config/database.yml{.example,}
   bundle exec bundle-audit update
   bundle exec bundle-audit check
 
-  bundle exec rubocop --rails --display-cop-names
+  bundle exec rubocop -DES
   $(dirname $0)/check_i18n
 
   bundle exec discover-unused-partials || true

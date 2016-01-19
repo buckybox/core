@@ -11,7 +11,7 @@ class CreateInvoices < ActiveRecord::Migration
       t.date :end_date
       t.text :transactions
       t.text :deliveries
-      t.boolean :paid, :default => false
+      t.boolean :paid, default: false
       t.timestamps
     end
   end

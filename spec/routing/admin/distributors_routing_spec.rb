@@ -11,7 +11,7 @@ describe Admin::DistributorsController do
     end
 
     it "delivery_services to #edit" do
-      expect(get("/admin/distributors/1/edit")).to route_to("admin/distributors#edit", :id => "1")
+      expect(get("/admin/distributors/1/edit")).to route_to("admin/distributors#edit", id: "1")
     end
 
     it "delivery_services to #create" do
@@ -19,7 +19,7 @@ describe Admin::DistributorsController do
     end
 
     it "delivery_services to #update" do
-      expect(put("/admin/distributors/1")).to route_to("admin/distributors#update", :id => "1")
+      expect(put("/admin/distributors/1")).to route_to("admin/distributors#update", id: "1")
     end
   end
 end

@@ -3,7 +3,7 @@ class CreateAccounts < ActiveRecord::Migration
     create_table :accounts do |t|
       t.references :distributor
       t.references :customer
-      t.integer :balance_cents, :default => 0, :null => false
+      t.integer :balance_cents, default: 0, null: false
       t.string :currency
 
       t.timestamps

@@ -118,11 +118,10 @@ protected
   end
 
   def account_transactions(account, offset = 0, limit = 6, dummy = true)
-    transactions = []
-    if cookies["transaction_order"].blank? || cookies["transaction_order"] == 'date_processed'
-      transactions = account.transactions.ordered_by_created_at.limit(limit).offset(offset)
+    transactions = if cookies["transaction_order"].blank? || cookies["transaction_order"] == 'date_processed'
+      account.transactions.ordered_by_created_at.limit(limit).offset(offset)
     else
-      transactions = account.transactions.ordered_by_display_time.limit(limit).offset(offset)
+      account.transactions.ordered_by_display_time.limit(limit).offset(offset)
     end
     transactions = [Transaction.dummy(0, "Opening Balance", @account.created_at)] if transactions.empty? && dummy
     transactions
@@ -133,10 +132,10 @@ private
   def set_user_time_zone
     distributor = current_distributor || current_customer.try(:distributor)
 
-    if distributor.present? && distributor.time_zone.present?
-      Time.zone = distributor.time_zone
+    Time.zone = if distributor.present? && distributor.time_zone.present?
+      distributor.time_zone
     else
-      Time.zone = BuckyBox::Application.config.time_zone
+      BuckyBox::Application.config.time_zone
     end
   end
 

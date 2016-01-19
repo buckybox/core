@@ -93,7 +93,7 @@ module Messaging
       {
         tries: 3,
         sleep: 0,
-        on: NON_FATAL_EXCEPTIONS
+        on: NON_FATAL_EXCEPTIONS,
       }.freeze
     end
   end

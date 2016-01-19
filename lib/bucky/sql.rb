@@ -32,7 +32,7 @@ class Bucky::Sql
     flux_substitute('find_schedules', {
       dow: date.strftime('%a').downcase,
       date: date.to_s(:db),
-      distributor_id: distributor.id.to_s
+      distributor_id: distributor.id.to_s,
     })
   end
 
@@ -41,7 +41,7 @@ class Bucky::Sql
       dow: date.strftime('%a').downcase,
       date: date.to_s(:db),
       distributor_id: distributor.id.to_s,
-      delivery_service_id: delivery_service_id
+      delivery_service_id: delivery_service_id,
     })
   end
 

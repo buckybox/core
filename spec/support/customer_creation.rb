@@ -24,7 +24,7 @@ def customer_with(args = {})
     delivery_note: args[:delivery_note],
     mobile_phone: args[:mobile_phone],
     home_phone: args[:home_phone],
-    work_phone: args[:work_phone]
+    work_phone: args[:work_phone],
   }
   account = customer.account
   account.change_balance_to(args[:account_balance])

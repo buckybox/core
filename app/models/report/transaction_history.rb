@@ -3,8 +3,8 @@ require 'csv'
 require_relative '../report'
 
 class Report::TransactionHistory
-  NAME_PREFIX = 'bucky-box-transaction-history-export'
-  DATE_FORMAT = '%d/%b/%Y'
+  NAME_PREFIX = 'bucky-box-transaction-history-export'.freeze
+  DATE_FORMAT = '%d/%b/%Y'.freeze
 
   def initialize(args = {})
     @distributor  = args[:distributor]

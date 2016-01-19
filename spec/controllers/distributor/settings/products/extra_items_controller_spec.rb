@@ -11,7 +11,7 @@ describe Distributor::Settings::Products::ExtraItemsController do
         post :create, {
           extra: {
             name: 'Eggs', unit: '1/2 doz', price: '246'
-          }
+          },
         }
       end
 

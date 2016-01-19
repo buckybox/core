@@ -21,8 +21,8 @@ class Package < ActiveRecord::Base
 
   attr_accessible :order, :order_id, :packing_list, :status, :position
 
-  STATUS = %w(unpacked packed) # TODO: change to state_machine next time this is touched
-  PACKING_METHOD = %w(manual auto)
+  STATUS = %w(unpacked packed).freeze # TODO: change to state_machine next time this is touched
+  PACKING_METHOD = %w(manual auto).freeze
 
   validates_presence_of :order, :packing_list_id, :status
   validates_inclusion_of :status, in: STATUS, message: "%{value} is not a valid status"
@@ -87,7 +87,7 @@ class Package < ActiveRecord::Base
   def self.contents_description(box_name, order_extras)
     box_name = box_name.name if box_name.is_a? Box
 
-    result = "#{box_name}"
+    result = box_name.to_s
     result << ", #{Order.extras_description(order_extras)}" if order_extras.present?
 
     result

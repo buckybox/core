@@ -3,7 +3,7 @@ class CreateTransactions < ActiveRecord::Migration
     create_table :transactions do |t|
       t.references :account
       t.string :kind
-      t.integer :amount_cents, :default => 0, :null => false
+      t.integer :amount_cents, default: 0, null: false
       t.string :currency
       t.text :description
 

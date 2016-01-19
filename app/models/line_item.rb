@@ -14,7 +14,7 @@ class LineItem < ActiveRecord::Base
 
   default_scope { order(:name) }
 
-  DEFAULT_LIST = "Beetroot, Broccoli, Cabbage, Carrots, Cauliflower, Celery, Courgette, Cucumber, Fennel, Kale, Leeks, Lettuce, Onions, Parsnips, Peppers, Potatoes, Red Cabbage, Red Onions, Rhubarb, Spinach, Spring Greens, Sprouts, Squash, Swede, Tomatoes, Turnips"
+  DEFAULT_LIST = "Beetroot, Broccoli, Cabbage, Carrots, Cauliflower, Celery, Courgette, Cucumber, Fennel, Kale, Leeks, Lettuce, Onions, Parsnips, Peppers, Potatoes, Red Cabbage, Red Onions, Rhubarb, Spinach, Spring Greens, Sprouts, Squash, Swede, Tomatoes, Turnips".freeze
 
   def self.from_list(distributor, text)
     return false if text.blank?

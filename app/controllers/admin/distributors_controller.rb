@@ -52,7 +52,7 @@ class Admin::DistributorsController < Admin::ResourceController
     render json: {
       time_zone: time_zone,
       currency: @country.currency,
-      fee: @country.default_consumer_fee_cents / 100.0
+      fee: @country.default_consumer_fee_cents / 100.0,
     }
   end
 

@@ -27,7 +27,7 @@ class CustomerDecorator < Draper::Decorator
 
     [
       date.strftime("%A, %d %b %Y"),
-      next_orders.map(&:summary).sort
+      next_orders.map(&:summary).sort,
     ].join("\n")
   end
 

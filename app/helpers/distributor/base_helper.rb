@@ -26,7 +26,7 @@ module Distributor::BaseHelper
 
     list_item += content_tag :a, href: link, id: options.delete(:link_id) do
       content_tag(:div, nil, class: 'nav-image') +
-      content_tag(:div, text, class: 'nav-text')
+        content_tag(:div, text, class: 'nav-text')
     end
 
     content_tag(:li, list_item, class: klass)

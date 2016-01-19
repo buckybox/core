@@ -18,7 +18,7 @@ class ImportTransaction < ActiveRecord::Base
     MATCH_MATCHED => 0,
     MATCH_NOT_A_CUSTOMER => 1,
     MATCH_DUPLICATE => 2,
-    MATCH_UNABLE_TO_MATCH => 3
+    MATCH_UNABLE_TO_MATCH => 3,
   }.freeze
   MATCH_SELECT = (MATCH_TYPES.keys - [MATCH_MATCHED]).map { |symbol|
     [symbol.humanize, symbol]

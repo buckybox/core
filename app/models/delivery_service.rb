@@ -66,7 +66,7 @@ class DeliveryService < ActiveRecord::Base
       [
         I18n.l(time, format: "%a - %b %-d, %Y"),
         time.to_date.iso8601,
-        { 'data-weekday' => time.strftime('%a').downcase }
+        { 'data-weekday' => time.strftime('%a').downcase },
       ]
     end
   end

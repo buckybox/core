@@ -62,12 +62,11 @@ class Distributor::DeliveriesController < Distributor::ResourceController
 
   def make_payment
     deliveries = current_distributor.deliveries.ordered.where(id: params[:deliveries])
-    result = false
 
-    if params[:reverse_payment]
-      result = Delivery.reverse_pay_on_delivery(deliveries)
+    result = if params[:reverse_payment]
+      Delivery.reverse_pay_on_delivery(deliveries)
     else
-      result = Delivery.pay_on_delivery(deliveries)
+      Delivery.pay_on_delivery(deliveries)
     end
 
     if result

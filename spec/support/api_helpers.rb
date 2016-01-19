@@ -37,7 +37,7 @@ module ApiHelpers
       headers = {
         "API-Key" => Figaro.env.api_master_key,
         "API-Secret" => Figaro.env.api_master_secret,
-        "Webstore-ID" => api_distributor.parameter_name
+        "Webstore-ID" => api_distributor.parameter_name,
       }
 
       expect(Figaro.env.api_master_allowed_ips).not_to include "127.0.0.1"

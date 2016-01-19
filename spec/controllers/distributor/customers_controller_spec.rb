@@ -59,7 +59,7 @@ describe Distributor::CustomersController do
       let(:email_template) do
         {
           "subject" => "Hey!",
-          "body" => "Hi [first_name],\r\n\r\nCheers"
+          "body" => "Hi [first_name],\r\n\r\nCheers",
         }
       end
       let(:params) do
@@ -67,14 +67,14 @@ describe Distributor::CustomersController do
           recipient_ids: recipient_ids.join(','),
           selected_email_template_id: "1",
           email_template: email_template,
-          link_action: ""
+          link_action: "",
         }
       end
 
       let(:email_templates) do
         [
           Fabricate(:email_template),
-          Fabricate(:email_template)
+          Fabricate(:email_template),
         ]
       end
 

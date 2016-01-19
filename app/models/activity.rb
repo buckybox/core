@@ -37,18 +37,18 @@ class Activity < ActiveRecord::Base
       message << " with extras" if params.order.extras.present?
       message
     end,
-  }
+  }.freeze
 
   def self.add(customer, initiator, type, params = {})
     params[:initiator] = \
-    case initiator
-    when Customer
-      initiator.name
-    when Distributor
-      "You"
-    else
-      raise ArgumentError, "Invalid initiator"
-    end
+      case initiator
+      when Customer
+        initiator.name
+      when Distributor
+        "You"
+      else
+        raise ArgumentError, "Invalid initiator"
+      end
 
     action = ACTIONS.fetch(type).call(
       OpenStruct.new(params)

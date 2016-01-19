@@ -24,7 +24,7 @@ class PhoneCollection
       [
         I18n.t("models.phone_collection.#{attribute}"),
         I18n.t('colon'),
-        phone
+        phone,
       ].join unless phone.blank?
     end.compact
   end

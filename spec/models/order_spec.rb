@@ -98,8 +98,8 @@ describe Order do
         { discount: 0.00, fee: 5, quantity: 5, individual_price: 15.00, price: 75.00 },
         { discount: 0.00, fee: 5, quantity: 1, individual_price: 15.00, price: 15.00 },
         { discount: 0.00, fee: 0, quantity: 5, individual_price: 10.00, price: 50.00 },
-        { discount: 0.00, fee: 0, quantity: 1, individual_price: 10.00, price: 10.00 }
-      ]
+        { discount: 0.00, fee: 0, quantity: 1, individual_price: 10.00, price: 10.00 },
+      ].freeze
 
       ORDER_PRICE_PERMUTATIONS.each do |pp|
         context "where discount is #{pp[:discount]}, fee is #{pp[:fee]}, and quantity is #{pp[:quantity]}" do

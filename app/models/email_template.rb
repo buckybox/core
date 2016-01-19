@@ -10,7 +10,7 @@ class EmailTemplate < EmailTemplator
     delivery_service:      :delivery_service_name,
     customer_number:       :customer_number,
     email_address:         :email,
-  }
+  }.freeze
 
   def pre_personalize_hook(customer)
     customer.decorate unless customer.decorated?
