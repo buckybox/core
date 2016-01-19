@@ -18,7 +18,7 @@ class Metrics
     queue.add "bucky.distributor.active" => Distributor.active.count
     queue.add "bucky.webstore.active" => Distributor.active_webstore.active.count
     queue.add "bucky.customer.transactional.new_last_7_days" => Distributor.all.sum(&:new_transactional_customer_count)
-    queue.add "bucky.customer.active" => Customer.active.count
+    queue.add "bucky.customer.active" => Customer.active_count
     queue.add "bucky.jobs.enqueued" => Delayed::Job.count
     queue.add "bucky.jobs.working" => Delayed::Job.where("locked_at IS NOT NULL").count
     queue.add "bucky.jobs.failed" => Delayed::Job.where("last_error IS NOT NULL").count

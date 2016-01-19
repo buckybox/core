@@ -140,8 +140,10 @@ class Customer < ActiveRecord::Base
     all_dynamic_tags.keys.freeze
   end
 
-  def self.active
-    Customer.joins(:orders).where("orders.active" => true).uniq
+  def self.active_count
+    Rails.cache.fetch('metrics.total_active_transactional_customer_count', expires_in: 1.day) do
+      Distributor.active.map(&:transactional_customer_count).sum
+    end
   end
 
   def dynamic_tags
