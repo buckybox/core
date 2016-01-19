@@ -39,6 +39,7 @@ Session.vim
 coverage/
 /public/uploads/tmp/
 /public/assets/**/*.gz
+/.rubocop-*
 
 # Ignore private uploads
 /private_uploads/

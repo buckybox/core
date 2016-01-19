@@ -38,9 +38,9 @@ class Metrics
     metrics = classes.inject({}) do |hash, (key, klass)|
       metric_key = "new_#{key}_last_24_hours"
 
-      hash.merge!(metric_key => lambda {
+      hash.merge!(metric_key => lambda do
         klass.where(created_at: last_24_hours).count
-      })
+      end)
     end
 
     File.open(MUNIN_DAILY_METRICS_CONFIG_FILE, "w") do |file|
@@ -70,9 +70,9 @@ CONFIG
 
   def self.calculate_and_store_for_munin_weekly
     metrics = {
-      "new_transactional_customers_last_7_days" => lambda {
+      "new_transactional_customers_last_7_days" => lambda do
         Distributor.all.map(&:new_transactional_customer_count).sum
-      },
+      end,
     }
 
     File.open(MUNIN_WEEKLY_METRICS_CONFIG_FILE, "w") do |file|

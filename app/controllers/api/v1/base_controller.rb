@@ -31,10 +31,10 @@ class Api::V1::BaseController < ApplicationController
 
     if blacklist.none? { |pattern| report.include?(pattern) }
       Bugsnag.notify(RuntimeError.new("CSP violation"), {
-        report: report,
-        user_agent: request.user_agent,
-        ip_address: request.remote_ip,
-      })
+                       report: report,
+                       user_agent: request.user_agent,
+                       ip_address: request.remote_ip,
+                     })
     end
 
     render text: nil, status: :no_content

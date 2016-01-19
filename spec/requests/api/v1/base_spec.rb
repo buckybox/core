@@ -18,7 +18,7 @@ describe "API v1" do
 
   describe "POST /csp-report" do
     let(:url) { "#{base_url}/csp-report" }
-    let(:csp_report) {
+    let(:csp_report) do
       <<-JSON
 {
   "csp-report": {
@@ -31,7 +31,7 @@ describe "API v1" do
   }
 }
       JSON
-    }
+    end
 
     it_behaves_like "an unauthenticated API", :post
 

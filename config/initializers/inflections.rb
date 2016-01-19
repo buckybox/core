@@ -7,7 +7,7 @@ ActiveSupport::Inflector.inflections do |inflect|
     #   inflect.singular /^(ox)en/i, '\1'
     #   inflect.irregular 'person', 'people'
 
-    inflect.singular /(ss)$/i, '\1' # for things like address and business
+    inflect.singular(/(ss)$/i, '\1') # for things like address and business
     inflect.irregular 'information', 'information'
 end
 

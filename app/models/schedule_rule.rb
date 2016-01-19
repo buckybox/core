@@ -219,7 +219,7 @@ class ScheduleRule < ActiveRecord::Base
 
     if schedule_pause
       return false unless ((schedule_rule.one_off? &&
-        schedule_rule.start < schedule_pause.start) ||
+                            schedule_rule.start < schedule_pause.start) ||
         schedule_pause.finish <= schedule_rule.start) ||
                           schedule_pause.finish <= schedule_rule.start
     end

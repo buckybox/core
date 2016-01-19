@@ -6,7 +6,7 @@ class MakeLikesAndDislikesAtomic < ActiveRecord::Migration
   class Customer < ActiveRecord::Base; end
   class LineItem < ActiveRecord::Base; end
 
-  SPLITTING_REGEX = /\s*,\s*|\s+and\s+|\s+or\s+|\s*;\s*|\s*\.\s*|\s*\/\s*/
+  SPLITTING_REGEX = %r{\s*,\s*|\s+and\s+|\s+or\s+|\s*;\s*|\s*\.\s*|\s*\/\s*}
 
   def up
     Distributor.reset_column_information

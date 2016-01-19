@@ -95,12 +95,12 @@ module BuckyBox
     # CORS setup (including handling of preflight OPTIONS requests)
     config.middleware.insert_before 0, "Rack::Cors", debug: Rails.env.development? do
       allow do
-        origins(/^https?:\/\/.*\.buckybox\.(com|local)(:[0-9]+)?$/)
+        origins(%r{^https?:\/\/.*\.buckybox\.(com|local)(:[0-9]+)?$})
 
         resource("*",
           if: lambda do |env|
             env["SERVER_NAME"] =~ /^my\.buckybox\.(com|local)$/ &&
-            env["PATH_INFO"] =~ /^\/sign_up_wizard\//
+            env["PATH_INFO"] =~ %r{^\/sign_up_wizard\/}
           end,
           headers: nil,
           methods: %i(get post),

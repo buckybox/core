@@ -20,9 +20,9 @@ class ImportTransaction < ActiveRecord::Base
     MATCH_DUPLICATE => 2,
     MATCH_UNABLE_TO_MATCH => 3,
   }.freeze
-  MATCH_SELECT = (MATCH_TYPES.keys - [MATCH_MATCHED]).map { |symbol|
+  MATCH_SELECT = (MATCH_TYPES.keys - [MATCH_MATCHED]).map do |symbol|
     [symbol.humanize, symbol]
-  }.freeze
+  end.freeze
 
   scope :ordered,   -> { order("transaction_date DESC, created_at DESC") }
   scope :draft,     -> { where(['import_transactions.draft = ?', true]) }

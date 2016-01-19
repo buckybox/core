@@ -1,68 +1,44 @@
-Lint/AmbiguousRegexpLiteral:
+inherit_from:
+  - https://gist.githubusercontent.com/infertux/cdd2ccc6e0a0cd94f458/raw
+
+AllCops:
+  TargetRubyVersion: 2.2
+
+Rails:
+  Enabled: true
+
+Rails/Date:
+  Enabled: false # FIXME
+
+Rails/TimeZone:
+  Enabled: false # FIXME
+
+Rails/HasAndBelongsToMany:
+  Enabled: false
+
+Rails/ScopeArgs:
+  Enabled: false # TODO: remove when Rails 4
+
+Rails/Validation:
   Enabled: false
 
 Lint/AssignmentInCondition:
   Enabled: false
 
-Lint/DefEndAlignment:
-  Enabled: false
-
-Lint/EndAlignment:
-  Enabled: false
-
 Lint/UselessAssignment:
   Exclude: ["config/compass.rb", "spec/**/*"]
 
-Lint/LiteralInInterpolation:
-  Enabled: false
-
 Lint/UselessAccessModifier:
-  Enabled: false
-
-Lint/FormatParameterMismatch:
-  Enabled: false
+  Enabled: false # TODO
 
 Lint/IneffectiveAccessModifier:
   Enabled: false # TODO
-
-Metrics/ClassLength:
-  Enabled: false
-
-Metrics/CyclomaticComplexity:
-  Enabled: false
-
-Metrics/LineLength:
-  Enabled: false
-
-Metrics/MethodLength:
-  Enabled: false
-
-Metrics/PerceivedComplexity:
-  Enabled: false
-
-Metrics/ParameterLists:
-  Enabled: false
-
-Metrics/AbcSize:
-  Enabled: false
-
-Metrics/ModuleLength:
-  Enabled: false
-
-Metrics/BlockNesting:
-  Enabled: false
-
-Style/AccessModifierIndentation:
-  EnforcedStyle: outdent
 
 Style/AccessorMethodName:
   Enabled: false
 
 Style/AlignParameters:
   EnforcedStyle: with_fixed_indentation
-
-Style/AndOr:
-  EnforcedStyle: conditionals
 
 Style/BracesAroundHashParameters:
   Enabled: false
@@ -73,28 +49,13 @@ Style/ClassAndModuleChildren:
 Style/ClassVars:
   Enabled: false # TODO
 
-Style/Documentation:
-  Enabled: false
-
-Style/DoubleNegation:
-  Enabled: false
-
 Style/EachWithObject:
-  Enabled: false
-
-Style/ElseAlignment:
-  Enabled: false
-
-Style/FileName:
   Enabled: false
 
 Style/FormatString:
   Enabled: false
 
 Style/GuardClause:
-  Enabled: false
-
-Style/IndentHash:
   Enabled: false
 
 Style/IndentationWidth:
@@ -110,9 +71,6 @@ Style/PredicateName:
   Enabled: false # TODO
 
 Style/RedundantSelf:
-  Enabled: false
-
-Style/RegexpLiteral:
   Enabled: false
 
 Style/RescueModifier:
@@ -133,31 +91,7 @@ Style/SingleLineBlockParams:
 Style/SingleLineMethods:
   Enabled: false
 
-Style/SpecialGlobalVars:
-  Enabled: false
-
-Style/StringLiterals:
-  Enabled: false
-
 Style/StructInheritance:
-  Enabled: false
-
-Style/TrailingCommaInLiteral:
-  EnforcedStyleForMultiline: comma
-
-Style/TrailingCommaInArguments:
-  Enabled: false
-
-Style/SignalException:
-  Enabled: false
-
-Style/ClosingParenthesisIndentation:
-  Enabled: false
-
-Style/ParallelAssignment:
-  Enabled: false
-
-Style/BlockDelimiters:
   Enabled: false
 
 Style/ExtraSpacing:
@@ -166,31 +100,12 @@ Style/ExtraSpacing:
 Style/Alias:
   EnforcedStyle: prefer_alias_method
 
+Style/BlockDelimiters:
+  Enabled: false
+
 Performance/TimesMap:
   Exclude: ["spec/**/*"]
 
 Performance/RedundantMerge:
-  Enabled: false
-
-Rails:
-  Enabled: true
-
-Rails/Date:
-  Enabled: false # FIXME
-
-Rails/TimeZone:
-  Enabled: false # FIXME
-
-Rails/HasAndBelongsToMany:
-  Enabled: false
-
-Rails/Output:
-  Enabled: false
-
-# TODO: remove when Rails 4
-Rails/ScopeArgs:
-  Enabled: false
-
-Rails/Validation:
   Enabled: false
 

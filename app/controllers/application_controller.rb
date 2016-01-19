@@ -170,11 +170,11 @@ private
     # Add some app-specific data which will be displayed on a custom
     # "Diagnostics" tab on each error page on bugsnag.com
     notification.add_tab(:diagnostics, {
-      distributor_id: current_distributor.try(:id),
-      distributor_name: current_distributor.try(:name),
-      customer_id: current_customer.try(:id),
-      customer_name: current_customer.try(:name),
-    })
+                           distributor_id: current_distributor.try(:id),
+                           distributor_name: current_distributor.try(:name),
+                           customer_id: current_customer.try(:id),
+                           customer_name: current_customer.try(:name),
+                         })
   end
 
   def find_locale

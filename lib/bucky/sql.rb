@@ -30,19 +30,19 @@ class Bucky::Sql
 
   def self.find_schedules(distributor, date)
     flux_substitute('find_schedules', {
-      dow: date.strftime('%a').downcase,
-      date: date.to_s(:db),
-      distributor_id: distributor.id.to_s,
-    })
+                      dow: date.strftime('%a').downcase,
+                      date: date.to_s(:db),
+                      distributor_id: distributor.id.to_s,
+                    })
   end
 
   def self.find_schedules_delivery_service(distributor, date, delivery_service_id)
     flux_substitute('find_schedules_delivery_service', {
-      dow: date.strftime('%a').downcase,
-      date: date.to_s(:db),
-      distributor_id: distributor.id.to_s,
-      delivery_service_id: delivery_service_id,
-    })
+                      dow: date.strftime('%a').downcase,
+                      date: date.to_s(:db),
+                      distributor_id: distributor.id.to_s,
+                      delivery_service_id: delivery_service_id,
+                    })
   end
 
   def self.order_count(distributor, date, delivery_service_id = nil)

@@ -569,7 +569,7 @@ EOF
         matches.all? do |column, t|
           text = t.to_s
           if text[0] == '/' && text[-1] == '/'
-            !!get(row, column).match(/#{text[1..-2]}/)
+            get(row, column).match(/#{text[1..-2]}/)
           else
             get(row, column) == text
           end

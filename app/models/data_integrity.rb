@@ -1,6 +1,6 @@
 class DataIntegrity
   def self.check_and_print
-    puts check.errors.join("\n")
+    Rails.logger.warn check.errors.join("\n")
   end
 
   def self.check_and_email
