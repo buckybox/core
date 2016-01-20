@@ -87,10 +87,10 @@ class Package < ActiveRecord::Base
   def self.contents_description(box_name, order_extras)
     box_name = box_name.name if box_name.is_a? Box
 
-    result = box_name.to_s
-    result << ", #{Order.extras_description(order_extras)}" if order_extras.present?
+    description = [box_name]
+    description << ", #{Order.extras_description(order_extras)}" if order_extras.present?
 
-    result
+    description.join
   end
 
   def contents_description
