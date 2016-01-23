@@ -2,7 +2,7 @@ de:
   customer_mailer:
     login_details:
       subject: Ihre Login Daten für %{distributor}
-      new_details: Hier sind Ihre neuen Logindaten für Ihren Account mit uns bei %{ditributor}.
+      new_details: Hier sind Ihre neuen Logindaten für Ihren Account mit uns bei %{distributor}.
       email: Email
       password: Passwort
       instructions_html: |
