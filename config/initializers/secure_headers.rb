@@ -12,7 +12,6 @@ SecureHeaders::Configuration.default do |config|
     form_action: %w('self' www.paypal.com),
     connect_src: %w('self' api.buckybox.com *.google-analytics.com *.intercomcdn.com *.intercom.io wss://*.intercom.io),
     frame_ancestors: %w('none'),
-    block_all_mixed_content: '',
     report_uri: %w(https://api.buckybox.com/v1/csp-report),
   }
   # config.hpkp = {
