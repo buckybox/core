@@ -88,9 +88,9 @@ module Bucky::TransactionImports
       if not_customer? # Don't search for customers that match if we know its not going to match
         []
       else
-        customers.collect do|customer|
+        customers.collect do |customer|
           MatchResult.customer_match(customer, match_confidence(customer))
-        end.sort.select do|result|
+        end.sort.select do |result|
           result.confidence >= 0.48 # Threshold for selecting a match
         end.reverse
       end

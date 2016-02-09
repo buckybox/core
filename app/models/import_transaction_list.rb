@@ -35,13 +35,13 @@ class ImportTransactionList < ActiveRecord::Base
   end
 
   def has_failed?
-    errors.size > 0 || (csv_parser && csv_parser.rows.any?(&:invalid?))
+    errors.present? || (csv_parser && csv_parser.rows.any?(&:invalid?))
   end
 
   def error_messages
     if csv_parser.present?
       csv_parser.rows.select(&:invalid?).map { |row| row.errors.values }
-    elsif errors.size > 0
+    elsif errors.present?
       errors.full_messages
     end
   end

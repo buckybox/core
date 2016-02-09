@@ -119,9 +119,9 @@ class Distributor < ActiveRecord::Base
   attr_reader :spend_limit_on_all_customers
   alias_method :spend_limit_on_all_customers?, :spend_limit_on_all_customers
 
-  # Devise Override: Avoid validations on update or if now password provided
+  # Devise Override: Avoid validations on update or if no password provided
   def password_required?
-    password.present? && password.size > 0 || new_record?
+    password.present? || new_record?
   end
 
   def self.demo
