@@ -1,5 +1,4 @@
 class ApplicationController < ActionController::Base
-  ensure_security_headers # secure_headers Gem
   protect_from_forgery
 
   if Rails.env.production? || Rails.env.staging?

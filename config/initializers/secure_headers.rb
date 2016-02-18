@@ -2,9 +2,7 @@ require "secure_headers"
 
 SecureHeaders::Configuration.default do |config|
   config.x_frame_options = "DENY"
-  config.x_xss_protection = "1; mode=block"
   config.csp = {
-    enforce: true,
     default_src: %w('none'),
     img_src: %w('self' *.google-analytics.com *.pingdom.net *.pingdom.com *.intercomcdn.com *.intercomassets.com *.intercom.io *.tile.openstreetmap.org),
     script_src: %w('self' 'unsafe-inline' 'unsafe-eval' *.google-analytics.com *.pingdom.net js-agent.newrelic.com bam.nr-data.net *.intercomcdn.com *.intercom.io),
