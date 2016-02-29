@@ -20,13 +20,16 @@ $(function() {
     update: function() {
       $.ajax({
         type: 'post',
-        data: $.map($('#delivery_list li.data-listings'), function(val){return "delivery[]=" + $(val).data('delivery_id')}).join("&"),
+        data: $.map($('#delivery_list li.data-listings'), function(val){return "delivery[]=" + $(val).data('deliveryId')}).join("&"),
         dataType: 'json',
         url: '/distributor/deliveries/date/' +
           $('#delivery-listings').data('date') +
           '/reposition',
         statusCode: {
             400: function() {
+              bootbox.alert("Oops, that didn't work! Please refresh the page and try again.");
+            },
+            404: function() {
               bootbox.alert("Oops, that didn't work! Please refresh the page and try again.");
             }
         }
