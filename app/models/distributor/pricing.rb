@@ -14,6 +14,8 @@ class Distributor::Pricing < ActiveRecord::Base
                             .where(deductable_type: "Delivery")
 
     cut = deductions.sum do |deduction|
+      raise "currency mismatch" if deduction.distributor.currency != currency
+
       [deduction.amount * percentage_fee / 100, percentage_fee_max].min
     end
 
@@ -30,7 +32,7 @@ class Distributor::Pricing < ActiveRecord::Base
 
   def last_billed_date
     distributor.use_local_time_zone do
-      last_invoice = distributor.invoices.last # FIXME: order by 'to'?
+      last_invoice = distributor.invoices.order('distributor_invoices.to').last
       return last_invoice.to if last_invoice
 
       # otherwise we assume it was invoicing_day_of_the_month
