@@ -1070,7 +1070,8 @@ CREATE TABLE distributor_pricings (
     discount_percentage numeric DEFAULT 0 NOT NULL,
     currency character varying(255) NOT NULL,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    updated_at timestamp without time zone NOT NULL,
+    invoicing_day_of_the_month integer DEFAULT 1 NOT NULL
 );
 
 
@@ -3561,3 +3562,5 @@ INSERT INTO schema_migrations (version) VALUES ('20151126143915');
 INSERT INTO schema_migrations (version) VALUES ('20160102123920');
 
 INSERT INTO schema_migrations (version) VALUES ('20160102181716');
+
+INSERT INTO schema_migrations (version) VALUES ('20160318091706');

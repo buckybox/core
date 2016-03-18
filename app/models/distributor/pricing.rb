@@ -1,14 +1,10 @@
 class Distributor::Pricing < ActiveRecord::Base
-  attr_accessible :name, :flat_fee, :percentage_fee, :percentage_fee_max, :discount_percentage, :currency
+  attr_accessible :name, :flat_fee, :percentage_fee, :percentage_fee_max, :discount_percentage, :currency, :invoicing_day_of_the_month
 
   belongs_to :distributor
 
   monetize :flat_fee_cents
   monetize :percentage_fee_max_cents
-
-  def account_balance
-    CrazyMoney.zero # FIXME
-  end
 
   def usage_between(from, to)
     raise ArgumentError unless from.is_a?(Date) && to.is_a?(Date)
@@ -53,10 +49,6 @@ class Distributor::Pricing < ActiveRecord::Base
 
   def next_invoicing_date
     last_invoiced_date + 1.month
-  end
-
-  def invoicing_day_of_the_month
-    10
   end
 
   def description

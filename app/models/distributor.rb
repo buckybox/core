@@ -166,7 +166,7 @@ class Distributor < ActiveRecord::Base
   end
 
   def self.create_missing_invoices
-    active.each do |distributor|
+    Distributor.where("last_seen_at > ?", 1.year.ago).find_each do |distributor|
       Distributor::Invoice.create_invoice!(distributor)
     end
   end

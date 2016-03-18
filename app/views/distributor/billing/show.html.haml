@@ -44,12 +44,6 @@
 
 %hr
 .row-fluid
-  %strong.span2 Account Balance
-  .span10
-    = current_pricing.account_balance.with_currency(current_pricing.currency)
-
-%hr
-.row-fluid
   %strong.span2 Current Usage
   .span10
     = current_pricing.current_usage.with_currency(current_pricing.currency)
