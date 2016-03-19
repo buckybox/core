@@ -57,16 +57,15 @@ BuckyBox::Application.configure do
   config.action_mailer.raise_delivery_errors = false
   config.action_mailer.default_url_options = { host: Figaro.env.host }
 
-  # Mandrill settings
+  # SMTP settings
   config.action_mailer.delivery_method = :smtp
   config.action_mailer.smtp_settings = {
-    address: "smtp.mandrillapp.com",
+    address: "smtp.sparkpostmail.com",
     port: 587,
     enable_starttls_auto: true, # detects and uses STARTTLS
-    user_name: Figaro.env.mandrill_email,
-    password: Figaro.env.mandrill_password,
-    authentication: 'login', # Mandrill supports 'plain' or 'login'
-    domain: 'my.buckybox.com', # your domain to identify your server when connecting
+    user_name: Figaro.env.sparkpost_username,
+    password: Figaro.env.sparkpost_password,
+    authentication: 'login',
   }
 
   # Enable threaded mode
