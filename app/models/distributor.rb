@@ -131,8 +131,8 @@ class Distributor < ActiveRecord::Base
   def self.active
     where("email != ?", DEMO_EMAIL)
       .where("last_seen_at > ?", 30.days.ago)
-      .select { |d| d.transactional_customer_count > 9 }
-      .sort_by(&:transactional_customer_count).reverse
+      .select { |d| d.transactional_customer_count > 2 }
+      .sort_by(&:deliveries_last_30_days_count).reverse
   end
 
   def self.refresh_webstore_caches
