@@ -31,8 +31,8 @@
           = distributor.orders.active.count
           %i.icon-shopping-cart(title="active orders")
           %br
-          = distributor.deliveries_last_7_days_count
-          %i.icon-road(title="deliveries completed in last 7 days")
+          = distributor.deliveries_last_30_days_count
+          %i.icon-road(title="deliveries completed in last 30 days")
         .span2.align-right.medium.bold
           = "#{distributor.sales_last_30_days.to_k} #{distributor.currency}"
           %i.icon-book(title="sales in last 30 days")

@@ -470,8 +470,8 @@ class Distributor < ActiveRecord::Base
     customers.where("created_at > ?", 1.week.ago).count
   end
 
-  def deliveries_last_7_days_count
-    deliveries.delivered.where("deliveries.updated_at > ?", 7.days.ago).count
+  def deliveries_last_30_days_count
+    deliveries.delivered.where("deliveries.updated_at > ?", 30.days.ago).count
   end
 
   def notify_address_changed(customer, notifier = Event)
