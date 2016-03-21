@@ -538,6 +538,10 @@ class Distributor < ActiveRecord::Base
     last_seen_at && last_seen_at > 30.minutes.ago
   end
 
+  def new?
+    created_at > 2.months.ago
+  end
+
   def sales_last_30_days
     @sales_last_30_days ||= begin
       amount = deductions.where("created_at > ?", 30.days.ago) \
