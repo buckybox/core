@@ -50,21 +50,9 @@ describe Bucky::Geolocation do
   end
 
   describe ".get_geoip_info" do
-    it "doesn't take more than a second", :internet do
-      expect(Benchmark.realtime do
-        Bucky::Geolocation.get_geoip_info "202.162.73.2"
-      end).to be < 2 # 2 because it can be 1.1-ish
-    end
-
-    it "returns nil when it times out" do
-      allow(Geokit::Geocoders::FreeGeoIpGeocoder).to receive(:do_geocode) { sleep 2 }
-
-      expect(Bucky::Geolocation.get_geoip_info("202.162.73.2")).to be_nil
-    end
-
     it "ignores bad responses" do
-      geoloc = double(success: false)
-      allow(Geokit::Geocoders::FreeGeoIpGeocoder).to receive(:do_geocode) { geoloc }
+      geoip = double(request: double(response: double(success?: false, code: 0)))
+      allow(Typhoeus).to receive(:get) { geoip }
 
       expect(Bucky::Geolocation.get_geoip_info("202.162.73.2")).to be_nil
     end

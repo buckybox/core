@@ -50,12 +50,26 @@ module Bucky
     end
 
     def get_geoip_info(ip_address)
-      Timeout.timeout(1) do
-        info = Geokit::Geocoders::FreeGeoIpGeocoder.do_geocode(ip_address)
-        info.success ? info : nil
+      url = "#{geoip_url}/json/#{ip_address}"
+      geoip = Typhoeus.get(url, timeout: 1).request.response
+
+      unless geoip.success?
+        Bugsnag.notify(RuntimeError.new("geoip: unknown error (#{geoip.code})"))
+        return
       end
-    rescue Timeout::Error # too slow
-      nil
+
+      json = JSON.parse(geoip.body)
+
+      # add currency to JSON structure
+      country_code = json.fetch("country_code")
+      country = Country.find_by!(alpha2: country_code)
+      new_json = json.merge!(currency: country.currency)
+
+      OpenStruct.new(new_json)
+    end
+
+    def geoip_url
+      "http://127.0.0.1:9999".freeze
     end
   end
 end

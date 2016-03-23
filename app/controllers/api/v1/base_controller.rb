@@ -42,17 +42,11 @@ class Api::V1::BaseController < ApplicationController
 
   def geoip
     ip = params.fetch(:ip, request.remote_ip)
-    geoip = Typhoeus.get("http://127.0.0.1:9999/json/#{ip}").request.response
+    geoip = Bucky::Geolocation.get_geoip_info(ip)
 
-    return unprocessable_entity("unknown error") if geoip.code != 200
+    return unprocessable_entity("unknown error") unless geoip
 
-    json = JSON.parse(geoip.body)
-    country_code = json.fetch("country_code")
-
-    country = Country.find_by!(alpha2: country_code)
-    new_json = json.merge!(currency: country.currency)
-
-    render json: new_json
+    render json: geoip.to_h
   end
 
 private
