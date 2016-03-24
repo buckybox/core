@@ -4,7 +4,6 @@ class CustomerMailer < ApplicationMailer
     @customer = customer
 
     set_locale(@customer)
-    headers['X-MC-Tags'] = "customer,login_details,#{@distributor.name.parameterize}"
 
     mail to: @customer.email_to,
          from: @distributor.email_from(email: Figaro.env.no_reply_email),
@@ -17,7 +16,6 @@ class CustomerMailer < ApplicationMailer
     @customer = customer
 
     set_locale(@customer)
-    headers['X-MC-Tags'] = "customer,orders_halted,#{@distributor.name.parameterize}"
 
     mail to: @customer.email_to,
          from: @distributor.email_from(email: Figaro.env.no_reply_email),
@@ -31,7 +29,6 @@ class CustomerMailer < ApplicationMailer
     @customer = customer
 
     set_locale(@customer)
-    headers['X-MC-Tags'] = "customer,remind_orders_halted,#{@distributor.name.parameterize}"
 
     mail to: @customer.email_to,
          from: @distributor.email_from(email: Figaro.env.no_reply_email),
@@ -46,7 +43,6 @@ class CustomerMailer < ApplicationMailer
     @customer = @order.customer.decorate
 
     set_locale(@customer)
-    headers['X-MC-Tags'] = "customer,order_confirmation,#{@distributor.name.parameterize}"
 
     cc = @distributor.email_from if @distributor.email_distributor_on_new_webstore_order
 
@@ -63,8 +59,6 @@ class CustomerMailer < ApplicationMailer
     else
       recipient
     end
-
-    headers['X-MC-Tags'] = "customer,email_template,#{distributor.name.parameterize}"
 
     mail to: recipient.email_to,
          from: distributor.email_from(email: Figaro.env.no_reply_email),
