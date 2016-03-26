@@ -6,6 +6,8 @@ class Distributor::Pricing < ActiveRecord::Base
   monetize :flat_fee_cents
   monetize :percentage_fee_max_cents
 
+  validates_inclusion_of :invoicing_day_of_the_month, in: 1..28
+
   def usage_between(from, to)
     raise ArgumentError unless from.is_a?(Date) && to.is_a?(Date)
 
@@ -38,7 +40,7 @@ class Distributor::Pricing < ActiveRecord::Base
       # otherwise we assume it was invoicing_day_of_the_month
       yesterday = Date.yesterday
 
-      date = Date.new(yesterday.year, yesterday.month, invoicing_day_of_the_month - 1)
+      date = Date.new(yesterday.year, yesterday.month, invoicing_day_of_the_month) - 1.day
       date -= 1.month if yesterday.day < invoicing_day_of_the_month
 
       date

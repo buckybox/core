@@ -49,6 +49,49 @@ describe Distributor::Pricing do
     end
   end
 
+  describe "#last_billed_date" do
+    before do
+      distributor = Fabricate(:distributor)
+
+      @pricing = Distributor::Pricing.default_pricing_for_currency("USD")
+      @pricing.distributor = distributor
+      @pricing.save!
+    end
+
+    def assert_last_billed_date(today, expected)
+      time_travel_to Date.parse(today)
+      expect(@pricing.last_billed_date).to eq Date.parse(expected)
+    end
+
+    context "with invoicing_day_of_the_month = 10" do
+      before do
+        @pricing.invoicing_day_of_the_month = 10
+        expect(@pricing).to be_valid
+      end
+
+      specify { assert_last_billed_date "2016-03-31", "2016-03-09" }
+      specify { assert_last_billed_date "2016-03-12", "2016-03-09" }
+      specify { assert_last_billed_date "2016-03-11", "2016-03-09" }
+      specify { assert_last_billed_date "2016-03-10", "2016-02-09" }
+      specify { assert_last_billed_date "2016-03-09", "2016-02-09" }
+      specify { assert_last_billed_date "2016-03-02", "2016-02-09" }
+      specify { assert_last_billed_date "2016-03-01", "2016-02-09" }
+    end
+
+    context "with invoicing_day_of_the_month = 1" do
+      before do
+        @pricing.invoicing_day_of_the_month = 1
+        expect(@pricing).to be_valid
+      end
+
+      specify { assert_last_billed_date "2016-03-31", "2016-02-29" }
+      specify { assert_last_billed_date "2016-03-10", "2016-02-29" }
+      specify { assert_last_billed_date "2016-03-02", "2016-02-29" }
+      specify { assert_last_billed_date "2016-03-01", "2016-01-31" }
+      specify { assert_last_billed_date "2016-02-29", "2016-01-31" }
+    end
+  end
+
   describe "#description" do
     before do
       @pricing = Distributor::Pricing.new(
