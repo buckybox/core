@@ -19,6 +19,10 @@ class Distributor::Invoice < ActiveRecord::Base
       usage = pricing.usage_between(from, to)
       description = "#{pricing.name} plan: #{pricing.description}"
 
+      unless pricing.discount_percentage.zero?
+        description << " - #{pricing.discount_percentage}% discount"
+      end
+
       create!(
         distributor: distributor,
         from: from,
