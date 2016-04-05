@@ -40,10 +40,8 @@
           %i.icon-book(title="sales in last 30 days")
           %br
           - if last_invoice = distributor.invoices.last
-            = "#{last_invoice.amount.round.to_i} #{distributor.pricing.currency}"
-          - else
-            N/A
-          %i.icon-briefcase(title="last invoice")
+            = "#{last_invoice.amount} #{distributor.pricing.currency}"
+            %i.icon-briefcase(title="last invoice from #{last_invoice.from} to #{last_invoice.to} (#{last_invoice.description})")
         .span2.align-right.medium
           = time_since(distributor.last_seen_at)
           %br
