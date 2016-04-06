@@ -17,6 +17,7 @@ class Distributor::Invoice < ActiveRecord::Base
       return if to >= Date.current
 
       usage = pricing.usage_between(from, to)
+      due = [usage - pricing.account_balance, CrazyMoney.zero].max
       description = "#{pricing.name} plan: #{pricing.description}"
 
       unless pricing.discount_percentage.zero?
@@ -27,10 +28,21 @@ class Distributor::Invoice < ActiveRecord::Base
         distributor: distributor,
         from: from,
         to: to,
-        amount: usage,
+        amount: due,
         description: description,
         currency: pricing.currency,
       )
     end
+  end
+
+  def self.create_refund!(distributor, amount, description, date = Date.current)
+    create!(
+      distributor: distributor,
+      from: date,
+      to: date,
+      amount: -amount,
+      description: description,
+      currency: distributor.pricing.currency,
+    )
   end
 end
