@@ -16,9 +16,13 @@ class Distributor::Pricing < ActiveRecord::Base
                             .where(deductable_type: "Delivery")
 
     cut = deductions.sum do |deduction|
-      raise "currency mismatch" if deduction.distributor.currency != currency
+      amount = deduction.amount
 
-      [deduction.amount * percentage_fee / 100, percentage_fee_max].min
+      from = deduction.distributor.currency
+      to = currency
+      amount = exchange_currency(amount, from, to) if from != to
+
+      [amount * percentage_fee / 100, percentage_fee_max].min
     end
 
     total = CrazyMoney.new(cut) + flat_fee
@@ -81,6 +85,17 @@ class Distributor::Pricing < ActiveRecord::Base
     ).all? do |attr|
       other.public_send(attr) == public_send(attr)
     end
+  end
+
+  private def exchange_currency(amount, from, to)
+    require 'money'
+    require 'money/bank/google_currency'
+    require 'monetize'
+
+    Money.default_bank = Money::Bank::GoogleCurrency.new
+
+    money = Monetize.parse("#{from} #{amount}")
+    CrazyMoney.new(money.exchange_to(to).to_s)
   end
 
   def pricings_for_currency

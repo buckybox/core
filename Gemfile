@@ -72,6 +72,9 @@ group :default do # XXX: all environments, think twice before adding Gems here
   gem "marginalia"
   gem "secure_headers"
   gem "bugsnag"
+
+  gem "google_currency", require: false
+  gem "monetize", require: false
 end
 
 group :development do
