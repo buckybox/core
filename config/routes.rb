@@ -176,6 +176,7 @@ BuckyBox::Application.routes.draw do
       collection do
         get "conversion_pipeline"
         get "transactional_customers"
+        get "sales"
       end
     end
 

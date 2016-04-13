@@ -30,4 +30,29 @@ class Admin::MetricsController < Admin::BaseController
 
     render locals: { data: data }
   end
+
+  caches_action :sales, expires_in: 1.day
+  def sales
+    require 'money'
+    require 'money/bank/google_currency'
+    require 'monetize'
+
+    Money.default_bank = Money::Bank::GoogleCurrency.new
+
+    data = Distributor.active.map do |distributor|
+      amount = distributor.invoices.last.try(:amount)
+      next unless amount
+
+      currency = distributor.pricing.currency
+
+      money = Monetize.parse("#{currency} #{amount}")
+      amount = money.exchange_to(:NZD)
+
+      label = "#{distributor.name} (#{distributor.pricing.name})"
+
+      OpenStruct.new(label: label, amount: amount)
+    end.compact.sort_by(&:amount).reverse
+
+    render locals: { data: data }
+  end
 end
