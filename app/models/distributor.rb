@@ -133,6 +133,7 @@ class Distributor < ActiveRecord::Base
       .where("last_seen_at > ?", 30.days.ago)
       .select { |d| d.transactional_customer_count > 2 }
       .sort_by(&:deliveries_last_30_days_count).reverse
+      .sort_by { |d| d.status.paying? ? 1 : 0 }
   end
 
   def self.refresh_webstore_caches
@@ -538,8 +539,8 @@ class Distributor < ActiveRecord::Base
     last_seen_at && last_seen_at > 30.minutes.ago
   end
 
-  def new?
-    created_at > 2.months.ago
+  def status
+    ActiveSupport::StringInquirer.new(self[:status])
   end
 
   def sales_last_30_days

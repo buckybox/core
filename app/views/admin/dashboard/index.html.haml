@@ -1,7 +1,7 @@
 = render partial: 'admin/nav'
 
 %table#distributors.table.table-bordered.table-hover
-  - @distributors.unshift(@demo_distributor).compact.each do |distributor|
+  - @distributors.append(@demo_distributor).compact.each do |distributor|
     = render partial: 'admin/distributors/index', locals: {distributor: distributor}
 
 - unless @cron_logs.empty?
