@@ -6,15 +6,18 @@
         .span3
           %span.big.bold
             = link_to_unless !distributor.active_webstore?, distributor.name, distributor.webstore_url
+            %span.pull-right{style: "font-variant: small-caps"}
+              = distributor.status
+          %br
+          %span.medium
+            = mail_to(distributor.email, distributor.contact_name_for_email)
+          %span.pull-right{style: "font-variant: small-caps"}
             - if distributor.new?
               %span{title: "Signed up at #{distributor.created_at}", style: "color: orange"} [NEW]
             - if distributor.overdue.present?
               %span{title: distributor.overdue, style: "color: red"} [OVERDUE]
             - if distributor.access_locked?
               %span{title: "locked at #{distributor.locked_at}", style: "color: orange"} [LOCKED]
-            %br
-          %span.medium
-            = mail_to(distributor.email, distributor.contact_name_for_email)
         .span2
           %span.medium.bold= distributor.country.name
           %br

@@ -1181,7 +1181,8 @@ CREATE TABLE distributors (
     paypal_email character varying(255),
     locale character varying(255) DEFAULT 'en'::character varying NOT NULL,
     overdue character varying(255) DEFAULT ''::character varying NOT NULL,
-    ga_tracking_id character varying(255)
+    ga_tracking_id character varying(255),
+    status character varying(255) DEFAULT 'trial'::character varying NOT NULL
 );
 
 
@@ -3564,3 +3565,5 @@ INSERT INTO schema_migrations (version) VALUES ('20160102123920');
 INSERT INTO schema_migrations (version) VALUES ('20160102181716');
 
 INSERT INTO schema_migrations (version) VALUES ('20160318091706');
+
+INSERT INTO schema_migrations (version) VALUES ('20160418141933');
