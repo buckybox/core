@@ -411,10 +411,6 @@ class Distributor < ActiveRecord::Base
     end
   end
 
-  def contact_name_for_email
-    contact_name.present? ? contact_name : email
-  end
-
   def packing_list_by_date(date)
     PackingList.collect_list(self, date)
   end
@@ -533,6 +529,15 @@ class Distributor < ActiveRecord::Base
 
   def admin_link
     Rails.application.routes.url_helpers.edit_admin_distributor_url(id: id, host: Figaro.env.host)
+  end
+
+  def intercom_url
+    if intercom_id.blank?
+      intercom_id = Intercom::User.find(user_id: id).id
+      update_attribute(:intercom_id, intercom_id)
+    end
+
+    @intercom_url ||= "https://app.intercom.io/a/apps/b3e72f90ddcc230dea36a8e35ec7e4dd65860b61/users/#{self[:intercom_id]}"
   end
 
   def seen_recently?

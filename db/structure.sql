@@ -1182,7 +1182,8 @@ CREATE TABLE distributors (
     locale character varying(255) DEFAULT 'en'::character varying NOT NULL,
     overdue character varying(255) DEFAULT ''::character varying NOT NULL,
     ga_tracking_id character varying(255),
-    status character varying(255) DEFAULT 'trial'::character varying NOT NULL
+    status character varying(255) DEFAULT 'trial'::character varying NOT NULL,
+    intercom_id character varying(255)
 );
 
 
@@ -3567,3 +3568,5 @@ INSERT INTO schema_migrations (version) VALUES ('20160102181716');
 INSERT INTO schema_migrations (version) VALUES ('20160318091706');
 
 INSERT INTO schema_migrations (version) VALUES ('20160418141933');
+
+INSERT INTO schema_migrations (version) VALUES ('20160419122414');
