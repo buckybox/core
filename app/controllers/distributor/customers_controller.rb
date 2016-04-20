@@ -31,6 +31,19 @@ class Distributor::CustomersController < Distributor::ResourceController
     redirect_to distributor_customer_url(customer)
   end
 
+  def destroy
+    customer = current_distributor.customers.find(params[:id])
+
+    # NOTE: don't delete everything, e.g. we want to keep deductions for billing
+    customer.account.orders.map(&:packages).flatten.map(&:delete)
+    customer.account.orders.delete_all
+    customer.account.delete
+    customer.address.delete
+    customer.delete
+
+    redirect_to distributor_customers_url, notice: "The customer has been deleted."
+  end
+
   def edit_profile
     locals = { customer_profile: Distributor::Form::EditCustomerProfile.new(pre_form_args) }
     render "edit_profile", locals: locals
