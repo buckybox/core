@@ -39,7 +39,7 @@ class Admin::MetricsController < Admin::BaseController
 
     Money.default_bank = Money::Bank::GoogleCurrency.new
 
-    data = Distributor.active.map do |distributor|
+    data = Distributor.paying.map do |distributor|
       amount = distributor.invoices.last.try(:amount)
       next unless amount
 

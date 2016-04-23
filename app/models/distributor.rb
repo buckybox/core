@@ -136,6 +136,10 @@ class Distributor < ActiveRecord::Base
       .sort_by { |d| d.status.paying? ? 1 : 0 }
   end
 
+  def self.paying
+    active.select { |d| d.status.paying? }
+  end
+
   def self.refresh_webstore_caches
     return unless Rails.env.production?
 
