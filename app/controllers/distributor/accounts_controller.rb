@@ -20,7 +20,7 @@ class Distributor::AccountsController < Distributor::ResourceController
     limit = params[:limit].to_i
     limit ||= 6
 
-    limit += 6 if params[:more].present?
+    limit += 100 if params[:more].present?
     @account = current_distributor.accounts.find(params[:id])
     @transactions = account_transactions(@account, offset_size, limit)
     @show_more_link = @transactions.size != @account.transactions.count
