@@ -23,6 +23,7 @@ module SalesCsv
     attr_reader :list
 
     def ids
+      return unless @ids
       @ids.map(&:to_i) unless @ids.is_a?(Integer)
     end
 

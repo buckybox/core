@@ -2,7 +2,13 @@ module Distributor::Export::Utils
 module_function
 
   def determine_type(args)
-    [:deliveries, :packages, :orders].find { |key| args.key?(key) }
+    from_id_list = [:deliveries, :packages, :orders].find { |key| args.key?(key) }
+    return from_id_list if from_id_list
+
+    case args[:screen]
+    when "packing" then :packages
+    when "delivery" then :deliveries
+    end
   end
 
   def build_csv_exporter_constant(type)
