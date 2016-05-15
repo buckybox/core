@@ -174,7 +174,7 @@ class Customer < ActiveRecord::Base
   end
 
   def new?
-    deliveries.size <= 1
+    deliveries.delivered.size.zero?
   end
 
   def email_to

@@ -220,21 +220,19 @@ describe Customer do
   end
 
   describe '#new?' do
-    before { @customer = Fabricate(:customer) }
-
-    context 'customer has 0 deliveries' do
-      before { allow(@customer.deliveries).to receive(:size).and_return(0) }
-      specify { expect(@customer.new?).to be true }
+    before do
+      @customer = Fabricate(:customer)
     end
 
-    context 'customer has 1 delivery' do
-      before { allow(@customer.deliveries).to receive(:size).and_return(1) }
-      specify { expect(@customer.new?).to be true }
+    it "returns false without delivered deliveries" do
+      expect(@customer.new?).to be true
     end
 
-    context 'customer has 2 deliveries' do
-      before { allow(@customer.deliveries).to receive(:size).and_return(2) }
-      specify { expect(@customer.new?).to be false }
+    it "returns true with delivered deliveries" do
+      order = Fabricate(:order, account: @customer.account)
+      Fabricate(:delivery, order: order, status: 'delivered')
+
+      expect(@customer.new?).to be false
     end
   end
 
