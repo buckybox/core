@@ -144,14 +144,6 @@ class DataIntegrity
     end
   end
 
-  def deliveries_have_valid_packages
-    diff = Delivery.pluck(:id) - Delivery.joins(:package).pluck(:id)
-
-    diff.each do |id|
-      error "Delivery ##{id} has missing package"
-    end
-  end
-
   def orders_have_generated_valid_packages_and_deliveries
     Distributor.find_each do |distributor|
       (distributor.window_start_from..(distributor.window_end_at - 1)).each do |date|
@@ -198,7 +190,6 @@ private
     checker.orders_have_valid_accounts
     checker.order_extras_have_valid_foreign_keys
     checker.orders_have_generated_valid_packages_and_deliveries
-    checker.deliveries_have_valid_packages
 
     checker
   end
