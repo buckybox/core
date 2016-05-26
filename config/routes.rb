@@ -213,7 +213,9 @@ BuckyBox::Application.routes.draw do
       resources :orders,            only: [:index, :show, :create]
       resources :webstores,         only: [:index] # all webstores
       resource  :webstore,          only: [:show] # current webstore
-      resources :deliveries,        only: [:index]
+      resources :deliveries,        only: [:index] do
+        get :yellow_zone, on: :collection
+      end
     end
   end
 
