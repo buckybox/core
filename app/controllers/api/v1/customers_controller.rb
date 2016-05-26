@@ -31,7 +31,7 @@ class Api::V1::CustomersController < Api::V1::BaseController
   api :GET, '/customers', "Get list of customers"
   param :email, String, desc: "Customer's Email Address. Returns array of single customer"
   param :embed, String, desc: "Children available: address"
-  example "/customers/?email=will@buckybox.com&embed=address"
+  example "/customers/?email=joe@smith.me&embed=address"
   def index
     @customers = if params[:email].nil?
       @distributor.customers
@@ -87,9 +87,9 @@ class Api::V1::CustomersController < Api::V1::BaseController
   description 'A JSON object representing the new customer'
   param_group :customer
   example '{
-      "first_name": "Will",
-      "last_name": "Lau",
-      "email": "will@buckybox.com",
+      "first_name": "Joe",
+      "last_name": "Smith",
+      "email": "joe@smith.me",
       "delivery_service_id": 56,
       "address": {
           "address_1": "12 Bucky Lane",
@@ -111,9 +111,9 @@ class Api::V1::CustomersController < Api::V1::BaseController
   description 'A JSON object representing the customer'
   param_group :customer
   example '{
-      "first_name": "Will",
-      "last_name": "Lau",
-      "email": "will@buckybox.com",
+      "first_name": "Joe",
+      "last_name": "Smith",
+      "email": "joe@smith.me",
       "delivery_service_id": 56,
       "address": {
           "address_1": "12 Bucky Lane",

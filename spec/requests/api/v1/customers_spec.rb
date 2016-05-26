@@ -136,9 +136,9 @@ describe "API v1" do
       let(:params) do
         <<-JSON
         {
-            "first_name": "Will",
-            "last_name": "Lau",
-            "email": "will@buckybox.com",
+            "first_name": "Joe",
+            "last_name": "Smith",
+            "email": "joe@smith.me",
             "delivery_service_id": #{delivery_service.id},
             "address": {
                 "address_1": "12 Bucky Lane",
@@ -191,9 +191,9 @@ describe "API v1" do
       let(:params) do
         <<-JSON
         {
-            "first_name": "Will",
-            "last_name": "Lau",
-            "email": "will@buckybox.com",
+            "first_name": "Joe",
+            "last_name": "Smith",
+            "email": "joe@smith.me",
             "delivery_service_id": #{customer.delivery_service.id},
             "address": {
                 "address_1": "12 Bucky Lane",
