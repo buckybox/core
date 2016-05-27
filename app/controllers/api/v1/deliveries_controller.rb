@@ -7,7 +7,7 @@ class Api::V1::DeliveriesController < Api::V1::BaseController
     render json: csv_array
   end
 
-  def yellow_zone
+  def pending
     render json: {
       window_start_from: @distributor.window_start_from,
       window_end_at: @distributor.window_end_at,

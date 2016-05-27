@@ -214,7 +214,7 @@ BuckyBox::Application.routes.draw do
       resources :webstores,         only: [:index] # all webstores
       resource  :webstore,          only: [:show] # current webstore
       resources :deliveries,        only: [:index] do
-        get :yellow_zone, on: :collection
+        get :pending, on: :collection
       end
     end
   end
