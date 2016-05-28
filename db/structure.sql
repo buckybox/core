@@ -1183,7 +1183,8 @@ CREATE TABLE distributors (
     overdue character varying(255) DEFAULT ''::character varying NOT NULL,
     ga_tracking_id character varying(255),
     status character varying(255) DEFAULT 'trial'::character varying NOT NULL,
-    intercom_id character varying(255)
+    intercom_id character varying(255),
+    addons character varying(255) DEFAULT ''::character varying NOT NULL
 );
 
 
@@ -3570,3 +3571,5 @@ INSERT INTO schema_migrations (version) VALUES ('20160318091706');
 INSERT INTO schema_migrations (version) VALUES ('20160418141933');
 
 INSERT INTO schema_migrations (version) VALUES ('20160419122414');
+
+INSERT INTO schema_migrations (version) VALUES ('20160527220835');

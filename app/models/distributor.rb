@@ -66,7 +66,7 @@ class Distributor < ActiveRecord::Base
     :country_id, :consumer_delivery_fee, :consumer_delivery_fee_cents, :active_webstore, :about,
     :details, :facebook_url, :city, :parameter_name, :spend_limit_on_all_customers,
     :feature_spend_limit, :contact_name, :tag_list, :omni_importer_ids, :notes, :email_templates,
-    :phone, :localised_address_attributes, :api_key, :api_secret, :overdue
+    :phone, :localised_address_attributes, :api_key, :api_secret, :overdue, :addons
 
   # Intro flags
   attr_accessible :customers_show_intro, :deliveries_index_packing_intro,
@@ -236,6 +236,12 @@ class Distributor < ActiveRecord::Base
   def self.mark_as_seen!(distributor, options = {})
     return if distributor.nil? || options[:no_track]
     distributor.mark_as_seen!
+  end
+
+  def addons
+    return [] if api_key.blank?
+
+    self[:addons].split(",").map(&:chomp).map(&:to_sym)
   end
 
   def webstore_url

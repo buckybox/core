@@ -53,6 +53,9 @@
           - if @real_list
             %li
               = link_to "Print packing summary", "javascript:void(0)", id: 'master-print'
+            - if current_distributor.addons.include?(:labels)
+              %li
+                = link_to "Print customer labels", "https://addons.buckybox.com/labels?key=#{current_distributor.api_key}&secret=#{current_distributor.api_secret}&date=#{@selected_date}"
             %li.divider
 
           -# %li
