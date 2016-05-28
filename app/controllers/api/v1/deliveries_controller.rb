@@ -1,5 +1,10 @@
 class Api::V1::DeliveriesController < Api::V1::BaseController
   def index
+    date = params.fetch(:date)
+    if Date.iso8601(date) > @distributor.window_end_at
+      render json: nil, status: :unprocessable_entity and return
+    end
+
     export = Distributor::Export::Utils.get_export(@distributor, params)
     csv_string = export.csv.first
     csv_array = CSV.parse(csv_string)
