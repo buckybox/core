@@ -35,8 +35,8 @@ class Distributor::CustomersController < Distributor::ResourceController
     customer = current_distributor.customers.find(params[:id])
 
     # NOTE: don't delete everything, e.g. we want to keep deductions for billing
-    customer.account.orders.map(&:packages).flatten.map(&:delete)
     customer.account.orders.map(&:order_extras).flatten.map(&:delete)
+    customer.account.orders.map(&:packages).flatten.map(&:delete)
     customer.account.orders.delete_all
     customer.account.delete
     customer.address.delete
