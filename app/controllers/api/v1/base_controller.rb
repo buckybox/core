@@ -14,6 +14,7 @@ class Api::V1::BaseController < ApplicationController
     report = request.raw_post
 
     # XXX: maybe parse JSON down the road...
+    # rubocop:disable Lint/PercentStringArray
     blacklist = %w(
       .tlscdn.com
       .apollocdn.com
@@ -28,6 +29,7 @@ class Api::V1::BaseController < ApplicationController
       "blocked-uri":""
       "blocked-uri":"data
     ).freeze
+    # rubocop:enable Lint/PercentStringArray
 
     if blacklist.none? { |pattern| report.include?(pattern) }
       Bugsnag.notify(RuntimeError.new("CSP violation"), {

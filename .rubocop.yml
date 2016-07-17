@@ -16,6 +16,9 @@ Rails/TimeZone:
 Rails/HasAndBelongsToMany:
   Enabled: false
 
+Rails/OutputSafety:
+  Enabled: false
+
 Rails/ScopeArgs:
   Enabled: false # TODO: remove when Rails 4
 

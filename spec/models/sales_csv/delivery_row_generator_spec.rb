@@ -13,7 +13,7 @@ describe SalesCsv::DeliveryRowGenerator do
   end
   let(:delivery) do
     double('delivery',
-      formated_delivery_number: 01,
+      formated_delivery_number: 1,
       status: 'pak',
       order: order,
       package: package,

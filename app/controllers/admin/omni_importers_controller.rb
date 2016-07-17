@@ -55,7 +55,7 @@ private
     @rules = rules
     begin
       @test_importer = Bucky::TransactionImports::OmniImport.new(@omni_importer.test_rows, YAML.load(@rules))
-    rescue StandardError => ex
+    rescue StandardError => ex # rubocop:disable Lint/ShadowedException
       @error_message = "#{ex}\n#{ex.backtrace}"
     rescue Psych::SyntaxError => ex
       @error_message = "YAML syntax is wrong
