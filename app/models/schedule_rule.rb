@@ -248,7 +248,7 @@ class ScheduleRule < ActiveRecord::Base
   end
 
   def deleted_day_numbers
-    DAYS.each_with_index.map { |day, index| (self.send("#{day}_changed?".to_sym) && self.send(day) == false) ? index : nil }.compact
+    DAYS.each_with_index.map { |day, index| self.send("#{day}_changed?".to_sym) && self.send(day) == false ? index : nil }.compact
   end
 
   def pause!(start, finish = nil)

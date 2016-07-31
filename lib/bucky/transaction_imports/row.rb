@@ -111,7 +111,7 @@ module Bucky::TransactionImports
     end
 
     def duplicate?(distributor)
-      duplicates(distributor).count != 0
+      duplicates(distributor).count.nonzero?
     end
 
     def duplicates(distributor)

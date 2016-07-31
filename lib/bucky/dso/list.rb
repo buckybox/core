@@ -32,7 +32,7 @@ module Bucky::Dso
     end
 
     def peek_behind
-      if position == 0
+      if position.zero?
         nil
       else
         list[position - 1]

@@ -165,7 +165,7 @@ protected
 
     if params[:query].present?
       query = params[:query].delete('.')
-      @customers = if params[:query].to_i == 0
+      @customers = if params[:query].to_i.zero?
         current_distributor.customers.search(query)
       else
         current_distributor.customers.where(number: query.to_i)

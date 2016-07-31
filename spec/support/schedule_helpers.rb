@@ -30,7 +30,7 @@ def next_day(day, time = Time.current)
   day = [:sunday, :monday, :tuesday, :wednesday, :thursday, :friday, :saturday].find_index(day) if day.is_a?(Symbol)
   nday = time + ((7 - (time.wday - day)) % 7).days
 
-  nday == 0 ? 7 : nday
+  nday.zero? ? 7 : nday
 end
 
 # From
