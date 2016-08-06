@@ -106,6 +106,7 @@ class DataIntegrity
 
         deduction_count = distributor.transactions
                                      .where(transactionable_type: "Deduction")
+                                     .where(reverse_transactionable_id: nil)
                                      .where("display_time::date = ?", utc_date) # display_time is UTC
                                      .count
 
