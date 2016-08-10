@@ -1,25 +1,25 @@
 # Official language image. Look for the different tagged releases at:
 # https://hub.docker.com/r/library/ruby/tags/
-image: "ruby:2.2"
+image: ruby:2.2
 
-# Pick zero or more services to be used on all builds.
-# Only needed when using a docker container to run your tests in.
-# Check out: http://docs.gitlab.com/ce/ci/docker/using_docker_images.html#what-is-service
 services:
   - redis:latest
-  - postgres:latest
+  - postgres:9.4
 
-# Cache gems in between builds
+variables:
+  POSTGRES_HOST: postgres
+  POSTGRES_USER: runner
+
 cache:
   paths:
-    - vendor/ruby
+    - vendor/ruby # cache gems in between builds
 
 before_script:
   - ruby -v
-  - export DEBIAN_FRONTEND=noninteractive
   - apt-get -qq update
-  - apt-get -qq install libicu-dev # required by charlock_holmes Gem
-  - apt-get -qq install imagemagick # required by carrierwave Gem
+  - apt-get -qq -o=Dpkg::Use-Pty=0 install libicu-dev # required by charlock_holmes Gem
+  - apt-get -qq -o=Dpkg::Use-Pty=0 install imagemagick # required by carrierwave Gem
+  - apt-get -qq -o=Dpkg::Use-Pty=0 install postgresql-client # for psql command
   - gem install bundler --no-ri --no-rdoc
   - bundle install -j $(nproc) --path vendor
 
