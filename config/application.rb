@@ -77,7 +77,10 @@ module BuckyBox
 
     # Use Redis as cache store
     config.cache_store = :readthis_store, {
-      redis: { url: "redis://localhost:6379/", driver: :hiredis },
+      redis: {
+        url: ENV.fetch("REDIS_URL", "redis://localhost:6379/"),
+        driver: :hiredis,
+      },
       expires_in: 2.weeks.to_i,
       namespace: 'core-cache',
       compress: false,

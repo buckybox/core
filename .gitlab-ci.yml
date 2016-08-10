@@ -3,12 +3,13 @@
 image: ruby:2.2
 
 services:
-  - redis:latest
   - postgres:9.4
+  - redis:latest
 
 variables:
   POSTGRES_HOST: postgres
   POSTGRES_USER: runner
+  REDIS_URL: redis://redis:6379/
 
 cache:
   paths:
