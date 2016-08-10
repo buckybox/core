@@ -8,8 +8,6 @@ export COVERAGE=1
 
 cp -n config/database.yml{.example,}
 
-[ -n "$SNAP_CI" ] && bundle install --jobs=3 --retry=3 --deployment
-
 [ -z "$FAST" ] && {
   export SPEC_OPTS="--format p"
 
