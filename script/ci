@@ -15,13 +15,11 @@ cp -n config/database.yml{.example,}
   echo -n "$output"
   test -z "$output"
 
-  bundle exec bundle-audit update
-  bundle exec bundle-audit check
+  bundle exec bundle-audit check --update
 
   bundle exec rubocop -DES
   $(dirname $0)/check_i18n
 
-  bundle exec discover-unused-partials || true
   bundle exec brakeman -qz --no-progress -w3 || true # FIXME
   bundle exec cane --no-doc --style-measure 160 --abc-max 30 || true # FIXME
 

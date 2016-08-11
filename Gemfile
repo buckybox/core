@@ -51,7 +51,6 @@ group :default do # XXX: all environments, think twice before adding Gems here
   gem "apipie-rails"
   gem "strong_parameters"
   gem "rails-timeago"
-  gem "discover-unused-partials"
   gem "fast_blank"
   gem "retryable"
   gem "foreman"
