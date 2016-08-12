@@ -2,7 +2,7 @@
 
 %p= new_customer_session_url(distributor: @distributor.parameter_name)
 
-%p
+%p<
   = t('.email') << t('colon') << @customer.email
   %br
   = t('.password') << t('colon') << @customer.password
