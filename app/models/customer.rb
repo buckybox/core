@@ -142,7 +142,7 @@ class Customer < ActiveRecord::Base
 
   def self.active_count
     Rails.cache.fetch('metrics.total_active_transactional_customer_count', expires_in: 1.day) do
-      Distributor.active.map(&:transactional_customer_count).sum
+      Distributor.active.lazy.map(&:transactional_customer_count).sum
     end
   end
 
