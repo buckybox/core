@@ -49,5 +49,13 @@ describe "API v1" do
 
       post url, '{..."blocked-uri":"https://nikkomsgchannel...}'
     end
+
+    it "ignores reports from IE/Edge" do
+      expect(Bugsnag).not_to receive(:notify)
+
+      post url, csp_report, {
+        "HTTP_USER_AGENT" => "Mozilla/5.0 (Windows Phone 10.0; Android 4.2.1; Microsoft; Lumia 550) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/46.0.2486.0 Mobile Safari/537.36 Edge/13.10586",
+      }
+    end
   end
 end

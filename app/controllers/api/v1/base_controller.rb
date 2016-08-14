@@ -32,7 +32,9 @@ class Api::V1::BaseController < ApplicationController
     ).freeze
     # rubocop:enable Lint/PercentStringArray
 
-    if blacklist.none? { |pattern| report.include?(pattern) }
+    if !request.user_agent.to_s.include?("Microsoft") &&
+       blacklist.none? { |pattern| report.include?(pattern) }
+
       Bugsnag.notify(RuntimeError.new("CSP violation"), {
                        report: report,
                        user_agent: request.user_agent,
