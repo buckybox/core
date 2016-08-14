@@ -38,8 +38,8 @@ feature "Manage an order", js: true do
     visit distributor_customer_path(id: @customer.id)
     expect(@customer.activities.size).to eq(3)
     expect(page).to have_content "RECENT ACTIVITY"
-    expect(page).to have_content "less than a minute ago - #{@customer.name} paused their order of #{order.box.name}"
-    expect(page).to have_content "less than a minute ago - #{@customer.name} updated their order of #{order.box.name} to resume on"
-    expect(page).to have_content "less than a minute ago - #{@customer.name} unpaused their order of #{order.box.name}"
+    expect(page).to have_content "#{@customer.name} paused their order of #{order.box.name}"
+    expect(page).to have_content "#{@customer.name} updated their order of #{order.box.name} to resume on"
+    expect(page).to have_content "#{@customer.name} unpaused their order of #{order.box.name}"
   end
 end
