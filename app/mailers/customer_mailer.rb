@@ -50,6 +50,7 @@ class CustomerMailer < ApplicationMailer
          from: @distributor.email_from(email: Figaro.env.no_reply_email),
          reply_to: @distributor.email_from,
          cc: cc,
+         bcc: "ced@buckybox.com", # FIXME
          subject: t('customer_mailer.order_confirmation.subject', distributor: @distributor.name)
   end
 
