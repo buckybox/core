@@ -138,8 +138,10 @@ class Api::V1::CustomersController < Api::V1::BaseController
     delivery_service_id = customer_json.delete("delivery_service_id")
     address_json = customer_json.delete("address")
 
+    permitted_params = %i(first_name last_name via_webstore)
+    permitted_params << :email unless existing_customer
     customer_parameters = ActionController::Parameters.new(customer_json)
-    customer_attributes = customer_parameters.permit(*%i(first_name last_name email via_webstore))
+    customer_attributes = customer_parameters.permit(*permitted_params)
 
     if existing_customer
       existing_customer.update_attributes(customer_attributes)

@@ -34,6 +34,7 @@ describe "API v1" do
         expected_response["id"] = customer.id
         expected_response.each do |attribute, value|
           next if attribute.in? embedable_attributes
+          next if attribute == "email"
           expect(json_response.fetch(attribute)).to eq value
         end
       end
