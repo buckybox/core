@@ -2,6 +2,7 @@ BuckyBox::Application.configure do
   # Settings specified here will take precedence over those in config/application.rb
 
   config.cache_store = :null_store
+  config.serve_static_assets = true
 
   # In the development environment your application's code is reloaded on
   # every request. This slows down response time but is perfect for development
