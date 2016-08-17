@@ -14,8 +14,6 @@ class Jobs
 
     CronLog.log("Running metrics for Librato.")
     Metrics.calculate_and_push_to_librato
-
-    Distributor.refresh_webstore_caches
   end
 
   def self.run_daily

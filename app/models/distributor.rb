@@ -140,36 +140,6 @@ class Distributor < ActiveRecord::Base
     active.select { |d| d.status.paying? }
   end
 
-  def self.refresh_webstore_caches
-    return unless Rails.env.production?
-
-    duration = Benchmark.realtime do
-      active_webstore.active.each_slice(3) do |distributors|
-        hydra = Typhoeus::Hydra.hydra
-
-        distributors.each do |distributor|
-          request = Typhoeus::Request.new(distributor.webstore_url, timeout: 30)
-          request.on_complete do |response|
-            unless response.success?
-              error = "Could not refresh #{response.request.url}: #{response.return_message}"
-              Bugsnag.notify(RuntimeError.new(error))
-            end
-          end
-          hydra.queue request
-        end
-
-        hydra.run # this is a blocking call that returns once all requests are complete
-        sleep 5
-      end
-    end.round
-
-    if duration > 4.minutes
-      Bugsnag.notify(RuntimeError.new("Refreshing caches took too long (#{duration}s)"))
-    end
-
-    CronLog.log("Refreshed web store caches in #{duration}s.")
-  end
-
   def self.create_missing_invoices
     Distributor.where("last_seen_at > ?", 1.year.ago).find_each do |distributor|
       Distributor::Invoice.create_invoice!(distributor)
