@@ -13,6 +13,7 @@ module ApiHelpers
     {
       "API-Key" => api_distributor.api_key,
       "API-Secret" => api_distributor.api_secret,
+      "Webstore-ID" => api_distributor.parameter_name,
     }
   end
 
@@ -26,7 +27,11 @@ module ApiHelpers
     end
 
     it "returns 401 with invalid credentials" do
-      headers = { "API-Key" => "fuck", "API-Secret" => "off" }
+      headers = {
+        "API-Key" => "fuck",
+        "API-Secret" => "off",
+        "Webstore-ID" => api_distributor.parameter_name,
+      }
       json_request(method, url, nil, headers)
 
       expect(response.status).to eq 401
