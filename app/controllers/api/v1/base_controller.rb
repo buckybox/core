@@ -81,7 +81,7 @@ private
       @distributor = Distributor.find_by(parameter_name: webstore_id)
       return not_found unless @distributor
     else
-      @distributor = Distributor.find_by(api_key: api_key, api_secret: api_secret, parameter_name: webstore_id)
+      @distributor = Distributor.find_by(api_key: api_key, api_secret: api_secret)
     end
 
     unless @distributor
