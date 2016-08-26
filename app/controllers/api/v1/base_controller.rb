@@ -1,6 +1,6 @@
 class Api::V1::BaseController < ApplicationController
   layout false
-  before_action :log_request, :authenticate, :set_time_zone, :set_locale, :embed_options
+  before_action :new_relic_ignore_demo, :log_request, :authenticate, :set_time_zone, :set_locale, :embed_options
   skip_before_action :authenticate, only: [:ping, :csp_report, :geoip]
 
   # rescue_from ActionController::RoutingError, with: :not_found # TODO: enable with Rails 4
@@ -147,5 +147,9 @@ private
   # 422
   def unprocessable_entity(errors)
     render json: { errors: errors }, status: :unprocessable_entity and return
+  end
+
+  def new_relic_ignore_demo
+    NewRelic::Agent.ignore_transaction if webstore_id == "fantastic-vege-people"
   end
 end

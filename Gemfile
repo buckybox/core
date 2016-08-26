@@ -71,6 +71,7 @@ group :default do # XXX: all environments, think twice before adding Gems here
   gem "marginalia"
   gem "secure_headers"
   gem "bugsnag"
+  gem "newrelic_rpm"
 
   gem "google_currency", require: false
   gem "monetize", require: false
@@ -112,7 +113,6 @@ group :staging do
 end
 
 group :staging, :production do
-  gem "newrelic_rpm"
   # gem "skylight"
 end
 
