@@ -1,4 +1,4 @@
-API_SUBDOMAIN = { subdomain: /\Aapi(-staging)?\Z/ }.freeze unless defined? API_SUBDOMAIN
+API_SUBDOMAIN = { subdomain: /\A(staging-)?api\Z/ }.freeze unless defined? API_SUBDOMAIN
 
 BuckyBox::Application.routes.draw do
   apipie

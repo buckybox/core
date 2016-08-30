@@ -63,7 +63,7 @@ test:
   PORT: "3000"
 
 staging:
-  HOST: "staging.buckybox.com"
+  HOST: "staging-my.buckybox.com"
   SECRET_TOKEN: "0ce3394fc7b12efba69326374f079c3c9cd7bd2bf8df023d18c1327d900fcae0b65765316f115cb593b350abd0738cb80be1b2caf228ae534db9c0f3abea415e"
   SPARKPOST_USERNAME: ""
   SPARKPOST_PASSWORD: ""
