@@ -4,6 +4,7 @@ module Messaging
       ::Intercom::ServerError,
       ::Intercom::BadGatewayError,
       ::Intercom::ServiceUnavailableError,
+      ::Intercom::HttpError,
       ::Intercom::UnexpectedError, # Feature temporarily disabled and http_code: '500'
       Errno::ECONNRESET,
     ].freeze
