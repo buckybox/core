@@ -158,6 +158,13 @@ describe "API v1" do
 
       it_behaves_like "creating or updating a customer", :post
 
+      it "assigns a customer number" do
+        json_request :post, url, params, headers
+
+        expect(response).to be_success
+        expect(Customer.find_by(email: "joe@smith.me").number).to be_present
+      end
+
       context "with invalid attributes" do
         context "without missing attributes" do
           it "validates the delivery service ID" do

@@ -163,7 +163,6 @@ class Api::V1::CustomersController < Api::V1::BaseController
     unless existing_customer
       @customer.distributor_id = @distributor.id
       @customer.delivery_service = @distributor.delivery_services.find_by(id: delivery_service_id)
-      @customer.number = Customer.next_number(@distributor)
     end
 
     @customer = existing_customer if existing_customer
