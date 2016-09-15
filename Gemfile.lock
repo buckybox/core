@@ -57,7 +57,7 @@ GIT
 GEM
   remote: https://rubygems.org/
   specs:
-    ace-rails-ap (4.1.0)
+    ace-rails-ap (4.1.1)
     active_utils (3.2.2)
       activesupport (>= 3.2, < 5.1.0)
       i18n
@@ -93,10 +93,10 @@ GEM
     bootbox-rails (0.5.0)
     bootstrap-sass (2.3.2.2)
       sass (~> 3.2)
-    brakeman (3.3.5)
-    bugsnag (5.0.0)
+    brakeman (3.4.0)
+    bugsnag (5.0.1)
     builder (3.0.4)
-    bullet (5.3.0)
+    bullet (5.4.0)
       activesupport (>= 3.0.0)
       uniform_notifier (~> 1.10.0)
     bundler-audit (0.5.0)
@@ -113,7 +113,7 @@ GEM
       rack (>= 1.0.0)
       rack-test (>= 0.5.4)
       xpath (~> 2.0)
-    capybara-screenshot (1.0.13)
+    capybara-screenshot (1.0.14)
       capybara (>= 1.0, < 3)
       launchy
     carrierwave (0.11.2)
@@ -360,7 +360,7 @@ GEM
       i18n (~> 0.7.0)
     orm_adapter (0.5.0)
     parallel (1.9.0)
-    parallel_tests (2.8.0)
+    parallel_tests (2.9.0)
       parallel
     parser (2.3.1.2)
       ast (~> 2.2)
@@ -374,7 +374,7 @@ GEM
       capybara (~> 2.1)
       cliver (~> 0.3.1)
       websocket-driver (>= 0.2.0)
-    power_assert (0.3.0)
+    power_assert (0.3.1)
     powerpack (0.1.1)
     premailer (1.8.7)
       css_parser (>= 1.4.5)
@@ -481,7 +481,7 @@ GEM
       railties (~> 3.2.0)
       sass (>= 3.1.10)
       tilt (~> 1.3)
-    secure_headers (3.4.0)
+    secure_headers (3.4.1)
       useragent
     select2-rails (3.5.10)
       thor (~> 0.14)
@@ -534,7 +534,7 @@ GEM
     tzinfo (0.3.51)
     uglifier (3.0.2)
       execjs (>= 0.3.0, < 3)
-    unicode-display_width (1.1.0)
+    unicode-display_width (1.1.1)
     unicode_utils (1.4.0)
     unicorn (5.1.0)
       kgio (~> 2.6)
@@ -556,7 +556,7 @@ GEM
       chronic (>= 0.6.3)
     xpath (2.0.0)
       nokogiri (~> 1.3)
-    xray-rails (0.1.21)
+    xray-rails (0.1.22)
       coffee-rails
       rails (>= 3.1.0)
     yard (0.9.5)
