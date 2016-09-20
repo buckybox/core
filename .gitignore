@@ -13,7 +13,6 @@
 
 # Ignore bundler config
 /.bundle
-/bin
 
 # Ignore the config files
 /config/database.yml
