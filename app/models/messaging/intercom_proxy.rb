@@ -7,6 +7,7 @@ module Messaging
       ::Intercom::HttpError,
       ::Intercom::UnexpectedError, # Feature temporarily disabled and http_code: '500'
       Errno::ECONNRESET,
+      Net::OpenTimeout,
     ].freeze
 
     def self.instance
