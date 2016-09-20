@@ -77,7 +77,7 @@ private
       render json: { message: "Could not authenticate. You must set the API-Key and API-Secret headers." }, status: :unauthorized and return
     end
 
-    if api_key == Figaro.env.api_master_key && api_secret == Figaro.env.api_master_secret && request.remote_ip.in?(api_master_allowed_ips)
+    if api_key == Figaro.env.api_master_key && api_secret == Figaro.env.api_master_secret
       @distributor = Distributor.find_by(parameter_name: webstore_id)
       return not_found unless @distributor
     else
@@ -113,12 +113,6 @@ private
 
   def webstore_id
     request.headers['Webstore-ID']
-  end
-
-  def api_master_allowed_ips
-    ips = Figaro.env.api_master_allowed_ips.dup
-    ips << "127.0.0.1" if Rails.env.development?
-    ips
   end
 
   def send_alert_email(body)
