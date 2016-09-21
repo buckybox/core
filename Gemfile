@@ -110,15 +110,6 @@ end
 
 group :staging do
   gem "mail_safe"
-  # gem "oink"
-end
-
-group :staging, :production do
-  # gem "skylight"
-end
-
-group :development, :staging do
-  # gem "stackprof", git: "https://github.com/tmm1/stackprof.git"
 end
 
 group :development, :test do
