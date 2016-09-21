@@ -7,6 +7,7 @@ BuckyBox::Application.routes.draw do
   devise_for :distributors, controllers: { sessions: "distributor/sessions", passwords: "distributor/passwords" }
   devise_for :customers,    controllers: { sessions: "customer/sessions", passwords: "customer/passwords" }
 
+  get "/ping" => "application#ping"
   get "/delayed_job" => DelayedJobWeb, anchor: false
   get "/" => "api#index", constraints: API_SUBDOMAIN
 

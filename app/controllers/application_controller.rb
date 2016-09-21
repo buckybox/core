@@ -19,6 +19,10 @@ class ApplicationController < ActionController::Base
 
   layout :layout_by_resource
 
+  def ping
+    render text: "Pong!"
+  end
+
 protected
 
   before_action def set_locale
@@ -130,7 +134,9 @@ protected
 private
 
   def new_relic_ignore_pingdom
-    NewRelic::Agent.ignore_transaction if request.user_agent =~ /pingdom/i
+    if request.user_agent =~ /pingdom|ELB-HealthChecker/i
+      NewRelic::Agent.ignore_transaction
+    end
   end
 
   def set_user_time_zone
