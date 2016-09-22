@@ -1,0 +1,46 @@
+# Rails setup
+SECRET_TOKEN: ""
+HOST: "localhost"
+PORT: "3000"
+
+# URLs
+MARKETING_SITE_URL: "http://www.buckybox.com/"
+CONSUMER_SITE_URL: "https://store.buckybox.com/"
+
+# Emails
+SUPPORT_EMAIL: "support@buckybox.com"
+NO_REPLY_EMAIL: "no-reply@buckybox.com"
+SIGNUPS_EMAIL: "signups@buckybox.com"
+SYSALERTS_EMAIL: "sysalerts@buckybox.com"
+MAIL_SAFE: "crashtestdummy@buckybox.com"
+X_MAILER: "Bucky Box Mailer (1.0.0) www.buckybox.com"
+
+# API
+API_MASTER_KEY: "key"
+API_MASTER_SECRET: "secret"
+
+# Bugsnag
+BUGSNAG_API_KEY: ""
+
+# Delayed::Job
+DELAYED_JOB_PRIORITY_HIGH: "0"
+DELAYED_JOB_PRIORITY_LOW:  "50"
+
+# Delayed::Job Web interface
+DELAYED_JOB_USERNAME: "root"
+DELAYED_JOB_PASSWORD: "root"
+
+# Intercom
+INTERCOM_APP_ID: ""
+INTERCOM_APP_API_KEY: ""
+INTERCOM_API_SECRET: ""
+
+# Pingdom
+PINGDOM_RUM_ID: ""
+
+# Sparkpost
+SPARKPOST_USERNAME: ""
+SPARKPOST_PASSWORD: ""
+
+# Librato
+# see config/librato.yml
