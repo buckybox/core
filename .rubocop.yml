@@ -37,6 +37,9 @@ Lint/UselessAccessModifier:
 Lint/IneffectiveAccessModifier:
   Enabled: false # TODO
 
+Lint/UnifiedInteger:
+  Enabled: false
+
 Style/AccessorMethodName:
   Enabled: false
 
@@ -104,6 +107,9 @@ Style/Alias:
   EnforcedStyle: prefer_alias_method
 
 Style/BlockDelimiters:
+  Enabled: false
+
+Style/VariableNumber:
   Enabled: false
 
 Performance/TimesMap:

@@ -151,7 +151,7 @@ class Api::V1::CustomersController < Api::V1::BaseController
 
     address_parameters = ActionController::Parameters.new(address_json)
     address_attributes = address_parameters.permit(
-      *%i(address_1 address_2 suburb city postcode delivery_note home_phone mobile_phone work_phone)
+      :address_1, :address_2, :suburb, :city, :postcode, :delivery_note, :home_phone, :mobile_phone, :work_phone
     )
 
     if existing_customer

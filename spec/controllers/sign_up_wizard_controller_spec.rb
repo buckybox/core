@@ -35,7 +35,7 @@ describe SignUpWizardController do
     end
 
     it "sets the form fields" do
-      expect(assigns[:fields]).to include(*%w(street state city zip))
+      expect(assigns[:fields]).to include('street', 'state', 'city', 'zip')
     end
   end
 
