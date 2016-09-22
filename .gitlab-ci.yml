@@ -32,6 +32,7 @@ rubocop:
 rspec:
   script:
   - ./vendor/bin/install_phantomjs.sh
+  - cp -n config/application.yml{.example,}
   - cp -n config/database.yml{.example,}
   - rake db:drop db:create db:structure:load
   - rspec
