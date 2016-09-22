@@ -72,7 +72,6 @@ group :default do # XXX: all environments, think twice before adding Gems here
   gem "secure_headers"
   gem "bugsnag"
   gem "newrelic_rpm"
-  gem "datadoge", git: "https://github.com/buckybox/datadoge.git"
 
   gem "google_currency", require: false
   gem "monetize", require: false

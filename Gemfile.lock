@@ -1,12 +1,4 @@
 GIT
-  remote: https://github.com/buckybox/datadoge.git
-  revision: 4e1fba841abd1da7965ef477949625ad1522a5ed
-  specs:
-    datadoge (0.0.3)
-      dogstatsd-ruby (> 0)
-      gem_config (~> 0)
-
-GIT
   remote: https://github.com/infertux/rails.git
   revision: 5eb7b074ad8387dc47397fe0380d6d2dea2e38f6
   branch: 3-2-stable
@@ -106,7 +98,7 @@ GEM
     callsite (0.0.11)
     cane (3.0.0)
       parallel
-    capybara (2.8.1)
+    capybara (2.9.0)
       addressable
       mime-types (>= 1.16)
       nokogiri (>= 1.3.3)
@@ -211,7 +203,6 @@ GEM
     devise-i18n (1.1.0)
     diff-lcs (1.2.5)
     docile (1.1.5)
-    dogstatsd-ruby (1.6.0)
     draper (1.4.0)
       actionpack (>= 3.0)
       activemodel (>= 3.0)
@@ -220,7 +211,7 @@ GEM
     email_templator (1.0.0)
     equalizer (0.0.11)
     erubis (2.7.0)
-    ethon (0.9.0)
+    ethon (0.9.1)
       ffi (>= 1.3.0)
     execjs (2.7.0)
     fabrication (2.15.2)
@@ -235,7 +226,6 @@ GEM
     foreman (0.82.0)
       thor (~> 0.19.1)
     formatador (0.2.5)
-    gem_config (0.3.1)
     geokit (1.10.0)
     geokit-rails (2.2.0)
       geokit (~> 1.5)
@@ -362,7 +352,7 @@ GEM
     parallel (1.9.0)
     parallel_tests (2.9.0)
       parallel
-    parser (2.3.1.2)
+    parser (2.3.1.4)
       ast (~> 2.2)
     pg (0.18.4)
     pg_search (1.0.6)
@@ -596,7 +586,6 @@ DEPENDENCIES
   currency_data
   daemons
   database_cleaner
-  datadoge!
   default_value_for
   delayed_job
   delayed_job_active_record
