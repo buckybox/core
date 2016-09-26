@@ -5,7 +5,7 @@ describe Distributor::Pricing do
     before do
       distributor = Fabricate(:distributor)
 
-      @pricing = Distributor::Pricing.default_pricing_for_currency(distributor.currency)
+      @pricing = Distributor::Pricing.pricings_for_currency(distributor.currency).detect { |p| p.name == "Standard" }
       @pricing.distributor = distributor
       @pricing.save!
     end

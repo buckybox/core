@@ -103,7 +103,7 @@ class Distributor::Pricing < ActiveRecord::Base
   end
 
   def self.default_pricing_for_currency(currency)
-    pricings_for_currency(currency).detect { |p| p.name == "Standard" }
+    pricings_for_currency(currency).detect { |p| p.name == "Casual" }
   end
 
   def self.pricings_for_currency(currency)
