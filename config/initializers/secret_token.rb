@@ -11,5 +11,5 @@
 BuckyBox::Application.config.secret_token = if Rails.env.development? || Rails.env.test?
   "c3df8f74b5d59798bb4f5b1b63021d38c09dfaa7af81650d4b744121c1dc2de3753a275f1979976365c5ecfe1b1fa4077abae03a68ef1a4b16bd765927e76c9a"
 else
-  ENV.fetch("SECRET_TOKEN")
+  ENV.fetch("SECRET_TOKEN", "2d65d2137a6b7d6280f0a820e476b264aa3e5df31707e3ef3bb3fec2fd2945993d47d102528e1cef2822ea6b6087d008d2de87322d781f2ebaf2dc5dde161f4b") # FIXME: needed to run db:migrate
 end

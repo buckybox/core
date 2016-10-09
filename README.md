@@ -5,12 +5,11 @@
 1. Create new EC2 instance
 1. Look up for latest Debian stable AMI
 1. Select t2.medium (need 4+ GB of RAM)
-1. Add 32+ GB of storage
-1. Attach security group with TCP 22, 80 & 443 open
+1. Add 16+ GB of storage
+1. Attach security group with TCP 22 & 80 open
 1. Launch instance
-1. Attach Elastic IP to instance
 
-1. ssh -i ~/.ssh/aws-buckybox-ced admin@52.208.137.102
+1. ssh -i ~/.ssh/aws-buckybox-ced admin@IP
 1. Add host in ~/.ssh/config
 1. ssh buckybox-staging-core
 1. sudo apt-get update && sudo apt-get dist-upgrade && sudo apt-get autoremove --purge && sudo reboot
@@ -27,6 +26,8 @@
 1. Put current site in maintenance mode
 1. cd core && cat ./bin/production_to_staging.sh
 1. ./bin/production_to_staging.sh
+1. Allow EC2 instance to access RDS in security group
+1. pg_restore --format custom --verbose --clean --dbname core_production --host core-production.cbqr8ikjw2qk.eu-west-1.rds.amazonaws.com --port 5432 --user buckybox --no-owner /tmp/16...
 1. cd chef-repo && ./deploy.sh buckybox-staging-core nodes/staging-core.json
 1. reboot
 
