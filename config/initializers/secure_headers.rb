@@ -2,6 +2,7 @@ require "secure_headers"
 
 SecureHeaders::Configuration.default do |config|
   config.x_frame_options = "DENY"
+
   # rubocop:disable Lint/PercentStringArray
   config.csp = {
     default_src: %w('none'),
@@ -11,11 +12,9 @@ SecureHeaders::Configuration.default do |config|
     form_action: %w('self' www.paypal.com),
     connect_src: %w('self' api.buckybox.com *.google-analytics.com *.intercomcdn.com *.intercom.io wss://*.intercom.io),
     media_src: %w(*.intercomcdn.com),
+    font_src: %w(*.intercomcdn.com),
     frame_ancestors: %w('none'),
     report_uri: %w(https://api.buckybox.com/v1/csp-report),
   }
   # rubocop:enable Lint/PercentStringArray
-  # config.hpkp = {
-  # TODO: set up HPKP
-  # }
 end
