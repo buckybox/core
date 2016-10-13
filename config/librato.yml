@@ -2,3 +2,4 @@ production:
   user: "sysadmins@buckybox.com"
   token: "cfe849aa81c5536248b4a5d0822c04b900ad1d3477f5ee7da1263489b97b4d9c"
   source: "core"
+  suites: "-rack,-rack_status,-rack_method"
