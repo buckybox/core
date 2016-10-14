@@ -142,7 +142,11 @@ class Distributor < ActiveRecord::Base
 
   def self.create_missing_invoices
     Distributor.where("last_seen_at > ?", 1.year.ago).find_each do |distributor|
-      Distributor::Invoice.create_invoice!(distributor)
+      invoice = Distributor::Invoice.create_invoice!(distributor)
+
+      if invoice && distributor.country.alpha2 != "NZ" # use Xero for NZ
+        Billing::PaypalInvoice.create!(invoice)
+      end
     end
   end
 
