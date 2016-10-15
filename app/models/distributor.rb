@@ -145,7 +145,9 @@ class Distributor < ActiveRecord::Base
       invoice = Distributor::Invoice.create_invoice!(distributor)
 
       if invoice && distributor.country.alpha2 != "NZ" # use Xero for NZ
-        Billing::PaypalInvoice.create!(invoice)
+        paypal_invoice = Billing::PaypalInvoice.create!(invoice)
+
+        invoice.update_attributes!(number: paypal_invoice.number)
       end
     end
   end

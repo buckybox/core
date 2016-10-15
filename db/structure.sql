@@ -1006,7 +1006,8 @@ CREATE TABLE distributor_invoices (
     amount_cents integer NOT NULL,
     currency character varying(255) NOT NULL,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    updated_at timestamp without time zone NOT NULL,
+    number character varying(255)
 );
 
 
@@ -3586,3 +3587,5 @@ INSERT INTO schema_migrations (version) VALUES ('20160419122414');
 INSERT INTO schema_migrations (version) VALUES ('20160527220835');
 
 INSERT INTO schema_migrations (version) VALUES ('20161012105035');
+
+INSERT INTO schema_migrations (version) VALUES ('20161015092717');

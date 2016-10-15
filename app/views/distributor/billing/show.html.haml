@@ -62,15 +62,17 @@
       %table.table.table-hover
         %thead
           %tr
+            %th Number
             %th From
             %th To
             %th Description
-            %th Amount
+            %th.text-right Amount
         %tbody
           - invoices.each do |invoice|
             %tr
+              %td= invoice.number || "N/A"
               %td= invoice.from
               %td= invoice.to
               %td= invoice.description
-              %td= invoice.amount.with_currency(invoice.currency)
+              %td.text-right= invoice.amount.with_currency(invoice.currency)
 
