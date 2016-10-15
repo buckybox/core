@@ -145,6 +145,7 @@ class Distributor < ActiveRecord::Base
       invoice = Distributor::Invoice.create_invoice!(distributor)
 
       next unless invoice
+      next if invoice.amount.zero?
       next if distributor.country.alpha2 == "NZ" # use Xero for NZ
       next unless distributor.in?(paying)
 

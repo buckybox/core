@@ -56,7 +56,7 @@ module Billing
         ],
         "note" => "From #{invoice.from} to #{invoice.to}",
         "payment_term" => {
-          "term_type" => "NET_10",
+          "term_type" => "NET_30",
         }
       )
 
