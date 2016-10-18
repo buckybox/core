@@ -9,7 +9,7 @@ describe Package do
     before do
       @distributor = Fabricate(:distributor, consumer_delivery_fee_cents: 10)
       @customer    = Fabricate(:customer, distributor: @distributor)
-      @address     = Fabricate(:address_with_associations)
+      @address     = @customer.address
       @account     = Fabricate(:account, customer: @address.customer)
       @box         = Fabricate(:box, distributor: @account.distributor)
       @order       = Fabricate(:order, box: @box, account: @account)

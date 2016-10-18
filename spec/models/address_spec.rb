@@ -6,12 +6,12 @@ describe Address do
 
   describe "#phones" do
     it "returns phone numbers" do
-      address = Fabricate(:address, mobile_phone: '005')
+      address = Fabricate.build(:address, mobile_phone: '005')
       expect(address.mobile_phone).to eq '005'
     end
 
     it "returns all phone numbers" do
-      address = Fabricate(:address, mobile_phone: '005', work_phone: '123')
+      address = Fabricate.build(:address, mobile_phone: '005', work_phone: '123')
       expect(address.phones.all).to eq ["Mobile phone: 005", "Work phone: 123"]
     end
   end

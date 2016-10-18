@@ -204,18 +204,11 @@ describe Customer do
 
   describe '.search' do
     before :each do
-      address = Fabricate(:address_with_associations, city: 'Edinburgh')
-      customer2 = address.customer
-      customer2.first_name = 'Smith'
-      customer2.save
-
-      Fabricate(:address_with_associations, city: 'Edinburgh')
       Fabricate(:customer, last_name: 'Smith')
       Fabricate(:customer, first_name: 'John', last_name: 'Smith')
     end
 
-    specify { expect(Customer.search('Edinburgh').size).to eq 2 }
-    specify { expect(Customer.search('Smith').size).to eq 3 }
+    specify { expect(Customer.search('Smith').size).to eq 2 }
     specify { expect(Customer.search('John').size).to eq 1 }
   end
 

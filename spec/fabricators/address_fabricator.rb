@@ -7,10 +7,6 @@ Fabricator(:address) do
   mobile_phone { '007' }
 end
 
-Fabricator(:address_with_associations, from: :address) do
-  customer
-end
-
 Fabricator(:full_address, from: :address) do
   address_2 { 'Apartment 1' }
   delivery_note { 'This is a note.' }

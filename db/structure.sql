@@ -2692,7 +2692,7 @@ CREATE INDEX index_addresses_on_address_hash ON addresses USING btree (address_h
 -- Name: index_addresses_on_customer_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_addresses_on_customer_id ON addresses USING btree (customer_id);
+CREATE UNIQUE INDEX index_addresses_on_customer_id ON addresses USING btree (customer_id);
 
 
 --
@@ -3589,3 +3589,5 @@ INSERT INTO schema_migrations (version) VALUES ('20160527220835');
 INSERT INTO schema_migrations (version) VALUES ('20161012105035');
 
 INSERT INTO schema_migrations (version) VALUES ('20161015092717');
+
+INSERT INTO schema_migrations (version) VALUES ('20161018203706');
