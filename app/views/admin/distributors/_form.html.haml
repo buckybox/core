@@ -7,7 +7,7 @@
     = f.input :contact_name
     = f.input :addons, placeholder: 'e.g. labels,delivery,packing', input_html: { disabled: @distributor.api_key.blank? }
     = f.input :tag_list, label: 'Tags', placeholder: 'e.g. challenge, delete-me, paying'
-    = f.input :overdue, placeholder: "e.g. 2 months"
+    = f.input :overdue
     = f.input :notes, row: 2
     = f.input :parameter_name
     = f.input :url

@@ -154,6 +154,13 @@ class Distributor < ActiveRecord::Base
     end
   end
 
+  def self.check_for_overdue_invoices
+    paying.each do |distributor|
+      invoice_url = Billing::PaypalInvoice.overdue_invoice(distributor.email)
+      distributor.update_column(:overdue, invoice_url || "")
+    end
+  end
+
   def self.create_daily_lists(time = Time.current)
     find_each do |distributor|
       distributor.use_local_time_zone do
