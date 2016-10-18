@@ -234,6 +234,13 @@ describe "API v1" do
         json_request :put, url, '{"admin_with_super_powers": "1337"}', headers
         expect(response.status).to eq 200
       end
+
+      it "updates existing addresses" do
+        json_request :put, url, params, headers
+        json_request :put, url, params.gsub("12 Bucky Lane", "13 Bucky Lane"), headers
+        expect(response.status).to eq 200
+        expect(customer.address.reload.address_1).to eq "13 Bucky Lane"
+      end
     end
   end
 end

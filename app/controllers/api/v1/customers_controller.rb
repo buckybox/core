@@ -155,7 +155,7 @@ class Api::V1::CustomersController < Api::V1::BaseController
     )
 
     if existing_customer
-      existing_customer.update_attributes(address_attributes: address_attributes)
+      existing_customer.address.update_attributes(address_attributes)
     else
       @customer.build_address(address_attributes)
     end
