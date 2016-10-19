@@ -5,6 +5,7 @@ class Distributor::BaseController < ApplicationController
   before_action :mark_as_seen
   before_action :notifications
   before_action :distributor_setup
+  before_action :check_if_very_overdue
 
   skip_after_action :intercom_rails_auto_include
 
@@ -24,5 +25,12 @@ private
 
   def check_setup
     redirect_to distributor_root_url and return unless distributor_setup.finished_settings?
+  end
+
+  def check_if_very_overdue
+    # redirect to billing if more than 1 overdue invoice
+    if current_distributor.overdue.count("\n") > 0 && request.path != distributor_billing_path
+      redirect_to distributor_billing_path and return
+    end
   end
 end

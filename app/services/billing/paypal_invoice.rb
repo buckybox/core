@@ -75,15 +75,15 @@ module Billing
       paypal_invoice
     end
 
-    def self.overdue_invoice(email)
+    def self.overdue_invoices(email)
       query = Invoice.search(email: email, status: ["SENT"])
 
-      overdue_invoice = query.invoices.select do |invoice|
+      query.invoices.select do |invoice|
         due_date = invoice.payment_term.due_date
         Date.parse(due_date) < Date.yesterday
-      end.first
-
-      overdue_invoice.metadata.payer_view_url if overdue_invoice
+      end.map do |invoice|
+        invoice.metadata.payer_view_url
+      end
     end
 
   private

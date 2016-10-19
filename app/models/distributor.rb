@@ -156,8 +156,8 @@ class Distributor < ActiveRecord::Base
 
   def self.check_for_overdue_invoices
     paying.each do |distributor|
-      invoice_url = Billing::PaypalInvoice.overdue_invoice(distributor.email)
-      distributor.update_column(:overdue, invoice_url || "")
+      urls = Billing::PaypalInvoice.overdue_invoices(distributor.email)
+      distributor.update_column(:overdue, urls.join("\n"))
     end
   end
 
