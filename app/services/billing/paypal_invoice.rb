@@ -63,11 +63,11 @@ module Billing
       if paypal_invoice.create
         Rails.logger.info "Invoice[#{paypal_invoice.id}] created successfully"
 
-        # if paypal_invoice.send_invoice # TODO: keep them as drafts for now
-        #   logger.info "Invoice[#{paypal_invoice.id}] sent successfully"
-        # else
-        #   logger.error paypal_invoice.error.inspect
-        # end
+        if paypal_invoice.send_invoice
+          logger.info "Invoice[#{paypal_invoice.id}] sent successfully"
+        else
+          logger.error paypal_invoice.error.inspect
+        end
       else
         Rails.logger.error paypal_invoice.error.inspect
       end
