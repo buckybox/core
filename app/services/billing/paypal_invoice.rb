@@ -64,12 +64,12 @@ module Billing
         Rails.logger.info "Invoice[#{paypal_invoice.id}] created successfully"
 
         if paypal_invoice.send_invoice
-          logger.info "Invoice[#{paypal_invoice.id}] sent successfully"
+          Rails.logger.info "Invoice[#{paypal_invoice.id}] sent successfully"
         else
-          logger.error paypal_invoice.error.inspect
+          Bugsnag.notify(RuntimeError.new(paypal_invoice.error.inspect))
         end
       else
-        Rails.logger.error paypal_invoice.error.inspect
+        Bugsnag.notify(RuntimeError.new(paypal_invoice.error.inspect))
       end
 
       paypal_invoice
