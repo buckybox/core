@@ -3,7 +3,7 @@
 image: ruby:2.2
 
 services:
-  - postgres:9.4
+  - postgres:9.5
   - redis:latest
 
 variables:
