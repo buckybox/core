@@ -16,7 +16,7 @@
 1. echo "127.0.0.1      staging-core" | sudo tee -a /etc/hosts
 1. sudo hostnamectl set-hostname staging-core # sudo apt-get install dbus # if missing
 1. sudo reboot
-1. wget https://raw.githubusercontent.com/infertux/ruby-bootstrap/master/bootstrap_ruby_2.2.sh && chmod +x ./bootstrap_ruby_2.2.sh && sudo ./bootstrap_ruby_2.2.sh
+1. wget https://raw.githubusercontent.com/infertux/ruby-bootstrap/master/bootstrap_ruby_2.3.sh && chmod +x ./bootstrap_ruby_2.3.sh && sudo ./bootstrap_ruby_2.3.sh
 1. sudo apt-get install bzip2 # for ./deploy.sh step below
 1. sudo reboot
 
