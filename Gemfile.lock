@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/infertux/rails.git
-  revision: 5eb7b074ad8387dc47397fe0380d6d2dea2e38f6
+  revision: 016de14ad6dfff808a08d8d41b720202e24b2f4c
   branch: 3-2-stable
   specs:
     actionmailer (3.2.22.5)
@@ -9,7 +9,7 @@ GIT
     actionpack (3.2.22.5)
       activemodel (= 3.2.22.5)
       activesupport (= 3.2.22.5)
-      builder (~> 3.0.0)
+      builder (~> 3.0)
       erubis (~> 2.7.0)
       journey (~> 1.0.4)
       rack (~> 1.4.5)
@@ -18,7 +18,7 @@ GIT
       sprockets (~> 2.2.1)
     activemodel (3.2.22.5)
       activesupport (= 3.2.22.5)
-      builder (~> 3.0.0)
+      builder (~> 3.0)
     activerecord (3.2.22.5)
       activemodel (= 3.2.22.5)
       activesupport (= 3.2.22.5)
@@ -87,7 +87,7 @@ GEM
       sass (~> 3.2)
     brakeman (3.4.0)
     bugsnag (5.0.1)
-    builder (3.0.4)
+    builder (3.2.2)
     bullet (5.4.0)
       activesupport (>= 3.0.0)
       uniform_notifier (~> 1.10.0)
@@ -525,7 +525,7 @@ GEM
     trollop (2.1.2)
     typhoeus (1.1.0)
       ethon (>= 0.9.0)
-    tzinfo (0.3.51)
+    tzinfo (0.3.52)
     uglifier (3.0.2)
       execjs (>= 0.3.0, < 3)
     unicode-display_width (1.1.1)
@@ -681,4 +681,4 @@ DEPENDENCIES
   yard
 
 BUNDLED WITH
-   1.13.1
+   1.13.6
