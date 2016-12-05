@@ -55,13 +55,13 @@
               = link_to "Print packing summary", "javascript:void(0)", id: 'master-print'
             - if current_distributor.addons.include?(:labels)
               %li
-                = link_to "Print labels", "https://addons.buckybox.com/labels?key=#{current_distributor.api_key}&secret=#{current_distributor.api_secret}&date=#{@selected_date}", target: "_blank"
+                = link_to "Print labels", "https://addons.buckybox.com/labels?key=#{current_distributor.api_key}&secret=#{current_distributor.api_secret}&date=#{@selected_date}", target: "_blank", method: :post
             - if current_distributor.addons.include?(:delivery)
               %li
-                = link_to "Print delivery summaries", "https://addons.buckybox.com/delivery?key=#{current_distributor.api_key}&secret=#{current_distributor.api_secret}&date=#{@selected_date}", target: "_blank"
+                = link_to "Print delivery summaries", "https://addons.buckybox.com/delivery?key=#{current_distributor.api_key}&secret=#{current_distributor.api_secret}&date=#{@selected_date}", target: "_blank", method: :post
             - if current_distributor.addons.include?(:packing)
               %li
-                = link_to "Print packing sheets", "https://addons.buckybox.com/packing?key=#{current_distributor.api_key}&secret=#{current_distributor.api_secret}&date=#{@selected_date}", target: "_blank"
+                = link_to "Print packing sheets", "https://addons.buckybox.com/packing?key=#{current_distributor.api_key}&secret=#{current_distributor.api_secret}&date=#{@selected_date}", target: "_blank", method: :post
             %li.divider
 
           -# %li
