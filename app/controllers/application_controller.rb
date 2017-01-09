@@ -7,7 +7,6 @@ class ApplicationController < ActionController::Base
 
   attr_reader :current_currency
 
-  before_action :new_relic_ignore_pingdom
   before_action :set_user_time_zone
   before_action :customer_smart_sign_in
 
@@ -132,12 +131,6 @@ protected
   end
 
 private
-
-  def new_relic_ignore_pingdom
-    if request.user_agent =~ /pingdom|ELB-HealthChecker/i
-      NewRelic::Agent.ignore_transaction
-    end
-  end
 
   def set_user_time_zone
     distributor = current_distributor || current_customer.try(:distributor)

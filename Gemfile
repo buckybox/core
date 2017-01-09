@@ -71,7 +71,6 @@ group :default do # XXX: all environments, think twice before adding Gems here
   gem "marginalia"
   gem "secure_headers"
   gem "bugsnag"
-  gem "newrelic_rpm"
 
   gem "google_currency", require: false
   gem "monetize", require: false
@@ -83,7 +82,6 @@ group :development do
   gem "yard",       require: false
   gem "brakeman",   require: false
   gem "xray-rails", require: false
-  gem "ruby-prof",  require: false # profiling with /newrelic
   gem "term-ansicolor"
   gem "parallel_tests"
   gem "sextant"
