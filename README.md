@@ -27,7 +27,7 @@
 1. cd core && cat ./bin/production_to_staging.sh
 1. ./bin/production_to_staging.sh
 1. Allow EC2 instance to access RDS in security group
-1. pg_restore --format custom --verbose --clean --dbname core_production --host core-production.cbqr8ikjw2qk.eu-west-1.rds.amazonaws.com --port 5432 --user buckybox --no-owner /tmp/16...
+1. pg_restore --format custom --verbose --clean --dbname core_production --host core-production.xxx.eu-west-1.rds.amazonaws.com --port 5432 --user buckybox --no-owner /tmp/16...
 1. cd chef-repo && ./deploy.sh buckybox-staging-core nodes/staging-core.json
 1. reboot
 

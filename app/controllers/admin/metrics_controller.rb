@@ -1,9 +1,6 @@
 class Admin::MetricsController < Admin::BaseController
   layout false
 
-  def conversion_pipeline
-  end
-
   caches_action :transactional_customers, expires_in: 1.week
   def transactional_customers
     beginning = Date.iso8601("2013-01-01")
