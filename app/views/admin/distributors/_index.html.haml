@@ -10,7 +10,7 @@
               = distributor.status
           %br
           %span.medium
-            = link_to distributor.contact_name, distributor.intercom_url
+            = distributor.contact_name
           %span.pull-right{style: "font-variant: small-caps"}
             - if distributor.overdue.present?
               %span{title: distributor.overdue.count("\n").succ, style: "color: red"} [OVERDUE]

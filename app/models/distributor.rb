@@ -526,15 +526,6 @@ class Distributor < ActiveRecord::Base
     Rails.application.routes.url_helpers.edit_admin_distributor_url(id: id, host: Figaro.env.host)
   end
 
-  def intercom_url
-    if intercom_id.blank?
-      intercom_id = Intercom::User.find(user_id: id).id
-      update_attribute(:intercom_id, intercom_id)
-    end
-
-    @intercom_url ||= "https://app.intercom.io/a/apps/b3e72f90ddcc230dea36a8e35ec7e4dd65860b61/users/#{self[:intercom_id]}"
-  end
-
   def seen_recently?
     last_seen_at && last_seen_at > 30.minutes.ago
   end

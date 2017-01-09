@@ -27,9 +27,8 @@
       = @distributors.count { |d| d.status.paying? }
       Paying Distributors
       |
-      = link_to "https://app.intercom.io/a/apps/b3e72f90ddcc230dea36a8e35ec7e4dd65860b61/users/segments/active", target: "_blank" do
-        = @distributors.count
-        Active Distributors
+      = @distributors.count
+      Active Distributors
       |
 
     = link_to 'Log Out', destroy_admin_session_path, method: :delete
