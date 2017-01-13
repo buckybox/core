@@ -87,7 +87,7 @@ GEM
       sass (~> 3.2)
     brakeman (3.4.0)
     bugsnag (5.0.1)
-    builder (3.2.2)
+    builder (3.2.3)
     bullet (5.4.0)
       activesupport (>= 3.0.0)
       uniform_notifier (~> 1.10.0)
@@ -591,7 +591,7 @@ DEPENDENCIES
   default_value_for
   delayed_job
   delayed_job_active_record
-  delayed_job_web (= 1.2.10)
+  delayed_job_web
   delorean
   devise
   devise-i18n

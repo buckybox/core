@@ -2,7 +2,7 @@ source "https://rubygems.org"
 
 group :default do # XXX: all environments, think twice before adding Gems here
   gem "rake"
-  gem "test-unit" # for Ruby 2.2
+  gem "test-unit" # for Ruby 2.2+
   gem "unicorn"
   gem "rails", git: "https://github.com/infertux/rails.git", branch: "3-2-stable" # use our own 3.2 fork with backported patches...
   gem "sprockets"
@@ -37,8 +37,8 @@ group :default do # XXX: all environments, think twice before adding Gems here
   gem "nokogiri" # premailer-rails dependency
   gem "delayed_job"
   gem "delayed_job_active_record"
-  gem "delayed_job_web", "1.2.10" # version hardcoded in Chef repo
-  gem "daemons" # able to monitor delayed_job via monit
+  gem "delayed_job_web"
+  gem "daemons" # needed for script/delayed_job
   gem "analytical"
   gem "ace-rails-ap"
   gem "active_utils"
