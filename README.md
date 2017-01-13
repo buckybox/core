@@ -1,5 +1,13 @@
 # Bucky Box
 
+## Development (local install)
+
+1. `bundle install`
+1. `bundle exec rake db:setup`
+1. `bundle exec foreman start`
+1. `open http://localhost:3000/distributor`
+1. Log in with demo@example.net:changeme
+
 ## Deployment (using AWS)
 
 1. Create new EC2 instance
@@ -29,43 +37,6 @@
 1. https://your-url.net/distributor
 1. Log in with demo@example.net and "changeme" as the password
 
-## Sign Up Wizard
+## License
 
-Here's what you need to do to use the wizard locally:
-
-1. `RAILS_ENV=development bundle exec rake assets:precompile`
-1. copy `wizard-localhost.html` to your `/public/` dir
-1. `rails s`
-1. goto http://buckybox.local:3000/wizard-localhost.html
-
-And when you're done: `RAILS_ENV=development bundle exec rake assets:clean`.
-
-_wizard-localhost.html_:
-
-```html
-<html>
-<head>
-<title>Test</title>
-<style>
-p { font-size: 100px; }
-</style>
-</head>
-
-<body>
-<h1>My test website!</h1>
-
-<button onclick="_bucky_box_sign_up_wizard.push(['show']);">Show</button>
-
-<p>blah blah blah blah blah blah...</p>
-<p>blah blah blah blah blah blah...</p>
-
-<script type="text/javascript" src="https://code.jquery.com/jquery-1.9.1.js"></script>
-<script type="text/javascript" src="http://buckybox.local:3000/assets/sign_up_wizard.js" async="true"></script>
-<script type="text/javascript">
-  var _bucky_box_sign_up_wizard = _bucky_box_sign_up_wizard || [];
-  _bucky_box_sign_up_wizard.push(["setHost", "http://buckybox.local:3000"]);
-  _bucky_box_sign_up_wizard.push(["show"]);
-</script>
-</body>
-</html>
-```
+See [LICENSE](LICENSE).
