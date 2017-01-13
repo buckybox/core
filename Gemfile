@@ -90,7 +90,6 @@ group :development do
   gem "quiet_assets"
   gem "meta_request"
   gem "i15r", require: false
-  gem "faker"
 end
 
 group :test do
