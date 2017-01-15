@@ -35,12 +35,15 @@ INTERCOM_APP_ID: ""
 INTERCOM_APP_API_KEY: ""
 INTERCOM_API_SECRET: ""
 
+# Librato
+LIBRATO_USER: ""
+LIBRATO_TOKEN: ""
+LIBRATO_SOURCE: "core"
+LIBRATO_SUITES: "-rack,-rack_status,-rack_method,-rails_render"
+
 # Pingdom
 PINGDOM_RUM_ID: ""
 
 # Sparkpost
 SPARKPOST_USERNAME: ""
 SPARKPOST_PASSWORD: ""
-
-# Librato
-# see config/librato.yml
