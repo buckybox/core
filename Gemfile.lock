@@ -46,6 +46,12 @@ GIT
       rdoc (~> 3.4)
       thor (>= 0.14.6, < 2.0)
 
+GIT
+  remote: https://github.com/jkrall/analytical.git
+  revision: 486e157b7dcd0bf7031ebbca3543c1a58118ee84
+  specs:
+    analytical (3.0.12)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -64,7 +70,6 @@ GEM
       activerecord (>= 3.0)
     addressable (2.4.0)
     aggregate (0.2.2)
-    analytical (3.0.12)
     apipie-rails (0.3.6)
       json
     arel (3.0.3)
@@ -562,7 +567,7 @@ DEPENDENCIES
   activemerchant
   acts-as-taggable-on
   acts_as_list
-  analytical
+  analytical!
   apipie-rails
   better_errors
   biggs

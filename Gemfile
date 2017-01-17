@@ -39,7 +39,7 @@ group :default do # XXX: all environments, think twice before adding Gems here
   gem "delayed_job_active_record"
   gem "delayed_job_web"
   gem "daemons" # needed for script/delayed_job
-  gem "analytical"
+  gem "analytical", git: "https://github.com/jkrall/analytical.git" # released version doesn't allow setting the key in controller
   gem "ace-rails-ap"
   gem "active_utils"
   gem "activemerchant"
