@@ -7,7 +7,7 @@
 Bucky Box Core is part of the [Bucky Box](http://www.buckybox.com/) platform.
 It allows food producers and distributors to manage customers and get orders, payments and delivery lists.
 
-![Screenshot](doc/screenshot.jpg)
+![Screenshot](doc/screenshot.png)
 
 ## Configuration
 
