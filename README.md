@@ -1,41 +1,53 @@
-# Bucky Box
+# Bucky Box Core
 
-## Development (local install)
+[![Build Status](https://gitlab.com/buckybox/core/badges/master/build.svg)](https://gitlab.com/buckybox/core/commits/master)
+[![Coverage Report](https://gitlab.com/buckybox/core/badges/master/coverage.svg)](https://gitlab.com/buckybox/core/commits/master)
+[![Code Climate](https://codeclimate.com/github/buckybox/core/badges/gpa.svg)](https://codeclimate.com/github/buckybox/core)
 
-1. `bundle install`
-1. `bundle exec rake db:setup`
-1. `bundle exec foreman start`
-1. `open http://localhost:3000/distributor`
-1. Log in with demo@example.net:changeme
+Bucky Box Core is part of the [Bucky Box](http://www.buckybox.com/) platform.
+It allows food producers and distributors to manage customers and get orders, payments and delivery lists.
 
-## Deployment (using AWS)
+![Screenshot](doc/screenshot.jpg)
 
-1. Create new EC2 instance
-1. Look up for latest Debian stable AMI
-1. Select t2.medium (need 4+ GB of RAM or 2 GB with swap for small installations)
-1. Add 16+ GB of storage
-1. Attach security group with TCP 22 & 80 open
-1. Launch instance
+## Configuration
 
-1. ssh -i ~/.ssh/aws-key admin@IP
-1. Add host in ~/.ssh/config
-1. ssh buckybox-core
-1. sudo apt-get update && sudo apt-get dist-upgrade && sudo apt-get autoremove --purge && sudo reboot
-1. echo "127.0.0.1      buckybox-core" | sudo tee -a /etc/hosts
-1. sudo hostnamectl set-hostname buckybox-core # sudo apt-get install dbus # if missing
-1. sudo reboot
-1. wget https://raw.githubusercontent.com/infertux/ruby-bootstrap/master/bootstrap_ruby_2.3.sh && chmod +x ./bootstrap_ruby_2.3.sh && sudo ./bootstrap_ruby_2.3.sh
-1. sudo apt-get install bzip2 # for ./deploy.sh step below
-1. sudo reboot
+See [config/application.yml](config/application.yml.example):
 
-1. Set up RDS with Postgresql
-1. Allow EC2 instance to access RDS in security group
-1. Deploy the Rails app and set up Delayed Job
-1. bundle exec rake db:setup
+- required variable: `SECRET_TOKEN`
+- to send emails (recommended): `SPARKPOST_USERNAME` and `SPARKPOST_PASSWORD`
+- to interface with the web store (optional): `API_MASTER_KEY` and `API_MASTER_SECRET`
+- other variables can be left to default values.
 
-1. Set up DNS
-1. https://your-url.net/distributor
-1. Log in with demo@example.net and "changeme" as the password
+## Ruby version and system dependencies
+
+See [CI config](.gitlab-ci.yml).
+
+## Services
+
+- Postgresql 9.5+ (main DB)
+- Redis (cache store)
+
+## Installation and deployment
+
+See [INSTALL.md](INSTALL.md).
+
+## Contributing
+
+Any bug fix or tweak is welcomed but if you have bigger plans, please drop us a line at `support AT buckybox.com` first.
+
+## Translation
+
+You can help translate it into your favorite language.
+We use [Transifex](https://www.transifex.com/projects/p/buckybox-core/).
+New translations can be fetched with `tx pull -af`.
+
+## Tests
+
+```bash
+./script/ci
+# or
+git commit && gitlab-ci-multi-runner exec docker integration
+```
 
 ## License
 
