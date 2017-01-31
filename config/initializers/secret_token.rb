@@ -11,7 +11,7 @@
 BuckyBox::Application.config.secret_token = if Rails.env.development? || Rails.env.test?
   "0e8a5b92da228e886c8879ee7dd5935341736db44030ccac1b77202af5018a8d41feaef7ac0fe80103d90f676e658753c20b84a62b412cfc473458a01f21b8ea"
 else
-  # FIXME: a token is needed to run db:migrate so we generate a random one
+  # XXX: a token is needed to run db:migrate so we generate a random one
   require "securerandom"
   ENV.fetch("SECRET_TOKEN", SecureRandom.hex(64))
 end

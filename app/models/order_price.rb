@@ -32,9 +32,6 @@ class OrderPrice
       price * order_extra[:count]
     end.sum
 
-    # FIXME: try to debug huge order price bug
-    Bugsnag.notify(RuntimeError.new(order_extras.inspect)) if total_price > 1000
-
     discounted(total_price, customer_discount)
   end
 

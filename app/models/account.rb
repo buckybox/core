@@ -24,10 +24,9 @@ class Account < ActiveRecord::Base
 
   delegate :name, to: :customer
 
-  # A way to double check that the transactions and the balance have not gone out of sync.
+  # XXX: A way to double check that the transactions and the balance have not gone out of sync.
   # THIS SHOULD NEVER HAPPEN! If it does fix the root cause don't make this write a new balance.
   # Likely somewhere a transaction is being created manually.
-  # FIXME
   def calculate_balance(offset_size = 0)
     CrazyMoney.new(transactions.offset(offset_size).map(&:amount).sum)
   end
