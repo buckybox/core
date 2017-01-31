@@ -5,7 +5,19 @@
 [![Code Climate](https://codeclimate.com/github/buckybox/core/badges/gpa.svg)](https://codeclimate.com/github/buckybox/core)
 
 Bucky Box Core is part of the [Bucky Box](http://www.buckybox.com/) platform.
-It allows food producers and distributors to manage customers and get orders, payments and delivery lists.
+
+It is targeted to food producers and distributors to:
+
+- manage customers
+- aggregate orders
+- generate delivery lists
+- reconcile payments
+
+It is composed of three parts:
+
+- distributor area (customer database + deliveries + payments)
+- customer area (order management)
+- [API](https://my.buckybox.com/docs) to interface with the [Web Store App](https://github.com/buckybox/webstore)
 
 ![Screenshot](doc/screenshot.png)
 
