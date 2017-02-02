@@ -10,8 +10,8 @@ class LineItemDecorator < Draper::Decorator
     exclusion_count    = object.exclusions_count_by_customer
     substitution_count = object.substitution_count_by_customer
 
-    has_exclusions = (exclusion_count > 0)
-    has_substitutions = (substitution_count > 0)
+    has_exclusions = exclusion_count.positive?
+    has_substitutions = substitution_count.positive?
 
     if has_exclusions || has_substitutions
       content = [content_tag(:i, nil, class: 'icon-user icon-white')]
@@ -38,6 +38,6 @@ class LineItemDecorator < Draper::Decorator
     count = object.exclusions_count_by_customer + object.substitution_count_by_customer
     label_text += pluralize(count, 'customer')
 
-    content_tag(:span, label_text, class: 'label label-warning warning') if count > 0
+    content_tag(:span, label_text, class: 'label label-warning warning') if count.positive?
   end
 end

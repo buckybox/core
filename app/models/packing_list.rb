@@ -13,7 +13,7 @@ class PackingList < ActiveRecord::Base
   scope :packed, -> { where(status: 'packed') }
 
   def self.collect_list(distributor, date)
-    if distributor.packing_lists.where(date: date).count > 0
+    if distributor.packing_lists.where(date: date).count.positive?
       distributor.packing_lists.where(date: date).includes({ packages: {} }).first
     else
       order_ids = Bucky::Sql.order_ids(distributor, date)

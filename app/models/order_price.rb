@@ -43,7 +43,7 @@ class OrderPrice
   end
 
   def self.with_delivery_fee(price, delivery_fee)
-    if delivery_fee && delivery_fee > 0
+    if delivery_fee && delivery_fee.positive?
       price + delivery_fee
     else
       price

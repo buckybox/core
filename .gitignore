@@ -32,4 +32,3 @@ Session.vim
 /public/uploads/tmp/
 /public/assets/**/*.gz
 /private_uploads/
-/.rubocop-*

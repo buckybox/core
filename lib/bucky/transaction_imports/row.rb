@@ -119,7 +119,7 @@ module Bucky::TransactionImports
     end
 
     def credit?
-      amount > 0
+      amount.positive?
     end
 
     def debit?

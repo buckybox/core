@@ -13,7 +13,7 @@ module Distributor::BoxesHelper
         box_price = OrderPrice.discounted(box.price, customer).with_currency(currency)
 
         text = "#{box.name} - #{box_price}"
-        text << " + #{delivery_service_fee.with_currency(currency)} delivery" if delivery_service_fee > 0
+        text << " + #{delivery_service_fee.with_currency(currency)} delivery" if delivery_service_fee.positive?
 
         [text, box.id]
       end

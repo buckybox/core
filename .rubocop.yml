@@ -1,8 +1,79 @@
-inherit_from:
-  - https://gist.githubusercontent.com/infertux/cdd2ccc6e0a0cd94f458/raw
+# See https://github.com/bbatsov/rubocop
+
+# AllCops
 
 AllCops:
-  TargetRubyVersion: 2.2
+  TargetRubyVersion: 2.3
+  Exclude:
+    - 'vendor/**/*'
+
+# Metrics
+
+Metrics:
+  Enabled: false
+
+# Lint
+
+Lint/AmbiguousRegexpLiteral:
+  Exclude: [features/**/*] # allow "Given /^I am a cuke$/"
+
+Lint/DefEndAlignment:
+  Enabled: false
+
+Lint/EndAlignment:
+  Enabled: false
+
+# Style
+Style/AccessModifierIndentation:
+  EnforcedStyle: outdent
+
+Style/AndOr:
+  Enabled: false
+
+Style/ClosingParenthesisIndentation:
+  Enabled: false
+
+Style/Documentation:
+  Enabled: false
+
+Style/ElseAlignment:
+  Enabled: false
+
+Style/FrozenStringLiteralComment:
+  Enabled: false
+
+Style/GlobalVars:
+  AllowedVariables: [$redis]
+
+Style/IndentationWidth:
+  Enabled: false
+
+Style/MultilineMethodCallBraceLayout:
+  Enabled: false
+
+Style/ParallelAssignment:
+  Enabled: false
+
+Style/PredicateName:
+  Enabled: false
+
+Style/SafeNavigation:
+  Enabled: false
+
+Style/SignalException:
+  EnforcedStyle: only_raise
+
+Style/StringLiterals:
+  Enabled: false
+
+Style/TrailingCommaInArguments:
+  Enabled: false
+
+Style/TrailingCommaInLiteral:
+  EnforcedStyleForMultiline: comma
+
+Style/TrivialAccessors:
+  ExactNameMatch: true
 
 Rails:
   Enabled: true
@@ -117,4 +188,3 @@ Performance/TimesMap:
 
 Performance/RedundantMerge:
   Enabled: false
-
