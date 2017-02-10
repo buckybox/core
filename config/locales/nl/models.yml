@@ -1,0 +1,57 @@
+nl:
+  models:
+    schedule_rule:
+      deliver_on: Lever op
+      deliver_weekly_on: Lever wekelijks op
+      deliver_fornightly_on: 'Lever tweewekelijks op '
+      deliver_monthly_on: Lever maandelijks op de
+      no_future_deliveries: Geen toekomstige leveringen gepland
+    account:
+      manual_transaction: Manuele Transactie
+    delivery:
+      delivery_of: Levering van
+      payment_made_on_delivery: Betaling uitgevoerd bij levering
+    order:
+      edit: wijzig deze bestelling
+      remove: verwijder bestelling
+      remove_confirmation: Weet u zeker dat u deze bestelling wilt verwijderen?
+      impending_delivery: Deze bestelling heeft een levering die reeds in verwerking is. Wijzigingen in deze bestelling zullen slechts effect hebben op leveringen op of na %{date}.
+      extra_frequencies:
+        always: voeg toe bij elke levering
+        once: voeg enkel toe bij de volgende levering
+    phone_collection:
+      mobile_phone: GSM
+      work_phone: Werk telefoon
+      home_phone: Huis telefoon
+  activerecord:
+    models:
+      box: Product
+      customer: Klant
+      order: Bestelling
+    attributes:
+      customer:
+        formated_number: Klantennummer
+      order:
+        exclusions: Weggelaten
+        substitutions: Vervaning
+  virtus:
+    attributes:
+      customer/form/update_contact_details:
+        first_name: Voornaam
+        last_name: Naam
+        email: Email
+        hints:
+          email: Controleer aub dit email adres, aangezien het ook als login gebruikt wordt.
+          phone: Er is ten minste één telefoonnummer vereist.
+      customer/form/update_delivery_address:
+        address_1: Adres 1
+        address_2: Adres 2
+        suburb: Wijk
+        city: Stad
+        postcode: Postcode
+        delivery_note: Leveringsnota
+        placeholders:
+          delivery_note: "Leveringsinstructies, zoals waar het pakket geplaatst moet worden. vb. \"Plaats achteraan op het terras\""
+      customer/form/update_password:
+        password: Voer uw nieuwe paswoord in
+        password_confirmation: Voer uw nieuwe paswoord nogmaals in om te bevestigen

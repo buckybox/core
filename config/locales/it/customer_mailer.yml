@@ -9,9 +9,9 @@ it:
         Utilizza questo profilo per:
 
         <ul>
-          <li>modificare i tuoi ordini
-          <li>sospendere i tuoi ordini quando non ci sei
-          <li>modificare l'indirizzo di consegna o i dati di contatto in caso di trasloco
+        <li>modificare i tuoi ordini
+        <li>sospendere i tuoi ordini quando non ci sei
+        <li>modificare l'indirizzo di consegna o i dati di contatto in caso di trasloco
         </ul>
     orders_halted:
       subject: Le tue consegne di %{distributor} sono state sospese

@@ -9,9 +9,9 @@ fr:
         Vous pouvez utilisez votre compte pour :
 
         <ul>
-          <li>modifier vos commandes
-          <li>susprendre vos commandes lorsque vous n'est pas chez vous
-          <li>mettre à jour vos coordonnées si vous déménager
+        <li>modifier vos commandes
+        <li>susprendre vos commandes lorsque vous n'est pas chez vous
+        <li>mettre à jour vos coordonnées si vous déménager
         </ul>
     orders_halted:
       subject: Vos livraisons %{distributor} ont été suspendues

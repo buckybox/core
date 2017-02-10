@@ -1,0 +1,10 @@
+nl:
+  devise_mailer:
+    reset_password_instructions:
+      change_password: Wijzig mijn paswoord
+      body_html: |
+        Hallo %{email}
+        Iemand heeft een link aangevraagd om uw paswoord te wijzigen. U kan dit doen door op onderstaande link te klikken.
+        %{link}
+        Indien u dit niet heeft aangevraagd, negeer dan deze email.
+        Uw paswoord zal niet gewijzigd worden tot u op de link klikt en een nieuw paswoord ingeeft.

@@ -1,0 +1,52 @@
+nl:
+  customer_mailer:
+    login_details:
+      subject: Uw login gegevens voor %{distributor}
+      new_details: Hierbij uw nieuwe login gegevens voor uw account bij %{distributor}.
+      email: Email
+      password: Paswoord
+      instructions_html: |
+        Gebruik deze account om
+
+        <ul>
+        <li>bestellingen te wijzigen
+        <li>bestellingen te pauzeren terwijl u afwezig bent
+        <li>uw leveringsadres of contactgegevens te wijzigen na verhuis
+        </ul>
+    orders_halted:
+      subject: Uw %{distributor} leveringen werden gepauzeerd
+      intro_html: |
+        We hebben gemerkt dat uw account het minimum saldo bereikt heeft - uw huidige account saldo is
+        <strong>%{balance}</strong>
+        (uw account moet steeds boven het minimum saldo van %{threshold} blijven om bestellingen te kunnen ontvangen).
+      pay_html: "%{link} of contact %{distributor}."
+      recent: Indien u recent een betaling overgemaakt hebt, is het mogelijk dat deze nog niet getoond wordt. Controleer de komende dagen uw account om te verifiëren of de betaling goed uitgevoerd is.
+      signature: Het %{distributor} team
+    remind_orders_halted:
+      subject: Uw %{distributor} leveringen staan op pauze.
+      intro_html: |
+        Uw recente bestelling zal pas voldaan worden wanneer uw account boven het minimum saldo staat - uw huidige account saldo is
+        <strong>%{balance}</strong>
+        (uw account moet steeds boven het minimum saldo van %{threshold} blijven om bestellingen te kunnen ontvangen).
+      pay_html: "%{link} of contacteer %{distributor}."
+      recent: Indien u recent een betaling overgemaakt hebt, is het mogelijk dat deze nog niet getoond wordt. Controleer de komende dagen uw account om te verifiëren of de betaling goed uitgevoerd is.
+      signature: Het %{distributor} team
+    order_confirmation:
+      subject: Uw %{distributor} Bestelling
+      thanks: Bedankt voor uw bestelling %{name}!
+      update_order: Wist u dat u uw bestellingen 24u per dag kan bekijken en wijzigen? Ga naar %{link}.
+      order_information: Bestelling informatie
+      customer_number: Klantennummer
+      email: Email
+      mobile_phone: GSM
+      home_phone: Telefoon
+      work_phone: Werk telefoon
+      pick_up_from: Ophalen vanaf
+      delivery_address: Leveringsadres
+      order_summary: Samenvatting bestelling
+      exclusions: Weggelaten
+      substitutes: Vervanging
+      starting: startend
+      review_html: U kan uw bestellingen en uw account uitreksels steeds raadplegen door in te loggen op %{link}.
+      contact_html: Indien u vragen of opmerkingen heeft, kan u terecht op %{email}
+      powered_by_html: Powered by %{link}

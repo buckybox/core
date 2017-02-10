@@ -1,0 +1,13 @@
+nl:
+  partials:
+    payments:
+      bank_deposit:
+        deposit_funds: Schrijf het geld aub over naar
+        account_name: Naam Rekeninghouder
+        account_number: Rekeningnummer
+        reference: Referentie
+      paypal:
+        pay_now: Betaal nu
+        top_up: Voeg krediet toe aan mijn account
+        amount: Bedrag
+        amount_to_top_up: Bedrag toe te voegen

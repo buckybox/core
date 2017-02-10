@@ -1,0 +1,73 @@
+nl:
+  c:
+    orders:
+      pausing:
+        pause: pauze
+        resume: hervat
+        remove: verwijder
+        close: sluit
+        pause_start: pauzeren begonnen
+        resume_start: leveringen worden hervat op
+        until_further_notice: tot nader bericht
+    dashboard:
+      change_contact_details: wijzig mijn contactgegevens
+      change_password: wijzig mijn paswoord
+      change_delivery_address: wijzig mijn leveringsadres
+      order_another_item: Bestel nog iets
+      no_active_orders: U heeft geen open bestellingen.
+      account_statement: Rekeningafschrift
+      make_payment: Doe een betaling
+      pay_by:
+        bank_deposit: Betaal per overschrijving
+        paypal: Betaal met PayPal / Credietkaart
+    transactions:
+      processed_date: Verwerkingsdatum
+      transaction_date: Transactiedatum
+      details: Details
+      amount: Hoeveelheid
+      balance: Balans
+      more: meer...
+    contact_details:
+      change: Wijzig uw contactgegevens
+      successful_update: Uw contactgegevens werden succesvol veranderd.
+    delivery_address:
+      successful_update: Uw leveringsadres werd succesvol gewijzigd.
+    password:
+      change: Wijzig uw paswoord
+      update: Update paswoord
+      successful_update: Uw paswoord is succesvol gewijzigd.
+    address:
+      change: Wijzig uw adres
+    update_next_delivery: Dit heeft effect op uw volgende levering.
+    order:
+      existing: Bestaande bestelling
+      extras: Extras
+      include_extras: voeg extras toe
+      no_extras: Geen extras toegelaten in deze mand
+      extras_limit: Deze mand is beperkt tot %{count} extras.
+      extras_one_off:
+        hint: Extras kunnen éénmalig besteld worden, of bij elke bestelling.
+        'false': voeg toe bij elke levering
+        'true': voeg enkel toe bij volgende levering
+      exclude_items: Verwijder volgende items...
+      substitute_with_items: Wissel voor deze items...
+      update:
+        success: Uw bestelling is succesvol gewijzigd.
+        not_allowed: U kan deze bestelling niet wijzigen.
+        oops: Er was een probleem met het wijzigen van deze bestelling.
+      deactivate:
+        success: Uw bestelling werd succesvol verwijderd.
+        oops: Error bij het verwijderen van uw bestelling.
+        not_allowed: U heeft geen toestemming om deze handeling uit te voeren.
+        too_late:
+          one_off: Aangezien de levering weldra plaatsvindt is het te laat om deze bestelling te verwijderen.
+          recurring: De eerstkomende levering is te snel om nog te annuleren, maar we hebben uw toekomstige leveringen geannulleerd.
+    sign_in:
+      enter_email: voer uw email in
+      enter_password: voer uw paswoord in
+      remember_me: onthoud mij
+      lost_password: paswoord verloren?
+    lost_password:
+      send_my_password: Stuur me mijn paswoord
+      enter_email: voer uw email in
+      send: Verstuur paswoord
