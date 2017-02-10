@@ -43,7 +43,7 @@ group :default do # XXX: all environments, think twice before adding Gems here
   gem "ace-rails-ap"
   gem "active_utils"
   gem "activemerchant"
-  gem "countries"
+  gem "countries", "< 2"
   gem "country_select", "~> 1.1.3" # TODO: https://github.com/stefanpenner/country_select/blob/master/UPGRADING.md
   gem "biggs"
   gem "charlock_holmes"
@@ -116,8 +116,8 @@ group :development, :test do
   gem "terminal-notifier-guard" # Mac 10.8 system notifications for Guard
   gem "letter_opener"
   gem "bundler-audit", require: false
-  gem "bullet"
-  gem "rubocop"
+  gem "bullet", "~> 5.3.0" # TODO: upgrade
+  gem "rubocop", "~> 0.43.0" # TODO: upgrade
   gem "byebug"
   gem "cane"
   gem "pry-byebug"
