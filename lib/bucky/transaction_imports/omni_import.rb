@@ -245,7 +245,9 @@ EOF
     end
 
     def self.sanitize_amount(amount)
-      amount && amount.gsub(/[^\d.-]/, '')
+      return unless amount
+      decimal_separator = amount.scan(/[\.,]/).last || "."
+      amount.gsub(/[^-\d#{Regexp.escape(decimal_separator)}]/, '').tr(decimal_separator, ".")
     end
 
     class Rules
