@@ -43,7 +43,7 @@ group :default do # XXX: all environments, think twice before adding Gems here
   gem "ace-rails-ap"
   gem "active_utils"
   gem "activemerchant"
-  gem "countries", "< 2"
+  gem "countries"
   gem "country_select", "~> 1.1.3" # TODO: https://github.com/stefanpenner/country_select/blob/master/UPGRADING.md
   gem "biggs"
   gem "charlock_holmes"

@@ -8,7 +8,7 @@ class Country < ActiveRecord::Base
   alias_method :full_name, :name
 
   def currency
-    @currency ||= iso3166.currency.code.upcase
+    @currency ||= iso3166.currency.iso_code
   end
 
   def time_zones
