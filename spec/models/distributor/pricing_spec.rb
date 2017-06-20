@@ -21,7 +21,7 @@ describe Distributor::Pricing do
       end
 
       usage = @pricing.usage_between(1.month.ago.to_date, Date.current)
-      expected = 100 + 0.2 + 0.3 + 0.3
+      expected = 65 + 0.2 + 0.3 + 0.3
 
       expect(usage).to eq expected
     end
@@ -42,7 +42,7 @@ describe Distributor::Pricing do
         )
 
         usage = @pricing.usage_between(1.month.ago.to_date, Date.current)
-        expected = (100 + 0.1) * ((100.0 - discount_percentage) / 100)
+        expected = (65 + 0.1) * ((100.0 - discount_percentage) / 100)
 
         expect(usage).to eq expected
       end
