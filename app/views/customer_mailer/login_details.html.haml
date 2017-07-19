@@ -1,6 +1,6 @@
 %p= t('.new_details', distributor: @distributor.name)
 
-%p= new_customer_session_url(distributor: @distributor.parameter_name)
+%p= link_to new_customer_session_url(distributor: @distributor.parameter_name), new_customer_session_url(distributor: @distributor.parameter_name)
 
 %p<
   = t('.email') << t('colon') << @customer.email
