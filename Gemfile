@@ -69,7 +69,7 @@ group :default do # XXX: all environments, think twice before adding Gems here
   gem "typhoeus"
   gem "rack-cors"
   gem "marginalia"
-  gem "secure_headers"
+  gem "secure_headers", "< 4" # TODO: upgrade
   gem "bugsnag"
 
   gem "google_currency", require: false

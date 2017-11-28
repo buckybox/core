@@ -21,7 +21,7 @@ cp -n config/database.yml{.example,}
   bundle exec rubocop -DES
   $(dirname $0)/check_i18n
 
-  bundle exec brakeman -qz --no-progress -w3 || true # FIXME
+  bundle exec brakeman -qz --no-progress --no-pager -w3 || true # FIXME
   bundle exec cane --no-doc --style-measure 160 --abc-max 30 || true # FIXME
 
   bundle exec rake generate_secret_token
