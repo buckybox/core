@@ -10,7 +10,7 @@ SecureHeaders::Configuration.default do |config|
     script_src: %w('self' 'unsafe-inline' 'unsafe-eval' *.google-analytics.com *.pingdom.net *.intercomcdn.com *.intercom.io),
     style_src: %w('self' 'unsafe-inline'),
     form_action: %w('self' addons.buckybox.com www.paypal.com),
-    connect_src: %w('self' api.buckybox.com *.google-analytics.com *.intercomcdn.com *.intercom.io wss://*.intercom.io),
+    connect_src: %w('self' api.buckybox.com *.google-analytics.com *.pingdom.net *.intercomcdn.com *.intercom.io wss://*.intercom.io),
     media_src: %w(*.intercomcdn.com),
     font_src: %w(*.intercomcdn.com),
     frame_ancestors: %w('none'),
