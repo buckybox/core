@@ -8,11 +8,9 @@ class Metrics
   def self.calculate_and_push_to_librato
     return unless Rails.env.production?
 
-    config = YAML.load_file(Rails.root.join("config/librato.yml"))["production"]
+    Librato::Metrics.authenticate Figaro.env.librato_user, Figaro.env.librato_token
 
-    Librato::Metrics.authenticate config.fetch("user"), config.fetch("token")
-
-    queue = Librato::Metrics::Queue.new(source: config.fetch("source"))
+    queue = Librato::Metrics::Queue.new(source: Figaro.env.librato_source)
 
     queue.add "bucky.distributor.total" => Distributor.count
     queue.add "bucky.distributor.active" => Distributor.active.count
