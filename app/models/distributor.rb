@@ -146,17 +146,30 @@ class Distributor < ActiveRecord::Base
 
       next unless invoice
       next if invoice.amount.zero?
-      next if distributor.country.alpha2 == "NZ" # use Xero for NZ
       next unless distributor.in?(paying)
 
-      paypal_invoice = Billing::PaypalInvoice.create!(invoice)
-      invoice.update_attribute(:number, paypal_invoice.number)
+      number = \
+        case distributor.country.alpha2
+        when "NZ"
+          Billing::XeroInvoice.create!(invoice)
+        else
+          Billing::PaypalInvoice.create!(invoice)
+        end
+
+      invoice.update_attribute(:number, number)
     end
   end
 
   def self.check_for_overdue_invoices
     paying.each do |distributor|
-      urls = Billing::PaypalInvoice.overdue_invoices(distributor.email)
+      urls = \
+        case distributor.country.alpha2
+        when "NZ"
+          Billing::XeroInvoice.overdue_invoices(distributor.email)
+        else
+          Billing::PaypalInvoice.overdue_invoices(distributor.email)
+        end
+
       distributor.update_column(:overdue, urls.join("\n"))
     end
   end

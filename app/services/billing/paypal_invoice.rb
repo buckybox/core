@@ -72,7 +72,7 @@ module Billing
         Bugsnag.notify(RuntimeError.new(paypal_invoice.error.inspect))
       end
 
-      paypal_invoice
+      paypal_invoice.number
     end
 
     def self.overdue_invoices(email)

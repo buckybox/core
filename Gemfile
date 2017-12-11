@@ -75,6 +75,7 @@ group :default do # XXX: all environments, think twice before adding Gems here
   gem "google_currency", require: false
   gem "monetize", require: false
   gem "paypal-sdk-rest", require: false
+  gem "xero_gateway", require: false
 end
 
 group :development do
