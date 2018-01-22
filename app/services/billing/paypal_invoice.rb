@@ -82,7 +82,7 @@ module Billing
         due_date = invoice.payment_term.due_date
         Date.parse(due_date) < Date.yesterday
       end.map do |invoice|
-        invoice.metadata.payer_view_url
+        "https://www.paypal.com/invoice/p/##{invoice.id}"
       end
     end
 
