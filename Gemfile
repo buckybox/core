@@ -118,7 +118,7 @@ group :development, :test do
   gem "letter_opener"
   gem "bundler-audit", require: false
   gem "bullet", "~> 5.3.0" # TODO: upgrade
-  gem "rubocop", "~> 0.43.0" # TODO: upgrade
+  gem "rubocop"
   gem "byebug"
   gem "cane"
   gem "pry-byebug"

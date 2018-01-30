@@ -25,10 +25,6 @@ before_script:
   - gem install bundler --no-ri --no-rdoc
   - bundle install -j $(nproc) --path vendor
 
-rubocop:
-  script:
-  - rubocop
-
 rspec:
   script:
   - ./vendor/bin/install_phantomjs.sh
