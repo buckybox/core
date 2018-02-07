@@ -64,7 +64,9 @@ module Billing
 
       invoices.select do |invoice|
         invoice.due_date < Date.yesterday
-      end.map(&:url).compact
+      end.map do |invoice|
+        "https://go.xero.com/?InvoiceNumber=#{invoice.invoice_number}"
+      end
     end
   end
 end
