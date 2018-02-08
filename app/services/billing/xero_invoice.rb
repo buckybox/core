@@ -59,7 +59,7 @@ module Billing
 
       invoices = gateway.get_invoices(
         contact_ids: [contact.contact_id],
-        where: "Status!=\"PAID\"",
+        where: "Status=\"AUTHORISED\"",
       ).invoices
 
       invoices.select do |invoice|
