@@ -6,13 +6,11 @@ SecureHeaders::Configuration.default do |config|
   # rubocop:disable Lint/PercentStringArray
   config.csp = {
     default_src: %w('none'),
-    img_src: %w('self' data: *.google-analytics.com *.pingdom.net *.intercomcdn.com *.intercomassets.com *.intercom.io *.tile.openstreetmap.org),
-    script_src: %w('self' 'unsafe-inline' 'unsafe-eval' *.google-analytics.com *.pingdom.net *.intercomcdn.com *.intercom.io),
+    img_src: %w('self' data: *.google-analytics.com *.pingdom.net *.tile.openstreetmap.org),
+    script_src: %w('self' 'unsafe-inline' 'unsafe-eval' *.google-analytics.com *.pingdom.net),
     style_src: %w('self' 'unsafe-inline'),
     form_action: %w('self' addons.buckybox.com www.paypal.com),
-    connect_src: %w('self' api.buckybox.com *.google-analytics.com *.pingdom.net *.intercomcdn.com *.intercom.io wss://*.intercom.io),
-    media_src: %w(*.intercomcdn.com),
-    font_src: %w(*.intercomcdn.com),
+    connect_src: %w('self' api.buckybox.com *.google-analytics.com *.pingdom.net),
     frame_ancestors: %w('none'),
     report_uri: %w(https://api.buckybox.com/v1/csp-report),
   }
