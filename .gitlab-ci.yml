@@ -25,24 +25,7 @@ before_script:
   - gem install bundler --no-ri --no-rdoc
   - bundle install -j $(nproc) --path vendor
 
-rspec:
-  script:
-  - ./vendor/bin/install_phantomjs.sh
-  - cp -n config/application.yml{.example,}
-  - cp -n config/database.yml{.example,}
-  - rake db:drop db:create db:structure:load
-  - rspec
-
-cucumber:
-  script:
-  - ./vendor/bin/install_phantomjs.sh
-  - cp -n config/database.yml{.example,}
-  - rake db:drop db:create db:structure:load
-  - cucumber
-
 integration:
   script:
   - ./vendor/bin/install_phantomjs.sh
-  - cp -n config/database.yml{.example,}
-  - rake db:drop db:create db:structure:load
   - ./script/ci
