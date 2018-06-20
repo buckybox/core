@@ -33,11 +33,6 @@ DELAYED_JOB_PASSWORD: "root"
 # Google Analytics
 GA_TRACKING_ID: ""
 
-# Intercom
-INTERCOM_APP_ID: ""
-INTERCOM_APP_API_KEY: ""
-INTERCOM_API_SECRET: ""
-
 # Librato
 LIBRATO_USER: ""
 LIBRATO_TOKEN: ""

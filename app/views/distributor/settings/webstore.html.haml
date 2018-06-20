@@ -5,7 +5,7 @@
   .row-fluid
     .span12
       Your web store is currently set up in #{I18n.t('current_locale_en', locale: current_distributor.locale)}, please
-      = mail_to "support@buckybox.com", "contact us", class: "intercom"
+      = mail_to "support@buckybox.com", "contact us"
       to change it.
 
   = simple_form_for(@form, url: distributor_settings_webstore_url) do |f|

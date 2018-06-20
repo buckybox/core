@@ -22,8 +22,6 @@ class Distributor::PaymentsController < Distributor::BaseController
 
     load_index
 
-    tracking.event(current_distributor, "payment_csv_uploaded") unless current_admin.present?
-
     render :index, locals: { distributor: current_distributor.decorate }
   end
 
@@ -32,7 +30,6 @@ class Distributor::PaymentsController < Distributor::BaseController
     processor = Payments::Processor.new(@import_transaction_list)
 
     if processor.process(params[:import_transaction_list])
-      tracking.event(current_distributor, "payment_csv_commited") unless current_admin.present?
       redirect_to distributor_payments_url, notice: "Payments processed successfully"
     else
       redirect_to distributor_payments_url, alert: "There was a problem"

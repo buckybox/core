@@ -10,7 +10,6 @@ class Distributor::Settings::Products::BoxesController < Distributor::BaseContro
     box.distributor = current_distributor
 
     if box.save
-      tracking.event(current_distributor, 'new_box') unless current_admin.present?
       flash.now[:notice] = "Your new box has been created."
     else
       flash.now[:error] = box.errors.full_messages.to_sentence

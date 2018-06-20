@@ -98,10 +98,8 @@ class Distributor < ActiveRecord::Base
   before_validation :check_emails
   before_create :parameterize_name, if: "parameter_name.nil?"
   after_create :send_welcome_email
-  after_create :tracking_after_create
   after_save :generate_required_daily_lists, if: "advance_days_changed? || advance_hour_changed? || time_zone_changed?"
   after_save :update_halted_statuses
-  after_save :tracking_after_save
 
   serialize :email_templates, Array
 
@@ -113,8 +111,6 @@ class Distributor < ActiveRecord::Base
 
   scope :keep_updated,    -> { where(keep_me_updated: true) }
   scope :active_webstore, -> { where(active_webstore: true) }
-
-  delegate :tracking_after_create, :tracking_after_save, :track, to: :messaging
 
   attr_reader :spend_limit_on_all_customers
   alias_method :spend_limit_on_all_customers?, :spend_limit_on_all_customers
@@ -510,14 +506,6 @@ class Distributor < ActiveRecord::Base
                 .order('created_at DESC')
   end
 
-  def skip_tracking?(env = Rails.env)
-    messaging.skip?(env)
-  end
-
-  def webstore_status_changed?
-    active_webstore_changed?
-  end
-
   def generate_api_key!
     return if api_key.present?
     update_attributes(api_key: SecureRandom.uuid, api_secret: SecureRandom.uuid)
@@ -589,14 +577,6 @@ private
 
   def send_welcome_email
     DistributorMailer.welcome(self).deliver_now
-  end
-
-  def messaging
-    @messaging ||= Distributor.messaging_class.new(self)
-  end
-
-  def self.messaging_class
-    Messaging::Distributor
   end
 
   def validate_require_phone

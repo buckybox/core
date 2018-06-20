@@ -5,14 +5,6 @@ $(function() {
       $(this).closest("." + $(this).attr("data-hide")).hide();
   });
 
-  // Open Intercom in-app messaging rather than mailto:support
-  $('a.intercom[href="mailto:support@buckybox.com"]').click(function(event) {
-      if (typeof(Intercom) == "function") {
-        Intercom('show');
-        event.preventDefault();
-      }
-  });
-
   //////////////////////////////////////////////////////////////////////////////
   // Checkbox selector
   //

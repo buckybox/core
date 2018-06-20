@@ -26,7 +26,6 @@ class Delivery < ActiveRecord::Base
 
   before_save :update_dso
   before_create :set_delivery_number
-  after_save :tracking
 
   scope :pending,   -> { where(status: 'pending') }
   scope :delivered, -> { where(status: 'delivered') }
@@ -229,12 +228,5 @@ private
     end
 
     errors.add(:base, 'The order could not be saved.') unless order.save
-  end
-
-  def tracking
-    if status_changed? && status == 'delivered'
-      Bucky::Tracking.instance.event(distributor, "distributor_delivered_order")
-      Bucky::Tracking.instance.event(distributor, "engaged")
-    end
   end
 end

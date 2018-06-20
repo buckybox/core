@@ -11,8 +11,6 @@ class Distributor::Settings::Payments::CashOnDeliveryController < Distributor::S
 
   def update
     if @cash_on_delivery.save
-      track
-
       redirect_to distributor_settings_payments_cash_on_delivery_path,
         notice: "Your Cash on Delivery settings were successfully updated."
     else

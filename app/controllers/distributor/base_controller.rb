@@ -7,8 +7,6 @@ class Distributor::BaseController < ApplicationController
   before_action :distributor_setup
   before_action :check_if_very_overdue
 
-  skip_after_action :intercom_rails_auto_include
-
 private
 
   def mark_as_seen

@@ -4,8 +4,6 @@ class Distributor::Export::DeliveriesController < Distributor::BaseController
 
     if export
       screen = params[:screen] # delivery or packing
-      tracking.event(current_distributor, "export_#{screen}_list") unless current_admin.present?
-
       send_data(*export.csv)
     else
       redirect_to :back

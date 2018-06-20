@@ -11,8 +11,6 @@ class Distributor::Settings::Payments::PaypalController < Distributor::Settings:
 
   def update
     if @paypal.save
-      track
-
       redirect_to distributor_settings_payments_paypal_path,
         notice: "Your PayPal settings were successfully updated."
     else

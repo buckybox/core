@@ -11,8 +11,6 @@ class Distributor::Settings::Payments::BankDepositController < Distributor::Sett
 
   def update
     if @bank_deposit.save
-      track
-
       redirect_to distributor_settings_payments_bank_deposit_path,
         notice: "Your Bank Deposit settings were successfully updated."
     else

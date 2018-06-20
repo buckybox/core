@@ -99,8 +99,8 @@ application.js: application-875f0d42a52ff5536404da8fda8d423b.js
 application/index.js: application-875f0d42a52ff5536404da8fda8d423b.js
 customer.js: customer-d57a23d34693997fefb96f8ae2ab09e5.js
 customer/index.js: customer-d57a23d34693997fefb96f8ae2ab09e5.js
-distributor.js: distributor-5b185932662c148f2775e2a78b4d35fb.js
-distributor/index.js: distributor-5b185932662c148f2775e2a78b4d35fb.js
+distributor.js: distributor-6f1993a2b571fd165b546c72e81d152f.js
+distributor/index.js: distributor-6f1993a2b571fd165b546c72e81d152f.js
 print.js: print-71fad10951794a24966227e1f6b71509.js
 print/index.js: print-71fad10951794a24966227e1f6b71509.js
 sign_up_wizard.js: sign_up_wizard-be1568dce630ddd753cb19488fc22ca3.js

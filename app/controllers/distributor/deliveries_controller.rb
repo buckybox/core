@@ -89,8 +89,6 @@ class Distributor::DeliveriesController < Distributor::ResourceController
 
     @date = @packages.first.packing_list.date
 
-    tracking.event(current_distributor, "print_packing_list") unless current_admin.present?
-
     render layout: 'print'
   end
 

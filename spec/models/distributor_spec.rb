@@ -364,13 +364,6 @@ describe Distributor do
     end
   end
 
-  context "Messaging and tracking" do
-    subject { distributor }
-    it { is_expected.to delegate(:tracking_after_create).to(:messaging) }
-    it { is_expected.to delegate(:tracking_after_save).to(:messaging) }
-    it { is_expected.to delegate(:track).to(:messaging) }
-  end
-
   describe '#transactions_for_export' do
     let(:day1)    { Date.parse('2013-08-03') }
     let(:day2)    { Date.parse('2013-08-04') }
