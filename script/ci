@@ -16,7 +16,7 @@ cp -n config/database.yml{.example,}
   echo -n "$output"
   test -z "$output"
 
-  bundle exec bundle-audit check --update
+  bundle exec bundle-audit check --update --ignore CVE-2018-3760
 
   $(dirname $0)/check_i18n
 
