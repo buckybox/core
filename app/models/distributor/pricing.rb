@@ -89,10 +89,12 @@ class Distributor::Pricing < ActiveRecord::Base
 
   private def exchange_currency(amount, from, to)
     require 'money'
-    require 'money/bank/google_currency'
+    require 'eu_central_bank'
     require 'monetize'
 
-    Money.default_bank = Money::Bank::GoogleCurrency.new
+    eu_bank = EuCentralBank.new
+    eu_bank.update_rates
+    Money.default_bank = eu_bank
 
     money = Monetize.parse("#{from} #{amount}")
     CrazyMoney.new(money.exchange_to(to).to_s)

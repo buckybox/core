@@ -70,7 +70,7 @@ group :default do # XXX: all environments, think twice before adding Gems here
   gem "secure_headers", "< 4" # TODO: upgrade
   gem "bugsnag"
 
-  gem "google_currency", require: false
+  gem "eu_central_bank", require: false
   gem "monetize", require: false
   gem "paypal-sdk-rest", require: false
   gem "xero_gateway", require: false
