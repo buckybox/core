@@ -60,11 +60,11 @@ BuckyBox::Application.configure do
   # SMTP settings
   config.action_mailer.delivery_method = :smtp
   config.action_mailer.smtp_settings = {
-    address: "smtp.sparkpostmail.com",
+    address: Figaro.env.smtp_host,
     port: 587,
     enable_starttls_auto: true, # detects and uses STARTTLS
-    user_name: Figaro.env.sparkpost_username,
-    password: Figaro.env.sparkpost_password,
+    user_name: Figaro.env.smtp_username,
+    password: Figaro.env.smtp_password,
     authentication: 'login',
   }
 

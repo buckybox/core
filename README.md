@@ -26,7 +26,7 @@ It is composed of three parts:
 See [config/application.yml](config/application.yml.example):
 
 - required variable: `SECRET_TOKEN`
-- to send emails (recommended): `SPARKPOST_USERNAME` and `SPARKPOST_PASSWORD`
+- to send emails (recommended): `SMTP_HOST`, `SMTP_USERNAME` and `SMTP_PASSWORD`
 - to interface with the web store (optional): `API_MASTER_KEY` and `API_MASTER_SECRET`
 - other variables can be left to default values.
 

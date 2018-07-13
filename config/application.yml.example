@@ -9,7 +9,7 @@ CONSUMER_SITE_URL: "https://store.buckybox.com/"
 
 # Emails
 SUPPORT_EMAIL: "support@buckybox.com"
-NO_REPLY_EMAIL: "no-reply@buckybox.com"
+NO_REPLY_EMAIL: "noreply@buckybox.com"
 SIGNUPS_EMAIL: "signups@buckybox.com"
 SYSALERTS_EMAIL: "sysalerts@buckybox.com"
 MAIL_SAFE: "crashtestdummy@buckybox.com"
@@ -42,6 +42,7 @@ LIBRATO_SUITES: "-rack,-rack_status,-rack_method,-rails_render"
 # Pingdom
 PINGDOM_RUM_ID: ""
 
-# Sparkpost
-SPARKPOST_USERNAME: ""
-SPARKPOST_PASSWORD: ""
+# SMTP
+SMTP_HOST: ""
+SMTP_USERNAME: ""
+SMTP_PASSWORD: ""
