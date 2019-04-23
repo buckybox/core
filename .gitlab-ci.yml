@@ -22,7 +22,7 @@ before_script:
   - apt-get -qq -o=Dpkg::Use-Pty=0 install libicu-dev # required by charlock_holmes Gem
   - apt-get -qq -o=Dpkg::Use-Pty=0 install imagemagick # required by carrierwave Gem
   - apt-get -qq -o=Dpkg::Use-Pty=0 install postgresql-client # for psql command
-  - gem install bundler --no-ri --no-rdoc
+  - gem install bundler --no-document
   - bundle install -j $(nproc) --path vendor
 
 integration:
