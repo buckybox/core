@@ -110,7 +110,7 @@ class DataIntegrity
                                      .where("display_time::date = ?", utc_date) # display_time is UTC
                                      .count
 
-        if delivery_count != deduction_count
+        if (delivery_count - deduction_count).abs > 5
           error "Distributor ##{distributor.id}: #{delivery_count} deliveries on #{local_date} but #{deduction_count} deductions"
         end
       end
