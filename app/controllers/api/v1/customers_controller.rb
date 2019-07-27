@@ -19,7 +19,7 @@ class Api::V1::CustomersController < Api::V1::BaseController
 
   def_param_group :customer do
     # :nocov:
-    param :customer, Object, "JSON String ", required: true do
+    param :customer, Object, "JSON String", required: true do
       param :first_name, String, "First name of the customer", required: true
       param :last_name, String, "Last name of the customer"
       param :email, String, "Customer's email address", required: true

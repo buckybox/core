@@ -2,6 +2,7 @@
 SECRET_TOKEN: ""
 HOST: "localhost"
 PORT: "3000"
+HOST_WITH_PORT: "localhost:3000"
 
 # URLs
 MARKETING_SITE_URL: "http://www.buckybox.com/"
