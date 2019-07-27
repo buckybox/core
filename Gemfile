@@ -53,7 +53,6 @@ group :default do # XXX: all environments, think twice before adding Gems here
   gem "rails-timeago"
   gem "fast_blank"
   gem "retryable"
-  gem "foreman"
   gem "rails-patch-json-encode"
   gem "oj"
   gem "crazy_money"

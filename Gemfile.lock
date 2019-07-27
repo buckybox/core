@@ -239,8 +239,6 @@ GEM
     ffi (1.9.25)
     figaro (1.1.1)
       thor (~> 0.14)
-    foreman (0.84.0)
-      thor (~> 0.19.1)
     formatador (0.2.5)
     geokit (1.11.0)
     geokit-rails (2.3.0)
@@ -611,7 +609,6 @@ DEPENDENCIES
   fabrication
   fast_blank
   figaro
-  foreman
   geokit-rails
   guard-rspec
   haml-rails

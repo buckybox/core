@@ -3,7 +3,7 @@
 1. `cp config/application.yml.example config/application.yml`
 1. `bundle install`
 1. `bundle exec rake db:setup`
-1. `bundle exec foreman start`
+1. `bundle exec rails s`
 1. `open http://localhost:3000/distributor`
 1. Log in with demo@example.net:changeme
 
