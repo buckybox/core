@@ -21,7 +21,7 @@ group :default do # XXX: all environments, think twice before adding Gems here
   gem "devise-i18n"
   gem "simple_form", "< 3"
   gem "inherited_resources"
-  gem "mini_magick", "< 4"
+  gem "mini_magick"
   gem "carrierwave"
   gem "acts-as-taggable-on"
   gem "pg_search"
