@@ -42,7 +42,7 @@
 
           %tr.edit.background-yellow
             %td
-              = f.input_field :name, name: "line_items[#{line_item.id}][name]", class: 'name', required: true, placeholder: "Remove item #{line_item.name}", value: line_item.name, required: false, 'data-original-value' => line_item.name
+              = f.input_field :name, name: "line_items[#{line_item.id}][name]", class: 'name', required: false, placeholder: "Remove item #{line_item.name}", value: line_item.name, 'data-original-value' => line_item.name
               %button.remove &times;
 
             %td
