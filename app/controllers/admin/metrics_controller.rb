@@ -31,10 +31,12 @@ class Admin::MetricsController < Admin::BaseController
   caches_action :sales, expires_in: 1.day
   def sales
     require 'money'
-    require 'money/bank/google_currency'
+    require 'eu_central_bank'
     require 'monetize'
 
-    Money.default_bank = Money::Bank::GoogleCurrency.new
+    eu_bank = EuCentralBank.new
+    eu_bank.update_rates
+    Money.default_bank = eu_bank
 
     data = Distributor.paying.map do |distributor|
       amount = distributor.invoices.last.try(:amount)
