@@ -3,7 +3,7 @@ class Admin::MetricsController < Admin::BaseController
 
   caches_action :transactional_customers, expires_in: 1.week
   def transactional_customers
-    beginning = Date.iso8601("2013-01-01")
+    beginning = 3.years.ago.to_date
     yesterday = Time.now.utc.to_date - 1.day
     data = []
     previous_cumulative_count = 0
