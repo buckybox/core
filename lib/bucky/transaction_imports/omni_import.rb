@@ -2,7 +2,7 @@ require "csv"
 
 module Bucky::TransactionImports
   class OmniImport
-    CSV_SEPARATORS = [",", ";"].freeze
+    CSV_SEPARATORS = [",", ";", "\t"].freeze
 
     def self.test_yaml
       <<EOY
