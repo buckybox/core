@@ -149,9 +149,10 @@ class Distributor < ActiveRecord::Base
         when "NZ"
           Billing::XeroInvoice.create!(invoice)
         else
-          Billing::PaypalInvoice.create!(invoice)
+          # XXX: no need to create invoice as we expect bank deposits
         end
 
+      number ||= invoice.id # use invoice ID if we don't already have a number from upstream
       invoice.update_attribute(:number, number)
     end
   end
@@ -163,7 +164,7 @@ class Distributor < ActiveRecord::Base
         when "NZ"
           Billing::XeroInvoice.overdue_invoices(distributor.email)
         else
-          Billing::PaypalInvoice.overdue_invoices(distributor.email)
+          # TODO: account statement reconciliation
         end
 
       distributor.update_column(:overdue, urls.join("\n"))

@@ -49,8 +49,19 @@
     = current_pricing.current_usage.with_currency(current_pricing.currency)
     = "(since #{current_pricing.last_invoiced_date})"
 
-%hr
+- if bank_account
+  %hr
+  .row-fluid{style: "color: red"}
+    %strong.span2 Bank Account Details
+    .span10
+      %strong Starting 1 June 2020, please pay through bank deposit into the following account:
+      %p
+        Account Holder: Bucky Box Limited
+        %br
+        = bank_account.gsub("\n", "<br>").html_safe
+      Please make sure to include the invoice reference below along with your wire transfer for prompt reconciliation.
 
+%hr
 
 - if invoices.present?
   .row-fluid{style: "padding-top: 4em"}
@@ -62,7 +73,7 @@
       %table.table.table-hover
         %thead
           %tr
-            %th Number
+            %th{style: "color: red"} Reference
             %th From
             %th To
             %th Description
@@ -70,7 +81,7 @@
         %tbody
           - invoices.each do |invoice|
             %tr
-              %td= invoice.number || "N/A"
+              %td{style: "color: red"}= invoice.reference
               %td= invoice.from
               %td= invoice.to
               %td= invoice.description

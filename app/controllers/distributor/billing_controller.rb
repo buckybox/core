@@ -7,11 +7,24 @@ class Distributor::BillingController < Distributor::BaseController
       (next_pricing && next_pricing == pricing) || (!next_pricing && current_pricing == pricing)
     end
 
+    bank_account = \
+      case current_pricing.currency
+      when 'NZD'
+        nil
+      when 'AUD'
+        SimpleForm::BankAccountNumber::Formatter.formatted_bank_account_number(Figaro.env.transferwise_bank_account_au, 'AU').to_s
+      when 'GBP'
+        SimpleForm::BankAccountNumber::Formatter.formatted_bank_account_number(Figaro.env.transferwise_bank_account_gb, 'GB').to_s
+      else
+        SimpleForm::BankAccountNumber::Formatter.formatted_bank_account_number(Figaro.env.transferwise_bank_account_nz, 'NZ').to_s
+      end
+
     render locals: {
       current_pricing: current_pricing,
       next_pricing: next_pricing,
       other_pricings: other_pricings,
       invoices: last_invoices,
+      bank_account: bank_account,
     }
   end
 end

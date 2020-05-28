@@ -71,7 +71,6 @@ group :default do # XXX: all environments, think twice before adding Gems here
 
   gem "eu_central_bank", require: false
   gem "monetize", require: false
-  gem "paypal-sdk-rest", require: false
   gem "xero_gateway", require: false
 end
 

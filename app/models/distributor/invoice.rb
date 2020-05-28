@@ -33,4 +33,8 @@ class Distributor::Invoice < ActiveRecord::Base
       )
     end
   end
+
+  def reference
+    "B#{distributor.id}B#{number}X"
+  end
 end
