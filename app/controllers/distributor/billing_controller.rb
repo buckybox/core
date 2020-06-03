@@ -13,6 +13,8 @@ class Distributor::BillingController < Distributor::BaseController
         nil
       when 'AUD'
         SimpleForm::BankAccountNumber::Formatter.formatted_bank_account_number(Figaro.env.transferwise_bank_account_au, 'AU').to_s
+      when 'EUR'
+        SimpleForm::BankAccountNumber::Formatter.formatted_bank_account_number(Figaro.env.transferwise_bank_account_be, 'BE').to_s
       when 'GBP'
         SimpleForm::BankAccountNumber::Formatter.formatted_bank_account_number(Figaro.env.transferwise_bank_account_gb, 'GB').to_s
       else
