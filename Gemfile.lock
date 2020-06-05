@@ -542,7 +542,7 @@ GEM
     webrick (1.4.2)
     websocket-driver (0.7.0)
       websocket-extensions (>= 0.1.0)
-    websocket-extensions (0.1.3)
+    websocket-extensions (0.1.5)
     whenever (0.10.0)
       chronic (>= 0.6.3)
     xero_gateway (2.5.0)
