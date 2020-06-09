@@ -167,7 +167,7 @@ class Distributor < ActiveRecord::Base
           # TODO: account statement reconciliation
         end
 
-      distributor.update_column(:overdue, urls.join("\n"))
+      distributor.update_column(:overdue, urls.first)
     end
   end
 

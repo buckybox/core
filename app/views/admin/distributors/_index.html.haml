@@ -13,7 +13,7 @@
             = distributor.contact_name
           %span.pull-right{style: "font-variant: small-caps"}
             - if distributor.overdue.present?
-              %span{title: distributor.overdue.count("\n").succ, style: "color: red"} [OVERDUE]
+              %span{title: distributor.overdue, style: "color: red"} [OVERDUE]
             - if distributor.access_locked?
               %span{title: "locked at #{distributor.locked_at}", style: "color: orange"} [LOCKED]
         .span2

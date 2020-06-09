@@ -5,7 +5,7 @@ class Distributor::BaseController < ApplicationController
   before_action :mark_as_seen
   before_action :notifications
   before_action :distributor_setup
-  before_action :check_if_very_overdue
+  before_action :check_if_overdue
 
 private
 
@@ -25,9 +25,8 @@ private
     redirect_to distributor_root_url and return unless distributor_setup.finished_settings?
   end
 
-  def check_if_very_overdue
-    # redirect to billing if more than 1 overdue invoice
-    if current_distributor.overdue.count("\n").positive? && request.path != distributor_billing_path
+  def check_if_overdue
+    if current_distributor.overdue.present? && request.path != distributor_billing_path
       redirect_to distributor_billing_path and return
     end
   end

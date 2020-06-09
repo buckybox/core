@@ -6,10 +6,10 @@
 
 - content_for :body do
   .container
-    - if false && flash.empty? && current_distributor.overdue.present? # FIXME: reenable in June
+    - if flash.empty? && current_distributor.overdue.present?
       %div{style: "position: fixed; top: 0; left: 0; right: 0; text-align: center; z-index: 100"}
-        = flash_bar("Uh-oh! Your account is overdue and will be locked out soon, please <a target=\"_blank\" href=\"#{current_distributor.overdue.split("\n").first}\">pay your invoice</a>.<br>If you paid recently, your payment may take up to 24 hours to register.".html_safe, kind: :error, close: false)
-    - if flash.empty? && current_distributor.pricing.currency != "NZD"
+        = flash_bar("Uh-oh! Your account is overdue and will be locked out soon, please <a target=\"_blank\" href=\"#{current_distributor.overdue}\">pay your invoice</a>.<br>If you paid recently, your payment may take up to 24 hours to register.".html_safe, kind: :error, close: false)
+    - elsif flash.empty? && current_distributor.pricing.currency != "NZD"
       %div{style: "position: fixed; top: 0; left: 0; right: 0; text-align: center; z-index: 100"}
         = flash_bar("Heads up! Starting 1 June 2020, please pay using bank deposit instead of PayPal.<br>Our bank account details can be found on your #{link_to 'billing page', distributor_billing_path}. The invoices sent before June shall still be paid through PayPal. Thanks.".html_safe, kind: :warning, close: true)
 
