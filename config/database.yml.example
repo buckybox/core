@@ -3,15 +3,15 @@ development:
   encoding: unicode
   database: bucky_box_development
   pool: 5
-  username: developer
-  password:
+  username: buckybox
+  password: dummy
 
 test:
   adapter: postgresql
   encoding: unicode
   database: bucky_box_test<%= ENV['TEST_ENV_NUMBER'] %>
   pool: 5
-  username: <%= ENV.fetch("POSTGRES_USER", "root") %>
+  username: <%= ENV.fetch("POSTGRES_USER", "buckybox") %>
   password: <%= ENV.fetch("POSTGRES_PASSWORD", "") %>
   host: <%= ENV.fetch("POSTGRES_HOST", "localhost") %>
 
@@ -20,5 +20,5 @@ production:
   encoding: unicode
   database: bucky_box_production
   pool: 5
-  username: developer
+  username: buckybox
   password:

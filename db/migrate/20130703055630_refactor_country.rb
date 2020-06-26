@@ -1,5 +1,11 @@
 class RefactorCountry < ActiveRecord::Migration
   def up
+    filepath = File.join(Bucky::Sql::PATH, 'templates', 'countries.sql')
+    if File.exist?(filepath)
+      execute File.read(filepath)
+      return
+    end
+
     add_column :countries, :alpha2, :string, limit: 2, null: false, default: ""
     add_index :countries, :alpha2
 

@@ -1,4 +1,6 @@
 class UpdateRouteSchedules < ActiveRecord::Migration
+  class Route < ActiveRecord::Base; end
+
   def up
     Route.reset_column_information
     ScheduleRule.reset_column_information
