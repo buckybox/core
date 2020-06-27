@@ -1,0 +1,46 @@
+#!/bin/bash
+
+set -eo pipefail
+
+# Source common file
+SCRIPT_DIR=$(dirname "${0}")
+source "${SCRIPT_DIR}/distributor_data_common"
+
+# Check for data directory
+if [ ! -d "${DATA_DIR}" ]; then
+  echo "WARN -- Data directory doesn't exist at ${DATA_DIR}, creating it"
+  mkdir -p ${DATA_DIR}
+fi
+
+# For each distributor ...
+for DIST_ID in $(echo "${BUCKYBOX_DISTRIBUTOR_IDS}" | sed 's/,/ /g'); do
+
+  # Store IFS (table file contains spaces)
+  OIFS="$IFS"
+  IFS=$'\n'
+
+  # Create distributor output directory
+  if [ ! -d "${DATA_DIR}/distributor_${DIST_ID}" ]; then
+    mkdir "${DATA_DIR}/distributor_${DIST_ID}"
+  fi
+  echo "==== Dumping data for distributor ID ${DIST_ID} to ${DATA_DIR}/distributor_${DIST_ID}"
+
+  # For each table, dump using the correct query
+  for LINE in $(cat "${TABLES_FILE}" | grep -Ev '^#|^$'); do
+
+    # Split table and query
+    TABLE=${LINE%|*}
+    QUERY_TEMPLATE=${LINE#*|}
+    CSV_FILE="${DATA_DIR}/distributor_${DIST_ID}/${TABLE}.csv"
+
+    # Replace ID placeholder
+    QUERY_REAL=$(echo "${QUERY_TEMPLATE}" | sed "s/DISTRIBUTOR_ID_PLACEHOLDER/${DIST_ID}/g")
+
+    # Actually run the query
+    echo "INFO -- ${TABLE} : Running '${QUERY_REAL}'"
+    psql -h "${DB_HOST}" -U "${DB_USER}" -d "${DB_SCHEMA}" -c "\COPY (${QUERY_REAL}) TO '${CSV_FILE}' DELIMITER ',' CSV HEADER"
+  done
+
+  # Reset IFS
+  IFS="$OIFS"
+done

@@ -1,0 +1,61 @@
+#!/bin/bash
+
+set -eo pipefail
+
+# Source common file
+SCRIPT_DIR=$(dirname "${0}")
+source "${SCRIPT_DIR}/distributor_data_common"
+
+# Check for data directory
+if [ ! -d "${DATA_DIR}" ]; then
+  echo "ERROR -- Data directory doesn't exist at ${DATA_DIR}" >&2
+  exit 1
+fi
+
+# For each distributor ...
+for DIST_ID in $(echo "${BUCKYBOX_DISTRIBUTOR_IDS}" | sed 's/,/ /g'); do
+
+  # Store IFS (table file contains spaces)
+  OIFS="$IFS"
+  IFS=$'\n'
+
+  # Clear the table for that distributor if configured to do so
+  if [ ${CLEAR:-0} -eq 1 ]; then
+    echo "INFO -- Clearing data for distributor ${DIST_ID}"
+    psql -h "${DB_HOST}" -U "${DB_USER}" -d "${DB_SCHEMA}" -c "DELETE FROM distributors WHERE id = ${DIST_ID}"
+  fi
+
+  # For each table, run the import
+  for LINE in $(cat "${TABLES_FILE}" | grep -Ev '^#|^$'); do
+    TABLE=${LINE%|*}
+    FILE="${DATA_DIR}/distributor_${DIST_ID}/${TABLE}.csv"
+
+    if [ ! -f "${FILE}" ]; then
+      echo "ERROR -- CSV file for ${TABLE} does not exist at ${FILE}" >&2
+      continue
+    else
+      echo "INFO -- Importing table ${TABLE} from ${FILE}"
+
+      case $TABLE in
+        # XXX: for some complex tables, we need to specify the columns
+        # explicitely ortherwise PostgreSQL gets confused about the column order
+        # https://gis.stackexchange.com/a/320846
+
+        distributors)
+          COLUMNS="(id,email,encrypted_password,reset_password_token,reset_password_sent_at,remember_created_at,sign_in_count,current_sign_in_at,last_sign_in_at,current_sign_in_ip,last_sign_in_ip,password_salt,confirmation_token,confirmed_at,confirmation_sent_at,failed_attempts,unlock_token,locked_at,authentication_token,created_at,updated_at,name,url,company_logo,completed_wizard,parameter_name,separate_bucky_fee,support_email,time_zone,advance_hour,advance_days,currency,country_id,consumer_delivery_fee_cents,active_webstore,city,company_team_image,about,details,facebook_url,customers_show_intro,deliveries_index_packing_intro,deliveries_index_deliveries_intro,payments_index_intro,customers_index_intro,has_balance_threshold,default_balance_threshold_cents,send_email,send_halted_email,feature_spend_limit,contact_name,customer_can_remove_orders,collect_phone,last_seen_at,notes,payment_cash_on_delivery,payment_bank_deposit,payment_credit_card,require_postcode,require_phone,require_address_1,require_address_2,require_suburb,require_city,keep_me_updated,email_templates,notify_address_change,phone,collect_delivery_note,require_delivery_note,notify_for_new_webstore_order,sidebar_description,api_key,api_secret,email_customer_on_new_webstore_order,email_customer_on_new_order,email_distributor_on_new_webstore_order,customer_can_edit_orders,payment_paypal,paypal_email,locale,overdue,ga_tracking_id,status,intercom_id,addons)"
+          ;;
+        transactions)
+          COLUMNS="(id,account_id,amount_cents,description,created_at,updated_at,display_time,transactionable_id,transactionable_type,reverse_transactionable_id,reverse_transactionable_type)"
+          ;;
+        *)
+          COLUMNS=""
+          ;;
+      esac
+
+      psql -h "${DB_HOST}" -U "${DB_USER}" -d "${DB_SCHEMA}" -c "\COPY ${TABLE} ${COLUMNS} FROM '${FILE}' DELIMITER ',' CSV HEADER"
+    fi
+  done
+
+  # Reset IFS
+  IFS="$OIFS"
+done

@@ -1,0 +1,50 @@
+#!/bin/bash
+
+# Variables
+TODAY=$(date +%Y-%m-%d)
+DATA_DIR="/var/tmp/buckybox_distributor_data/${TODAY}"
+TABLES_FILE="${SCRIPT_DIR}/../db/distributor_script_tables.txt"
+DB_CONFIG="${SCRIPT_DIR}/../config/database.yml"
+
+# Check for rails env var
+if [ -z ${RAILS_ENV} ]; then
+  echo "ERROR -- Need to set RAILS_ENV environment variable" >&2
+  exit 1
+fi
+
+# Check for distributor env var
+if [ -z ${BUCKYBOX_DISTRIBUTOR_IDS} ]; then
+  echo "ERROR -- Need to set BUCKYBOX_DISTRIBUTOR_IDS environment variable" >&2
+  exit 1
+fi
+
+# Check for database.yaml
+if [ ! -f "${DB_CONFIG}" ]; then
+  echo "ERROR -- database.yaml file does not exist!" >&2
+  exit 1
+fi
+
+# Extract environemnt database config
+DB_HOST=$(sed -n "/${RAILS_ENV}:/,/^$/p" "${DB_CONFIG}" | grep 'host:' | cut -f2 -d: | tr -d ' ')
+DB_USER=$(sed -n "/${RAILS_ENV}:/,/^$/p" "${DB_CONFIG}" | grep 'username:' | cut -f2 -d: | tr -d ' ')
+DB_SCHEMA=$(sed -n "/${RAILS_ENV}:/,/^$/p" "${DB_CONFIG}" | grep 'database:' | cut -f2 -d: | tr -d ' ')
+
+# Use default localhost if not found
+if [ "${DB_HOST}x" == "x" ]; then
+  echo "WARN -- Database host not found in ${DB_CONFIG} for environment ${RAILS_ENV}, defaulting to 'localhost'"
+  DB_HOST="localhost"
+fi
+
+# Check for tables list
+if [ ! -f "${TABLES_FILE}" ]; then
+  echo "ERROR -- Unable to read table list from ${TABLES_FILE}" >&2
+  exit 1
+else
+  echo "INFO -- Using table file at ${TABLES_FILE}"
+fi
+
+# Check for Postgres password file
+if [ ! -f ~/.pgpass ]; then
+  echo "ERROR -- Postgres credentials file at ~/.pgpass not found" >&2
+  exit 1
+fi
