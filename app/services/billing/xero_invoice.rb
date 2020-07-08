@@ -62,9 +62,16 @@ module Billing
         where: "Status=\"AUTHORISED\"",
       ).invoices
 
-      invoices.select do |invoice|
+      overdue_invoice_numbers = invoices.select do |invoice|
         invoice.due_date < Date.yesterday
       end.map(&:invoice_number)
+
+      Distributor \
+        .find_by(email: email) \
+        .invoices.where("number NOT IN (?)", overdue_invoice_numbers) \
+        .update_all(paid: true)
+
+      overdue_invoice_numbers
     end
   end
 end
