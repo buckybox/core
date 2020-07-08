@@ -1,0 +1,70 @@
+# == Main distributors table and immediate childless dependencies (can be imported in any order)
+countries|SELECT c.* FROM countries c JOIN distributors d ON d.country_id = c.id WHERE d.id = DISTRIBUTOR_ID_PLACEHOLDER
+distributors|SELECT * FROM distributors WHERE id = DISTRIBUTOR_ID_PLACEHOLDER
+events|SELECT * FROM events WHERE distributor_id = DISTRIBUTOR_ID_PLACEHOLDER
+extras|SELECT * FROM extras WHERE distributor_id = DISTRIBUTOR_ID_PLACEHOLDER
+distributor_invoices|SELECT * FROM distributor_invoices WHERE distributor_id = DISTRIBUTOR_ID_PLACEHOLDER
+distributor_logins|SELECT * FROM distributor_logins WHERE distributor_id = DISTRIBUTOR_ID_PLACEHOLDER
+distributor_pricings|SELECT * FROM distributor_pricings WHERE distributor_id = DISTRIBUTOR_ID_PLACEHOLDER
+bank_information|SELECT * FROM bank_information WHERE distributor_id = DISTRIBUTOR_ID_PLACEHOLDER
+delivery_lists|SELECT * FROM delivery_lists WHERE distributor_id = DISTRIBUTOR_ID_PLACEHOLDER
+packing_lists|SELECT * FROM packing_lists WHERE distributor_id = DISTRIBUTOR_ID_PLACEHOLDER
+boxes|SELECT * FROM boxes WHERE distributor_id = DISTRIBUTOR_ID_PLACEHOLDER
+line_items|SELECT * FROM line_items WHERE distributor_id = DISTRIBUTOR_ID_PLACEHOLDER
+
+# box_extras requires boxes and extras
+box_extras|SELECT be.* FROM box_extras be JOIN boxes b ON b.id = be.box_id WHERE b.distributor_id = DISTRIBUTOR_ID_PLACEHOLDER
+
+# Omni Importers
+omni_importers|SELECT oi.* FROM omni_importers oi JOIN distributors_omni_importers doi ON doi.omni_importer_id = oi.id WHERE doi.distributor_id = DISTRIBUTOR_ID_PLACEHOLDER
+distributors_omni_importers|SELECT * FROM distributors_omni_importers WHERE distributor_id = DISTRIBUTOR_ID_PLACEHOLDER
+
+# Transaction importers - requires omni_importers and distributors
+import_transaction_lists|SELECT * FROM import_transaction_lists WHERE distributor_id = DISTRIBUTOR_ID_PLACEHOLDER
+
+# Deliveries
+delivery_services|SELECT * FROM delivery_services WHERE distributor_id = DISTRIBUTOR_ID_PLACEHOLDER
+
+# Main customers table and immediate childless dependencies - requires distributors, delivery_services
+customers|SELECT * FROM customers WHERE distributor_id = DISTRIBUTOR_ID_PLACEHOLDER
+addresses|SELECT a.* FROM addresses a JOIN customers c ON c.id = a.customer_id WHERE c.distributor_id = DISTRIBUTOR_ID_PLACEHOLDER
+customer_checkouts|SELECT cc.* FROM customer_checkouts cc JOIN customers c ON c.id = cc.customer_id WHERE c.distributor_id = DISTRIBUTOR_ID_PLACEHOLDER
+customer_logins|SELECT * FROM customer_logins WHERE distributor_id = DISTRIBUTOR_ID_PLACEHOLDER
+accounts|SELECT a.* FROM accounts a JOIN customers c ON c.id = a.customer_id WHERE c.distributor_id = DISTRIBUTOR_ID_PLACEHOLDER
+activities|SELECT a.* FROM activities a JOIN customers c ON c.id = a.customer_id WHERE c.distributor_id = DISTRIBUTOR_ID_PLACEHOLDER
+
+# Transactions - requires accounts
+transactions|SELECT t.* FROM transactions t JOIN accounts a ON a.id = t.account_id JOIN customers c ON c.id = a.customer_id WHERE c.distributor_id = DISTRIBUTOR_ID_PLACEHOLDER
+payments|SELECT * FROM payments WHERE distributor_id = DISTRIBUTOR_ID_PLACEHOLDER
+
+# Deductions - requires customers, accounts, transactions
+deductions|SELECT * FROM deductions WHERE distributor_id = DISTRIBUTOR_ID_PLACEHOLDER
+
+# Import Transactions - requires customer, import_transaction_lists and transactions
+import_transactions|SELECT it.* FROM import_transactions it JOIN customers c ON c.id = it.customer_id WHERE c.distributor_id = DISTRIBUTOR_ID_PLACEHOLDER
+
+# Orders - requires accounts, packing_lists
+orders|SELECT o.* FROM orders o JOIN boxes b ON b.id = o.box_id WHERE b.distributor_id = DISTRIBUTOR_ID_PLACEHOLDER
+
+# Order dependencies - requires orders, line_items
+exclusions|SELECT * FROM exclusions e JOIN line_items li ON li.id = e.line_item_id WHERE li.distributor_id = DISTRIBUTOR_ID_PLACEHOLDER
+substitutions|SELECT s.* FROM substitutions s JOIN orders o ON s.order_id = o.id JOIN boxes b ON b.id = o.box_id WHERE b.distributor_id = DISTRIBUTOR_ID_PLACEHOLDER
+
+# Packages - requires packing_lists, orders
+packages|SELECT p.* FROM packages p JOIN orders o ON p.order_id = o.id JOIN boxes b ON b.id = o.box_id WHERE b.distributor_id = DISTRIBUTOR_ID_PLACEHOLDER
+
+# Deliveries and immediate dependencies - requires orders, delivery_services, packages
+deliveries|SELECT d.* FROM deliveries d JOIN delivery_services ds ON ds.id = d.delivery_service_id WHERE ds.distributor_id = DISTRIBUTOR_ID_PLACEHOLDER
+delivery_sequence_orders|SELECT dso.* FROM delivery_sequence_orders dso JOIN delivery_services ds ON dso.delivery_service_id = ds.id WHERE ds.distributor_id = DISTRIBUTOR_ID_PLACEHOLDER
+delivery_service_schedule_transactions|SELECT dsst.* FROM delivery_service_schedule_transactions dsst JOIN delivery_services ds ON dsst.delivery_service_id = ds.id WHERE ds.distributor_id = DISTRIBUTOR_ID_PLACEHOLDER
+
+# Order Extras - requires orders, extras
+order_extras|SELECT oe.* FROM order_extras oe JOIN orders o ON oe.order_id = o.id JOIN boxes b ON b.id = o.box_id WHERE b.distributor_id = DISTRIBUTOR_ID_PLACEHOLDER
+
+# Order schedule transactions - requires orders, deliveries, delivery_services
+order_schedule_transactions|SELECT ost.* FROM order_schedule_transactions ost JOIN deliveries d ON d.id = ost.delivery_id JOIN delivery_services ds ON ds.id = d.delivery_list_id WHERE ds.distributor_id = DISTRIBUTOR_ID_PLACEHOLDER
+
+# Schedules
+schedule_rules|SELECT * FROM schedule_rules WHERE scheduleable_id IN (SELECT id FROM delivery_services WHERE distributor_id = DISTRIBUTOR_ID_PLACEHOLDER) OR scheduleable_id IN (SELECT o.id FROM orders o JOIN boxes b ON b.id = o.box_id WHERE b.distributor_id = DISTRIBUTOR_ID_PLACEHOLDER)
+schedule_transactions|SELECT st.* FROM schedule_transactions st JOIN schedule_rules sr ON st.schedule_rule_id = sr.id WHERE sr.id IN (SELECT * FROM schedule_rules WHERE scheduleable_id IN (SELECT id FROM delivery_services WHERE distributor_id = DISTRIBUTOR_ID_PLACEHOLDER) OR scheduleable_id IN (SELECT o.id FROM orders o JOIN boxes b ON b.id = o.box_id WHERE b.distributor_id = DISTRIBUTOR_ID_PLACEHOLDER))
+schedule_pauses|SELECT sp.* FROM schedule_pauses sp JOIN schedule_rules sr ON sr.schedule_pause_id = sp.id WHERE sr.id IN (SELECT id FROM schedule_rules WHERE scheduleable_id IN (SELECT id FROM delivery_services WHERE distributor_id = DISTRIBUTOR_ID_PLACEHOLDER) OR scheduleable_id IN (SELECT o.id FROM orders o JOIN boxes b ON b.id = o.box_id WHERE b.distributor_id = DISTRIBUTOR_ID_PLACEHOLDER))
