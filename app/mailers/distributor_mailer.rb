@@ -15,4 +15,14 @@ class DistributorMailer < ApplicationMailer
          from: "Bucky Box Support <#{Figaro.env.support_email}>",
          subject: "[Bucky Box] Setting up your bank feed"
   end
+
+  def invoice(distributor, invoice)
+    @distributor = distributor
+    @invoice = invoice
+
+    mail to: @distributor.email_to,
+         cc: "sysadmins@buckybox.com",
+         from: "Bucky Box Support <#{Figaro.env.support_email}>",
+         subject: "[Bucky Box] Your new invoice #{@invoice.reference}"
+  end
 end

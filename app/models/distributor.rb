@@ -154,6 +154,8 @@ class Distributor < ActiveRecord::Base
 
       number ||= invoice.id # use invoice ID if we don't already have a number from upstream
       invoice.update_attribute(:number, number)
+
+      DistributorMailer.invoice(distributor, invoice).deliver_now
     end
   end
 
