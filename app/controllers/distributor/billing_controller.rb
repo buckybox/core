@@ -1,6 +1,6 @@
 class Distributor::BillingController < Distributor::BaseController
   def show
-    last_invoices = current_distributor.invoices.order('distributor_invoices.to').last(5).reverse
+    last_invoices = current_distributor.invoices.where("created_at >= ?", Date.iso8601("2020-06-01")).order('distributor_invoices.to').last(5).reverse
     current_pricing = current_distributor.pricing
     next_pricing = Distributor::Pricing.where(distributor_id: current_distributor.id).last
     other_pricings = current_pricing.pricings_for_currency.reject do |pricing|

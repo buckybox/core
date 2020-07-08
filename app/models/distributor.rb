@@ -159,15 +159,15 @@ class Distributor < ActiveRecord::Base
 
   def self.check_for_overdue_invoices
     paying.each do |distributor|
-      urls = \
+      overdue_invoice = \
         case distributor.country.alpha2
         when "NZ"
           Billing::XeroInvoice.overdue_invoices(distributor.email)
         else
-          # TODO: account statement reconciliation
-        end
+          Billing::Transferwise.overdue_invoices(distributor)
+        end.first || ""
 
-      distributor.update_column(:overdue, urls.first)
+      distributor.update_column(:overdue, overdue_invoice)
     end
   end
 

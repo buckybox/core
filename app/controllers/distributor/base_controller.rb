@@ -5,7 +5,7 @@ class Distributor::BaseController < ApplicationController
   before_action :mark_as_seen
   before_action :notifications
   before_action :distributor_setup
-  before_action :check_if_overdue
+  # before_action :check_if_overdue # FIXME: reenable soon because I'm too nice...
 
 private
 

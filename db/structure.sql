@@ -2,42 +2,27 @@
 -- PostgreSQL database dump
 --
 
--- Dumped from database version 9.5.4
--- Dumped by pg_dump version 9.5.4
+-- Dumped from database version 9.5.22
+-- Dumped by pg_dump version 12.3
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
+SET idle_in_transaction_session_timeout = 0;
 SET client_encoding = 'UTF8';
 SET standard_conforming_strings = on;
+SELECT pg_catalog.set_config('search_path', '', false);
 SET check_function_bodies = false;
+SET xmloption = content;
 SET client_min_messages = warning;
 SET row_security = off;
 
---
--- Name: plpgsql; Type: EXTENSION; Schema: -; Owner: -
---
-
-CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA pg_catalog;
-
-
---
--- Name: EXTENSION plpgsql; Type: COMMENT; Schema: -; Owner: -
---
-
-COMMENT ON EXTENSION plpgsql IS 'PL/pgSQL procedural language';
-
-
-SET search_path = public, pg_catalog;
-
 SET default_tablespace = '';
-
-SET default_with_oids = false;
 
 --
 -- Name: schedule_rules; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE schedule_rules (
+CREATE TABLE public.schedule_rules (
     id integer NOT NULL,
     recur character varying(255),
     start date,
@@ -59,10 +44,10 @@ CREATE TABLE schedule_rules (
 
 
 --
--- Name: is_paused(date, schedule_rules); Type: FUNCTION; Schema: public; Owner: -
+-- Name: is_paused(date, public.schedule_rules); Type: FUNCTION; Schema: public; Owner: -
 --
 
-CREATE FUNCTION is_paused(test_date date, schedule_rule schedule_rules) RETURNS boolean
+CREATE FUNCTION public.is_paused(test_date date, schedule_rule public.schedule_rules) RETURNS boolean
     LANGUAGE plpgsql STABLE
     AS $$
 BEGIN
@@ -81,10 +66,10 @@ $$;
 
 
 --
--- Name: next_occurrence(date, schedule_rules); Type: FUNCTION; Schema: public; Owner: -
+-- Name: next_occurrence(date, public.schedule_rules); Type: FUNCTION; Schema: public; Owner: -
 --
 
-CREATE FUNCTION next_occurrence(from_date date, schedule_rule schedule_rules) RETURNS date
+CREATE FUNCTION public.next_occurrence(from_date date, schedule_rule public.schedule_rules) RETURNS date
     LANGUAGE plpgsql STABLE
     AS $$
 DECLARE
@@ -110,10 +95,10 @@ $$;
 
 
 --
--- Name: next_occurrence(date, boolean, boolean, schedule_rules); Type: FUNCTION; Schema: public; Owner: -
+-- Name: next_occurrence(date, boolean, boolean, public.schedule_rules); Type: FUNCTION; Schema: public; Owner: -
 --
 
-CREATE FUNCTION next_occurrence(from_date date, ignore_pauses boolean, ignore_halts boolean, schedule_rule schedule_rules) RETURNS date
+CREATE FUNCTION public.next_occurrence(from_date date, ignore_pauses boolean, ignore_halts boolean, schedule_rule public.schedule_rules) RETURNS date
     LANGUAGE plpgsql STABLE
     AS $$
 DECLARE
@@ -143,10 +128,10 @@ $$;
 
 
 --
--- Name: on_day(integer, schedule_rules); Type: FUNCTION; Schema: public; Owner: -
+-- Name: on_day(integer, public.schedule_rules); Type: FUNCTION; Schema: public; Owner: -
 --
 
-CREATE FUNCTION on_day(day integer, schedule_rule schedule_rules) RETURNS boolean
+CREATE FUNCTION public.on_day(day integer, schedule_rule public.schedule_rules) RETURNS boolean
     LANGUAGE plpgsql IMMUTABLE
     AS $$
 DECLARE
@@ -180,10 +165,10 @@ $$;
 
 
 --
--- Name: pause_finish(date, schedule_rules); Type: FUNCTION; Schema: public; Owner: -
+-- Name: pause_finish(date, public.schedule_rules); Type: FUNCTION; Schema: public; Owner: -
 --
 
-CREATE FUNCTION pause_finish(test_date date, schedule_rule schedule_rules) RETURNS date
+CREATE FUNCTION public.pause_finish(test_date date, schedule_rule public.schedule_rules) RETURNS date
     LANGUAGE plpgsql STABLE
     AS $$
 DECLARE
@@ -203,10 +188,10 @@ $$;
 
 
 --
--- Name: unpaused_next_occurrence(date, schedule_rules); Type: FUNCTION; Schema: public; Owner: -
+-- Name: unpaused_next_occurrence(date, public.schedule_rules); Type: FUNCTION; Schema: public; Owner: -
 --
 
-CREATE FUNCTION unpaused_next_occurrence(from_date date, schedule_rule schedule_rules) RETURNS date
+CREATE FUNCTION public.unpaused_next_occurrence(from_date date, schedule_rule public.schedule_rules) RETURNS date
     LANGUAGE plpgsql IMMUTABLE
     AS $$
 DECLARE
@@ -294,7 +279,7 @@ $$;
 -- Name: accounts; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE accounts (
+CREATE TABLE public.accounts (
     id integer NOT NULL,
     customer_id integer,
     balance_cents integer DEFAULT 0 NOT NULL,
@@ -309,7 +294,7 @@ CREATE TABLE accounts (
 -- Name: accounts_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE accounts_id_seq
+CREATE SEQUENCE public.accounts_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -321,14 +306,14 @@ CREATE SEQUENCE accounts_id_seq
 -- Name: accounts_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
-ALTER SEQUENCE accounts_id_seq OWNED BY accounts.id;
+ALTER SEQUENCE public.accounts_id_seq OWNED BY public.accounts.id;
 
 
 --
 -- Name: activities; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE activities (
+CREATE TABLE public.activities (
     id integer NOT NULL,
     customer_id integer NOT NULL,
     action text NOT NULL,
@@ -341,7 +326,7 @@ CREATE TABLE activities (
 -- Name: activities_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE activities_id_seq
+CREATE SEQUENCE public.activities_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -353,14 +338,14 @@ CREATE SEQUENCE activities_id_seq
 -- Name: activities_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
-ALTER SEQUENCE activities_id_seq OWNED BY activities.id;
+ALTER SEQUENCE public.activities_id_seq OWNED BY public.activities.id;
 
 
 --
 -- Name: addresses; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE addresses (
+CREATE TABLE public.addresses (
     id integer NOT NULL,
     customer_id integer,
     address_1 character varying(255),
@@ -382,7 +367,7 @@ CREATE TABLE addresses (
 -- Name: addresses_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE addresses_id_seq
+CREATE SEQUENCE public.addresses_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -394,14 +379,14 @@ CREATE SEQUENCE addresses_id_seq
 -- Name: addresses_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
-ALTER SEQUENCE addresses_id_seq OWNED BY addresses.id;
+ALTER SEQUENCE public.addresses_id_seq OWNED BY public.addresses.id;
 
 
 --
 -- Name: admins; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE admins (
+CREATE TABLE public.admins (
     id integer NOT NULL,
     email character varying(255) DEFAULT ''::character varying NOT NULL,
     encrypted_password character varying(128) DEFAULT ''::character varying NOT NULL,
@@ -422,7 +407,7 @@ CREATE TABLE admins (
 -- Name: admins_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE admins_id_seq
+CREATE SEQUENCE public.admins_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -434,14 +419,14 @@ CREATE SEQUENCE admins_id_seq
 -- Name: admins_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
-ALTER SEQUENCE admins_id_seq OWNED BY admins.id;
+ALTER SEQUENCE public.admins_id_seq OWNED BY public.admins.id;
 
 
 --
 -- Name: bank_information; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE bank_information (
+CREATE TABLE public.bank_information (
     id integer NOT NULL,
     distributor_id integer,
     name character varying(255),
@@ -458,7 +443,7 @@ CREATE TABLE bank_information (
 -- Name: bank_information_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE bank_information_id_seq
+CREATE SEQUENCE public.bank_information_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -470,14 +455,14 @@ CREATE SEQUENCE bank_information_id_seq
 -- Name: bank_information_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
-ALTER SEQUENCE bank_information_id_seq OWNED BY bank_information.id;
+ALTER SEQUENCE public.bank_information_id_seq OWNED BY public.bank_information.id;
 
 
 --
 -- Name: box_extras; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE box_extras (
+CREATE TABLE public.box_extras (
     id integer NOT NULL,
     box_id integer,
     extra_id integer,
@@ -490,7 +475,7 @@ CREATE TABLE box_extras (
 -- Name: box_extras_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE box_extras_id_seq
+CREATE SEQUENCE public.box_extras_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -502,14 +487,14 @@ CREATE SEQUENCE box_extras_id_seq
 -- Name: box_extras_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
-ALTER SEQUENCE box_extras_id_seq OWNED BY box_extras.id;
+ALTER SEQUENCE public.box_extras_id_seq OWNED BY public.box_extras.id;
 
 
 --
 -- Name: boxes; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE boxes (
+CREATE TABLE public.boxes (
     id integer NOT NULL,
     distributor_id integer,
     name character varying(255),
@@ -535,7 +520,7 @@ CREATE TABLE boxes (
 -- Name: boxes_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE boxes_id_seq
+CREATE SEQUENCE public.boxes_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -547,14 +532,14 @@ CREATE SEQUENCE boxes_id_seq
 -- Name: boxes_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
-ALTER SEQUENCE boxes_id_seq OWNED BY boxes.id;
+ALTER SEQUENCE public.boxes_id_seq OWNED BY public.boxes.id;
 
 
 --
 -- Name: countries; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE countries (
+CREATE TABLE public.countries (
     id integer NOT NULL,
     default_consumer_fee_cents integer DEFAULT 0 NOT NULL,
     created_at timestamp without time zone NOT NULL,
@@ -567,7 +552,7 @@ CREATE TABLE countries (
 -- Name: countries_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE countries_id_seq
+CREATE SEQUENCE public.countries_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -579,14 +564,14 @@ CREATE SEQUENCE countries_id_seq
 -- Name: countries_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
-ALTER SEQUENCE countries_id_seq OWNED BY countries.id;
+ALTER SEQUENCE public.countries_id_seq OWNED BY public.countries.id;
 
 
 --
 -- Name: cron_logs; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE cron_logs (
+CREATE TABLE public.cron_logs (
     id integer NOT NULL,
     log text,
     created_at timestamp without time zone NOT NULL,
@@ -599,7 +584,7 @@ CREATE TABLE cron_logs (
 -- Name: cron_logs_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE cron_logs_id_seq
+CREATE SEQUENCE public.cron_logs_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -611,14 +596,14 @@ CREATE SEQUENCE cron_logs_id_seq
 -- Name: cron_logs_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
-ALTER SEQUENCE cron_logs_id_seq OWNED BY cron_logs.id;
+ALTER SEQUENCE public.cron_logs_id_seq OWNED BY public.cron_logs.id;
 
 
 --
 -- Name: customer_checkouts; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE customer_checkouts (
+CREATE TABLE public.customer_checkouts (
     id integer NOT NULL,
     distributor_id integer,
     customer_id integer,
@@ -631,7 +616,7 @@ CREATE TABLE customer_checkouts (
 -- Name: customer_checkouts_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE customer_checkouts_id_seq
+CREATE SEQUENCE public.customer_checkouts_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -643,14 +628,14 @@ CREATE SEQUENCE customer_checkouts_id_seq
 -- Name: customer_checkouts_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
-ALTER SEQUENCE customer_checkouts_id_seq OWNED BY customer_checkouts.id;
+ALTER SEQUENCE public.customer_checkouts_id_seq OWNED BY public.customer_checkouts.id;
 
 
 --
 -- Name: customer_logins; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE customer_logins (
+CREATE TABLE public.customer_logins (
     id integer NOT NULL,
     distributor_id integer,
     customer_id integer,
@@ -663,7 +648,7 @@ CREATE TABLE customer_logins (
 -- Name: customer_logins_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE customer_logins_id_seq
+CREATE SEQUENCE public.customer_logins_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -675,14 +660,14 @@ CREATE SEQUENCE customer_logins_id_seq
 -- Name: customer_logins_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
-ALTER SEQUENCE customer_logins_id_seq OWNED BY customer_logins.id;
+ALTER SEQUENCE public.customer_logins_id_seq OWNED BY public.customer_logins.id;
 
 
 --
 -- Name: customers; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE customers (
+CREATE TABLE public.customers (
     id integer NOT NULL,
     first_name character varying(255),
     email character varying(255),
@@ -724,7 +709,7 @@ CREATE TABLE customers (
 -- Name: customers_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE customers_id_seq
+CREATE SEQUENCE public.customers_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -736,14 +721,14 @@ CREATE SEQUENCE customers_id_seq
 -- Name: customers_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
-ALTER SEQUENCE customers_id_seq OWNED BY customers.id;
+ALTER SEQUENCE public.customers_id_seq OWNED BY public.customers.id;
 
 
 --
 -- Name: deductions; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE deductions (
+CREATE TABLE public.deductions (
     id integer NOT NULL,
     distributor_id integer,
     account_id integer DEFAULT 0 NOT NULL,
@@ -767,7 +752,7 @@ CREATE TABLE deductions (
 -- Name: deductions_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE deductions_id_seq
+CREATE SEQUENCE public.deductions_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -779,14 +764,14 @@ CREATE SEQUENCE deductions_id_seq
 -- Name: deductions_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
-ALTER SEQUENCE deductions_id_seq OWNED BY deductions.id;
+ALTER SEQUENCE public.deductions_id_seq OWNED BY public.deductions.id;
 
 
 --
 -- Name: delayed_jobs; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE delayed_jobs (
+CREATE TABLE public.delayed_jobs (
     id integer NOT NULL,
     priority integer DEFAULT 0,
     attempts integer DEFAULT 0,
@@ -806,7 +791,7 @@ CREATE TABLE delayed_jobs (
 -- Name: delayed_jobs_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE delayed_jobs_id_seq
+CREATE SEQUENCE public.delayed_jobs_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -818,14 +803,14 @@ CREATE SEQUENCE delayed_jobs_id_seq
 -- Name: delayed_jobs_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
-ALTER SEQUENCE delayed_jobs_id_seq OWNED BY delayed_jobs.id;
+ALTER SEQUENCE public.delayed_jobs_id_seq OWNED BY public.delayed_jobs.id;
 
 
 --
 -- Name: deliveries; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE deliveries (
+CREATE TABLE public.deliveries (
     id integer NOT NULL,
     order_id integer,
     created_at timestamp without time zone,
@@ -845,7 +830,7 @@ CREATE TABLE deliveries (
 -- Name: deliveries_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE deliveries_id_seq
+CREATE SEQUENCE public.deliveries_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -857,14 +842,14 @@ CREATE SEQUENCE deliveries_id_seq
 -- Name: deliveries_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
-ALTER SEQUENCE deliveries_id_seq OWNED BY deliveries.id;
+ALTER SEQUENCE public.deliveries_id_seq OWNED BY public.deliveries.id;
 
 
 --
 -- Name: delivery_lists; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE delivery_lists (
+CREATE TABLE public.delivery_lists (
     id integer NOT NULL,
     distributor_id integer,
     date date,
@@ -877,7 +862,7 @@ CREATE TABLE delivery_lists (
 -- Name: delivery_lists_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE delivery_lists_id_seq
+CREATE SEQUENCE public.delivery_lists_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -889,14 +874,14 @@ CREATE SEQUENCE delivery_lists_id_seq
 -- Name: delivery_lists_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
-ALTER SEQUENCE delivery_lists_id_seq OWNED BY delivery_lists.id;
+ALTER SEQUENCE public.delivery_lists_id_seq OWNED BY public.delivery_lists.id;
 
 
 --
 -- Name: delivery_sequence_orders; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE delivery_sequence_orders (
+CREATE TABLE public.delivery_sequence_orders (
     id integer NOT NULL,
     address_hash character varying(255),
     delivery_service_id integer,
@@ -911,7 +896,7 @@ CREATE TABLE delivery_sequence_orders (
 -- Name: delivery_sequence_orders_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE delivery_sequence_orders_id_seq
+CREATE SEQUENCE public.delivery_sequence_orders_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -923,14 +908,14 @@ CREATE SEQUENCE delivery_sequence_orders_id_seq
 -- Name: delivery_sequence_orders_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
-ALTER SEQUENCE delivery_sequence_orders_id_seq OWNED BY delivery_sequence_orders.id;
+ALTER SEQUENCE public.delivery_sequence_orders_id_seq OWNED BY public.delivery_sequence_orders.id;
 
 
 --
 -- Name: delivery_service_schedule_transactions; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE delivery_service_schedule_transactions (
+CREATE TABLE public.delivery_service_schedule_transactions (
     id integer NOT NULL,
     delivery_service_id integer,
     schedule text,
@@ -943,7 +928,7 @@ CREATE TABLE delivery_service_schedule_transactions (
 -- Name: delivery_service_schedule_transactions_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE delivery_service_schedule_transactions_id_seq
+CREATE SEQUENCE public.delivery_service_schedule_transactions_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -955,14 +940,14 @@ CREATE SEQUENCE delivery_service_schedule_transactions_id_seq
 -- Name: delivery_service_schedule_transactions_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
-ALTER SEQUENCE delivery_service_schedule_transactions_id_seq OWNED BY delivery_service_schedule_transactions.id;
+ALTER SEQUENCE public.delivery_service_schedule_transactions_id_seq OWNED BY public.delivery_service_schedule_transactions.id;
 
 
 --
 -- Name: delivery_services; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE delivery_services (
+CREATE TABLE public.delivery_services (
     id integer NOT NULL,
     distributor_id integer,
     name character varying(255),
@@ -978,7 +963,7 @@ CREATE TABLE delivery_services (
 -- Name: delivery_services_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE delivery_services_id_seq
+CREATE SEQUENCE public.delivery_services_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -990,14 +975,14 @@ CREATE SEQUENCE delivery_services_id_seq
 -- Name: delivery_services_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
-ALTER SEQUENCE delivery_services_id_seq OWNED BY delivery_services.id;
+ALTER SEQUENCE public.delivery_services_id_seq OWNED BY public.delivery_services.id;
 
 
 --
 -- Name: distributor_invoices; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE distributor_invoices (
+CREATE TABLE public.distributor_invoices (
     id integer NOT NULL,
     distributor_id integer NOT NULL,
     "from" date NOT NULL,
@@ -1007,7 +992,8 @@ CREATE TABLE distributor_invoices (
     currency character varying(255) NOT NULL,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
-    number character varying(255)
+    number character varying(255),
+    paid boolean DEFAULT false NOT NULL
 );
 
 
@@ -1015,7 +1001,7 @@ CREATE TABLE distributor_invoices (
 -- Name: distributor_invoices_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE distributor_invoices_id_seq
+CREATE SEQUENCE public.distributor_invoices_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -1027,14 +1013,14 @@ CREATE SEQUENCE distributor_invoices_id_seq
 -- Name: distributor_invoices_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
-ALTER SEQUENCE distributor_invoices_id_seq OWNED BY distributor_invoices.id;
+ALTER SEQUENCE public.distributor_invoices_id_seq OWNED BY public.distributor_invoices.id;
 
 
 --
 -- Name: distributor_logins; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE distributor_logins (
+CREATE TABLE public.distributor_logins (
     id integer NOT NULL,
     distributor_id integer,
     created_at timestamp without time zone NOT NULL,
@@ -1046,7 +1032,7 @@ CREATE TABLE distributor_logins (
 -- Name: distributor_logins_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE distributor_logins_id_seq
+CREATE SEQUENCE public.distributor_logins_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -1058,14 +1044,14 @@ CREATE SEQUENCE distributor_logins_id_seq
 -- Name: distributor_logins_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
-ALTER SEQUENCE distributor_logins_id_seq OWNED BY distributor_logins.id;
+ALTER SEQUENCE public.distributor_logins_id_seq OWNED BY public.distributor_logins.id;
 
 
 --
 -- Name: distributor_pricings; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE distributor_pricings (
+CREATE TABLE public.distributor_pricings (
     id integer NOT NULL,
     distributor_id integer,
     name character varying(255) NOT NULL,
@@ -1084,7 +1070,7 @@ CREATE TABLE distributor_pricings (
 -- Name: distributor_pricings_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE distributor_pricings_id_seq
+CREATE SEQUENCE public.distributor_pricings_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -1096,14 +1082,14 @@ CREATE SEQUENCE distributor_pricings_id_seq
 -- Name: distributor_pricings_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
-ALTER SEQUENCE distributor_pricings_id_seq OWNED BY distributor_pricings.id;
+ALTER SEQUENCE public.distributor_pricings_id_seq OWNED BY public.distributor_pricings.id;
 
 
 --
 -- Name: distributors; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE distributors (
+CREATE TABLE public.distributors (
     id integer NOT NULL,
     email character varying(255) DEFAULT ''::character varying NOT NULL,
     encrypted_password character varying(128) DEFAULT ''::character varying NOT NULL,
@@ -1197,7 +1183,7 @@ CREATE TABLE distributors (
 -- Name: distributors_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE distributors_id_seq
+CREATE SEQUENCE public.distributors_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -1209,14 +1195,14 @@ CREATE SEQUENCE distributors_id_seq
 -- Name: distributors_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
-ALTER SEQUENCE distributors_id_seq OWNED BY distributors.id;
+ALTER SEQUENCE public.distributors_id_seq OWNED BY public.distributors.id;
 
 
 --
 -- Name: distributors_omni_importers; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE distributors_omni_importers (
+CREATE TABLE public.distributors_omni_importers (
     id integer NOT NULL,
     distributor_id integer,
     omni_importer_id integer,
@@ -1229,7 +1215,7 @@ CREATE TABLE distributors_omni_importers (
 -- Name: distributors_omni_importers_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE distributors_omni_importers_id_seq
+CREATE SEQUENCE public.distributors_omni_importers_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -1241,14 +1227,14 @@ CREATE SEQUENCE distributors_omni_importers_id_seq
 -- Name: distributors_omni_importers_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
-ALTER SEQUENCE distributors_omni_importers_id_seq OWNED BY distributors_omni_importers.id;
+ALTER SEQUENCE public.distributors_omni_importers_id_seq OWNED BY public.distributors_omni_importers.id;
 
 
 --
 -- Name: events; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE events (
+CREATE TABLE public.events (
     id integer NOT NULL,
     distributor_id integer NOT NULL,
     event_type character varying(255) NOT NULL,
@@ -1265,7 +1251,7 @@ CREATE TABLE events (
 -- Name: events_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE events_id_seq
+CREATE SEQUENCE public.events_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -1277,14 +1263,14 @@ CREATE SEQUENCE events_id_seq
 -- Name: events_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
-ALTER SEQUENCE events_id_seq OWNED BY events.id;
+ALTER SEQUENCE public.events_id_seq OWNED BY public.events.id;
 
 
 --
 -- Name: exclusions; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE exclusions (
+CREATE TABLE public.exclusions (
     id integer NOT NULL,
     order_id integer,
     line_item_id integer,
@@ -1297,7 +1283,7 @@ CREATE TABLE exclusions (
 -- Name: exclusions_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE exclusions_id_seq
+CREATE SEQUENCE public.exclusions_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -1309,14 +1295,14 @@ CREATE SEQUENCE exclusions_id_seq
 -- Name: exclusions_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
-ALTER SEQUENCE exclusions_id_seq OWNED BY exclusions.id;
+ALTER SEQUENCE public.exclusions_id_seq OWNED BY public.exclusions.id;
 
 
 --
 -- Name: extras; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE extras (
+CREATE TABLE public.extras (
     id integer NOT NULL,
     name character varying(255),
     unit character varying(255),
@@ -1332,7 +1318,7 @@ CREATE TABLE extras (
 -- Name: extras_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE extras_id_seq
+CREATE SEQUENCE public.extras_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -1344,14 +1330,14 @@ CREATE SEQUENCE extras_id_seq
 -- Name: extras_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
-ALTER SEQUENCE extras_id_seq OWNED BY extras.id;
+ALTER SEQUENCE public.extras_id_seq OWNED BY public.extras.id;
 
 
 --
 -- Name: import_transaction_lists; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE import_transaction_lists (
+CREATE TABLE public.import_transaction_lists (
     id integer NOT NULL,
     distributor_id integer,
     draft boolean,
@@ -1368,7 +1354,7 @@ CREATE TABLE import_transaction_lists (
 -- Name: import_transaction_lists_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE import_transaction_lists_id_seq
+CREATE SEQUENCE public.import_transaction_lists_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -1380,14 +1366,14 @@ CREATE SEQUENCE import_transaction_lists_id_seq
 -- Name: import_transaction_lists_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
-ALTER SEQUENCE import_transaction_lists_id_seq OWNED BY import_transaction_lists.id;
+ALTER SEQUENCE public.import_transaction_lists_id_seq OWNED BY public.import_transaction_lists.id;
 
 
 --
 -- Name: import_transactions; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE import_transactions (
+CREATE TABLE public.import_transactions (
     id integer NOT NULL,
     customer_id integer,
     transaction_date date,
@@ -1410,7 +1396,7 @@ CREATE TABLE import_transactions (
 -- Name: import_transactions_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE import_transactions_id_seq
+CREATE SEQUENCE public.import_transactions_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -1422,14 +1408,14 @@ CREATE SEQUENCE import_transactions_id_seq
 -- Name: import_transactions_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
-ALTER SEQUENCE import_transactions_id_seq OWNED BY import_transactions.id;
+ALTER SEQUENCE public.import_transactions_id_seq OWNED BY public.import_transactions.id;
 
 
 --
 -- Name: line_items; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE line_items (
+CREATE TABLE public.line_items (
     id integer NOT NULL,
     distributor_id integer,
     name character varying(255),
@@ -1442,7 +1428,7 @@ CREATE TABLE line_items (
 -- Name: line_items_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE line_items_id_seq
+CREATE SEQUENCE public.line_items_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -1454,14 +1440,14 @@ CREATE SEQUENCE line_items_id_seq
 -- Name: line_items_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
-ALTER SEQUENCE line_items_id_seq OWNED BY line_items.id;
+ALTER SEQUENCE public.line_items_id_seq OWNED BY public.line_items.id;
 
 
 --
 -- Name: localised_addresses; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE localised_addresses (
+CREATE TABLE public.localised_addresses (
     id integer NOT NULL,
     addressable_id integer NOT NULL,
     addressable_type character varying(255) NOT NULL,
@@ -1480,7 +1466,7 @@ CREATE TABLE localised_addresses (
 -- Name: localised_addresses_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE localised_addresses_id_seq
+CREATE SEQUENCE public.localised_addresses_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -1492,14 +1478,14 @@ CREATE SEQUENCE localised_addresses_id_seq
 -- Name: localised_addresses_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
-ALTER SEQUENCE localised_addresses_id_seq OWNED BY localised_addresses.id;
+ALTER SEQUENCE public.localised_addresses_id_seq OWNED BY public.localised_addresses.id;
 
 
 --
 -- Name: omni_importers; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE omni_importers (
+CREATE TABLE public.omni_importers (
     id integer NOT NULL,
     country_id integer,
     rules text,
@@ -1516,7 +1502,7 @@ CREATE TABLE omni_importers (
 -- Name: omni_importers_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE omni_importers_id_seq
+CREATE SEQUENCE public.omni_importers_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -1528,14 +1514,14 @@ CREATE SEQUENCE omni_importers_id_seq
 -- Name: omni_importers_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
-ALTER SEQUENCE omni_importers_id_seq OWNED BY omni_importers.id;
+ALTER SEQUENCE public.omni_importers_id_seq OWNED BY public.omni_importers.id;
 
 
 --
 -- Name: order_extras; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE order_extras (
+CREATE TABLE public.order_extras (
     id integer NOT NULL,
     order_id integer,
     extra_id integer,
@@ -1549,7 +1535,7 @@ CREATE TABLE order_extras (
 -- Name: order_extras_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE order_extras_id_seq
+CREATE SEQUENCE public.order_extras_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -1561,14 +1547,14 @@ CREATE SEQUENCE order_extras_id_seq
 -- Name: order_extras_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
-ALTER SEQUENCE order_extras_id_seq OWNED BY order_extras.id;
+ALTER SEQUENCE public.order_extras_id_seq OWNED BY public.order_extras.id;
 
 
 --
 -- Name: order_schedule_transactions; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE order_schedule_transactions (
+CREATE TABLE public.order_schedule_transactions (
     id integer NOT NULL,
     order_id integer,
     schedule text,
@@ -1582,7 +1568,7 @@ CREATE TABLE order_schedule_transactions (
 -- Name: order_schedule_transactions_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE order_schedule_transactions_id_seq
+CREATE SEQUENCE public.order_schedule_transactions_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -1594,14 +1580,14 @@ CREATE SEQUENCE order_schedule_transactions_id_seq
 -- Name: order_schedule_transactions_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
-ALTER SEQUENCE order_schedule_transactions_id_seq OWNED BY order_schedule_transactions.id;
+ALTER SEQUENCE public.order_schedule_transactions_id_seq OWNED BY public.order_schedule_transactions.id;
 
 
 --
 -- Name: orders; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE orders (
+CREATE TABLE public.orders (
     id integer NOT NULL,
     box_id integer,
     quantity integer DEFAULT 1 NOT NULL,
@@ -1619,7 +1605,7 @@ CREATE TABLE orders (
 -- Name: orders_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE orders_id_seq
+CREATE SEQUENCE public.orders_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -1631,14 +1617,14 @@ CREATE SEQUENCE orders_id_seq
 -- Name: orders_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
-ALTER SEQUENCE orders_id_seq OWNED BY orders.id;
+ALTER SEQUENCE public.orders_id_seq OWNED BY public.orders.id;
 
 
 --
 -- Name: packages; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE packages (
+CREATE TABLE public.packages (
     id integer NOT NULL,
     packing_list_id integer,
     "position" integer,
@@ -1667,7 +1653,7 @@ CREATE TABLE packages (
 -- Name: packages_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE packages_id_seq
+CREATE SEQUENCE public.packages_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -1679,14 +1665,14 @@ CREATE SEQUENCE packages_id_seq
 -- Name: packages_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
-ALTER SEQUENCE packages_id_seq OWNED BY packages.id;
+ALTER SEQUENCE public.packages_id_seq OWNED BY public.packages.id;
 
 
 --
 -- Name: packing_lists; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE packing_lists (
+CREATE TABLE public.packing_lists (
     id integer NOT NULL,
     distributor_id integer,
     date date,
@@ -1699,7 +1685,7 @@ CREATE TABLE packing_lists (
 -- Name: packing_lists_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE packing_lists_id_seq
+CREATE SEQUENCE public.packing_lists_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -1711,14 +1697,14 @@ CREATE SEQUENCE packing_lists_id_seq
 -- Name: packing_lists_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
-ALTER SEQUENCE packing_lists_id_seq OWNED BY packing_lists.id;
+ALTER SEQUENCE public.packing_lists_id_seq OWNED BY public.packing_lists.id;
 
 
 --
 -- Name: payments; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE payments (
+CREATE TABLE public.payments (
     id integer NOT NULL,
     distributor_id integer,
     account_id integer,
@@ -1743,7 +1729,7 @@ CREATE TABLE payments (
 -- Name: payments_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE payments_id_seq
+CREATE SEQUENCE public.payments_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -1755,14 +1741,14 @@ CREATE SEQUENCE payments_id_seq
 -- Name: payments_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
-ALTER SEQUENCE payments_id_seq OWNED BY payments.id;
+ALTER SEQUENCE public.payments_id_seq OWNED BY public.payments.id;
 
 
 --
 -- Name: schedule_pauses; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE schedule_pauses (
+CREATE TABLE public.schedule_pauses (
     id integer NOT NULL,
     start date,
     finish date,
@@ -1775,7 +1761,7 @@ CREATE TABLE schedule_pauses (
 -- Name: schedule_pauses_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE schedule_pauses_id_seq
+CREATE SEQUENCE public.schedule_pauses_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -1787,14 +1773,14 @@ CREATE SEQUENCE schedule_pauses_id_seq
 -- Name: schedule_pauses_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
-ALTER SEQUENCE schedule_pauses_id_seq OWNED BY schedule_pauses.id;
+ALTER SEQUENCE public.schedule_pauses_id_seq OWNED BY public.schedule_pauses.id;
 
 
 --
 -- Name: schedule_rules_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE schedule_rules_id_seq
+CREATE SEQUENCE public.schedule_rules_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -1806,14 +1792,14 @@ CREATE SEQUENCE schedule_rules_id_seq
 -- Name: schedule_rules_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
-ALTER SEQUENCE schedule_rules_id_seq OWNED BY schedule_rules.id;
+ALTER SEQUENCE public.schedule_rules_id_seq OWNED BY public.schedule_rules.id;
 
 
 --
 -- Name: schedule_transactions; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE schedule_transactions (
+CREATE TABLE public.schedule_transactions (
     id integer NOT NULL,
     schedule_rule text,
     schedule_rule_id integer,
@@ -1826,7 +1812,7 @@ CREATE TABLE schedule_transactions (
 -- Name: schedule_transactions_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE schedule_transactions_id_seq
+CREATE SEQUENCE public.schedule_transactions_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -1838,14 +1824,14 @@ CREATE SEQUENCE schedule_transactions_id_seq
 -- Name: schedule_transactions_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
-ALTER SEQUENCE schedule_transactions_id_seq OWNED BY schedule_transactions.id;
+ALTER SEQUENCE public.schedule_transactions_id_seq OWNED BY public.schedule_transactions.id;
 
 
 --
 -- Name: schema_migrations; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE schema_migrations (
+CREATE TABLE public.schema_migrations (
     version character varying(255) NOT NULL
 );
 
@@ -1854,7 +1840,7 @@ CREATE TABLE schema_migrations (
 -- Name: substitutions; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE substitutions (
+CREATE TABLE public.substitutions (
     id integer NOT NULL,
     order_id integer,
     line_item_id integer,
@@ -1867,7 +1853,7 @@ CREATE TABLE substitutions (
 -- Name: substitutions_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE substitutions_id_seq
+CREATE SEQUENCE public.substitutions_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -1879,14 +1865,14 @@ CREATE SEQUENCE substitutions_id_seq
 -- Name: substitutions_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
-ALTER SEQUENCE substitutions_id_seq OWNED BY substitutions.id;
+ALTER SEQUENCE public.substitutions_id_seq OWNED BY public.substitutions.id;
 
 
 --
 -- Name: taggings; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE taggings (
+CREATE TABLE public.taggings (
     id integer NOT NULL,
     tag_id integer,
     taggable_id integer,
@@ -1902,7 +1888,7 @@ CREATE TABLE taggings (
 -- Name: taggings_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE taggings_id_seq
+CREATE SEQUENCE public.taggings_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -1914,14 +1900,14 @@ CREATE SEQUENCE taggings_id_seq
 -- Name: taggings_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
-ALTER SEQUENCE taggings_id_seq OWNED BY taggings.id;
+ALTER SEQUENCE public.taggings_id_seq OWNED BY public.taggings.id;
 
 
 --
 -- Name: tags; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE tags (
+CREATE TABLE public.tags (
     id integer NOT NULL,
     name character varying(255),
     taggings_count integer DEFAULT 0
@@ -1932,7 +1918,7 @@ CREATE TABLE tags (
 -- Name: tags_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE tags_id_seq
+CREATE SEQUENCE public.tags_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -1944,14 +1930,14 @@ CREATE SEQUENCE tags_id_seq
 -- Name: tags_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
-ALTER SEQUENCE tags_id_seq OWNED BY tags.id;
+ALTER SEQUENCE public.tags_id_seq OWNED BY public.tags.id;
 
 
 --
 -- Name: transactions; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE transactions (
+CREATE TABLE public.transactions (
     id integer NOT NULL,
     account_id integer,
     amount_cents integer DEFAULT 0 NOT NULL,
@@ -1970,7 +1956,7 @@ CREATE TABLE transactions (
 -- Name: transactions_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE transactions_id_seq
+CREATE SEQUENCE public.transactions_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -1982,681 +1968,681 @@ CREATE SEQUENCE transactions_id_seq
 -- Name: transactions_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
-ALTER SEQUENCE transactions_id_seq OWNED BY transactions.id;
+ALTER SEQUENCE public.transactions_id_seq OWNED BY public.transactions.id;
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: accounts id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY accounts ALTER COLUMN id SET DEFAULT nextval('accounts_id_seq'::regclass);
+ALTER TABLE ONLY public.accounts ALTER COLUMN id SET DEFAULT nextval('public.accounts_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: activities id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY activities ALTER COLUMN id SET DEFAULT nextval('activities_id_seq'::regclass);
+ALTER TABLE ONLY public.activities ALTER COLUMN id SET DEFAULT nextval('public.activities_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: addresses id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY addresses ALTER COLUMN id SET DEFAULT nextval('addresses_id_seq'::regclass);
+ALTER TABLE ONLY public.addresses ALTER COLUMN id SET DEFAULT nextval('public.addresses_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: admins id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY admins ALTER COLUMN id SET DEFAULT nextval('admins_id_seq'::regclass);
+ALTER TABLE ONLY public.admins ALTER COLUMN id SET DEFAULT nextval('public.admins_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: bank_information id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY bank_information ALTER COLUMN id SET DEFAULT nextval('bank_information_id_seq'::regclass);
+ALTER TABLE ONLY public.bank_information ALTER COLUMN id SET DEFAULT nextval('public.bank_information_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: box_extras id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY box_extras ALTER COLUMN id SET DEFAULT nextval('box_extras_id_seq'::regclass);
+ALTER TABLE ONLY public.box_extras ALTER COLUMN id SET DEFAULT nextval('public.box_extras_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: boxes id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY boxes ALTER COLUMN id SET DEFAULT nextval('boxes_id_seq'::regclass);
+ALTER TABLE ONLY public.boxes ALTER COLUMN id SET DEFAULT nextval('public.boxes_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: countries id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY countries ALTER COLUMN id SET DEFAULT nextval('countries_id_seq'::regclass);
+ALTER TABLE ONLY public.countries ALTER COLUMN id SET DEFAULT nextval('public.countries_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: cron_logs id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY cron_logs ALTER COLUMN id SET DEFAULT nextval('cron_logs_id_seq'::regclass);
+ALTER TABLE ONLY public.cron_logs ALTER COLUMN id SET DEFAULT nextval('public.cron_logs_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: customer_checkouts id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY customer_checkouts ALTER COLUMN id SET DEFAULT nextval('customer_checkouts_id_seq'::regclass);
+ALTER TABLE ONLY public.customer_checkouts ALTER COLUMN id SET DEFAULT nextval('public.customer_checkouts_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: customer_logins id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY customer_logins ALTER COLUMN id SET DEFAULT nextval('customer_logins_id_seq'::regclass);
+ALTER TABLE ONLY public.customer_logins ALTER COLUMN id SET DEFAULT nextval('public.customer_logins_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: customers id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY customers ALTER COLUMN id SET DEFAULT nextval('customers_id_seq'::regclass);
+ALTER TABLE ONLY public.customers ALTER COLUMN id SET DEFAULT nextval('public.customers_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: deductions id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY deductions ALTER COLUMN id SET DEFAULT nextval('deductions_id_seq'::regclass);
+ALTER TABLE ONLY public.deductions ALTER COLUMN id SET DEFAULT nextval('public.deductions_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: delayed_jobs id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY delayed_jobs ALTER COLUMN id SET DEFAULT nextval('delayed_jobs_id_seq'::regclass);
+ALTER TABLE ONLY public.delayed_jobs ALTER COLUMN id SET DEFAULT nextval('public.delayed_jobs_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: deliveries id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY deliveries ALTER COLUMN id SET DEFAULT nextval('deliveries_id_seq'::regclass);
+ALTER TABLE ONLY public.deliveries ALTER COLUMN id SET DEFAULT nextval('public.deliveries_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: delivery_lists id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY delivery_lists ALTER COLUMN id SET DEFAULT nextval('delivery_lists_id_seq'::regclass);
+ALTER TABLE ONLY public.delivery_lists ALTER COLUMN id SET DEFAULT nextval('public.delivery_lists_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: delivery_sequence_orders id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY delivery_sequence_orders ALTER COLUMN id SET DEFAULT nextval('delivery_sequence_orders_id_seq'::regclass);
+ALTER TABLE ONLY public.delivery_sequence_orders ALTER COLUMN id SET DEFAULT nextval('public.delivery_sequence_orders_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: delivery_service_schedule_transactions id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY delivery_service_schedule_transactions ALTER COLUMN id SET DEFAULT nextval('delivery_service_schedule_transactions_id_seq'::regclass);
+ALTER TABLE ONLY public.delivery_service_schedule_transactions ALTER COLUMN id SET DEFAULT nextval('public.delivery_service_schedule_transactions_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: delivery_services id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY delivery_services ALTER COLUMN id SET DEFAULT nextval('delivery_services_id_seq'::regclass);
+ALTER TABLE ONLY public.delivery_services ALTER COLUMN id SET DEFAULT nextval('public.delivery_services_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: distributor_invoices id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY distributor_invoices ALTER COLUMN id SET DEFAULT nextval('distributor_invoices_id_seq'::regclass);
+ALTER TABLE ONLY public.distributor_invoices ALTER COLUMN id SET DEFAULT nextval('public.distributor_invoices_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: distributor_logins id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY distributor_logins ALTER COLUMN id SET DEFAULT nextval('distributor_logins_id_seq'::regclass);
+ALTER TABLE ONLY public.distributor_logins ALTER COLUMN id SET DEFAULT nextval('public.distributor_logins_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: distributor_pricings id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY distributor_pricings ALTER COLUMN id SET DEFAULT nextval('distributor_pricings_id_seq'::regclass);
+ALTER TABLE ONLY public.distributor_pricings ALTER COLUMN id SET DEFAULT nextval('public.distributor_pricings_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: distributors id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY distributors ALTER COLUMN id SET DEFAULT nextval('distributors_id_seq'::regclass);
+ALTER TABLE ONLY public.distributors ALTER COLUMN id SET DEFAULT nextval('public.distributors_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: distributors_omni_importers id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY distributors_omni_importers ALTER COLUMN id SET DEFAULT nextval('distributors_omni_importers_id_seq'::regclass);
+ALTER TABLE ONLY public.distributors_omni_importers ALTER COLUMN id SET DEFAULT nextval('public.distributors_omni_importers_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: events id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY events ALTER COLUMN id SET DEFAULT nextval('events_id_seq'::regclass);
+ALTER TABLE ONLY public.events ALTER COLUMN id SET DEFAULT nextval('public.events_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: exclusions id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY exclusions ALTER COLUMN id SET DEFAULT nextval('exclusions_id_seq'::regclass);
+ALTER TABLE ONLY public.exclusions ALTER COLUMN id SET DEFAULT nextval('public.exclusions_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: extras id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY extras ALTER COLUMN id SET DEFAULT nextval('extras_id_seq'::regclass);
+ALTER TABLE ONLY public.extras ALTER COLUMN id SET DEFAULT nextval('public.extras_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: import_transaction_lists id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY import_transaction_lists ALTER COLUMN id SET DEFAULT nextval('import_transaction_lists_id_seq'::regclass);
+ALTER TABLE ONLY public.import_transaction_lists ALTER COLUMN id SET DEFAULT nextval('public.import_transaction_lists_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: import_transactions id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY import_transactions ALTER COLUMN id SET DEFAULT nextval('import_transactions_id_seq'::regclass);
+ALTER TABLE ONLY public.import_transactions ALTER COLUMN id SET DEFAULT nextval('public.import_transactions_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: line_items id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY line_items ALTER COLUMN id SET DEFAULT nextval('line_items_id_seq'::regclass);
+ALTER TABLE ONLY public.line_items ALTER COLUMN id SET DEFAULT nextval('public.line_items_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: localised_addresses id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY localised_addresses ALTER COLUMN id SET DEFAULT nextval('localised_addresses_id_seq'::regclass);
+ALTER TABLE ONLY public.localised_addresses ALTER COLUMN id SET DEFAULT nextval('public.localised_addresses_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: omni_importers id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY omni_importers ALTER COLUMN id SET DEFAULT nextval('omni_importers_id_seq'::regclass);
+ALTER TABLE ONLY public.omni_importers ALTER COLUMN id SET DEFAULT nextval('public.omni_importers_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: order_extras id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY order_extras ALTER COLUMN id SET DEFAULT nextval('order_extras_id_seq'::regclass);
+ALTER TABLE ONLY public.order_extras ALTER COLUMN id SET DEFAULT nextval('public.order_extras_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: order_schedule_transactions id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY order_schedule_transactions ALTER COLUMN id SET DEFAULT nextval('order_schedule_transactions_id_seq'::regclass);
+ALTER TABLE ONLY public.order_schedule_transactions ALTER COLUMN id SET DEFAULT nextval('public.order_schedule_transactions_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: orders id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY orders ALTER COLUMN id SET DEFAULT nextval('orders_id_seq'::regclass);
+ALTER TABLE ONLY public.orders ALTER COLUMN id SET DEFAULT nextval('public.orders_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: packages id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY packages ALTER COLUMN id SET DEFAULT nextval('packages_id_seq'::regclass);
+ALTER TABLE ONLY public.packages ALTER COLUMN id SET DEFAULT nextval('public.packages_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: packing_lists id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY packing_lists ALTER COLUMN id SET DEFAULT nextval('packing_lists_id_seq'::regclass);
+ALTER TABLE ONLY public.packing_lists ALTER COLUMN id SET DEFAULT nextval('public.packing_lists_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: payments id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY payments ALTER COLUMN id SET DEFAULT nextval('payments_id_seq'::regclass);
+ALTER TABLE ONLY public.payments ALTER COLUMN id SET DEFAULT nextval('public.payments_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: schedule_pauses id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY schedule_pauses ALTER COLUMN id SET DEFAULT nextval('schedule_pauses_id_seq'::regclass);
+ALTER TABLE ONLY public.schedule_pauses ALTER COLUMN id SET DEFAULT nextval('public.schedule_pauses_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: schedule_rules id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY schedule_rules ALTER COLUMN id SET DEFAULT nextval('schedule_rules_id_seq'::regclass);
+ALTER TABLE ONLY public.schedule_rules ALTER COLUMN id SET DEFAULT nextval('public.schedule_rules_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: schedule_transactions id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY schedule_transactions ALTER COLUMN id SET DEFAULT nextval('schedule_transactions_id_seq'::regclass);
+ALTER TABLE ONLY public.schedule_transactions ALTER COLUMN id SET DEFAULT nextval('public.schedule_transactions_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: substitutions id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY substitutions ALTER COLUMN id SET DEFAULT nextval('substitutions_id_seq'::regclass);
+ALTER TABLE ONLY public.substitutions ALTER COLUMN id SET DEFAULT nextval('public.substitutions_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: taggings id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY taggings ALTER COLUMN id SET DEFAULT nextval('taggings_id_seq'::regclass);
+ALTER TABLE ONLY public.taggings ALTER COLUMN id SET DEFAULT nextval('public.taggings_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: tags id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY tags ALTER COLUMN id SET DEFAULT nextval('tags_id_seq'::regclass);
+ALTER TABLE ONLY public.tags ALTER COLUMN id SET DEFAULT nextval('public.tags_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: transactions id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY transactions ALTER COLUMN id SET DEFAULT nextval('transactions_id_seq'::regclass);
+ALTER TABLE ONLY public.transactions ALTER COLUMN id SET DEFAULT nextval('public.transactions_id_seq'::regclass);
 
 
 --
--- Name: accounts_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: accounts accounts_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY accounts
+ALTER TABLE ONLY public.accounts
     ADD CONSTRAINT accounts_pkey PRIMARY KEY (id);
 
 
 --
--- Name: activities_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: activities activities_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY activities
+ALTER TABLE ONLY public.activities
     ADD CONSTRAINT activities_pkey PRIMARY KEY (id);
 
 
 --
--- Name: addresses_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: addresses addresses_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY addresses
+ALTER TABLE ONLY public.addresses
     ADD CONSTRAINT addresses_pkey PRIMARY KEY (id);
 
 
 --
--- Name: admins_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: admins admins_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY admins
+ALTER TABLE ONLY public.admins
     ADD CONSTRAINT admins_pkey PRIMARY KEY (id);
 
 
 --
--- Name: bank_information_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: bank_information bank_information_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY bank_information
+ALTER TABLE ONLY public.bank_information
     ADD CONSTRAINT bank_information_pkey PRIMARY KEY (id);
 
 
 --
--- Name: box_extras_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: box_extras box_extras_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY box_extras
+ALTER TABLE ONLY public.box_extras
     ADD CONSTRAINT box_extras_pkey PRIMARY KEY (id);
 
 
 --
--- Name: boxes_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: boxes boxes_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY boxes
+ALTER TABLE ONLY public.boxes
     ADD CONSTRAINT boxes_pkey PRIMARY KEY (id);
 
 
 --
--- Name: countries_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: countries countries_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY countries
+ALTER TABLE ONLY public.countries
     ADD CONSTRAINT countries_pkey PRIMARY KEY (id);
 
 
 --
--- Name: cron_logs_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: cron_logs cron_logs_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY cron_logs
+ALTER TABLE ONLY public.cron_logs
     ADD CONSTRAINT cron_logs_pkey PRIMARY KEY (id);
 
 
 --
--- Name: customer_checkouts_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: customer_checkouts customer_checkouts_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY customer_checkouts
+ALTER TABLE ONLY public.customer_checkouts
     ADD CONSTRAINT customer_checkouts_pkey PRIMARY KEY (id);
 
 
 --
--- Name: customer_logins_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: customer_logins customer_logins_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY customer_logins
+ALTER TABLE ONLY public.customer_logins
     ADD CONSTRAINT customer_logins_pkey PRIMARY KEY (id);
 
 
 --
--- Name: customers_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: customers customers_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY customers
+ALTER TABLE ONLY public.customers
     ADD CONSTRAINT customers_pkey PRIMARY KEY (id);
 
 
 --
--- Name: deductions_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: deductions deductions_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY deductions
+ALTER TABLE ONLY public.deductions
     ADD CONSTRAINT deductions_pkey PRIMARY KEY (id);
 
 
 --
--- Name: delayed_jobs_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: delayed_jobs delayed_jobs_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY delayed_jobs
+ALTER TABLE ONLY public.delayed_jobs
     ADD CONSTRAINT delayed_jobs_pkey PRIMARY KEY (id);
 
 
 --
--- Name: deliveries_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: deliveries deliveries_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY deliveries
+ALTER TABLE ONLY public.deliveries
     ADD CONSTRAINT deliveries_pkey PRIMARY KEY (id);
 
 
 --
--- Name: delivery_lists_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: delivery_lists delivery_lists_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY delivery_lists
+ALTER TABLE ONLY public.delivery_lists
     ADD CONSTRAINT delivery_lists_pkey PRIMARY KEY (id);
 
 
 --
--- Name: delivery_sequence_orders_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: delivery_sequence_orders delivery_sequence_orders_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY delivery_sequence_orders
+ALTER TABLE ONLY public.delivery_sequence_orders
     ADD CONSTRAINT delivery_sequence_orders_pkey PRIMARY KEY (id);
 
 
 --
--- Name: delivery_service_schedule_transactions_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: delivery_service_schedule_transactions delivery_service_schedule_transactions_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY delivery_service_schedule_transactions
+ALTER TABLE ONLY public.delivery_service_schedule_transactions
     ADD CONSTRAINT delivery_service_schedule_transactions_pkey PRIMARY KEY (id);
 
 
 --
--- Name: delivery_services_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: delivery_services delivery_services_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY delivery_services
+ALTER TABLE ONLY public.delivery_services
     ADD CONSTRAINT delivery_services_pkey PRIMARY KEY (id);
 
 
 --
--- Name: distributor_invoices_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: distributor_invoices distributor_invoices_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY distributor_invoices
+ALTER TABLE ONLY public.distributor_invoices
     ADD CONSTRAINT distributor_invoices_pkey PRIMARY KEY (id);
 
 
 --
--- Name: distributor_logins_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: distributor_logins distributor_logins_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY distributor_logins
+ALTER TABLE ONLY public.distributor_logins
     ADD CONSTRAINT distributor_logins_pkey PRIMARY KEY (id);
 
 
 --
--- Name: distributor_pricings_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: distributor_pricings distributor_pricings_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY distributor_pricings
+ALTER TABLE ONLY public.distributor_pricings
     ADD CONSTRAINT distributor_pricings_pkey PRIMARY KEY (id);
 
 
 --
--- Name: distributors_omni_importers_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: distributors_omni_importers distributors_omni_importers_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY distributors_omni_importers
+ALTER TABLE ONLY public.distributors_omni_importers
     ADD CONSTRAINT distributors_omni_importers_pkey PRIMARY KEY (id);
 
 
 --
--- Name: distributors_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: distributors distributors_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY distributors
+ALTER TABLE ONLY public.distributors
     ADD CONSTRAINT distributors_pkey PRIMARY KEY (id);
 
 
 --
--- Name: events_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: events events_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY events
+ALTER TABLE ONLY public.events
     ADD CONSTRAINT events_pkey PRIMARY KEY (id);
 
 
 --
--- Name: exclusions_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: exclusions exclusions_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY exclusions
+ALTER TABLE ONLY public.exclusions
     ADD CONSTRAINT exclusions_pkey PRIMARY KEY (id);
 
 
 --
--- Name: extras_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: extras extras_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY extras
+ALTER TABLE ONLY public.extras
     ADD CONSTRAINT extras_pkey PRIMARY KEY (id);
 
 
 --
--- Name: import_transaction_lists_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: import_transaction_lists import_transaction_lists_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY import_transaction_lists
+ALTER TABLE ONLY public.import_transaction_lists
     ADD CONSTRAINT import_transaction_lists_pkey PRIMARY KEY (id);
 
 
 --
--- Name: import_transactions_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: import_transactions import_transactions_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY import_transactions
+ALTER TABLE ONLY public.import_transactions
     ADD CONSTRAINT import_transactions_pkey PRIMARY KEY (id);
 
 
 --
--- Name: line_items_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: line_items line_items_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY line_items
+ALTER TABLE ONLY public.line_items
     ADD CONSTRAINT line_items_pkey PRIMARY KEY (id);
 
 
 --
--- Name: localised_addresses_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: localised_addresses localised_addresses_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY localised_addresses
+ALTER TABLE ONLY public.localised_addresses
     ADD CONSTRAINT localised_addresses_pkey PRIMARY KEY (id);
 
 
 --
--- Name: omni_importers_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: omni_importers omni_importers_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY omni_importers
+ALTER TABLE ONLY public.omni_importers
     ADD CONSTRAINT omni_importers_pkey PRIMARY KEY (id);
 
 
 --
--- Name: order_extras_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: order_extras order_extras_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY order_extras
+ALTER TABLE ONLY public.order_extras
     ADD CONSTRAINT order_extras_pkey PRIMARY KEY (id);
 
 
 --
--- Name: order_schedule_transactions_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: order_schedule_transactions order_schedule_transactions_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY order_schedule_transactions
+ALTER TABLE ONLY public.order_schedule_transactions
     ADD CONSTRAINT order_schedule_transactions_pkey PRIMARY KEY (id);
 
 
 --
--- Name: orders_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: orders orders_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY orders
+ALTER TABLE ONLY public.orders
     ADD CONSTRAINT orders_pkey PRIMARY KEY (id);
 
 
 --
--- Name: packages_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: packages packages_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY packages
+ALTER TABLE ONLY public.packages
     ADD CONSTRAINT packages_pkey PRIMARY KEY (id);
 
 
 --
--- Name: packing_lists_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: packing_lists packing_lists_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY packing_lists
+ALTER TABLE ONLY public.packing_lists
     ADD CONSTRAINT packing_lists_pkey PRIMARY KEY (id);
 
 
 --
--- Name: payments_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: payments payments_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY payments
+ALTER TABLE ONLY public.payments
     ADD CONSTRAINT payments_pkey PRIMARY KEY (id);
 
 
 --
--- Name: schedule_pauses_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: schedule_pauses schedule_pauses_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY schedule_pauses
+ALTER TABLE ONLY public.schedule_pauses
     ADD CONSTRAINT schedule_pauses_pkey PRIMARY KEY (id);
 
 
 --
--- Name: schedule_rules_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: schedule_rules schedule_rules_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY schedule_rules
+ALTER TABLE ONLY public.schedule_rules
     ADD CONSTRAINT schedule_rules_pkey PRIMARY KEY (id);
 
 
 --
--- Name: schedule_transactions_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: schedule_transactions schedule_transactions_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY schedule_transactions
+ALTER TABLE ONLY public.schedule_transactions
     ADD CONSTRAINT schedule_transactions_pkey PRIMARY KEY (id);
 
 
 --
--- Name: substitutions_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: substitutions substitutions_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY substitutions
+ALTER TABLE ONLY public.substitutions
     ADD CONSTRAINT substitutions_pkey PRIMARY KEY (id);
 
 
 --
--- Name: taggings_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: taggings taggings_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY taggings
+ALTER TABLE ONLY public.taggings
     ADD CONSTRAINT taggings_pkey PRIMARY KEY (id);
 
 
 --
--- Name: tags_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: tags tags_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY tags
+ALTER TABLE ONLY public.tags
     ADD CONSTRAINT tags_pkey PRIMARY KEY (id);
 
 
 --
--- Name: transactions_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: transactions transactions_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY transactions
+ALTER TABLE ONLY public.transactions
     ADD CONSTRAINT transactions_pkey PRIMARY KEY (id);
 
 
@@ -2664,406 +2650,406 @@ ALTER TABLE ONLY transactions
 -- Name: delayed_jobs_priority; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX delayed_jobs_priority ON delayed_jobs USING btree (priority, run_at);
+CREATE INDEX delayed_jobs_priority ON public.delayed_jobs USING btree (priority, run_at);
 
 
 --
 -- Name: index_accounts_on_customer_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_accounts_on_customer_id ON accounts USING btree (customer_id);
+CREATE INDEX index_accounts_on_customer_id ON public.accounts USING btree (customer_id);
 
 
 --
 -- Name: index_activities_on_customer_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_activities_on_customer_id ON activities USING btree (customer_id);
+CREATE INDEX index_activities_on_customer_id ON public.activities USING btree (customer_id);
 
 
 --
 -- Name: index_addresses_on_address_hash; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_addresses_on_address_hash ON addresses USING btree (address_hash);
+CREATE INDEX index_addresses_on_address_hash ON public.addresses USING btree (address_hash);
 
 
 --
 -- Name: index_addresses_on_customer_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX index_addresses_on_customer_id ON addresses USING btree (customer_id);
+CREATE UNIQUE INDEX index_addresses_on_customer_id ON public.addresses USING btree (customer_id);
 
 
 --
 -- Name: index_admins_on_email; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX index_admins_on_email ON admins USING btree (email);
+CREATE UNIQUE INDEX index_admins_on_email ON public.admins USING btree (email);
 
 
 --
 -- Name: index_admins_on_reset_password_token; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX index_admins_on_reset_password_token ON admins USING btree (reset_password_token);
+CREATE UNIQUE INDEX index_admins_on_reset_password_token ON public.admins USING btree (reset_password_token);
 
 
 --
 -- Name: index_bank_information_on_distributor_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_bank_information_on_distributor_id ON bank_information USING btree (distributor_id);
+CREATE INDEX index_bank_information_on_distributor_id ON public.bank_information USING btree (distributor_id);
 
 
 --
 -- Name: index_boxes_on_distributor_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_boxes_on_distributor_id ON boxes USING btree (distributor_id);
+CREATE INDEX index_boxes_on_distributor_id ON public.boxes USING btree (distributor_id);
 
 
 --
 -- Name: index_countries_on_alpha2; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_countries_on_alpha2 ON countries USING btree (alpha2);
+CREATE INDEX index_countries_on_alpha2 ON public.countries USING btree (alpha2);
 
 
 --
 -- Name: index_customers_on_authentication_token; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX index_customers_on_authentication_token ON customers USING btree (authentication_token);
+CREATE UNIQUE INDEX index_customers_on_authentication_token ON public.customers USING btree (authentication_token);
 
 
 --
 -- Name: index_customers_on_confirmation_token; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX index_customers_on_confirmation_token ON customers USING btree (confirmation_token);
+CREATE UNIQUE INDEX index_customers_on_confirmation_token ON public.customers USING btree (confirmation_token);
 
 
 --
 -- Name: index_customers_on_delivery_service_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_customers_on_delivery_service_id ON customers USING btree (delivery_service_id);
+CREATE INDEX index_customers_on_delivery_service_id ON public.customers USING btree (delivery_service_id);
 
 
 --
 -- Name: index_customers_on_distributor_id_and_number; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX index_customers_on_distributor_id_and_number ON customers USING btree (distributor_id, number);
+CREATE UNIQUE INDEX index_customers_on_distributor_id_and_number ON public.customers USING btree (distributor_id, number);
 
 
 --
 -- Name: index_customers_on_email_and_distributor_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX index_customers_on_email_and_distributor_id ON customers USING btree (email, distributor_id);
+CREATE UNIQUE INDEX index_customers_on_email_and_distributor_id ON public.customers USING btree (email, distributor_id);
 
 
 --
 -- Name: index_customers_on_reset_password_token; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX index_customers_on_reset_password_token ON customers USING btree (reset_password_token);
+CREATE UNIQUE INDEX index_customers_on_reset_password_token ON public.customers USING btree (reset_password_token);
 
 
 --
 -- Name: index_customers_on_unlock_token; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX index_customers_on_unlock_token ON customers USING btree (unlock_token);
+CREATE UNIQUE INDEX index_customers_on_unlock_token ON public.customers USING btree (unlock_token);
 
 
 --
 -- Name: index_deductions_on_account_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_deductions_on_account_id ON deductions USING btree (account_id);
+CREATE INDEX index_deductions_on_account_id ON public.deductions USING btree (account_id);
 
 
 --
 -- Name: index_deductions_on_distributor_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_deductions_on_distributor_id ON deductions USING btree (distributor_id);
+CREATE INDEX index_deductions_on_distributor_id ON public.deductions USING btree (distributor_id);
 
 
 --
 -- Name: index_deliveries_on_delivery_list_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_deliveries_on_delivery_list_id ON deliveries USING btree (delivery_list_id);
+CREATE INDEX index_deliveries_on_delivery_list_id ON public.deliveries USING btree (delivery_list_id);
 
 
 --
 -- Name: index_deliveries_on_delivery_list_id_and_order_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX index_deliveries_on_delivery_list_id_and_order_id ON deliveries USING btree (delivery_list_id, order_id);
+CREATE UNIQUE INDEX index_deliveries_on_delivery_list_id_and_order_id ON public.deliveries USING btree (delivery_list_id, order_id);
 
 
 --
 -- Name: index_deliveries_on_delivery_service_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_deliveries_on_delivery_service_id ON deliveries USING btree (delivery_service_id);
+CREATE INDEX index_deliveries_on_delivery_service_id ON public.deliveries USING btree (delivery_service_id);
 
 
 --
 -- Name: index_deliveries_on_package_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_deliveries_on_package_id ON deliveries USING btree (package_id);
+CREATE INDEX index_deliveries_on_package_id ON public.deliveries USING btree (package_id);
 
 
 --
 -- Name: index_delivery_lists_on_distributor_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_delivery_lists_on_distributor_id ON delivery_lists USING btree (distributor_id);
+CREATE INDEX index_delivery_lists_on_distributor_id ON public.delivery_lists USING btree (distributor_id);
 
 
 --
 -- Name: index_delivery_service_schedule_transactions_on_ds_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_delivery_service_schedule_transactions_on_ds_id ON delivery_service_schedule_transactions USING btree (delivery_service_id);
+CREATE INDEX index_delivery_service_schedule_transactions_on_ds_id ON public.delivery_service_schedule_transactions USING btree (delivery_service_id);
 
 
 --
 -- Name: index_delivery_services_on_distributor_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_delivery_services_on_distributor_id ON delivery_services USING btree (distributor_id);
+CREATE INDEX index_delivery_services_on_distributor_id ON public.delivery_services USING btree (distributor_id);
 
 
 --
 -- Name: index_distributors_on_api_key; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX index_distributors_on_api_key ON distributors USING btree (api_key);
+CREATE UNIQUE INDEX index_distributors_on_api_key ON public.distributors USING btree (api_key);
 
 
 --
 -- Name: index_distributors_on_authentication_token; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX index_distributors_on_authentication_token ON distributors USING btree (authentication_token);
+CREATE UNIQUE INDEX index_distributors_on_authentication_token ON public.distributors USING btree (authentication_token);
 
 
 --
 -- Name: index_distributors_on_confirmation_token; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX index_distributors_on_confirmation_token ON distributors USING btree (confirmation_token);
+CREATE UNIQUE INDEX index_distributors_on_confirmation_token ON public.distributors USING btree (confirmation_token);
 
 
 --
 -- Name: index_distributors_on_email; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX index_distributors_on_email ON distributors USING btree (email);
+CREATE UNIQUE INDEX index_distributors_on_email ON public.distributors USING btree (email);
 
 
 --
 -- Name: index_distributors_on_reset_password_token; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX index_distributors_on_reset_password_token ON distributors USING btree (reset_password_token);
+CREATE UNIQUE INDEX index_distributors_on_reset_password_token ON public.distributors USING btree (reset_password_token);
 
 
 --
 -- Name: index_distributors_on_unlock_token; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX index_distributors_on_unlock_token ON distributors USING btree (unlock_token);
+CREATE UNIQUE INDEX index_distributors_on_unlock_token ON public.distributors USING btree (unlock_token);
 
 
 --
 -- Name: index_events_on_distributor_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_events_on_distributor_id ON events USING btree (distributor_id);
+CREATE INDEX index_events_on_distributor_id ON public.events USING btree (distributor_id);
 
 
 --
 -- Name: index_exclusions_on_line_item_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_exclusions_on_line_item_id ON exclusions USING btree (line_item_id);
+CREATE INDEX index_exclusions_on_line_item_id ON public.exclusions USING btree (line_item_id);
 
 
 --
 -- Name: index_exclusions_on_order_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_exclusions_on_order_id ON exclusions USING btree (order_id);
+CREATE INDEX index_exclusions_on_order_id ON public.exclusions USING btree (order_id);
 
 
 --
 -- Name: index_import_draft; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_import_draft ON import_transactions USING btree (import_transaction_list_id, draft);
+CREATE INDEX index_import_draft ON public.import_transactions USING btree (import_transaction_list_id, draft);
 
 
 --
 -- Name: index_import_match; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_import_match ON import_transactions USING btree (import_transaction_list_id, match);
+CREATE INDEX index_import_match ON public.import_transactions USING btree (import_transaction_list_id, match);
 
 
 --
 -- Name: index_import_removed; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_import_removed ON import_transactions USING btree (import_transaction_list_id, removed);
+CREATE INDEX index_import_removed ON public.import_transactions USING btree (import_transaction_list_id, removed);
 
 
 --
 -- Name: index_import_transaction_lists_on_distributor_id_and_draft; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_import_transaction_lists_on_distributor_id_and_draft ON import_transaction_lists USING btree (distributor_id, draft);
+CREATE INDEX index_import_transaction_lists_on_distributor_id_and_draft ON public.import_transaction_lists USING btree (distributor_id, draft);
 
 
 --
 -- Name: index_import_transactions_on_import_transaction_list_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_import_transactions_on_import_transaction_list_id ON import_transactions USING btree (import_transaction_list_id);
+CREATE INDEX index_import_transactions_on_import_transaction_list_id ON public.import_transactions USING btree (import_transaction_list_id);
 
 
 --
 -- Name: index_line_items_on_distributor_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_line_items_on_distributor_id ON line_items USING btree (distributor_id);
+CREATE INDEX index_line_items_on_distributor_id ON public.line_items USING btree (distributor_id);
 
 
 --
 -- Name: index_order_schedule_transactions_on_delivery_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_order_schedule_transactions_on_delivery_id ON order_schedule_transactions USING btree (delivery_id);
+CREATE INDEX index_order_schedule_transactions_on_delivery_id ON public.order_schedule_transactions USING btree (delivery_id);
 
 
 --
 -- Name: index_order_schedule_transactions_on_order_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_order_schedule_transactions_on_order_id ON order_schedule_transactions USING btree (order_id);
+CREATE INDEX index_order_schedule_transactions_on_order_id ON public.order_schedule_transactions USING btree (order_id);
 
 
 --
 -- Name: index_orders_on_account_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_orders_on_account_id ON orders USING btree (account_id);
+CREATE INDEX index_orders_on_account_id ON public.orders USING btree (account_id);
 
 
 --
 -- Name: index_orders_on_box_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_orders_on_box_id ON orders USING btree (box_id);
+CREATE INDEX index_orders_on_box_id ON public.orders USING btree (box_id);
 
 
 --
 -- Name: index_packages_on_original_package_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_packages_on_original_package_id ON packages USING btree (original_package_id);
+CREATE INDEX index_packages_on_original_package_id ON public.packages USING btree (original_package_id);
 
 
 --
 -- Name: index_packages_on_packing_list_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_packages_on_packing_list_id ON packages USING btree (packing_list_id);
+CREATE INDEX index_packages_on_packing_list_id ON public.packages USING btree (packing_list_id);
 
 
 --
 -- Name: index_packages_on_packing_list_id_and_order_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX index_packages_on_packing_list_id_and_order_id ON packages USING btree (packing_list_id, order_id);
+CREATE UNIQUE INDEX index_packages_on_packing_list_id_and_order_id ON public.packages USING btree (packing_list_id, order_id);
 
 
 --
 -- Name: index_packing_lists_on_distributor_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_packing_lists_on_distributor_id ON packing_lists USING btree (distributor_id);
+CREATE INDEX index_packing_lists_on_distributor_id ON public.packing_lists USING btree (distributor_id);
 
 
 --
 -- Name: index_payments_on_account_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_payments_on_account_id ON payments USING btree (account_id);
+CREATE INDEX index_payments_on_account_id ON public.payments USING btree (account_id);
 
 
 --
 -- Name: index_payments_on_distributor_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_payments_on_distributor_id ON payments USING btree (distributor_id);
+CREATE INDEX index_payments_on_distributor_id ON public.payments USING btree (distributor_id);
 
 
 --
 -- Name: index_substitutions_on_line_item_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_substitutions_on_line_item_id ON substitutions USING btree (line_item_id);
+CREATE INDEX index_substitutions_on_line_item_id ON public.substitutions USING btree (line_item_id);
 
 
 --
 -- Name: index_substitutions_on_order_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_substitutions_on_order_id ON substitutions USING btree (order_id);
+CREATE INDEX index_substitutions_on_order_id ON public.substitutions USING btree (order_id);
 
 
 --
 -- Name: index_taggings_on_taggable_id_and_taggable_type_and_context; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_taggings_on_taggable_id_and_taggable_type_and_context ON taggings USING btree (taggable_id, taggable_type, context);
+CREATE INDEX index_taggings_on_taggable_id_and_taggable_type_and_context ON public.taggings USING btree (taggable_id, taggable_type, context);
 
 
 --
 -- Name: index_tags_on_name; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX index_tags_on_name ON tags USING btree (name);
+CREATE UNIQUE INDEX index_tags_on_name ON public.tags USING btree (name);
 
 
 --
 -- Name: index_transactions_on_account_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_transactions_on_account_id ON transactions USING btree (account_id);
+CREATE INDEX index_transactions_on_account_id ON public.transactions USING btree (account_id);
 
 
 --
 -- Name: taggings_idx; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX taggings_idx ON taggings USING btree (tag_id, taggable_id, taggable_type, context, tagger_id, tagger_type);
+CREATE UNIQUE INDEX taggings_idx ON public.taggings USING btree (tag_id, taggable_id, taggable_type, context, tagger_id, tagger_type);
 
 
 --
 -- Name: unique_schema_migrations; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX unique_schema_migrations ON schema_migrations USING btree (version);
+CREATE UNIQUE INDEX unique_schema_migrations ON public.schema_migrations USING btree (version);
 
 
 --
@@ -3593,3 +3579,7 @@ INSERT INTO schema_migrations (version) VALUES ('20161015092717');
 INSERT INTO schema_migrations (version) VALUES ('20161018203706');
 
 INSERT INTO schema_migrations (version) VALUES ('20161019140533');
+
+INSERT INTO schema_migrations (version) VALUES ('20200626151920');
+
+INSERT INTO schema_migrations (version) VALUES ('20200708091011');

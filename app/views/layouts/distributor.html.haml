@@ -8,7 +8,7 @@
   .container
     - if flash.empty? && current_distributor.overdue.present?
       %div{style: "position: fixed; top: 0; left: 0; right: 0; text-align: center; z-index: 100"}
-        = flash_bar("Uh-oh! Your account is overdue and will be locked out soon, please <a target=\"_blank\" href=\"#{current_distributor.overdue}\">pay your invoice</a>.<br>If you paid recently, your payment may take up to 24 hours to register.".html_safe, kind: :error, close: false)
+        = flash_bar("Uh-oh! Your #{link_to "invoice #{current_distributor.overdue}", distributor_billing_path} is overdue, please pay your invoice to unlock your account.<br>If you paid recently, your payment may take up to 24 hours to register.".html_safe, kind: :error, close: false)
     - elsif flash.empty? && current_distributor.pricing.currency != "NZD"
       %div{style: "position: fixed; top: 0; left: 0; right: 0; text-align: center; z-index: 100"}
         = flash_bar("Heads up! Starting 1 June 2020, please pay using bank deposit instead of PayPal.<br>Our bank account details can be found on your #{link_to 'billing page', distributor_billing_path}. Thanks.".html_safe, kind: :warning, close: true)

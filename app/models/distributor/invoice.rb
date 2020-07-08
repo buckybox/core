@@ -1,5 +1,5 @@
 class Distributor::Invoice < ActiveRecord::Base
-  attr_accessible :distributor, :from, :to, :description, :amount, :currency
+  attr_accessible :distributor, :from, :to, :description, :amount, :currency, :paid
 
   belongs_to :distributor
 
