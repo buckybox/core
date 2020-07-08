@@ -58,7 +58,7 @@
       %p
         Account Holder: Bucky Box Limited
         %br
-        = bank_account.gsub("\n", "<br>").html_safe
+        = simple_format(bank_account)
       Please make sure to include the invoice reference below along with your wire transfer for prompt reconciliation.
 
 %hr
@@ -74,18 +74,22 @@
         %thead
           %tr
             %th{style: "color: red"} Reference
+            %th.text-right Amount
             %th Paid
             %th From
             %th To
             %th Description
-            %th.text-right Amount
         %tbody
           - invoices.each do |invoice|
             %tr
-              %td{style: "color: red"}= invoice.reference
+              - if invoice.currency == "NZD"
+                %td{style: "color: red"}= invoice.reference
+              - else
+                %td{style: "color: red"}= link_to invoice.reference, invoice_distributor_billing_path(number: invoice.number)
+
+              %td.text-right= invoice.amount.with_currency(invoice.currency)
               %td= invoice.paid ? "Yes" : "No"
               %td= invoice.from
               %td= invoice.to
               %td= invoice.description
-              %td.text-right= invoice.amount.with_currency(invoice.currency)
 

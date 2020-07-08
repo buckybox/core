@@ -44,7 +44,7 @@ module Billing
     end
 
     def self.query_overdue_invoices(distributor)
-      distributor.invoices.where("created_at >= ? AND created_at < ? AND paid = ?", Date.iso8601("2020-06-01"), 14.days.ago, false)
+      distributor.invoices.where("created_at >= ? AND created_at < ? AND paid = ?", Date.iso8601("2020-06-01"), 15.days.ago, false)
     end
   end
 end
