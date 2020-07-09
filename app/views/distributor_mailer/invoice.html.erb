@@ -2,6 +2,6 @@
 
 <p>Your buckybox.com account has a new invoice <%= @invoice.reference %> in the amount of <%= @invoice.amount %>&nbsp;<%= @invoice.currency %>.</p>
 
-<p>To view your it, please log into your account at <%= invoice_distributor_billing_url(number: @invoice.number) %></p>
+<p>To view your it, please log into your account at <%= link_to invoice_distributor_billing_url(number: @invoice.number), invoice_distributor_billing_url(number: @invoice.number) %></p>
 
 <p>The Bucky Box team</p>
