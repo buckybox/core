@@ -1,8 +1,23 @@
 #!/bin/bash
 
+DATE=$(date +%Y-%m-%d)
+
+# CLI overrides
+while getopts "d:t:" ARG; do
+  case $ARG in
+    d)
+      BUCKYBOX_DISTRIBUTOR_IDS=$OPTARG
+      echo "INFO -- Using distributor IDs: ${OPTARG}"
+      ;;
+    t)
+      DATE=$OPTARG
+      echo "INFO -- Using date: ${OPTARG}"
+      ;;
+  esac
+done
+
 # Variables
-TODAY=$(date +%Y-%m-%d)
-DATA_DIR="/var/tmp/buckybox_distributor_data/${TODAY}"
+DATA_DIR="/var/tmp/buckybox_distributor_data/${DATE}"
 TABLES_FILE="${SCRIPT_DIR}/../db/distributor_script_tables.txt"
 DB_CONFIG="${SCRIPT_DIR}/../config/database.yml"
 
