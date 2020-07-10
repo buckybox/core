@@ -2,6 +2,12 @@
 
 <p>Your buckybox.com account has a new invoice <%= @invoice.reference %> in the amount of <%= @invoice.amount %>&nbsp;<%= @invoice.currency %>.</p>
 
-<p>To view your it, please log into your account at <%= link_to invoice_distributor_billing_url(number: @invoice.number), invoice_distributor_billing_url(number: @invoice.number) %></p>
+<p>To view your it, please log into your account at
+<% if @invoice.currency == "NZD" %>
+<%= link_to "https://xero.com/", "https://go.xero.com/?InvoiceNumber=#{@invoice.number}" %>
+<% else %>
+<%= link_to invoice_distributor_billing_url(number: @invoice.number), invoice_distributor_billing_url(number: @invoice.number) %>
+<% end %>
+</p>
 
 <p>The Bucky Box team</p>
