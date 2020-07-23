@@ -8,7 +8,7 @@
   .container
     - if flash.empty? && current_distributor.overdue.present?
       %div{style: "position: fixed; top: 0; left: 0; right: 0; text-align: center; z-index: 100"}
-        = flash_bar("Uh-oh! Your #{link_to "invoice #{current_distributor.overdue}", distributor_billing_path} is overdue, please pay your invoice to unlock your account.<br>If you paid recently, your payment may take up to 24 hours to register.".html_safe, kind: :error, close: false)
+        = flash_bar("Uh-oh! Your #{link_to "invoice #{current_distributor.overdue.split("\n").first}", distributor_billing_path} is overdue, please pay your invoice to unlock your account.<br>If you paid recently, your payment may take up to 24 hours to register.".html_safe, kind: :error, close: false)
 
     #flash-messages
       = render_site_messages(flash, container: false)

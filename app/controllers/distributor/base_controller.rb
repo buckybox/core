@@ -26,7 +26,8 @@ private
   end
 
   def check_if_overdue
-    if current_distributor.overdue.present? && !request.path.include?(distributor_billing_path)
+    # redirect to billing if more than 1 overdue invoice
+    if current_distributor.overdue.count("\n").positive? && !request.path.include?(distributor_billing_path)
       redirect_to distributor_billing_path and return
     end
   end

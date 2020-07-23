@@ -19,7 +19,7 @@ class Distributor::BillingController < Distributor::BaseController
       reference: invoice.reference,
       recipient: invoice.distributor.localised_address.postal_address_with_recipient,
       created_at: invoice.created_at.to_date,
-      due_at: (invoice.created_at + 15.days).to_date,
+      due_at: invoice.created_at.to_date + 1.month,
       from: invoice.from,
       to: invoice.to,
       description: invoice.description,
