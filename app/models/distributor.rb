@@ -144,16 +144,14 @@ class Distributor < ActiveRecord::Base
       next if invoice.amount.zero?
       next unless distributor.in?(paying)
 
-      number = \
-        case distributor.country.alpha2
-        when "NZ"
-          Billing::XeroInvoice.create!(invoice)
-        else
-          # XXX: no need to create invoice as we expect bank deposits
-        end
+      case distributor.country.alpha2
+      when "NZ"
+        Billing::XeroInvoice.create!(invoice)
+      else
+        # XXX: no need to create invoice as we expect bank deposits
+      end
 
-      number ||= invoice.id # use invoice ID if we don't already have a number from upstream
-      invoice.update_attribute(:number, number)
+      invoice.update_attribute(:number, invoice.id)
 
       DistributorMailer.invoice(distributor, invoice).deliver_now
     end

@@ -15,6 +15,7 @@ module Billing
       address = distributor.localised_address
 
       xero_invoice = gateway.build_invoice(
+        invoice_number: invoice.id,
         invoice_type: "ACCREC",
         invoice_status: "AUTHORISED",
         date: Date.current,
@@ -42,12 +43,10 @@ module Billing
       if xero_invoice.valid?
         # XXX: cannot send it yet https://xero.uservoice.com/forums/5528-xero-core-api/suggestions/1930769-be-able-to-email-approved-invoices-via-the-api
         xero_invoice.create
-        Rails.logger.info "Invoice[#{xero_invoice.invoice_number}] created successfully"
+        Rails.logger.info "Invoice[#{invoice.id}] created successfully"
       else
         Bugsnag.notify(RuntimeError.new(xero_invoice.errors.inspect))
       end
-
-      xero_invoice.invoice_number
     end
 
     def self.overdue_invoices(email)
